@@ -1,0 +1,14 @@
+**/.idea
+**/target
+**/.project
+**/.settings
+**/.classpath
+**/*.iml
+**/.metadata
+**/Servers
+**/out
+**/overlays
+**/*.log
+**/*.pdb
+**/build
+**/.pdb

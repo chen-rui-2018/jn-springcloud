@@ -37,7 +37,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		String shiroUser =(String) principals.getPrimaryPrincipal();
 		List<Resources> roleList = client.getResources(new Resources(shiroUser,null,null,null,"2",null));
-		Set<String> urlSet = new HashSet<String>();
+		Set<String> urlSet = new HashSet<>();
 		for (Resources roleId : roleList) {
 			urlSet.add(roleId.getUrl());
 		}

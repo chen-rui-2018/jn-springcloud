@@ -19,4 +19,7 @@ public interface SystemClient {
 
     @RequestMapping(value = "/springcloud-app-system/api/getResources", method = RequestMethod.POST)
     List<Resources> getResources(@RequestBody  Resources r);
+
+
+
 }

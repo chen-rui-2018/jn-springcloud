@@ -1,5 +1,7 @@
 package com.wangsong.system.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
@@ -10,7 +12,9 @@ public class User implements Serializable {
      *
      */
     private static final long serialVersionUID = -7484136779753770396L;
+
     private String id;
+    @Size(min = 4,max = 10,message = "测试")
     private String username;
     private String password;
 

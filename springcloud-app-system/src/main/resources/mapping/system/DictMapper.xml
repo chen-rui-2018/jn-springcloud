@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangsong.system.dao.DictMapper">
-    <resultMap id="BaseResultMap" type="com.wangsong.system.model.Dict">
+<mapper namespace="com.jn.system.dao.DictMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.Dict">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="code" jdbcType="VARCHAR" property="code"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -12,13 +12,13 @@
         where id = #{id,jdbcType=VARCHAR}
     </delete>
 
-    <insert id="insert" parameterType="com.wangsong.system.model.Dict">
+    <insert id="insert" parameterType="com.jn.system.model.Dict">
         insert into system_dict (id, code, name,
         type)
         values (#{id,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
         #{type,jdbcType=VARCHAR})
     </insert>
-    <update id="updateByPrimaryKey" parameterType="com.wangsong.system.model.Dict">
+    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.Dict">
         update system_dict
         set code = #{code,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},
@@ -37,7 +37,7 @@
 
 
 
-    <select id="findTByPage" parameterType="com.wangsong.system.model.DictPage" resultMap="BaseResultMap">
+    <select id="findTByPage" parameterType="com.jn.system.model.DictPage" resultMap="BaseResultMap">
         select id, code, name, type
         from system_dict
         where 1=1
@@ -59,7 +59,7 @@
             #{id}
         </foreach>
     </delete>
-    <select id="findTByT" parameterType="com.wangsong.system.model.Dict" resultMap="BaseResultMap">
+    <select id="findTByT" parameterType="com.jn.system.model.Dict" resultMap="BaseResultMap">
         select id, code, name, type
         from system_dict
         where type = #{type,jdbcType=VARCHAR}

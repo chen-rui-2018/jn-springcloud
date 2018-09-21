@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangsong.system.dao.ResourcesMapper">
-    <resultMap id="BaseResultMap" type="com.wangsong.system.model.Resources">
+<mapper namespace="com.jn.system.dao.ResourcesMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.Resources">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="pid" jdbcType="VARCHAR" property="pid"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -9,7 +9,7 @@
         <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="sort" jdbcType="VARCHAR" property="sort"/>
     </resultMap>
-    <insert id="insert" parameterType="com.wangsong.system.model.Resources">
+    <insert id="insert" parameterType="com.jn.system.model.Resources">
         insert into system_resources (id, pid, name,
         url,type,sort)
         values (#{id,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR},
@@ -19,7 +19,7 @@
         delete from system_resources
         where id = #{id,jdbcType=VARCHAR}
     </delete>
-    <update id="updateByPrimaryKey" parameterType="com.wangsong.system.model.Resources">
+    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.Resources">
         update system_resources
         set pid = #{pid,jdbcType=VARCHAR},
         name = #{name,jdbcType=VARCHAR},

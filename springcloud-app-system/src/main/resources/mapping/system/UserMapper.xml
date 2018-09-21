@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.wangsong.system.dao.UserMapper">
-    <resultMap id="BaseResultMap" type="com.wangsong.system.model.User">
+<mapper namespace="com.jn.system.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.User">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
     </resultMap>
-    <insert id="insert" parameterType="com.wangsong.system.model.User">
+    <insert id="insert" parameterType="com.jn.system.model.User">
         insert into system_user (id, username, password
         )
         values (#{id,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
@@ -14,11 +14,11 @@
     </insert>
 
 
-    <delete id="deleteByPrimaryKey" parameterType="com.wangsong.system.model.RoleResources">
+    <delete id="deleteByPrimaryKey" parameterType="com.jn.system.model.RoleResources">
         delete from system_user
         where id = #{id,jdbcType=VARCHAR}
     </delete>
-    <update id="updateByPrimaryKey" parameterType="com.wangsong.system.model.User">
+    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.User">
         update system_user
         set username = #{username,jdbcType=VARCHAR}
         ,password = #{password,jdbcType=VARCHAR}
@@ -26,7 +26,7 @@
     </update>
 
 
-    <update id="updateNoPasswordByPrimaryKey" parameterType="com.wangsong.system.model.UserAddModel">
+    <update id="updateNoPasswordByPrimaryKey" parameterType="com.jn.system.model.UserAddModel">
         update system_user
         set username = #{username,jdbcType=VARCHAR}
         where id = #{id,jdbcType=VARCHAR}
@@ -42,13 +42,13 @@
     </select>
 
 
-    <select id="findTByT" parameterType="com.wangsong.system.model.User" resultMap="BaseResultMap">
+    <select id="findTByT" parameterType="com.jn.system.model.User" resultMap="BaseResultMap">
         select id, username, password
         from system_user
         where username = #{username,jdbcType=VARCHAR}
 
     </select>
-    <select id="findTByPage" parameterType="com.wangsong.system.model.UserPage" resultMap="BaseResultMap">
+    <select id="findTByPage" parameterType="com.jn.system.model.UserPage" resultMap="BaseResultMap">
         select id, username, password
         from system_user
         where 1=1
@@ -64,7 +64,7 @@
         </foreach>
     </delete>
 
-    <select id="selectVOByPrimaryKey" parameterType="java.lang.String" resultType="com.wangsong.system.vo.UserVO">
+    <select id="selectVOByPrimaryKey" parameterType="java.lang.String" resultType="com.jn.system.vo.UserVO">
         select id, username, password
         from system_user
         where id = #{id,jdbcType=VARCHAR}

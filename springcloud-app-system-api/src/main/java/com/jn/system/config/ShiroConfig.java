@@ -6,7 +6,6 @@ import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +25,9 @@ public class ShiroConfig {
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 	@Value(value = "${shiro_redis_session}")
-	private int shiro_redis_session;
+	private int shiroRedisSession;
 	@Value(value = "${shiro_redis_cache}")
-	private int shiro_redis_cache;
+	private int shiroRedisCache;
 	
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -45,15 +44,17 @@ public class ShiroConfig {
         //所有客人访问的接口不需要拦截
         filterChainDefinitionMap.put("/guest/**", "anon");
         filterChainDefinitionMap.put("/**", "authc");
-        shiroFilterFactoryBean.setLoginUrl("/index");
+
+        Map<String, javax.servlet.Filter> filterMap = new LinkedHashMap<>();
+        filterMap.put("authc",new ShiroFormAuthenticationFilter() );
+        shiroFilterFactoryBean.setFilters(filterMap);
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }
 
     @Bean
     public ShiroDbRealm myShiroRealm(){
-    	ShiroDbRealm myShiroRealm = new ShiroDbRealm();
-        return myShiroRealm;
+        return new ShiroDbRealm();
     }
     /**
      * EhCacheManager，缓存管理，用户登陆成功后，把用户信息和权限信息缓存起来，
@@ -65,7 +66,7 @@ public class ShiroConfig {
     public RedisCacheManager redisCacheManager() {
     	RedisCacheManager cacheManager = new RedisCacheManager();
     	cacheManager.setRedisTemplate(redisTemplate);
-    	cacheManager.setExpire(shiro_redis_cache);
+    	cacheManager.setExpire(shiroRedisCache);
         return cacheManager;
     }
     
@@ -73,32 +74,22 @@ public class ShiroConfig {
     public RedisSessionDAO redisSessionDAO() {
     	RedisSessionDAO sessionDAO = new RedisSessionDAO();
     	sessionDAO.setRedisTemplate(redisTemplate);
-    	sessionDAO.setExpire(shiro_redis_session);
+    	sessionDAO.setExpire(shiroRedisSession);
         return sessionDAO;
     }
   
     
     @Bean
     public DefaultWebSessionManager sessionManager() {
-    	DefaultWebSessionManager defaultWebSessionManager = new DefaultWebSessionManager();
-    	defaultWebSessionManager.setSessionDAO(redisSessionDAO() );
-    	defaultWebSessionManager.setSessionIdCookie(sessionIdCookie());
-    	defaultWebSessionManager.setGlobalSessionTimeout(shiro_redis_session);
-        return defaultWebSessionManager;
+        MySessionManager mySessionManager = new MySessionManager();
+        mySessionManager.setSessionDAO(redisSessionDAO() );
+        mySessionManager.setGlobalSessionTimeout(shiroRedisSession);
+        return mySessionManager;
     }
-    
-    @Bean
-    public SimpleCookie sessionIdCookie() {
-    	SimpleCookie simpleCookie = new SimpleCookie("shiroSessionId");
-        return simpleCookie;
-    }
-    
-    
     @Bean
     public DefaultWebSecurityManager securityManager(){
         DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
         securityManager.setRealm(myShiroRealm());
-     // <!-- 用户授权/认证信息Cache, 采用EhCache 缓存 -->
         securityManager.setSessionManager(sessionManager());
         securityManager.setCacheManager(redisCacheManager());
         return securityManager;

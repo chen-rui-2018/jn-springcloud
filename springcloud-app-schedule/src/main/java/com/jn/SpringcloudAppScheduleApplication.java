@@ -9,7 +9,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
-@MapperScan("com.wangsong.*.dao")
+@MapperScan("com.jn.*.dao")
 public class SpringcloudAppScheduleApplication {
 
 	public static void main(String[] args) {

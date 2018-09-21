@@ -1,12 +1,8 @@
-location /springcloud/springcloud-app-system/schedule/ {
-    proxy_pass http://127.0.0.1:1101/springcloud-app-schedule/springcloud-app-schedule/schedule/;
-}
-
-location /springcloud/ {
-    proxy_pass http://127.0.0.1:1101;
-}
-
 location / {
-    root   D:/app//app-ui;
+    root   D:/jnprojects//app-ui//html;
     index login.html;
+	location ~* \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|ttf|eot|mao|ico)$ {
+		break;
+	}
+	proxy_pass http://127.0.0.1:1101;
 }

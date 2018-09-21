@@ -14,10 +14,10 @@ import com.jn.system.model.User;
 public interface SystemClient {
 
 
-    @RequestMapping(value = "/springcloud-app-system/api/getUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/getUser", method = RequestMethod.POST)
     User getUser(@RequestBody  User u);
 
-    @RequestMapping(value = "/springcloud-app-system/api/getResources", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/getResources", method = RequestMethod.POST)
     List<Resources> getResources(@RequestBody  Resources r);
 
 

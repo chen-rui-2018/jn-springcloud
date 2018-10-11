@@ -6,7 +6,7 @@ import com.jn.common.model.GetEasyUIData;
 import com.jn.system.dao.UserMapper;
 import com.jn.system.dao.UserRoleMapper;
 import com.jn.system.model.User;
-import com.jn.system.model.UserAddModel;
+import com.jn.system.model.UserAdd;
 import com.jn.system.model.UserPage;
 import com.jn.system.model.UserRole;
 import com.jn.system.service.UserService;
@@ -18,7 +18,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
+/**
+ * 用户
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -29,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void insertUser(UserAddModel user) {
+    public void insertUser(UserAdd user) {
         String[] roleId = user.getRoleId();
         user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         user.setId(UUID.randomUUID().toString());
@@ -45,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(UserAddModel user) {
+    public void updateUser(UserAdd user) {
         String[] roleId = user.getRoleId();
         if (!"".equals(user.getPassword())) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
@@ -85,7 +92,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updatePassword(UserAddModel user) {
+    public void updatePassword(UserAdd user) {
         if (!"".equals(user.getPassword())) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword()));
             userMapper.updateByPrimaryKey(user);

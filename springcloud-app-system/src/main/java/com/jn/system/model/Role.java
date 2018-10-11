@@ -2,7 +2,14 @@ package com.jn.system.model;
 
 import java.io.Serializable;
 
-
+/**
+ * 角色
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class Role implements Serializable {
     /**
      *

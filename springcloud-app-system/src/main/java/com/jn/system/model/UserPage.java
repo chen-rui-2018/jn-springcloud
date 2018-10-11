@@ -4,7 +4,14 @@ import com.jn.common.model.Page;
 
 import java.io.Serializable;
 
-
+/**
+ * 用户分页
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class UserPage extends Page implements Serializable {
 
 

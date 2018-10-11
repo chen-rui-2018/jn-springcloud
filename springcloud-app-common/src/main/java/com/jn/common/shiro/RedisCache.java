@@ -1,23 +1,22 @@
 package com.jn.common.shiro;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+/**
+ * redis缓存
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class RedisCache<K, V> implements Cache<K, V> {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -61,12 +60,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 	     this.redisTemplate = redisTemplate;
 	}
 	
-	/**
-	 * Constructs a cache instance with the specified
-	 * Redis manager and using a custom key prefix.
-	 * @param cache The cache manager instance
-	 * @param prefix The Redis key prefix
-	 */
+
 	public RedisCache(RedisTemplate<String, Object> redisTemplate, 
 				String prefix,int expire){
 		 

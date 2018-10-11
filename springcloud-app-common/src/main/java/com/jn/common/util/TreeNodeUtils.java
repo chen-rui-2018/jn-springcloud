@@ -5,10 +5,25 @@ import java.util.List;
 
 import com.jn.common.model.JsonTreeData;
 
-public class TreeNodeUtil {
+/**
+ * 树子节点工具类
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
+public class TreeNodeUtils {
 
-    public final static List<JsonTreeData> getfatherNode(List<JsonTreeData> treeDataList) {
-        List<JsonTreeData> newTreeDataList = new ArrayList<JsonTreeData>();
+    /**
+     * 转变成父子结构数据
+     * 需要注意，最顶级的父亲必须为0
+     *
+     * @param treeDataList  没加工的DataList列表
+     * @return
+     */
+    public final static List<JsonTreeData> changeToTreeStructure(List<JsonTreeData> treeDataList) {
+        List<JsonTreeData> newTreeDataList = new ArrayList<>();
         for (JsonTreeData jsonTreeData : treeDataList) {
             if(jsonTreeData.getPid() .equals("0")) {
                 //获取父节点下的子节点
@@ -20,8 +35,14 @@ public class TreeNodeUtil {
         return newTreeDataList;
     }
 
+    /**
+     * 递归完成儿子的赋值
+     * @param pid
+     * @param treeDataList
+     * @return
+     */
     private final static List<JsonTreeData> getChildrenNode(String pid , List<JsonTreeData> treeDataList) {
-        List<JsonTreeData> newTreeDataList = new ArrayList<JsonTreeData>();
+        List<JsonTreeData> newTreeDataList = new ArrayList<>();
         for (JsonTreeData jsonTreeData : treeDataList) {
             if (jsonTreeData.getPid() == null)  {
                 continue;

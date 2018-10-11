@@ -26,7 +26,7 @@
     </update>
 
 
-    <update id="updateNoPasswordByPrimaryKey" parameterType="com.jn.system.model.UserAddModel">
+    <update id="updateNoPasswordByPrimaryKey" parameterType="com.jn.system.model.UserAdd">
         update system_user
         set username = #{username,jdbcType=VARCHAR}
         where id = #{id,jdbcType=VARCHAR}

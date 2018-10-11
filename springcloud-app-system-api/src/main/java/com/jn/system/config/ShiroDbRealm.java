@@ -13,7 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
+/**
+ * shiro认证的重写
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class ShiroDbRealm extends AuthorizingRealm {
 	
 	@Autowired

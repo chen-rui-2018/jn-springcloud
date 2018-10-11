@@ -9,14 +9,21 @@ import org.apache.shiro.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-
+/**
+ * shiro的redi缓存管理
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class RedisCacheManager implements CacheManager {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(RedisCacheManager.class);
 
 	// fast lookup by name map
-	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<String, Cache>();
+	private final ConcurrentMap<String, Cache> caches = new ConcurrentHashMap<>();
 	private RedisTemplate<String, Object> redisTemplate;
 	private int expire;
 	/**

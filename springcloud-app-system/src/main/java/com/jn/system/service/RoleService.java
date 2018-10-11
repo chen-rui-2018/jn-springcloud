@@ -5,12 +5,19 @@ import com.jn.system.model.*;
 import com.jn.system.vo.RoleVO;
 
 import java.util.List;
-
+/**
+ * 角色
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public interface RoleService {
 
-    void insertRole(RoleAddModel role);
+    void insertRole(RoleAdd role);
 
-    void updateRole(RoleAddModel role);
+    void updateRole(RoleAdd role);
 
     void deleteRole(String[] id);
 

@@ -16,10 +16,10 @@ import org.springframework.context.annotation.Bean;
  */
 @EnableZuulProxy
 @SpringCloudApplication
-public class SpringcloudAppZuulApplication {
+public class SpringCloudAppZuulApplication {
   
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(SpringcloudAppZuulApplication.class).web(true).run(args);
+		new SpringApplicationBuilder(SpringCloudAppZuulApplication.class).web(true).run(args);
 	}
 	@Bean
 	public OneToAccessFilter accessFilter() {

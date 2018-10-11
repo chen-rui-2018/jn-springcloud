@@ -5,7 +5,14 @@ import com.jn.system.model.Dict;
 import com.jn.system.model.DictPage;
 
 import java.util.List;
-
+/**
+ * 字典
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public interface DictService {
 
     GetEasyUIData findTByPage(DictPage dict);

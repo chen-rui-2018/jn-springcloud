@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.jn.common.model.Attributes;
 import com.jn.common.model.JsonTreeData;
-import com.jn.common.util.TreeNodeUtil;
+import com.jn.common.util.TreeNodeUtils;
 import com.jn.system.dao.ResourcesMapper;
 import com.jn.system.model.Resources;
 import com.jn.system.model.RoleResources;
@@ -17,7 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-
+/**
+ * 资源
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 @Service
 public class ResourcesServiceImpl implements ResourcesService {
     @Autowired
@@ -100,7 +107,7 @@ public class ResourcesServiceImpl implements ResourcesService {
             treeDataList.add(treeData);
         }
         //最后得到结果集,经过FirstJSON转换后就可得所需的json格式
-        List<JsonTreeData> newTreeDataList = TreeNodeUtil.getfatherNode(treeDataList);
+        List<JsonTreeData> newTreeDataList = TreeNodeUtils.changeToTreeStructure(treeDataList);
         return newTreeDataList;
     }
 

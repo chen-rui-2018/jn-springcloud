@@ -13,7 +13,12 @@ import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 
 /**
- * Created by arnold.zhu on 6/13/2017.
+ * 数据库配置文件
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
  */
 @Configuration
 public class DruidConfig {

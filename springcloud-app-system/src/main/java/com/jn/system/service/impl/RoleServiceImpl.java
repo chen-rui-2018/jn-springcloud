@@ -16,7 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
-
+/**
+ * 角色
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 @Service
 public class RoleServiceImpl implements RoleService {
     @Autowired
@@ -29,7 +36,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void insertRole(RoleAddModel role) {
+    public void insertRole(RoleAdd role) {
         String[] resourcesId = role.getResourcesId();
         role.setId(UUID.randomUUID().toString());
         roleMapper.insert(role);
@@ -44,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @Transactional
-    public void updateRole(RoleAddModel role) {
+    public void updateRole(RoleAdd role) {
         String[] resourcesId = role.getResourcesId();
         roleResourcesMapper.deleteByT(new RoleResources[]{new RoleResources(null, null, role.getId())});
         roleMapper.updateByPrimaryKey(role);

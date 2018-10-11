@@ -9,8 +9,15 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 
-
-public class BaseController {
+/**
+ * 基础controller的配置
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
+public abstract class BaseController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
@@ -27,7 +34,7 @@ public class BaseController {
 			}
 		});
 		
-		// Date 类型转换
+		// Date 类型转换，将字符串转成日期类型
 		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
 			@Override
 			public void setAsText(String text) {

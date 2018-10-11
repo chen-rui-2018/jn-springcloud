@@ -1,15 +1,22 @@
 package com.jn.common.model;
 
 import java.util.List;
-
+/**
+ * json的树形结构
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class JsonTreeData {
 
-    public String id;       //json id
-    public String pid;      //
-    public String text;     //json 显示文本
-    public String state;    //json 'open','closed'
+    public String id;
+    public String pid;
+    public String text;
+    public String state;
     public Attributes attributes;
-    public List<JsonTreeData> children;       //
+    public List<JsonTreeData> children;
 
     public JsonTreeData(String id, String pid, String text, String state, Attributes attributes,
                         List<JsonTreeData> children) {

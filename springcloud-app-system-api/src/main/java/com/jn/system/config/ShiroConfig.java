@@ -18,7 +18,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
+/**
+ * shiro框架的配置文件
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 @Configuration
 public class ShiroConfig {
 	

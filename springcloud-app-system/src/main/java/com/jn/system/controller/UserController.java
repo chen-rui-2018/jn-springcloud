@@ -3,7 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.model.User;
-import com.jn.system.model.UserAddModel;
+import com.jn.system.model.UserAdd;
 import com.jn.system.model.UserPage;
 import com.jn.system.service.UserService;
 import com.jn.system.vo.UserVO;
@@ -12,7 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * 用户
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 @RestController
 @RequestMapping("/system/user")
 public class UserController extends BaseController {
@@ -28,7 +35,7 @@ public class UserController extends BaseController {
 
     @RequiresPermissions("/system/user/add")
     @RequestMapping(value = "/add")
-    public Result add(UserAddModel user) {
+    public Result add(UserAdd user) {
         userService.insertUser(user);
         return new Result();
 
@@ -42,7 +49,7 @@ public class UserController extends BaseController {
 
     @RequiresPermissions("/system/user/update")
     @RequestMapping(value = "/update")
-    public Result update(UserAddModel muser) {
+    public Result update(UserAdd muser) {
         Assert.notNull(muser.getId(),"用户ID不能为空");
         userService.updateUser(muser);
         return new Result();
@@ -70,7 +77,7 @@ public class UserController extends BaseController {
     }
 
     @RequestMapping(value = "/updatePassword")
-    public Result updatePassword(UserAddModel muser) {
+    public Result updatePassword(UserAdd muser) {
         userService.updatePassword(muser);
         return new Result();
 

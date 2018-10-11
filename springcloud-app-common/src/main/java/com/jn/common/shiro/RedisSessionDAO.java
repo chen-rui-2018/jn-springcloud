@@ -12,14 +12,20 @@ import org.apache.shiro.session.mgt.eis.AbstractSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-
+/**
+ * shiro使用redis进行session存放
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public class RedisSessionDAO extends AbstractSessionDAO {
 
 	private static Logger logger = LoggerFactory.getLogger(RedisSessionDAO.class);
 	/**
 	 * shiro-redis的session对象前缀
 	 */
-	//private RedisManager redisManager;
 	private RedisTemplate<String, Object> redisTemplate;
 	private int expire;
 	

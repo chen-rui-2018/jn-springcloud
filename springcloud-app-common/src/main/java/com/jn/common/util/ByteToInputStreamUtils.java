@@ -12,7 +12,7 @@ import java.io.InputStream;
  * @version： v1.0
  * @modified By:
  */
-public class ByteToInputStream {  
+public class ByteToInputStreamUtils {
   
     public static final InputStream byte2Input(byte[] buf) {  
         return new ByteArrayInputStream(buf);  

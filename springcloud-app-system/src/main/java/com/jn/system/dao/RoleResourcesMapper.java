@@ -4,7 +4,14 @@ import com.jn.system.model.Resources;
 import com.jn.system.model.RoleResources;
 
 import java.util.List;
-
+/**
+ * 角色资源
+ *
+ * @author： fengxh
+ * @date： Created on 2018/10/01 15:31
+ * @version： v1.0
+ * @modified By:
+ */
 public interface RoleResourcesMapper {
     int deleteByPrimaryKey(String id);
 

@@ -28,19 +28,7 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
     public static String INDEX= "index";
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        if (isLoginRequest(request, response)) {
-            if (isLoginSubmission(request, response)) {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Login submission detected.  Attempting to execute login.");
-                }
-                return executeLogin(request, response);
-            } else {
-                if (logger.isTraceEnabled()) {
-                    logger.trace("Login page view.");
-                }
-                return true;
-            }
-        } else {
+        if (!isLoginRequest(request, response)) {
             HttpServletRequest req = (HttpServletRequest)request;
             HttpServletResponse resp = (HttpServletResponse) response;
             if(req.getMethod().equals(RequestMethod.OPTIONS.name())) {
@@ -62,6 +50,8 @@ public class ShiroFormAuthenticationFilter extends FormAuthenticationFilter {
             out.flush();
             out.close();
             return false;
+        } else {
+            return super.onAccessDenied(request, response) ;
         }
     }
 }

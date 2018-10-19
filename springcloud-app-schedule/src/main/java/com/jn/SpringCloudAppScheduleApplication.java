@@ -3,6 +3,8 @@ package com.jn;
 import org.springframework.boot.SpringApplication;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * 调度中心启动方法
  *
@@ -12,11 +14,11 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
  * @modified By:
  */
 @EnableFeignClients
+@EnableScheduling
 @SpringCloudApplication
 public class SpringCloudAppScheduleApplication {
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(SpringCloudAppScheduleApplication.class, args);
 
 	}

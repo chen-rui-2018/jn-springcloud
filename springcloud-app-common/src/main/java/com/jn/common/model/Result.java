@@ -1,5 +1,7 @@
 package com.jn.common.model;
 
+import java.io.Serializable;
+
 /**
  * 统一结果
  *
@@ -8,7 +10,7 @@ package com.jn.common.model;
  * @version： v1.0
  * @modified By:
  */
-public class Result<T> {
+public class Result<T> implements Serializable {
     private String result = "OK";
     private String code = "0000";
     private T data;

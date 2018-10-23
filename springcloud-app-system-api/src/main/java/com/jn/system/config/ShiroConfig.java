@@ -3,13 +3,12 @@ package com.jn.system.config;
 import com.jn.common.shiro.RedisCacheManager;
 import com.jn.common.shiro.RedisSessionDAO;
 import org.apache.shiro.mgt.SecurityManager;
-import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,6 +34,9 @@ public class ShiroConfig {
 	private int shiroRedisSession;
 	@Value(value = "${shiro_redis_cache}")
 	private int shiroRedisCache;
+
+
+	private final static String SESSION_ID = "shiroSessionId";
 	
     @Bean
     public ShiroFilterFactoryBean shirFilter(SecurityManager securityManager) {
@@ -64,7 +66,7 @@ public class ShiroConfig {
         return new ShiroDbRealm();
     }
     /**
-     * EhCacheManager，缓存管理，用户登陆成功后，把用户信息和权限信息缓存起来，
+     * 缓存管理，用户登陆成功后，把用户信息和权限信息缓存起来，
      * 然后每次用户请求时，放入用户的session中，如果不设置这个bean，每个请求都会查询一次数据库。
      * 
      * @return
@@ -84,12 +86,19 @@ public class ShiroConfig {
     	sessionDAO.setExpire(shiroRedisSession);
         return sessionDAO;
     }
-  
-    
+
+    @Bean
+    public SimpleCookie sessionIdCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie(SESSION_ID);
+        return simpleCookie;
+    }
+
+
     @Bean
     public DefaultWebSessionManager sessionManager() {
         MySessionManager mySessionManager = new MySessionManager();
-        mySessionManager.setSessionDAO(redisSessionDAO() );
+        mySessionManager.setSessionDAO(redisSessionDAO());
+        mySessionManager.setSessionIdCookie(sessionIdCookie());
         mySessionManager.setGlobalSessionTimeout(shiroRedisSession);
         return mySessionManager;
     }

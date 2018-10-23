@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 /**
- * shiro认证的重写
+ * shiro安全数据源
  *
  * @author： fengxh
  * @date： Created on 2018/10/01 15:31

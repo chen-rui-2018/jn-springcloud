@@ -39,7 +39,7 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 	public void update(Session session) throws UnknownSessionException {
 		this.saveSession(session);
 	}
-	
+
 	/**
 	 * save session
 	 * @param session
@@ -50,12 +50,15 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 			logger.error("session or session id is null");
 			return;
 		}
-		
 		String key = session.getId().toString();
-		session.setTimeout(expire);		
+		session.setTimeout(expire);
 		redisTemplate.opsForValue().set(keyPrefix+key, session, expire, TimeUnit.MILLISECONDS);
 	}
 
+	/**
+	 * delete
+	 * @param session
+	 */
 	@Override
 	public void delete(Session session) {
 		if(session == null || session.getId() == null){
@@ -63,12 +66,11 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 			return;
 		}
 		redisTemplate.delete(keyPrefix+session.getId().toString());
-
 	}
 
 	@Override
 	public Collection<Session> getActiveSessions() {
-		Set<Session> sessions = new HashSet<Session>();
+		Set<Session> sessions = new HashSet<>();
 		Set<String> keys = redisTemplate.keys(this.keyPrefix + "*");
 		if(keys != null && keys.size()>0){
 			for(String key:keys){
@@ -76,13 +78,12 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 				sessions.add(s);
 			}
 		}
-		
 		return sessions;
 	}
 
 	@Override
 	protected Serializable doCreate(Session session) {
-		Serializable sessionId = this.generateSessionId(session);  
+		Serializable sessionId = this.generateSessionId(session);
         this.assignSessionId(session, sessionId);
         this.saveSession(session);
 		return sessionId;
@@ -90,10 +91,12 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
 	@Override
 	protected Session doReadSession(Serializable sessionId) {
+		System.out.println("sessionId:"+sessionId == null? null:sessionId.toString());
 		if(sessionId == null){
 			logger.error("session id is null");
 			return null;
 		}
+
 		Session s = (Session)redisTemplate.opsForValue().get(keyPrefix+sessionId);
 		return s;
 	}

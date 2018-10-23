@@ -56,10 +56,7 @@ public class RedisCacheManager implements CacheManager {
 		Cache c = caches.get(name);
 		
 		if (c == null) {
-			// create a new cache instance
 			c = new RedisCache<K, V>(redisTemplate, keyPrefix,expire);
-			
-			// add it to the cache collection
 			caches.put(name, c);
 		}
 		return c;

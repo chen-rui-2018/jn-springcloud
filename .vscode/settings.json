@@ -1,0 +1,4 @@
+{
+    "eslint.autoFixOnSave": true,
+    "workbench.editor.revealIfOpen": true
+}

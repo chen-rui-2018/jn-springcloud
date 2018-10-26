@@ -1,0 +1,15 @@
+.filter-bar {
+    align-items: flex-start;
+    &>ul {
+        margin: 0;
+        padding: 0;
+        align-items: center;
+        list-style: none;
+        li {
+            margin-bottom: 10px;
+            &+li {
+                margin-left: 10px;
+            }
+        }
+    }
+}

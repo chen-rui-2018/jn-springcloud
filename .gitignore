@@ -12,3 +12,8 @@
 **/*.pdb
 **/build
 **/.pdb
+
+**/node_modules
+**/*_20*.vue
+**/*_20*.js
+**/*_20*.scss

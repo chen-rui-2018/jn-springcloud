@@ -22,7 +22,8 @@
 		<module>springcloud-app-hystrix</module>
         <module>springcloud-app-turbine</module>
 		<module>springcloud-app-zipkin</module>
-	</modules>
+        <module>springcloud-app-fastdfs</module>
+    </modules>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -90,6 +91,14 @@
 				<artifactId>pagehelper-spring-boot-starter</artifactId>
 				<version>1.2.2</version>
 			</dependency>
+			<!-- fastDfs -->
+			<dependency>
+				<groupId>com.github.tobato</groupId>
+				<artifactId>fastdfs-client</artifactId>
+				<version>1.25.4-RELEASE</version>
+			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
 	<build>

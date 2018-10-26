@@ -6,7 +6,6 @@
 		<artifactId>jn-springcloud-app</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.jn</groupId>
 	<artifactId>springcloud-app-system</artifactId>
 	<packaging>jar</packaging>
 	<description>用户中心</description>

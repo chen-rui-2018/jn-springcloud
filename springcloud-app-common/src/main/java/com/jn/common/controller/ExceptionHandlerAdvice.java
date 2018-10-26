@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 import java.util.List;
 
@@ -68,6 +69,15 @@ public class ExceptionHandlerAdvice {
     public Result handelIllegalArgumentException(IllegalArgumentException e) {
         logger.error("IllegalArgumentException异常", e);
         return new Result(CommonExceptionEnum.NOT_NULL.getCode(), e.getMessage());
+    }
+
+    /**
+     * 文件上传异常
+     */
+    @ExceptionHandler(value = MultipartException.class)
+    public Result handelIllegalArgumentException(MultipartException e) {
+        logger.error("文件流异常", e);
+        return new Result(CommonExceptionEnum.FILE_ERROR.getCode(),CommonExceptionEnum.FILE_ERROR.getMessage());
     }
     /**
      * Exception的异常处理

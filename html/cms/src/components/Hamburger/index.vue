@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 首页图标 -->
     <svg
       :class="{'is-active':isActive}"
       t="1492500959545"

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-
+import ECharts from 'vue-echarts'
+Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import Element from 'element-ui'
@@ -34,7 +35,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  /* 璺敱鍙戠敓鍙樺寲淇敼椤甸潰title */
+  /* 路由发生变化修改页面title */
   if (to.meta.title) {
     document.title = to.meta.title
   }

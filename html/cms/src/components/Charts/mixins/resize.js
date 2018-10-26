@@ -14,6 +14,7 @@ export default {
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.__resizeHandler)
+
     const sidebarElm = document.getElementsByClassName('sidebar-container')[0]
     sidebarElm.removeEventListener('transitionend', this.sidebarResizeHandler)
   },

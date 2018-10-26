@@ -22,6 +22,7 @@ export default {
       'roles'
     ])
   },
+  // 创建后 判断roles是否包含用户名
   created() {
     if (!this.roles.includes('admin')) {
       this.currentRole = 'editorDashboard'

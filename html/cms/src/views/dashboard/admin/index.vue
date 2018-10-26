@@ -2,16 +2,17 @@
   <div class="dashboard-editor-container">
 
     <github-corner style="position: absolute; top: 0px; border: 0; right: 0;"/>
-
+    <!-- 四小块 -->
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+      <!-- //曲线图 -->
       <line-chart :chart-data="lineChartData"/>
       <line-chart :chart-data="lineChartData2"/>
       <line-chart :chart-data="lineChartData3"/>
       <line-chart :chart-data="lineChartData4"/>
     </el-row>
-
+    <!-- 三个表格图 -->
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import axios from 'axios'
 
 export function fetchList(query) {
   return request({
@@ -39,3 +40,15 @@ export function updateArticle(data) {
     data
   })
 }
+export const Tenlist = () => {
+  return axios.get('../../static/aqi-beijing.json').then((res) => {
+    return res
+  })
+}
+// export function Tenlist(data) {
+//   return request({
+//     url: '../../static/aqi-beijing.json',
+//     method: 'get',
+//     data
+//   })
+// }

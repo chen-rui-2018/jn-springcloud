@@ -4,12 +4,10 @@
 
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
-import { debounce } from '@/utils'
-
-const animationDuration = 3000
-
+import resize from '@/components/Charts/mixins/resize'
 export default {
+  // vue中的混入写法，当文件中有其中的代码 则以文件中的为主，没有则合并
+  mixins: [resize],
   props: {
     className: {
       type: String,
@@ -31,26 +29,16 @@ export default {
   },
   mounted() {
     this.initChart()
-    this.__resizeHandler = debounce(() => {
-      if (this.chart) {
-        this.chart.resize()
-      }
-    }, 100)
-    window.addEventListener('resize', this.__resizeHandler)
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return
-    }
-    window.removeEventListener('resize', this.__resizeHandler)
-    this.chart.dispose()
-    this.chart = null
   },
   methods: {
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
+        color: ['#45c9eb', '#a3d469', '#efe638', '#ee8381'],
+        legend: {
+          y: 10
+        },
         tooltip: {
           trigger: 'axis',
           showContent: false
@@ -83,8 +71,7 @@ export default {
               itemName: 'product',
               value: '6时',
               tooltip: '6时'
-            },
-            animationDuration: animationDuration
+            }
           }]
       })
     }

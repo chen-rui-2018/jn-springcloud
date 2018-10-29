@@ -1,6 +1,6 @@
 <template>
   <el-col :span="12" :xs="24" :lg="8" >
-    <a class="c-item-grid" href="#/planning/project">
+    <router-link to="/planning/project/detail" class="c-item-grid">
       <div class="flex-column-wrap">
         <h3 class="r1 f-18 "><span class="text-blue"> {{ iData.content.title }} </span></h3>
         <div class="r2 f-25">
@@ -33,7 +33,7 @@
         {{ iData.content.projectStatus }}
         <i class="iconfont icon-clock" />
       </footer>
-    </a>
+    </router-link>
   </el-col>
 </template>
 <script>

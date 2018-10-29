@@ -31,11 +31,11 @@ module.exports = {
     showEslintErrorsInOverlay: false,
 
     /**
-     * Source Maps
-     */
+         * Source Maps
+         */
 
     // https://webpack.js.org/configuration/devtool/#development
-    devtool: 'cheap-source-map',
+    devtool: 'source-map',
 
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
@@ -54,17 +54,17 @@ module.exports = {
     assetsSubDirectory: 'static',
 
     /**
-     * You can set by youself according to actual condition
-     * You will need to set this if you plan to deploy your site under a sub path,
-     * for example GitHub pages. If you plan to deploy your site to https://foo.github.io/bar/,
-     * then assetsPublicPath should be set to "/bar/".
-     * In most cases please use '/' !!!
-     */
+         * You can set by youself according to actual condition
+         * You will need to set this if you plan to deploy your site under a sub path,
+         * for example GitHub pages. If you plan to deploy your site to https://foo.github.io/bar/,
+         * then assetsPublicPath should be set to "/bar/".
+         * In most cases please use '/' !!!
+         */
     assetsPublicPath: './',
 
     /**
-     * Source Maps
-     */
+         * Source Maps
+         */
     productionSourceMap: false,
     // https://webpack.js.org/configuration/devtool/#production
     devtool: 'source-map',

@@ -1,5 +1,6 @@
 <template>
   <div>
+    {{ opts[0][0] }}
     <div class="flex-box filter-bar">
       <ul class="flex-item flex-box">
         <li
@@ -38,13 +39,14 @@
 </template>
 <script>
 import $ from 'jquery'
-import projectGrid from './components/ProjectGrid'
+import projectGrid from '../components/ProjectGrid'
+import axios from 'axios'
 export default {
   name: 'ProjectPage',
   components: { projectGrid },
   data() {
     return {
-      opts: [
+      opts2: [
         {
           data: {
             content: {
@@ -154,7 +156,8 @@ export default {
       ],
       searchKeyword: '',
       projectStatus: '',
-      scheduleStatus: ''
+      scheduleStatus: '',
+      opts: null
     }
   },
   computed: {
@@ -163,7 +166,7 @@ export default {
     },
     dataList() {
       const projectStatusLabel = (this.projectStatus === '全部' ? '' : this.projectStatus)
-      const scheduleStatusLabel = (this.scheduleStatus === '全部' ? '' : this.scheduleStatus)
+      const scheduleStatusLabel = (this.scheduleStatusLabel === '全部' ? '' : this.scheduleStatusLabel)
       return this.opts.filter(
         d => d.data.content.projectStatus.includes(projectStatusLabel) && d.data.content.scheduleStatus.includes(scheduleStatusLabel)
       )
@@ -183,8 +186,8 @@ export default {
       return [...new Set(statusList)]
     }
   },
-  watch: {
-
+  mounted() {
+    axios.get('https://easy-mock.com/mock/5bd532347c1abe61ecb48935/test/planning').then(response => (this.$set(this, 'opts', response.data.testdata)))
   },
   methods: {
     filterStatus: function(event) {

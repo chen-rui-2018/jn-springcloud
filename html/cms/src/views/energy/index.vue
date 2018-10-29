@@ -4,7 +4,7 @@
       <el-form ref="form" label-width="40px">
         <el-form-item label="时间">
           <el-col :span="3">
-            <el-date-picker type="date" placeholder="选择日期" style="width: 100%;" />
+            <el-date-picker vtype="date" placeholder="选择日期" style="width: 100%;" />
           </el-col>
         </el-form-item>
       </el-form>

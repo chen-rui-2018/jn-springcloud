@@ -4,8 +4,8 @@
       <el-row :gutter="20">
         <el-col :span="19">
           <div class="grid-content bg-purple">
-            <el-button type="primary" round>诚信信用最高TOP5</el-button>
-            <el-button type="primary" round plain>诚信信用最低TOP5</el-button>
+            <el-button :type="current1==0?'primary':''" round @click="rankUp">诚信信用最高TOP5</el-button>
+            <el-button :type="current1==1?'primary':''" round @click="rankDown">诚信信用最低TOP5</el-button>
           </div>
         </el-col>
         <el-col :span="5">
@@ -23,13 +23,14 @@
         <el-col v-for="(item,index) in enterpriseData " :key="index" class="Corporate_content">
           <div class="Corporate_Info">
             <img :src="item.enterpriseLogo" alt="企业logo">
-            <h2>{{ item.enterpriseName }}</h2>
+            <span>{{ item.enterpriseName }}</span>
           </div>
           <p>
           <span>{{ item.enterpriseScale }}</span>分</p>
-          <h4>园区排名 : 第
-          <span>{{ item.enterpriseRanking }}</span>名</h4>
-          <div class="Corporate_ft">详细
+          <h4>
+            园区排名 : 第<!--
+           --><span>{{ item.enterpriseRanking }}</span>名</h4>
+          <div class="Corporate_ft" @click="toDetails">详细
             <i class="el-icon-arrow-right" />
           </div>
         </el-col>
@@ -45,7 +46,7 @@
             <div>企业信用排行</div>
           </el-col>
           <el-col :span="4">
-            <div class="text-right">查看表格
+            <div class="text-right" @click="toDetails">查看表格
               <i class="el-icon-arrow-right" />
             </div>
           </el-col>
@@ -65,7 +66,56 @@ export default {
   data() {
     return {
       input21: '',
-      enterpriseData: [
+      current1: 0,
+      enterpriseData: []
+    }
+  },
+  mounted() {
+    const upList = [
+      {
+        enterpriseName: '云创大数据',
+        enterpriseLogo: '/static/corporate/logo/1-1.png',
+        enterpriseScale: '125',
+        enterpriseRanking: '1'
+      },
+      {
+        enterpriseName: '紫光西部数据',
+        enterpriseLogo: '/static/corporate/logo/1-2.png',
+        enterpriseScale: '115',
+        enterpriseRanking: '2'
+      },
+      {
+        enterpriseName: '艾科朗克',
+        enterpriseLogo: '/static/corporate/logo/1-4.png',
+        enterpriseScale: '113',
+        enterpriseRanking: '3'
+      },
+      {
+        enterpriseName: '拓视普',
+        enterpriseLogo: '/static/corporate/logo/2-3.png',
+        enterpriseScale: '112',
+        enterpriseRanking: '4'
+      },
+      {
+        enterpriseName: '佳汇科技',
+        enterpriseLogo: '/static/corporate/logo/2-4.png',
+        enterpriseScale: '111',
+        enterpriseRanking: '5'
+      }
+
+    ]
+    this.enterpriseData = upList
+  },
+  methods: {
+    toDetails() {
+      this.$router.push({
+        name: 'details',
+        params: {
+          dataObj: { enterpriseName: '云创大数据', NegativeRecord: '10', frontRecord: '85', enterpriseRank: '93', score: '125', percentage: '15%', icon: 'el-icon-sort-up', assessTime: '2018年5月1日', count: '726' }
+        }})
+    },
+    rankUp() {
+      var upList = [
         {
           enterpriseName: '云创大数据',
           enterpriseLogo: '/static/corporate/logo/1-1.png',
@@ -96,7 +146,47 @@ export default {
           enterpriseScale: '111',
           enterpriseRanking: '5'
         }
+
       ]
+      this.enterpriseData = upList
+      this.current1 = 0
+    },
+    rankDown() {
+      var downList = [
+        {
+          enterpriseName: '云创大',
+          enterpriseLogo: '/static/corporate/logo/1-1.png',
+          enterpriseScale: '125',
+          enterpriseRanking: '1'
+        },
+        {
+          enterpriseName: '紫光据',
+          enterpriseLogo: '/static/corporate/logo/1-2.png',
+          enterpriseScale: '115',
+          enterpriseRanking: '2'
+        },
+        {
+          enterpriseName: '艾科克',
+          enterpriseLogo: '/static/corporate/logo/1-4.png',
+          enterpriseScale: '113',
+          enterpriseRanking: '3'
+        },
+        {
+          enterpriseName: '视普',
+          enterpriseLogo: '/static/corporate/logo/2-3.png',
+          enterpriseScale: '112',
+          enterpriseRanking: '4'
+        },
+        {
+          enterpriseName: '佳汇科技',
+          enterpriseLogo: '/static/corporate/logo/2-4.png',
+          enterpriseScale: '111',
+          enterpriseRanking: '5'
+        }
+
+      ]
+      this.enterpriseData = downList
+      this.current1 = 1
     }
   }
   // computed: {
@@ -104,6 +194,7 @@ export default {
   //     const opt=
   //   }
   // }
+
 }
 </script>
 
@@ -140,9 +231,11 @@ export default {
     }
   }
   .Corporate_content,
-  .Corporate_chart:hover {
-    box-shadow: 0 0 10px #2ca8e7;
-    transform: translateY(-3px);
+  .Corporate_chart {
+    &:hover {
+      box-shadow: 0 0 10px #2ca8e7;
+      transform: translateY(-3px);
+    }
   }
   .Corporate_rk {
     margin: 15px 0;
@@ -159,9 +252,10 @@ export default {
           width: 100%;
           display: block;
         }
-        h2 {
-          padding: 15px 0;
+        > span {
           text-align: center;
+          display: block;
+          padding: 5px;
           font-size: 20px;
         }
       }

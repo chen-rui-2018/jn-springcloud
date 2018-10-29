@@ -29,6 +29,13 @@ const operationRouter = {
       component: () => import('@/views/enterprise/index'),
       name: 'enterprise',
       meta: { title: '企业信用', noCache: true }
+    },
+    {
+      path: 'details',
+      component: () => import('@/views/enterprise/details'),
+      name: 'details',
+      meta: { title: '企业信用详情', noCache: true }
+      // hidden: true
     }
   ]
 }

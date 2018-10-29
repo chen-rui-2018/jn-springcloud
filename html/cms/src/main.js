@@ -9,6 +9,8 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import '@/styles/index.scss' // global css
+// 寮曞叆瀛椾綋鍥炬爣
+import '@/assets/icon/css/font-awesome.min.css'
 
 import App from './App'
 import router from './router'
@@ -35,7 +37,7 @@ Object.keys(filters).forEach(key => {
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  /* 路由发生变化修改页面title */
+  /* 路锟缴凤拷锟斤拷锟戒化锟睫革拷页锟斤拷title */
   if (to.meta.title) {
     document.title = to.meta.title
   }

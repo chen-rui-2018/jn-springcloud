@@ -42,9 +42,9 @@
     </div>
     <div class="development_content ">
       <el-row>
-        <el-col v-for="(item,index) in dataList " :key="index" :xs="12" :sm="12" :lg="8" >
+        <el-col v-for="(item,index) in dataList " :key="index" :xs="12" :sm="12" :md="8" :lg="8" >
           <div class="grid-content bg-purple">
-            <dpInfo :title="item.title" :piedata="item.piedata" :ranking="item.ranking"/>
+            <dpInfo :title="item.title" :piedata="item.piedata" :ranking="item.ranking" :count-number="countNumber"/>
           </div>
         </el-col>
       </el-row>
@@ -69,21 +69,22 @@ export default {
       value: '2018-5',
       title1: '综合发展名次走势',
       title2: '综合发展TOP20 排名',
-      // 在交互中  设置为空值  然后通过computed计算属性 给他重新赋值
+      // 在交互中  设置为空值  然后通过mounted 给他重新赋值
       dataList: [
-        { title: '园区招商', ranking: '132', piedata: [{ value: 335, name: '' }, { value: 310, name: '' }] },
+        { title: '园区招商', ranking: '1000', piedata: [{ value: 335, name: '' }, { value: 310, name: '' }] },
         { title: '孵化企业', ranking: '14', piedata: [{ value: 315, name: '' }, { value: 310, name: '' }] },
-        { title: '发展高新技术企业', ranking: '20', piedata: [{ value: 155, name: '' }, { value: 310, name: '' }] },
+        { title: '发展高新技术企业', ranking: '5000', piedata: [{ value: 155, name: '' }, { value: 310, name: '' }] },
         { title: '新上市企业', ranking: '35', piedata: [{ value: 90, name: '' }, { value: 310, name: '' }] },
         { title: '研发投入占比销售收入', ranking: '20', piedata: [{ value: 655, name: '' }, { value: 310, name: '' }] },
-        { title: '科技拨款占比财政支出', ranking: '20', piedata: [{ value: 315, name: '' }, { value: 310, name: '' }] },
+        { title: '科技拨款占比财政支出', ranking: '11000', piedata: [{ value: 315, name: '' }, { value: 310, name: '' }] },
         { title: '高新技术收入占比', ranking: '20', piedata: [{ value: 65, name: '' }, { value: 310, name: '' }] },
-        { title: '企业本科以上学历占比', ranking: '20', piedata: [{ value: 95, name: '' }, { value: 310, name: '' }] },
+        { title: '企业本科以上学历占比', ranking: '10520', piedata: [{ value: 95, name: '' }, { value: 310, name: '' }] },
         { title: '今年新增专利', ranking: '20', piedata: [{ value: 135, name: '' }, { value: 310, name: '' }] },
-        { title: '科技成果转移', ranking: '20', piedata: [{ value: 125, name: '' }, { value: 310, name: '' }] },
+        { title: '科技成果转移', ranking: '10020', piedata: [{ value: 125, name: '' }, { value: 310, name: '' }] },
         { title: '万元增量能耗', ranking: '20', piedata: [{ value: 455, name: '' }, { value: 310, name: '' }] },
-        { title: '今年企业已纳税额', ranking: '20', piedata: [{ value: 400, name: '' }, { value: 310, name: '' }] }
-      ]
+        { title: '今年企业已纳税额', ranking: '12110', piedata: [{ value: 400, name: '' }, { value: 310, name: '' }] }
+      ],
+      countNumber: '12452'
 
     }
   }

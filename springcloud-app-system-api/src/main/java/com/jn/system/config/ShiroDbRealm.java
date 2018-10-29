@@ -2,6 +2,7 @@ package com.jn.system.config;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
@@ -33,8 +34,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		Result<User> user = client.getUser(new User(null,token.getUsername(),null));
-		// TODO: 2018/10/27 获取用户调整
-		if(user.getData() == null) {
+		if(GlobalConstants.SUCCESS_CODE.equals(user.getCode()) && user.getData() == null ){
+			// TODO: 2018/10/29 throws 用户不存在的异常
+		}else if (!GlobalConstants.SUCCESS_CODE.equals(user.getCode())){
 			throw new JnSpringCloudException(user) ;
 		}
 		// 认证缓存信息

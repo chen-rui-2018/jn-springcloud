@@ -13,4 +13,9 @@ public final class GlobalConstants {
      * 全站，是http，还是https
      */
     public final static String HTTP_PRODOCOL = "http://";
+
+    /**
+     * 全站，默认成功编码是0000
+     */
+    public final static String SUCCESS_CODE = "0000";
 }

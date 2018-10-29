@@ -6,6 +6,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,17 +52,14 @@ public class ExceptionHandlerAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        StringBuffer resultBuffer = new StringBuffer();
-        List<ObjectError> errors = e.getBindingResult().getAllErrors();
-        String tips = "参数不合法";
-        if (errors.size() > 0) {
-            for(ObjectError objectError :errors) {
-                resultBuffer.append(objectError.getDefaultMessage()).append(",");
-            }
-        }else {
-            resultBuffer.append(tips) ;
-        }
-        return new Result(CommonExceptionEnum.VALID_ERROR.getCode(),resultBuffer.toString());
+        return this.handleBindResult(e.getBindingResult()) ;
+    }
+    /**
+     * Bind数据异常
+     */
+    @ExceptionHandler(value = BindException.class)
+    public Result handelIllegalArgumentException(BindException e) {
+        return this.handleBindResult(e);
     }
     /**
      * 断言判断参数的异常处理
@@ -78,6 +77,8 @@ public class ExceptionHandlerAdvice {
         logger.error("文件流异常", e);
         return new Result(CommonExceptionEnum.FILE_ERROR.getCode(),CommonExceptionEnum.FILE_ERROR.getMessage());
     }
+
+
     /**
      * Exception的异常处理
      */
@@ -96,6 +97,26 @@ public class ExceptionHandlerAdvice {
     public Result handleThrowable(Throwable e) {
         logger.error("Throwable异常", e);
         return new Result(CommonExceptionEnum.UN_KNOW.getCode(), e.getMessage());
+    }
+
+
+    /**
+     * 封装绑定参数的异常
+     * @param bindingResult
+     * @return
+     */
+    private Result handleBindResult(BindingResult bindingResult){
+        StringBuffer resultBuffer = new StringBuffer();
+        List<ObjectError> errors = bindingResult.getAllErrors();
+        String tips = "参数不合法";
+        if (errors.size() > 0) {
+            for(ObjectError objectError :errors) {
+                resultBuffer.append(objectError.getDefaultMessage()).append(",");
+            }
+        }else {
+            resultBuffer.append(tips) ;
+        }
+        return new Result(CommonExceptionEnum.VALID_ERROR.getCode(),resultBuffer.toString());
     }
 
 

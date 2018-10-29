@@ -3,21 +3,24 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 
 /**
  * 用户信息
  */
-@ApiModel(value = "User", description = "用户")
+@ApiModel(value = "User" ,description = "用户信息")
 public class User implements Serializable{
 
 	private static final long serialVersionUID = -7484136779753770396L;
     @ApiModelProperty(value = "id")
 	private String id;
-    @ApiModelProperty(value = "账户名")
+    @ApiModelProperty("账户名")
+    @Size(min = 4,max = 10,message = "账号TEST")
     private String username;
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty("密码")
+    @Size(min = 4,max = 10,message = "密码TEST")
     private String password;
 
 	public User(String id, String username, String password) {

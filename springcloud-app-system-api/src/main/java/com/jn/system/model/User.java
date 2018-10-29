@@ -1,21 +1,23 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
 
-
-
-
+/**
+ * 用户信息
+ */
+@ApiModel(value = "User", description = "用户")
 public class User implements Serializable{
 
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7484136779753770396L;
+    @ApiModelProperty(value = "id")
 	private String id;
+    @ApiModelProperty(value = "账户名")
     private String username;
+    @ApiModelProperty(value = "密码")
     private String password;
 
 	public User(String id, String username, String password) {

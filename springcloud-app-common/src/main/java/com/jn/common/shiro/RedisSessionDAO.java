@@ -91,7 +91,6 @@ public class RedisSessionDAO extends AbstractSessionDAO {
 
 	@Override
 	protected Session doReadSession(Serializable sessionId) {
-		System.out.println("sessionId:"+sessionId == null? null:sessionId.toString());
 		if(sessionId == null){
 			logger.error("session id is null");
 			return null;

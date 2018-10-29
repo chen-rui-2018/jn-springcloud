@@ -1,6 +1,7 @@
 package com.jn;
 
 import com.jn.pre.OneToAccessFilter;
+import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Bean;
  * @modified By:
  */
 @EnableZuulProxy
+@EnableSwagger2Doc
 @SpringCloudApplication
 public class SpringCloudAppZuulApplication {
   

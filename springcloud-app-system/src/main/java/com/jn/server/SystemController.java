@@ -1,11 +1,13 @@
 package com.jn.server;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.Result;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
 import com.jn.system.service.ResourcesService;
 import com.jn.system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,8 +39,8 @@ public class SystemController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
-    public User getUser(@RequestBody  User u) {
-    	return userService.findTByT(u);
+    public Result<User> getUser(@RequestBody @Validated User u) {
+    	return new Result(userService.findTByT(u));
     }
     /**
      * 获取资源

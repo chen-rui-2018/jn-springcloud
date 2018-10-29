@@ -1,5 +1,7 @@
 package com.jn.system.config;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
@@ -30,9 +32,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-		User user = client.getUser(new User(null,token.getUsername(),null));
+		Result<User> user = client.getUser(new User(null,token.getUsername(),null));
+		// TODO: 2018/10/27 获取用户调整
+		if(user.getData() == null) {
+			throw new JnSpringCloudException(user) ;
+		}
 		// 认证缓存信息
-		return new SimpleAuthenticationInfo(user.getId(), user.getPassword().toCharArray(), getName());
+		return new SimpleAuthenticationInfo(user.getData().getId(), user.getData().getPassword().toCharArray(), getName());
 	}
 
 	/**
@@ -42,6 +48,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		// TODO: 2018/10/27 按照新的数据模型，进行改造。。。炮哥
 		String shiroUser =(String) principals.getPrimaryPrincipal();
 		List<Resources> roleList = client.getResources(new Resources(shiroUser,null,null,null,"2",null));
 		Set<String> urlSet = new HashSet<>();

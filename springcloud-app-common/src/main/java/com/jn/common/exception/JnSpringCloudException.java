@@ -2,6 +2,7 @@ package com.jn.common.exception;
 
 
 import com.jn.common.api.CodeAndMsg;
+import com.jn.common.model.Result;
 
 /**
  * 统一接口对外的异常包装类，用于业务抛异常
@@ -59,6 +60,15 @@ public class JnSpringCloudException extends RuntimeException {
         super(msg,throwable);
         this.msg = msg;
         this.code = codeAndMsg.getCode();
+    }
+
+    /**
+     * 通过结果model初始化
+     * @param result
+     */
+    public JnSpringCloudException(Result result) {
+        this.msg = result.getResult() ;
+        this.code = result.getCode() ;
     }
 
     public String getCode() {

@@ -70,7 +70,6 @@ public class ExceptionHandlerAdvice {
         logger.error("IllegalArgumentException异常", e);
         return new Result(CommonExceptionEnum.NOT_NULL.getCode(), e.getMessage());
     }
-
     /**
      * 文件上传异常
      */

@@ -43,13 +43,15 @@ public class ShiroConfig {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         //拦截器.
-        Map<String,String> filterChainDefinitionMap = new LinkedHashMap<String,String>();
+        Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 过滤链定义，从上向下顺序执行，一般将/**放在最为下边
         //authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问
         filterChainDefinitionMap.put("/hystrix.stream", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         //所有内部提供的api接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
+        ///v2/api-docs
+        filterChainDefinitionMap.put("/v2/api-docs/**", "anon");
         //所有客人访问的接口不需要拦截
         filterChainDefinitionMap.put("/guest/**", "anon");
         filterChainDefinitionMap.put("/**", "authc");

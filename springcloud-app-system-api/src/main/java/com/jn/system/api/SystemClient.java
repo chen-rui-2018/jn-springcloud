@@ -2,6 +2,7 @@ package com.jn.system.api;
 
 import java.util.List;
 
+import com.jn.common.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ public interface SystemClient {
 
 
     @RequestMapping(value = "/api/system/getUser", method = RequestMethod.POST)
-    User getUser(@RequestBody  User u);
+    Result<User> getUser(@RequestBody  User u);
 
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
     List<Resources> getResources(@RequestBody  Resources r);

@@ -20,7 +20,9 @@
 - shiro 会话
 - redis 集群会话，shiro缓存，mybatis二级缓存
 - 连接池 druid
-- ？？？？ 页面UI
+- swagger 接口API文档
+- VUE js框架
+- ElementUI  页面UI框架
 
 ## 启动
 - 1.启动redis

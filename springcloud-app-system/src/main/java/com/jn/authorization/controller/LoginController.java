@@ -1,11 +1,14 @@
-package com.jn.system.controller;
+package com.jn.authorization.controller;
 
+import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.service.LoginService;
+import com.jn.system.model.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,25 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
+
+@Api(tags = "鉴权管理")
 @RestController
 public class LoginController extends BaseController  {
-
-    public static String INDEX= "index";
 
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value = "/index")
-    public Result index() {
-        return new Result(INDEX,null);
-    }
-
+    @ApiOperation(value = "登录", httpMethod = "POST", response=Result.class)
     @RequestMapping(value = "/login")
-    public Object loginPost(String username, String password) {
-        loginService.loginPost(username, password);
+    public Result loginPost(@Validated User user) {
+        loginService.login(user);
         return new Result(SecurityUtils.getSubject().getSession().getId());
     }
 
+    @ApiOperation(value = "退出", httpMethod = "POST", response=Result.class)
     @RequestMapping(value = "/logoutJSON")
     public Result logoutJSON() {
         loginService.logoutJSON();

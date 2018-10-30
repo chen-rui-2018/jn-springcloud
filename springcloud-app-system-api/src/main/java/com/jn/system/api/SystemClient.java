@@ -36,7 +36,7 @@ public interface SystemClient {
      * @return
      */
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
-    List<Resources> getResources(@RequestBody  Resources r);
+    Result<List<Resources>> getResources(@RequestBody  Resources r);
 
 
 

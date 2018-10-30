@@ -1,6 +1,8 @@
 package com.jn.server;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.enums.CommonExceptionEnum;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
@@ -40,7 +42,11 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
-    	return new Result(userService.findTByT(u));
+        User user = userService.findTByT(u) ;
+        if(user == null) {
+            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
+        }
+    	return new Result(user);
     }
     /**
      * 获取资源
@@ -48,7 +54,11 @@ public class SystemController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/getResources", method = RequestMethod.POST)
-    public List<Resources> getResources(@RequestBody  Resources r) {
-    	return resourcesService.findTByT(r);
+    public Result<List<Resources>> getResources(@RequestBody  Resources r) {
+        List<Resources> resourcesList = resourcesService.findTByT(r) ;
+        if(resourcesList == null || resourcesList.size() == 0) {
+            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
+        }
+    	return new Result(resourcesList);
     }
 }

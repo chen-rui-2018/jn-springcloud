@@ -22,10 +22,19 @@ import com.jn.system.model.User;
 @FeignClient("springcloud-app-system")
 public interface SystemClient {
 
-
+    /**
+     * 获取用户信息
+     * @param u
+     * @return
+     */
     @RequestMapping(value = "/api/system/getUser", method = RequestMethod.POST)
     Result<User> getUser(@RequestBody  User u);
 
+    /**
+     * 获取资源列表
+     * @param r
+     * @return
+     */
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
     List<Resources> getResources(@RequestBody  Resources r);
 

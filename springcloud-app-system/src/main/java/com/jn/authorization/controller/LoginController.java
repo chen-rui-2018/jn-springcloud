@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  */
 
-@Api(tags = "鉴权管理")
+@Api(tags = "登录鉴权管理")
 @RestController
 public class LoginController extends BaseController  {
 

@@ -86,7 +86,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User selectByPrimaryKey() {
-        User u = userMapper.selectByPrimaryKey((String) SecurityUtils.getSubject().getPrincipal());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        User u = userMapper.selectByPrimaryKey(user.getId());
         u.setPassword("");
         return u;
     }

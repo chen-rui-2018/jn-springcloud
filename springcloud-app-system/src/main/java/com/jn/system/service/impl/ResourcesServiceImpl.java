@@ -6,6 +6,7 @@ import com.jn.common.util.TreeNodeUtils;
 import com.jn.system.dao.ResourcesMapper;
 import com.jn.system.model.Resources;
 import com.jn.system.model.RoleResources;
+import com.jn.system.model.User;
 import com.jn.system.service.ResourcesService;
 import com.jn.system.service.RoleService;
 import org.apache.shiro.SecurityUtils;
@@ -83,8 +84,9 @@ public class ResourcesServiceImpl implements ResourcesService {
 
     @Override
     public List<JsonTreeData> findResourcesEMUByResources() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         return resourcesToJsonTreeData(this.findTByT
-                (new Resources((String) SecurityUtils.getSubject().getPrincipal(), null, null, null, "1", null)));
+                (new Resources(user.getId() , null, null, null, "1", null)));
     }
 
     @Override

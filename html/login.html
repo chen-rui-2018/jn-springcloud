@@ -9,12 +9,12 @@
 	<script type="text/javascript">
 		
 		function submitForm(){
-			
 			if($("#ff").form('validate')==true){
 				$.ajax({   
 				     url:url+"/login",   
-				     type:$("#ff").attr("method"),   
-				     data:$("#ff").serializeArray(),
+				     type:$("#ff").attr("method"),
+					 contentType: 'application/json',
+				     data:JSON.stringify($('#ff').serializeJSON()),
 				     success:function(data){
 				    	 if(data.code=="0000"){
 				        	window.location=htmlURL+"/index.html";

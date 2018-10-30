@@ -1,4 +1,4 @@
-package com.jn.common.shiro;
+package com.jn.system.config;
 
 import java.io.Serializable;
 import java.util.Collection;

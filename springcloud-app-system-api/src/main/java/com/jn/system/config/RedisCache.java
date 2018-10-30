@@ -1,7 +1,10 @@
-package com.jn.common.shiro;
+package com.jn.system.config;
 
+import com.jn.system.model.User;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
+import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,67 +20,29 @@ import java.util.concurrent.TimeUnit;
  * @version： v1.0
  * @modified By:
  */
-public class RedisCache<K, V> implements Cache<K, V> {
+class RedisCache<K, V> implements Cache<K, V> {
 	
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
-		
-	/**
-     * The wrapped Jedis instance.
-     */
-	
+
 	private RedisTemplate<String, Object> redisTemplate;	
-	/**
-	 * The Redis key prefix for the sessions 
-	 */
+
 	private String keyPrefix ;
 	
 	private int expire;
-	/**
-	 * Returns the Redis session keys
-	 * prefix.
-	 * @return The prefix
-	 */
-	public String getKeyPrefix() {
-		return keyPrefix;
-	}
 
-	/**
-	 * Sets the Redis sessions key 
-	 * prefix.
-	 * @param keyPrefix The prefix
-	 */
-	public void setKeyPrefix(String keyPrefix) {
-		this.keyPrefix = keyPrefix;
-	}
-	
-	/**
-	 * 通过一个JedisManager实例构造RedisCache
-	 */
-	public RedisCache(RedisTemplate<String, Object> redisTemplate){
-		 if (redisTemplate == null) {
-	         throw new IllegalArgumentException("Cache argument cannot be null.");
-	     }
-	     this.redisTemplate = redisTemplate;
-	}
-	
-
-	public RedisCache(RedisTemplate<String, Object> redisTemplate, 
-				String prefix,int expire){
-		 
+	public RedisCache(RedisTemplate<String, Object> redisTemplate, String prefix,int expire){
 		 this.redisTemplate = redisTemplate;
-		// set the prefix
-		this.keyPrefix = prefix;
-		this.expire = expire;
+		 this.keyPrefix = prefix;
+		 this.expire = expire;
 	}
  	
 	@Override
 	public V get(K key) throws CacheException {
-		logger.debug("根据key从Redis中获取对象 key [" + key + "]");
 		try {
 			if (key == null) {
 	            return null;
 	        }else{
-				V value = (V)redisTemplate.opsForValue().get(keyPrefix+key);
+				Object k=getKey(key);
+				V value = (V)redisTemplate.opsForValue().get(keyPrefix+k);
 	        	return value;
 	        }
 		} catch (Throwable t) {
@@ -88,9 +53,9 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public V put(K key, V value) throws CacheException {
-		logger.debug("根据key从存储 key [" + key + "]");
 		 try {
-			 	redisTemplate.opsForValue().set(keyPrefix+key, value,expire, TimeUnit.MILLISECONDS);
+			 	Object k=getKey(key);
+			 	redisTemplate.opsForValue().set(keyPrefix+k, value,expire, TimeUnit.MILLISECONDS);
 	            return value;
 	        } catch (Throwable t) {
 	            throw new CacheException(t);
@@ -99,10 +64,11 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public V remove(K key) throws CacheException {
-		logger.debug("从redis中删除 key [" + key + "]");
+
 		try {
+			Object k=getKey(key);
             V previous = get(key);
-            redisTemplate.delete(keyPrefix+key);
+            redisTemplate.delete(keyPrefix+k);
             return previous;
         } catch (Throwable t) {
             throw new CacheException(t);
@@ -111,7 +77,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 	@Override
 	public void clear() throws CacheException {
-		logger.debug("从redis中删除所有元素");
+
 		try {
 			redisTemplate.delete(redisTemplate.keys(keyPrefix+"*"));
 		} catch (Throwable t) {
@@ -136,7 +102,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
             if (CollectionUtils.isEmpty(keys)) {
             	return Collections.emptySet();
             }else{
-            	Set<K> newKeys = new HashSet<K>();
+            	Set<K> newKeys = new HashSet<>();
             	for(String key:keys){
             		newKeys.add((K)key);
             	}
@@ -169,6 +135,19 @@ public class RedisCache<K, V> implements Cache<K, V> {
         }
 	}
 
+	/**
+	 * 使用用户对象获取用户ID作为缓存的key
+	 * @param key
+	 * @return
+	 */
+	private Object getKey(K key) {
+		if(key instanceof PrincipalCollection) {
+			PrincipalCollection pc=(PrincipalCollection) key;
+			User user =(User)pc.getPrimaryPrincipal();
+			return user.getId();
+		}
+		return key;
+	}
 	public int getExpire() {
 		return expire;
 	}

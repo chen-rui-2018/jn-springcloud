@@ -1,7 +1,5 @@
 package com.jn.system.config;
 
-import com.jn.common.shiro.RedisCacheManager;
-import com.jn.common.shiro.RedisSessionDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;

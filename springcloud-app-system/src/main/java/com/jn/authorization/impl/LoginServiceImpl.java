@@ -9,6 +9,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
+/**
+ * 登录
+ */
 @Service
 public class LoginServiceImpl implements LoginService {
 

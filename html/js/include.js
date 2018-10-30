@@ -4,6 +4,7 @@ var htmlURL = "";
 
 
 document.write("<script type='text/javascript' src='"+htmlURL+"/js/jquery-easyui-1.5/jquery.min.js'></script>");
+document.write('<script src="https://cdn.bootcss.com/jquery.serializeJSON/2.9.0/jquery.serializejson.min.js"></script>');
 document.write("<script type='text/javascript' src='"+htmlURL+"/js/jquery-easyui-1.5/jquery.easyui.min.js'></script>");
 document.write("<script type='text/javascript' src='"+htmlURL+"/js/jquery-easyui-1.5/locale/easyui-lang-zh_CN.js'></script>");
 document.write("<script type='text/javascript' src='"+htmlURL+"/js/method.js'></script>");

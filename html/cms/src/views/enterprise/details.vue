@@ -61,7 +61,7 @@
               <span>{{ dataList.enterpriseName }}</span>企业信用</div>
               <div class="assessResult">高于园内企业平均水平
                 <span>{{ dataList.percentage }}</span>
-                <i class="}" />
+                <i class="fa fa-long-arrow-up" />
               </div>
               <div class="assessTime">评估时间:
                 <span>{{ dataList.assessTime }}</span>
@@ -109,19 +109,40 @@
                 </svg>
               </div>
             </div>
-            <div class="rank"><span>第</span>{{ dataList.enterpriseRank }}名<i class="fa fa-long-arrow-up"/></div>
+            <div class="rank">
+              <span>第</span>{{ dataList.enterpriseRank }}名
+              <i class="fa fa-long-arrow-up" />
+            </div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="header_right">
-            <div class="front text-right"><i class="fa fa-thumbs-o-up "/> 正面记录:{{ dataList.frontRecord }}</div>
-            <div class="negative text-right"><i class="fa fa-thumbs-o-down "/> 负面记录:{{ dataList.NegativeRecord }}</div>
-        </div></el-col>
+            <div class="front text-right">
+            <i class="fa fa-thumbs-o-up " /> 正面记录:{{ dataList.frontRecord }}</div>
+            <div class="negative text-right">
+            <i class="fa fa-thumbs-o-down " /> 负面记录:{{ dataList.NegativeRecord }}</div>
+          </div>
+        </el-col>
       </el-row>
     </header>
-    <el-row>
-      <el-col :span="12"><div class="grid-content bg-purple"/></el-col>
-      <el-col :span="12"><div class="grid-content bg-purple-light"/></el-col>
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <div class="grid-content bg-purple"/>
+        <el-table :data="tableData" class="text-center" style="width: 100%">
+          <el-table-column class="text-center" prop="date" label="指标" />
+          <el-table-column class="text-center" prop="name" label="总分" />
+          <el-table-column class="text-center" prop="address" label="记录数" />
+          <el-table-column class="text-center" prop="qushi" label="趋势">
+            <template slot-scope="scope">
+              <i class="fa fa-long-arrow-up" />
+            </template>
+          </el-table-column>
+        </el-table>
+
+      </el-col>
+      <el-col :span="16">
+        <div class="grid-content bg-purple-light" />
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -130,7 +151,63 @@
 export default {
   data() {
     return {
-      dataList: {}
+      dataList: {},
+      tableData: [
+        {
+          date: '园区评价',
+          name: '-12',
+          address: '3',
+          qushi: ``
+        },
+        {
+          date: '银行信贷',
+          name: '0',
+          address: '39',
+          qushi: 'up'
+        },
+        {
+          date: '企业运营',
+          name: '-2',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        },
+        {
+          date: '员工评价',
+          name: '21',
+          address: '上海市',
+          qushi: 'up'
+        }
+      ]
     }
   },
   mounted() {
@@ -152,6 +229,7 @@ export default {
 .details {
   header {
     padding: 15px;
+    margin-bottom: 20px;
     .header_left {
       display: flex;
       .Credit_Score {
@@ -192,17 +270,17 @@ export default {
           color: #ffb800;
         }
       }
-      .rank{
-        color:#f00;
+      .rank {
+        color: #f00;
       }
       .row-bg {
         color: #2ca9f8;
       }
-      .dib{
+      .dib {
         height: 23px;
         position: relative;
         margin: 5px 0;
-        >.active{
+        > .active {
           position: absolute;
           top: 0;
           left: 0;
@@ -211,19 +289,19 @@ export default {
         }
       }
     }
-    .header_right{
-      .front,.negative{
-        padding:15px 5px;
+    .header_right {
+      .front,
+      .negative {
+        padding: 15px 5px;
       }
-      .fa-thumbs-o-up{
+      .fa-thumbs-o-up {
         font-size: 20px;
-        color:#00b050;
+        color: #00b050;
       }
-      .fa-thumbs-o-down{
-         font-size: 20px;
-        color:#c00000;
+      .fa-thumbs-o-down {
+        font-size: 20px;
+        color: #c00000;
       }
-
     }
   }
 }

@@ -66,13 +66,15 @@
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
           <el-button type="primary" align="center" size="mini" @click="showBumenDialog(scope.row)">部门岗位</el-button>
-          <el-button type="primary" size="mini" @click="handleRole(scope.row)">角色</el-button>
+          <el-button type="primary" size="mini" @click="showRoleDialog(scope.row)">角色</el-button>
           <!-- 删除按钮 -->
           <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户">
       <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="70px" style="width: 400px; margin-left:50px;">
@@ -150,20 +152,24 @@
     <el-dialog :visible.sync="bumendialogFormVisible" title="部门、岗位">
       <el-button type="primary" round>分配</el-button>
       <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="部门">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="部门" width="210" align="center">
           <template slot-scope="scope">
-            <el-cascader :options="options" placeholder="试试搜索：指南" filterable />
+            <el-cascader :options="options" placeholder="请选择部门" filterable />
           </template>
         </el-table-column>
-        <el-table-column prop="name" label="岗位" >
+        <el-table-column label="岗位" width="140" align="center">
           <template slot-scope="scope">
-            <el-select v-model="value8" filterable placeholder="请选择">
+            <el-select v-model="scope.row.name" filterable placeholder="请选择岗位">
               <el-option v-for="item in gangweioptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="address" label="默认" show-overflow-tooltip/>
+        <el-table-column prop="address" label="默认" align="center">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" round>设置为默认</el-button>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <!-- 删除按钮 -->
@@ -178,6 +184,17 @@
         <el-button type="primary" @click="bumendialogFormVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 弹出的角色对话框 -->
+    <el-dialog
+      :visible.sync="roledialogVisible"
+      title="角色">
+      <el-transfer v-model="value1" :data="data"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="roledialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="roledialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 
 </template>
@@ -185,7 +202,23 @@
 <script>
 export default {
   data() {
+    // 角色相关信息
+    const generateData = _ => {
+      const data = []
+      for (let i = 1; i <= 15; i++) {
+        data.push({
+          key: i,
+          label: `备选项 ${i}`
+        })
+      }
+      return data
+    }
     return {
+      data: generateData(),
+      value1: [1, 4],
+      pagesize: 1,
+      total: 0,
+      pagenum: 1,
       userList: [],
       options: [
         {
@@ -455,57 +488,47 @@ export default {
           ]
         }
       ],
-      gangweioptions: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value8: '',
+      gangweioptions: [
+        {
+          value: '选项1',
+          label: '经理'
+        },
+        {
+          value: '选项2',
+          label: '工程师'
+        },
+        {
+          value: '选项3',
+          label: '蚵仔煎'
+        },
+        {
+          value: '选项4',
+          label: '龙须面'
+        },
+        {
+          value: '选项5',
+          label: '北京烤鸭'
+        }
+      ],
       tableData3: [
         {
           date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
+          address: ''
         },
         {
           date: '2016-05-02',
-          name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         },
         {
           date: '2016-05-04',
-          name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         },
         {
           date: '2016-05-01',
-          name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         },
         {
           date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-07',
-          name: '王小虎',
           address: '上海市普陀区金沙江路 1518 弄'
         }
       ],
@@ -518,6 +541,7 @@ export default {
       adddialogFormVisible: false,
       editdialogFormVisible: false,
       bumendialogFormVisible: false,
+      roledialogVisible: false,
       statusOptions: ['有效', '失效'],
       departmentOptions: ['研发部', '工程部', '维修部', '人力部', '财务部'],
       departmentdata: [
@@ -603,8 +627,11 @@ export default {
       this.multipleSelection = val
     },
 
-    // 添加角色功能实现
-    handleRole() {},
+    // 显示角色对话框
+    showRoleDialog(row) {
+      console.log(row)
+      this.roledialogVisible = true
+    },
     // 删除用户功能实现
     deleteUser() {},
     // 项目初始化
@@ -652,6 +679,13 @@ export default {
         }
       ]
       this.userList = list
+    },
+    // 分页功能
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`)
     }
   }
 }

@@ -26,10 +26,10 @@ public class FastDfsClientWrapper {
     @Autowired
     private FastFileStorageClient storageClient;
 
-    @Value("${fdfs.resHost}")
+    @Value("${fdfs.ngStoregeIP}")
     private String resHost;
 
-    @Value("${fdfs.storagePort}")
+    @Value("${fdfs.ngStoregePort}")
     private String storagePort;
 
     /**

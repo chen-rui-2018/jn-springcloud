@@ -20,22 +20,37 @@ import java.io.IOException;
  * @modified By:
  */
 @RestController
-@RequestMapping("/upload")
 public class UploadController {
 
     @Autowired
     private FastDfsClientWrapper fastDfsClientWrapper;
 
-
-    @RequestMapping("fastUpload")
+    /**
+     * 不需要登录的上传
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/guest/upload/fastUpload")
     public Result<String> upload(@RequestParam("file") MultipartFile file) throws IOException{
         Assert.notNull(file,"文件不能为空");
         Result<String> result = new Result();
         result.setData(fastDfsClientWrapper.uploadFile(file));
         return result;
     }
-
-
+    /**
+     * 需要登录的上传
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/upload/fastUpload")
+    public Result<String> uploadByLogin(@RequestParam("file") MultipartFile file) throws IOException{
+        Assert.notNull(file,"文件不能为空");
+        Result<String> result = new Result();
+        result.setData(fastDfsClientWrapper.uploadFile(file));
+        return result;
+    }
 
 
 }

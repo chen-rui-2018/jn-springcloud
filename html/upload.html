@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<head>
+
+
+    <title></title>
+    <script type="text/javascript" src="js/include.js"></script>
+
+</head>
+
+<body>
+
+<div>上传测试不带登录
+        <form  style="padding:10px 20px 10px 40px;"  enctype="multipart/form-data" action="/springcloud-app-fastdfs/guest/upload/fastUpload" method="post">
+        <p> <input type="file"  name="file" ></p>
+        <div style="padding:5px;text-align:center;">
+            <input type="submit" value="提交" name="提交"  class="easyui-linkbutton">
+        </div>
+    </form>
+</div>
+
+<div>上传测试带登录
+    <form  style="padding:10px 20px 10px 40px;"  enctype="multipart/form-data" action="/springcloud-app-fastdfs/upload/fastUpload" method="post">
+        <p> <input type="file"  name="file" ></p>
+        <div style="padding:5px;text-align:center;">
+            <input type="submit" value="提交" name="提交"  class="easyui-linkbutton">
+        </div>
+    </form>
+</div>
+</body>
+</html>

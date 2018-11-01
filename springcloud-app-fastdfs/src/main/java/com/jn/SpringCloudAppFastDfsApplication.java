@@ -1,6 +1,9 @@
 package com.jn;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.github.tobato.fastdfs.FdfsClientConfig;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
@@ -16,10 +19,11 @@ import org.springframework.jmx.support.RegistrationPolicy;
  * @version： v1.0
  * @modified By:
  */
-@SpringCloudApplication
 @EnableFeignClients
-@Import(FdfsClientConfig.class)//注解，就可以拥有带有连接池的FastDFS Java客户端了
-@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)// 解决jmx重复注册bean的问题
+@Import(FdfsClientConfig.class)
+// 解决jmx重复注册bean的问题
+@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
+@SpringCloudApplication
 public class SpringCloudAppFastDfsApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringCloudAppFastDfsApplication.class).web(true).run(args);

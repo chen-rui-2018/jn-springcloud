@@ -160,10 +160,17 @@
         </el-table-column>
         <el-table-column label="岗位" width="140" align="center">
           <template slot-scope="scope">
-            <el-select v-model="scope.row.name" filterable placeholder="请选择岗位">
+            <el-select v-model="scope.row.name2" placeholder="请选择岗位">
               <el-option v-for="item in gangweioptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </template>
+
+          <template>
+            <div>
+              <slot :row="data"/>
+            </div>
+          </template>
+
         </el-table-column>
         <el-table-column prop="address" label="默认" align="center">
           <template slot-scope="scope">

@@ -222,29 +222,6 @@ export default {
 .text-green {
   color: #00b050;
 }
-body .el-table th.gutter {
-  display: table-cell !important;
-}
-
-.el-table thead .cell {
-  font-weight: normal;
-  color: #0a2b3a;
-  white-space: nowrap;
-  padding: 0;
-}
-.el-table--border,
-.el-table--group {
-  border: 1px solid #a3d9f4;
-}
-.el-table thead.is-group th {
-  background: #e0f1fc;
-  border-bottom: 1px solid #a3d9f4;
-  border-right: 1px solid #a3d9f4;
-}
-.el-table .cell {
-  position: relative;
-  word-wrap: normal;
-}
 
 .planned-time,
 .planned-time .cell {

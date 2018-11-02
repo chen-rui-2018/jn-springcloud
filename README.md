@@ -74,6 +74,7 @@
 - 业务校验统一使用抛异常JnSpringCloudException来实现
 - controller层，不需要捕获任何的异常,已经有统一地方进行了处理
 - controller层，都需要继承BaseController，用于统一处理参数
+- 不允许使用SimpleDateFormate 类，请使用com.jn.common.util.DateUtils
 - 遗留问题，或者防止遗忘的，使用todo方式。
 ### 7.调试规范
 - 不能写main 方法进行业务的调试，统一使用junit

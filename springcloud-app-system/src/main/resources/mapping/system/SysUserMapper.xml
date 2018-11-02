@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysUserMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.vo.TbSysUser">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+
+        <collection  property="sysDepartmentPostList" ofType="com.jn.system.model.SysDepartmentPost" >
+            <id property="id" column="dpid" jdbcType="VARCHAR"/>
+            <result property="departmentId" column="did" jdbcType="VARCHAR"/>
+            <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
+            <result property="departmentCreateTime" column="departmentCreateTime" jdbcType="TIMESTAMP"/>
+            <result property="departmentStatus" column="departmentStatus" jdbcType="VARCHAR"/>
+            <result property="departmentCreator" column="departmentCreator" jdbcType="VARCHAR"/>
+            <result property="postId" column="pid" jdbcType="VARCHAR"/>
+            <result property="postName" column="post_name" jdbcType="VARCHAR"/>
+            <result property="postCreator" column="postCreator" jdbcType="VARCHAR"/>
+            <result property="postCreateTime" column="postCreateTime" jdbcType="TIMESTAMP"/>
+            <result property="postStatus" column="postStatus" jdbcType="VARCHAR"/>
+            <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,account,password,name,phone,email,creator,create_time as createTime,status
+    </sql>
+
+    <sql id="Column_list">
+                    tsu.id,
+            tsu.account,
+            tsu.`password`,
+            tsu.`name`,
+            tsu.phone,
+            tsu.email,
+            tsu.creator,
+            tsu.create_time,
+            tsu.`status`,
+
+            tsd.id as did,
+            tsd.department_name,
+            tsd.creator as departmentCreator,
+            tsd.create_time as departmentCreateTime,
+            tsd.`status` as departmentStatus ,
+
+            tsp.id as pid,
+            tsp.post_name,
+            tsp.creator as postCreator,
+            tsp.create_time as postCreateTime,
+            tsp.`status` as postStatus,
+
+            tsudp.is_default,
+            tsudp.id as dpid
+    </sql>
+
+    <insert id="addSysUser" parameterType="com.jn.system.vo.TbSysUser" >
+        insert into tb_sys_user (id, account, password,
+          name, phone, email,
+          creator, create_time, status
+          )
+        values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+          #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+          #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
+          )
+    </insert>
+
+    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.QueryVo" resultMap="BaseResultMap">
+        select distinct
+        <include refid="Column_list"/>
+          from tb_sys_user tsu
+            left join tb_sys_user_department_post tsudp on tsu.id = tsudp.user_id
+            left join tb_sys_department tsd on tsudp.department_id = tsd.id
+            left join tb_sys_post tsp on tsudp.post_id = tsp.id
+            <where>
+                tsudp.status != '-1'
+                <if test="name != null and name != '' ">
+                   and tsu.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+                </if>
+                <if test="status != null and status != '' ">
+                   and tsu.`status` = #{status,jdbcType=VARCHAR}
+                </if>
+                <if test="departmentId != null and departmentId != '' ">
+                   and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
+                </if>
+                <if test="id != null and id != ''">
+                   and tsu.id = #{id,jdbcType=VARCHAR}
+                </if>
+                <if test="udpStatus != null and udpStatus != ''">
+                   and tsudp.`status` = #{udpStatus,jdbcType=VARCHAR}
+                </if>
+            </where>
+             order by tsu.create_time desc
+    </select>
+
+    <select id="findSysUserByPage" resultMap="BaseResultMap">
+        select distinct
+        <include refid="Column_list"/>
+        from tb_sys_user tsu
+        left join tb_sys_user_department_post tsudp on tsu.id = tsudp.user_id
+        left join tb_sys_department tsd on tsudp.department_id = tsd.id
+        left join tb_sys_post tsp on tsudp.post_id = tsp.id
+        where tsu.status != '-1' and tsudp.status != '-1'
+        order by tsu.create_time desc
+    </select>
+
+    <update id="deleteSysUser" parameterType="java.lang.String">
+        update tb_sys_user
+        set `status` = '-1'
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateSysUser" parameterType="com.jn.system.vo.TbSysUser">
+            update tb_sys_user
+            <set >
+                <if test="account != null" >
+                    account = #{account,jdbcType=VARCHAR},
+                </if>
+                <if test="password != null" >
+                    password = #{password,jdbcType=VARCHAR},
+                </if>
+                <if test="name != null" >
+                    name = #{name,jdbcType=VARCHAR},
+                </if>
+                <if test="phone != null" >
+                    phone = #{phone,jdbcType=VARCHAR},
+                </if>
+                <if test="email != null" >
+                    email = #{email,jdbcType=VARCHAR},
+                </if>
+                <if test="creator != null" >
+                    creator = #{creator,jdbcType=VARCHAR},
+                </if>
+                <if test="createTime != null" >
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="status != null" >
+                    status = #{status,jdbcType=VARCHAR},
+                </if>
+            </set>
+            where id = #{id}
+    </update>
+
+    <!--逻辑删除用户已经具有的用户组-->
+    <update id="deleGroupOfUser" parameterType="java.lang.String">
+        update tb_sys_user_group
+        set `status` = '-1'
+        where user_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--为用户添加用户组-->
+    <insert id="saveSysGroupToSysUser" parameterType="com.jn.system.vo.TbSysUserGroup">
+        insert into tb_sys_user_group (id, group_id,creator, user_id,
+         create_time, status)
+        values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR},
+                 #{creator,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},
+                 #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+    </insert>
+
+    <!--逻辑删除用户已经具有的角色-->
+    <update id="deleRoleOfUser" parameterType="java.lang.String">
+        update tb_sys_user_role
+        set `status` = '-1'
+        where user_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--为用户添加添加角色-->
+    <insert id="saveSysRoleToSysUser" parameterType="com.jn.system.vo.TbSysUserRole" >
+        insert into tb_sys_user_role (id, role_id, user_id,creator,
+          create_time, status)
+        values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},
+         #{userId,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},
+          #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+     </insert>
+
+    <!--清除用户原有部门岗位信息-->
+    <update id="deleDepartmentandPost" parameterType="java.lang.String">
+        update tb_sys_user_department_post
+        set `status` = '-1'
+        where user_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!--添加用户部门岗位信息-->
+    <insert id="saveDepartmentandPostOfUser" parameterType="com.jn.system.vo.TbSysUserDepartmentPost" >
+        insert into tb_sys_user_department_post (id, user_id, department_id,
+          post_id, is_default, create_time,
+          status,creator)
+        values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR},
+          #{postId,jdbcType=VARCHAR}, #{isDefault,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+          #{status,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR})
+      </insert>
+
+    <!--根据用户id返回用户信息-->
+    <select id="findSysUserById" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysUser">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_user
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

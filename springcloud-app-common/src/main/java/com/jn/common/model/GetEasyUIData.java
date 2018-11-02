@@ -29,4 +29,12 @@ public class GetEasyUIData<T> {
     public GetEasyUIData() {
 
     }
+
+    @Override
+    public String toString() {
+        return "GetEasyUIData{" +
+                "rows=" + rows +
+                ", total=" + total +
+                '}';
+    }
 }

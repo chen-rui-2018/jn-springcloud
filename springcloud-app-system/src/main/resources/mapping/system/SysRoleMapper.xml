@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysRoleMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.vo.TbSysRole">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="CHAR" property="status"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,role_name as roleName ,creator,create_time as createTime,status
+    </sql>
+
+    <select id="findSysRoleByid" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_role
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findSysRoleAll" resultType="com.jn.system.vo.TbSysRole">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_role
+        where `status` = '1'
+    </select>
+
+    <select id="findSysRoleByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysRole">
+        select
+          <include refid="Base_Column_List"/>
+        from tb_sys_role
+        where id in
+        (select tsur.role_id
+            from
+            tb_sys_user_role tsur
+            join tb_sys_user tsu
+            on tsur.user_id = tsu.id
+            where tsu.id = #{id,jdbcType=VARCHAR}
+            and tsur.`status` = '1')
+    </select>
+
+</mapper>

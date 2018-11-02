@@ -9,11 +9,6 @@
       <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 90px" class="filter-item">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
       </el-select>
-      <!-- 第二个下拉菜单 -->
-      部门：
-      <el-select v-model="listQuery.department" placeholder="请选择" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in departmentOptions" :key="item" :label="item" :value="item" />
-      </el-select>
       <!-- 搜索按钮 -->
       <el-button class="filter-item" type="primary" icon="el-icon-search">搜索</el-button>
       <!-- 新增按钮 -->
@@ -25,17 +20,17 @@
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" />
       <!-- 表格第二列  姓名 -->
-      <el-table-column label="姓名" align="center">
+      <el-table-column label="用户组名称" align="center">
         <template slot-scope="scope">
           <span class="link-type">{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账号" align="center">
+      <el-table-column label="拥有用户" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.username }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" width="180" align="center">
+      <el-table-column label="角色名称" width="170" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.email }}</span>
         </template>
@@ -45,15 +40,9 @@
           <span>{{ scope.row.timestamp }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="部门" align="center">
+      <el-table-column label="描述" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.bumen }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="岗位" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.gangwei }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">
@@ -61,24 +50,22 @@
           <span>{{ scope.row.status }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
-          <el-button type="primary" align="center" size="mini" @click="showBumenDialog(scope.row)">部门岗位</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row)">角色</el-button>
           <!-- 删除按钮 -->
-          <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除
-          </el-button>
+          <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
     <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    <!-- 弹出的添加用户对话框 -->
-    <el-dialog :visible.sync="adddialogFormVisible" title="添加用户">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="账号" prop="username">
+    <!-- 弹出的添加用户组对话框 -->
+    <el-dialog :visible.sync="adddialogFormVisible" title="添加用户组">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="用户组" prop="username">
           <el-input v-model="addform.username" />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
@@ -112,14 +99,11 @@
       </div>
     </el-dialog>
 
-    <!-- 编辑用户对话框 -->
-    <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户">
-      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="70px" style="width: 400px; margin-left:50px;">
+    <!-- 编辑用户组对话框 -->
+    <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户组">
+      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
         <el-form-item label="账号" prop="username">
           <el-input v-model="editform.username" />
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="editform.name" />
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="editform.email" />
@@ -127,76 +111,20 @@
         <el-form-item label="手机" prop="mobile">
           <el-input v-model="editform.mobile" />
         </el-form-item>
-        <el-form-item label="部门" prop="bumen">
-          <el-input v-model="editform.bumen" />
-        </el-form-item>
-        <el-form-item label="岗位" prop="gangwei">
-          <el-input v-model="editform.gangwei" />
-        </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="editform.status" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="角色" prop="juese">
-          <el-input v-model="editform.juese" />
+        <el-form-item>
+          <el-button type="primary" @click="editUserSubmit('editform')">提交</el-button>
+          <el-button @click="editdialogFormVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editdialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="editUserSubmit('editform')">确定</el-button>
-      </div>
     </el-dialog>
-
-    <!-- 部门岗位对话框 -->
-    <el-dialog :visible.sync="bumendialogFormVisible" title="部门、岗位">
-      <el-button type="primary" round>分配</el-button>
-      <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="部门" width="210" align="center">
-          <template slot-scope="scope">
-            <el-cascader :options="options" placeholder="请选择部门" filterable />
-          </template>
-        </el-table-column>
-        <el-table-column label="岗位" width="140" align="center">
-          <template slot-scope="scope">
-            <el-select v-model="scope.row.name2" placeholder="请选择岗位">
-              <el-option v-for="item in gangweioptions" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </template>
-
-          <template>
-            <div>
-              <slot :row="data"/>
-            </div>
-          </template>
-
-        </el-table-column>
-        <el-table-column prop="address" label="默认" align="center">
-          <template slot-scope="scope">
-            <el-button type="primary" size="mini" round>设置为默认</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <!-- 删除按钮 -->
-            <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="bumendialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="bumendialogFormVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
-
     <!-- 弹出的角色对话框 -->
-    <el-dialog
-      :visible.sync="roledialogVisible"
-      title="角色">
-      <el-transfer v-model="value1" :data="data"/>
+    <el-dialog :visible.sync="roledialogVisible" title="选择角色">
+      <el-transfer v-model="value1" :data="rloedata" :titles="['角色1', '角色2']" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="roledialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="roledialogVisible = false">确 定</el-button>
@@ -212,20 +140,23 @@ export default {
     // 角色相关信息
     const generateData = _ => {
       const data = []
-      for (let i = 1; i <= 15; i++) {
+      const roles = ['管理员', '超级管理员', '超管理员', '超级理员']
+      roles.forEach((role, index) => {
         data.push({
-          key: i,
-          label: `备选项 ${i}`
+          label: role,
+          key: index
         })
-      }
+      })
       return data
     }
     return {
-      data: generateData(),
-      value1: [1, 4],
+      ruleForm2: { pass: '', checkPass: '' },
+      rloedata: generateData(),
+      value1: [],
       pagesize: 1,
       total: 0,
       pagenum: 1,
+      isshow: true,
       userList: [],
       options: [
         {
@@ -517,40 +448,15 @@ export default {
           label: '北京烤鸭'
         }
       ],
-      tableData3: [
-        {
-          date: '2016-05-03',
-          address: ''
-        },
-        {
-          date: '2016-05-02',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-04',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-01',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2016-05-08',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }
-      ],
-      multipleSelection: [],
       listQuery: {
         title: '',
-        status: '',
-        department: ''
+        status: ''
       },
       adddialogFormVisible: false,
       editdialogFormVisible: false,
       bumendialogFormVisible: false,
       roledialogVisible: false,
       statusOptions: ['有效', '失效'],
-      departmentOptions: ['研发部', '工程部', '维修部', '人力部', '财务部'],
       departmentdata: [
         { bumen: '研发部', gangwei: '经理' },
         { bumen: '工程部', gangwei: '工程师' }
@@ -569,13 +475,9 @@ export default {
       editform: {
         id: '',
         username: '',
-        name: '',
         email: '',
         mobile: '',
-        status: '',
-        role: '',
-        bumen: '',
-        gangwei: ''
+        status: ''
       },
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
@@ -605,42 +507,52 @@ export default {
       // 显示对话框
       this.editdialogFormVisible = true
       //   添加默认数据
-      this.editform.name = row.name
       this.editform.username = row.username
       this.editform.mobile = row.mobile
       this.editform.email = row.email
-      this.editform.role = row.role
       this.editform.status = row.status
-      this.editform.gangwei = row.gangwei
-      this.editform.bumen = row.bumen
     },
     // 编辑用户的功能实现
     editUserSubmit(editform) {},
-    // 添加部门对话框
-    showBumenDialog() {
-      this.bumendialogFormVisible = true
-    },
-    // 部门岗位的操作
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-
     // 显示角色对话框
     showRoleDialog(row) {
       console.log(row)
       this.roledialogVisible = true
     },
     // 删除用户功能实现
-    deleteUser() {},
+    deleteUser(id) {
+      this.$confirm(
+        `此操作将永久删除id号为${id}的数据, 是否继续?`,
+        '删除提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          // deleteUserById(id).then(res => {
+          //   if (res.meta.status === 200) {
+          this.$message({
+            message: '删除成功', //    res.meta.msg,
+            type: 'success'
+          })
+          // this.initList()
+          // } else {
+          //   this.$message({
+          //     message: res.meta.msg,
+          //     type: 'success'
+          //   })
+          // }
+          // })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
     // 项目初始化
     initList() {
       const list = [
@@ -701,5 +613,8 @@ export default {
 <style lang="scss" scoped>
 .management {
   padding: 20px;
+  .fixed-width .el-button--mini {
+    width: auto;
+  }
 }
 </style>

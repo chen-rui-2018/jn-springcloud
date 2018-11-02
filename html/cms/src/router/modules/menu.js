@@ -19,9 +19,9 @@ const menuRouter = {
       meta: { title: '用户管理', noCache: true }
     },
     {
-      path: 'management',
-      component: () => import('@/views/menu/management'),
-      name: 'management',
+      path: 'user-group-management',
+      component: () => import('@/views/menu/user-group-management'),
+      name: 'user-group-management',
       meta: { title: '用户组管理', noCache: true }
     },
     {

@@ -94,7 +94,7 @@
 			<!-- fastDfs -->
 			<dependency>
 				<groupId>com.github.tobato</groupId>
-				<artifactId>fastdfs-client</artifactId>
+				<artifactId>fastdfs-jn-client</artifactId>
 				<version>1.25.4-RELEASE</version>
 			</dependency>
 			<!--swagger2 -->

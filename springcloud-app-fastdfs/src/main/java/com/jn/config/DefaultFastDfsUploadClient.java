@@ -1,5 +1,6 @@
 package com.jn.config;
 
+import com.github.tobato.fastdfs.context.TokenContext;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.jn.common.util.GlobalConstants;
@@ -21,7 +22,7 @@ import java.io.InputStream;
  * @modified By:
  */
 @Component
-public class FastDfsClientWrapper {
+public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
 
     @Autowired
     private FastFileStorageClient storageClient;
@@ -32,17 +33,27 @@ public class FastDfsClientWrapper {
     @Value("${fdfs.ngStoregePort}")
     private String storagePort;
 
-    /**
-     * 文件上传
-     * @param file
-     * @return
-     * @throws IOException
-     */
+
+    @Value("${fdfs.storegeIP}")
+    private String resNeedHost;
+
+    @Value("${fdfs.storegePort}")
+    private String storageNeedPort;
+
+
+    @Override
     public String uploadFile(MultipartFile file) throws IOException {
+        TokenContext.setContext(Boolean.FALSE);
         StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
         return getResAccessUrl(storePath);
     }
 
+    @Override
+    public String uploadNeedTokenFile(MultipartFile file) throws IOException {
+        TokenContext.setContext(Boolean.TRUE);
+        StorePath storePath = storageClient.uploadFile(file.getInputStream(),file.getSize(), FilenameUtils.getExtension(file.getOriginalFilename()),null);
+        return getNeedResAccessUrl(storePath);
+    }
     /**
      * 封装文件完整URL地址
      * @param storePath
@@ -54,6 +65,21 @@ public class FastDfsClientWrapper {
                 .append(resHost)
                 .append(":")
                 .append(storagePort)
+                .append("/")
+                .append(storePath.getFullPath());
+        return fileUrl.toString();
+    }
+    /**
+     * 封装文件完整URL地址
+     * @param storePath
+     * @return
+     */
+    private String getNeedResAccessUrl(StorePath storePath) {
+        StringBuffer fileUrl = new StringBuffer();
+        fileUrl.append(GlobalConstants.HTTP_PRODOCOL)
+                .append(resNeedHost)
+                .append(":")
+                .append(storageNeedPort)
                 .append("/")
                 .append(storePath.getFullPath());
         return fileUrl.toString();
@@ -74,5 +100,21 @@ public class FastDfsClientWrapper {
 
     public void setStoragePort(String storagePort) {
         this.storagePort = storagePort;
+    }
+
+    public String getResNeedHost() {
+        return resNeedHost;
+    }
+
+    public void setResNeedHost(String resNeedHost) {
+        this.resNeedHost = resNeedHost;
+    }
+
+    public String getStorageNeedPort() {
+        return storageNeedPort;
+    }
+
+    public void setStorageNeedPort(String storageNeedPort) {
+        this.storageNeedPort = storageNeedPort;
     }
 }

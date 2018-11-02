@@ -1,7 +1,7 @@
 package com.jn.controller;
 
 import com.jn.common.model.Result;
-import com.jn.config.FastDfsClientWrapper;
+import com.jn.config.FastDfsUploadClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class UploadController {
 
     @Autowired
-    private FastDfsClientWrapper fastDfsClientWrapper;
+    private FastDfsUploadClient fastDfsUploadClient;
 
     /**
      * 不需要登录的上传
@@ -35,7 +35,7 @@ public class UploadController {
     public Result<String> upload(@RequestParam("file") MultipartFile file) throws IOException{
         Assert.notNull(file,"文件不能为空");
         Result<String> result = new Result();
-        result.setData(fastDfsClientWrapper.uploadFile(file));
+        result.setData(fastDfsUploadClient.uploadFile(file));
         return result;
     }
     /**
@@ -48,9 +48,20 @@ public class UploadController {
     public Result<String> uploadByLogin(@RequestParam("file") MultipartFile file) throws IOException{
         Assert.notNull(file,"文件不能为空");
         Result<String> result = new Result();
-        result.setData(fastDfsClientWrapper.uploadFile(file));
+        result.setData(fastDfsUploadClient.uploadFile(file));
         return result;
     }
-
-
+    /**
+     * 需要登录的上传（下载需要token）
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping("/upload/token/fastUpload")
+    public Result<String> uploadByLoginUseToken(@RequestParam("file") MultipartFile file) throws IOException{
+        Assert.notNull(file,"文件不能为空");
+        Result<String> result = new Result();
+        result.setData(fastDfsUploadClient.uploadNeedTokenFile(file));
+        return result;
+    }
 }

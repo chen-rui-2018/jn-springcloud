@@ -1,28 +1,52 @@
 package com.jn.system.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 权限菜单关联表
- */
-public class TbSysPermissionMenu {
+ * TODO:权限菜单实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysPermissionMenu implements Serializable {
+    private static final long serialVersionUID = -7391040980927145164L;
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 权限id
+     */
+    private String permissionId;
+    /**
+     * 菜单id
+     */
+    private String menuId;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String permissionId; // 权限id
-
-    private String menuId; // 菜单id
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysPermissionMenu() {
+    public SysPermissionMenu() {
     }
 
-    public TbSysPermissionMenu(String id, String permissionId, String menuId, Date createTime, String status) {
+    public SysPermissionMenu(String id, String permissionId, String menuId, String creator,
+                             Date createTime, String status) {
         this.id = id;
         this.permissionId = permissionId;
         this.menuId = menuId;
+        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
     }
@@ -67,12 +91,21 @@ public class TbSysPermissionMenu {
         this.status = status;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
     @Override
     public String toString() {
-        return "TbSysPermissionMenu{" +
+        return "SysPermissionMenu{" +
                 "id='" + id + '\'' +
                 ", permissionId='" + permissionId + '\'' +
                 ", menuId='" + menuId + '\'' +
+                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

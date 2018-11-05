@@ -1,10 +1,10 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.QueryVo;
-import com.jn.system.vo.TbSysUser;
-import com.jn.system.vo.TbSysUserDepartmentPost;
-import com.jn.system.vo.TbSysUserGroup;
-import com.jn.system.vo.TbSysUserRole;
+import com.jn.system.model.UserQuery;
+import com.jn.system.vo.SysUser;
+import com.jn.system.vo.SysUserDepartmentPost;
+import com.jn.system.vo.SysUserGroup;
+import com.jn.system.vo.SysUserRole;
 
 import java.util.List;
 
@@ -22,20 +22,21 @@ public interface SysUserMapper {
      * 添加用户
      * @param sysUser
      */
-    void addSysUser(TbSysUser sysUser);
+    void addSysUser(SysUser sysUser);
 
     /**
-     * 根据查询条件查询用户
-     * @param userQueryVo
+     * 当按部门查询用户时
+     * @param userUserQuery
      * @return
      */
-    List<TbSysUser> findSysUserByPageAndOption(QueryVo userQueryVo);
+    List<SysUser> findSysUserByPageAndOption(UserQuery userUserQuery);
 
     /**
-     * 在没有查询条件是查询用户
+     * 当查询部门的条件为空时的查询方法
+     * @param userUserQuery
      * @return
      */
-    List<TbSysUser> findSysUserByPage();
+    List<SysUser> findSysUserByPage(UserQuery userUserQuery);
 
     /**
      * 删除用户
@@ -47,13 +48,13 @@ public interface SysUserMapper {
      * 更新用户
      * @param sysUser
      */
-    void updateSysUser(TbSysUser sysUser);
+    void updateSysUser(SysUser sysUser);
 
     /**
      * 往用户中添加用户组
      * @param sysUserGroup
      */
-    void saveSysGroupToSysUser(TbSysUserGroup sysUserGroup);
+    void saveSysGroupToSysUser(SysUserGroup sysUserGroup);
 
     /**
      * 清除用户组中已经存在的用户组
@@ -71,7 +72,7 @@ public interface SysUserMapper {
      * 为用户添加权限
      * @param sysUserRole
      */
-    void saveSysRoleToSysUser(TbSysUserRole sysUserRole);
+    void saveSysRoleToSysUser(SysUserRole sysUserRole);
 
     /**
      * 清除用户原有部门岗位信息
@@ -83,12 +84,12 @@ public interface SysUserMapper {
      * 为用户添加新的部门岗位信息
      * @param sysUserDepartmentPost
      */
-    void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);
+    void saveDepartmentandPostOfUser(SysUserDepartmentPost sysUserDepartmentPost);
 
     /**
      * 根据用户id返回用户信息
      * @param id
      * @return
      */
-    TbSysUser findSysUserById(String id);
+    SysUser findSysUserById(String id);
 }

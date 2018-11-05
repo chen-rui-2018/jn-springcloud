@@ -9,6 +9,9 @@ import com.jn.common.model.Result;
  * @modified By:
  **/
 public interface SysDepartmentService {
-
+    /**
+     * 返回所有部门信息
+     * @return
+     */
     Result findSysDepartmentAll();
 }

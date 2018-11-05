@@ -7,9 +7,9 @@ import com.jn.common.model.Result;
 import com.jn.system.dao.SysGroupMapper;
 import com.jn.system.dao.SysRoleMapper;
 import com.jn.system.dao.SysUserMapper;
+import com.jn.system.model.UserQuery;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.*;
-import com.jn.system.model.QueryVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -44,41 +43,52 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    @Transactional
-    public void addSysUser(TbSysUser sysUser) {
+    @Transactional(rollbackFor = Exception.class)
+    public void addSysUser(SysUser sysUser) {
         sysUser.setId(UUID.randomUUID().toString());
         //用户添加,默认密码123456
         sysUser.setPassword(DigestUtils.md5Hex("123456"));
         sysUser.setCreateTime(new Date());
-        TbSysUser tbSysUser = (TbSysUser) SecurityUtils.getSubject().getPrincipal();
+        SysUser tbSysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
         sysUser.setCreator(tbSysUser.getId());
         sysUserMapper.addSysUser(sysUser);
     }
 
     /**
      * 分页查询用户,返回用户信息及部门岗位
-     * @param userQueryVo
+     * @param userUserQuery
      * @return
      */
     @Override
-    public Result findSysUserByPage(QueryVo userQueryVo) {
+    public Result findSysUserByPage(UserQuery userUserQuery) {
         //分页查询
-        Page<Object> objects = PageHelper.startPage(userQueryVo.getPage(), userQueryVo.getRows());
+        Page<Object> objects = PageHelper.startPage(userUserQuery.getPage(), userUserQuery.getRows());
         GetEasyUIData getEasyUIData = null;
         //判断传过来参数是否有查询条件
-        if(StringUtils.isBlank(userQueryVo.getName()) &&
-                StringUtils.isBlank(userQueryVo.getStatus()) &&
-                    StringUtils.isBlank(userQueryVo.getStatus())){
-            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPage(),objects.getTotal());
+        if(StringUtils.isBlank(userUserQuery.getDepartmentId())){
+            List<SysUser> sysUserList = sysUserMapper.findSysUserByPage(userUserQuery);
+            //遍历用户,获取用户默认部门岗位
+            for (SysUser sysUser:sysUserList) {
+                UserQuery query = new UserQuery();
+                query.setId(sysUser.getId());
+                query.setIsDefault("1");
+                List<SysUser> sysUserListOne = sysUserMapper.findSysUserByPageAndOption(query);
+                if (sysUserListOne.size() == 1){
+                    for (SysUser sysUser1:sysUserListOne) {
+                        sysUser.setSysDepartmentPostList(sysUser1.getSysDepartmentPostList());
+                    }
+                }
+            }
+            getEasyUIData = new GetEasyUIData(sysUserList,objects.getTotal());
         }else{
-            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(userQueryVo),objects.getTotal());
+            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(userUserQuery),objects.getTotal());
         }
 
         //参数回显
         Map<String,Object> map = new HashMap<String, Object>();
-        map.put("name",userQueryVo.getName());
-        map.put("status",userQueryVo.getStatus());
-        map.put("dapartmentId",userQueryVo.getDepartmentId());
+        map.put("name", userUserQuery.getName());
+        map.put("status", userUserQuery.getStatus());
+        map.put("dapartmentId", userUserQuery.getDepartmentId());
         map.put("getEasyUIData",getEasyUIData);
         return new Result(map);
     }
@@ -88,7 +98,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param ids
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
         for (String id:ids) {
             sysUserMapper.deleteSysUser(id);
@@ -100,8 +110,8 @@ public class SysUserServiceImpl implements SysUserService {
      * @param sysUser
      */
     @Override
-    @Transactional
-    public void updateSysUser(TbSysUser sysUser) {
+    @Transactional(rollbackFor = Exception.class)
+    public void updateSysUser(SysUser sysUser) {
         sysUser.setCreateTime(new Date());
         if(StringUtils.isNotBlank(sysUser.getPassword())){
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
@@ -117,11 +127,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Result findSysGroupByUserId(String id) {
         //根据用户id查询用户组
-        List<TbSysGroup> sysGroupOfUser = sysGroupMapper.findSysGroupByUserId(id);
+        List<SysGroup> sysGroupOfUser = sysGroupMapper.findSysGroupByUserId(id);
         //获取所有用户组
-        List<TbSysGroup> sysGroupAll = sysGroupMapper.findSysGroupAll();
+        List<SysGroup> sysGroupAll = sysGroupMapper.findSysGroupAll();
         if (sysGroupOfUser != null && sysGroupOfUser.size() > 0){
-            for (TbSysGroup sysGroup: sysGroupOfUser) {
+            for (SysGroup sysGroup: sysGroupOfUser) {
                 //排除用户已经具有的用户
                 if(sysGroupAll.contains(sysGroup)){
                     sysGroupAll.remove(sysGroup);
@@ -141,19 +151,19 @@ public class SysUserServiceImpl implements SysUserService {
      * @param userId
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void saveSysGroupToSysUser(String[] groupIds, String userId) {
         if(groupIds != null && groupIds.length > 0){
             //清除用户中已经存在的用户组
             sysUserMapper.deleGroupOfUser(userId);
-            if (groupIds != null && groupIds.length > 0){
+            if (groupIds.length > 0){
                 //往用户中添加新的用户组
                 for (String groupId: groupIds) {
                     //设置用户用户组实体类
-                    TbSysUserGroup sysUserGroup = new TbSysUserGroup();
+                    SysUserGroup sysUserGroup = new SysUserGroup();
                     sysUserGroup.setCreateTime(new Date());
-                    TbSysUser tbSysUser = (TbSysUser) SecurityUtils.getSubject().getPrincipal();
-                    sysUserGroup.setCreator(tbSysUser.getId());
+                    SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+                    sysUserGroup.setCreator(sysUser.getId());
                     sysUserGroup.setGroupId(groupId);
                     sysUserGroup.setUserId(userId);
                     sysUserGroup.setId(UUID.randomUUID().toString());
@@ -172,10 +182,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public Result findSysRoleByUserId(String id) {
         //或取用户已经具有角色
-        List<TbSysRole> sysRoleOfUser = sysRoleMapper.findSysRoleByUserId(id);
-        List<TbSysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
+        List<SysRole> sysRoleOfUser = sysRoleMapper.findSysRoleByUserId(id);
+        List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
         if(sysRoleOfUser != null && sysRoleOfUser.size() >0){
-            for (TbSysRole sysRole:sysRoleOfUser) {
+            for (SysRole sysRole:sysRoleOfUser) {
                 if(sysRoleAll.contains(sysRole)){
                     sysRoleAll.remove(sysRole);
                 }
@@ -194,17 +204,17 @@ public class SysUserServiceImpl implements SysUserService {
      * @param userId
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void saveSysRoleToSysUser(String[] roleIds, String userId) {
         //清除用户中已经存在的角色
         sysUserMapper.deleRoleOfUser(userId);
         if (roleIds != null && roleIds.length > 0){
             //为用户添加新的角色
             for (String roleId:roleIds) {
-                TbSysUserRole sysUserRole = new TbSysUserRole();
+                SysUserRole sysUserRole = new SysUserRole();
                 sysUserRole.setCreateTime(new Date());
-                TbSysUser tbSysUser = (TbSysUser) SecurityUtils.getSubject().getPrincipal();
-                sysUserRole.setCreator(tbSysUser.getId());
+                SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+                sysUserRole.setCreator(sysUser.getId());
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
@@ -221,11 +231,11 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findDepartmentandPostByUserId(String userId) {
-        QueryVo queryVo = new QueryVo();
-        queryVo.setId(userId);
+        UserQuery userQuery = new UserQuery();
+        userQuery.setId(userId);
         //设置默认查询用户部门岗位为有效状态数据
-        queryVo.setUdpStatus("1");
-        List<TbSysUser> sysUserList = sysUserMapper.findSysUserByPageAndOption(queryVo);
+        userQuery.setUdpStatus("1");
+        List<SysUser> sysUserList = sysUserMapper.findSysUserByPageAndOption(userQuery);
         return new Result(sysUserList);
     }
 
@@ -236,16 +246,16 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    @Transactional
-    public void saveDepartmentandPostOfUser(String sysUserId, List<TbSysUserDepartmentPost> sysUserDepartmentPostlist) {
+    @Transactional(rollbackFor = Exception.class)
+    public void saveDepartmentandPostOfUser(String sysUserId, List<SysUserDepartmentPost> sysUserDepartmentPostlist) {
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserId);
         if (sysUserDepartmentPostlist != null && sysUserDepartmentPostlist.size() > 0){
             //为用户添加新部门岗位信息
-            for (TbSysUserDepartmentPost sysUserDepartmentPost:sysUserDepartmentPostlist) {
+            for (SysUserDepartmentPost sysUserDepartmentPost:sysUserDepartmentPostlist) {
                 sysUserDepartmentPost.setCreateTime(new Date());
-                TbSysUser tbSysUser = (TbSysUser) SecurityUtils.getSubject().getPrincipal();
-                sysUserDepartmentPost.setCreator(tbSysUser.getId());
+                SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+                sysUserDepartmentPost.setCreator(sysUser.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
                 sysUserDepartmentPost.setStatus("1");
                 sysUserDepartmentPost.setUserId(sysUserId);
@@ -262,7 +272,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findSysUserById(String id) {
-        TbSysUser sysUser = sysUserMapper.findSysUserById(id);
+        SysUser sysUser = sysUserMapper.findSysUserById(id);
         return new Result(sysUser);
     }
 }

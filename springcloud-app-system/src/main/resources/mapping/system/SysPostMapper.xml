@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysPostMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.vo.TbSysPost">
+    <resultMap id="BaseResultMap" type="com.jn.system.vo.SysPost">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="post_name" jdbcType="VARCHAR" property="postName"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
@@ -32,7 +32,7 @@
           <include refid="Base_status"/>
     </select>
 
-    <select id="findSysPostByDepartmentId" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysPost">
+    <select id="findSysPostByDepartmentId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysPost">
 
     </select>
 </mapper>

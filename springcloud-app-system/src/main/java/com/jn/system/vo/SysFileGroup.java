@@ -4,29 +4,42 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户角色关联实体
- */
-public class TbSysUserRole implements Serializable {
-    private static final long serialVersionUID = -6016435320433311326L;
+ * TODO:文件组类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysFileGroup implements Serializable {
+    private static final long serialVersionUID = -4676519264453291735L;
+    /**
+     * 文件组id
+     */
     private String id;
+    /**
+     * 文件组名称
+     */
+    private String fileGroupName;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效,-1删除
+     */
+    private String status;
 
-    private String roleId; //角色id
-
-    private String userId; //用户id
-
-    private String creator; //创造者
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysUserRole() {
+    public SysFileGroup() {
     }
 
-    public TbSysUserRole(String id, String roleId, String userId, String creator, Date createTime, String status) {
+    public SysFileGroup(String id, String fileGroupName, String creator, Date createTime, String status) {
         this.id = id;
-        this.roleId = roleId;
-        this.userId = userId;
+        this.fileGroupName = fileGroupName;
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
@@ -40,20 +53,12 @@ public class TbSysUserRole implements Serializable {
         this.id = id;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public String getFileGroupName() {
+        return fileGroupName;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setFileGroupName(String fileGroupName) {
+        this.fileGroupName = fileGroupName;
     }
 
     public Date getCreateTime() {
@@ -82,10 +87,9 @@ public class TbSysUserRole implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysUserRole{" +
+        return "SysFileGroup{" +
                 "id='" + id + '\'' +
-                ", roleId='" + roleId + '\'' +
-                ", userId='" + userId + '\'' +
+                ", fileGroupName='" + fileGroupName + '\'' +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +

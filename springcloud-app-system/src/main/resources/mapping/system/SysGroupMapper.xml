@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysGroupMapper">
-        <resultMap id="BaseResultMap" type="com.jn.system.vo.TbSysGroup">
+        <resultMap id="BaseResultMap" type="com.jn.system.vo.SysGroup">
                 <id column="id" jdbcType="VARCHAR" property="id"/>
                 <result property="creator" jdbcType="VARCHAR" column="creator"/>
                 <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
                 <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
                 <result column="status" jdbcType="CHAR" property="status"/>
 
-            <collection  property="sysRoles" ofType="com.jn.system.vo.TbSysRole" >
+            <collection  property="sysRoles" ofType="com.jn.system.vo.SysRole" >
                 <id property="id" column="rid"/>
                 <result property="role_name" column="roleName" jdbcType="VARCHAR"/>
                 <result property="creator" column="roleCreator" jdbcType="VARCHAR"/>
@@ -16,7 +16,7 @@
                 <result property="status" column="roleStatus" jdbcType="VARCHAR"/>
             </collection>
 
-            <collection  property="sysUsers" ofType="com.jn.system.vo.TbSysUser" >
+            <collection  property="sysUsers" ofType="com.jn.system.vo.SysUser" >
                 <id property="id" column="uid"/>
                 <result property="account" column="account" jdbcType="VARCHAR"/>
                 <result property="password" column="password" jdbcType="VARCHAR"/>
@@ -70,14 +70,14 @@
             and tsr.`status` = '1'
         </select>
         <!--查询所有用户组-->
-        <select id="findSysGroupAll" resultType="com.jn.system.vo.TbSysGroup">
+        <select id="findSysGroupAll" resultType="com.jn.system.vo.SysGroup">
             select
             <include refid="Base_Column_List"/>
             from tb_sys_group
             where `status` = '1'
         </select>
         <!--通过用户id获取用户组-->
-        <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysGroup">
+        <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysGroup">
             select
               <include refid="Base_Column_List"/>
             from tb_sys_group
@@ -91,7 +91,7 @@
                 and tsug.`status` = '1')
         </select>
         <!--添加用户组-->
-        <insert id="addSysGroup" parameterType="com.jn.system.vo.TbSysGroup">
+        <insert id="addSysGroup" parameterType="com.jn.system.vo.SysGroup">
                 insert into tb_sys_group (id, group_name, create_time,creator,
                   status)
                 values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
@@ -106,7 +106,7 @@
         </update>
 
         <!--更新用户组信息-->
-        <update id="updateSysGroup" parameterType="com.jn.system.vo.TbSysGroup">
+        <update id="updateSysGroup" parameterType="com.jn.system.vo.SysGroup">
             update tb_sys_group
             <set >
                 <if test="groupName != null" >
@@ -126,7 +126,7 @@
         </update>
 
       <!--根据用户组id获取用户组信息-->
-        <select id="findSysGroupById" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysGroup">
+        <select id="findSysGroupById" parameterType="java.lang.String" resultType="com.jn.system.vo.SysGroup">
             select
             <include refid="Base_Column_List"/>
             from tb_sys_group

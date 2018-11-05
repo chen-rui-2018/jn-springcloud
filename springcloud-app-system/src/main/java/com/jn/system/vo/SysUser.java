@@ -1,42 +1,64 @@
 package com.jn.system.vo;
 
-import com.jn.system.model.SysDepartmentPost;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * 用户实体类
- */
-public class TbSysUser implements Serializable {
+ * TODO:用户实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysUser implements Serializable {
 
     private static final long serialVersionUID = 3235175375305639033L;
+    /**
+     * id
+     */
     private String id;
-
-    private String account; //用户账号
-
-    private String password; //用户密码
-
-    private String name; //用户名称
-
-    private String phone;//手机号码
-
-    private String email;//邮箱
-
-    private String creator;//创建人
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效 -1:删除
+    /**
+     * 用户账号
+     */
+    private String account;
+    /**
+     * 用户密码
+     */
+    private String password;
+    /**
+     * 用户名称
+     */
+    private String name;
+    /**
+     * 手机号码
+     */
+    private String phone;
+    /**
+     * 邮箱
+     */
+    private String email;
+    /**
+     * 创建人
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1:删除
+     */
+    private String status;
 
     private List<SysDepartmentPost> sysDepartmentPostList;
 
-    public TbSysUser() {
+    public SysUser() {
     }
 
-    public TbSysUser(String id, String account, String password, String name, String phone, String email,
-                     String creator, Date createTime, String status, List<SysDepartmentPost> sysDepartmentPostList) {
+    public SysUser(String id, String account, String password, String name, String phone, String email,
+                   String creator, Date createTime, String status, List<SysDepartmentPost> sysDepartmentPostList) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -135,7 +157,7 @@ public class TbSysUser implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysUser{" +
+        return "SysUser{" +
                 "id='" + id + '\'' +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +

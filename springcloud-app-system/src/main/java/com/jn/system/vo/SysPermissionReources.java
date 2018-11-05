@@ -1,29 +1,52 @@
 package com.jn.system.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 权限功能关联表
- */
-public class TbSysPermissionReources {
+ * TODO:权限功能实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysPermissionReources implements Serializable {
+    private static final long serialVersionUID = 8368246755722203118L;
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 权限id
+     */
+    private String permissionId;
+    /**
+     * 菜单id
+     */
+    private String reourcesId;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String permissionId; //权限id
-
-    private String reourcesId; // 菜单id
-
-    private Date createTime; // 创建时间
-
-    private String status; // 状态 1:有效 0:无效
-
-    public TbSysPermissionReources() {
+    public SysPermissionReources() {
     }
 
-    public TbSysPermissionReources(String id, String permissionId, String reourcesId,
-                                   Date createTime, String status) {
+    public SysPermissionReources(String id, String permissionId, String reourcesId,
+                                 String creator, Date createTime, String status) {
         this.id = id;
         this.permissionId = permissionId;
         this.reourcesId = reourcesId;
+        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
     }
@@ -68,12 +91,21 @@ public class TbSysPermissionReources {
         this.status = status;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
     @Override
     public String toString() {
-        return "TbSysPermissionReources{" +
+        return "SysPermissionReources{" +
                 "id='" + id + '\'' +
                 ", permissionId='" + permissionId + '\'' +
                 ", reourcesId='" + reourcesId + '\'' +
+                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

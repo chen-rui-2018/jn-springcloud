@@ -1,9 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.vo.TbSysGroup;
-
-import java.util.List;
+import com.jn.system.vo.SysGroup;
 
 /**
  * 用户组
@@ -25,7 +23,7 @@ public interface SysGroupService {
      * 增加用户组
      * @param sysGroup 用户组
      */
-    void addSysGroup(TbSysGroup sysGroup);
+    void addSysGroup(SysGroup sysGroup);
 
     /**
      * 逻辑删除用户组
@@ -38,7 +36,7 @@ public interface SysGroupService {
      * @param sysGroup 用户组对象
      * @return
      */
-    void updateSysGroup(TbSysGroup sysGroup);
+    void updateSysGroup(SysGroup sysGroup);
 
     /**
      * 根据用户组id获取用户组信息

@@ -4,31 +4,53 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户部门岗位关联实体类
- */
-public class TbSysUserDepartmentPost implements Serializable {
+ * TODO:用户部门岗位实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysUserDepartmentPost implements Serializable {
     private static final long serialVersionUID = -7989897535661328826L;
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 用户id
+     */
+    private String userId;
+    /**
+     * 部门id
+     */
+    private String departmentId;
+    /**
+     * 岗位id
+     */
+    private String postId;
+    /**
+     * 是否默认
+     */
+    private String isDefault;
+    /**
+     * 创造者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String userId; //用户id
-
-    private String departmentId; //部门id
-
-    private String postId; //岗位id
-
-    private String isDefault; //是否默认
-
-    private String creator; // 创造者
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysUserDepartmentPost() {
+    public SysUserDepartmentPost() {
     }
 
-    public TbSysUserDepartmentPost(String id, String userId, String departmentId, String postId,
-                                   String isDefault, String creator, Date createTime, String status) {
+    public SysUserDepartmentPost(String id, String userId, String departmentId, String postId,
+                                 String isDefault, String creator, Date createTime, String status) {
         this.id = id;
         this.userId = userId;
         this.departmentId = departmentId;
@@ -105,7 +127,7 @@ public class TbSysUserDepartmentPost implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysUserDepartmentPost{" +
+        return "SysUserDepartmentPost{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", departmentId='" + departmentId + '\'' +

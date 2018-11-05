@@ -4,24 +4,40 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 部门实体类
- */
-public class TbSysDepartment implements Serializable {
+ * TODO:部门实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysDepartment implements Serializable {
     private static final long serialVersionUID = -6961951858143702934L;
-    private String id; //部门id
-
-    private String departmentName; //部门名称
-
-    private Date createTime;  //创建时间
-
+    /**
+     * 部门id
+     */
+    private String id;
+    /**
+     * 部门名称
+     */
+    private String departmentName;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 创建者
+     */
     private String creator;
+    /**
+     * 状态 1:有效,0:无效,-1删除
+     */
+    private String status;
 
-    private String status;  // 状态 1:有效,0:无效
-
-    public TbSysDepartment() {
+    public SysDepartment() {
     }
 
-    public TbSysDepartment(String id, String departmentName, Date createTime, String creator, String status) {
+    public SysDepartment(String id, String departmentName, Date createTime, String creator, String status) {
         this.id = id;
         this.departmentName = departmentName;
         this.createTime = createTime;
@@ -71,7 +87,7 @@ public class TbSysDepartment implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysDepartment{" +
+        return "SysDepartment{" +
                 "id='" + id + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", createTime=" + createTime +

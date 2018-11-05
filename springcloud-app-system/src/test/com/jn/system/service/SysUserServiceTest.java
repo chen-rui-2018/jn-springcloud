@@ -1,17 +1,15 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.QueryVo;
-import com.jn.system.vo.TbSysUser;
-import com.jn.system.vo.TbSysUserDepartmentPost;
-import net.bytebuddy.agent.builder.AgentBuilder;
+import com.jn.system.model.UserQuery;
+import com.jn.system.vo.SysUser;
+import com.jn.system.vo.SysUserDepartmentPost;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +24,7 @@ public class SysUserServiceTest {
 
     @Test
     public void addSysUserTest() {
-        TbSysUser sysUser = new TbSysUser();
+        SysUser sysUser = new SysUser();
         sysUser.setAccount("datang05");
         sysUser.setEmail("123345678@163.com");
         sysUser.setName("大唐");
@@ -36,23 +34,23 @@ public class SysUserServiceTest {
     }
 
     @Test
-    public void findSysUserByPageTest(){
-        QueryVo sysUserQueryVo = new QueryVo();
-        sysUserQueryVo.setPage(0);
-        sysUserQueryVo.setRows(10);
-        Result result = sysUserService.findSysUserByPage(sysUserQueryVo);
+    public void findSysUserByPageTest() {
+        UserQuery sysUserUserQuery = new UserQuery();
+        sysUserUserQuery.setPage(1);
+        sysUserUserQuery.setRows(10);
+        Result result = sysUserService.findSysUserByPage(sysUserUserQuery);
         System.out.println(result);
     }
 
     @Test
-    public void deleteSysUserTest(){
-        String[] ids = {"u003","u004"};
+    public void deleteSysUserTest() {
+        String[] ids = {"u003", "u004"};
         sysUserService.deleteSysUser(ids);
     }
 
     @Test
-    public void updateSysUserTest(){
-        TbSysUser sysUser = new TbSysUser();
+    public void updateSysUserTest() {
+        SysUser sysUser = new SysUser();
         sysUser.setId("u002");
         sysUser.setPassword("45677");
         sysUser.setName("大唐006");
@@ -60,47 +58,47 @@ public class SysUserServiceTest {
     }
 
     @Test
-    public void findSysGroupByUserIdTest(){
+    public void findSysGroupByUserIdTest() {
         Result result = sysUserService.findSysGroupByUserId("u002");
         System.out.println(result);
     }
 
     @Test
-    public void saveSysGroupToSysUserTest(){
-        String[] groupIds = {"g002","g003"};
-        sysUserService.saveSysGroupToSysUser(groupIds,"u002");
+    public void saveSysGroupToSysUserTest() {
+        String[] groupIds = {"g002", "g003"};
+        sysUserService.saveSysGroupToSysUser(groupIds, "u002");
     }
 
     @Test
-    public void findSysRoleByUserIdTest(){
+    public void findSysRoleByUserIdTest() {
         Result result = sysUserService.findSysRoleByUserId("u002");
         System.out.println(result);
     }
 
     @Test
-    public void saveSysRoleToSysUser(){
-        String[] roleId = {"r002","r003"};
-        sysUserService.saveSysRoleToSysUser(roleId,"u002");
+    public void saveSysRoleToSysUser() {
+        String[] roleId = {"r002", "r003"};
+        sysUserService.saveSysRoleToSysUser(roleId, "u002");
     }
 
     @Test
-    public void findDepartmentandPostByUserIdTest(){
+    public void findDepartmentandPostByUserIdTest() {
         Result result = sysUserService.findDepartmentandPostByUserId("u002");
         System.out.println(result);
     }
 
     @Test
-    public void saveDepartmentandPostOfUser(){
-        TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
+    public void saveDepartmentandPostOfUser() {
+        SysUserDepartmentPost sysUserDepartmentPost = new SysUserDepartmentPost();
         sysUserDepartmentPost.setDepartmentId("d004");
         sysUserDepartmentPost.setPostId("p004");
-        List<TbSysUserDepartmentPost> list = new ArrayList<>();
+        List<SysUserDepartmentPost> list = new ArrayList<>();
         list.add(sysUserDepartmentPost);
-        sysUserService.saveDepartmentandPostOfUser("u002",list);
+        sysUserService.saveDepartmentandPostOfUser("u002", list);
     }
 
     @Test
-    public void findSysUserByIdTest(){
+    public void findSysUserByIdTest() {
         Result result = sysUserService.findSysUserById("u002");
         System.out.println(result);
     }

@@ -3,17 +3,14 @@ package com.jn.system.service.impl;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysGroupMapper;
 import com.jn.system.service.SysGroupService;
-import com.jn.system.vo.TbSysGroup;
-import com.jn.system.vo.TbSysUser;
+import com.jn.system.vo.SysGroup;
+import com.jn.system.vo.SysUser;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.security.auth.Subject;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,7 +22,7 @@ import java.util.UUID;
  * @modified By:
  */
 @Service
-public class SysGroupServiceimpl implements SysGroupService{
+public class SysGroupServiceImpl implements SysGroupService{
 
     @Autowired
     private SysGroupMapper sysGroupMapper;
@@ -44,13 +41,13 @@ public class SysGroupServiceimpl implements SysGroupService{
      * @param sysGroup 用户组
      */
     @Override
-    @Transactional
-    public void addSysGroup(TbSysGroup sysGroup) {
+    @Transactional(rollbackFor = Exception.class)
+    public void addSysGroup(SysGroup sysGroup) {
         //为用户组设置信息
         sysGroup.setId(UUID.randomUUID().toString());
         sysGroup.setCreateTime(new Date());
-        TbSysUser tbSysUser = (TbSysUser) SecurityUtils.getSubject().getPrincipal();
-        sysGroup.setCreator(tbSysUser.getId());
+        SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        sysGroup.setCreator(sysUser.getId());
         sysGroupMapper.addSysGroup(sysGroup);
     }
 
@@ -59,7 +56,7 @@ public class SysGroupServiceimpl implements SysGroupService{
      * @param groupIds 用户组id数组
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
         for (String groupId: groupIds) {
             sysGroupMapper.deleSysGroup(groupId);
@@ -72,8 +69,8 @@ public class SysGroupServiceimpl implements SysGroupService{
      * @return
      */
     @Override
-    @Transactional
-    public void updateSysGroup(TbSysGroup sysGroup) {
+    @Transactional(rollbackFor = Exception.class)
+    public void updateSysGroup(SysGroup sysGroup) {
         sysGroup.setCreateTime(new Date());
         sysGroupMapper.updateSysGroup(sysGroup);
     }

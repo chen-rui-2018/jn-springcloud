@@ -1,28 +1,52 @@
 package com.jn.system.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 文件组文件关联表
- */
-public class TbSysFileGroupFile {
-    private String id; //id
+ * TODO:文件文件组实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysFileGroupFile implements Serializable {
+    private static final long serialVersionUID = -210328037296057198L;
+    /**
+     * id
+     */
+    private String id;
+    /**
+     * 文件组id
+     */
+    private String fileGroupId;
+    /**
+     * 文件id
+     */
+    private String fileId;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String fileGroupId; //文件组id
-
-    private String fileId; // 文件id
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysFileGroupFile() {
+    public SysFileGroupFile() {
     }
 
-    public TbSysFileGroupFile(String id, String fileGroupId, String fileId, Date createTime, String status) {
+    public SysFileGroupFile(String id, String fileGroupId, String fileId, String creator,
+                            Date createTime, String status) {
         this.id = id;
         this.fileGroupId = fileGroupId;
         this.fileId = fileId;
+        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
     }
@@ -67,12 +91,21 @@ public class TbSysFileGroupFile {
         this.status = status;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
     @Override
     public String toString() {
-        return "TbSysFileGroupFile{" +
+        return "SysFileGroupFile{" +
                 "id='" + id + '\'' +
                 ", fileGroupId='" + fileGroupId + '\'' +
                 ", fileId='" + fileId + '\'' +
+                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

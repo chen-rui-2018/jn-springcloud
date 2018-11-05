@@ -1,9 +1,9 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.QueryVo;
-import com.jn.system.vo.TbSysUser;
-import com.jn.system.vo.TbSysUserDepartmentPost;
+import com.jn.system.model.UserQuery;
+import com.jn.system.vo.SysUser;
+import com.jn.system.vo.SysUserDepartmentPost;
 
 import java.util.List;
 
@@ -21,14 +21,14 @@ public interface SysUserService {
      * 添加用户
      * @param sysUser
      */
-    void addSysUser(TbSysUser sysUser);
+    void addSysUser(SysUser sysUser);
 
     /**
      * 查询用户
-     * @param userQueryVo
+     * @param userUserQuery
      * @return
      */
-    Result findSysUserByPage(QueryVo userQueryVo);
+    Result findSysUserByPage(UserQuery userUserQuery);
 
     /**
      * 删除用户
@@ -40,7 +40,7 @@ public interface SysUserService {
      * 更新用户信息
      * @param sysUser
      */
-    void updateSysUser(TbSysUser sysUser);
+    void updateSysUser(SysUser sysUser);
 
     /**
      * 根据用户id获取用户已经存在的用户组及其他用户组
@@ -83,7 +83,7 @@ public interface SysUserService {
      * @param sysUserDepartmentPostlist 岗位,部门列表集合
      * @return
      */
-    void saveDepartmentandPostOfUser(String sysUserId, List<TbSysUserDepartmentPost> sysUserDepartmentPostlist);
+    void saveDepartmentandPostOfUser(String sysUserId, List<SysUserDepartmentPost> sysUserDepartmentPostlist);
 
     /**
      * 根据用户id返回用户信息

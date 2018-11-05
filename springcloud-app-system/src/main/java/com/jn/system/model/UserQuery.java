@@ -5,30 +5,51 @@ import com.jn.common.model.Page;
 import java.io.Serializable;
 
 /**
- * 查询实体类
+ * TODO:查询工具类
+ *
  * @author： shaobao
- * @date： Created on 2018/11/1 9:05
+ * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class QueryVo extends Page implements Serializable {
+public class UserQuery extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
-    private String id; //根据id查询
-    private String name; //查询名称条件
-    private String status; // 状态查询条件
-    private String departmentId; //部门查询id
-    private String udpStatus; //部门岗位状态
+    /**
+     * 根据id查询
+     */
+    private String id;
+    /**
+     * 查询名称条件
+     */
+    private String name;
+    /**
+     * 状态查询条件
+     */
+    private String status;
+    /**
+     * 部门查询id
+     */
+    private String departmentId;
+    /**
+     * 部门岗位状态
+     */
+    private String udpStatus;
+    /**
+     * 是否默认
+     */
+    private String isDefault;
 
-    public QueryVo() {
+    public UserQuery() {
     }
 
-    public QueryVo(String id, String name, String status, String departmentId, String udpStatus) {
+    public UserQuery(String id, String name, String status, String departmentId, String udpStatus, String isDefault) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.departmentId = departmentId;
         this.udpStatus = udpStatus;
+        this.isDefault = isDefault;
     }
 
     public String getName() {
@@ -71,14 +92,23 @@ public class QueryVo extends Page implements Serializable {
         this.udpStatus = udpStatus;
     }
 
+    public String getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
+    }
+
     @Override
     public String toString() {
-        return "QueryVo{" +
+        return "UserQuery{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", udpStatus='" + udpStatus + '\'' +
+                ", isDefault='" + isDefault + '\'' +
                 '}';
     }
 }

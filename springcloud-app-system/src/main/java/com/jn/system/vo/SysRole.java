@@ -4,24 +4,40 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 角色表
- */
-public class TbSysRole implements Serializable {
+ * TODO:角色实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysRole implements Serializable {
     private static final long serialVersionUID = 2885231996482043241L;
+    /**
+     * id
+     */
     private String id;
-
-    private String roleName; //角色名称
-
+    /**
+     * 角色名称
+     */
+    private String roleName;
+    /**
+     * 创建者
+     */
     private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1:删除
+     */
+    private String status;
 
-    private Date createTime; // 创建时间
-
-    private String status; //状态 1:有效 0:无效 -1:删除
-
-    public TbSysRole() {
+    public SysRole() {
     }
 
-    public TbSysRole(String id, String roleName, String creator, Date createTime, String status) {
+    public SysRole(String id, String roleName, String creator, Date createTime, String status) {
         this.id = id;
         this.roleName = roleName;
         this.creator = creator;
@@ -71,15 +87,27 @@ public class TbSysRole implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TbSysRole)) return false;
+        if (this == o){
+            return true;
+        }
+        if (!(o instanceof SysRole)){
+            return false;
+        }
 
-        TbSysRole sysRole = (TbSysRole) o;
+        SysRole sysRole = (SysRole) o;
 
-        if (id != null ? !id.equals(sysRole.id) : sysRole.id != null) return false;
-        if (roleName != null ? !roleName.equals(sysRole.roleName) : sysRole.roleName != null) return false;
-        if (creator != null ? !creator.equals(sysRole.creator) : sysRole.creator != null) return false;
-        if (createTime != null ? !createTime.equals(sysRole.createTime) : sysRole.createTime != null) return false;
+        if (id != null ? !id.equals(sysRole.id) : sysRole.id != null){
+            return false;
+        }
+        if (roleName != null ? !roleName.equals(sysRole.roleName) : sysRole.roleName != null){
+            return false;
+        }
+        if (creator != null ? !creator.equals(sysRole.creator) : sysRole.creator != null){
+            return false;
+        }
+        if (createTime != null ? !createTime.equals(sysRole.createTime) : sysRole.createTime != null) {
+            return false;
+        }
         return status != null ? status.equals(sysRole.status) : sysRole.status == null;
     }
 
@@ -95,7 +123,7 @@ public class TbSysRole implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysRole{" +
+        return "SysRole{" +
                 "id='" + id + '\'' +
                 ", roleName='" + roleName + '\'' +
                 ", creator='" + creator + '\'' +

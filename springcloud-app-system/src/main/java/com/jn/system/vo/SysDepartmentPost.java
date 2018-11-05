@@ -1,43 +1,66 @@
-package com.jn.system.model;
+package com.jn.system.vo;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 部门岗位实体类
+ * TODO:部门岗位实体类
+ *
  * @author： shaobao
- * @date： Created on 2018/10/31 23:55
+ * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
 public class SysDepartmentPost implements Serializable {
-
-
     private static final long serialVersionUID = 5393600301120145656L;
-
-    private String id; //部门岗位id
-
-    private String departmentId; //部门id
-
-    private String departmentName; //部门名称
-
-    private Date departmentCreateTime;  //创建时间
-
-    private String departmentCreator; //部门创造者
-
-    private String departmentStatus;  // 状态 1:有效,0:无效
-
-    private String postId; //岗位id
-
-    private String postName; //岗位名称
-
-    private String postCreator; //岗位创造者
-
-    private Date postCreateTime; // 创建时间
-
-    private String postStatus; //状态 1:有效 0:无效
-
-    private String isDefault; // 是否默认
+    /**
+     * 部门岗位id
+     */
+    private String id;
+    /**
+     * 部门id
+     */
+    private String departmentId;
+    /**
+     * 部门名称
+     */
+    private String departmentName;
+    /**
+     * 创建时间
+     */
+    private Date departmentCreateTime;
+    /**
+     * 部门创造者
+     */
+    private String departmentCreator;
+    /**
+     *
+     */
+    private String departmentStatus;
+    /**
+     * 岗位id
+     */
+    private String postId;
+    /**
+     * 岗位名称
+     */
+    private String postName;
+    /**
+     * 岗位创造者
+     */
+    private String postCreator;
+    /**
+     * 创建时间
+     */
+    private Date postCreateTime;
+    /**
+     * 状态 1:有效,0:无效 -1删除
+     */
+    private String postStatus;
+    /**
+     * 是否默认
+     */
+    private String isDefault;
 
     public SysDepartmentPost() {
     }

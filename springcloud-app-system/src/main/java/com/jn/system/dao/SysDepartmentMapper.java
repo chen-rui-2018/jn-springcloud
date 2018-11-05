@@ -1,6 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.vo.TbSysDepartment;
+import com.jn.system.vo.SysDepartment;
 
 import java.util.List;
 
@@ -15,6 +15,6 @@ public interface SysDepartmentMapper {
      * 获取所有部门列表
      * @return
      */
-    List<TbSysDepartment> findSysDepartmentAll();
+    List<SysDepartment> findSysDepartmentAll();
 
 }

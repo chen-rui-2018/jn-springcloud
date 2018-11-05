@@ -3,11 +3,10 @@ package com.jn.system.service.impl;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysPostMapper;
 import com.jn.system.service.SysPostService;
-import com.jn.system.vo.TbSysPost;
+import com.jn.system.vo.SysPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ import java.util.List;
  * @modified By:
  **/
 @Service
-public class SysPostServiceimpl implements SysPostService {
+public class SysPostServiceImpl implements SysPostService {
 
     @Autowired
     private SysPostMapper sysPostMapper;
@@ -30,7 +29,7 @@ public class SysPostServiceimpl implements SysPostService {
     @Override
     public Result findSysPostAll() {
         Result result = new Result();
-        List<TbSysPost> sysPostList = sysPostMapper.findSysPostAll();
+        List<SysPost> sysPostList = sysPostMapper.findSysPostAll();
         result.setData(sysPostList);
         return result;
     }

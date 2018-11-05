@@ -4,27 +4,42 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 岗位表
- */
-public class TbSysPost implements Serializable {
-
+ * TODO:岗位实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysPost implements Serializable {
     private static final long serialVersionUID = -4700078673130094037L;
+    /**
+     * id
+     */
     private String id;
-
-    private String postName; //岗位名称
-
+    /**
+     * 岗位名称
+     */
+    private String postName;
+    /**
+     * 创建者
+     */
     private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private Date createTime; // 创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysPost() {
+    public SysPost() {
 
     }
 
 
-    public TbSysPost(String id, String postName, String creator, Date createTime, String status) {
+    public SysPost(String id, String postName, String creator, Date createTime, String status) {
         this.id = id;
         this.postName = postName;
         this.creator = creator;
@@ -74,7 +89,7 @@ public class TbSysPost implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysPost{" +
+        return "SysPost{" +
                 "id='" + id + '\'' +
                 ", postName='" + postName + '\'' +
                 ", creator='" + creator + '\'' +

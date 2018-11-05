@@ -3,11 +3,10 @@ package com.jn.system.service.impl;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysDepartmentMapper;
 import com.jn.system.service.SysDepartmentService;
-import com.jn.system.vo.TbSysDepartment;
+import com.jn.system.vo.SysDepartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @Override
     public Result findSysDepartmentAll() {
         Result result = new Result();
-        List<TbSysDepartment> sysDepartmentList = sysDepartmentMapper.findSysDepartmentAll();
+        List<SysDepartment> sysDepartmentList = sysDepartmentMapper.findSysDepartmentAll();
         result.setData(sysDepartmentList);
         return result;
     }

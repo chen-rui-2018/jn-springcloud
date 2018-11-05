@@ -1,25 +1,46 @@
 package com.jn.system.vo;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 权限表
- */
-public class TbSysPermission {
-    private String id; //id
+ * TODO:权限实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysPermission implements Serializable {
+    private static final long serialVersionUID = 3175697968557474816L;
+    /**
+     * id
+     */
+    private String id;
+    /**
+     * 权限名称
+     */
+    private String permissionName;
+    /**
+     * 创建者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String permissionName; //权限名称
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysPermission() {
+    public SysPermission() {
     }
 
-    public TbSysPermission(String id, String permissionName, Date createTime, String status) {
+    public SysPermission(String id, String permissionName, String creator, Date createTime, String status) {
         this.id = id;
         this.permissionName = permissionName;
+        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
     }
@@ -56,11 +77,20 @@ public class TbSysPermission {
         this.status = status;
     }
 
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
     @Override
     public String toString() {
-        return "TbSysPermission{" +
+        return "SysPermission{" +
                 "id='" + id + '\'' +
                 ", permissionName='" + permissionName + '\'' +
+                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

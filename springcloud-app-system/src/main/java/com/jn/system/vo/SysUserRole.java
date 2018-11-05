@@ -4,31 +4,48 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户组用户关联表
- */
-public class TbSysUserGroup implements Serializable {
-
-    private static final long serialVersionUID = -3719419034027851775L;
+ * TODO:用户角色实体类
+ *
+ * @author： shaobao
+ * @date： Created on 2018/11/5 9:52
+ * @version： v1.0
+ * @modified By:
+ **/
+public class SysUserRole implements Serializable {
+    private static final long serialVersionUID = -6016435320433311326L;
+    /**
+     * id
+     */
     private String id;
+    /**
+     * 角色id
+     */
+    private String roleId;
+    /**
+     * 用户id
+     */
+    private String userId;
+    /**
+     * 创造者
+     */
+    private String creator;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 状态 1:有效 0:无效 -1删除
+     */
+    private String status;
 
-    private String groupId; //用户组id
-
-    private String creator; // 创造者
-
-    private String userId;  //用户id
-
-    private Date createTime; //创建时间
-
-    private String status; //状态 1:有效 0:无效
-
-    public TbSysUserGroup() {
+    public SysUserRole() {
     }
 
-    public TbSysUserGroup(String id, String groupId, String creator, String userId, Date createTime, String status) {
+    public SysUserRole(String id, String roleId, String userId, String creator, Date createTime, String status) {
         this.id = id;
-        this.groupId = groupId;
-        this.creator = creator;
+        this.roleId = roleId;
         this.userId = userId;
+        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
     }
@@ -41,12 +58,12 @@ public class TbSysUserGroup implements Serializable {
         this.id = id;
     }
 
-    public String getGroupId() {
-        return groupId;
+    public String getRoleId() {
+        return roleId;
     }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public void setRoleId(String roleId) {
+        this.roleId = roleId;
     }
 
     public String getUserId() {
@@ -83,11 +100,11 @@ public class TbSysUserGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "TbSysUserGroup{" +
+        return "SysUserRole{" +
                 "id='" + id + '\'' +
-                ", groupId='" + groupId + '\'' +
-                ", creator='" + creator + '\'' +
+                ", roleId='" + roleId + '\'' +
                 ", userId='" + userId + '\'' +
+                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

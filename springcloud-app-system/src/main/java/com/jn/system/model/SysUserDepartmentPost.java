@@ -1,22 +1,26 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:数据权限实体类
+ *用户部门岗位实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class SysPermissionDb implements Serializable {
-    private static final long serialVersionUID = 3262404933946559706L;
+public class SysUserDepartmentPost implements Serializable {
+    private static final long serialVersionUID = -7989897535661328826L;
     /**
      * id
      */
     private String id;
+    /**
+     * 用户id
+     */
+    private String userId;
     /**
      * 部门id
      */
@@ -26,11 +30,11 @@ public class SysPermissionDb implements Serializable {
      */
     private String postId;
     /**
-     * 父id
+     * 是否默认
      */
-    private String parentId;
+    private String isDefault;
     /**
-     * 创建者
+     * 创造者
      */
     private String creator;
     /**
@@ -42,15 +46,16 @@ public class SysPermissionDb implements Serializable {
      */
     private String status;
 
-    public SysPermissionDb() {
+    public SysUserDepartmentPost() {
     }
 
-    public SysPermissionDb(String id, String departmentId, String postId, String parentId,
-                           String creator, Date createTime, String status) {
+    public SysUserDepartmentPost(String id, String userId, String departmentId, String postId,
+                                 String isDefault, String creator, Date createTime, String status) {
         this.id = id;
+        this.userId = userId;
         this.departmentId = departmentId;
         this.postId = postId;
-        this.parentId = parentId;
+        this.isDefault = isDefault;
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
@@ -62,6 +67,14 @@ public class SysPermissionDb implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getDepartmentId() {
@@ -80,12 +93,12 @@ public class SysPermissionDb implements Serializable {
         this.postId = postId;
     }
 
-    public String getParentId() {
-        return parentId;
+    public String getIsDefault() {
+        return isDefault;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setIsDefault(String isDefault) {
+        this.isDefault = isDefault;
     }
 
     public Date getCreateTime() {
@@ -114,11 +127,12 @@ public class SysPermissionDb implements Serializable {
 
     @Override
     public String toString() {
-        return "SysPermissionDb{" +
+        return "SysUserDepartmentPost{" +
                 "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", postId='" + postId + '\'' +
-                ", parentId='" + parentId + '\'' +
+                ", isDefault='" + isDefault + '\'' +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +

@@ -1,18 +1,18 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:用户角色实体类
+ * 用户组角色实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class SysUserRole implements Serializable {
-    private static final long serialVersionUID = -6016435320433311326L;
+public class SysGroupRole implements Serializable {
+    private static final long serialVersionUID = 2429600148501298066L;
     /**
      * id
      */
@@ -22,11 +22,11 @@ public class SysUserRole implements Serializable {
      */
     private String roleId;
     /**
-     * 用户id
+     * 用户组id
      */
-    private String userId;
+    private String userGroupId;
     /**
-     * 创造者
+     * 创建者
      */
     private String creator;
     /**
@@ -34,17 +34,17 @@ public class SysUserRole implements Serializable {
      */
     private Date createTime;
     /**
-     * 状态 1:有效 0:无效 -1删除
+     * 状态 1:有效 0:无效 -1 删除
      */
     private String status;
 
-    public SysUserRole() {
+    public SysGroupRole() {
     }
 
-    public SysUserRole(String id, String roleId, String userId, String creator, Date createTime, String status) {
+    public SysGroupRole(String id, String roleId, String userGroupId, String creator, Date createTime, String status) {
         this.id = id;
         this.roleId = roleId;
-        this.userId = userId;
+        this.userGroupId = userGroupId;
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
@@ -66,12 +66,12 @@ public class SysUserRole implements Serializable {
         this.roleId = roleId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUserGroupId() {
+        return userGroupId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUserGroupId(String userGroupId) {
+        this.userGroupId = userGroupId;
     }
 
     public Date getCreateTime() {
@@ -100,10 +100,10 @@ public class SysUserRole implements Serializable {
 
     @Override
     public String toString() {
-        return "SysUserRole{" +
+        return "SysGroupRole{" +
                 "id='" + id + '\'' +
                 ", roleId='" + roleId + '\'' +
-                ", userId='" + userId + '\'' +
+                ", userGroupId='" + userGroupId + '\'' +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +

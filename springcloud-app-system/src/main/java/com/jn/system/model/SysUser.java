@@ -1,11 +1,13 @@
-package com.jn.system.vo;
+package com.jn.system.model;
+
+import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
- * TODO:用户实体类
+ *用户实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
@@ -52,13 +54,13 @@ public class SysUser implements Serializable {
      */
     private String status;
 
-    private List<SysDepartmentPost> sysDepartmentPostList;
+    private List<SysDepartmentPostVO> sysDepartmentPostVOList;
 
     public SysUser() {
     }
 
     public SysUser(String id, String account, String password, String name, String phone, String email,
-                   String creator, Date createTime, String status, List<SysDepartmentPost> sysDepartmentPostList) {
+                   String creator, Date createTime, String status, List<SysDepartmentPostVO> sysDepartmentPostVOList) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -68,19 +70,19 @@ public class SysUser implements Serializable {
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
-        this.sysDepartmentPostList = sysDepartmentPostList;
+        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public List<SysDepartmentPost> getSysDepartmentPostList() {
-        return sysDepartmentPostList;
+    public List<SysDepartmentPostVO> getSysDepartmentPostVOList() {
+        return sysDepartmentPostVOList;
     }
 
-    public void setSysDepartmentPostList(List<SysDepartmentPost> sysDepartmentPostList) {
-        this.sysDepartmentPostList = sysDepartmentPostList;
+    public void setSysDepartmentPostVOList(List<SysDepartmentPostVO> sysDepartmentPostVOList) {
+        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
     }
 
     public String getId() {
@@ -167,7 +169,7 @@ public class SysUser implements Serializable {
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
-                ", sysDepartmentPostList=" + sysDepartmentPostList +
+                ", sysDepartmentPostVOList=" + sysDepartmentPostVOList +
                 '}';
     }
 }

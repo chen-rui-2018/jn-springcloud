@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO:岗位管理
+ *岗位管理
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52

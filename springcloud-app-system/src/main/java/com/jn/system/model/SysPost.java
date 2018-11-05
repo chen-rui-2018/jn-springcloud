@@ -1,26 +1,26 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:权限实体类
+ *岗位实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class SysPermission implements Serializable {
-    private static final long serialVersionUID = 3175697968557474816L;
+public class SysPost implements Serializable {
+    private static final long serialVersionUID = -4700078673130094037L;
     /**
      * id
      */
     private String id;
     /**
-     * 权限名称
+     * 岗位名称
      */
-    private String permissionName;
+    private String postName;
     /**
      * 创建者
      */
@@ -34,15 +34,25 @@ public class SysPermission implements Serializable {
      */
     private String status;
 
-    public SysPermission() {
+    public SysPost() {
+
     }
 
-    public SysPermission(String id, String permissionName, String creator, Date createTime, String status) {
+
+    public SysPost(String id, String postName, String creator, Date createTime, String status) {
         this.id = id;
-        this.permissionName = permissionName;
+        this.postName = postName;
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getId() {
@@ -53,12 +63,12 @@ public class SysPermission implements Serializable {
         this.id = id;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public String getPostName() {
+        return postName;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+    public void setPostName(String postName) {
+        this.postName = postName;
     }
 
     public Date getCreateTime() {
@@ -77,19 +87,11 @@ public class SysPermission implements Serializable {
         this.status = status;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
     @Override
     public String toString() {
-        return "SysPermission{" +
+        return "SysPost{" +
                 "id='" + id + '\'' +
-                ", permissionName='" + permissionName + '\'' +
+                ", postName='" + postName + '\'' +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +

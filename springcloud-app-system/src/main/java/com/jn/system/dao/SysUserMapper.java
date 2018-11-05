@@ -1,10 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.UserQuery;
-import com.jn.system.vo.SysUser;
-import com.jn.system.vo.SysUserDepartmentPost;
-import com.jn.system.vo.SysUserGroup;
-import com.jn.system.vo.SysUserRole;
+import com.jn.system.model.*;
 
 import java.util.List;
 
@@ -26,17 +22,17 @@ public interface SysUserMapper {
 
     /**
      * 当按部门查询用户时
-     * @param userUserQuery
+     * @param userSysUserQuery
      * @return
      */
-    List<SysUser> findSysUserByPageAndOption(UserQuery userUserQuery);
+    List<SysUser> findSysUserByPageAndOption(SysUserQuery userSysUserQuery);
 
     /**
      * 当查询部门的条件为空时的查询方法
-     * @param userUserQuery
+     * @param userSysUserQuery
      * @return
      */
-    List<SysUser> findSysUserByPage(UserQuery userUserQuery);
+    List<SysUser> findSysUserByPage(SysUserQuery userSysUserQuery);
 
     /**
      * 删除用户

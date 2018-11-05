@@ -2,10 +2,10 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.model.UserQuery;
+import com.jn.system.model.SysUserQuery;
 import com.jn.system.service.SysUserService;
-import com.jn.system.vo.SysUser;
-import com.jn.system.vo.SysUserDepartmentPost;
+import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDepartmentPost;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * TODO:用户管理
+ * 用户管理
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
@@ -42,13 +42,13 @@ public class SysUserController extends BaseController{
 
     /**
      * 查询用户
-     * @param userUserQuery
+     * @param userSysUserQuery
      * @return
      */
     @ApiOperation(value = "查询用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(UserQuery userUserQuery){
-        return sysUserService.findSysUserByPage(userUserQuery);
+    public Result findSysUserByPage(SysUserQuery userSysUserQuery){
+        return sysUserService.findSysUserByPage(userSysUserQuery);
     }
 
     /**

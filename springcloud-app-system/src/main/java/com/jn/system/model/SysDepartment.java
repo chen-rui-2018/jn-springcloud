@@ -1,10 +1,10 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:部门实体类
+ * 部门实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52

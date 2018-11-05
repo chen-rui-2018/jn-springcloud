@@ -33,7 +33,6 @@ public class SysRole implements Serializable {
     /**
      * 创建时间
      */
-
     private Timestamp createTime;
     /**
      * 角色状态 1：有效，0：无效，-1：删除

@@ -7,9 +7,8 @@ import com.jn.common.model.Result;
 import com.jn.system.dao.SysGroupMapper;
 import com.jn.system.dao.SysRoleMapper;
 import com.jn.system.dao.SysUserMapper;
-import com.jn.system.model.UserQuery;
+import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
-import com.jn.system.vo.*;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -56,39 +55,39 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 分页查询用户,返回用户信息及部门岗位
-     * @param userUserQuery
+     * @param userSysUserQuery
      * @return
      */
     @Override
-    public Result findSysUserByPage(UserQuery userUserQuery) {
+    public Result findSysUserByPage(SysUserQuery userSysUserQuery) {
         //分页查询
-        Page<Object> objects = PageHelper.startPage(userUserQuery.getPage(), userUserQuery.getRows());
+        Page<Object> objects = PageHelper.startPage(userSysUserQuery.getPage(), userSysUserQuery.getRows());
         GetEasyUIData getEasyUIData = null;
         //判断传过来参数是否有查询条件
-        if(StringUtils.isBlank(userUserQuery.getDepartmentId())){
-            List<SysUser> sysUserList = sysUserMapper.findSysUserByPage(userUserQuery);
+        if(StringUtils.isBlank(userSysUserQuery.getDepartmentId())){
+            List<SysUser> sysUserList = sysUserMapper.findSysUserByPage(userSysUserQuery);
             //遍历用户,获取用户默认部门岗位
             for (SysUser sysUser:sysUserList) {
-                UserQuery query = new UserQuery();
+                SysUserQuery query = new SysUserQuery();
                 query.setId(sysUser.getId());
                 query.setIsDefault("1");
                 List<SysUser> sysUserListOne = sysUserMapper.findSysUserByPageAndOption(query);
                 if (sysUserListOne.size() == 1){
                     for (SysUser sysUser1:sysUserListOne) {
-                        sysUser.setSysDepartmentPostList(sysUser1.getSysDepartmentPostList());
+                        sysUser.setSysDepartmentPostVOList(sysUser1.getSysDepartmentPostVOList());
                     }
                 }
             }
             getEasyUIData = new GetEasyUIData(sysUserList,objects.getTotal());
         }else{
-            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(userUserQuery),objects.getTotal());
+            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(userSysUserQuery),objects.getTotal());
         }
 
         //参数回显
         Map<String,Object> map = new HashMap<String, Object>();
-        map.put("name", userUserQuery.getName());
-        map.put("status", userUserQuery.getStatus());
-        map.put("dapartmentId", userUserQuery.getDepartmentId());
+        map.put("name", userSysUserQuery.getName());
+        map.put("status", userSysUserQuery.getStatus());
+        map.put("dapartmentId", userSysUserQuery.getDepartmentId());
         map.put("getEasyUIData",getEasyUIData);
         return new Result(map);
     }
@@ -212,7 +211,7 @@ public class SysUserServiceImpl implements SysUserService {
             //为用户添加新的角色
             for (String roleId:roleIds) {
                 SysUserRole sysUserRole = new SysUserRole();
-                sysUserRole.setCreateTime(new Date());
+                sysUserRole.setCreateTime( new Date());
                 SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
                 sysUserRole.setCreator(sysUser.getId());
                 sysUserRole.setRoleId(roleId);
@@ -231,11 +230,11 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findDepartmentandPostByUserId(String userId) {
-        UserQuery userQuery = new UserQuery();
-        userQuery.setId(userId);
+        SysUserQuery sysUserQuery = new SysUserQuery();
+        sysUserQuery.setId(userId);
         //设置默认查询用户部门岗位为有效状态数据
-        userQuery.setUdpStatus("1");
-        List<SysUser> sysUserList = sysUserMapper.findSysUserByPageAndOption(userQuery);
+        sysUserQuery.setUdpStatus("1");
+        List<SysUser> sysUserList = sysUserMapper.findSysUserByPageAndOption(sysUserQuery);
         return new Result(sysUserList);
     }
 

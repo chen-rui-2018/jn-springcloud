@@ -3,7 +3,7 @@ package com.jn.system.service.impl;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysPostMapper;
 import com.jn.system.service.SysPostService;
-import com.jn.system.vo.SysPost;
+import com.jn.system.model.SysPost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

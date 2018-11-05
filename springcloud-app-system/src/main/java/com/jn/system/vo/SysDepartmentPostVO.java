@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:部门岗位实体类
+ *部门岗位实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class SysDepartmentPost implements Serializable {
+public class SysDepartmentPostVO implements Serializable {
     private static final long serialVersionUID = 5393600301120145656L;
     /**
      * 部门岗位id
@@ -62,7 +62,7 @@ public class SysDepartmentPost implements Serializable {
      */
     private String isDefault;
 
-    public SysDepartmentPost() {
+    public SysDepartmentPostVO() {
     }
 
     public String getId() {
@@ -73,9 +73,9 @@ public class SysDepartmentPost implements Serializable {
         this.id = id;
     }
 
-    public SysDepartmentPost(String id, String departmentId, String departmentName, Date departmentCreateTime,
-                             String departmentCreator, String departmentStatus, String postId, String postName,
-                             String postCreator, Date postCreateTime, String postStatus, String isDefault) {
+    public SysDepartmentPostVO(String id, String departmentId, String departmentName, Date departmentCreateTime,
+                               String departmentCreator, String departmentStatus, String postId, String postName,
+                               String postCreator, Date postCreateTime, String postStatus, String isDefault) {
         this.id = id;
         this.departmentId = departmentId;
         this.departmentName = departmentName;
@@ -184,7 +184,7 @@ public class SysDepartmentPost implements Serializable {
 
     @Override
     public String toString() {
-        return "SysDepartmentPost{" +
+        return "SysDepartmentPostVO{" +
                 "id='" + id + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", departmentName='" + departmentName + '\'' +

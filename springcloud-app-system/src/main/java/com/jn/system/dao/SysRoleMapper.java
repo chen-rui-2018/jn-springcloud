@@ -3,7 +3,6 @@ package com.jn.system.dao;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.SysRolePage;
 import com.jn.system.vo.SysRoleVO;
-import com.jn.system.vo.TbSysRole;
 
 import java.util.List;
 
@@ -22,19 +21,19 @@ public interface SysRoleMapper {
      * @param roleId
      * @return
      */
-    TbSysRole findSysRoleByid(String roleId);
+    SysRole findSysRoleByid(String roleId);
 
     /**
      * 查询所有角色
      * @return
      */
-    List<TbSysRole> findSysRoleAll();
+    List<SysRole> findSysRoleAll();
 
     /**
      * 根据用户id获取用户已经具有的角色
      * @return
      */
-    List<TbSysRole> findSysRoleByUserId(String id);
+    List<SysRole> findSysRoleByUserId(String id);
 
 
     /**

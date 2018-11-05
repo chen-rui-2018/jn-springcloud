@@ -1,6 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.vo.SysDepartment;
+import com.jn.system.model.SysDepartment;
 
 import java.util.List;
 

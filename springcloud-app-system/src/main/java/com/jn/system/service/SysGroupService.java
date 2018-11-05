@@ -1,7 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.vo.SysGroup;
+import com.jn.system.model.SysGroup;
 
 /**
  * 用户组

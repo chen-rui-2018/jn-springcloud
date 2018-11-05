@@ -5,14 +5,14 @@ import com.jn.common.model.Page;
 import java.io.Serializable;
 
 /**
- * TODO:查询工具类
+ *查询工具类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class UserQuery extends Page implements Serializable {
+public class SysUserQuery extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
     /**
@@ -40,10 +40,10 @@ public class UserQuery extends Page implements Serializable {
      */
     private String isDefault;
 
-    public UserQuery() {
+    public SysUserQuery() {
     }
 
-    public UserQuery(String id, String name, String status, String departmentId, String udpStatus, String isDefault) {
+    public SysUserQuery(String id, String name, String status, String departmentId, String udpStatus, String isDefault) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -102,7 +102,7 @@ public class UserQuery extends Page implements Serializable {
 
     @Override
     public String toString() {
-        return "UserQuery{" +
+        return "SysUserQuery{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +

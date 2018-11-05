@@ -1,6 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.vo.SysPost;
+import com.jn.system.model.SysPost;
 
 import java.util.List;
 

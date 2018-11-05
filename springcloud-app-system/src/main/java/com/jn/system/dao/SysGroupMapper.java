@@ -1,6 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.vo.SysGroup;
+import com.jn.system.model.SysGroup;
 
 import java.util.List;
 

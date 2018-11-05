@@ -1,4 +1,4 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * TODO:用户组实体类
+ * 用户组实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52

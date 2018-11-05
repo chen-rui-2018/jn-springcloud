@@ -1,46 +1,52 @@
-package com.jn.system.vo;
+package com.jn.system.model;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * TODO:文件组类
+ *用户组用户实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-public class SysFileGroup implements Serializable {
-    private static final long serialVersionUID = -4676519264453291735L;
+public class SysUserGroup implements Serializable {
+
+    private static final long serialVersionUID = -3719419034027851775L;
     /**
-     * 文件组id
+     * id
      */
     private String id;
     /**
-     * 文件组名称
+     * 用户组id
      */
-    private String fileGroupName;
+    private String groupId;
     /**
-     * 创建者
+     * 创造者
      */
     private String creator;
+    /**
+     * 用户id
+     */
+    private String userId;
     /**
      * 创建时间
      */
     private Date createTime;
     /**
-     * 状态 1:有效 0:无效,-1删除
+     * 状态 1:有效 0:无效 -1删除
      */
     private String status;
 
-    public SysFileGroup() {
+    public SysUserGroup() {
     }
 
-    public SysFileGroup(String id, String fileGroupName, String creator, Date createTime, String status) {
+    public SysUserGroup(String id, String groupId, String creator, String userId, Date createTime, String status) {
         this.id = id;
-        this.fileGroupName = fileGroupName;
+        this.groupId = groupId;
         this.creator = creator;
+        this.userId = userId;
         this.createTime = createTime;
         this.status = status;
     }
@@ -53,12 +59,20 @@ public class SysFileGroup implements Serializable {
         this.id = id;
     }
 
-    public String getFileGroupName() {
-        return fileGroupName;
+    public String getGroupId() {
+        return groupId;
     }
 
-    public void setFileGroupName(String fileGroupName) {
-        this.fileGroupName = fileGroupName;
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public Date getCreateTime() {
@@ -87,10 +101,11 @@ public class SysFileGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "SysFileGroup{" +
+        return "SysUserGroup{" +
                 "id='" + id + '\'' +
-                ", fileGroupName='" + fileGroupName + '\'' +
+                ", groupId='" + groupId + '\'' +
                 ", creator='" + creator + '\'' +
+                ", userId='" + userId + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 '}';

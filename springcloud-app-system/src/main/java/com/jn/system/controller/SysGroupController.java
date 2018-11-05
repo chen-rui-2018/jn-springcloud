@@ -3,7 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.service.SysGroupService;
-import com.jn.system.vo.SysGroup;
+import com.jn.system.model.SysGroup;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO:用户组管理
+ * 用户组管理
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52

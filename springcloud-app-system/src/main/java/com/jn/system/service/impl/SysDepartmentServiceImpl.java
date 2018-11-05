@@ -3,7 +3,7 @@ package com.jn.system.service.impl;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysDepartmentMapper;
 import com.jn.system.service.SysDepartmentService;
-import com.jn.system.vo.SysDepartment;
+import com.jn.system.model.SysDepartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

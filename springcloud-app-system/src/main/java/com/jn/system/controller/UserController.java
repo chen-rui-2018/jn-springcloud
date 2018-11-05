@@ -41,6 +41,12 @@ public class UserController extends BaseController {
 
     }
 
+    @RequestMapping(value = "/genertor/test")
+    public Result<User> test(User user) {
+        Assert.isNull(user.getPassword(),"不允许使用密码进行查询");
+        return new Result(userService.findTByT(user));
+    }
+
 
     @RequestMapping(value = "/selectByPrimaryKey")
     public UserVO selectByPrimaryKey(String id) {
@@ -66,7 +72,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/findUserByUser")
     public Result findUserByUser(User user) {
-        User tByT = userService.findTByT(user);
+        User tByT = userService.findTByT(user).get(0);
         return new Result(tByT);
 
     }

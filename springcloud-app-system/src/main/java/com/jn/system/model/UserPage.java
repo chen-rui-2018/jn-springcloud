@@ -31,7 +31,7 @@ public class UserPage extends Page implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getUsername() {
+    public String getAccount() {
         return username;
     }
 

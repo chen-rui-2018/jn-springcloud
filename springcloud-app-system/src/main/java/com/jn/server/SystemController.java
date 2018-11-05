@@ -42,11 +42,14 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
-        User user = userService.findTByT(u) ;
+        List<User> user = userService.findTByT(u) ;
         if(user == null) {
             throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
         }
-    	return new Result(user);
+        if(user.size() > 1){
+            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NOT_ONE);
+        }
+    	return new Result(user.get(0));
     }
     /**
      * 获取资源

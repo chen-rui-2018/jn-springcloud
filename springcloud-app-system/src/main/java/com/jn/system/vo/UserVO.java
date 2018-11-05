@@ -32,7 +32,7 @@ public class UserVO implements Serializable{
 	public void setId(String id) {
 		this.id = id;
 	}
-	public String getUsername() {
+	public String getAccount() {
 		return username;
 	}
 	public void setUsername(String username) {

@@ -7,6 +7,7 @@ import com.jn.system.model.Dict;
 import com.jn.system.model.DictPage;
 import com.jn.system.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;

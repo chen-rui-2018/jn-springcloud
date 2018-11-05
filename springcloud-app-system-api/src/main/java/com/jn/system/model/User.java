@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Date;
 
 
 /**
@@ -14,43 +15,55 @@ import java.io.Serializable;
 public class User implements Serializable{
 
 	private static final long serialVersionUID = -7484136779753770396L;
-    @ApiModelProperty(value = "id")
-	private String id;
-    @ApiModelProperty("账户名")
-    @Size(min = 4,max = 10,message = "账号TEST")
-    private String username;
-    @ApiModelProperty("密码")
-    @Size(min = 4,max = 10,message = "密码TEST")
+
+    @ApiModelProperty(value = "id" )
+    private String id;
+    @ApiModelProperty(value = "账户名")
+    private String account;
+
+    @ApiModelProperty(value = "密码")
     private String password;
 
-	public User(String id, String username, String password) {
-		super();
-		this.id = id;
-		this.username = username;
-		this.password = password;
-	}
+    @ApiModelProperty("用户真实姓名")
+    private String name;
 
-	public User(String username) {
-	    super();
-	    this.username = username;
+    @ApiModelProperty("手机号码")
+    private String phone;
+
+    @ApiModelProperty("创建邮箱")
+    private String email;
+
+    @ApiModelProperty("创建人")
+    private String creator;
+
+    @ApiModelProperty("创建时间")
+    private Date createTime;
+
+    @ApiModelProperty("状态")
+    private String status;
+
+
+    public User(String account) {
+        this.account = account;
     }
-	public User(){
-		
-	}
-	public String getId() {
+
+    public User() {
+    }
+
+    public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
+    public void setAccount(String account) {
+        this.account = account;
     }
 
     public String getPassword() {
@@ -58,13 +71,54 @@ public class User implements Serializable{
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", password=" + password + "]";
-	}
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

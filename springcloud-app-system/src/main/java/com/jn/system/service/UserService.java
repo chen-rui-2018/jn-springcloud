@@ -6,6 +6,9 @@ import com.jn.system.model.UserAdd;
 import com.jn.system.model.UserPage;
 import com.jn.system.model.UserRole;
 import com.jn.system.vo.UserVO;
+
+import java.util.List;
+
 /**
  * 用户
  *
@@ -30,7 +33,7 @@ public interface UserService {
 
     UserVO selectByPrimaryKey(String id);
 
-    User findTByT(User user);
+    List<User> findTByT(User user);
 
     void deleteByT(UserRole[] u);
 

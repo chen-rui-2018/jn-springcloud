@@ -3,8 +3,12 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.GetEasyUIData;
+import com.jn.common.util.StringUtils;
+import com.jn.system.dao.TbSysUserMapper;
 import com.jn.system.dao.UserMapper;
 import com.jn.system.dao.UserRoleMapper;
+import com.jn.system.entity.TbSysUser;
+import com.jn.system.entity.TbSysUserCriteria;
 import com.jn.system.model.User;
 import com.jn.system.model.UserAdd;
 import com.jn.system.model.UserPage;
@@ -13,10 +17,13 @@ import com.jn.system.service.UserService;
 import com.jn.system.vo.UserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 /**
  * 用户
@@ -33,6 +40,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+
+    @Autowired
+    private TbSysUserMapper tbSysUserMapper;
 
     @Override
     @Transactional
@@ -118,8 +129,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findTByT(User user) {
-        return userMapper.findTByT(user);
+    public List<User> findTByT(User user) {
+        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        if (StringUtils.isNotBlank(user.getAccount())){
+            tbSysUserCriteria.createCriteria().andAccountLike(user.getAccount());
+        }
+        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+        List<User> users = new ArrayList<>();
+        for (TbSysUser tbSysUser1 : tbSysUsers) {
+            User user1 = new User();
+            BeanUtils.copyProperties(tbSysUser1,user1);
+            users.add(user1);
+        }
+        return users;
     }
 
     @Override

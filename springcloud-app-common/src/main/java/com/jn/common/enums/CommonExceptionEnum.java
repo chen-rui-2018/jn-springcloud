@@ -18,7 +18,8 @@ public enum CommonExceptionEnum implements CodeAndMsg {
     UN_AUTH("9997","鉴权失败"),
     FILE_ERROR("9996","文件上传异常"),
     NOT_NULL("9995","不能为空"),
-    DATA_NULL("9994","数据为空");
+    DATA_NULL("9994","数据为空"),
+    DATA_NOT_ONE("9993","数据不为一");
     /**
      * 编码
      */

@@ -1,10 +1,10 @@
 package com.jn.authorization;
 
-import com.jn.system.model.User;
+import com.jn.system.model.UserLogin;
 
 public interface LoginService {
 
-    void login(User user);
+    void login(UserLogin user);
 
     void logoutJSON();
 }

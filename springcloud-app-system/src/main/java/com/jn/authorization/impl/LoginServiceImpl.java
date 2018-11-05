@@ -2,7 +2,7 @@ package com.jn.authorization.impl;
 
 
 import com.jn.authorization.LoginService;
-import com.jn.system.model.User;
+import com.jn.system.model.UserLogin;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -17,9 +17,9 @@ public class LoginServiceImpl implements LoginService {
 
 
     @Override
-    public void login(User user) {
+    public void login(UserLogin user) {
         Subject userShiro = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
         userShiro.login(token);
     }
 

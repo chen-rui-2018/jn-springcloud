@@ -1,5 +1,5 @@
 import com.jn.SpringCloudAppFastDfsApplication;
-import com.jn.config.FastDfsClientWrapper;
+import com.jn.config.FastDfsUploadClient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * 测试的JUNIT
@@ -28,7 +27,7 @@ public class FastDfsTest {
 
 
     @Autowired
-    private FastDfsClientWrapper fastDfsClientWrapper;
+    private FastDfsUploadClient fastDfsClientWrapper;
 
 
     @Test

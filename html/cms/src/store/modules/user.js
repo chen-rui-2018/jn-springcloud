@@ -1,5 +1,6 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
 import { getToken, setToken, removeToken } from '@/utils/auth'
+import { Message } from 'element-ui'
 
 const user = {
   state: {
@@ -46,13 +47,24 @@ const user = {
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
+      console.log(userInfo.password)
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data
-          commit('SET_TOKEN', data.token)
-          setToken(response.data.token)
-          resolve()
+          console.log(data.code)
+          if (data.code === '0000') {
+            commit('SET_TOKEN', data.data)
+            setToken(response.data.data)
+            resolve()
+          } else {
+            console.log(data.result)
+            Message({
+              message: '登录失败,' + data.result,
+              type: 'error',
+              duration: 5 * 1000
+            })
+          }
         }).catch(error => {
           reject(error)
         })
@@ -63,20 +75,21 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-            reject('error')
-          }
-          const data = response.data
+          // if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
+          //  reject('error')
+          // }
+          // const data = response.data
 
-          if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-            commit('SET_ROLES', data.roles)
-          } else {
-            reject('getInfo: roles must be a non-null array !')
-          }
+          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
+          //  commit('SET_ROLES', data.roles)
+          // } else {
+          //  reject('getInfo: roles must be a non-null array !')
+          // }
 
-          commit('SET_NAME', data.name)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_INTRODUCTION', data.introduction)
+          commit('SET_ROLES', ['admin'])
+          commit('SET_NAME', 'wangsong')
+          commit('SET_AVATAR', '')
+          commit('SET_INTRODUCTION', '')
           resolve(response)
         }).catch(error => {
           reject(error)

@@ -43,14 +43,14 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="findSysRoleAll" resultType="com.jn.system.vo.TbSysRole">
+    <select id="findSysRoleAll" resultType="com.jn.system.model.SysRole">
         select
         <include refid="Base_Column_List"/>
         from tb_sys_role
         where `status` = '1'
     </select>
 
-    <select id="findSysRoleByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysRole">
+    <select id="findSysRoleByUserId" parameterType="java.lang.String" resultType="com.jn.system.model.SysRole">
         select
         <include refid="Base_Column_List"/>
         from tb_sys_role

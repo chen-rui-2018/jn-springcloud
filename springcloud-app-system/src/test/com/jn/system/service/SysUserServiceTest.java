@@ -1,9 +1,9 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.UserQuery;
-import com.jn.system.vo.SysUser;
-import com.jn.system.vo.SysUserDepartmentPost;
+import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDepartmentPost;
+import com.jn.system.model.SysUserQuery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class SysUserServiceTest {
     @Test
     public void addSysUserTest() {
         SysUser sysUser = new SysUser();
-        sysUser.setAccount("datang05");
+        sysUser.setAccount("datang07");
         sysUser.setEmail("123345678@163.com");
         sysUser.setName("大唐");
         sysUser.setPhone("12345678998");
@@ -35,7 +35,7 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysUserByPageTest() {
-        UserQuery sysUserUserQuery = new UserQuery();
+        SysUserQuery sysUserUserQuery = new SysUserQuery();
         sysUserUserQuery.setPage(1);
         sysUserUserQuery.setRows(10);
         Result result = sysUserService.findSysUserByPage(sysUserUserQuery);

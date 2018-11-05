@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -48,8 +49,8 @@ public class SysUserServiceImpl implements SysUserService {
         //用户添加,默认密码123456
         sysUser.setPassword(DigestUtils.md5Hex("123456"));
         sysUser.setCreateTime(new Date());
-        SysUser tbSysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        sysUser.setCreator(tbSysUser.getId());
+        //SysUser tbSysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
+        //sysUser.setCreator(tbSysUser.getId());
         sysUserMapper.addSysUser(sysUser);
     }
 
@@ -211,7 +212,7 @@ public class SysUserServiceImpl implements SysUserService {
             //为用户添加新的角色
             for (String roleId:roleIds) {
                 SysUserRole sysUserRole = new SysUserRole();
-                sysUserRole.setCreateTime( new Date());
+                sysUserRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
                 SysUser sysUser = (SysUser) SecurityUtils.getSubject().getPrincipal();
                 sysUserRole.setCreator(sysUser.getId());
                 sysUserRole.setRoleId(roleId);

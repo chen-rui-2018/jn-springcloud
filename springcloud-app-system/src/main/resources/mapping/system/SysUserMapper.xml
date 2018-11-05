@@ -176,7 +176,7 @@
     </update>
 
     <!--为用户添加添加角色-->
-    <insert id="saveSysRoleToSysUser" parameterType="com.jn.system.vo.SysUserRole" >
+    <insert id="saveSysRoleToSysUser" parameterType="com.jn.system.model.SysUserRole" >
         insert into tb_sys_user_role (id, role_id, user_id,creator,
           create_time, status)
         values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},

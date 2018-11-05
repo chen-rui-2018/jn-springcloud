@@ -8,7 +8,7 @@
                 <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
                 <result column="status" jdbcType="CHAR" property="status"/>
 
-            <collection  property="sysRoles" ofType="com.jn.system.vo.SysRole" >
+            <collection  property="sysRoles" ofType="com.jn.system.model.SysRole" >
                 <id property="id" column="rid"/>
                 <result property="role_name" column="roleName" jdbcType="VARCHAR"/>
                 <result property="creator" column="roleCreator" jdbcType="VARCHAR"/>

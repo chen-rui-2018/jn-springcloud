@@ -80,7 +80,7 @@ public class SysUserRole implements Serializable {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 

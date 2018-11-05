@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysUserGroupRoleMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.SysUserGroupRole">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" javaType="java.lang.String"/>
+        <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId" javaType="java.lang.String"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+    </resultMap>
+    <insert id="insert" parameterType="com.jn.system.model.SysUserRole">
+        insert into tb_sys_group_role (id, role_id,user_group_id,creator,create_time,status)
+        values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},#{userGroupId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, now(), #{status,jdbcType=VARCHAR})
+    </insert>
+
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.String">
+        update tb_sys_group_role set  status=-1
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.SysUserRole">
+        update tb_sys_group_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleId)">
+                role_id=#{roleId,jdbcType=VARCHAR},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupId)">
+                user_group_id=#{userGroupId,jdbcType=VARCHAR},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                status=#{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select id, role_id,user_group_id,creator,create_time,status
+        from tb_sys_group_role
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, role_id,user_group_id,creator,create_time,status
+        from tb_sys_group_role
+    </select>
+
+
+    <update id="deleteBy" parameterType="java.lang.String">
+        update tb_sys_group_role set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByRoleIds" parameterType="java.lang.String">
+        update tb_sys_group_role set status=-1
+        where role_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_sys_group_role (id, role_id,user_group_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=VARCHAR},
+            #{item.userGroupId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+
+
+</mapper>

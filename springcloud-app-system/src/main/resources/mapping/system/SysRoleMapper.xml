@@ -1,11 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysRoleMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.vo.TbSysRole">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.SysRole">
         <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="CHAR" property="status"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName" javaType="java.lang.String"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+    </resultMap>
+    <resultMap id="queryForListResultMap" type="com.jn.system.vo.SysRoleVO">
+        <id column="r_roleId" jdbcType="VARCHAR" property="roleId"/>
+        <result column="r_roleName" jdbcType="VARCHAR" property="roleName" javaType="java.lang.String"/>
+        <result column="r_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="r_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+        <collection property="tbRolePermissions" javaType="java.util.List"
+                    ofType="com.jn.system.model.SysRolePermission">
+            <id column="rp_id" property="id" jdbcType="VARCHAR"/>
+            <result column="rp_roleId" property="roleId" jdbcType="VARCHAR"/>
+            <result column="rp_permissionId" property="permissionId" jdbcType="VARCHAR"/>
+            <result column="p_permissionName" property="permissionName" jdbcType="VARCHAR"/>
+            <result column="rp_createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="rp_status" property="status" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="tbUserRoles" javaType="java.util.List" ofType="com.jn.system.model.SysUserRole">
+            <id column="ur_id" property="id" jdbcType="VARCHAR"/>
+            <result column="ur_roleId" property="roleId" jdbcType="VARCHAR"/>
+            <result column="ur_userId" property="userId" jdbcType="VARCHAR"/>
+            <result column="u_userName" property="userName" jdbcType="VARCHAR"/>
+            <result column="ur_createTime" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="ur_status" property="status" jdbcType="VARCHAR"/>
+        </collection>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -28,16 +52,118 @@
 
     <select id="findSysRoleByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.TbSysRole">
         select
-          <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         from tb_sys_role
         where id in
         (select tsur.role_id
-            from
-            tb_sys_user_role tsur
-            join tb_sys_user tsu
-            on tsur.user_id = tsu.id
-            where tsu.id = #{id,jdbcType=VARCHAR}
-            and tsur.`status` = '1')
+        from
+        tb_sys_user_role tsur
+        join tb_sys_user tsu
+        on tsur.user_id = tsu.id
+        where tsu.id = #{id,jdbcType=VARCHAR}
+        and tsur.`status` = '1')
+    </select>
+
+    <insert id="insert" parameterType="com.jn.system.model.SysRole">
+        insert into tb_sys_role (id, role_name,creator,create_time,status)
+        values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, now(), #{status,jdbcType=VARCHAR})
+    </insert>
+
+
+    <update id="deleteByPrimaryKey" parameterType="java.lang.String">
+        update tb_sys_role set  status=-1
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.SysRole">
+        update tb_sys_role
+        <trim prefix="set" suffixOverrides=",">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+                role_name=#{roleName,jdbcType=VARCHAR},
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                status=#{status,jdbcType=VARCHAR},
+            </if>
+        </trim>
+        where id=#{id,jdbcType=VARCHAR}
+    </update>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select id, role_name,creator,create_time,status
+        from tb_sys_role
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, role_name,creator,create_time,status
+        from tb_sys_role
+    </select>
+
+
+    <select id="findTByPage" parameterType="com.jn.system.model.SysRolePage" resultMap="queryForListResultMap">
+        SELECT
+        r.id r_roleId,
+        r.role_name r_roleName,
+        r.creator r_creator,
+        r.create_time r_createTime,
+        r.STATUS r_STATUS,
+        rp.id rp_id,
+        rp.permission_id rp_permissionId,
+        rp.role_id rp_roleId,
+        rp.create_time rp_createTime,
+        p.permission_name p_permissionName,
+        ur.id ur_id,
+        ur.user_id ur_userId,
+        ur.role_id ur_roleId,
+        ur.create_time ur_createTime,
+        u.name u_userName
+        FROM
+        tb_sys_role r
+        left join
+        tb_sys_role_permission rp on r.id=rp.role_id
+        left join
+        tb_sys_permission p on rp.permission_id=p.id
+        left join
+        tb_sys_user_role ur on r.id=ur.role_id
+        left join
+        tb_sys_user u on u.id=ur.user_id
+        where 1=1
+        and r.status!=-1
+
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+            and r.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+            and r.status=#{status,jdbcType=VARCHAR}
+        </if>
+
+    </select>
+
+    <update id="deleteBy" parameterType="java.lang.String">
+        update tb_sys_role set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectTbRoleVOByPrimaryKey" parameterType="java.lang.String" resultType="com.jn.system.vo.SysRoleVO">
+        select id, role_name,creator,create_time,status
+        from tb_sys_role
+        where 1=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and id=#{id,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+            and role_name=#{roleName,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creator)">
+            and creator=#{creator,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+            and status=#{status,jdbcType=VARCHAR}
+        </if>
+
     </select>
 
 </mapper>

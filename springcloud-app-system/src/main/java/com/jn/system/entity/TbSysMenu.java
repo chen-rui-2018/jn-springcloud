@@ -12,6 +12,8 @@ public class TbSysMenu implements Serializable {
 
     private String parentId;
 
+    private String isDir;
+
     private String sort;
 
     private String creator;
@@ -52,6 +54,14 @@ public class TbSysMenu implements Serializable {
 
     public void setParentId(String parentId) {
         this.parentId = parentId == null ? null : parentId.trim();
+    }
+
+    public String getIsDir() {
+        return isDir;
+    }
+
+    public void setIsDir(String isDir) {
+        this.isDir = isDir == null ? null : isDir.trim();
     }
 
     public String getSort() {
@@ -102,6 +112,7 @@ public class TbSysMenu implements Serializable {
             && (this.getMenuName() == null ? other.getMenuName() == null : this.getMenuName().equals(other.getMenuName()))
             && (this.getMenuUrl() == null ? other.getMenuUrl() == null : this.getMenuUrl().equals(other.getMenuUrl()))
             && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
+            && (this.getIsDir() == null ? other.getIsDir() == null : this.getIsDir().equals(other.getIsDir()))
             && (this.getSort() == null ? other.getSort() == null : this.getSort().equals(other.getSort()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
@@ -116,6 +127,7 @@ public class TbSysMenu implements Serializable {
         result = prime * result + ((getMenuName() == null) ? 0 : getMenuName().hashCode());
         result = prime * result + ((getMenuUrl() == null) ? 0 : getMenuUrl().hashCode());
         result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
+        result = prime * result + ((getIsDir() == null) ? 0 : getIsDir().hashCode());
         result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
@@ -133,6 +145,7 @@ public class TbSysMenu implements Serializable {
         sb.append(", menuName=").append(menuName);
         sb.append(", menuUrl=").append(menuUrl);
         sb.append(", parentId=").append(parentId);
+        sb.append(", isDir=").append(isDir);
         sb.append(", sort=").append(sort);
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);

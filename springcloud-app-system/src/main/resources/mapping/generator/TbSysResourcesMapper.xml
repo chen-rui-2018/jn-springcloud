@@ -105,22 +105,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysResources">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_resources (resources_name, resources_url, menu_id, 
-      creator, create_time, status
-      )
-    values (#{resourcesName,jdbcType=VARCHAR}, #{resourcesUrl,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
-      )
+    insert into tb_sys_resources (id, resources_name, resources_url, 
+      menu_id, creator, create_time, 
+      status)
+    values (#{id,jdbcType=VARCHAR}, #{resourcesName,jdbcType=VARCHAR}, #{resourcesUrl,jdbcType=VARCHAR}, 
+      #{menuId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysResources">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_resources
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="resourcesName != null">
         resources_name,
       </if>
@@ -141,6 +142,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="resourcesName != null">
         #{resourcesName,jdbcType=VARCHAR},
       </if>

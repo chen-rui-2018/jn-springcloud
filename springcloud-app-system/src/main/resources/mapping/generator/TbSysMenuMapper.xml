@@ -6,6 +6,7 @@
     <result column="menu_menu_name" jdbcType="VARCHAR" property="menuName" />
     <result column="menu_menu_url" jdbcType="VARCHAR" property="menuUrl" />
     <result column="menu_parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="menu_is_dir" jdbcType="VARCHAR" property="isDir" />
     <result column="menu_sort" jdbcType="VARCHAR" property="sort" />
     <result column="menu_creator" jdbcType="VARCHAR" property="creator" />
     <result column="menu_create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -71,8 +72,8 @@
   </sql>
   <sql id="Base_Column_List">
     menu.id as menu_id, menu.menu_name as menu_menu_name, menu.menu_url as menu_menu_url, 
-    menu.parent_id as menu_parent_id, menu.sort as menu_sort, menu.creator as menu_creator, 
-    menu.create_time as menu_create_time, menu.status as menu_status
+    menu.parent_id as menu_parent_id, menu.is_dir as menu_is_dir, menu.sort as menu_sort, 
+    menu.creator as menu_creator, menu.create_time as menu_create_time, menu.status as menu_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysMenuCriteria" resultMap="BaseResultMap">
     select
@@ -105,22 +106,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysMenu">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_menu (menu_name, menu_url, parent_id, 
-      sort, creator, create_time, 
-      status)
-    values (#{menuName,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{sort,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR})
+    insert into tb_sys_menu (id, menu_name, menu_url, 
+      parent_id, is_dir, sort, 
+      creator, create_time, status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, #{isDir,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysMenu">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="menuName != null">
         menu_name,
       </if>
@@ -129,6 +133,9 @@
       </if>
       <if test="parentId != null">
         parent_id,
+      </if>
+      <if test="isDir != null">
+        is_dir,
       </if>
       <if test="sort != null">
         sort,
@@ -144,6 +151,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="menuName != null">
         #{menuName,jdbcType=VARCHAR},
       </if>
@@ -152,6 +160,9 @@
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDir != null">
+        #{isDir,jdbcType=VARCHAR},
       </if>
       <if test="sort != null">
         #{sort,jdbcType=VARCHAR},
@@ -188,6 +199,9 @@
       <if test="record.parentId != null">
         menu.parent_id = #{record.parentId,jdbcType=VARCHAR},
       </if>
+      <if test="record.isDir != null">
+        menu.is_dir = #{record.isDir,jdbcType=VARCHAR},
+      </if>
       <if test="record.sort != null">
         menu.sort = #{record.sort,jdbcType=VARCHAR},
       </if>
@@ -211,6 +225,7 @@
       menu.menu_name = #{record.menuName,jdbcType=VARCHAR},
       menu.menu_url = #{record.menuUrl,jdbcType=VARCHAR},
       menu.parent_id = #{record.parentId,jdbcType=VARCHAR},
+      menu.is_dir = #{record.isDir,jdbcType=VARCHAR},
       menu.sort = #{record.sort,jdbcType=VARCHAR},
       menu.creator = #{record.creator,jdbcType=VARCHAR},
       menu.create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -230,6 +245,9 @@
       </if>
       <if test="parentId != null">
         parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="isDir != null">
+        is_dir = #{isDir,jdbcType=VARCHAR},
       </if>
       <if test="sort != null">
         sort = #{sort,jdbcType=VARCHAR},
@@ -251,6 +269,7 @@
     set menu_name = #{menuName,jdbcType=VARCHAR},
       menu_url = #{menuUrl,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=VARCHAR},
+      is_dir = #{isDir,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

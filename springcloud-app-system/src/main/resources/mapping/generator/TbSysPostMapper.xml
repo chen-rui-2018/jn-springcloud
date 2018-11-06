@@ -101,20 +101,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPost">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_post (post_name, creator, create_time, 
-      status)
-    values (#{postName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR})
+    insert into tb_sys_post (id, post_name, creator, 
+      create_time, status)
+    values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPost">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_post
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="postName != null">
         post_name,
       </if>
@@ -129,6 +130,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="postName != null">
         #{postName,jdbcType=VARCHAR},
       </if>

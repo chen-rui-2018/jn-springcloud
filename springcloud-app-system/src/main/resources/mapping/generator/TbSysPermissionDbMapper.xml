@@ -105,22 +105,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPermissionDb">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_permission_db (department_id, post_id, parent_id, 
-      creator, create_time, status
-      )
-    values (#{departmentId,jdbcType=VARCHAR}, #{postId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
-      )
+    insert into tb_sys_permission_db (id, department_id, post_id, 
+      parent_id, creator, create_time, 
+      status)
+    values (#{id,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{postId,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPermissionDb">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_permission_db
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="departmentId != null">
         department_id,
       </if>
@@ -141,6 +142,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="departmentId != null">
         #{departmentId,jdbcType=VARCHAR},
       </if>

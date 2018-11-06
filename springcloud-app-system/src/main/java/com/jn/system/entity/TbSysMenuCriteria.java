@@ -385,6 +385,76 @@ public class TbSysMenuCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsDirIsNull() {
+            addCriterion("menu.is_dir is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirIsNotNull() {
+            addCriterion("menu.is_dir is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirEqualTo(String value) {
+            addCriterion("menu.is_dir =", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirNotEqualTo(String value) {
+            addCriterion("menu.is_dir <>", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirGreaterThan(String value) {
+            addCriterion("menu.is_dir >", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirGreaterThanOrEqualTo(String value) {
+            addCriterion("menu.is_dir >=", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirLessThan(String value) {
+            addCriterion("menu.is_dir <", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirLessThanOrEqualTo(String value) {
+            addCriterion("menu.is_dir <=", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirLike(String value) {
+            addCriterion("menu.is_dir like", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirNotLike(String value) {
+            addCriterion("menu.is_dir not like", value, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirIn(List<String> values) {
+            addCriterion("menu.is_dir in", values, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirNotIn(List<String> values) {
+            addCriterion("menu.is_dir not in", values, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirBetween(String value1, String value2) {
+            addCriterion("menu.is_dir between", value1, value2, "isDir");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsDirNotBetween(String value1, String value2) {
+            addCriterion("menu.is_dir not between", value1, value2, "isDir");
+            return (Criteria) this;
+        }
+
         public Criteria andSortIsNull() {
             addCriterion("menu.sort is null");
             return (Criteria) this;

@@ -102,20 +102,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysDepartment">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_department (department_name, creator, create_time, 
-      status)
-    values (#{departmentName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR})
+    insert into tb_sys_department (id, department_name, creator, 
+      create_time, status)
+    values (#{id,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysDepartment">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_department
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="departmentName != null">
         department_name,
       </if>
@@ -130,6 +131,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="departmentName != null">
         #{departmentName,jdbcType=VARCHAR},
       </if>

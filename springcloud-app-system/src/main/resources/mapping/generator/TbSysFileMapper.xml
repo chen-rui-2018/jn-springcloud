@@ -102,20 +102,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysFile">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_sys_file (file_name, file_url, creator, 
-      create_time, status)
-    values (#{fileName,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+    insert into tb_sys_file (id, file_name, file_url, 
+      creator, create_time, status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysFile">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_sys_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      id,
       <if test="fileName != null">
         file_name,
       </if>
@@ -133,6 +136,7 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=VARCHAR},
       <if test="fileName != null">
         #{fileName,jdbcType=VARCHAR},
       </if>

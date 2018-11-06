@@ -6,13 +6,13 @@
       <el-input v-model="listQuery.title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
       <!-- 第一个下拉菜单 -->
       状态：
-      <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 90px" class="filter-item">
+      <el-select v-model="listQuery.status" placeholder="请选择状态" clearable class="filter-item">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
       </el-select>
       <!-- 搜索按钮 -->
       <el-button class="filter-item" type="primary" icon="el-icon-search">搜索</el-button>
       <!-- 新增按钮 -->
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="adddialogFormVisible = true">添加用户</el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="adddialogFormVisible = true">添加用户组</el-button>
     </div>
 
     <!-- 表格 -->
@@ -64,32 +64,18 @@
     <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户组对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户组">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="用户组" prop="username">
-          <el-input v-model="addform.username" />
+          <el-input v-model.trim="addform.username" />
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="addform.name" />
+        <el-form-item label="描述" prop="miaoshu">
+          <el-input v-model.trim="addform.miaoshu" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="addform.email" />
-        </el-form-item>
-        <el-form-item label="手机" prop="mobile">
-          <el-input v-model="addform.mobile" />
-        </el-form-item>
-        <el-form-item label="部门" prop="bumen">
-          <el-input v-model="addform.bumen" />
-        </el-form-item>
-        <el-form-item label="岗位" prop="gangwei">
-          <el-input v-model="addform.gangwei" />
-        </el-form-item>
+
         <el-form-item label="状态" prop="status">
           <el-select v-model="addform.status" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="角色" prop="juese">
-          <el-input v-model="addform.juese" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
@@ -101,15 +87,12 @@
 
     <!-- 编辑用户组对话框 -->
     <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户组">
-      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="账号" prop="username">
+      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="用户组名称" prop="username">
           <el-input v-model="editform.username" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="editform.email" />
-        </el-form-item>
-        <el-form-item label="手机" prop="mobile">
-          <el-input v-model="editform.mobile" />
+        <el-form-item label="描述" prop="miaoshu">
+          <el-input v-model.trim="addform.miaoshu" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="editform.status" class="filter-item">
@@ -480,16 +463,8 @@ export default {
         status: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
-        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
-        email: [
-          { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址',
-            trigger: 'blur,change'
-          }
-        ]
+        username: [{ required: true, message: '请输入用户组', trigger: 'blur' }],
+        miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }]
       }
     }
   },

@@ -25,15 +25,15 @@ const menuRouter = {
       meta: { title: '用户组管理', noCache: true }
     },
     {
-      path: 'enterprise',
-      component: () => import('@/views/enterprise/index'),
-      name: 'enterprise',
+      path: 'rolemanagement',
+      component: () => import('@/views/menu/roleManagement'),
+      name: 'rolemanagement',
       meta: { title: '角色管理', noCache: true }
     },
     {
-      path: 'details',
-      component: () => import('@/views/enterprise/details'),
-      name: 'details',
+      path: 'authoritymanagement',
+      component: () => import('@/views/menu/authoritymanagement'),
+      name: 'authoritymanagement',
       meta: { title: '权限管理', noCache: true }
       // hidden: true
     }

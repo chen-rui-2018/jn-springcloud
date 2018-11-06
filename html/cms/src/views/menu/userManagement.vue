@@ -6,7 +6,7 @@
       <el-input v-model="listQuery.title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
       <!-- 第一个下拉菜单 -->
       状态：
-      <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 90px" class="filter-item">
+      <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
       </el-select>
       <!-- 第二个下拉菜单 -->
@@ -77,32 +77,25 @@
     <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="账号" prop="username">
-          <el-input v-model="addform.username" />
+          <el-input v-model.trim="addform.username" />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="addform.name" />
+          <el-input v-model.trim="addform.name" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
+        <el-form-item
+          label="邮箱"
+          prop="email">
           <el-input v-model="addform.email" />
         </el-form-item>
         <el-form-item label="手机" prop="mobile">
-          <el-input v-model="addform.mobile" />
-        </el-form-item>
-        <el-form-item label="部门" prop="bumen">
-          <el-input v-model="addform.bumen" />
-        </el-form-item>
-        <el-form-item label="岗位" prop="gangwei">
-          <el-input v-model="addform.gangwei" />
+          <el-input v-model.trim="addform.mobile" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="addform.status" class="filter-item">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
-        </el-form-item>
-        <el-form-item label="角色" prop="juese">
-          <el-input v-model="addform.juese" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
@@ -114,7 +107,7 @@
 
     <!-- 编辑用户对话框 -->
     <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户">
-      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="50px" style="width: 400px; margin-left:50px;">
+      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="账号" prop="username">
           <el-input v-model="editform.username" />
         </el-form-item>
@@ -138,47 +131,34 @@
 
     <!-- 部门岗位对话框 -->
     <el-dialog :visible.sync="bumendialogFormVisible" title="部门、岗位">
-      <el-button type="primary" round>分配</el-button>
+      <el-button type="primary" size="mini">分配</el-button>
+      <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除
+      </el-button>
       <el-table ref="multipleTable" :data="tableData3" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column label="部门" width="210" align="center" prop="bumen">
-          <!-- <template slot-scope="scope">
-            <el-cascader :options="options" placeholder="请选择部门" filterable />
-          </template> -->
+          <template slot-scope="scope">
+            <el-cascader :options="options" v-model="selectedOptions" placeholder="请选择部门" filterable />
+          </template>
         </el-table-column>
         <el-table-column label="岗位" width="140" align="center" prop="gangwei">
-          <!-- <template slot-scope="scope">
-            <el-select v-show="isshow" v-model="scope.row.name" filterable placeholder="请选择岗位">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.name" filterable placeholder="请选择岗位">
               <el-option v-for="item in gangweioptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
-          </template> -->
-
-          <!-- <template>
-            <div>
-              <slot :row="data"/>
-            </div>
-          </template> -->
-
+          </template>
         </el-table-column>
         <el-table-column prop="address" label="默认" align="center">
           <template slot-scope="scope">
             <el-button type="primary" size="mini" round>设置为默认</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <!-- 删除按钮 -->
-            <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
 
+      </el-table>
       <span slot="footer" class="dialog-footer">
         <el-button @click="bumendialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="bumendialogFormVisible = false">确 定</el-button>
-      </span>
-    </el-dialog>
+    </span></el-dialog>
     <!-- 弹出重置密码对话框 -->
     <el-dialog :visible.sync="restdialogVisible" title="重置密码" width="30%">
       <el-form ref="ruleForm2" :model="ruleForm2" :rules="rules2" status-icon label-width="100px" class="demo-ruleForm">
@@ -207,6 +187,7 @@
 </template>
 
 <script>
+// import { getAllUserList } from '@/api/index.js'
 export default {
   data() {
     // 密码验证
@@ -229,26 +210,14 @@ export default {
         callback()
       }
     }
-    // 角色相关信息
-    const generateData = _ => {
-      const data = []
-      const roles = ['管理员', '超级管理员', '超管理员', '超级理员', 'admin']
-      roles.forEach((role, index) => {
-        data.push({
-          label: role,
-          key: index
-        })
-      })
-      return data
-    }
     return {
+      selectedOptions: [],
       ruleForm2: { pass: '', checkPass: '' },
-      roledata: generateData(),
+      roledata: [{ key: 0, label: '管理员' }, { key: 1, label: '经理' }, { key: 2, label: '报表角色' }, { key: 3, label: '超级管理员' }],
       value1: [0],
       pagesize: 1,
       total: 0,
-      pagenum: 1,
-      isshow: true,
+      pagenum: 10,
       userList: [],
       options: [
         {
@@ -582,15 +551,13 @@ export default {
         status: ''
       },
       rules: {
-        name: [{ required: true, message: '请输入姓名', trigger: 'change' }],
-        mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+        username: [{ required: true, message: '请输入账户名', trigger: 'blur' }],
+        mobile: [{ required: true, message: '请输入正确手机号', trigger: 'blur' }, { required: true, pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur,change' }],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
-          {
-            type: 'email',
-            message: '请输入正确的邮箱地址',
-            trigger: 'blur,change'
-          }
+          // { required: true, pattern: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, message: '请输入正确的邮箱地址', trigger: 'blur' }
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }
         ]
       },
       rules2: {
@@ -616,6 +583,7 @@ export default {
       this.editform.username = row.username
       this.editform.mobile = row.mobile
       this.editform.email = row.email
+
       this.editform.status = row.status
     },
     // 编辑用户的功能实现
@@ -624,13 +592,9 @@ export default {
     showBumenDialog(row) {
       console.log(row)
       this.bumendialogFormVisible = true
-      this.tableData3[0].bumen = row.bumen
-      this.tableData3[0].gangwei = row.gangwei
-      if (this.tableData3[0].gangwei) {
-        this.isshow = false
-      } else {
-        this.isshow = true
-      }
+      this.selectedOptions.push(row.bumen)
+      // this.tableData3[0].bumen = row.bumen
+      // this.tableData3[0].gangwei = row.gangwei
     },
     // 部门岗位的操作
     toggleSelection(rows) {
@@ -670,10 +634,24 @@ export default {
     showRoleDialog(row) {
       console.log(row)
       this.roledialogVisible = true
-      this.value1.push(row.role)
-      console.log(this.value1)
+      // for(let index=0;index<this.roledata.length;index++){
+      //   if(this.roledata[index].lable==row.role){
+      //     console.log(index);
+
+      //   }
+      // }
       console.log(this.roledata)
-      console.info(this.roledata.indexOf(row.role))
+      this.roledata.forEach((val, index) => {
+        if (this.roledata[index].label === row.role) {
+          console.log(index)
+          this.value1.push(index)
+        }
+      })
+      console.log(this.value1)
+      // this.value1.push(row.role)
+      // console.log(this.value1)
+      // console.log(this.roledata)
+      // console.info(this.roledata.indexOf(row.role))
     },
     // 删除用户功能实现
     deleteUser(id) {
@@ -710,6 +688,17 @@ export default {
         })
     },
     // 项目初始化
+    //   获取动态数据
+    // initList() {
+    //   getAllUserList({
+    //     query: this.listQuery,
+    //     pagenum: this.pagenum,
+    //     pagesize: this.pagesize
+    //   }).then(res => {
+    //     console.log(res)
+    //     // this.total = res.data.total
+    //   })
+    // },
     initList() {
       const list = [
         {
@@ -720,8 +709,7 @@ export default {
           timestamp: '2018/8/5 14:30',
           bumen: '销售部',
           gangwei: '经理岗',
-          status: '生效',
-          role: 'admin'
+          status: '生效'
         },
         {
           id: '2',
@@ -731,8 +719,7 @@ export default {
           timestamp: '2018/8/6 14:30',
           bumen: 'A部门',
           gangwei: '研发岗',
-          status: '生效',
-          role: '超级管理员'
+          status: '生效'
         },
         {
           id: '3',

@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysRoleMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysRole">
-    <id column="role_id" jdbcType="VARCHAR" property="id" />
-    <result column="role_role_name" jdbcType="VARCHAR" property="roleName" />
-    <result column="role_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="role_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="role_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,8 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    role.id as role_id, role.role_name as role_role_name, role.creator as role_creator, 
-    role.create_time as role_create_time, role.status as role_status
+    id, role_name, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysRoleCriteria" resultMap="BaseResultMap">
     select
@@ -76,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_role role
+    from tb_sys_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,35 +86,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_role role
-    where role.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_role
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_role
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysRoleCriteria">
-    delete from tb_sys_role role
+    delete from tb_sys_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysRole">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_role (id, role_name, creator, 
       create_time, status)
     values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysRole">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="roleName != null">
         role_name,
       </if>
@@ -130,7 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="roleName != null">
         #{roleName,jdbcType=VARCHAR},
       </if>
@@ -146,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysRoleCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_role role
+    select count(*) from tb_sys_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_role role
+    update tb_sys_role
     <set>
       <if test="record.id != null">
-        role.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.roleName != null">
-        role.role_name = #{record.roleName,jdbcType=VARCHAR},
+        role_name = #{record.roleName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        role.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        role.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        role.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -175,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_role role
-    set role.id = #{record.id,jdbcType=VARCHAR},
-      role.role_name = #{record.roleName,jdbcType=VARCHAR},
-      role.creator = #{record.creator,jdbcType=VARCHAR},
-      role.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      role.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_role
+    set id = #{record.id,jdbcType=VARCHAR},
+      role_name = #{record.roleName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

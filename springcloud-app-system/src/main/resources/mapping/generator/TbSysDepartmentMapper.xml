@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysDepartmentMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysDepartment">
-    <id column="department_id" jdbcType="VARCHAR" property="id" />
-    <result column="department_department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="department_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="department_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="department_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,9 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    department.id as department_id, department.department_name as department_department_name, 
-    department.creator as department_creator, department.create_time as department_create_time, 
-    department.status as department_status
+    id, department_name, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysDepartmentCriteria" resultMap="BaseResultMap">
     select
@@ -77,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_department department
+    from tb_sys_department
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,35 +86,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_department department
-    where department.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_department
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_department
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysDepartmentCriteria">
-    delete from tb_sys_department department
+    delete from tb_sys_department
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysDepartment">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_department (id, department_name, creator, 
       create_time, status)
     values (#{id,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysDepartment">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_department
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="departmentName != null">
         department_name,
       </if>
@@ -131,7 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="departmentName != null">
         #{departmentName,jdbcType=VARCHAR},
       </if>
@@ -147,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysDepartmentCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_department department
+    select count(*) from tb_sys_department
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_department department
+    update tb_sys_department
     <set>
       <if test="record.id != null">
-        department.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        department.department_name = #{record.departmentName,jdbcType=VARCHAR},
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        department.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        department.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        department.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -176,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_department department
-    set department.id = #{record.id,jdbcType=VARCHAR},
-      department.department_name = #{record.departmentName,jdbcType=VARCHAR},
-      department.creator = #{record.creator,jdbcType=VARCHAR},
-      department.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      department.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_department
+    set id = #{record.id,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

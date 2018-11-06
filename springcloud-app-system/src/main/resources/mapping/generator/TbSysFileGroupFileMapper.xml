@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysFileGroupFileMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysFileGroupFile">
-    <id column="fileGroupFile_id" jdbcType="VARCHAR" property="id" />
-    <result column="fileGroupFile_file_group_id" jdbcType="VARCHAR" property="fileGroupId" />
-    <result column="fileGroupFile_file_id" jdbcType="VARCHAR" property="fileId" />
-    <result column="fileGroupFile_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="fileGroupFile_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="fileGroupFile_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="file_group_id" jdbcType="VARCHAR" property="fileGroupId" />
+    <result column="file_id" jdbcType="VARCHAR" property="fileId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    fileGroupFile.id as fileGroupFile_id, fileGroupFile.file_group_id as fileGroupFile_file_group_id, 
-    fileGroupFile.file_id as fileGroupFile_file_id, fileGroupFile.creator as fileGroupFile_creator, 
-    fileGroupFile.create_time as fileGroupFile_create_time, fileGroupFile.status as fileGroupFile_status
+    id, file_group_id, file_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysFileGroupFileCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_file_group_file fileGroupFile
+    from tb_sys_file_group_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_file_group_file fileGroupFile
-    where fileGroupFile.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_file_group_file
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_file_group_file
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysFileGroupFileCriteria">
-    delete from tb_sys_file_group_file fileGroupFile
+    delete from tb_sys_file_group_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysFileGroupFile">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file_group_file (id, file_group_id, file_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysFileGroupFile">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file_group_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="fileGroupId != null">
         file_group_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="fileGroupId != null">
         #{fileGroupId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysFileGroupFileCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_file_group_file fileGroupFile
+    select count(*) from tb_sys_file_group_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_file_group_file fileGroupFile
+    update tb_sys_file_group_file
     <set>
       <if test="record.id != null">
-        fileGroupFile.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.fileGroupId != null">
-        fileGroupFile.file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
+        file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.fileId != null">
-        fileGroupFile.file_id = #{record.fileId,jdbcType=VARCHAR},
+        file_id = #{record.fileId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        fileGroupFile.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        fileGroupFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        fileGroupFile.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_file_group_file fileGroupFile
-    set fileGroupFile.id = #{record.id,jdbcType=VARCHAR},
-      fileGroupFile.file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
-      fileGroupFile.file_id = #{record.fileId,jdbcType=VARCHAR},
-      fileGroupFile.creator = #{record.creator,jdbcType=VARCHAR},
-      fileGroupFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      fileGroupFile.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_file_group_file
+    set id = #{record.id,jdbcType=VARCHAR},
+      file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
+      file_id = #{record.fileId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

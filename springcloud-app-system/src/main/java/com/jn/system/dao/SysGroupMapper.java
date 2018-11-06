@@ -1,54 +1,30 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.SysGroup;
-
+import com.jn.system.entity.SysGroup;
+import com.jn.system.entity.SysGroupCriteria;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
-/**
- * 用户组dao
- *
- * @author： shaobao
- * @date： Created on 2018/10/30 15:30
- * @version： v1.0
- * @modified By:
- */
-public interface SysGroupMapper  {
+public interface SysGroupMapper {
+    long countByExample(SysGroupCriteria example);
 
-    /**
-     * 查询所有用户组信息
-     * @return
-     */
-    List<SysGroup> findSysGroupAll();
+    int deleteByExample(SysGroupCriteria example);
 
-    /**
-     * 根据用户id对应用户组
-     * @param id
-     * @return
-     */
-    List<SysGroup> findSysGroupByUserId(String id);
+    int deleteByPrimaryKey(String id);
 
-    /**
-     * 增加用户组
-     * @param sysGroup
-     */
-    void addSysGroup(SysGroup sysGroup);
+    int insert(SysGroup record);
 
-    /**
-     * 逻辑删除用户组
-     * @param groupId
-     */
-    void deleSysGroup(String groupId);
+    int insertSelective(SysGroup record);
 
-    /**
-     * 更新用户组信息
-     * @param sysGroup
-     */
-    void updateSysGroup(SysGroup sysGroup);
+    List<SysGroup> selectByExample(SysGroupCriteria example);
 
-    /**
-     * 根据用户组id获取用户组信息
-     * @param id 用户组id
-     * @return
-     */
-    SysGroup findSysGroupById(String id);
+    SysGroup selectByPrimaryKey(String id);
+
+    int updateByExampleSelective(@Param("record") SysGroup record, @Param("example") SysGroupCriteria example);
+
+    int updateByExample(@Param("record") SysGroup record, @Param("example") SysGroupCriteria example);
+
+    int updateByPrimaryKeySelective(SysGroup record);
+
+    int updateByPrimaryKey(SysGroup record);
 }

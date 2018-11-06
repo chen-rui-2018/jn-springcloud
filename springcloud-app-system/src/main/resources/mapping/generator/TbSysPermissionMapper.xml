@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysPermissionMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysPermission">
-    <id column="permission_id" jdbcType="VARCHAR" property="id" />
-    <result column="permission_permission_name" jdbcType="VARCHAR" property="permissionName" />
-    <result column="permission_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="permission_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="permission_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="permission_name" jdbcType="VARCHAR" property="permissionName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,9 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    permission.id as permission_id, permission.permission_name as permission_permission_name, 
-    permission.creator as permission_creator, permission.create_time as permission_create_time, 
-    permission.status as permission_status
+    id, permission_name, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysPermissionCriteria" resultMap="BaseResultMap">
     select
@@ -77,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_permission permission
+    from tb_sys_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,35 +86,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_permission permission
-    where permission.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_permission
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_permission
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysPermissionCriteria">
-    delete from tb_sys_permission permission
+    delete from tb_sys_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPermission">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission (id, permission_name, creator, 
       create_time, status)
     values (#{id,jdbcType=VARCHAR}, #{permissionName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPermission">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="permissionName != null">
         permission_name,
       </if>
@@ -131,7 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="permissionName != null">
         #{permissionName,jdbcType=VARCHAR},
       </if>
@@ -147,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysPermissionCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_permission permission
+    select count(*) from tb_sys_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_permission permission
+    update tb_sys_permission
     <set>
       <if test="record.id != null">
-        permission.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.permissionName != null">
-        permission.permission_name = #{record.permissionName,jdbcType=VARCHAR},
+        permission_name = #{record.permissionName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        permission.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        permission.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        permission.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -176,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_permission permission
-    set permission.id = #{record.id,jdbcType=VARCHAR},
-      permission.permission_name = #{record.permissionName,jdbcType=VARCHAR},
-      permission.creator = #{record.creator,jdbcType=VARCHAR},
-      permission.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      permission.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_permission
+    set id = #{record.id,jdbcType=VARCHAR},
+      permission_name = #{record.permissionName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

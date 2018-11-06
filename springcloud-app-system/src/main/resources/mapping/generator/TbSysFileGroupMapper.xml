@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysFileGroupMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysFileGroup">
-    <id column="fileGroup_id" jdbcType="VARCHAR" property="id" />
-    <result column="fileGroup_file_group_name" jdbcType="VARCHAR" property="fileGroupName" />
-    <result column="fileGroup_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="fileGroup_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="fileGroup_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="file_group_name" jdbcType="VARCHAR" property="fileGroupName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,9 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    fileGroup.id as fileGroup_id, fileGroup.file_group_name as fileGroup_file_group_name, 
-    fileGroup.creator as fileGroup_creator, fileGroup.create_time as fileGroup_create_time, 
-    fileGroup.status as fileGroup_status
+    id, file_group_name, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysFileGroupCriteria" resultMap="BaseResultMap">
     select
@@ -77,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_file_group fileGroup
+    from tb_sys_file_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,35 +86,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_file_group fileGroup
-    where fileGroup.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_file_group
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_file_group
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysFileGroupCriteria">
-    delete from tb_sys_file_group fileGroup
+    delete from tb_sys_file_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysFileGroup">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file_group (id, file_group_name, creator, 
       create_time, status)
     values (#{id,jdbcType=VARCHAR}, #{fileGroupName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysFileGroup">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="fileGroupName != null">
         file_group_name,
       </if>
@@ -131,7 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="fileGroupName != null">
         #{fileGroupName,jdbcType=VARCHAR},
       </if>
@@ -147,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysFileGroupCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_file_group fileGroup
+    select count(*) from tb_sys_file_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_file_group fileGroup
+    update tb_sys_file_group
     <set>
       <if test="record.id != null">
-        fileGroup.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.fileGroupName != null">
-        fileGroup.file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
+        file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        fileGroup.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        fileGroup.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        fileGroup.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -176,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_file_group fileGroup
-    set fileGroup.id = #{record.id,jdbcType=VARCHAR},
-      fileGroup.file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
-      fileGroup.creator = #{record.creator,jdbcType=VARCHAR},
-      fileGroup.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      fileGroup.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_file_group
+    set id = #{record.id,jdbcType=VARCHAR},
+      file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysUserGroupMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysUserGroup">
-    <id column="userGroup_id" jdbcType="VARCHAR" property="id" />
-    <result column="userGroup_group_id" jdbcType="VARCHAR" property="groupId" />
-    <result column="userGroup_user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="userGroup_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="userGroup_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="userGroup_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="group_id" jdbcType="VARCHAR" property="groupId" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    userGroup.id as userGroup_id, userGroup.group_id as userGroup_group_id, userGroup.user_id as userGroup_user_id, 
-    userGroup.creator as userGroup_creator, userGroup.create_time as userGroup_create_time, 
-    userGroup.status as userGroup_status
+    id, group_id, user_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysUserGroupCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_user_group userGroup
+    from tb_sys_user_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_user_group userGroup
-    where userGroup.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_user_group
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_user_group
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysUserGroupCriteria">
-    delete from tb_sys_user_group userGroup
+    delete from tb_sys_user_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysUserGroup">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_user_group (id, group_id, user_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysUserGroup">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_user_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="groupId != null">
         group_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="groupId != null">
         #{groupId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysUserGroupCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_user_group userGroup
+    select count(*) from tb_sys_user_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_user_group userGroup
+    update tb_sys_user_group
     <set>
       <if test="record.id != null">
-        userGroup.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.groupId != null">
-        userGroup.group_id = #{record.groupId,jdbcType=VARCHAR},
+        group_id = #{record.groupId,jdbcType=VARCHAR},
       </if>
       <if test="record.userId != null">
-        userGroup.user_id = #{record.userId,jdbcType=VARCHAR},
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        userGroup.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        userGroup.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        userGroup.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_user_group userGroup
-    set userGroup.id = #{record.id,jdbcType=VARCHAR},
-      userGroup.group_id = #{record.groupId,jdbcType=VARCHAR},
-      userGroup.user_id = #{record.userId,jdbcType=VARCHAR},
-      userGroup.creator = #{record.creator,jdbcType=VARCHAR},
-      userGroup.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      userGroup.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_user_group
+    set id = #{record.id,jdbcType=VARCHAR},
+      group_id = #{record.groupId,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

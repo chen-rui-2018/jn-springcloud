@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysGroupRoleMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysGroupRole">
-    <id column="groupRole_id" jdbcType="VARCHAR" property="id" />
-    <result column="groupRole_role_id" jdbcType="VARCHAR" property="roleId" />
-    <result column="groupRole_user_group_id" jdbcType="VARCHAR" property="userGroupId" />
-    <result column="groupRole_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="groupRole_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="groupRole_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    groupRole.id as groupRole_id, groupRole.role_id as groupRole_role_id, groupRole.user_group_id as groupRole_user_group_id, 
-    groupRole.creator as groupRole_creator, groupRole.create_time as groupRole_create_time, 
-    groupRole.status as groupRole_status
+    id, role_id, user_group_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysGroupRoleCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_group_role groupRole
+    from tb_sys_group_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_group_role groupRole
-    where groupRole.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_group_role
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_group_role
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysGroupRoleCriteria">
-    delete from tb_sys_group_role groupRole
+    delete from tb_sys_group_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysGroupRole">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_group_role (id, role_id, user_group_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysGroupRole">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_group_role
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="roleId != null">
         role_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="roleId != null">
         #{roleId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysGroupRoleCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_group_role groupRole
+    select count(*) from tb_sys_group_role
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_group_role groupRole
+    update tb_sys_group_role
     <set>
       <if test="record.id != null">
-        groupRole.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.roleId != null">
-        groupRole.role_id = #{record.roleId,jdbcType=VARCHAR},
+        role_id = #{record.roleId,jdbcType=VARCHAR},
       </if>
       <if test="record.userGroupId != null">
-        groupRole.user_group_id = #{record.userGroupId,jdbcType=VARCHAR},
+        user_group_id = #{record.userGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        groupRole.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        groupRole.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        groupRole.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_group_role groupRole
-    set groupRole.id = #{record.id,jdbcType=VARCHAR},
-      groupRole.role_id = #{record.roleId,jdbcType=VARCHAR},
-      groupRole.user_group_id = #{record.userGroupId,jdbcType=VARCHAR},
-      groupRole.creator = #{record.creator,jdbcType=VARCHAR},
-      groupRole.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      groupRole.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_group_role
+    set id = #{record.id,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=VARCHAR},
+      user_group_id = #{record.userGroupId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

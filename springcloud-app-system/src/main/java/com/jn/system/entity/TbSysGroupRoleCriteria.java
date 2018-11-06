@@ -106,412 +106,412 @@ public class TbSysGroupRoleCriteria {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("groupRole.id is null");
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("groupRole.id is not null");
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(String value) {
-            addCriterion("groupRole.id =", value, "id");
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(String value) {
-            addCriterion("groupRole.id <>", value, "id");
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(String value) {
-            addCriterion("groupRole.id >", value, "id");
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("groupRole.id >=", value, "id");
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(String value) {
-            addCriterion("groupRole.id <", value, "id");
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("groupRole.id <=", value, "id");
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLike(String value) {
-            addCriterion("groupRole.id like", value, "id");
+            addCriterion("id like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotLike(String value) {
-            addCriterion("groupRole.id not like", value, "id");
+            addCriterion("id not like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<String> values) {
-            addCriterion("groupRole.id in", values, "id");
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<String> values) {
-            addCriterion("groupRole.id not in", values, "id");
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("groupRole.id between", value1, value2, "id");
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("groupRole.id not between", value1, value2, "id");
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIsNull() {
-            addCriterion("groupRole.role_id is null");
+            addCriterion("role_id is null");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIsNotNull() {
-            addCriterion("groupRole.role_id is not null");
+            addCriterion("role_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdEqualTo(String value) {
-            addCriterion("groupRole.role_id =", value, "roleId");
+            addCriterion("role_id =", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotEqualTo(String value) {
-            addCriterion("groupRole.role_id <>", value, "roleId");
+            addCriterion("role_id <>", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdGreaterThan(String value) {
-            addCriterion("groupRole.role_id >", value, "roleId");
+            addCriterion("role_id >", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdGreaterThanOrEqualTo(String value) {
-            addCriterion("groupRole.role_id >=", value, "roleId");
+            addCriterion("role_id >=", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLessThan(String value) {
-            addCriterion("groupRole.role_id <", value, "roleId");
+            addCriterion("role_id <", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLessThanOrEqualTo(String value) {
-            addCriterion("groupRole.role_id <=", value, "roleId");
+            addCriterion("role_id <=", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLike(String value) {
-            addCriterion("groupRole.role_id like", value, "roleId");
+            addCriterion("role_id like", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotLike(String value) {
-            addCriterion("groupRole.role_id not like", value, "roleId");
+            addCriterion("role_id not like", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIn(List<String> values) {
-            addCriterion("groupRole.role_id in", values, "roleId");
+            addCriterion("role_id in", values, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotIn(List<String> values) {
-            addCriterion("groupRole.role_id not in", values, "roleId");
+            addCriterion("role_id not in", values, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdBetween(String value1, String value2) {
-            addCriterion("groupRole.role_id between", value1, value2, "roleId");
+            addCriterion("role_id between", value1, value2, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotBetween(String value1, String value2) {
-            addCriterion("groupRole.role_id not between", value1, value2, "roleId");
+            addCriterion("role_id not between", value1, value2, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdIsNull() {
-            addCriterion("groupRole.user_group_id is null");
+            addCriterion("user_group_id is null");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdIsNotNull() {
-            addCriterion("groupRole.user_group_id is not null");
+            addCriterion("user_group_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdEqualTo(String value) {
-            addCriterion("groupRole.user_group_id =", value, "userGroupId");
+            addCriterion("user_group_id =", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdNotEqualTo(String value) {
-            addCriterion("groupRole.user_group_id <>", value, "userGroupId");
+            addCriterion("user_group_id <>", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdGreaterThan(String value) {
-            addCriterion("groupRole.user_group_id >", value, "userGroupId");
+            addCriterion("user_group_id >", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdGreaterThanOrEqualTo(String value) {
-            addCriterion("groupRole.user_group_id >=", value, "userGroupId");
+            addCriterion("user_group_id >=", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdLessThan(String value) {
-            addCriterion("groupRole.user_group_id <", value, "userGroupId");
+            addCriterion("user_group_id <", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdLessThanOrEqualTo(String value) {
-            addCriterion("groupRole.user_group_id <=", value, "userGroupId");
+            addCriterion("user_group_id <=", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdLike(String value) {
-            addCriterion("groupRole.user_group_id like", value, "userGroupId");
+            addCriterion("user_group_id like", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdNotLike(String value) {
-            addCriterion("groupRole.user_group_id not like", value, "userGroupId");
+            addCriterion("user_group_id not like", value, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdIn(List<String> values) {
-            addCriterion("groupRole.user_group_id in", values, "userGroupId");
+            addCriterion("user_group_id in", values, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdNotIn(List<String> values) {
-            addCriterion("groupRole.user_group_id not in", values, "userGroupId");
+            addCriterion("user_group_id not in", values, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdBetween(String value1, String value2) {
-            addCriterion("groupRole.user_group_id between", value1, value2, "userGroupId");
+            addCriterion("user_group_id between", value1, value2, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andUserGroupIdNotBetween(String value1, String value2) {
-            addCriterion("groupRole.user_group_id not between", value1, value2, "userGroupId");
+            addCriterion("user_group_id not between", value1, value2, "userGroupId");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIsNull() {
-            addCriterion("groupRole.creator is null");
+            addCriterion("creator is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIsNotNull() {
-            addCriterion("groupRole.creator is not null");
+            addCriterion("creator is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorEqualTo(String value) {
-            addCriterion("groupRole.creator =", value, "creator");
+            addCriterion("creator =", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotEqualTo(String value) {
-            addCriterion("groupRole.creator <>", value, "creator");
+            addCriterion("creator <>", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorGreaterThan(String value) {
-            addCriterion("groupRole.creator >", value, "creator");
+            addCriterion("creator >", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorGreaterThanOrEqualTo(String value) {
-            addCriterion("groupRole.creator >=", value, "creator");
+            addCriterion("creator >=", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLessThan(String value) {
-            addCriterion("groupRole.creator <", value, "creator");
+            addCriterion("creator <", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLessThanOrEqualTo(String value) {
-            addCriterion("groupRole.creator <=", value, "creator");
+            addCriterion("creator <=", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLike(String value) {
-            addCriterion("groupRole.creator like", value, "creator");
+            addCriterion("creator like", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotLike(String value) {
-            addCriterion("groupRole.creator not like", value, "creator");
+            addCriterion("creator not like", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIn(List<String> values) {
-            addCriterion("groupRole.creator in", values, "creator");
+            addCriterion("creator in", values, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotIn(List<String> values) {
-            addCriterion("groupRole.creator not in", values, "creator");
+            addCriterion("creator not in", values, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorBetween(String value1, String value2) {
-            addCriterion("groupRole.creator between", value1, value2, "creator");
+            addCriterion("creator between", value1, value2, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotBetween(String value1, String value2) {
-            addCriterion("groupRole.creator not between", value1, value2, "creator");
+            addCriterion("creator not between", value1, value2, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNull() {
-            addCriterion("groupRole.create_time is null");
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNotNull() {
-            addCriterion("groupRole.create_time is not null");
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeEqualTo(Date value) {
-            addCriterion("groupRole.create_time =", value, "createTime");
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotEqualTo(Date value) {
-            addCriterion("groupRole.create_time <>", value, "createTime");
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThan(Date value) {
-            addCriterion("groupRole.create_time >", value, "createTime");
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("groupRole.create_time >=", value, "createTime");
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThan(Date value) {
-            addCriterion("groupRole.create_time <", value, "createTime");
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("groupRole.create_time <=", value, "createTime");
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIn(List<Date> values) {
-            addCriterion("groupRole.create_time in", values, "createTime");
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotIn(List<Date> values) {
-            addCriterion("groupRole.create_time not in", values, "createTime");
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("groupRole.create_time between", value1, value2, "createTime");
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("groupRole.create_time not between", value1, value2, "createTime");
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNull() {
-            addCriterion("groupRole.status is null");
+            addCriterion("status is null");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNotNull() {
-            addCriterion("groupRole.status is not null");
+            addCriterion("status is not null");
             return (Criteria) this;
         }
 
         public Criteria andStatusEqualTo(String value) {
-            addCriterion("groupRole.status =", value, "status");
+            addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("groupRole.status <>", value, "status");
+            addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThan(String value) {
-            addCriterion("groupRole.status >", value, "status");
+            addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("groupRole.status >=", value, "status");
+            addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThan(String value) {
-            addCriterion("groupRole.status <", value, "status");
+            addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("groupRole.status <=", value, "status");
+            addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLike(String value) {
-            addCriterion("groupRole.status like", value, "status");
+            addCriterion("status like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotLike(String value) {
-            addCriterion("groupRole.status not like", value, "status");
+            addCriterion("status not like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusIn(List<String> values) {
-            addCriterion("groupRole.status in", values, "status");
+            addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("groupRole.status not in", values, "status");
+            addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("groupRole.status between", value1, value2, "status");
+            addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("groupRole.status not between", value1, value2, "status");
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

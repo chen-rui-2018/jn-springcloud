@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysResourcesMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysResources">
-    <id column="resources_id" jdbcType="VARCHAR" property="id" />
-    <result column="resources_resources_name" jdbcType="VARCHAR" property="resourcesName" />
-    <result column="resources_resources_url" jdbcType="VARCHAR" property="resourcesUrl" />
-    <result column="resources_menu_id" jdbcType="VARCHAR" property="menuId" />
-    <result column="resources_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="resources_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="resources_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="resources_name" jdbcType="VARCHAR" property="resourcesName" />
+    <result column="resources_url" jdbcType="VARCHAR" property="resourcesUrl" />
+    <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,10 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    resources.id as resources_id, resources.resources_name as resources_resources_name, 
-    resources.resources_url as resources_resources_url, resources.menu_id as resources_menu_id, 
-    resources.creator as resources_creator, resources.create_time as resources_create_time, 
-    resources.status as resources_status
+    id, resources_name, resources_url, menu_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysResourcesCriteria" resultMap="BaseResultMap">
     select
@@ -80,7 +77,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_resources resources
+    from tb_sys_resources
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,23 +88,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_resources resources
-    where resources.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_resources
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_resources
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysResourcesCriteria">
-    delete from tb_sys_resources resources
+    delete from tb_sys_resources
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysResources">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_resources (id, resources_name, resources_url, 
       menu_id, creator, create_time, 
       status)
@@ -116,12 +110,11 @@
       #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysResources">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_resources
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="resourcesName != null">
         resources_name,
       </if>
@@ -142,7 +135,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="resourcesName != null">
         #{resourcesName,jdbcType=VARCHAR},
       </if>
@@ -164,34 +159,34 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysResourcesCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_resources resources
+    select count(*) from tb_sys_resources
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_resources resources
+    update tb_sys_resources
     <set>
       <if test="record.id != null">
-        resources.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.resourcesName != null">
-        resources.resources_name = #{record.resourcesName,jdbcType=VARCHAR},
+        resources_name = #{record.resourcesName,jdbcType=VARCHAR},
       </if>
       <if test="record.resourcesUrl != null">
-        resources.resources_url = #{record.resourcesUrl,jdbcType=VARCHAR},
+        resources_url = #{record.resourcesUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.menuId != null">
-        resources.menu_id = #{record.menuId,jdbcType=VARCHAR},
+        menu_id = #{record.menuId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        resources.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        resources.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        resources.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -199,14 +194,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_resources resources
-    set resources.id = #{record.id,jdbcType=VARCHAR},
-      resources.resources_name = #{record.resourcesName,jdbcType=VARCHAR},
-      resources.resources_url = #{record.resourcesUrl,jdbcType=VARCHAR},
-      resources.menu_id = #{record.menuId,jdbcType=VARCHAR},
-      resources.creator = #{record.creator,jdbcType=VARCHAR},
-      resources.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      resources.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_resources
+    set id = #{record.id,jdbcType=VARCHAR},
+      resources_name = #{record.resourcesName,jdbcType=VARCHAR},
+      resources_url = #{record.resourcesUrl,jdbcType=VARCHAR},
+      menu_id = #{record.menuId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

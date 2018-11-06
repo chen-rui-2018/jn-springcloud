@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysMenuMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysMenu">
-    <id column="menu_id" jdbcType="VARCHAR" property="id" />
-    <result column="menu_menu_name" jdbcType="VARCHAR" property="menuName" />
-    <result column="menu_menu_url" jdbcType="VARCHAR" property="menuUrl" />
-    <result column="menu_parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="menu_is_dir" jdbcType="VARCHAR" property="isDir" />
-    <result column="menu_sort" jdbcType="VARCHAR" property="sort" />
-    <result column="menu_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="menu_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="menu_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="menu_name" jdbcType="VARCHAR" property="menuName" />
+    <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
+    <result column="is_dir" jdbcType="VARCHAR" property="isDir" />
+    <result column="sort" jdbcType="VARCHAR" property="sort" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,9 +71,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    menu.id as menu_id, menu.menu_name as menu_menu_name, menu.menu_url as menu_menu_url, 
-    menu.parent_id as menu_parent_id, menu.is_dir as menu_is_dir, menu.sort as menu_sort, 
-    menu.creator as menu_creator, menu.create_time as menu_create_time, menu.status as menu_status
+    id, menu_name, menu_url, parent_id, is_dir, sort, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysMenuCriteria" resultMap="BaseResultMap">
     select
@@ -81,7 +79,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_menu menu
+    from tb_sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,23 +90,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_menu menu
-    where menu.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_menu
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_menu
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysMenuCriteria">
-    delete from tb_sys_menu menu
+    delete from tb_sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysMenu">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_menu (id, menu_name, menu_url, 
       parent_id, is_dir, sort, 
       creator, create_time, status
@@ -119,12 +114,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysMenu">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="menuName != null">
         menu_name,
       </if>
@@ -151,7 +145,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="menuName != null">
         #{menuName,jdbcType=VARCHAR},
       </if>
@@ -179,40 +175,40 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysMenuCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_menu menu
+    select count(*) from tb_sys_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_menu menu
+    update tb_sys_menu
     <set>
       <if test="record.id != null">
-        menu.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.menuName != null">
-        menu.menu_name = #{record.menuName,jdbcType=VARCHAR},
+        menu_name = #{record.menuName,jdbcType=VARCHAR},
       </if>
       <if test="record.menuUrl != null">
-        menu.menu_url = #{record.menuUrl,jdbcType=VARCHAR},
+        menu_url = #{record.menuUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.parentId != null">
-        menu.parent_id = #{record.parentId,jdbcType=VARCHAR},
+        parent_id = #{record.parentId,jdbcType=VARCHAR},
       </if>
       <if test="record.isDir != null">
-        menu.is_dir = #{record.isDir,jdbcType=VARCHAR},
+        is_dir = #{record.isDir,jdbcType=VARCHAR},
       </if>
       <if test="record.sort != null">
-        menu.sort = #{record.sort,jdbcType=VARCHAR},
+        sort = #{record.sort,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        menu.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        menu.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        menu.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -220,16 +216,16 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_menu menu
-    set menu.id = #{record.id,jdbcType=VARCHAR},
-      menu.menu_name = #{record.menuName,jdbcType=VARCHAR},
-      menu.menu_url = #{record.menuUrl,jdbcType=VARCHAR},
-      menu.parent_id = #{record.parentId,jdbcType=VARCHAR},
-      menu.is_dir = #{record.isDir,jdbcType=VARCHAR},
-      menu.sort = #{record.sort,jdbcType=VARCHAR},
-      menu.creator = #{record.creator,jdbcType=VARCHAR},
-      menu.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      menu.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_menu
+    set id = #{record.id,jdbcType=VARCHAR},
+      menu_name = #{record.menuName,jdbcType=VARCHAR},
+      menu_url = #{record.menuUrl,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
+      is_dir = #{record.isDir,jdbcType=VARCHAR},
+      sort = #{record.sort,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

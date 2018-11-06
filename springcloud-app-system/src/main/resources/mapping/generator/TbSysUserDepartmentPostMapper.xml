@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysUserDepartmentPostMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysUserDepartmentPost">
-    <id column="userDepartmentPost_id" jdbcType="VARCHAR" property="id" />
-    <result column="userDepartmentPost_user_id" jdbcType="VARCHAR" property="userId" />
-    <result column="userDepartmentPost_department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="userDepartmentPost_post_id" jdbcType="VARCHAR" property="postId" />
-    <result column="userDepartmentPost_is_default" jdbcType="VARCHAR" property="isDefault" />
-    <result column="userDepartmentPost_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="userDepartmentPost_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="userDepartmentPost_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="post_id" jdbcType="VARCHAR" property="postId" />
+    <result column="is_default" jdbcType="VARCHAR" property="isDefault" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,10 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    userDepartmentPost.id as userDepartmentPost_id, userDepartmentPost.user_id as userDepartmentPost_user_id, 
-    userDepartmentPost.department_id as userDepartmentPost_department_id, userDepartmentPost.post_id as userDepartmentPost_post_id, 
-    userDepartmentPost.is_default as userDepartmentPost_is_default, userDepartmentPost.creator as userDepartmentPost_creator, 
-    userDepartmentPost.create_time as userDepartmentPost_create_time, userDepartmentPost.status as userDepartmentPost_status
+    id, user_id, department_id, post_id, is_default, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysUserDepartmentPostCriteria" resultMap="BaseResultMap">
     select
@@ -81,7 +78,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_user_department_post userDepartmentPost
+    from tb_sys_user_department_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,23 +89,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_user_department_post userDepartmentPost
-    where userDepartmentPost.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_user_department_post
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_user_department_post
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysUserDepartmentPostCriteria">
-    delete from tb_sys_user_department_post userDepartmentPost
+    delete from tb_sys_user_department_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysUserDepartmentPost">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_user_department_post (id, user_id, department_id, 
       post_id, is_default, creator, 
       create_time, status)
@@ -117,12 +111,11 @@
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysUserDepartmentPost">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_user_department_post
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="userId != null">
         user_id,
       </if>
@@ -146,7 +139,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="userId != null">
         #{userId,jdbcType=VARCHAR},
       </if>
@@ -171,37 +166,37 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysUserDepartmentPostCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_user_department_post userDepartmentPost
+    select count(*) from tb_sys_user_department_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_user_department_post userDepartmentPost
+    update tb_sys_user_department_post
     <set>
       <if test="record.id != null">
-        userDepartmentPost.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.userId != null">
-        userDepartmentPost.user_id = #{record.userId,jdbcType=VARCHAR},
+        user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        userDepartmentPost.department_id = #{record.departmentId,jdbcType=VARCHAR},
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.postId != null">
-        userDepartmentPost.post_id = #{record.postId,jdbcType=VARCHAR},
+        post_id = #{record.postId,jdbcType=VARCHAR},
       </if>
       <if test="record.isDefault != null">
-        userDepartmentPost.is_default = #{record.isDefault,jdbcType=VARCHAR},
+        is_default = #{record.isDefault,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        userDepartmentPost.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        userDepartmentPost.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        userDepartmentPost.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -209,15 +204,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_user_department_post userDepartmentPost
-    set userDepartmentPost.id = #{record.id,jdbcType=VARCHAR},
-      userDepartmentPost.user_id = #{record.userId,jdbcType=VARCHAR},
-      userDepartmentPost.department_id = #{record.departmentId,jdbcType=VARCHAR},
-      userDepartmentPost.post_id = #{record.postId,jdbcType=VARCHAR},
-      userDepartmentPost.is_default = #{record.isDefault,jdbcType=VARCHAR},
-      userDepartmentPost.creator = #{record.creator,jdbcType=VARCHAR},
-      userDepartmentPost.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      userDepartmentPost.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_user_department_post
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      post_id = #{record.postId,jdbcType=VARCHAR},
+      is_default = #{record.isDefault,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

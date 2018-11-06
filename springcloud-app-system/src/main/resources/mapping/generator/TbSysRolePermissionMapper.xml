@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysRolePermissionMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysRolePermission">
-    <id column="rolePermission_id" jdbcType="VARCHAR" property="id" />
-    <result column="rolePermission_role_id" jdbcType="VARCHAR" property="roleId" />
-    <result column="rolePermission_permission_id" jdbcType="VARCHAR" property="permissionId" />
-    <result column="rolePermission_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="rolePermission_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="rolePermission_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    rolePermission.id as rolePermission_id, rolePermission.role_id as rolePermission_role_id, 
-    rolePermission.permission_id as rolePermission_permission_id, rolePermission.creator as rolePermission_creator, 
-    rolePermission.create_time as rolePermission_create_time, rolePermission.status as rolePermission_status
+    id, role_id, permission_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysRolePermissionCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_role_permission rolePermission
+    from tb_sys_role_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_role_permission rolePermission
-    where rolePermission.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_role_permission
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_role_permission
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysRolePermissionCriteria">
-    delete from tb_sys_role_permission rolePermission
+    delete from tb_sys_role_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysRolePermission">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_role_permission (id, role_id, permission_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysRolePermission">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_role_permission
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="roleId != null">
         role_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="roleId != null">
         #{roleId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysRolePermissionCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_role_permission rolePermission
+    select count(*) from tb_sys_role_permission
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_role_permission rolePermission
+    update tb_sys_role_permission
     <set>
       <if test="record.id != null">
-        rolePermission.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.roleId != null">
-        rolePermission.role_id = #{record.roleId,jdbcType=VARCHAR},
+        role_id = #{record.roleId,jdbcType=VARCHAR},
       </if>
       <if test="record.permissionId != null">
-        rolePermission.permission_id = #{record.permissionId,jdbcType=VARCHAR},
+        permission_id = #{record.permissionId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        rolePermission.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        rolePermission.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        rolePermission.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_role_permission rolePermission
-    set rolePermission.id = #{record.id,jdbcType=VARCHAR},
-      rolePermission.role_id = #{record.roleId,jdbcType=VARCHAR},
-      rolePermission.permission_id = #{record.permissionId,jdbcType=VARCHAR},
-      rolePermission.creator = #{record.creator,jdbcType=VARCHAR},
-      rolePermission.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      rolePermission.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_role_permission
+    set id = #{record.id,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=VARCHAR},
+      permission_id = #{record.permissionId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

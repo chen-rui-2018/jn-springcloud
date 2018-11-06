@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysPermissionMenuMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysPermissionMenu">
-    <id column="permissionMenu_id" jdbcType="VARCHAR" property="id" />
-    <result column="permissionMenu_permission_id" jdbcType="VARCHAR" property="permissionId" />
-    <result column="permissionMenu_menu_id" jdbcType="VARCHAR" property="menuId" />
-    <result column="permissionMenu_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="permissionMenu_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="permissionMenu_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    permissionMenu.id as permissionMenu_id, permissionMenu.permission_id as permissionMenu_permission_id, 
-    permissionMenu.menu_id as permissionMenu_menu_id, permissionMenu.creator as permissionMenu_creator, 
-    permissionMenu.create_time as permissionMenu_create_time, permissionMenu.status as permissionMenu_status
+    id, permission_id, menu_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysPermissionMenuCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_permission_menu permissionMenu
+    from tb_sys_permission_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_permission_menu permissionMenu
-    where permissionMenu.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_permission_menu
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_permission_menu
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysPermissionMenuCriteria">
-    delete from tb_sys_permission_menu permissionMenu
+    delete from tb_sys_permission_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPermissionMenu">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission_menu (id, permission_id, menu_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPermissionMenu">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="permissionId != null">
         permission_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="permissionId != null">
         #{permissionId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysPermissionMenuCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_permission_menu permissionMenu
+    select count(*) from tb_sys_permission_menu
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_permission_menu permissionMenu
+    update tb_sys_permission_menu
     <set>
       <if test="record.id != null">
-        permissionMenu.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.permissionId != null">
-        permissionMenu.permission_id = #{record.permissionId,jdbcType=VARCHAR},
+        permission_id = #{record.permissionId,jdbcType=VARCHAR},
       </if>
       <if test="record.menuId != null">
-        permissionMenu.menu_id = #{record.menuId,jdbcType=VARCHAR},
+        menu_id = #{record.menuId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        permissionMenu.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        permissionMenu.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        permissionMenu.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_permission_menu permissionMenu
-    set permissionMenu.id = #{record.id,jdbcType=VARCHAR},
-      permissionMenu.permission_id = #{record.permissionId,jdbcType=VARCHAR},
-      permissionMenu.menu_id = #{record.menuId,jdbcType=VARCHAR},
-      permissionMenu.creator = #{record.creator,jdbcType=VARCHAR},
-      permissionMenu.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      permissionMenu.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_permission_menu
+    set id = #{record.id,jdbcType=VARCHAR},
+      permission_id = #{record.permissionId,jdbcType=VARCHAR},
+      menu_id = #{record.menuId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

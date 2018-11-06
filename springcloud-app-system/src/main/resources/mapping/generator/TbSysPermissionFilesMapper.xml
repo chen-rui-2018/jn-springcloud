@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysPermissionFilesMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysPermissionFiles">
-    <id column="permissionFiles_id" jdbcType="VARCHAR" property="id" />
-    <result column="permissionFiles_permission_id" jdbcType="VARCHAR" property="permissionId" />
-    <result column="permissionFiles_file_group_id" jdbcType="VARCHAR" property="fileGroupId" />
-    <result column="permissionFiles_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="permissionFiles_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="permissionFiles_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="permission_id" jdbcType="VARCHAR" property="permissionId" />
+    <result column="file_group_id" jdbcType="VARCHAR" property="fileGroupId" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,9 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    permissionFiles.id as permissionFiles_id, permissionFiles.permission_id as permissionFiles_permission_id, 
-    permissionFiles.file_group_id as permissionFiles_file_group_id, permissionFiles.creator as permissionFiles_creator, 
-    permissionFiles.create_time as permissionFiles_create_time, permissionFiles.status as permissionFiles_status
+    id, permission_id, file_group_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysPermissionFilesCriteria" resultMap="BaseResultMap">
     select
@@ -78,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_permission_files permissionFiles
+    from tb_sys_permission_files
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_permission_files permissionFiles
-    where permissionFiles.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_permission_files
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_permission_files
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysPermissionFilesCriteria">
-    delete from tb_sys_permission_files permissionFiles
+    delete from tb_sys_permission_files
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPermissionFiles">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission_files (id, permission_id, file_group_id, 
       creator, create_time, status
       )
@@ -114,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPermissionFiles">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_permission_files
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="permissionId != null">
         permission_id,
       </if>
@@ -137,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="permissionId != null">
         #{permissionId,jdbcType=VARCHAR},
       </if>
@@ -156,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysPermissionFilesCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_permission_files permissionFiles
+    select count(*) from tb_sys_permission_files
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_permission_files permissionFiles
+    update tb_sys_permission_files
     <set>
       <if test="record.id != null">
-        permissionFiles.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.permissionId != null">
-        permissionFiles.permission_id = #{record.permissionId,jdbcType=VARCHAR},
+        permission_id = #{record.permissionId,jdbcType=VARCHAR},
       </if>
       <if test="record.fileGroupId != null">
-        permissionFiles.file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
+        file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        permissionFiles.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        permissionFiles.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        permissionFiles.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_permission_files permissionFiles
-    set permissionFiles.id = #{record.id,jdbcType=VARCHAR},
-      permissionFiles.permission_id = #{record.permissionId,jdbcType=VARCHAR},
-      permissionFiles.file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
-      permissionFiles.creator = #{record.creator,jdbcType=VARCHAR},
-      permissionFiles.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      permissionFiles.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_permission_files
+    set id = #{record.id,jdbcType=VARCHAR},
+      permission_id = #{record.permissionId,jdbcType=VARCHAR},
+      file_group_id = #{record.fileGroupId,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

@@ -106,412 +106,412 @@ public class TbSysUserRoleCriteria {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("userRole.id is null");
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("userRole.id is not null");
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(String value) {
-            addCriterion("userRole.id =", value, "id");
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(String value) {
-            addCriterion("userRole.id <>", value, "id");
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(String value) {
-            addCriterion("userRole.id >", value, "id");
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("userRole.id >=", value, "id");
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(String value) {
-            addCriterion("userRole.id <", value, "id");
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("userRole.id <=", value, "id");
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLike(String value) {
-            addCriterion("userRole.id like", value, "id");
+            addCriterion("id like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotLike(String value) {
-            addCriterion("userRole.id not like", value, "id");
+            addCriterion("id not like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<String> values) {
-            addCriterion("userRole.id in", values, "id");
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<String> values) {
-            addCriterion("userRole.id not in", values, "id");
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("userRole.id between", value1, value2, "id");
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("userRole.id not between", value1, value2, "id");
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIsNull() {
-            addCriterion("userRole.role_id is null");
+            addCriterion("role_id is null");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIsNotNull() {
-            addCriterion("userRole.role_id is not null");
+            addCriterion("role_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdEqualTo(String value) {
-            addCriterion("userRole.role_id =", value, "roleId");
+            addCriterion("role_id =", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotEqualTo(String value) {
-            addCriterion("userRole.role_id <>", value, "roleId");
+            addCriterion("role_id <>", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdGreaterThan(String value) {
-            addCriterion("userRole.role_id >", value, "roleId");
+            addCriterion("role_id >", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdGreaterThanOrEqualTo(String value) {
-            addCriterion("userRole.role_id >=", value, "roleId");
+            addCriterion("role_id >=", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLessThan(String value) {
-            addCriterion("userRole.role_id <", value, "roleId");
+            addCriterion("role_id <", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLessThanOrEqualTo(String value) {
-            addCriterion("userRole.role_id <=", value, "roleId");
+            addCriterion("role_id <=", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdLike(String value) {
-            addCriterion("userRole.role_id like", value, "roleId");
+            addCriterion("role_id like", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotLike(String value) {
-            addCriterion("userRole.role_id not like", value, "roleId");
+            addCriterion("role_id not like", value, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdIn(List<String> values) {
-            addCriterion("userRole.role_id in", values, "roleId");
+            addCriterion("role_id in", values, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotIn(List<String> values) {
-            addCriterion("userRole.role_id not in", values, "roleId");
+            addCriterion("role_id not in", values, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdBetween(String value1, String value2) {
-            addCriterion("userRole.role_id between", value1, value2, "roleId");
+            addCriterion("role_id between", value1, value2, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andRoleIdNotBetween(String value1, String value2) {
-            addCriterion("userRole.role_id not between", value1, value2, "roleId");
+            addCriterion("role_id not between", value1, value2, "roleId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdIsNull() {
-            addCriterion("userRole.user_id is null");
+            addCriterion("user_id is null");
             return (Criteria) this;
         }
 
         public Criteria andUserIdIsNotNull() {
-            addCriterion("userRole.user_id is not null");
+            addCriterion("user_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andUserIdEqualTo(String value) {
-            addCriterion("userRole.user_id =", value, "userId");
+            addCriterion("user_id =", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdNotEqualTo(String value) {
-            addCriterion("userRole.user_id <>", value, "userId");
+            addCriterion("user_id <>", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdGreaterThan(String value) {
-            addCriterion("userRole.user_id >", value, "userId");
+            addCriterion("user_id >", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("userRole.user_id >=", value, "userId");
+            addCriterion("user_id >=", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdLessThan(String value) {
-            addCriterion("userRole.user_id <", value, "userId");
+            addCriterion("user_id <", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdLessThanOrEqualTo(String value) {
-            addCriterion("userRole.user_id <=", value, "userId");
+            addCriterion("user_id <=", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdLike(String value) {
-            addCriterion("userRole.user_id like", value, "userId");
+            addCriterion("user_id like", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdNotLike(String value) {
-            addCriterion("userRole.user_id not like", value, "userId");
+            addCriterion("user_id not like", value, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdIn(List<String> values) {
-            addCriterion("userRole.user_id in", values, "userId");
+            addCriterion("user_id in", values, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdNotIn(List<String> values) {
-            addCriterion("userRole.user_id not in", values, "userId");
+            addCriterion("user_id not in", values, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdBetween(String value1, String value2) {
-            addCriterion("userRole.user_id between", value1, value2, "userId");
+            addCriterion("user_id between", value1, value2, "userId");
             return (Criteria) this;
         }
 
         public Criteria andUserIdNotBetween(String value1, String value2) {
-            addCriterion("userRole.user_id not between", value1, value2, "userId");
+            addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIsNull() {
-            addCriterion("userRole.creator is null");
+            addCriterion("creator is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIsNotNull() {
-            addCriterion("userRole.creator is not null");
+            addCriterion("creator is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorEqualTo(String value) {
-            addCriterion("userRole.creator =", value, "creator");
+            addCriterion("creator =", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotEqualTo(String value) {
-            addCriterion("userRole.creator <>", value, "creator");
+            addCriterion("creator <>", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorGreaterThan(String value) {
-            addCriterion("userRole.creator >", value, "creator");
+            addCriterion("creator >", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorGreaterThanOrEqualTo(String value) {
-            addCriterion("userRole.creator >=", value, "creator");
+            addCriterion("creator >=", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLessThan(String value) {
-            addCriterion("userRole.creator <", value, "creator");
+            addCriterion("creator <", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLessThanOrEqualTo(String value) {
-            addCriterion("userRole.creator <=", value, "creator");
+            addCriterion("creator <=", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorLike(String value) {
-            addCriterion("userRole.creator like", value, "creator");
+            addCriterion("creator like", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotLike(String value) {
-            addCriterion("userRole.creator not like", value, "creator");
+            addCriterion("creator not like", value, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorIn(List<String> values) {
-            addCriterion("userRole.creator in", values, "creator");
+            addCriterion("creator in", values, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotIn(List<String> values) {
-            addCriterion("userRole.creator not in", values, "creator");
+            addCriterion("creator not in", values, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorBetween(String value1, String value2) {
-            addCriterion("userRole.creator between", value1, value2, "creator");
+            addCriterion("creator between", value1, value2, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreatorNotBetween(String value1, String value2) {
-            addCriterion("userRole.creator not between", value1, value2, "creator");
+            addCriterion("creator not between", value1, value2, "creator");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNull() {
-            addCriterion("userRole.create_time is null");
+            addCriterion("create_time is null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNotNull() {
-            addCriterion("userRole.create_time is not null");
+            addCriterion("create_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeEqualTo(Date value) {
-            addCriterion("userRole.create_time =", value, "createTime");
+            addCriterion("create_time =", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotEqualTo(Date value) {
-            addCriterion("userRole.create_time <>", value, "createTime");
+            addCriterion("create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThan(Date value) {
-            addCriterion("userRole.create_time >", value, "createTime");
+            addCriterion("create_time >", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("userRole.create_time >=", value, "createTime");
+            addCriterion("create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThan(Date value) {
-            addCriterion("userRole.create_time <", value, "createTime");
+            addCriterion("create_time <", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("userRole.create_time <=", value, "createTime");
+            addCriterion("create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIn(List<Date> values) {
-            addCriterion("userRole.create_time in", values, "createTime");
+            addCriterion("create_time in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotIn(List<Date> values) {
-            addCriterion("userRole.create_time not in", values, "createTime");
+            addCriterion("create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("userRole.create_time between", value1, value2, "createTime");
+            addCriterion("create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("userRole.create_time not between", value1, value2, "createTime");
+            addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNull() {
-            addCriterion("userRole.status is null");
+            addCriterion("status is null");
             return (Criteria) this;
         }
 
         public Criteria andStatusIsNotNull() {
-            addCriterion("userRole.status is not null");
+            addCriterion("status is not null");
             return (Criteria) this;
         }
 
         public Criteria andStatusEqualTo(String value) {
-            addCriterion("userRole.status =", value, "status");
+            addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("userRole.status <>", value, "status");
+            addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThan(String value) {
-            addCriterion("userRole.status >", value, "status");
+            addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("userRole.status >=", value, "status");
+            addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThan(String value) {
-            addCriterion("userRole.status <", value, "status");
+            addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("userRole.status <=", value, "status");
+            addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusLike(String value) {
-            addCriterion("userRole.status like", value, "status");
+            addCriterion("status like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotLike(String value) {
-            addCriterion("userRole.status not like", value, "status");
+            addCriterion("status not like", value, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusIn(List<String> values) {
-            addCriterion("userRole.status in", values, "status");
+            addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("userRole.status not in", values, "status");
+            addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("userRole.status between", value1, value2, "status");
+            addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
         public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("userRole.status not between", value1, value2, "status");
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
     }

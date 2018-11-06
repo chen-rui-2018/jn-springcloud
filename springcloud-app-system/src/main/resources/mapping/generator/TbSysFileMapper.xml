@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysFileMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysFile">
-    <id column="file_id" jdbcType="VARCHAR" property="id" />
-    <result column="file_file_name" jdbcType="VARCHAR" property="fileName" />
-    <result column="file_file_url" jdbcType="VARCHAR" property="fileUrl" />
-    <result column="file_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="file_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="file_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,8 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    file.id as file_id, file.file_name as file_file_name, file.file_url as file_file_url, 
-    file.creator as file_creator, file.create_time as file_create_time, file.status as file_status
+    id, file_name, file_url, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysFileCriteria" resultMap="BaseResultMap">
     select
@@ -77,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_file file
+    from tb_sys_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,23 +87,20 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_file file
-    where file.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_file
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_file
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysFileCriteria">
-    delete from tb_sys_file file
+    delete from tb_sys_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysFile">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file (id, file_name, file_url, 
       creator, create_time, status
       )
@@ -113,12 +109,11 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysFile">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="fileName != null">
         file_name,
       </if>
@@ -136,7 +131,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="fileName != null">
         #{fileName,jdbcType=VARCHAR},
       </if>
@@ -155,31 +152,31 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysFileCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_file file
+    select count(*) from tb_sys_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_file file
+    update tb_sys_file
     <set>
       <if test="record.id != null">
-        file.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.fileName != null">
-        file.file_name = #{record.fileName,jdbcType=VARCHAR},
+        file_name = #{record.fileName,jdbcType=VARCHAR},
       </if>
       <if test="record.fileUrl != null">
-        file.file_url = #{record.fileUrl,jdbcType=VARCHAR},
+        file_url = #{record.fileUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        file.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        file.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        file.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -187,13 +184,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_file file
-    set file.id = #{record.id,jdbcType=VARCHAR},
-      file.file_name = #{record.fileName,jdbcType=VARCHAR},
-      file.file_url = #{record.fileUrl,jdbcType=VARCHAR},
-      file.creator = #{record.creator,jdbcType=VARCHAR},
-      file.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      file.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_file
+    set id = #{record.id,jdbcType=VARCHAR},
+      file_name = #{record.fileName,jdbcType=VARCHAR},
+      file_url = #{record.fileUrl,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

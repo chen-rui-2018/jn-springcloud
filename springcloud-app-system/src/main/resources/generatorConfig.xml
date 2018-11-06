@@ -51,83 +51,64 @@
 
         <!-- 用户表 -->
         <table tableName="tb_sys_user" alias="user">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+            <!--<generatedKey column="id" sqlStatement="MySql"/>-->
         </table>
         <!-- 用户组表 -->
-        <table tableName="tb_sys_group" alias="group">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_group">
         </table>
         <!-- 用户组用户关联表 -->
-        <table tableName="tb_sys_user_group" alias="userGroup">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_user_group">
         </table>
         <!-- 角色表 -->
-        <table tableName="tb_sys_role" alias="role">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_role">
         </table>
         <!-- 用户角色关联表 -->
-        <table tableName="tb_sys_user_role" alias="userRole">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_user_role">
         </table>
         <!-- 用户组角色关联表 -->
-        <table tableName="tb_sys_group_role" alias="groupRole">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_group_role">
         </table>
         <!-- 权限表 -->
-        <table tableName="tb_sys_permission" alias="permission">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_permission">
         </table>
         <!-- 用户角色权限关联表 -->
-        <table tableName="tb_sys_role_permission" alias="rolePermission">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_role_permission">
         </table>
         <!-- 菜单表 -->
-        <table tableName="tb_sys_menu" alias="menu">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_menu">
         </table>
         <!-- 功能表 -->
-        <table tableName="tb_sys_resources" alias="resources">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_resources">
         </table>
         <!-- 权限菜单关联表 -->
-        <table tableName="tb_sys_permission_menu" alias="permissionMenu">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_permission_menu">
         </table>
         <!-- 权限功能关联表 -->
-        <table tableName="tb_sys_permission_resources" alias="permissionResources">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_permission_resources">
         </table>
         <!-- 文件表 -->
-        <table tableName="tb_sys_file" alias="file">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_file">
         </table>
         <!-- 文件组表 -->
-        <table tableName="tb_sys_file_group" alias="fileGroup">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_file_group">
         </table>
         <!-- 文件组文件关联表 -->
-        <table tableName="tb_sys_file_group_file" alias="fileGroupFile">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_file_group_file">
         </table>
         <!-- 权限文件组关联表 -->
-        <table tableName="tb_sys_permission_files" alias="permissionFiles">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_permission_files">
         </table>
         <!-- 岗位表 -->
-        <table tableName="tb_sys_post" alias="post">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_post">
         </table>
         <!-- 部门表 -->
-        <table tableName="tb_sys_department" alias="department">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_department">
         </table>
         <!-- 用户部门岗位关联表 -->
-        <table tableName="tb_sys_user_department_post" alias="userDepartmentPost">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_user_department_post">
         </table>
         <!-- 数据权限表 -->
-        <table tableName="tb_sys_permission_db" alias="permissionDb">
-            <generatedKey column="id" sqlStatement="MySql" identity="false" />
+        <table tableName="tb_sys_permission_db">
         </table>
 
     </context>

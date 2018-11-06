@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.TbSysPostMapper">
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysPost">
-    <id column="post_id" jdbcType="VARCHAR" property="id" />
-    <result column="post_post_name" jdbcType="VARCHAR" property="postName" />
-    <result column="post_creator" jdbcType="VARCHAR" property="creator" />
-    <result column="post_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="post_status" jdbcType="VARCHAR" property="status" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,8 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    post.id as post_id, post.post_name as post_post_name, post.creator as post_creator, 
-    post.create_time as post_create_time, post.status as post_status
+    id, post_name, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysPostCriteria" resultMap="BaseResultMap">
     select
@@ -76,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_post post
+    from tb_sys_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,35 +86,31 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_post post
-    where post.id = #{id,jdbcType=VARCHAR}
+    from tb_sys_post
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_sys_post
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.system.entity.TbSysPostCriteria">
-    delete from tb_sys_post post
+    delete from tb_sys_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysPost">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_post (id, post_name, creator, 
       create_time, status)
     values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysPost">
-    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_sys_post
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      id,
+      <if test="id != null">
+        id,
+      </if>
       <if test="postName != null">
         post_name,
       </if>
@@ -130,7 +125,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      #{id,jdbcType=VARCHAR},
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="postName != null">
         #{postName,jdbcType=VARCHAR},
       </if>
@@ -146,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.system.entity.TbSysPostCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_post post
+    select count(*) from tb_sys_post
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_post post
+    update tb_sys_post
     <set>
       <if test="record.id != null">
-        post.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.postName != null">
-        post.post_name = #{record.postName,jdbcType=VARCHAR},
+        post_name = #{record.postName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
-        post.creator = #{record.creator,jdbcType=VARCHAR},
+        creator = #{record.creator,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        post.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.status != null">
-        post.status = #{record.status,jdbcType=VARCHAR},
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -175,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_post post
-    set post.id = #{record.id,jdbcType=VARCHAR},
-      post.post_name = #{record.postName,jdbcType=VARCHAR},
-      post.creator = #{record.creator,jdbcType=VARCHAR},
-      post.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      post.status = #{record.status,jdbcType=VARCHAR}
+    update tb_sys_post
+    set id = #{record.id,jdbcType=VARCHAR},
+      post_name = #{record.postName,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

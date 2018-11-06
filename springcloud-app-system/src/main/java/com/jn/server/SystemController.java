@@ -4,10 +4,13 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.system.config.RedisSessionDAO;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
 import com.jn.system.service.ResourcesService;
 import com.jn.system.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +32,8 @@ import java.util.List;
 @RequestMapping("/api/system")
 public class SystemController extends BaseController {
 
+    private static Logger logger = LoggerFactory.getLogger(SystemController.class);
+
 	@Autowired
 	private UserService userService;
 
@@ -42,8 +47,9 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
+        logger.info("进入获取用户的API,用户参数：{}",u.toString());
         List<User> user = userService.findTByT(u) ;
-        if(user == null) {
+        if(user == null || user.size() ==0 ) {
             throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
         }
         if(user.size() > 1){

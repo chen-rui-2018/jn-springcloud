@@ -1,4 +1,6 @@
-package com.jn.system.model;
+package com.jn.system.vo;
+
+import com.jn.system.model.SysRole;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  **/
-public class SysGroup implements Serializable {
+public class SysGroupVO implements Serializable {
 
     private static final long serialVersionUID = 2758645323376032467L;
     /**
@@ -43,20 +45,20 @@ public class SysGroup implements Serializable {
     /**
      * 用户组中用户
      */
-    private List<SysUser> sysUsers = new ArrayList<SysUser>();
+    private List<SysUserVO> sysUserVOS = new ArrayList<SysUserVO>();
 
-    public SysGroup() {
+    public SysGroupVO() {
     }
 
-    public SysGroup(String id, String groupName, Date createTime, String status, String creator,
-                    List<SysRole> sysRoles, List<SysUser> sysUsers) {
+    public SysGroupVO(String id, String groupName, Date createTime, String status, String creator,
+                      List<SysRole> sysRoles, List<SysUserVO> sysUserVOS) {
         this.id = id;
         this.groupName = groupName;
         this.createTime = createTime;
         this.status = status;
         this.creator = creator;
         this.sysRoles = sysRoles;
-        this.sysUsers = sysUsers;
+        this.sysUserVOS = sysUserVOS;
     }
 
     public static long getSerialVersionUID() {
@@ -111,12 +113,12 @@ public class SysGroup implements Serializable {
         this.sysRoles = sysRoles;
     }
 
-    public List<SysUser> getSysUsers() {
-        return sysUsers;
+    public List<SysUserVO> getSysUserVOS() {
+        return sysUserVOS;
     }
 
-    public void setSysUsers(List<SysUser> sysUsers) {
-        this.sysUsers = sysUsers;
+    public void setSysUserVOS(List<SysUserVO> sysUserVOS) {
+        this.sysUserVOS = sysUserVOS;
     }
 
     @Override
@@ -124,11 +126,11 @@ public class SysGroup implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SysGroup)){
+        if (!(o instanceof SysGroupVO)){
             return false;
         }
 
-        SysGroup sysGroup = (SysGroup) o;
+        SysGroupVO sysGroup = (SysGroupVO) o;
 
         if (id != null ? !id.equals(sysGroup.id) : sysGroup.id != null){
             return false;
@@ -148,7 +150,7 @@ public class SysGroup implements Serializable {
         if (sysRoles != null ? !sysRoles.equals(sysGroup.sysRoles) : sysGroup.sysRoles != null){
             return false;
         }
-        return sysUsers != null ? sysUsers.equals(sysGroup.sysUsers) : sysGroup.sysUsers == null;
+        return sysUserVOS != null ? sysUserVOS.equals(sysGroup.sysUserVOS) : sysGroup.sysUserVOS == null;
     }
 
     @Override
@@ -159,7 +161,7 @@ public class SysGroup implements Serializable {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (creator != null ? creator.hashCode() : 0);
         result = 31 * result + (sysRoles != null ? sysRoles.hashCode() : 0);
-        result = 31 * result + (sysUsers != null ? sysUsers.hashCode() : 0);
+        result = 31 * result + (sysUserVOS != null ? sysUserVOS.hashCode() : 0);
         return result;
     }
 
@@ -172,7 +174,7 @@ public class SysGroup implements Serializable {
                 ", status='" + status + '\'' +
                 ", creator='" + creator + '\'' +
                 ", sysRoles=" + sysRoles +
-                ", sysUsers=" + sysUsers +
+                ", sysUserVOS=" + sysUserVOS +
                 '}';
     }
 }

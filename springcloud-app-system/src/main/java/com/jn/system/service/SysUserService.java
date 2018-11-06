@@ -1,8 +1,8 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.SysUserQuery;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserPage;
 import com.jn.system.model.SysUserDepartmentPost;
 
 import java.util.List;
@@ -25,10 +25,10 @@ public interface SysUserService {
 
     /**
      * 查询用户
-     * @param userSysUserQuery
+     * @param userSysUserPage
      * @return
      */
-    Result findSysUserByPage(SysUserQuery userSysUserQuery);
+    Result findSysUserByPage(SysUserPage userSysUserPage);
 
     /**
      * 删除用户

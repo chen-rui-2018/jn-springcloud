@@ -1,38 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysPostMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.model.SysPost">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="post_name" jdbcType="VARCHAR" property="postName"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="CHAR" property="status"/>
-    </resultMap>
 
-    <sql id="Base_Column_List">
-        id,post_name as postName,creator,create_time as createTime,status
-    </sql>
-
-    <sql id="Base_status">
-        status = '1'
-    </sql>
-
-    <select id="findSysPostById" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-          <include refid="Base_Column_List"/>
-        from tb_sys_post
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
-
-    <select id="findSysPostAll" resultMap="BaseResultMap">
-        select
-          <include refid="Base_Column_List"/>
-        from tb_sys_post
-        where
-          <include refid="Base_status"/>
-    </select>
-
-    <select id="findSysPostByDepartmentId" parameterType="java.lang.String" resultType="com.jn.system.model.SysPost">
-
-    </select>
 </mapper>

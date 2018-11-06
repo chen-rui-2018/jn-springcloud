@@ -79,4 +79,40 @@ public class SysRole implements Serializable {
     public void setStatus(String status) {
         this.status = status == null ? null : status.trim();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SysRole)){
+            return false;
+        }
+
+        SysRole sysRole = (SysRole) o;
+
+        if (id != null ? !id.equals(sysRole.id) : sysRole.id != null){
+            return false;
+        }
+        if (roleName != null ? !roleName.equals(sysRole.roleName) : sysRole.roleName != null){
+            return false;
+        }
+        if (creator != null ? !creator.equals(sysRole.creator) : sysRole.creator != null) {
+            return false;
+        }
+        if (createTime != null ? !createTime.equals(sysRole.createTime) : sysRole.createTime != null) {
+            return false;
+        }
+        return status != null ? status.equals(sysRole.status) : sysRole.status == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
+        result = 31 * result + (creator != null ? creator.hashCode() : 0);
+        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        return result;
+    }
 }

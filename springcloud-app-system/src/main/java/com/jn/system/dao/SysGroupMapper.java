@@ -1,6 +1,8 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.SysGroup;
+import com.jn.system.entity.TbSysGroup;
+import com.jn.system.model.SysGroupPage;
+import com.jn.system.vo.SysGroupVO;
 
 import java.util.List;
 
@@ -15,23 +17,23 @@ import java.util.List;
 public interface SysGroupMapper  {
 
     /**
-     * 查询所有用户组信息
+     * 分页查询用户组信息
      * @return
      */
-    List<SysGroup> findSysGroupAll();
+    List<SysGroupVO> findSysGroupAll(SysGroupPage groupPage);
 
     /**
      * 根据用户id对应用户组
      * @param id
      * @return
      */
-    List<SysGroup> findSysGroupByUserId(String id);
+    List<TbSysGroup> findSysGroupByUserId(String id);
 
     /**
      * 增加用户组
      * @param sysGroup
      */
-    void addSysGroup(SysGroup sysGroup);
+    void addSysGroup(TbSysGroup sysGroup);
 
     /**
      * 逻辑删除用户组
@@ -43,12 +45,19 @@ public interface SysGroupMapper  {
      * 更新用户组信息
      * @param sysGroup
      */
-    void updateSysGroup(SysGroup sysGroup);
+    void updateSysGroup(TbSysGroup sysGroup);
 
     /**
      * 根据用户组id获取用户组信息
      * @param id 用户组id
      * @return
      */
-    SysGroup findSysGroupById(String id);
+    TbSysGroup findSysGroupById(String id);
+
+    /**
+     * 获取所有用户组信息
+     * @return
+     */
+    List<TbSysGroup> findGroupAll();
+
 }

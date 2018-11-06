@@ -1,6 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.SysPost;
+import com.jn.system.entity.TbSysPost;
 
 import java.util.List;
 
@@ -12,16 +12,4 @@ import java.util.List;
  **/
 public interface SysPostMapper {
 
-    /**
-     * 获取所有岗位信息
-     * @return
-     */
-    public List<SysPost> findSysPostAll();
-
-    /**
-     * 根据部门id获取所有岗位信息
-     * @param departmentId
-     * @return
-     */
-    List<SysPost> findSysPostByDepartmentId(String departmentId);
 }

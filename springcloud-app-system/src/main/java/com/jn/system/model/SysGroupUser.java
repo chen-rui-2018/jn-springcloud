@@ -1,5 +1,8 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,38 +14,33 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
-public class SysUserGroup implements Serializable {
+@ApiModel(value = "SysGroupUser",description = "用户组用户实体")
+public class SysGroupUser implements Serializable {
 
     private static final long serialVersionUID = -3719419034027851775L;
-    /**
-     * id
-     */
+
+    @ApiModelProperty("id")
     private String id;
-    /**
-     * 用户组id
-     */
+
+    @ApiModelProperty("用户组id")
     private String groupId;
-    /**
-     * 创造者
-     */
+
+    @ApiModelProperty("创建人")
     private String creator;
-    /**
-     * 用户id
-     */
+
+    @ApiModelProperty("用户id")
     private String userId;
-    /**
-     * 创建时间
-     */
+
+    @ApiModelProperty("创建时间")
     private Date createTime;
-    /**
-     * 状态 1:有效 0:无效 -1删除
-     */
+
+    @ApiModelProperty("状态 1有效 0无效 -1删除")
     private String status;
 
-    public SysUserGroup() {
+    public SysGroupUser() {
     }
 
-    public SysUserGroup(String id, String groupId, String creator, String userId, Date createTime, String status) {
+    public SysGroupUser(String id, String groupId, String creator, String userId, Date createTime, String status) {
         this.id = id;
         this.groupId = groupId;
         this.creator = creator;
@@ -101,7 +99,7 @@ public class SysUserGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "SysUserGroup{" +
+        return "SysGroupUser{" +
                 "id='" + id + '\'' +
                 ", groupId='" + groupId + '\'' +
                 ", creator='" + creator + '\'' +

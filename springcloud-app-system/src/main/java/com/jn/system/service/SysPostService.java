@@ -16,10 +16,4 @@ public interface SysPostService {
      */
     Result findSysPostAll();
 
-    /**
-     * 根据部门id获取对应岗位
-     * @param departmentId
-     * @return
-     */
-    Result findSysPostByDepartmentId(String departmentId);
 }

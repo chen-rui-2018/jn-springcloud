@@ -1,63 +1,69 @@
-package com.jn.system.model;
+package com.jn.system.vo;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import com.jn.system.vo.SysDepartmentPostVO;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 用户
+ *用户实体类
+ *
  * @author： shaobao
- * @date： Created on 2018/11/6 14:00
+ * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUser",description = "用户信息")
-public class SysUser implements Serializable {
+public class SysUserVO implements Serializable {
 
-    private static final long serialVersionUID = 5917002469697213234L;
-
-    @ApiModelProperty("id")
+    private static final long serialVersionUID = 3235175375305639033L;
+    /**
+     * id
+     */
     private String id;
-
-    @ApiModelProperty("用户账号")
-    @Pattern(regexp="^[A-Za-z0-9]{6,16}$",message="{用户名只允许6-16位数字及字母}")
+    /**
+     * 用户账号
+     */
     private String account;
-
-    @ApiModelProperty("用户密码")
-    @Pattern(regexp="^[a-zA-Z0-9]{6,16}$",message="{密码只允许6-16位数字及字母}")
+    /**
+     * 用户密码
+     */
     private String password;
-
-    @ApiModelProperty("用户名称")
+    /**
+     * 用户名称
+     */
     private String name;
-
-    @ApiModelProperty("手机号码")
-    @Pattern(regexp="^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
-            message="{手机号码验证出错}")
+    /**
+     * 手机号码
+     */
     private String phone;
-
-    @ApiModelProperty("邮箱")
-    @Pattern(regexp="[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",
-            message="{邮箱验证出错}")
+    /**
+     * 邮箱
+     */
     private String email;
-
-    @ApiModelProperty("创建人")
+    /**
+     * 创建人
+     */
     private String creator;
-
-    @ApiModelProperty("创建时间")
+    /**
+     * 创建时间
+     */
     private Date createTime;
-
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
+    /**
+     * 状态 1:有效 0:无效 -1:删除
+     */
     private String status;
 
-    public SysUser() {
+    /**
+     * 部门岗位集合
+     */
+    private List<SysDepartmentPostVO> sysDepartmentPostVOList;
+
+    public SysUserVO() {
     }
 
-    public SysUser(String id, String account, String password, String name, String phone,
-                   String email, String creator, Date createTime, String status) {
+    public SysUserVO(String id, String account, String password, String name, String phone, String email,
+                     String creator, Date createTime, String status, List<SysDepartmentPostVO> sysDepartmentPostVOList) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -67,10 +73,19 @@ public class SysUser implements Serializable {
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
+        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
+    }
+
+    public List<SysDepartmentPostVO> getSysDepartmentPostVOList() {
+        return sysDepartmentPostVOList;
+    }
+
+    public void setSysDepartmentPostVOList(List<SysDepartmentPostVO> sysDepartmentPostVOList) {
+        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
     }
 
     public String getId() {
@@ -147,7 +162,7 @@ public class SysUser implements Serializable {
 
     @Override
     public String toString() {
-        return "SysUser{" +
+        return "SysUserVO{" +
                 "id='" + id + '\'' +
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
@@ -157,6 +172,7 @@ public class SysUser implements Serializable {
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", sysDepartmentPostVOList=" + sysDepartmentPostVOList +
                 '}';
     }
 }

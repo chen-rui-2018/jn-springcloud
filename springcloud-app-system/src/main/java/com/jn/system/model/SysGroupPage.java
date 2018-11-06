@@ -1,5 +1,6 @@
 package com.jn.system.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -7,45 +8,43 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户组角色实体类
- *
  * @author： shaobao
- * @date： Created on 2018/11/5 9:52
+ * @date： Created on 2018/11/5 16:49
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysGroupRole",description = "用户组角色实体")
-public class SysGroupRole implements Serializable {
-    private static final long serialVersionUID = 2429600148501298066L;
+@ApiModel(value = "SysGroupPage",description = "用户组分页及查询条件")
+public class SysGroupPage extends Page implements Serializable {
 
+    private static final long serialVersionUID = -2672024922368575734L;
     @ApiModelProperty("id")
     private String id;
 
-    @ApiModelProperty("角色id")
-    private String roleId;
-
-    @ApiModelProperty("用户组id")
-    private String userGroupId;
-
-    @ApiModelProperty("创建人")
-    private String creator;
+    @ApiModelProperty("用户组名称")
+    private String groupName;
 
     @ApiModelProperty("创建时间")
     private Date createTime;
 
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
+    @ApiModelProperty("创建状态")
     private String status;
 
-    public SysGroupRole() {
+    @ApiModelProperty("创建人")
+    private String creator;
+
+    public SysGroupPage() {
     }
 
-    public SysGroupRole(String id, String roleId, String userGroupId, String creator, Date createTime, String status) {
+    public SysGroupPage(String id, String groupName, Date createTime, String status, String creator) {
         this.id = id;
-        this.roleId = roleId;
-        this.userGroupId = userGroupId;
-        this.creator = creator;
+        this.groupName = groupName;
         this.createTime = createTime;
         this.status = status;
+        this.creator = creator;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getId() {
@@ -56,20 +55,12 @@ public class SysGroupRole implements Serializable {
         this.id = id;
     }
 
-    public String getRoleId() {
-        return roleId;
+    public String getGroupName() {
+        return groupName;
     }
 
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getUserGroupId() {
-        return userGroupId;
-    }
-
-    public void setUserGroupId(String userGroupId) {
-        this.userGroupId = userGroupId;
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     public Date getCreateTime() {
@@ -98,13 +89,12 @@ public class SysGroupRole implements Serializable {
 
     @Override
     public String toString() {
-        return "SysGroupRole{" +
+        return "SysGroupPage{" +
                 "id='" + id + '\'' +
-                ", roleId='" + roleId + '\'' +
-                ", userGroupId='" + userGroupId + '\'' +
-                ", creator='" + creator + '\'' +
+                ", groupName='" + groupName + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", creator='" + creator + '\'' +
                 '}';
     }
 }

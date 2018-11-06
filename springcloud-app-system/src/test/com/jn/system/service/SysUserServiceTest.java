@@ -2,10 +2,14 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.SysUser;
+import com.jn.system.service.impl.SysUserServiceImpl;
+import com.jn.system.vo.SysUserVO;
 import com.jn.system.model.SysUserDepartmentPost;
-import com.jn.system.model.SysUserQuery;
+import com.jn.system.model.SysUserPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -19,14 +23,17 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
 public class SysUserServiceTest {
+
+    private Logger logger = LoggerFactory.getLogger(SysUserServiceTest.class);
+
     @Autowired
     private SysUserService sysUserService;
 
     @Test
     public void addSysUserTest() {
         SysUser sysUser = new SysUser();
-        sysUser.setAccount("datang07");
-        sysUser.setEmail("123345678@163.com");
+        sysUser.setAccount("datang11");
+        sysUser.setEmail("1233458@163.com");
         sysUser.setName("大唐");
         sysUser.setPhone("12345678998");
         sysUser.setStatus("1");
@@ -35,11 +42,11 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysUserByPageTest() {
-        SysUserQuery sysUserUserQuery = new SysUserQuery();
+        SysUserPage sysUserUserQuery = new SysUserPage();
         sysUserUserQuery.setPage(1);
         sysUserUserQuery.setRows(10);
         Result result = sysUserService.findSysUserByPage(sysUserUserQuery);
-        System.out.println(result);
+        logger.info("result",result);
     }
 
     @Test
@@ -51,16 +58,16 @@ public class SysUserServiceTest {
     @Test
     public void updateSysUserTest() {
         SysUser sysUser = new SysUser();
-        sysUser.setId("u002");
-        sysUser.setPassword("45677");
-        sysUser.setName("大唐006");
+        sysUser.setId("10000");
+        sysUser.setPassword("1gfddfgsdlg");
+        sysUser.setName("管理员3");
         sysUserService.updateSysUser(sysUser);
     }
 
     @Test
     public void findSysGroupByUserIdTest() {
         Result result = sysUserService.findSysGroupByUserId("u002");
-        System.out.println(result);
+        logger.info("result",result);
     }
 
     @Test
@@ -72,7 +79,7 @@ public class SysUserServiceTest {
     @Test
     public void findSysRoleByUserIdTest() {
         Result result = sysUserService.findSysRoleByUserId("u002");
-        System.out.println(result);
+        logger.info("result",result);
     }
 
     @Test
@@ -84,7 +91,7 @@ public class SysUserServiceTest {
     @Test
     public void findDepartmentandPostByUserIdTest() {
         Result result = sysUserService.findDepartmentandPostByUserId("u002");
-        System.out.println(result);
+        logger.info("result",result);
     }
 
     @Test
@@ -99,7 +106,8 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysUserByIdTest() {
-        Result result = sysUserService.findSysUserById("u002");
-        System.out.println(result);
+        Result result = sysUserService.findSysUserById("10000");
+        logger.info("result",result);
     }
+
 }

@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 import com.jn.system.model.*;
+import com.jn.system.vo.SysUserVO;
 
 import java.util.List;
 
@@ -22,17 +23,17 @@ public interface SysUserMapper {
 
     /**
      * 当按部门查询用户时
-     * @param userSysUserQuery
+     * @param userSysUserPage
      * @return
      */
-    List<SysUser> findSysUserByPageAndOption(SysUserQuery userSysUserQuery);
+    List<SysUserVO> findSysUserByPageAndOption(SysUserPage userSysUserPage);
 
     /**
      * 当查询部门的条件为空时的查询方法
-     * @param userSysUserQuery
+     * @param userSysUserPage
      * @return
      */
-    List<SysUser> findSysUserByPage(SysUserQuery userSysUserQuery);
+    List<SysUserVO> findSysUserByPage(SysUserPage userSysUserPage);
 
     /**
      * 删除用户
@@ -42,15 +43,15 @@ public interface SysUserMapper {
 
     /**
      * 更新用户
-     * @param sysUser
+     * @param sysUserVO
      */
-    void updateSysUser(SysUser sysUser);
+    void updateSysUser(SysUserVO sysUserVO);
 
     /**
      * 往用户中添加用户组
-     * @param sysUserGroup
+     * @param sysGroupUser
      */
-    void saveSysGroupToSysUser(SysUserGroup sysUserGroup);
+    void saveSysGroupToSysUser(SysGroupUser sysGroupUser);
 
     /**
      * 清除用户组中已经存在的用户组
@@ -87,5 +88,5 @@ public interface SysUserMapper {
      * @param id
      * @return
      */
-    SysUser findSysUserById(String id);
+    SysUserVO findSysUserById(String id);
 }

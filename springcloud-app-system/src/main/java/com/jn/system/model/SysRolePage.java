@@ -16,7 +16,6 @@ import java.sql.Timestamp;
  */
 public class SysRolePage extends Page implements Serializable {
 
-
     private static final long serialVersionUID = -514084002440259994L;
 
     private String id;

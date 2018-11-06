@@ -1,137 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysGroupMapper">
-        <resultMap id="BaseResultMap" type="com.jn.system.model.SysGroup">
-                <id column="id" jdbcType="VARCHAR" property="id"/>
-                <result property="creator" jdbcType="VARCHAR" column="creator"/>
-                <result column="group_name" jdbcType="VARCHAR" property="groupName"/>
-                <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-                <result column="status" jdbcType="CHAR" property="status"/>
 
-            <collection  property="sysRoles" ofType="com.jn.system.model.SysRole" >
-                <id property="id" column="rid"/>
-                <result property="role_name" column="roleName" jdbcType="VARCHAR"/>
-                <result property="creator" column="roleCreator" jdbcType="VARCHAR"/>
-                <result property="createTime" column="roleCreateTime" jdbcType="TIMESTAMP"/>
-                <result property="status" column="roleStatus" jdbcType="VARCHAR"/>
-            </collection>
-
-            <collection  property="sysUsers" ofType="com.jn.system.model.SysUser" >
-                <id property="id" column="uid"/>
-                <result property="account" column="account" jdbcType="VARCHAR"/>
-                <result property="password" column="password" jdbcType="VARCHAR"/>
-                <result property="name" column="name" jdbcType="VARCHAR"/>
-                <result property="phone" column="phone" jdbcType="VARCHAR"/>
-                <result property="email" column="email" jdbcType="VARCHAR"/>
-                <result property="creator" column="userCreator" jdbcType="VARCHAR"/>
-                <result property="createTime" column="userCreateTime" jdbcType="TIMESTAMP"/>
-                <result property="status" column="userStatus" jdbcType="VARCHAR"/>
-            </collection>
-
-        </resultMap>
-
-        <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
             id, group_name as groupName,creator, create_time as createTime, status
-        </sql>
+    </sql>
 
-        <select id="findSysGroupBypage" resultMap="BaseResultMap">
-            select distinct
-              tsg.id,
-              tsg.group_name,
-              tsg.create_time,
-              tsg.status,
-              tsg.creator,
+    <!--查询所有用户组-->
+    <select id="findSysGroupAll" resultType="com.jn.system.vo.SysGroupVO"
+            parameterType="com.jn.system.model.SysGroupPage">
+        select
+        <include refid="Base_Column_List"/>
+          from tb_sys_group
+        where  `status` != '-1'
+            <if test="groupName != null and groupName != ''">
+                and group_name like CONCAT('%', #{groupName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="createTime != null and createTime != ''">
+                and create_time = #{createTime,jdbcType=TIMESTAMP}
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="creator != null and creator != ''">
+                and creator = #{creator,jdbcType=VARCHAR}
+            </if>
+    </select>
 
-              tsu.id as uid,
-              tsu.account,
-              tsu.password,
-              tsu.name,
-              tsu.phone,
-              tsu.email,
-              tsu.creator as userCreator,
-              tsu.create_time as userCreateTime,
-              tsu.status as userStatus,
-              
-              tsr.id as rid,
-              tsr.role_name,
-              tsr.create_time as roleCreateTime ,
-              tsr.status as roleStatus,
-              tsg.creator as roleCreator
+    <select id="findGroupAll" resultType="com.jn.system.entity.TbSysGroup">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_group
+    </select>
 
-            from tb_sys_group tsg
-            left join tb_sys_user_group tsug on tsg.id = tsug.group_id
-            left join tb_sys_user tsu on tsu.id = tsug.user_id
-            left join tb_sys_group_role tsgr on tsg.id = tsgr.user_group_id
-            left join tb_sys_role tsr on tsgr.role_id = tsr.id
-            where tsg.`status` = '1'
-            and tsug.`status` = '1'
-            and tsu.`status` = '1'
-            and tsgr.`status` = '1'
-            and tsr.`status` = '1'
-        </select>
-        <!--查询所有用户组-->
-        <select id="findSysGroupAll" resultType="com.jn.system.model.SysGroup">
-            select
-            <include refid="Base_Column_List"/>
-            from tb_sys_group
-            where `status` = '1'
-        </select>
-        <!--通过用户id获取用户组-->
-        <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.model.SysGroup">
-            select
-              <include refid="Base_Column_List"/>
-            from tb_sys_group
-                where id in
-                (select tsug.group_id
-                  from
-                tb_sys_user_group tsug
-                join tb_sys_user tsu
-                on tsug.user_id = tsu.id
-                where tsu.id = #{id}
-                and tsug.`status` = '1')
-        </select>
-        <!--添加用户组-->
-        <insert id="addSysGroup" parameterType="com.jn.system.model.SysGroup">
+    <!--通过用户id获取用户组-->
+    <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.entity.TbSysGroup">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_group
+        where id in
+        (select tsug.group_id
+        from
+        tb_sys_user_group tsug
+        join tb_sys_user tsu
+        on tsug.user_id = tsu.id
+        where tsu.id = #{id}
+        and tsug.`status` = '1')
+    </select>
+    <!--添加用户组-->
+    <insert id="addSysGroup" parameterType="com.jn.system.entity.TbSysGroup">
                 insert into tb_sys_group (id, group_name, create_time,creator,
                   status)
                 values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
                 #{creator,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
         </insert>
 
-        <!--逻辑删除用户组-->
-        <update id="deleSysGroup" parameterType="java.lang.String">
+    <!--逻辑删除用户组-->
+    <update id="deleSysGroup" parameterType="java.lang.String">
             update tb_sys_group
             set `status` = '-1'
             where id = #{id,jdbcType=VARCHAR}
         </update>
 
-        <!--更新用户组信息-->
-        <update id="updateSysGroup" parameterType="com.jn.system.model.SysGroup">
-            update tb_sys_group
-            <set >
-                <if test="groupName != null" >
-                    group_name = #{groupName,jdbcType=VARCHAR},
-                </if>
-                <if test="createTime != null" >
-                    create_time = #{createTime,jdbcType=TIMESTAMP},
-                </if>
-                <if test="status != null" >
-                    status = #{status,jdbcType=VARCHAR},
-                </if>
-                <if test="creator != null" >
-                    creator = #{creator,jdbcType=VARCHAR}
-                </if>
-            </set>
-            where id = #{id,jdbcType=VARCHAR}
-        </update>
+    <!--更新用户组信息-->
+    <update id="updateSysGroup" parameterType="com.jn.system.entity.TbSysGroup">
+        update tb_sys_group
+        <set>
+            <if test="groupName != null">
+                group_name = #{groupName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=VARCHAR}
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
 
-      <!--根据用户组id获取用户组信息-->
-        <select id="findSysGroupById" parameterType="java.lang.String" resultType="com.jn.system.model.SysGroup">
-            select
-            <include refid="Base_Column_List"/>
-            from tb_sys_group
-            where id = #{id,jdbcType=VARCHAR}
-        </select>
-
+    <!--根据用户组id获取用户组信息-->
+    <select id="findSysGroupById" parameterType="java.lang.String" resultType="com.jn.system.entity.TbSysGroup">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_sys_group
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

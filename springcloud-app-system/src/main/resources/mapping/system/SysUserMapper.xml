@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysUserMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.model.SysUser">
+    <resultMap id="BaseResultMap" type="com.jn.system.vo.SysUserVO">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="account" jdbcType="VARCHAR" property="account"/>
         <result column="password" jdbcType="VARCHAR" property="password"/>
@@ -12,7 +12,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
 
-        <collection  property="sysDepartmentPostVOList" ofType="com.jn.system.vo.SysDepartmentPostVO" >
+        <collection  property="sysDepartmentPostVOList" ofType="com.jn.system.vo.SysDepartmentPostVO">
             <id property="id" column="dpid" jdbcType="VARCHAR"/>
             <result property="departmentId" column="did" jdbcType="VARCHAR"/>
             <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
@@ -33,7 +33,7 @@
     </sql>
 
     <sql id="Column_list">
-                    tsu.id,
+            tsu.id,
             tsu.account,
             tsu.`password`,
             tsu.`name`,
@@ -59,7 +59,7 @@
             tsudp.id as dpid
     </sql>
 
-    <insert id="addSysUser" parameterType="com.jn.system.model.SysUser" >
+    <insert id="addSysUser" parameterType="com.jn.system.vo.SysUserVO" >
         insert into tb_sys_user (id, account, password,
           name, phone, email,
           creator, create_time, status
@@ -70,7 +70,7 @@
           )
     </insert>
 
-    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.SysUserQuery" resultMap="BaseResultMap">
+    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.SysUserPage" resultMap="BaseResultMap">
         select distinct
         <include refid="Column_list"/>
           from tb_sys_user tsu
@@ -91,17 +91,17 @@
                 <if test="id != null and id != ''">
                    and tsu.id = #{id,jdbcType=VARCHAR}
                 </if>
-                <if test="udpStatus != null and udpStatus != ''">
-                   and tsudp.`status` = #{udpStatus,jdbcType=VARCHAR}
+                <if test="departmentPostStatus != null and departmentPostStatus != ''">
+                   and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
                 </if>
                 <if test="isDefault != null and isDefault != ''">
-                    and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
+                   and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
                 </if>
             </where>
              order by tsu.create_time desc
     </select>
 
-    <select id="findSysUserByPage" resultType="com.jn.system.model.SysUser" parameterType="com.jn.system.model.SysUserQuery">
+    <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO" parameterType="com.jn.system.model.SysUserPage">
         select distinct
         <include refid="Base_Column_List"/>
         from tb_sys_user
@@ -121,7 +121,7 @@
         where id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <update id="updateSysUser" parameterType="com.jn.system.model.SysUser">
+    <update id="updateSysUser" parameterType="com.jn.system.vo.SysUserVO">
             update tb_sys_user
             <set >
                 <if test="account != null" >
@@ -160,7 +160,7 @@
     </update>
 
     <!--为用户添加用户组-->
-    <insert id="saveSysGroupToSysUser" parameterType="com.jn.system.model.SysUserGroup">
+    <insert id="saveSysGroupToSysUser" parameterType="com.jn.system.model.SysGroupUser">
         insert into tb_sys_user_group (id, group_id,creator, user_id,
          create_time, status)
         values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR},
@@ -202,7 +202,7 @@
       </insert>
 
     <!--根据用户id返回用户信息-->
-    <select id="findSysUserById" parameterType="java.lang.String" resultType="com.jn.system.model.SysUser">
+    <select id="findSysUserById" parameterType="java.lang.String" resultType="com.jn.system.vo.SysUserVO">
         select
         <include refid="Base_Column_List"/>
         from tb_sys_user

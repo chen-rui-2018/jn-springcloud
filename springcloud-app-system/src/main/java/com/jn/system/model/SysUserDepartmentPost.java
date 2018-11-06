@@ -1,5 +1,8 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,39 +14,32 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
+@ApiModel(value = "SysUserDepartmentPost",description = "用户部门岗位实体")
 public class SysUserDepartmentPost implements Serializable {
     private static final long serialVersionUID = -7989897535661328826L;
-    /**
-     * id
-     */
+
+    @ApiModelProperty("id")
     private String id;
-    /**
-     * 用户id
-     */
+
+    @ApiModelProperty("用户id")
     private String userId;
-    /**
-     * 部门id
-     */
+
+    @ApiModelProperty("部门id")
     private String departmentId;
-    /**
-     * 岗位id
-     */
+
+    @ApiModelProperty("岗位id")
     private String postId;
-    /**
-     * 是否默认
-     */
+
+    @ApiModelProperty("是否默认")
     private String isDefault;
-    /**
-     * 创造者
-     */
+
+    @ApiModelProperty("创建人")
     private String creator;
-    /**
-     * 创建时间
-     */
+
+    @ApiModelProperty("创建时间")
     private Date createTime;
-    /**
-     * 状态 1:有效 0:无效 -1删除
-     */
+
+    @ApiModelProperty("状态 1有效 0无效 -1删除")
     private String status;
 
     public SysUserDepartmentPost() {

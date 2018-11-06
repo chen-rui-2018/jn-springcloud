@@ -2,13 +2,15 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysUserQuery;
-import com.jn.system.service.SysUserService;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserPage;
+import com.jn.system.service.SysUserService;
 import com.jn.system.model.SysUserDepartmentPost;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,44 +31,27 @@ public class SysUserController extends BaseController{
     @Autowired
     private SysUserService sysUserService;
 
-    /**
-     * 添加用户
-     * @param sysUser
-     */
     @ApiOperation(value = "添加用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value ="/addSysUser")
-    public Result addSysUser(SysUser sysUser){
+    public Result addSysUser(@Validated @RequestBody SysUser sysUser){
         sysUserService.addSysUser(sysUser);
         return new Result();
     }
 
-    /**
-     * 查询用户
-     * @param userSysUserQuery
-     * @return
-     */
-    @ApiOperation(value = "查询用户",httpMethod = "POST",response = Result.class)
+    @ApiOperation(value = "分页条件查询用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(SysUserQuery userSysUserQuery){
-        return sysUserService.findSysUserByPage(userSysUserQuery);
+    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage){
+        return sysUserService.findSysUserByPage(userSysUserPage);
     }
 
-    /**
-     * 根据用户id返回用户信息
-     * @param id
-     * @return
-     */
+
     @ApiOperation(value = "根据用户id返回用户信息",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysUserById")
     public Result findSysUserById(String id){
         return sysUserService.findSysUserById(id);
     }
 
-    /**
-     * 删除用户
-     * @param ids
-     * @return
-     */
+
     @ApiOperation(value = "删除用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
     public Result deleteSysUser(String[] ids){
@@ -74,34 +59,22 @@ public class SysUserController extends BaseController{
         return new Result();
     }
 
-    /**
-     * 更新用户
-     * @param sysUser
-     * @return
-     */
+
     @ApiOperation(value = "更新用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/updateSysUser")
-    public Result updateSysUser(SysUser sysUser){
+    public Result updateSysUser(@Validated @RequestBody SysUser sysUser){
         sysUserService.updateSysUser(sysUser);
         return new Result();
     }
 
-    /**
-     * 根据用户id获取用户已经存在的用户组及其他用户组
-     * @return
-     */
+
     @ApiOperation(value = "根据用户id获取用户已经存在的用户组及其他用户组",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
     public Result findSysGroupByUserId(String id){
         return sysUserService.findSysGroupByUserId(id);
     }
 
-    /**
-     * 添加用户组到用户
-     * @param groupIds 用户组id
-     * @param userId 用户id
-     * @return
-     */
+
     @ApiOperation(value = "添加用户组到用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
     public Result saveSysGroupToSysUser(String[] groupIds,String userId){
@@ -109,22 +82,14 @@ public class SysUserController extends BaseController{
         return new Result();
     }
 
-    /**
-     * 根据用户id获取用户具有角色及其他角色
-     * @return
-     */
+
     @ApiOperation(value = "根据用户id获取用户具有角色及其他角色",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(String id){
         return sysUserService.findSysRoleByUserId(id);
     }
 
-    /**
-     * 为用户添加角色权限
-     * @param roleIds
-     * @param userId
-     * @return
-     */
+
     @ApiOperation(value = "为用户添加角色权限",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
     public Result saveSysRoleToSysUser(String[] roleIds,String userId){
@@ -132,11 +97,7 @@ public class SysUserController extends BaseController{
         return new Result();
     }
 
-    /**
-     * 根据用户id查询用户已经具有的岗位及用户信息
-     * @param userId
-     * @return
-     */
+
     @ApiOperation(value = "根据用户id查询用户已经具有的岗位及用户信息",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findDepartmentandPostByUserId")
     public Result findDepartmentandPostByUserId(String userId){
@@ -156,7 +117,5 @@ public class SysUserController extends BaseController{
         sysUserService.saveDepartmentandPostOfUser(sysUserId,sysUserDepartmentPostlist);
         return new Result();
     }
-
-
 
 }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysGroupUserMapper">
+	<sql id="Base_Column_list">
+			tsu.id,
+			tsu.account,
+			tsu.`password`,
+			tsu.`name`,
+			tsu.phone,
+			tsu.email,
+			tsu.creator,
+			tsu.create_time as createTime,
+			tsu.`status`
+	</sql>
+
+    <select id="findUserByGroupId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysUserVO">
+	   select
+			<include refid="Base_Column_list"/>
+		from tb_sys_user_group tsug join tb_sys_user tsu
+			on tsug.user_id = tsu.id
+		where tsug.group_id = #{id,jdbcType=VARCHAR}
+			and tsug.`status` = '1'
+			and tsu.`status` = '1'
+    </select>
+
+    <select id="findOtherUserByPage" parameterType="com.jn.system.model.SysGroupUserPage"
+            resultType="com.jn.system.vo.SysUserVO">
+  		select
+		<include refid="Base_Column_list"/>
+		from tb_sys_user tsu
+		where
+		`status` = '1'
+		<if test="groupId != null and groupId != ''">
+			and tsu.id not in
+			(select
+			user_id
+			from tb_sys_user_group
+			where `status` = '1'
+			and group_id = #{groupId,jdbcType=VARCHAR} )
+		</if>
+		<if test="name  != null and name != ''">
+			and tsu.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+
+	<update id="deleteUserOfGroup" parameterType="java.lang.String">
+		UPDATE tb_sys_user_group set `status` = '-1' where group_id = #{groupId,jdbcType=VARCHAR}
+	</update>
+
+	<insert id="insertSysGroupUserBatch" parameterType="java.util.List">
+		insert into  tb_sys_user_group(id,group_id,user_id,creator,create_time,status) values
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.id,jdbcType=BIGINT},
+			#{item.groupId,jdbcType=VARCHAR},
+			#{item.userId,jdbcType=VARCHAR},
+			#{item.creator,jdbcType=VARCHAR},
+			#{item.createTime,jdbcType=VARCHAR},
+			#{item.status,jdbcType=VARCHAR})
+		</foreach>
+	</insert>
+</mapper>

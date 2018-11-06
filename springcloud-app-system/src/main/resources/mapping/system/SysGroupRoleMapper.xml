@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysGroupRoleMapper">
+    <select id="findRoleByGroupId" parameterType="java.lang.String" resultType="com.jn.system.model.SysRole">
+        SELECT
+            r.id,
+            r.role_name as roleName ,
+            r.creator,
+            r.create_time as createTime,
+            r.status
+        FROM tb_sys_group_role gr join tb_sys_role r
+            on gr.role_id = r.id
+        where gr.user_group_id = #{id,jdbcType=VARCHAR}
+            and gr.`status` = '1'
+            and r.`status` = '1'
+    </select>
+
+    <update id="deteSysGroupRoleByGroupId" parameterType="java.lang.String">
+        update tb_sys_group_role
+        set `status` = '-1'
+        where user_group_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertSysGroupRoleBatch" parameterType="java.util.List">
+        insert into tb_sys_group_role(id,role_id,user_group_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=VARCHAR},
+            #{item.userGroupId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=VARCHAR},
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+</mapper>

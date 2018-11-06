@@ -196,7 +196,6 @@ public class SysRoleServiceImpl implements SysRoleService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SysUserGroupRole> sysUserGroupRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserGroupRoleAdd.getUserGroupId().length; i++) {
-
             SysUserGroupRole sysUserGroupRole = new SysUserGroupRole();
             sysUserGroupRole.setId(UUID.randomUUID().toString());
             sysUserGroupRole.setStatus(sysUserGroupRoleAdd.getStatus());

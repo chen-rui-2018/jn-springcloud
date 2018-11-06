@@ -1,6 +1,8 @@
 package com.jn.system.model;
 
 import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
@@ -12,44 +14,52 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-public class SysUserQuery extends Page implements Serializable {
+@ApiModel(value = "SysUserPage",description = "用户条件分页查询类")
+public class SysUserPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
-    /**
-     * 根据id查询
-     */
+
+    @ApiModelProperty("id")
     private String id;
-    /**
-     * 查询名称条件
-     */
+
+    @ApiModelProperty("名称")
     private String name;
-    /**
-     * 状态查询条件
-     */
+
+    @ApiModelProperty("状态")
     private String status;
-    /**
-     * 部门查询id
-     */
+
+    @ApiModelProperty("部门id")
     private String departmentId;
-    /**
-     * 部门岗位状态
-     */
-    private String udpStatus;
-    /**
-     * 是否默认
-     */
+
+    @ApiModelProperty("部门岗位状态")
+    private String departmentPostStatus;
+
+    @ApiModelProperty("是否默认")
     private String isDefault;
 
-    public SysUserQuery() {
+    public SysUserPage() {
     }
 
-    public SysUserQuery(String id, String name, String status, String departmentId, String udpStatus, String isDefault) {
+    public SysUserPage(String id, String name, String status, String departmentId,
+                       String departmentPostStatus, String isDefault) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.departmentId = departmentId;
-        this.udpStatus = udpStatus;
+        this.departmentPostStatus = departmentPostStatus;
         this.isDefault = isDefault;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -76,20 +86,12 @@ public class SysUserQuery extends Page implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public String getId() {
-        return id;
+    public String getDepartmentPostStatus() {
+        return departmentPostStatus;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUdpStatus() {
-        return udpStatus;
-    }
-
-    public void setUdpStatus(String udpStatus) {
-        this.udpStatus = udpStatus;
+    public void setDepartmentPostStatus(String departmentPostStatus) {
+        this.departmentPostStatus = departmentPostStatus;
     }
 
     public String getIsDefault() {
@@ -102,12 +104,12 @@ public class SysUserQuery extends Page implements Serializable {
 
     @Override
     public String toString() {
-        return "SysUserQuery{" +
+        return "SysUserPage{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", departmentId='" + departmentId + '\'' +
-                ", udpStatus='" + udpStatus + '\'' +
+                ", departmentPostStatus='" + departmentPostStatus + '\'' +
                 ", isDefault='" + isDefault + '\'' +
                 '}';
     }

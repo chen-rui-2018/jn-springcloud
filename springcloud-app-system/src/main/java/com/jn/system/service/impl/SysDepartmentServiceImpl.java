@@ -2,8 +2,10 @@ package com.jn.system.service.impl;
 
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysDepartmentMapper;
+import com.jn.system.dao.TbSysDepartmentMapper;
+import com.jn.system.entity.TbSysDepartment;
+import com.jn.system.entity.TbSysDepartmentCriteria;
 import com.jn.system.service.SysDepartmentService;
-import com.jn.system.model.SysDepartment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
 
     @Autowired
     private SysDepartmentMapper sysDepartmentMapper;
+    @Autowired
+    private TbSysDepartmentMapper tbSysDepartmentMapper;
 
     /**
      * 查询所有部门
@@ -29,8 +33,11 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @Override
     public Result findSysDepartmentAll() {
         Result result = new Result();
-        List<SysDepartment> sysDepartmentList = sysDepartmentMapper.findSysDepartmentAll();
-        result.setData(sysDepartmentList);
+        TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
+        TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
+        criteria.andStatusEqualTo("1");
+        List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
+        result.setData(tbSysDepartmentList);
         return result;
     }
 }

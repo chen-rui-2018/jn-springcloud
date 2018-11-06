@@ -35,13 +35,4 @@ public class SysPostController extends BaseController{
         return sysPostService.findSysPostAll();
     }
 
-    /**
-     * 根据部门id获取对应岗位
-     * @return
-     */
-    @ApiOperation(value = "根据部门id获取对应岗位",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/findSysPostByDepartmentId")
-    public Result findSysPostByDepartmentId(String departmentId ){
-        return sysPostService.findSysPostByDepartmentId(departmentId);
-    }
 }

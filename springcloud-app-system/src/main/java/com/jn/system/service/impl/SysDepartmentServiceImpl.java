@@ -80,4 +80,10 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         criteria.andIdEqualTo(tbSysDepartment.getId());
         tbSysDepartmentMapper.updateByExampleSelective(tbSysDepartment,tbSysDepartmentCriteria);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void add(TbSysDepartment tbSysDepartment) {
+
+    }
 }

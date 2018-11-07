@@ -34,4 +34,10 @@ public interface SysDepartmentService {
      * @param tbSysDepartment
      */
     void update(TbSysDepartment tbSysDepartment);
+
+    /**
+     * 添加部门信息
+     * @param tbSysDepartment
+     */
+    void add(TbSysDepartment tbSysDepartment);
 }

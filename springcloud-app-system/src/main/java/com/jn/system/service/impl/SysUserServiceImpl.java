@@ -105,14 +105,7 @@ public class SysUserServiceImpl implements SysUserService {
             BeanUtils.copyProperties(userSysUserPage,query);
             getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(query), objects.getTotal());
         }
-
-        //参数回显
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("name", userSysUserPage.getName());
-        map.put("status", userSysUserPage.getStatus());
-        map.put("dapartmentId", userSysUserPage.getDepartmentId());
-        map.put("getEasyUIData", getEasyUIData);
-        return new Result(map);
+        return new Result(getEasyUIData);
     }
 
     /**

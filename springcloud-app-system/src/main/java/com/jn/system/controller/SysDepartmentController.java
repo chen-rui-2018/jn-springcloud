@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,9 +55,16 @@ public class SysDepartmentController extends BaseController {
 
     @ApiOperation(value = "修改部门信息",httpMethod = "POST",response = Result.class)
     @RequestMapping("/update")
-    public Result update(TbSysDepartment tbSysDepartment){
+    public Result update(@Validated @RequestBody TbSysDepartment tbSysDepartment){
         Assert.notNull(tbSysDepartment.getId(),"部门id不能为空");
         sysDepartmentService.update(tbSysDepartment);
+        return new Result();
+    }
+
+    @ApiOperation(value = "添加部门",httpMethod = "POST",response = Result.class)
+    @RequestMapping("/update")
+    public Result add(@Validated @RequestBody TbSysDepartment tbSysDepartment){
+        sysDepartmentService.add(tbSysDepartment);
         return new Result();
     }
 

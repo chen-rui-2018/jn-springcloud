@@ -13,7 +13,7 @@
         <result column="r_roleName" jdbcType="VARCHAR" property="roleName" javaType="java.lang.String"/>
         <result column="r_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
         <result column="r_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-        <collection property="tbRolePermissions" javaType="java.util.List"
+        <collection property="sysRolePermissions" javaType="java.util.List"
                     ofType="com.jn.system.model.SysRolePermission">
             <id column="rp_id" property="id" jdbcType="VARCHAR"/>
             <result column="rp_roleId" property="roleId" jdbcType="VARCHAR"/>
@@ -22,7 +22,7 @@
             <result column="rp_createTime" property="createTime" jdbcType="TIMESTAMP"/>
             <result column="rp_status" property="status" jdbcType="VARCHAR"/>
         </collection>
-        <collection property="tbUserRoles" javaType="java.util.List" ofType="com.jn.system.model.SysUserRole">
+        <collection property="sysUserRoles" javaType="java.util.List" ofType="com.jn.system.model.SysUserRole">
             <id column="ur_id" property="id" jdbcType="VARCHAR"/>
             <result column="ur_roleId" property="roleId" jdbcType="VARCHAR"/>
             <result column="ur_userId" property="userId" jdbcType="VARCHAR"/>
@@ -36,12 +36,6 @@
         id,role_name as roleName ,creator,create_time as createTime,status
     </sql>
 
-    <select id="findSysRoleByid" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_sys_role
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
 
     <select id="findSysRoleAll" resultType="com.jn.system.model.SysRole">
         select
@@ -62,41 +56,6 @@
         on tsur.user_id = tsu.id
         where tsu.id = #{id,jdbcType=VARCHAR}
         and tsur.`status` = '1')
-    </select>
-
-    <insert id="insert" parameterType="com.jn.system.model.SysRole">
-        insert into tb_sys_role (id, role_name,creator,create_time,status)
-        values (#{id,jdbcType=VARCHAR}, #{roleName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, now(), #{status,jdbcType=VARCHAR})
-    </insert>
-
-
-    <update id="deleteByPrimaryKey" parameterType="java.lang.String">
-        update tb_sys_role set  status=-1
-        where id = #{id,jdbcType=VARCHAR}
-    </update>
-
-    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.SysRole">
-        update tb_sys_role
-        <trim prefix="set" suffixOverrides=",">
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
-                role_name=#{roleName,jdbcType=VARCHAR},
-            </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                status=#{status,jdbcType=VARCHAR},
-            </if>
-        </trim>
-        where id=#{id,jdbcType=VARCHAR}
-    </update>
-
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select id, role_name,creator,create_time,status
-        from tb_sys_role
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
-    <select id="selectAll" resultMap="BaseResultMap">
-        select id, role_name,creator,create_time,status
-        from tb_sys_role
     </select>
 
 
@@ -147,23 +106,5 @@
         </foreach>
     </update>
 
-    <select id="selectTbRoleVOByPrimaryKey" parameterType="java.lang.String" resultType="com.jn.system.vo.SysRoleVO">
-        select id, role_name,creator,create_time,status
-        from tb_sys_role
-        where 1=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
-            and id=#{id,jdbcType=VARCHAR}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
-            and role_name=#{roleName,jdbcType=VARCHAR}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creator)">
-            and creator=#{creator,jdbcType=VARCHAR}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and status=#{status,jdbcType=VARCHAR}
-        </if>
-
-    </select>
 
 </mapper>

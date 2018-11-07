@@ -1,12 +1,23 @@
 package com.jn.system.service.impl;
 
 import com.jn.system.dao.SysUserGroupRoleMapper;
+import com.jn.system.dao.TbSysGroupRoleMapper;
+import com.jn.system.entity.TbSysGroupRole;
 import com.jn.system.model.SysUserGroupRole;
+import com.jn.system.model.User;
 import com.jn.system.service.SysUserGroupRoleService;
+import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户组角色service
@@ -18,9 +29,13 @@ import java.util.List;
  */
 @Service
 public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
+    private Logger logger = LoggerFactory.getLogger(SysUserGroupRoleServiceImpl.class);
+
     @Resource
     private SysUserGroupRoleMapper sysUserGroupRoleMapper;
 
+    @Resource
+    private TbSysGroupRoleMapper tbSysGroupRoleMapper;
 
     /**
      * 新增用户组角色
@@ -28,8 +43,16 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param userGroupRole
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertTbUserGroupRole(SysUserGroupRole userGroupRole) {
-        sysUserGroupRoleMapper.insert(userGroupRole);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        userGroupRole.setCreator(user.getId());
+        userGroupRole.setId(UUID.randomUUID().toString());
+        TbSysGroupRole tbSysGroupRole =new TbSysGroupRole();
+        BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
+        tbSysGroupRoleMapper.insert(tbSysGroupRole);
+        logger.info("message={}", "用户组角色,userGroupRoleId=" + userGroupRole.getUserGroupId()+ ",userGroupRoleId=" + userGroupRole.getId()+",roleId="+userGroupRole.getRoleId());
     }
 
     /**
@@ -38,8 +61,13 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param userGroupRole
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateTbUserGroupRole(SysUserGroupRole userGroupRole) {
-        sysUserGroupRoleMapper.updateByPrimaryKey(userGroupRole);
+        TbSysGroupRole tbSysGroupRole =new TbSysGroupRole();
+        BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
+        tbSysGroupRoleMapper.updateByPrimaryKeySelective(tbSysGroupRole);
+        logger.info("message={}", "更新用户组角色,userGroupRoleId=" + userGroupRole.getUserGroupId()+ ",userGroupRoleId=" + userGroupRole.getId()+",roleId="+userGroupRole.getRoleId());
+
     }
 
     /**
@@ -49,8 +77,11 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleByRoleIds(String[] roleIds) {
         sysUserGroupRoleMapper.deleteByRoleIds(roleIds);
+        logger.info("message={}", "根据角色id批量删除用户组角色（逻辑删除）,roleIds=" + Arrays.toString(roleIds));
+
     }
 
     /**
@@ -60,8 +91,10 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleById(String[] ids) {
         sysUserGroupRoleMapper.deleteBy(ids);
+        logger.info("message={}", "根据角色id批量删除用户组角色（逻辑删除）,ids=" + Arrays.toString(ids));
     }
 
     /**
@@ -70,6 +103,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param sysUserGroupRoles
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertTbUserGroupRoleBatch(List<SysUserGroupRole> sysUserGroupRoles) {
         sysUserGroupRoleMapper.insertBatch(sysUserGroupRoles);
     }

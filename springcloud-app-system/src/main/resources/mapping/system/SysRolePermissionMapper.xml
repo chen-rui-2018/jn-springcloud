@@ -9,40 +9,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
         <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
     </resultMap>
-    <insert id="insert" parameterType="com.jn.system.model.SysRolePermission">
-        insert into tb_sys_role_permission (id, role_id,permission_id,creator,create_time,status)
-        values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},#{permissionId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, now(), #{status,jdbcType=VARCHAR})
-    </insert>
 
-
-    <update id="deleteByPrimaryKey" parameterType="java.lang.String">
-        update tb_sys_role_permission  set  status=-1
-        where id = #{id,jdbcType=VARCHAR}
-    </update>
-
-
-    <update id="updateByPrimaryKey" parameterType="com.jn.system.model.SysRolePermission">
-        update tb_sys_role_permission
-        <trim prefix="set" suffixOverrides=",">
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleId)">
-                role_id=#{roleId,jdbcType=VARCHAR},
-            </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(permissionId)">
-                permission_id=#{permissionId,jdbcType=VARCHAR},
-            </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                status=#{status,jdbcType=VARCHAR},
-            </if>
-        </trim>
-        where id=#{id,jdbcType=VARCHAR}
-    </update>
-
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-        select id, role_id,permission_id,creator,create_time,status
-        from tb_sys_role_permission
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
     <select id="selectAll" resultMap="BaseResultMap">
         select id, role_id,permission_id,creator,create_time,status
         from tb_sys_role_permission

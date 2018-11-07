@@ -62,7 +62,7 @@ public class SysDepartmentController extends BaseController {
     }
 
     @ApiOperation(value = "添加部门",httpMethod = "POST",response = Result.class)
-    @RequestMapping("/update")
+    @RequestMapping("/add")
     public Result add(@Validated @RequestBody TbSysDepartment tbSysDepartment){
         sysDepartmentService.add(tbSysDepartment);
         return new Result();

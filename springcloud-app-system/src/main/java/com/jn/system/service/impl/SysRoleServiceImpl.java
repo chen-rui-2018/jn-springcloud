@@ -5,6 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.GetEasyUIData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysRoleMapper;
+import com.jn.system.dao.TbSysRoleMapper;
+import com.jn.system.entity.TbSysRole;
+import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysRolePermissionService;
 import com.jn.system.service.SysRoleService;
@@ -13,6 +16,7 @@ import com.jn.system.service.SysUserRoleService;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,13 +39,11 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     private Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
 
-
-
     @Resource
     private SysRoleMapper sysRoleMapper;
 
-
-
+    @Resource
+    private TbSysRoleMapper tbSysRoleMapper;
 
     @Autowired
     private SysUserRoleService userRoleService;
@@ -73,7 +75,9 @@ public class SysRoleServiceImpl implements SysRoleService {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         role.setCreator(user.getId());
-        sysRoleMapper.insert(role);
+        TbSysRole tbSysRole=new TbSysRole();
+        BeanUtils.copyProperties(role, tbSysRole);
+        tbSysRoleMapper.insert(tbSysRole);
         logger.info("message{}", "新增角色成功！，roleId=" + role.getId());
 
     }
@@ -86,8 +90,10 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRole(SysRole role) {
-        sysRoleMapper.updateByPrimaryKey(role);
-
+        TbSysRole tbSysRole=new TbSysRole();
+        BeanUtils.copyProperties(role, tbSysRole);
+        tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);
+        logger.info("message{}", "修改角色成功！，roleId=" + role.getId());
     }
 
     /**
@@ -135,12 +141,13 @@ public class SysRoleServiceImpl implements SysRoleService {
         for (int i = 0; i < sysUserRoleAdd.getUserId().length; i++) {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setId(UUID.randomUUID().toString());
-            sysUserRole.setStatus(sysUserRoleAdd.getStatus());
+            //状态，默认有效
+            sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
             sysUserRole.setCreator(user.getId());
             sysUserRole.setUserId(sysUserRoleAdd.getUserId()[i]);
             sysUserRole.setRoleId(sysUserRoleAdd.getRoleId());
             sysUserRoleList.add(sysUserRole);
-            logger.info("message={}","添加角色授权用户，roleId="+roleIds.toString()+"userId="+ sysUserRoleAdd.getUserId()[i]);
+            logger.info("message={}","添加角色授权用户，roleId="+Arrays.toString(roleIds)+"userId="+ sysUserRoleAdd.getUserId()[i]);
         }
 
         //插入前删除该角色的所有用户角色数据
@@ -167,12 +174,13 @@ public class SysRoleServiceImpl implements SysRoleService {
         for (int i = 0; i < sysRolePermissionAdd.getPermissionId().length; i++) {
             SysRolePermission sysRolePermission = new SysRolePermission();
             sysRolePermission.setId(UUID.randomUUID().toString());
-            sysRolePermission.setStatus(sysRolePermissionAdd.getStatus());
+            //状态，默认有效
+            sysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getKey());
             sysRolePermission.setCreator(user.getId());
             sysRolePermission.setPermissionId(sysRolePermissionAdd.getPermissionId()[i]);
             sysRolePermission.setRoleId(sysRolePermissionAdd.getRoleId());
             sysRolePermissionList.add(sysRolePermission);
-            logger.info("message={}","添加角色授权权限，roleId="+roleIds.toString()+"userId="+ sysRolePermissionAdd.getPermissionId()[i]);
+            logger.info("message={}","添加角色授权权限，roleId="+Arrays.toString(roleIds)+"userId="+ sysRolePermissionAdd.getPermissionId()[i]);
 
 
         }
@@ -198,12 +206,13 @@ public class SysRoleServiceImpl implements SysRoleService {
         for (int i = 0; i < sysUserGroupRoleAdd.getUserGroupId().length; i++) {
             SysUserGroupRole sysUserGroupRole = new SysUserGroupRole();
             sysUserGroupRole.setId(UUID.randomUUID().toString());
-            sysUserGroupRole.setStatus(sysUserGroupRoleAdd.getStatus());
+            //状态，默认有效
+            sysUserGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
             sysUserGroupRole.setCreator(user.getId());
             sysUserGroupRole.setUserGroupId(sysUserGroupRoleAdd.getUserGroupId()[i]);
             sysUserGroupRole.setRoleId(sysUserGroupRoleAdd.getRoleId());
             sysUserGroupRoleList.add(sysUserGroupRole);
-            logger.info("message={}","添加角色授权用户组，roleId="+roleIds.toString()+"userId="+ sysUserGroupRoleAdd.getUserGroupId()[i]);
+            logger.info("message={}","添加角色授权用户组，roleId="+Arrays.toString(roleIds)+"userId="+ sysUserGroupRoleAdd.getUserGroupId()[i]);
 
         }
         //插入前删除该角色的所有用户组角色数据

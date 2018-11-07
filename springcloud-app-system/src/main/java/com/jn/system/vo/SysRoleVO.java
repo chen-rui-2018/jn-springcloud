@@ -7,7 +7,7 @@ import com.jn.system.model.SysUserRole;
 import com.jn.common.util.enums.EnumUtil;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 /**
  * 角色vo实体
@@ -35,7 +35,7 @@ public class SysRoleVO implements Serializable{
 	 * 创建时间
 	 */
 
-	private Timestamp createTime;
+	private Date createTime;
 	/**
 	 * 角色状态 1：有效，0：无效，-1：删除(默认有效)
 	 */
@@ -72,12 +72,12 @@ public class SysRoleVO implements Serializable{
 		this.roleName = roleName;
 	}
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Timestamp getCreateTime() {
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+	public Date getCreateTime() {
 		return createTime;
 	}
 
-	public void setCreateTime(Timestamp createTime) {
+	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
 

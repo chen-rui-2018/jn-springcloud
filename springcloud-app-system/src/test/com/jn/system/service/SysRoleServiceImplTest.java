@@ -75,7 +75,6 @@ public class SysRoleServiceImplTest {
     public void userRoleAuthorizationTest(){
         SysUserRoleAdd sysUserRoleAdd =new SysUserRoleAdd();
         sysUserRoleAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
-        sysUserRoleAdd.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         String[] userIds={"u001","u002"};
         sysUserRoleAdd.setUserId(userIds);
         tbRoleService.userRoleAuthorization(sysUserRoleAdd);
@@ -88,7 +87,6 @@ public class SysRoleServiceImplTest {
     public void rolePermissionAuthorizationTest(){
         SysRolePermissionAdd sysRolePermissionAdd =new SysRolePermissionAdd();
         sysRolePermissionAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
-        sysRolePermissionAdd.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         String[] permissionIds={"p001","p002"};
         sysRolePermissionAdd.setPermissionId(permissionIds);
         tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd);
@@ -101,7 +99,6 @@ public class SysRoleServiceImplTest {
     public void UserGroupRoleAuthorizationTest(){
         SysUserGroupRoleAdd sysUserGroupRoleAdd =new SysUserGroupRoleAdd();
         sysUserGroupRoleAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
-        sysUserGroupRoleAdd.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         String[] userGroupRole={"ug001","ug002"};
         sysUserGroupRoleAdd.setUserGroupId(userGroupRole);
         tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd);

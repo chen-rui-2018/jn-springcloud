@@ -16,41 +16,12 @@ import java.util.List;
  */
 public interface SysUserRoleMapper {
 
-    /**
-     * 根据主键删除用户角色
-     * @param id
-     * @return
-     */
-    int deleteByPrimaryKey(String id);
 
-    /**
-     * 新增用户角色
-     * @param role
-     * @return
-     */
-    int insert(SysUserRole role);
-    /**
-     * 查询所有权限列表
-     * @return
-     */
-    List<SysUserRole> selectAll();
-    /**
-     * 根据主键查询用户角色
-     * @param id
-     * @return
-     */
-    SysUserRole selectByPrimaryKey(String id);
-    /**
-     * 根据主键更新用户角色
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(SysUserRole record);
     /**
      * 批量删除权限
      * @param id
      */
-    void deleteBy(String[] id);
+    void deleteByIds(String[] id);
     /**
      * 根据角色id删除用户角色
      * @param id

@@ -1,6 +1,7 @@
 package com.jn.system.model;
 
 import com.jn.system.enums.SysStatusEnums;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
@@ -16,11 +17,11 @@ public class SysRolePermissionAdd implements Serializable {
 
     private static final long serialVersionUID = -5110778698071514990L;
 
+    @ApiModelProperty(value = "权限id数组" )
     private String[] permissionId;
 
+    @ApiModelProperty(value = "角色id" )
     private String roleId;
-
-    private String status=SysStatusEnums.EFFECTIVE.getKey();
 
     public String[] getPermissionId() {
         return permissionId;
@@ -38,11 +39,4 @@ public class SysRolePermissionAdd implements Serializable {
         this.roleId = roleId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

@@ -42,16 +42,7 @@ public class SysMenuResourcesAdd implements Serializable {
     @ApiModelProperty(value = "功能路径" )
     private String resourcesUrl;
 
-    /**
-     * 创建人
-     */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
@@ -91,21 +82,6 @@ public class SysMenuResourcesAdd implements Serializable {
         this.resourcesUrl = resourcesUrl;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 
     public String getStatus() {
         return status;

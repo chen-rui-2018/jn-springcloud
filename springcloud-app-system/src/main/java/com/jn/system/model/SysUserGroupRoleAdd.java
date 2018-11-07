@@ -19,8 +19,6 @@ public class SysUserGroupRoleAdd implements Serializable {
 
     private String roleId;
 
-    private String status=SysStatusEnums.EFFECTIVE.getKey();
-
     public String[] getUserGroupId() {
         return userGroupId;
     }
@@ -31,14 +29,6 @@ public class SysUserGroupRoleAdd implements Serializable {
 
     public void setRoleId(String roleId) {
         this.roleId = roleId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public void setUserGroupId(String[] userGroupId) {

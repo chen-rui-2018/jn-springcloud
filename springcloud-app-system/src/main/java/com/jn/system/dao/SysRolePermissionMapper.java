@@ -14,19 +14,7 @@ import java.util.List;
  */
 public interface SysRolePermissionMapper {
 
-    /**
-     * 根据主键删除角色权限
-     * @param id
-     * @return
-     */
-    int deleteByPrimaryKey(String id);
 
-    /**
-     * 新增角色权限
-     * @param role
-     * @return
-     */
-    int insert(SysRolePermission role);
 
     /**
      * 查询所有权限列表
@@ -34,19 +22,6 @@ public interface SysRolePermissionMapper {
      */
     List<SysRolePermission> selectAll();
 
-    /**
-     * 根据主键查询角色权限
-     * @param id
-     * @return
-     */
-    SysRolePermission selectByPrimaryKey(String id);
-
-    /**
-     * 根据主键更新角色权限
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(SysRolePermission record);
 
     /**
      * 批量删除权限

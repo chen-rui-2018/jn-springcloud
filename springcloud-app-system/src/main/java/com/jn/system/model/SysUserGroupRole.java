@@ -3,7 +3,7 @@ package com.jn.system.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 用户组角色关系
@@ -33,7 +33,7 @@ public class SysUserGroupRole implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
@@ -71,12 +71,12 @@ public class SysUserGroupRole implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Timestamp getCreateTime() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

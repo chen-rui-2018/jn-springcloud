@@ -20,8 +20,6 @@ public class SysUserRoleAdd implements Serializable {
 
     private String roleId;
 
-    private String status=SysStatusEnums.EFFECTIVE.getKey();
-
     public String[] getUserId() {
         return userId;
     }
@@ -38,11 +36,4 @@ public class SysUserRoleAdd implements Serializable {
         this.roleId = roleId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
 }

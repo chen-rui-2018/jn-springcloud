@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -16,7 +17,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-
+@ApiModel(value = "SysMenu" ,description = "菜单信息")
 public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 3668352539116946388L;

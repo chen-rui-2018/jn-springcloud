@@ -1,5 +1,6 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysMenuResourcesAdd" ,description = "菜单添加功能实体")
 public class SysMenuResourcesAdd implements Serializable {
 
     private static final long serialVersionUID = -6923429557226417911L;

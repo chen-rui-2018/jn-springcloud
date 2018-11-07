@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysMenuPage" ,description = "菜单分页实体")
 public class SysMenuPage extends Page implements Serializable {
 
 

@@ -1,6 +1,7 @@
 package com.jn.system.model;
 
 import com.jn.system.enums.SysStatusEnums;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysRolePermissionAdd", description = "角色分配权限实体")
 public class SysRolePermissionAdd implements Serializable {
 
     private static final long serialVersionUID = -5110778698071514990L;

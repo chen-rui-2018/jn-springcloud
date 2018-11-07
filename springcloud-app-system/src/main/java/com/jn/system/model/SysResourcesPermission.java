@@ -1,5 +1,8 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,32 +14,39 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysResourcesPermission" ,description = "功能分页实体")
 public class SysResourcesPermission implements Serializable {
     private static final long serialVersionUID = -1818556420963076451L;
 
+    @ApiModelProperty(value = "id" )
     private String id;
 
     /**
      * 权限id
      */
+    @ApiModelProperty(value = "权限id" )
     private String permissionId;
 
     /**
      * 资源id
      */
+    @ApiModelProperty(value = "资源id" )
     private String resourcesId;
 
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人" )
     private String creator;
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间" )
     private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
 
     public String getId() {

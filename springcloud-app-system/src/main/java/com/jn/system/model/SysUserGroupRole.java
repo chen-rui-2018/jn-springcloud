@@ -1,6 +1,8 @@
 package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,30 +15,37 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysRolePermissionAdd", description = "角色分配权限实体")
 public class SysUserGroupRole implements Serializable {
-
     private static final long serialVersionUID = 4289655721908438550L;
+
+    @ApiModelProperty(value = "id")
     private String id;
     /**
      * 角色id
      */
+    @ApiModelProperty(value = "角色id" )
     private String roleId;
     /**
      * 用户组id
      */
+    @ApiModelProperty(value = "用户组id" )
     private String userGroupId;
 
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人")
     private String creator;
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
     private String status;
 
     public String getId() {
@@ -71,7 +80,7 @@ public class SysUserGroupRole implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

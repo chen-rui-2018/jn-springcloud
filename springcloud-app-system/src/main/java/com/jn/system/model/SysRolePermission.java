@@ -1,6 +1,8 @@
 package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,34 +15,42 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysRolePermission", description = "角色权限关系实体")
 public class SysRolePermission implements Serializable {
-
     private static final long serialVersionUID = 5559883275762448025L;
+
+    @ApiModelProperty(value = "id")
     private String id;
     /**
      * 角色id
      */
+    @ApiModelProperty(value = "角色id")
     private String roleId;
     /**
      * 权限id
      */
+    @ApiModelProperty(value = "权限id")
     private String permissionId;
 
     /**
      * 权限名称
      */
+    @ApiModelProperty(value = "权限名称")
     private String permissionName;
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人")
     private String creator;
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
     private String status;
 
     public String getId() {

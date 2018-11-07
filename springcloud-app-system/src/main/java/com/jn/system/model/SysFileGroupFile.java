@@ -1,6 +1,7 @@
 package com.jn.system.model;
 
 import com.jn.system.enums.SysStatusEnums;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysFileGroupFile" ,description = "文件组文件关联")
 public class SysFileGroupFile implements Serializable {
 
     private static final long serialVersionUID = 8698342402955891194L;

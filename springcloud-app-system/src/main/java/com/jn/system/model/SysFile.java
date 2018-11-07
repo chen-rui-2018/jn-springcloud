@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.system.enums.SysStatusEnums;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -16,6 +17,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysFile" ,description = "文件")
 public class SysFile implements Serializable {
     private static final long serialVersionUID = 1596374127179651417L;
     @ApiModelProperty(value = "id" )

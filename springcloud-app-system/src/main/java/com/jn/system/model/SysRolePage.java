@@ -2,6 +2,8 @@ package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,27 +16,32 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysRolePage", description = "角色分页实体")
 public class SysRolePage extends Page implements Serializable {
 
     private static final long serialVersionUID = -514084002440259994L;
 
+    @ApiModelProperty(value = "id")
     private String id;
     /**
      * 角色名称
      */
+    @ApiModelProperty(value = "角色名称")
     private String roleName;
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人")
     private String creator;
     /**
      * 创建时间
      */
-
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
     /**
-     * 角色状态 1：有效，0：无效，-1：删除
+     * 状态 1：有效，0：无效，-1：删除
      */
+    @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")
     private String status;
 
     public String getId() {

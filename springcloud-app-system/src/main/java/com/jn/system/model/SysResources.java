@@ -1,6 +1,7 @@
 package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -15,6 +16,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysResources" ,description = "功能信息")
 public class SysResources implements Serializable {
     private static final long serialVersionUID = 3335508336524984508L;
 

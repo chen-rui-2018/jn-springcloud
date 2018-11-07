@@ -1,5 +1,6 @@
 package com.jn.system.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysFileGroupFileAdd" ,description = "文件组添加文件")
 public class SysFileGroupFileAdd implements Serializable {
 
     private static final long serialVersionUID = -6923429557226417911L;

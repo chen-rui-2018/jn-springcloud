@@ -27,7 +27,7 @@
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>
-
+		<janino.version>2.7.8</janino.version>
 
 	</properties>
 	<dependencyManagement>
@@ -83,11 +83,7 @@
 				<artifactId>druid-spring-boot-starter</artifactId>
 				<version>1.1.10</version>
 			</dependency>
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.17</version>
-			</dependency>
+
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
@@ -115,6 +111,18 @@
 				<groupId>com.spring4all</groupId>
 				<artifactId>swagger-spring-boot-starter</artifactId>
 				<version>1.7.0.RELEASE</version>
+			</dependency>
+			<!-- 日志文件管理包-提高性能log输出性能 -->
+			<!--  janino -->
+			<dependency>
+				<groupId>org.codehaus.janino</groupId>
+				<artifactId>commons-compiler</artifactId>
+				<version>${janino.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.janino</groupId>
+				<artifactId>janino</artifactId>
+				<version>${janino.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

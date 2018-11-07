@@ -54,10 +54,7 @@ public class SystemController extends BaseController {
         logger.info("进入获取用户的API,用户参数：{}",u.toString());
         List<User> user = userService.findTByT(u) ;
         if(user == null || user.size() ==0 ) {
-            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
-        }
-        if(user.size() > 1){
-            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NOT_ONE);
+            new Result();
         }
     	return new Result(user.get(0));
     }
@@ -69,9 +66,6 @@ public class SystemController extends BaseController {
     @RequestMapping(value = "/getResources", method = RequestMethod.POST)
     public Result<Set<String>> getResources(@RequestBody  String id) {
         Set<String> resourcesList = sysResourcesService.findPermissionsUrlById(id);
-        if(resourcesList == null || resourcesList.size() == 0) {
-            throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
-        }
     	return new Result(resourcesList);
     }
 }

@@ -46,7 +46,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		Result<User> user = client.getUser(new User(token.getUsername()));
-		if(CommonExceptionEnum.DATA_NULL.getCode().equals(user.getCode())){
+		if(GlobalConstants.SUCCESS_CODE.equals(user.getCode()) && user.getData() == null){
 			throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_ACCOUNT);
 		}else if (!GlobalConstants.SUCCESS_CODE.equals(user.getCode())){
 			throw new JnSpringCloudException(user) ;

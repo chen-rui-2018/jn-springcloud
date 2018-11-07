@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ import java.util.Set;
  * @version： v1.0
  * @modified By:
  */
+@ApiIgnore()
 @RestController
 @RequestMapping("/api/system")
 public class SystemController extends BaseController {

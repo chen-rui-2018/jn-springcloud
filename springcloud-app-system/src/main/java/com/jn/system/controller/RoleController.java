@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@ApiIgnore()
 @RestController
 @RequestMapping("/system/role")
 public class RoleController extends BaseController {

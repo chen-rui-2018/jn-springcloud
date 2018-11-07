@@ -28,7 +28,6 @@ import java.util.List;
 public class ExceptionHandlerAdvice {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
-
     /**
      * 鉴权失败
      * @param e
@@ -67,7 +66,7 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(value = IllegalArgumentException.class)
     public Result handelIllegalArgumentException(IllegalArgumentException e) {
         logger.error("IllegalArgumentException异常", e);
-        return new Result(CommonExceptionEnum.NOT_NULL.getCode(), e.getMessage());
+        return new Result(CommonExceptionEnum.VALID_ERROR.getCode(), e.getMessage());
     }
     /**
      * 文件上传异常

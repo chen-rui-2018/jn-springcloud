@@ -12,8 +12,7 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum ShiroExceptionEnum implements CodeAndMsg{
 
-
-    UNKNOWN_ACCOUNT("9801","用户不存在");
+    UNKNOWN_ACCOUNT("1110101","用户不存在");
 
 
     private String code;

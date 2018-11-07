@@ -41,7 +41,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		// TODO: 2018/10/30 用户有效性，还有用户的基础信息,炮哥
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		Result<User> user = client.getUser(new User(token.getUsername()));
-		if(CommonExceptionEnum.DATA_NULL.getCode().equals(user.getCode())){
+		if(GlobalConstants.SUCCESS_CODE.equals(user.getCode()) && user.getData() == null){
 			throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_ACCOUNT);
 		}else if (!GlobalConstants.SUCCESS_CODE.equals(user.getCode())){
 			throw new JnSpringCloudException(user) ;

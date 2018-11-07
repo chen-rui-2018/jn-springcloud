@@ -30,21 +30,21 @@ public class SysFileController extends BaseController {
     private SysFileService sysFileService;
 
     @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @RequestMapping(value = "/list")
     public Result list(@RequestBody SysFilePage sysFilePage) {
         GetEasyUIData data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
         return new Result(data);
     }
 
     @ApiOperation(value = "新增文件", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysFile sysFile) {
         sysFileService.insertSysFile(sysFile);
         return new Result();
     }
 
     @ApiOperation(value = "修改文件", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody  SysFile sysFile) {
         Assert.notNull(sysFile.getId(), "文件ID不能为空");
         sysFileService.updateSysFileById(sysFile);
@@ -52,7 +52,7 @@ public class SysFileController extends BaseController {
     }
 
     @ApiOperation(value = "批量删除文件", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @RequestMapping(value = "/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "文件ID不能为空");
         sysFileService.deleteSysFileByIds(ids);
@@ -60,7 +60,7 @@ public class SysFileController extends BaseController {
     }
 
     @ApiOperation(value = "根据ID查询文件", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectById")
+    @RequestMapping(value = "/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "文件ID不能为空");
         SysFile sysFile = sysFileService.selectSysFileByIds(id);
@@ -68,7 +68,7 @@ public class SysFileController extends BaseController {
     }
 
     @ApiOperation(value = "文件添加文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sysFileAddFileGroup")
+    @RequestMapping(value = "/sysFileAddFileGroup")
     public Result sysFileAddFileGroup(@RequestBody SysFileAddFileGroup sysFileAddFileGroup) {
         Assert.notNull(sysFileAddFileGroup.getFileId(), "文件ID不能为空");
         sysFileService.sysFileAddFileGroup(sysFileAddFileGroup);

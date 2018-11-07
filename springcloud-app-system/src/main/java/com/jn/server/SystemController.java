@@ -31,7 +31,6 @@ import java.util.Set;
  * @version： v1.0
  * @modified By:
  */
-@ApiIgnore()
 @RestController
 @RequestMapping("/api/system")
 public class SystemController extends BaseController {

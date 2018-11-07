@@ -32,21 +32,21 @@ public class SysFileGroupController extends BaseController {
     private SysFileGroupService sysFileGroupService;
 
     @ApiOperation(value = "查询文件组列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @RequestMapping(value = "/list")
     public Result list(@RequestBody SysFileGroupPage sysFileGroupPage) {
         GetEasyUIData data = sysFileGroupService.selectSysFileGroupListBySearchKey(sysFileGroupPage);
         return new Result(data);
     }
 
     @ApiOperation(value = "新增文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysFileGroup sysFileGroup) {
         sysFileGroupService.insertSysFileGroup(sysFileGroup);
         return new Result();
     }
 
     @ApiOperation(value = "修改文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysFileGroup sysFileGroup) {
         Assert.notNull(sysFileGroup.getId(), "文件组ID不能为空");
         sysFileGroupService.updateSysFileGroupById(sysFileGroup);
@@ -54,7 +54,7 @@ public class SysFileGroupController extends BaseController {
     }
 
     @ApiOperation(value = "批量删除文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @RequestMapping(value = "/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "文件组ID不能为空");
         sysFileGroupService.deleteSysFileGroupByIds(ids);
@@ -62,7 +62,7 @@ public class SysFileGroupController extends BaseController {
     }
 
     @ApiOperation(value = "根据ID查询文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectById")
+    @RequestMapping(value = "/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "文件组ID不能为空");
         SysFileGroup sysFileGroup = sysFileGroupService.selectSysFileGroupByIds(id);
@@ -70,7 +70,7 @@ public class SysFileGroupController extends BaseController {
     }
 
     @ApiOperation(value = "文件组添加文件", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sysFileGroupFileAdd")
+    @RequestMapping(value = "/sysFileGroupFileAdd")
     public Result sysFileGroupFileAdd(@RequestBody SysFileGroupFileAdd sysFileGroupFileAdd) {
         Assert.notNull(sysFileGroupFileAdd.getFileGroupId(),"文件组ID不能为空");
         sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd);

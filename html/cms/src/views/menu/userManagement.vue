@@ -187,7 +187,7 @@
 </template>
 
 <script>
-// import { getAllUserList } from '@/api/index.js'
+import { getAllUserList } from '@/api/index.js'
 export default {
   data() {
     // 密码验证
@@ -217,7 +217,7 @@ export default {
       value1: [0],
       pagesize: 1,
       total: 0,
-      pagenum: 10,
+      pagenum: 1,
       userList: [],
       options: [
         {
@@ -689,17 +689,18 @@ export default {
     },
     // 项目初始化
     //   获取动态数据
-    // initList() {
-    //   getAllUserList({
-    //     query: this.listQuery,
-    //     pagenum: this.pagenum,
-    //     pagesize: this.pagesize
-    //   }).then(res => {
-    //     console.log(res)
-    //     // this.total = res.data.total
-    //   })
-    // },
     initList() {
+      getAllUserList({
+        // query: this.listQuery,
+        page: this.pagenum,
+        rows: this.pagesize
+      }).then(res => {
+        console.log(res)
+        this.total = res.data.data.getEasyUIData.total
+        this.userList = res.data.data.getEasyUIData.rows
+      })
+    },
+    /* initList() {
       const list = [
         {
           id: '5',
@@ -743,7 +744,7 @@ export default {
         }
       ]
       this.userList = list
-    },
+    },*/
     // 分页功能
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)

@@ -29,5 +29,6 @@ Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
 
 //  权限管理页面-用户管理
 Mock.mock(/\/permission\/user/, 'get', permissionAPI.getList)
+Mock.mock(/\/permission\/userCreate/, 'post', permissionAPI.userCreateData)
 
 export default Mock

@@ -1,8 +1,13 @@
 package com.jn.system.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 菜单
@@ -17,39 +22,57 @@ public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 3668352539116946388L;
 
+    @ApiModelProperty(value = "id" )
     private String id;
 
     /**
      * 菜单名称
      */
+    @ApiModelProperty(value = "菜单名称" )
+    @NotBlank(message = "菜单名称不能为空！")
     private String menuName;
 
     /**
      * 菜单URL
      */
+    @ApiModelProperty(value = "菜单URL" )
+    @NotBlank(message = "菜单名称不能为空！")
     private String menuUrl;
 
     /**
      * 父级菜单ID
      */
+    @ApiModelProperty(value = "父级菜单ID" )
+    @NotBlank(message = "父级菜单ID不能为空！")
     private String parentId;
 
     /**
      * 排序
      */
+    @ApiModelProperty(value = "排序" )
     private String sort;
+
+    /**
+     * 是否目录 1:目录 0:文件
+     */
+    @ApiModelProperty(value = "是否目录 1:目录 0:文件" )
+    private String isDir;
 
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人" )
     private String creator;
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    @ApiModelProperty(value = "创建时间" )
+    private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
+    @NotBlank(message = "状态不能为空！")
     private String status;
 
     public String getId() {
@@ -100,11 +123,12 @@ public class SysMenu implements Serializable {
         this.creator = creator;
     }
 
-    public Timestamp getCreateTime() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -114,5 +138,13 @@ public class SysMenu implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIsDir() {
+        return isDir;
+    }
+
+    public void setIsDir(String isDir) {
+        this.isDir = isDir;
     }
 }

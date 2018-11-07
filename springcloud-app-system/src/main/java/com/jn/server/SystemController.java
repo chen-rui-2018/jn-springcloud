@@ -8,6 +8,7 @@ import com.jn.system.config.RedisSessionDAO;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
 import com.jn.system.service.ResourcesService;
+import com.jn.system.service.SysResourcesService;
 import com.jn.system.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 提供内部使用的API接口
@@ -38,7 +40,7 @@ public class SystemController extends BaseController {
 	private UserService userService;
 
 	@Autowired
-	private ResourcesService resourcesService;
+	private SysResourcesService sysResourcesService;
 
     /**
      * 获取用户
@@ -59,12 +61,12 @@ public class SystemController extends BaseController {
     }
     /**
      * 获取资源
-     * @param r
+     * @param id
      * @return
      */
     @RequestMapping(value = "/getResources", method = RequestMethod.POST)
-    public Result<List<Resources>> getResources(@RequestBody  Resources r) {
-        List<Resources> resourcesList = resourcesService.findTByT(r) ;
+    public Result<Set<String>> getResources(@RequestBody  String id) {
+        Set<String> resourcesList = sysResourcesService.findPermissionsUrlById(id);
         if(resourcesList == null || resourcesList.size() == 0) {
             throw new JnSpringCloudException(CommonExceptionEnum.DATA_NULL) ;
         }

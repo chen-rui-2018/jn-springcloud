@@ -6,6 +6,7 @@ import com.jn.system.model.SysResourcesPage;
 import com.jn.system.vo.SysResourcesVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 功能mapper
@@ -31,5 +32,10 @@ public interface SysResourcesMapper {
      */
     List<SysResourcesVO> findMenuResourcesByPage(SysResourcesPage sysResourcesPage);
 
-
+    /**
+     * 根据id查找用户拥有权限列表
+     * @param id
+     * @return
+     */
+    Set<String> findPermissionsUrlById(String id);
 }

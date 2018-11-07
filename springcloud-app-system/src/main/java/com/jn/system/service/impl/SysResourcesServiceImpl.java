@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -111,5 +112,10 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         SysResources sysResources=new SysResources();
         BeanUtils.copyProperties(tbSysResources, sysResources);
         return sysResources;
+    }
+
+    @Override
+    public Set<String> findPermissionsUrlById(String id) {
+        return sysResourcesMapper.findPermissionsUrlById(id);
     }
 }

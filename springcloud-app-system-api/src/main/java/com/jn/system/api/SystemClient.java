@@ -1,6 +1,7 @@
 package com.jn.system.api;
 
 import java.util.List;
+import java.util.Set;
 
 import com.jn.common.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -32,11 +33,11 @@ public interface SystemClient {
 
     /**
      * 获取资源列表
-     * @param r
+     * @param id
      * @return
      */
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
-    Result<List<Resources>> getResources(@RequestBody  Resources r);
+    Result<Set<String>> getResources(@RequestBody String id);
 
 
 

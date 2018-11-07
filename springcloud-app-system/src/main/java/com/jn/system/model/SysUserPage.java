@@ -19,9 +19,6 @@ public class SysUserPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
 
-    @ApiModelProperty("id")
-    private String id;
-
     @ApiModelProperty("名称")
     private String name;
 
@@ -31,35 +28,17 @@ public class SysUserPage extends Page implements Serializable {
     @ApiModelProperty("部门id")
     private String departmentId;
 
-    @ApiModelProperty("部门岗位状态")
-    private String departmentPostStatus;
-
-    @ApiModelProperty("是否默认")
-    private String isDefault;
-
     public SysUserPage() {
     }
 
-    public SysUserPage(String id, String name, String status, String departmentId,
-                       String departmentPostStatus, String isDefault) {
-        this.id = id;
+    public SysUserPage(String name, String status, String departmentId) {
         this.name = name;
         this.status = status;
         this.departmentId = departmentId;
-        this.departmentPostStatus = departmentPostStatus;
-        this.isDefault = isDefault;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -86,31 +65,13 @@ public class SysUserPage extends Page implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public String getDepartmentPostStatus() {
-        return departmentPostStatus;
-    }
-
-    public void setDepartmentPostStatus(String departmentPostStatus) {
-        this.departmentPostStatus = departmentPostStatus;
-    }
-
-    public String getIsDefault() {
-        return isDefault;
-    }
-
-    public void setIsDefault(String isDefault) {
-        this.isDefault = isDefault;
-    }
-
     @Override
     public String toString() {
         return "SysUserPage{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", departmentId='" + departmentId + '\'' +
-                ", departmentPostStatus='" + departmentPostStatus + '\'' +
-                ", isDefault='" + isDefault + '\'' +
                 '}';
     }
+
 }

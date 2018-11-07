@@ -8,6 +8,8 @@ public class TbSysDepartment implements Serializable {
 
     private String departmentName;
 
+    private String parentId;
+
     private String creator;
 
     private Date createTime;
@@ -30,6 +32,14 @@ public class TbSysDepartment implements Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName == null ? null : departmentName.trim();
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId == null ? null : parentId.trim();
     }
 
     public String getCreator() {
@@ -70,6 +80,7 @@ public class TbSysDepartment implements Serializable {
         TbSysDepartment other = (TbSysDepartment) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
+            && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
@@ -81,6 +92,7 @@ public class TbSysDepartment implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
+        result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -95,6 +107,7 @@ public class TbSysDepartment implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", departmentName=").append(departmentName);
+        sb.append(", parentId=").append(parentId);
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);

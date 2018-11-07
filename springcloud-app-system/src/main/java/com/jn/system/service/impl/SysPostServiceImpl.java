@@ -1,10 +1,7 @@
 package com.jn.system.service.impl;
 
 import com.jn.common.model.Result;
-import com.jn.system.dao.SysPostMapper;
-import com.jn.system.dao.TbSysDepartmentMapper;
 import com.jn.system.dao.TbSysPostMapper;
-import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysPost;
 import com.jn.system.entity.TbSysPostCriteria;
 import com.jn.system.service.SysPostService;
@@ -23,8 +20,6 @@ import java.util.List;
 @Service
 public class SysPostServiceImpl implements SysPostService {
 
-    @Autowired
-    private SysPostMapper sysPostMapper;
     @Autowired
     private TbSysPostMapper tbSysPostMapper;
 

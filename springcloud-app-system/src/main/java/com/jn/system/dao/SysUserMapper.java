@@ -1,5 +1,6 @@
 package com.jn.system.dao;
 
+import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
 import com.jn.system.vo.SysUserVO;
 
@@ -23,10 +24,10 @@ public interface SysUserMapper {
 
     /**
      * 当按部门查询用户时
-     * @param userSysUserPage
+     * @param sysUserDepartmentPost
      * @return
      */
-    List<SysUserVO> findSysUserByPageAndOption(SysUserPage userSysUserPage);
+    List<SysUserVO> findSysUserByPageAndOption(SysUserDepartmentPost sysUserDepartmentPost);
 
     /**
      * 当查询部门的条件为空时的查询方法
@@ -81,7 +82,7 @@ public interface SysUserMapper {
      * 为用户添加新的部门岗位信息
      * @param sysUserDepartmentPost
      */
-    void saveDepartmentandPostOfUser(SysUserDepartmentPost sysUserDepartmentPost);
+    void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);
 
     /**
      * 根据用户id返回用户信息

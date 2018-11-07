@@ -7,6 +7,7 @@ import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
+import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import com.jn.system.vo.SysGroupVO;
@@ -95,7 +96,7 @@ public class SysGroupServiceImpl implements SysGroupService{
     public void deleSysGroup(String[] groupIds) {
         for (String groupId: groupIds) {
             TbSysGroup tbSysGroup = tbSysGroupMapper.selectByPrimaryKey(groupId);
-            tbSysGroup.setStatus("-1");
+            tbSysGroup.setStatus(SysStatusEnums.DELETED.getKey());
             TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
             TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
             criteria.andIdEqualTo(tbSysGroup.getId());

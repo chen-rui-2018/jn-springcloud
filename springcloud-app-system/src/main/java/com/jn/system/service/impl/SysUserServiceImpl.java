@@ -11,6 +11,8 @@ import com.jn.system.dao.TbSysUserMapper;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysUser;
 import com.jn.system.entity.TbSysUserCriteria;
+import com.jn.system.entity.TbSysUserDepartmentPost;
+import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.SysUserVO;
@@ -62,8 +64,8 @@ public class SysUserServiceImpl implements SysUserService {
         //用户添加,默认密码123456
         sysUser.setPassword(DigestUtils.md5Hex("123456"));
         sysUser.setCreateTime(new Date());
-        //User user = (User) SecurityUtils.getSubject().getPrincipal();
-        //sysUser.setCreator(user.getId());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUser.setCreator(user.getId());
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser,tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
@@ -87,8 +89,8 @@ public class SysUserServiceImpl implements SysUserService {
             //遍历用户,获取用户默认部门岗位
             for (SysUserVO sysUserVO : sysUserVOList) {
                 sysUserVO.setPassword("");
-                SysUserPage query = new SysUserPage();
-                query.setId(sysUserVO.getId());
+                SysUserDepartmentPost query = new SysUserDepartmentPost();
+                query.setUserId(sysUserVO.getId());
                 query.setIsDefault("1");
                 List<SysUserVO> sysUserVOListOne = sysUserMapper.findSysUserByPageAndOption(query);
                 if (sysUserVOListOne.size() == 1) {
@@ -99,7 +101,9 @@ public class SysUserServiceImpl implements SysUserService {
             }
             getEasyUIData = new GetEasyUIData(sysUserVOList, objects.getTotal());
         } else {
-            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(userSysUserPage), objects.getTotal());
+            SysUserDepartmentPost query = new SysUserDepartmentPost();
+            BeanUtils.copyProperties(userSysUserPage,query);
+            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(query), objects.getTotal());
         }
 
         //参数回显
@@ -122,7 +126,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(ids.length > 0){
             for (String id : ids) {
                 TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
-                tbSysUser.setStatus("-1");
+                tbSysUser.setStatus(SysStatusEnums.DELETED.getKey());
                 tbSysUserMapper.updateByPrimaryKey(tbSysUser);
                 sysUserMapper.deleteSysUser(id);
                 logger.info("message{}", "删除用户成功！，sysUserId=" + id);
@@ -203,7 +207,7 @@ public class SysUserServiceImpl implements SysUserService {
                     sysGroupUser.setGroupId(groupId);
                     sysGroupUser.setUserId(userId);
                     sysGroupUser.setId(UUID.randomUUID().toString());
-                    sysGroupUser.setStatus("1");
+                    sysGroupUser.setStatus(SysStatusEnums.EFFECTIVE.getKey());
                     sysUserMapper.saveSysGroupToSysUser(sysGroupUser);
                 }
             }
@@ -258,7 +262,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
-                sysUserRole.setStatus("1");
+                sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
                 sysUserMapper.saveSysRoleToSysUser(sysUserRole);
             }
             logger.info("message{}", "用户添加角色成功！，sysUserId=" + userId);
@@ -274,11 +278,11 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findDepartmentandPostByUserId(String userId) {
-        SysUserPage sysUserPage = new SysUserPage();
-        sysUserPage.setId(userId);
+        SysUserDepartmentPost sysUserDepartmentPost = new SysUserDepartmentPost();
+        sysUserDepartmentPost.setUserId(userId);
         //设置默认查询用户部门岗位为有效状态数据
-        sysUserPage.setDepartmentPostStatus("1");
-        List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPageAndOption(sysUserPage);
+        sysUserDepartmentPost.setDepartmentPostStatus(SysStatusEnums.EFFECTIVE.getKey());
+        List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPageAndOption(sysUserDepartmentPost);
         return new Result(sysUserVOList);
     }
 
@@ -291,17 +295,17 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartmentandPostOfUser(String sysUserId, List<SysUserDepartmentPost> sysUserDepartmentPostlist) {
+    public void saveDepartmentandPostOfUser(String sysUserId, List<TbSysUserDepartmentPost> sysUserDepartmentPostlist) {
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserId);
         if (sysUserDepartmentPostlist != null && sysUserDepartmentPostlist.size() > 0) {
             //为用户添加新部门岗位信息
-            for (SysUserDepartmentPost sysUserDepartmentPost : sysUserDepartmentPostlist) {
+            for (TbSysUserDepartmentPost sysUserDepartmentPost : sysUserDepartmentPostlist) {
                 sysUserDepartmentPost.setCreateTime(new Date());
                 User user = (User) SecurityUtils.getSubject().getPrincipal();
                 sysUserDepartmentPost.setCreator(user.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
-                sysUserDepartmentPost.setStatus("1");
+                sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getKey());
                 sysUserDepartmentPost.setUserId(sysUserId);
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
             }

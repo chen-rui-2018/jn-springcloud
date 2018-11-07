@@ -2,10 +2,10 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysUser;
 import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
-import com.jn.system.model.SysUserDepartmentPost;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +115,7 @@ public class SysUserController extends BaseController{
     @ApiOperation(value = "为用户添加部门岗位",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
     public Result saveDepartmentandPostOfUser(String sysUserId,
-                                              List<SysUserDepartmentPost> sysUserDepartmentPostlist){
+                                              List<TbSysUserDepartmentPost> sysUserDepartmentPostlist){
         sysUserService.saveDepartmentandPostOfUser(sysUserId,sysUserDepartmentPostlist);
         return new Result();
     }

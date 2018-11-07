@@ -1,10 +1,8 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysUser;
-import com.jn.system.service.impl.SysUserServiceImpl;
-import com.jn.system.vo.SysUserVO;
-import com.jn.system.model.SysUserDepartmentPost;
 import com.jn.system.model.SysUserPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,7 +44,7 @@ public class SysUserServiceTest {
         sysUserUserQuery.setPage(1);
         sysUserUserQuery.setRows(10);
         Result result = sysUserService.findSysUserByPage(sysUserUserQuery);
-        logger.info("result",result);
+        logger.info("测试结果:" + result.getData().toString());
     }
 
     @Test
@@ -66,8 +64,8 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysGroupByUserIdTest() {
-        Result result = sysUserService.findSysGroupByUserId("u002");
-        logger.info("result",result);
+        Result result = sysUserService.findSysGroupByUserId("10002");
+        logger.info("测试结果:" + result.getData().toString());
     }
 
     @Test
@@ -79,7 +77,7 @@ public class SysUserServiceTest {
     @Test
     public void findSysRoleByUserIdTest() {
         Result result = sysUserService.findSysRoleByUserId("u002");
-        logger.info("result",result);
+        logger.info("测试结果:" + result.getData().toString());
     }
 
     @Test
@@ -91,15 +89,15 @@ public class SysUserServiceTest {
     @Test
     public void findDepartmentandPostByUserIdTest() {
         Result result = sysUserService.findDepartmentandPostByUserId("u002");
-        logger.info("result",result);
+        logger.info("测试结果:" + result.getData().toString());
     }
 
     @Test
     public void saveDepartmentandPostOfUser() {
-        SysUserDepartmentPost sysUserDepartmentPost = new SysUserDepartmentPost();
+        TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
         sysUserDepartmentPost.setDepartmentId("d004");
         sysUserDepartmentPost.setPostId("p004");
-        List<SysUserDepartmentPost> list = new ArrayList<>();
+        List<TbSysUserDepartmentPost> list = new ArrayList<>();
         list.add(sysUserDepartmentPost);
         sysUserService.saveDepartmentandPostOfUser("u002", list);
     }
@@ -107,7 +105,7 @@ public class SysUserServiceTest {
     @Test
     public void findSysUserByIdTest() {
         Result result = sysUserService.findSysUserById("10000");
-        logger.info("result",result);
+        logger.info("测试结果:" + result.getData().toString());
     }
 
 }

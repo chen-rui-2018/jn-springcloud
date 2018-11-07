@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysDepartment">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, department_name, creator, create_time, status
+    id, department_name, parent_id, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysDepartmentCriteria" resultMap="BaseResultMap">
     select
@@ -100,10 +101,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysDepartment">
-    insert into tb_sys_department (id, department_name, creator, 
-      create_time, status)
-    values (#{id,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+    insert into tb_sys_department (id, department_name, parent_id, 
+      creator, create_time, status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysDepartment">
     insert into tb_sys_department
@@ -113,6 +116,9 @@
       </if>
       <if test="departmentName != null">
         department_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
       </if>
       <if test="creator != null">
         creator,
@@ -130,6 +136,9 @@
       </if>
       <if test="departmentName != null">
         #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -157,6 +166,9 @@
       <if test="record.departmentName != null">
         department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
+      <if test="record.parentId != null">
+        parent_id = #{record.parentId,jdbcType=VARCHAR},
+      </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
       </if>
@@ -175,6 +187,7 @@
     update tb_sys_department
     set id = #{record.id,jdbcType=VARCHAR},
       department_name = #{record.departmentName,jdbcType=VARCHAR},
+      parent_id = #{record.parentId,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR}
@@ -187,6 +200,9 @@
     <set>
       <if test="departmentName != null">
         department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
@@ -203,6 +219,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.system.entity.TbSysDepartment">
     update tb_sys_department
     set department_name = #{departmentName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR}

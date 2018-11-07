@@ -1,68 +1,47 @@
 package com.jn.system.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import java.io.Serializable;
-import java.util.Date;
-
 /**
- *用户部门岗位实体类
- *
  * @author： shaobao
- * @date： Created on 2018/11/5 9:52
+ * @date： Created on 2018/11/7 11:41
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUserDepartmentPost",description = "用户部门岗位实体")
-public class SysUserDepartmentPost implements Serializable {
-    private static final long serialVersionUID = -7989897535661328826L;
+@ApiModel(value = "SysUserPage",description = "根据用户id查询用户部门岗位")
+public class SysUserDepartmentPost extends Page {
 
-    @ApiModelProperty("id")
-    private String id;
-
-    @ApiModelProperty("用户id")
+    @ApiModelProperty("userId")
     private String userId;
 
-    @ApiModelProperty("部门id")
-    private String departmentId;
-
-    @ApiModelProperty("岗位id")
-    private String postId;
+    @ApiModelProperty("部门岗位状态")
+    private String departmentPostStatus;
 
     @ApiModelProperty("是否默认")
     private String isDefault;
 
-    @ApiModelProperty("创建人")
-    private String creator;
+    @ApiModelProperty("名称")
+    private String name;
 
-    @ApiModelProperty("创建时间")
-    private Date createTime;
-
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
+    @ApiModelProperty("状态")
     private String status;
+
+    @ApiModelProperty("部门id")
+    private String departmentId;
 
     public SysUserDepartmentPost() {
     }
 
-    public SysUserDepartmentPost(String id, String userId, String departmentId, String postId,
-                                 String isDefault, String creator, Date createTime, String status) {
-        this.id = id;
+    public SysUserDepartmentPost(String userId, String departmentPostStatus, String isDefault,
+                                 String name, String status, String departmentId) {
         this.userId = userId;
-        this.departmentId = departmentId;
-        this.postId = postId;
+        this.departmentPostStatus = departmentPostStatus;
         this.isDefault = isDefault;
-        this.creator = creator;
-        this.createTime = createTime;
+        this.name = name;
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.departmentId = departmentId;
     }
 
     public String getUserId() {
@@ -73,20 +52,12 @@ public class SysUserDepartmentPost implements Serializable {
         this.userId = userId;
     }
 
-    public String getDepartmentId() {
-        return departmentId;
+    public String getDepartmentPostStatus() {
+        return departmentPostStatus;
     }
 
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public String getPostId() {
-        return postId;
-    }
-
-    public void setPostId(String postId) {
-        this.postId = postId;
+    public void setDepartmentPostStatus(String departmentPostStatus) {
+        this.departmentPostStatus = departmentPostStatus;
     }
 
     public String getIsDefault() {
@@ -97,12 +68,12 @@ public class SysUserDepartmentPost implements Serializable {
         this.isDefault = isDefault;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getName() {
+        return name;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStatus() {
@@ -113,25 +84,23 @@ public class SysUserDepartmentPost implements Serializable {
         this.status = status;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
     public String toString() {
         return "SysUserDepartmentPost{" +
-                "id='" + id + '\'' +
-                ", userId='" + userId + '\'' +
-                ", departmentId='" + departmentId + '\'' +
-                ", postId='" + postId + '\'' +
+                "userId='" + userId + '\'' +
+                ", departmentPostStatus='" + departmentPostStatus + '\'' +
                 ", isDefault='" + isDefault + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
+                ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
+                ", departmentId='" + departmentId + '\'' +
                 '}';
     }
 }

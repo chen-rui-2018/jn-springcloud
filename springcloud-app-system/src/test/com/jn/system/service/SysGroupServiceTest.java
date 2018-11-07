@@ -34,7 +34,7 @@ public class SysGroupServiceTest {
         sysGroupPage.setPage(1);
         sysGroupPage.setRows(10);
         Result result = sysGroupService.findSysGroupAll(sysGroupPage);
-        logger.info("result",result);
+        logger.info("测试结果:"+result.getData().toString());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class SysGroupServiceTest {
     @Test
     public void selectGroupRoleAndOtherRoleTest(){
         Result result = sysGroupService.selectGroupRoleAndOtherRole("g002");
-        logger.info("result",result);
+        logger.info("测试结果:"+result.getData().toString());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class SysGroupServiceTest {
     @Test
     public void findUserOfGroupTest(){
         Result result = sysGroupService.findUserOfGroup("g002");
-        logger.info("result",result);
+        logger.info("测试结果:"+result.getData().toString());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class SysGroupServiceTest {
         sysGroupUserPage.setPage(1);
         sysGroupUserPage.setRows(1);
         Result result = sysGroupService.findOtherUserByPage(sysGroupUserPage);
-        logger.info("result",result);
+        logger.info("测试结果:"+result.getData().toString());
     }
 
     @Test

@@ -21,7 +21,7 @@ public class SysPostServiceTest {
     @Test
     public void findSysPostAll() {
         Result result = sysPostService.findSysPostAll();
-        logger.info("result",result);
+        logger.info("测试结果:"+result.getData().toString());
     }
 
 }

@@ -70,7 +70,7 @@
           )
     </insert>
 
-    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.SysUserPage" resultMap="BaseResultMap">
+    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.SysUserDepartmentPost" resultMap="BaseResultMap">
         select distinct
         <include refid="Column_list"/>
           from tb_sys_user tsu
@@ -88,8 +88,8 @@
                 <if test="departmentId != null and departmentId != '' ">
                    and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
                 </if>
-                <if test="id != null and id != ''">
-                   and tsu.id = #{id,jdbcType=VARCHAR}
+                <if test="userId != null and userId != ''">
+                   and tsu.id = #{userId,jdbcType=VARCHAR}
                 </if>
                 <if test="departmentPostStatus != null and departmentPostStatus != ''">
                    and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
@@ -99,6 +99,37 @@
                 </if>
             </where>
              order by tsu.create_time desc
+    </select>
+
+    <select id="袋盖" parameterType="com.jn.system.model.SysUserPage" resultMap="BaseResultMap">
+        select distinct
+        <include refid="Column_list"/>
+        from tb_sys_user tsu
+        left join tb_sys_user_department_post tsudp on tsu.id = tsudp.user_id
+        left join tb_sys_department tsd on tsudp.department_id = tsd.id
+        left join tb_sys_post tsp on tsudp.post_id = tsp.id
+        <where>
+            tsudp.status != '-1'
+            <if test="name != null and name != '' ">
+                and tsu.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null and status != '' ">
+                and tsu.`status` = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="departmentId != null and departmentId != '' ">
+                and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
+            </if>
+            <if test="id != null and id != ''">
+                and tsu.id = #{id,jdbcType=VARCHAR}
+            </if>
+            <if test="departmentPostStatus != null and departmentPostStatus != ''">
+                and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
+            </if>
+            <if test="isDefault != null and isDefault != ''">
+                and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by tsu.create_time desc
     </select>
 
     <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO" parameterType="com.jn.system.model.SysUserPage">
@@ -192,7 +223,7 @@
     </update>
 
     <!--添加用户部门岗位信息-->
-    <insert id="saveDepartmentandPostOfUser" parameterType="com.jn.system.model.SysUserDepartmentPost" >
+    <insert id="saveDepartmentandPostOfUser" parameterType="com.jn.system.entity.TbSysUserDepartmentPost" >
         insert into tb_sys_user_department_post (id, user_id, department_id,
           post_id, is_default, create_time,
           status,creator)

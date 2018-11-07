@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysFileMapper">
+  <resultMap id="BaseResultMap" type="com.jn.system.model.SysFile">
+    <id column="user_id" jdbcType="VARCHAR" property="id" />
+    <result column="user_file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="user_file_url" jdbcType="VARCHAR" property="fileUrl" />
+    <result column="user_creator" jdbcType="VARCHAR" property="creator" />
+    <result column="user_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+  <resultMap id="queryForListResultMap" type="com.jn.system.vo.SysFileVO">
+    <id column="f_fileId" jdbcType="VARCHAR" property="fileId"/>
+    <result column="f_fileName" jdbcType="VARCHAR" property="fileName" javaType="java.lang.String"/>
+    <result column="f_fileUrl" jdbcType="VARCHAR" property="fileUrl" javaType="java.lang.String"/>
+    <result column="f_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
+    <result column="f_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+    <collection property="fileGroupList" javaType="java.util.List" ofType="com.jn.system.model.SysFileGroup">
+      <id column="fg_id" property="id" jdbcType="VARCHAR"/>
+      <result column="rp_roleId" property="roleId" jdbcType="VARCHAR"/>
+      <result column="rp_permissionId" property="permissionId" jdbcType="VARCHAR"/>
+      <result column="p_permissionName" property="permissionName" jdbcType="VARCHAR"/>
+      <result column="rp_createTime" property="createTime" jdbcType="TIMESTAMP"/>
+      <result column="rp_status" property="status" jdbcType="VARCHAR"/>
+    </collection>
+
+  </resultMap>
+
+  <update id="deleteByIds" parameterType="java.lang.String">
+    update tb_sys_file set status=-1
+    where id in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+
+  <select id="selectFileListBySearchKey" parameterType="com.jn.system.model.SysFilePage" resultMap="queryForListResultMap">
+       SELECT
+          f.id AS f_id,
+          f.STATUS AS f_status,
+          f.file_url AS f_fileUrl,
+          f.file_name AS f_fileName,
+          f.create_time AS f_createTime,
+          fg.id AS fg_id,
+          fg.file_group_name AS fg_fileGroupName,
+          fg.create_time AS fg_createTime,
+          fg.STATUS AS fg_status
+      FROM
+          tb_sys_file f
+          LEFT JOIN ( SELECT file_group_id, file_id FROM tb_sys_file_group_file WHERE STATUS !=- 1 ) fgf ON fgf.file_id = f.id
+          LEFT JOIN ( SELECT * FROM tb_sys_file_group WHERE STATUS !=- 1 ) fg ON fgf.file_group_id = fg.id
+
+          where 1=1
+          and f.status !=-1
+          <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
+            f.file_name=#{fileName,jdbcType=VARCHAR},
+          </if>
+          <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+            f.status=#{status,jdbcType=VARCHAR},
+          </if>
+          <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and f.id=#{id,jdbcType=VARCHAR}
+          </if>
+          ORDER BY f.create_time desc
+  </select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysFileGroupFileMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.model.SysFileGroupFile">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="file_group_id" jdbcType="VARCHAR" property="fileGroupId"/>
+        <result column="file_id" jdbcType="VARCHAR" property="fileId"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+
+    <update id="deleteByIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByFileIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where file_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByFileGroupIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where file_group_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <!--批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        insert into tb_sys_file_group_file (id, file_group_id,file_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.fileGroupId,jdbcType=VARCHAR},
+            #{item.fileId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+</mapper>

@@ -3,7 +3,6 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -42,8 +41,6 @@ public class SysMenuResourcesAdd implements Serializable {
      */
     @ApiModelProperty(value = "功能路径" )
     private String resourcesUrl;
-
-
 
     /**
      * 创建人

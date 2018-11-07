@@ -5,7 +5,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -87,7 +86,7 @@ public class SysMenuPage extends Page implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysFileGroupMapper">
+  <resultMap id="BaseResultMap" type="com.jn.system.model.SysFileGroup">
+    <id column="user_id" jdbcType="VARCHAR" property="id" />
+    <result column="user_file_group_name" jdbcType="VARCHAR" property="fileGroupName" />
+    <result column="user_creator" jdbcType="VARCHAR" property="creator" />
+    <result column="user_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="user_status" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+
+  <update id="deleteByIds" parameterType="java.lang.String">
+    update tb_sys_file_group set status=-1
+    where id in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
+</mapper>

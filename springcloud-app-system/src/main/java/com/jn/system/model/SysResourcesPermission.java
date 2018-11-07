@@ -1,7 +1,7 @@
 package com.jn.system.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 权限资源
@@ -33,7 +33,7 @@ public class SysResourcesPermission implements Serializable {
     /**
      * 创建时间
      */
-    private Timestamp createTime;
+    private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
@@ -71,11 +71,11 @@ public class SysResourcesPermission implements Serializable {
         this.creator = creator;
     }
 
-    public Timestamp getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

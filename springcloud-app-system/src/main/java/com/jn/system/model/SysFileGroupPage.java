@@ -1,68 +1,67 @@
 package com.jn.system.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 菜单权限
+ * 文件组分页实体
  *
  * @author： yuanyy
- * @date： Created on 2018/11/4 21:05
+ * @date： Created on 2018/11/6 10:15
  * @version： v1.0
  * @modified By:
  */
-public class SysMenuPermission implements Serializable {
-    private static final long serialVersionUID = 8438573945382865137L;
+public class SysFileGroupPage extends Page implements Serializable {
 
+    private static final long serialVersionUID = 1964622157773498642L;
+
+    @ApiModelProperty(value = "id" )
     private String id;
 
     /**
-     * 权限id
+     * 文件组名称
      */
-    private String permissionId;
-
-    /**
-     * 菜单id
-     */
-    private String menuId;
+    @ApiModelProperty(value = "文件组名称" )
+    private String fileGroupName;
 
     /**
      * 创建人
      */
+    @ApiModelProperty(value = "创建人" )
     private String creator;
+
     /**
      * 创建时间
      */
+    @ApiModelProperty(value = "创建时间" )
     private Date createTime;
+
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
+
+
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
-    public String getPermissionId() {
-        return permissionId;
+    public String getFileGroupName() {
+        return fileGroupName;
     }
 
-    public void setPermissionId(String permissionId) {
-        this.permissionId = permissionId;
-    }
-
-    public String getMenuId() {
-        return menuId;
-    }
-
-    public void setMenuId(String menuId) {
-        this.menuId = menuId;
+    public void setFileGroupName(String fileGroupName) {
+        this.fileGroupName = fileGroupName == null ? null : fileGroupName.trim();
     }
 
     public String getCreator() {
@@ -70,7 +69,7 @@ public class SysMenuPermission implements Serializable {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator;
+        this.creator = creator == null ? null : creator.trim();
     }
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
@@ -87,6 +86,7 @@ public class SysMenuPermission implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status;
+        this.status = status == null ? null : status.trim();
     }
+
 }

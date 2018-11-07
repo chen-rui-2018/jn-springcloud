@@ -5,7 +5,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 功能分页实体
@@ -51,7 +51,7 @@ public class SysResourcesPage extends Page implements Serializable {
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间" )
-    private Timestamp createTime;
+    private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
@@ -75,12 +75,12 @@ public class SysResourcesPage extends Page implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public Timestamp getCreateTime() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 

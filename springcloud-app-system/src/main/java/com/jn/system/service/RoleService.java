@@ -1,10 +1,11 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.model.*;
 import com.jn.system.vo.RoleVO;
 
 import java.util.List;
+
 /**
  * 角色
  *
@@ -21,7 +22,7 @@ public interface RoleService {
 
     void deleteRole(String[] id);
 
-    GetEasyUIData findTByPage(RolePage role);
+    PaginationData findTByPage(RolePage role);
 
     RoleVO selectByPrimaryKey(String id);
 

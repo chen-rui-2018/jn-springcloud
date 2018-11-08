@@ -2,7 +2,7 @@ package com.jn.system.controller;
 
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.Role;
 import com.jn.system.model.RoleAdd;
@@ -36,7 +36,7 @@ public class RoleController extends BaseController {
 
     @RequiresPermissions("/system/role/list")
     @RequestMapping(value = "/list")
-    public GetEasyUIData list( RolePage role) {
+    public PaginationData list(RolePage role) {
         return roleService.findTByPage(role);
     }
 
@@ -59,7 +59,7 @@ public class RoleController extends BaseController {
     @RequiresPermissions("/system/role/update")
     @RequestMapping(value = "/update")
     public Result update(RoleAdd mrole) {
-        Assert.notNull(mrole.getId(),"角色ID不能为空");
+        Assert.notNull(mrole.getId(), "角色ID不能为空");
         roleService.updateRole(mrole);
         return new Result();
     }

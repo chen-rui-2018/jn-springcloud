@@ -1,10 +1,11 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.model.*;
-import com.jn.system.service.SysFileGroupService;
+import com.jn.system.model.SysFile;
+import com.jn.system.model.SysFileAddFileGroup;
+import com.jn.system.model.SysFilePage;
 import com.jn.system.service.SysFileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,12 +33,12 @@ public class SysFileController extends BaseController {
     @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     public Result list(@RequestBody SysFilePage sysFilePage) {
-        GetEasyUIData data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
+        PaginationData data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
         return new Result(data);
     }
 
     @ApiOperation(value = "新增文件", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add",method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Result add(@Validated @RequestBody SysFile sysFile) {
         sysFileService.insertSysFile(sysFile);
         return new Result();
@@ -45,7 +46,7 @@ public class SysFileController extends BaseController {
 
     @ApiOperation(value = "修改文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
-    public Result update(@Validated @RequestBody  SysFile sysFile) {
+    public Result update(@Validated @RequestBody SysFile sysFile) {
         Assert.notNull(sysFile.getId(), "文件ID不能为空");
         sysFileService.updateSysFileById(sysFile);
         return new Result();
@@ -75,7 +76,5 @@ public class SysFileController extends BaseController {
         return new Result();
     }
 
-
-    
 
 }

@@ -1,6 +1,6 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
 import com.jn.system.model.UserAdd;
 import com.jn.system.model.UserPage;
@@ -29,7 +29,7 @@ public interface UserService {
 
     void updatePassword(UserAdd u);
 
-    GetEasyUIData findTByPage(UserPage user);
+    PaginationData findTByPage(UserPage user);
 
     UserVO selectByPrimaryKey(String id);
 

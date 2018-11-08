@@ -1,7 +1,7 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.SysMenu;
 import com.jn.system.model.SysMenuPage;
@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "菜单管理")
 @RestController
 @RequestMapping("/system/sysMenu")
-public class SysMenuController  extends BaseController {
+public class SysMenuController extends BaseController {
     @Autowired
     private SysMenuService sysMenuService;
 
     @ApiOperation(value = "查询菜单列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     public Result list(@RequestBody SysMenuPage sysMenuPage) {
-        GetEasyUIData data = sysMenuService.selectMenuListBySearchKey(sysMenuPage);
+        PaginationData data = sysMenuService.selectMenuListBySearchKey(sysMenuPage);
         return new Result(data);
     }
 
@@ -45,7 +45,7 @@ public class SysMenuController  extends BaseController {
 
     @ApiOperation(value = "修改菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
-    public Result update(@Validated @RequestBody  SysMenu sysMenu) {
+    public Result update(@Validated @RequestBody SysMenu sysMenu) {
         Assert.notNull(sysMenu.getId(), "菜单ID不能为空");
         sysMenuService.updateSysMenuById(sysMenu);
         return new Result();
@@ -71,7 +71,7 @@ public class SysMenuController  extends BaseController {
     @PostMapping(value = "/insertMenuResources")
     public Result insertMenuResources(@RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
         Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
-        if(sysMenuResourcesAdd.getResourcesId().length==0){
+        if (sysMenuResourcesAdd.getResourcesId().length == 0) {
             Assert.notNull(sysMenuResourcesAdd.getResourcesName(), "功能名称不能为空");
             Assert.notNull(sysMenuResourcesAdd.getResourcesUrl(), "功能路径不能为空");
             Assert.notNull(sysMenuResourcesAdd.getStatus(), "功能状态不能为空");

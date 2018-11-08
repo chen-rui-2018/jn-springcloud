@@ -2,12 +2,11 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.dao.SysFileGroupFileMapper;
 import com.jn.system.dao.SysFileMapper;
 import com.jn.system.dao.TbSysFileMapper;
 import com.jn.system.entity.TbSysFile;
-import com.jn.system.entity.TbSysFileGroupFile;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileService;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.swing.*;
 import java.util.*;
 
 /**
@@ -61,7 +59,7 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFile tbSysFile = new TbSysFile();
         BeanUtils.copyProperties(sysFile, tbSysFile);
         tbSysFileMapper.insert(tbSysFile);
-        logger.info("message={}", "新增文件,fileName="+sysFile.getFileName()+",fileId="+sysFile.getId());
+        logger.info("message={}", "新增文件,fileName=" + sysFile.getFileName() + ",fileId=" + sysFile.getId());
 
     }
 
@@ -76,7 +74,7 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFile tbSysFile = new TbSysFile();
         BeanUtils.copyProperties(sysFile, tbSysFile);
         tbSysFileMapper.updateByPrimaryKeySelective(tbSysFile);
-        logger.info("message={}", "更新文件,fileName="+sysFile.getFileName()+",fileId="+sysFile.getId());
+        logger.info("message={}", "更新文件,fileName=" + sysFile.getFileName() + ",fileId=" + sysFile.getId());
 
     }
 
@@ -89,7 +87,7 @@ public class SysFileServiceImpl implements SysFileService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileByIds(String[] fileIds) {
         sysFileMapper.deleteByIds(fileIds);
-        logger.info("message={}", "批量删除文件,fileIds="+Arrays.toString(fileIds));
+        logger.info("message={}", "批量删除文件,fileIds=" + Arrays.toString(fileIds));
     }
 
     /**
@@ -100,10 +98,10 @@ public class SysFileServiceImpl implements SysFileService {
      */
     @Override
     public SysFile selectSysFileByIds(String id) {
-        TbSysFile tbSysFile=tbSysFileMapper.selectByPrimaryKey(id);
-        SysFile sysFile =new SysFile();
+        TbSysFile tbSysFile = tbSysFileMapper.selectByPrimaryKey(id);
+        SysFile sysFile = new SysFile();
         BeanUtils.copyProperties(tbSysFile, sysFile);
-        logger.info("message={}", "根据Id查询文件,fileId="+id);
+        logger.info("message={}", "根据Id查询文件,fileId=" + id);
         return sysFile;
     }
 
@@ -114,10 +112,10 @@ public class SysFileServiceImpl implements SysFileService {
      * @return
      */
     @Override
-    public GetEasyUIData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
+    public PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
 
         Page<Object> objects = PageHelper.startPage(sysFilePage.getPage(), sysFilePage.getRows());
-        return  new GetEasyUIData(sysFileMapper.selectFileListBySearchKey(sysFilePage)
+        return new PaginationData(sysFileMapper.selectFileListBySearchKey(sysFilePage)
                 , objects.getTotal());
     }
 
@@ -132,12 +130,12 @@ public class SysFileServiceImpl implements SysFileService {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //文件
-        String fileId=sysFileAddFileGroup.getFileId();
+        String fileId = sysFileAddFileGroup.getFileId();
         //文件组
-        String[] fileGroupId=sysFileAddFileGroup.getFileGroupId();
-        List<SysFileGroupFile> sysFileGroupFiles=new ArrayList<>();
-        for(int i=0;i<fileGroupId.length;i++){
-            SysFileGroupFile sysFileGroupFile=new SysFileGroupFile();
+        String[] fileGroupId = sysFileAddFileGroup.getFileGroupId();
+        List<SysFileGroupFile> sysFileGroupFiles = new ArrayList<>();
+        for (int i = 0; i < fileGroupId.length; i++) {
+            SysFileGroupFile sysFileGroupFile = new SysFileGroupFile();
             sysFileGroupFile.setId(UUID.randomUUID().toString());
             //创建人
             sysFileGroupFile.setCreator(user.getId());
@@ -150,13 +148,13 @@ public class SysFileServiceImpl implements SysFileService {
 
             sysFileGroupFiles.add(sysFileGroupFile);
 
-            logger.info("message={}","文件添加文件组，fileGroupId="+Arrays.toString(fileGroupId)+"fileId="+ fileId);
+            logger.info("message={}", "文件添加文件组，fileGroupId=" + Arrays.toString(fileGroupId) + "fileId=" + fileId);
         }
 
-        logger.info("message={}","文件添加文件组,新增前删除该的所有该文件的文件组数据，fileGroupId="+Arrays.toString(fileGroupId));
+        logger.info("message={}", "文件添加文件组,新增前删除该的所有该文件的文件组数据，fileGroupId=" + Arrays.toString(fileGroupId));
 
         //新增前删除该的所有该文件的文件组数据
-        String [] fileIds={fileId};
+        String[] fileIds = {fileId};
         sysFileGroupFileMapper.deleteByFileIds(fileIds);
 
         //批量新增文件组文件信息

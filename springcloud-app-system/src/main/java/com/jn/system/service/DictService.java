@@ -1,10 +1,11 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.model.Dict;
 import com.jn.system.model.DictPage;
 
 import java.util.List;
+
 /**
  * 字典
  *
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface DictService {
 
-    GetEasyUIData findTByPage(DictPage dict);
+    PaginationData findTByPage(DictPage dict);
 
     void insertDict(Dict dict);
 

@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.system.dao.SysFileGroupFileMapper;
 import com.jn.system.dao.SysFileGroupMapper;
@@ -112,13 +112,13 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @return
      */
     @Override
-    public GetEasyUIData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
+    public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
 
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字
-            sysFileGroupCriteria.createCriteria().andFileGroupNameLike("%"+sysFileGroupPage.getFileGroupName()+"%");
+            sysFileGroupCriteria.createCriteria().andFileGroupNameLike("%" + sysFileGroupPage.getFileGroupName() + "%");
         }
         if (!StringUtils.isEmpty(sysFileGroupPage.getId())) {
             //根据id查询
@@ -133,7 +133,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
 
         logger.info("message={}", "根据关键字分页查询文件组列表,searchKey=" + sysFileGroupPage.getFileGroupName() + ",status=" + sysFileGroupPage.getStatus());
-        return new GetEasyUIData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
+        return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }
 
@@ -172,7 +172,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         logger.info("message={}", "文件组添加文件,新增前删除该的所有该文件组的文件数据，fileId=" + Arrays.toString(fileId));
 
         //新增前删除该的所有该文件组的文件数据
-        String [] fileGroupIds={fileGroupId};
+        String[] fileGroupIds = {fileGroupId};
         sysFileGroupFileMapper.deleteByFileGroupIds(fileGroupIds);
 
         //批量新增文件组文件信息

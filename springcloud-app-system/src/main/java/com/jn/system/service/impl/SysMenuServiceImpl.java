@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.dao.SysMenuMapper;
 import com.jn.system.dao.TbSysMenuMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
@@ -56,7 +56,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysMenu.setCreator(user.getId());
         sysMenu.setCreateTime(new Date());
-        TbSysMenu tbSysMenu=new TbSysMenu();
+        TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
         tbSysMenuMapper.insert(tbSysMenu);
 
@@ -70,7 +70,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysMenuById(SysMenu sysMenu) {
-        TbSysMenu tbSysMenu=new TbSysMenu();
+        TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
     }
@@ -94,9 +94,9 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
-    public GetEasyUIData selectMenuListBySearchKey(SysMenuPage sysMenuPage) {
+    public PaginationData selectMenuListBySearchKey(SysMenuPage sysMenuPage) {
         Page<Object> objects = PageHelper.startPage(sysMenuPage.getPage(), sysMenuPage.getRows());
-        return  new GetEasyUIData( sysMenuMapper.selectMenuListBySearchKey(sysMenuPage)
+        return new PaginationData(sysMenuMapper.selectMenuListBySearchKey(sysMenuPage)
                 , objects.getTotal());
 
     }
@@ -109,8 +109,8 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     public SysMenu selectMenuById(String id) {
-        TbSysMenu tbSysMenu= tbSysMenuMapper.selectByPrimaryKey(id);
-        SysMenu sysMenu=new SysMenu();
+        TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(id);
+        SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(tbSysMenu, sysMenu);
         return sysMenu;
     }
@@ -124,12 +124,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Transactional(rollbackFor = Exception.class)
     public void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd) {
         //功能
-        String[] resourcesId=sysMenuResourcesAdd.getResourcesId();
+        String[] resourcesId = sysMenuResourcesAdd.getResourcesId();
         //菜单
-        String menuId=sysMenuResourcesAdd.getMenuId();
-        if(resourcesId.length==0){
+        String menuId = sysMenuResourcesAdd.getMenuId();
+        if (resourcesId.length == 0) {
             //获取当前登录用户信息
-            TbSysResources tbSysResources=new TbSysResources();
+            TbSysResources tbSysResources = new TbSysResources();
             User user = (User) SecurityUtils.getSubject().getPrincipal();
             tbSysResources.setCreator(user.getId());
             tbSysResources.setId(UUID.randomUUID().toString());
@@ -142,10 +142,10 @@ public class SysMenuServiceImpl implements SysMenuService {
             return;
         }
 
-        for(int i=0;i<resourcesId.length;i++){
+        for (int i = 0; i < resourcesId.length; i++) {
             //根据id查询当前功能
-            TbSysResources tbSysResources=tbSysResourcesMapper.selectByPrimaryKey(resourcesId[i]);
-            if(tbSysResources==null){
+            TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(resourcesId[i]);
+            if (tbSysResources == null) {
                 //获取当前登录用户信息
                 User user = (User) SecurityUtils.getSubject().getPrincipal();
                 tbSysResources.setCreator(user.getId());
@@ -156,7 +156,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 tbSysResources.setStatus(sysMenuResourcesAdd.getStatus());
                 tbSysResources.setMenuId(menuId);
                 tbSysResourcesMapper.insert(tbSysResources);
-            }else{
+            } else {
                 //设置当前菜单
                 tbSysResources.setMenuId(menuId);
                 //更新功能中的菜单

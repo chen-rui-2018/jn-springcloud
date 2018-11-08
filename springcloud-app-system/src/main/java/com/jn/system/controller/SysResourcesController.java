@@ -1,13 +1,10 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuPage;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
-import com.jn.system.service.SysMenuService;
 import com.jn.system.service.SysResourcesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,7 +32,7 @@ public class SysResourcesController extends BaseController {
     @ApiOperation(value = "查询功能列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     public Result list(@RequestBody SysResourcesPage sysMenuPage) {
-        GetEasyUIData data = sysResourcesService.selectResourcesListBySearchKey(sysMenuPage);
+        PaginationData data = sysResourcesService.selectResourcesListBySearchKey(sysMenuPage);
         return new Result(data);
     }
 
@@ -48,7 +45,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "修改功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
-    public Result update(@Validated @RequestBody  SysResources sysResources) {
+    public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
         sysResourcesService.updateResourcesById(sysResources);
         return new Result();

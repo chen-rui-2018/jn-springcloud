@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysGroupMapper;
 import com.jn.system.dao.SysRoleMapper;
@@ -16,7 +16,6 @@ import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.SysUserVO;
-import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -54,6 +53,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 添加用户
+     *
      * @param sysUser
      * @return
      */
@@ -67,7 +67,7 @@ public class SysUserServiceImpl implements SysUserService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysUser.setCreator(user.getId());
         TbSysUser tbSysUser = new TbSysUser();
-        BeanUtils.copyProperties(sysUser,tbSysUser);
+        BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
         logger.info("message{}", "新增用户成功！，sysUserId=" + sysUser.getId());
     }
@@ -82,7 +82,7 @@ public class SysUserServiceImpl implements SysUserService {
     public Result findSysUserByPage(SysUserPage userSysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(userSysUserPage.getPage(), userSysUserPage.getRows());
-        GetEasyUIData getEasyUIData = null;
+        PaginationData getEasyUIData = null;
         //判断传过来参数是否有查询条件
         if (StringUtils.isBlank(userSysUserPage.getDepartmentId())) {
             List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPage(userSysUserPage);
@@ -99,11 +99,11 @@ public class SysUserServiceImpl implements SysUserService {
                     }
                 }
             }
-            getEasyUIData = new GetEasyUIData(sysUserVOList, objects.getTotal());
+            getEasyUIData = new PaginationData(sysUserVOList, objects.getTotal());
         } else {
             SysUserDepartmentPost query = new SysUserDepartmentPost();
-            BeanUtils.copyProperties(userSysUserPage,query);
-            getEasyUIData = new GetEasyUIData(sysUserMapper.findSysUserByPageAndOption(query), objects.getTotal());
+            BeanUtils.copyProperties(userSysUserPage, query);
+            getEasyUIData = new PaginationData(sysUserMapper.findSysUserByPageAndOption(query), objects.getTotal());
         }
         return new Result(getEasyUIData);
     }
@@ -116,7 +116,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
-        if(ids.length > 0){
+        if (ids.length > 0) {
             for (String id : ids) {
                 TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
                 tbSysUser.setStatus(SysStatusEnums.DELETED.getKey());
@@ -124,7 +124,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserMapper.deleteSysUser(id);
                 logger.info("message{}", "删除用户成功！，sysUserId=" + id);
             }
-        }else{
+        } else {
             return;
         }
     }
@@ -142,11 +142,11 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
         }
         TbSysUser tbSysUser = new TbSysUser();
-        BeanUtils.copyProperties(sysUser,tbSysUser);
+        BeanUtils.copyProperties(sysUser, tbSysUser);
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andIdEqualTo(tbSysUser.getId());
-        tbSysUserMapper.updateByExampleSelective(tbSysUser,tbSysUserCriteria);
+        tbSysUserMapper.updateByExampleSelective(tbSysUser, tbSysUserCriteria);
         logger.info("message{}", "更新用户成功！，sysUserId=" + sysUser.getId());
     }
 
@@ -317,8 +317,8 @@ public class SysUserServiceImpl implements SysUserService {
     public Result findSysUserById(String id) {
         TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
         SysUser sysUser = new SysUser();
-        if(tbSysUser != null){
-            BeanUtils.copyProperties(tbSysUser,sysUser);
+        if (tbSysUser != null) {
+            BeanUtils.copyProperties(tbSysUser, sysUser);
             sysUser.setPassword("");
         }
         return new Result(sysUser);

@@ -1,6 +1,14 @@
 package com.jn.common.model;
 
-public class GetEasyUIData<T> {
+/**
+ * Pagination 分頁
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
+public class PaginationData<T> {
     private T rows;
     private long total;
 
@@ -20,19 +28,19 @@ public class GetEasyUIData<T> {
         this.total = total;
     }
 
-    public GetEasyUIData(T rows, long total) {
+    public PaginationData(T rows, long total) {
         super();
         this.rows = rows;
         this.total = total;
     }
 
-    public GetEasyUIData() {
+    public PaginationData() {
 
     }
 
     @Override
     public String toString() {
-        return "GetEasyUIData{" +
+        return "PaginationData{" +
                 "rows=" + rows +
                 ", total=" + total +
                 '}';

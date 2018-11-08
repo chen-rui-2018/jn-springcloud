@@ -1,6 +1,6 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 
@@ -19,18 +19,21 @@ public interface SysResourcesService {
 
     /**
      * 新增功能
+     *
      * @param sysResources
      */
     void insertResources(SysResources sysResources);
 
     /**
      * 更新功能信息
+     *
      * @param sysResources
      */
     void updateResourcesById(SysResources sysResources);
 
     /**
      * 批量删除功能（逻辑删除）
+     *
      * @param resourcesIds
      * @return
      */
@@ -38,13 +41,15 @@ public interface SysResourcesService {
 
     /**
      * 分页查询功能功能列表信息
+     *
      * @param sysResourcesPage
      * @return
      */
-    GetEasyUIData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage);
+    PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage);
 
     /**
      * 根据id查询功能详情
+     *
      * @param id
      * @return
      */
@@ -52,6 +57,7 @@ public interface SysResourcesService {
 
     /**
      * 根据id查找用户拥有权限列表
+     *
      * @param id 用户ID
      * @return
      */

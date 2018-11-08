@@ -1,9 +1,8 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysFileAddFileGroup;
 import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFileAdd;
 import com.jn.system.model.SysFileGroupPage;
@@ -34,7 +33,7 @@ public class SysFileGroupController extends BaseController {
     @ApiOperation(value = "查询文件组列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     public Result list(@RequestBody SysFileGroupPage sysFileGroupPage) {
-        GetEasyUIData data = sysFileGroupService.selectSysFileGroupListBySearchKey(sysFileGroupPage);
+        PaginationData data = sysFileGroupService.selectSysFileGroupListBySearchKey(sysFileGroupPage);
         return new Result(data);
     }
 
@@ -72,7 +71,7 @@ public class SysFileGroupController extends BaseController {
     @ApiOperation(value = "文件组添加文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/sysFileGroupFileAdd")
     public Result sysFileGroupFileAdd(@RequestBody SysFileGroupFileAdd sysFileGroupFileAdd) {
-        Assert.notNull(sysFileGroupFileAdd.getFileGroupId(),"文件组ID不能为空");
+        Assert.notNull(sysFileGroupFileAdd.getFileGroupId(), "文件组ID不能为空");
         sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd);
         return new Result();
     }

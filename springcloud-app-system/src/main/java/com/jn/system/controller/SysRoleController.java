@@ -2,9 +2,8 @@ package com.jn.system.controller;
 
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-
 import com.jn.system.model.*;
 import com.jn.system.service.SysRoleService;
 import io.swagger.annotations.Api;
@@ -33,7 +32,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "查询角色列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     public Result list(@RequestBody SysRolePage role) {
-        GetEasyUIData data = tbRoleService.selectRoleListBySearchKey(role);
+        PaginationData data = tbRoleService.selectRoleListBySearchKey(role);
         return new Result(data);
     }
 

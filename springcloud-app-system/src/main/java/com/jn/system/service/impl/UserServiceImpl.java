@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.system.dao.TbSysUserMapper;
 import com.jn.system.dao.UserMapper;
@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 /**
  * 用户
  *
@@ -113,9 +114,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public GetEasyUIData findTByPage(UserPage user) {
+    public PaginationData findTByPage(UserPage user) {
         Page<Object> objects = PageHelper.startPage(user.getPage(), user.getRows());
-        return new GetEasyUIData(userMapper.findTByPage(user)
+        return new PaginationData(userMapper.findTByPage(user)
                 , objects.getTotal());
     }
 
@@ -131,14 +132,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findTByT(User user) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        if (StringUtils.isNotBlank(user.getAccount())){
+        if (StringUtils.isNotBlank(user.getAccount())) {
             tbSysUserCriteria.createCriteria().andAccountLike(user.getAccount());
         }
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
         List<User> users = new ArrayList<>();
         for (TbSysUser tbSysUser1 : tbSysUsers) {
             User user1 = new User();
-            BeanUtils.copyProperties(tbSysUser1,user1);
+            BeanUtils.copyProperties(tbSysUser1, user1);
             users.add(user1);
         }
         return users;

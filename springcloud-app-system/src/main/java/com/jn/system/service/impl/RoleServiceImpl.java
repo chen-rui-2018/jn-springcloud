@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.dao.RoleMapper;
 import com.jn.system.dao.RoleResourcesMapper;
 import com.jn.system.model.*;
@@ -79,9 +79,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public GetEasyUIData findTByPage(RolePage role) {
+    public PaginationData findTByPage(RolePage role) {
         Page<Object> objects = PageHelper.startPage(role.getPage(), role.getRows());
-        return new GetEasyUIData(roleMapper.findTByPage(role)
+        return new PaginationData(roleMapper.findTByPage(role)
                 , objects.getTotal());
     }
 

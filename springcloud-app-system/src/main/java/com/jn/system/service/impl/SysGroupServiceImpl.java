@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysGroup;
@@ -30,7 +30,7 @@ import java.util.*;
  * @modified By:
  */
 @Service
-public class SysGroupServiceImpl implements SysGroupService{
+public class SysGroupServiceImpl implements SysGroupService {
     private Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
 
     @Autowired
@@ -51,15 +51,16 @@ public class SysGroupServiceImpl implements SysGroupService{
 
     /**
      * 查询所用用户组信息
+     *
      * @return
      */
     @Override
     public Result findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
         List<SysGroupVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
-        if (sysGroupAll != null && sysGroupAll.size() > 0){
+        if (sysGroupAll != null && sysGroupAll.size() > 0) {
             //获取用户组对应的用户及角色
-            for (SysGroupVO sysGroupVO:sysGroupAll) {
+            for (SysGroupVO sysGroupVO : sysGroupAll) {
                 //获取用户信息
                 List<SysUserVO> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupVO.getId());
                 sysGroupVO.setSysUserVOS(userAllOfGroup);
@@ -68,12 +69,13 @@ public class SysGroupServiceImpl implements SysGroupService{
                 sysGroupVO.setSysRoles(roleAllOfGroup);
             }
         }
-        GetEasyUIData getEasyUIData = new GetEasyUIData(sysGroupAll,objects.getTotal());
+        PaginationData getEasyUIData = new PaginationData(sysGroupAll, objects.getTotal());
         return new Result<>(getEasyUIData);
     }
 
     /**
      * 用户组增加
+     *
      * @param sysGroup 用户组
      */
     @Override
@@ -89,23 +91,25 @@ public class SysGroupServiceImpl implements SysGroupService{
 
     /**
      * 逻辑删除用户组
+     *
      * @param groupIds 用户组id数组
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
-        for (String groupId: groupIds) {
+        for (String groupId : groupIds) {
             TbSysGroup tbSysGroup = tbSysGroupMapper.selectByPrimaryKey(groupId);
             tbSysGroup.setStatus(SysStatusEnums.DELETED.getKey());
             TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
             TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
             criteria.andIdEqualTo(tbSysGroup.getId());
-            tbSysGroupMapper.updateByExampleSelective(tbSysGroup,tbSysGroupCriteria);
+            tbSysGroupMapper.updateByExampleSelective(tbSysGroup, tbSysGroupCriteria);
         }
     }
 
     /**
      * 修改用户组信息
+     *
      * @param sysGroup 用户组对象
      * @return
      */
@@ -116,11 +120,12 @@ public class SysGroupServiceImpl implements SysGroupService{
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
         TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
         criteria.andIdEqualTo(sysGroup.getId());
-        tbSysGroupMapper.updateByExampleSelective(sysGroup,tbSysGroupCriteria);
+        tbSysGroupMapper.updateByExampleSelective(sysGroup, tbSysGroupCriteria);
     }
 
     /**
      * 根据用户组id获取用户组信息
+     *
      * @param id 用户组id
      * @return
      */
@@ -131,6 +136,7 @@ public class SysGroupServiceImpl implements SysGroupService{
 
     /**
      * 根据用户组id获取用户组信息及用户组具有的角色信息并返回其他所有角色信息
+     *
      * @param id 用户组id
      * @return
      */
@@ -140,24 +146,25 @@ public class SysGroupServiceImpl implements SysGroupService{
         List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(id);
         //获取所有用户组信息
         List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        System.out.println("所有角色"+sysRoleAll);
+        System.out.println("所有角色" + sysRoleAll);
         //排除角色列表中用户组中已经存在的角色
-        if(roleAllOfGroup != null && roleAllOfGroup.size() > 0){
-            for (SysRole sysRole:roleAllOfGroup) {
-                if(sysRoleAll.contains(sysRole)){
+        if (roleAllOfGroup != null && roleAllOfGroup.size() > 0) {
+            for (SysRole sysRole : roleAllOfGroup) {
+                if (sysRoleAll.contains(sysRole)) {
                     sysRoleAll.remove(sysRole);
                 }
             }
         }
         //返回用户组已具有角色信息及其他所有角色信息
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("roleAllOfGroup",roleAllOfGroup);
-        map.put("sysRoleAll",sysRoleAll);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("roleAllOfGroup", roleAllOfGroup);
+        map.put("sysRoleAll", sysRoleAll);
         return new Result(map);
     }
 
     /**
      * 为用户组授权权限信息
+     *
      * @param sysRoleGroupAdd
      */
     @Override
@@ -167,7 +174,7 @@ public class SysGroupServiceImpl implements SysGroupService{
         User user = (User) SecurityUtils.getSubject().getPrincipals();
 
         List<SysGroupRole> sysGroupRoleList = new ArrayList<>();
-        for (String roleId:sysRoleGroupAdd.getRoleIds()) {
+        for (String roleId : sysRoleGroupAdd.getRoleIds()) {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
             sysGroupRole.setStatus(sysRoleGroupAdd.getStatus());
@@ -176,7 +183,7 @@ public class SysGroupServiceImpl implements SysGroupService{
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("message={}","添加用户组授权角色，groupId="+groupids.toString()+"roleId="
+            logger.info("message={}", "添加用户组授权角色，groupId=" + groupids.toString() + "roleId="
                     + roleId);
         }
 
@@ -184,11 +191,12 @@ public class SysGroupServiceImpl implements SysGroupService{
         sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
-        logger.info("message={}","用户组授权角色成功，groupId="+groupids.toString());
+        logger.info("message={}", "用户组授权角色成功，groupId=" + groupids.toString());
     }
 
     /**
      * 根据用户组id获取用户组下面所有用户
+     *
      * @param groupId 用户组id
      * @return
      */
@@ -200,6 +208,7 @@ public class SysGroupServiceImpl implements SysGroupService{
 
     /**
      * 分页获取除用户组具有的用户以外的用户
+     *
      * @param sysGroupUserPage
      * @return
      */
@@ -207,12 +216,13 @@ public class SysGroupServiceImpl implements SysGroupService{
     public Result findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
         List<SysUserVO> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
-        GetEasyUIData data = new GetEasyUIData(userList,objects.getTotal());
+        PaginationData data = new PaginationData(userList, objects.getTotal());
         return new Result(data);
     }
 
     /**
      * 用户组授权用户
+     *
      * @param sysGroupUserAdd
      */
     @Override
@@ -222,7 +232,7 @@ public class SysGroupServiceImpl implements SysGroupService{
         User user = (User) SecurityUtils.getSubject().getPrincipals();
 
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
-        for (String userId:sysGroupUserAdd.getUserIds()) {
+        for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();
             sysGroupUser.setId(UUID.randomUUID().toString());
             sysGroupUser.setCreateTime(new Date());
@@ -231,14 +241,14 @@ public class SysGroupServiceImpl implements SysGroupService{
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
-            logger.info("message={}","添加用户组授权用户，groupId="+sysGroupUserAdd.getGroupId()+"userId="
+            logger.info("message={}", "添加用户组授权用户，groupId=" + sysGroupUserAdd.getGroupId() + "userId="
                     + userId);
         }
         //用户组添加用户之前清除用户组以前用户
         sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
-        logger.info("message={}","用户组授权用户成功，groupId="+sysGroupUserAdd.getGroupId());
+        logger.info("message={}", "用户组授权用户成功，groupId=" + sysGroupUserAdd.getGroupId());
     }
 
 

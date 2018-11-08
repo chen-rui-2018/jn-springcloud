@@ -1,7 +1,9 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
-import com.jn.system.model.*;
+import com.jn.common.model.PaginationData;
+import com.jn.system.model.SysMenu;
+import com.jn.system.model.SysMenuPage;
+import com.jn.system.model.SysMenuResourcesAdd;
 
 /**
  * 菜单service
@@ -15,18 +17,21 @@ public interface SysMenuService {
 
     /**
      * 新增菜单
+     *
      * @param sysMenu
      */
     void insertSysMenu(SysMenu sysMenu);
 
     /**
      * 更新菜单信息
+     *
      * @param sysMenu
      */
     void updateSysMenuById(SysMenu sysMenu);
 
     /**
      * 批量删除菜单（逻辑删除）
+     *
      * @param menuIds
      * @return
      */
@@ -34,13 +39,15 @@ public interface SysMenuService {
 
     /**
      * 分页查询菜单功能列表信息
+     *
      * @param sysMenuPage
      * @return
      */
-    GetEasyUIData selectMenuListBySearchKey(SysMenuPage sysMenuPage);
+    PaginationData selectMenuListBySearchKey(SysMenuPage sysMenuPage);
 
     /**
      * 根据id获取菜单详情
+     *
      * @param id
      * @return
      */
@@ -48,6 +55,7 @@ public interface SysMenuService {
 
     /**
      * 菜单分配功能
+     *
      * @param sysMenuResourcesAdd
      */
     void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd);

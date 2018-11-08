@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.dao.DictMapper;
 import com.jn.system.model.Dict;
 import com.jn.system.model.DictPage;
@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
 /**
  * 字典
  *
@@ -27,10 +28,10 @@ public class DictServiceImpl implements DictService {
     private DictMapper dictMapper;
 
     @Override
-    public GetEasyUIData findTByPage(DictPage dict) {
+    public PaginationData findTByPage(DictPage dict) {
         Page<Object> objects = PageHelper.startPage(dict.getPage(), dict.getRows());
         List<Dict> tByPage = dictMapper.findTByPage(dict);
-        return new GetEasyUIData(tByPage, objects.getTotal());
+        return new PaginationData(tByPage, objects.getTotal());
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.dao.SysResourcesMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
@@ -94,9 +94,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public GetEasyUIData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
+    public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
-        return new GetEasyUIData(sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage)
+        return new PaginationData(sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage)
                 , objects.getTotal());
     }
 
@@ -108,8 +108,8 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     public SysResources selectSysResourcesById(String id) {
-        TbSysResources tbSysResources =tbSysResourcesMapper.selectByPrimaryKey(id);
-        SysResources sysResources=new SysResources();
+        TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(id);
+        SysResources sysResources = new SysResources();
         BeanUtils.copyProperties(tbSysResources, sysResources);
         return sysResources;
     }

@@ -1,13 +1,12 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.Dict;
 import com.jn.system.model.DictPage;
 import com.jn.system.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,17 +32,19 @@ public class DictController extends BaseController {
 
     /**
      * 获取列表
+     *
      * @param dict
      * @return
      */
     @RequiresPermissions("/system/dict/list")
     @RequestMapping(value = "/list")
-    public GetEasyUIData list(DictPage dict) {
+    public PaginationData list(DictPage dict) {
         return dictService.findTByPage(dict);
     }
 
     /**
      * 字典新增
+     *
      * @param dict
      * @return
      */
@@ -56,19 +57,21 @@ public class DictController extends BaseController {
 
     /**
      * 字典更新
+     *
      * @param dict
      * @return
      */
     @RequiresPermissions("/system/dict/update")
     @RequestMapping(value = "/update")
     public Result update(Dict dict) {
-        Assert.notNull(dict.getId(),"字典ID不能为空");
+        Assert.notNull(dict.getId(), "字典ID不能为空");
         dictService.updateByPrimaryKeyDict(dict);
         return new Result();
     }
 
     /**
      * 字典删除
+     *
      * @param id
      * @return
      */
@@ -79,8 +82,10 @@ public class DictController extends BaseController {
         return new Result();
 
     }
+
     /**
-     *  查找列表
+     * 查找列表
+     *
      * @param dict
      * @return
      */
@@ -91,6 +96,7 @@ public class DictController extends BaseController {
 
     /**
      * 通过主键找字典
+     *
      * @param id
      * @return
      */

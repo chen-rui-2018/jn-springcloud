@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.jn.common.model.Result;
+import com.jn.system.model.MenuResources;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,12 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
     Result<Set<String>> getResources(@RequestBody String id);
 
-
+    /**
+     * 获取菜单功能URL列表
+     * @param id 用户ID
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getMenuResources", method = RequestMethod.POST)
+    Result<List<MenuResources>> getMenuResources(@RequestBody String id);
 
 }

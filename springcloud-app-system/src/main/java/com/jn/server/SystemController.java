@@ -5,6 +5,7 @@ import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.system.config.RedisSessionDAO;
+import com.jn.system.model.MenuResources;
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
 import com.jn.system.service.ResourcesService;
@@ -66,5 +67,11 @@ public class SystemController extends BaseController {
     public Result<Set<String>> getResources(@RequestBody  String id) {
         Set<String> resourcesList = sysResourcesService.findPermissionsUrlById(id);
     	return new Result(resourcesList);
+    }
+
+    @RequestMapping(value = "/getMenuResources",method = RequestMethod.POST)
+    public Result<List<MenuResources>> getMenuResources(@RequestBody  String id) {
+        List<MenuResources> menuResourcesList = sysResourcesService.getMenuResourcesUrlById(id);
+        return new Result(menuResourcesList);
     }
 }

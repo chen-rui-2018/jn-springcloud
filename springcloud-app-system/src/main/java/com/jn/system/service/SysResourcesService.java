@@ -1,9 +1,11 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -63,4 +65,10 @@ public interface SysResourcesService {
      */
     Set<String> findPermissionsUrlById(String id);
 
+    /**
+     * 根据id查找用户拥有功能权限列表
+     * @param id 用户ID
+     * @return
+     */
+    List<MenuResources> getMenuResourcesUrlById(String id);
 }

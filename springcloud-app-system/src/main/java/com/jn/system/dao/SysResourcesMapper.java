@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 
+import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 import com.jn.system.vo.SysResourcesVO;
@@ -34,8 +35,15 @@ public interface SysResourcesMapper {
 
     /**
      * 根据id查找用户拥有权限列表
-     * @param id
+     * @param id 用户ID
      * @return
      */
     Set<String> findPermissionsUrlById(String id);
+
+    /**
+     * 根据id查找用户拥有功能权限列表
+     * @param id 用户ID
+     * @return
+     */
+    List<MenuResources> getMenuResourcesUrlById(String id);
 }

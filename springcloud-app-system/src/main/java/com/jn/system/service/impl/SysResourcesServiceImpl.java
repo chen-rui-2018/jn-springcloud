@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.dao.SysResourcesMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
+import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 import com.jn.system.model.User;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -117,5 +119,10 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     public Set<String> findPermissionsUrlById(String id) {
         return sysResourcesMapper.findPermissionsUrlById(id);
+    }
+
+    @Override
+    public List<MenuResources> getMenuResourcesUrlById(String id) {
+        return sysResourcesMapper.getMenuResourcesUrlById(id);
     }
 }

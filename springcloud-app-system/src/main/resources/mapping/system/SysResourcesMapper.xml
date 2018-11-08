@@ -119,5 +119,40 @@
         and su.id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <select id="getMenuResourcesUrlById" parameterType="java.lang.String"
+            resultType="com.jn.system.model.MenuResources">
+        select
+        tsr.id "resourcesId"
+        ,tsr.resources_url "resourcesUrl"
+        ,tsr.menu_id "menuId"
+        ,sm.menu_url "menuUrl"
+        from
+        tb_sys_user su
+        ,tb_sys_user_role sur
+        ,tb_sys_role sr
+        ,tb_sys_permission sp
+        ,tb_sys_role_permission srp
+        ,tb_sys_resources tsr
+        ,tb_sys_permission_resources spr
+        ,tb_sys_menu sm
+        where su.id = sur.user_id
+        and sr.id = sur.role_id
+        and sr.id = srp.role_id
+        and sp.id = srp.permission_id
+        and sp.id = spr.permission_id
+        and tsr.id = spr.resources_id
+        and sm.id = tsr.menu_id
+        and su.status =1
+        and sur.status =1
+        and sr.status = 1
+        and sp.status = 1
+        and srp.status = 1
+        and sr.status = 1
+        and spr.status = 1
+        and sm.status = 1
+        and su.id = #{id,jdbcType=VARCHAR}
+        order by sm.menu_url asc
+    </select>
+
 
 </mapper>

@@ -7,6 +7,7 @@ import com.jn.system.model.SysUser;
 import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
+import com.jn.system.utils.ShiroUserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -47,6 +48,7 @@ public class SysUserController extends BaseController{
     @ApiOperation(value = "分页条件查询用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
     public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage){
+        ShiroUserUtils.getPermissionsByLoginUser();
         return sysUserService.findSysUserByPage(userSysUserPage);
     }
 

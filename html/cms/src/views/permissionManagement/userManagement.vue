@@ -40,14 +40,14 @@
       max-height="500"
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序列" prop="id" align="center" width="65"/>
+      <el-table-column label="序列" prop="id" align="center" width="120"/>
       <el-table-column label="姓名" prop="name" align="center" width="65"/>
       <el-table-column label="账号" prop="account" align="center" width="130"/>
       <el-table-column label="邮箱" prop="email" align="center" width="200"/>
-      <el-table-column label="创建时间" prop="creation_time" align="center" width="200"/>
+      <el-table-column label="创建时间" prop="creationTime" align="center" width="200"/>
       <el-table-column label="部门" prop="department" align="center" width="65"/>
       <el-table-column label="岗位" prop="position" align="center" width="65"/>
-      <el-table-column label="人员状态" prop="userStatus" align="center" width="65"/>
+      <el-table-column label="人员状态" prop="status" align="center" width="65"/>
       <el-table-column
         fit
         label="操作"
@@ -56,7 +56,7 @@
         min-width="400">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleSectorUpdate(scope.row)">部门岗位</el-button>
-          <el-button type="primary" size="mini">角色</el-button>
+          <el-button type="primary" size="mini" @click="handleRoleUpdate(scope.row)">角色</el-button>
           <el-button type="primary" size="mini">重置密码</el-button>
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)"/>
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)"/>
@@ -75,7 +75,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange" />
     </div>
-    <!-- 新增弹窗 -->
+    <!-- S 新增弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" title="新增">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
         <el-form-item label="账号" prop="account" >
@@ -117,25 +117,91 @@
         <el-button type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
       </div>
     </el-dialog>
-    <!---->
-    <!-- 部门岗位 -->
-    <el-dialog :visible.sync="dialogSectorVisible" title="部门岗位" >
-      <el-botton type="primary" size="mini">分配</el-botton>
-      <el-form ref="dataForm" :rules="rules" :model="temp2" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
-        <el-form-item label="账号" prop="account" >
-          <el-input
-            v-model="temp.account"
-            maxLength="20"
-            clearable
-          />
-        </el-form-item>
-      </el-form>
+    <!-- E 新增弹窗 -->
+    <!-- S 部门岗位 -->
+    <el-dialog
+      :visible.sync="dialogSectorVisible"
+      title="部门岗位"
+      class="sector-dialog">
+      <el-table
+        :data="userPositionData"
+        border
+        fit
+        style="width: 100%">
+        <el-table-column
+          label="部门"
+          align="center"
+          width="280">
+          <template slot-scope="scope">
+            <el-cascader
+              v-model="userPositionData[scope.$index].department"
+              :options="departmentList"
+              change-on-select
+              style="width:100%;"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="岗位"
+          align="center"
+          width="180">
+          <template scope="scope">
+            <el-select v-model="userPositionData[scope.$index].position" placeholder="请选择">
+              <el-option
+                v-for="(item,index) in positionOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="默认"
+          align="center"
+          width="180">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.status==='default'" type="success" size="small" >默认岗位</el-button>
+            <el-button v-else-if="scope.row.status!=='default' && scope.row.department && scope.row.position" size="small" @click="setDefaultPosition(scope.$index, scope.row)">设为默认岗位</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          align="center">
+          <template slot-scope="scope">
+            <el-button
+              v-if="scope.row.department && scope.row.position"
+              size="mini"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
       </div>
     </el-dialog>
-    <!---->
+    <!-- E 部门岗位 -->
+    <!-- S 角色岗位 -->
+    <el-dialog
+      :visible.sync="dialogRoleVisible"
+      title="角色"
+      class="role-dialog">
+      <el-transfer
+        :filter-method="filterMethod"
+        :titles="[ '角色列表', '已选中角色' ]"
+        :data="data2"
+        v-model="value2"
+        filterable
+        filter-placeholder="请输入角色拼音"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogRoleVisible = false">取消</el-button>
+        <el-button type="primary" @click="test">确认</el-button>
+      </div>
+    </el-dialog>
+    <!-- E 角色岗位 -->
   </div>
 </template>
 
@@ -184,6 +250,19 @@ export default {
         callback()
       }
     }
+    const generateData2 = _ => {
+      const data = []
+      const cities = ['角色一', '角色二', '角色三', '角色四', '角色五', '角色六', '角色七']
+      const pinyin = ['juese1', 'juese2', 'juese3', 'juese4', 'juese5', 'juese6', 'juese7']
+      cities.forEach((city, index) => {
+        data.push({
+          label: city,
+          key: index,
+          pinyin: pinyin[index]
+        })
+      })
+      return data
+    }
     return {
       tableKey: 0,
       userList: null,
@@ -202,6 +281,7 @@ export default {
       },
       userStatusOptions: ['生效', '不生效'],
       departmentOptions: ['A部门', '销售部', '研发部', '市场部'],
+      positionOptions: ['经理', '美工', '开发', '推广', '策划'],
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
         { label: 'ID Descending', key: '-id' }
@@ -218,8 +298,8 @@ export default {
       },
       dialogFormVisible: false,
       dialogStatus: '',
-      dialogPvVisible: false,
       dialogSectorVisible: false,
+      dialogRoleVisible: false,
       rules: {
         name: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
@@ -244,7 +324,86 @@ export default {
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           { validator: checkPhoneNumber, trigger: 'blur' }
         ]
+      },
+      defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      userPositionData: [
+        {
+          department: ['test2', '22', 'yizhi'],
+          position: '美工',
+          status: 'default'
+        }, {
+          department: '',
+          position: '',
+          status: undefined
+        }, {
+          department: '',
+          position: '',
+          status: undefined
+        }
+      ],
+      departmentList: [
+        {
+          value: 'zhinan',
+          label: '指南',
+          children: [{
+            value: 'shejiyuanze',
+            label: '设计原则',
+            children: [{
+              value: 'yizhi',
+              label: '一致'
+            }, {
+              value: 'fankui',
+              label: '反馈'
+            }, {
+              value: 'xiaolv',
+              label: '效率'
+            }, {
+              value: 'kekong',
+              label: '可控'
+            }]
+          }]
+        },
+        {
+          value: 'test2',
+          label: '一级部门',
+          children: [{
+            value: '22',
+            label: '二级部门',
+            children: [{
+              value: 'yizhi',
+              label: '三级部门'
+            }, {
+              value: 'fankui',
+              label: '三级部门'
+            }]
+          }]
+        }
+      ],
+      data2: generateData2(),
+      value2: [],
+      filterMethod(query, item) {
+        return item.pinyin.indexOf(query) > -1
       }
+    }
+  },
+  watch: {
+    userPositionData: {
+      handler: function() {
+        const userPosition = this.userPositionData.filter(function(item) {
+          return item.department && item.position
+        })
+        if (this.userPositionData.length < userPosition.length + 2) {
+          this.userPositionData.push({
+            department: '',
+            position: '',
+            status: undefined
+          })
+        }
+      },
+      deep: true
     }
   },
   created() {
@@ -259,18 +418,20 @@ export default {
     },
     getUserList() {
       this.listLoading = true
-      userList(this.listQuery).then(response => {
-        this.userList = response.data.items
-        this.total = response.data.total
-
+      userList({ page: 2, rows: 2 }).then(response => {
+        this.userList = response.data.data.rows
+        this.total = response.data.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1.5 * 1000)
+        }, 1e3)
       })
     },
     handleSectorUpdate(row) {
       this.dialogSectorVisible = true
+    },
+    handleRoleUpdate(row) {
+      this.dialogRoleVisible = true
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -380,15 +541,35 @@ export default {
           }
         })
       )
+    },
+    setDefaultPosition(index, row) {
+      var currentIndex = index
+      this.userPositionData = this.userPositionData.map(function(item, index) {
+        if (currentIndex === index) {
+          item.status = 'default'
+        } else {
+          item.status = undefined
+        }
+        return item
+      })
     }
   }
 }
 </script>
 <style lang="scss" >
   .el-dialog {
-    width:90%;
-    max-width:400px;
+    width:90%;max-width:400px;
+  }
+  .sector-dialog{
+    .el-dialog{max-width: 800px;}
+    .item-box{padding:5px;border:1px solid #d7d7d7;}
+  }
+  .role-dialog{
+     .el-dialog{max-width:540px;}
+     .el-transfer{display:inline-block;white-space: nowrap;}
   }
   .el-dialog__body{padding-top:10px;padding-bottom:0;}
+  .el-form-item{margin-bottom:0;}
+  .filter-container{padding-bottom:0;}
 </style>
 

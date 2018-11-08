@@ -52,7 +52,6 @@ const user = {
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
           const data = response.data
-          console.log(data.code)
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)

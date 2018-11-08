@@ -1,53 +1,47 @@
 package com.jn.system.vo;
 
-import com.jn.system.model.SysRole;
 import com.jn.system.model.SysTUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * 用户组实体类
- *
+ * 部门VO
  * @author： shaobao
- * @date： Created on 2018/11/5 9:52
+ * @date： Created on 2018/11/7 19:15
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysGroupVO",description = "用户组VO")
-public class SysGroupVO implements Serializable {
+@ApiModel(value = "SysDepartmentVO",description = "部门VO")
+public class SysDepartmentVO implements Serializable {
 
-    private static final long serialVersionUID = 2758645323376032467L;
+    private static final long serialVersionUID = 8857934360566700442L;
     @ApiModelProperty("id")
     private String id;
-    @ApiModelProperty("用户组名称")
-    private String groupName;
+    @ApiModelProperty("部门名称")
+    private String departmentName;
     @ApiModelProperty("创建时间")
     private Date createTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
     private String status;
-    @ApiModelProperty("创建人")
-    private String creator;
-    @ApiModelProperty("关联角色")
-    private List<SysRole> sysRoleList;
-    @ApiModelProperty("关联用户")
+    @ApiModelProperty("父级id")
+    private String parentId;
+    @ApiModelProperty("用户集合")
     private List<SysTUser> sysTUserList;
 
-    public SysGroupVO() {
+    public SysDepartmentVO() {
     }
 
-    public SysGroupVO(String id, String groupName, Date createTime, String status, String creator,
-                      List<SysRole> sysRoleList, List<SysTUser> sysTUserList) {
+    public SysDepartmentVO(String id, String departmentName, Date createTime, String status,
+                           String parentId, List<SysTUser> sysTUserList) {
         this.id = id;
-        this.groupName = groupName;
+        this.departmentName = departmentName;
         this.createTime = createTime;
         this.status = status;
-        this.creator = creator;
-        this.sysRoleList = sysRoleList;
+        this.parentId = parentId;
         this.sysTUserList = sysTUserList;
     }
 
@@ -59,12 +53,12 @@ public class SysGroupVO implements Serializable {
         this.id = id;
     }
 
-    public String getGroupName() {
-        return groupName;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public Date getCreateTime() {
@@ -83,20 +77,12 @@ public class SysGroupVO implements Serializable {
         this.status = status;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public List<SysRole> getSysRoleList() {
-        return sysRoleList;
-    }
-
-    public void setSysRoleList(List<SysRole> sysRoleList) {
-        this.sysRoleList = sysRoleList;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public List<SysTUser> getSysTUserList() {
@@ -109,13 +95,12 @@ public class SysGroupVO implements Serializable {
 
     @Override
     public String toString() {
-        return "SysGroupVO{" +
+        return "SysDepartmentVO{" +
                 "id='" + id + '\'' +
-                ", groupName='" + groupName + '\'' +
+                ", departmentName='" + departmentName + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
-                ", creator='" + creator + '\'' +
-                ", sysRoleList=" + sysRoleList +
+                ", parentId='" + parentId + '\'' +
                 ", sysTUserList=" + sysTUserList +
                 '}';
     }

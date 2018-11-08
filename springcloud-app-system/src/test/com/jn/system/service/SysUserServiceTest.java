@@ -2,7 +2,9 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
+import com.jn.system.model.SysDepartmentPost;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -94,12 +96,15 @@ public class SysUserServiceTest {
 
     @Test
     public void saveDepartmentandPostOfUser() {
-        TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
-        sysUserDepartmentPost.setDepartmentId("d004");
-        sysUserDepartmentPost.setPostId("p004");
-        List<TbSysUserDepartmentPost> list = new ArrayList<>();
-        list.add(sysUserDepartmentPost);
-        sysUserService.saveDepartmentandPostOfUser("u002", list);
+        SysUserDepartmentPostAdd sysUserDepartmentPost = new SysUserDepartmentPostAdd();
+        sysUserDepartmentPost.setUserId("u002");
+        List<SysDepartmentPost> list = new ArrayList<>();
+        SysDepartmentPost sysDepartmentPost = new SysDepartmentPost();
+        sysDepartmentPost.setDepartmentId("d006");
+        sysDepartmentPost.setPostId("p006");
+        list.add(sysDepartmentPost);
+        sysUserDepartmentPost.setSysDepartmentPostList(list);
+        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPost);
     }
 
     @Test

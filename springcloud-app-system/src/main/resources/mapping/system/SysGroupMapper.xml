@@ -53,14 +53,14 @@
                   status)
                 values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
                 #{creator,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
-        </insert>
+     </insert>
 
     <!--逻辑删除用户组-->
     <update id="deleSysGroup" parameterType="java.lang.String">
             update tb_sys_group
             set `status` = '-1'
             where id = #{id,jdbcType=VARCHAR}
-        </update>
+    </update>
 
     <!--更新用户组信息-->
     <update id="updateSysGroup" parameterType="com.jn.system.entity.TbSysGroup">

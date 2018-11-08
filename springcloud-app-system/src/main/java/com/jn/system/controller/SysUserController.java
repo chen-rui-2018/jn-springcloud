@@ -4,12 +4,14 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -110,15 +112,14 @@ public class SysUserController extends BaseController{
 
     /**
      * 为用户添加部门岗位
-     * @param sysUserId 用户id
-     * @param sysUserDepartmentPostlist 岗位,部门列表集合
+     * @param sysUserDepartmentPostAdd
      * @return
      */
     @ApiOperation(value = "为用户添加部门岗位",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
-    public Result saveDepartmentandPostOfUser(String sysUserId,
-                                              List<TbSysUserDepartmentPost> sysUserDepartmentPostlist){
-        sysUserService.saveDepartmentandPostOfUser(sysUserId,sysUserDepartmentPostlist);
+    public Result saveDepartmentandPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd){
+        Assert.notNull(sysUserDepartmentPostAdd.getUserId(),"用户id不能为空");
+        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd);
         return new Result();
     }
 

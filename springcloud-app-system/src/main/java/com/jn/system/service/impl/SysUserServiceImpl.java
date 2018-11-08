@@ -282,27 +282,31 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 为用户添加部门岗位
      *
-     * @param sysUserId                 用户id
-     * @param sysUserDepartmentPostlist 岗位,部门列表集合
+     * @param sysUserDepartmentPostAdd
      * @return
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartmentandPostOfUser(String sysUserId, List<TbSysUserDepartmentPost> sysUserDepartmentPostlist) {
+    public void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
         //清除用户已有岗位部门列表
-        sysUserMapper.deleDepartmentandPost(sysUserId);
-        if (sysUserDepartmentPostlist != null && sysUserDepartmentPostlist.size() > 0) {
+        sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
+        if (sysUserDepartmentPostAdd.getSysDepartmentPostList() != null
+                && sysUserDepartmentPostAdd.getSysDepartmentPostList().size() > 0) {
             //为用户添加新部门岗位信息
-            for (TbSysUserDepartmentPost sysUserDepartmentPost : sysUserDepartmentPostlist) {
+            for (SysDepartmentPost sysDepartmentPost : sysUserDepartmentPostAdd.getSysDepartmentPostList()) {
+                TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
                 sysUserDepartmentPost.setCreateTime(new Date());
                 User user = (User) SecurityUtils.getSubject().getPrincipal();
                 sysUserDepartmentPost.setCreator(user.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
                 sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-                sysUserDepartmentPost.setUserId(sysUserId);
+                sysUserDepartmentPost.setUserId(sysUserDepartmentPostAdd.getUserId());
+                sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
+                sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
+                sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
             }
-            logger.info("message{}", "用户添加部门岗位成功！，sysUserId=" + sysUserId);
+            logger.info("message{}", "用户添加部门岗位成功！，sysUserId=" + sysUserDepartmentPostAdd.getUserId());
         }
 
     }

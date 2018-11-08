@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysDepartment;
+import com.jn.system.model.*;
 
 /**
  * @author： shaobao
@@ -31,13 +32,40 @@ public interface SysDepartmentService {
 
     /**
      * 修改部门信息
-     * @param tbSysDepartment
+     * @param sysDepartment
      */
-    void update(TbSysDepartment tbSysDepartment);
+    void update(SysDepartment sysDepartment);
 
     /**
      * 添加部门信息
-     * @param tbSysDepartment
+     * @param sysDepartmentAdd
      */
-    void add(TbSysDepartment tbSysDepartment);
+    void add(SysDepartmentAdd sysDepartmentAdd);
+
+    /**
+     * 条件分页查询部门信息
+     * @param sysDepartmentPage
+     * @return
+     */
+    Result findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
+
+    /**
+     * 根据部门id获取部门已经存在的用户信息
+     * @param departmentId
+     * @return
+     */
+    Result findUserOfDepartment(String departmentId);
+
+    /**
+     * 条件分页查询部门具有的用户以外的用户信息
+     * @param sysDepartmentUserPage
+     * @return
+     */
+    Result fingOtherUserByPage(SysDepartmentUserPage sysDepartmentUserPage);
+
+    /**
+     * 为部门添加用户
+     * @param sysDepartmentUserAdd
+     */
+    void addUserToDepartment(SysDepartmentUserAdd sysDepartmentUserAdd);
 }

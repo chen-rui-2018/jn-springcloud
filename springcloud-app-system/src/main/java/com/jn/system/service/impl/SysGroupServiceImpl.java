@@ -62,15 +62,15 @@ public class SysGroupServiceImpl implements SysGroupService {
             //获取用户组对应的用户及角色
             for (SysGroupVO sysGroupVO : sysGroupAll) {
                 //获取用户信息
-                List<SysUserVO> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupVO.getId());
-                sysGroupVO.setSysUserVOS(userAllOfGroup);
+                List<SysTUser> sysTUserList = sysGroupUserMapper.findUserByGroupId(sysGroupVO.getId());
+                sysGroupVO.setSysTUserList(sysTUserList);
                 //获取角色信息
                 List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(sysGroupVO.getId());
-                sysGroupVO.setSysRoles(roleAllOfGroup);
+                sysGroupVO.setSysRoleList(roleAllOfGroup);
             }
         }
         PaginationData getEasyUIData = new PaginationData(sysGroupAll, objects.getTotal());
-        return new Result<>(getEasyUIData);
+        return new Result(getEasyUIData);
     }
 
     /**
@@ -173,7 +173,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         String[] groupids = {sysRoleGroupAdd.getGroupId()};
         User user = (User) SecurityUtils.getSubject().getPrincipals();
 
-        List<SysGroupRole> sysGroupRoleList = new ArrayList<>();
+        List<SysGroupRole> sysGroupRoleList = new ArrayList<SysGroupRole>();
         for (String roleId : sysRoleGroupAdd.getRoleIds()) {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
@@ -202,7 +202,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     public Result findUserOfGroup(String groupId) {
-        List<SysUserVO> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(groupId);
+        List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(groupId);
         return new Result(userAllOfGroup);
     }
 
@@ -215,7 +215,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     public Result findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
-        List<SysUserVO> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
+        List<SysTUser> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
         PaginationData data = new PaginationData(userList, objects.getTotal());
         return new Result(data);
     }

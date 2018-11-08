@@ -2,6 +2,7 @@ package com.jn.system.dao;
 
 import com.jn.system.model.SysGroupUser;
 import com.jn.system.model.SysGroupUserPage;
+import com.jn.system.model.SysTUser;
 import com.jn.system.vo.SysUserVO;
 
 import java.util.List;
@@ -20,14 +21,14 @@ public interface SysGroupUserMapper {
      * @param id
      * @return
      */
-    List<SysUserVO> findUserByGroupId(String id);
+    List<SysTUser> findUserByGroupId(String id);
 
     /**
      * 分页查询用户组已经具有的用户以外的用户
      * @param sysGroupUserPage
      * @return
      */
-    List<SysUserVO> findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
+    List<SysTUser> findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
 
     /**
      * 逻辑删除用户组下面已经具有的用户

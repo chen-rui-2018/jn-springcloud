@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysUserDepartmentPostMapper">
+
+    <select id="fingUserOfDepartment" parameterType="java.lang.String" resultType="com.jn.system.model.SysTUser">
+        select u.id,u.`name`
+        from tb_sys_user_department_post d , tb_sys_user u
+        where d.user_id = u.id
+        and d.`status` = '1' and u.`status` = '1'
+        and d.department_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="fingOtherUserByPage" parameterType="com.jn.system.model.SysDepartmentUserPage"
+            resultType="com.jn.system.model.SysTUser">
+            select id,`name`
+            from tb_sys_user
+            where id not in
+            (select user_id from tb_sys_user_department_post
+              where `status` = '1'
+              and department_id = #{departmentId,jdbcType=VARCHAR})
+            <if test="name  != null and name != ''">
+                and `name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
+            </if>
+    </select>
+
+    <update id="deleteUserOfDepartment" parameterType="java.lang.String">
+        update tb_sys_user_department_post set `status` = '-1' where department_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insert" parameterType="java.util.List">
+        insert into  tb_sys_user_department_post(id,user_id,department_id,post_id,is_default,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.departmentId,jdbcType=VARCHAR},
+            #{item.postId,jdbcType=VARCHAR},
+            #{item.isDefault,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=VARCHAR},
+            #{item.status,jdbcType=VARCHAR}
+            )
+        </foreach>
+    </insert>
+</mapper>

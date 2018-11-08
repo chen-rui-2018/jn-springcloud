@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysDepartmentMapper">
+    <select id="findSysDepartmentByPage" parameterType="com.jn.system.model.SysDepartmentPage"
+            resultType="com.jn.system.vo.SysDepartmentVO">
+        select
+        id,
+        department_name as departmentName,
+        parent_id as parentId,
+        create_time as createTime,
+        status
+        from tb_sys_department
+        where `status` != '-1'
+        <if test="departmentName != null and departmentName != ''">
+            and department_name  like CONCAT('%', #{departmentName,jdbcType=VARCHAR},'%')
+        </if>
+        <if test="status != null and status != ''">
+            and status = #{status,jdbcType=VARCHAR}
+        </if>
+        ORDER BY create_time desc
+    </select>
+</mapper>

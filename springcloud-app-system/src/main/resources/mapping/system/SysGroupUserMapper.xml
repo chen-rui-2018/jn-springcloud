@@ -13,9 +13,9 @@
 			tsu.`status`
 	</sql>
 
-    <select id="findUserByGroupId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysUserVO">
+    <select id="findUserByGroupId" parameterType="java.lang.String" resultType="com.jn.system.model.SysTUser">
 	   select
-			<include refid="Base_Column_list"/>
+			tsu.id,tsu.`name`
 		from tb_sys_user_group tsug join tb_sys_user tsu
 			on tsug.user_id = tsu.id
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
@@ -24,22 +24,21 @@
     </select>
 
     <select id="findOtherUserByPage" parameterType="com.jn.system.model.SysGroupUserPage"
-            resultType="com.jn.system.vo.SysUserVO">
-  		select
-		<include refid="Base_Column_list"/>
-		from tb_sys_user tsu
+            resultType="com.jn.system.model.SysTUser">
+
+		select
+		id,`name`
+		from tb_sys_user
 		where
 		`status` = '1'
-		<if test="groupId != null and groupId != ''">
-			and tsu.id not in
-			(select
+		and id not in
+		(select
 			user_id
 			from tb_sys_user_group
 			where `status` = '1'
-			and group_id = #{groupId,jdbcType=VARCHAR} )
-		</if>
+			and group_id = #{groupId,jdbcType=VARCHAR})
 		<if test="name  != null and name != ''">
-			and tsu.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
+			and `name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
 		</if>
 	</select>
 

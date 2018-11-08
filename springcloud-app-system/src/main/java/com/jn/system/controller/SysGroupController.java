@@ -97,6 +97,7 @@ public class SysGroupController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findOtherUserByPage")
     public Result findOtherUserByPage(@Validated @RequestBody SysGroupUserPage sysGroupUserPage) {
+        Assert.notNull(sysGroupUserPage.getGroupId(),"用户组id不能为空");
         return sysGroupService.findOtherUserByPage(sysGroupUserPage);
     }
 

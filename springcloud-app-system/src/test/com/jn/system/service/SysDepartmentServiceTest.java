@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysDepartment;
+import com.jn.system.model.SysDepartment;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -41,13 +42,12 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void updateTest() {
-        TbSysDepartment tbSysDepartment = new TbSysDepartment();
-        tbSysDepartment.setId("d002");
-        tbSysDepartment.setStatus("-1");
-        tbSysDepartment.setCreateTime(new Date());
-        tbSysDepartment.setCreator("管理员");
-        tbSysDepartment.setDepartmentName("工程部");
-        tbSysDepartment.setParentId("2");
-        sysDepartmentService.update(tbSysDepartment);
+        SysDepartment SysDepartment = new SysDepartment();
+        SysDepartment.setId("d002");
+        SysDepartment.setStatus("-1");
+        SysDepartment.setCreateTime(new Date());
+        SysDepartment.setDepartmentName("工程部");
+        SysDepartment.setParentId("2");
+        sysDepartmentService.update(SysDepartment);
     }
 }

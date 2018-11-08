@@ -3,6 +3,7 @@ package com.jn.system.service;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 
 import java.util.List;
@@ -89,11 +90,10 @@ public interface SysUserService {
     /**
      * 为用户添加部门岗位
      *
-     * @param sysUserId                 用户id
-     * @param sysUserDepartmentPostlist 岗位,部门列表集合
+     * @param sysUserDepartmentPostAdd
      * @return
      */
-    void saveDepartmentandPostOfUser(String sysUserId, List<TbSysUserDepartmentPost> sysUserDepartmentPostlist);
+    void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd);
 
     /**
      * 根据用户id返回用户信息

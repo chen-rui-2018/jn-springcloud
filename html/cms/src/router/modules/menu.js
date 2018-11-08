@@ -36,6 +36,12 @@ const menuRouter = {
       name: 'authoritymanagement',
       meta: { title: '权限管理', noCache: true }
       // hidden: true
+    },
+    {
+      path: 'menumanagement',
+      component: () => import('@/views/menu/menumanagement'),
+      name: 'menumanagement',
+      meta: { title: '菜单管理', noCache: true }
     }
   ]
 }

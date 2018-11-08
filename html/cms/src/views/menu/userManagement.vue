@@ -3,15 +3,15 @@
     <div class="filter-container">
       <!-- input搜索框 -->
       名称：
-      <el-input v-model="listQuery.title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
+      <el-input v-model="title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
       <!-- 第一个下拉菜单 -->
       状态：
-      <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item">
+      <el-select v-model="status" placeholder="请选择" clearable class="filter-item">
         <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
       </el-select>
       <!-- 第二个下拉菜单 -->
       部门：
-      <el-select v-model="listQuery.department" placeholder="请选择" clearable class="filter-item" style="width: 130px">
+      <el-select v-model="department" placeholder="请选择" clearable class="filter-item" style="width: 130px">
         <el-option v-for="item in departmentOptions" :key="item" :label="item" :value="item" />
       </el-select>
       <!-- 搜索按钮 -->
@@ -64,12 +64,12 @@
       <el-table-column label="操作" align="center" width="360" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
-          <el-button type="primary" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showBumenDialog(scope.row)">部门岗位</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row)">角色</el-button>
           <el-button type="primary" size="mini" @click="showrestDialog(scope.row)">重置密码</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="showEditDialog(scope.row)"/>
           <!-- 删除按钮 -->
-          <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteUser(scope.row.id)"/>
         </template>
       </el-table-column>
     </el-table>
@@ -163,10 +163,10 @@
     <el-dialog :visible.sync="restdialogVisible" title="重置密码" width="30%">
       <el-form ref="ruleForm2" :model="ruleForm2" :rules="rules2" status-icon label-width="100px" class="demo-ruleForm">
         <el-form-item label="密码" prop="pass">
-          <el-input v-model="ruleForm2.pass" type="password" auto-complete="off" />
+          <el-input v-model.trim="ruleForm2.pass" type="password" auto-complete="off" />
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPass">
-          <el-input v-model="ruleForm2.checkPass" type="password" auto-complete="off" />
+          <el-input v-model.trim="ruleForm2.checkPass" type="password" auto-complete="off" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="Restsubmit('ruleForm2')">提交</el-button>
@@ -215,7 +215,7 @@ export default {
       ruleForm2: { pass: '', checkPass: '' },
       roledata: [{ key: 0, label: '管理员' }, { key: 1, label: '经理' }, { key: 2, label: '报表角色' }, { key: 3, label: '超级管理员' }],
       value1: [0],
-      pagesize: 1,
+      pagesize: 10,
       total: 0,
       pagenum: 1,
       userList: [],
@@ -516,11 +516,10 @@ export default {
         }
       ],
       multipleSelection: [],
-      listQuery: {
-        title: '',
-        status: '',
-        department: ''
-      },
+
+      title: '',
+      status: '',
+      department: '',
       adddialogFormVisible: false,
       editdialogFormVisible: false,
       bumendialogFormVisible: false,
@@ -553,7 +552,7 @@ export default {
       rules: {
         name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
         username: [{ required: true, message: '请输入账户名', trigger: 'blur' }],
-        mobile: [{ required: true, message: '请输入正确手机号', trigger: 'blur' }, { required: true, pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur,change' }],
+        mobile: [{ required: true, message: '请输入正确手机号', trigger: 'blur' }, { required: true, pattern: /^1\d{10}$/, message: '请输入正确手机号', trigger: 'blur' }],
         email: [
           { required: true, message: '请输入邮箱地址', trigger: 'blur' },
           // { required: true, pattern: /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/, message: '请输入正确的邮箱地址', trigger: 'blur' }
@@ -566,7 +565,7 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.initList()
   },
   methods: {
@@ -692,65 +691,28 @@ export default {
     initList() {
       getAllUserList({
         // query: this.listQuery,
-        page: this.pagenum,
-        rows: this.pagesize
+        rows: this.pagesize,
+        page: this.pagenum
       }).then(res => {
         console.log(res)
-        this.total = res.data.data.getEasyUIData.total
-        this.userList = res.data.data.getEasyUIData.rows
+
+        // this.userList = res.data.rows
+        // this.total = res.data.total
       })
     },
-    /* initList() {
-      const list = [
-        {
-          id: '5',
-          name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '生效'
-        },
-        {
-          id: '2',
-          name: '李四',
-          username: '李四',
-          email: '1235466dfdf@163.com',
-          timestamp: '2018/8/6 14:30',
-          bumen: 'A部门',
-          gangwei: '研发岗',
-          status: '生效'
-        },
-        {
-          id: '3',
-          name: '测试1',
-          username: 'ceshi',
-          email: '12356dfdf@163.com',
-          timestamp: '2018/8/9 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '失效'
-        },
-        {
-          id: '4',
-          name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '生效'
-        }
-      ]
-      this.userList = list
-    },*/
+
     // 分页功能
+    // 当用户切换每面显示记录数时触发
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
+      this.pagesize = val
+      this.initList()
     },
+    // 当前页码变化的时候触发的操作
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
+      this.pagenum = val
+      this.initList()
     }
   }
 }

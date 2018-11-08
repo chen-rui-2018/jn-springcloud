@@ -55,6 +55,7 @@ const user = {
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
+
             resolve()
           } else {
             console.log(data.result)

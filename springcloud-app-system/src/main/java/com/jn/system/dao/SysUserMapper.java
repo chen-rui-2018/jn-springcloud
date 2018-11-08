@@ -90,4 +90,10 @@ public interface SysUserMapper {
      * @return
      */
     SysUserVO findSysUserById(String id);
+
+    /**
+     * 批量删除用户
+     * @param ids
+     */
+    void deleteUserBranch(String[] ids);
 }

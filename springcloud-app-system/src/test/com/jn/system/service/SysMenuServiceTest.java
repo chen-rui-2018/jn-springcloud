@@ -1,8 +1,9 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
 import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.*;
+import com.jn.system.model.SysMenu;
+import com.jn.system.model.SysMenuPage;
+import com.jn.system.model.SysMenuResourcesAdd;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class SysMenuServiceTest {
         SysMenuPage page = new SysMenuPage();
         page.setPage(1);
         page.setRows(10);
-        GetEasyUIData GetEasyUIData = sysMenuService.selectMenuListBySearchKey(page);
+        sysMenuService.selectMenuListBySearchKey(page);
     }
 
 

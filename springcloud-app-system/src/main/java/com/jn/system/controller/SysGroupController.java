@@ -34,6 +34,7 @@ public class SysGroupController extends BaseController {
     @Autowired
     private SysGroupService sysGroupService;
 
+
     @ApiOperation(value = "分页查询用户组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
     @RequiresPermissions("/system/sysGroup/list")
@@ -107,7 +108,7 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/findOtherUserByPage")
     @RequiresPermissions("/system/sysGroup/findOtherUserByPage")
     public Result findOtherUserByPage(@Validated @RequestBody SysGroupUserPage sysGroupUserPage) {
-        Assert.notNull(sysGroupUserPage.getGroupId(),"用户组id不能为空");
+        Assert.notNull(sysGroupUserPage.getGroupId(), "用户组id不能为空");
         return sysGroupService.findOtherUserByPage(sysGroupUserPage);
     }
 

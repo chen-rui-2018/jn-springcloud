@@ -33,4 +33,11 @@
         </foreach>
     </insert>
 
+    <update id="deleteGroupBranch" parameterType="java.lang.String">
+        update tb_sys_group_role set status=-1
+        where user_group_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

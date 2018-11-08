@@ -34,6 +34,9 @@ public interface SysUserRoleMapper {
      */
     void insertBatch(List<SysUserRole> sysUserRoles);
 
-
-
+    /**
+     * 批量删除用户对应的信息
+     * @param ids
+     */
+    void deleteUserBranch(String[] ids);
 }

@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.dao.SysGroupMapper;
-import com.jn.system.dao.SysRoleMapper;
-import com.jn.system.dao.SysUserMapper;
-import com.jn.system.dao.TbSysUserMapper;
+import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysUser;
 import com.jn.system.entity.TbSysUserCriteria;
@@ -50,6 +47,12 @@ public class SysUserServiceImpl implements SysUserService {
     private SysRoleMapper sysRoleMapper;
     @Autowired
     private TbSysUserMapper tbSysUserMapper;
+    @Autowired
+    private SysUserDepartmentPostMapper sysUserDepartmentPostMapper;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    private SysGroupUserMapper sysGroupUserMapper;
 
     /**
      * 添加用户
@@ -75,37 +78,16 @@ public class SysUserServiceImpl implements SysUserService {
     /**
      * 分页查询用户,返回用户信息及部门岗位
      *
-     * @param userSysUserPage
+     * @param sysUserPage
      * @return
      */
     @Override
-    public Result findSysUserByPage(SysUserPage userSysUserPage) {
+    public Result findSysUserByPage(SysUserPage sysUserPage) {
         //分页查询
-        Page<Object> objects = PageHelper.startPage(userSysUserPage.getPage(), userSysUserPage.getRows());
-        PaginationData getEasyUIData = null;
-        //判断传过来参数是否有查询条件
-        if (StringUtils.isBlank(userSysUserPage.getDepartmentId())) {
-            List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPage(userSysUserPage);
-            //遍历用户,获取用户默认部门岗位
-            for (SysUserVO sysUserVO : sysUserVOList) {
-                sysUserVO.setPassword("");
-                SysUserDepartmentPost query = new SysUserDepartmentPost();
-                query.setUserId(sysUserVO.getId());
-                query.setIsDefault("1");
-                List<SysUserVO> sysUserVOListOne = sysUserMapper.findSysUserByPageAndOption(query);
-                if (sysUserVOListOne.size() == 1) {
-                    for (SysUserVO sysUserVO1 : sysUserVOListOne) {
-                        sysUserVO.setSysDepartmentPostVOList(sysUserVO1.getSysDepartmentPostVOList());
-                    }
-                }
-            }
-            getEasyUIData = new PaginationData(sysUserVOList, objects.getTotal());
-        } else {
-            SysUserDepartmentPost query = new SysUserDepartmentPost();
-            BeanUtils.copyProperties(userSysUserPage, query);
-            getEasyUIData = new PaginationData(sysUserMapper.findSysUserByPageAndOption(query), objects.getTotal());
-        }
-        return new Result(getEasyUIData);
+        Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
+        List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
+        PaginationData data = new PaginationData(sysUserVOList, objects.getTotal());
+        return new Result(data);
     }
 
     /**
@@ -116,17 +98,12 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
-        if (ids.length > 0) {
-            for (String id : ids) {
-                TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
-                tbSysUser.setStatus(SysStatusEnums.DELETED.getKey());
-                tbSysUserMapper.updateByPrimaryKey(tbSysUser);
-                sysUserMapper.deleteSysUser(id);
-                logger.info("message{}", "删除用户成功！，sysUserId=" + id);
-            }
-        } else {
-            return;
-        }
+        sysUserMapper.deleteUserBranch(ids);
+        sysUserDepartmentPostMapper.deleteUserBranch(ids);
+        sysUserRoleMapper.deleteUserBranch(ids);
+        sysGroupUserMapper.deleteUserBranch(ids);
+        logger.info("message{}", "删除用户成功！，sysUserIds=" + ids.toString());
+
     }
 
     /**

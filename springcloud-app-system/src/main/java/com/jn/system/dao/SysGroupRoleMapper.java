@@ -32,5 +32,9 @@ public interface SysGroupRoleMapper {
      */
     void insertSysGroupRoleBatch(List<SysGroupRole> sysGroupRoleList);
 
-
+    /**
+     * 根据用户组id批量删除多用信息
+     * @param groupIds
+     */
+    void deleteGroupBranch(String[] groupIds);
 }

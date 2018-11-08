@@ -91,15 +91,9 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(String[] ids) {
-        for (String id : ids) {
-            TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(id);
-            tbSysDepartment.setStatus(SysStatusEnums.DELETED.getKey());
-            TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
-            TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
-            criteria.andIdEqualTo(id);
-            tbSysDepartmentMapper.updateByExampleSelective(tbSysDepartment, tbSysDepartmentCriteria);
-            logger.info("message={}", "逻辑删除部门成功,departmentId:" + id);
-        }
+        sysDepartmentMapper.deleteDepartmentBranch(ids);
+        sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
+        logger.info("message={}", "逻辑删除部门成功,departmentIds:" + ids.toString());
     }
 
     /**

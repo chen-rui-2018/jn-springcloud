@@ -1,6 +1,8 @@
 package com.jn.system.vo;
 
 import com.jn.system.vo.SysDepartmentPostVO;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,78 +16,43 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  **/
+@ApiModel(value ="SysUserVO",description = "用户关联部门和岗位")
 public class SysUserVO implements Serializable {
 
     private static final long serialVersionUID = 3235175375305639033L;
-    /**
-     * id
-     */
+    @ApiModelProperty("id")
     private String id;
-    /**
-     * 用户账号
-     */
+    @ApiModelProperty("用户账号")
     private String account;
-    /**
-     * 用户密码
-     */
-    private String password;
-    /**
-     * 用户名称
-     */
+    @ApiModelProperty("用户名称")
     private String name;
-    /**
-     * 手机号码
-     */
+    @ApiModelProperty("手机号码")
     private String phone;
-    /**
-     * 邮箱
-     */
+    @ApiModelProperty("邮箱")
     private String email;
-    /**
-     * 创建人
-     */
-    private String creator;
-    /**
-     * 创建时间
-     */
+    @ApiModelProperty("创建时间")
     private Date createTime;
-    /**
-     * 状态 1:有效 0:无效 -1:删除
-     */
+    @ApiModelProperty("状态")
     private String status;
-
-    /**
-     * 部门岗位集合
-     */
-    private List<SysDepartmentPostVO> sysDepartmentPostVOList;
+    @ApiModelProperty("部门名称")
+    private String departmentName;
+    @ApiModelProperty("岗位名称")
+    private String postName;
 
     public SysUserVO() {
     }
 
-    public SysUserVO(String id, String account, String password, String name, String phone, String email,
-                     String creator, Date createTime, String status, List<SysDepartmentPostVO> sysDepartmentPostVOList) {
+    public SysUserVO(String id, String account, String name, String phone, String email,
+                     Date createTime, String status, String departmentName, String postName) {
         this.id = id;
         this.account = account;
-        this.password = password;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.creator = creator;
         this.createTime = createTime;
         this.status = status;
-        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
-
-    public List<SysDepartmentPostVO> getSysDepartmentPostVOList() {
-        return sysDepartmentPostVOList;
-    }
-
-    public void setSysDepartmentPostVOList(List<SysDepartmentPostVO> sysDepartmentPostVOList) {
-        this.sysDepartmentPostVOList = sysDepartmentPostVOList;
+        this.departmentName = departmentName;
+        this.postName = postName;
     }
 
     public String getId() {
@@ -102,14 +69,6 @@ public class SysUserVO implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getName() {
@@ -136,14 +95,6 @@ public class SysUserVO implements Serializable {
         this.email = email;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -160,19 +111,34 @@ public class SysUserVO implements Serializable {
         this.status = status;
     }
 
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getPostName() {
+        return postName;
+    }
+
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
     @Override
     public String toString() {
         return "SysUserVO{" +
                 "id='" + id + '\'' +
                 ", account='" + account + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
-                ", sysDepartmentPostVOList=" + sysDepartmentPostVOList +
+                ", departmentName='" + departmentName + '\'' +
+                ", postName='" + postName + '\'' +
                 '}';
     }
 }

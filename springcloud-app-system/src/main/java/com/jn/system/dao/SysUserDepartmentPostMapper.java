@@ -39,4 +39,29 @@ public interface SysUserDepartmentPostMapper {
      * @param list
      */
     void insert(List<TbSysUserDepartmentPost> list);
+
+    /**
+     * 根据岗位id获取岗位上用户
+     * @param id
+     * @return
+     */
+    List<SysTUser> findUserByPostId(String id);
+
+    /**
+     * 批量删除岗位id
+     * @param ids
+     */
+    void deletePostBranch(String[] ids);
+
+    /**
+     * 根据部门id批量删除部门信息
+     * @param ids
+     */
+    void deleteDepartmentBranch(String[] ids);
+
+    /**
+     * 批量删除用户对应的信息
+     * @param ids
+     */
+    void deleteUserBranch(String[] ids);
 }

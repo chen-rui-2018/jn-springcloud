@@ -1,5 +1,8 @@
 package com.jn.system.vo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,58 +14,33 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
+@ApiModel(value = "SysDepartmentPostVO",description = "部门岗位实体类")
 public class SysDepartmentPostVO implements Serializable {
     private static final long serialVersionUID = 5393600301120145656L;
-    /**
-     * 部门岗位id
-     */
+    @ApiModelProperty("id")
     private String id;
-    /**
-     * 部门id
-     */
+    @ApiModelProperty("部门id")
     private String departmentId;
-    /**
-     * 部门名称
-     */
+    @ApiModelProperty("部门名称")
     private String departmentName;
-    /**
-     * 创建时间
-     */
-    private Date departmentCreateTime;
-    /**
-     * 部门创造者
-     */
-    private String departmentCreator;
-    /**
-     *
-     */
-    private String departmentStatus;
-    /**
-     * 岗位id
-     */
+    @ApiModelProperty("岗位id")
     private String postId;
-    /**
-     * 岗位名称
-     */
+    @ApiModelProperty("岗位民称")
     private String postName;
-    /**
-     * 岗位创造者
-     */
-    private String postCreator;
-    /**
-     * 创建时间
-     */
-    private Date postCreateTime;
-    /**
-     * 状态 1:有效,0:无效 -1删除
-     */
-    private String postStatus;
-    /**
-     * 是否默认
-     */
+    @ApiModelProperty("是否默认")
     private String isDefault;
 
     public SysDepartmentPostVO() {
+    }
+
+    public SysDepartmentPostVO(String id, String departmentId, String departmentName,
+                               String postId, String postName, String isDefault) {
+        this.id = id;
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+        this.postId = postId;
+        this.postName = postName;
+        this.isDefault = isDefault;
     }
 
     public String getId() {
@@ -71,27 +49,6 @@ public class SysDepartmentPostVO implements Serializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public SysDepartmentPostVO(String id, String departmentId, String departmentName, Date departmentCreateTime,
-                               String departmentCreator, String departmentStatus, String postId, String postName,
-                               String postCreator, Date postCreateTime, String postStatus, String isDefault) {
-        this.id = id;
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-        this.departmentCreateTime = departmentCreateTime;
-        this.departmentCreator = departmentCreator;
-        this.departmentStatus = departmentStatus;
-        this.postId = postId;
-        this.postName = postName;
-        this.postCreator = postCreator;
-        this.postCreateTime = postCreateTime;
-        this.postStatus = postStatus;
-        this.isDefault = isDefault;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getDepartmentId() {
@@ -110,30 +67,6 @@ public class SysDepartmentPostVO implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public Date getDepartmentCreateTime() {
-        return departmentCreateTime;
-    }
-
-    public void setDepartmentCreateTime(Date departmentCreateTime) {
-        this.departmentCreateTime = departmentCreateTime;
-    }
-
-    public String getDepartmentCreator() {
-        return departmentCreator;
-    }
-
-    public void setDepartmentCreator(String departmentCreator) {
-        this.departmentCreator = departmentCreator;
-    }
-
-    public String getDepartmentStatus() {
-        return departmentStatus;
-    }
-
-    public void setDepartmentStatus(String departmentStatus) {
-        this.departmentStatus = departmentStatus;
-    }
-
     public String getPostId() {
         return postId;
     }
@@ -150,30 +83,6 @@ public class SysDepartmentPostVO implements Serializable {
         this.postName = postName;
     }
 
-    public String getPostCreator() {
-        return postCreator;
-    }
-
-    public void setPostCreator(String postCreator) {
-        this.postCreator = postCreator;
-    }
-
-    public Date getPostCreateTime() {
-        return postCreateTime;
-    }
-
-    public void setPostCreateTime(Date postCreateTime) {
-        this.postCreateTime = postCreateTime;
-    }
-
-    public String getPostStatus() {
-        return postStatus;
-    }
-
-    public void setPostStatus(String postStatus) {
-        this.postStatus = postStatus;
-    }
-
     public String getIsDefault() {
         return isDefault;
     }
@@ -188,14 +97,8 @@ public class SysDepartmentPostVO implements Serializable {
                 "id='" + id + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", departmentName='" + departmentName + '\'' +
-                ", departmentCreateTime=" + departmentCreateTime +
-                ", departmentCreator='" + departmentCreator + '\'' +
-                ", departmentStatus='" + departmentStatus + '\'' +
                 ", postId='" + postId + '\'' +
                 ", postName='" + postName + '\'' +
-                ", postCreator='" + postCreator + '\'' +
-                ", postCreateTime=" + postCreateTime +
-                ", postStatus='" + postStatus + '\'' +
                 ", isDefault='" + isDefault + '\'' +
                 '}';
     }

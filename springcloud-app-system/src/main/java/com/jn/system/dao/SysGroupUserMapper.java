@@ -41,4 +41,16 @@ public interface SysGroupUserMapper {
      * @param sysGroupUserList
      */
     void insertSysGroupUserBatch(List<SysGroupUser> sysGroupUserList);
+
+    /**
+     * 根据用户组id批量删除对应信息
+     * @param groupIds
+     */
+    void deleteGroupBranch(String[] groupIds);
+
+    /**
+     * 根据用户id批量删除用户对应的信息
+     * @param ids
+     */
+    void deleteUserBranch(String[] ids);
 }

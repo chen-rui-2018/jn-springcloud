@@ -20,4 +20,9 @@ public interface SysDepartmentMapper {
      */
     List<SysDepartmentVO> findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
 
+    /**
+     * 批量删除部门
+     * @param ids
+     */
+    void deleteDepartmentBranch(String[] ids);
 }

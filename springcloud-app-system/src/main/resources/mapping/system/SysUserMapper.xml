@@ -101,49 +101,40 @@
              order by tsu.create_time desc
     </select>
 
-    <select id="袋盖" parameterType="com.jn.system.model.SysUserPage" resultMap="BaseResultMap">
-        select distinct
-        <include refid="Column_list"/>
-        from tb_sys_user tsu
-        left join tb_sys_user_department_post tsudp on tsu.id = tsudp.user_id
-        left join tb_sys_department tsd on tsudp.department_id = tsd.id
-        left join tb_sys_post tsp on tsudp.post_id = tsp.id
-        <where>
-            tsudp.status != '-1'
-            <if test="name != null and name != '' ">
-                and tsu.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
-            </if>
-            <if test="status != null and status != '' ">
-                and tsu.`status` = #{status,jdbcType=VARCHAR}
-            </if>
-            <if test="departmentId != null and departmentId != '' ">
-                and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
-            </if>
-            <if test="id != null and id != ''">
-                and tsu.id = #{id,jdbcType=VARCHAR}
-            </if>
-            <if test="departmentPostStatus != null and departmentPostStatus != ''">
-                and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
-            </if>
-            <if test="isDefault != null and isDefault != ''">
-                and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
-            </if>
-        </where>
-        order by tsu.create_time desc
-    </select>
-
     <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO" parameterType="com.jn.system.model.SysUserPage">
-        select distinct
-        <include refid="Base_Column_List"/>
-        from tb_sys_user
-        where status != '-1'
-            <if test="name != null and name != '' ">
-                and `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+        select
+        t.id,
+        t.account,
+        t.name,
+        t.phone,
+        t.email,
+        t.status,
+        t.create_time as createTime,
+        tt.department_name as departmentName,
+        tt.post_name as postName,
+        tt.department_id
+        from tb_sys_user t
+        left join
+        (select t1.department_name,t3.department_id,t2.post_name,t3.user_id,t3.is_default from tb_sys_department t1
+        ,tb_sys_post t2
+        ,tb_sys_user_department_post t3
+        where t1.id = t3.department_id
+        and t2.id = t3.post_id
+        and t1.status = 1
+        and t2.status = 1
+        and t3.status = 1
+        and t3.is_default = 1
+        ) tt on t.id = tt.user_id
+        where t.status != '-1'
+            <if test="name != null and name != ''">
+               and  name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
-            <if test="status != null and status != '' ">
-                and `status` = #{status,jdbcType=VARCHAR}
+            <if test="status != null and status != ''">
+                and status = #{status,jdbcType=VARCHAR}
             </if>
-            order by create_time desc
+            <if test="departmentId != null and departmentId != ''">
+                and department_id = #{departmentId,jdbcType=VARCHAR}
+            </if>
     </select>
 
     <update id="deleteSysUser" parameterType="java.lang.String">
@@ -239,5 +230,13 @@
         from tb_sys_user
         where id = #{id,jdbcType=VARCHAR}
     </select>
+
+    <update id="deleteUserBranch" parameterType="java.lang.String">
+        update tb_sys_user set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 
 </mapper>

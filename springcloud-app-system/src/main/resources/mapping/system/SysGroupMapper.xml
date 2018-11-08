@@ -90,4 +90,12 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <update id="deleteGroupBranch" parameterType="java.lang.String">
+        update tb_sys_group set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

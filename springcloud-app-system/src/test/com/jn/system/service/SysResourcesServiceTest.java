@@ -1,9 +1,7 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
+import com.jn.common.model.PaginationData;
 import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 import org.junit.Test;
@@ -24,7 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class SysResourcesServiceTest {
     @Autowired
-    private  SysResourcesService sysResourcesService;
+    private SysResourcesService sysResourcesService;
 
     /**
      * 搜索关键字分页查询功能列表
@@ -35,7 +33,7 @@ public class SysResourcesServiceTest {
         page.setPage(1);
         page.setRows(10);
         page.setResourcesName("");
-        GetEasyUIData GetEasyUIData = sysResourcesService.selectResourcesListBySearchKey(page);
+        PaginationData data = sysResourcesService.selectResourcesListBySearchKey(page);
     }
 
     /**
@@ -43,7 +41,7 @@ public class SysResourcesServiceTest {
      */
     @Test
     public void addTest() {
-        SysResources resources= new SysResources();
+        SysResources resources = new SysResources();
         resources.setResourcesName("功能测试1");
         resources.setResourcesUrl("xxx/xxx/a.html");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
@@ -55,7 +53,7 @@ public class SysResourcesServiceTest {
      */
     @Test
     public void updateTest() {
-        SysResources resources= new SysResources();
+        SysResources resources = new SysResources();
         resources.setId("17ff9b4e-a920-4866-8cf8-35eab5c8ccde");
         resources.setResourcesName("功能测试2");
         resources.setResourcesUrl("xxx/xxx/a.html");
@@ -78,11 +76,9 @@ public class SysResourcesServiceTest {
     @Test
     public void selectByIdTest() {
         String id = "17ff9b4e-a920-4866-8cf8-35eab5c8ccde";
-        SysResources resources=sysResourcesService.selectSysResourcesById(id);
+        SysResources resources = sysResourcesService.selectSysResourcesById(id);
         System.out.println(resources.toString());
     }
-
-
 
 
 }

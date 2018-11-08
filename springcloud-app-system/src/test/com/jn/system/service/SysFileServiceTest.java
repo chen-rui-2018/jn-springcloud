@@ -1,19 +1,14 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysFile;
 import com.jn.system.model.SysFileAddFileGroup;
 import com.jn.system.model.SysFilePage;
-import com.jn.system.model.SysRolePage;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Date;
 
 /**
  * 权限模块文件service单元测试
@@ -37,7 +32,7 @@ public class SysFileServiceTest {
         SysFilePage page = new SysFilePage();
         page.setPage(1);
         page.setRows(10);
-        GetEasyUIData GetEasyUIData = sysFileService.selectSysFileListBySearchKey(page);
+        sysFileService.selectSysFileListBySearchKey(page);
     }
 
     /**

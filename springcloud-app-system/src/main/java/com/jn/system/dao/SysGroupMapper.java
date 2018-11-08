@@ -60,4 +60,9 @@ public interface SysGroupMapper  {
      */
     List<TbSysGroup> findGroupAll();
 
+    /**
+     * 批量删除用户组信息
+     * @param groupIds
+     */
+    void deleteGroupBranch(String[] groupIds);
 }

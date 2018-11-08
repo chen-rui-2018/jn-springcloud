@@ -19,4 +19,12 @@
         </if>
         ORDER BY create_time desc
     </select>
+
+    <update id="deleteDepartmentBranch" parameterType="java.lang.String">
+        update tb_sys_department set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

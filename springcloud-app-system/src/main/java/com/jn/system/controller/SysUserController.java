@@ -2,12 +2,10 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysUser;
 import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
-import com.jn.system.utils.ShiroUserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -18,8 +16,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 用户管理
@@ -32,95 +28,91 @@ import java.util.List;
 @Api(tags = "用户管理及用户授权")
 @RestController
 @RequestMapping("/system/sysUser")
-public class SysUserController extends BaseController{
+public class SysUserController extends BaseController {
     @Autowired
     private SysUserService sysUserService;
 
-    @ApiOperation(value = "添加用户",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value ="/addSysUser")
-    public Result addSysUser(@Validated @RequestBody SysUser sysUser){
+    @RequiresPermissions("/system/sysUser/addSysUser")
+    @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/addSysUser")
+    public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
         sysUserService.addSysUser(sysUser);
         return new Result();
     }
 
     @CrossOrigin
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
-    @ApiOperation(value = "分页条件查询用户",httpMethod = "POST",response = Result.class)
+    @ApiOperation(value = "分页条件查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage){
-        ShiroUserUtils.getPermissionsByLoginUser();
+    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage) {
         return sysUserService.findSysUserByPage(userSysUserPage);
     }
 
-
-    @ApiOperation(value = "根据用户id返回用户信息",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/findSysUserById")
+    @ApiOperation(value = "根据用户id返回用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserById")
-    public Result findSysUserById(String id){
+    public Result findSysUserById(String id) {
         return sysUserService.findSysUserById(id);
     }
 
-
-    @ApiOperation(value = "删除用户",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/deleteSysUser")
+    @ApiOperation(value = "删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
-    public Result deleteSysUser(String[] ids){
+    public Result deleteSysUser(String[] ids) {
         sysUserService.deleteSysUser(ids);
         return new Result();
     }
 
-
-    @ApiOperation(value = "更新用户",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/updateSysUser")
+    @ApiOperation(value = "更新用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateSysUser")
-    public Result updateSysUser(@Validated @RequestBody SysUser sysUser){
+    public Result updateSysUser(@Validated @RequestBody SysUser sysUser) {
         sysUserService.updateSysUser(sysUser);
         return new Result();
     }
 
-
-    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及其他用户组",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
+    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及其他用户组", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
-    public Result findSysGroupByUserId(String id){
+    public Result findSysGroupByUserId(String id) {
         return sysUserService.findSysGroupByUserId(id);
     }
 
-
-    @ApiOperation(value = "添加用户组到用户",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/saveSysGroupToSysUser")
+    @ApiOperation(value = "添加用户组到用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
-    public Result saveSysGroupToSysUser(String[] groupIds,String userId){
-        sysUserService.saveSysGroupToSysUser(groupIds,userId);
+    public Result saveSysGroupToSysUser(String[] groupIds, String userId) {
+        sysUserService.saveSysGroupToSysUser(groupIds, userId);
         return new Result();
     }
 
-
-    @ApiOperation(value = "根据用户id获取用户具有角色及其他角色",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
+    @ApiOperation(value = "根据用户id获取用户具有角色及其他角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
-    public Result findSysRoleByUserId(String id){
+    public Result findSysRoleByUserId(String id) {
         return sysUserService.findSysRoleByUserId(id);
     }
 
-
-    @ApiOperation(value = "为用户添加角色权限",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")
+    @ApiOperation(value = "为用户添加角色权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
-    public Result saveSysRoleToSysUser(String[] roleIds,String userId){
-        sysUserService.saveSysRoleToSysUser(roleIds,userId);
+    public Result saveSysRoleToSysUser(String[] roleIds, String userId) {
+        sysUserService.saveSysRoleToSysUser(roleIds, userId);
         return new Result();
     }
 
-
-    @ApiOperation(value = "根据用户id查询用户已经具有的岗位及用户信息",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/findDepartmentandPostByUserId")
+    @ApiOperation(value = "根据用户id查询用户已经具有的岗位及用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findDepartmentandPostByUserId")
-    public Result findDepartmentandPostByUserId(String userId){
+    public Result findDepartmentandPostByUserId(String userId) {
         return sysUserService.findDepartmentandPostByUserId(userId);
     }
 
-    /**
-     * 为用户添加部门岗位
-     * @param sysUserDepartmentPostAdd
-     * @return
-     */
-    @ApiOperation(value = "为用户添加部门岗位",httpMethod = "POST",response = Result.class)
+    @RequiresPermissions("/system/sysUser/saveDepartmentandPostOfUser")
+    @ApiOperation(value = "为用户添加部门岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
-    public Result saveDepartmentandPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd){
-        Assert.notNull(sysUserDepartmentPostAdd.getUserId(),"用户id不能为空");
+    public Result saveDepartmentandPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
+        Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
         sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd);
         return new Result();
     }

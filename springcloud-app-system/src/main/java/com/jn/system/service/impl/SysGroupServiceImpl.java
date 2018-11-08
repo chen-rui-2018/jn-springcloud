@@ -7,11 +7,9 @@ import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
-import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import com.jn.system.vo.SysGroupVO;
-import com.jn.system.vo.SysUserVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,16 +33,12 @@ public class SysGroupServiceImpl implements SysGroupService {
 
     @Autowired
     private SysGroupMapper sysGroupMapper;
-
     @Autowired
     private SysGroupUserMapper sysGroupUserMapper;
-
     @Autowired
     private SysGroupRoleMapper sysGroupRoleMapper;
-
     @Autowired
     private SysRoleMapper sysRoleMapper;
-
     @Autowired
     private TbSysGroupMapper tbSysGroupMapper;
 
@@ -87,6 +81,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(sysGroup);
+        logger.info("message={}", "用户组信息增加成功,groupId:" + sysGroup.getId());
     }
 
     /**
@@ -97,14 +92,10 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
-        for (String groupId : groupIds) {
-            TbSysGroup tbSysGroup = tbSysGroupMapper.selectByPrimaryKey(groupId);
-            tbSysGroup.setStatus(SysStatusEnums.DELETED.getKey());
-            TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-            TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-            criteria.andIdEqualTo(tbSysGroup.getId());
-            tbSysGroupMapper.updateByExampleSelective(tbSysGroup, tbSysGroupCriteria);
-        }
+        sysGroupMapper.deleteGroupBranch(groupIds);
+        sysGroupUserMapper.deleteGroupBranch(groupIds);
+        sysGroupRoleMapper.deleteGroupBranch(groupIds);
+        logger.info("message={}", "逻辑删除用户组信息,groupIds:" + groupIds.toString());
     }
 
     /**
@@ -228,9 +219,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd) {
-
         User user = (User) SecurityUtils.getSubject().getPrincipals();
-
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
         for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();

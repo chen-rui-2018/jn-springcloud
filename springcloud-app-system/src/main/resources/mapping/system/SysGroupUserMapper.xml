@@ -57,4 +57,20 @@
 			#{item.status,jdbcType=VARCHAR})
 		</foreach>
 	</insert>
+
+	<update id="deleteGroupBranch" parameterType="java.lang.String">
+		update tb_sys_user_group set status=-1
+		where group_id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<update id="deleteUserBranch" parameterType="java.lang.String">
+		update tb_sys_user_group set status=-1
+		where user_id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
 </mapper>

@@ -1,6 +1,9 @@
 package com.jn.system.service;
 
 import com.jn.common.model.Result;
+import com.jn.system.model.SysPost;
+import com.jn.system.model.SysPostAdd;
+import com.jn.system.model.SysPostPage;
 
 /**
  * 岗位service
@@ -16,4 +19,35 @@ public interface SysPostService {
      */
     Result findSysPostAll();
 
+    /**
+     * 添加岗位
+     * @param sysPostAdd
+     */
+    void addPost(SysPostAdd sysPostAdd);
+
+    /**
+     * 批量删除岗位
+     * @param ids
+     */
+    void deletePostBranch(String[] ids);
+
+    /**
+     * 修改岗位信息
+     * @param sysPost
+     */
+    void updatePost(SysPost sysPost);
+
+    /**
+     * 根据岗位id获取岗位信息
+     * @param id
+     * @return
+     */
+    Result selectByPrimaryKey(String id);
+
+    /**
+     * 分页获取岗位信息及对应的用户
+     * @param sysPostPage
+     * @return
+     */
+    Result findByPage(SysPostPage sysPostPage);
 }

@@ -27,6 +27,14 @@
         </foreach>
     </update>
 
+    <update id="deleteUserBranch" parameterType="java.lang.String">
+        update tb_sys_user_role set status=-1
+        where user_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
         insert into tb_sys_user_role (id, role_id,user_id,creator,create_time,status) values

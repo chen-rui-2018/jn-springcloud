@@ -1,9 +1,7 @@
 package com.jn.system.service;
 
-import com.jn.common.model.GetEasyUIData;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,7 +29,7 @@ public class SysRoleServiceImplTest {
         SysRolePage rolePage =new SysRolePage();
         rolePage.setPage(1);
         rolePage.setRows(10);
-        GetEasyUIData GetEasyUIData=tbRoleService.selectRoleListBySearchKey(rolePage);
+        tbRoleService.selectRoleListBySearchKey(rolePage);
 
     }
 

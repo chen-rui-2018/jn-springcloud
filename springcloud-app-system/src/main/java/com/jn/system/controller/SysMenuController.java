@@ -9,6 +9,7 @@ import com.jn.system.model.SysMenuResourcesAdd;
 import com.jn.system.service.SysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "查询菜单列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
+    @RequiresPermissions("/system/sysMenu/list")
     public Result list(@RequestBody SysMenuPage sysMenuPage) {
         PaginationData data = sysMenuService.selectMenuListBySearchKey(sysMenuPage);
         return new Result(data);
@@ -38,6 +40,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "新增菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
+    @RequiresPermissions("/system/sysMenu/add")
     public Result add(@Validated @RequestBody SysMenu sysMenu) {
         sysMenuService.insertSysMenu(sysMenu);
         return new Result();
@@ -45,6 +48,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "修改菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
+    @RequiresPermissions("/system/sysMenu/update")
     public Result update(@Validated @RequestBody SysMenu sysMenu) {
         Assert.notNull(sysMenu.getId(), "菜单ID不能为空");
         sysMenuService.updateSysMenuById(sysMenu);
@@ -53,6 +57,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "批量删除菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
+    @RequiresPermissions("/system/sysMenu/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "菜单ID不能为空");
         sysMenuService.deleteSysMenuById(ids);
@@ -61,6 +66,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "根据ID查询菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
+    @RequiresPermissions("/system/sysMenu/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "菜单ID不能为空");
         SysMenu sysMenu = sysMenuService.selectMenuById(id);
@@ -69,6 +75,7 @@ public class SysMenuController extends BaseController {
 
     @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/insertMenuResources")
+    @RequiresPermissions("/system/sysMenu/insertMenuResources")
     public Result insertMenuResources(@RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
         Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
         if (sysMenuResourcesAdd.getResourcesId().length == 0) {

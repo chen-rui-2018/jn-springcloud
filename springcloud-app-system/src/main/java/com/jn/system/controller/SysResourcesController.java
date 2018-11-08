@@ -8,6 +8,7 @@ import com.jn.system.model.SysResourcesPage;
 import com.jn.system.service.SysResourcesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "查询功能列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
+    @RequiresPermissions("/system/sysResources/list")
     public Result list(@RequestBody SysResourcesPage sysMenuPage) {
         PaginationData data = sysResourcesService.selectResourcesListBySearchKey(sysMenuPage);
         return new Result(data);
@@ -38,6 +40,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "新增功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
+    @RequiresPermissions("/system/sysResources/add")
     public Result add(@Validated @RequestBody SysResources sysResources) {
         sysResourcesService.insertResources(sysResources);
         return new Result();
@@ -45,6 +48,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "修改功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
+    @RequiresPermissions("/system/sysResources/update")
     public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
         sysResourcesService.updateResourcesById(sysResources);
@@ -53,6 +57,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "批量删除功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
+    @RequiresPermissions("/system/sysResources/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
         sysResourcesService.deleteResourcesById(ids);
@@ -61,6 +66,7 @@ public class SysResourcesController extends BaseController {
 
     @ApiOperation(value = "根据ID查询功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
+    @RequiresPermissions("/system/sysResources/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "功能ID不能为空");
         SysResources sysResources = sysResourcesService.selectSysResourcesById(id);

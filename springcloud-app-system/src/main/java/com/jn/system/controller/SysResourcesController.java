@@ -33,21 +33,21 @@ public class SysResourcesController extends BaseController {
     private SysResourcesService sysResourcesService;
 
     @ApiOperation(value = "查询功能列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/list")
+    @PostMapping(value = "/list")
     public Result list(@RequestBody SysResourcesPage sysMenuPage) {
         GetEasyUIData data = sysResourcesService.selectResourcesListBySearchKey(sysMenuPage);
         return new Result(data);
     }
 
     @ApiOperation(value = "新增功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add")
+    @PostMapping(value = "/add")
     public Result add(@Validated @RequestBody SysResources sysResources) {
         sysResourcesService.insertResources(sysResources);
         return new Result();
     }
 
     @ApiOperation(value = "修改功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/update")
+    @PostMapping(value = "/update")
     public Result update(@Validated @RequestBody  SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
         sysResourcesService.updateResourcesById(sysResources);
@@ -55,7 +55,7 @@ public class SysResourcesController extends BaseController {
     }
 
     @ApiOperation(value = "批量删除功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/delete")
+    @PostMapping(value = "/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
         sysResourcesService.deleteResourcesById(ids);
@@ -63,7 +63,7 @@ public class SysResourcesController extends BaseController {
     }
 
     @ApiOperation(value = "根据ID查询功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/selectById")
+    @PostMapping(value = "/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "功能ID不能为空");
         SysResources sysResources = sysResourcesService.selectSysResourcesById(id);

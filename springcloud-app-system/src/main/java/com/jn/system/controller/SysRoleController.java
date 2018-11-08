@@ -31,7 +31,7 @@ public class SysRoleController extends BaseController {
 
 
     @ApiOperation(value = "查询角色列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/list")
+    @PostMapping(value = "/list")
     public Result list(@RequestBody SysRolePage role) {
         GetEasyUIData data = tbRoleService.selectRoleListBySearchKey(role);
         return new Result(data);
@@ -39,7 +39,7 @@ public class SysRoleController extends BaseController {
 
 
     @ApiOperation(value = "新增角色", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add")
+    @PostMapping(value = "/add")
     public Result add(@Validated @RequestBody SysRole role) {
         tbRoleService.insertTbRole(role);
         return new Result();
@@ -47,7 +47,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "删除角色", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/delete")
+    @PostMapping(value = "/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "角色ID不能为空");
         tbRoleService.deleteTbRoleById(ids);
@@ -55,7 +55,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "修改角色", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/update")
+    @PostMapping(value = "/update")
     public Result update(@Validated @RequestBody SysRole role) {
         Assert.notNull(role.getId(), "角色ID不能为空");
         tbRoleService.updateTbRole(role);
@@ -63,7 +63,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "角色授权权限", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/rolePermissionAuthorization")
+    @PostMapping(value = "/rolePermissionAuthorization")
     public Result rolePermissionAuthorization(@Validated @RequestBody SysRolePermissionAdd sysRolePermissionAdd) {
         Assert.notNull(sysRolePermissionAdd.getRoleId(), "角色ID不能为空");
         tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd);
@@ -71,7 +71,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "角色授权用户组", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/userGroupRoleAuthorization")
+    @PostMapping(value = "/userGroupRoleAuthorization")
     public Result userGroupRoleAuthorization(@Validated @RequestBody SysUserGroupRoleAdd sysUserGroupRoleAdd) {
         Assert.notNull(sysUserGroupRoleAdd.getRoleId(), "角色ID不能为空");
         tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd);
@@ -79,7 +79,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "角色授权用户", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/userRoleAuthorization")
+    @PostMapping(value = "/userRoleAuthorization")
     public Result userRoleAuthorization(@Validated @RequestBody SysUserRoleAdd sysUserRoleAdd) {
         Assert.notNull(sysUserRoleAdd.getRoleId(), "角色ID不能为空");
         tbRoleService.userRoleAuthorization(sysUserRoleAdd);
@@ -87,7 +87,7 @@ public class SysRoleController extends BaseController {
     }
 
     @ApiOperation(value = "用户查询所有角色", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findSysRoleAll")
+    @PostMapping(value = "/findSysRoleAll")
     public Result findSysRoleAll() {
         return tbRoleService.findSysRoleAll();
     }

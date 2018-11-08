@@ -30,21 +30,21 @@ public class SysMenuController  extends BaseController {
     private SysMenuService sysMenuService;
 
     @ApiOperation(value = "查询菜单列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/list")
+    @PostMapping(value = "/list")
     public Result list(@RequestBody SysMenuPage sysMenuPage) {
         GetEasyUIData data = sysMenuService.selectMenuListBySearchKey(sysMenuPage);
         return new Result(data);
     }
 
     @ApiOperation(value = "新增菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add")
+    @PostMapping(value = "/add")
     public Result add(@Validated @RequestBody SysMenu sysMenu) {
         sysMenuService.insertSysMenu(sysMenu);
         return new Result();
     }
 
     @ApiOperation(value = "修改菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/update")
+    @PostMapping(value = "/update")
     public Result update(@Validated @RequestBody  SysMenu sysMenu) {
         Assert.notNull(sysMenu.getId(), "菜单ID不能为空");
         sysMenuService.updateSysMenuById(sysMenu);
@@ -52,7 +52,7 @@ public class SysMenuController  extends BaseController {
     }
 
     @ApiOperation(value = "批量删除菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/delete")
+    @PostMapping(value = "/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "菜单ID不能为空");
         sysMenuService.deleteSysMenuById(ids);
@@ -60,7 +60,7 @@ public class SysMenuController  extends BaseController {
     }
 
     @ApiOperation(value = "根据ID查询菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/selectById")
+    @PostMapping(value = "/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "菜单ID不能为空");
         SysMenu sysMenu = sysMenuService.selectMenuById(id);
@@ -68,7 +68,7 @@ public class SysMenuController  extends BaseController {
     }
 
     @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/insertMenuResources")
+    @PostMapping(value = "/insertMenuResources")
     public Result insertMenuResources(@RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
         Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
         if(sysMenuResourcesAdd.getResourcesId().length==0){

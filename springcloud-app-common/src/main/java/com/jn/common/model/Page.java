@@ -1,10 +1,24 @@
 package com.jn.common.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+/**
+ * 分頁實體
+ *
+ * @author： fengxh
+ * @date： Created on 2018/9/20 15:31
+ * @version： v1.0
+ * @modified By:
+ */
+@ApiModel(value = "Page",description = "分页")
 public class Page {
 
+    @ApiModelProperty("页码")
     private int page;
+
+    @ApiModelProperty("每页显示数量")
     private int rows;
-    private int first;
 
     public int getPage() {
         return page;
@@ -22,11 +36,4 @@ public class Page {
         this.rows = rows;
     }
 
-    public int getFirst() {
-        return first;
-    }
-
-    public void setFirst(int first) {
-        this.first = first;
-    }
 }

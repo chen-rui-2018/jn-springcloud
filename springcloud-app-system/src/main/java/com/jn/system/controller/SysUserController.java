@@ -8,6 +8,7 @@ import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,6 +41,7 @@ public class SysUserController extends BaseController{
     }
 
     @CrossOrigin
+    @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "分页条件查询用户",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
     public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage){

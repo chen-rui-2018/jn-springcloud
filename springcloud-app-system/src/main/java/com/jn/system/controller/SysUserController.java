@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  **/
 @Api(tags = "用户管理及用户授权")
+@CrossOrigin
 @RestController
 @RequestMapping("/system/sysUser")
 public class SysUserController extends BaseController {
@@ -40,7 +41,6 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @CrossOrigin
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "分页条件查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")

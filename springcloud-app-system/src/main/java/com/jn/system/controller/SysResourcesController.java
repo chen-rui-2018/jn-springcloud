@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @modified By:
  */
 @Api(tags = "功能管理")
+@CrossOrigin
 @RestController
 @RequestMapping("/system/sysResources")
 public class SysResourcesController extends BaseController {

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @modified By:
  */
 @Api(tags = "菜单管理")
+@CrossOrigin
 @RestController
 @RequestMapping("/system/sysMenu")
 public class SysMenuController extends BaseController {

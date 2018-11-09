@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
  * @modified By:
  */
 @Api(tags = "角色管理")
+@CrossOrigin
 @RestController
 @RequestMapping("/system/sysRole")
 public class SysRoleController extends BaseController {

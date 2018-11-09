@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- debug：打印logback内部日志信息，实时查看logback的运行状态，默认为false -->
+<!-- scan：配置文件如果发生改变，是否被重新加载，默认为true。 -->
+<!-- scanPeriod：设置检测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒，默认的时间间隔为1分钟，默认为true。 scanPeriod="30 seconds" -->
 <configuration debug="true">
     <!-- 项目名称 -->
     <property name="PROJECT_NAME" value="spring.application.name" />
-    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径，可以使用系统变量 -->
     <property name="LOG_HOME" value="./logs" />
-
-
 
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <withJansi>true</withJansi>
+        <!-- On Windows machines setting withJansi to true enables ANSI
+         color code interpretation by the Jansi library. This requires
+         org.fusesource.jansi:jansi:1.8 on the class path.  Note that
+         Unix-based operating systems such as Linux and Mac OS X
+         support ANSI color codes by default.
+         http://blog.csdn.net/u013613428/article/details/51499552
+         -->
+        <!--<withJansi>true</withJansi>-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
             <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %highlight([%-5level] [%logger{50}.%M\(%line\)] ==> %msg%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
     </appender>
-
 
     <!-- 自己打印的日志文件，用于记录重要日志信息 -->
     <appender name="MY_INFO_FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">

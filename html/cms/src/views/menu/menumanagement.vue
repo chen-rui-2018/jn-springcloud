@@ -1,10 +1,17 @@
 <template>
   <div class="menumanagement">
     <header>菜单管理</header>
-    <el-row :gutter="20">
+    <el-row :gutter="40">
       <el-col :span="6">
         <div>
-          <el-tree :data="data4" :props="defaultProps" :expand-on-click-node="false" :render-content="renderContent" ref="tree" node-key="id" default-expand-all @node-click="handleNodeClick"/>
+          <el-tree
+            ref="tree"
+            :data="data4"
+            :expand-on-click-node="false"
+            :render-content="renderContent"
+            node-key="id"
+            default-expand-all
+            @node-click="handleNodeClick"/>
         </div>
       </el-col>
       <el-col :span="18">
@@ -13,17 +20,18 @@
           <div class="content">
             <div class="left">
               <el-breadcrumb separator-class="el-icon-arrow-right">
-                <el-breadcrumb-item >易软天创</el-breadcrumb-item>
-                <el-breadcrumb-item >开发 </el-breadcrumb-item>
-                <el-breadcrumb-item>后台</el-breadcrumb-item>
-                <el-breadcrumb-item>Java工程师</el-breadcrumb-item>
+                <el-breadcrumb-item >{{ parentlabel }}</el-breadcrumb-item>
+                <el-breadcrumb-item >{{ label }} </el-breadcrumb-item>
+
               </el-breadcrumb>
             </div>
             <div class="right">
               <el-form ref="dynamicValidateForm" :model="dynamicValidateForm" class="demo-dynamic">
-                <el-form-item v-for="(item,index) in dynamicValidateForm.domains" :key="index">
-                  <el-input v-model="dynamicValidateForm.domains.value1"/>
-                </el-form-item>
+                <template slot-scope="scope">
+                  <el-form-item v-for="(item,index) in dynamicValidateForm.domains" :key="index">
+                    <el-input v-model="item.label"/>
+                  </el-form-item>
+                </template>
                 <el-form-item class="footer">
                   <el-button type="primary" @click="submitForm('dynamicValidateForm')">保存</el-button>
                   <el-button >新增</el-button>
@@ -77,75 +85,55 @@
 export default {
   data() {
     return {
+      parentlabel: '',
+      childrenlabel: '',
+      label: '',
       value6: '',
       value5: '',
+      value3: '',
       editdialogVisible: false,
-      data4: [
-        {
-          label: '开发部',
-          children: [
-            {
-              label: '前端',
-              children: [
-                {
-                  label: '前端工程师',
-                }
-              ]
-            },
-            {
-              label: '后台',
-              children: [
-                {
-                  label: 'Java工程师'
-                }
-              ]
-            }
-          ]
-        },
-        {
+      data4: [{
+        id: 1,
+        label: '开发部',
+        children: [{
+          id: 4,
           label: '产品',
-          children: [
-            {
-              label: '二级 2-1',
-              children: [
-                {
-                  label: '三级 2-1-1'
-                }
-              ]
-            },
-            {
-              label: '二级 2-2',
-              children: [
-                {
-                  label: '三级 2-2-1'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          label: '测试',
-          children: [
-            {
-              label: '测试1',
-              children: [
-                {
-                  label: '三级 3-1-1',
-                  children: [{ label: 155 }]
-                }
-              ]
-            },
-            {
-              label: '二级 3-2',
-              children: [
-                {
-                  label: '三级 3-2-1'
-                }
-              ]
-            }
-          ]
-        }
-      ],
+          parentlabel: '开发部',
+          children: [{
+            id: 9,
+            label: '前端',
+            parentlabel: '产品'
+          }, {
+            id: 10,
+            label: '后台',
+            parentlabel: '产品'
+          }]
+        }]
+      }, {
+        id: 2,
+        label: '测试',
+        children: [{
+          id: 5,
+          label: '二级 2-1',
+          parentlabel: '测试'
+        }, {
+          id: 6,
+          label: '二级 2-2',
+          parentlabel: '测试'
+        }]
+      }, {
+        id: 3,
+        label: '一级 3',
+        children: [{
+          id: 7,
+          label: '二级 3-1',
+          parentlabel: '一级3'
+        }, {
+          id: 8,
+          label: '二级 3-2',
+          parentlabel: '一级3'
+        }]
+      }],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -154,25 +142,25 @@ export default {
         value: '',
         domains: [
           {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }, {
-            value1: ''
+            label: ''
           }
         ]
       },
@@ -180,11 +168,20 @@ export default {
 
     }
   },
+  mounted() {
+    this.parentlabel = '开发部'
+  },
   methods: {
     handleNodeClick(data) {
-      // console.log( this.$refs.currentNode.node)
-      console.log( this.$refs.tree.getCurrentNode
-)
+      console.log(data)
+      this.label = data.label
+      this.parentlabel = data.parentlabel
+      if (data.children !== undefined) {
+        this.dynamicValidateForm.domains = data.children
+      } else {
+        console.log(data.children)
+        data.children === this.dynamicValidateForm.domains
+      }
     },
     renderContent(h, { node, data, store }) {
       return (
@@ -206,6 +203,7 @@ export default {
     edit(data) {
       this.editdialogVisible = true
       this.editform.name = data.label
+      this.value5 = data.parentlabel
       console.log(data)
     },
     submitForm(formName) {
@@ -236,13 +234,13 @@ export default {
     background-color: #fff;
   }
   .bgc {
-    padding: 20px;
+    padding: 20px 0 20px 20px;
   }
   .content {
     display: flex;
     .left {
       // flex:1;
-      margin-right: 20px;
+      margin-right: 30px;
       display: flex;
       align-items: center;
     }

@@ -79,22 +79,22 @@
             left join tb_sys_post tsp on tsudp.post_id = tsp.id
             <where>
                 tsudp.status != '-1'
-                <if test="name != null and name != '' ">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
                    and tsu.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
                 </if>
-                <if test="status != null and status != '' ">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
                    and tsu.`status` = #{status,jdbcType=VARCHAR}
                 </if>
-                <if test="departmentId != null and departmentId != '' ">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
                    and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
                 </if>
-                <if test="userId != null and userId != ''">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
                    and tsu.id = #{userId,jdbcType=VARCHAR}
                 </if>
-                <if test="departmentPostStatus != null and departmentPostStatus != ''">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentPostStatus)">
                    and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
                 </if>
-                <if test="isDefault != null and isDefault != ''">
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isDefault)">
                    and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
                 </if>
             </where>
@@ -126,10 +126,10 @@
         and t3.is_default = 1
         ) tt on t.id = tt.user_id
         where t.status != '-1'
-            <if test="name != null and name != ''">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
                and  name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
-            <if test="status != null and status != ''">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
                 and status = #{status,jdbcType=VARCHAR}
             </if>
             <if test="departmentIds != null and departmentIds.length > 0">

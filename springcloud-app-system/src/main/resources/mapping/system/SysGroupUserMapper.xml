@@ -37,7 +37,7 @@
 			from tb_sys_user_group
 			where `status` = '1'
 			and group_id = #{groupId,jdbcType=VARCHAR})
-		<if test="name  != null and name != ''">
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
 			and `name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
 		</if>
 	</select>

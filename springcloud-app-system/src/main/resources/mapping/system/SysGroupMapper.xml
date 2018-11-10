@@ -13,17 +13,11 @@
         <include refid="Base_Column_List"/>
           from tb_sys_group
         where  `status` != '-1'
-            <if test="groupName != null and groupName != ''">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(groupName)">
                 and group_name like CONCAT('%', #{groupName,jdbcType=VARCHAR},'%')
             </if>
-            <if test="createTime != null and createTime != ''">
-                and create_time = #{createTime,jdbcType=TIMESTAMP}
-            </if>
-            <if test="status != null and status != ''">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
                 and status = #{status,jdbcType=VARCHAR}
-            </if>
-            <if test="creator != null and creator != ''">
-                and creator = #{creator,jdbcType=VARCHAR}
             </if>
     </select>
 

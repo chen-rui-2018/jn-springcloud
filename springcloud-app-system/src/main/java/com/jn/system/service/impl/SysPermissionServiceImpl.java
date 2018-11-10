@@ -76,7 +76,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void updatePermission(SysPermission sysPermission) {
         sysPermissionMapper.updatePermission(sysPermission);
-        logger.info("[权限]修改权限信息成功！，sysPermissionId",sysPermission.getId());
+        logger.info("[权限]修改权限信息成功！，sysPermissionId:{}",sysPermission.getId());
     }
 
     /**

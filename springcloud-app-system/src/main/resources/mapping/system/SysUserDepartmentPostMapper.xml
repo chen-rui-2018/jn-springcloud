@@ -18,7 +18,7 @@
             (select user_id from tb_sys_user_department_post
               where `status` = '1'
               and department_id = #{departmentId,jdbcType=VARCHAR})
-            <if test="name  != null and name != ''">
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
                 and `name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
             </if>
     </select>

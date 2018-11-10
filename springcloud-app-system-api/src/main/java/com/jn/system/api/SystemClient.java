@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jn.system.model.Resources;
 import com.jn.system.model.User;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 系统客户端
@@ -34,18 +35,35 @@ public interface SystemClient {
 
     /**
      * 获取资源列表
-     * @param id
+     * @param userId 用户ID
      * @return
      */
     @RequestMapping(value = "/api/system/getResources", method = RequestMethod.POST)
-    Result<Set<String>> getResources(@RequestBody String id);
+    Result<Set<String>> getResources(@RequestBody String userId);
 
     /**
      * 获取菜单功能URL列表
-     * @param id 用户ID
+     * @param userId 用户ID
      * @return
      */
     @RequestMapping(value = "/api/system/getMenuResources", method = RequestMethod.POST)
-    Result<List<MenuResources>> getMenuResources(@RequestBody String id);
+    Result<List<MenuResources>> getMenuResources(@RequestBody String userId);
+
+    /**
+     * 获取用户文件组
+     * @param userId 用户ID
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserFileGroup", method = RequestMethod.POST)
+    Result<Set<String>> getUserFileGroup(@RequestBody String userId);
+
+    /**
+     * 获取用户是否拥有该文件的下载权限
+     * @param userId  用户ID
+     * @param fileUrl 文件URL
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserFilePermission", method = RequestMethod.POST)
+    Result<Boolean> getUserFilePermission(@RequestBody String userId, @RequestParam("fileUrl") String fileUrl);
 
 }

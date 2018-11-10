@@ -178,4 +178,18 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //批量新增文件组文件信息
         sysFileGroupFileMapper.insertBatch(sysFileGroupFiles);
     }
+
+    @Override
+    public List<TbSysFileGroup> getUserFileGroupById(String userId) {
+        return sysFileGroupFileMapper.getUserFileGroupById(userId);
+    }
+
+    @Override
+    public Boolean getUserFilePermission(String userId, String fileUrl) {
+        List<String> userFilePermissionList = sysFileGroupFileMapper.getUserFilePermission(userId,fileUrl);
+        if(userFilePermissionList.size() >0){
+            return true;
+        }
+        return false;
+    }
 }

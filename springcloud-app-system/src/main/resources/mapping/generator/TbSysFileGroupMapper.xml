@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.system.entity.TbSysFileGroup">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="file_group_name" jdbcType="VARCHAR" property="fileGroupName" />
+    <result column="file_group_describe" jdbcType="VARCHAR" property="fileGroupDescribe" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, file_group_name, creator, create_time, status
+    id, file_group_name, file_group_describe, creator, create_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysFileGroupCriteria" resultMap="BaseResultMap">
     select
@@ -100,10 +101,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.system.entity.TbSysFileGroup">
-    insert into tb_sys_file_group (id, file_group_name, creator, 
-      create_time, status)
-    values (#{id,jdbcType=VARCHAR}, #{fileGroupName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+    insert into tb_sys_file_group (id, file_group_name, file_group_describe, 
+      creator, create_time, status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{fileGroupName,jdbcType=VARCHAR}, #{fileGroupDescribe,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysFileGroup">
     insert into tb_sys_file_group
@@ -113,6 +116,9 @@
       </if>
       <if test="fileGroupName != null">
         file_group_name,
+      </if>
+      <if test="fileGroupDescribe != null">
+        file_group_describe,
       </if>
       <if test="creator != null">
         creator,
@@ -130,6 +136,9 @@
       </if>
       <if test="fileGroupName != null">
         #{fileGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileGroupDescribe != null">
+        #{fileGroupDescribe,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -157,6 +166,9 @@
       <if test="record.fileGroupName != null">
         file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
       </if>
+      <if test="record.fileGroupDescribe != null">
+        file_group_describe = #{record.fileGroupDescribe,jdbcType=VARCHAR},
+      </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
       </if>
@@ -175,6 +187,7 @@
     update tb_sys_file_group
     set id = #{record.id,jdbcType=VARCHAR},
       file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
+      file_group_describe = #{record.fileGroupDescribe,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR}
@@ -187,6 +200,9 @@
     <set>
       <if test="fileGroupName != null">
         file_group_name = #{fileGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileGroupDescribe != null">
+        file_group_describe = #{fileGroupDescribe,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
@@ -203,6 +219,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.system.entity.TbSysFileGroup">
     update tb_sys_file_group
     set file_group_name = #{fileGroupName,jdbcType=VARCHAR},
+      file_group_describe = #{fileGroupDescribe,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR}

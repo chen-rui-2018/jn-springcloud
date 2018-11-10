@@ -69,8 +69,10 @@
 
     </select>
 
+    <!-- 获取用户菜单、功能列表-->
     <select id="findPermissionsUrlById" parameterType="java.lang.String" resultType="java.lang.String">
-        select sm.menu_url "url"
+        select distinct
+        sm.menu_url "url"
         from
         tb_sys_user su
         ,tb_sys_user_role sur
@@ -94,7 +96,8 @@
         and spm.status = 1
         and su.id = #{id,jdbcType=VARCHAR}
         union all
-        select tsr.resources_url "url"
+        select distinct
+        tsr.resources_url "url"
         from
         tb_sys_user su
         ,tb_sys_user_role sur
@@ -119,9 +122,10 @@
         and su.id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <!-- 获取菜单对应功能链接-->
     <select id="getMenuResourcesUrlById" parameterType="java.lang.String"
             resultType="com.jn.system.model.MenuResources">
-        select
+        select distinct
         tsr.id "resourcesId"
         ,tsr.resources_url "resourcesUrl"
         ,tsr.menu_id "menuId"

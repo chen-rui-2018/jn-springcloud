@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 
+import com.jn.system.entity.TbSysFileGroup;
 import com.jn.system.model.SysFileGroupFile;
 
 import java.util.List;
@@ -41,4 +42,19 @@ public interface SysFileGroupFileMapper {
      * @return
      */
     int insertBatch(List<SysFileGroupFile> sysFileGroupFiles);
+
+    /**
+     * 根据用户获取文件组
+     * @param userId 用户ID
+     * @return
+     */
+    List<TbSysFileGroup> getUserFileGroupById(String userId);
+
+    /**
+     * 获取用户是否拥有该文件的下载权限
+     * @param userId 用户ID
+     * @param fileUrl 文件路径
+     * @return
+     */
+    List<String> getUserFilePermission(String userId, String fileUrl);
 }

@@ -245,6 +245,76 @@ public class TbSysFileGroupCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andFileGroupDescribeIsNull() {
+            addCriterion("file_group_describe is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeIsNotNull() {
+            addCriterion("file_group_describe is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeEqualTo(String value) {
+            addCriterion("file_group_describe =", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeNotEqualTo(String value) {
+            addCriterion("file_group_describe <>", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeGreaterThan(String value) {
+            addCriterion("file_group_describe >", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeGreaterThanOrEqualTo(String value) {
+            addCriterion("file_group_describe >=", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeLessThan(String value) {
+            addCriterion("file_group_describe <", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeLessThanOrEqualTo(String value) {
+            addCriterion("file_group_describe <=", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeLike(String value) {
+            addCriterion("file_group_describe like", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeNotLike(String value) {
+            addCriterion("file_group_describe not like", value, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeIn(List<String> values) {
+            addCriterion("file_group_describe in", values, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeNotIn(List<String> values) {
+            addCriterion("file_group_describe not in", values, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeBetween(String value1, String value2) {
+            addCriterion("file_group_describe between", value1, value2, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
+        public Criteria andFileGroupDescribeNotBetween(String value1, String value2) {
+            addCriterion("file_group_describe not between", value1, value2, "fileGroupDescribe");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatorIsNull() {
             addCriterion("creator is null");
             return (Criteria) this;

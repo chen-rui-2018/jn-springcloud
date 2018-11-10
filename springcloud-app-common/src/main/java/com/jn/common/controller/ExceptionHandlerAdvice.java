@@ -3,7 +3,6 @@ package com.jn.common.controller;
 import com.jn.common.model.Result;
 import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
@@ -28,16 +27,7 @@ import java.util.List;
 public class ExceptionHandlerAdvice {
 
     private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
-    /**
-     * 鉴权失败
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(value = UnauthorizedException.class)
-    public Result unAuth(UnauthorizedException e) {
-        logger.error("鉴权失败:{}",e.getMessage());
-        return new Result(CommonExceptionEnum.UN_AUTH.getCode(), CommonExceptionEnum.UN_AUTH.getMessage());
-    }
+
     /**
      * 业务异常处理
      */

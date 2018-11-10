@@ -23,7 +23,9 @@
         <module>springcloud-app-turbine</module>
 		<module>springcloud-app-zipkin</module>
         <module>springcloud-app-fastdfs</module>
-    </modules>
+		<module>springcloud-app-stream</module>
+		<module>springcloud-app-stream-demo</module>
+	</modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>

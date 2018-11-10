@@ -22,7 +22,7 @@ import java.io.FileInputStream;
  * @modified By:
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes={SpringCloudAppFastDfsApplication.class,FastDfsTest.class})
+@SpringBootTest(classes={SpringCloudAppFastDfsApplication.class})
 public class FastDfsTest {
 
 

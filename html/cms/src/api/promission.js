@@ -9,10 +9,10 @@ export function userList(query) {
     data: query
   })
 }
-export function userCreate(data) {
+export function userCreate(query) {
   return request({
-    url: '/permission/userCreate',
+    url: 'system/sysUser/addSysUser',
     method: 'post',
-    data
+    data: query
   })
 }

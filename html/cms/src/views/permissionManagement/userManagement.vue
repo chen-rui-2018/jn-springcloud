@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="filter-container">
-      <el-form :inline="true" :model="formInline" >
+      <el-form :inline="true" class="filter-bar" >
         <el-form-item label="姓名" >
           <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable />
         </el-form-item>
         <el-form-item label="状态">
           <el-select
-            v-model="listQuery.userStatus"
+            v-model="listQuery.status"
             placeholder="请选择"
             clearable
             style="width: 90px"
@@ -40,14 +40,18 @@
       max-height="500"
       highlight-current-row
       style="width: 100%;">
-      <el-table-column label="序列" prop="id" align="center" width="120"/>
-      <el-table-column label="姓名" prop="name" align="center" width="65"/>
-      <el-table-column label="账号" prop="account" align="center" width="130"/>
-      <el-table-column label="邮箱" prop="email" align="center" width="200"/>
-      <el-table-column label="创建时间" prop="creationTime" align="center" width="200"/>
-      <el-table-column label="部门" prop="department" align="center" width="65"/>
-      <el-table-column label="岗位" prop="position" align="center" width="65"/>
-      <el-table-column label="人员状态" prop="status" align="center" width="65"/>
+      <el-table-column label="序列" type="index" align="center" width="50"/>
+      <el-table-column label="姓名" prop="name" align="left" width="100"/>
+      <el-table-column label="账号" prop="account" align="left" width="130"/>
+      <el-table-column label="邮箱" prop="email" align="left" width="200"/>
+      <el-table-column label="创建时间" prop="createTime" align="center" width="200"/>
+      <el-table-column label="部门" prop="departmentName" align="center" width="65"/>
+      <el-table-column label="岗位" prop="postName" align="center" width="65"/>
+      <el-table-column label="人员状态" prop="status" align="center" width="65">
+        <template slot-scope="scope">
+          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'" >{{ scope.row.status | statusFilter }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         fit
         label="操作"
@@ -67,8 +71,8 @@
       <el-pagination
         v-show="total>0"
         :current-page="listQuery.page"
-        :page-sizes="[10,20,30, 50]"
-        :page-size="listQuery.limit"
+        :page-sizes="[5,10,20,30, 50]"
+        :page-size="listQuery.rows"
         :total="total"
         background
         layout="total, sizes, prev, pager, next, jumper"
@@ -77,7 +81,7 @@
     </div>
     <!-- S 新增弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" title="新增">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
+      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
         <el-form-item label="账号" prop="account" >
           <el-input
             v-model="temp.account"
@@ -92,9 +96,9 @@
             clearable
           />
         </el-form-item>
-        <el-form-item label="状态" prop="userStatus">
-          <el-select v-model="temp.userStatus" class="filter-item" placeholder="请选择" >
-            <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="item" />
+        <el-form-item label="状态" prop="status">
+          <el-select v-model="temp.status" class="filter-item" placeholder="请选择" >
+            <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -103,11 +107,11 @@
             clearable
           />
         </el-form-item>
-        <el-form-item label="手机" prop="phonenumber" >
+        <el-form-item label="手机" prop="phone" >
           <el-input
-            v-model.number="temp.phonenumber"
-            :maxLength="11"
-            minLength="11"
+            v-model="temp.phone"
+            maxlength="11"
+            minlenght="11"
             clearable
           />
         </el-form-item>
@@ -161,7 +165,10 @@
           align="center"
           width="180">
           <template slot-scope="scope">
-            <el-button v-if="scope.row.status==='default'" type="success" size="small" >默认岗位</el-button>
+            <el-button
+              v-if="scope.row.status==='default'"
+              type="success"
+              size="small" >默认岗位</el-button>
             <el-button v-else-if="scope.row.status!=='default' && scope.row.department && scope.row.position" size="small" @click="setDefaultPosition(scope.$index, scope.row)">设为默认岗位</el-button>
           </template>
         </el-table-column>
@@ -198,7 +205,7 @@
       />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogRoleVisible = false">取消</el-button>
-        <el-button type="primary" @click="test">确认</el-button>
+        <el-button type="primary" >确认</el-button>
       </div>
     </el-dialog>
     <!-- E 角色岗位 -->
@@ -218,9 +225,8 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        published: 'success',
-        draft: 'info',
-        deleted: 'danger'
+        0: '未生效',
+        1: '生效'
       }
       return statusMap[status]
     }
@@ -270,37 +276,32 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        rows: 5,
         sort: '+id',
-        userStatus: undefined,
+        status: undefined,
         position: undefined,
         department: undefined
       },
-      userStatusOptions: ['生效', '不生效'],
-      departmentOptions: ['A部门', '销售部', '研发部', '市场部'],
+      userStatusOptions: ['不生效', '生效'],
+      departmentOptions: [],
       positionOptions: ['经理', '美工', '开发', '推广', '策划'],
       sortOptions: [
         { label: 'ID Ascending', key: '+id' },
         { label: 'ID Descending', key: '-id' }
       ],
-      statusOptions: ['published', 'draft', 'deleted'],
-      showReviewer: false,
       temp: {
         name: undefined,
         account: undefined,
-        userStatus: undefined,
+        status: undefined,
         email: undefined,
-        phonenumber: undefined,
+        phone: undefined,
         id: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
       dialogSectorVisible: false,
       dialogRoleVisible: false,
-      rules: {
+      addUserDialogRules: {
         name: [
           { required: true, message: '用户名不能为空', trigger: 'blur' },
           { validator: checkName, trigger: 'blur' }
@@ -309,7 +310,7 @@ export default {
           { required: true, message: '账号不能为空', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        userStatus: [
+        status: [
           {
             required: true,
             message: '状态不能为空',
@@ -320,7 +321,7 @@ export default {
           { required: true, message: '邮箱不能为空', trigger: 'blur' },
           { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' }
         ],
-        phonenumber: [
+        phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           { validator: checkPhoneNumber, trigger: 'blur' }
         ]
@@ -418,13 +419,21 @@ export default {
     },
     getUserList() {
       this.listLoading = true
-      userList({ page: 2, rows: 2 }).then(response => {
-        this.userList = response.data.data.rows
-        this.total = response.data.data.total
+      console.log(this.listQuery)
+      userList(this.listQuery).then(response => {
+        const data = response.data.data
+        this.userList = data.rows
+        this.departmentOptions = this.userList.map(function(item) {
+          return item.departmentName
+        })
+
+        this.departmentOptions = [...new Set(this.departmentOptions)]
+        console.log(this.departmentOptions)
+        this.total = data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
-        }, 1e3)
+        }, 5e2)
       })
     },
     handleSectorUpdate(row) {
@@ -438,7 +447,7 @@ export default {
       this.getUserList()
     },
     handleSizeChange(val) {
-      this.listQuery.limit = val
+      this.listQuery.rows = val
       this.getUserList()
     },
     handleCurrentChange(val) {
@@ -452,19 +461,7 @@ export default {
       })
       row.status = status
     },
-    resetTemp() {
-      this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
-      }
-    },
     handleCreate() {
-      this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -474,7 +471,6 @@ export default {
     createUserData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
           userCreate(this.temp).then(() => {
             this.userList.unshift(this.temp)
             this.dialogFormVisible = false
@@ -556,7 +552,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" >
+<style lang="scss">
   .el-dialog {
     width:90%;max-width:400px;
   }
@@ -569,7 +565,7 @@ export default {
      .el-transfer{display:inline-block;white-space: nowrap;}
   }
   .el-dialog__body{padding-top:10px;padding-bottom:0;}
-  .el-form-item{margin-bottom:0;}
+  .filter-bar .el-form-item{margin-bottom:0; }
   .filter-container{padding-bottom:0;}
 </style>
 

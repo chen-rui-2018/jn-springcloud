@@ -2,7 +2,7 @@ import axios from 'axios'
 // import store from '@/store'
 // import { getToken } from '@/utils/auth'
 // 配置基准路径
-const baseURL = 'http://192.168.2.139/springcloud-app-system/'
+const baseURL = 'http://192.168.2.112/springcloud-app-system/'
 // 设置默认的基准路径
 axios.defaults.baseURL = baseURL
 // axios.interceptors.request.use(function(config) {

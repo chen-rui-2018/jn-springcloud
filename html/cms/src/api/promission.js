@@ -16,3 +16,10 @@ export function userCreate(query) {
     data: query
   })
 }
+export function findSysDepartmentAll(query) {
+  return request({
+    url: 'system/sysDepartment/findSysDepartmentAll',
+    method: 'post',
+    data: query
+  })
+}

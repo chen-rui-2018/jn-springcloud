@@ -8,7 +8,7 @@ export function loginByUsername(account, password) {
   }
   // 'http://192.168.2.139/springcloud-app-system/login
   return request({
-    url: 'http://192.168.2.139/springcloud-app-system/login',
+    url: 'login',
     method: 'post',
     data
   })

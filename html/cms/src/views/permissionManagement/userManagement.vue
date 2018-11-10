@@ -1,7 +1,10 @@
 <template>
-  <div>
+  <div class="flex-box">
     <div class="filter-container">
-      <el-form :inline="true" class="filter-bar" >
+      <el-form
+        :inline="true"
+        :model="listQuery"
+        class="filter-bar" >
         <el-form-item label="姓名" >
           <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable />
         </el-form-item>
@@ -13,18 +16,19 @@
             style="width: 90px"
             class="filter-item"
             @change="selecteUserStatus" >
-            <el-option v-for="item in userStatusOptions" :key="item" :label="item" :value="item"/>
+            <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index"/>
           </el-select>
         </el-form-item>
         <el-form-item label="部门">
           <el-select
-            v-model="listQuery.department"
-            placeholder="请选择"
+            v-model="listQuery.departmentId"
+            multiple
+            collapse-tags
             clearable
-            style="width: 90px"
+            placeholder="请选择"
             class="filter-item"
             @change="selecteDepartment" >
-            <el-option v-for="item in departmentOptions" :key="item" :label="item" :value="item"/>
+            <el-option v-for="item in departmentOptions" :key="item" :label="item.departmentName" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -37,14 +41,21 @@
       :data="userList"
       border
       fit
-      max-height="500"
       highlight-current-row
       style="width: 100%;">
       <el-table-column label="序列" type="index" align="center" width="50"/>
       <el-table-column label="姓名" prop="name" align="left" width="100"/>
       <el-table-column label="账号" prop="account" align="left" width="130"/>
       <el-table-column label="邮箱" prop="email" align="left" width="200"/>
-      <el-table-column label="创建时间" prop="createTime" align="center" width="200"/>
+      <el-table-column
+        label="创建时间"
+        prop="createTime"
+        align="center"
+        width="150">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+        </template>
+      </el-table-column>
       <el-table-column label="部门" prop="departmentName" align="center" width="65"/>
       <el-table-column label="岗位" prop="postName" align="center" width="65"/>
       <el-table-column label="人员状态" prop="status" align="center" width="65">
@@ -213,7 +224,7 @@
 </template>
 
 <script>
-import { userList, userCreate } from '@/api/promission'
+import { userList, userCreate, findSysDepartmentAll } from '@/api/promission'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 
@@ -280,9 +291,10 @@ export default {
         sort: '+id',
         status: undefined,
         position: undefined,
-        department: undefined
+        departmentName: undefined,
+        departmentId: undefined
       },
-      userStatusOptions: ['不生效', '生效'],
+      userStatusOptions: ['未生效', '生效'],
       departmentOptions: [],
       positionOptions: ['经理', '美工', '开发', '推广', '策划'],
       sortOptions: [
@@ -409,6 +421,7 @@ export default {
   },
   created() {
     this.getUserList()
+    this.getSysDepartmentAll()
   },
   methods: {
     selecteUserStatus(value) {
@@ -417,18 +430,18 @@ export default {
     selecteDepartment(value) {
       this.listQuery.department = value
     },
+    getSysDepartmentAll() {
+      findSysDepartmentAll().then(response => {
+        const data = response.data.data
+        this.departmentOptions = data
+      })
+    },
     getUserList() {
       this.listLoading = true
       console.log(this.listQuery)
       userList(this.listQuery).then(response => {
         const data = response.data.data
         this.userList = data.rows
-        this.departmentOptions = this.userList.map(function(item) {
-          return item.departmentName
-        })
-
-        this.departmentOptions = [...new Set(this.departmentOptions)]
-        console.log(this.departmentOptions)
         this.total = data.total
         // Just to simulate the time of the request
         setTimeout(() => {
@@ -444,6 +457,7 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
+      this
       this.getUserList()
     },
     handleSizeChange(val) {
@@ -553,6 +567,9 @@ export default {
 }
 </script>
 <style lang="scss">
+  .flex-box{
+    display:flex;flex-direction: column;height:100%;
+  }
   .el-dialog {
     width:90%;max-width:400px;
   }

@@ -93,7 +93,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public void delete(String[] ids) {
         sysDepartmentMapper.deleteDepartmentBranch(ids);
         sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
-        logger.info("message={}", "逻辑删除部门成功,departmentIds:" + ids.toString());
+        logger.info("[部门] 逻辑删除部门成功,departmentIds: {}",ids.toString());
     }
 
     /**
@@ -110,7 +110,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andIdEqualTo(tbSysDepartment.getId());
         tbSysDepartmentMapper.updateByExampleSelective(tbSysDepartment, tbSysDepartmentCriteria);
-        logger.info("message={}", "修改部门信息成功,departmentId:" + tbSysDepartment.getId());
+        logger.info("[部门] 修改部门信息成功,departmentId: {}",tbSysDepartment.getId());
     }
 
     /**
@@ -136,10 +136,10 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                 tbSysDepartment.setCreateTime(new Date());
                 tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getKey());
 
-                //插入
+                //插入F
                 tbSysDepartmentMapper.insertSelective(tbSysDepartment);
-                logger.info("message={}", "添加部门信息成功,departmentId:" + tbSysDepartment.getId()
-                        + ",父级id:" + sysDepartmentAdd.getParentId());
+                logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}",tbSysDepartment.getId(),
+                        sysDepartmentAdd.getParentId());
             }
         }
     }
@@ -215,13 +215,31 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                 tbSysUserDepartmentPost.setUserId(sysUserPostAdd.getUserId());
                 tbSysUserDepartmentPost.setPostId(sysUserPostAdd.getPostId());
                 list.add(tbSysUserDepartmentPost);
-                logger.info("message={}", "部门添加用户信息成功,departmentId:" + sysDepartmentUserAdd.getDepartmentId()
-                        + ",用户id:" + sysUserPostAdd.getUserId());
+                logger.info("[部门] 部门添加用户信息成功,departmentId:{},用户id:",sysDepartmentUserAdd.getDepartmentId(),
+                       sysUserPostAdd.getUserId());
             }
             //批量为部门插入用户
             sysUserDepartmentPostMapper.insert(list);
 
         }
+    }
+
+    /**
+     * 判断部门名称是否存在
+     *
+     * @param departmentName
+     * @return
+     */
+    @Override
+    public Result checkDepartmentName(String departmentName) {
+        TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
+        TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
+        criteria.andDepartmentNameEqualTo(departmentName);
+        List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
+        if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0){
+            return new Result("部门名称已存在");
+        }
+        return new Result("部门名称可以使用");
     }
 
 

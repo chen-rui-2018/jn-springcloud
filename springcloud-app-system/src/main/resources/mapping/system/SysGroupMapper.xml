@@ -51,7 +51,7 @@
     <insert id="addSysGroup" parameterType="com.jn.system.entity.TbSysGroup">
                 insert into tb_sys_group (id, group_name, create_time,creator,
                   status)
-                values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=VARCHAR},
+                values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
                 #{creator,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
      </insert>
 

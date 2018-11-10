@@ -48,8 +48,7 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysGroup/add")
     public Result add(@Validated @RequestBody TbSysGroup sysGroup) {
-        sysGroupService.addSysGroup(sysGroup);
-        return new Result();
+        return sysGroupService.addSysGroup(sysGroup);
     }
 
     @ApiOperation(value = "逻辑删除用户组", httpMethod = "POST", response = Result.class)

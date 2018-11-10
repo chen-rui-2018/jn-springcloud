@@ -23,7 +23,7 @@ public interface SysUserService {
      *
      * @param sysUser
      */
-    void addSysUser(SysUser sysUser);
+    String addSysUser(SysUser sysUser);
 
     /**
      * 查询用户

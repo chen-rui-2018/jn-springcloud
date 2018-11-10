@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysPermissionMenuMapper">
+    <update id="deletePermissionBranch" parameterType="java.lang.String">
+        update tb_sys_permission_menu set status=-1
+        where permission_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findMenuOfPermission" parameterType="java.lang.String" resultType="com.jn.system.model.SysMenu">
+        select
+        t2.id,
+        t2.menu_name as menuName,
+        t2.menu_url as menuUrl,
+        t2.parent_id as parentId,
+        t2.is_dir as isDir,
+        t2.sort,
+        t2.creator,
+        t2.create_time as createTime,
+        t2.`status`
+        from tb_sys_permission_menu t1 , tb_sys_menu t2
+        where t1.menu_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
+        and t1.permission_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findOtherMenu" parameterType="java.lang.String" resultType="com.jn.system.model.SysMenu">
+        select
+            id,
+            menu_name as menuName,
+            menu_url as menuUrl,
+            parent_id as parentId,
+            is_dir as isDir,
+            sort,
+            creator,
+            create_time as createTime,
+            `status`
+        from tb_sys_menu where id not in
+            (select t2.id
+            from tb_sys_permission_menu t1 , tb_sys_menu t2
+            where t1.menu_id = t2.id and t1.`status` = '1'
+            and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR})
+            and `status` = '1'
+    </select>
+
+    <update id="deleteByPermissionId" parameterType="java.lang.String">
+        update tb_sys_permission_menu set `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="addMenuToPermission" parameterType="java.util.List">
+        insert into tb_sys_permission_menu (id, permission_id,menu_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.permissionId,jdbcType=VARCHAR},
+            #{item.menuId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+</mapper>

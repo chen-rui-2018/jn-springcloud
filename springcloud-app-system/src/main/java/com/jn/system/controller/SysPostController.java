@@ -45,8 +45,8 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "添加岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysPostAdd sysPostAdd) {
-        sysPostService.addPost(sysPostAdd);
-        return new Result();
+        String result = sysPostService.addPost(sysPostAdd);
+        return new Result(result);
     }
 
     @RequiresPermissions("/system/sysPost/delete")

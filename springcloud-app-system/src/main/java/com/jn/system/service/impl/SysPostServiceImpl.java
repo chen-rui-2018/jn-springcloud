@@ -69,16 +69,24 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addPost(SysPostAdd sysPostAdd) {
+    public String addPost(SysPostAdd sysPostAdd) {
+        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
+        criteria.andPostNameEqualTo(sysPostAdd.getPostName());
+        List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+        if(tbSysPosts != null && tbSysPosts.size() > 0){
+            return "用户名已存在";
+        }
         TbSysPost tbSysPost = new TbSysPost();
         tbSysPost.setId(UUID.randomUUID().toString());
-        User user = (User) SecurityUtils.getSubject().getPrincipals();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbSysPost.setCreator(user.getId());
         tbSysPost.setStatus(sysPostAdd.getStatus());
         tbSysPost.setCreateTime(new Date());
         tbSysPost.setPostName(sysPostAdd.getPostName());
         tbSysPostMapper.insertSelective(tbSysPost);
-        logger.info("message{}", "新增岗位成功！，sysPostId=" + tbSysPost.getId());
+        logger.info("[岗位]新增岗位成功！，sysPostId:{}",tbSysPost.getId());
+        return "添加成功";
     }
 
     /**
@@ -91,7 +99,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void deletePostBranch(String[] ids) {
         sysPostMapper.deletePostBranch(ids);
         sysUserDepartmentPostMapper.deletePostBranch(ids);
-        logger.info("message{}", "批量删除岗位成功！，sysPostIds=" + ids.toString());
+        logger.info("[岗位]批量删除岗位成功！，sysPostIds:{}",ids.toString());
     }
 
     /**
@@ -103,7 +111,7 @@ public class SysPostServiceImpl implements SysPostService {
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
         sysPostMapper.updatePost(sysPost);
-        logger.info("message{}", "修改岗位信息成功！，sysPostId:" + sysPost.getId());
+        logger.info("[岗位]修改岗位信息成功！，sysPostId:{}",sysPost.getId());
     }
 
     /**

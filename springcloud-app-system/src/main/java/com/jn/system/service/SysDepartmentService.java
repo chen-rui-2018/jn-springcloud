@@ -68,4 +68,11 @@ public interface SysDepartmentService {
      * @param sysDepartmentUserAdd
      */
     void addUserToDepartment(SysDepartmentUserAdd sysDepartmentUserAdd);
+
+    /**
+     * 判断部门名称是否存在
+     * @param departmentName
+     * @return
+     */
+    Result checkDepartmentName(String departmentName);
 }

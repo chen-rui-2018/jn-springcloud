@@ -23,7 +23,7 @@ public interface SysPostService {
      * 添加岗位
      * @param sysPostAdd
      */
-    void addPost(SysPostAdd sysPostAdd);
+    String addPost(SysPostAdd sysPostAdd);
 
     /**
      * 批量删除岗位

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dao.SysPermissionMapper">
+
+    <update id="updatePermission" parameterType="com.jn.system.model.SysPermission">
+        UPDATE tb_sys_permission
+        SET `status` = #{status,jdbcType=VARCHAR} ,
+        permission_name = #{permissionName,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="findByPage" parameterType="com.jn.system.model.SysPermissionPage"
+            resultType="com.jn.system.model.SysPermission">
+            select
+            id,
+            permission_name as permissionName,
+            create_time as  createTime,
+            `status`
+            from tb_sys_permission
+            where `status` != '-1'
+            <if test="permissionName != null and permissionName != ''">
+                and permission_name like CONCAT('%', #{permissionName,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="status != null and status != ''">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+            ORDER BY create_time desc
+    </select>
+
+    <update id="deletePermissionBranch" parameterType="java.lang.String">
+        update tb_sys_permission set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

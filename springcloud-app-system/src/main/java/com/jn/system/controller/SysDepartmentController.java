@@ -104,4 +104,12 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
+
+    @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
+    @ApiOperation(value = "判断部门名称是否存在", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/checkDepartmentName")
+    public Result checkDepartmentName(String departmentName){
+        return sysDepartmentService.checkDepartmentName(departmentName);
+    }
+
 }

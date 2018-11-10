@@ -74,14 +74,23 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addSysGroup(TbSysGroup sysGroup) {
+    public Result addSysGroup(TbSysGroup sysGroup) {
+        //判断用户组名是否存在
+        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
+        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
+        criteria.andGroupNameEqualTo(sysGroup.getGroupName());
+        List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
+        if (tbSysGroups != null && tbSysGroups.size() > 0 ){
+            return new Result("用户组名已存在");
+        }
         //为用户组设置信息
         sysGroup.setId(UUID.randomUUID().toString());
         sysGroup.setCreateTime(new Date());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(sysGroup);
-        logger.info("message={}", "用户组信息增加成功,groupId:" + sysGroup.getId());
+        logger.info("[用户组]用户组信息增加成功,groupId:{}",sysGroup.getId());
+        return new Result("添加成功");
     }
 
     /**
@@ -95,7 +104,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroupMapper.deleteGroupBranch(groupIds);
         sysGroupUserMapper.deleteGroupBranch(groupIds);
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("message={}", "逻辑删除用户组信息,groupIds:" + groupIds.toString());
+        logger.info("[用户组]逻辑删除用户组信息,groupIds:{}",groupIds.toString());
     }
 
     /**
@@ -137,7 +146,6 @@ public class SysGroupServiceImpl implements SysGroupService {
         List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(id);
         //获取所有用户组信息
         List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        System.out.println("所有角色" + sysRoleAll);
         //排除角色列表中用户组中已经存在的角色
         if (roleAllOfGroup != null && roleAllOfGroup.size() > 0) {
             for (SysRole sysRole : roleAllOfGroup) {
@@ -162,7 +170,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd) {
         String[] groupids = {sysRoleGroupAdd.getGroupId()};
-        User user = (User) SecurityUtils.getSubject().getPrincipals();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         List<SysGroupRole> sysGroupRoleList = new ArrayList<SysGroupRole>();
         for (String roleId : sysRoleGroupAdd.getRoleIds()) {
@@ -174,15 +182,15 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("message={}", "添加用户组授权角色，groupId=" + groupids.toString() + "roleId="
-                    + roleId);
+            logger.info("[用户组]添加用户组授权角色，groupId:{},roleId:{}",groupids.toString(),
+                    roleId);
         }
 
         //插入之前,清除该用户组下面的角色信息
         sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
-        logger.info("message={}", "用户组授权角色成功，groupId=" + groupids.toString());
+        logger.info("[用户组]用户组授权角色成功，groupId:{}", groupids.toString());
     }
 
     /**
@@ -219,7 +227,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd) {
-        User user = (User) SecurityUtils.getSubject().getPrincipals();
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
         for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();
@@ -230,14 +238,14 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
-            logger.info("message={}", "添加用户组授权用户，groupId=" + sysGroupUserAdd.getGroupId() + "userId="
-                    + userId);
+            logger.info("[用户组]添加用户组授权用户，groupId:{},userId:{}",sysGroupUserAdd.getGroupId(),
+                    userId);
         }
         //用户组添加用户之前清除用户组以前用户
         sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
-        logger.info("message={}", "用户组授权用户成功，groupId=" + sysGroupUserAdd.getGroupId());
+        logger.info("[用户组]用户组授权用户成功，groupId:{}",sysGroupUserAdd.getGroupId());
     }
 
 

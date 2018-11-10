@@ -28,7 +28,7 @@
             #{item.roleId,jdbcType=VARCHAR},
             #{item.userGroupId,jdbcType=VARCHAR},
             #{item.creator,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>

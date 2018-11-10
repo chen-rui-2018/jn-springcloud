@@ -14,6 +14,8 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -62,17 +64,25 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addSysUser(SysUser sysUser) {
+    public String addSysUser(SysUser sysUser) {
+        //根据用户名查询用户名是否存在
+        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
+        criteria.andAccountEqualTo(sysUser.getAccount());
+        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+        if(tbSysUsers != null && tbSysUsers.size() > 0){
+            return "用户名已存在";
+        }
         sysUser.setId(UUID.randomUUID().toString());
-        //用户添加,默认密码123456
-        sysUser.setPassword(DigestUtils.md5Hex("123456"));
         sysUser.setCreateTime(new Date());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysUser.setCreator(user.getId());
+        sysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
-        logger.info("message{}", "新增用户成功！，sysUserId=" + sysUser.getId());
+        logger.info("[用户] 新增用户成功！，sysUserId:{}",sysUser.getId());
+        return "添加成功";
     }
 
     /**
@@ -102,7 +112,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPostMapper.deleteUserBranch(ids);
         sysUserRoleMapper.deleteUserBranch(ids);
         sysGroupUserMapper.deleteUserBranch(ids);
-        logger.info("message{}", "删除用户成功！，sysUserIds=" + ids.toString());
+        logger.info("[用户] 删除用户成功！，sysUserIds:{}",ids.toString());
 
     }
 
@@ -124,7 +134,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andIdEqualTo(tbSysUser.getId());
         tbSysUserMapper.updateByExampleSelective(tbSysUser, tbSysUserCriteria);
-        logger.info("message{}", "更新用户成功！，sysUserId=" + sysUser.getId());
+        logger.info("[用户] 更新用户成功！，sysUserId:{}",sysUser.getId());
     }
 
     /**
@@ -181,7 +191,7 @@ public class SysUserServiceImpl implements SysUserService {
                     sysUserMapper.saveSysGroupToSysUser(sysGroupUser);
                 }
             }
-            logger.info("message{}", "用户添加用户组成功！，sysUserId=" + userId);
+            logger.info("[用户] 用户添加用户组成功！，sysUserId:{}",userId);
         }
 
     }
@@ -235,7 +245,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
                 sysUserMapper.saveSysRoleToSysUser(sysUserRole);
             }
-            logger.info("message{}", "用户添加角色成功！，sysUserId=" + userId);
+            logger.info("[用户] 用户添加角色成功！，sysUserId:{}",userId);
         }
 
     }
@@ -283,7 +293,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
             }
-            logger.info("message{}", "用户添加部门岗位成功！，sysUserId=" + sysUserDepartmentPostAdd.getUserId());
+            logger.info("[用户] 用户添加部门岗位成功！，sysUserI:{}",sysUserDepartmentPostAdd.getUserId());
         }
 
     }

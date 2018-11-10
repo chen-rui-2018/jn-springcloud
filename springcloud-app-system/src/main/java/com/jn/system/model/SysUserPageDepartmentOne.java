@@ -1,24 +1,20 @@
 package com.jn.system.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
- *查询工具类
- *
+ * 用户条件分页查询
  * @author： shaobao
- * @date： Created on 2018/11/5 9:52
+ * @date： Created on 2018/11/10 11:25
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUserPage",description = "用户条件分页查询类")
-public class SysUserPage extends Page implements Serializable {
-
-    private static final long serialVersionUID = 2197567068130372509L;
+@ApiModel(value = "SysUserPage",description = "用户条件分页查询")
+public class SysUserPageDepartmentOne implements Serializable {
+    private static final long serialVersionUID = -7606963081636682180L;
 
     @ApiModelProperty("名称")
     private String name;
@@ -27,15 +23,15 @@ public class SysUserPage extends Page implements Serializable {
     private String status;
 
     @ApiModelProperty("部门id")
-    private String[] departmentIds;
+    private String departmentId;
 
-    public SysUserPage() {
+    public SysUserPageDepartmentOne() {
     }
 
-    public SysUserPage(String name, String status, String[] departmentIds) {
+    public SysUserPageDepartmentOne(String name, String status, String departmentId) {
         this.name = name;
         this.status = status;
-        this.departmentIds = departmentIds;
+        this.departmentId = departmentId;
     }
 
     public String getName() {
@@ -54,20 +50,20 @@ public class SysUserPage extends Page implements Serializable {
         this.status = status;
     }
 
-    public String[] getDepartmentIds() {
-        return departmentIds;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartmentIds(String[] departmentIds) {
-        this.departmentIds = departmentIds;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
     public String toString() {
-        return "SysUserPage{" +
+        return "SysUserPageDepartmentOne{" +
                 "name='" + name + '\'' +
                 ", status='" + status + '\'' +
-                ", departmentIds=" + Arrays.toString(departmentIds) +
+                ", departmentId='" + departmentId + '\'' +
                 '}';
     }
 }

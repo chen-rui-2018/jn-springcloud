@@ -101,7 +101,7 @@
              order by tsu.create_time desc
     </select>
 
-    <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO" parameterType="com.jn.system.model.SysUserPage">
+    <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO"  parameterType="com.jn.system.model.SysUserPage">
         select
         t.id,
         t.account,
@@ -132,8 +132,11 @@
             <if test="status != null and status != ''">
                 and status = #{status,jdbcType=VARCHAR}
             </if>
-            <if test="departmentId != null and departmentId != ''">
-                and department_id = #{departmentId,jdbcType=VARCHAR}
+            <if test="departmentIds != null and departmentIds.length > 0">
+                and department_id in
+                <foreach item="id" collection="departmentIds" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
             </if>
     </select>
 

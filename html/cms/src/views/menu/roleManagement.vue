@@ -20,31 +20,11 @@
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" />
       <!-- 表格第二列  姓名 -->
-      <el-table-column label="角色名称" align="center">
-        <template slot-scope="scope">
-          <span class="link-type">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="用户" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="权限" width="170" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.email }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" width="120" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="角色名称" align="center" prop="roleName"/>
+      <el-table-column label="用户" align="center" prop="name" />
+      <el-table-column label="权限" width="170" align="center" prop="describe"/>
+      <el-table-column label="创建时间" width="120" align="center" prop="creationTime"/>
+      <el-table-column label="状态" align="center" prop="roleStatus"/>
       <el-table-column label="操作" align="center" width="360" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
@@ -235,44 +215,32 @@ export default {
     initList() {
       const list = [
         {
-          id: '5',
           name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '生效'
+          roleName: 'zhansan',
+          describe: '10000',
+          creationTime: '2018/8/5 14:30',
+          roleStatus: '生效'
         },
         {
-          id: '2',
           name: '李四',
-          username: '李四',
-          email: '1235466dfdf@163.com',
-          timestamp: '2018/8/6 14:30',
-          bumen: 'A部门',
-          gangwei: '研发岗',
-          status: '生效'
+          roleName: '李四',
+          describe: '1235466d',
+          creationTime: '2018/8/6 14:30',
+          roleStatus: '生效'
         },
         {
-          id: '3',
           name: '测试1',
-          username: 'ceshi',
-          email: '12356dfdf@163.com',
-          timestamp: '2018/8/9 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '失效'
+          roleName: 'ceshi',
+          describe: '1235',
+          creationTime: '2018/8/9 14:30',
+          roleStatus: '失效'
         },
         {
-          id: '4',
           name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
-          status: '生效'
+          roleName: 'zhansan',
+          describe: '123df',
+          creationTime: '2018/8/5 14:30',
+          roleStatus: '生效'
         }
       ]
       this.userList = list

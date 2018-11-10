@@ -32,16 +32,22 @@ const menuRouter = {
     },
     {
       path: 'authoritymanagement',
-      component: () => import('@/views/menu/authoritymanagement'),
+      component: () => import('@/views/menu/authorityManagement'),
       name: 'authoritymanagement',
       meta: { title: '权限管理', noCache: true }
       // hidden: true
     },
     {
       path: 'menumanagement',
-      component: () => import('@/views/menu/menumanagement'),
+      component: () => import('@/views/menu/menuManagement'),
       name: 'menumanagement',
       meta: { title: '菜单管理', noCache: true }
+    },
+    {
+      path: 'filegroupmanagement',
+      component: () => import('@/views/menu/filegroupManagement'),
+      name: 'filegroupmanagement',
+      meta: { title: '文件组管理', noCache: true }
     }
   ]
 }

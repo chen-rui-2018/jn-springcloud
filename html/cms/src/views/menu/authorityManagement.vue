@@ -1,45 +1,27 @@
 <template>
   <div class="authoritymanagement">
     <div class="filter-container">
-      <!-- input搜索框 -->
-      名称：
-      <el-input v-model="listQuery.title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
-      <!-- 第一个下拉菜单 -->
-      状态：
-      <el-select v-model="listQuery.status" placeholder="请选择状态" clearable class="filter-item">
-        <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-
-      <!-- 搜索按钮 -->
-      <el-button class="filter-item" type="primary" round>查询</el-button>
-      <!-- 新增按钮 -->
-      <el-button class="filter-item" round style="margin-left: 10px;" type="primary" @click="adddialogFormVisible=true">新增</el-button>
+      <el-form :inline="true" :model="listQuery">
+        <el-form-item label="名称:">
+          <el-input v-model="listQuery.name" placeholder="请输入名称" style="width: 150px;" class="filter-item" clearable />
+        </el-form-item>
+        <el-form-item label="状态:">
+          <el-select v-model="listQuery.status" placeholder="请选择" style="width: 150px;" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="adddialogFormVisible = true">新增</el-button>
+      </el-form>
     </div>
     <!-- 表格 -->
     <el-table :data="userList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" />
       <!-- 表格第二列  姓名 -->
-      <el-table-column label="权限名称" align="center">
-        <template slot-scope="scope">
-          <span class="link-type">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="权限类型" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" width="120" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="权限名称" align="center" prop="authorityName"/>
+      <el-table-column label="创建时间" width="120" align="center" prop="creationTime"/>
+      <el-table-column label="状态" align="center" prop="status"/>
       <el-table-column label="操作" align="center" width="360" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
@@ -57,7 +39,7 @@
     <!-- 新增权限 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="新增权限">
       <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="权限名称" prop="username">
+        <el-form-item label="权限名称" prop="authorityName">
           <el-input v-model.trim="addform.username" />
         </el-form-item>
         <el-form-item label="描述" prop="miaoshu">
@@ -77,8 +59,8 @@
     <!-- 编辑权限 -->
     <el-dialog :visible.sync="editdialogFormVisible" title="编辑权限">
       <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="权限名称" prop="rolename">
-          <el-input v-model.trim="editform.rolename" />
+        <el-form-item label="权限名称" prop="authorityName">
+          <el-input v-model.trim="editform.authorityName" />
         </el-form-item>
         <el-form-item label="描述" prop="miaoshu">
           <el-input v-model.trim="editform.miaoshu" />
@@ -129,10 +111,13 @@ export default {
   data() {
     return {
       listQuery: {
-        title: '',
+        name: '',
         status: ''
       },
-      statusOptions: ['有效', '失效'],
+      statusOptions: [
+        { value: '1', label: '有效' },
+        { value: '0', label: '无效' }
+      ],
       pagesize: 1,
       pagenum: 10,
       total: 0,
@@ -147,16 +132,16 @@ export default {
       groupManagementdialogVisible: false,
       addform: {
         id: '',
-        username: '',
+        authorityName: '',
         status: ''
       },
       editform: {
         id: '',
-        rolename: '',
+        authorityName: '',
         status: ''
       },
       rules: {
-        username: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
+        authorityName: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
         miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }]
       }
     }
@@ -165,6 +150,10 @@ export default {
     this.initList()
   },
   methods: {
+    handleFilter() {},
+    selecteUserStatus(value) {
+      this.listQuery.status = value
+    },
     // 删除用户功能实现
     deleteUser(id) {
       this.$confirm(
@@ -237,43 +226,23 @@ export default {
     initList() {
       const list = [
         {
-          id: '5',
-          name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
+          authorityName: '张三',
+          creationTime: '2018/8/5 14:30',
           status: '生效'
         },
         {
-          id: '2',
-          name: '李四',
-          username: '李四',
-          email: '1235466dfdf@163.com',
-          timestamp: '2018/8/6 14:30',
-          bumen: 'A部门',
-          gangwei: '研发岗',
+          authorityName: '李四',
+          creationTime: '2018/8/6 14:30',
           status: '生效'
         },
         {
-          id: '3',
-          name: '测试1',
-          username: 'ceshi',
-          email: '12356dfdf@163.com',
-          timestamp: '2018/8/9 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
+          authorityName: '测试1',
+          creationTime: '2018/8/9 14:30',
           status: '失效'
         },
         {
-          id: '4',
-          name: '张三',
-          username: 'zhansan',
-          email: '123dfdf@163.com',
-          timestamp: '2018/8/5 14:30',
-          bumen: '销售部',
-          gangwei: '经理岗',
+          authorityName: '张三',
+          creationTime: '2018/8/5 14:30',
           status: '生效'
         }
       ]

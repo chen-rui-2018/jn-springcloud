@@ -1,66 +1,43 @@
 <template>
   <div class="management">
     <div class="filter-container">
-      <!-- input搜索框 -->
-      名称：
-      <el-input v-model="title" placeholder="请输入名称" style="width: 200px;" class="filter-item" @keyup.enter.native="searchListdata" />
-      <!-- 第一个下拉菜单 -->
-      状态：
-      <el-select v-model="status" placeholder="请选择" clearable class="filter-item">
-        <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <!-- 第二个下拉菜单 -->
-      部门：
-      <el-select v-model="department" placeholder="请选择" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in departmentOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <!-- 搜索按钮 -->
-      <el-button class="filter-item" type="primary" icon="el-icon-search">搜索</el-button>
-      <!-- 新增按钮 -->
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="adddialogFormVisible = true">添加用户</el-button>
+      <el-form :inline="true" :model="formInline" >
+        <el-form-item label="姓名" >
+          <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable />
+        </el-form-item>
+        <el-form-item label="状态:">
+          <el-select v-model="listQuery.status" placeholder="请选择" style="width: 150px;" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="部门" >
+          <el-select
+            v-model="listQuery.department"
+            placeholder="请选择"
+            clearable
+            style="width: 90px"
+            class="filter-item"
+            @change="selecteDepartment" >
+            <el-option v-for="item in departmentOptions" :key="item" :label="item" :value="item"/>
+          </el-select>
+        </el-form-item>
+        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate">新增用户</el-button>
+      </el-form>
     </div>
 
     <!-- 表格 -->
-    <el-table :data="userList" border fit highlight-current-row style="width: 100%;">
+    <el-table v-loading="listLoading" :data="userList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" />
       <!-- 表格第二列  姓名 -->
-      <el-table-column label="姓名" align="center">
-        <template slot-scope="scope">
-          <span class="link-type">{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="账号" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.username }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="邮箱" width="170" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.email }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" width="120" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.timestamp }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="部门" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.bumen }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column label="岗位" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.gangwei }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="姓名" align="center" prop="name"/>
+      <el-table-column label="账号" align="center" prop="account"/>
+      <el-table-column label="邮箱" width="170" align="center" prop="email"/>
+      <el-table-column label="创建时间" width="120" align="center" prop="creationTime" />
+      <el-table-column label="部门" align="center" prop="department"/>
+      <el-table-column label="岗位" align="center" prop="position"/>
+      <el-table-column label="状态" align="center" prop="status" />
       <el-table-column label="操作" align="center" width="360" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
@@ -74,7 +51,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination :current-page="page" :page-sizes="[1, 2, 3, 4]" :page-size="rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户">
       <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="70px" style="width: 400px; margin-left:50px;">
@@ -187,7 +164,7 @@
 </template>
 
 <script>
-import { getAllUserList } from '@/api/index.js'
+import { userList } from '@/api/promission'
 export default {
   data() {
     // 密码验证
@@ -211,13 +188,14 @@ export default {
       }
     }
     return {
+      listLoading: false,
       selectedOptions: [],
       ruleForm2: { pass: '', checkPass: '' },
       roledata: [{ key: 0, label: '管理员' }, { key: 1, label: '经理' }, { key: 2, label: '报表角色' }, { key: 3, label: '超级管理员' }],
       value1: [0],
-      pagesize: 10,
+      page: 1,
       total: 0,
-      pagenum: 1,
+      rows: 1,
       userList: [],
       options: [
         {
@@ -516,16 +494,20 @@ export default {
         }
       ],
       multipleSelection: [],
-
-      title: '',
-      status: '',
-      department: '',
+      listQuery: {
+        name: '',
+        status: '',
+        department: ''
+      },
       adddialogFormVisible: false,
       editdialogFormVisible: false,
       bumendialogFormVisible: false,
       roledialogVisible: false,
       restdialogVisible: false,
-      statusOptions: ['有效', '失效'],
+      statusOptions: [
+        { value: '1', label: '有效' },
+        { value: '0', label: '无效' }
+      ],
       departmentOptions: ['研发部', '工程部', '维修部', '人力部', '财务部'],
       departmentdata: [
         { bumen: '研发部', gangwei: '经理' },
@@ -569,6 +551,10 @@ export default {
     this.initList()
   },
   methods: {
+    handleFilter() {},
+    selecteUserStatus(value) {
+      this.listQuery.status = value
+    },
     //   查询数据的方法
     searchListdata() {},
     // 实现添加用户功能
@@ -689,29 +675,31 @@ export default {
     // 项目初始化
     //   获取动态数据
     initList() {
-      getAllUserList({
-        // query: this.listQuery,
-        rows: this.pagesize,
-        page: this.pagenum
-      }).then(res => {
-        console.log(res)
-
-        // this.userList = res.data.rows
-        // this.total = res.data.total
+      this.listLoading = true
+      userList({ page: this.page, rows: this.rows }).then(response => {
+        console.log(response)
+        this.userList = response.data.data.rows
+        this.total = response.data.data.total
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1e3)
       })
+      // this.userList = res.data.rows
+      // this.total = res.data.total
     },
 
     // 分页功能
     // 当用户切换每面显示记录数时触发
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
-      this.pagesize = val
+      this.rows = val
       this.initList()
     },
     // 当前页码变化的时候触发的操作
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
-      this.pagenum = val
+      this.page = val
       this.initList()
     }
   }

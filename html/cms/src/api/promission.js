@@ -11,7 +11,7 @@ export function userList(query) {
 }
 export function userCreate(query) {
   return request({
-   url: 'system/sysUser/addSysUser',
+    url: 'system/sysUser/addSysUser',
     method: 'post',
     data: query
   })

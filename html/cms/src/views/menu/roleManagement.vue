@@ -41,7 +41,7 @@
 
     <!-- 新增角色 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加角色">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="名称" prop="username">
           <el-input v-model="addform.username" />
         </el-form-item>

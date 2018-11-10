@@ -37,10 +37,10 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :current-page="pagenum" :page-sizes="[10, 20, 30, 40]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户组对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户组">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="用户组" prop="groupName">
           <el-input v-model.trim="addform.groupName" />
         </el-form-item>
@@ -64,7 +64,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="editform.status" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { groupList, addgroupList } from '@/api/promission'
+import { groupList, addgroupList } from '@/api/userGroup'
 export default {
   data() {
     // 角色相关信息
@@ -106,10 +106,7 @@ export default {
       ruleForm2: { pass: '', checkPass: '' },
       rloedata: generateData(),
       value1: [],
-      pagesize: 10,
-      total: 0,
-      pagenum: 1,
-      isshow: true,
+      total: null,
       userList: [],
       options: [
         {
@@ -402,8 +399,10 @@ export default {
         }
       ],
       listQuery: {
-        groupname: '',
-        status: ''
+        groupname: undefined,
+        status: undefined,
+        rows: 10,
+        page: 1
       },
       adddialogFormVisible: false,
       editdialogFormVisible: false,
@@ -527,10 +526,10 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      groupList({ page: this.pagesize, rows: this.pagenum }).then(response => {
+      groupList({ page: 2, rows: 2 }).then(response => {
         console.log(response)
-        this.userList = response.data.data.rows
-        this.total = response.data.data.total
+        // this.userList = response.data.data.rows
+        // this.total = response.data.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false

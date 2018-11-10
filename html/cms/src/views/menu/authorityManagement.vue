@@ -37,7 +37,7 @@
     <el-pagination :current-page="pagenum" :page-sizes="[1, 2, 3, 4]" :page-size="pagesize" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!-- 新增权限 -->
-    <el-dialog :visible.sync="adddialogFormVisible" title="新增权限">
+    <el-dialog :visible.sync="adddialogFormVisible" title="新增">
       <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="权限名称" prop="authorityName">
           <el-input v-model.trim="addform.username" />
@@ -47,7 +47,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="addform.status" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -67,7 +67,7 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="editform.status" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -111,8 +111,8 @@ export default {
   data() {
     return {
       listQuery: {
-        name: '',
-        status: ''
+        name:undefined,
+        status: undefined
       },
       statusOptions: [
         { value: '1', label: '有效' },
@@ -131,18 +131,19 @@ export default {
       managementdialogVisible: false,
       groupManagementdialogVisible: false,
       addform: {
-        id: '',
-        authorityName: '',
-        status: ''
+        id: undefined,
+        authorityName: undefined,
+        status: undefined
       },
       editform: {
-        id: '',
-        authorityName: '',
-        status: ''
+        id:undefined,
+        authorityName:undefined,
+        status:undefined
       },
       rules: {
         authorityName: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],
-        miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }]
+        miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }],
+        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
     }
   },

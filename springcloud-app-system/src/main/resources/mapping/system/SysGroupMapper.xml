@@ -25,6 +25,7 @@
         select
         <include refid="Base_Column_List"/>
         from tb_sys_group
+        ORDER BY create_time desc
     </select>
 
     <!--通过用户id获取用户组-->

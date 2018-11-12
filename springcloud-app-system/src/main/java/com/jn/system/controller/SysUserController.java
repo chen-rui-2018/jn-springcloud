@@ -3,6 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.model.SysUser;
+import com.jn.system.model.SysUserDelete;
 import com.jn.system.model.SysUserDepartmentPostAdd;
 import com.jn.system.model.SysUserPage;
 import com.jn.system.service.SysUserService;
@@ -12,10 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户管理
@@ -58,8 +56,8 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/deleteSysUser")
     @ApiOperation(value = "删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
-    public Result deleteSysUser(String[] ids) {
-        sysUserService.deleteSysUser(ids);
+    public Result deleteSysUser(@Validated @RequestBody SysUserDelete sysUserDelete) {
+        sysUserService.deleteSysUser(sysUserDelete.getUserIds());
         return new Result();
     }
 
@@ -116,5 +114,14 @@ public class SysUserController extends BaseController {
         sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd);
         return new Result();
     }
+
+
+    @RequiresPermissions("/system/sysUser/checkUserName")
+    @ApiOperation(value = "校验用户账号是否存在,success表示用户名可用,false不可用", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkUserName")
+    public Result checkAccount(String account){
+        return sysUserService.checkUserName(account);
+    }
+
 
 }

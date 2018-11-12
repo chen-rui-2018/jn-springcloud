@@ -24,11 +24,11 @@ public class SysUser implements Serializable {
     private String id;
 
     @ApiModelProperty("用户账号")
-    @Pattern(regexp="^[A-Za-z0-9]{6,16}$",message="{用户名只允许6-16位数字及字母}")
+    @Pattern(regexp="^[A-Za-z0-9]{6,16}$",message="{account:'账号只允许6-16位数字及字母'}")
     private String account;
 
     @ApiModelProperty("用户密码")
-    @Pattern(regexp="^[a-zA-Z0-9]{6,16}$",message="{密码只允许6-16位数字及字母}")
+    @Pattern(regexp="^[a-zA-Z0-9]{6,16}$",message="{password:'密码只允许6-16位数字及字母'}")
     private String password;
 
     @ApiModelProperty("用户名称")
@@ -36,12 +36,12 @@ public class SysUser implements Serializable {
 
     @ApiModelProperty("手机号码")
     @Pattern(regexp="^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
-            message="{手机号码验证出错}")
+            message="{phone:'手机号码验证出错'}")
     private String phone;
 
     @ApiModelProperty("邮箱")
     @Pattern(regexp="[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",
-            message="{邮箱验证出错}")
+            message="{email:'邮箱验证出错'}")
     private String email;
 
     @ApiModelProperty("创建人")

@@ -16,6 +16,9 @@
             <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
             <result property="postId" column="postId" jdbcType="VARCHAR"/>
             <result property="postName" column="post_name" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="VARCHAR"/>
+            <result property="level" column="level" jdbcType="VARCHAR"/>
+            <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 

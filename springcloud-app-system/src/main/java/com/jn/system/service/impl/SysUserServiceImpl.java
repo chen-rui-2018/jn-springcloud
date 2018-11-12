@@ -12,11 +12,9 @@ import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
-import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.system.vo.SysUserDepartmentPostVO;
 import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang.math.RandomUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -57,6 +55,7 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserRoleMapper sysUserRoleMapper;
     @Autowired
     private SysGroupUserMapper sysGroupUserMapper;
+
 
     /**
      * 添加用户
@@ -312,5 +311,22 @@ public class SysUserServiceImpl implements SysUserService {
             sysUser.setPassword("");
         }
         return new Result(sysUser);
+    }
+
+    /**
+     * 校验账号是否存在
+     * @param account
+     * @return
+     */
+    @Override
+    public Result checkUserName(String account) {
+        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
+        criteria.andAccountEqualTo(account);
+        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+        if(tbSysUsers != null && tbSysUsers.size() > 0){
+            return new Result("false");
+        }
+        return new Result("success");
     }
 }

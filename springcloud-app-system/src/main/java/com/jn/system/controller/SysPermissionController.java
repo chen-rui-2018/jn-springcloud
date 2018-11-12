@@ -123,7 +123,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/addFileGroupToPermission")
     @ApiOperation(value = "为权限添加文件组", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addFileGroupToPermission")
-    public Result addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd) {
+    public Result addFileGroupToPermission(@Validated @RequestBody SysPermissionFileGroupAdd sysPermissionFileGroupAdd) {
         Assert.notNull(sysPermissionFileGroupAdd.getPermissionId(), "权限id不能为空");
         sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd);
         return new Result();
@@ -164,7 +164,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/MenuAndResourceToPermission")
     @ApiOperation(value = "为权限添加菜单及页面功能", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addMenuAndResourceToPermission")
-    public Result addMenuAndResourceToPermission(SysPermissionMenuRecourcesAdd sysPermissionMenuRecourcesAdd) {
+    public Result addMenuAndResourceToPermission(@Validated @RequestBody SysPermissionMenuRecourcesAdd sysPermissionMenuRecourcesAdd) {
         Assert.notNull(sysPermissionMenuRecourcesAdd.getPermissionId(), "权限id不能为空");
         sysPermissionService.addMenuAndResourceToPermission(sysPermissionMenuRecourcesAdd);
         return new Result();

@@ -102,4 +102,11 @@ public interface SysUserService {
      * @return
      */
     Result findSysUserById(String id);
+
+    /**
+     * 校验用户账号是否存在
+     * @param account
+     * @return
+     */
+    Result checkUserName(String account);
 }

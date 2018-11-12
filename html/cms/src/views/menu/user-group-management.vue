@@ -11,22 +11,36 @@
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="adddialogFormVisible = true">新增</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
 
     <!-- 表格 -->
-    <el-table v-loading="listLoading" :data="userList" border fit highlight-current-row style="width: 100%;">
+    <el-table v-loading="listLoading" :key="tableKey" :data="usergroupList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" />
       <!-- 表格第二列  姓名 -->
-      <el-table-column label="用户组名称" align="center" prop="usergroupName"/>
-      <el-table-column label="拥有用户" align="center" prop="userName"/>
-      <el-table-column label="角色名称" width="170" align="center" prop="roleName"/>
-      <el-table-column label="创建时间" width="120" align="center" prop="creationTime"/>
-      <el-table-column label="描述" align="center" prop="describe" />
-      <el-table-column label="状态" align="center" prop="status"/>
-      <el-table-column label="操作" align="center" width="180" class-name="small-padding fixed-width">
+      <el-table-column label="用户组名称" align="center" prop="groupName" />
+      <el-table-column label="拥有用户" align="center" min-width="120" prop="sysTUserList">
+        <template slot-scope="scope">
+          <span v-for="item in scope.row.sysTUserList" :key="item.id" >{{ item.name }}</span>
+      </template></el-table-column>
+      <el-table-column label="角色名称" align="center" prop="sysRoleList" min-width="120" >
+        <template slot-scope="scope">
+          {{ scope.row.sysRoleList }}
+          <span v-for="item in scope.row.sysRoleList" :key="item.id" >{{ item.roleName }}</span>
+      </template></el-table-column>
+      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
+        <template slot-scope="scope">
+          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center" prop="status">
+        <template slot-scope="scope">
+          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
@@ -37,12 +51,12 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination :current-page="listQuery.page" :page-sizes="[5,10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的添加用户组对话框 -->
     <el-dialog :visible.sync="adddialogFormVisible" title="添加用户组">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px;">
         <el-form-item label="用户组" prop="groupName">
-          <el-input v-model.trim="addform.groupName" />
+          <el-input v-model.trim="addform.groupName" max-length="20" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="addform.status" class="filter-item">
@@ -58,8 +72,8 @@
 
     <!-- 编辑用户组对话框 -->
     <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户组">
-      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="用户组名称" prop="groupName">
+      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px;">
+        <el-form-item label="用户组" prop="groupName">
           <el-input v-model="editform.groupName" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -88,6 +102,15 @@
 <script>
 import { groupList, addgroupList } from '@/api/userGroup'
 export default {
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        0: '未生效',
+        1: '生效'
+      }
+      return statusMap[status]
+    }
+  },
   data() {
     // 角色相关信息
     const generateData = _ => {
@@ -102,12 +125,14 @@ export default {
       return data
     }
     return {
+      dialogStatus: undefined,
+      tableKey: 0,
       listLoading: false,
       ruleForm2: { pass: '', checkPass: '' },
       rloedata: generateData(),
       value1: [],
       total: null,
-      userList: [],
+      usergroupList: [],
       options: [
         {
           value: 'zhinan',
@@ -418,8 +443,8 @@ export default {
       ],
       addform: {
         id: '',
-        groupName: '',
-        status: ''
+        groupName: undefined,
+        status: undefined
       },
       editform: {
         id: '',
@@ -429,7 +454,9 @@ export default {
         status: ''
       },
       rules: {
-        groupName: [{ required: true, message: '请输入用户组', trigger: 'blur' }],
+        groupName: [
+          { required: true, message: '请输入用户组', trigger: 'blur' }
+        ],
         miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }]
       }
     }
@@ -442,13 +469,34 @@ export default {
       this.listQuery.status = value
     },
     //   查询数据的方法
-    handleFilter() {},
+    handleFilter() {
+      this.initList()
+    },
+    // 清空信息
+    resetaddform() {
+      this.addform = {
+        groupName: '',
+        status: ''
+      }
+    },
+    // 显示新增用户组对话框
+    handleCreate() {
+      this.resetaddform()
+      this.dialogStatus = 'create'
+      this.adddialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['addform'].clearValidate()
+      })
+    },
     // 实现添加用户功能
     addUserSubmit(addform) {
       this.$refs[addform].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addgroupList({ groupName: this.addform.groupName, status: this.addform.status }).then(res => {
+          addgroupList({
+            groupName: this.addform.groupName,
+            status: this.addform.status
+          }).then(res => {
             console.log(res)
             if (res.meta.status === 201) {
               this.$message({
@@ -526,10 +574,10 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      groupList({ page: 2, rows: 2 }).then(response => {
+      groupList(this.listQuery).then(response => {
         console.log(response)
-        // this.userList = response.data.data.rows
-        // this.total = response.data.data.total
+        this.usergroupList = response.data.data.rows
+        this.total = response.data.data.total
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
@@ -539,12 +587,12 @@ export default {
     // 分页功能
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`)
-      this.pagesize = val
+      this.listQuery.rows = val
       this.initList()
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`)
-      this.pagenum = val
+      this.listQuery.page = val
       this.initList()
     }
   }
@@ -553,7 +601,9 @@ export default {
 
 <style lang="scss" scoped>
 .management {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  // height:100%;
   .fixed-width .el-button--mini {
     width: auto;
   }

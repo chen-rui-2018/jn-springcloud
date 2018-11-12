@@ -111,7 +111,7 @@ export default {
   data() {
     return {
       listQuery: {
-        name:undefined,
+        name: undefined,
         status: undefined
       },
       statusOptions: [
@@ -136,9 +136,9 @@ export default {
         status: undefined
       },
       editform: {
-        id:undefined,
-        authorityName:undefined,
-        status:undefined
+        id: undefined,
+        authorityName: undefined,
+        status: undefined
       },
       rules: {
         authorityName: [{ required: true, message: '请输入权限名称', trigger: 'blur' }],

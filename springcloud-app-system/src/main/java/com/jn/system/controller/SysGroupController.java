@@ -121,4 +121,12 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ApiOperation(value = "校验用户组名是否存在,success表示用户组名可以用,false表示用户组名已存在",
+            httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkGroupName")
+    @RequiresPermissions("/system/sysGroup/checkGroupName")
+    public Result checkGroupName(String groupName){
+        return sysGroupService.checkGroupName(groupName);
+    }
+
 }

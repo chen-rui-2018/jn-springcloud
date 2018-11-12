@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 import com.jn.system.model.SysDepartmentPage;
+import com.jn.system.vo.SysDepartmentUserVO;
 import com.jn.system.vo.SysDepartmentVO;
 
 import java.util.List;
@@ -15,14 +16,30 @@ public interface SysDepartmentMapper {
 
     /**
      * 条件分页获取信息
+     *
      * @param sysDepartmentPage
      * @return
      */
-    List<SysDepartmentVO> findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
+    List<SysDepartmentUserVO> findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
 
     /**
      * 批量删除部门
+     *
      * @param ids
      */
     void deleteDepartmentBranch(String[] ids);
+
+    /**
+     * 获取一级部门信息
+     *
+     * @return
+     */
+    List<SysDepartmentVO> findSysDepartmentAll();
+
+    /**
+     * 根据父id查询所有子部门
+     * @param departmentId
+     * @return
+     */
+    List<SysDepartmentVO> findChildrenDepartment(String departmentId);
 }

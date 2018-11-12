@@ -5,14 +5,11 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.*;
-import com.jn.system.entity.TbSysGroup;
-import com.jn.system.entity.TbSysUser;
-import com.jn.system.entity.TbSysUserCriteria;
-import com.jn.system.entity.TbSysUserDepartmentPost;
+import com.jn.system.entity.*;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
-import com.jn.system.vo.SysUserDepartmentPostVO;
+import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -71,7 +68,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(sysUser.getAccount());
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
-        if(tbSysUsers != null && tbSysUsers.size() > 0){
+        if (tbSysUsers != null && tbSysUsers.size() > 0) {
             return new Result("用户名已存在");
         }
         sysUser.setId(UUID.randomUUID().toString());
@@ -82,9 +79,8 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
-        logger.info("[用户] 新增用户成功！，sysUserId:{}",sysUser.getId());
-        sysUser.setPassword("");
-        return new Result(sysUser);
+        logger.info("[用户] 新增用户成功！，sysUserId:{}", sysUser.getId());
+        return new Result();
     }
 
     /**
@@ -114,7 +110,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPostMapper.deleteUserBranch(ids);
         sysUserRoleMapper.deleteUserBranch(ids);
         sysGroupUserMapper.deleteUserBranch(ids);
-        logger.info("[用户] 删除用户成功！，sysUserIds:{}",ids.toString());
+        logger.info("[用户] 删除用户成功！，sysUserIds:{}", ids.toString());
 
     }
 
@@ -136,7 +132,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andIdEqualTo(tbSysUser.getId());
         tbSysUserMapper.updateByExampleSelective(tbSysUser, tbSysUserCriteria);
-        logger.info("[用户] 更新用户成功！，sysUserId:{}",sysUser.getId());
+        logger.info("[用户] 更新用户成功！，sysUserId:{}", sysUser.getId());
     }
 
     /**
@@ -193,7 +189,7 @@ public class SysUserServiceImpl implements SysUserService {
                     sysUserMapper.saveSysGroupToSysUser(sysGroupUser);
                 }
             }
-            logger.info("[用户] 用户添加用户组成功！，sysUserId:{}",userId);
+            logger.info("[用户] 用户添加用户组成功！，sysUserId:{}", userId);
         }
 
     }
@@ -247,21 +243,31 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
                 sysUserMapper.saveSysRoleToSysUser(sysUserRole);
             }
-            logger.info("[用户] 用户添加角色成功！，sysUserId:{}",userId);
+            logger.info("[用户] 用户添加角色成功！，sysUserId:{}", userId);
         }
 
     }
 
     /**
-     * 根据用户id查询用户已经具有的部门岗位信息及用户信息
+     * 根据用户id查询用户已经具有的部门岗位信息
      *
      * @param userId
      * @return
      */
     @Override
     public Result findDepartmentandPostByUserId(String userId) {
-        SysUserDepartmentPostVO sysUserDepartmentPostVO = sysUserMapper.findDepartmentAndPostByUserId(userId);
-        return new Result(sysUserDepartmentPostVO);
+        List<SysDepartmentPostVO> sysDepartmentPostVOList = sysUserDepartmentPostMapper.findDepartmentAndPostByUserId(userId);
+        for (SysDepartmentPostVO sysDepartmentPostVO : sysDepartmentPostVOList) {
+            List<TbSysDepartment> tbSysDepartmentList =
+                    sysUserDepartmentPostMapper.findDepartmentId(sysDepartmentPostVO.getDepartmentId());
+            LinkedList<String> departmentNameList = new LinkedList<String>();
+            //对返回的部门名称数据做处理
+            for (TbSysDepartment tbSysDepartment : tbSysDepartmentList) {
+                departmentNameList.addFirst(tbSysDepartment.getDepartmentName());
+            }
+            sysDepartmentPostVO.setDepartmentName(departmentNameList.toString());
+        }
+        return new Result(sysDepartmentPostVOList);
     }
 
     /**
@@ -291,7 +297,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
             }
-            logger.info("[用户] 用户添加部门岗位成功！，sysUserI:{}",sysUserDepartmentPostAdd.getUserId());
+            logger.info("[用户] 用户添加部门岗位成功！，sysUserI:{}", sysUserDepartmentPostAdd.getUserId());
         }
 
     }
@@ -315,6 +321,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 校验账号是否存在
+     *
      * @param account
      * @return
      */
@@ -324,7 +331,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(account);
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
-        if(tbSysUsers != null && tbSysUsers.size() > 0){
+        if (tbSysUsers != null && tbSysUsers.size() > 0) {
             return new Result("false");
         }
         return new Result("success");

@@ -78,4 +78,11 @@ public interface SysGroupService {
      * @param sysGroupUserAdd
      */
     void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd);
+
+    /**
+     * 校验用户组名是否可用
+     * @param groupName
+     * @return
+     */
+    Result checkGroupName(String groupName);
 }

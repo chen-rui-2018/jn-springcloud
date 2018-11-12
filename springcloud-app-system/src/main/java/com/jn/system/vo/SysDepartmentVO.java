@@ -1,56 +1,44 @@
 package com.jn.system.vo;
 
-import com.jn.system.model.SysTUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
- * 部门VO
  * @author： shaobao
- * @date： Created on 2018/11/7 19:15
+ * @date： Created on 2018/11/12 16:34
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentVO",description = "部门VO")
+@ApiModel(value = "SysDepartmentVO" ,description = "根据层级关系获取部门信息")
 public class SysDepartmentVO implements Serializable {
-
     private static final long serialVersionUID = 8857934360566700442L;
-    @ApiModelProperty("id")
-    private String id;
+
+    @ApiModelProperty("部门id")
+    private String departmentId;
     @ApiModelProperty("部门名称")
     private String departmentName;
-    @ApiModelProperty("创建时间")
-    private Date createTime;
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
-    private String status;
-    @ApiModelProperty("父级id")
-    private String parentId;
-    @ApiModelProperty("用户集合")
-    private List<SysTUser> sysTUserList;
+    @ApiModelProperty("子部门的集合")
+    private List<SysDepartmentVO> sysChildrenDepartmentList;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String id, String departmentName, Date createTime, String status,
-                           String parentId, List<SysTUser> sysTUserList) {
-        this.id = id;
+    public SysDepartmentVO(String departmentId, String departmentName, List<SysDepartmentVO> sysChildrenDepartmentList) {
+        this.departmentId = departmentId;
         this.departmentName = departmentName;
-        this.createTime = createTime;
-        this.status = status;
-        this.parentId = parentId;
-        this.sysTUserList = sysTUserList;
+        this.sysChildrenDepartmentList = sysChildrenDepartmentList;
     }
 
-    public String getId() {
-        return id;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getDepartmentName() {
@@ -61,47 +49,20 @@ public class SysDepartmentVO implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public List<SysDepartmentVO> getSysChildrenDepartmentList() {
+        return sysChildrenDepartmentList;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
-
-    public List<SysTUser> getSysTUserList() {
-        return sysTUserList;
-    }
-
-    public void setSysTUserList(List<SysTUser> sysTUserList) {
-        this.sysTUserList = sysTUserList;
+    public void setSysChildrenDepartmentList(List<SysDepartmentVO> sysChildrenDepartmentList) {
+        this.sysChildrenDepartmentList = sysChildrenDepartmentList;
     }
 
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
-                "id='" + id + '\'' +
+                "departmentId='" + departmentId + '\'' +
                 ", departmentName='" + departmentName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
-                ", parentId='" + parentId + '\'' +
-                ", sysTUserList=" + sysTUserList +
+                ", sysChildrenDepartmentList=" + sysChildrenDepartmentList +
                 '}';
     }
 }

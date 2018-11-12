@@ -99,7 +99,7 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysUser/findDepartmentandPostByUserId")
-    @ApiOperation(value = "根据用户id查询用户已经具有的岗位部门及用户信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据用户id查询用户已经具有的岗位部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findDepartmentandPostByUserId")
     public Result findDepartmentandPostByUserId(String userId) {
         return sysUserService.findDepartmentandPostByUserId(userId);

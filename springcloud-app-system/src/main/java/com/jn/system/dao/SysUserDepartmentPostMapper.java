@@ -1,8 +1,10 @@
 package com.jn.system.dao;
 
+import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.SysDepartmentUserPage;
 import com.jn.system.model.SysTUser;
+import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
 
@@ -64,4 +66,18 @@ public interface SysUserDepartmentPostMapper {
      * @param ids
      */
     void deleteUserBranch(String[] ids);
+
+    /**
+     * 根据部门id递归获取部门及上级部门信息
+     * @param departmentId
+     * @return
+     */
+    List<TbSysDepartment> findDepartmentId(String departmentId);
+
+    /**
+     * 根据用户id获取用户已经具有的部门岗位信息
+     * @param userId
+     * @return
+     */
+    List<SysDepartmentPostVO> findDepartmentAndPostByUserId(String userId);
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysDepartmentMapper">
     <select id="findSysDepartmentByPage" parameterType="com.jn.system.model.SysDepartmentPage"
-            resultType="com.jn.system.vo.SysDepartmentVO">
+            resultType="com.jn.system.vo.SysDepartmentUserVO">
         select
         id,
         department_name as departmentName,
@@ -27,4 +27,19 @@
             #{id}
         </foreach>
     </update>
+
+    <select id="findSysDepartmentAll" resultType="com.jn.system.vo.SysDepartmentVO">
+        select
+        id as departmentId,
+        department_name as departmentName
+        from tb_sys_department where parent_id = '1'
+    </select>
+
+    <select id="findChildrenDepartment" parameterType="java.lang.String"
+            resultType="com.jn.system.vo.SysDepartmentVO">
+        select
+            id as departmentId,
+            department_name as departmentName
+            from tb_sys_department where parent_id = #{id,jdbcType=VARCHAR}
+    </select>
 </mapper>

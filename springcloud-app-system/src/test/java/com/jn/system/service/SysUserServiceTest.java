@@ -78,7 +78,7 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysRoleByUserIdTest() {
-        Result result = sysUserService.findSysRoleByUserId("u002");
+        Result result = sysUserService.findSysRoleByUserId("10000");
         logger.info("测试结果:" + result.getData().toString());
     }
 
@@ -90,7 +90,7 @@ public class SysUserServiceTest {
 
     @Test
     public void findDepartmentandPostByUserIdTest() {
-        Result result = sysUserService.findDepartmentandPostByUserId("u002");
+        Result result = sysUserService.findDepartmentandPostByUserId("10000");
         logger.info("测试结果:" + result.getData().toString());
     }
 

@@ -24,6 +24,13 @@ public interface SysGroupUserMapper {
     List<SysTUser> findUserByGroupId(String id);
 
     /**
+     * 根据用户组id获取该用户组下用户信息
+     * @param id
+     * @return
+     */
+    List<String> findUsersByGroupId(String id);
+
+    /**
      * 分页查询用户组已经具有的用户以外的用户
      * @param sysGroupUserPage
      * @return

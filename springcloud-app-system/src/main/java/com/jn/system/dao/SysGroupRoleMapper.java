@@ -21,6 +21,13 @@ public interface SysGroupRoleMapper {
     List<SysRole> findRoleByGroupId(String id);
 
     /**
+     * 根据用户组id获取用户组具有的角色
+     * @param id
+     * @return
+     */
+    List<String> findRolesByGroupId(String id);
+
+    /**
      * 根据用户组id清除用户组下面的角色信息
      * @param groupId
      */

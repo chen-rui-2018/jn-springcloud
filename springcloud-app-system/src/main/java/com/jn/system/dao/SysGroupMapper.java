@@ -2,6 +2,7 @@ package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.model.SysGroupPage;
+import com.jn.system.vo.SysGroupUserRoleVO;
 import com.jn.system.vo.SysGroupVO;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface SysGroupMapper  {
      * 分页查询用户组信息
      * @return
      */
-    List<SysGroupVO> findSysGroupAll(SysGroupPage groupPage);
+    List<SysGroupUserRoleVO> findSysGroupAll(SysGroupPage groupPage);
 
     /**
      * 根据用户id对应用户组

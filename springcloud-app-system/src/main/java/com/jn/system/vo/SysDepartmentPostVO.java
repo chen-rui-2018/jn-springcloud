@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedList;
 
 /**
  *部门岗位实体类
@@ -126,4 +127,5 @@ public class SysDepartmentPostVO implements Serializable {
                 ", isDefault='" + isDefault + '\'' +
                 '}';
     }
+
 }

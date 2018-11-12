@@ -47,9 +47,9 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/delete")
     @ApiOperation(value = "逻辑删除部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/delete")
-    public Result delete(String[] ids) {
-        Assert.noNullElements(ids, "部门id不能为空");
-        sysDepartmentService.delete(ids);
+    public Result delete(@Validated @RequestBody SysDepaetmentDelete sysDepaetmentDelete) {
+        Assert.noNullElements(sysDepaetmentDelete.getDepartmentIds(), "部门id不能为空");
+        sysDepartmentService.delete(sysDepaetmentDelete.getDepartmentIds());
         return new Result();
     }
 
@@ -108,6 +108,14 @@ public class SysDepartmentController extends BaseController {
     @RequestMapping("/checkDepartmentName")
     public Result checkDepartmentName(String departmentName) {
         return sysDepartmentService.checkDepartmentName(departmentName);
+    }
+
+
+    @RequiresPermissions("/system/sysDepartment/findDepartmentAllByLevel")
+    @ApiOperation(value = "查询所有部门信息,并根据层级关系返回数据", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/findDepartmentAllByLevel")
+    public Result findDepartmentAllByLevel(){
+        return sysDepartmentService.findDepartmentAllByLevel();
     }
 
 }

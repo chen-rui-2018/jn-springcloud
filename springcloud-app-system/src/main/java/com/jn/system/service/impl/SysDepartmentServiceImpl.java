@@ -13,6 +13,7 @@ import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysDepartmentService;
+import com.jn.system.vo.SysDepartmentUserVO;
 import com.jn.system.vo.SysDepartmentVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -93,7 +94,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public void delete(String[] ids) {
         sysDepartmentMapper.deleteDepartmentBranch(ids);
         sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
-        logger.info("[部门] 逻辑删除部门成功,departmentIds: {}",ids.toString());
+        logger.info("[部门] 逻辑删除部门成功,departmentIds: {}", ids.toString());
     }
 
     /**
@@ -110,7 +111,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andIdEqualTo(tbSysDepartment.getId());
         tbSysDepartmentMapper.updateByExampleSelective(tbSysDepartment, tbSysDepartmentCriteria);
-        logger.info("[部门] 修改部门信息成功,departmentId: {}",tbSysDepartment.getId());
+        logger.info("[部门] 修改部门信息成功,departmentId: {}", tbSysDepartment.getId());
     }
 
     /**
@@ -138,7 +139,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
 
                 //插入F
                 tbSysDepartmentMapper.insertSelective(tbSysDepartment);
-                logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}",tbSysDepartment.getId(),
+                logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}", tbSysDepartment.getId(),
                         sysDepartmentAdd.getParentId());
             }
         }
@@ -154,11 +155,11 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public Result findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage) {
         //分页查询所有部门
         Page<Object> objects = PageHelper.startPage(sysDepartmentPage.getPage(), sysDepartmentPage.getRows());
-        List<SysDepartmentVO> list = sysDepartmentMapper.findSysDepartmentByPage(sysDepartmentPage);
-        for (SysDepartmentVO sysDepartmentVO : list) {
+        List<SysDepartmentUserVO> list = sysDepartmentMapper.findSysDepartmentByPage(sysDepartmentPage);
+        for (SysDepartmentUserVO sysDepartmentUserVO : list) {
             //查询该部门下所有用户
-            List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.fingUserOfDepartment(sysDepartmentVO.getId());
-            sysDepartmentVO.setSysTUserList(sysTUserList);
+            List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.fingUserOfDepartment(sysDepartmentUserVO.getId());
+            sysDepartmentUserVO.setSysTUserList(sysTUserList);
         }
         PaginationData getEasyUIData = new PaginationData(list, objects.getTotal());
         return new Result(getEasyUIData);
@@ -215,8 +216,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                 tbSysUserDepartmentPost.setUserId(sysUserPostAdd.getUserId());
                 tbSysUserDepartmentPost.setPostId(sysUserPostAdd.getPostId());
                 list.add(tbSysUserDepartmentPost);
-                logger.info("[部门] 部门添加用户信息成功,departmentId:{},用户id:",sysDepartmentUserAdd.getDepartmentId(),
-                       sysUserPostAdd.getUserId());
+                logger.info("[部门] 部门添加用户信息成功,departmentId:{},用户id:", sysDepartmentUserAdd.getDepartmentId(),
+                        sysUserPostAdd.getUserId());
             }
             //批量为部门插入用户
             sysUserDepartmentPostMapper.insert(list);
@@ -236,10 +237,40 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andDepartmentNameEqualTo(departmentName);
         List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
-        if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0){
+        if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
             return new Result("部门名称已存在");
         }
         return new Result("部门名称可以使用");
+    }
+
+    /**
+     * 查询所有部门信息,并根据层级关系返回
+     *
+     * @return
+     */
+    @Override
+    public Result findDepartmentAllByLevel() {
+        //查询所有以及部门
+        List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentMapper.findSysDepartmentAll();
+        findChildrenDepartment(sysDepartmentVOList);
+        return new Result(sysDepartmentVOList);
+    }
+
+    /**
+     * 递归循环查找部门所有子部门
+     *
+     * @param sysDepartmentVOList
+     */
+    public void findChildrenDepartment(List<SysDepartmentVO> sysDepartmentVOList) {
+        for (SysDepartmentVO sysDepartmentVO : sysDepartmentVOList) {
+            List<SysDepartmentVO> childrenDepartList =
+                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getDepartmentId());
+            sysDepartmentVO.setSysChildrenDepartmentList(childrenDepartList);
+            findChildrenDepartment(childrenDepartList);
+            if (childrenDepartList == null || childrenDepartList.size() == 0) {
+                return;
+            }
+        }
     }
 
 

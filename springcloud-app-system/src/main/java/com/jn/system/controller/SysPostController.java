@@ -2,6 +2,7 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.system.model.SysDepaetmentDelete;
 import com.jn.system.model.SysPost;
 import com.jn.system.model.SysPostAdd;
 import com.jn.system.model.SysPostPage;
@@ -50,9 +51,9 @@ public class SysPostController extends BaseController {
     @RequiresPermissions("/system/sysPost/delete")
     @ApiOperation(value = "逻辑删除岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete")
-    public Result delete(String[] ids) {
-        Assert.noNullElements(ids, "岗位id不能为空");
-        sysPostService.deletePostBranch(ids);
+    public Result delete(@Validated @RequestBody SysPostDelete sysPostDelete) {
+        Assert.noNullElements(sysPostDelete.getPostIds(), "岗位id不能为空");
+        sysPostService.deletePostBranch(sysPostDelete.getPostIds());
         return new Result();
     }
 

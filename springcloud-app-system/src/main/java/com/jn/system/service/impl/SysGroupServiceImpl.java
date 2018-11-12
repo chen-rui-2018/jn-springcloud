@@ -5,11 +5,14 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.*;
+import com.jn.system.entity.TbSysDepartmentCriteria;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
+import com.jn.system.vo.SysGroupUserRoleVO;
 import com.jn.system.vo.SysGroupVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +54,15 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     public Result findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
-        List<SysGroupVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
+        List<SysGroupUserRoleVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
         if (sysGroupAll != null && sysGroupAll.size() > 0) {
             //获取用户组对应的用户及角色
-            for (SysGroupVO sysGroupVO : sysGroupAll) {
+            for (SysGroupUserRoleVO sysGroupVO : sysGroupAll) {
                 //获取用户信息
-                List<SysTUser> sysTUserList = sysGroupUserMapper.findUserByGroupId(sysGroupVO.getId());
+                List<String> sysTUserList = sysGroupUserMapper.findUsersByGroupId(sysGroupVO.getId());
                 sysGroupVO.setSysTUserList(sysTUserList);
                 //获取角色信息
-                List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(sysGroupVO.getId());
+                List<String> roleAllOfGroup = sysGroupRoleMapper.findRolesByGroupId(sysGroupVO.getId());
                 sysGroupVO.setSysRoleList(roleAllOfGroup);
             }
         }
@@ -246,6 +249,25 @@ public class SysGroupServiceImpl implements SysGroupService {
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
         logger.info("[用户组]用户组授权用户成功，groupId:{}",sysGroupUserAdd.getGroupId());
+    }
+
+    /**
+     * 校验用户组名是否可用
+     * @param groupName
+     * @return
+     */
+    @Override
+    public Result checkGroupName(String groupName) {
+        if (StringUtils.isNotBlank(groupName)){
+            TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
+            TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
+            criteria.andGroupNameEqualTo(groupName);
+            List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
+            if (tbSysGroups != null && tbSysGroups.size() > 0){
+                return new Result("false");
+            }
+        }
+        return  new Result("success");
     }
 
 

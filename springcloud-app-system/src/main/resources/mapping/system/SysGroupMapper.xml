@@ -7,7 +7,7 @@
     </sql>
 
     <!--查询所有用户组-->
-    <select id="findSysGroupAll" resultType="com.jn.system.vo.SysGroupVO"
+    <select id="findSysGroupAll" resultType="com.jn.system.vo.SysGroupUserRoleVO"
             parameterType="com.jn.system.model.SysGroupPage">
         select
         <include refid="Base_Column_List"/>

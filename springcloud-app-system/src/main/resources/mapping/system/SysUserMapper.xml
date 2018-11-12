@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dao.SysUserMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.vo.SysUserVO">
+    <resultMap id="BaseResultMap" type="com.jn.system.vo.SysUserDepartmentPostVO">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="account" jdbcType="VARCHAR" property="account"/>
-        <result column="password" jdbcType="VARCHAR" property="password"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
@@ -13,18 +12,10 @@
         <result column="status" jdbcType="VARCHAR" property="status"/>
 
         <collection  property="sysDepartmentPostVOList" ofType="com.jn.system.vo.SysDepartmentPostVO">
-            <id property="id" column="dpid" jdbcType="VARCHAR"/>
-            <result property="departmentId" column="did" jdbcType="VARCHAR"/>
+            <result property="departmentId" column="departmentId" jdbcType="VARCHAR"/>
             <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
-            <result property="departmentCreateTime" column="departmentCreateTime" jdbcType="TIMESTAMP"/>
-            <result property="departmentStatus" column="departmentStatus" jdbcType="VARCHAR"/>
-            <result property="departmentCreator" column="departmentCreator" jdbcType="VARCHAR"/>
-            <result property="postId" column="pid" jdbcType="VARCHAR"/>
+            <result property="postId" column="postId" jdbcType="VARCHAR"/>
             <result property="postName" column="post_name" jdbcType="VARCHAR"/>
-            <result property="postCreator" column="postCreator" jdbcType="VARCHAR"/>
-            <result property="postCreateTime" column="postCreateTime" jdbcType="TIMESTAMP"/>
-            <result property="postStatus" column="postStatus" jdbcType="VARCHAR"/>
-            <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -70,35 +61,16 @@
           )
     </insert>
 
-    <select id="findSysUserByPageAndOption" parameterType="com.jn.system.model.SysUserDepartmentPost" resultMap="BaseResultMap">
-        select distinct
-        <include refid="Column_list"/>
-          from tb_sys_user tsu
-            left join tb_sys_user_department_post tsudp on tsu.id = tsudp.user_id
-            left join tb_sys_department tsd on tsudp.department_id = tsd.id
-            left join tb_sys_post tsp on tsudp.post_id = tsp.id
-            <where>
-                tsudp.status != '-1'
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-                   and tsu.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
-                </if>
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                   and tsu.`status` = #{status,jdbcType=VARCHAR}
-                </if>
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
-                   and tsudp.department_id = #{departmentId,jdbcType=VARCHAR}
-                </if>
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userId)">
-                   and tsu.id = #{userId,jdbcType=VARCHAR}
-                </if>
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentPostStatus)">
-                   and tsudp.`status` = #{departmentPostStatus,jdbcType=VARCHAR}
-                </if>
-                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(isDefault)">
-                   and tsudp.`is_default` = #{isDefault,jdbcType=VARCHAR}
-                </if>
-            </where>
-             order by tsu.create_time desc
+    <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+       SELECT *
+       from tb_sys_user u left join
+            (select t2.id as departmentId,t2.department_name,
+            t3.id as postId ,t3.post_name,t1.user_id
+            from tb_sys_user_department_post t1,tb_sys_department t2,
+            tb_sys_post t3 where t1.department_id = t2.id AND
+            t1.post_id = t3.id and t1.`status` = '1'
+            and t2.`status` = '1' and t3.`status` = '1') tt
+            on u.id = tt.user_id where u.id = #{id,jdbcType=VARCHAR}
     </select>
 
     <select id="findSysUserByPage" resultType="com.jn.system.vo.SysUserVO"  parameterType="com.jn.system.model.SysUserPage">

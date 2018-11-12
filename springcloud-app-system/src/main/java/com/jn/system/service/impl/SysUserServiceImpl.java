@@ -12,6 +12,8 @@ import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysUserDepartmentPostVO;
 import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.math.RandomUtils;
@@ -64,14 +66,14 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String addSysUser(SysUser sysUser) {
+    public Result addSysUser(SysUser sysUser) {
         //根据用户名查询用户名是否存在
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(sysUser.getAccount());
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
         if(tbSysUsers != null && tbSysUsers.size() > 0){
-            return "用户名已存在";
+            return new Result("用户名已存在");
         }
         sysUser.setId(UUID.randomUUID().toString());
         sysUser.setCreateTime(new Date());
@@ -82,7 +84,8 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
         logger.info("[用户] 新增用户成功！，sysUserId:{}",sysUser.getId());
-        return "添加成功";
+        sysUser.setPassword("");
+        return new Result(sysUser);
     }
 
     /**
@@ -258,12 +261,8 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findDepartmentandPostByUserId(String userId) {
-        SysUserDepartmentPost sysUserDepartmentPost = new SysUserDepartmentPost();
-        sysUserDepartmentPost.setUserId(userId);
-        //设置默认查询用户部门岗位为有效状态数据
-        sysUserDepartmentPost.setDepartmentPostStatus(SysStatusEnums.EFFECTIVE.getKey());
-        List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPageAndOption(sysUserDepartmentPost);
-        return new Result(sysUserVOList);
+        SysUserDepartmentPostVO sysUserDepartmentPostVO = sysUserMapper.findDepartmentAndPostByUserId(userId);
+        return new Result(sysUserDepartmentPostVO);
     }
 
     /**

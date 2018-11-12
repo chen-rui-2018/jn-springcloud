@@ -37,7 +37,7 @@ public class SysPostController extends BaseController {
     @RequiresPermissions("/system/sysPost/findSysPostAll")
     @ApiOperation(value = "查询所有岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysPostAll")
-    private Result findSysPostAll() {
+    public Result findSysPostAll() {
         return sysPostService.findSysPostAll();
     }
 

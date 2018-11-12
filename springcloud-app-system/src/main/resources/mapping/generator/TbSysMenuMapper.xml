@@ -11,6 +11,7 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, menu_name, menu_url, parent_id, is_dir, sort, creator, create_time, status
+    id, menu_name, menu_url, parent_id, is_dir, sort, creator, create_time, status, level
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.entity.TbSysMenuCriteria" resultMap="BaseResultMap">
     select
@@ -106,12 +107,12 @@
   <insert id="insert" parameterType="com.jn.system.entity.TbSysMenu">
     insert into tb_sys_menu (id, menu_name, menu_url, 
       parent_id, is_dir, sort, 
-      creator, create_time, status
-      )
+      creator, create_time, status, 
+      level)
     values (#{id,jdbcType=VARCHAR}, #{menuName,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, 
       #{parentId,jdbcType=VARCHAR}, #{isDir,jdbcType=VARCHAR}, #{sort,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
-      )
+      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
+      #{level,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.entity.TbSysMenu">
     insert into tb_sys_menu
@@ -143,6 +144,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="level != null">
+        level,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -171,6 +175,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -210,6 +217,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
       </if>
+      <if test="record.level != null">
+        level = #{record.level,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -225,7 +235,8 @@
       sort = #{record.sort,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR},
+      level = #{record.level,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -257,6 +268,9 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -269,7 +283,8 @@
       sort = #{sort,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR},
+      level = #{level,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
  * @modified By:
  */
 @Api(tags = "文件组管理")
-@CrossOrigin
 @RestController
 @RequestMapping("/system/sysFileGroup")
 public class SysFileGroupController extends BaseController {

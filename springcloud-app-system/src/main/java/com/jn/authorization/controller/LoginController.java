@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +29,6 @@ public class LoginController extends BaseController {
     @Autowired
     private LoginService loginService;
 
-    @CrossOrigin
     @ApiOperation(value = "登录", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/login")
     public Result<String> loginPost(@RequestBody @Validated UserLogin userLogin) {

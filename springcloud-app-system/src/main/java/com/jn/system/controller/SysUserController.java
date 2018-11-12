@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
  * @modified By:
  **/
 @Api(tags = "用户管理及用户授权")
-@CrossOrigin
 @RestController
 @RequestMapping("/system/sysUser")
 public class SysUserController extends BaseController {

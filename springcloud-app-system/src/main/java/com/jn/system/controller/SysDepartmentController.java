@@ -10,7 +10,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  **/
 @Api(tags = "部门管理")
-@CrossOrigin
 @RestController
 @RequestMapping("/system/sysDepartment")
 public class SysDepartmentController extends BaseController {
@@ -108,7 +106,7 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
     @ApiOperation(value = "判断部门名称是否存在", httpMethod = "POST", response = Result.class)
     @RequestMapping("/checkDepartmentName")
-    public Result checkDepartmentName(String departmentName){
+    public Result checkDepartmentName(String departmentName) {
         return sysDepartmentService.checkDepartmentName(departmentName);
     }
 

@@ -48,10 +48,11 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
-        logger.info("进入获取用户的API,用户参数：{}", u.toString());
-        List<User> user = userService.findTByT(u);
-        if (user == null || user.size() == 0) {
-            new Result();
+        logger.info("进入获取用户的API,用户参数：{}",u.toString());
+        List<User> user = userService.findTByT(u) ;
+
+        if(user == null || user.size() == 0 ) {
+            return new Result();
         }
         return new Result(user.get(0));
     }

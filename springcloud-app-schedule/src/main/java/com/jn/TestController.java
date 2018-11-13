@@ -12,10 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @modified By:
  */
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/guest/schedule")
 public class TestController  {
     @RequestMapping(value = "/getTestData")
     public String  test() {
-    	return "hello world";
+        try{
+            Thread.sleep(20000);
+        }catch (Exception e){
+
+        }
+        System.out.println("no hello world");
+    	return "no hello world";
     }
 }

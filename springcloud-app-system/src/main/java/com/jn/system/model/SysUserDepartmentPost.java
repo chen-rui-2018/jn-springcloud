@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 根据用户id查询用户部门岗位
  * @author： shaobao
  * @date： Created on 2018/11/7 11:41
  * @version： v1.0

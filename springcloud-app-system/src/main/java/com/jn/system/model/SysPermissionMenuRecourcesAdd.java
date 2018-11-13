@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 public class SysPermissionMenuRecourcesAdd implements Serializable {
     private static final long serialVersionUID = -7541006935977245850L;
     @ApiModelProperty("权限id")
+    @NotBlank(message = "权限id不能为空")
     private String permissionId;
     @ApiModelProperty("菜单id数组")
     private String[] menuIds;

@@ -7,12 +7,13 @@ import java.io.Serializable;
 
 /**
  * 部门岗位
+ *
  * @author： shaobao
  * @date： Created on 2018/11/8 0:59
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentPost",description = "部门岗位")
+@ApiModel(value = "SysDepartmentPost", description = "部门岗位")
 public class SysDepartmentPost implements Serializable {
 
     private static final long serialVersionUID = -5641244659720519896L;

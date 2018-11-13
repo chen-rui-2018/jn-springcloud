@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +80,13 @@ public class SysPostController extends BaseController {
     @RequestMapping(value = "/list")
     public Result list(@Validated @RequestBody SysPostPage sysPostPage) {
         return sysPostService.findByPage(sysPostPage);
+    }
+
+    @RequiresPermissions("/system/sysPost/checkPostName")
+    @ApiOperation(value = "校验岗位名称是否存在,false表示岗位名称已经存在,success表示可以使用", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkPostName")
+    public Result checkPostName(String postName){
+        return sysPostService.checkPostName(postName);
     }
 
 }

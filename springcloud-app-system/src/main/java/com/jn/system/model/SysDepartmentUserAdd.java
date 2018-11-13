@@ -2,22 +2,24 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 /**
  * 部门增加用户
+ *
  * @author： shaobao
  * @date： Created on 2018/11/7 20:43
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentUserAdd",description = "部门添加用户")
+@ApiModel(value = "SysDepartmentUserAdd", description = "部门添加用户")
 public class SysDepartmentUserAdd implements Serializable {
 
     private static final long serialVersionUID = 1823985722724564067L;
+    @NotBlank(message = "部门id不能为空")
     @ApiModelProperty("部门id ")
     private String departmentId;
 

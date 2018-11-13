@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 岗位添加
  * @author： shaobao
  * @date： Created on 2018/11/8 16:41
  * @version： v1.0

@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
+ * 岗位分页
  * @author： shaobao
  * @date： Created on 2018/11/8 17:03
  * @version： v1.0

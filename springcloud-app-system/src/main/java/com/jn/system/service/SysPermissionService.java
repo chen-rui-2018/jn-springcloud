@@ -15,7 +15,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionAdd
      */
-    void addPermission(SysPermissionAdd sysPermissionAdd);
+    Result addPermission(SysPermissionAdd sysPermissionAdd);
 
     /**
      * 修改权限
@@ -128,4 +128,11 @@ public interface SysPermissionService {
      * @param sysPermissionMenuRecourcesAdd
      */
     void addMenuAndResourceToPermission(SysPermissionMenuRecourcesAdd sysPermissionMenuRecourcesAdd);
+
+    /**
+     * 校验权限名是否已经存在
+     * @param permissionName
+     * @return
+     */
+    Result checkPermissionName(String permissionName);
 }

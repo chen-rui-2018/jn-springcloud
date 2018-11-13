@@ -2,10 +2,7 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysUser;
-import com.jn.system.model.SysUserDelete;
-import com.jn.system.model.SysUserDepartmentPostAdd;
-import com.jn.system.model.SysUserPage;
+import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -78,8 +75,9 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/saveSysGroupToSysUser")
     @ApiOperation(value = "添加用户组到用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
-    public Result saveSysGroupToSysUser(String[] groupIds, String userId) {
-        sysUserService.saveSysGroupToSysUser(groupIds, userId);
+    public Result saveSysGroupToSysUser(@Validated @RequestBody SysUserGroupAdd sysUserGroupAdd) {
+        Assert.notNull(sysUserGroupAdd.getUserId(),"用户id不能为空");
+        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId());
         return new Result();
     }
 
@@ -93,8 +91,9 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")
     @ApiOperation(value = "为用户添加角色权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
-    public Result saveSysRoleToSysUser(String[] roleIds, String userId) {
-        sysUserService.saveSysRoleToSysUser(roleIds, userId);
+    public Result saveSysRoleToSysUser(@Validated @RequestBody SysRoleUserAdd sysRoleUserAdd) {
+        Assert.notNull(sysRoleUserAdd.getUserId(),"用户id不能为空");
+        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId());
         return new Result();
     }
 
@@ -114,13 +113,11 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-
     @RequiresPermissions("/system/sysUser/checkUserName")
     @ApiOperation(value = "校验用户账号是否存在,success表示用户名可用,false不可用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")
     public Result checkAccount(String account){
         return sysUserService.checkUserName(account);
     }
-
 
 }

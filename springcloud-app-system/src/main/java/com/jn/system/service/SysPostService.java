@@ -57,4 +57,11 @@ public interface SysPostService {
      * @return
      */
     Result findByPage(SysPostPage sysPostPage);
+
+    /**
+     *  校验岗位名称是否已存在
+     * @param postName
+     * @return
+     */
+    Result checkPostName(String postName);
 }

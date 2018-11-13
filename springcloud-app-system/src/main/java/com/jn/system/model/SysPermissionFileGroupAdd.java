@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 public class SysPermissionFileGroupAdd implements Serializable {
     private static final long serialVersionUID = 4485524436556246969L;
     @ApiModelProperty("权限id")
+    @NotBlank(message = "权限id不能为空")
     private String permissionId;
     @ApiModelProperty("文件组id")
     private String[] fileGroupIds;

@@ -55,7 +55,15 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addPermission(SysPermissionAdd sysPermissionAdd) {
+    public Result addPermission(SysPermissionAdd sysPermissionAdd) {
+        //判断权限名称是否已经存在
+        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
+        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
+        criteria.andPermissionNameEqualTo(sysPermissionAdd.getPermissionName());
+        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
+        if (tbSysPermissions != null && tbSysPermissions.size() > 0){
+            return new Result("添加失败,权限名称已存在");
+        }
         TbSysPermission tbSysPermission = new TbSysPermission();
         tbSysPermission.setId(UUID.randomUUID().toString());
         tbSysPermission.setCreateTime(new Date());
@@ -65,6 +73,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         tbSysPermission.setStatus(sysPermissionAdd.getStatus());
         tbSysPermissionMapper.insertSelective(tbSysPermission);
         logger.info("[权限]新增权限信息成功！，sysPermissionId:{}",tbSysPermission.getId());
+        return new Result("添加成功");
     }
 
     /**
@@ -323,5 +332,22 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         logger.info("[权限]权限添加菜单及页面功能权限成功,permissionId:{},menuIds:{},resourcesIds:{}",
                 sysPermissionMenuRecourcesAdd.getPermissionId(),sysPermissionMenuRecourcesAdd.getMenuIds(),
                 sysPermissionMenuRecourcesAdd.getResourcesIds());
+    }
+
+    /**
+     * 校验权限明显名称是否已经存在
+     * @param permissionName
+     * @return
+     */
+    @Override
+    public Result checkPermissionName(String permissionName) {
+        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
+        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
+        criteria.andPermissionNameEqualTo(permissionName);
+        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
+        if (tbSysPermissions != null && tbSysPermissions.size() > 0){
+            return new Result("false");
+        }
+        return new Result("success");
     }
 }

@@ -104,7 +104,8 @@ public class SysDepartmentController extends BaseController {
 
 
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
-    @ApiOperation(value = "判断部门名称是否存在", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验部门名称是否存在,false表示部门名称已存在,success表示可以使用",
+            httpMethod = "POST", response = Result.class)
     @RequestMapping("/checkDepartmentName")
     public Result checkDepartmentName(String departmentName) {
         return sysDepartmentService.checkDepartmentName(departmentName);
@@ -114,7 +115,7 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/findDepartmentAllByLevel")
     @ApiOperation(value = "查询所有部门信息,并根据层级关系返回数据", httpMethod = "POST", response = Result.class)
     @RequestMapping("/findDepartmentAllByLevel")
-    public Result findDepartmentAllByLevel(){
+    public Result findDepartmentAllByLevel() {
         return sysDepartmentService.findDepartmentAllByLevel();
     }
 

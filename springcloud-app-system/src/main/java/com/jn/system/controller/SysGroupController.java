@@ -53,7 +53,7 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/delete")
     @RequiresPermissions("/system/sysGroup/delete")
     public Result delete(String[] groupIds) {
-        Assert.noNullElements(groupIds, "用户组信息不能为空");
+        Assert.noNullElements(groupIds, "用户组id数组不能为空");
         sysGroupService.deleSysGroup(groupIds);
         return new Result();
     }

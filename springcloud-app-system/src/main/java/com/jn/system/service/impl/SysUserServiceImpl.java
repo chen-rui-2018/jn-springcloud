@@ -327,12 +327,14 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result checkUserName(String account) {
-        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andAccountEqualTo(account);
-        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
-        if (tbSysUsers != null && tbSysUsers.size() > 0) {
-            return new Result("false");
+        if (StringUtils.isNotBlank(account)){
+            TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+            TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
+            criteria.andAccountEqualTo(account);
+            List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+            if (tbSysUsers != null && tbSysUsers.size() > 0) {
+                return new Result("false");
+            }
         }
         return new Result("success");
     }

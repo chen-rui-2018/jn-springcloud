@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 public class SysDepartmentAdd implements Serializable {
 
     private static final long serialVersionUID = -5667858257333477069L;
+    @NotBlank(message = "部门父级id不能为空")
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("部门名称数组")

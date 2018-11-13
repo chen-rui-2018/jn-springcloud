@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 public class SysPermissionRolesAdd implements Serializable {
     private static final long serialVersionUID = -1745882055362489572L;
     @ApiModelProperty("权限ID")
+    @NotBlank(message = "权限id不能为空")
     private String permissionId;
     @ApiModelProperty("角色id数组")
     private String[] roleIds;

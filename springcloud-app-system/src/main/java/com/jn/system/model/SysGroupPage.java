@@ -5,15 +5,16 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
+ * 用户组分页及查询条件
+ *
  * @author： shaobao
  * @date： Created on 2018/11/5 16:49
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysGroupPage",description = "用户组分页及查询条件")
+@ApiModel(value = "SysGroupPage", description = "用户组分页及查询条件")
 public class SysGroupPage extends Page implements Serializable {
 
     private static final long serialVersionUID = -2672024922368575734L;

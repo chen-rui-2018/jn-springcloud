@@ -13,6 +13,7 @@ import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysPostService;
 import com.jn.system.vo.SysPostVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,7 @@ public class SysPostServiceImpl implements SysPostService {
         criteria.andPostNameEqualTo(sysPostAdd.getPostName());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            return "用户名已存在";
+            return "添加失败,岗位名称已存在";
         }
         TbSysPost tbSysPost = new TbSysPost();
         tbSysPost.setId(UUID.randomUUID().toString());
@@ -147,6 +148,25 @@ public class SysPostServiceImpl implements SysPostService {
         }
         PaginationData data = new PaginationData(sysPostVOList, objects.getTotal());
         return new Result(data);
+    }
+
+    /**
+     * 校验岗位名称是否已存在
+     * @param postName
+     * @return
+     */
+    @Override
+    public Result checkPostName(String postName) {
+        if(StringUtils.isNotBlank(postName)){
+            TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+            TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
+            criteria.andPostNameEqualTo(postName);
+            List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+            if (tbSysPosts != null && tbSysPosts.size() > 0){
+                return new Result("false");
+            }
+        }
+        return new Result("success");
     }
 
 }

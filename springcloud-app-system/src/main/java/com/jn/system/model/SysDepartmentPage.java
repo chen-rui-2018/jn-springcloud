@@ -8,12 +8,13 @@ import java.io.Serializable;
 
 /**
  * 部门条件分页查询
+ *
  * @author： shaobao
  * @date： Created on 2018/11/7 19:18
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentPage",description = "部门条件分页查询")
+@ApiModel(value = "SysDepartmentPage", description = "部门条件分页查询")
 public class SysDepartmentPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 4050951256991437887L;

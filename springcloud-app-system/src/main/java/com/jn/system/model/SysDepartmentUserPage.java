@@ -7,12 +7,14 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
+ * 条件分页用于查询部门具有用户以外用户
+ *
  * @author： shaobao
  * @date： Created on 2018/11/7 20:21
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentUserPage",description = "条件分页用于查询部门具有用户以外用户")
+@ApiModel(value = "SysDepartmentUserPage", description = "条件分页用于查询部门具有用户以外用户")
 public class SysDepartmentUserPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 1270305903793734287L;

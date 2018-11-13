@@ -35,8 +35,7 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "添加权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysPermissionAdd sysPermissionAdd) {
-        sysPermissionService.addPermission(sysPermissionAdd);
-        return new Result();
+        return sysPermissionService.addPermission(sysPermissionAdd);
     }
 
 
@@ -168,6 +167,14 @@ public class SysPermissionController extends BaseController {
         Assert.notNull(sysPermissionMenuRecourcesAdd.getPermissionId(), "权限id不能为空");
         sysPermissionService.addMenuAndResourceToPermission(sysPermissionMenuRecourcesAdd);
         return new Result();
+    }
+
+    @RequiresPermissions("/system/sysPermission/checkPermissionName")
+    @ApiOperation(value = "校验权限名称是否已经存在,false权限名称已经存在,success权限名称可以使用",
+            httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkPerssionName")
+    public Result checkPermissionName(String permissionName){
+        return sysPermissionService.checkPermissionName(permissionName);
     }
 
 }

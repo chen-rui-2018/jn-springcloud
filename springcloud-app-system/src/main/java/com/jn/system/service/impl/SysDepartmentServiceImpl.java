@@ -15,6 +15,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysDepartmentService;
 import com.jn.system.vo.SysDepartmentUserVO;
 import com.jn.system.vo.SysDepartmentVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,6 +123,15 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(SysDepartmentAdd sysDepartmentAdd) {
+        String level;
+        //根据父id查询父级部门等级,判断父id是否是1级id,若是设置等级为1
+        if ("1".equals(sysDepartmentAdd.getParentId())){
+            level = "1";
+        }else{
+            //查询父级部门等级
+            TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(sysDepartmentAdd.getParentId());
+            level = (Integer.parseInt(tbSysDepartment.getLevel())+1)+"";
+        }
         //判断部门名称中是否有数据
         if (sysDepartmentAdd.getDepartmentNames() != null &&
                 sysDepartmentAdd.getDepartmentNames().length > 0) {
@@ -136,8 +146,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                 tbSysDepartment.setCreator(user.getId());
                 tbSysDepartment.setCreateTime(new Date());
                 tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-
-                //插入F
+                tbSysDepartment.setLevel(level);
+                //插入部门
                 tbSysDepartmentMapper.insertSelective(tbSysDepartment);
                 logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}", tbSysDepartment.getId(),
                         sysDepartmentAdd.getParentId());
@@ -233,14 +243,16 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      */
     @Override
     public Result checkDepartmentName(String departmentName) {
-        TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
-        TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
-        criteria.andDepartmentNameEqualTo(departmentName);
-        List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
-        if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
-            return new Result("部门名称已存在");
+        if(StringUtils.isNotBlank(departmentName)){
+            TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
+            TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
+            criteria.andDepartmentNameEqualTo(departmentName);
+            List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
+            if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
+                return new Result("false");
+            }
         }
-        return new Result("部门名称可以使用");
+        return new Result("success");
     }
 
     /**

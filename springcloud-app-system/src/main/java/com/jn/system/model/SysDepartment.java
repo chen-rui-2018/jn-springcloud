@@ -8,12 +8,13 @@ import java.util.Date;
 
 /**
  * 部门
+ *
  * @author： shaobao
  * @date： Created on 2018/11/7 16:45
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartment",description = "部门信息")
+@ApiModel(value = "SysDepartment", description = "部门信息")
 public class SysDepartment implements Serializable {
 
     private static final long serialVersionUID = 3850036433256084982L;

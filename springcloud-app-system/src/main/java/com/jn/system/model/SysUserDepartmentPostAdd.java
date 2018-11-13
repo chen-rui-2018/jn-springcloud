@@ -2,6 +2,7 @@ package com.jn.system.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 public class SysUserDepartmentPostAdd implements Serializable {
     private static final long serialVersionUID = 7361217970856264730L;
     @ApiModelProperty("用户id")
+    @NotBlank(message = "用户id不能为空！")
     private String userId;
     @ApiModelProperty("部门岗位id集合")
     private List<SysDepartmentPost> sysDepartmentPostList;

@@ -1,6 +1,9 @@
 package com.jn.system.model;
 
 import com.jn.system.enums.SysStatusEnums;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -12,19 +15,15 @@ import java.util.Arrays;
  * @version： v1.0
  * @modified By:
  **/
+@ApiModel(value = "SysRoleGroupAdd",description = "用户组添加角色实体")
 public class SysRoleGroupAdd implements Serializable {
     private static final long serialVersionUID = -2260462623972187088L;
-    /**
-     * 角色id数组
-     */
+    @ApiModelProperty("角色id数组")
     private String[] roleIds;
-    /**
-     * 用户组id
-     */
+    @NotBlank(message = "用户组id不能为空")
+    @ApiModelProperty("用户组id")
     private String groupId;
-    /**
-     * 状态
-     */
+    @ApiModelProperty("状态")
     private String status= SysStatusEnums.EFFECTIVE.getKey();
 
 

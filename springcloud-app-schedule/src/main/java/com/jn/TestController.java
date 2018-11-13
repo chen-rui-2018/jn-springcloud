@@ -16,11 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController  {
     @RequestMapping(value = "/getTestData")
     public String  test() {
-        try{
-            Thread.sleep(20000);
-        }catch (Exception e){
 
-        }
         System.out.println("no hello world");
     	return "no hello world";
     }

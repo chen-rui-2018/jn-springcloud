@@ -29,4 +29,10 @@ public class TestController{
         System.out.println("User用户信息："+object);
         messageSource.outputSms().send(MessageBuilder.withPayload(object).build());
     }
+    @RequestMapping("/sendEmail")
+    public void sinkSenderEmail() {
+        String object = "发送邮件测试" ;
+        System.out.println(object);
+        messageSource.outputEmail().send(MessageBuilder.withPayload(object).build());
+    }
 }

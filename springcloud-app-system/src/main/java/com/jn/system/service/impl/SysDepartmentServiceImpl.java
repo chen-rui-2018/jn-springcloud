@@ -276,8 +276,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public void findChildrenDepartment(List<SysDepartmentVO> sysDepartmentVOList) {
         for (SysDepartmentVO sysDepartmentVO : sysDepartmentVOList) {
             List<SysDepartmentVO> childrenDepartList =
-                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getDepartmentId());
-            sysDepartmentVO.setSysChildrenDepartmentList(childrenDepartList);
+                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getId());
+            sysDepartmentVO.setChildren(childrenDepartList);
             findChildrenDepartment(childrenDepartList);
             if (childrenDepartList == null || childrenDepartList.size() == 0) {
                 return;

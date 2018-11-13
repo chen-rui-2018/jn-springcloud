@@ -18,51 +18,51 @@ public class SysDepartmentVO implements Serializable {
     private static final long serialVersionUID = 8857934360566700442L;
 
     @ApiModelProperty("部门id")
-    private String departmentId;
+    private String id;
     @ApiModelProperty("部门名称")
-    private String departmentName;
+    private String label ;
     @ApiModelProperty("子部门的集合")
-    private List<SysDepartmentVO> sysChildrenDepartmentList;
+    private List<SysDepartmentVO> children;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String departmentId, String departmentName, List<SysDepartmentVO> sysChildrenDepartmentList) {
-        this.departmentId = departmentId;
-        this.departmentName = departmentName;
-        this.sysChildrenDepartmentList = sysChildrenDepartmentList;
+    public SysDepartmentVO(String id, String label, List<SysDepartmentVO> children) {
+        this.id = id;
+        this.label = label;
+        this.children = children;
     }
 
-    public String getDepartmentId() {
-        return departmentId;
+    public String getId() {
+        return id;
     }
 
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public String getLabel() {
+        return label;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setLabel(String label) {
+        this.label = label;
     }
 
-    public List<SysDepartmentVO> getSysChildrenDepartmentList() {
-        return sysChildrenDepartmentList;
+    public List<SysDepartmentVO> getChildren() {
+        return children;
     }
 
-    public void setSysChildrenDepartmentList(List<SysDepartmentVO> sysChildrenDepartmentList) {
-        this.sysChildrenDepartmentList = sysChildrenDepartmentList;
+    public void setChildren(List<SysDepartmentVO> children) {
+        this.children = children;
     }
 
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
-                "departmentId='" + departmentId + '\'' +
-                ", departmentName='" + departmentName + '\'' +
-                ", sysChildrenDepartmentList=" + sysChildrenDepartmentList +
+                "id='" + id + '\'' +
+                ", label='" + label + '\'' +
+                ", children=" + children +
                 '}';
     }
 }

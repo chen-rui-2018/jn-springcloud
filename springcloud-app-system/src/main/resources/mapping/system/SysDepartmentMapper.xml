@@ -30,16 +30,16 @@
 
     <select id="findSysDepartmentAll" resultType="com.jn.system.vo.SysDepartmentVO">
         select
-        id as departmentId,
-        department_name as departmentName
+        id,
+        department_name as label
         from tb_sys_department where parent_id = '1'
     </select>
 
     <select id="findChildrenDepartment" parameterType="java.lang.String"
             resultType="com.jn.system.vo.SysDepartmentVO">
         select
-            id as departmentId,
-            department_name as departmentName
+            id,
+            department_name as label
             from tb_sys_department where parent_id = #{id,jdbcType=VARCHAR}
     </select>
 </mapper>

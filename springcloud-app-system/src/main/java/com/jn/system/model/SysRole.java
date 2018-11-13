@@ -1,6 +1,5 @@
 package com.jn.system.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -68,7 +67,6 @@ public class SysRole implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

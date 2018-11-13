@@ -1,6 +1,5 @@
 package com.jn.system.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.util.enums.EnumUtil;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysResources;
@@ -71,6 +70,13 @@ public class SysMenuVO implements Serializable {
     private String statusDesc;
 
 
+    /**
+     * 菜单层级
+     */
+    private String level;
+
+
+
     private List<SysResources> sysResources;
 
     public String getMenuId() {
@@ -131,7 +137,6 @@ public class SysMenuVO implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
@@ -171,5 +176,13 @@ public class SysMenuVO implements Serializable {
 
     public void setIsDir(String isDir) {
         this.isDir = isDir;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

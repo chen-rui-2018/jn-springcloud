@@ -1,6 +1,5 @@
 package com.jn.system.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -49,6 +48,13 @@ public class SysMenuPermission implements Serializable {
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
 
+    /**
+     * 菜单层级
+     */
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
+
+
     public String getId() {
         return id;
     }
@@ -81,7 +87,6 @@ public class SysMenuPermission implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
@@ -96,5 +101,13 @@ public class SysMenuPermission implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

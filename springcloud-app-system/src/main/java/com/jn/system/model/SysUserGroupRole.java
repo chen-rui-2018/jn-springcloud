@@ -1,6 +1,5 @@
 package com.jn.system.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -80,7 +79,6 @@ public class SysUserGroupRole implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

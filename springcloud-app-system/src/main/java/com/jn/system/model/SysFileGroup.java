@@ -1,6 +1,5 @@
 package com.jn.system.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.system.enums.SysStatusEnums;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -76,7 +75,6 @@ public class SysFileGroup implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }

@@ -1,7 +1,6 @@
 package com.jn.system.model;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
@@ -75,6 +74,12 @@ public class SysMenu implements Serializable {
     @NotBlank(message = "状态不能为空！")
     private String status;
 
+    /**
+     * 菜单层级
+     */
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
+
     public String getId() {
         return id;
     }
@@ -123,7 +128,6 @@ public class SysMenu implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
@@ -146,5 +150,13 @@ public class SysMenu implements Serializable {
 
     public void setIsDir(String isDir) {
         this.isDir = isDir;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

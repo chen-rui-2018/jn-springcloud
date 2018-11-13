@@ -1,6 +1,6 @@
 package com.jn.system.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+
 import com.jn.common.util.enums.EnumUtil;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysMenu;
@@ -100,7 +100,7 @@ public class SysResourcesVO implements Serializable {
         this.creator = creator;
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+
     public Date getCreateTime() {
         return createTime;
     }

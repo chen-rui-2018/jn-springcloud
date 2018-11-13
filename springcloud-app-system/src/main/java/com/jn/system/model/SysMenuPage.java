@@ -1,6 +1,5 @@
 package com.jn.system.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -71,6 +70,13 @@ public class SysMenuPage extends Page implements Serializable {
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
 
+    /**
+     * 菜单层级
+     */
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
+
+
     public String getId() {
         return id;
     }
@@ -88,7 +94,6 @@ public class SysMenuPage extends Page implements Serializable {
         this.creator = creator == null ? null : creator.trim();
     }
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     public Date getCreateTime() {
         return createTime;
     }
@@ -143,5 +148,13 @@ public class SysMenuPage extends Page implements Serializable {
 
     public void setIsDir(String isDir) {
         this.isDir = isDir;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

@@ -52,6 +52,13 @@ public class SysMenuResourcesAdd implements Serializable {
 
     private String status;
 
+    /**
+     * 菜单层级
+     */
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
+
+
     public String getMenuId() {
         return menuId;
     }
@@ -91,5 +98,13 @@ public class SysMenuResourcesAdd implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 }

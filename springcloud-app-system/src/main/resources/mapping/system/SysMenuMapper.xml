@@ -11,6 +11,7 @@
         <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
         <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+        <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
     </resultMap>
     <resultMap id="MenuResourcesResultMap" type="com.jn.system.vo.SysMenuVO">
         <id column="m_menuId" jdbcType="VARCHAR" property="menuId"/>
@@ -23,6 +24,7 @@
         <result column="m_creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
         <result column="m_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
         <result column="m_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+        <result column="m_level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
         <collection property="sysResources" javaType="java.util.List" ofType="com.jn.system.model.SysResources">
             <id column="r_id" property="id" jdbcType="VARCHAR"/>
             <result column="r_resourcesName" property="resourcesName" jdbcType="VARCHAR"/>
@@ -51,6 +53,7 @@
         m.sort as m_sort,
         m.is_dir as m_isDir,
         m.parent_id as m_parentId,
+        m.level as m_level,
         mm.menu_name as m_parentMenuName,
         r.id as r_id,
         r.resources_name as r_resourcesName,

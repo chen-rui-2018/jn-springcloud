@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     initChart() {
-      const opts = this.chartopts // 完成进度
+      const opts = this.chartopts // 图表参数
       const mLength = opts.currentMonth // 当前月份
       const dateData = opts.cycle // 项目月份周期数组  ;
       let pData = opts.uncompletedArr // 项目月份未完成比例数组,开始默认100%
@@ -227,6 +227,7 @@ export default {
         ]
       }
       option = $.extend({}, option, opts.options)
+
       this.chart.setOption(option)
     }
   }

@@ -60,8 +60,8 @@
           v-for="(item,index) in 31"
           :key="index"
           :label="item"
-          :class="[ item==currentDate && 'currentabc']"
-          prop=" "
+          :class="[ item==currentDate && 'current']"
+          prop=""
           width="22"
           align="center" />
       </el-table-column>

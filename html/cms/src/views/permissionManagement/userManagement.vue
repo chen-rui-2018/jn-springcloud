@@ -1,12 +1,18 @@
 <template>
-  <div class="flex-box">
+  <div class="flex-box-cloumn">
     <div class="filter-container">
       <el-form
         :inline="true"
         :model="listQuery"
         class="filter-bar" >
         <el-form-item label="姓名" >
-          <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable />
+          <el-input
+            v-model="listQuery.name"
+            placeholder="请输入姓名"
+            style="width: 150px;"
+            class="filter-item"
+            maxlength="16"
+            clearable />
         </el-form-item>
         <el-form-item label="状态">
           <el-select
@@ -21,7 +27,7 @@
         </el-form-item>
         <el-form-item label="部门">
           <el-select
-            v-model="listQuery.departmentId"
+            v-model="listQuery.departmentIds"
             multiple
             collapse-tags
             clearable
@@ -47,6 +53,7 @@
       <el-table-column label="姓名" prop="name" align="left" width="100"/>
       <el-table-column label="账号" prop="account" align="left" width="130"/>
       <el-table-column label="邮箱" prop="email" align="left" width="200"/>
+      <el-table-column label="手机" prop="phone" align="center" width="120"/>
       <el-table-column
         label="创建时间"
         prop="createTime"
@@ -58,7 +65,7 @@
       </el-table-column>
       <el-table-column label="部门" prop="departmentName" align="center" width="65"/>
       <el-table-column label="岗位" prop="postName" align="center" width="65"/>
-      <el-table-column label="人员状态" prop="status" align="center" width="65">
+      <el-table-column label="人员状态" prop="status" align="center" width="90">
         <template slot-scope="scope">
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'" >{{ scope.row.status | statusFilter }}</span>
         </template>
@@ -82,7 +89,7 @@
       <el-pagination
         v-show="total>0"
         :current-page="listQuery.page"
-        :page-sizes="[5,10,20,30, 50]"
+        :page-sizes="[10,20,30, 50]"
         :page-size="listQuery.rows"
         :total="total"
         background
@@ -91,19 +98,25 @@
         @current-change="handleCurrentChange" />
     </div>
     <!-- S 新增弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" title="新增">
-      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
+    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle">
+      <el-form
+        ref="dataForm"
+        :rules="addUserDialogRules"
+        :model="temp"
+        label-position="left"
+        label-width="60px"
+        style="max-width:300px;margin-left:20px;">
         <el-form-item label="账号" prop="account" >
           <el-input
             v-model="temp.account"
-            maxLength="20"
+            maxlength="20"
             clearable
           />
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input
             v-model="temp.name"
-            maxLength="20"
+            maxlength="20"
             clearable
           />
         </el-form-item>
@@ -191,7 +204,7 @@
               v-if="scope.row.department && scope.row.position"
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+              @click="handleUserSectorDelete(scope.$index, scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -224,9 +237,8 @@
 </template>
 
 <script>
-import { userList, userCreate, findSysDepartmentAll } from '@/api/promission'
+import { userList, userCreate, findDepartmentAllByLevel, deleteSysUser, checkUserName } from '@/api/promission'
 import waves from '@/directive/waves' // 水波纹指令
-import { parseTime } from '@/utils'
 
 export default {
   name: 'UserManagement',
@@ -244,11 +256,35 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_-]{4,16}$/
+      const reg = /^[a-zA-Z0-9]{4,16}$/
       if (!reg.test(value)) {
-        callback(new Error('4到16位(字母，数字，下划线，减号)'))
+        callback(new Error('账号只允许4-16位数字及字母'))
       } else {
-        callback()
+        checkUserName(this.temp.account).then(response => {
+          const result = response.data.data
+          if (result === 'success') {
+            callback()
+          } else {
+            callback(new Error('用户已经使用'))
+          }
+        })
+        // userCreate(this.temp).then( response => {
+        //   let result = response.data.result
+        //   console.log(response)
+        //   if (result!=="OK") {
+        //     // 输入格式验证不通过
+        //     result = JSON.parse(result.slice(0,-1))
+        //     callback(new Error(result.account))
+        //   } else {
+
+        //     if (!response.data.data) {
+        //       // 用户已存在提示
+        //       callback(new Error(response.data.data))
+        //     } else {
+        //       callback()
+        //     }
+        //   }
+        // })
       }
     }
     var checkName = (rule, value, callback) => {
@@ -260,7 +296,8 @@ export default {
       }
     }
     var checkPhoneNumber = (rule, value, callback) => {
-      const reg = /^1[34578]\d{9}$/
+      // const reg = /^1[34578]\d{9}$/
+      const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
       if (!reg.test(value)) {
         callback(new Error('请输入正确手机号码'))
       } else {
@@ -281,18 +318,19 @@ export default {
       return data
     }
     return {
+      addDialogTitle: '新增',
       tableKey: 0,
       userList: null,
       total: null,
       listLoading: true,
       listQuery: {
         page: 1,
-        rows: 5,
+        rows: 10,
         sort: '+id',
         status: undefined,
         position: undefined,
         departmentName: undefined,
-        departmentId: undefined
+        departmentIds: undefined
       },
       userStatusOptions: ['未生效', '生效'],
       departmentOptions: [],
@@ -304,7 +342,7 @@ export default {
       temp: {
         name: undefined,
         account: undefined,
-        status: undefined,
+        status: '',
         email: undefined,
         phone: undefined,
         id: undefined
@@ -423,6 +461,9 @@ export default {
     this.getUserList()
     this.getSysDepartmentAll()
   },
+  mounted() {
+    // console.log(this.$refs.userList.offsetHeight)
+  },
   methods: {
     selecteUserStatus(value) {
       this.listQuery.userStatus = value
@@ -431,14 +472,18 @@ export default {
       this.listQuery.department = value
     },
     getSysDepartmentAll() {
-      findSysDepartmentAll().then(response => {
-        const data = response.data.data
-        this.departmentOptions = data
+      findDepartmentAllByLevel().then(response => {
+        // const data = response.data.data
+        // data = JSON.stringify(data)
       })
+      // findSysDepartmentAll().then(response => {
+      //   console.log(response)
+      //   const data = response.data.data
+      //   this.departmentOptions = data
+      // })
     },
     getUserList() {
       this.listLoading = true
-      console.log(this.listQuery)
       userList(this.listQuery).then(response => {
         const data = response.data.data
         this.userList = data.rows
@@ -457,7 +502,6 @@ export default {
     },
     handleFilter() {
       this.listQuery.page = 1
-      this
       this.getUserList()
     },
     handleSizeChange(val) {
@@ -476,7 +520,15 @@ export default {
       row.status = status
     },
     handleCreate() {
+      this.temp = {
+        account: '',
+        name: '',
+        phone: '',
+        email: '',
+        status: ''
+      }
       this.dialogStatus = 'create'
+      this.addDialogTitle = '新增'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -485,8 +537,8 @@ export default {
     createUserData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          userCreate(this.temp).then(() => {
-            this.userList.unshift(this.temp)
+          userCreate(this.temp).then(response => {
+            // this.userList.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
@@ -494,15 +546,18 @@ export default {
               type: 'success',
               duration: 2000
             })
+            this.getUserList()
           })
         }
       })
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
       this.dialogStatus = 'update'
+      this.addDialogTitle = '编辑'
+      this.temp.status = this.userStatusOptions[this.temp.status]
       this.dialogFormVisible = true
+
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -511,7 +566,6 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
           userCreate(tempData).then(() => {
             for (const v of this.userList) {
               if (v.id === this.temp.id) {
@@ -532,25 +586,16 @@ export default {
       })
     },
     handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
-      })
-      const index = this.userList.indexOf(row)
-      this.userList.splice(index, 1)
-    },
-    formatJson(filterVal, jsonData) {
-      return jsonData.map(v =>
-        filterVal.map(j => {
-          if (j === 'timestamp') {
-            return parseTime(v[j])
-          } else {
-            return v[j]
-          }
+      deleteSysUser({ userIds: [row.id] }).then((response) => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
         })
-      )
+        const index = this.userList.indexOf(row)
+        this.userList.splice(index, 1)
+      })
     },
     setDefaultPosition(index, row) {
       var currentIndex = index
@@ -567,12 +612,13 @@ export default {
 }
 </script>
 <style lang="scss">
-  .flex-box{
-    display:flex;flex-direction: column;height:100%;
+  .flex-box-column{
+    display:flex;flex-direction: column;
   }
   .el-dialog {
     width:90%;max-width:400px;
   }
+ .pagination-container{margin-top:10px;}
   .sector-dialog{
     .el-dialog{max-width: 800px;}
     .item-box{padding:5px;border:1px solid #d7d7d7;}

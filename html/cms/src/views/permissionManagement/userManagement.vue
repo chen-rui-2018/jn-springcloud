@@ -25,7 +25,7 @@
             <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="部门">
+        <!-- <el-form-item label="部门">
           <el-select
             v-model="listQuery.departmentIds"
             multiple
@@ -36,6 +36,32 @@
             @change="selecteDepartment" >
             <el-option v-for="item in departmentOptions" :key="item" :label="item.departmentName" :value="item.id"/>
           </el-select>
+        </el-form-item> -->
+        <el-form-item label="部门">
+          <el-popover
+            placement="bottom"
+            trigger="click"
+            width="400">
+            <div>
+              <el-tree
+                ref="departmentList"
+                :data="departmentList"
+                :default-expanded-keys="[2, 3]"
+                :default-checked-keys="[5]"
+                :props="defaultProps"
+                show-checkbox
+                node-key="id"
+                @check-change="getDepartment()"/>
+            </div>
+            <el-input
+              slot="reference"
+              v-model="checkedDepartment"
+              placeholder="请选择部门"
+              clearable
+              @clear="resetCheckedDepartment"
+            />
+            <!-- <el-button slot="reference">请选择部门</el-button> -->
+          </el-popover>
         </el-form-item>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate">新增用户</el-button>
@@ -268,23 +294,6 @@ export default {
             callback(new Error('用户已经使用'))
           }
         })
-        // userCreate(this.temp).then( response => {
-        //   let result = response.data.result
-        //   console.log(response)
-        //   if (result!=="OK") {
-        //     // 输入格式验证不通过
-        //     result = JSON.parse(result.slice(0,-1))
-        //     callback(new Error(result.account))
-        //   } else {
-
-        //     if (!response.data.data) {
-        //       // 用户已存在提示
-        //       callback(new Error(response.data.data))
-        //     } else {
-        //       callback()
-        //     }
-        //   }
-        // })
       }
     }
     var checkName = (rule, value, callback) => {
@@ -318,6 +327,7 @@ export default {
       return data
     }
     return {
+      checkedDepartment: undefined,
       addDialogTitle: '新增',
       tableKey: 0,
       userList: null,
@@ -395,44 +405,7 @@ export default {
           status: undefined
         }
       ],
-      departmentList: [
-        {
-          value: 'zhinan',
-          label: '指南',
-          children: [{
-            value: 'shejiyuanze',
-            label: '设计原则',
-            children: [{
-              value: 'yizhi',
-              label: '一致'
-            }, {
-              value: 'fankui',
-              label: '反馈'
-            }, {
-              value: 'xiaolv',
-              label: '效率'
-            }, {
-              value: 'kekong',
-              label: '可控'
-            }]
-          }]
-        },
-        {
-          value: 'test2',
-          label: '一级部门',
-          children: [{
-            value: '22',
-            label: '二级部门',
-            children: [{
-              value: 'yizhi',
-              label: '三级部门'
-            }, {
-              value: 'fankui',
-              label: '三级部门'
-            }]
-          }]
-        }
-      ],
+      departmentList: undefined,
       data2: generateData2(),
       value2: [],
       filterMethod(query, item) {
@@ -473,8 +446,8 @@ export default {
     },
     getSysDepartmentAll() {
       findDepartmentAllByLevel().then(response => {
-        // const data = response.data.data
-        // data = JSON.stringify(data)
+        const data = response.data.data
+        this.departmentList = data
       })
       // findSysDepartmentAll().then(response => {
       //   console.log(response)
@@ -607,6 +580,16 @@ export default {
         }
         return item
       })
+    },
+    getDepartment() {
+      this.listQuery.departmentIds = this.$refs.departmentList.getCheckedKeys()
+      this.checkedDepartment = this.$refs.departmentList.getCheckedNodes().map(function(item) {
+        return item.label
+      })
+      console.log(this.checkedDepartment)
+    },
+    resetCheckedDepartment() {
+      this.$refs.departmentList.setCheckedKeys([])
     }
   }
 }

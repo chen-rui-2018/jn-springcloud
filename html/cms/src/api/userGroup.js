@@ -18,3 +18,20 @@ export function addgroupList(query) {
     data: query
   })
 }
+// 编辑用户组
+export function editgroupList(query) {
+  return request({
+    url: 'system/sysGroup/update',
+    method: 'post',
+    data: query
+  })
+}
+// 删除用户组
+
+export function deleteUsergroupById(query) {
+  return request({
+    url: 'system/sysGroup/delete',
+    method: 'post',
+    data: query
+  })
+}

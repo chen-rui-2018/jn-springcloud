@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="用户组名称:">
-          <el-input v-model="listQuery.groupname" placeholder="请输入名称" style="width: 150px;" class="filter-item" clearable />
+          <el-input v-model="listQuery.groupName" placeholder="请输入名称" style="width: 150px;" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
@@ -23,13 +23,13 @@
       <el-table-column label="用户组名称" align="center" prop="groupName" />
       <el-table-column label="拥有用户" align="center" min-width="120" prop="sysTUserList">
         <template slot-scope="scope">
-          <span v-for="item in scope.row.sysTUserList" :key="item.id" >{{ item.name }}</span>
+          {{ scope.row.sysTUserList.join('、') }}
       </template></el-table-column>
       <el-table-column label="角色名称" align="center" prop="sysRoleList" min-width="120" >
         <template slot-scope="scope">
-          {{ scope.row.sysRoleList }}
-          <span v-for="item in scope.row.sysRoleList" :key="item.id" >{{ item.roleName }}</span>
-      </template></el-table-column>
+          {{ scope.row.sysRoleList.join('、') }}
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
@@ -43,49 +43,41 @@
       <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
-          <el-button type="primary" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row)">角色</el-button>
           <!-- 删除按钮 -->
-          <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="danger" @click="deleteUsergroup(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination :current-page="listQuery.page" :page-sizes="[5,10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    <!-- 弹出的添加用户组对话框 -->
-    <el-dialog :visible.sync="adddialogFormVisible" title="添加用户组">
-      <el-form ref="addform" :rules="rules" :model="addform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px;">
+    <div class="pagination-container">
+      <el-pagination
+        v-show="total>0"
+        :current-page="listQuery.page"
+        :page-sizes="[5,10,20,30, 50]"
+        :page-size="listQuery.rows"
+        :total="total"
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange" /></div>
+    <!-- 弹出的用户组对话框 -->
+    <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" max-width="400">
+      <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px;">
         <el-form-item label="用户组" prop="groupName">
-          <el-input v-model.trim="addform.groupName" max-length="20" />
+          <el-input v-model.trim="userGroupform.groupName" max-length="20" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="addform.status" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          <el-select v-model="userGroupform.status" class="filter-item">
+            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="addUserSubmit('addform')">提交</el-button>
-        <el-button @click="adddialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
+        <el-button @click="userGroupdialogFormVisible = false">取消</el-button>
       </div>
-    </el-dialog>
-
-    <!-- 编辑用户组对话框 -->
-    <el-dialog :visible.sync="editdialogFormVisible" title="编辑用户组">
-      <el-form ref="editform" :rules="rules" :model="editform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px;">
-        <el-form-item label="用户组" prop="groupName">
-          <el-input v-model="editform.groupName" />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="editform.status" class="filter-item">
-            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="editUserSubmit('editform')">提交</el-button>
-          <el-button @click="editdialogFormVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
     </el-dialog>
     <!-- 弹出的角色对话框 -->
     <el-dialog :visible.sync="roledialogVisible" title="选择角色">
@@ -100,7 +92,7 @@
 </template>
 
 <script>
-import { groupList, addgroupList } from '@/api/userGroup'
+import { groupList, addgroupList, editgroupList, deleteUsergroupById } from '@/api/userGroup'
 export default {
   filters: {
     statusFilter(status) {
@@ -110,6 +102,18 @@ export default {
       }
       return statusMap[status]
     }
+    // filterRoleName(value) {
+    //   const arr = value.map(function(item) {
+    //     return item.roleName
+    //   })
+    //   return arr.join('、')
+    // },
+    // filtername(value) {
+    //   const arr = value.map(function(item) {
+    //     return item.name
+    //   })
+    //   return arr.join('、')
+    // }
   },
   data() {
     // 角色相关信息
@@ -424,40 +428,29 @@ export default {
         }
       ],
       listQuery: {
-        groupname: undefined,
+        groupName: undefined,
         status: undefined,
         rows: 10,
         page: 1
       },
-      adddialogFormVisible: false,
-      editdialogFormVisible: false,
+      userGroupdialogFormVisible: false,
       bumendialogFormVisible: false,
       roledialogVisible: false,
-      statusOptions: [
-        { value: '1', label: '有效' },
-        { value: '0', label: '无效' }
-      ],
+      statusOptions: ['未生效', '生效'],
       departmentdata: [
         { bumen: '研发部', gangwei: '经理' },
         { bumen: '工程部', gangwei: '工程师' }
       ],
-      addform: {
+      userGroupform: {
         id: '',
         groupName: undefined,
         status: undefined
-      },
-      editform: {
-        id: '',
-        username: '',
-        email: '',
-        mobile: '',
-        status: ''
       },
       rules: {
         groupName: [
           { required: true, message: '请输入用户组', trigger: 'blur' }
         ],
-        miaoshu: [{ required: true, message: '请输入描述', trigger: 'blur' }]
+        status: [{ required: true, message: '请输入描述', trigger: 'blur' }]
       }
     }
   },
@@ -470,44 +463,42 @@ export default {
     },
     //   查询数据的方法
     handleFilter() {
+      this.listQuery.page = 1
       this.initList()
     },
     // 清空信息
-    resetaddform() {
-      this.addform = {
-        groupName: '',
-        status: ''
+    resetuserGroupform() {
+      this.userGroupform = {
+        groupName: undefined,
+        status: undefined
       }
     },
     // 显示新增用户组对话框
     handleCreate() {
-      this.resetaddform()
-      this.dialogStatus = 'create'
-      this.adddialogFormVisible = true
+      this.resetuserGroupform()
+      this.dialogStatus = '新增用户组'
+      this.userGroupdialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['addform'].clearValidate()
+        this.$refs['userGroupform'].clearValidate()
       })
     },
     // 实现添加用户功能
-    addUserSubmit(addform) {
-      this.$refs[addform].validate(valid => {
+    createUserData() {
+      this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addgroupList({
-            groupName: this.addform.groupName,
-            status: this.addform.status
-          }).then(res => {
+          addgroupList(this.userGroupform).then(res => {
             console.log(res)
-            if (res.meta.status === 201) {
+            if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
                 type: 'success'
               })
             }
             // 将对话框隐藏
-            this.adddialogFormVisible = false
+            this.userGroupdialogFormVisible = false
             // 重置表单元素的数据
-            this.$refs[addform].resetFields()
+            this.$refs['userGroupform'].resetFields()
             // 刷新页面显示
             this.initList()
           })
@@ -520,25 +511,55 @@ export default {
       })
     },
     // 弹出编辑对话框
-    showEditDialog(row) {
+    handleUpdate(row) {
       console.log(row)
       // 显示对话框
-      this.editdialogFormVisible = true
+      this.userGroupdialogFormVisible = true
       //   添加默认数据
-      this.editform.username = row.username
-      this.editform.mobile = row.mobile
-      this.editform.email = row.email
-      this.editform.status = row.status
+      this.dialogStatus = '编辑用户组'
+      this.userGroupform.groupName = row.groupName
+      if (row.status === '1') {
+        this.userGroupform.status = '生效'
+      } else if (row.status === '0') {
+        this.userGroupform.status = '不生效'
+      }
+      this.userGroupform.id = row.id
     },
     // 编辑用户的功能实现
-    editUserSubmit(editform) {},
+    updateData() {
+      this.$refs['userGroupform'].validate(valid => {
+        if (valid) {
+          // 调用接口发送请求
+          editgroupList(this.userGroupform).then(res => {
+            console.log(res)
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '编辑成功',
+                type: 'success'
+              })
+            }
+            // 将对话框隐藏
+            this.userGroupdialogFormVisible = false
+            // 重置表单元素的数据
+            this.$refs['userGroupform'].resetFields()
+            // 刷新页面显示
+            this.initList()
+          })
+        } else {
+          this.$message({
+            message: '输入数据不合法',
+            type: 'error'
+          })
+        }
+      })
+    },
     // 显示角色对话框
     showRoleDialog(row) {
       console.log(row)
       this.roledialogVisible = true
     },
     // 删除用户功能实现
-    deleteUser(id) {
+    deleteUsergroup(id) {
       this.$confirm(
         `此操作将永久删除id号为${id}的数据, 是否继续?`,
         '删除提示',
@@ -549,20 +570,20 @@ export default {
         }
       )
         .then(() => {
-          // deleteUserById(id).then(res => {
-          //   if (res.meta.status === 200) {
-          this.$message({
-            message: '删除成功', //    res.meta.msg,
-            type: 'success'
+          deleteUsergroupById(id).then(res => {
+            if (res.meta.status === '0000') {
+              this.$message({
+                message: '删除成功', //    res.meta.msg,
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message({
+                message: '删除失败',
+                type: 'success'
+              })
+            }
           })
-          // this.initList()
-          // } else {
-          //   this.$message({
-          //     message: res.meta.msg,
-          //     type: 'success'
-          //   })
-          // }
-          // })
         })
         .catch(() => {
           this.$message({

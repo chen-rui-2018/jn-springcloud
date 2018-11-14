@@ -10,6 +10,7 @@ import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
+import com.jn.system.vo.SysGroupRoleVO;
 import com.jn.system.vo.SysGroupUserRoleVO;
 import com.jn.system.vo.SysGroupVO;
 import org.apache.commons.lang3.StringUtils;
@@ -145,23 +146,15 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     public Result selectGroupRoleAndOtherRole(String id) {
+        SysGroupRoleVO sysGroupRoleVO = new SysGroupRoleVO();
         //获取用户组具有的角色
         List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(id);
         //获取所有用户组信息
         List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        //排除角色列表中用户组中已经存在的角色
-        if (roleAllOfGroup != null && roleAllOfGroup.size() > 0) {
-            for (SysRole sysRole : roleAllOfGroup) {
-                if (sysRoleAll.contains(sysRole)) {
-                    sysRoleAll.remove(sysRole);
-                }
-            }
-        }
         //返回用户组已具有角色信息及其他所有角色信息
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("roleAllOfGroup", roleAllOfGroup);
-        map.put("sysRoleAll", sysRoleAll);
-        return new Result(map);
+        sysGroupRoleVO.setRoleAllOfGroup(roleAllOfGroup);
+        sysGroupRoleVO.setSysRoleAll(sysRoleAll);
+        return new Result(sysGroupRoleVO);
     }
 
     /**

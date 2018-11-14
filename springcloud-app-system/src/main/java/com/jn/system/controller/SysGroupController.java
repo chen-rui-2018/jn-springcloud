@@ -75,7 +75,7 @@ public class SysGroupController extends BaseController {
     }
 
 
-    @ApiOperation(value = "根据用户组id获取用户组具有的角色信息并返回其他所有角色信息",
+    @ApiOperation(value = "根据用户组id获取用户组具有的角色信息及所有角色信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectGroupRoleAndOtherRole")
     @RequiresPermissions("/system/sysGroup/selectGroupRoleAndOtherRole")

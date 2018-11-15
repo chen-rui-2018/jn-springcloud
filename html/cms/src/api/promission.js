@@ -57,6 +57,39 @@ export function findDepartmentAllByLevel(query) {
     data: query
   })
 }
+
+// 查询所有岗位
+export function findSysPostAll(query) {
+  return request({
+    url: 'system/sysPost/findSysPostAll',
+    method: 'post',
+    data: query
+  })
+}
+// 根据用户id查询用户已经具有的岗位部门信息
+export function findDepartmentandPostByUserId(query) {
+  return request({
+    url: 'system/sysUser/findDepartmentandPostByUserId?userId=' + query,
+    method: 'post'
+  })
+}
+// 为用户添加部门岗位
+export function saveDepartmentandPostOfUser(query) {
+  return request({
+    url: 'system/sysUser/saveDepartmentandPostOfUser',
+    method: 'post',
+    data: query
+  })
+}
+// 更新用户
+export function updateSysUser(query) {
+  return request({
+    url: 'system/sysUser/updateSysUser',
+    method: 'post',
+    data: query
+  })
+}
+
 // 新增用户组
 export function addgroupList(query) {
   return request({

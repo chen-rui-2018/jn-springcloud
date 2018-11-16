@@ -13,41 +13,47 @@ const menuRouter = {
   },
   children: [
     {
-      path: 'user-management',
+      path: 'userManagement',
       component: () => import('@/views/menu/userManagement'),
-      name: 'user-management',
+      name: 'userManagement',
       meta: { title: '用户管理', noCache: true }
     },
     {
-      path: 'user-group-management',
-      component: () => import('@/views/menu/user-group-management'),
-      name: 'user-group-management',
+      path: 'userGroupManagement',
+      component: () => import('@/views/menu/userGroupManagement'),
+      name: 'userGroupManagement',
       meta: { title: '用户组管理', noCache: true }
     },
     {
-      path: 'rolemanagement',
+      path: 'roleManagement',
       component: () => import('@/views/menu/roleManagement'),
-      name: 'rolemanagement',
+      name: 'roleManagement',
       meta: { title: '角色管理', noCache: true }
     },
     {
-      path: 'authoritymanagement',
+      path: 'authorityManagement',
       component: () => import('@/views/menu/authorityManagement'),
-      name: 'authoritymanagement',
+      name: 'authorityManagement',
       meta: { title: '权限管理', noCache: true }
       // hidden: true
     },
     {
-      path: 'menumanagement',
+      path: 'menuManagement',
       component: () => import('@/views/menu/menuManagement'),
-      name: 'menumanagement',
+      name: 'menuManagement',
       meta: { title: '菜单管理', noCache: true }
     },
     {
-      path: 'filegroupmanagement',
-      component: () => import('@/views/menu/filegroupManagement'),
-      name: 'filegroupmanagement',
+      path: 'fileGroupManagement',
+      component: () => import('@/views/menu/fileGroupManagement'),
+      name: 'fileGroupManagement',
       meta: { title: '文件组管理', noCache: true }
+    },
+    {
+      path: 'postManagement',
+      component: () => import('@/views/menu/postManagement'),
+      name: 'postManagement',
+      meta: { title: '岗位管理', noCache: true }
     }
   ]
 }

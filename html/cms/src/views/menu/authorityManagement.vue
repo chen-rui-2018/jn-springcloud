@@ -115,8 +115,8 @@ export default {
         status: undefined
       },
       statusOptions: [
-        { value: '1', label: '有效' },
-        { value: '0', label: '无效' }
+        { value: '1', label: '生效' },
+        { value: '0', label: '不生效' }
       ],
       pagesize: 1,
       pagenum: 10,

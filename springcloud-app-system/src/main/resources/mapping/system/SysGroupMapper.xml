@@ -19,12 +19,13 @@
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
                 and status = #{status,jdbcType=VARCHAR}
             </if>
+            order by create_time desc
     </select>
 
     <select id="findGroupAll" resultType="com.jn.system.entity.TbSysGroup">
         select
         <include refid="Base_Column_List"/>
-        from tb_sys_group
+        from tb_sys_group where status = '1'
         ORDER BY create_time desc
     </select>
 

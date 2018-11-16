@@ -82,20 +82,12 @@
             and t1.permission_id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="findOtherRoles" parameterType="java.lang.String" resultType="com.jn.system.model.SysRole">
-        select
-            id,
-            role_name as roleName,
-            creator,
-            create_time as createTime,
-            `status`
-        from tb_sys_role
-            where id not in
-                (select t2.id
-                from tb_sys_role_permission t1,tb_sys_role t2
-                where t1.role_id = t2.id and t1.permission_id = #{id,jdbcType=VARCHAR}
-                and t1.`status` = '1' and t2.`status` = '1')
-            and `status` = '1'
+    <select id="findPermissionNameByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+        select t1.permission_name from tb_sys_permission t1,
+         tb_sys_role_permission t2
+         where t1.id = t2.permission_id
+         and t1.`status` = '1' and
+         t2.`status` = '1' and role_id = #{id,jdbcType=VARCHAR}
     </select>
 
 </mapper>

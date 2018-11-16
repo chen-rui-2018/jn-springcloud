@@ -4,6 +4,8 @@ import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysRolePermission;
 import com.jn.system.model.SysUserRole;
 import com.jn.common.util.enums.EnumUtil;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,44 +18,45 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysRoleVO",description = "角色vo实体")
 public class SysRoleVO implements Serializable{
 	private static final long serialVersionUID = -3511056564542238821L;
 
 
-	/**
-	 * 角色id
-	 */
+	@ApiModelProperty("角色id")
 	private String roleId;
 
-	/**
-	 * 角色名称
-	 */
+	@ApiModelProperty("角色名称")
 	private String roleName;
 
-	/**
-	 * 创建时间
-	 */
-
+	@ApiModelProperty("创建时间")
 	private Date createTime;
-	/**
-	 * 角色状态 1：有效，0：无效，-1：删除(默认有效)
-	 */
-	private String status =SysStatusEnums.EFFECTIVE.getKey();
 
-	/**
-	 * 角色状态描述
-	 */
+	@ApiModelProperty("状态")
+	private String status;
+
+	@ApiModelProperty("角色状态描述")
 	private String statusDesc;
 
-	/**
-	 * 角色权限列表
-	 */
-	private List<SysRolePermission> sysRolePermissions;
+	@ApiModelProperty("角色权限名称列表")
+	private List<String> sysRolePermissions;
 
-	/**
-	 * 用户角色
-	 */
-	private List<SysUserRole> sysUserRoles;
+	@ApiModelProperty("角色用户名称列表")
+	private List<String> sysUserRoles;
+
+	public SysRoleVO() {
+	}
+
+	public SysRoleVO(String roleId, String roleName, Date createTime, String status, String statusDesc,
+					 List<String> sysRolePermissions, List<String> sysUserRoles) {
+		this.roleId = roleId;
+		this.roleName = roleName;
+		this.createTime = createTime;
+		this.status = status;
+		this.statusDesc = statusDesc;
+		this.sysRolePermissions = sysRolePermissions;
+		this.sysUserRoles = sysUserRoles;
+	}
 
 	public String getRoleId() {
 		return roleId;
@@ -79,7 +82,6 @@ public class SysRoleVO implements Serializable{
 		this.createTime = createTime;
 	}
 
-
 	public String getStatus() {
 		return status;
 	}
@@ -88,27 +90,40 @@ public class SysRoleVO implements Serializable{
 		this.status = status;
 	}
 
-	public List<SysRolePermission> getSysRolePermissions() {
-		return sysRolePermissions;
-	}
-
-	public void setSysRolePermissions(List<SysRolePermission> sysRolePermissions) {
-		this.sysRolePermissions = sysRolePermissions;
-	}
-
-	public List<SysUserRole> getSysUserRoles() {
-		return sysUserRoles;
-	}
-
-	public void setSysUserRoles(List<SysUserRole> sysUserRoles) {
-		this.sysUserRoles = sysUserRoles;
-	}
-
 	public String getStatusDesc() {
-		return EnumUtil.getByKey(status,SysStatusEnums.class).getValue();
+		return statusDesc;
 	}
 
 	public void setStatusDesc(String statusDesc) {
 		this.statusDesc = statusDesc;
+	}
+
+	public List<String> getSysRolePermissions() {
+		return sysRolePermissions;
+	}
+
+	public void setSysRolePermissions(List<String> sysRolePermissions) {
+		this.sysRolePermissions = sysRolePermissions;
+	}
+
+	public List<String> getSysUserRoles() {
+		return sysUserRoles;
+	}
+
+	public void setSysUserRoles(List<String> sysUserRoles) {
+		this.sysUserRoles = sysUserRoles;
+	}
+
+	@Override
+	public String toString() {
+		return "SysRoleVO{" +
+				"roleId='" + roleId + '\'' +
+				", roleName='" + roleName + '\'' +
+				", createTime=" + createTime +
+				", status='" + status + '\'' +
+				", statusDesc='" + statusDesc + '\'' +
+				", sysRolePermissions=" + sysRolePermissions +
+				", sysUserRoles=" + sysUserRoles +
+				'}';
 	}
 }

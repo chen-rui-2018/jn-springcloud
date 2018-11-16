@@ -86,24 +86,15 @@ public class SysPermissionController extends BaseController {
 
 
     @RequiresPermissions("/system/sysPermission/findRoleOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的角色", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据权限id获取权限已经具有的角色及所有角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findRoleOfPermission")
     public Result findRoleOfPermission(String id) {
         return sysPermissionService.findRoleOfPermission(id);
     }
 
 
-    @RequiresPermissions("/system/sysPermission/findOtherRoles")
-    @ApiOperation(value = "根据权限id获取除权限已经具有的角色之外的角色信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findOtherRoles")
-    public Result findOtherRoles(String id) {
-        Assert.notNull(id, "权限id不能为空");
-        return sysPermissionService.findOtherRoles(id);
-    }
-
-
     @RequiresPermissions("/system/sysPermission/findFileGroupOfPermission")
-    @ApiOperation(value = "根据权限id获取除权限已经具有的文件组信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据权限id获取除权限已经具有的文件组信息及所有文件组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findFileGroupOfPermission")
     public Result findFileGroupOfPermission(String id) {
         return sysPermissionService.findFileGroupOfPermission(id);
@@ -130,7 +121,7 @@ public class SysPermissionController extends BaseController {
 
 
     @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的菜单", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据权限id获取权限已经具有的菜单及所有菜单信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findMenuOfPermission")
     public Result findMenuOfPermission(String id) {
         return sysPermissionService.findMenuOfPermission(id);
@@ -146,7 +137,7 @@ public class SysPermissionController extends BaseController {
 
 
     @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的功能信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据权限id获取权限已经具有的功能信息及所有功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findResourcesOfPermission")
     public Result findResourcesOfPermission(String permissionId) {
         return sysPermissionService.findResourcesOfPermission(permissionId);
@@ -173,7 +164,7 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "校验权限名称是否已经存在,false权限名称已经存在,success权限名称可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPerssionName")
-    public Result checkPermissionName(String permissionName){
+    public Result checkPermissionName(String permissionName) {
         return sysPermissionService.checkPermissionName(permissionName);
     }
 

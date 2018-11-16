@@ -1,6 +1,5 @@
 package com.jn.system.dao;
 
-import com.jn.system.entity.TbSysPermissionFiles;
 import com.jn.system.entity.TbSysRolePermission;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.SysRolePermission;
@@ -77,11 +76,10 @@ public interface SysRolePermissionMapper {
     List<SysRole> findRoleOfPermission(String id);
 
     /**
-     * 根据权限id获取除权限已经具有的角色之外的角色信息
+     * 根据角色id获取角色对应的权限信息
      *
-     * @param id
+     * @param roleId
      * @return
      */
-    List<SysRole> findOtherRoles(String id);
-
+    List<String> findPermissionNameByRoleId(String roleId);
 }

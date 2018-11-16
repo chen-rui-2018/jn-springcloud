@@ -100,4 +100,12 @@ public class SysRoleController extends BaseController {
         return tbRoleService.findSysRoleAll();
     }
 
+    @ApiOperation(value = "校验角色名称是否已经存在,false表示角色名称已存在,success表示名称可以使用",
+            httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/checkRoleName")
+    @RequiresPermissions("/system/sysRole/checkRoleName")
+    public Result checkRoleName(String roleName){
+        return tbRoleService.checkRoleName(roleName);
+    }
+
 }

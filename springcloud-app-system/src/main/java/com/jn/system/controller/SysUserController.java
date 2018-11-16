@@ -66,7 +66,7 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
-    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及其他用户组", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及所有用户组", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
     public Result findSysGroupByUserId(String id) {
         return sysUserService.findSysGroupByUserId(id);
@@ -82,7 +82,7 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
-    @ApiOperation(value = "根据用户id获取用户具有角色及其他角色", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据用户id获取用户具有角色及所有角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(String id) {
         return sysUserService.findSysRoleByUserId(id);

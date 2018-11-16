@@ -37,12 +37,6 @@ public interface SysUserDepartmentPostMapper {
     void deleteUserOfDepartment(String departmentId);
 
     /**
-     * 为部门批量添加用户信息
-     * @param list
-     */
-    void insert(List<TbSysUserDepartmentPost> list);
-
-    /**
      * 根据岗位id获取岗位上用户
      * @param id
      * @return

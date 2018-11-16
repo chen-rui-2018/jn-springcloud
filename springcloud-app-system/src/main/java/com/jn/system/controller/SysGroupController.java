@@ -102,7 +102,7 @@ public class SysGroupController extends BaseController {
         return sysGroupService.findUserOfGroup(groupId);
     }
 
-    @ApiOperation(value = "分页获取除用户组具有的用户以外的用户",
+    @ApiOperation(value = "分页获取除用户组拥有的用户及用户组未拥有用户",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findOtherUserByPage")
     @RequiresPermissions("/system/sysGroup/findOtherUserByPage")

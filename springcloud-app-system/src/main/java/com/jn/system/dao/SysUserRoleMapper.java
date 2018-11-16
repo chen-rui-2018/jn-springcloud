@@ -39,4 +39,11 @@ public interface SysUserRoleMapper {
      * @param ids
      */
     void deleteUserBranch(String[] ids);
+
+    /**
+     * 根据角色id获取角色对应用户名称
+     * @param roleId
+     * @return
+     */
+    List<String> findUserNameByRoleId(String roleId);
 }

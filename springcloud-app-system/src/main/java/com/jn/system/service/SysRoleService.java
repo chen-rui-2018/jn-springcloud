@@ -69,4 +69,12 @@ public interface SysRoleService {
      * @param sysUserGroupRoleAdd
      */
     void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd);
+
+    /**
+     * 校验角色名称是否已经存在
+     *
+     * @param roleName
+     * @return
+     */
+    Result checkRoleName(String roleName);
 }

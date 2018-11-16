@@ -12,15 +12,16 @@
 
     <select id="fingOtherUserByPage" parameterType="com.jn.system.model.SysDepartmentUserPage"
             resultType="com.jn.system.model.SysTUser">
-            select id,`name`
-            from tb_sys_user
-            where id not in
-            (select user_id from tb_sys_user_department_post
-              where `status` = '1'
-              and department_id = #{departmentId,jdbcType=VARCHAR})
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-                and `name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
-            </if>
+        select t.id,t.`name`
+        from tb_sys_user t left join
+        (select t1.id,t1.`name`
+        from tb_sys_user t1,tb_sys_user_department_post t2
+        where t1.id = t2.user_id and t1.id = t2.user_id and t1.`status` = '1'
+        and t2.`status` = '1' and t2.department_id = #{departmentId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where tt.id is null and t.`status` = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+                and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
+        </if>
     </select>
 
     <update id="deleteUserOfDepartment" parameterType="java.lang.String">
@@ -95,17 +96,17 @@
         JOIN tb_sys_department T2
         ON T1._id = T2.id
         WHERE T1.level >=1
-        ORDER BY T1.level DESC;
+        ORDER BY T1.level asc;
     </select>
 
     <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysDepartmentPostVO">
         select
             t2.id as departmentId,
-            t2.department_name,
+            t2.department_name as departmentName,
             t2.parent_id as parentId,
             t2.`level`,
             t3.id as postId ,
-            t3.post_name,
+            t3.post_name as postName,
             t1.user_id,
             t1.is_default as isDefault
             from tb_sys_user_department_post t1,tb_sys_department t2,

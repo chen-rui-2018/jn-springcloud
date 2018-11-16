@@ -56,44 +56,22 @@
         on tsur.user_id = tsu.id
         where tsu.id = #{id,jdbcType=VARCHAR}
         and tsur.`status` = '1')
+        and `status` = '1'
     </select>
 
 
-    <select id="findTByPage" parameterType="com.jn.system.model.SysRolePage" resultMap="queryForListResultMap">
+    <select id="findTByPage" parameterType="com.jn.system.model.SysRolePage" resultType="com.jn.system.vo.SysRoleVO">
         SELECT
-        r.id r_roleId,
-        r.role_name r_roleName,
-        r.creator r_creator,
-        r.create_time r_createTime,
-        r.STATUS r_STATUS,
-        rp.id rp_id,
-        rp.permission_id rp_permissionId,
-        rp.role_id rp_roleId,
-        rp.create_time rp_createTime,
-        p.permission_name p_permissionName,
-        ur.id ur_id,
-        ur.user_id ur_userId,
-        ur.role_id ur_roleId,
-        ur.create_time ur_createTime,
-        u.name u_userName
-        FROM
-        tb_sys_role r
-        left join
-        tb_sys_role_permission rp on r.id=rp.role_id
-        left join
-        tb_sys_permission p on rp.permission_id=p.id
-        left join
-        tb_sys_user_role ur on r.id=ur.role_id
-        left join
-        tb_sys_user u on u.id=ur.user_id
-        where 1=1
-        and r.status!=-1
-
+        id as roleId,
+        role_name as roleName,
+        create_time as createTime,
+        `status`
+        FROM `tb_sys_role` where `status` != '-1'
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
-            and r.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
+            and role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and r.status=#{status,jdbcType=VARCHAR}
+            and status=#{status,jdbcType=VARCHAR}
         </if>
 
     </select>

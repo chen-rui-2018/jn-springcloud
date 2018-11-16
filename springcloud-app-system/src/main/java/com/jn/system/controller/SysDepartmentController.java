@@ -78,30 +78,6 @@ public class SysDepartmentController extends BaseController {
         return sysDepartmentService.findSysDepartmentByPage(sysDepartmentPage);
     }
 
-    @RequiresPermissions("/system/sysDepartment/findUserOfDepartment")
-    @ApiOperation(value = "根据部门id获取部门具有的用户", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/findUserOfDepartment")
-    public Result findUserOfDepartment(String departmentId) {
-        return sysDepartmentService.findUserOfDepartment(departmentId);
-    }
-
-    @RequiresPermissions("/system/sysDepartment/fingOtherUserByPage")
-    @ApiOperation(value = "条件分页查询部门具有的用户以外的用户信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/fingOtherUserByPage")
-    public Result fingOtherUserByPage(@Validated @RequestBody SysDepartmentUserPage sysDepartmentUserPage) {
-        Assert.notNull(sysDepartmentUserPage.getDepartmentId(), "部门id不能为空");
-        return sysDepartmentService.fingOtherUserByPage(sysDepartmentUserPage);
-    }
-
-    @RequiresPermissions("/system/sysDepartment/addUserToDepartment")
-    @ApiOperation(value = "为部门添加用户", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/addUserToDepartment")
-    public Result addUserToDepartment(@Validated @RequestBody SysDepartmentUserAdd sysDepartmentUserAdd) {
-        Assert.notNull(sysDepartmentUserAdd.getDepartmentId(), "部门id不能为空");
-        sysDepartmentService.addUserToDepartment(sysDepartmentUserAdd);
-        return new Result();
-    }
-
 
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
     @ApiOperation(value = "校验部门名称是否存在,false表示部门名称已存在,success表示可以使用",

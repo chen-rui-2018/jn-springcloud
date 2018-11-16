@@ -142,10 +142,6 @@ public class SysPostServiceImpl implements SysPostService {
     public Result findByPage(SysPostPage sysPostPage) {
         Page<Object> objects = PageHelper.startPage(sysPostPage.getPage(), sysPostPage.getRows());
         List<SysPostVO> sysPostVOList = sysPostMapper.findByPage(sysPostPage);
-        for (SysPostVO sysPostVO : sysPostVOList) {
-            List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.findUserByPostId(sysPostVO.getId());
-            sysPostVO.setSysTUserList(sysTUserList);
-        }
         PaginationData data = new PaginationData(sysPostVOList, objects.getTotal());
         return new Result(data);
     }

@@ -55,28 +55,6 @@ public interface SysDepartmentService {
      */
     Result findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
 
-    /**
-     * 根据部门id获取部门已经存在的用户信息
-     *
-     * @param departmentId
-     * @return
-     */
-    Result findUserOfDepartment(String departmentId);
-
-    /**
-     * 条件分页查询部门具有的用户以外的用户信息
-     *
-     * @param sysDepartmentUserPage
-     * @return
-     */
-    Result fingOtherUserByPage(SysDepartmentUserPage sysDepartmentUserPage);
-
-    /**
-     * 为部门添加用户
-     *
-     * @param sysDepartmentUserAdd
-     */
-    void addUserToDepartment(SysDepartmentUserAdd sysDepartmentUserAdd);
 
     /**
      * 判断部门名称是否存在

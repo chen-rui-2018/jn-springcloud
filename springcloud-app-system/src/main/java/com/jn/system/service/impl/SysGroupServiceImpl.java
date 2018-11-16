@@ -12,6 +12,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import com.jn.system.vo.SysGroupRoleVO;
 import com.jn.system.vo.SysGroupUserRoleVO;
+import com.jn.system.vo.SysGroupUserVO;
 import com.jn.system.vo.SysGroupVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -158,16 +159,20 @@ public class SysGroupServiceImpl implements SysGroupService {
     }
 
     /**
-     * 为用户组授权权限信息
+     * 为用户组授权角色信息
      *
      * @param sysRoleGroupAdd
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd) {
+        //插入之前,清除该用户组下面的角色信息
+        sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
+        if(sysRoleGroupAdd.getRoleIds().length == 0){
+            return;
+        }
         String[] groupids = {sysRoleGroupAdd.getGroupId()};
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-
         List<SysGroupRole> sysGroupRoleList = new ArrayList<SysGroupRole>();
         for (String roleId : sysRoleGroupAdd.getRoleIds()) {
             SysGroupRole sysGroupRole = new SysGroupRole();
@@ -181,9 +186,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             logger.info("[用户组]添加用户组授权角色，groupId:{},roleId:{}",groupids.toString(),
                     roleId);
         }
-
-        //插入之前,清除该用户组下面的角色信息
-        sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
         logger.info("[用户组]用户组授权角色成功，groupId:{}", groupids.toString());
@@ -210,8 +212,16 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     public Result findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
+        //条件分页获取用户组未拥有用户
         List<SysTUser> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
-        PaginationData data = new PaginationData(userList, objects.getTotal());
+        //获取用户组已拥有用户
+        List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupUserPage.getGroupId());
+        //将以用户用户放入分页查询到的集合中,方便前端解析
+        userList.addAll(userAllOfGroup);
+        SysGroupUserVO sysGroupUserVO = new SysGroupUserVO();
+        sysGroupUserVO.setUserList(userList);
+        sysGroupUserVO.setUserAllOfGroup(userAllOfGroup);
+        PaginationData data = new PaginationData(sysGroupUserVO, objects.getTotal());
         return new Result(data);
     }
 
@@ -223,8 +233,13 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd) {
+        //用户组添加用户之前清除用户组以前用户
+        sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
+        if(sysGroupUserAdd.getUserIds().length == 0){
+            return;
+        }
         for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();
             sysGroupUser.setId(UUID.randomUUID().toString());
@@ -237,8 +252,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             logger.info("[用户组]添加用户组授权用户，groupId:{},userId:{}",sysGroupUserAdd.getGroupId(),
                     userId);
         }
-        //用户组添加用户之前清除用户组以前用户
-        sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
         logger.info("[用户组]用户组授权用户成功，groupId:{}",sysGroupUserAdd.getGroupId());

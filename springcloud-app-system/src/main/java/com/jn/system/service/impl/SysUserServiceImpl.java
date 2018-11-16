@@ -10,6 +10,8 @@ import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysUserGroupVO;
+import com.jn.system.vo.SysUserRoleVO;
 import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -143,23 +145,14 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result findSysGroupByUserId(String id) {
+        SysUserGroupVO sysUserGroupVO = new SysUserGroupVO();
         //根据用户id查询用户组
         List<TbSysGroup> sysGroupOfUser = sysGroupMapper.findSysGroupByUserId(id);
         //获取所有用户组
         List<TbSysGroup> sysGroupAll = sysGroupMapper.findGroupAll();
-        if (sysGroupOfUser != null && sysGroupOfUser.size() > 0) {
-            for (TbSysGroup sysGroup : sysGroupOfUser) {
-                //排除用户已经具有的用户
-                if (sysGroupAll.contains(sysGroup)) {
-                    sysGroupAll.remove(sysGroup);
-                }
-            }
-        }
-        //将用户具有的用户组及其他用户组返回
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("sysGroupOfUser", sysGroupOfUser);
-        map.put("sysGroupAll", sysGroupAll);
-        return new Result(map);
+        sysUserGroupVO.setSysGroupOfUser(sysGroupOfUser);
+        sysUserGroupVO.setSysGroupAll(sysGroupAll);
+        return new Result(sysUserGroupVO);
     }
 
     /**
@@ -205,18 +198,10 @@ public class SysUserServiceImpl implements SysUserService {
         //或取用户已经具有角色
         List<SysRole> sysRoleOfUser = sysRoleMapper.findSysRoleByUserId(id);
         List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        if (sysRoleOfUser != null && sysRoleOfUser.size() > 0) {
-            for (SysRole sysRole : sysRoleOfUser) {
-                if (sysRoleAll.contains(sysRole)) {
-                    sysRoleAll.remove(sysRole);
-                }
-            }
-        }
-        //将用户具有的角色及其他角色返回
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("sysRoleOfUser", sysRoleOfUser);
-        map.put("sysRoleAll", sysRoleAll);
-        return new Result(map);
+        SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
+        sysUserRoleVO.setSysRoleAll(sysRoleAll);
+        sysUserRoleVO.setSysRoleOfUser(sysRoleOfUser);
+        return new Result(sysUserRoleVO);
     }
 
     /**
@@ -260,12 +245,13 @@ public class SysUserServiceImpl implements SysUserService {
         for (SysDepartmentPostVO sysDepartmentPostVO : sysDepartmentPostVOList) {
             List<TbSysDepartment> tbSysDepartmentList =
                     sysUserDepartmentPostMapper.findDepartmentId(sysDepartmentPostVO.getDepartmentId());
-            LinkedList<String> departmentNameList = new LinkedList<String>();
+            StringBuffer buffer = new StringBuffer();
             //对返回的部门名称数据做处理
             for (TbSysDepartment tbSysDepartment : tbSysDepartmentList) {
-                departmentNameList.addFirst(tbSysDepartment.getDepartmentName());
+                buffer.append(tbSysDepartment.getId()).append(",");
             }
-            sysDepartmentPostVO.setDepartmentName(departmentNameList.toString());
+            String id = buffer.toString();
+            sysDepartmentPostVO.setDepartmentId(id.substring(0,id.length() - 1));
         }
         return new Result(sysDepartmentPostVOList);
     }
@@ -284,6 +270,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (sysUserDepartmentPostAdd.getSysDepartmentPostList() != null
                 && sysUserDepartmentPostAdd.getSysDepartmentPostList().size() > 0) {
             //为用户添加新部门岗位信息
+            int count = 0;
             for (SysDepartmentPost sysDepartmentPost : sysUserDepartmentPostAdd.getSysDepartmentPostList()) {
                 TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
                 sysUserDepartmentPost.setCreateTime(new Date());
@@ -295,6 +282,12 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
                 sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
                 sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
+                if("1".equals(sysDepartmentPost.getIsDefault())){
+                    count++;
+                    if (count > 1){
+                        throw new RuntimeException("部门岗位信息只能有一个是默认的");
+                    }
+                }
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
             }
             logger.info("[用户] 用户添加部门岗位成功！，sysUserI:{}", sysUserDepartmentPostAdd.getUserId());

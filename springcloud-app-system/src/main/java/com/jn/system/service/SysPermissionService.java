@@ -61,14 +61,6 @@ public interface SysPermissionService {
     Result findRoleOfPermission(String id);
 
     /**
-     * 根据权限id获取除权限已经具有的角色之外的角色信息
-     *
-     * @param id
-     * @return
-     */
-    Result findOtherRoles(String id);
-
-    /**
      * 根据权限id获取除权限已经具有的文件组信息
      *
      * @param id
@@ -92,7 +84,7 @@ public interface SysPermissionService {
     void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd);
 
     /**
-     * 根据权限id获取权限已经具有的菜单
+     * 根据权限id获取权限已经具有的菜单及所有菜单信息
      *
      * @param id
      * @return
@@ -108,7 +100,7 @@ public interface SysPermissionService {
     Result findOtherMenu(String id);
 
     /**
-     * 根据权限id获取权限已经具有的功能信息
+     * 根据权限id获取权限已经具有的功能信息及所有功能信息
      *
      * @param id
      * @return

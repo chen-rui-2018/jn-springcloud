@@ -166,74 +166,10 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         //分页查询所有部门
         Page<Object> objects = PageHelper.startPage(sysDepartmentPage.getPage(), sysDepartmentPage.getRows());
         List<SysDepartmentUserVO> list = sysDepartmentMapper.findSysDepartmentByPage(sysDepartmentPage);
-        for (SysDepartmentUserVO sysDepartmentUserVO : list) {
-            //查询该部门下所有用户
-            List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.fingUserOfDepartment(sysDepartmentUserVO.getId());
-            sysDepartmentUserVO.setSysTUserList(sysTUserList);
-        }
         PaginationData getEasyUIData = new PaginationData(list, objects.getTotal());
         return new Result(getEasyUIData);
     }
 
-    /**
-     * 根据部门id获取部门已经存在的用户信息
-     *
-     * @param departmentId
-     * @return
-     */
-    @Override
-    public Result findUserOfDepartment(String departmentId) {
-        List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.fingUserOfDepartment(departmentId);
-        return new Result(sysTUserList);
-    }
-
-    /**
-     * 条件分页查询部门具有的用户以外的用户信息
-     *
-     * @param sysDepartmentUserPage
-     * @return
-     */
-    @Override
-    public Result fingOtherUserByPage(SysDepartmentUserPage sysDepartmentUserPage) {
-        Page<Object> objects = PageHelper.startPage(sysDepartmentUserPage.getPage(), sysDepartmentUserPage.getRows());
-        List<SysTUser> sysTUserList = sysUserDepartmentPostMapper.fingOtherUserByPage(sysDepartmentUserPage);
-        PaginationData getEasyUIData = new PaginationData(sysTUserList, objects.getTotal());
-        return new Result(getEasyUIData);
-    }
-
-    /**
-     * 为部门添加用户
-     *
-     * @param sysDepartmentUserAdd
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void addUserToDepartment(SysDepartmentUserAdd sysDepartmentUserAdd) {
-        //清除部门已经具有的用户
-        sysUserDepartmentPostMapper.deleteUserOfDepartment(sysDepartmentUserAdd.getDepartmentId());
-        if (sysDepartmentUserAdd.getUserPostAddList() != null &&
-                sysDepartmentUserAdd.getUserPostAddList().size() > 0) {
-            User user = (User) SecurityUtils.getSubject().getPrincipal();
-            List<TbSysUserDepartmentPost> list = new ArrayList<TbSysUserDepartmentPost>();
-            for (SysUserPostAdd sysUserPostAdd : sysDepartmentUserAdd.getUserPostAddList()) {
-                TbSysUserDepartmentPost tbSysUserDepartmentPost = new TbSysUserDepartmentPost();
-                tbSysUserDepartmentPost.setId(UUID.randomUUID().toString());
-                tbSysUserDepartmentPost.setCreateTime(new Date());
-                tbSysUserDepartmentPost.setCreator(user.getId());
-                tbSysUserDepartmentPost.setDepartmentId(sysDepartmentUserAdd.getDepartmentId());
-                tbSysUserDepartmentPost.setIsDefault(SysStatusEnums.INVALID.getKey());
-                tbSysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-                tbSysUserDepartmentPost.setUserId(sysUserPostAdd.getUserId());
-                tbSysUserDepartmentPost.setPostId(sysUserPostAdd.getPostId());
-                list.add(tbSysUserDepartmentPost);
-                logger.info("[部门] 部门添加用户信息成功,departmentId:{},用户id:", sysDepartmentUserAdd.getDepartmentId(),
-                        sysUserPostAdd.getUserId());
-            }
-            //批量为部门插入用户
-            sysUserDepartmentPostMapper.insert(list);
-
-        }
-    }
 
     /**
      * 判断部门名称是否存在
@@ -276,8 +212,11 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public void findChildrenDepartment(List<SysDepartmentVO> sysDepartmentVOList) {
         for (SysDepartmentVO sysDepartmentVO : sysDepartmentVOList) {
             List<SysDepartmentVO> childrenDepartList =
-                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getId());
+                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getValue());
             sysDepartmentVO.setChildren(childrenDepartList);
+            if (childrenDepartList.size() == 0){
+                sysDepartmentVO.setChildren(null);
+            }
             findChildrenDepartment(childrenDepartList);
             if (childrenDepartList == null || childrenDepartList.size() == 0) {
                 return;

@@ -2,17 +2,13 @@ package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysDepaetmentDelete;
-import com.jn.system.model.SysPost;
-import com.jn.system.model.SysPostAdd;
-import com.jn.system.model.SysPostPage;
+import com.jn.system.model.*;
 import com.jn.system.service.SysPostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

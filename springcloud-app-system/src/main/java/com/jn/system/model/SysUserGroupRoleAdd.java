@@ -3,6 +3,7 @@ package com.jn.system.model;
 import com.jn.system.enums.SysStatusEnums;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysRolePermissionAdd", description = "角色分配权限实体")
+@ApiModel(value = "SysUserGroupRoleAdd", description = "用户组分配权限")
 public class SysUserGroupRoleAdd implements Serializable {
     private static final long serialVersionUID = -9009880146686290643L;
 
@@ -22,6 +23,7 @@ public class SysUserGroupRoleAdd implements Serializable {
     private String[] userGroupId;
 
     @ApiModelProperty(value = "角色id")
+    @NotBlank(message = "角色id不能为空")
     private String roleId;
 
     public String[] getUserGroupId() {

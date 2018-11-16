@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -45,6 +46,7 @@ public class SysFileGroupPage extends Page implements Serializable {
      * 状态 1:有效 0:无效 -1:删除
      */
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
+    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
 

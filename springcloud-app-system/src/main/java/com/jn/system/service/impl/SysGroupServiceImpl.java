@@ -8,6 +8,7 @@ import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysDepartmentCriteria;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
+import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import com.jn.system.vo.SysGroupRoleVO;
@@ -177,7 +178,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         for (String roleId : sysRoleGroupAdd.getRoleIds()) {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
-            sysGroupRole.setStatus(sysRoleGroupAdd.getStatus());
+            sysGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
             sysGroupRole.setCreateTime(new Date());
             sysGroupRole.setCreator(user.getId());
             sysGroupRole.setRoleId(roleId);

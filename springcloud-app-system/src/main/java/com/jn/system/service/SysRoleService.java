@@ -23,14 +23,14 @@ public interface SysRoleService {
      *
      * @param role
      */
-    void insertTbRole(SysRole role);
+    void insertTbRole(SysRoleAdd role);
 
     /**
      * 更新角色信息
      *
      * @param role
      */
-    void updateTbRole(SysRole role);
+    void updateTbRole(SysRoleUpdate role);
 
     /**
      * 批量删除角色（逻辑删除）
@@ -77,4 +77,28 @@ public interface SysRoleService {
      * @return
      */
     Result checkRoleName(String roleName);
+
+    /**
+     * 查询角色具有的用户信息及条件分页获取为拥有用户信息
+     *
+     * @param sysRoleUserPage
+     * @return
+     */
+    Result findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
+
+    /**
+     * 查询角色具有的用户组信息及条件分页获取为拥有用户组信息
+     *
+     * @param sysRoleUserGroupPage
+     * @return
+     */
+    Result findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
+
+    /**
+     * 查询角色具有的权限信息及条件分页获取为拥有权限信息
+     *
+     * @param sysRolePermissionPage
+     * @return
+     */
+    Result findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
 }

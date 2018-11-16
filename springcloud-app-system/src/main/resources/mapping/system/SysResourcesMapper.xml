@@ -66,7 +66,7 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
             and r.status=#{status,jdbcType=VARCHAR}
         </if>
-
+        ORDER BY r.create_time DESC
     </select>
 
     <!-- 获取用户菜单、功能列表-->
@@ -158,5 +158,18 @@
         order by sm.menu_url asc
     </select>
 
+    <select id="findResourceById" parameterType="java.lang.String" resultType="com.jn.system.model.SysResources">
+        select distinct
+        r.id,
+        r.resources_name as resourcesName,
+        r.create_time as createTime,
+        r.creator,
+        r.resources_url as resourcesUrl,
+        r.`status`,
+        m.menu_name as menuId
+        from tb_sys_resources r left join
+        (SELECT * FROM tb_sys_menu WHERE STATUS = '1') m
+        on r.menu_id = m.id where r.id = #{id,jdbcType=VARCHAR}
+    </select>
 
 </mapper>

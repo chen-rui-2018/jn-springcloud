@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.dao.SysResourcesMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
+import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
@@ -57,8 +58,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         sysResources.setCreator(user.getId());
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
+        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbSysResourcesMapper.insert(tbSysResources);
-        logger.info("message={}", "新增功能,resourcesName=" + sysResources.getResourcesName() + ",resourcesId=" + sysResources.getId());
+        logger.info("新增功能,resourcesName={},resourcesId={}",sysResources.getResourcesName(),sysResources.getId());
     }
 
     /**
@@ -110,9 +112,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     public SysResources selectSysResourcesById(String id) {
-        TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(id);
-        SysResources sysResources = new SysResources();
-        BeanUtils.copyProperties(tbSysResources, sysResources);
+        SysResources sysResources = sysResourcesMapper.findResourceById(id);
         return sysResources;
     }
 

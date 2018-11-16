@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -26,6 +27,7 @@ public class SysGroupUserAdd implements Serializable {
     @ApiModelProperty("用户组id")
     private String groupId;
     @ApiModelProperty("状态")
+    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status = SysStatusEnums.EFFECTIVE.getKey();
 
     public SysGroupUserAdd() {

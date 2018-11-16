@@ -30,7 +30,7 @@ public class SysRoleController extends BaseController {
     private SysRoleService tbRoleService;
 
 
-    @ApiOperation(value = "查询角色列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询角色列表", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysRole/list")
     public Result list(@RequestBody SysRolePage role) {
@@ -39,17 +39,17 @@ public class SysRoleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "新增角色", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增角色" ,httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysRole/add")
-    public Result add(@Validated @RequestBody SysRole role) {
+    public Result add(@Validated @RequestBody SysRoleAdd role) {
         tbRoleService.insertTbRole(role);
         return new Result();
 
     }
 
     @ApiOperation(value = "删除角色", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @RequestMapping(value = "/delete",method=RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "角色ID不能为空");
@@ -60,7 +60,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "修改角色", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/system/sysRole/update")
-    public Result update(@Validated @RequestBody SysRole role) {
+    public Result update(@Validated @RequestBody SysRoleUpdate role) {
         Assert.notNull(role.getId(), "角色ID不能为空");
         tbRoleService.updateTbRole(role);
         return new Result();
@@ -93,8 +93,8 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
-    @ApiOperation(value = "用户查询所有角色", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findSysRoleAll")
+    @ApiOperation(value = "查询所有角色", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/findSysRoleAll",method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findSysRoleAll")
     public Result findSysRoleAll() {
         return tbRoleService.findSysRoleAll();
@@ -102,10 +102,34 @@ public class SysRoleController extends BaseController {
 
     @ApiOperation(value = "校验角色名称是否已经存在,false表示角色名称已存在,success表示名称可以使用",
             httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/checkRoleName")
+    @RequestMapping(value = "/checkRoleName")
     @RequiresPermissions("/system/sysRole/checkRoleName")
     public Result checkRoleName(String roleName){
         return tbRoleService.checkRoleName(roleName);
+    }
+
+    @ApiOperation(value = "查询角色具有的用户信息及条件分页获取为拥有用户信息",
+            httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/findUserOfRoleAndOtherUser")
+    @RequiresPermissions("/system/sysRole/findUserOfRoleAndOtherUser")
+    public Result findUserOfRoleAndOtherUser(@Validated @RequestBody SysRoleUserPage sysRoleUserPage){
+        return tbRoleService.findUserOfRoleAndOtherUser(sysRoleUserPage);
+    }
+
+    @ApiOperation(value = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息",
+            httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/findUserGroupOfRoleAndOtherGroup")
+    @RequiresPermissions("/system/sysRole/findUserGroupOfRoleAndOtherGroup")
+    public Result findUserGroupOfRoleAndOtherGroup(@Validated @RequestBody SysRoleUserGroupPage sysRoleUserGroupPage){
+        return tbRoleService.findUserGroupOfRoleAndOtherGroup(sysRoleUserGroupPage);
+    }
+
+    @ApiOperation(value = "查询角色具有的权限信息及条件分页获取为拥有权限信息",
+            httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission")
+    @RequiresPermissions("/system/sysRole/findPermissionOrRole")
+    public Result findPermissionOrRoleAndOtherPermission(@Validated @RequestBody SysRolePermissionPage sysRolePermissionPage){
+        return tbRoleService.findPermissionOrRoleAndOtherPermission(sysRolePermissionPage);
     }
 
 }

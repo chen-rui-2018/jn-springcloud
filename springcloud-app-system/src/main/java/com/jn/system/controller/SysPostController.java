@@ -48,9 +48,9 @@ public class SysPostController extends BaseController {
     @RequiresPermissions("/system/sysPost/delete")
     @ApiOperation(value = "逻辑删除岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete")
-    public Result delete(@Validated @RequestBody SysPostDelete sysPostDelete) {
-        Assert.noNullElements(sysPostDelete.getPostIds(), "岗位id不能为空");
-        sysPostService.deletePostBranch(sysPostDelete.getPostIds());
+    public Result delete(String[] postIds) {
+        Assert.noNullElements(postIds, "岗位id不能为空");
+        sysPostService.deletePostBranch(postIds);
         return new Result();
     }
 

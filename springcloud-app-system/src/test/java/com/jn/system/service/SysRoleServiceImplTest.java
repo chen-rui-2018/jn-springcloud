@@ -38,7 +38,7 @@ public class SysRoleServiceImplTest {
      */
     @Test
     public void insertTbSystemRole(){
-        SysRole role=new SysRole();
+        SysRoleAdd role=new SysRoleAdd();
         role.setRoleName("普通用户");
         role.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbRoleService.insertTbRole(role);
@@ -49,7 +49,7 @@ public class SysRoleServiceImplTest {
      */
     @Test
     public void updateTbRole(){
-        SysRole role=new SysRole();
+        SysRoleUpdate role=new SysRoleUpdate();
         role.setId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
         role.setRoleName("普通用户1");
         role.setStatus(SysStatusEnums.INVALID.getKey());

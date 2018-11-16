@@ -4,10 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.dao.SysRoleMapper;
-import com.jn.system.dao.SysRolePermissionMapper;
-import com.jn.system.dao.SysUserRoleMapper;
-import com.jn.system.dao.TbSysRoleMapper;
+import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysRole;
 import com.jn.system.entity.TbSysRoleCriteria;
 import com.jn.system.enums.SysStatusEnums;
@@ -16,6 +13,9 @@ import com.jn.system.service.SysRolePermissionService;
 import com.jn.system.service.SysRoleService;
 import com.jn.system.service.SysUserGroupRoleService;
 import com.jn.system.service.SysUserRoleService;
+import com.jn.system.vo.SysRolePermissionVO;
+import com.jn.system.vo.SysRoleUserGroupVO;
+import com.jn.system.vo.SysRoleUserVO;
 import com.jn.system.vo.SysRoleVO;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -57,6 +57,8 @@ public class SysRoleServiceImpl implements SysRoleService {
     private SysUserRoleMapper sysUserRoleMapper;
     @Autowired
     private SysRolePermissionMapper sysRolePermissionMapper;
+    @Autowired
+    private SysGroupRoleMapper sysGroupRoleMapper;
 
     /**
      * 查询所有角色
@@ -76,23 +78,24 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbRole(SysRole role) {
+    public void insertTbRole(SysRoleAdd role) {
         //判断角色名称是否已经存在
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(role.getRoleName());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
-        if (tbSysRoles != null && tbSysRoles.size() > 0){
+        if (tbSysRoles != null && tbSysRoles.size() > 0) {
             throw new RuntimeException("添加失败,角色名称已存在");
         }
-        role.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        role.setCreator(user.getId());
         TbSysRole tbSysRole = new TbSysRole();
-        BeanUtils.copyProperties(role, tbSysRole);
+        tbSysRole.setId(UUID.randomUUID().toString());
+        tbSysRole.setCreator(user.getId());
+        tbSysRole.setRoleName(role.getRoleName());
+        tbSysRole.setStatus(role.getStatus());
         tbSysRoleMapper.insert(tbSysRole);
-        logger.info("新增角色成功！，roleId={}",role.getId());
+        logger.info("新增角色成功！，roleId={}", tbSysRole.getId());
 
     }
 
@@ -103,11 +106,11 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateTbRole(SysRole role) {
+    public void updateTbRole(SysRoleUpdate role) {
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);
-        logger.info("修改角色成功！，roleId={}",role.getId());
+        logger.info("修改角色成功！，roleId={}", role.getId());
     }
 
     /**
@@ -122,7 +125,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         sysRoleMapper.deleteBy(roleIds);
         userRoleService.deleteTbUserRoleByRoleIds(roleIds);
         rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
-        logger.info("删除角色成功！，roleIds=",roleIds.toString());
+        logger.info("删除角色成功！，roleIds=", roleIds.toString());
     }
 
     /**
@@ -156,8 +159,12 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd) {
         String[] roleIds = {sysUserRoleAdd.getRoleId()};
+        //插入前删除该角色的所有用户角色数据
+        userRoleService.deleteTbUserRoleByRoleIds(roleIds);
+        if (sysUserRoleAdd.getUserId().length == 0) {
+            return;
+        }
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-
         //批量插入用户角色信息
         List<SysUserRole> sysUserRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserRoleAdd.getUserId().length; i++) {
@@ -169,12 +176,9 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysUserRole.setUserId(sysUserRoleAdd.getUserId()[i]);
             sysUserRole.setRoleId(sysUserRoleAdd.getRoleId());
             sysUserRoleList.add(sysUserRole);
-            logger.info("添加角色授权用户，roleId={},userId={}",Arrays.toString(roleIds),sysUserRoleAdd.getUserId()[i]);
+            logger.info("添加角色授权用户，roleId={},userId={}", Arrays.toString(roleIds), sysUserRoleAdd.getUserId()[i]);
         }
-
-        //插入前删除该角色的所有用户角色数据
-        userRoleService.deleteTbUserRoleByRoleIds(roleIds);
-        logger.info("添加角色授权用户,插入前删除该角色的所有用户角色数据，roleId={}",Arrays.toString(roleIds));
+        logger.info("添加角色授权用户,插入前删除该角色的所有用户角色数据，roleId={}", Arrays.toString(roleIds));
         //批量插入用户角色信息
         userRoleService.insertTbUserRoleBatch(sysUserRoleList);
 
@@ -189,9 +193,14 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd) {
         String[] roleIds = {sysRolePermissionAdd.getRoleId()};
+        //插入前删除该角色的所有角色权限数据
+        rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
+        logger.info("添加角色授权权限,插入前删除该角色的所有角色权限数据，roleId={}", Arrays.toString(roleIds));
+        if (sysRolePermissionAdd.getPermissionId().length == 0) {
+            return;
+        }
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-
-        //批量插入用户角色信息
+        //批量插入角色权限信息
         List<SysRolePermission> sysRolePermissionList = new ArrayList<>();
         for (int i = 0; i < sysRolePermissionAdd.getPermissionId().length; i++) {
             SysRolePermission sysRolePermission = new SysRolePermission();
@@ -202,13 +211,8 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysRolePermission.setPermissionId(sysRolePermissionAdd.getPermissionId()[i]);
             sysRolePermission.setRoleId(sysRolePermissionAdd.getRoleId());
             sysRolePermissionList.add(sysRolePermission);
-            logger.info("添加角色授权权限，roleId={},userId={}",Arrays.toString(roleIds),sysRolePermissionAdd.getPermissionId()[i]);
-
-
+            logger.info("添加角色授权权限，roleId={},userId={}", Arrays.toString(roleIds), sysRolePermissionAdd.getPermissionId()[i]);
         }
-        //插入前删除该角色的所有角色权限数据
-        rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
-        logger.info("添加角色授权权限,插入前删除该角色的所有角色权限数据，roleId={}",Arrays.toString(roleIds));
         //批量插入角色权限
         rolePermissionService.insertTbRolePermissionBatch(sysRolePermissionList);
 
@@ -223,6 +227,11 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd) {
         String[] roleIds = {sysUserGroupRoleAdd.getRoleId()};
+        //插入前删除该角色的所有用户组角色数据
+        sysUserGroupRoleService.deleteTbUserGroupRoleByRoleIds(roleIds);
+        if (sysUserGroupRoleAdd.getUserGroupId().length == 0) {
+            return;
+        }
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SysUserGroupRole> sysUserGroupRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserGroupRoleAdd.getUserGroupId().length; i++) {
@@ -234,18 +243,17 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysUserGroupRole.setUserGroupId(sysUserGroupRoleAdd.getUserGroupId()[i]);
             sysUserGroupRole.setRoleId(sysUserGroupRoleAdd.getRoleId());
             sysUserGroupRoleList.add(sysUserGroupRole);
-            logger.info("添加角色授权用户组，roleId={},userId={}",Arrays.toString(roleIds),sysUserGroupRoleAdd.getUserGroupId()[i]);
+            logger.info("添加角色授权用户组，roleId={},userId={}", Arrays.toString(roleIds), sysUserGroupRoleAdd.getUserGroupId()[i]);
 
         }
-        //插入前删除该角色的所有用户组角色数据
-        sysUserGroupRoleService.deleteTbUserGroupRoleByRoleIds(roleIds);
-        logger.info("添加角色授权用户组,插入前删除该角色的所有用户组角色数据，roleId={}",Arrays.toString(roleIds));
+        logger.info("添加角色授权用户组,插入前删除该角色的所有用户组角色数据，roleId={}", Arrays.toString(roleIds));
         //批量插入用户组角色
         sysUserGroupRoleService.insertTbUserGroupRoleBatch(sysUserGroupRoleList);
     }
 
     /**
      * 校验角色名称是否已经存在
+     *
      * @param roleName
      * @return
      */
@@ -255,10 +263,69 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(roleName);
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
-        if (tbSysRoles != null && tbSysRoles.size() > 0){
+        if (tbSysRoles != null && tbSysRoles.size() > 0) {
             return new Result("false");
         }
         return new Result("success");
+    }
+
+    /**
+     * 查询角色具有的用户信息及条件分页获取为拥有用户信息
+     *
+     * @param sysRoleUserPage
+     * @return
+     */
+    @Override
+    public Result findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
+        //根据角色id获取角色已经拥有的用户信息
+        List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
+        //条件分页获取角色未拥有用户信息
+        Page<Object> objects = PageHelper.startPage(sysRoleUserPage.getPage(), sysRoleUserPage.getRows());
+        List<SysTUser> otherUserList = sysUserRoleMapper.findOtherUser(sysRoleUserPage);
+        //方便前端解析,将已拥有数据添加到为拥有数据中
+        otherUserList.addAll(userOfRoleList);
+        SysRoleUserVO sysRoleUserVO = new SysRoleUserVO(userOfRoleList, otherUserList);
+        PaginationData data = new PaginationData(sysRoleUserVO, objects.getTotal());
+        return new Result(data);
+    }
+
+    /**
+     * 查询角色具有的用户组信息及条件分页获取为拥有用户组信息
+     *
+     * @param sysRoleUserGroupPage
+     * @return
+     */
+    @Override
+    public Result findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
+        //获取角色已经拥有的用户组信息
+        List<SysGroup> userGroupOfRoleList = sysGroupRoleMapper.findUserGroupByRoleId(sysRoleUserGroupPage.getRoleId());
+        //条件分页获取角色为拥有的用户组信息
+        Page<Object> objects = PageHelper.startPage(sysRoleUserGroupPage.getPage(), sysRoleUserGroupPage.getRows());
+        List<SysGroup> otherUserGroupList = sysGroupRoleMapper.findOtherUserGroup(sysRoleUserGroupPage);
+        otherUserGroupList.addAll(userGroupOfRoleList);
+        SysRoleUserGroupVO sysRoleUserGroupVO = new SysRoleUserGroupVO(userGroupOfRoleList, otherUserGroupList);
+        PaginationData data = new PaginationData(sysRoleUserGroupVO, objects.getTotal());
+        return new Result(data);
+    }
+
+    /**
+     * 查询角色具有的权限信息及条件分页获取为拥有权限信息
+     *
+     * @param sysRolePermissionPage
+     * @return
+     */
+    @Override
+    public Result findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
+        //获取角色已经拥有的权限信息
+        List<SysPermission> permissionOfRoleList =
+                sysRolePermissionMapper.findPermissionByRoleId(sysRolePermissionPage.getRoleId());
+        //条件分页获取角色为拥有的权限信息
+        Page<Object> objects = PageHelper.startPage(sysRolePermissionPage.getPage(), sysRolePermissionPage.getRows());
+        List<SysPermission> otherPermissionList = sysRolePermissionMapper.findOtherUserGroup(sysRolePermissionPage);
+        otherPermissionList.addAll(permissionOfRoleList);
+        SysRolePermissionVO sysRolePermissionVO = new SysRolePermissionVO(permissionOfRoleList,otherPermissionList);
+        PaginationData data = new PaginationData(sysRolePermissionVO, objects.getTotal());
+        return new Result(data);
     }
 
 }

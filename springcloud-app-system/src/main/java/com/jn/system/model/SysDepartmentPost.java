@@ -3,6 +3,7 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -22,6 +23,7 @@ public class SysDepartmentPost implements Serializable {
     @ApiModelProperty("岗位id")
     private String postId;
     @ApiModelProperty("部门岗位是否默认")
+    @Pattern(regexp="^[01]$",message="{isDefault:'默认值只允许为0,1'}")
     private String isDefault;
 
     public SysDepartmentPost() {

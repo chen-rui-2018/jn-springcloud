@@ -22,12 +22,14 @@ public interface SysResourcesMapper {
 
     /**
      * 根据ids批量删除
+     *
      * @param id
      */
     void deleteByIds(String[] id);
 
     /**
      * 根据主键查询功能菜单列表
+     *
      * @param sysResourcesPage
      * @return
      */
@@ -35,6 +37,7 @@ public interface SysResourcesMapper {
 
     /**
      * 根据id查找用户拥有权限列表
+     *
      * @param id 用户ID
      * @return
      */
@@ -42,8 +45,17 @@ public interface SysResourcesMapper {
 
     /**
      * 根据id查找用户拥有功能权限列表
+     *
      * @param id 用户ID
      * @return
      */
     List<MenuResources> getMenuResourcesUrlById(String id);
+
+    /**
+     * 根据id查询功能详情
+     *
+     * @param id
+     * @return
+     */
+    SysResources findResourceById(String id);
 }

@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * 根据用户id查询用户部门岗位
  * @author： shaobao
@@ -21,12 +23,14 @@ public class SysUserDepartmentPost extends Page {
     private String departmentPostStatus;
 
     @ApiModelProperty("是否默认")
+    @Pattern(regexp="^[01]$",message="{isDefault:'默认值值只允许为0,1'}")
     private String isDefault;
 
     @ApiModelProperty("名称")
     private String name;
 
     @ApiModelProperty("状态")
+    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
     @ApiModelProperty("部门id")

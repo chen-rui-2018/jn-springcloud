@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -24,6 +25,7 @@ public class SysUserPage extends Page implements Serializable {
     private String name;
 
     @ApiModelProperty("状态")
+    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
     @ApiModelProperty("部门id")

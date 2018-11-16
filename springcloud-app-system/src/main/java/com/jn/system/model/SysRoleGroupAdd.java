@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -23,21 +24,13 @@ public class SysRoleGroupAdd implements Serializable {
     @NotBlank(message = "用户组id不能为空")
     @ApiModelProperty("用户组id")
     private String groupId;
-    @ApiModelProperty("状态")
-    private String status= SysStatusEnums.EFFECTIVE.getKey();
-
 
     public SysRoleGroupAdd() {
     }
 
-    public SysRoleGroupAdd(String[] roleIds, String groupId, String status) {
+    public SysRoleGroupAdd(String[] roleIds, String groupId) {
         this.roleIds = roleIds;
         this.groupId = groupId;
-        this.status = status;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String[] getRoleIds() {
@@ -56,20 +49,11 @@ public class SysRoleGroupAdd implements Serializable {
         this.groupId = groupId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return "SysRoleGroupAdd{" +
                 "roleIds=" + Arrays.toString(roleIds) +
                 ", groupId='" + groupId + '\'' +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

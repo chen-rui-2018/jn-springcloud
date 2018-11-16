@@ -47,9 +47,9 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/delete")
     @ApiOperation(value = "逻辑删除部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/delete")
-    public Result delete(@Validated @RequestBody SysDepaetmentDelete sysDepaetmentDelete) {
-        Assert.noNullElements(sysDepaetmentDelete.getDepartmentIds(), "部门id不能为空");
-        sysDepartmentService.delete(sysDepaetmentDelete.getDepartmentIds());
+    public Result delete(String[] departmentIds) {
+        Assert.noNullElements(departmentIds, "部门id不能为空");
+        sysDepartmentService.delete(departmentIds);
         return new Result();
     }
 

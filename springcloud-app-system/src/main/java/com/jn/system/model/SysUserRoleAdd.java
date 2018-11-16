@@ -3,6 +3,7 @@ package com.jn.system.model;
 import com.jn.system.enums.SysStatusEnums;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
@@ -23,6 +24,7 @@ public class SysUserRoleAdd implements Serializable {
     private String[] userId;
 
     @ApiModelProperty(value = "角色id")
+    @NotBlank(message = "角色id不能为空")
     private String roleId;
 
     public String[] getUserId() {

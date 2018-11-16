@@ -3,6 +3,7 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -34,6 +35,7 @@ public class SysGroupRole implements Serializable {
     private Date createTime;
 
     @ApiModelProperty("状态 1有效 0无效 -1删除")
+    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
     public SysGroupRole() {

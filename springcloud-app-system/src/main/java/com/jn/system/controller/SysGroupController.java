@@ -3,10 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysGroup;
-import com.jn.system.model.SysGroupPage;
-import com.jn.system.model.SysGroupUserAdd;
-import com.jn.system.model.SysGroupUserPage;
-import com.jn.system.model.SysRoleGroupAdd;
+import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -75,12 +72,12 @@ public class SysGroupController extends BaseController {
     }
 
 
-    @ApiOperation(value = "根据用户组id获取用户组具有的角色信息及所有角色信息",
+    @ApiOperation(value = "根据用户组id获取用户组具有的角色信息及条件分页查询用户组未拥有的角色信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectGroupRoleAndOtherRole")
     @RequiresPermissions("/system/sysGroup/selectGroupRoleAndOtherRole")
-    public Result selectGroupRoleAndOtherRole(String id) {
-        return sysGroupService.selectGroupRoleAndOtherRole(id);
+    public Result selectGroupRoleAndOtherRole(@Validated @RequestBody SysGroupRolePage sysGroupRolePage) {
+        return sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
     }
 
 
@@ -125,7 +122,7 @@ public class SysGroupController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkGroupName")
     @RequiresPermissions("/system/sysGroup/checkGroupName")
-    public Result checkGroupName(String groupName){
+    public Result checkGroupName(String groupName) {
         return sysGroupService.checkGroupName(groupName);
     }
 

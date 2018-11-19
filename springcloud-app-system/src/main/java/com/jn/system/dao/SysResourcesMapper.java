@@ -58,4 +58,11 @@ public interface SysResourcesMapper {
      * @return
      */
     SysResources findResourceById(String id);
+
+    /**
+     * 根据功能id获取菜单名称
+     * @param resourcesId
+     * @return
+     */
+    List<String> findMenuNameByResourcesId(String resourcesId);
 }

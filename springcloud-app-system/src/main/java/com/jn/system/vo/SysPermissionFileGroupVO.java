@@ -19,39 +19,39 @@ import java.util.List;
 public class SysPermissionFileGroupVO implements Serializable {
     private static final long serialVersionUID = 3682263800524170374L;
     @ApiModelProperty("权限已经具有的文件组集合")
-    private List<SysFileGroup> sysFileGroupList;
+    private List<SysFileGroup> sysFileGroupOfPermissionList;
     @ApiModelProperty("所有文件组集合")
-    private List<TbSysFileGroup> tbSysFileGroupAll;
+    private List<SysFileGroup> otherFileGroupList;
 
     public SysPermissionFileGroupVO() {
     }
 
-    public SysPermissionFileGroupVO(List<SysFileGroup> sysFileGroupList, List<TbSysFileGroup> tbSysFileGroupAll) {
-        this.sysFileGroupList = sysFileGroupList;
-        this.tbSysFileGroupAll = tbSysFileGroupAll;
+    public SysPermissionFileGroupVO(List<SysFileGroup> sysFileGroupOfPermissionList, List<SysFileGroup> otherFileGroupList) {
+        this.sysFileGroupOfPermissionList = sysFileGroupOfPermissionList;
+        this.otherFileGroupList = otherFileGroupList;
     }
 
-    public List<SysFileGroup> getSysFileGroupList() {
-        return sysFileGroupList;
+    public List<SysFileGroup> getSysFileGroupOfPermissionList() {
+        return sysFileGroupOfPermissionList;
     }
 
-    public void setSysFileGroupList(List<SysFileGroup> sysFileGroupList) {
-        this.sysFileGroupList = sysFileGroupList;
+    public void setSysFileGroupOfPermissionList(List<SysFileGroup> sysFileGroupOfPermissionList) {
+        this.sysFileGroupOfPermissionList = sysFileGroupOfPermissionList;
     }
 
-    public List<TbSysFileGroup> getTbSysFileGroupAll() {
-        return tbSysFileGroupAll;
+    public List<SysFileGroup> getOtherFileGroupList() {
+        return otherFileGroupList;
     }
 
-    public void setTbSysFileGroupAll(List<TbSysFileGroup> tbSysFileGroupAll) {
-        this.tbSysFileGroupAll = tbSysFileGroupAll;
+    public void setOtherFileGroupList(List<SysFileGroup> otherFileGroupList) {
+        this.otherFileGroupList = otherFileGroupList;
     }
 
     @Override
     public String toString() {
         return "SysPermissionFileGroupVO{" +
-                "sysFileGroupList=" + sysFileGroupList +
-                ", tbSysFileGroupAll=" + tbSysFileGroupAll +
+                "sysFileGroupOfPermissionList=" + sysFileGroupOfPermissionList +
+                ", otherFileGroupList=" + otherFileGroupList +
                 '}';
     }
 }

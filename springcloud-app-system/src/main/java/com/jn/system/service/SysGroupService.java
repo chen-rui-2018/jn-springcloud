@@ -47,11 +47,11 @@ public interface SysGroupService {
     Result findSysGroupById(String id);
 
     /**
-     * 根据用户组id获取用户组信息及用户组具有的角色信息并返回其他所有角色信息
-     * @param id 用户组id
+     * 根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息
+     * @param sysGroupRolePage
      * @return
      */
-    Result selectGroupRoleAndOtherRole(String id);
+    Result selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage);
 
     /**
      * 为用户组授权角色信息

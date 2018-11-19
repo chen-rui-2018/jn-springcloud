@@ -83,6 +83,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(role.getRoleName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
             throw new RuntimeException("添加失败,角色名称已存在");
@@ -262,6 +263,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(roleName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
             return new Result("false");

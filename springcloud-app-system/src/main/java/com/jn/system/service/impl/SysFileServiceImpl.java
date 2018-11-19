@@ -3,13 +3,17 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.dao.SysFileGroupFileMapper;
 import com.jn.system.dao.SysFileMapper;
 import com.jn.system.dao.TbSysFileMapper;
 import com.jn.system.entity.TbSysFile;
+import com.jn.system.entity.TbSysFileCriteria;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileService;
+import com.jn.system.vo.SysFileVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +54,15 @@ public class SysFileServiceImpl implements SysFileService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSysFile(SysFile sysFile) {
+        //文件名称校验
+        TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
+        TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
+        criteria.andFileNameEqualTo(sysFile.getFileName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
+        if (tbSysFiles != null && tbSysFiles.size() > 0) {
+            throw new RuntimeException("添加失败,文件名称已存在");
+        }
         sysFile.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -113,10 +126,14 @@ public class SysFileServiceImpl implements SysFileService {
      */
     @Override
     public PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
-
         Page<Object> objects = PageHelper.startPage(sysFilePage.getPage(), sysFilePage.getRows());
-        return new PaginationData(sysFileMapper.selectFileListBySearchKey(sysFilePage)
-                , objects.getTotal());
+        //分页查询文件信息
+        List<SysFileVO> sysFileVOList = sysFileMapper.findFileByPage(sysFilePage);
+        for (SysFileVO sysFileVO:sysFileVOList) {
+            List<String> fileGroupNameList = sysFileGroupFileMapper.findFileGroupNameByFileId(sysFileVO.getFileId());
+            sysFileVO.setFileGroupNameList(fileGroupNameList);
+        }
+        return new PaginationData(sysFileVOList, objects.getTotal());
     }
 
     /**
@@ -161,5 +178,27 @@ public class SysFileServiceImpl implements SysFileService {
         sysFileGroupFileMapper.insertBatch(sysFileGroupFiles);
 
 
+    }
+
+    /**
+     * 校验文件名称
+     *
+     * @param fileName
+     * @return
+     */
+    @Override
+    public Result checkFileName(String fileName) {
+        if (StringUtils.isNotBlank(fileName)){
+            //文件名称校验
+            TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
+            TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
+            criteria.andFileNameEqualTo(fileName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
+            if (tbSysFiles != null && tbSysFiles.size() > 0) {
+                return new Result("false");
+            }
+        }
+        return new Result("success");
     }
 }

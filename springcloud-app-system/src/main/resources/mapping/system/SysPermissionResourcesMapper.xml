@@ -10,7 +10,7 @@
     </update>
 
     <select id="findResourcesOfPermission" parameterType="java.lang.String" resultType="com.jn.system.model.SysResources">
-        select
+        select distinct
             t2.id,
             t2.resources_name as resourcesName,
             t2.resources_url as resourcesUrl,
@@ -21,23 +21,6 @@
         from tb_sys_permission_resources t1,tb_sys_resources t2
         where t1.resources_id = t2.id and t1.`status` = '1'
            and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR}
-    </select>
-
-
-    <select id="findOtherResources" parameterType="java.lang.String" resultType="com.jn.system.model.SysResources">
-        select
-            id,
-            resources_name as resourcesName,
-            resources_url as resourcesUrl,
-            menu_id as menuId,
-            creator,
-            create_time as createTime,
-            `status`
-        FROM tb_sys_resources where id not in
-            (select t2.id from tb_sys_permission_resources t1,tb_sys_resources t2
-            where t1.resources_id = t2.id and t1.`status` = '1'
-            and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR})
-        and `status` = '1'
     </select>
 
     <update id="deleteByPermissionId" parameterType="java.lang.String">
@@ -55,4 +38,19 @@
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>
+
+    <select id="findResourceByPermissionPage" parameterType="com.jn.system.model.SysPermissionResourcePage"
+            resultType="com.jn.system.model.SysResources">
+        select DISTINCT
+        t.id,
+        t.resources_name as resourcesName
+        from tb_sys_resources t left join
+        (select t1.id from tb_sys_resources t1,tb_sys_permission_resources t2
+        where t1.id = t2.resources_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(resourceName)">
+            and t.resources_name like CONCAT('%', #{resourceName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
 </mapper>

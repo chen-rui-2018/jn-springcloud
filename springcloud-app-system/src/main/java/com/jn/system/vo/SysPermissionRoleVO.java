@@ -20,14 +20,14 @@ public class SysPermissionRoleVO implements Serializable {
     @ApiModelProperty("权限具有的角色")
     private List<SysRole> roleOfPermissionList;
     @ApiModelProperty("所有角色信息")
-    private List<SysRole> sysRoleAll;
+    private List<SysRole> otherRoleList;
 
     public SysPermissionRoleVO() {
     }
 
-    public SysPermissionRoleVO(List<SysRole> roleOfPermissionList, List<SysRole> sysRoleAll) {
+    public SysPermissionRoleVO(List<SysRole> roleOfPermissionList, List<SysRole> otherRoleList) {
         this.roleOfPermissionList = roleOfPermissionList;
-        this.sysRoleAll = sysRoleAll;
+        this.otherRoleList = otherRoleList;
     }
 
     public List<SysRole> getRoleOfPermissionList() {
@@ -38,19 +38,19 @@ public class SysPermissionRoleVO implements Serializable {
         this.roleOfPermissionList = roleOfPermissionList;
     }
 
-    public List<SysRole> getSysRoleAll() {
-        return sysRoleAll;
+    public List<SysRole> getOtherRoleList() {
+        return otherRoleList;
     }
 
-    public void setSysRoleAll(List<SysRole> sysRoleAll) {
-        this.sysRoleAll = sysRoleAll;
+    public void setOtherRoleList(List<SysRole> otherRoleList) {
+        this.otherRoleList = otherRoleList;
     }
 
     @Override
     public String toString() {
         return "SysPermissionRoleVO{" +
                 "roleOfPermissionList=" + roleOfPermissionList +
-                ", sysRoleAll=" + sysRoleAll +
+                ", otherRoleList=" + otherRoleList +
                 '}';
     }
 }

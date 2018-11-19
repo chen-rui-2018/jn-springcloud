@@ -72,4 +72,11 @@ public class SysResourcesController extends BaseController {
         SysResources sysResources = sysResourcesService.selectSysResourcesById(id);
         return new Result(sysResources);
     }
+
+    @ApiOperation(value = "校验页面功能名称是否存在", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/checkResourceName")
+    @RequiresPermissions("/system/sysResources/checkResourceName")
+    public Result checkResourceName(String resourceName){
+        return sysResourcesService.checkResourceName(resourceName);
+    }
 }

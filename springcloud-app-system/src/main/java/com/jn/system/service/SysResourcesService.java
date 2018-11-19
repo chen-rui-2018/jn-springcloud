@@ -1,6 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
@@ -67,8 +68,17 @@ public interface SysResourcesService {
 
     /**
      * 根据id查找用户拥有功能权限列表
+     *
      * @param id 用户ID
      * @return
      */
     List<MenuResources> getMenuResourcesUrlById(String id);
+
+    /**
+     * 校验页面功能名称是否存在
+     *
+     * @param resourceName
+     * @return
+     */
+    Result checkResourceName(String resourceName);
 }

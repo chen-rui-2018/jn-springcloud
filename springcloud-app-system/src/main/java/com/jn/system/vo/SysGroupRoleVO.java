@@ -19,39 +19,39 @@ import java.util.List;
 public class SysGroupRoleVO implements Serializable {
     private static final long serialVersionUID = -5361397168446883005L;
     @ApiModelProperty("用户组具有的角色集合")
-    private List<SysRole> roleAllOfGroup;
+    private List<SysRole> roleOfGroupList;
     @ApiModelProperty("所有角色集合")
-    private List<SysRole> sysRoleAll;
+    private List<SysRole> otherRoleList;
 
     public SysGroupRoleVO() {
     }
 
-    public SysGroupRoleVO(List<SysRole> roleAllOfGroup, List<SysRole> sysRoleAll) {
-        this.roleAllOfGroup = roleAllOfGroup;
-        this.sysRoleAll = sysRoleAll;
+    public SysGroupRoleVO(List<SysRole> roleOfGroupList, List<SysRole> otherRoleList) {
+        this.roleOfGroupList = roleOfGroupList;
+        this.otherRoleList = otherRoleList;
     }
 
-    public List<SysRole> getRoleAllOfGroup() {
-        return roleAllOfGroup;
+    public List<SysRole> getRoleOfGroupList() {
+        return roleOfGroupList;
     }
 
-    public void setRoleAllOfGroup(List<SysRole> roleAllOfGroup) {
-        this.roleAllOfGroup = roleAllOfGroup;
+    public void setRoleOfGroupList(List<SysRole> roleOfGroupList) {
+        this.roleOfGroupList = roleOfGroupList;
     }
 
-    public List<SysRole> getSysRoleAll() {
-        return sysRoleAll;
+    public List<SysRole> getOtherRoleList() {
+        return otherRoleList;
     }
 
-    public void setSysRoleAll(List<SysRole> sysRoleAll) {
-        this.sysRoleAll = sysRoleAll;
+    public void setOtherRoleList(List<SysRole> otherRoleList) {
+        this.otherRoleList = otherRoleList;
     }
 
     @Override
     public String toString() {
         return "SysGroupRoleVO{" +
-                "roleAllOfGroup=" + roleAllOfGroup +
-                ", sysRoleAll=" + sysRoleAll +
+                "roleOfGroupList=" + roleOfGroupList +
+                ", otherRoleList=" + otherRoleList +
                 '}';
     }
 }

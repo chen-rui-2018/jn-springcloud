@@ -1,10 +1,7 @@
 package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysRolePermission;
-import com.jn.system.model.SysPermission;
-import com.jn.system.model.SysRole;
-import com.jn.system.model.SysRolePermission;
-import com.jn.system.model.SysRolePermissionPage;
+import com.jn.system.model.*;
 
 import java.util.List;
 
@@ -100,4 +97,12 @@ public interface SysRolePermissionMapper {
      * @return
      */
     List<SysPermission> findOtherUserGroup(SysRolePermissionPage sysRolePermissionPage);
+
+    /**
+     * 条件分页获取未拥有的角色信息
+     *
+     * @param sysPermissionRolePage
+     * @return
+     */
+    List<SysRole> findRoleByPermissionPage(SysPermissionRolePage sysPermissionRolePage);
 }

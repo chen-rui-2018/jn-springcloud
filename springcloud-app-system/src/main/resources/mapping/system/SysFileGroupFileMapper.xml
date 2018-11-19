@@ -118,4 +118,10 @@
         and sf.file_url = #{1}
     </select>
 
+    <select id="findFileGroupNameByFileId" parameterType="java.lang.String" resultType="java.lang.String">
+        select t.file_group_name from tb_sys_file_group t,tb_sys_file_group_file tt
+        where t.id = tt.file_group_id and t.`status` = '1'
+        and tt.`status` = '1' and tt.file_id = #{id,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

@@ -53,28 +53,20 @@ public interface SysPermissionService {
     void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd);
 
     /**
-     * 根据权限id获取权限已经具有的角色
+     * 条件分页获取未拥有的角色信息
      *
-     * @param id
+     * @param sysPermissionRolePage
      * @return
      */
-    Result findRoleOfPermission(String id);
+    Result findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
 
     /**
-     * 根据权限id获取除权限已经具有的文件组信息
+     * 获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息
      *
-     * @param id
+     * @param sysPermissionFileGroupPage
      * @return
      */
-    Result findFileGroupOfPermission(String id);
-
-    /**
-     * 根据权限id获取除权限已经具有的文件组之外的文件组信息
-     *
-     * @param id
-     * @return
-     */
-    Result findOtherFileGroups(String id);
+    Result findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage);
 
     /**
      * 为权限添加文件组
@@ -84,47 +76,40 @@ public interface SysPermissionService {
     void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd);
 
     /**
-     * 根据权限id获取权限已经具有的菜单及所有菜单信息
+     * 获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息
      *
-     * @param id
+     * @param sysPermissionMenuPage
      * @return
      */
-    Result findMenuOfPermission(String id);
+    Result findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage);
 
     /**
-     * 根据权限id获取权限已经具有的菜单之外的菜单
+     * 获取权限已经具有的功能信息及条件分页获取未拥有的功能信息
      *
-     * @param id
+     * @param sysPermissionResourcePage
      * @return
      */
-    Result findOtherMenu(String id);
-
-    /**
-     * 根据权限id获取权限已经具有的功能信息及所有功能信息
-     *
-     * @param id
-     * @return
-     */
-    Result findResourcesOfPermission(String id);
-
-    /**
-     * 根据权限id获取权限已经具有的页面功能之外的页面功能
-     *
-     * @param permissionId
-     * @return
-     */
-    Result findOtherResources(String permissionId);
-
-    /**
-     * 为权限添加菜单及页面功能
-     * @param sysPermissionMenuRecourcesAdd
-     */
-    void addMenuAndResourceToPermission(SysPermissionMenuRecourcesAdd sysPermissionMenuRecourcesAdd);
+    Result findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage);
 
     /**
      * 校验权限名是否已经存在
+     *
      * @param permissionName
      * @return
      */
     Result checkPermissionName(String permissionName);
+
+    /**
+     * 为权限添加菜单
+     *
+     * @param sysPermissionMenuAdd
+     */
+    void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd);
+
+    /**
+     * 为权限添加页面功能
+     *
+     * @param sysPermissionMenuAdd
+     */
+    void addResounceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd);
 }

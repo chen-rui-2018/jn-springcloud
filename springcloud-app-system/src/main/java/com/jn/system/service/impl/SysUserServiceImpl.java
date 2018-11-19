@@ -69,6 +69,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(sysUser.getAccount());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
             return new Result("用户名已存在");
@@ -138,21 +139,22 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 根据用户id获取用户已经存在的用户组及其他用户组
+     * 根据用户id获取用户已经存在的用户组及条件分页获取未拥有用户组
      *
-     * @param id
+     * @param sysUserGroupPage
      * @return
      */
     @Override
-    public Result findSysGroupByUserId(String id) {
-        SysUserGroupVO sysUserGroupVO = new SysUserGroupVO();
+    public Result findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
-        List<TbSysGroup> sysGroupOfUser = sysGroupMapper.findSysGroupByUserId(id);
-        //获取所有用户组
-        List<TbSysGroup> sysGroupAll = sysGroupMapper.findGroupAll();
-        sysUserGroupVO.setSysGroupOfUser(sysGroupOfUser);
-        sysUserGroupVO.setSysGroupAll(sysGroupAll);
-        return new Result(sysUserGroupVO);
+        List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
+        //条件分页获取用户未拥有用户组信息
+        Page<Object> objects = PageHelper.startPage(sysUserGroupPage.getPage(), sysUserGroupPage.getRows());
+        List<SysGroup> otherGroupList = sysGroupUserMapper.findGroupByPage(sysUserGroupPage);
+        otherGroupList.addAll(sysGroupOfUserList);
+        SysUserGroupVO sysUserGroupVO = new SysUserGroupVO(sysGroupOfUserList,otherGroupList);
+        PaginationData data = new PaginationData(sysUserGroupVO,objects.getTotal());
+        return new Result(data);
     }
 
     /**
@@ -188,19 +190,19 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 根据用户id获取用户具有角色及其他角色
+     * 根据用户id获取用户具有角色及条件分页查询用户未拥有的角色
      *
-     * @param id
+     * @param sysUserRolePage
      * @return
      */
     @Override
-    public Result findSysRoleByUserId(String id) {
-        //或取用户已经具有角色
-        List<SysRole> sysRoleOfUser = sysRoleMapper.findSysRoleByUserId(id);
-        List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        SysUserRoleVO sysUserRoleVO = new SysUserRoleVO();
-        sysUserRoleVO.setSysRoleAll(sysRoleAll);
-        sysUserRoleVO.setSysRoleOfUser(sysRoleOfUser);
+    public Result findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
+        //获取用户已经具有角色
+        List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
+        //条件分页获取用户未拥有的角色信息
+        List<SysRole> otherRoleList = sysUserRoleMapper.findRoleByUserPage(sysUserRolePage);
+        otherRoleList.addAll(sysRoleOfUserList);
+        SysUserRoleVO sysUserRoleVO = new SysUserRoleVO(sysRoleOfUserList,otherRoleList);
         return new Result(sysUserRoleVO);
     }
 
@@ -324,6 +326,7 @@ public class SysUserServiceImpl implements SysUserService {
             TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
             TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
             criteria.andAccountEqualTo(account);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
             if (tbSysUsers != null && tbSysUsers.size() > 0) {
                 return new Result("false");

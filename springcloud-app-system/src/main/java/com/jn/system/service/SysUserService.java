@@ -2,9 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
-import com.jn.system.model.SysUser;
-import com.jn.system.model.SysUserDepartmentPostAdd;
-import com.jn.system.model.SysUserPage;
+import com.jn.system.model.*;
 
 import java.util.List;
 
@@ -50,10 +48,10 @@ public interface SysUserService {
     /**
      * 根据用户id获取用户已经存在的用户组及其他用户组
      *
-     * @param id
+     * @param sysUserGroupPage
      * @return
      */
-    Result findSysGroupByUserId(String id);
+    Result findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
 
     /**
      * 往用户中添加用户组
@@ -64,12 +62,12 @@ public interface SysUserService {
     void saveSysGroupToSysUser(String[] groupIds, String userId);
 
     /**
-     * 根据用户id获取用户具有角色及其他角色
+     * 根据用户id获取用户具有角色及条件查询用户未拥有的角色
      *
-     * @param id
+     * @param sysUserRolePage
      * @return
      */
-    Result findSysRoleByUserId(String id);
+    Result findSysRoleByUserId(SysUserRolePage sysUserRolePage);
 
     /**
      * 为用户添加角色权限

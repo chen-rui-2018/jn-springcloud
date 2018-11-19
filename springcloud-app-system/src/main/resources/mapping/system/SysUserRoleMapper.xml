@@ -73,4 +73,22 @@
         </if>
     </select>
 
+    <select id="findRoleByUserPage" parameterType="com.jn.system.model.SysUserRolePage"
+            resultType="com.jn.system.model.SysRole">
+        select DISTINCT
+        t.id,
+        t.role_name as roleName,
+        t.create_time as createTime,
+        t.creator,
+        t.`status`
+        from tb_sys_role t left join
+        (select t1.id,t1.role_name from tb_sys_role t1 , tb_sys_user_role t2
+        where t1.id = t2.role_id and t1.`status` = '1'
+        and t2.`status` = '1' and t2.user_id = #{userId,jdbcType=VARCHAR} ) tt
+        on t.id = tt.id
+        where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+            and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
 </mapper>

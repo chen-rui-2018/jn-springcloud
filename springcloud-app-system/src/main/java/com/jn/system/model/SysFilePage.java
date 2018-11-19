@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,42 +15,41 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFilePage" ,description = "文件分页实体")
+@ApiModel(value = "SysFilePage", description = "文件分页实体")
 public class SysFilePage extends Page implements Serializable {
     private static final long serialVersionUID = 7252981735944287742L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 文件名称
      */
-    @ApiModelProperty(value = "文件名称" )
+    @ApiModelProperty(value = "文件名称")
     private String fileName;
 
     /**
      * 文件路径
      */
-    @ApiModelProperty(value = "文件路径" )
+    @ApiModelProperty(value = "文件路径")
     private String fileUrl;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
+    @ApiModelProperty(value = "创建人")
     private String creator;
 
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
 
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
+    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
     private String status;
 
     public String getId() {

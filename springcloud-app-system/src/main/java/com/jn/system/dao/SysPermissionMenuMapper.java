@@ -2,6 +2,7 @@ package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysPermissionMenu;
 import com.jn.system.model.SysMenu;
+import com.jn.system.model.SysPermissionMenuPage;
 
 import java.util.List;
 
@@ -31,14 +32,6 @@ public interface SysPermissionMenuMapper {
     List<SysMenu> findMenuOfPermission(String id);
 
     /**
-     * 根据权限id获取权限已经具有的菜单之外的其他菜单
-     *
-     * @param id
-     * @return
-     */
-    List<SysMenu> findOtherMenu(String id);
-
-    /**
      * 逻辑删除原权限菜单数据
      *
      * @param permissionId
@@ -51,4 +44,12 @@ public interface SysPermissionMenuMapper {
      * @param tbSysPermissionMenuList
      */
     void addMenuToPermission(List<TbSysPermissionMenu> tbSysPermissionMenuList);
+
+    /**
+     * 条件分页查询未拥有的菜单信息
+     *
+     * @param sysPermissionMenuPage
+     * @return
+     */
+    List<SysMenu> findMenuByPermissionPage(SysPermissionMenuPage sysPermissionMenuPage);
 }

@@ -1,6 +1,7 @@
 package com.jn.system.vo;
 
 import com.jn.system.entity.TbSysGroup;
+import com.jn.system.model.SysGroup;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,40 +20,39 @@ import java.util.List;
 public class SysUserGroupVO implements Serializable {
     private static final long serialVersionUID = -5046372835306323599L;
     @ApiModelProperty("用户具有的用户组")
-    private List<TbSysGroup> sysGroupOfUser;
+    private List<SysGroup> sysGroupOfUserList;
     @ApiModelProperty("所有的用户组")
-    private List<TbSysGroup> sysGroupAll;
+    private List<SysGroup> otherGroupList;
 
     public SysUserGroupVO() {
     }
 
-    public SysUserGroupVO(List<TbSysGroup> sysGroupOfUser, List<TbSysGroup> sysGroupAll) {
-        this.sysGroupOfUser = sysGroupOfUser;
-        this.sysGroupAll = sysGroupAll;
+    public SysUserGroupVO(List<SysGroup> sysGroupOfUserList, List<SysGroup> otherGroupList) {
+        this.sysGroupOfUserList = sysGroupOfUserList;
+        this.otherGroupList = otherGroupList;
     }
 
-    public List<TbSysGroup> getSysGroupOfUser() {
-        return sysGroupOfUser;
+    public List<SysGroup> getSysGroupOfUserList() {
+        return sysGroupOfUserList;
     }
 
-    public void setSysGroupOfUser(List<TbSysGroup> sysGroupOfUser) {
-        this.sysGroupOfUser = sysGroupOfUser;
+    public void setSysGroupOfUserList(List<SysGroup> sysGroupOfUserList) {
+        this.sysGroupOfUserList = sysGroupOfUserList;
     }
 
-    public List<TbSysGroup> getSysGroupAll() {
-        return sysGroupAll;
+    public List<SysGroup> getOtherGroupList() {
+        return otherGroupList;
     }
 
-    public void setSysGroupAll(List<TbSysGroup> sysGroupAll) {
-        this.sysGroupAll = sysGroupAll;
+    public void setOtherGroupList(List<SysGroup> otherGroupList) {
+        this.otherGroupList = otherGroupList;
     }
-
 
     @Override
     public String toString() {
         return "SysUserGroupVO{" +
-                "sysGroupOfUser=" + sysGroupOfUser +
-                ", sysGroupAll=" + sysGroupAll +
+                "sysGroupOfUserList=" + sysGroupOfUserList +
+                ", otherGroupList=" + otherGroupList +
                 '}';
     }
 }

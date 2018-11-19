@@ -24,7 +24,6 @@ public class SysGroupPage extends Page implements Serializable {
     private String groupName;
 
     @ApiModelProperty("创建状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
 

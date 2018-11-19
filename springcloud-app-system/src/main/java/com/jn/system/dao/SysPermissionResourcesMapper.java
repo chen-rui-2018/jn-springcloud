@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysPermissionResources;
+import com.jn.system.model.SysPermissionResourcePage;
 import com.jn.system.model.SysResources;
 
 import java.util.List;
@@ -30,14 +31,6 @@ public interface SysPermissionResourcesMapper {
     List<SysResources> findResourcesOfPermission(String id);
 
     /**
-     * 根据权限id获取权限已经具有的页面功能之外的页面功能
-     *
-     * @param permissionId
-     * @return
-     */
-    List<SysResources> findOtherResources(String permissionId);
-
-    /**
      * 逻辑删除原有权限页面功能数据
      *
      * @param permissionId
@@ -46,7 +39,16 @@ public interface SysPermissionResourcesMapper {
 
     /**
      * 添加新权限页面功能数据
+     *
      * @param tbSysPermissionResourcesList
      */
     void addResourceToPermission(List<TbSysPermissionResources> tbSysPermissionResourcesList);
+
+    /**
+     * 条件分页获取未拥有的功能信息
+     *
+     * @param sysPermissionResourcePage
+     * @return
+     */
+    List<SysResources> findResourceByPermissionPage(SysPermissionResourcePage sysPermissionResourcePage);
 }

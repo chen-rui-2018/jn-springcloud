@@ -1,9 +1,6 @@
 package com.jn.system.dao;
 
-import com.jn.system.model.SysGroup;
-import com.jn.system.model.SysGroupRole;
-import com.jn.system.model.SysRole;
-import com.jn.system.model.SysRoleUserGroupPage;
+import com.jn.system.model.*;
 
 import java.util.List;
 
@@ -66,4 +63,12 @@ public interface SysGroupRoleMapper {
      * @return
      */
     List<SysGroup> findOtherUserGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
+
+    /**
+     * 条件分页查询用户组为拥有的角色信息
+     *
+     * @param sysGroupRolePage
+     * @return
+     */
+    List<SysRole> findRoleByGroupPage(SysGroupRolePage sysGroupRolePage);
 }

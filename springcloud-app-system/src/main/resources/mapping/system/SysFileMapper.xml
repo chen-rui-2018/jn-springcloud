@@ -10,18 +10,16 @@
     <result column="user_status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <resultMap id="queryForListResultMap" type="com.jn.system.vo.SysFileVO">
-    <id column="f_fileId" jdbcType="VARCHAR" property="fileId"/>
+    <id column="f_id" jdbcType="VARCHAR" property="fileId"/>
     <result column="f_fileName" jdbcType="VARCHAR" property="fileName" javaType="java.lang.String"/>
     <result column="f_fileUrl" jdbcType="VARCHAR" property="fileUrl" javaType="java.lang.String"/>
     <result column="f_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
     <result column="f_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
     <collection property="fileGroupList" javaType="java.util.List" ofType="com.jn.system.model.SysFileGroup">
       <id column="fg_id" property="id" jdbcType="VARCHAR"/>
-      <result column="rp_roleId" property="roleId" jdbcType="VARCHAR"/>
-      <result column="rp_permissionId" property="permissionId" jdbcType="VARCHAR"/>
-      <result column="p_permissionName" property="permissionName" jdbcType="VARCHAR"/>
-      <result column="rp_createTime" property="createTime" jdbcType="TIMESTAMP"/>
-      <result column="rp_status" property="status" jdbcType="VARCHAR"/>
+      <result column="fg_fileGroupName" property="fileGroupName" jdbcType="VARCHAR"/>
+      <result column="fg_createTime" property="createTime" jdbcType="VARCHAR"/>
+      <result column="fg_status" property="status" jdbcType="VARCHAR"/>
     </collection>
 
   </resultMap>
@@ -53,15 +51,36 @@
           where 1=1
           and f.status !=-1
           <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
-            f.file_name=#{fileName,jdbcType=VARCHAR},
+            and f.file_name=#{fileName,jdbcType=VARCHAR},
           </if>
           <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            f.status=#{status,jdbcType=VARCHAR},
+            and f.status=#{status,jdbcType=VARCHAR},
           </if>
           <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
             and f.id=#{id,jdbcType=VARCHAR}
           </if>
           ORDER BY f.create_time desc
   </select>
+
+    <select id="findFileByPage" parameterType="com.jn.system.model.SysFilePage" resultType="com.jn.system.vo.SysFileVO">
+            SELECT
+            id as fileId,
+            file_name as fileName,
+            create_time as createTime,
+            creator,
+            file_url as fileUrl,
+            status
+            FROM `tb_sys_file`
+            where `status` != '-1'
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
+                and file_name like CONCAT('%', #{fileName,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                and status=#{status,jdbcType=VARCHAR}
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+                and id=#{id,jdbcType=VARCHAR}
+            </if>
+    </select>
 
 </mapper>

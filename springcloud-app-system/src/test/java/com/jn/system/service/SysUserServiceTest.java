@@ -2,10 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
-import com.jn.system.model.SysDepartmentPost;
-import com.jn.system.model.SysUser;
-import com.jn.system.model.SysUserDepartmentPostAdd;
-import com.jn.system.model.SysUserPage;
+import com.jn.system.model.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -66,7 +63,10 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysGroupByUserIdTest() {
-        Result result = sysUserService.findSysGroupByUserId("10002");
+        SysUserGroupPage sysUserGroupPage = new SysUserGroupPage();
+        sysUserGroupPage.setPage(1);
+        sysUserGroupPage.setRows(10);
+        Result result = sysUserService.findSysGroupByUserId(sysUserGroupPage);
         logger.info("测试结果:" + result.getData().toString());
     }
 
@@ -78,7 +78,10 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysRoleByUserIdTest() {
-        Result result = sysUserService.findSysRoleByUserId("10000");
+        SysUserRolePage sysUserRolePage = new SysUserRolePage();
+        sysUserRolePage.setPage(1);
+        sysUserRolePage.setRows(10);
+        Result result = sysUserService.findSysRoleByUserId(sysUserRolePage);
         logger.info("测试结果:" + result.getData().toString());
     }
 

@@ -62,7 +62,10 @@ public class SysGroupServiceTest {
 
     @Test
     public void selectGroupRoleAndOtherRoleTest(){
-        Result result = sysGroupService.selectGroupRoleAndOtherRole("g002");
+        SysGroupRolePage sysGroupRolePage = new SysGroupRolePage();
+        sysGroupRolePage.setPage(1);
+        sysGroupRolePage.setRows(10);
+        Result result = sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
         logger.info("测试结果:"+result.getData().toString());
     }
 

@@ -10,7 +10,7 @@
     </update>
 
     <select id="findMenuOfPermission" parameterType="java.lang.String" resultType="com.jn.system.model.SysMenu">
-        select
+        select distinct
         t2.id,
         t2.menu_name as menuName,
         t2.menu_url as menuUrl,
@@ -23,25 +23,6 @@
         from tb_sys_permission_menu t1 , tb_sys_menu t2
         where t1.menu_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
         and t1.permission_id = #{id,jdbcType=VARCHAR}
-    </select>
-
-    <select id="findOtherMenu" parameterType="java.lang.String" resultType="com.jn.system.model.SysMenu">
-        select
-            id,
-            menu_name as menuName,
-            menu_url as menuUrl,
-            parent_id as parentId,
-            is_dir as isDir,
-            sort,
-            creator,
-            create_time as createTime,
-            `status`
-        from tb_sys_menu where id not in
-            (select t2.id
-            from tb_sys_permission_menu t1 , tb_sys_menu t2
-            where t1.menu_id = t2.id and t1.`status` = '1'
-            and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR})
-            and `status` = '1'
     </select>
 
     <update id="deleteByPermissionId" parameterType="java.lang.String">
@@ -59,5 +40,21 @@
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>
+
+    <select id="findMenuByPermissionPage" parameterType="com.jn.system.model.SysPermissionMenuPage"
+            resultType="com.jn.system.model.SysMenu">
+        select DISTINCT
+        t.id,
+        t.menu_name as menuName
+        from tb_sys_menu t left join
+        (select t1.id from tb_sys_menu t1,tb_sys_permission_menu t2
+        where t1.id = t2.menu_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id
+        where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(menuName)">
+            and t.menu_name like CONCAT('%', #{menuName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
 
 </mapper>

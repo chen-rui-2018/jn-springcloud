@@ -32,7 +32,6 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/addSysUser")
     public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
         return  sysUserService.addSysUser(sysUser);
-
     }
 
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
@@ -66,10 +65,11 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
-    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及所有用户组", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有的用户组",
+            httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
-    public Result findSysGroupByUserId(String id) {
-        return sysUserService.findSysGroupByUserId(id);
+    public Result findSysGroupByUserId(@Validated @RequestBody SysUserGroupPage sysUserGroupPage) {
+        return sysUserService.findSysGroupByUserId(sysUserGroupPage);
     }
 
     @RequiresPermissions("/system/sysUser/saveSysGroupToSysUser")
@@ -82,10 +82,11 @@ public class SysUserController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
-    @ApiOperation(value = "根据用户id获取用户具有角色及所有角色信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据用户id获取用户具有角色及条件分页获取用户未拥有角色信息",
+            httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
-    public Result findSysRoleByUserId(String id) {
-        return sysUserService.findSysRoleByUserId(id);
+    public Result findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {
+        return sysUserService.findSysRoleByUserId(sysUserRolePage);
     }
 
     @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")

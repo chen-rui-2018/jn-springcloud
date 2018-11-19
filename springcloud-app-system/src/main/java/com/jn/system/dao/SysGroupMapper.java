@@ -1,6 +1,7 @@
 package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysGroup;
+import com.jn.system.model.SysGroup;
 import com.jn.system.model.SysGroupPage;
 import com.jn.system.vo.SysGroupUserRoleVO;
 import com.jn.system.vo.SysGroupVO;
@@ -28,7 +29,7 @@ public interface SysGroupMapper  {
      * @param id
      * @return
      */
-    List<TbSysGroup> findSysGroupByUserId(String id);
+    List<SysGroup> findSysGroupByUserId(String id);
 
     /**
      * 增加用户组

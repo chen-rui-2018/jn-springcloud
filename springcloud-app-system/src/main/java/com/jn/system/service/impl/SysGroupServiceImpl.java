@@ -85,6 +85,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
         TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
         criteria.andGroupNameEqualTo(sysGroup.getGroupName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
         if (tbSysGroups != null && tbSysGroups.size() > 0 ){
             return new Result("用户组名已存在");
@@ -141,22 +142,22 @@ public class SysGroupServiceImpl implements SysGroupService {
     }
 
     /**
-     * 根据用户组id获取用户组信息及用户组具有的角色信息并返回其他所有角色信息
+     * 根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息
      *
-     * @param id 用户组id
+     * @param sysGroupRolePage
      * @return
      */
     @Override
-    public Result selectGroupRoleAndOtherRole(String id) {
-        SysGroupRoleVO sysGroupRoleVO = new SysGroupRoleVO();
+    public Result selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
-        List<SysRole> roleAllOfGroup = sysGroupRoleMapper.findRoleByGroupId(id);
-        //获取所有用户组信息
-        List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        //返回用户组已具有角色信息及其他所有角色信息
-        sysGroupRoleVO.setRoleAllOfGroup(roleAllOfGroup);
-        sysGroupRoleVO.setSysRoleAll(sysRoleAll);
-        return new Result(sysGroupRoleVO);
+        List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
+        //条件分页查询用户组为拥有的角色信息
+        Page<Object> objects = PageHelper.startPage(sysGroupRolePage.getPage(), sysGroupRolePage.getRows());
+        List<SysRole> otherRoleList = sysGroupRoleMapper.findRoleByGroupPage(sysGroupRolePage);
+        otherRoleList.addAll(roleOfGroupList);
+        SysGroupRoleVO sysGroupRoleVO = new SysGroupRoleVO(roleOfGroupList,otherRoleList);
+        PaginationData data = new PaginationData(sysGroupRoleVO,objects.getTotal());
+        return new Result(data);
     }
 
     /**
@@ -269,6 +270,7 @@ public class SysGroupServiceImpl implements SysGroupService {
             TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
             TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
             criteria.andGroupNameEqualTo(groupName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
             if (tbSysGroups != null && tbSysGroups.size() > 0){
                 return new Result("false");

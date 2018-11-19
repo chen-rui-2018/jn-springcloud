@@ -1,6 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysFileGroup;
 import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFileAdd;
@@ -64,6 +65,7 @@ public interface SysFileGroupService {
 
     /**
      * 根据用户获取文件组
+     *
      * @param userId 用户ID
      * @return
      */
@@ -71,9 +73,18 @@ public interface SysFileGroupService {
 
     /**
      * 获取用户是否拥有该文件的下载权限
+     *
      * @param userId
      * @param fileUrl
      * @return
      */
     Boolean getUserFilePermission(String userId, String fileUrl);
+
+    /**
+     * 校验文件组是否存在
+     *
+     * @param fileGroupName
+     * @return
+     */
+    Result checkFileGroupName(String fileGroupName);
 }

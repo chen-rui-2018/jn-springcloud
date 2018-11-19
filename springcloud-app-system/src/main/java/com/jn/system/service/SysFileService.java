@@ -1,6 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.model.SysFile;
 import com.jn.system.model.SysFileAddFileGroup;
 import com.jn.system.model.SysFilePage;
@@ -57,4 +58,12 @@ public interface SysFileService {
      * @param sysFileAddFileGroup
      */
     void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup);
+
+    /**
+     * 校验文件名称
+     *
+     * @param fileName
+     * @return
+     */
+    Result checkFileName(String fileName);
 }

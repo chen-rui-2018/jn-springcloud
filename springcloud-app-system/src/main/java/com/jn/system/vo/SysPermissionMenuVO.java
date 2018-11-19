@@ -22,14 +22,14 @@ public class SysPermissionMenuVO implements Serializable {
     @ApiModelProperty("权限已经具有的菜单信息")
     private List<SysMenu> sysMenuOfPermissionList;
     @ApiModelProperty("所有菜单信息")
-    private List<TbSysMenu> sysMenuAll;
+    private List<SysMenu> otherMenuList;
 
     public SysPermissionMenuVO() {
     }
 
-    public SysPermissionMenuVO(List<SysMenu> sysMenuOfPermissionList, List<TbSysMenu> sysMenuAll) {
+    public SysPermissionMenuVO(List<SysMenu> sysMenuOfPermissionList, List<SysMenu> otherMenuList) {
         this.sysMenuOfPermissionList = sysMenuOfPermissionList;
-        this.sysMenuAll = sysMenuAll;
+        this.otherMenuList = otherMenuList;
     }
 
     public List<SysMenu> getSysMenuOfPermissionList() {
@@ -40,19 +40,19 @@ public class SysPermissionMenuVO implements Serializable {
         this.sysMenuOfPermissionList = sysMenuOfPermissionList;
     }
 
-    public List<TbSysMenu> getSysMenuAll() {
-        return sysMenuAll;
+    public List<SysMenu> getOtherMenuList() {
+        return otherMenuList;
     }
 
-    public void setSysMenuAll(List<TbSysMenu> sysMenuAll) {
-        this.sysMenuAll = sysMenuAll;
+    public void setOtherMenuList(List<SysMenu> otherMenuList) {
+        this.otherMenuList = otherMenuList;
     }
 
     @Override
     public String toString() {
         return "SysPermissionMenuVO{" +
                 "sysMenuOfPermissionList=" + sysMenuOfPermissionList +
-                ", sysMenuAll=" + sysMenuAll +
+                ", otherMenuList=" + otherMenuList +
                 '}';
     }
 }

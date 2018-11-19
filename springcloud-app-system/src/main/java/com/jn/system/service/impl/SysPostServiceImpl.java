@@ -75,6 +75,7 @@ public class SysPostServiceImpl implements SysPostService {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(sysPostAdd.getPostName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
             return "添加失败,岗位名称已存在";
@@ -157,6 +158,7 @@ public class SysPostServiceImpl implements SysPostService {
             TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
             TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
             criteria.andPostNameEqualTo(postName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
             if (tbSysPosts != null && tbSysPosts.size() > 0){
                 return new Result("false");

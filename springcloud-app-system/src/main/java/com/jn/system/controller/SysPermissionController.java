@@ -86,27 +86,18 @@ public class SysPermissionController extends BaseController {
 
 
     @RequiresPermissions("/system/sysPermission/findRoleOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的角色及所有角色信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findRoleOfPermission")
-    public Result findRoleOfPermission(String id) {
-        return sysPermissionService.findRoleOfPermission(id);
+    public Result findRoleOfPermission(@Validated @RequestBody SysPermissionRolePage sysPermissionRolePage) {
+        return sysPermissionService.findRoleOfPermission(sysPermissionRolePage);
     }
 
 
     @RequiresPermissions("/system/sysPermission/findFileGroupOfPermission")
-    @ApiOperation(value = "根据权限id获取除权限已经具有的文件组信息及所有文件组信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findFileGroupOfPermission")
-    public Result findFileGroupOfPermission(String id) {
-        return sysPermissionService.findFileGroupOfPermission(id);
-    }
-
-
-    @RequiresPermissions("/system/sysPermission/findOtherFileGroups")
-    @ApiOperation(value = "根据权限id获取除权限已经具有的文件组之外的文件组信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findOtherFileGroups")
-    public Result findOtherFileGroups(String id) {
-        Assert.notNull(id, "权限id不能为空");
-        return sysPermissionService.findOtherFileGroups(id);
+    public Result findFileGroupOfPermission(@Validated @RequestBody SysPermissionFileGroupPage sysPermissionFileGroupPage) {
+        return sysPermissionService.findFileGroupOfPermission(sysPermissionFileGroupPage);
     }
 
 
@@ -121,44 +112,39 @@ public class SysPermissionController extends BaseController {
 
 
     @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的菜单及所有菜单信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息",
+            httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findMenuOfPermission")
-    public Result findMenuOfPermission(String id) {
-        return sysPermissionService.findMenuOfPermission(id);
-    }
-
-
-    @RequiresPermissions("/system/sysPermission/findOtherMenu")
-    @ApiOperation(value = "根据权限id获取权限已经具有的菜单之外的菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findOtherMenu")
-    public Result findOtherMenu(String permissionId) {
-        return sysPermissionService.findOtherMenu(permissionId);
+    public Result findMenuOfPermission(@Validated @RequestBody SysPermissionMenuPage sysPermissionMenuPage) {
+        return sysPermissionService.findMenuOfPermission(sysPermissionMenuPage);
     }
 
 
     @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
-    @ApiOperation(value = "根据权限id获取权限已经具有的功能信息及所有功能信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findResourcesOfPermission")
-    public Result findResourcesOfPermission(String permissionId) {
-        return sysPermissionService.findResourcesOfPermission(permissionId);
+    public Result findResourcesOfPermission(@Validated @RequestBody SysPermissionResourcePage sysPermissionResourcePage) {
+        return sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);
     }
 
 
-    @RequiresPermissions("/system/sysPermission/findOtherResources")
-    @ApiOperation(value = "根据权限id获取权限已经具有的页面功能之外的页面功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findOtherResources")
-    public Result findOtherResources(String permissionId) {
-        return sysPermissionService.findOtherResources(permissionId);
-    }
-
-    @RequiresPermissions("/system/sysPermission/MenuAndResourceToPermission")
-    @ApiOperation(value = "为权限添加菜单及页面功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/addMenuAndResourceToPermission")
-    public Result addMenuAndResourceToPermission(@Validated @RequestBody SysPermissionMenuRecourcesAdd sysPermissionMenuRecourcesAdd) {
-        Assert.notNull(sysPermissionMenuRecourcesAdd.getPermissionId(), "权限id不能为空");
-        sysPermissionService.addMenuAndResourceToPermission(sysPermissionMenuRecourcesAdd);
+    @RequiresPermissions("/system/sysPermission/addMenuToPermission")
+    @ApiOperation(value = "为权限添加菜单", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/addMenuToPermission")
+    public Result addMenuToPermission(@Validated @RequestBody SysPermissionMenuAdd sysPermissionMenuAdd) {
+        sysPermissionService.addMenuToPermission(sysPermissionMenuAdd);
         return new Result();
     }
+
+
+    @RequiresPermissions("/system/sysPermission/addResounceToPermission")
+    @ApiOperation(value = "为权限添加页面功能", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/addResounceToPermission")
+    public Result addResounceToPermission(@Validated @RequestBody SysPermissionResourceAdd sysPermissionMenuAdd) {
+        sysPermissionService.addResounceToPermission(sysPermissionMenuAdd);
+        return new Result();
+    }
+
 
     @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @ApiOperation(value = "校验权限名称是否已经存在,false权限名称已经存在,success权限名称可以使用",

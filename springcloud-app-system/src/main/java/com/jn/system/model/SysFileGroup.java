@@ -32,6 +32,12 @@ public class SysFileGroup implements Serializable {
     private String fileGroupName;
 
     /**
+     * 文件组名称
+     */
+    @ApiModelProperty(value = "文件组描述" )
+    private String fileGroupDescribe;
+
+    /**
      * 创建人
      */
     @ApiModelProperty(value = "创建人" )
@@ -51,14 +57,25 @@ public class SysFileGroup implements Serializable {
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status=SysStatusEnums.EFFECTIVE.getKey();
 
+    public SysFileGroup() {
+    }
 
+    public SysFileGroup(String id, String fileGroupName, String fileGroupDescribe, String creator,
+                        Date createTime, String status) {
+        this.id = id;
+        this.fileGroupName = fileGroupName;
+        this.fileGroupDescribe = fileGroupDescribe;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getFileGroupName() {
@@ -66,7 +83,15 @@ public class SysFileGroup implements Serializable {
     }
 
     public void setFileGroupName(String fileGroupName) {
-        this.fileGroupName = fileGroupName == null ? null : fileGroupName.trim();
+        this.fileGroupName = fileGroupName;
+    }
+
+    public String getFileGroupDescribe() {
+        return fileGroupDescribe;
+    }
+
+    public void setFileGroupDescribe(String fileGroupDescribe) {
+        this.fileGroupDescribe = fileGroupDescribe;
     }
 
     public String getCreator() {
@@ -74,7 +99,7 @@ public class SysFileGroup implements Serializable {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public Date getCreateTime() {
@@ -90,53 +115,18 @@ public class SysFileGroup implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        SysFileGroup other = (SysFileGroup) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getFileGroupName() == null ? other.getFileGroupName() == null : this.getFileGroupName().equals(other.getFileGroupName()))
-            && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getFileGroupName() == null) ? 0 : getFileGroupName().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        return result;
+        this.status = status;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", fileGroupName=").append(fileGroupName);
-        sb.append(", creator=").append(creator);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SysFileGroup{" +
+                "id='" + id + '\'' +
+                ", fileGroupName='" + fileGroupName + '\'' +
+                ", fileGroupDescribe='" + fileGroupDescribe + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

@@ -2,6 +2,7 @@ package com.jn.system.dao;
 
 import com.jn.system.entity.TbSysPermissionFiles;
 import com.jn.system.model.SysFileGroup;
+import com.jn.system.model.SysPermissionFileGroupPage;
 
 import java.util.List;
 
@@ -29,23 +30,26 @@ public interface SysPermissionFilesMapper {
      */
     List<SysFileGroup> findFileGroupOfPermission(String id);
 
-    /**
-     * 根据权限id获取除权限已经具有的文件组之外的文件组信息
-     *
-     * @param id
-     * @return
-     */
-    List<SysFileGroup> findOtherFileGroups(String id);
 
     /**
      * 根据权限id逻辑删除原有权限对应文件组
+     *
      * @param permissionId
      */
     void deleteByPermissionId(String permissionId);
 
     /**
      * 为权限添加新的文件组
+     *
      * @param list
      */
     void addFileGroupToPermission(List<TbSysPermissionFiles> list);
+
+    /**
+     * 条件分页获取未拥有的文件组信息
+     *
+     * @param sysPermissionFileGroupPage
+     * @return
+     */
+    List<SysFileGroup> findFileGroupByPermissionPage(SysPermissionFileGroupPage sysPermissionFileGroupPage);
 }

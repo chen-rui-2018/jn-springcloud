@@ -183,6 +183,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
             TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
             criteria.andDepartmentNameEqualTo(departmentName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
             if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
                 return new Result("false");

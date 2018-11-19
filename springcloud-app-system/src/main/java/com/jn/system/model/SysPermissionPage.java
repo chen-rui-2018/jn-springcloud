@@ -20,7 +20,6 @@ public class SysPermissionPage extends Page implements Serializable {
     @ApiModelProperty("权限名称")
     private String permissionName;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
     public SysPermissionPage() {

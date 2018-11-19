@@ -34,7 +34,7 @@ public class SysFileController extends BaseController {
     @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysFile/list")
-    public Result list(@RequestBody SysFilePage sysFilePage) {
+    public Result list(@Validated @RequestBody SysFilePage sysFilePage) {
         PaginationData data = sysFileService.selectSysFileListBySearchKey(sysFilePage);
         return new Result(data);
     }
@@ -81,6 +81,13 @@ public class SysFileController extends BaseController {
         Assert.notNull(sysFileAddFileGroup.getFileId(), "文件ID不能为空");
         sysFileService.sysFileAddFileGroup(sysFileAddFileGroup);
         return new Result();
+    }
+
+    @ApiOperation(value = "校验文件名称", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/checkFileName")
+    @RequiresPermissions("/system/sysFile/checkFileName")
+    public Result checkFileName(String fileName){
+        return sysFileService.checkFileName(fileName);
     }
 
 

@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.SysPermissionAdd;
+import com.jn.system.model.SysPermissionResourcePage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -32,12 +33,6 @@ public class SysPermissionServiceTest {
         sysPermissionAdd.setPermissionName("测试权限1");
         sysPermissionAdd.setStatus("1");
         sysPermissionService.addPermission(sysPermissionAdd);
-    }
-
-    @Test
-    public void findOtherMenuTest(){
-        Result result = sysPermissionService.findOtherMenu("10005");
-        logger.info("message{}",result);
     }
 
 }

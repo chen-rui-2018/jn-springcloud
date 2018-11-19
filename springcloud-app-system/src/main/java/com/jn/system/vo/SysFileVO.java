@@ -57,15 +57,22 @@ public class SysFileVO implements Serializable {
     /**
      * 文件所属文件组
      */
-    private List<SysFileGroup> fileGroupList;
+    private List<String> fileGroupNameList;
 
 
-    public String getStatusDesc() {
-        return EnumUtil.getByKey(status, SysStatusEnums.class).getValue();
+    public SysFileVO() {
     }
 
-    public void setStatusDesc(String statusDesc) {
+    public SysFileVO(String fileId, String fileName, String fileUrl, String creator, Date createTime,
+                     String status, String statusDesc, List<String> fileGroupNameList) {
+        this.fileId = fileId;
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
         this.statusDesc = statusDesc;
+        this.fileGroupNameList = fileGroupNameList;
     }
 
     public String getFileId() {
@@ -81,7 +88,7 @@ public class SysFileVO implements Serializable {
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName == null ? null : fileName.trim();
+        this.fileName = fileName;
     }
 
     public String getFileUrl() {
@@ -89,7 +96,7 @@ public class SysFileVO implements Serializable {
     }
 
     public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+        this.fileUrl = fileUrl;
     }
 
     public String getCreator() {
@@ -97,7 +104,7 @@ public class SysFileVO implements Serializable {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+        this.creator = creator;
     }
 
     public Date getCreateTime() {
@@ -113,14 +120,36 @@ public class SysFileVO implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
     }
 
-    public List<SysFileGroup> getFileGroupList() {
-        return fileGroupList;
+    public String getStatusDesc() {
+        return statusDesc;
     }
 
-    public void setFileGroupList(List<SysFileGroup> fileGroupList) {
-        this.fileGroupList = fileGroupList;
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
+    }
+
+    @Override
+    public String toString() {
+        return "SysFileVO{" +
+                "fileId='" + fileId + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", fileUrl='" + fileUrl + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", statusDesc='" + statusDesc + '\'' +
+                ", fileGroupNameList=" + fileGroupNameList +
+                '}';
+    }
+
+    public List<String> getFileGroupNameList() {
+        return fileGroupNameList;
+    }
+
+    public void setFileGroupNameList(List<String> fileGroupNameList) {
+        this.fileGroupNameList = fileGroupNameList;
     }
 }

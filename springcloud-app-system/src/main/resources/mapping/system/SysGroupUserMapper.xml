@@ -81,4 +81,22 @@
 			#{id}
 		</foreach>
 	</update>
+
+	<select id="findGroupByPage" parameterType="com.jn.system.model.SysUserGroupPage"
+			resultType="com.jn.system.model.SysGroup">
+		select DISTINCT
+		t.id as groupId,
+		t.group_name as groupName,
+		t.create_time as createTime,
+		t.`status`
+		from tb_sys_group t left join
+		(SELECT t1.id,t1.group_name FROM tb_sys_group t1 , tb_sys_user_group t2
+		where t1.id = t2.group_id and t1.`status` = '1'
+		and t2.`status` = '1' and t2.user_id = #{userId,jdbcType=VARCHAR}) tt
+		on t.id = tt.id
+		where tt.id is null and t.`status` = '1'
+		<if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupName)">
+			and t.group_name like CONCAT('%', #{userGroupName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
 </mapper>

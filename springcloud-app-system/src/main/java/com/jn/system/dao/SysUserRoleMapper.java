@@ -1,9 +1,7 @@
 package com.jn.system.dao;
 
 
-import com.jn.system.model.SysRoleUserPage;
-import com.jn.system.model.SysTUser;
-import com.jn.system.model.SysUserRole;
+import com.jn.system.model.*;
 
 import java.util.List;
 
@@ -69,4 +67,12 @@ public interface SysUserRoleMapper {
      * @return
      */
     List<SysTUser> findOtherUser(SysRoleUserPage sysRoleUserPage);
+
+    /**
+     * 条件分页获取用户未拥有的角色信息
+     *
+     * @param sysUserRolePage
+     * @return
+     */
+    List<SysRole> findRoleByUserPage(SysUserRolePage sysUserRolePage);
 }

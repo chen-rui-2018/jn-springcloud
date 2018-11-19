@@ -57,4 +57,11 @@ public interface SysFileGroupFileMapper {
      * @return
      */
     List<String> getUserFilePermission(String userId, String fileUrl);
+
+    /**
+     * 根据文件id获取对应文件组名称
+     * @param fileId
+     * @return
+     */
+    List<String> findFileGroupNameByFileId(String fileId);
 }

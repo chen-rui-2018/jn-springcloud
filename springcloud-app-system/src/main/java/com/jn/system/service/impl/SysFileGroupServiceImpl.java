@@ -3,6 +3,7 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.dao.SysFileGroupFileMapper;
 import com.jn.system.dao.SysFileGroupMapper;
@@ -51,12 +52,20 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSysFileGroup(SysFileGroup sysFileGroup) {
+        //名称校验
+        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
+        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
+        criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+        if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+            throw new RuntimeException("添加失败,文件组名已存在");
+        }
         sysFileGroup.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysFileGroup.setCreator(user.getId());
         sysFileGroup.setCreateTime(new Date());
-
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.insert(tbSysFileGroup);
@@ -186,10 +195,31 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
     @Override
     public Boolean getUserFilePermission(String userId, String fileUrl) {
-        List<String> userFilePermissionList = sysFileGroupFileMapper.getUserFilePermission(userId,fileUrl);
-        if(userFilePermissionList.size() >0){
+        List<String> userFilePermissionList = sysFileGroupFileMapper.getUserFilePermission(userId, fileUrl);
+        if (userFilePermissionList.size() > 0) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 校验文件组是否存在
+     *
+     * @param fileGroupName
+     * @return
+     */
+    @Override
+    public Result checkFileGroupName(String fileGroupName) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)){
+            TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
+            TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
+            criteria.andFileGroupNameEqualTo(fileGroupName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+            if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+                return new Result("false");
+            }
+        }
+        return new Result("success");
     }
 }

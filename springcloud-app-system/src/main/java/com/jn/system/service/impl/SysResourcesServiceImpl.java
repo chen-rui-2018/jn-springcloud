@@ -3,15 +3,19 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.dao.SysResourcesMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
+import com.jn.system.entity.TbSysResourcesCriteria;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 import com.jn.system.model.User;
 import com.jn.system.service.SysResourcesService;
+import com.jn.system.vo.SysResourcesVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +56,15 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertResources(SysResources sysResources) {
+        //添加名称校验
+        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
+        criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+        if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
+            throw new RuntimeException("添加失败,页面功能名称已存在");
+        }
         sysResources.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -60,7 +73,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbSysResourcesMapper.insert(tbSysResources);
-        logger.info("新增功能,resourcesName={},resourcesId={}",sysResources.getResourcesName(),sysResources.getId());
+        logger.info("新增功能,resourcesName={},resourcesId={}", sysResources.getResourcesName(), sysResources.getId());
     }
 
     /**
@@ -100,7 +113,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
-        return new PaginationData(sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage)
+        List<SysResourcesVO> sysResourcesVOList = sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage);
+        for (SysResourcesVO sysResourcesVO:sysResourcesVOList) {
+            List<String> menuNameList = sysResourcesMapper.findMenuNameByResourcesId(sysResourcesVO.getResourcesId());
+            sysResourcesVO.setMenuName(menuNameList);
+        }
+        return new PaginationData(sysResourcesVOList
                 , objects.getTotal());
     }
 
@@ -124,5 +142,26 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     public List<MenuResources> getMenuResourcesUrlById(String id) {
         return sysResourcesMapper.getMenuResourcesUrlById(id);
+    }
+
+    /**
+     * 校验页面功能名称是否存在
+     *
+     * @param resourceName
+     * @return
+     */
+    @Override
+    public Result checkResourceName(String resourceName) {
+        if (StringUtils.isNotBlank(resourceName)){
+            TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+            TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
+            criteria.andResourcesNameEqualTo(resourceName);
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+            if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
+                return new Result("flase");
+            }
+        }
+        return new Result("success");
     }
 }

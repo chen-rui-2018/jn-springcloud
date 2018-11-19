@@ -10,7 +10,7 @@
     </update>
 
     <select id="findFileGroupOfPermission" parameterType="java.lang.String" resultType="com.jn.system.model.SysFileGroup">
-        select
+        select distinct
             t2.id,
             t2.file_group_name as fileGroupName,
             t2.create_time as createTime,
@@ -21,21 +21,6 @@
         and t1.permission_id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="findOtherFileGroups" parameterType="java.lang.String" resultType="com.jn.system.model.SysFileGroup">
-        select
-            id,
-            file_group_name as fileGroupName,
-            create_time as createTime,
-            creator,
-            `status`
-        from tb_sys_file_group where id not in
-            (select
-                    t2.id
-            from tb_sys_permission_files t1 , tb_sys_file_group t2
-            where t1.file_group_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
-            and t1.permission_id = #{id,jdbcType=VARCHAR})
-        and `status` = '1'
-    </select>
 
     <update id="deleteByPermissionId" parameterType="java.lang.String">
         update tb_sys_permission_files set `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
@@ -52,4 +37,25 @@
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>
+
+    <select id="findFileGroupByPermissionPage" parameterType="com.jn.system.model.SysPermissionFileGroupPage"
+            resultType="com.jn.system.model.SysFileGroup">
+        SELECT DISTINCT
+        t.id,
+        t.file_group_name as fileGroupName,
+        t.file_group_describe as fileGroupDescribe,
+        t.create_time as createTime,
+        t.creator,
+        t.`status`
+        from tb_sys_file_group t left join
+        (select DISTINCT
+        t1.id,t1.file_group_name
+        from tb_sys_file_group t1,tb_sys_permission_files t2
+        where t1.id = t2.file_group_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileGroupName)">
+            and t.file_group_name like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
 </mapper>

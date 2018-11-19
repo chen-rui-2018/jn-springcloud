@@ -7,6 +7,7 @@ import com.jn.system.model.SysMenu;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -58,7 +59,23 @@ public class SysResourcesVO implements Serializable {
     /**
      * 菜单
      */
-    private SysMenu sysMenu;
+    private List<String> menuName;
+
+    public SysResourcesVO() {
+    }
+
+    public SysResourcesVO(String resourcesId, String resourcesName, String resourcesUrl, String menuId,
+                          String creator, Date createTime, String status, String statusDesc, List<String> menuName) {
+        this.resourcesId = resourcesId;
+        this.resourcesName = resourcesName;
+        this.resourcesUrl = resourcesUrl;
+        this.menuId = menuId;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+        this.statusDesc = statusDesc;
+        this.menuName = menuName;
+    }
 
     public String getResourcesId() {
         return resourcesId;
@@ -100,7 +117,6 @@ public class SysResourcesVO implements Serializable {
         this.creator = creator;
     }
 
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -118,18 +134,33 @@ public class SysResourcesVO implements Serializable {
     }
 
     public String getStatusDesc() {
-        return EnumUtil.getByKey(status,SysStatusEnums.class).getValue();
+        return statusDesc;
     }
 
     public void setStatusDesc(String statusDesc) {
         this.statusDesc = statusDesc;
     }
 
-    public SysMenu getSysMenu() {
-        return sysMenu;
+    public List<String> getMenuName() {
+        return menuName;
     }
 
-    public void setSysMenu(SysMenu sysMenu) {
-        this.sysMenu = sysMenu;
+    public void setMenuName(List<String> menuName) {
+        this.menuName = menuName;
+    }
+
+    @Override
+    public String toString() {
+        return "SysResourcesVO{" +
+                "resourcesId='" + resourcesId + '\'' +
+                ", resourcesName='" + resourcesName + '\'' +
+                ", resourcesUrl='" + resourcesUrl + '\'' +
+                ", menuId='" + menuId + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", statusDesc='" + statusDesc + '\'' +
+                ", menuName=" + menuName +
+                '}';
     }
 }

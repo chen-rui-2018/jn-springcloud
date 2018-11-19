@@ -18,39 +18,39 @@ import java.util.List;
 public class SysUserRoleVO implements Serializable {
     private static final long serialVersionUID = -6753835711994878991L;
     @ApiModelProperty("用户具有的角色")
-    private List<SysRole> sysRoleOfUser;
+    private List<SysRole> sysRoleOfUserList;
     @ApiModelProperty("所有角色")
-    private List<SysRole> sysRoleAll;
+    private List<SysRole> otherRoleList;
 
     public SysUserRoleVO() {
     }
 
-    public SysUserRoleVO(List<SysRole> sysRoleOfUser, List<SysRole> sysRoleAll) {
-        this.sysRoleOfUser = sysRoleOfUser;
-        this.sysRoleAll = sysRoleAll;
+    public SysUserRoleVO(List<SysRole> sysRoleOfUserList, List<SysRole> otherRoleList) {
+        this.sysRoleOfUserList = sysRoleOfUserList;
+        this.otherRoleList = otherRoleList;
     }
 
-    public List<SysRole> getSysRoleOfUser() {
-        return sysRoleOfUser;
+    public List<SysRole> getSysRoleOfUserList() {
+        return sysRoleOfUserList;
     }
 
-    public void setSysRoleOfUser(List<SysRole> sysRoleOfUser) {
-        this.sysRoleOfUser = sysRoleOfUser;
+    public void setSysRoleOfUserList(List<SysRole> sysRoleOfUserList) {
+        this.sysRoleOfUserList = sysRoleOfUserList;
     }
 
-    public List<SysRole> getSysRoleAll() {
-        return sysRoleAll;
+    public List<SysRole> getOtherRoleList() {
+        return otherRoleList;
     }
 
-    public void setSysRoleAll(List<SysRole> sysRoleAll) {
-        this.sysRoleAll = sysRoleAll;
+    public void setOtherRoleList(List<SysRole> otherRoleList) {
+        this.otherRoleList = otherRoleList;
     }
 
     @Override
     public String toString() {
         return "SysUserRoleVO{" +
-                "sysRoleOfUser=" + sysRoleOfUser +
-                ", sysRoleAll=" + sysRoleAll +
+                "sysRoleOfUserList=" + sysRoleOfUserList +
+                ", otherRoleList=" + otherRoleList +
                 '}';
     }
 }

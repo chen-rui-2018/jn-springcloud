@@ -6,8 +6,8 @@
           <el-input v-model="listQuery.postName" placeholder="请输入名称" style="width: 150px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteRoleStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="item" :label="item" :value="index" />
+          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selectePostStatus">
+            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -51,14 +51,14 @@
           <el-input v-model.trim="postform.postName" max-length="20" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="postform.status" class="filter-item">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="item" />
+          <el-select v-model="postform.status" class="filter-item" >
+            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
-        <el-button @click="postdialogFormVisible = false">取消</el-button>
+        <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -84,13 +84,13 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('请输入字母或汉字组成的岗位名称'))
       } else {
-        if (this.dialogStatus === '新增岗位') {
+        if (this.oldPostName !== this.postform.postName) {
           checkPostName(this.postform.postName).then(response => {
             const result = response.data.data
             if (result === 'success') {
               callback()
             } else {
-              callback(new Error('用户组名称已重复'))
+              callback(new Error('岗位名称已重复'))
             }
           })
         } else {
@@ -99,6 +99,7 @@ export default {
       }
     }
     return {
+      oldPostName: undefined,
       postform: {
         id: '',
         postName: undefined,
@@ -115,7 +116,7 @@ export default {
         page: 1,
         rows: 10
       },
-      statusOptions: ['不生效', '生效'],
+      statusOptions: ['未生效', '生效'],
       rules: {
         postName: [
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
@@ -157,19 +158,23 @@ export default {
           })
         })
     },
+    // 取消编辑
+    cancelEdit() {
+      this.$nextTick(() => {
+        this.$refs['postform'].clearValidate()
+      })
+      this.postdialogFormVisible = false
+    },
     // 弹出编辑岗位对话框
     handleUpdate(row) {
       // 显示对话框
       this.postdialogFormVisible = true
+      this.oldPostName = row.postName
       //   添加默认数据
       this.dialogStatus = '编辑岗位'
       this.postform.id = row.id
       this.postform.postName = row.postName
-      if (row.status === '1') {
-        this.postform.status = '生效'
-      } else if (row.status === '0') {
-        this.postform.status = '不生效'
-      }
+      this.postform.status = parseInt(row.status)
     },
     // 编辑岗位的功能实现
     updateData() {
@@ -177,15 +182,8 @@ export default {
         if (valid) {
           // 将对话框隐藏
           this.postdialogFormVisible = false
-          // 调用接口发送请求
-          if (this.postform.status === '生效') {
-            this.postform.status = '1'
-          } else if (this.postform.status === '不生效') {
-            this.postform.status = '0'
-          }
-          console.log(this.postform)
+          // // 调用接口发送请求
           editPostList(this.postform).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -209,7 +207,7 @@ export default {
     },
     // 查询功能
     handleFilter() { this.initList() },
-    selecteRoleStatus(value) {
+    selectePostStatus(value) {
       this.listQuery.status = value
     },
     // 实现新增岗位功能

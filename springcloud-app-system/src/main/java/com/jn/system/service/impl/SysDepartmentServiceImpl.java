@@ -217,10 +217,9 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             sysDepartmentVO.setChildren(childrenDepartList);
             if (childrenDepartList.size() == 0){
                 sysDepartmentVO.setChildren(null);
-            }
-            findChildrenDepartment(childrenDepartList);
-            if (childrenDepartList == null || childrenDepartList.size() == 0) {
-                return;
+                continue;
+            }else {
+                findChildrenDepartment(childrenDepartList);
             }
         }
     }

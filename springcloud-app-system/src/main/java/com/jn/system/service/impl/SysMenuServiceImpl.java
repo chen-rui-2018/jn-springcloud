@@ -3,16 +3,18 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.dao.SysMenuMapper;
 import com.jn.system.dao.TbSysMenuMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysMenu;
+import com.jn.system.entity.TbSysMenuCriteria;
 import com.jn.system.entity.TbSysResources;
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuPage;
-import com.jn.system.model.SysMenuResourcesAdd;
-import com.jn.system.model.User;
+import com.jn.system.enums.SysStatusEnums;
+import com.jn.system.model.*;
 import com.jn.system.service.SysMenuService;
+import com.jn.system.vo.SysMenuTreeVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,26 +44,6 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Resource
     private TbSysResourcesMapper tbSysResourcesMapper;
-
-
-    /**
-     * 新增菜单
-     *
-     * @param sysMenu
-     */
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void insertSysMenu(SysMenu sysMenu) {
-        sysMenu.setId(UUID.randomUUID().toString());
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysMenu.setCreator(user.getId());
-        sysMenu.setCreateTime(new Date());
-        TbSysMenu tbSysMenu = new TbSysMenu();
-        BeanUtils.copyProperties(sysMenu, tbSysMenu);
-        tbSysMenuMapper.insert(tbSysMenu);
-
-    }
 
     /**
      * 更新菜单信息
@@ -88,17 +71,37 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
-     * 分页查询菜单功能列表信息
-     *
-     * @param sysMenuPage
+     * 查询所有菜单,返回树形结构
      * @return
      */
     @Override
-    public PaginationData selectMenuListBySearchKey(SysMenuPage sysMenuPage) {
-        Page<Object> objects = PageHelper.startPage(sysMenuPage.getPage(), sysMenuPage.getRows());
-        return new PaginationData(sysMenuMapper.selectMenuListBySearchKey(sysMenuPage)
-                , objects.getTotal());
+    public Result selectMenuListBySearchKey() {
+        //先查询等级为1的菜单信息
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.findMenuByLevelOne();
+        findChildMenuList(menuTreeVOList);
+        return new Result(menuTreeVOList);
 
+    }
+
+    /**
+     * 递归查询菜单子菜单
+     * @param menuTreeVOList
+     */
+    public void findChildMenuList(List<SysMenuTreeVO> menuTreeVOList){
+        for (SysMenuTreeVO sysMenuTreeVO:menuTreeVOList) {
+            //判断菜单项是否是文件夹,是再递归获取数据
+            if ("1".equals(sysMenuTreeVO.getIsDir())){
+                //以菜单id作为父id,去获取菜单子集
+                List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getValue());
+                sysMenuTreeVO.setChildren(childrenMenuList);
+                if (childrenMenuList.size() == 0){
+                    sysMenuTreeVO.setChildren(null);
+                    continue;
+                }else{
+                    findChildMenuList(childrenMenuList);
+                }
+            }
+        }
     }
 
     /**
@@ -165,6 +168,94 @@ public class SysMenuServiceImpl implements SysMenuService {
 
         }
 
-
     }
+
+    /**
+     * 校验菜单名称是否存在
+     * @param sysMenuAdd
+     */
+    public void checkName(SysMenuAdd sysMenuAdd){
+        TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
+        TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
+        criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andParentIdEqualTo(sysMenuAdd.getParentId());
+        criteria.andMenuNameEqualTo(sysMenuAdd.getMenuName());
+        List<TbSysMenu> tbSysMenus = tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
+        if (tbSysMenus != null && tbSysMenus.size() > 0){
+            throw new RuntimeException("添加失败,菜单名称已存在");
+        }
+    }
+
+    /**
+     * 菜单添加目录或子目录
+     *
+     * @param sysMenuAdd
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addMenuDir(SysMenuAdd sysMenuAdd) {
+        //校验在该等级中菜单名称是否已经存在
+        checkName(sysMenuAdd);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        TbSysMenu tbSysMenu = new TbSysMenu();
+        //判断参数中父级id的值,1表示一级目录
+        if ("1".equals(sysMenuAdd.getParentId())) {
+            //直接添加菜单目录
+            tbSysMenu.setLevel("1");
+        } else {
+            //parent_id不为1,说明是子目录,查询父级id的等级
+            String parentMenuLevl = sysMenuMapper.findLevelByMenuId(sysMenuAdd.getParentId());
+            if (StringUtils.isNotBlank(parentMenuLevl)) {
+                tbSysMenu.setLevel((Integer.parseInt(parentMenuLevl) + 1) + "");
+            }
+        }
+        tbSysMenu.setId(UUID.randomUUID().toString());
+        tbSysMenu.setCreateTime(new Date());
+        tbSysMenu.setCreator(user.getId());
+        tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
+        tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
+        tbSysMenu.setParentId(sysMenuAdd.getParentId());
+        tbSysMenu.setSort("0");
+        tbSysMenu.setIsDir("1");
+        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        tbSysMenuMapper.insertSelective(tbSysMenu);
+    }
+
+    /**
+     * 菜单目录下面添加子菜单
+     *
+     * @param sysMenuAdd
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addMenu(SysMenuAdd sysMenuAdd) {
+        //校验在该等级中菜单名称是否已经存在
+        checkName(sysMenuAdd);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        TbSysMenu tbSysMenu = new TbSysMenu();
+        //查询父级id的等级
+        String parentMenuLevl = sysMenuMapper.findLevelByMenuId(sysMenuAdd.getParentId());
+        if (StringUtils.isNotBlank(parentMenuLevl)) {
+            tbSysMenu.setLevel((Integer.parseInt(parentMenuLevl) + 1) + "");
+        }
+        //查询文件菜单中子菜单sort的最大值
+        String sortMax = sysMenuMapper.findSortByMenuId(sysMenuAdd.getParentId());
+        if (StringUtils.isNotBlank(sortMax)){
+            tbSysMenu.setSort((Integer.parseInt(sortMax)+1)+"");
+        }else {
+            //如果查询不到数据,直接设置排序为1
+            tbSysMenu.setSort("1");
+        }
+        tbSysMenu.setId(UUID.randomUUID().toString());
+        tbSysMenu.setCreateTime(new Date());
+        tbSysMenu.setCreator(user.getId());
+        tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
+        tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
+        tbSysMenu.setParentId(sysMenuAdd.getParentId());
+        tbSysMenu.setIsDir("0");
+        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        tbSysMenuMapper.insertSelective(tbSysMenu);
+    }
+
+
 }

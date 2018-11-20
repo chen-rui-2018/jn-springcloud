@@ -1,7 +1,8 @@
 package com.jn.system.service;
 
-import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.model.SysMenu;
+import com.jn.system.model.SysMenuAdd;
 import com.jn.system.model.SysMenuPage;
 import com.jn.system.model.SysMenuResourcesAdd;
 
@@ -14,13 +15,6 @@ import com.jn.system.model.SysMenuResourcesAdd;
  * @modified By:
  */
 public interface SysMenuService {
-
-    /**
-     * 新增菜单
-     *
-     * @param sysMenu
-     */
-    void insertSysMenu(SysMenu sysMenu);
 
     /**
      * 更新菜单信息
@@ -38,12 +32,10 @@ public interface SysMenuService {
     void deleteSysMenuById(String[] menuIds);
 
     /**
-     * 分页查询菜单功能列表信息
-     *
-     * @param sysMenuPage
+     * 查询所有菜单信息,返回属性结构
      * @return
      */
-    PaginationData selectMenuListBySearchKey(SysMenuPage sysMenuPage);
+    Result selectMenuListBySearchKey();
 
     /**
      * 根据id获取菜单详情
@@ -60,5 +52,17 @@ public interface SysMenuService {
      */
     void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd);
 
+    /**
+     * 菜单添加目录或子目录
+     *
+     * @param sysMenuAdd
+     */
+    void addMenuDir(SysMenuAdd sysMenuAdd);
 
+    /**
+     * 菜单目录下面添加子菜单
+     *
+     * @param sysMenuAdd
+     */
+    void addMenu(SysMenuAdd sysMenuAdd);
 }

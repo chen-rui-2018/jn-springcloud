@@ -9,10 +9,7 @@ import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
 import com.jn.system.entity.TbSysResourcesCriteria;
 import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.SysResources;
-import com.jn.system.model.SysResourcesPage;
-import com.jn.system.model.User;
+import com.jn.system.model.*;
 import com.jn.system.service.SysResourcesService;
 import com.jn.system.vo.SysResourcesVO;
 import org.apache.commons.lang3.StringUtils;
@@ -61,6 +58,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andMenuIdEqualTo(sysResources.getMenuId());
         List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
             throw new RuntimeException("添加失败,页面功能名称已存在");
@@ -114,7 +112,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
         List<SysResourcesVO> sysResourcesVOList = sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage);
-        for (SysResourcesVO sysResourcesVO:sysResourcesVOList) {
+        for (SysResourcesVO sysResourcesVO : sysResourcesVOList) {
             List<String> menuNameList = sysResourcesMapper.findMenuNameByResourcesId(sysResourcesVO.getResourcesId());
             sysResourcesVO.setMenuName(menuNameList);
         }
@@ -147,21 +145,38 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     /**
      * 校验页面功能名称是否存在
      *
-     * @param resourceName
+     * @param sysResourceCheckName
      * @return
      */
     @Override
-    public Result checkResourceName(String resourceName) {
-        if (StringUtils.isNotBlank(resourceName)){
+    public Result checkResourceName(SysResourceCheckName sysResourceCheckName) {
+        if (StringUtils.isNotBlank(sysResourceCheckName.getResourceName())) {
             TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
             TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
-            criteria.andResourcesNameEqualTo(resourceName);
+            criteria.andResourcesNameEqualTo(sysResourceCheckName.getResourceName());
             criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            criteria.andMenuIdEqualTo(sysResourceCheckName.getMenuId());
             List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
             if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
                 return new Result("flase");
             }
         }
         return new Result("success");
+    }
+
+    /**
+     * 根据菜单id获取菜单所有页面功能
+     *
+     * @param menuId
+     * @return
+     */
+    @Override
+    public Result findResourcesByMenuId(String menuId) {
+        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
+        criteria.andMenuIdEqualTo(menuId);
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
+        List<TbSysResources> tbSysResources = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+        return new Result(tbSysResources);
     }
 }

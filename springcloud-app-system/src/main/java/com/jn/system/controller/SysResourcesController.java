@@ -3,6 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.model.SysResourceCheckName;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 import com.jn.system.service.SysResourcesService;
@@ -73,10 +74,17 @@ public class SysResourcesController extends BaseController {
         return new Result(sysResources);
     }
 
-    @ApiOperation(value = "校验页面功能名称是否存在", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验菜单界面页面功能名称是否存在", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/checkResourceName")
     @RequiresPermissions("/system/sysResources/checkResourceName")
-    public Result checkResourceName(String resourceName){
-        return sysResourcesService.checkResourceName(resourceName);
+    public Result checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName){
+        return sysResourcesService.checkResourceName(sysResourceCheckName);
+    }
+
+    @ApiOperation(value = "根据菜单id获取菜单所有页面功能", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/findResourcesByMenuId")
+    @RequiresPermissions("/system/sysResources/findResourcesByMenuId")
+    public Result findResourcesByMenuId(String menuId){
+        return sysResourcesService.findResourcesByMenuId(menuId);
     }
 }

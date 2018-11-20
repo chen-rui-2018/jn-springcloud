@@ -60,22 +60,10 @@
     </update>
 
     <!--更新用户组信息-->
-    <update id="updateSysGroup" parameterType="com.jn.system.entity.TbSysGroup">
+    <update id="updateSysGroup" parameterType="com.jn.system.model.SysGroupUpdate">
         update tb_sys_group
-        <set>
-            <if test="groupName != null">
-                group_name = #{groupName,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=VARCHAR},
-            </if>
-            <if test="creator != null">
-                creator = #{creator,jdbcType=VARCHAR}
-            </if>
-        </set>
+        set group_name = #{groupName,jdbcType=VARCHAR},
+            status = #{status,jdbcType=VARCHAR}
         where id = #{id,jdbcType=VARCHAR}
     </update>
 

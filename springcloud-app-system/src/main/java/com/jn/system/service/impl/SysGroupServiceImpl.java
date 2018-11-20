@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,12 +123,8 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysGroup(TbSysGroup sysGroup) {
-        sysGroup.setCreateTime(new Date());
-        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-        criteria.andIdEqualTo(sysGroup.getId());
-        tbSysGroupMapper.updateByExampleSelective(sysGroup, tbSysGroupCriteria);
+    public void updateSysGroup(SysGroupUpdate sysGroup) {
+        sysGroupMapper.updateSysGroup(sysGroup);
     }
 
     /**

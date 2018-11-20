@@ -53,10 +53,9 @@ public class SysGroupServiceTest {
 
     @Test
     public void updateSysGroupTest() {
-        TbSysGroup sysGroup = new TbSysGroup();
+        SysGroupUpdate sysGroup = new SysGroupUpdate();
         sysGroup.setId("g001");
         sysGroup.setGroupName("");
-        sysGroup.setCreator("系统管理员");
         sysGroupService.updateSysGroup(sysGroup);
     }
 

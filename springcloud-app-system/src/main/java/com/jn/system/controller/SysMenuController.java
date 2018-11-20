@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.SysMenu;
+import com.jn.system.model.SysMenuAdd;
 import com.jn.system.model.SysMenuPage;
 import com.jn.system.model.SysMenuResourcesAdd;
 import com.jn.system.service.SysMenuService;
@@ -30,21 +31,13 @@ public class SysMenuController extends BaseController {
     @Autowired
     private SysMenuService sysMenuService;
 
-    @ApiOperation(value = "查询菜单列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询菜单列表,返回菜单树结构", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysMenu/list")
-    public Result list(@RequestBody SysMenuPage sysMenuPage) {
-        PaginationData data = sysMenuService.selectMenuListBySearchKey(sysMenuPage);
-        return new Result(data);
+    public Result list() {
+        return sysMenuService.selectMenuListBySearchKey();
     }
 
-    @ApiOperation(value = "新增菜单", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
-    @RequiresPermissions("/system/sysMenu/add")
-    public Result add(@Validated @RequestBody SysMenu sysMenu) {
-        sysMenuService.insertSysMenu(sysMenu);
-        return new Result();
-    }
 
     @ApiOperation(value = "修改菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
@@ -76,7 +69,7 @@ public class SysMenuController extends BaseController {
     @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/insertMenuResources")
     @RequiresPermissions("/system/sysMenu/insertMenuResources")
-    public Result insertMenuResources(@RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
+    public Result insertMenuResources(@Validated @RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
         Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
         if (sysMenuResourcesAdd.getResourcesId().length == 0) {
             Assert.notNull(sysMenuResourcesAdd.getResourcesName(), "功能名称不能为空");
@@ -86,6 +79,23 @@ public class SysMenuController extends BaseController {
         sysMenuService.insertMenuResources(sysMenuResourcesAdd);
         return new Result();
     }
+
+    @ApiOperation(value = "菜单添加目录或子目录", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/addMenuDir")
+    @RequiresPermissions("/system/sysMenu/addMenuDir")
+    public Result addMenuDir(@Validated @RequestBody SysMenuAdd sysMenuAdd){
+        sysMenuService.addMenuDir(sysMenuAdd);
+        return new Result();
+    }
+
+    @ApiOperation(value = "菜单目录下面添加子菜单", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/addMenu")
+    @RequiresPermissions("/system/sysMenu/addMenu")
+    public Result addMenu(@Validated @RequestBody SysMenuAdd sysMenuAdd){
+        sysMenuService.addMenu(sysMenuAdd);
+        return new Result();
+    }
+
 
 
 }

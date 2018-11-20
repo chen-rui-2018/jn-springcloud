@@ -80,6 +80,32 @@
 
     </select>
 
+    <select id="findLevelByMenuId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT level FROM `tb_sys_menu` where id = #{id,jdbcType=VARCHAR} LIMIT 1
+    </select>
 
+    <select id="findSortByMenuId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+    <select id="findMenuByLevelOne" resultType="com.jn.system.vo.SysMenuTreeVO">
+        select
+        id as value,
+        menu_name as label,
+        menu_url as menuUrl,
+        sort,
+        is_dir as isDir
+        from tb_sys_menu where `level` = '1' and `status` = '1'
+    </select>
+
+    <select id="findMenuByParentId" parameterType="java.lang.String" resultType="com.jn.system.vo.SysMenuTreeVO">
+        select
+        id as value,
+        menu_name as label,
+        menu_url as menuUrl,
+        sort,
+        is_dir as isDir
+        from tb_sys_menu where parent_id = #{id,jdbcType=VARCHAR} and `status` = '1'
+    </select>
 
 </mapper>

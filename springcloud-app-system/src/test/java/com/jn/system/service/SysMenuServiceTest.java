@@ -25,31 +25,6 @@ public class SysMenuServiceTest {
     private  SysMenuService sysMenuService;
 
     /**
-     * 搜索关键字分页查询菜单列表
-     */
-    @Test
-    public void selectListBySearchKeyTest() {
-        SysMenuPage page = new SysMenuPage();
-        page.setPage(1);
-        page.setRows(10);
-        sysMenuService.selectMenuListBySearchKey(page);
-    }
-
-
-    /**
-     * 新增菜单
-     */
-    @Test
-    public void addTest() {
-        SysMenu menu= new SysMenu();
-        menu.setMenuName("菜单测试1");
-        menu.setMenuUrl("xxx/xxx/a.html");
-        menu.setParentId("a9b97767-54ff-4477-a81a-274d6e2b5ce9");
-        menu.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-        sysMenuService.insertSysMenu(menu);
-    }
-
-    /**
      * 修改菜单
      */
     @Test

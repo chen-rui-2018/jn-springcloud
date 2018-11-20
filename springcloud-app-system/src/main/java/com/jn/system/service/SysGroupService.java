@@ -37,7 +37,7 @@ public interface SysGroupService {
      * @param sysGroup 用户组对象
      * @return
      */
-    void updateSysGroup(TbSysGroup sysGroup);
+    void updateSysGroup(SysGroupUpdate sysGroup);
 
     /**
      * 根据用户组id获取用户组信息

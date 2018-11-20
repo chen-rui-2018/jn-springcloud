@@ -3,6 +3,7 @@ package com.jn.system.service;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.MenuResources;
+import com.jn.system.model.SysResourceCheckName;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
 
@@ -77,8 +78,16 @@ public interface SysResourcesService {
     /**
      * 校验页面功能名称是否存在
      *
-     * @param resourceName
+     * @param sysResourceCheckName
      * @return
      */
-    Result checkResourceName(String resourceName);
+    Result checkResourceName(SysResourceCheckName sysResourceCheckName);
+
+    /**
+     * 根据菜单id获取菜单所有页面功能
+     *
+     * @param menuId
+     * @return
+     */
+    Result findResourcesByMenuId(String menuId);
 }

@@ -58,7 +58,7 @@ public class SysGroupController extends BaseController {
     @ApiOperation(value = "修改用户组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/update")
     @RequiresPermissions("/system/sysGroup/update")
-    public Result update(@Validated @RequestBody TbSysGroup sysGroup) {
+    public Result update(@Validated @RequestBody SysGroupUpdate sysGroup) {
         Assert.notNull(sysGroup.getId(), "用户组id不能为空");
         sysGroupService.updateSysGroup(sysGroup);
         return new Result();

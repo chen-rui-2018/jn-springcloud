@@ -125,7 +125,6 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
-        sysUser.setCreateTime(new Date());
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
         }

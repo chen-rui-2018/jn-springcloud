@@ -25,6 +25,11 @@
         <module>springcloud-app-fastdfs</module>
 		<module>springcloud-app-stream</module>
 		<module>springcloud-app-stream-demo</module>
+		<module>springcloud-portals</module>
+		<module>springcloud-portals-management</module>
+		<module>springcloud-integrated-app</module>
+		<module>springcloud-wechat-official-accounts</module>
+		<module>springcloud-wechat-mini-program</module>
 	</modules>
 
 	<properties>

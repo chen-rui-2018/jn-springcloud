@@ -16,7 +16,8 @@ public enum CommonExceptionEnum implements CodeAndMsg {
     UN_KNOW("1000999","未知异常"),
     VALID_ERROR("1000201","参数异常"),
     UN_AUTH("1000202","鉴权失败"),
-    FILE_ERROR("1000203","文件传输异常");
+    FILE_ERROR("1000203","文件传输异常"),
+    EMAIL_ERROR("5000001","邮件发送异常");
     /**
      * 编码
      */

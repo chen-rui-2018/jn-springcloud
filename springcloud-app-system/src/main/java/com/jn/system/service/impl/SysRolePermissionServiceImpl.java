@@ -52,7 +52,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
         TbSysRolePermission tbSysRolePermission =new TbSysRolePermission();
         BeanUtils.copyProperties(rolePermission, tbSysRolePermission);
         tbSysRolePermissionMapper.insert(tbSysRolePermission);
-        logger.info("message={}", "新增角色权限,rolePermissionName=" + rolePermission.getPermissionName()+ ",rolePermissionId=" + rolePermission.getId());
+        logger.info("[角色权限] 添加角色权限成功！,rolePermissionId：{}" + rolePermission.getId());
 
     }
 
@@ -67,7 +67,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
         TbSysRolePermission tbSysRolePermission =new TbSysRolePermission();
         BeanUtils.copyProperties(rolePermission, tbSysRolePermission);
         tbSysRolePermissionMapper.updateByPrimaryKey(tbSysRolePermission);
-        logger.info("message={}", "更新角色权限,rolePermissionName=" + rolePermission.getPermissionName()+ ",rolePermissionId=" + rolePermission.getId());
+        logger.info("[角色权限] 更新角色权限成功！,rolePermissionId：{}" , rolePermission.getId());
     }
 
     /**
@@ -80,7 +80,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRolePermissionByRoleIds(String[] roleIds) {
         sysRolePermissionMapper.deleteByRoleIds(roleIds);
-        logger.info("message={}", "根据角色id批量删除角色权限（逻辑删除）,roleIds=" +  Arrays.toString(roleIds));
+        logger.info("[角色权限] 根据角色id批量删除角色权限限（逻辑删除）成功！,roleIds：{}" , Arrays.toString(roleIds));
     }
 
     /**
@@ -93,7 +93,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRolePermissionByIds(String[] ids) {
         sysRolePermissionMapper.deleteBy(ids);
-        logger.info("message={}", "批量删除角色权限（逻辑删除）,ids=" +  Arrays.toString(ids));
+        logger.info("[角色权限] 批量删除角色权限（逻辑删除）成功！,ids:{}" ,  Arrays.toString(ids));
     }
 
     /**

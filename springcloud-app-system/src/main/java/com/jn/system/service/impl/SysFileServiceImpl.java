@@ -72,7 +72,7 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFile tbSysFile = new TbSysFile();
         BeanUtils.copyProperties(sysFile, tbSysFile);
         tbSysFileMapper.insert(tbSysFile);
-        logger.info("message={}", "新增文件,fileName=" + sysFile.getFileName() + ",fileId=" + sysFile.getId());
+        logger.info("[文件] 添加文件成功！,fileId: {}", sysFile.getId());
 
     }
 
@@ -87,7 +87,7 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFile tbSysFile = new TbSysFile();
         BeanUtils.copyProperties(sysFile, tbSysFile);
         tbSysFileMapper.updateByPrimaryKeySelective(tbSysFile);
-        logger.info("message={}", "更新文件,fileName=" + sysFile.getFileName() + ",fileId=" + sysFile.getId());
+        logger.info("[文件] 更新文件成功！,fileId: {}" ,sysFile.getId());
 
     }
 
@@ -100,7 +100,7 @@ public class SysFileServiceImpl implements SysFileService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileByIds(String[] fileIds) {
         sysFileMapper.deleteByIds(fileIds);
-        logger.info("message={}", "批量删除文件,fileIds=" + Arrays.toString(fileIds));
+        logger.info("[文件] 批量删除文件成功！,fileIds: {}" , Arrays.toString(fileIds));
     }
 
     /**
@@ -114,7 +114,7 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFile tbSysFile = tbSysFileMapper.selectByPrimaryKey(id);
         SysFile sysFile = new SysFile();
         BeanUtils.copyProperties(tbSysFile, sysFile);
-        logger.info("message={}", "根据Id查询文件,fileId=" + id);
+        logger.info("[文件] 根据Id查询文件成功！,fileId: {}",id);
         return sysFile;
     }
 
@@ -164,11 +164,10 @@ public class SysFileServiceImpl implements SysFileService {
             sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getKey());
 
             sysFileGroupFiles.add(sysFileGroupFile);
+            logger.info("[文件] 文件添加文件组,fileId: {}",fileId);
 
-            logger.info("message={}", "文件添加文件组，fileGroupId=" + Arrays.toString(fileGroupId) + "fileId=" + fileId);
         }
-
-        logger.info("message={}", "文件添加文件组,新增前删除该的所有该文件的文件组数据，fileGroupId=" + Arrays.toString(fileGroupId));
+        logger.info("[文件] 文件添加文件组,新增前删除该的所有该文件的文件组数据成功,fileGroupId: {}",Arrays.toString(fileGroupId));
 
         //新增前删除该的所有该文件的文件组数据
         String[] fileIds = {fileId};

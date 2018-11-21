@@ -51,7 +51,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         TbSysUserRole tbSysUserRole=new TbSysUserRole();
         BeanUtils.copyProperties(role, tbSysUserRole);
         tbSysUserRoleMapper.insert(tbSysUserRole);
-        logger.info("message={}", "新增用户角色,userId=" +role.getId()+",roleId="+role.getRoleId());
+        logger.info("[用户角色] 新增用户角色成功！,userId: {},roleId: {}" ,role.getId(),role.getRoleId());
 
     }
 
@@ -66,7 +66,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
         TbSysUserRole tbSysUserRole=new TbSysUserRole();
         BeanUtils.copyProperties(role, tbSysUserRole);
         tbSysUserRoleMapper.updateByPrimaryKeySelective(tbSysUserRole);
-        logger.info("message={}", "更新用户角色,userId=" +role.getId()+",roleId="+role.getRoleId());
+        logger.info("[用户角色] 更新用户角色成功！,userId: {},roleId: {}" ,role.getId(),role.getRoleId());
 
     }
 
@@ -80,7 +80,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserRoleByRoleIds(String[] roleIds) {
         sysUserRoleMapper.deleteByRoleIds(roleIds);
-        logger.info("message={}", "根据角色id批量删除用户角色（逻辑删除）,roleIds=" + Arrays.toString(roleIds));
+        logger.info("[用户角色] 根据角色id批量删除用户角色（逻辑删除）成功！,roleIds: {}" , Arrays.toString(roleIds));
     }
 
     /**
@@ -93,7 +93,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserRoleById(String[] ids) {
         sysUserRoleMapper.deleteByIds(ids);
-        logger.info("message={}", "批量删除用户角色（逻辑删除）,ids=" + Arrays.toString(ids));
+        logger.info("[用户角色] 批量删除用户角色（逻辑删除）成功！,ids: {}" , Arrays.toString(ids));
     }
 
     /**

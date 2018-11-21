@@ -52,7 +52,8 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         TbSysGroupRole tbSysGroupRole =new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.insert(tbSysGroupRole);
-        logger.info("message={}", "用户组角色,userGroupRoleId=" + userGroupRole.getUserGroupId()+ ",userGroupRoleId=" + userGroupRole.getId()+",roleId="+userGroupRole.getRoleId());
+
+        logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}",userGroupRole.getId(),userGroupRole.getRoleId());
     }
 
     /**
@@ -66,7 +67,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         TbSysGroupRole tbSysGroupRole =new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.updateByPrimaryKeySelective(tbSysGroupRole);
-        logger.info("message={}", "更新用户组角色,userGroupRoleId=" + userGroupRole.getUserGroupId()+ ",userGroupRoleId=" + userGroupRole.getId()+",roleId="+userGroupRole.getRoleId());
+        logger.info("[用户组角色] 更新用户组角色成功！,userGroupRoleId: {},roleId: {}",userGroupRole.getId(),userGroupRole.getRoleId());
 
     }
 
@@ -80,7 +81,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleByRoleIds(String[] roleIds) {
         sysUserGroupRoleMapper.deleteByRoleIds(roleIds);
-        logger.info("message={}", "根据角色id批量删除用户组角色（逻辑删除）,roleIds=" + Arrays.toString(roleIds));
+        logger.info("[用户组角色] 根据角色id批量删除用户组角色（逻辑删除）成功！,roleIds: {}" , Arrays.toString(roleIds));
 
     }
 
@@ -94,7 +95,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleById(String[] ids) {
         sysUserGroupRoleMapper.deleteBy(ids);
-        logger.info("message={}", "根据角色id批量删除用户组角色（逻辑删除）,ids=" + Arrays.toString(ids));
+        logger.info("[用户组角色] 根据角色id批量删除用户组角色（逻辑删除）成功！,ids: {}" , Arrays.toString(ids));
     }
 
     /**

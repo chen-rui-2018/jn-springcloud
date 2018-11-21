@@ -93,7 +93,7 @@ public class SysUserServiceTest {
 
     @Test
     public void findDepartmentandPostByUserIdTest() {
-        Result result = sysUserService.findDepartmentandPostByUserId("10000");
+        Result result = sysUserService.findDepartmentandPostByUserId("62619962-c88c-4530-b424-ced43b30e1ea");
         logger.info("测试结果:" + result.getData().toString());
     }
 

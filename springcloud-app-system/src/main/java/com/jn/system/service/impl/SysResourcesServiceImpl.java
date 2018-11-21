@@ -66,7 +66,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbSysResourcesMapper.insert(tbSysResources);
-        logger.info("新增功能,resourcesName={},resourcesId={}", sysResources.getResourcesName(), sysResources.getId());
+        logger.info("[功能] 新增功能成功！,resourcesName:{},resourcesId:{}", sysResources.getResourcesName(), sysResources.getId());
     }
 
     /**
@@ -105,8 +105,8 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
-        logger.info("message={}", "更新功能信息,resourcesName=" + sysResources.getResourcesName() + ",resourcesId=" + sysResources.getId());
-    }
+        logger.info("[功能] 更新功能信息成功！,resourcesId:{}", sysResources.getId());
+        }
 
     /**
      * 批量删除功能（逻辑删除）
@@ -118,7 +118,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
-        logger.info("message={}", "批量删除功能,resourcesIds=" + Arrays.toString(resourcesIds));
+        logger.info("[功能] 批量删除功能成功！,resourcesIds:{}" + Arrays.toString(resourcesIds));
     }
 
     /**

@@ -65,7 +65,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.insert(tbSysFileGroup);
-        logger.info("message={}", "新增文件组,fileGroupName=" + sysFileGroup.getFileGroupName() + ",fileGroupId=" + sysFileGroup.getId());
+        logger.info("[文件组] 添加文件组成功！,fileGroupId: {}", sysFileGroup.getId());
     }
 
     /**
@@ -101,7 +101,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.updateByPrimaryKeySelective(tbSysFileGroup);
-        logger.info("message={}", "更新文件组,fileGroupName=" + sysFileGroup.getFileGroupName() + ",fileGroupId=" + sysFileGroup.getId());
+        logger.info("[文件组] 更新文件组成功！,fileGroupId: {}", sysFileGroup.getId());
     }
 
     /**
@@ -113,7 +113,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileGroupByIds(String[] ids) {
         sysFileGroupMapper.deleteByIds(ids);
-        logger.info("message={}", "批量删除文件组,fileGroupIds=" + Arrays.toString(ids));
+        logger.info("[文件组] 批量删除文件组成功！,fileGroupIds: {}", Arrays.toString(ids));
     }
 
     /**
@@ -125,9 +125,9 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     public SysFileGroup selectSysFileGroupByIds(String id) {
         TbSysFileGroup tbSysFileGroup = tbSysFileGroupMapper.selectByPrimaryKey(id);
-        logger.info("message={}", "根据Id查询文件组,fileGroupId=" + id);
         SysFileGroup sysFileGroup = new SysFileGroup();
         BeanUtils.copyProperties(tbSysFileGroup, sysFileGroup);
+        logger.info("[文件组] 根据Id查询文件组成功！,fileGroupId: {}", id);
         return sysFileGroup;
     }
 
@@ -158,7 +158,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //过滤已删除的数据
         sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
 
-        logger.info("message={}", "根据关键字分页查询文件组列表,searchKey=" + sysFileGroupPage.getFileGroupName() + ",status=" + sysFileGroupPage.getStatus());
+        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(),sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }
@@ -191,11 +191,10 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getKey());
 
             sysFileGroupFiles.add(sysFileGroupFile);
+            logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId , Arrays.toString(fileId));
 
-            logger.info("message={}", "文件组添加文件，fileGroupId=" + fileGroupId + "fileId=" + Arrays.toString(fileId));
         }
-
-        logger.info("message={}", "文件组添加文件,新增前删除该的所有该文件组的文件数据，fileId=" + Arrays.toString(fileId));
+        logger.info("[文件组] 文件组添加文件,新增前删除该的所有该文件组的文件数据,fileId：{}", fileGroupId,Arrays.toString(fileId));
 
         //新增前删除该的所有该文件组的文件数据
         String[] fileGroupIds = {fileGroupId};

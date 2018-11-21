@@ -1,9 +1,12 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysUserRoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -11,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 用户管理
@@ -39,14 +44,16 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "分页条件查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
     public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage) {
-        return sysUserService.findSysUserByPage(userSysUserPage);
+        PaginationData data = sysUserService.findSysUserByPage(userSysUserPage);
+        return new Result(data);
     }
 
     @RequiresPermissions("/system/sysUser/findSysUserById")
     @ApiOperation(value = "根据用户id返回用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserById")
     public Result findSysUserById(String id) {
-        return sysUserService.findSysUserById(id);
+        SysUser sysUser = sysUserService.findSysUserById(id);
+        return new Result(sysUser);
     }
 
     @RequiresPermissions("/system/sysUser/deleteSysUser")
@@ -70,7 +77,8 @@ public class SysUserController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
     public Result findSysGroupByUserId(@Validated @RequestBody SysUserGroupPage sysUserGroupPage) {
-        return sysUserService.findSysGroupByUserId(sysUserGroupPage);
+        PaginationData data = sysUserService.findSysGroupByUserId(sysUserGroupPage);
+        return new Result(data);
     }
 
     @RequiresPermissions("/system/sysUser/saveSysGroupToSysUser")
@@ -87,7 +95,8 @@ public class SysUserController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {
-        return sysUserService.findSysRoleByUserId(sysUserRolePage);
+        SysUserRoleVO sysUserRoleVO = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        return new Result(sysUserRoleVO);
     }
 
     @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")
@@ -103,7 +112,8 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "根据用户id查询用户已经具有的岗位部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findDepartmentandPostByUserId")
     public Result findDepartmentandPostByUserId(String userId) {
-        return sysUserService.findDepartmentandPostByUserId(userId);
+        List<SysDepartmentPostVO> sysDepartmentPostVOList = sysUserService.findDepartmentandPostByUserId(userId);
+        return new Result(sysDepartmentPostVOList);
     }
 
     @RequiresPermissions("/system/sysUser/saveDepartmentandPostOfUser")
@@ -119,7 +129,8 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "校验用户账号是否存在,success表示用户名可用,false不可用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")
     public Result checkAccount(String account){
-        return sysUserService.checkUserName(account);
+        String result = sysUserService.checkUserName(account);
+        return new Result(result);
     }
 
 }

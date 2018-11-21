@@ -2,11 +2,12 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysRole;
 import com.jn.system.entity.TbSysRoleCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysRolePermissionService;
@@ -17,6 +18,7 @@ import com.jn.system.vo.SysRolePermissionVO;
 import com.jn.system.vo.SysRoleUserGroupVO;
 import com.jn.system.vo.SysRoleUserVO;
 import com.jn.system.vo.SysRoleVO;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,8 +68,9 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
-    public Result findSysRoleAll() {
-        return new Result(sysRoleMapper.findSysRoleAll());
+    public List<SysRole> findSysRoleAll() {
+        List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
+        return sysRoleAll;
     }
 
 
@@ -82,7 +85,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         //判断角色名称是否已经存在
         List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            throw new RuntimeException("添加失败,角色名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -92,12 +95,13 @@ public class SysRoleServiceImpl implements SysRoleService {
         tbSysRole.setRoleName(role.getRoleName());
         tbSysRole.setStatus(role.getStatus());
         tbSysRoleMapper.insert(tbSysRole);
-        logger.info("[角色权限] 新增角色成功！,roleId: {}" , tbSysRole.getId());
+        logger.info("[角色权限] 新增角色成功！,roleId: {}", tbSysRole.getId());
 
     }
 
     /**
      * 用于角色名称校验
+     *
      * @param roleName
      * @return
      */
@@ -124,12 +128,12 @@ public class SysRoleServiceImpl implements SysRoleService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            throw new RuntimeException("添加失败,角色名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);
-        logger.info("[角色权限] 更新角色成功！,roleId: {}" , role.getId());
+        logger.info("[角色权限] 更新角色成功！,roleId: {}", role.getId());
     }
 
     /**
@@ -277,12 +281,14 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
-    public Result checkRoleName(String roleName) {
-        List<TbSysRole> tbSysRoles = checkName(roleName);
-        if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            return new Result("false");
+    public String checkRoleName(String roleName) {
+        if (StringUtils.isNotBlank(roleName)){
+            List<TbSysRole> tbSysRoles = checkName(roleName);
+            if (tbSysRoles != null && tbSysRoles.size() > 0) {
+                return "false";
+            }
         }
-        return new Result("success");
+        return "success";
     }
 
     /**
@@ -292,7 +298,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
-    public Result findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
+    public PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
         //根据角色id获取角色已经拥有的用户信息
         List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
         //条件分页获取角色未拥有用户信息
@@ -302,7 +308,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         otherUserList.addAll(userOfRoleList);
         SysRoleUserVO sysRoleUserVO = new SysRoleUserVO(userOfRoleList, otherUserList);
         PaginationData data = new PaginationData(sysRoleUserVO, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
@@ -312,7 +318,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
-    public Result findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
+    public PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
         //获取角色已经拥有的用户组信息
         List<SysGroup> userGroupOfRoleList = sysGroupRoleMapper.findUserGroupByRoleId(sysRoleUserGroupPage.getRoleId());
         //条件分页获取角色为拥有的用户组信息
@@ -321,7 +327,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         otherUserGroupList.addAll(userGroupOfRoleList);
         SysRoleUserGroupVO sysRoleUserGroupVO = new SysRoleUserGroupVO(userGroupOfRoleList, otherUserGroupList);
         PaginationData data = new PaginationData(sysRoleUserGroupVO, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
@@ -331,7 +337,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
-    public Result findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
+    public PaginationData findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
         //获取角色已经拥有的权限信息
         List<SysPermission> permissionOfRoleList =
                 sysRolePermissionMapper.findPermissionByRoleId(sysRolePermissionPage.getRoleId());
@@ -339,9 +345,9 @@ public class SysRoleServiceImpl implements SysRoleService {
         Page<Object> objects = PageHelper.startPage(sysRolePermissionPage.getPage(), sysRolePermissionPage.getRows());
         List<SysPermission> otherPermissionList = sysRolePermissionMapper.findOtherUserGroup(sysRolePermissionPage);
         otherPermissionList.addAll(permissionOfRoleList);
-        SysRolePermissionVO sysRolePermissionVO = new SysRolePermissionVO(permissionOfRoleList,otherPermissionList);
+        SysRolePermissionVO sysRolePermissionVO = new SysRolePermissionVO(permissionOfRoleList, otherPermissionList);
         PaginationData data = new PaginationData(sysRolePermissionVO, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
 }

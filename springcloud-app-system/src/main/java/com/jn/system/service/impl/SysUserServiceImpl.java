@@ -2,6 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.*;
@@ -9,6 +10,7 @@ import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysUser;
 import com.jn.system.entity.TbSysUserCriteria;
 import com.jn.system.entity.TbSysUserDepartmentPost;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
@@ -73,7 +75,7 @@ public class SysUserServiceImpl implements SysUserService {
         //根据用户名查询用户账号是否存在
         List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
-            throw new RuntimeException("添加失败,账号已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysUser.setId(UUID.randomUUID().toString());
         sysUser.setCreateTime(new Date());
@@ -107,12 +109,12 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result findSysUserByPage(SysUserPage sysUserPage) {
+    public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
         List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
         PaginationData data = new PaginationData(sysUserVOList, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
@@ -142,7 +144,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(StringUtils.isNotBlank(sysUser.getAccount())){
             TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
             if (!sysUser.getAccount().equals(tbSysUser.getAccount())){
-                throw new RuntimeException("账号不允许修改!");
+                throw new JnSpringCloudException(SysExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
@@ -164,7 +166,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
+    public PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
         List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
         //条件分页获取用户未拥有用户组信息
@@ -173,7 +175,7 @@ public class SysUserServiceImpl implements SysUserService {
         otherGroupList.addAll(sysGroupOfUserList);
         SysUserGroupVO sysUserGroupVO = new SysUserGroupVO(sysGroupOfUserList, otherGroupList);
         PaginationData data = new PaginationData(sysUserGroupVO, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
@@ -215,14 +217,14 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
+    public SysUserRoleVO findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
         //获取用户已经具有角色
         List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
         //条件分页获取用户未拥有的角色信息
         List<SysRole> otherRoleList = sysUserRoleMapper.findRoleByUserPage(sysUserRolePage);
         otherRoleList.addAll(sysRoleOfUserList);
         SysUserRoleVO sysUserRoleVO = new SysUserRoleVO(sysRoleOfUserList, otherRoleList);
-        return new Result(sysUserRoleVO);
+        return sysUserRoleVO;
     }
 
     /**
@@ -261,7 +263,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result findDepartmentandPostByUserId(String userId) {
+    public List<SysDepartmentPostVO> findDepartmentandPostByUserId(String userId) {
         List<SysDepartmentPostVO> sysDepartmentPostVOList = sysUserDepartmentPostMapper.findDepartmentAndPostByUserId(userId);
         for (SysDepartmentPostVO sysDepartmentPostVO : sysDepartmentPostVOList) {
             List<TbSysDepartment> tbSysDepartmentList =
@@ -274,7 +276,7 @@ public class SysUserServiceImpl implements SysUserService {
             String id = buffer.toString();
             sysDepartmentPostVO.setDepartmentId(id.substring(0, id.length() - 1));
         }
-        return new Result(sysDepartmentPostVOList);
+        return sysDepartmentPostVOList;
     }
 
     /**
@@ -306,7 +308,7 @@ public class SysUserServiceImpl implements SysUserService {
                 if ("1".equals(sysDepartmentPost.getIsDefault())) {
                     count++;
                     if (count > 1) {
-                        throw new RuntimeException("部门岗位信息只能有一个是默认的");
+                        throw new JnSpringCloudException(SysExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
                     }
                 }
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);
@@ -323,14 +325,14 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result findSysUserById(String id) {
+    public SysUser findSysUserById(String id) {
         TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
         SysUser sysUser = new SysUser();
         if (tbSysUser != null) {
             BeanUtils.copyProperties(tbSysUser, sysUser);
             sysUser.setPassword("");
         }
-        return new Result(sysUser);
+        return sysUser;
     }
 
     /**
@@ -340,13 +342,13 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
-    public Result checkUserName(String account) {
+    public String checkUserName(String account) {
         if (StringUtils.isNotBlank(account)) {
             List<TbSysUser> tbSysUsers = checkAccount(account);
             if (tbSysUsers != null && tbSysUsers.size() > 0) {
-                return new Result("false");
+                return "false";
             }
         }
-        return new Result("success");
+        return "success";
     }
 }

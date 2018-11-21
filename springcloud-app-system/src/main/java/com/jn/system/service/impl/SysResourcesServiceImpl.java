@@ -2,12 +2,13 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.SysResourcesMapper;
 import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
 import com.jn.system.entity.TbSysResourcesCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysResourcesService;
@@ -56,7 +57,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         //添加名称校验
         List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            throw new RuntimeException("添加失败,页面功能名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysResources.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
@@ -71,6 +72,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
 
     /**
      * 用于页面功能做名称校验
+     *
      * @param resourcesName
      * @param menuId
      * @return
@@ -100,7 +102,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         criteria.andIdNotEqualTo(sysResources.getId());
         List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            throw new RuntimeException("修改失败,页面功能名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
@@ -169,14 +171,14 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
-    public Result checkResourceName(SysResourceCheckName sysResourceCheckName) {
+    public String checkResourceName(SysResourceCheckName sysResourceCheckName) {
         if (StringUtils.isNotBlank(sysResourceCheckName.getResourceName())) {
             List<TbSysResources> tbSysResourcesList = checkName(sysResourceCheckName.getResourceName(), sysResourceCheckName.getMenuId());
             if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-                return new Result("flase");
+                return "flase";
             }
         }
-        return new Result("success");
+        return "success";
     }
 
     /**
@@ -186,12 +188,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
-    public Result findResourcesByMenuId(String menuId) {
+    public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
         List<TbSysResources> tbSysResources = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
-        return new Result(tbSysResources);
+        return tbSysResources;
     }
 }

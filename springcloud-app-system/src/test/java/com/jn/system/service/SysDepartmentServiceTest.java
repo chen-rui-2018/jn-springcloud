@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -24,14 +25,14 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void findSysDepartmentAll() {
-        Result result = sysDepartmentService.findSysDepartmentAll();
-        logger.info("测试结果:" + result.getData().toString());
+        List<SysDepartment> data = sysDepartmentService.findSysDepartmentAll();
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
     public void selectByPrimaryKeyTest() {
-        Result result = sysDepartmentService.selectByPrimaryKey("d001");
-        logger.info("测试结果:" + result.getData().toString());
+        SysDepartment data = sysDepartmentService.selectByPrimaryKey("d001");
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test

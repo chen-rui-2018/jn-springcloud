@@ -87,7 +87,8 @@ public class SysFileGroupController extends BaseController {
     @RequestMapping(value = "/checkFileGroupName")
     @RequiresPermissions("/system/sysFileGroup/checkFileGroupName")
     public Result checkFileGroupName(String fileGroupName){
-        return sysFileGroupService.checkFileGroupName(fileGroupName);
+        String result = sysFileGroupService.checkFileGroupName(fileGroupName);
+        return new Result(result);
     }
 
 }

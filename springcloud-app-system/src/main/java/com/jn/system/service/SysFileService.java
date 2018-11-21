@@ -65,5 +65,5 @@ public interface SysFileService {
      * @param fileName
      * @return
      */
-    Result checkFileName(String fileName);
+    String checkFileName(String fileName);
 }

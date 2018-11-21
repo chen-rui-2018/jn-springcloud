@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
 
@@ -30,7 +31,7 @@ public interface SysPermissionService {
      * @param id
      * @return
      */
-    Result selectByPrimaryKey(String id);
+    SysPermission selectByPrimaryKey(String id);
 
     /**
      * 条件分页查询
@@ -38,7 +39,7 @@ public interface SysPermissionService {
      * @param sysPermissionPage
      * @return
      */
-    Result findByPage(SysPermissionPage sysPermissionPage);
+    PaginationData findByPage(SysPermissionPage sysPermissionPage);
 
     /**
      * @param ids
@@ -58,7 +59,7 @@ public interface SysPermissionService {
      * @param sysPermissionRolePage
      * @return
      */
-    Result findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
+    PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
 
     /**
      * 获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息
@@ -66,7 +67,7 @@ public interface SysPermissionService {
      * @param sysPermissionFileGroupPage
      * @return
      */
-    Result findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage);
+    PaginationData findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage);
 
     /**
      * 为权限添加文件组
@@ -81,7 +82,7 @@ public interface SysPermissionService {
      * @param sysPermissionMenuPage
      * @return
      */
-    Result findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage);
+    PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage);
 
     /**
      * 获取权限已经具有的功能信息及条件分页获取未拥有的功能信息
@@ -89,7 +90,7 @@ public interface SysPermissionService {
      * @param sysPermissionResourcePage
      * @return
      */
-    Result findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage);
+    PaginationData findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage);
 
     /**
      * 校验权限名是否已经存在
@@ -97,7 +98,7 @@ public interface SysPermissionService {
      * @param permissionName
      * @return
      */
-    Result checkPermissionName(String permissionName);
+    String checkPermissionName(String permissionName);
 
     /**
      * 为权限添加菜单

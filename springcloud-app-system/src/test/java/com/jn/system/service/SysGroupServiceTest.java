@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.model.*;
@@ -10,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 /**
  * 用户dao
@@ -33,8 +36,8 @@ public class SysGroupServiceTest {
         SysGroupPage sysGroupPage = new SysGroupPage();
         sysGroupPage.setPage(1);
         sysGroupPage.setRows(10);
-        Result result = sysGroupService.findSysGroupAll(sysGroupPage);
-        logger.info("测试结果:"+result.getData().toString());
+        PaginationData data = sysGroupService.findSysGroupAll(sysGroupPage);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -64,8 +67,8 @@ public class SysGroupServiceTest {
         SysGroupRolePage sysGroupRolePage = new SysGroupRolePage();
         sysGroupRolePage.setPage(1);
         sysGroupRolePage.setRows(10);
-        Result result = sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
-        logger.info("测试结果:"+result.getData().toString());
+        PaginationData data = sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -79,8 +82,8 @@ public class SysGroupServiceTest {
 
     @Test
     public void findUserOfGroupTest(){
-        Result result = sysGroupService.findUserOfGroup("g002");
-        logger.info("测试结果:"+result.getData().toString());
+        List<SysTUser> data = sysGroupService.findUserOfGroup("g002");
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -89,8 +92,8 @@ public class SysGroupServiceTest {
         sysGroupUserPage.setGroupId("g002");
         sysGroupUserPage.setPage(1);
         sysGroupUserPage.setRows(1);
-        Result result = sysGroupService.findOtherUserByPage(sysGroupUserPage);
-        logger.info("测试结果:"+result.getData().toString());
+        PaginationData data = sysGroupService.findOtherUserByPage(sysGroupUserPage);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test

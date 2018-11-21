@@ -14,6 +14,8 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 角色
  *
@@ -97,7 +99,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/findSysRoleAll",method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findSysRoleAll")
     public Result findSysRoleAll() {
-        return tbRoleService.findSysRoleAll();
+        List<SysRole> sysRoleAll = tbRoleService.findSysRoleAll();
+        return new Result(sysRoleAll);
     }
 
     @ApiOperation(value = "校验角色名称是否已经存在,false表示角色名称已存在,success表示名称可以使用",
@@ -105,7 +108,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/checkRoleName")
     @RequiresPermissions("/system/sysRole/checkRoleName")
     public Result checkRoleName(String roleName){
-        return tbRoleService.checkRoleName(roleName);
+        String result = tbRoleService.checkRoleName(roleName);
+        return new Result(result);
     }
 
     @ApiOperation(value = "查询角色具有的用户信息及条件分页获取为拥有用户信息",
@@ -113,7 +117,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/findUserOfRoleAndOtherUser")
     @RequiresPermissions("/system/sysRole/findUserOfRoleAndOtherUser")
     public Result findUserOfRoleAndOtherUser(@Validated @RequestBody SysRoleUserPage sysRoleUserPage){
-        return tbRoleService.findUserOfRoleAndOtherUser(sysRoleUserPage);
+        PaginationData data = tbRoleService.findUserOfRoleAndOtherUser(sysRoleUserPage);
+        return new Result(data);
     }
 
     @ApiOperation(value = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息",
@@ -121,7 +126,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/findUserGroupOfRoleAndOtherGroup")
     @RequiresPermissions("/system/sysRole/findUserGroupOfRoleAndOtherGroup")
     public Result findUserGroupOfRoleAndOtherGroup(@Validated @RequestBody SysRoleUserGroupPage sysRoleUserGroupPage){
-        return tbRoleService.findUserGroupOfRoleAndOtherGroup(sysRoleUserGroupPage);
+        PaginationData data = tbRoleService.findUserGroupOfRoleAndOtherGroup(sysRoleUserGroupPage);
+        return new Result(data);
     }
 
     @ApiOperation(value = "查询角色具有的权限信息及条件分页获取为拥有权限信息",
@@ -129,7 +135,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission")
     @RequiresPermissions("/system/sysRole/findPermissionOrRole")
     public Result findPermissionOrRoleAndOtherPermission(@Validated @RequestBody SysRolePermissionPage sysRolePermissionPage){
-        return tbRoleService.findPermissionOrRoleAndOtherPermission(sysRolePermissionPage);
+        PaginationData data = tbRoleService.findPermissionOrRoleAndOtherPermission(sysRolePermissionPage);
+        return new Result(data);
     }
 
 }

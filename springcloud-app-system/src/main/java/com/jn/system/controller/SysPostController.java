@@ -1,7 +1,9 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysPost;
 import com.jn.system.model.*;
 import com.jn.system.service.SysPostService;
 import io.swagger.annotations.Api;
@@ -13,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 岗位管理
@@ -34,7 +38,8 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "查询所有岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysPostAll")
     public Result findSysPostAll() {
-        return sysPostService.findSysPostAll();
+        List<TbSysPost> sysPostAll = sysPostService.findSysPostAll();
+        return new Result(sysPostAll);
     }
 
     @RequiresPermissions("/system/sysPost/add")
@@ -67,7 +72,8 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "根据岗位id获取岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
     public Result selectByPrimaryKey(String id) {
-        return sysPostService.selectByPrimaryKey(id);
+        SysPost sysPost = sysPostService.selectByPrimaryKey(id);
+        return new Result(sysPost);
     }
 
 
@@ -75,14 +81,16 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "分页获取岗位信息及岗位对应的用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
     public Result list(@Validated @RequestBody SysPostPage sysPostPage) {
-        return sysPostService.findByPage(sysPostPage);
+        PaginationData data = sysPostService.findByPage(sysPostPage);
+        return new Result(data);
     }
 
     @RequiresPermissions("/system/sysPost/checkPostName")
     @ApiOperation(value = "校验岗位名称是否存在,false表示岗位名称已经存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPostName")
     public Result checkPostName(String postName){
-        return sysPostService.checkPostName(postName);
+        String result = sysPostService.checkPostName(postName);
+        return new Result(result);
     }
 
 }

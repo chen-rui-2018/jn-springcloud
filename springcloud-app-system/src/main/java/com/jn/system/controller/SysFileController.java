@@ -87,7 +87,8 @@ public class SysFileController extends BaseController {
     @PostMapping(value = "/checkFileName")
     @RequiresPermissions("/system/sysFile/checkFileName")
     public Result checkFileName(String fileName){
-        return sysFileService.checkFileName(fileName);
+        String result = sysFileService.checkFileName(fileName);
+        return new Result(result);
     }
 
 

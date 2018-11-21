@@ -1,8 +1,11 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.model.*;
+
+import java.util.List;
 
 /**
  * 用户组
@@ -18,7 +21,7 @@ public interface SysGroupService {
      * 查询所有用户组信息
      * @return
      */
-    Result findSysGroupAll(SysGroupPage groupPage);
+    PaginationData findSysGroupAll(SysGroupPage groupPage);
 
     /**
      * 增加用户组
@@ -44,14 +47,14 @@ public interface SysGroupService {
      * @param id 用户组id
      * @return
      */
-    Result findSysGroupById(String id);
+    TbSysGroup findSysGroupById(String id);
 
     /**
      * 根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息
      * @param sysGroupRolePage
      * @return
      */
-    Result selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage);
+    PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage);
 
     /**
      * 为用户组授权角色信息
@@ -64,14 +67,14 @@ public interface SysGroupService {
      * @param groupId 用户组id
      * @return
      */
-    Result findUserOfGroup(String groupId);
+    List<SysTUser> findUserOfGroup(String groupId);
 
     /**
      * 分页获取除用户组具有的用户以外的用户
      * @param sysGroupUserPage
      * @return
      */
-    Result findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
+    PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
 
     /**
      * 用户组授权用户
@@ -84,5 +87,5 @@ public interface SysGroupService {
      * @param groupName
      * @return
      */
-    Result checkGroupName(String groupName);
+    String checkGroupName(String groupName);
 }

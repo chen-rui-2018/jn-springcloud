@@ -1,8 +1,11 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysUserRoleVO;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public interface SysUserService {
      * @param userSysUserPage
      * @return
      */
-    Result findSysUserByPage(SysUserPage userSysUserPage);
+    PaginationData findSysUserByPage(SysUserPage userSysUserPage);
 
     /**
      * 删除用户
@@ -51,7 +54,7 @@ public interface SysUserService {
      * @param sysUserGroupPage
      * @return
      */
-    Result findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
+    PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
 
     /**
      * 往用户中添加用户组
@@ -67,7 +70,7 @@ public interface SysUserService {
      * @param sysUserRolePage
      * @return
      */
-    Result findSysRoleByUserId(SysUserRolePage sysUserRolePage);
+    SysUserRoleVO findSysRoleByUserId(SysUserRolePage sysUserRolePage);
 
     /**
      * 为用户添加角色权限
@@ -83,7 +86,7 @@ public interface SysUserService {
      * @param userId
      * @return
      */
-    Result findDepartmentandPostByUserId(String userId);
+    List<SysDepartmentPostVO> findDepartmentandPostByUserId(String userId);
 
     /**
      * 为用户添加部门岗位
@@ -99,12 +102,12 @@ public interface SysUserService {
      * @param id
      * @return
      */
-    Result findSysUserById(String id);
+    SysUser findSysUserById(String id);
 
     /**
      * 校验用户账号是否存在
      * @param account
      * @return
      */
-    Result checkUserName(String account);
+    String checkUserName(String account);
 }

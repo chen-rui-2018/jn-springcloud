@@ -4,6 +4,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
 
+import java.util.List;
+
 /**
  * @author： shaobao
  * @date： Created on 2018/11/1 16:23
@@ -16,7 +18,7 @@ public interface SysRoleService {
      *
      * @return
      */
-    Result findSysRoleAll();
+    List<SysRole> findSysRoleAll();
 
     /**
      * 新增角色
@@ -76,7 +78,7 @@ public interface SysRoleService {
      * @param roleName
      * @return
      */
-    Result checkRoleName(String roleName);
+    String checkRoleName(String roleName);
 
     /**
      * 查询角色具有的用户信息及条件分页获取为拥有用户信息
@@ -84,7 +86,7 @@ public interface SysRoleService {
      * @param sysRoleUserPage
      * @return
      */
-    Result findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
+    PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
 
     /**
      * 查询角色具有的用户组信息及条件分页获取为拥有用户组信息
@@ -92,7 +94,7 @@ public interface SysRoleService {
      * @param sysRoleUserGroupPage
      * @return
      */
-    Result findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
+    PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
 
     /**
      * 查询角色具有的权限信息及条件分页获取为拥有权限信息
@@ -100,5 +102,5 @@ public interface SysRoleService {
      * @param sysRolePermissionPage
      * @return
      */
-    Result findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
+    PaginationData findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
 }

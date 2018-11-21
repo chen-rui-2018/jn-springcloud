@@ -1,8 +1,12 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysDepartmentVO;
+
+import java.util.List;
 
 /**
  * @author： shaobao
@@ -16,7 +20,7 @@ public interface SysDepartmentService {
      *
      * @return
      */
-    Result findSysDepartmentAll();
+    List<SysDepartment> findSysDepartmentAll();
 
     /**
      * 根据部门id获取部门信息
@@ -24,7 +28,7 @@ public interface SysDepartmentService {
      * @param id
      * @return
      */
-    Result selectByPrimaryKey(String id);
+    SysDepartment selectByPrimaryKey(String id);
 
     /**
      * 逻辑删除部门信息
@@ -53,7 +57,7 @@ public interface SysDepartmentService {
      * @param sysDepartmentPage
      * @return
      */
-    Result findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
+    PaginationData findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage);
 
 
     /**
@@ -62,12 +66,12 @@ public interface SysDepartmentService {
      * @param departmentName
      * @return
      */
-    Result checkDepartmentName(String departmentName);
+    String checkDepartmentName(String departmentName);
 
     /**
      * 查询所有部门信息,并根据层级关系返回
      *
      * @return
      */
-    Result findDepartmentAllByLevel();
+    List<SysDepartmentVO> findDepartmentAllByLevel();
 }

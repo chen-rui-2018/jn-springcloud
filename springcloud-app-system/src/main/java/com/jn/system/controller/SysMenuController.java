@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
 import com.jn.system.service.SysMenuService;
+import com.jn.system.vo.SysMenuTreeVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 菜单controller
@@ -32,7 +35,8 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysMenu/list")
     public Result list() {
-        return sysMenuService.selectMenuListBySearchKey();
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuListBySearchKey();
+        return new Result(menuTreeVOList);
     }
 
 
@@ -97,6 +101,7 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/checkMenuName")
     @RequiresPermissions("/system/sysMenu/checkMenuName")
     public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck){
-        return sysMenuService.checkMenuName(sysMenuNameCheck);
+        String result = sysMenuService.checkMenuName(sysMenuNameCheck);
+        return new Result(result);
     }
 }

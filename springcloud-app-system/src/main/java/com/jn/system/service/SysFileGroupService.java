@@ -86,5 +86,5 @@ public interface SysFileGroupService {
      * @param fileGroupName
      * @return
      */
-    Result checkFileGroupName(String fileGroupName);
+    String checkFileGroupName(String fileGroupName);
 }

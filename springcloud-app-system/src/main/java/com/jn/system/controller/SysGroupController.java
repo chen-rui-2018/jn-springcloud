@@ -1,6 +1,7 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.model.*;
@@ -14,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 用户组管理
@@ -36,7 +39,8 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/list")
     @RequiresPermissions("/system/sysGroup/list")
     public Result list(@Validated @RequestBody SysGroupPage groupPage) {
-        return sysGroupService.findSysGroupAll(groupPage);
+        PaginationData data = sysGroupService.findSysGroupAll(groupPage);
+        return new Result(data);
     }
 
     @ApiOperation(value = "用户组添加", httpMethod = "POST", response = Result.class)
@@ -69,7 +73,8 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/selectByPrimaryKey")
     @RequiresPermissions("/system/sysGroup/selectByPrimaryKey")
     public Result selectByPrimaryKey(String id) {
-        return sysGroupService.findSysGroupById(id);
+        TbSysGroup sysGroup = sysGroupService.findSysGroupById(id);
+        return new Result(sysGroup);
     }
 
 
@@ -78,7 +83,8 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/selectGroupRoleAndOtherRole")
     @RequiresPermissions("/system/sysGroup/selectGroupRoleAndOtherRole")
     public Result selectGroupRoleAndOtherRole(@Validated @RequestBody SysGroupRolePage sysGroupRolePage) {
-        return sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
+        PaginationData data = sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
+        return new Result(data);
     }
 
 
@@ -97,7 +103,8 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/findUserOfGroup")
     @RequiresPermissions("/system/sysGroup/findUserOfGroup")
     public Result findUserOfGroup(String groupId) {
-        return sysGroupService.findUserOfGroup(groupId);
+        List<SysTUser> userOfGroup = sysGroupService.findUserOfGroup(groupId);
+        return new Result(userOfGroup);
     }
 
     @ApiOperation(value = "分页获取除用户组拥有的用户及用户组未拥有用户",
@@ -106,7 +113,8 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/findOtherUserByPage")
     public Result findOtherUserByPage(@Validated @RequestBody SysGroupUserPage sysGroupUserPage) {
         Assert.notNull(sysGroupUserPage.getGroupId(), "用户组id不能为空");
-        return sysGroupService.findOtherUserByPage(sysGroupUserPage);
+        PaginationData data = sysGroupService.findOtherUserByPage(sysGroupUserPage);
+        return new Result(data);
     }
 
     @ApiOperation(value = "用户组授权用户",
@@ -124,7 +132,8 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/checkGroupName")
     @RequiresPermissions("/system/sysGroup/checkGroupName")
     public Result checkGroupName(String groupName) {
-        return sysGroupService.checkGroupName(groupName);
+        String result = sysGroupService.checkGroupName(groupName);
+        return new Result(result);
     }
 
 }

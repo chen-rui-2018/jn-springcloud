@@ -2,29 +2,30 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.*;
-import com.jn.system.entity.TbSysDepartmentCriteria;
 import com.jn.system.entity.TbSysGroup;
 import com.jn.system.entity.TbSysGroupCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import com.jn.system.vo.SysGroupRoleVO;
 import com.jn.system.vo.SysGroupUserRoleVO;
 import com.jn.system.vo.SysGroupUserVO;
-import com.jn.system.vo.SysGroupVO;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户组service实现
@@ -56,7 +57,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    public Result findSysGroupAll(SysGroupPage groupPage) {
+    public PaginationData findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
         List<SysGroupUserRoleVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
         if (sysGroupAll != null && sysGroupAll.size() > 0) {
@@ -70,8 +71,8 @@ public class SysGroupServiceImpl implements SysGroupService {
                 sysGroupVO.setSysRoleList(roleAllOfGroup);
             }
         }
-        PaginationData getEasyUIData = new PaginationData(sysGroupAll, objects.getTotal());
-        return new Result(getEasyUIData);
+        PaginationData data = new PaginationData(sysGroupAll, objects.getTotal());
+        return data;
     }
 
     /**
@@ -84,8 +85,8 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void addSysGroup(TbSysGroup sysGroup) {
         //判断用户组名是否存在
         List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
-        if (tbSysGroups != null && tbSysGroups.size() > 0 ){
-            throw new RuntimeException("添加失败,用户组名已存在");
+        if (tbSysGroups != null && tbSysGroups.size() > 0) {
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         //为用户组设置信息
         sysGroup.setId(UUID.randomUUID().toString());
@@ -93,11 +94,12 @@ public class SysGroupServiceImpl implements SysGroupService {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(sysGroup);
-        logger.info("[用户组]用户组信息增加成功,groupId:{}",sysGroup.getId());
+        logger.info("[用户组] 用户组信息增加成功,groupId:{}", sysGroup.getId());
     }
 
     /**
      * 用于名称校验
+     *
      * @param groupName
      * @return
      */
@@ -120,7 +122,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroupMapper.deleteGroupBranch(groupIds);
         sysGroupUserMapper.deleteGroupBranch(groupIds);
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组]逻辑删除用户组信息,groupIds:{}",groupIds.toString());
+        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", groupIds.toString());
     }
 
     /**
@@ -138,8 +140,8 @@ public class SysGroupServiceImpl implements SysGroupService {
         criteria.andIdNotEqualTo(sysGroup.getId());
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
-        if (tbSysGroups != null && tbSysGroups.size() > 0 ){
-            throw new RuntimeException("修改失败,用户组名已存在");
+        if (tbSysGroups != null && tbSysGroups.size() > 0) {
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysGroupMapper.updateSysGroup(sysGroup);
     }
@@ -151,8 +153,9 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    public Result findSysGroupById(String id) {
-        return new Result(tbSysGroupMapper.selectByPrimaryKey(id));
+    public TbSysGroup findSysGroupById(String id) {
+        TbSysGroup tbSysGroup = tbSysGroupMapper.selectByPrimaryKey(id);
+        return tbSysGroup;
     }
 
     /**
@@ -162,16 +165,16 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    public Result selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
+    public PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
         List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
         //条件分页查询用户组为拥有的角色信息
         Page<Object> objects = PageHelper.startPage(sysGroupRolePage.getPage(), sysGroupRolePage.getRows());
         List<SysRole> otherRoleList = sysGroupRoleMapper.findRoleByGroupPage(sysGroupRolePage);
         otherRoleList.addAll(roleOfGroupList);
-        SysGroupRoleVO sysGroupRoleVO = new SysGroupRoleVO(roleOfGroupList,otherRoleList);
-        PaginationData data = new PaginationData(sysGroupRoleVO,objects.getTotal());
-        return new Result(data);
+        SysGroupRoleVO sysGroupRoleVO = new SysGroupRoleVO(roleOfGroupList, otherRoleList);
+        PaginationData data = new PaginationData(sysGroupRoleVO, objects.getTotal());
+        return data;
     }
 
     /**
@@ -184,7 +187,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd) {
         //插入之前,清除该用户组下面的角色信息
         sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
-        if(sysRoleGroupAdd.getRoleIds().length == 0){
+        if (sysRoleGroupAdd.getRoleIds().length == 0) {
             return;
         }
         String[] groupids = {sysRoleGroupAdd.getGroupId()};
@@ -199,12 +202,12 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("[用户组]添加用户组授权角色，groupId:{},roleId:{}",groupids.toString(),
+            logger.info("[用户组] 添加用户组授权角色，groupId:{},roleId:{}", groupids.toString(),
                     roleId);
         }
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
-        logger.info("[用户组]用户组授权角色成功，groupId:{}", groupids.toString());
+        logger.info("[用户组] 用户组授权角色成功，groupId:{}", groupids.toString());
     }
 
     /**
@@ -214,9 +217,9 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    public Result findUserOfGroup(String groupId) {
+    public List<SysTUser> findUserOfGroup(String groupId) {
         List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(groupId);
-        return new Result(userAllOfGroup);
+        return userAllOfGroup;
     }
 
     /**
@@ -226,7 +229,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    public Result findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
+    public PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
         //条件分页获取用户组未拥有用户
         List<SysTUser> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
@@ -238,7 +241,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroupUserVO.setUserList(userList);
         sysGroupUserVO.setUserAllOfGroup(userAllOfGroup);
         PaginationData data = new PaginationData(sysGroupUserVO, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
@@ -253,7 +256,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
-        if(sysGroupUserAdd.getUserIds().length == 0){
+        if (sysGroupUserAdd.getUserIds().length == 0) {
             return;
         }
         for (String userId : sysGroupUserAdd.getUserIds()) {
@@ -265,28 +268,29 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
-            logger.info("[用户组]添加用户组授权用户，groupId:{},userId:{}",sysGroupUserAdd.getGroupId(),
+            logger.info("[用户组] 添加用户组授权用户，groupId:{},userId:{}", sysGroupUserAdd.getGroupId(),
                     userId);
         }
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
-        logger.info("[用户组]用户组授权用户成功，groupId:{}",sysGroupUserAdd.getGroupId());
+        logger.info("[用户组] 用户组授权用户成功，groupId:{}", sysGroupUserAdd.getGroupId());
     }
 
     /**
      * 校验用户组名是否可用
+     *
      * @param groupName
      * @return
      */
     @Override
-    public Result checkGroupName(String groupName) {
-        if (StringUtils.isNotBlank(groupName)){
+    public String checkGroupName(String groupName) {
+        if (StringUtils.isNotBlank(groupName)) {
             List<TbSysGroup> tbSysGroups = checkName(groupName);
-            if (tbSysGroups != null && tbSysGroups.size() > 0){
-                return new Result("false");
+            if (tbSysGroups != null && tbSysGroups.size() > 0) {
+                return "false";
             }
         }
-        return  new Result("success");
+        return "success";
     }
 
 

@@ -2,15 +2,19 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.SysPostMapper;
 import com.jn.system.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dao.TbSysPostMapper;
 import com.jn.system.entity.TbSysPost;
 import com.jn.system.entity.TbSysPostCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.*;
+import com.jn.system.model.SysPost;
+import com.jn.system.model.SysPostAdd;
+import com.jn.system.model.SysPostPage;
+import com.jn.system.model.User;
 import com.jn.system.service.SysPostService;
 import com.jn.system.vo.SysPostVO;
 import org.apache.commons.lang3.StringUtils;
@@ -53,14 +57,12 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
-    public Result findSysPostAll() {
-        Result result = new Result();
+    public List<TbSysPost> findSysPostAll() {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
         List<TbSysPost> sysPostList = tbSysPostMapper.selectByExample(tbSysPostCriteria);
-        result.setData(sysPostList);
-        return result;
+        return sysPostList;
     }
 
 
@@ -74,7 +76,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void addPost(SysPostAdd sysPostAdd) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            throw new RuntimeException("添加失败,岗位名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPost tbSysPost = new TbSysPost();
         tbSysPost.setId(UUID.randomUUID().toString());
@@ -84,11 +86,12 @@ public class SysPostServiceImpl implements SysPostService {
         tbSysPost.setCreateTime(new Date());
         tbSysPost.setPostName(sysPostAdd.getPostName());
         tbSysPostMapper.insertSelective(tbSysPost);
-        logger.info("[岗位]新增岗位成功！，sysPostId:{}", tbSysPost.getId());
+        logger.info("[岗位] 新增岗位成功！，sysPostId:{}", tbSysPost.getId());
     }
 
     /**
      * 用于岗位名称校验
+     *
      * @param postName
      * @return
      */
@@ -110,7 +113,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void deletePostBranch(String[] ids) {
         sysPostMapper.deletePostBranch(ids);
         sysUserDepartmentPostMapper.deletePostBranch(ids);
-        logger.info("[岗位]批量删除岗位成功！，sysPostIds:{}", ids.toString());
+        logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", ids.toString());
     }
 
     /**
@@ -128,10 +131,10 @@ public class SysPostServiceImpl implements SysPostService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            throw new RuntimeException("修改失败,岗位名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysPostMapper.updatePost(sysPost);
-        logger.info("[岗位]修改岗位信息成功！，sysPostId:{}", sysPost.getId());
+        logger.info("[岗位] 修改岗位信息成功！，sysPostId:{}", sysPost.getId());
     }
 
     /**
@@ -141,13 +144,13 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
-    public Result selectByPrimaryKey(String id) {
+    public SysPost selectByPrimaryKey(String id) {
         TbSysPost tbSysPost = tbSysPostMapper.selectByPrimaryKey(id);
         SysPost sysPost = new SysPost();
         if (tbSysPost != null) {
             BeanUtils.copyProperties(tbSysPost, sysPost);
         }
-        return new Result(sysPost);
+        return sysPost;
     }
 
     /**
@@ -157,27 +160,28 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
-    public Result findByPage(SysPostPage sysPostPage) {
+    public PaginationData findByPage(SysPostPage sysPostPage) {
         Page<Object> objects = PageHelper.startPage(sysPostPage.getPage(), sysPostPage.getRows());
         List<SysPostVO> sysPostVOList = sysPostMapper.findByPage(sysPostPage);
         PaginationData data = new PaginationData(sysPostVOList, objects.getTotal());
-        return new Result(data);
+        return data;
     }
 
     /**
      * 校验岗位名称是否已存在
+     *
      * @param postName
      * @return
      */
     @Override
-    public Result checkPostName(String postName) {
-        if(StringUtils.isNotBlank(postName)){
+    public String checkPostName(String postName) {
+        if (StringUtils.isNotBlank(postName)) {
             List<TbSysPost> tbSysPosts = checkName(postName);
-            if (tbSysPosts != null && tbSysPosts.size() > 0){
-                return new Result("false");
+            if (tbSysPosts != null && tbSysPosts.size() > 0) {
+                return "false";
             }
         }
-        return new Result("success");
+        return "success";
     }
 
 }

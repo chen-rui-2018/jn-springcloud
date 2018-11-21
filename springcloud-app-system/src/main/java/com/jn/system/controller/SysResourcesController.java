@@ -3,6 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysResources;
 import com.jn.system.model.SysResourceCheckName;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 功能controller
@@ -78,13 +81,15 @@ public class SysResourcesController extends BaseController {
     @PostMapping(value = "/checkResourceName")
     @RequiresPermissions("/system/sysResources/checkResourceName")
     public Result checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName){
-        return sysResourcesService.checkResourceName(sysResourceCheckName);
+        String result = sysResourcesService.checkResourceName(sysResourceCheckName);
+        return new Result(result);
     }
 
     @ApiOperation(value = "根据菜单id获取菜单所有页面功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findResourcesByMenuId")
     @RequiresPermissions("/system/sysResources/findResourcesByMenuId")
     public Result findResourcesByMenuId(String menuId){
-        return sysResourcesService.findResourcesByMenuId(menuId);
+        List<TbSysResources> sysResourcesList = sysResourcesService.findResourcesByMenuId(menuId);
+        return new Result(sysResourcesList);
     }
 }

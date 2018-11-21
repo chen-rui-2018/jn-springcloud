@@ -5,6 +5,9 @@ import com.jn.system.model.SysMenu;
 import com.jn.system.model.SysMenuAdd;
 import com.jn.system.model.SysMenuNameCheck;
 import com.jn.system.model.SysMenuResourcesAdd;
+import com.jn.system.vo.SysMenuTreeVO;
+
+import java.util.List;
 
 /**
  * 菜单service
@@ -36,7 +39,7 @@ public interface SysMenuService {
      *
      * @return
      */
-    Result selectMenuListBySearchKey();
+    List<SysMenuTreeVO> selectMenuListBySearchKey();
 
     /**
      * 根据id获取菜单详情
@@ -73,5 +76,5 @@ public interface SysMenuService {
      * @param sysMenuNameCheck
      * @return
      */
-    Result checkMenuName(SysMenuNameCheck sysMenuNameCheck);
+    String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
 }

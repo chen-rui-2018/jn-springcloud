@@ -1,6 +1,7 @@
 package com.jn.system.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
 import com.jn.system.service.SysPermissionService;
@@ -54,7 +55,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "根据主键获取权限信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
     private Result selectByPrimaryKey(String id) {
-        return sysPermissionService.selectByPrimaryKey(id);
+        SysPermission sysPermission = sysPermissionService.selectByPrimaryKey(id);
+        return new Result(sysPermission);
     }
 
 
@@ -62,7 +64,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "条件分页查询", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
     public Result list(@Validated @RequestBody SysPermissionPage sysPermissionPage) {
-        return sysPermissionService.findByPage(sysPermissionPage);
+        PaginationData data = sysPermissionService.findByPage(sysPermissionPage);
+        return new Result(data);
     }
 
 
@@ -90,7 +93,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findRoleOfPermission")
     public Result findRoleOfPermission(@Validated @RequestBody SysPermissionRolePage sysPermissionRolePage) {
-        return sysPermissionService.findRoleOfPermission(sysPermissionRolePage);
+        PaginationData data = sysPermissionService.findRoleOfPermission(sysPermissionRolePage);
+        return new Result(data);
     }
 
 
@@ -98,7 +102,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findFileGroupOfPermission")
     public Result findFileGroupOfPermission(@Validated @RequestBody SysPermissionFileGroupPage sysPermissionFileGroupPage) {
-        return sysPermissionService.findFileGroupOfPermission(sysPermissionFileGroupPage);
+        PaginationData data = sysPermissionService.findFileGroupOfPermission(sysPermissionFileGroupPage);
+        return new Result(data);
     }
 
 
@@ -117,7 +122,8 @@ public class SysPermissionController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findMenuOfPermission")
     public Result findMenuOfPermission(@Validated @RequestBody SysPermissionMenuPage sysPermissionMenuPage) {
-        return sysPermissionService.findMenuOfPermission(sysPermissionMenuPage);
+        PaginationData data = sysPermissionService.findMenuOfPermission(sysPermissionMenuPage);
+        return new Result(data);
     }
 
 
@@ -125,7 +131,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findResourcesOfPermission")
     public Result findResourcesOfPermission(@Validated @RequestBody SysPermissionResourcePage sysPermissionResourcePage) {
-        return sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);
+        PaginationData data = sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);
+        return new Result(data);
     }
 
 
@@ -152,7 +159,8 @@ public class SysPermissionController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPerssionName")
     public Result checkPermissionName(String permissionName) {
-        return sysPermissionService.checkPermissionName(permissionName);
+        String result = sysPermissionService.checkPermissionName(permissionName);
+        return new Result(result);
     }
 
 }

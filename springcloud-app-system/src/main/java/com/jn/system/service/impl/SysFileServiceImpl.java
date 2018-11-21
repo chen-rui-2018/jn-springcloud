@@ -2,6 +2,7 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysFileGroupFileMapper;
@@ -9,6 +10,7 @@ import com.jn.system.dao.SysFileMapper;
 import com.jn.system.dao.TbSysFileMapper;
 import com.jn.system.entity.TbSysFile;
 import com.jn.system.entity.TbSysFileCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileService;
@@ -61,7 +63,7 @@ public class SysFileServiceImpl implements SysFileService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
         if (tbSysFiles != null && tbSysFiles.size() > 0) {
-            throw new RuntimeException("添加失败,文件名称已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFile.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
@@ -113,7 +115,9 @@ public class SysFileServiceImpl implements SysFileService {
     public SysFile selectSysFileByIds(String id) {
         TbSysFile tbSysFile = tbSysFileMapper.selectByPrimaryKey(id);
         SysFile sysFile = new SysFile();
-        BeanUtils.copyProperties(tbSysFile, sysFile);
+        if (tbSysFile != null){
+            BeanUtils.copyProperties(tbSysFile, sysFile);
+        }
         logger.info("[文件] 根据Id查询文件成功！,fileId: {}",id);
         return sysFile;
     }
@@ -186,8 +190,8 @@ public class SysFileServiceImpl implements SysFileService {
      * @return
      */
     @Override
-    public Result checkFileName(String fileName) {
-        if (StringUtils.isNotBlank(fileName)){
+    public String checkFileName(String fileName) {
+        if (StringUtils.isNotBlank(fileName)) {
             //文件名称校验
             TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
             TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
@@ -195,9 +199,9 @@ public class SysFileServiceImpl implements SysFileService {
             criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
             if (tbSysFiles != null && tbSysFiles.size() > 0) {
-                return new Result("false");
+                return "false";
             }
         }
-        return new Result("success");
+        return "success";
     }
 }

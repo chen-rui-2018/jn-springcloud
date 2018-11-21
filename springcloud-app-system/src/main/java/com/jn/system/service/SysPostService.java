@@ -1,9 +1,13 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysPost;
 import com.jn.system.model.SysPost;
 import com.jn.system.model.SysPostAdd;
 import com.jn.system.model.SysPostPage;
+
+import java.util.List;
 
 /**
  * 岗位service
@@ -19,7 +23,7 @@ public interface SysPostService {
      *
      * @return
      */
-    Result findSysPostAll();
+    List<TbSysPost> findSysPostAll();
 
     /**
      * 添加岗位
@@ -48,7 +52,7 @@ public interface SysPostService {
      * @param id
      * @return
      */
-    Result selectByPrimaryKey(String id);
+    SysPost selectByPrimaryKey(String id);
 
     /**
      * 分页获取岗位信息及对应的用户
@@ -56,12 +60,12 @@ public interface SysPostService {
      * @param sysPostPage
      * @return
      */
-    Result findByPage(SysPostPage sysPostPage);
+    PaginationData findByPage(SysPostPage sysPostPage);
 
     /**
      *  校验岗位名称是否已存在
      * @param postName
      * @return
      */
-    Result checkPostName(String postName);
+    String checkPostName(String postName);
 }

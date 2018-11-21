@@ -1,8 +1,11 @@
 package com.jn.system.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysUserRoleVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -42,8 +45,8 @@ public class SysUserServiceTest {
         SysUserPage sysUserUserQuery = new SysUserPage();
         sysUserUserQuery.setPage(1);
         sysUserUserQuery.setRows(10);
-        Result result = sysUserService.findSysUserByPage(sysUserUserQuery);
-        logger.info("测试结果:" + result.getData().toString());
+        PaginationData data = sysUserService.findSysUserByPage(sysUserUserQuery);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -66,8 +69,8 @@ public class SysUserServiceTest {
         SysUserGroupPage sysUserGroupPage = new SysUserGroupPage();
         sysUserGroupPage.setPage(1);
         sysUserGroupPage.setRows(10);
-        Result result = sysUserService.findSysGroupByUserId(sysUserGroupPage);
-        logger.info("测试结果:" + result.getData().toString());
+        PaginationData data = sysUserService.findSysGroupByUserId(sysUserGroupPage);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -81,8 +84,8 @@ public class SysUserServiceTest {
         SysUserRolePage sysUserRolePage = new SysUserRolePage();
         sysUserRolePage.setPage(1);
         sysUserRolePage.setRows(10);
-        Result result = sysUserService.findSysRoleByUserId(sysUserRolePage);
-        logger.info("测试结果:" + result.getData().toString());
+        SysUserRoleVO data = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        logger.info("测试结果:{}",data.toString());
     }
 
     @Test
@@ -93,8 +96,8 @@ public class SysUserServiceTest {
 
     @Test
     public void findDepartmentandPostByUserIdTest() {
-        Result result = sysUserService.findDepartmentandPostByUserId("62619962-c88c-4530-b424-ced43b30e1ea");
-        logger.info("测试结果:" + result.getData().toString());
+        List<SysDepartmentPostVO> data = sysUserService.findDepartmentandPostByUserId("10000");
+        logger.info("测试结果:" + data.toString());
     }
 
     @Test
@@ -112,8 +115,8 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysUserByIdTest() {
-        Result result = sysUserService.findSysUserById("10000");
-        logger.info("测试结果:" + result.getData().toString());
+        SysUser data = sysUserService.findSysUserById("10000");
+        logger.info("测试结果:",data.toString());
     }
 
 }

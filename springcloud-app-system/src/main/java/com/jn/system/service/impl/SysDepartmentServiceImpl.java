@@ -3,15 +3,16 @@ package com.jn.system.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.SysDepartmentMapper;
 import com.jn.system.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dao.TbSysDepartmentMapper;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysDepartmentCriteria;
-import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.*;
+import com.jn.system.model.SysDepartment;
+import com.jn.system.model.SysDepartmentAdd;
+import com.jn.system.model.SysDepartmentPage;
+import com.jn.system.model.User;
 import com.jn.system.service.SysDepartmentService;
 import com.jn.system.vo.SysDepartmentUserVO;
 import com.jn.system.vo.SysDepartmentVO;
@@ -55,8 +56,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
-    public Result findSysDepartmentAll() {
-        Result result = new Result();
+    public List<SysDepartment> findSysDepartmentAll() {
         TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
@@ -67,8 +67,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             BeanUtils.copyProperties(tbSysDepartment, sysDepartment);
             list.add(sysDepartment);
         }
-        result.setData(list);
-        return result;
+        return list;
     }
 
     /**
@@ -78,11 +77,13 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
-    public Result selectByPrimaryKey(String id) {
+    public SysDepartment selectByPrimaryKey(String id) {
         TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(id);
         SysDepartment sysDepartment = new SysDepartment();
-        BeanUtils.copyProperties(tbSysDepartment, sysDepartment);
-        return new Result(sysDepartment);
+        if (tbSysDepartment != null){
+            BeanUtils.copyProperties(tbSysDepartment, sysDepartment);
+        }
+        return sysDepartment;
     }
 
     /**
@@ -125,12 +126,12 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public void add(SysDepartmentAdd sysDepartmentAdd) {
         String level;
         //根据父id查询父级部门等级,判断父id是否是1级id,若是设置等级为1
-        if ("1".equals(sysDepartmentAdd.getParentId())){
+        if ("1".equals(sysDepartmentAdd.getParentId())) {
             level = "1";
-        }else{
+        } else {
             //查询父级部门等级
             TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(sysDepartmentAdd.getParentId());
-            level = (Integer.parseInt(tbSysDepartment.getLevel())+1)+"";
+            level = (Integer.parseInt(tbSysDepartment.getLevel()) + 1) + "";
         }
         //判断部门名称中是否有数据
         if (sysDepartmentAdd.getDepartmentNames() != null &&
@@ -162,12 +163,12 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
-    public Result findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage) {
+    public PaginationData findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage) {
         //分页查询所有部门
         Page<Object> objects = PageHelper.startPage(sysDepartmentPage.getPage(), sysDepartmentPage.getRows());
         List<SysDepartmentUserVO> list = sysDepartmentMapper.findSysDepartmentByPage(sysDepartmentPage);
-        PaginationData getEasyUIData = new PaginationData(list, objects.getTotal());
-        return new Result(getEasyUIData);
+        PaginationData data = new PaginationData(list, objects.getTotal());
+        return data;
     }
 
 
@@ -178,18 +179,18 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
-    public Result checkDepartmentName(String departmentName) {
-        if(StringUtils.isNotBlank(departmentName)){
+    public String checkDepartmentName(String departmentName) {
+        if (StringUtils.isNotBlank(departmentName)) {
             TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
             TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
             criteria.andDepartmentNameEqualTo(departmentName);
             criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
             List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
             if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
-                return new Result("false");
+                return "false";
             }
         }
-        return new Result("success");
+        return "success";
     }
 
     /**
@@ -198,11 +199,11 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
-    public Result findDepartmentAllByLevel() {
+    public List<SysDepartmentVO> findDepartmentAllByLevel() {
         //查询所有以及部门
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentMapper.findSysDepartmentAll();
         findChildrenDepartment(sysDepartmentVOList);
-        return new Result(sysDepartmentVOList);
+        return sysDepartmentVOList;
     }
 
     /**
@@ -215,10 +216,10 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             List<SysDepartmentVO> childrenDepartList =
                     sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getValue());
             sysDepartmentVO.setChildren(childrenDepartList);
-            if (childrenDepartList.size() == 0){
+            if (childrenDepartList.size() == 0) {
                 sysDepartmentVO.setChildren(null);
                 continue;
-            }else {
+            } else {
                 findChildrenDepartment(childrenDepartList);
             }
         }

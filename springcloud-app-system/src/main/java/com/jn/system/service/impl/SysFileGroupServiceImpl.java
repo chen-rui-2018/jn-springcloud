@@ -2,14 +2,15 @@ package com.jn.system.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.dao.SysFileGroupFileMapper;
 import com.jn.system.dao.SysFileGroupMapper;
 import com.jn.system.dao.TbSysFileGroupMapper;
 import com.jn.system.entity.TbSysFileGroup;
 import com.jn.system.entity.TbSysFileGroupCriteria;
+import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileGroupService;
@@ -55,7 +56,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //名称校验
         List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            throw new RuntimeException("添加失败,文件组名已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFileGroup.setId(UUID.randomUUID().toString());
         //获取当前登录用户信息
@@ -70,6 +71,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
     /**
      * 用于做名称校验
+     *
      * @param fileGroupName
      * @return
      */
@@ -96,7 +98,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         criteria.andIdNotEqualTo(sysFileGroup.getId());
         List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            throw new RuntimeException("修改失败,文件组名已存在");
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
@@ -126,7 +128,9 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public SysFileGroup selectSysFileGroupByIds(String id) {
         TbSysFileGroup tbSysFileGroup = tbSysFileGroupMapper.selectByPrimaryKey(id);
         SysFileGroup sysFileGroup = new SysFileGroup();
-        BeanUtils.copyProperties(tbSysFileGroup, sysFileGroup);
+        if (tbSysFileGroup != null){
+            BeanUtils.copyProperties(tbSysFileGroup, sysFileGroup);
+        }
         logger.info("[文件组] 根据Id查询文件组成功！,fileGroupId: {}", id);
         return sysFileGroup;
     }
@@ -158,7 +162,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //过滤已删除的数据
         sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
 
-        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(),sysFileGroupPage.getStatus());
+        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }
@@ -191,10 +195,10 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getKey());
 
             sysFileGroupFiles.add(sysFileGroupFile);
-            logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId , Arrays.toString(fileId));
+            logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId, Arrays.toString(fileId));
 
         }
-        logger.info("[文件组] 文件组添加文件,新增前删除该的所有该文件组的文件数据,fileId：{}", fileGroupId,Arrays.toString(fileId));
+        logger.info("[文件组] 文件组添加文件,新增前删除该的所有该文件组的文件数据,fileId：{}", fileGroupId, Arrays.toString(fileId));
 
         //新增前删除该的所有该文件组的文件数据
         String[] fileGroupIds = {fileGroupId};
@@ -225,13 +229,13 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @return
      */
     @Override
-    public Result checkFileGroupName(String fileGroupName) {
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)){
+    public String checkFileGroupName(String fileGroupName) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)) {
             List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);
             if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-                return new Result("false");
+                return "false";
             }
         }
-        return new Result("success");
+        return "success";
     }
 }

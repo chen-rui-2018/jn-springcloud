@@ -5,7 +5,10 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.*;
-import com.jn.system.entity.*;
+import com.jn.system.entity.TbSysDepartment;
+import com.jn.system.entity.TbSysUser;
+import com.jn.system.entity.TbSysUserCriteria;
+import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
@@ -25,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户dao
@@ -64,15 +69,11 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result addSysUser(SysUser sysUser) {
-        //根据用户名查询用户名是否存在
-        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andAccountEqualTo(sysUser.getAccount());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+    public void addSysUser(SysUser sysUser) {
+        //根据用户名查询用户账号是否存在
+        List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
-            return new Result("用户名已存在");
+            throw new RuntimeException("添加失败,账号已存在");
         }
         sysUser.setId(UUID.randomUUID().toString());
         sysUser.setCreateTime(new Date());
@@ -83,7 +84,20 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUserMapper.insert(tbSysUser);
         logger.info("[用户] 新增用户成功！，sysUserId:{}", sysUser.getId());
-        return new Result();
+    }
+
+    /**
+     * 用于做账号校验
+     *
+     * @param account
+     * @return
+     */
+    private List<TbSysUser> checkAccount(String account) {
+        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
+        criteria.andAccountEqualTo(account);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
     /**
@@ -125,6 +139,12 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
+        if(StringUtils.isNotBlank(sysUser.getAccount())){
+            TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
+            if (!sysUser.getAccount().equals(tbSysUser.getAccount())){
+                throw new RuntimeException("账号不允许修改!");
+            }
+        }
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
         }
@@ -151,8 +171,8 @@ public class SysUserServiceImpl implements SysUserService {
         Page<Object> objects = PageHelper.startPage(sysUserGroupPage.getPage(), sysUserGroupPage.getRows());
         List<SysGroup> otherGroupList = sysGroupUserMapper.findGroupByPage(sysUserGroupPage);
         otherGroupList.addAll(sysGroupOfUserList);
-        SysUserGroupVO sysUserGroupVO = new SysUserGroupVO(sysGroupOfUserList,otherGroupList);
-        PaginationData data = new PaginationData(sysUserGroupVO,objects.getTotal());
+        SysUserGroupVO sysUserGroupVO = new SysUserGroupVO(sysGroupOfUserList, otherGroupList);
+        PaginationData data = new PaginationData(sysUserGroupVO, objects.getTotal());
         return new Result(data);
     }
 
@@ -201,7 +221,7 @@ public class SysUserServiceImpl implements SysUserService {
         //条件分页获取用户未拥有的角色信息
         List<SysRole> otherRoleList = sysUserRoleMapper.findRoleByUserPage(sysUserRolePage);
         otherRoleList.addAll(sysRoleOfUserList);
-        SysUserRoleVO sysUserRoleVO = new SysUserRoleVO(sysRoleOfUserList,otherRoleList);
+        SysUserRoleVO sysUserRoleVO = new SysUserRoleVO(sysRoleOfUserList, otherRoleList);
         return new Result(sysUserRoleVO);
     }
 
@@ -252,7 +272,7 @@ public class SysUserServiceImpl implements SysUserService {
                 buffer.append(tbSysDepartment.getId()).append(",");
             }
             String id = buffer.toString();
-            sysDepartmentPostVO.setDepartmentId(id.substring(0,id.length() - 1));
+            sysDepartmentPostVO.setDepartmentId(id.substring(0, id.length() - 1));
         }
         return new Result(sysDepartmentPostVOList);
     }
@@ -283,9 +303,9 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
                 sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
                 sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
-                if("1".equals(sysDepartmentPost.getIsDefault())){
+                if ("1".equals(sysDepartmentPost.getIsDefault())) {
                     count++;
-                    if (count > 1){
+                    if (count > 1) {
                         throw new RuntimeException("部门岗位信息只能有一个是默认的");
                     }
                 }
@@ -321,12 +341,8 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public Result checkUserName(String account) {
-        if (StringUtils.isNotBlank(account)){
-            TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-            TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-            criteria.andAccountEqualTo(account);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-            List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+        if (StringUtils.isNotBlank(account)) {
+            List<TbSysUser> tbSysUsers = checkAccount(account);
             if (tbSysUsers != null && tbSysUsers.size() > 0) {
                 return new Result("false");
             }

@@ -63,15 +63,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result addPermission(SysPermissionAdd sysPermissionAdd) {
+    public void addPermission(SysPermissionAdd sysPermissionAdd) {
         //判断权限名称是否已经存在
-        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
-        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
-        criteria.andPermissionNameEqualTo(sysPermissionAdd.getPermissionName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
+        List<TbSysPermission> tbSysPermissions = checkName(sysPermissionAdd.getPermissionName());
         if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
-            return new Result("添加失败,权限名称已存在");
+            throw new RuntimeException("添加失败,权限名称已存在");
         }
         TbSysPermission tbSysPermission = new TbSysPermission();
         tbSysPermission.setId(UUID.randomUUID().toString());
@@ -82,7 +78,19 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         tbSysPermission.setStatus(sysPermissionAdd.getStatus());
         tbSysPermissionMapper.insertSelective(tbSysPermission);
         logger.info("[权限]新增权限信息成功！，sysPermissionId:{}", tbSysPermission.getId());
-        return new Result("添加成功");
+    }
+
+    /**
+     * 用于权限名称校验
+     * @param permissionName
+     * @return
+     */
+    private List<TbSysPermission> checkName(String permissionName) {
+        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
+        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
+        criteria.andPermissionNameEqualTo(permissionName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
     }
 
     /**
@@ -93,6 +101,15 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updatePermission(SysPermission sysPermission) {
+        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
+        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
+        criteria.andPermissionNameEqualTo(sysPermission.getPermissionName());
+        criteria.andIdNotEqualTo(sysPermission.getId());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
+        if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
+            throw new RuntimeException("修改失败,权限名称已存在");
+        }
         sysPermissionMapper.updatePermission(sysPermission);
         logger.info("[权限]修改权限信息成功！，sysPermissionId:{}", sysPermission.getId());
     }
@@ -295,11 +312,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     public Result checkPermissionName(String permissionName) {
-        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
-        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
-        criteria.andPermissionNameEqualTo(permissionName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
+        List<TbSysPermission> tbSysPermissions = checkName(permissionName);
         if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
             return new Result("false");
         }

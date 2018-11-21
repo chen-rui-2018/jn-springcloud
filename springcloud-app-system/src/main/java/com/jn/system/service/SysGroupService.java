@@ -24,7 +24,7 @@ public interface SysGroupService {
      * 增加用户组
      * @param sysGroup 用户组
      */
-    Result addSysGroup(TbSysGroup sysGroup);
+    void addSysGroup(TbSysGroup sysGroup);
 
     /**
      * 逻辑删除用户组

@@ -26,7 +26,7 @@ public interface SysPostService {
      *
      * @param sysPostAdd
      */
-    String addPost(SysPostAdd sysPostAdd);
+    void addPost(SysPostAdd sysPostAdd);
 
     /**
      * 批量删除岗位

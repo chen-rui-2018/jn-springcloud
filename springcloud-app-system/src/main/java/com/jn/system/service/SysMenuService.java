@@ -3,7 +3,7 @@ package com.jn.system.service;
 import com.jn.common.model.Result;
 import com.jn.system.model.SysMenu;
 import com.jn.system.model.SysMenuAdd;
-import com.jn.system.model.SysMenuPage;
+import com.jn.system.model.SysMenuNameCheck;
 import com.jn.system.model.SysMenuResourcesAdd;
 
 /**
@@ -33,6 +33,7 @@ public interface SysMenuService {
 
     /**
      * 查询所有菜单信息,返回属性结构
+     *
      * @return
      */
     Result selectMenuListBySearchKey();
@@ -65,4 +66,12 @@ public interface SysMenuService {
      * @param sysMenuAdd
      */
     void addMenu(SysMenuAdd sysMenuAdd);
+
+    /**
+     * 校验菜单名称
+     *
+     * @param sysMenuNameCheck
+     * @return
+     */
+    Result checkMenuName(SysMenuNameCheck sysMenuNameCheck);
 }

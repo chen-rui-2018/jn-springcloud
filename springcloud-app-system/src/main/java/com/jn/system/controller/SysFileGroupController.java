@@ -83,7 +83,7 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
-    @ApiOperation(value = "校验文件组是否存在", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验文件组名称是否存在", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkFileGroupName")
     @RequiresPermissions("/system/sysFileGroup/checkFileGroupName")
     public Result checkFileGroupName(String fileGroupName){

@@ -71,14 +71,10 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public String addPost(SysPostAdd sysPostAdd) {
-        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        criteria.andPostNameEqualTo(sysPostAdd.getPostName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+    public void addPost(SysPostAdd sysPostAdd) {
+        List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            return "添加失败,岗位名称已存在";
+            throw new RuntimeException("添加失败,岗位名称已存在");
         }
         TbSysPost tbSysPost = new TbSysPost();
         tbSysPost.setId(UUID.randomUUID().toString());
@@ -89,7 +85,19 @@ public class SysPostServiceImpl implements SysPostService {
         tbSysPost.setPostName(sysPostAdd.getPostName());
         tbSysPostMapper.insertSelective(tbSysPost);
         logger.info("[岗位]新增岗位成功！，sysPostId:{}", tbSysPost.getId());
-        return "添加成功";
+    }
+
+    /**
+     * 用于岗位名称校验
+     * @param postName
+     * @return
+     */
+    private List<TbSysPost> checkName(String postName) {
+        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
+        criteria.andPostNameEqualTo(postName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysPostMapper.selectByExample(tbSysPostCriteria);
     }
 
     /**
@@ -113,6 +121,15 @@ public class SysPostServiceImpl implements SysPostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
+        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
+        criteria.andPostNameEqualTo(sysPost.getPostName());
+        criteria.andIdNotEqualTo(sysPost.getId());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+        if (tbSysPosts != null && tbSysPosts.size() > 0) {
+            throw new RuntimeException("修改失败,岗位名称已存在");
+        }
         sysPostMapper.updatePost(sysPost);
         logger.info("[岗位]修改岗位信息成功！，sysPostId:{}", sysPost.getId());
     }
@@ -155,11 +172,7 @@ public class SysPostServiceImpl implements SysPostService {
     @Override
     public Result checkPostName(String postName) {
         if(StringUtils.isNotBlank(postName)){
-            TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-            TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-            criteria.andPostNameEqualTo(postName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-            List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+            List<TbSysPost> tbSysPosts = checkName(postName);
             if (tbSysPosts != null && tbSysPosts.size() > 0){
                 return new Result("false");
             }

@@ -31,7 +31,8 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addSysUser")
     public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
-        return  sysUserService.addSysUser(sysUser);
+        sysUserService.addSysUser(sysUser);
+        return new Result();
     }
 
     @RequiresPermissions("/system/sysUser/findSysUserByPage")

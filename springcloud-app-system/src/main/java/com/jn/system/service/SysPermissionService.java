@@ -15,7 +15,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionAdd
      */
-    Result addPermission(SysPermissionAdd sysPermissionAdd);
+    void addPermission(SysPermissionAdd sysPermissionAdd);
 
     /**
      * 修改权限

@@ -53,11 +53,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void insertSysFileGroup(SysFileGroup sysFileGroup) {
         //名称校验
-        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
-        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
-        criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+        List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
             throw new RuntimeException("添加失败,文件组名已存在");
         }
@@ -73,6 +69,19 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     }
 
     /**
+     * 用于做名称校验
+     * @param fileGroupName
+     * @return
+     */
+    private List<TbSysFileGroup> checkName(String fileGroupName) {
+        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
+        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
+        criteria.andFileGroupNameEqualTo(fileGroupName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+    }
+
+    /**
      * 根据id更新文件组
      *
      * @param sysFileGroup
@@ -80,7 +89,15 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
-
+        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
+        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
+        criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andIdNotEqualTo(sysFileGroup.getId());
+        List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+        if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+            throw new RuntimeException("修改失败,文件组名已存在");
+        }
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.updateByPrimaryKeySelective(tbSysFileGroup);
@@ -211,11 +228,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     public Result checkFileGroupName(String fileGroupName) {
         if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)){
-            TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
-            TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
-            criteria.andFileGroupNameEqualTo(fileGroupName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-            List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
+            List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);
             if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
                 return new Result("false");
             }

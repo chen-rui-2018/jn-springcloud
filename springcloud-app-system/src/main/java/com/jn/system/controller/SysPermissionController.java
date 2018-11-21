@@ -35,7 +35,8 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "添加权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysPermissionAdd sysPermissionAdd) {
-        return sysPermissionService.addPermission(sysPermissionAdd);
+        sysPermissionService.addPermission(sysPermissionAdd);
+        return new Result();
     }
 
 
@@ -78,7 +79,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/addRoleToPermission")
     @ApiOperation(value = "为权限添加角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addRoleToPermission")
-    private Result addRoleToPermission(@Validated @RequestBody SysPermissionRolesAdd sysPermissionRolesAdd) {
+    public Result addRoleToPermission(@Validated @RequestBody SysPermissionRolesAdd sysPermissionRolesAdd) {
         Assert.notNull(sysPermissionRolesAdd.getPermissionId(), "权限id不能为空");
         sysPermissionService.addRoleToPermission(sysPermissionRolesAdd);
         return new Result();

@@ -81,15 +81,11 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result addSysGroup(TbSysGroup sysGroup) {
+    public void addSysGroup(TbSysGroup sysGroup) {
         //判断用户组名是否存在
-        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-        criteria.andGroupNameEqualTo(sysGroup.getGroupName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
+        List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
         if (tbSysGroups != null && tbSysGroups.size() > 0 ){
-            return new Result("用户组名已存在");
+            throw new RuntimeException("添加失败,用户组名已存在");
         }
         //为用户组设置信息
         sysGroup.setId(UUID.randomUUID().toString());
@@ -98,7 +94,19 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(sysGroup);
         logger.info("[用户组]用户组信息增加成功,groupId:{}",sysGroup.getId());
-        return new Result("添加成功");
+    }
+
+    /**
+     * 用于名称校验
+     * @param groupName
+     * @return
+     */
+    private List<TbSysGroup> checkName(String groupName) {
+        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
+        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
+        criteria.andGroupNameEqualTo(groupName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
     }
 
     /**
@@ -124,6 +132,15 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
+        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
+        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
+        criteria.andGroupNameEqualTo(sysGroup.getGroupName());
+        criteria.andIdNotEqualTo(sysGroup.getId());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
+        if (tbSysGroups != null && tbSysGroups.size() > 0 ){
+            throw new RuntimeException("修改失败,用户组名已存在");
+        }
         sysGroupMapper.updateSysGroup(sysGroup);
     }
 
@@ -264,11 +281,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     public Result checkGroupName(String groupName) {
         if (StringUtils.isNotBlank(groupName)){
-            TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-            TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-            criteria.andGroupNameEqualTo(groupName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-            List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
+            List<TbSysGroup> tbSysGroups = checkName(groupName);
             if (tbSysGroups != null && tbSysGroups.size() > 0){
                 return new Result("false");
             }

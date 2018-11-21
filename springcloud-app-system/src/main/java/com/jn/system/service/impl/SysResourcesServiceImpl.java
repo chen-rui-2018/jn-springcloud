@@ -54,12 +54,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void insertResources(SysResources sysResources) {
         //添加名称校验
-        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
-        criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        criteria.andMenuIdEqualTo(sysResources.getMenuId());
-        List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+        List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
             throw new RuntimeException("添加失败,页面功能名称已存在");
         }
@@ -75,6 +70,21 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     }
 
     /**
+     * 用于页面功能做名称校验
+     * @param resourcesName
+     * @param menuId
+     * @return
+     */
+    private List<TbSysResources> checkName(String resourcesName, String menuId) {
+        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
+        criteria.andResourcesNameEqualTo(resourcesName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andMenuIdEqualTo(menuId);
+        return tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+    }
+
+    /**
      * 更新功能信息
      *
      * @param sysResources
@@ -82,6 +92,16 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
+        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
+        criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andMenuIdEqualTo(sysResources.getMenuId());
+        criteria.andIdNotEqualTo(sysResources.getId());
+        List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+        if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
+            throw new RuntimeException("修改失败,页面功能名称已存在");
+        }
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
@@ -151,12 +171,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     public Result checkResourceName(SysResourceCheckName sysResourceCheckName) {
         if (StringUtils.isNotBlank(sysResourceCheckName.getResourceName())) {
-            TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-            TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
-            criteria.andResourcesNameEqualTo(sysResourceCheckName.getResourceName());
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-            criteria.andMenuIdEqualTo(sysResourceCheckName.getMenuId());
-            List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
+            List<TbSysResources> tbSysResourcesList = checkName(sysResourceCheckName.getResourceName(), sysResourceCheckName.getMenuId());
             if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
                 return new Result("flase");
             }

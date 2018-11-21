@@ -3,10 +3,7 @@ package com.jn.system.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuAdd;
-import com.jn.system.model.SysMenuPage;
-import com.jn.system.model.SysMenuResourcesAdd;
+import com.jn.system.model.*;
 import com.jn.system.service.SysMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -96,6 +93,10 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
-
-
+    @ApiOperation(value = "校验菜单名称", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/checkMenuName")
+    @RequiresPermissions("/system/sysMenu/checkMenuName")
+    public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck){
+        return sysMenuService.checkMenuName(sysMenuNameCheck);
+    }
 }

@@ -1,8 +1,5 @@
 package com.jn.system.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dao.SysMenuMapper;
 import com.jn.system.dao.TbSysMenuMapper;
@@ -53,6 +50,16 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateSysMenuById(SysMenu sysMenu) {
+        TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
+        TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
+        criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andParentIdEqualTo(sysMenu.getParentId());
+        criteria.andMenuNameEqualTo(sysMenu.getMenuName());
+        criteria.andIdNotEqualTo(sysMenu.getId());
+        List<TbSysMenu> tbSysMenus = tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
+        if (tbSysMenus != null && tbSysMenus.size() > 0) {
+            throw new RuntimeException("添加失败,菜单名称已存在");
+        }
         TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
@@ -72,6 +79,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 查询所有菜单,返回树形结构
+     *
      * @return
      */
     @Override
@@ -85,19 +93,20 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 递归查询菜单子菜单
+     *
      * @param menuTreeVOList
      */
-    public void findChildMenuList(List<SysMenuTreeVO> menuTreeVOList){
-        for (SysMenuTreeVO sysMenuTreeVO:menuTreeVOList) {
+    public void findChildMenuList(List<SysMenuTreeVO> menuTreeVOList) {
+        for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
             //判断菜单项是否是文件夹,是再递归获取数据
-            if ("1".equals(sysMenuTreeVO.getIsDir())){
+            if ("1".equals(sysMenuTreeVO.getIsDir())) {
                 //以菜单id作为父id,去获取菜单子集
                 List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getValue());
                 sysMenuTreeVO.setChildren(childrenMenuList);
-                if (childrenMenuList.size() == 0){
+                if (childrenMenuList.size() == 0) {
                     sysMenuTreeVO.setChildren(null);
                     continue;
-                }else{
+                } else {
                     findChildMenuList(childrenMenuList);
                 }
             }
@@ -172,18 +181,29 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 校验菜单名称是否存在
+     *
      * @param sysMenuAdd
      */
-    public void checkName(SysMenuAdd sysMenuAdd){
+    public void checkName(SysMenuAdd sysMenuAdd) {
+        List<TbSysMenu> tbSysMenus = checkMenusName(sysMenuAdd.getMenuName(),sysMenuAdd.getParentId());
+        if (tbSysMenus != null && tbSysMenus.size() > 0) {
+            throw new RuntimeException("添加失败,菜单名称已存在");
+        }
+    }
+
+    /**
+     * 校验菜单名称
+     * @param menuName
+     * @param parentId
+     * @return
+     */
+    private List<TbSysMenu> checkMenusName(String menuName,String parentId) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
         criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getKey());
-        criteria.andParentIdEqualTo(sysMenuAdd.getParentId());
-        criteria.andMenuNameEqualTo(sysMenuAdd.getMenuName());
-        List<TbSysMenu> tbSysMenus = tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
-        if (tbSysMenus != null && tbSysMenus.size() > 0){
-            throw new RuntimeException("添加失败,菜单名称已存在");
-        }
+        criteria.andParentIdEqualTo(parentId);
+        criteria.andMenuNameEqualTo(menuName);
+        return tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
     }
 
     /**
@@ -240,9 +260,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         //查询文件菜单中子菜单sort的最大值
         String sortMax = sysMenuMapper.findSortByMenuId(sysMenuAdd.getParentId());
-        if (StringUtils.isNotBlank(sortMax)){
-            tbSysMenu.setSort((Integer.parseInt(sortMax)+1)+"");
-        }else {
+        if (StringUtils.isNotBlank(sortMax)) {
+            tbSysMenu.setSort((Integer.parseInt(sortMax) + 1) + "");
+        } else {
             //如果查询不到数据,直接设置排序为1
             tbSysMenu.setSort("1");
         }
@@ -255,6 +275,23 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setIsDir("0");
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbSysMenuMapper.insertSelective(tbSysMenu);
+    }
+
+    /**
+     * 校验菜单名称
+     *
+     * @param sysMenuNameCheck
+     * @return
+     */
+    @Override
+    public Result checkMenuName(SysMenuNameCheck sysMenuNameCheck) {
+        if (StringUtils.isNotBlank(sysMenuNameCheck.getMenuName())){
+            List<TbSysMenu> tbSysMenus = checkMenusName(sysMenuNameCheck.getMenuName(),sysMenuNameCheck.getParentId());
+            if (tbSysMenus != null && tbSysMenus.size() > 0) {
+                return new Result("false");
+            }
+        }
+        return new Result("success");
     }
 
 

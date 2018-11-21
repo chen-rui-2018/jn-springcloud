@@ -21,7 +21,7 @@ public interface SysUserService {
      *
      * @param sysUser
      */
-    Result addSysUser(SysUser sysUser);
+    void addSysUser(SysUser sysUser);
 
     /**
      * 查询用户

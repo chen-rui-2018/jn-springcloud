@@ -80,11 +80,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void insertTbRole(SysRoleAdd role) {
         //判断角色名称是否已经存在
-        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
-        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
-        criteria.andRoleNameEqualTo(role.getRoleName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
+        List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
             throw new RuntimeException("添加失败,角色名称已存在");
         }
@@ -101,6 +97,19 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     /**
+     * 用于角色名称校验
+     * @param roleName
+     * @return
+     */
+    private List<TbSysRole> checkName(String roleName) {
+        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
+        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
+        criteria.andRoleNameEqualTo(roleName);
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        return tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
+    }
+
+    /**
      * 更新角色信息
      *
      * @param role
@@ -108,6 +117,15 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRole(SysRoleUpdate role) {
+        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
+        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
+        criteria.andRoleNameEqualTo(role.getRoleName());
+        criteria.andIdNotEqualTo(role.getId());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
+        if (tbSysRoles != null && tbSysRoles.size() > 0) {
+            throw new RuntimeException("添加失败,角色名称已存在");
+        }
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);
@@ -260,11 +278,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public Result checkRoleName(String roleName) {
-        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
-        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
-        criteria.andRoleNameEqualTo(roleName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
-        List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
+        List<TbSysRole> tbSysRoles = checkName(roleName);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
             return new Result("false");
         }

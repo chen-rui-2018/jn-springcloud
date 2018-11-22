@@ -56,6 +56,7 @@ public class Result<T> implements Serializable {
     }
     public Result(){}
 
+
     @Override
     public String toString() {
         return "Result{" +

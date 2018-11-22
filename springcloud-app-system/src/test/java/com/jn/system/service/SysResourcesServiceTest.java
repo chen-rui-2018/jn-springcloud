@@ -1,9 +1,10 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.SysResources;
-import com.jn.system.model.SysResourcesPage;
+import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.menu.model.SysResources;
+import com.jn.system.menu.model.SysResourcesPage;
+import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,10 +47,10 @@ public class SysResourcesServiceTest {
         resources.setResourcesName("功能测试1");
         resources.setResourcesUrl("xxx/xxx/a.html");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysResourcesService.insertResources(resources,user);
+        sysResourcesService.insertResources(resources, user);
     }
 
     /**

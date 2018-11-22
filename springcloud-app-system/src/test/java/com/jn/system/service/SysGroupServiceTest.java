@@ -1,9 +1,11 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysGroup;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
+import com.jn.system.permission.model.SysRoleGroupAdd;
+import com.jn.system.user.entity.TbSysGroup;
+import com.jn.system.user.model.*;
+import com.jn.system.user.service.SysGroupService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -37,7 +39,7 @@ public class SysGroupServiceTest {
         sysGroupPage.setPage(1);
         sysGroupPage.setRows(10);
         PaginationData data = sysGroupService.findSysGroupAll(sysGroupPage);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
@@ -45,10 +47,10 @@ public class SysGroupServiceTest {
         TbSysGroup sysGroup = new TbSysGroup();
         sysGroup.setGroupName("财务组");
         sysGroup.setStatus("1");
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysGroupService.addSysGroup(sysGroup,user);
+        sysGroupService.addSysGroup(sysGroup, user);
     }
 
     @Test
@@ -66,52 +68,52 @@ public class SysGroupServiceTest {
     }
 
     @Test
-    public void selectGroupRoleAndOtherRoleTest(){
+    public void selectGroupRoleAndOtherRoleTest() {
         SysGroupRolePage sysGroupRolePage = new SysGroupRolePage();
         sysGroupRolePage.setPage(1);
         sysGroupRolePage.setRows(10);
         PaginationData data = sysGroupService.selectGroupRoleAndOtherRole(sysGroupRolePage);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
-    public void roleGroupAuthorizationTest(){
+    public void roleGroupAuthorizationTest() {
         SysRoleGroupAdd sysRoleGroupAdd = new SysRoleGroupAdd();
         sysRoleGroupAdd.setGroupId("g002");
-        String[] roleIds = {"r001","r002"};
+        String[] roleIds = {"r001", "r002"};
         sysRoleGroupAdd.setRoleIds(roleIds);
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd,user);
+        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd, user);
     }
 
     @Test
-    public void findUserOfGroupTest(){
+    public void findUserOfGroupTest() {
         List<SysTUser> data = sysGroupService.findUserOfGroup("g002");
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
-    public void findOtherUserByPageTest(){
+    public void findOtherUserByPageTest() {
         SysGroupUserPage sysGroupUserPage = new SysGroupUserPage();
         sysGroupUserPage.setGroupId("g002");
         sysGroupUserPage.setPage(1);
         sysGroupUserPage.setRows(1);
         PaginationData data = sysGroupService.findOtherUserByPage(sysGroupUserPage);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
-    public void userGroupAuthorization(){
+    public void userGroupAuthorization() {
         SysGroupUserAdd sysGroupUserAdd = new SysGroupUserAdd();
         sysGroupUserAdd.setGroupId("g002");
-        String[] userIds = {"u003","u004"};
+        String[] userIds = {"u003", "u004"};
         sysGroupUserAdd.setUserIds(userIds);
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysGroupService.userGroupAuthorization(sysGroupUserAdd,user);
+        sysGroupService.userGroupAuthorization(sysGroupUserAdd, user);
     }
 
 }

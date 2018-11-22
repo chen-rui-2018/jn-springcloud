@@ -1,7 +1,8 @@
 package com.jn.system.service;
 
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuResourcesAdd;
+import com.jn.system.menu.model.SysMenu;
+import com.jn.system.menu.model.SysMenuResourcesAdd;
+import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +29,7 @@ public class SysMenuServiceTest {
      */
     @Test
     public void updateTest() {
-        SysMenu menu= new SysMenu();
+        SysMenu menu = new SysMenu();
         menu.setId("87a240e8-d425-40d0-b09e-7204460b15c5");
         menu.setMenuName("菜单测试2");
         menu.setMenuUrl("xxx/xxx/b.html");
@@ -50,7 +51,7 @@ public class SysMenuServiceTest {
     @Test
     public void selectByIdTest() {
         String id = "87a240e8-d425-40d0-b09e-7204460b15c5";
-        SysMenu menu=sysMenuService.selectMenuById(id);
+        SysMenu menu = sysMenuService.selectMenuById(id);
         System.out.println(menu.toString());
     }
 
@@ -59,19 +60,16 @@ public class SysMenuServiceTest {
      */
     @Test
     public void insertMenuResources() {
-        SysMenuResourcesAdd sysMenuResourcesAd=new SysMenuResourcesAdd();
+        SysMenuResourcesAdd sysMenuResourcesAd = new SysMenuResourcesAdd();
         sysMenuResourcesAd.setMenuId("87a240e8-d425-40d0-b09e-7204460b15c5");
-        String[] resourcesIds={"17ff9b4e-a920-4866-8cf8-35eab5c8ccde"};
+        String[] resourcesIds = {"17ff9b4e-a920-4866-8cf8-35eab5c8ccde"};
         sysMenuResourcesAd.setResourcesId(resourcesIds);
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysMenuService.insertMenuResources(sysMenuResourcesAd,user);
+        sysMenuService.insertMenuResources(sysMenuResourcesAd, user);
 
     }
-
-
-
 
 
 }

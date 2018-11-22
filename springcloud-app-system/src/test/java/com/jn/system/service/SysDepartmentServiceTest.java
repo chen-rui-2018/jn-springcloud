@@ -1,9 +1,7 @@
 package com.jn.system.service;
 
-import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysDepartment;
-import com.jn.system.model.SysDepartment;
-import com.jn.system.service.SysDepartmentService;
+import com.jn.system.dept.model.SysDepartment;
+import com.jn.system.dept.service.SysDepartmentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -27,13 +25,13 @@ public class SysDepartmentServiceTest {
     @Test
     public void findSysDepartmentAll() {
         List<SysDepartment> data = sysDepartmentService.findSysDepartmentAll();
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
     public void selectByPrimaryKeyTest() {
         SysDepartment data = sysDepartmentService.selectByPrimaryKey("d001");
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test

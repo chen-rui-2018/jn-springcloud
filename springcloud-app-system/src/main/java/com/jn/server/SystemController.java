@@ -2,12 +2,12 @@ package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysFileGroup;
+import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
-import com.jn.system.service.SysFileGroupService;
-import com.jn.system.service.SysResourcesService;
-import com.jn.system.service.SysUserService;
+import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.menu.service.SysResourcesService;
+import com.jn.system.user.service.SysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

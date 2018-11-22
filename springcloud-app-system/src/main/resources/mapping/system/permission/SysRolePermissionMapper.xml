@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.permission.dao.SysRolePermissionMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.permission.model.SysRolePermission">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="role_id" jdbcType="VARCHAR" property="roleId" javaType="java.lang.String"/>
+        <result column="permission_id" jdbcType="VARCHAR" property="permissionId" javaType="java.lang.String"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
+        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select id, role_id,permission_id,creator,create_time,status
+        from tb_sys_role_permission
+    </select>
+
+
+    <update id="deleteBy" parameterType="java.lang.String">
+        update tb_sys_role_permission set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByRoleIds" parameterType="java.lang.String">
+        update tb_sys_role_permission set status=-1
+        where role_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        insert into tb_sys_role_permission (id, role_id,permission_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=VARCHAR},
+            #{item.permissionId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <update id="deletePermissionBranch" parameterType="java.lang.String">
+        update tb_sys_role_permission set status=-1
+        where permission_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByPermissionId" parameterType="java.lang.String">
+        UPDATE tb_sys_role_permission SET `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="addRoleToPermissionBranch" parameterType="java.util.List">
+        insert into tb_sys_role_permission (id, role_id,permission_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=VARCHAR},
+            #{item.permissionId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="findRoleOfPermission" parameterType="java.lang.String"
+            resultType="com.jn.system.permission.model.SysRole">
+        select
+            t2.id,
+            t2.role_name as roleName,
+            t2.creator,
+            t2.create_time as createTime,
+            t2.`status`
+        from tb_sys_role_permission t1,tb_sys_role t2
+            where t1.role_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
+            and t1.permission_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findPermissionNameByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
+        select t1.permission_name from tb_sys_permission t1,
+         tb_sys_role_permission t2
+         where t1.id = t2.permission_id
+         and t1.`status` = '1' and
+         t2.`status` = '1' and role_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findPermissionByRoleId" parameterType="java.lang.String"
+            resultType="com.jn.system.permission.model.SysPermission">
+        select distinct
+        t1.id,
+        t1.permission_name as permissionName,
+        t1.create_time as createTime,
+        t1.`status`
+        from tb_sys_permission t1,tb_sys_role_permission t2
+        where t1.id = t2.permission_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.role_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findOtherUserGroup" parameterType="com.jn.system.permission.model.SysRolePermissionPage"
+            resultType="com.jn.system.permission.model.SysPermission">
+        select DISTINCT
+        t.id,
+        t.permission_name as permissionName,
+        t.create_time as createTime,
+        t.`status`
+        from tb_sys_permission t left join
+        (select t1.id,
+        t1.permission_name
+        from tb_sys_permission t1,tb_sys_role_permission t2
+        where t1.id = t2.permission_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(permissionName)">
+            and t.permission_name like CONCAT('%', #{permissionName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
+
+    <select id="findRoleByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionRolePage"
+            resultType="com.jn.system.permission.model.SysRole">
+        select DISTINCT
+        t.id,
+        t.role_name as roleName,
+        t.create_time as createTime,
+        t.creator,
+        t.`status`
+        from tb_sys_role t left join
+        (SELECT t1.id,t1.role_name FROM `tb_sys_role` t1 ,tb_sys_role_permission t2
+        where t1.id = t2.role_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+            and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
+</mapper>

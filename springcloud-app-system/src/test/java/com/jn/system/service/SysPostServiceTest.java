@@ -1,7 +1,7 @@
 package com.jn.system.service;
 
-import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysPost;
+import com.jn.system.dept.entity.TbSysPost;
+import com.jn.system.dept.service.SysPostService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class SysPostServiceTest {
     @Test
     public void findSysPostAll() {
         List<TbSysPost> data = sysPostService.findSysPostAll();
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
 }

@@ -1,9 +1,8 @@
 package com.jn.system.service;
 
-import com.jn.common.model.Result;
-import com.jn.system.model.SysPermissionAdd;
-import com.jn.system.model.SysPermissionResourcePage;
 import com.jn.system.model.User;
+import com.jn.system.permission.model.SysPermissionAdd;
+import com.jn.system.permission.service.SysPermissionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * 权限测试
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 9:40
  * @version： v1.0
@@ -29,14 +29,14 @@ public class SysPermissionServiceTest {
     private SysPermissionService sysPermissionService;
 
     @Test
-    public void addPermissionTest(){
+    public void addPermissionTest() {
         SysPermissionAdd sysPermissionAdd = new SysPermissionAdd();
         sysPermissionAdd.setPermissionName("测试权限1");
         sysPermissionAdd.setStatus("1");
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysPermissionService.addPermission(sysPermissionAdd,user);
+        sysPermissionService.addPermission(sysPermissionAdd, user);
     }
 
 }

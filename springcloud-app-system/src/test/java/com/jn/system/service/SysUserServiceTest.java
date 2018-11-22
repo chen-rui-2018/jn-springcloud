@@ -1,11 +1,12 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysUserDepartmentPost;
-import com.jn.system.model.*;
-import com.jn.system.vo.SysDepartmentPostVO;
-import com.jn.system.vo.SysUserRoleVO;
+import com.jn.system.dept.model.SysDepartmentPost;
+import com.jn.system.dept.vo.SysDepartmentPostVO;
+import com.jn.system.model.User;
+import com.jn.system.user.model.*;
+import com.jn.system.user.service.SysUserService;
+import com.jn.system.user.vo.SysUserRoleVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -39,7 +40,7 @@ public class SysUserServiceTest {
         sysUser.setStatus("1");
         User user = new User();
         user.setId("10000");
-        sysUserService.addSysUser(sysUser,user);
+        sysUserService.addSysUser(sysUser, user);
     }
 
     @Test
@@ -48,7 +49,7 @@ public class SysUserServiceTest {
         sysUserUserQuery.setPage(1);
         sysUserUserQuery.setRows(10);
         PaginationData data = sysUserService.findSysUserByPage(sysUserUserQuery);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
@@ -72,16 +73,16 @@ public class SysUserServiceTest {
         sysUserGroupPage.setPage(1);
         sysUserGroupPage.setRows(10);
         PaginationData data = sysUserService.findSysGroupByUserId(sysUserGroupPage);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
     public void saveSysGroupToSysUserTest() {
         String[] groupIds = {"g002", "g003"};
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysUserService.saveSysGroupToSysUser(groupIds, "u002",user);
+        sysUserService.saveSysGroupToSysUser(groupIds, "u002", user);
     }
 
     @Test
@@ -90,16 +91,16 @@ public class SysUserServiceTest {
         sysUserRolePage.setPage(1);
         sysUserRolePage.setRows(10);
         SysUserRoleVO data = sysUserService.findSysRoleByUserId(sysUserRolePage);
-        logger.info("测试结果:{}",data.toString());
+        logger.info("测试结果:{}", data.toString());
     }
 
     @Test
     public void saveSysRoleToSysUser() {
         String[] roleId = {"r002", "r003"};
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysUserService.saveSysRoleToSysUser(roleId, "u002",user);
+        sysUserService.saveSysRoleToSysUser(roleId, "u002", user);
     }
 
     @Test
@@ -118,16 +119,16 @@ public class SysUserServiceTest {
         sysDepartmentPost.setPostId("p006");
         list.add(sysDepartmentPost);
         sysUserDepartmentPost.setSysDepartmentPostList(list);
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPost,user);
+        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPost, user);
     }
 
     @Test
     public void findSysUserByIdTest() {
         SysUser data = sysUserService.findSysUserById("10000");
-        logger.info("测试结果:",data.toString());
+        logger.info("测试结果:", data.toString());
     }
 
 }

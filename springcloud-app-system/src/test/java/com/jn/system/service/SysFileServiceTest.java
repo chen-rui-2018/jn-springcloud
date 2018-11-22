@@ -1,9 +1,10 @@
 package com.jn.system.service;
 
-import com.jn.system.enums.SysStatusEnums;
-import com.jn.system.model.SysFile;
-import com.jn.system.model.SysFileAddFileGroup;
-import com.jn.system.model.SysFilePage;
+import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.file.model.SysFile;
+import com.jn.system.file.model.SysFileAddFileGroup;
+import com.jn.system.file.model.SysFilePage;
+import com.jn.system.file.service.SysFileService;
 import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,10 +46,10 @@ public class SysFileServiceTest {
         file.setFileName("文件测试2");
         file.setFileUrl("xxx/xxx/a.html");
         file.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysFileService.insertSysFile(file,user);
+        sysFileService.insertSysFile(file, user);
     }
 
     /**
@@ -89,10 +90,10 @@ public class SysFileServiceTest {
         sysFileAddFileGroup.setFileId("f0c9e7dc-a1fc-4172-a12c-a8511cfd1538");
         String[] fileGroupId = {"b0e96afc-7d94-4a3e-b0a4-40774244bda0"};
         sysFileAddFileGroup.setFileGroupId(fileGroupId);
-        User user=new User();
+        User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysFileService.sysFileAddFileGroup(sysFileAddFileGroup,user);
+        sysFileService.sysFileAddFileGroup(sysFileAddFileGroup, user);
 
     }
 

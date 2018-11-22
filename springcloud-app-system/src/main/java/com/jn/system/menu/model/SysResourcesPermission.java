@@ -51,6 +51,19 @@ public class SysResourcesPermission implements Serializable {
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
+    public SysResourcesPermission() {
+    }
+
+    public SysResourcesPermission(String id, String permissionId, String resourcesId,
+                                  String creator, Date createTime, String status) {
+        this.id = id;
+        this.permissionId = permissionId;
+        this.resourcesId = resourcesId;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }
@@ -97,5 +110,17 @@ public class SysResourcesPermission implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "SysResourcesPermission{" +
+                "id='" + id + '\'' +
+                ", permissionId='" + permissionId + '\'' +
+                ", resourcesId='" + resourcesId + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

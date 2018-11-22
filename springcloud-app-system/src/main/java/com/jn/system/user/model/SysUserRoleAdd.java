@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 用户选择角色
@@ -26,6 +27,14 @@ public class SysUserRoleAdd implements Serializable {
     @NotBlank(message = "角色id不能为空")
     private String roleId;
 
+    public SysUserRoleAdd() {
+    }
+
+    public SysUserRoleAdd(String[] userId, String roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
+
     public String[] getUserId() {
         return userId;
     }
@@ -42,4 +51,11 @@ public class SysUserRoleAdd implements Serializable {
         this.roleId = roleId;
     }
 
+    @Override
+    public String toString() {
+        return "SysUserRoleAdd{" +
+                "userId=" + Arrays.toString(userId) +
+                ", roleId='" + roleId + '\'' +
+                '}';
+    }
 }

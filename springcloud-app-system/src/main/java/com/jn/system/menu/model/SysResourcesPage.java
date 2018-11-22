@@ -60,6 +60,20 @@ public class SysResourcesPage extends Page implements Serializable {
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
 
+    public SysResourcesPage() {
+    }
+
+    public SysResourcesPage(String id, String resourcesName, String resourcesUrl,
+                            String menuId, String creator, Date createTime, String status) {
+        this.id = id;
+        this.resourcesName = resourcesName;
+        this.resourcesUrl = resourcesUrl;
+        this.menuId = menuId;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }
@@ -115,5 +129,18 @@ public class SysResourcesPage extends Page implements Serializable {
 
     public void setMenuId(String menuId) {
         this.menuId = menuId;
+    }
+
+    @Override
+    public String toString() {
+        return "SysResourcesPage{" +
+                "id='" + id + '\'' +
+                ", resourcesName='" + resourcesName + '\'' +
+                ", resourcesUrl='" + resourcesUrl + '\'' +
+                ", menuId='" + menuId + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 文件添加文件组
@@ -30,6 +31,14 @@ public class SysFileAddFileGroup implements Serializable {
     @ApiModelProperty(value = "文件id")
     private String fileId;
 
+    public SysFileAddFileGroup() {
+    }
+
+    public SysFileAddFileGroup(String[] fileGroupId, String fileId) {
+        this.fileGroupId = fileGroupId;
+        this.fileId = fileId;
+    }
+
     public String[] getFileGroupId() {
         return fileGroupId;
     }
@@ -46,4 +55,11 @@ public class SysFileAddFileGroup implements Serializable {
         this.fileId = fileId;
     }
 
+    @Override
+    public String toString() {
+        return "SysFileAddFileGroup{" +
+                "fileGroupId=" + Arrays.toString(fileGroupId) +
+                ", fileId='" + fileId + '\'' +
+                '}';
+    }
 }

@@ -82,6 +82,23 @@ public class SysMenu implements Serializable {
     @ApiModelProperty(value = "菜单层级" )
     private String level;
 
+    public SysMenu() {
+    }
+
+    public SysMenu(String id, String menuName, String menuUrl, String parentId, String sort, String isDir,
+                   String creator, Date createTime, String status, String level) {
+        this.id = id;
+        this.menuName = menuName;
+        this.menuUrl = menuUrl;
+        this.parentId = parentId;
+        this.sort = sort;
+        this.isDir = isDir;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+        this.level = level;
+    }
+
     public String getId() {
         return id;
     }
@@ -160,5 +177,21 @@ public class SysMenu implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SysMenu{" +
+                "id='" + id + '\'' +
+                ", menuName='" + menuName + '\'' +
+                ", menuUrl='" + menuUrl + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", sort='" + sort + '\'' +
+                ", isDir='" + isDir + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", level='" + level + '\'' +
+                '}';
     }
 }

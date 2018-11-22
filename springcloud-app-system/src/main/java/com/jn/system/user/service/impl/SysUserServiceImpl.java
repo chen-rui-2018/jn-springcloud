@@ -7,7 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
-import com.jn.system.common.enums.SysUserExceptionEnums;
+import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;

@@ -54,6 +54,20 @@ public class SysRolePermission implements Serializable {
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
+    public SysRolePermission() {
+    }
+
+    public SysRolePermission(String id, String roleId, String permissionId, String permissionName,
+                             String creator, Date createTime, String status) {
+        this.id = id;
+        this.roleId = roleId;
+        this.permissionId = permissionId;
+        this.permissionName = permissionName;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }
@@ -108,5 +122,18 @@ public class SysRolePermission implements Serializable {
 
     public void setPermissionName(String permissionName) {
         this.permissionName = permissionName;
+    }
+
+    @Override
+    public String toString() {
+        return "SysRolePermission{" +
+                "id='" + id + '\'' +
+                ", roleId='" + roleId + '\'' +
+                ", permissionId='" + permissionId + '\'' +
+                ", permissionName='" + permissionName + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

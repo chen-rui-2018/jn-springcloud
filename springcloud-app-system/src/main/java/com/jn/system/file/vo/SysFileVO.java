@@ -2,6 +2,8 @@ package com.jn.system.file.vo;
 
 
 import com.jn.system.file.model.SysFileGroup;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -15,36 +17,43 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysFileVO",description = "文件vo")
 public class SysFileVO implements Serializable {
     private static final long serialVersionUID = -7789819491793048921L;
     /**
      * 文件id
      */
+    @ApiModelProperty("文件id")
     private String fileId;
 
     /**
      * 文件名称
      */
+    @ApiModelProperty("文件名称")
     private String fileName;
 
     /**
      * 文件路径
      */
+    @ApiModelProperty("文件路径")
     private String fileUrl;
 
     /**
      * 创建人
      */
+    @ApiModelProperty("创建人")
     private String creator;
 
     /**
      * 创建时间
      */
+    @ApiModelProperty("创建时间")
     private Date createTime;
 
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty("状态 1:有效 0:无效 -1:删除")
     private String status;
 
     /**

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -59,6 +60,18 @@ public class SysMenuResourcesAdd implements Serializable {
     @ApiModelProperty(value = "菜单层级" )
     private String level;
 
+    public SysMenuResourcesAdd() {
+    }
+
+    public SysMenuResourcesAdd(String menuId, String[] resourcesId, String resourcesName,
+                               String resourcesUrl, String status, String level) {
+        this.menuId = menuId;
+        this.resourcesId = resourcesId;
+        this.resourcesName = resourcesName;
+        this.resourcesUrl = resourcesUrl;
+        this.status = status;
+        this.level = level;
+    }
 
     public String getMenuId() {
         return menuId;
@@ -107,5 +120,17 @@ public class SysMenuResourcesAdd implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SysMenuResourcesAdd{" +
+                "menuId='" + menuId + '\'' +
+                ", resourcesId=" + Arrays.toString(resourcesId) +
+                ", resourcesName='" + resourcesName + '\'' +
+                ", resourcesUrl='" + resourcesUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", level='" + level + '\'' +
+                '}';
     }
 }

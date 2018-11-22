@@ -29,22 +29,6 @@
         update tb_sys_user_department_post set `status` = '-1' where department_id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <insert id="insert" parameterType="java.util.List">
-        insert into tb_sys_user_department_post
-        (id,user_id,department_id,post_id,is_default,creator,create_time,status)
-        values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
-            #{item.userId,jdbcType=VARCHAR},
-            #{item.departmentId,jdbcType=VARCHAR},
-            #{item.postId,jdbcType=VARCHAR},
-            #{item.isDefault,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=TIMESTAMP},
-            #{item.status,jdbcType=VARCHAR}
-            )
-        </foreach>
-    </insert>
 
     <select id="findUserByPostId" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">

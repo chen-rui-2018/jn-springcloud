@@ -25,14 +25,6 @@ public interface SysUserMapper {
     void addSysUser(SysUser sysUser);
 
     /**
-     * 当按部门查询用户时
-     *
-     * @param sysUserDepartmentPost
-     * @return
-     */
-    List<SysUserVO> findSysUserByPageAndOption(SysUserDepartmentPost sysUserDepartmentPost);
-
-    /**
      * 当查询部门的条件为空时的查询方法
      *
      * @param userSysUserPage

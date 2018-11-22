@@ -5,8 +5,7 @@ import com.jn.system.menu.dao.SysMenuMapper;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
-import com.jn.system.common.enums.SysMenuIsDirEnums;
-import com.jn.system.common.enums.SysMenuSortEnums;
+import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.dao.TbSysResourcesMapper;
@@ -113,7 +112,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public void findChildMenuList(List<SysMenuTreeVO> menuTreeVOList) {
         for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
             //判断菜单项是否是文件夹,是再递归获取数据
-            if ("1".equals(sysMenuTreeVO.getIsDir())) {
+            if (SysMenuEnums.MENU_ISDIR.getMessage().equals(sysMenuTreeVO.getIsDir())) {
                 //以菜单id作为父id,去获取菜单子集
                 List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getValue());
                 sysMenuTreeVO.setChildren(childrenMenuList);
@@ -249,8 +248,8 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setSort(SysMenuSortEnums.MENU_ISDIR_SORT.getCode());
-        tbSysMenu.setIsDir(SysMenuIsDirEnums.MENU_ISDIR.getCode());
+        tbSysMenu.setSort(SysMenuEnums.MENU_ISDIR_SORT.getCode());
+        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISDIR.getCode());
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysMenuMapper.insertSelective(tbSysMenu);
         logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
@@ -278,7 +277,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             tbSysMenu.setSort((Integer.parseInt(sortMax) + 1) + "");
         } else {
             //如果查询不到数据,直接设置排序为1
-            tbSysMenu.setSort(SysMenuSortEnums.FIRST_SORT.getCode());
+            tbSysMenu.setSort(SysMenuEnums.FIRST_SORT.getCode());
         }
         tbSysMenu.setId(UUID.randomUUID().toString());
         tbSysMenu.setCreateTime(new Date());
@@ -286,7 +285,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setIsDir(SysMenuIsDirEnums.MENU_ISNOTDIR.getCode());
+        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysMenuMapper.insertSelective(tbSysMenu);
         logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());

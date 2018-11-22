@@ -120,4 +120,15 @@ public class SysRole implements Serializable {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "SysRole{" +
+                "id='" + id + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

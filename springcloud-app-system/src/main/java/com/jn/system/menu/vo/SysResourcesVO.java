@@ -1,6 +1,9 @@
 package com.jn.system.menu.vo;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +17,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysResourcesVO",description = "功能菜单")
 public class SysResourcesVO implements Serializable {
     private static final long serialVersionUID = -4766803278902458039L;
     private String resourcesId;
@@ -21,40 +25,48 @@ public class SysResourcesVO implements Serializable {
     /**
      * 功能名称
      */
+    @ApiModelProperty("功能名称")
     private String resourcesName;
 
     /**
      * 资源URL
      */
+    @ApiModelProperty("资源URL")
     private String resourcesUrl;
 
 
     /**
      * 菜单id
      */
+    @ApiModelProperty("菜单id")
     private String menuId;
 
     /**
      * 创建人
      */
+    @ApiModelProperty("创建人")
     private String creator;
     /**
      * 创建时间
      */
+    @ApiModelProperty("创建时间")
     private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty("状态 1:有效 0:无效 -1:删除")
     private String status;
 
     /**
      * 状态描述
      */
+    @ApiModelProperty("状态描述")
     private String statusDesc;
 
     /**
      * 菜单
      */
+    @ApiModelProperty("菜单")
     private List<String> menuName;
 
     public SysResourcesVO() {

@@ -56,6 +56,19 @@ public class SysMenuPermission implements Serializable {
     @ApiModelProperty(value = "菜单层级" )
     private String level;
 
+    public SysMenuPermission() {
+    }
+
+    public SysMenuPermission(String id, String permissionId, String menuId, String creator,
+                             Date createTime, String status, String level) {
+        this.id = id;
+        this.permissionId = permissionId;
+        this.menuId = menuId;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+        this.level = level;
+    }
 
     public String getId() {
         return id;
@@ -111,5 +124,18 @@ public class SysMenuPermission implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SysMenuPermission{" +
+                "id='" + id + '\'' +
+                ", permissionId='" + permissionId + '\'' +
+                ", menuId='" + menuId + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", level='" + level + '\'' +
+                '}';
     }
 }

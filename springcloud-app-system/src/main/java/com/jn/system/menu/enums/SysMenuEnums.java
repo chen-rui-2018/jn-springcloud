@@ -1,22 +1,26 @@
-package com.jn.system.common.enums;
+package com.jn.system.menu.enums;
 
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 菜单页面用来判断是菜单是否是目录菜单
+ * 菜单接口目录属性及层级属性枚举
  * @author： shaobao
  * @date： Created on 2018/11/22 16:16
  * @version： v1.0
  * @modified By:
  **/
-public enum  SysMenuIsDirEnums implements CodeAndMsg {
+public enum SysMenuEnums implements CodeAndMsg {
+
     MENU_ISDIR("1","菜单是目录菜单"),
-    MENU_ISNOTDIR("0","菜单不是目录菜单");
+    MENU_ISNOTDIR("0","菜单不是目录菜单"),
+
+    MENU_ISDIR_SORT("0","菜单是目录菜单时,排序默认为0"),
+    FIRST_SORT("1","一级排序");
 
     private String code;
     private String message;
 
-    SysMenuIsDirEnums(String code, String message) {
+    SysMenuEnums(String code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -7,7 +7,6 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
 

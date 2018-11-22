@@ -15,7 +15,7 @@
         <result column="f_fileUrl" jdbcType="VARCHAR" property="fileUrl" javaType="java.lang.String"/>
         <result column="f_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
         <result column="f_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-        <collection property="fileGroupList" javaType="java.util.List" ofType="com.jn.system.file.model.SysFileGroup">
+        <collection property="fileGroupNameList" javaType="java.util.List" ofType="com.jn.system.file.model.SysFileGroup">
             <id column="fg_id" property="id" jdbcType="VARCHAR"/>
             <result column="fg_fileGroupName" property="fileGroupName" jdbcType="VARCHAR"/>
             <result column="fg_createTime" property="createTime" jdbcType="VARCHAR"/>

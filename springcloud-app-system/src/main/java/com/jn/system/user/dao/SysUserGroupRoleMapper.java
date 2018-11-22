@@ -16,39 +16,12 @@ import java.util.List;
  * @modified By:
  */
 public interface SysUserGroupRoleMapper {
-    /**
-     * 根据主键删除用户组角色
-     * @param id
-     * @return
-     */
-    int deleteByPrimaryKey(String id);
-
-    /**
-     * 新增用户组角色
-     * @param role
-     * @return
-     */
-    int insert(SysUserGroupRole role);
 
     /**
      * 查询所有权限列表
      * @return
      */
     List<SysUserGroupRole> selectAll();
-
-    /**
-     * 根据主键查询用户组角色
-     * @param id
-     * @return
-     */
-    SysUserGroupRole selectByPrimaryKey(String id);
-
-    /**
-     * 根据主键更新用户组角色
-     * @param record
-     * @return
-     */
-    int updateByPrimaryKey(SysUserGroupRole record);
 
     /**
      * 批量删除权限

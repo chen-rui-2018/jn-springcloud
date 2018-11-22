@@ -77,6 +77,22 @@ public class SysMenuPage extends Page implements Serializable {
     @ApiModelProperty(value = "菜单层级" )
     private String level;
 
+    public SysMenuPage() {
+    }
+
+    public SysMenuPage(String id, String menuName, String menuUrl, String parentId, String isDir,
+                       String sort, String creator, Date createTime, String status, String level) {
+        this.id = id;
+        this.menuName = menuName;
+        this.menuUrl = menuUrl;
+        this.parentId = parentId;
+        this.isDir = isDir;
+        this.sort = sort;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+        this.level = level;
+    }
 
     public String getId() {
         return id;
@@ -157,5 +173,21 @@ public class SysMenuPage extends Page implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SysMenuPage{" +
+                "id='" + id + '\'' +
+                ", menuName='" + menuName + '\'' +
+                ", menuUrl='" + menuUrl + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", isDir='" + isDir + '\'' +
+                ", sort='" + sort + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", level='" + level + '\'' +
+                '}';
     }
 }

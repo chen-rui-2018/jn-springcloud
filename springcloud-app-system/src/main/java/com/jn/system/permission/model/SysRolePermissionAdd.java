@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * 角色分配权限
@@ -26,6 +27,14 @@ public class SysRolePermissionAdd implements Serializable {
     @NotBlank(message = "角色id不能为空")
     private String roleId;
 
+    public SysRolePermissionAdd() {
+    }
+
+    public SysRolePermissionAdd(String[] permissionId, String roleId) {
+        this.permissionId = permissionId;
+        this.roleId = roleId;
+    }
+
     public String[] getPermissionId() {
         return permissionId;
     }
@@ -42,4 +51,11 @@ public class SysRolePermissionAdd implements Serializable {
         this.roleId = roleId;
     }
 
+    @Override
+    public String toString() {
+        return "SysRolePermissionAdd{" +
+                "permissionId=" + Arrays.toString(permissionId) +
+                ", roleId='" + roleId + '\'' +
+                '}';
+    }
 }

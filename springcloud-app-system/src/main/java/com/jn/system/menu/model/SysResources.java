@@ -60,6 +60,20 @@ public class SysResources implements Serializable {
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
+    public SysResources() {
+    }
+
+    public SysResources(String id, String resourcesName, String resourcesUrl,
+                        String menuId, String creator, Date createTime, String status) {
+        this.id = id;
+        this.resourcesName = resourcesName;
+        this.resourcesUrl = resourcesUrl;
+        this.menuId = menuId;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
+
     public String getId() {
         return id;
     }
@@ -108,14 +122,24 @@ public class SysResources implements Serializable {
         this.createTime = createTime;
     }
 
-
-
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "SysResources{" +
+                "id='" + id + '\'' +
+                ", resourcesName='" + resourcesName + '\'' +
+                ", resourcesUrl='" + resourcesUrl + '\'' +
+                ", menuId='" + menuId + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

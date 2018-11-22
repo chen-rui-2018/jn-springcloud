@@ -1,6 +1,8 @@
 package com.jn.system.menu.vo;
 
 import com.jn.system.menu.model.SysResources;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,62 +16,89 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
+@ApiModel(value = "SysMenuVO", description = "菜单功能vo")
 public class SysMenuVO implements Serializable {
 
     private static final long serialVersionUID = -8616863673820865812L;
-
+    @ApiModelProperty("菜单id")
     private String menuId;
 
     /**
      * 菜单名称
      */
+    @ApiModelProperty("菜单名称")
     private String menuName;
 
     /**
      * 菜单URL
      */
+    @ApiModelProperty("菜单URL")
     private String menuUrl;
 
     /**
      * 父级菜单ID
      */
+    @ApiModelProperty("父级菜单ID")
     private String parentId;
     /**
      * 父级菜单名称
      */
+    @ApiModelProperty("父级菜单名称")
     private String parentMenuName;
 
     /**
      * 排序
      */
+    @ApiModelProperty("排序")
     private String sort;
 
     /**
      * 创建人
      */
+    @ApiModelProperty("创建人")
     private String creator;
     /**
      * 创建时间
      */
+    @ApiModelProperty("创建时间")
     private Date createTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
+    @ApiModelProperty("菜单id")
     private String status;
 
     /**
      * 是否目录 1:目录 0:文件
      */
+    @ApiModelProperty("是否目录 1:目录 0:文件")
     private String isDir;
-
-
 
     /**
      * 菜单层级
      */
+    @ApiModelProperty("菜单层级")
     private String level;
 
+    public SysMenuVO() {
+    }
 
+    public SysMenuVO(String menuId, String menuName, String menuUrl, String parentId, String parentMenuName,
+                     String sort, String creator, Date createTime, String status,
+                     String isDir, String level, List<SysResources> sysResources) {
+        this.menuId = menuId;
+        this.menuName = menuName;
+        this.menuUrl = menuUrl;
+        this.parentId = parentId;
+        this.parentMenuName = parentMenuName;
+        this.sort = sort;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+        this.isDir = isDir;
+        this.level = level;
+        this.sysResources = sysResources;
+    }
 
     private List<SysResources> sysResources;
 
@@ -169,5 +198,23 @@ public class SysMenuVO implements Serializable {
 
     public void setLevel(String level) {
         this.level = level;
+    }
+
+    @Override
+    public String toString() {
+        return "SysMenuVO{" +
+                "menuId='" + menuId + '\'' +
+                ", menuName='" + menuName + '\'' +
+                ", menuUrl='" + menuUrl + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", parentMenuName='" + parentMenuName + '\'' +
+                ", sort='" + sort + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                ", isDir='" + isDir + '\'' +
+                ", level='" + level + '\'' +
+                ", sysResources=" + sysResources +
+                '}';
     }
 }

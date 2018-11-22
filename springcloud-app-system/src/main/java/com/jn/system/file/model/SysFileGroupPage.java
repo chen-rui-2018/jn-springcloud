@@ -48,7 +48,16 @@ public class SysFileGroupPage extends Page implements Serializable {
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     private String status;
 
+    public SysFileGroupPage() {
+    }
 
+    public SysFileGroupPage(String id, String fileGroupName, String creator, Date createTime, String status) {
+        this.id = id;
+        this.fileGroupName = fileGroupName;
+        this.creator = creator;
+        this.createTime = createTime;
+        this.status = status;
+    }
 
     public String getId() {
         return id;
@@ -90,4 +99,14 @@ public class SysFileGroupPage extends Page implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
+    @Override
+    public String toString() {
+        return "SysFileGroupPage{" +
+                "id='" + id + '\'' +
+                ", fileGroupName='" + fileGroupName + '\'' +
+                ", creator='" + creator + '\'' +
+                ", createTime=" + createTime +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

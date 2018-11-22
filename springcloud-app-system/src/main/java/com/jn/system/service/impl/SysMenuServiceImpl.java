@@ -13,7 +13,6 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysMenuService;
 import com.jn.system.vo.SysMenuTreeVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -142,7 +141,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd) {
+    public void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd,User user) {
         //功能
         String[] resourcesId = sysMenuResourcesAdd.getResourcesId();
         //菜单
@@ -150,7 +149,6 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (resourcesId.length == 0) {
             //获取当前登录用户信息
             TbSysResources tbSysResources = new TbSysResources();
-            User user = (User) SecurityUtils.getSubject().getPrincipal();
             tbSysResources.setCreator(user.getId());
             tbSysResources.setId(UUID.randomUUID().toString());
             tbSysResources.setCreateTime(new Date());
@@ -166,8 +164,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             //根据id查询当前功能
             TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(resourcesId[i]);
             if (tbSysResources == null) {
-                //获取当前登录用户信息
-                User user = (User) SecurityUtils.getSubject().getPrincipal();
+
                 tbSysResources.setCreator(user.getId());
                 tbSysResources.setId(UUID.randomUUID().toString());
                 tbSysResources.setCreateTime(new Date());
@@ -201,7 +198,6 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 校验菜单名称
-     *
      * @param menuName
      * @param parentId
      * @return
@@ -222,10 +218,9 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addMenuDir(SysMenuAdd sysMenuAdd) {
+    public void addMenuDir(SysMenuAdd sysMenuAdd,User user) {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         TbSysMenu tbSysMenu = new TbSysMenu();
         //判断参数中父级id的值,1表示一级目录
         if ("1".equals(sysMenuAdd.getParentId())) {
@@ -258,10 +253,9 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addMenu(SysMenuAdd sysMenuAdd) {
+    public void addMenu(SysMenuAdd sysMenuAdd,User user) {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         TbSysMenu tbSysMenu = new TbSysMenu();
         //查询父级id的等级
         String parentMenuLevl = sysMenuMapper.findLevelByMenuId(sysMenuAdd.getParentId());

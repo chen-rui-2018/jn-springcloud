@@ -1,10 +1,6 @@
 package com.jn.system.service;
 
-import com.jn.common.model.Result;
-import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuAdd;
-import com.jn.system.model.SysMenuNameCheck;
-import com.jn.system.model.SysMenuResourcesAdd;
+import com.jn.system.model.*;
 import com.jn.system.vo.SysMenuTreeVO;
 
 import java.util.List;
@@ -54,21 +50,21 @@ public interface SysMenuService {
      *
      * @param sysMenuResourcesAdd
      */
-    void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd);
+    void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd,User user);
 
     /**
      * 菜单添加目录或子目录
      *
      * @param sysMenuAdd
      */
-    void addMenuDir(SysMenuAdd sysMenuAdd);
+    void addMenuDir(SysMenuAdd sysMenuAdd,User user);
 
     /**
      * 菜单目录下面添加子菜单
      *
      * @param sysMenuAdd
      */
-    void addMenu(SysMenuAdd sysMenuAdd);
+    void addMenu(SysMenuAdd sysMenuAdd,User user);
 
     /**
      * 校验菜单名称

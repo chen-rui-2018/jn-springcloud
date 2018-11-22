@@ -8,6 +8,7 @@ import com.jn.system.service.SysMenuService;
 import com.jn.system.vo.SysMenuTreeVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -77,7 +78,9 @@ public class SysMenuController extends BaseController {
             Assert.notNull(sysMenuResourcesAdd.getResourcesUrl(), "功能路径不能为空");
             Assert.notNull(sysMenuResourcesAdd.getStatus(), "功能状态不能为空");
         }
-        sysMenuService.insertMenuResources(sysMenuResourcesAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.insertMenuResources(sysMenuResourcesAdd,user);
         return new Result();
     }
 
@@ -85,7 +88,9 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/addMenuDir")
     @RequiresPermissions("/system/sysMenu/addMenuDir")
     public Result addMenuDir(@Validated @RequestBody SysMenuAdd sysMenuAdd){
-        sysMenuService.addMenuDir(sysMenuAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.addMenuDir(sysMenuAdd,user);
         return new Result();
     }
 
@@ -93,7 +98,9 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/addMenu")
     @RequiresPermissions("/system/sysMenu/addMenu")
     public Result addMenu(@Validated @RequestBody SysMenuAdd sysMenuAdd){
-        sysMenuService.addMenu(sysMenuAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.addMenu(sysMenuAdd,user);
         return new Result();
     }
 

@@ -4,6 +4,8 @@ import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFileAdd;
 import com.jn.system.model.SysFileGroupPage;
+import com.jn.system.model.User;
+import com.jn.system.service.SysFileGroupService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +45,10 @@ public class SysFileGroupServiceTest {
         SysFileGroup sysFileGroup = new SysFileGroup();
         sysFileGroup.setFileGroupName("文件测试1");
         sysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-        sysFileGroupService.insertSysFileGroup(sysFileGroup);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysFileGroupService.insertSysFileGroup(sysFileGroup,user);
     }
 
     /**
@@ -84,8 +89,10 @@ public class SysFileGroupServiceTest {
         sysFileGroupFileAdd.setFileGroupId("b0e96afc-7d94-4a3e-b0a4-40774244bda0");
         String[] fileIds={"1cc32378-3272-4ec6-901f-c91c28e74aef","f0c9e7dc-a1fc-4172-a12c-a8511cfd1538"};
         sysFileGroupFileAdd.setFileId(fileIds);
-
-        sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd,user);
     }
 
 

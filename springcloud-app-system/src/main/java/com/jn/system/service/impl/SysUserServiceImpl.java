@@ -21,7 +21,6 @@ import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -71,7 +70,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addSysUser(SysUser sysUser) {
+    public void addSysUser(SysUser sysUser,User user ) {
         //根据用户名查询用户账号是否存在
         List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
@@ -79,7 +78,6 @@ public class SysUserServiceImpl implements SysUserService {
         }
         sysUser.setId(UUID.randomUUID().toString());
         sysUser.setCreateTime(new Date());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysUser.setCreator(user.getId());
         sysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
         TbSysUser tbSysUser = new TbSysUser();
@@ -186,7 +184,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveSysGroupToSysUser(String[] groupIds, String userId) {
+    public void saveSysGroupToSysUser(String[] groupIds, String userId,User user) {
         if (groupIds != null && groupIds.length > 0) {
             //清除用户中已经存在的用户组
             sysUserMapper.deleGroupOfUser(userId);
@@ -196,7 +194,6 @@ public class SysUserServiceImpl implements SysUserService {
                     //设置用户用户组实体类
                     SysGroupUser sysGroupUser = new SysGroupUser();
                     sysGroupUser.setCreateTime(new Date());
-                    User user = (User) SecurityUtils.getSubject().getPrincipal();
                     sysGroupUser.setCreator(user.getId());
                     sysGroupUser.setGroupId(groupId);
                     sysGroupUser.setUserId(userId);
@@ -235,7 +232,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveSysRoleToSysUser(String[] roleIds, String userId) {
+    public void saveSysRoleToSysUser(String[] roleIds, String userId,User user) {
         //清除用户中已经存在的角色
         sysUserMapper.deleRoleOfUser(userId);
         if (roleIds != null && roleIds.length > 0) {
@@ -243,7 +240,6 @@ public class SysUserServiceImpl implements SysUserService {
             for (String roleId : roleIds) {
                 SysUserRole sysUserRole = new SysUserRole();
                 sysUserRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
-                User user = (User) SecurityUtils.getSubject().getPrincipal();
                 sysUserRole.setCreator(user.getId());
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
@@ -287,7 +283,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
+    public void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user) {
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
         if (sysUserDepartmentPostAdd.getSysDepartmentPostList() != null
@@ -297,7 +293,6 @@ public class SysUserServiceImpl implements SysUserService {
             for (SysDepartmentPost sysDepartmentPost : sysUserDepartmentPostAdd.getSysDepartmentPostList()) {
                 TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
                 sysUserDepartmentPost.setCreateTime(new Date());
-                User user = (User) SecurityUtils.getSubject().getPrincipal();
                 sysUserDepartmentPost.setCreator(user.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
                 sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getKey());

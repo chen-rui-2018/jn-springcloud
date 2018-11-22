@@ -6,6 +6,7 @@ import com.jn.system.entity.TbSysFileGroup;
 import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFileAdd;
 import com.jn.system.model.SysFileGroupPage;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface SysFileGroupService {
      *
      * @param sysFileGroup
      */
-    void insertSysFileGroup(SysFileGroup sysFileGroup);
+    void insertSysFileGroup(SysFileGroup sysFileGroup,User user);
 
     /**
      * 根据id更新文件组
@@ -61,7 +62,7 @@ public interface SysFileGroupService {
      *
      * @param sysFileGroupFileAdd
      */
-    void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd);
+    void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd,User user);
 
     /**
      * 根据用户获取文件组

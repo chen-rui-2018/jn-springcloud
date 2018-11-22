@@ -3,10 +3,7 @@ package com.jn.system.service;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysResources;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.SysResourceCheckName;
-import com.jn.system.model.SysResources;
-import com.jn.system.model.SysResourcesPage;
+import com.jn.system.model.*;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +24,7 @@ public interface SysResourcesService {
      *
      * @param sysResources
      */
-    void insertResources(SysResources sysResources);
+    void insertResources(SysResources sysResources, User user);
 
     /**
      * 更新功能信息

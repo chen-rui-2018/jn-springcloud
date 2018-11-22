@@ -1,9 +1,8 @@
 package com.jn.system.service;
 
-import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysMenu;
-import com.jn.system.model.SysMenuPage;
 import com.jn.system.model.SysMenuResourcesAdd;
+import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class SysMenuServiceTest {
     @Autowired
-    private  SysMenuService sysMenuService;
+    private SysMenuService sysMenuService;
 
     /**
      * 修改菜单
@@ -64,7 +63,10 @@ public class SysMenuServiceTest {
         sysMenuResourcesAd.setMenuId("87a240e8-d425-40d0-b09e-7204460b15c5");
         String[] resourcesIds={"17ff9b4e-a920-4866-8cf8-35eab5c8ccde"};
         sysMenuResourcesAd.setResourcesId(resourcesIds);
-        sysMenuService.insertMenuResources(sysMenuResourcesAd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysMenuService.insertMenuResources(sysMenuResourcesAd,user);
 
     }
 

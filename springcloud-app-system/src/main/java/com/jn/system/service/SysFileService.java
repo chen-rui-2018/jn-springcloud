@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.system.model.SysFile;
 import com.jn.system.model.SysFileAddFileGroup;
 import com.jn.system.model.SysFilePage;
+import com.jn.system.model.User;
 
 /**
  * 文件service
@@ -20,7 +21,7 @@ public interface SysFileService {
      *
      * @param sysFile
      */
-    void insertSysFile(SysFile sysFile);
+    void insertSysFile(SysFile sysFile, User user);
 
     /**
      * 根据id更新文件
@@ -57,7 +58,7 @@ public interface SysFileService {
      *
      * @param sysFileAddFileGroup
      */
-    void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup);
+    void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup , User user);
 
     /**
      * 校验文件名称

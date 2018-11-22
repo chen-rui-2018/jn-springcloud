@@ -6,7 +6,6 @@ import com.jn.system.entity.TbSysRolePermission;
 import com.jn.system.model.SysRolePermission;
 import com.jn.system.model.User;
 import com.jn.system.service.SysRolePermissionService;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -44,9 +43,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbRolePermission(SysRolePermission rolePermission) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public void insertTbRolePermission(SysRolePermission rolePermission, User user) {
         rolePermission.setId(UUID.randomUUID().toString());
         rolePermission.setCreator(user.getId());
         TbSysRolePermission tbSysRolePermission =new TbSysRolePermission();

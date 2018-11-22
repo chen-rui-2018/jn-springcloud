@@ -4,6 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
+import com.jn.system.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,10 @@ public class SysResourcesServiceTest {
         resources.setResourcesName("功能测试1");
         resources.setResourcesUrl("xxx/xxx/a.html");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-        sysResourcesService.insertResources(resources);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysResourcesService.insertResources(resources,user);
     }
 
     /**

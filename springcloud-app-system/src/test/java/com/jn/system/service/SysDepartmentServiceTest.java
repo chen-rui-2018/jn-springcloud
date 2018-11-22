@@ -3,6 +3,7 @@ package com.jn.system.service;
 import com.jn.common.model.Result;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.model.SysDepartment;
+import com.jn.system.service.SysDepartmentService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

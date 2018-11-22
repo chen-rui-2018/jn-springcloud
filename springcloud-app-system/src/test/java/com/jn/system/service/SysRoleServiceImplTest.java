@@ -41,7 +41,10 @@ public class SysRoleServiceImplTest {
         SysRoleAdd role=new SysRoleAdd();
         role.setRoleName("普通用户");
         role.setStatus(SysStatusEnums.EFFECTIVE.getKey());
-        tbRoleService.insertTbRole(role);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        tbRoleService.insertTbRole(role,user);
     }
 
     /**
@@ -75,7 +78,10 @@ public class SysRoleServiceImplTest {
         sysUserRoleAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
         String[] userIds={"u001","u002"};
         sysUserRoleAdd.setUserId(userIds);
-        tbRoleService.userRoleAuthorization(sysUserRoleAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        tbRoleService.userRoleAuthorization(sysUserRoleAdd,user);
 
     }
     /**
@@ -87,7 +93,10 @@ public class SysRoleServiceImplTest {
         sysRolePermissionAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
         String[] permissionIds={"p001","p002"};
         sysRolePermissionAdd.setPermissionId(permissionIds);
-        tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd,user);
 
     }
     /**
@@ -99,7 +108,10 @@ public class SysRoleServiceImplTest {
         sysUserGroupRoleAdd.setRoleId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
         String[] userGroupRole={"ug001","ug002"};
         sysUserGroupRoleAdd.setUserGroupId(userGroupRole);
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd,user);
 
     }
 

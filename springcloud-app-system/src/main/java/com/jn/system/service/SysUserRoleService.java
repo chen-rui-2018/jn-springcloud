@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 
 import com.jn.system.model.SysUserRole;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface SysUserRoleService {
      * 新增用户角色
      * @param role
      */
-    void insertTbUserRole(SysUserRole role);
+    void insertTbUserRole(SysUserRole role,User user);
 
     /**
      * 更新用户角色信息

@@ -7,9 +7,11 @@ import com.jn.system.entity.TbSysResources;
 import com.jn.system.model.SysResourceCheckName;
 import com.jn.system.model.SysResources;
 import com.jn.system.model.SysResourcesPage;
+import com.jn.system.model.User;
 import com.jn.system.service.SysResourcesService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -46,7 +48,9 @@ public class SysResourcesController extends BaseController {
     @PostMapping(value = "/add")
     @RequiresPermissions("/system/sysResources/add")
     public Result add(@Validated @RequestBody SysResources sysResources) {
-        sysResourcesService.insertResources(sysResources);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.insertResources(sysResources,user);
         return new Result();
     }
 

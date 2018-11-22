@@ -14,7 +14,6 @@ import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileGroupService;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -52,15 +51,13 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSysFileGroup(SysFileGroup sysFileGroup) {
+    public void insertSysFileGroup(SysFileGroup sysFileGroup,User user) {
         //名称校验
         List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFileGroup.setId(UUID.randomUUID().toString());
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysFileGroup.setCreator(user.getId());
         sysFileGroup.setCreateTime(new Date());
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
@@ -174,9 +171,8 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd,User user) {
+
         //文件组
         String fileGroupId = sysFileGroupFileAdd.getFileGroupId();
         //文件

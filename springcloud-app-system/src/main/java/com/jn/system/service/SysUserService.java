@@ -24,7 +24,7 @@ public interface SysUserService {
      *
      * @param sysUser
      */
-    void addSysUser(SysUser sysUser);
+    void addSysUser(SysUser sysUser,User user);
 
     /**
      * 查询用户
@@ -62,7 +62,7 @@ public interface SysUserService {
      * @param groupIds
      * @param userId
      */
-    void saveSysGroupToSysUser(String[] groupIds, String userId);
+    void saveSysGroupToSysUser(String[] groupIds, String userId,User user);
 
     /**
      * 根据用户id获取用户具有角色及条件查询用户未拥有的角色
@@ -78,7 +78,7 @@ public interface SysUserService {
      * @param roleIds
      * @param userId
      */
-    void saveSysRoleToSysUser(String[] roleIds, String userId);
+    void saveSysRoleToSysUser(String[] roleIds, String userId,User user);
 
     /**
      * 根据用户id查询用户已经具有的部门岗位信息及用户信息
@@ -94,7 +94,7 @@ public interface SysUserService {
      * @param sysUserDepartmentPostAdd
      * @return
      */
-    void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd);
+    void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user);
 
     /**
      * 根据用户id返回用户信息

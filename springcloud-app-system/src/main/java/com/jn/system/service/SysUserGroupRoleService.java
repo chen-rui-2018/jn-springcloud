@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 
 import com.jn.system.model.SysUserGroupRole;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface SysUserGroupRoleService {
      * 新增用户组角色
      * @param userGroupRole
      */
-    void insertTbUserGroupRole(SysUserGroupRole userGroupRole);
+    void insertTbUserGroupRole(SysUserGroupRole userGroupRole, User user);
 
     /**
      * 更新用户组角色信息

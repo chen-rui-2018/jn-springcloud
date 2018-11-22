@@ -19,7 +19,6 @@ import com.jn.system.vo.SysRoleUserGroupVO;
 import com.jn.system.vo.SysRoleUserVO;
 import com.jn.system.vo.SysRoleVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -81,14 +80,12 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbRole(SysRoleAdd role) {
+    public void insertTbRole(SysRoleAdd role,User user) {
         //判断角色名称是否已经存在
         List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         TbSysRole tbSysRole = new TbSysRole();
         tbSysRole.setId(UUID.randomUUID().toString());
         tbSysRole.setCreator(user.getId());
@@ -180,14 +177,13 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd) {
+    public void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd,User user) {
         String[] roleIds = {sysUserRoleAdd.getRoleId()};
         //插入前删除该角色的所有用户角色数据
         userRoleService.deleteTbUserRoleByRoleIds(roleIds);
         if (sysUserRoleAdd.getUserId().length == 0) {
             return;
         }
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         //批量插入用户角色信息
         List<SysUserRole> sysUserRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserRoleAdd.getUserId().length; i++) {
@@ -214,7 +210,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd) {
+    public void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd,User user ) {
         String[] roleIds = {sysRolePermissionAdd.getRoleId()};
         //插入前删除该角色的所有角色权限数据
         rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
@@ -222,7 +218,6 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (sysRolePermissionAdd.getPermissionId().length == 0) {
             return;
         }
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         //批量插入角色权限信息
         List<SysRolePermission> sysRolePermissionList = new ArrayList<>();
         for (int i = 0; i < sysRolePermissionAdd.getPermissionId().length; i++) {
@@ -248,14 +243,14 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd) {
+    public void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd,User user ) {
         String[] roleIds = {sysUserGroupRoleAdd.getRoleId()};
         //插入前删除该角色的所有用户组角色数据
         sysUserGroupRoleService.deleteTbUserGroupRoleByRoleIds(roleIds);
         if (sysUserGroupRoleAdd.getUserGroupId().length == 0) {
             return;
         }
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
         List<SysUserGroupRole> sysUserGroupRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserGroupRoleAdd.getUserGroupId().length; i++) {
             SysUserGroupRole sysUserGroupRole = new SysUserGroupRole();

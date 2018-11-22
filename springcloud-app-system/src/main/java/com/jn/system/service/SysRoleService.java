@@ -25,7 +25,7 @@ public interface SysRoleService {
      *
      * @param role
      */
-    void insertTbRole(SysRoleAdd role);
+    void insertTbRole(SysRoleAdd role,User user);
 
     /**
      * 更新角色信息
@@ -56,21 +56,21 @@ public interface SysRoleService {
      *
      * @param sysUserRoleAdd
      */
-    void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd);
+    void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd,User user);
 
     /**
      * 添加角色授权（权限）
      *
      * @param sysRolePermissionAdd
      */
-    void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd);
+    void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd,User user);
 
     /**
      * 添加角色授权（用户组）
      *
      * @param sysUserGroupRoleAdd
      */
-    void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd);
+    void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd,User user);
 
     /**
      * 校验角色名称是否已经存在

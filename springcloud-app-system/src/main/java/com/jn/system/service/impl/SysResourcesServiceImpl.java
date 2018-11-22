@@ -14,7 +14,6 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysResourcesService;
 import com.jn.system.vo.SysResourcesVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -53,15 +52,13 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertResources(SysResources sysResources) {
+    public void insertResources(SysResources sysResources, User user) {
         //添加名称校验
         List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysResources.setId(UUID.randomUUID().toString());
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysResources.setCreator(user.getId());
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);

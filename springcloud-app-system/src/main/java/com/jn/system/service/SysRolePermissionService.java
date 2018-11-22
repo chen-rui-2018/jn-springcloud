@@ -2,6 +2,7 @@ package com.jn.system.service;
 
 
 import com.jn.system.model.SysRolePermission;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface SysRolePermissionService {
      * 新增角色权限
      * @param rolePermission
      */
-    void insertTbRolePermission(SysRolePermission rolePermission);
+    void insertTbRolePermission(SysRolePermission rolePermission, User user);
 
     /**
      * 更新角色权限信息

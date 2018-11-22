@@ -6,7 +6,6 @@ import com.jn.system.entity.TbSysGroupRole;
 import com.jn.system.model.SysUserGroupRole;
 import com.jn.system.model.User;
 import com.jn.system.service.SysUserGroupRoleService;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -44,9 +42,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbUserGroupRole(SysUserGroupRole userGroupRole) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public void insertTbUserGroupRole(SysUserGroupRole userGroupRole, User user ) {
         userGroupRole.setCreator(user.getId());
         userGroupRole.setId(UUID.randomUUID().toString());
         TbSysGroupRole tbSysGroupRole =new TbSysGroupRole();

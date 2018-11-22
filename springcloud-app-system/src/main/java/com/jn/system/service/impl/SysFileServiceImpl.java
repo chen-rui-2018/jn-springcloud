@@ -16,7 +16,6 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysFileService;
 import com.jn.system.vo.SysFileVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,7 +54,7 @@ public class SysFileServiceImpl implements SysFileService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertSysFile(SysFile sysFile) {
+    public void insertSysFile(SysFile sysFile, User user) {
         //文件名称校验
         TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
         TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
@@ -66,8 +65,7 @@ public class SysFileServiceImpl implements SysFileService {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFile.setId(UUID.randomUUID().toString());
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
         sysFile.setCreator(user.getId());
         sysFile.setCreateTime(new Date());
 
@@ -147,9 +145,8 @@ public class SysFileServiceImpl implements SysFileService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup, User user) {
+
         //文件
         String fileId = sysFileAddFileGroup.getFileId();
         //文件组

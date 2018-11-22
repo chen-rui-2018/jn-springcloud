@@ -6,7 +6,6 @@ import com.jn.system.entity.TbSysUserRole;
 import com.jn.system.model.SysUserRole;
 import com.jn.system.model.User;
 import com.jn.system.service.SysUserRoleService;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -43,9 +42,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbUserRole(SysUserRole role) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
+    public void insertTbUserRole(SysUserRole role,User user) {
         role.setId(UUID.randomUUID().toString());
         role.setCreator(user.getId());
         TbSysUserRole tbSysUserRole=new TbSysUserRole();

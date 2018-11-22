@@ -6,9 +6,11 @@ import com.jn.common.model.Result;
 import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFileAdd;
 import com.jn.system.model.SysFileGroupPage;
+import com.jn.system.model.User;
 import com.jn.system.service.SysFileGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -43,7 +45,9 @@ public class SysFileGroupController extends BaseController {
     @PostMapping(value = "/add")
     @RequiresPermissions("/system/sysFileGroup/add")
     public Result add(@Validated @RequestBody SysFileGroup sysFileGroup) {
-        sysFileGroupService.insertSysFileGroup(sysFileGroup);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysFileGroupService.insertSysFileGroup(sysFileGroup,user);
         return new Result();
     }
 
@@ -79,7 +83,9 @@ public class SysFileGroupController extends BaseController {
     @RequiresPermissions("/system/sysFileGroup/sysFileGroupFileAdd")
     public Result sysFileGroupFileAdd(@RequestBody SysFileGroupFileAdd sysFileGroupFileAdd) {
         Assert.notNull(sysFileGroupFileAdd.getFileGroupId(), "文件组ID不能为空");
-        sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd,user);
         return new Result();
     }
 

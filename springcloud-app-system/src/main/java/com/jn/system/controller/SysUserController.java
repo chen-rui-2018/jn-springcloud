@@ -9,6 +9,7 @@ import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.system.vo.SysUserRoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -36,7 +37,9 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addSysUser")
     public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
-        sysUserService.addSysUser(sysUser);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.addSysUser(sysUser,user);
         return new Result();
     }
 
@@ -86,7 +89,9 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/saveSysGroupToSysUser")
     public Result saveSysGroupToSysUser(@Validated @RequestBody SysUserGroupAdd sysUserGroupAdd) {
         Assert.notNull(sysUserGroupAdd.getUserId(),"用户id不能为空");
-        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId());
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId(),user);
         return new Result();
     }
 
@@ -104,7 +109,9 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/saveSysRoleToSysUser")
     public Result saveSysRoleToSysUser(@Validated @RequestBody SysRoleUserAdd sysRoleUserAdd) {
         Assert.notNull(sysRoleUserAdd.getUserId(),"用户id不能为空");
-        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId());
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId(),user);
         return new Result();
     }
 
@@ -121,7 +128,9 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
     public Result saveDepartmentandPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
         Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
-        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd,user);
         return new Result();
     }
 

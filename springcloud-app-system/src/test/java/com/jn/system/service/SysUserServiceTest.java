@@ -1,8 +1,6 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
-import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
 import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.system.vo.SysUserRoleVO;
@@ -37,7 +35,10 @@ public class SysUserServiceTest {
         sysUser.setName("大唐");
         sysUser.setPhone("12345678998");
         sysUser.setStatus("1");
-        sysUserService.addSysUser(sysUser);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysUserService.addSysUser(sysUser,user);
     }
 
     @Test
@@ -76,7 +77,10 @@ public class SysUserServiceTest {
     @Test
     public void saveSysGroupToSysUserTest() {
         String[] groupIds = {"g002", "g003"};
-        sysUserService.saveSysGroupToSysUser(groupIds, "u002");
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysUserService.saveSysGroupToSysUser(groupIds, "u002",user);
     }
 
     @Test
@@ -91,7 +95,10 @@ public class SysUserServiceTest {
     @Test
     public void saveSysRoleToSysUser() {
         String[] roleId = {"r002", "r003"};
-        sysUserService.saveSysRoleToSysUser(roleId, "u002");
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysUserService.saveSysRoleToSysUser(roleId, "u002",user);
     }
 
     @Test
@@ -110,7 +117,10 @@ public class SysUserServiceTest {
         sysDepartmentPost.setPostId("p006");
         list.add(sysDepartmentPost);
         sysUserDepartmentPost.setSysDepartmentPostList(list);
-        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPost);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPost,user);
     }
 
     @Test

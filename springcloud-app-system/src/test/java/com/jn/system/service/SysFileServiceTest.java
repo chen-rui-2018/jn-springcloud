@@ -44,7 +44,7 @@ public class SysFileServiceTest {
         SysFile file = new SysFile();
         file.setFileName("文件测试2");
         file.setFileUrl("xxx/xxx/a.html");
-        file.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        file.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user=new User();
         user.setId("123");
         user.setAccount("xxx");

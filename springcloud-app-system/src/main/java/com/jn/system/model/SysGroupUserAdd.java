@@ -28,7 +28,7 @@ public class SysGroupUserAdd implements Serializable {
     private String groupId;
     @ApiModelProperty("状态")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status = SysStatusEnums.EFFECTIVE.getKey();
+    private String status = SysStatusEnums.EFFECTIVE.getCode();
 
     public SysGroupUserAdd() {
     }

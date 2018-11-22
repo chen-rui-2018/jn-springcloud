@@ -126,16 +126,16 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/saveDepartmentandPostOfUser")
     @ApiOperation(value = "为用户添加部门岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
-    public Result saveDepartmentandPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
+    public Result saveDepartmentAndPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
         Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPostAdd,user);
+        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPostAdd,user);
         return new Result();
     }
 
     @RequiresPermissions("/system/sysUser/checkUserName")
-    @ApiOperation(value = "校验用户账号是否存在,success表示用户名可用,false不可用", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验用户账号是否存在,fail表示账号已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")
     public Result checkAccount(String account){
         String result = sysUserService.checkUserName(account);

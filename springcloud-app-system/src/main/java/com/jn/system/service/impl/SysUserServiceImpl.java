@@ -10,6 +10,7 @@ import com.jn.system.entity.TbSysUser;
 import com.jn.system.entity.TbSysUserCriteria;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
@@ -74,6 +75,7 @@ public class SysUserServiceImpl implements SysUserService {
         //根据用户名查询用户账号是否存在
         List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
+            logger.info("[用户] 新增用户失败，该用户账号已存在！,account: {}",sysUser.getAccount());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysUser.setId(UUID.randomUUID().toString());
@@ -96,7 +98,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(account);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -142,6 +144,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(StringUtils.isNotBlank(sysUser.getAccount())){
             TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
             if (!sysUser.getAccount().equals(tbSysUser.getAccount())){
+                logger.info("[用户] 更新用户失败，该用户账号已存在！,account: {}",sysUser.getAccount());
                 throw new JnSpringCloudException(SysExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
@@ -198,7 +201,7 @@ public class SysUserServiceImpl implements SysUserService {
                     sysGroupUser.setGroupId(groupId);
                     sysGroupUser.setUserId(userId);
                     sysGroupUser.setId(UUID.randomUUID().toString());
-                    sysGroupUser.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+                    sysGroupUser.setStatus(SysStatusEnums.EFFECTIVE.getCode());
                     sysUserMapper.saveSysGroupToSysUser(sysGroupUser);
                 }
             }
@@ -244,7 +247,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
-                sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+                sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
                 sysUserMapper.saveSysRoleToSysUser(sysUserRole);
             }
             logger.info("[用户] 用户添加角色成功！，sysUserId:{}", userId);
@@ -283,7 +286,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user) {
+    public void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user) {
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
         if (sysUserDepartmentPostAdd.getSysDepartmentPostList() != null
@@ -295,7 +298,7 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setCreateTime(new Date());
                 sysUserDepartmentPost.setCreator(user.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
-                sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+                sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
                 sysUserDepartmentPost.setUserId(sysUserDepartmentPostAdd.getUserId());
                 sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
                 sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
@@ -303,6 +306,7 @@ public class SysUserServiceImpl implements SysUserService {
                 if ("1".equals(sysDepartmentPost.getIsDefault())) {
                     count++;
                     if (count > 1) {
+                        logger.info("[用户] 用户添加部门岗位失败，用户默认部门岗位信息不唯一！,userId: {}，departmentId",sysUserDepartmentPostAdd.getUserId(),sysDepartmentPost.getPostId());
                         throw new JnSpringCloudException(SysExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
                     }
                 }
@@ -341,10 +345,10 @@ public class SysUserServiceImpl implements SysUserService {
         if (StringUtils.isNotBlank(account)) {
             List<TbSysUser> tbSysUsers = checkAccount(account);
             if (tbSysUsers != null && tbSysUsers.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
     @Override

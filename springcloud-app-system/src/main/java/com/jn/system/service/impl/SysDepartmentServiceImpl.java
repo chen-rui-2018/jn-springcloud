@@ -8,6 +8,8 @@ import com.jn.system.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dao.TbSysDepartmentMapper;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysDepartmentCriteria;
+import com.jn.system.enums.SysLevelEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysDepartment;
 import com.jn.system.model.SysDepartmentAdd;
@@ -17,7 +19,6 @@ import com.jn.system.service.SysDepartmentService;
 import com.jn.system.vo.SysDepartmentUserVO;
 import com.jn.system.vo.SysDepartmentVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 部门service实现
@@ -59,7 +61,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public List<SysDepartment> findSysDepartmentAll() {
         TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
         List<SysDepartment> list = new ArrayList<SysDepartment>();
         for (TbSysDepartment tbSysDepartment : tbSysDepartmentList) {
@@ -123,21 +125,20 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void add(SysDepartmentAdd sysDepartmentAdd) {
+    public void add(SysDepartmentAdd sysDepartmentAdd,User user) {
         String level;
         //根据父id查询父级部门等级,判断父id是否是1级id,若是设置等级为1
-        if ("1".equals(sysDepartmentAdd.getParentId())) {
-            level = "1";
+        if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysDepartmentAdd.getParentId())) {
+            level = SysLevelEnums.FIRST_LEVEL.getCode();
         } else {
             //查询父级部门等级
             TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(sysDepartmentAdd.getParentId());
-            level = (Integer.parseInt(tbSysDepartment.getLevel()) + 1) + "";
+            level = String.valueOf(Integer.parseInt(tbSysDepartment.getLevel()) + 1);
         }
         //判断部门名称中是否有数据
         if (sysDepartmentAdd.getDepartmentNames() != null &&
                 sysDepartmentAdd.getDepartmentNames().length > 0) {
-            User user = (User) SecurityUtils.getSubject().getPrincipal();
-            List<TbSysDepartment> list = new ArrayList<TbSysDepartment>();
+
             for (String departmentName : sysDepartmentAdd.getDepartmentNames()) {
                 //封装数据
                 TbSysDepartment tbSysDepartment = new TbSysDepartment();
@@ -146,7 +147,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                 tbSysDepartment.setDepartmentName(departmentName);
                 tbSysDepartment.setCreator(user.getId());
                 tbSysDepartment.setCreateTime(new Date());
-                tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+                tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
                 tbSysDepartment.setLevel(level);
                 //插入部门
                 tbSysDepartmentMapper.insertSelective(tbSysDepartment);
@@ -184,13 +185,13 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
             TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
             criteria.andDepartmentNameEqualTo(departmentName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
             List<TbSysDepartment> tbSysDepartmentList = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
             if (tbSysDepartmentList != null && tbSysDepartmentList.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
     /**

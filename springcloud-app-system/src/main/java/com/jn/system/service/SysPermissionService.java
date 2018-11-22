@@ -16,7 +16,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionAdd
      */
-    void addPermission(SysPermissionAdd sysPermissionAdd);
+    void addPermission(SysPermissionAdd sysPermissionAdd,User user);
 
     /**
      * 修改权限
@@ -51,7 +51,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionRolesAdd
      */
-    void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd);
+    void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd,User user);
 
     /**
      * 条件分页获取未拥有的角色信息
@@ -74,7 +74,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionFileGroupAdd
      */
-    void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd);
+    void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd,User user);
 
     /**
      * 获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息
@@ -105,12 +105,12 @@ public interface SysPermissionService {
      *
      * @param sysPermissionMenuAdd
      */
-    void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd);
+    void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd,User user);
 
     /**
      * 为权限添加页面功能
      *
      * @param sysPermissionMenuAdd
      */
-    void addResounceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd);
+    void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd,User user);
 }

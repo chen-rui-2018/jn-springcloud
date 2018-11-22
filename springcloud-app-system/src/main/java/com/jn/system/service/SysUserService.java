@@ -94,7 +94,7 @@ public interface SysUserService {
      * @param sysUserDepartmentPostAdd
      * @return
      */
-    void saveDepartmentandPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user);
+    void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd,User user);
 
     /**
      * 根据用户id返回用户信息

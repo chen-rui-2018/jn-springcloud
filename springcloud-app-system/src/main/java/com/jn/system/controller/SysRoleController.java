@@ -46,6 +46,7 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysRole/add")
     public Result add(@Validated @RequestBody SysRoleAdd role) {
+        //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbRoleService.insertTbRole(role,user);
         return new Result();
@@ -75,6 +76,7 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/rolePermissionAuthorization")
     public Result rolePermissionAuthorization(@Validated @RequestBody SysRolePermissionAdd sysRolePermissionAdd) {
         Assert.notNull(sysRolePermissionAdd.getRoleId(), "角色ID不能为空");
+        //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd,user);
         return new Result();
@@ -85,6 +87,7 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/userGroupRoleAuthorization")
     public Result userGroupRoleAuthorization(@Validated @RequestBody SysUserGroupRoleAdd sysUserGroupRoleAdd) {
         Assert.notNull(sysUserGroupRoleAdd.getRoleId(), "角色ID不能为空");
+        //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd,user);
         return new Result();
@@ -95,6 +98,7 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/userRoleAuthorization")
     public Result userRoleAuthorization(@Validated @RequestBody SysUserRoleAdd sysUserRoleAdd) {
         Assert.notNull(sysUserRoleAdd.getRoleId(), "角色ID不能为空");
+        //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbRoleService.userRoleAuthorization(sysUserRoleAdd,user);
         return new Result();
@@ -108,7 +112,7 @@ public class SysRoleController extends BaseController {
         return new Result(sysRoleAll);
     }
 
-    @ApiOperation(value = "校验角色名称是否已经存在,false表示角色名称已存在,success表示名称可以使用",
+    @ApiOperation(value = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkRoleName")
     @RequiresPermissions("/system/sysRole/checkRoleName")

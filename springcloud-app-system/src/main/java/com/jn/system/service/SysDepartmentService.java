@@ -49,7 +49,7 @@ public interface SysDepartmentService {
      *
      * @param sysDepartmentAdd
      */
-    void add(SysDepartmentAdd sysDepartmentAdd);
+    void add(SysDepartmentAdd sysDepartmentAdd,User user);
 
     /**
      * 条件分页查询部门信息

@@ -27,7 +27,7 @@ public interface SysGroupService {
      * 增加用户组
      * @param sysGroup 用户组
      */
-    void addSysGroup(TbSysGroup sysGroup);
+    void addSysGroup(TbSysGroup sysGroup,User user);
 
     /**
      * 逻辑删除用户组
@@ -60,7 +60,7 @@ public interface SysGroupService {
      * 为用户组授权角色信息
      * @param sysRoleGroupAdd
      */
-    void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd);
+    void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd,User user);
 
     /**
      * 根据用户组id获取用户组下面所有用户
@@ -80,7 +80,7 @@ public interface SysGroupService {
      * 用户组授权用户
      * @param sysGroupUserAdd
      */
-    void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd);
+    void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd,User user);
 
     /**
      * 校验用户组名是否可用

@@ -10,6 +10,7 @@ import com.jn.system.dao.TbSysPostMapper;
 import com.jn.system.entity.TbSysPost;
 import com.jn.system.entity.TbSysPostCriteria;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.SysPost;
 import com.jn.system.model.SysPostAdd;
@@ -18,7 +19,6 @@ import com.jn.system.model.User;
 import com.jn.system.service.SysPostService;
 import com.jn.system.vo.SysPostVO;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -60,7 +60,7 @@ public class SysPostServiceImpl implements SysPostService {
     public List<TbSysPost> findSysPostAll() {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         List<TbSysPost> sysPostList = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         return sysPostList;
     }
@@ -73,14 +73,14 @@ public class SysPostServiceImpl implements SysPostService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void addPost(SysPostAdd sysPostAdd) {
+    public void addPost(SysPostAdd sysPostAdd,User user) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
+            logger.info("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPost tbSysPost = new TbSysPost();
         tbSysPost.setId(UUID.randomUUID().toString());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbSysPost.setCreator(user.getId());
         tbSysPost.setStatus(sysPostAdd.getStatus());
         tbSysPost.setCreateTime(new Date());
@@ -99,7 +99,7 @@ public class SysPostServiceImpl implements SysPostService {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(postName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         return tbSysPostMapper.selectByExample(tbSysPostCriteria);
     }
 
@@ -128,9 +128,10 @@ public class SysPostServiceImpl implements SysPostService {
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(sysPost.getPostName());
         criteria.andIdNotEqualTo(sysPost.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
+            logger.info("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysPostMapper.updatePost(sysPost);
@@ -178,10 +179,10 @@ public class SysPostServiceImpl implements SysPostService {
         if (StringUtils.isNotBlank(postName)) {
             List<TbSysPost> tbSysPosts = checkName(postName);
             if (tbSysPosts != null && tbSysPosts.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
 }

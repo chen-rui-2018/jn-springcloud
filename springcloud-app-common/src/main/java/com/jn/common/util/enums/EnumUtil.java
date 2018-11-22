@@ -1,7 +1,7 @@
 package com.jn.common.util.enums;
 
 
-import com.jn.common.enums.CodeEnum;
+import com.jn.common.api.CodeAndMsg;
 
 /**
  * 状态码枚举类
@@ -13,9 +13,9 @@ import com.jn.common.enums.CodeEnum;
  */
 public class EnumUtil {
 
-    public static <T extends CodeEnum> T getByKey(String key, Class<T> enumClass) {
+    public static <T extends CodeAndMsg> T getByCode(String key, Class<T> enumClass) {
         for (T each : enumClass.getEnumConstants()) {
-            if (key.equals(each.getKey())) {
+            if (key.equals(each.getCode())) {
                 return each;
             }
         }

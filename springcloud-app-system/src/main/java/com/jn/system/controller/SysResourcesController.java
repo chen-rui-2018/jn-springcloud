@@ -81,7 +81,7 @@ public class SysResourcesController extends BaseController {
         return new Result(sysResources);
     }
 
-    @ApiOperation(value = "校验菜单界面页面功能名称是否存在", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验菜单界面页面功能名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/checkResourceName")
     @RequiresPermissions("/system/sysResources/checkResourceName")
     public Result checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName){

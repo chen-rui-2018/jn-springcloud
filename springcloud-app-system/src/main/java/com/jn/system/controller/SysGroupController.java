@@ -8,6 +8,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysGroupService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -47,7 +48,9 @@ public class SysGroupController extends BaseController {
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysGroup/add")
     public Result add(@Validated @RequestBody TbSysGroup sysGroup) {
-        sysGroupService.addSysGroup(sysGroup);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.addSysGroup(sysGroup,user);
         return new Result();
     }
 
@@ -94,7 +97,9 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/roleGroupAuthorization")
     public Result roleGroupAuthorization(@Validated @RequestBody SysRoleGroupAdd sysRoleGroupAdd) {
         Assert.notNull(sysRoleGroupAdd.getGroupId(), "用户组id不能为空");
-        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd,user);
         return new Result();
     }
 
@@ -123,11 +128,13 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/userGroupAuthorization")
     public Result userGroupAuthorization(@Validated @RequestBody SysGroupUserAdd sysGroupUserAdd) {
         Assert.notNull(sysGroupUserAdd.getGroupId(), "用户组id不能为空");
-        sysGroupService.userGroupAuthorization(sysGroupUserAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.userGroupAuthorization(sysGroupUserAdd,user);
         return new Result();
     }
 
-    @ApiOperation(value = "校验用户组名是否存在,success表示用户组名可以用,false表示用户组名已存在",
+    @ApiOperation(value = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkGroupName")
     @RequiresPermissions("/system/sysGroup/checkGroupName")

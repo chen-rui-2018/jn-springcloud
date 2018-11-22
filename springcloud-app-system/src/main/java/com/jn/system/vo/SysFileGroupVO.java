@@ -38,11 +38,6 @@ public class SysFileGroupVO implements Serializable {
      */
     private String status;
 
-    /**
-     * 状态描述
-     */
-    private String statusDesc;
-
 
 
     public String getId() {
@@ -85,11 +80,4 @@ public class SysFileGroupVO implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public String getStatusDesc() {
-        return EnumUtil.getByKey(status,SysStatusEnums.class).getValue();
-    }
-
-    public void setStatusDesc(String statusDesc) {
-        this.statusDesc = statusDesc;
-    }
 }

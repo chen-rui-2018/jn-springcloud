@@ -64,10 +64,6 @@ public class SysMenuVO implements Serializable {
      */
     private String isDir;
 
-    /**
-     * 状态描述
-     */
-    private String statusDesc;
 
 
     /**
@@ -160,15 +156,6 @@ public class SysMenuVO implements Serializable {
     public void setSysResources(List<SysResources> sysResources) {
         this.sysResources = sysResources;
     }
-
-    public String getStatusDesc() {
-        return EnumUtil.getByKey(status,SysStatusEnums.class).getValue();
-    }
-
-    public void setStatusDesc(String statusDesc) {
-        this.statusDesc = statusDesc;
-    }
-
 
     public String getIsDir() {
         return isDir;

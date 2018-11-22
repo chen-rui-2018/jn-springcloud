@@ -9,6 +9,7 @@ import com.jn.system.dao.TbSysResourcesMapper;
 import com.jn.system.entity.TbSysResources;
 import com.jn.system.entity.TbSysResourcesCriteria;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysResourcesService;
@@ -56,13 +57,14 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         //添加名称校验
         List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
+            logger.info("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}",sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysResources.setId(UUID.randomUUID().toString());
         sysResources.setCreator(user.getId());
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
-        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysResourcesMapper.insert(tbSysResources);
         logger.info("[功能] 新增功能成功！,resourcesName:{},resourcesId:{}", sysResources.getResourcesName(), sysResources.getId());
     }
@@ -78,7 +80,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(resourcesName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         criteria.andMenuIdEqualTo(menuId);
         return tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
     }
@@ -94,11 +96,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         criteria.andMenuIdEqualTo(sysResources.getMenuId());
         criteria.andIdNotEqualTo(sysResources.getId());
         List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
+            logger.info("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}",sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysResources tbSysResources = new TbSysResources();
@@ -172,10 +175,10 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         if (StringUtils.isNotBlank(sysResourceCheckName.getResourceName())) {
             List<TbSysResources> tbSysResourcesList = checkName(sysResourceCheckName.getResourceName(), sysResourceCheckName.getMenuId());
             if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-                return "flase";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
     /**
@@ -189,7 +192,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getKey());
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         List<TbSysResources> tbSysResources = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         return tbSysResources;
     }

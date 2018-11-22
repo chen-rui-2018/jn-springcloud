@@ -55,7 +55,7 @@ public class SysFileGroup implements Serializable {
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
     @NotBlank(message = "文件组状态不能为空！")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status=SysStatusEnums.EFFECTIVE.getKey();
+    private String status=SysStatusEnums.EFFECTIVE.getCode();
 
     public SysFileGroup() {
     }

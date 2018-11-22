@@ -3,35 +3,43 @@ package com.jn.system.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 状态枚举
+ * 层级枚举类
+ *
  * @author： yuanyy
- * @date： Created on 2018/11/1 17:03
+ * @date： Created on 2018/11/22 15:22
  * @version： v1.0
  * @modified By:
  */
-public enum SysStatusEnums implements CodeAndMsg {
-    EFFECTIVE("1", "有效"),
-    INVALID("0", "失效"),
-    DELETED("-1","已删除");
+public enum SysLevelEnums implements CodeAndMsg {
+
+    FIRST_LEVEL("1","第一层级");
 
     private String code;
 
     private String message;
 
-    SysStatusEnums(String key, String message) {
+    SysLevelEnums(String key, String message) {
         this.code = key;
         this.message = message;
     }
 
+    /**
+     * 获取code
+     *
+     * @return
+     */
     @Override
     public String getCode() {
-        return code;
+        return null;
     }
 
-
+    /**
+     * 获取信息
+     *
+     * @return
+     */
     @Override
     public String getMessage() {
-        return message;
+        return null;
     }
-
 }

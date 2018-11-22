@@ -8,6 +8,7 @@ import com.jn.system.service.SysDepartmentService;
 import com.jn.system.vo.SysDepartmentVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -73,7 +74,9 @@ public class SysDepartmentController extends BaseController {
     @RequestMapping("/add")
     public Result add(@Validated @RequestBody SysDepartmentAdd sysDepartmentAdd) {
         Assert.notNull(sysDepartmentAdd.getParentId(), "父级id不能为空");
-        sysDepartmentService.add(sysDepartmentAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysDepartmentService.add(sysDepartmentAdd,user);
         return new Result();
     }
 
@@ -87,7 +90,7 @@ public class SysDepartmentController extends BaseController {
 
 
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
-    @ApiOperation(value = "校验部门名称是否存在,false表示部门名称已存在,success表示可以使用",
+    @ApiOperation(value = "校验部门名称是否存在,fail表示部门名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping("/checkDepartmentName")
     public Result checkDepartmentName(String departmentName) {

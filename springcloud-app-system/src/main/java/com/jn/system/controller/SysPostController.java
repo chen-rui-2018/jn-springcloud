@@ -8,6 +8,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysPostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -46,7 +47,9 @@ public class SysPostController extends BaseController {
     @ApiOperation(value = "添加岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysPostAdd sysPostAdd) {
-        sysPostService.addPost(sysPostAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPostService.addPost(sysPostAdd,user);
         return new Result();
     }
 
@@ -86,7 +89,7 @@ public class SysPostController extends BaseController {
     }
 
     @RequiresPermissions("/system/sysPost/checkPostName")
-    @ApiOperation(value = "校验岗位名称是否存在,false表示岗位名称已经存在,success表示可以使用", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "校验岗位名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPostName")
     public Result checkPostName(String postName){
         String result = sysPostService.checkPostName(postName);

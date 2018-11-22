@@ -44,7 +44,7 @@ public class SysFileGroupServiceTest {
     public void addTest() {
         SysFileGroup sysFileGroup = new SysFileGroup();
         sysFileGroup.setFileGroupName("文件测试1");
-        sysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        sysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user=new User();
         user.setId("123");
         user.setAccount("xxx");
@@ -59,7 +59,7 @@ public class SysFileGroupServiceTest {
         SysFileGroup sysFileGroup = new SysFileGroup();
         sysFileGroup.setId("b0e96afc-7d94-4a3e-b0a4-40774244bda0");
         sysFileGroup.setFileGroupName("文件测试2");
-        sysFileGroup.setStatus(SysStatusEnums.INVALID.getKey());
+        sysFileGroup.setStatus(SysStatusEnums.INVALID.getCode());
         sysFileGroupService.updateSysFileGroupById(sysFileGroup);
     }
 

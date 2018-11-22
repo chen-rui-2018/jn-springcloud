@@ -120,7 +120,7 @@ public class SysUserServiceTest {
         User user=new User();
         user.setId("123");
         user.setAccount("xxx");
-        sysUserService.saveDepartmentandPostOfUser(sysUserDepartmentPost,user);
+        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPost,user);
     }
 
     @Test

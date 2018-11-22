@@ -45,7 +45,10 @@ public class SysGroupServiceTest {
         TbSysGroup sysGroup = new TbSysGroup();
         sysGroup.setGroupName("财务组");
         sysGroup.setStatus("1");
-        sysGroupService.addSysGroup(sysGroup);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysGroupService.addSysGroup(sysGroup,user);
     }
 
     @Test
@@ -77,7 +80,10 @@ public class SysGroupServiceTest {
         sysRoleGroupAdd.setGroupId("g002");
         String[] roleIds = {"r001","r002"};
         sysRoleGroupAdd.setRoleIds(roleIds);
-        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysGroupService.roleGroupAuthorization(sysRoleGroupAdd,user);
     }
 
     @Test
@@ -102,7 +108,10 @@ public class SysGroupServiceTest {
         sysGroupUserAdd.setGroupId("g002");
         String[] userIds = {"u003","u004"};
         sysGroupUserAdd.setUserIds(userIds);
-        sysGroupService.userGroupAuthorization(sysGroupUserAdd);
+        User user=new User();
+        user.setId("123");
+        user.setAccount("xxx");
+        sysGroupService.userGroupAuthorization(sysGroupUserAdd,user);
     }
 
 }

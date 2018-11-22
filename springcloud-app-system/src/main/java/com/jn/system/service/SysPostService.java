@@ -6,6 +6,7 @@ import com.jn.system.entity.TbSysPost;
 import com.jn.system.model.SysPost;
 import com.jn.system.model.SysPostAdd;
 import com.jn.system.model.SysPostPage;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface SysPostService {
      *
      * @param sysPostAdd
      */
-    void addPost(SysPostAdd sysPostAdd);
+    void addPost(SysPostAdd sysPostAdd, User user);
 
     /**
      * 批量删除岗位

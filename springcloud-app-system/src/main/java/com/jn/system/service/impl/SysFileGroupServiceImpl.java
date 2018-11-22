@@ -11,6 +11,7 @@ import com.jn.system.dao.TbSysFileGroupMapper;
 import com.jn.system.entity.TbSysFileGroup;
 import com.jn.system.entity.TbSysFileGroupCriteria;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileGroupService;
@@ -55,6 +56,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //名称校验
         List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+            logger.info("[文件组] 添加文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFileGroup.setId(UUID.randomUUID().toString());
@@ -76,7 +78,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(fileGroupName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         return tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
     }
 
@@ -91,10 +93,11 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         criteria.andIdNotEqualTo(sysFileGroup.getId());
         List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+            logger.info("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
@@ -157,7 +160,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         }
 
         //过滤已删除的数据
-        sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
 
         logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
@@ -188,7 +191,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             //文件组
             sysFileGroupFile.setFileGroupId(fileGroupId);
             //状态，默认有效
-            sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+            sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getCode());
 
             sysFileGroupFiles.add(sysFileGroupFile);
             logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId, Arrays.toString(fileId));
@@ -229,9 +232,9 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)) {
             List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);
             if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 }

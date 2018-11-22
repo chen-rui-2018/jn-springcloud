@@ -8,6 +8,7 @@ import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysRole;
 import com.jn.system.entity.TbSysRoleCriteria;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysRolePermissionService;
@@ -84,6 +85,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         //判断角色名称是否已经存在
         List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
+            logger.info("[角色权限] 新增角色失败，该角色名称已存在！,roleName: {}", role.getRoleName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysRole tbSysRole = new TbSysRole();
@@ -106,7 +108,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(roleName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         return tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
     }
 
@@ -122,9 +124,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(role.getRoleName());
         criteria.andIdNotEqualTo(role.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
+            logger.info("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", role.getRoleName(),role.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysRole tbSysRole = new TbSysRole();
@@ -181,7 +184,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         String[] roleIds = {sysUserRoleAdd.getRoleId()};
         //插入前删除该角色的所有用户角色数据
         userRoleService.deleteTbUserRoleByRoleIds(roleIds);
-        if (sysUserRoleAdd.getUserId().length == 0) {
+
+        Boolean isDelete=sysUserRoleAdd.getUserId().length==0?Boolean.TRUE:Boolean.FALSE;
+        if (isDelete) {
+            logger.info("[角色授权用户] 删除该角色下用户信息成功！roleId:{}",sysUserRoleAdd.getRoleId());
             return;
         }
         //批量插入用户角色信息
@@ -190,7 +196,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+            sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
             sysUserRole.setCreator(user.getId());
             sysUserRole.setUserId(sysUserRoleAdd.getUserId()[i]);
             sysUserRole.setRoleId(sysUserRoleAdd.getRoleId());
@@ -214,8 +220,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         String[] roleIds = {sysRolePermissionAdd.getRoleId()};
         //插入前删除该角色的所有角色权限数据
         rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
-        logger.info("[角色权限] 添加角色授权权限,插入前删除该角色的所有角色权限数据，roleId: {}", Arrays.toString(roleIds));
-        if (sysRolePermissionAdd.getPermissionId().length == 0) {
+
+        Boolean isDelete=sysRolePermissionAdd.getPermissionId().length==0?Boolean.TRUE:Boolean.FALSE;
+        if (isDelete) {
+            logger.info("[角色授权权限] 删除该角色下权限信息成功！roleId:{}",sysRolePermissionAdd.getRoleId());
             return;
         }
         //批量插入角色权限信息
@@ -224,13 +232,14 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysRolePermission sysRolePermission = new SysRolePermission();
             sysRolePermission.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+            sysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getCode());
             sysRolePermission.setCreator(user.getId());
             sysRolePermission.setPermissionId(sysRolePermissionAdd.getPermissionId()[i]);
             sysRolePermission.setRoleId(sysRolePermissionAdd.getRoleId());
             sysRolePermissionList.add(sysRolePermission);
-            logger.info("[角色权限] 添加角色授权权限，roleId: {},userId: {}", Arrays.toString(roleIds), sysRolePermissionAdd.getPermissionId()[i]);
+            logger.info("[角色授权权限] 添加角色授权权限，roleId: {},userId: {}", Arrays.toString(roleIds), sysRolePermissionAdd.getPermissionId()[i]);
         }
+        logger.info("[角色授权权限] 添加角色授权权限,插入前删除该角色的所有角色权限数据，roleId: {}", Arrays.toString(roleIds));
         //批量插入角色权限
         rolePermissionService.insertTbRolePermissionBatch(sysRolePermissionList);
 
@@ -247,16 +256,18 @@ public class SysRoleServiceImpl implements SysRoleService {
         String[] roleIds = {sysUserGroupRoleAdd.getRoleId()};
         //插入前删除该角色的所有用户组角色数据
         sysUserGroupRoleService.deleteTbUserGroupRoleByRoleIds(roleIds);
-        if (sysUserGroupRoleAdd.getUserGroupId().length == 0) {
+
+        Boolean isDelete=sysUserGroupRoleAdd.getUserGroupId().length==0?Boolean.TRUE:Boolean.FALSE;
+        if (isDelete) {
+            logger.info("[角色授权用户组] 删除该角色下用户组信息成功！roleId:{}",sysUserGroupRoleAdd.getRoleId());
             return;
         }
-
         List<SysUserGroupRole> sysUserGroupRoleList = new ArrayList<>();
         for (int i = 0; i < sysUserGroupRoleAdd.getUserGroupId().length; i++) {
             SysUserGroupRole sysUserGroupRole = new SysUserGroupRole();
             sysUserGroupRole.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysUserGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+            sysUserGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
             sysUserGroupRole.setCreator(user.getId());
             sysUserGroupRole.setUserGroupId(sysUserGroupRoleAdd.getUserGroupId()[i]);
             sysUserGroupRole.setRoleId(sysUserGroupRoleAdd.getRoleId());
@@ -280,10 +291,10 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (StringUtils.isNotBlank(roleName)){
             List<TbSysRole> tbSysRoles = checkName(roleName);
             if (tbSysRoles != null && tbSysRoles.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
     /**

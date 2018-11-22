@@ -45,7 +45,7 @@ public class SysResourcesServiceTest {
         SysResources resources = new SysResources();
         resources.setResourcesName("功能测试1");
         resources.setResourcesUrl("xxx/xxx/a.html");
-        resources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user=new User();
         user.setId("123");
         user.setAccount("xxx");
@@ -61,7 +61,7 @@ public class SysResourcesServiceTest {
         resources.setId("17ff9b4e-a920-4866-8cf8-35eab5c8ccde");
         resources.setResourcesName("功能测试2");
         resources.setResourcesUrl("xxx/xxx/a.html");
-        resources.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+        resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         sysResourcesService.updateResourcesById(resources);
     }
 

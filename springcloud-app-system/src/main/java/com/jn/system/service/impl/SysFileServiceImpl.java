@@ -11,6 +11,7 @@ import com.jn.system.dao.TbSysFileMapper;
 import com.jn.system.entity.TbSysFile;
 import com.jn.system.entity.TbSysFileCriteria;
 import com.jn.system.enums.SysExceptionEnums;
+import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysFileService;
@@ -59,9 +60,10 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
         TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
         criteria.andFileNameEqualTo(sysFile.getFileName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
         if (tbSysFiles != null && tbSysFiles.size() > 0) {
+            logger.info("[文件] 添加文件失败，该文件名称已存在！,fileName: {}", sysFile.getFileName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFile.setId(UUID.randomUUID().toString());
@@ -162,7 +164,7 @@ public class SysFileServiceImpl implements SysFileService {
             //文件
             sysFileGroupFile.setFileId(fileId);
             //状态，默认有效
-            sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getKey());
+            sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getCode());
 
             sysFileGroupFiles.add(sysFileGroupFile);
             logger.info("[文件] 文件添加文件组,fileId: {}",fileId);
@@ -193,12 +195,12 @@ public class SysFileServiceImpl implements SysFileService {
             TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
             TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
             criteria.andFileNameEqualTo(fileName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
+            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
             List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
             if (tbSysFiles != null && tbSysFiles.size() > 0) {
-                return "false";
+                return SysReturnMessageEnum.FAIL.getMessage();
             }
         }
-        return "success";
+        return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 }

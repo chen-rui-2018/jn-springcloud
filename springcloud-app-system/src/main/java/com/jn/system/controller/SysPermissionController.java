@@ -7,6 +7,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -36,7 +37,9 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "添加权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result add(@Validated @RequestBody SysPermissionAdd sysPermissionAdd) {
-        sysPermissionService.addPermission(sysPermissionAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addPermission(sysPermissionAdd,user);
         return new Result();
     }
 
@@ -84,7 +87,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/addRoleToPermission")
     public Result addRoleToPermission(@Validated @RequestBody SysPermissionRolesAdd sysPermissionRolesAdd) {
         Assert.notNull(sysPermissionRolesAdd.getPermissionId(), "权限id不能为空");
-        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd,user);
         return new Result();
     }
 
@@ -112,7 +117,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/addFileGroupToPermission")
     public Result addFileGroupToPermission(@Validated @RequestBody SysPermissionFileGroupAdd sysPermissionFileGroupAdd) {
         Assert.notNull(sysPermissionFileGroupAdd.getPermissionId(), "权限id不能为空");
-        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd,user);
         return new Result();
     }
 
@@ -140,7 +147,9 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "为权限添加菜单", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addMenuToPermission")
     public Result addMenuToPermission(@Validated @RequestBody SysPermissionMenuAdd sysPermissionMenuAdd) {
-        sysPermissionService.addMenuToPermission(sysPermissionMenuAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addMenuToPermission(sysPermissionMenuAdd,user);
         return new Result();
     }
 
@@ -149,13 +158,15 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "为权限添加页面功能", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addResounceToPermission")
     public Result addResounceToPermission(@Validated @RequestBody SysPermissionResourceAdd sysPermissionMenuAdd) {
-        sysPermissionService.addResounceToPermission(sysPermissionMenuAdd);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addResourceToPermission(sysPermissionMenuAdd,user);
         return new Result();
     }
 
 
     @RequiresPermissions("/system/sysPermission/checkPermissionName")
-    @ApiOperation(value = "校验权限名称是否已经存在,false权限名称已经存在,success权限名称可以使用",
+    @ApiOperation(value = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPerssionName")
     public Result checkPermissionName(String permissionName) {

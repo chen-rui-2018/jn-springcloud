@@ -37,4 +37,13 @@ public class EmailInlayImageVo {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+
+    @Override
+    public String toString() {
+        return "EmailInlayImageVo{" +
+                "imageCid='" + imageCid + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }

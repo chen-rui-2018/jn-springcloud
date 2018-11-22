@@ -1,5 +1,6 @@
 package com.jn.news.vo;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -111,4 +112,16 @@ public class EmailVo {
         this.templatesDataMap = templatesDataMap;
     }
 
+    @Override
+    public String toString() {
+        return "EmailVo{" +
+                "email='" + email + '\'' +
+                ", emailSubject='" + emailSubject + '\'' +
+                ", emailContent='" + emailContent + '\'' +
+                ", files=" + Arrays.toString(files) +
+                ", emailInlayImageVoList=" + emailInlayImageVoList +
+                ", templatesName='" + templatesName + '\'' +
+                ", templatesDataMap=" + templatesDataMap +
+                '}';
+    }
 }

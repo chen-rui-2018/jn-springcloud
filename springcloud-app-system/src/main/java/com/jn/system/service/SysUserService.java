@@ -110,4 +110,6 @@ public interface SysUserService {
      * @return
      */
     String checkUserName(String account);
+
+    List<User> findTByT(User user);
 }

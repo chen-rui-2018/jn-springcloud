@@ -8,6 +8,7 @@ import com.jn.system.model.*;
 import com.jn.system.service.SysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -45,7 +46,8 @@ public class SysRoleController extends BaseController {
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysRole/add")
     public Result add(@Validated @RequestBody SysRoleAdd role) {
-        tbRoleService.insertTbRole(role);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.insertTbRole(role,user);
         return new Result();
 
     }
@@ -73,7 +75,8 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/rolePermissionAuthorization")
     public Result rolePermissionAuthorization(@Validated @RequestBody SysRolePermissionAdd sysRolePermissionAdd) {
         Assert.notNull(sysRolePermissionAdd.getRoleId(), "角色ID不能为空");
-        tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.rolePermissionAuthorization(sysRolePermissionAdd,user);
         return new Result();
     }
 
@@ -82,7 +85,8 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/userGroupRoleAuthorization")
     public Result userGroupRoleAuthorization(@Validated @RequestBody SysUserGroupRoleAdd sysUserGroupRoleAdd) {
         Assert.notNull(sysUserGroupRoleAdd.getRoleId(), "角色ID不能为空");
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd,user);
         return new Result();
     }
 
@@ -91,7 +95,8 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/userRoleAuthorization")
     public Result userRoleAuthorization(@Validated @RequestBody SysUserRoleAdd sysUserRoleAdd) {
         Assert.notNull(sysUserRoleAdd.getRoleId(), "角色ID不能为空");
-        tbRoleService.userRoleAuthorization(sysUserRoleAdd);
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.userRoleAuthorization(sysUserRoleAdd,user);
         return new Result();
     }
 

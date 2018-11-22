@@ -7,7 +7,7 @@ import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
 import com.jn.system.service.SysFileGroupService;
 import com.jn.system.service.SysResourcesService;
-import com.jn.system.service.UserService;
+import com.jn.system.service.SysUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class SystemController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(SystemController.class);
 
     @Autowired
-    private UserService userService;
+    private SysUserService sysUserService;
 
     @Autowired
     private SysResourcesService sysResourcesService;
@@ -48,10 +48,10 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
-        logger.info("进入获取用户的API,用户参数：{}",u.toString());
-        List<User> user = userService.findTByT(u) ;
+        logger.info("进入获取用户的API,用户参数：{}", u.toString());
+        List<User> user = sysUserService.findTByT(u);
 
-        if(user == null || user.size() == 0 ) {
+        if (user == null || user.size() == 0) {
             return new Result();
         }
         return new Result(user.get(0));
@@ -102,7 +102,7 @@ public class SystemController extends BaseController {
      */
     @RequestMapping(value = "/getUserFilePermission", method = RequestMethod.POST)
     public Result<Boolean> getUserFilePermission(@RequestBody String userId, @RequestParam("fileUrl") String fileUrl) {
-        Boolean isUserFilePermission = sysFileGroupService.getUserFilePermission(userId,fileUrl);
+        Boolean isUserFilePermission = sysFileGroupService.getUserFilePermission(userId, fileUrl);
         return new Result(isUserFilePermission);
     }
 }

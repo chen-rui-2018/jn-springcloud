@@ -17,7 +17,7 @@
 				     data:JSON.stringify($('#ff').serializeJSON()),
 				     success:function(data){
 				    	 if(data.code=="0000"){
-				        	window.location=htmlURL+"/index.html";
+				        	$.messager.alert('登录成功','token：'+data.data);
 				        }else{
 				        	$.messager.alert('提示',data.result);
 				        }

@@ -4,7 +4,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysUser;
@@ -29,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -345,5 +345,21 @@ public class SysUserServiceImpl implements SysUserService {
             }
         }
         return "success";
+    }
+
+    @Override
+    public List<User> findTByT(User user) {
+        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
+            tbSysUserCriteria.createCriteria().andAccountLike(user.getAccount());
+        }
+        List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
+        List<User> users = new ArrayList<>();
+        for (TbSysUser tbSysUser1 : tbSysUsers) {
+            User user1 = new User();
+            BeanUtils.copyProperties(tbSysUser1, user1);
+            users.add(user1);
+        }
+        return users;
     }
 }

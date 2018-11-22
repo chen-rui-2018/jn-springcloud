@@ -1,6 +1,5 @@
 package com.jn.system.dao;
 
-import com.jn.system.entity.TbSysUser;
 import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
 import com.jn.system.vo.SysUserDepartmentPostVO;
@@ -116,6 +115,7 @@ public interface SysUserMapper {
 
     /**
      * 为用户添加岗位信息
+     *
      * @param sysUserDepartmentPost
      */
     void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);

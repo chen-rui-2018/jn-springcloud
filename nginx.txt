@@ -1,5 +1,5 @@
 location / {
-    root   D:/jnprojects//jn-spring-cloud//html;
+    root   D:/IdeaProjects/jn-spring-cloud/html/cms/dist;
     index login.html;
 	location ~* \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|ttf|eot|mao|ico)$ {
 		break;

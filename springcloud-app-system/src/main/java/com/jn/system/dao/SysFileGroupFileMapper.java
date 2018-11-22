@@ -2,7 +2,10 @@ package com.jn.system.dao;
 
 
 import com.jn.system.entity.TbSysFileGroup;
+import com.jn.system.model.SysFileGroup;
 import com.jn.system.model.SysFileGroupFile;
+import com.jn.system.model.SysFilePage;
+import com.jn.system.vo.SysFileVO;
 
 import java.util.List;
 
@@ -17,6 +20,7 @@ import java.util.List;
 public interface SysFileGroupFileMapper {
     /**
      * 批量删除
+     *
      * @param id
      * @return
      */
@@ -24,6 +28,7 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 根据fileId批量删除
+     *
      * @param id
      * @return
      */
@@ -31,6 +36,7 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 根据fileId批量删除
+     *
      * @param id
      * @return
      */
@@ -38,6 +44,7 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 批量插入文件组文件
+     *
      * @param sysFileGroupFiles
      * @return
      */
@@ -45,6 +52,7 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 根据用户获取文件组
+     *
      * @param userId 用户ID
      * @return
      */
@@ -52,7 +60,8 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 获取用户是否拥有该文件的下载权限
-     * @param userId 用户ID
+     *
+     * @param userId  用户ID
      * @param fileUrl 文件路径
      * @return
      */
@@ -60,8 +69,17 @@ public interface SysFileGroupFileMapper {
 
     /**
      * 根据文件id获取对应文件组名称
+     *
      * @param fileId
      * @return
      */
-    List<String> findFileGroupNameByFileId(String fileId);
+    List<SysFileGroup> findFileGroupNameByFileId(String fileId);
+
+    /**
+     * 按文件组查询文件信息
+     *
+     * @param sysFilePage
+     * @return
+     */
+    List<SysFileVO> findFileByFileGroupName(SysFilePage sysFilePage);
 }

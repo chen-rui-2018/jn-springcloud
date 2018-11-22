@@ -1,6 +1,8 @@
 package com.jn.system.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.*;
 import com.jn.system.vo.SysDepartmentPostVO;
 import com.jn.system.vo.SysUserRoleVO;
@@ -35,9 +37,8 @@ public class SysUserServiceTest {
         sysUser.setName("大唐");
         sysUser.setPhone("12345678998");
         sysUser.setStatus("1");
-        User user=new User();
-        user.setId("123");
-        user.setAccount("xxx");
+        User user = new User();
+        user.setId("10000");
         sysUserService.addSysUser(sysUser,user);
     }
 

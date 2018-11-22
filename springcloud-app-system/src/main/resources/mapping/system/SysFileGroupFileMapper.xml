@@ -118,10 +118,51 @@
         and sf.file_url = #{1}
     </select>
 
-    <select id="findFileGroupNameByFileId" parameterType="java.lang.String" resultType="java.lang.String">
-        select t.file_group_name from tb_sys_file_group t,tb_sys_file_group_file tt
+    <select id="findFileGroupNameByFileId" parameterType="java.lang.String" resultType="com.jn.system.model.SysFileGroup">
+        select
+        t.id,
+        t.file_group_name as fileGroupName
+        from tb_sys_file_group t,tb_sys_file_group_file tt
         where t.id = tt.file_group_id and t.`status` = '1'
         and tt.`status` = '1' and tt.file_id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <resultMap id="QueryResultMap" type="com.jn.system.vo.SysFileVO">
+        <id column="id" jdbcType="VARCHAR" property="fileId"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <collection property="fileGroupNameList" javaType="java.util.List" ofType="com.jn.system.model.SysFileGroup">
+            <id column="file_group_id" property="id" jdbcType="VARCHAR"/>
+            <result column="file_group_name" property="fileGroupName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="findFileByFileGroupName" parameterType="com.jn.system.model.SysFilePage"
+            resultMap="QueryResultMap">
+        select DISTINCT
+        t3.id,
+        t3.file_name,
+        t3.file_url,
+        t3.create_time,
+        t3.`status`,
+        t2.file_group_id,
+        t2.file_group_name
+        from tb_sys_file_group_file t1
+        inner join (select id as file_group_id,file_group_name from tb_sys_file_group
+        where file_group_name like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
+        and `status` = '1') t2
+        on t1.file_group_id = t2.file_group_id
+        inner join (select id ,file_name,file_url,create_time,`status`
+        from tb_sys_file where `status` != '-1') t3 on t1.file_id = t3.id
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
+                and t3.file_name like CONCAT('%', #{fileName,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                and t3.`status`=#{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
 </mapper>

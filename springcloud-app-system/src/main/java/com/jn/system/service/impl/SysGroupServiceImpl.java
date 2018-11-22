@@ -45,7 +45,8 @@ public class SysGroupServiceImpl implements SysGroupService {
     private SysGroupUserMapper sysGroupUserMapper;
     @Autowired
     private SysGroupRoleMapper sysGroupRoleMapper;
-
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
     @Autowired
     private TbSysGroupMapper tbSysGroupMapper;
 

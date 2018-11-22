@@ -3,21 +3,20 @@ package com.jn.system.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 后台权限管理异常枚举
+ * 菜单页面用来判断是菜单是否是目录菜单
  * @author： shaobao
- * @date： Created on 2018/11/21 16:56
+ * @date： Created on 2018/11/22 16:16
  * @version： v1.0
  * @modified By:
  **/
-public enum SysExceptionEnums implements CodeAndMsg {
-
-    ADDERR_NAME_EXIST("1100501","添加失败,名称已存在"),
-    UPDATEERR_NAME_EXIST("1100502", "修改信息失败,名称已存在");
+public enum  SysMenuIsDirEnums implements CodeAndMsg {
+    MENU_ISDIR("1","菜单是目录菜单"),
+    MENU_ISNOTDIR("0","菜单不是目录菜单");
 
     private String code;
     private String message;
 
-    SysExceptionEnums(String code, String message) {
+    SysMenuIsDirEnums(String code, String message) {
         this.code = code;
         this.message = message;
     }

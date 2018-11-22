@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.system.dao.*;
 import com.jn.system.entity.TbSysDepartment;
 import com.jn.system.entity.TbSysUser;
@@ -12,6 +13,7 @@ import com.jn.system.entity.TbSysUserDepartmentPost;
 import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysReturnMessageEnum;
 import com.jn.system.enums.SysStatusEnums;
+import com.jn.system.enums.SysUserExceptionEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysUserService;
 import com.jn.system.vo.SysDepartmentPostVO;
@@ -21,6 +23,7 @@ import com.jn.system.vo.SysUserVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -98,7 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(account);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getKey());
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -144,8 +147,7 @@ public class SysUserServiceImpl implements SysUserService {
         if(StringUtils.isNotBlank(sysUser.getAccount())){
             TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
             if (!sysUser.getAccount().equals(tbSysUser.getAccount())){
-                logger.info("[用户] 更新用户失败，该用户账号已存在！,account: {}",sysUser.getAccount());
-                throw new JnSpringCloudException(SysExceptionEnums.NOT_MODIFY_ACCOUNT);
+                throw new JnSpringCloudException(SysUserExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
@@ -306,8 +308,7 @@ public class SysUserServiceImpl implements SysUserService {
                 if ("1".equals(sysDepartmentPost.getIsDefault())) {
                     count++;
                     if (count > 1) {
-                        logger.info("[用户] 用户添加部门岗位失败，用户默认部门岗位信息不唯一！,userId: {}，departmentId",sysUserDepartmentPostAdd.getUserId(),sysDepartmentPost.getPostId());
-                        throw new JnSpringCloudException(SysExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
+                        throw new JnSpringCloudException(SysUserExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
                     }
                 }
                 sysUserMapper.saveDepartmentandPostOfUser(sysUserDepartmentPost);

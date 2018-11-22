@@ -10,6 +10,8 @@ import com.jn.system.entity.TbSysResources;
 import com.jn.system.enums.SysExceptionEnums;
 import com.jn.system.enums.SysLevelEnums;
 import com.jn.system.enums.SysReturnMessageEnum;
+import com.jn.system.enums.SysMenuIsDirEnums;
+import com.jn.system.enums.SysMenuSortEnums;
 import com.jn.system.enums.SysStatusEnums;
 import com.jn.system.model.*;
 import com.jn.system.service.SysMenuService;
@@ -243,9 +245,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setSort("0");
-        tbSysMenu.setIsDir("1");
-        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysMenu.setSort(SysMenuSortEnums.MENU_ISDIR_SORT.getCode());
+        tbSysMenu.setIsDir(SysMenuIsDirEnums.MENU_ISDIR.getCode());
+        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getKey());
         tbSysMenuMapper.insertSelective(tbSysMenu);
         logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
     }
@@ -272,7 +274,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             tbSysMenu.setSort((Integer.parseInt(sortMax) + 1) + "");
         } else {
             //如果查询不到数据,直接设置排序为1
-            tbSysMenu.setSort("1");
+            tbSysMenu.setSort(SysMenuSortEnums.FIRST_SORT.getCode());
         }
         tbSysMenu.setId(UUID.randomUUID().toString());
         tbSysMenu.setCreateTime(new Date());
@@ -280,7 +282,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setIsDir("0");
+        tbSysMenu.setIsDir(SysMenuIsDirEnums.MENU_ISNOTDIR.getCode());
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysMenuMapper.insertSelective(tbSysMenu);
         logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());

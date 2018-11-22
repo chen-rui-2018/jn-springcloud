@@ -131,11 +131,16 @@ public class SysFileServiceImpl implements SysFileService {
     @Override
     public PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
         Page<Object> objects = PageHelper.startPage(sysFilePage.getPage(), sysFilePage.getRows());
-        //分页查询文件信息
-        List<SysFileVO> sysFileVOList = sysFileMapper.findFileByPage(sysFilePage);
-        for (SysFileVO sysFileVO:sysFileVOList) {
-            List<String> fileGroupNameList = sysFileGroupFileMapper.findFileGroupNameByFileId(sysFileVO.getFileId());
-            sysFileVO.setFileGroupNameList(fileGroupNameList);
+        List<SysFileVO> sysFileVOList = null;
+        if (StringUtils.isNotBlank(sysFilePage.getFileGroupName())){
+            //当按文件组查询时
+            sysFileVOList = sysFileGroupFileMapper.findFileByFileGroupName(sysFilePage);
+        }else {
+            sysFileVOList = sysFileMapper.findFileByPage(sysFilePage);
+            for (SysFileVO sysFileVO:sysFileVOList) {
+                List<SysFileGroup> fileGroupNameList = sysFileGroupFileMapper.findFileGroupNameByFileId(sysFileVO.getFileId());
+                sysFileVO.setFileGroupNameList(fileGroupNameList);
+            }
         }
         return new PaginationData(sysFileVOList, objects.getTotal());
     }

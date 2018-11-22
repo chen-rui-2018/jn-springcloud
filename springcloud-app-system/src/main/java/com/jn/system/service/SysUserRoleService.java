@@ -20,7 +20,7 @@ public interface SysUserRoleService {
      * 新增用户角色
      * @param role
      */
-    void insertTbUserRole(SysUserRole role,User user);
+    void insertTbUserRole(SysUserRole role, User user);
 
     /**
      * 更新用户角色信息

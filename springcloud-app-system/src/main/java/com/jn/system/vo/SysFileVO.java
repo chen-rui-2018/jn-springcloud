@@ -57,14 +57,14 @@ public class SysFileVO implements Serializable {
     /**
      * 文件所属文件组
      */
-    private List<String> fileGroupNameList;
+    private List<SysFileGroup> fileGroupNameList;
 
 
     public SysFileVO() {
     }
 
     public SysFileVO(String fileId, String fileName, String fileUrl, String creator, Date createTime,
-                     String status, String statusDesc, List<String> fileGroupNameList) {
+                     String status, String statusDesc, List<SysFileGroup> fileGroupNameList) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
@@ -131,6 +131,14 @@ public class SysFileVO implements Serializable {
         this.statusDesc = statusDesc;
     }
 
+    public List<SysFileGroup> getFileGroupNameList() {
+        return fileGroupNameList;
+    }
+
+    public void setFileGroupNameList(List<SysFileGroup> fileGroupNameList) {
+        this.fileGroupNameList = fileGroupNameList;
+    }
+
     @Override
     public String toString() {
         return "SysFileVO{" +
@@ -143,13 +151,5 @@ public class SysFileVO implements Serializable {
                 ", statusDesc='" + statusDesc + '\'' +
                 ", fileGroupNameList=" + fileGroupNameList +
                 '}';
-    }
-
-    public List<String> getFileGroupNameList() {
-        return fileGroupNameList;
-    }
-
-    public void setFileGroupNameList(List<String> fileGroupNameList) {
-        this.fileGroupNameList = fileGroupNameList;
     }
 }

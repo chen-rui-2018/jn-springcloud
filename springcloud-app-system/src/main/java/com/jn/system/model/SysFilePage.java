@@ -19,45 +19,26 @@ import java.util.Date;
 public class SysFilePage extends Page implements Serializable {
     private static final long serialVersionUID = 7252981735944287742L;
 
-    @ApiModelProperty(value = "id")
-    private String id;
-
-    /**
-     * 文件名称
-     */
     @ApiModelProperty(value = "文件名称")
     private String fileName;
 
-    /**
-     * 文件路径
-     */
     @ApiModelProperty(value = "文件路径")
     private String fileUrl;
 
-    /**
-     * 创建人
-     */
-    @ApiModelProperty(value = "创建人")
-    private String creator;
-
-    /**
-     * 创建时间
-     */
-    @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-
-    /**
-     * 状态 1:有效 0:无效 -1:删除
-     */
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
     private String status;
 
-    public String getId() {
-        return id;
+    @ApiModelProperty(value = "文件组名称")
+    private String fileGroupName;
+
+    public SysFilePage() {
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public SysFilePage(String fileName, String fileUrl, String status, String fileGroupName) {
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.status = status;
+        this.fileGroupName = fileGroupName;
     }
 
     public String getFileName() {
@@ -65,7 +46,7 @@ public class SysFilePage extends Page implements Serializable {
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName == null ? null : fileName.trim();
+        this.fileName = fileName;
     }
 
     public String getFileUrl() {
@@ -73,23 +54,7 @@ public class SysFilePage extends Page implements Serializable {
     }
 
     public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+        this.fileUrl = fileUrl;
     }
 
     public String getStatus() {
@@ -97,6 +62,24 @@ public class SysFilePage extends Page implements Serializable {
     }
 
     public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.status = status;
+    }
+
+    public String getFileGroupName() {
+        return fileGroupName;
+    }
+
+    public void setFileGroupName(String fileGroupName) {
+        this.fileGroupName = fileGroupName;
+    }
+
+    @Override
+    public String toString() {
+        return "SysFilePage{" +
+                "fileName='" + fileName + '\'' +
+                ", fileUrl='" + fileUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", fileGroupName='" + fileGroupName + '\'' +
+                '}';
     }
 }

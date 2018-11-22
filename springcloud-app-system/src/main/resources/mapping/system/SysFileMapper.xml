@@ -78,8 +78,8 @@
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
                 and status=#{status,jdbcType=VARCHAR}
             </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
-                and id=#{id,jdbcType=VARCHAR}
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileUrl)">
+                and file_url=#{fileUrl,jdbcType=VARCHAR}
             </if>
     </select>
 

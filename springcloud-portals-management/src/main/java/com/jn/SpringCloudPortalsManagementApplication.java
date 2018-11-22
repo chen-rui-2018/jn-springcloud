@@ -18,7 +18,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableFeignClients
 @EnableSwagger2Doc
 @SpringCloudApplication
-@MapperScan("com.jn.*.dao")
+@MapperScan("com.jn.**.dao")
 public class SpringCloudPortalsManagementApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringCloudPortalsManagementApplication.class).web(true).run(args);

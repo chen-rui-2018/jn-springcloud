@@ -45,16 +45,15 @@
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showuserGruopDialog(scope.row)">授权用户</el-button>
-          <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">角色</el-button>
+          <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
           <!-- 删除按钮 -->
           <el-button size="mini" type="danger" @click="deleteUsergroup(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination-container">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
-    </div>
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+
     <!-- 弹出的用户组对话框 -->
     <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px">
@@ -72,15 +71,15 @@
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
-    <!-- 弹出的角色对话框 -->
-    <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="561px">
-      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户组拥有角色']" filterable filter-placeholder="请输入角色名称" @change="handleRoleChange" />
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitRoledata">确 定</el-button>
-        <el-button @click="roledialogVisible = false">取 消</el-button>
-      </span>
+    <!-- 弹出授权角色对话框 -->
+    <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '权限拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+        <span slot="left-footer" size="small">
+          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
+        </span>
+        <span slot="right-footer" size="small" />
+      </el-transfer>
     </el-dialog>
-
     <!-- 弹出的授權用户对话框 -->
     <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
       <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
@@ -89,10 +88,6 @@
         </span>
         <span slot="right-footer" size="small" />
       </el-transfer>
-      <!-- <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitUserdata">提 交</el-button>
-        <el-button @click="cancelUpdata()">取 消</el-button>
-      </span> -->
     </el-dialog>
 
   </div>
@@ -106,11 +101,10 @@ import {
   editgroupList,
   deleteUsergroupById,
   checkGroupName,
-  getAllRole,
-  updataRole,
   updataUser,
-  // getAllUser,
-  getAllUserInfo
+  getAllUserInfo,
+  getRoleInfo,
+  updataRole
 } from '@/api/Permission-model/userGroup'
 export default {
   filters: {
@@ -143,7 +137,9 @@ export default {
       }
     }
     return {
-      oldOwnUser: [],
+      numberTotal: 0,
+      numberRows: 10,
+      numberPage: 1,
       moveArr: 0,
       oldGroupName: undefined,
       userGroupId: undefined,
@@ -190,34 +186,25 @@ export default {
     this.initList()
   },
   methods: {
-    // 显示角色对话框
-    showRoleDialog(id) {
-      this.roleLoading = true
-      this.groupId = id
+    // 授权角色分页功能
+    handleRoleCurrentChange(val) {
+      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+        this.numberPage = val
+      } else {
+        this.numberPage = val - 1
+      }
       this.roledialogVisible = true
-      getAllRole(id).then(res => {
-        const allRoledata = []
-        const result = res.data.data.sysRoleAll
-        const checkResult = res.data.data.roleAllOfGroup
-        const checkRoledata = []
-        result.forEach((val, index) => {
-          allRoledata.push({
-            label: val.roleName,
-            key: val.id,
-            index: index
-          })
-        })
-        checkResult.forEach((val, index) => {
-          checkRoledata.push(val.id)
-        })
-        this.roleData = allRoledata
-        this.roleIds = checkRoledata
-        this.roleLoading = false
-      })
+      this.getRole()
     },
-    // 提交授权后的角色
-    submitRoledata() {
-      updataRole({ groupId: this.groupId, roleIds: this.roleIds }).then(res => {
+    // 改变授权角色穿梭框时获取选中的角色
+    handleRoleChange(value, direction, movedKeys) {
+      this.roleIds = value
+      if (direction === 'left') {
+        this.moveArr = -movedKeys.length
+      } else if (direction === 'right') {
+        this.moveArr = movedKeys.length
+      }
+      updataRole({ groupId: this.groupId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -226,8 +213,42 @@ export default {
         } else {
           this.$message.error('授权失败')
         }
-        this.roledialogVisible = false
         this.initList()
+      })
+    },
+    // 显示授权角色对话框
+    showRoleDialog(id) {
+      this.numberPage = 1
+      this.roleLoading = true
+      this.groupId = id
+      this.roledialogVisible = true
+      this.getRole()
+    },
+    getRole() {
+      getRoleInfo({
+        groupId: this.groupId,
+        page: this.numberPage,
+        rows: this.numberRows
+      }).then(res => {
+        if (res.data.code === '0000') {
+          const roleData = []
+          const checkRole = []
+          this.numberTotal = res.data.data.total
+          res.data.data.rows.otherRoleList.forEach((val, index) => {
+            roleData.push({
+              label: val.roleName,
+              key: val.id
+            })
+          })
+          res.data.data.rows.roleOfGroupList.forEach(val => {
+            checkRole.push(val.id)
+          })
+          this.roleData = roleData
+          this.roleIds = checkRole
+          this.roleLoading = false
+        } else {
+          this.$message.error('获取数据失败')
+        }
       })
     },
     // 显示授权用户对话框
@@ -240,10 +261,7 @@ export default {
     },
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
-        res.data.data.rows.userAllOfGroup.forEach((val) => {
-          this.oldOwnUser.push(val.id)
-        })
+      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, name: this.changeText, rows: this.userRows }).then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -271,27 +289,6 @@ export default {
       this.userLoading = true
       this.getUser()
     },
-    // 取消更改
-    // cancelUpdata() {
-    //   this.userdialogVisible = false
-    //   updataUser({ groupId: this.userGroupId, userIds: Array.from(new Set(this.oldOwnUser)) }).then(
-    //     res => {
-    //       if (res.data.code === '0000') {
-    //         this.$message({
-    //           message: '取消授权成功',
-    //           type: 'success'
-    //         })
-    //       }
-    //       this.initList()
-    //     }
-    //   )
-    //   this.oldOwnUser = []
-    // },
-    // 提交授权后的用户
-    // submitUserdata() {
-    //   this.userdialogVisible = false
-    //   // this.initList()
-    // },
     // 改变授权用户穿梭框时获取选中的用户
     handleUserChange(value, direction, movedKeys) {
       this.userIds = value
@@ -320,6 +317,7 @@ export default {
     },
     //   搜素功能的实现
     handleFilter() {
+      this.listQuery.page = 1
       this.initList()
     },
     // 清空信息
@@ -413,11 +411,6 @@ export default {
         }
       })
     },
-    // 改变穿梭框的值触发
-    handleRoleChange(value) {
-      this.roleIds = value
-    },
-
     // 删除用户功能实现
     deleteUsergroup(id) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
@@ -448,9 +441,13 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      groupList(this.listQuery).then(response => {
-        this.usergroupList = response.data.data.rows
-        this.total = response.data.data.total
+      groupList(this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.usergroupList = res.data.data.rows
+          this.total = res.data.data.total
+        } else {
+          this.$message.error('获取数据失败')
+        }
         this.listLoading = false
       })
     },
@@ -471,9 +468,11 @@ export default {
 
 <style lang="scss">
 .management {
-  display: flex;
-  flex-direction: column;
-  // height: 100%;
+   .filter-container {
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
   .fixed-width .el-button--mini {
     width: auto;
   }

@@ -239,12 +239,8 @@ export default {
 
 <style lang="scss" scoped>
 .file-group-management {
-  padding: 20px;
   .fixed-width .el-button--mini {
     width: auto;
   }
-}
-.el-pagination{
-  margin-top:20px;
 }
 </style>

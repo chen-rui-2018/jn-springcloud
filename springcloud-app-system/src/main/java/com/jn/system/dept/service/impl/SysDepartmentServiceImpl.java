@@ -17,6 +17,7 @@ import com.jn.system.dept.model.SysDepartmentPage;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentUserVO;
 import com.jn.system.dept.vo.SysDepartmentVO;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所有部门")
     public List<SysDepartment> findSysDepartmentAll() {
         TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
@@ -78,6 +80,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据部门id获取部门信息")
     public SysDepartment selectByPrimaryKey(String id) {
         TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(id);
         SysDepartment sysDepartment = new SysDepartment();
@@ -93,6 +96,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @param ids
      */
     @Override
+    @ServiceLog(doAction = "逻辑删除部门信息")
     @Transactional(rollbackFor = Exception.class)
     public void delete(String[] ids) {
         sysDepartmentMapper.deleteDepartmentBranch(ids);
@@ -106,6 +110,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @param sysDepartment
      */
     @Override
+    @ServiceLog(doAction = "修改部门信息")
     @Transactional(rollbackFor = Exception.class)
     public void update(SysDepartment sysDepartment) {
         TbSysDepartment tbSysDepartment = new TbSysDepartment();
@@ -123,6 +128,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @param sysDepartmentAdd
      */
     @Override
+    @ServiceLog(doAction = "批量添加部门")
     @Transactional(rollbackFor = Exception.class)
     public void add(SysDepartmentAdd sysDepartmentAdd, User user) {
         String level;
@@ -163,6 +169,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "条件分页查询部门信息")
     public PaginationData findSysDepartmentByPage(SysDepartmentPage sysDepartmentPage) {
         //分页查询所有部门
         Page<Object> objects = PageHelper.startPage(sysDepartmentPage.getPage(), sysDepartmentPage.getRows());
@@ -179,6 +186,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "判断部门名称是否存在")
     public String checkDepartmentName(String departmentName) {
         if (StringUtils.isNotBlank(departmentName)) {
             TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
@@ -199,6 +207,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所有部门信息,并根据层级关系返回")
     public List<SysDepartmentVO> findDepartmentAllByLevel() {
         //查询所有以及部门
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentMapper.findSysDepartmentAll();

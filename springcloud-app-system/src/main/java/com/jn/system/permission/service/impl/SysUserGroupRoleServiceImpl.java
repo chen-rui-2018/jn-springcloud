@@ -1,5 +1,6 @@
 package com.jn.system.permission.service.impl;
 
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.service.SysUserGroupRoleService;
 import com.jn.system.user.dao.SysUserGroupRoleMapper;
@@ -41,6 +42,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param userGroupRole
      */
     @Override
+    @ServiceLog(doAction = "新增用户组角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserGroupRole(SysUserGroupRole userGroupRole, User user) {
         userGroupRole.setCreator(user.getId());
@@ -58,6 +60,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param userGroupRole
      */
     @Override
+    @ServiceLog(doAction = "更新用户组角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbUserGroupRole(SysUserGroupRole userGroupRole) {
         TbSysGroupRole tbSysGroupRole = new TbSysGroupRole();
@@ -74,6 +77,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据角色id批量删除用户组角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleByRoleIds(String[] roleIds) {
         sysUserGroupRoleMapper.deleteByRoleIds(roleIds);
@@ -88,6 +92,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除用户组角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserGroupRoleById(String[] ids) {
         sysUserGroupRoleMapper.deleteBy(ids);
@@ -100,6 +105,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
      * @param sysUserGroupRoles
      */
     @Override
+    @ServiceLog(doAction = "批量插入用户组角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserGroupRoleBatch(List<SysUserGroupRole> sysUserGroupRoles) {
         sysUserGroupRoleMapper.insertBatch(sysUserGroupRoles);

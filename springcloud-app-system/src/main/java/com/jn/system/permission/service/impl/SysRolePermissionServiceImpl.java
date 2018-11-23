@@ -1,5 +1,6 @@
 package com.jn.system.permission.service.impl;
 
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysRolePermissionMapper;
 import com.jn.system.permission.dao.TbSysRolePermissionMapper;
@@ -42,6 +43,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      * @param rolePermission
      */
     @Override
+    @ServiceLog(doAction = "新增角色权限")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbRolePermission(SysRolePermission rolePermission, User user) {
         rolePermission.setId(UUID.randomUUID().toString());
@@ -59,6 +61,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      * @param rolePermission
      */
     @Override
+    @ServiceLog(doAction = "更新角色权限信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRolePermission(SysRolePermission rolePermission) {
         TbSysRolePermission tbSysRolePermission = new TbSysRolePermission();
@@ -74,6 +77,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据角色id批量删除角色权限（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRolePermissionByRoleIds(String[] roleIds) {
         sysRolePermissionMapper.deleteByRoleIds(roleIds);
@@ -87,6 +91,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除角色权限（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRolePermissionByIds(String[] ids) {
         sysRolePermissionMapper.deleteBy(ids);
@@ -99,6 +104,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
      * @param sysRolePermissions
      */
     @Override
+    @ServiceLog(doAction = "批量插入角色权限")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbRolePermissionBatch(List<SysRolePermission> sysRolePermissions) {
         sysRolePermissionMapper.insertBatch(sysRolePermissions);

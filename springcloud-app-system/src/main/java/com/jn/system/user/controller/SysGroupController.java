@@ -3,6 +3,7 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.user.entity.TbSysGroup;
@@ -37,7 +38,7 @@ public class SysGroupController extends BaseController {
     @Autowired
     private SysGroupService sysGroupService;
 
-
+    @ControllerLog(doAction = "分页查询用户组信息")
     @ApiOperation(value = "分页查询用户组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
     @RequiresPermissions("/system/sysGroup/list")
@@ -46,6 +47,7 @@ public class SysGroupController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "用户组添加")
     @ApiOperation(value = "用户组添加", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysGroup/add")
@@ -56,6 +58,7 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "逻辑删除用户组")
     @ApiOperation(value = "逻辑删除用户组", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete")
     @RequiresPermissions("/system/sysGroup/delete")
@@ -65,6 +68,7 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改用户组信息")
     @ApiOperation(value = "修改用户组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/update")
     @RequiresPermissions("/system/sysGroup/update")
@@ -74,6 +78,7 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据用户组id获取用户组信息")
     @ApiOperation(value = "根据用户组id获取用户组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
     @RequiresPermissions("/system/sysGroup/selectByPrimaryKey")
@@ -82,7 +87,7 @@ public class SysGroupController extends BaseController {
         return new Result(sysGroup);
     }
 
-
+    @ControllerLog(doAction = "根据用户组id获取用户组具有的角色信息及条件分页查询用户组未拥有的角色信息")
     @ApiOperation(value = "根据用户组id获取用户组具有的角色信息及条件分页查询用户组未拥有的角色信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectGroupRoleAndOtherRole")
@@ -92,7 +97,7 @@ public class SysGroupController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "用户组授权角色")
     @ApiOperation(value = "用户组授权角色",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/roleGroupAuthorization")
@@ -105,6 +110,7 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "获取用户组下面所有用户")
     @ApiOperation(value = "获取用户组下面所有用户",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findUserOfGroup")
@@ -114,6 +120,7 @@ public class SysGroupController extends BaseController {
         return new Result(userOfGroup);
     }
 
+    @ControllerLog(doAction = "分页获取除用户组拥有的用户及用户组未拥有用户")
     @ApiOperation(value = "分页获取除用户组拥有的用户及用户组未拥有用户",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findOtherUserByPage")
@@ -124,6 +131,7 @@ public class SysGroupController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "用户组授权用户")
     @ApiOperation(value = "用户组授权用户",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/userGroupAuthorization")
@@ -136,6 +144,7 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkGroupName")

@@ -4,6 +4,7 @@ package com.jn.system.permission.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.*;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysRoleService;
@@ -35,7 +36,7 @@ public class SysRoleController extends BaseController {
     @Autowired
     private SysRoleService tbRoleService;
 
-
+    @ControllerLog(doAction = "查询角色列表")
     @ApiOperation(value = "查询角色列表", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysRole/list")
@@ -44,7 +45,7 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "新增角色")
     @ApiOperation(value = "新增角色" ,httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysRole/add")
@@ -56,6 +57,7 @@ public class SysRoleController extends BaseController {
 
     }
 
+    @ControllerLog(doAction = "删除角色")
     @ApiOperation(value = "删除角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete",method=RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/delete")
@@ -65,6 +67,7 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改角色")
     @ApiOperation(value = "修改角色", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/system/sysRole/update")
@@ -74,6 +77,7 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "角色授权权限")
     @ApiOperation(value = "角色授权权限", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/rolePermissionAuthorization")
     @RequiresPermissions("/system/sysRole/rolePermissionAuthorization")
@@ -85,6 +89,7 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "角色授权用户组")
     @ApiOperation(value = "角色授权用户组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/userGroupRoleAuthorization")
     @RequiresPermissions("/system/sysRole/userGroupRoleAuthorization")
@@ -96,6 +101,7 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "角色授权用户")
     @ApiOperation(value = "角色授权用户", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/userRoleAuthorization")
     @RequiresPermissions("/system/sysRole/userRoleAuthorization")
@@ -107,6 +113,7 @@ public class SysRoleController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "查询所有角色")
     @ApiOperation(value = "查询所有角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleAll",method = RequestMethod.POST)
     @RequiresPermissions("/system/sysRole/findSysRoleAll")
@@ -115,6 +122,7 @@ public class SysRoleController extends BaseController {
         return new Result(sysRoleAll);
     }
 
+    @ControllerLog(doAction = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkRoleName")
@@ -124,6 +132,7 @@ public class SysRoleController extends BaseController {
         return new Result(result);
     }
 
+    @ControllerLog(doAction = "查询角色具有的用户信息及条件分页获取为拥有用户信息")
     @ApiOperation(value = "查询角色具有的用户信息及条件分页获取为拥有用户信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findUserOfRoleAndOtherUser")
@@ -133,6 +142,7 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息")
     @ApiOperation(value = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findUserGroupOfRoleAndOtherGroup")
@@ -142,6 +152,7 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "查询角色具有的权限信息及条件分页获取为拥有权限信息")
     @ApiOperation(value = "查询角色具有的权限信息及条件分页获取为拥有权限信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission")

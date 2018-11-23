@@ -7,6 +7,7 @@ import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.*;
 import com.jn.system.dept.service.SysPostService;
 import io.swagger.annotations.Api;
@@ -38,6 +39,7 @@ public class SysPostController extends BaseController {
     @Autowired
     private SysPostService sysPostService;
 
+    @ControllerLog(doAction = "查询所有岗位")
     @RequiresPermissions("/system/sysPost/findSysPostAll")
     @ApiOperation(value = "查询所有岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysPostAll")
@@ -46,6 +48,7 @@ public class SysPostController extends BaseController {
         return new Result(sysPostAll);
     }
 
+    @ControllerLog(doAction = "添加岗位")
     @RequiresPermissions("/system/sysPost/add")
     @ApiOperation(value = "添加岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
@@ -56,6 +59,7 @@ public class SysPostController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "逻辑删除岗位信息")
     @RequiresPermissions("/system/sysPost/delete")
     @ApiOperation(value = "逻辑删除岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete")
@@ -65,6 +69,7 @@ public class SysPostController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改岗位信息")
     @RequiresPermissions("/system/sysPost/update")
     @ApiOperation(value = "修改岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/update")
@@ -74,6 +79,7 @@ public class SysPostController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据岗位id获取岗位信息")
     @RequiresPermissions("/system/sysPost/selectByPrimaryKey")
     @ApiOperation(value = "根据岗位id获取岗位信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
@@ -82,7 +88,7 @@ public class SysPostController extends BaseController {
         return new Result(sysPost);
     }
 
-
+    @ControllerLog(doAction = "分页获取岗位信息及岗位对应的用户")
     @RequiresPermissions("/system/sysPost/list")
     @ApiOperation(value = "分页获取岗位信息及岗位对应的用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
@@ -91,6 +97,7 @@ public class SysPostController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "校验岗位名称是否存在,fail表示名称已存在,success表示可以使用")
     @RequiresPermissions("/system/sysPost/checkPostName")
     @ApiOperation(value = "校验岗位名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPostName")

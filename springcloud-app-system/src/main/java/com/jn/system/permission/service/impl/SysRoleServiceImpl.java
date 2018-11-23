@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.permission.dao.SysRolePermissionMapper;
@@ -74,6 +75,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所有角色")
     public List<SysRole> findSysRoleAll() {
         List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
         return sysRoleAll;
@@ -86,6 +88,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param role
      */
     @Override
+    @ServiceLog(doAction = "新增角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbRole(SysRoleAdd role, User user) {
         //判断角色名称是否已经存在
@@ -124,6 +127,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param role
      */
     @Override
+    @ServiceLog(doAction = "更新角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRole(SysRoleUpdate role) {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
@@ -149,6 +153,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRoleById(String[] roleIds) {
         sysRoleMapper.deleteBy(roleIds);
@@ -164,6 +169,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "分页查询角色授权列表信息")
     public PaginationData selectRoleListBySearchKey(SysRolePage rolePage) {
         Page<Object> objects = PageHelper.startPage(rolePage.getPage(), rolePage.getRows());
         List<SysRoleVO> sysRoleVOList = sysRoleMapper.findTByPage(rolePage);
@@ -185,6 +191,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param sysUserRoleAdd
      */
     @Override
+    @ServiceLog(doAction = "添加角色授权（用户）")
     @Transactional(rollbackFor = Exception.class)
     public void userRoleAuthorization(SysUserRoleAdd sysUserRoleAdd, User user) {
         String[] roleIds = {sysUserRoleAdd.getRoleId()};
@@ -221,6 +228,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param sysRolePermissionAdd
      */
     @Override
+    @ServiceLog(doAction = "添加角色授权（权限）")
     @Transactional(rollbackFor = Exception.class)
     public void rolePermissionAuthorization(SysRolePermissionAdd sysRolePermissionAdd, User user) {
         String[] roleIds = {sysRolePermissionAdd.getRoleId()};
@@ -257,6 +265,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @param sysUserGroupRoleAdd
      */
     @Override
+    @ServiceLog(doAction = "添加角色授权（用户组）")
     @Transactional(rollbackFor = Exception.class)
     public void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user) {
         String[] roleIds = {sysUserGroupRoleAdd.getRoleId()};
@@ -293,6 +302,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验角色名称是否已经存在")
     public String checkRoleName(String roleName) {
         if (StringUtils.isNotBlank(roleName)) {
             List<TbSysRole> tbSysRoles = checkName(roleName);
@@ -310,6 +320,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询角色具有的用户信息及条件分页获取为拥有用户信息")
     public PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
         //根据角色id获取角色已经拥有的用户信息
         List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
@@ -330,6 +341,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息")
     public PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
         //获取角色已经拥有的用户组信息
         List<SysGroup> userGroupOfRoleList = sysGroupRoleMapper.findUserGroupByRoleId(sysRoleUserGroupPage.getRoleId());
@@ -349,6 +361,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询角色具有的权限信息及条件分页获取为拥有权限信息")
     public PaginationData findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
         //获取角色已经拥有的权限信息
         List<SysPermission> permissionOfRoleList =

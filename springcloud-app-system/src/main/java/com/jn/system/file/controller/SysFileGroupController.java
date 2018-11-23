@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.system.file.model.SysFileGroup;
 import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.file.service.SysFileGroupService;
 import io.swagger.annotations.Api;
@@ -33,6 +34,7 @@ public class SysFileGroupController extends BaseController {
     @Autowired
     private SysFileGroupService sysFileGroupService;
 
+    @ControllerLog(doAction = "查询文件组列表")
     @ApiOperation(value = "查询文件组列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysFileGroup/list")
@@ -41,6 +43,7 @@ public class SysFileGroupController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "新增文件组")
     @ApiOperation(value = "新增文件组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
     @RequiresPermissions("/system/sysFileGroup/add")
@@ -51,6 +54,7 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改文件组")
     @ApiOperation(value = "修改文件组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/system/sysFileGroup/update")
@@ -60,6 +64,7 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "批量删除文件组")
     @ApiOperation(value = "批量删除文件组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysFileGroup/delete")
@@ -69,6 +74,7 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据ID查询文件组")
     @ApiOperation(value = "根据ID查询文件组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
     @RequiresPermissions("/system/sysFileGroup/selectById")
@@ -78,6 +84,7 @@ public class SysFileGroupController extends BaseController {
         return new Result(sysFileGroup);
     }
 
+    @ControllerLog(doAction = "文件组添加文件")
     @ApiOperation(value = "文件组添加文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/sysFileGroupFileAdd")
     @RequiresPermissions("/system/sysFileGroup/sysFileGroupFileAdd")
@@ -89,6 +96,7 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "校验文件组名称是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验文件组名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkFileGroupName")
     @RequiresPermissions("/system/sysFileGroup/checkFileGroupName")

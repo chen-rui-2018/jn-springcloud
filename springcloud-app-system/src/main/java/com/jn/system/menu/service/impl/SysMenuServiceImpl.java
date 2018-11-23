@@ -1,6 +1,7 @@
 package com.jn.system.menu.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.menu.dao.SysMenuMapper;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysLevelEnums;
@@ -58,6 +59,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param sysMenu
      */
     @Override
+    @ServiceLog(doAction = "更新菜单信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysMenuById(SysMenu sysMenu) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
@@ -84,6 +86,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除菜单（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysMenuById(String[] menuIds) {
         sysMenuMapper.deleteBy(menuIds);
@@ -96,6 +99,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所有菜单,返回树形结构")
     public List<SysMenuTreeVO> selectMenuListBySearchKey() {
         //先查询等级为1的菜单信息
         List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.findMenuByLevelOne();
@@ -133,6 +137,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据id获取菜单详情")
     public SysMenu selectMenuById(String id) {
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(id);
         SysMenu sysMenu = new SysMenu();
@@ -148,6 +153,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param sysMenuResourcesAdd
      */
     @Override
+    @ServiceLog(doAction = "菜单分配功能")
     @Transactional(rollbackFor = Exception.class)
     public void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user) {
         //功能
@@ -226,6 +232,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param sysMenuAdd
      */
     @Override
+    @ServiceLog(doAction = "菜单添加目录或子目录")
     @Transactional(rollbackFor = Exception.class)
     public void addMenuDir(SysMenuAdd sysMenuAdd,User user) {
         //校验在该等级中菜单名称是否已经存在
@@ -261,6 +268,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param sysMenuAdd
      */
     @Override
+    @ServiceLog(doAction = "菜单目录下面添加子菜单")
     @Transactional(rollbackFor = Exception.class)
     public void addMenu(SysMenuAdd sysMenuAdd,User user) {
         //校验在该等级中菜单名称是否已经存在
@@ -298,6 +306,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验菜单名称")
     public String checkMenuName(SysMenuNameCheck sysMenuNameCheck) {
         if (StringUtils.isNotBlank(sysMenuNameCheck.getMenuName())) {
             List<TbSysMenu> tbSysMenus = checkMenusName(sysMenuNameCheck.getMenuName(), sysMenuNameCheck.getParentId());

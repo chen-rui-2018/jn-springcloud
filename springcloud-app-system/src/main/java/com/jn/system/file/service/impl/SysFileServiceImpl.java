@@ -13,6 +13,7 @@ import com.jn.system.file.dao.TbSysFileMapper;
 import com.jn.system.file.entity.TbSysFile;
 import com.jn.system.file.entity.TbSysFileCriteria;
 import com.jn.system.file.model.*;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.*;
 import com.jn.system.file.service.SysFileService;
 import com.jn.system.file.vo.SysFileVO;
@@ -54,6 +55,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @param sysFile
      */
     @Override
+    @ServiceLog(doAction = "新增文件")
     @Transactional(rollbackFor = Exception.class)
     public void insertSysFile(SysFile sysFile, User user) {
         //文件名称校验
@@ -84,6 +86,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @param sysFile
      */
     @Override
+    @ServiceLog(doAction = "根据id更新文件")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileById(SysFile sysFile) {
         TbSysFile tbSysFile = new TbSysFile();
@@ -99,6 +102,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @param fileIds
      */
     @Override
+    @ServiceLog(doAction = "批量删除文件（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileByIds(String[] fileIds) {
         sysFileMapper.deleteByIds(fileIds);
@@ -112,6 +116,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据id查询文件")
     public SysFile selectSysFileByIds(String id) {
         TbSysFile tbSysFile = tbSysFileMapper.selectByPrimaryKey(id);
         SysFile sysFile = new SysFile();
@@ -129,6 +134,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据关键字分页查询文件列表")
     public PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
         Page<Object> objects = PageHelper.startPage(sysFilePage.getPage(), sysFilePage.getRows());
         List<SysFileVO> sysFileVOList = null;
@@ -151,6 +157,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @param sysFileAddFileGroup
      */
     @Override
+    @ServiceLog(doAction = "文件添加文件组")
     @Transactional(rollbackFor = Exception.class)
     public void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup, User user) {
 
@@ -194,6 +201,7 @@ public class SysFileServiceImpl implements SysFileService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验文件名称")
     public String checkFileName(String fileName) {
         if (StringUtils.isNotBlank(fileName)) {
             //文件名称校验

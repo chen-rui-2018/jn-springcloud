@@ -3,6 +3,7 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.*;
 import com.jn.system.permission.model.SysRoleUserAdd;
 import com.jn.system.user.model.*;
@@ -35,6 +36,7 @@ public class SysUserController extends BaseController {
     @Autowired
     private SysUserService sysUserService;
 
+    @ControllerLog(doAction = "添加用户")
     @RequiresPermissions("/system/sysUser/addSysUser")
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addSysUser")
@@ -45,6 +47,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "分页条件查询用户")
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "分页条件查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
@@ -53,6 +56,7 @@ public class SysUserController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "根据用户id返回用户信息")
     @RequiresPermissions("/system/sysUser/findSysUserById")
     @ApiOperation(value = "根据用户id返回用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserById")
@@ -61,6 +65,7 @@ public class SysUserController extends BaseController {
         return new Result(sysUser);
     }
 
+    @ControllerLog(doAction = "删除用户")
     @RequiresPermissions("/system/sysUser/deleteSysUser")
     @ApiOperation(value = "删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
@@ -69,6 +74,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "更新用户")
     @RequiresPermissions("/system/sysUser/updateSysUser")
     @ApiOperation(value = "更新用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateSysUser")
@@ -77,6 +83,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有的用户组")
     @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
     @ApiOperation(value = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有的用户组",
             httpMethod = "POST", response = Result.class)
@@ -86,6 +93,7 @@ public class SysUserController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "添加用户组到用户")
     @RequiresPermissions("/system/sysUser/saveSysGroupToSysUser")
     @ApiOperation(value = "添加用户组到用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
@@ -97,6 +105,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据用户id获取用户具有角色及条件分页获取用户未拥有角色信息")
     @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
     @ApiOperation(value = "根据用户id获取用户具有角色及条件分页获取用户未拥有角色信息",
             httpMethod = "POST", response = Result.class)
@@ -106,6 +115,7 @@ public class SysUserController extends BaseController {
         return new Result(sysUserRoleVO);
     }
 
+    @ControllerLog(doAction = "为用户添加角色权限")
     @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")
     @ApiOperation(value = "为用户添加角色权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
@@ -117,6 +127,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据用户id查询用户已经具有的岗位部门信息")
     @RequiresPermissions("/system/sysUser/findDepartmentandPostByUserId")
     @ApiOperation(value = "根据用户id查询用户已经具有的岗位部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findDepartmentandPostByUserId")
@@ -125,6 +136,7 @@ public class SysUserController extends BaseController {
         return new Result(sysDepartmentPostVOList);
     }
 
+    @ControllerLog(doAction = "为用户添加部门岗位")
     @RequiresPermissions("/system/sysUser/saveDepartmentandPostOfUser")
     @ApiOperation(value = "为用户添加部门岗位", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveDepartmentandPostOfUser")
@@ -136,6 +148,7 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "校验用户账号是否存在,fail表示账号已存在,success表示可以使用")
     @RequiresPermissions("/system/sysUser/checkUserName")
     @ApiOperation(value = "校验用户账号是否存在,fail表示账号已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")

@@ -8,6 +8,7 @@ import com.jn.system.dept.model.SysDepartmentAdd;
 import com.jn.system.dept.model.SysDepartmentPage;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -38,6 +39,7 @@ public class SysDepartmentController extends BaseController {
     @Autowired
     private SysDepartmentService sysDepartmentService;
 
+    @ControllerLog(doAction = "查询所有部门")
     @RequiresPermissions("/system/sysDepartment/findSysDepartmentAll")
     @ApiOperation(value = "查询所有部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/findSysDepartmentAll")
@@ -46,6 +48,7 @@ public class SysDepartmentController extends BaseController {
         return new Result(sysDepartmentAll);
     }
 
+    @ControllerLog(doAction = "根据部门id获取部门信息")
     @RequiresPermissions("/system/sysDepartment/selectByPrimaryKey")
     @ApiOperation(value = "根据部门id获取部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/selectByPrimaryKey")
@@ -54,6 +57,7 @@ public class SysDepartmentController extends BaseController {
         return new Result(sysDepartment);
     }
 
+    @ControllerLog(doAction = "逻辑删除部门")
     @RequiresPermissions("/system/sysDepartment/delete")
     @ApiOperation(value = "逻辑删除部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/delete")
@@ -63,6 +67,7 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改部门信息")
     @RequiresPermissions("/system/sysDepartment/update")
     @ApiOperation(value = "修改部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/update")
@@ -72,6 +77,7 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "批量添加部门")
     @RequiresPermissions("/system/sysDepartment/add")
     @ApiOperation(value = "批量添加部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/add")
@@ -83,6 +89,7 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "条件分页查询部门信息")
     @RequiresPermissions("/system/sysDepartment/list")
     @ApiOperation(value = "条件分页查询部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/list")
@@ -91,7 +98,7 @@ public class SysDepartmentController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "校验部门名称是否存在")
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
     @ApiOperation(value = "校验部门名称是否存在,fail表示部门名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
@@ -101,7 +108,7 @@ public class SysDepartmentController extends BaseController {
         return new Result(result);
     }
 
-
+    @ControllerLog(doAction = "查询所有部门信息,并根据层级关系返回数据")
     @RequiresPermissions("/system/sysDepartment/findDepartmentAllByLevel")
     @ApiOperation(value = "查询所有部门信息,并根据层级关系返回数据", httpMethod = "POST", response = Result.class)
     @RequestMapping("/findDepartmentAllByLevel")

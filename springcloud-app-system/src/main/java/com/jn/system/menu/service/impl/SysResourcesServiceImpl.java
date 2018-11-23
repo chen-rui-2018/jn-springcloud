@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.entity.TbSysResources;
@@ -56,6 +57,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @param sysResources
      */
     @Override
+    @ServiceLog(doAction = "新增功能")
     @Transactional(rollbackFor = Exception.class)
     public void insertResources(SysResources sysResources, User user) {
         //添加名称校验
@@ -95,6 +97,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @param sysResources
      */
     @Override
+    @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
@@ -121,6 +124,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除功能（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
@@ -134,6 +138,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "分页查询功能功能列表信息")
     @Transactional(rollbackFor = Exception.class)
     public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
@@ -153,17 +158,32 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据id查询功能详情")
     public SysResources selectSysResourcesById(String id) {
         SysResources sysResources = sysResourcesMapper.findResourceById(id);
         return sysResources;
     }
 
+    /**
+     * 根据id查找用户拥有权限列表
+     *
+     * @param id 用户ID
+     * @return
+     */
     @Override
+    @ServiceLog(doAction = "根据id查找用户拥有权限列表")
     public Set<String> findPermissionsUrlById(String id) {
         return sysResourcesMapper.findPermissionsUrlById(id);
     }
 
+    /**
+     * 根据id查找用户拥有功能权限列表
+     *
+     * @param id 用户ID
+     * @return
+     */
     @Override
+    @ServiceLog(doAction = "根据id查找用户拥有功能权限列表")
     public List<MenuResources> getMenuResourcesUrlById(String id) {
         return sysResourcesMapper.getMenuResourcesUrlById(id);
     }
@@ -175,6 +195,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验页面功能名称是否存在")
     public String checkResourceName(SysResourceCheckName sysResourceCheckName) {
         if (StringUtils.isNotBlank(sysResourceCheckName.getResourceName())) {
             List<TbSysResources> tbSysResourcesList = checkName(sysResourceCheckName.getResourceName(), sysResourceCheckName.getMenuId());
@@ -192,6 +213,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据菜单id获取菜单所有页面功能")
     public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();

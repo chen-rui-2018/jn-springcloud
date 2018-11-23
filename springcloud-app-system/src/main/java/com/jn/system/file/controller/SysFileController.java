@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.system.file.model.SysFile;
 import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.file.service.SysFileService;
 import io.swagger.annotations.Api;
@@ -33,6 +34,7 @@ public class SysFileController extends BaseController {
     @Autowired
     private SysFileService sysFileService;
 
+    @ControllerLog(doAction = "查询文件列表")
     @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysFile/list")
@@ -41,6 +43,7 @@ public class SysFileController extends BaseController {
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "新增文件")
     @ApiOperation(value = "新增文件", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFile/add")
@@ -51,6 +54,7 @@ public class SysFileController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "修改文件")
     @ApiOperation(value = "修改文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/system/sysFile/update")
@@ -60,6 +64,7 @@ public class SysFileController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "批量删除文件")
     @ApiOperation(value = "批量删除文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysFile/delete")
@@ -69,6 +74,7 @@ public class SysFileController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据ID查询文件")
     @ApiOperation(value = "根据ID查询文件", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
     @RequiresPermissions("/system/sysFile/selectById")
@@ -78,6 +84,7 @@ public class SysFileController extends BaseController {
         return new Result(sysFile);
     }
 
+    @ControllerLog(doAction = "文件添加文件组")
     @ApiOperation(value = "文件添加文件组", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/sysFileAddFileGroup")
     @RequiresPermissions("/system/sysFile/sysFileAddFileGroup")
@@ -89,6 +96,7 @@ public class SysFileController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "校验文件名称")
     @ApiOperation(value = "校验文件名称", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/checkFileName")
     @RequiresPermissions("/system/sysFile/checkFileName")

@@ -8,6 +8,7 @@ import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.file.model.SysFileGroup;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.model.SysMenu;
@@ -70,6 +71,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermissionAdd
      */
     @Override
+    @ServiceLog(doAction = "添加权限")
     @Transactional(rollbackFor = Exception.class)
     public void addPermission(SysPermissionAdd sysPermissionAdd, User user) {
         //判断权限名称是否已经存在
@@ -108,6 +110,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermission
      */
     @Override
+    @ServiceLog(doAction = "修改权限")
     @Transactional(rollbackFor = Exception.class)
     public void updatePermission(SysPermission sysPermission) {
         TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
@@ -131,6 +134,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据主键获取权限信息")
     public SysPermission selectByPrimaryKey(String id) {
         TbSysPermission tbSysPermission = tbSysPermissionMapper.selectByPrimaryKey(id);
         SysPermission sysPermission = new SysPermission();
@@ -147,6 +151,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "条件分页查询")
     public PaginationData findByPage(SysPermissionPage sysPermissionPage) {
         Page<Object> objects = PageHelper.startPage(sysPermissionPage.getPage(), sysPermissionPage.getRows());
         List<SysPermission> sysPermissionList = sysPermissionMapper.findByPage(sysPermissionPage);
@@ -160,6 +165,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param ids
      */
     @Override
+    @ServiceLog(doAction = "批量逻辑删除权限")
     @Transactional(rollbackFor = Exception.class)
     public void deletePermissionBranch(String[] ids) {
         sysPermissionMapper.deletePermissionBranch(ids);
@@ -176,6 +182,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermissionRolesAdd
      */
     @Override
+    @ServiceLog(doAction = "为权限添加角色")
     @Transactional(rollbackFor = Exception.class)
     public void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd,User user) {
         //清除权限已经具有的角色
@@ -214,6 +221,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "条件分页获取未拥有的角色信息")
     public PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage) {
         List<SysRole> roleOfPermissionList =
                 sysRolePermissionMapper.findRoleOfPermission(sysPermissionRolePage.getPermissionId());
@@ -233,6 +241,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息")
     public PaginationData findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage) {
         //获取权限已经具有的文件组信息
         List<SysFileGroup> sysFileGroupOfPermissionList =
@@ -253,6 +262,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermissionFileGroupAdd
      */
     @Override
+    @ServiceLog(doAction = "为权限添加文件组")
     @Transactional(rollbackFor = Exception.class)
     public void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd, User user) {
         //逻辑删除原有权限对应文件组
@@ -289,6 +299,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息")
     public PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage) {
         List<SysMenu> sysMenuOfPermissionList =
                 sysPermissionMenuMapper.findMenuOfPermission(sysPermissionMenuPage.getPermissionId());
@@ -308,6 +319,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息")
     public PaginationData findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage) {
         List<SysResources> sysResourcesOfPermissionList =
                 sysPermissionResourcesMapper.findResourcesOfPermission(sysPermissionResourcePage.getPermissionId());
@@ -329,6 +341,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验权限明显名称是否已经存在")
     public String checkPermissionName(String permissionName) {
         List<TbSysPermission> tbSysPermissions = checkName(permissionName);
         if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
@@ -343,6 +356,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermissionMenuAdd
      */
     @Override
+    @ServiceLog(doAction = "为权限添加菜单")
     @Transactional(rollbackFor = Exception.class)
     public void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd,User user) {
         //逻辑删除原权限菜单数据
@@ -378,6 +392,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysPermissionMenuAdd
      */
     @Override
+    @ServiceLog(doAction = "为权限添加页面功能")
     public void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd,User user) {
         //逻辑删除原有权限页面功能数据
         sysPermissionResourcesMapper.deleteByPermissionId(sysPermissionMenuAdd.getPermissionId());

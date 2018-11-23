@@ -15,6 +15,7 @@ import com.jn.system.dept.entity.TbSysPostCriteria;
 import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.dept.vo.SysPostVO;
@@ -57,6 +58,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所有岗位")
     public List<TbSysPost> findSysPostAll() {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
@@ -72,6 +74,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @param sysPostAdd
      */
     @Override
+    @ServiceLog(doAction = "增加岗位")
     @Transactional(rollbackFor = Exception.class)
     public void addPost(SysPostAdd sysPostAdd,User user) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
@@ -109,6 +112,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @param ids
      */
     @Override
+    @ServiceLog(doAction = "批量删除岗位")
     @Transactional(rollbackFor = Exception.class)
     public void deletePostBranch(String[] ids) {
         sysPostMapper.deletePostBranch(ids);
@@ -122,6 +126,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @param sysPost
      */
     @Override
+    @ServiceLog(doAction = "修改岗位信息")
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
@@ -145,6 +150,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据岗位id获取岗位信息")
     public SysPost selectByPrimaryKey(String id) {
         TbSysPost tbSysPost = tbSysPostMapper.selectByPrimaryKey(id);
         SysPost sysPost = new SysPost();
@@ -161,6 +167,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "分页获取岗位信息及对应的用户")
     public PaginationData findByPage(SysPostPage sysPostPage) {
         Page<Object> objects = PageHelper.startPage(sysPostPage.getPage(), sysPostPage.getRows());
         List<SysPostVO> sysPostVOList = sysPostMapper.findByPage(sysPostPage);
@@ -175,6 +182,7 @@ public class SysPostServiceImpl implements SysPostService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验岗位名称是否已存在")
     public String checkPostName(String postName) {
         if (StringUtils.isNotBlank(postName)) {
             List<TbSysPost> tbSysPosts = checkName(postName);

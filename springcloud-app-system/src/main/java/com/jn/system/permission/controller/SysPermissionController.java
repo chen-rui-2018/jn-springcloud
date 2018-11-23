@@ -3,6 +3,7 @@ package com.jn.system.permission.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.*;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysPermissionService;
@@ -33,7 +34,7 @@ public class SysPermissionController extends BaseController {
     @Autowired
     private SysPermissionService sysPermissionService;
 
-
+    @ControllerLog(doAction = "添加权限")
     @RequiresPermissions("/system/sysPermission/add")
     @ApiOperation(value = "添加权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
@@ -44,7 +45,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "修改权限")
     @RequiresPermissions("/system/sysPermission/update")
     @ApiOperation(value = "修改权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/update")
@@ -54,7 +55,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "根据主键获取权限信息")
     @RequiresPermissions("/system/sysPermission/selectByPrimaryKey")
     @ApiOperation(value = "根据主键获取权限信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
@@ -63,7 +64,7 @@ public class SysPermissionController extends BaseController {
         return new Result(sysPermission);
     }
 
-
+    @ControllerLog(doAction = "条件分页查询")
     @RequiresPermissions("/system/sysPermission/list")
     @ApiOperation(value = "条件分页查询", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
@@ -72,7 +73,7 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "批量删除权限")
     @RequiresPermissions("/system/sysPermission/delete")
     @ApiOperation(value = "批量删除权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/delete")
@@ -82,7 +83,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "为权限添加角色")
     @RequiresPermissions("/system/sysPermission/addRoleToPermission")
     @ApiOperation(value = "为权限添加角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addRoleToPermission")
@@ -94,7 +95,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息")
     @RequiresPermissions("/system/sysPermission/findRoleOfPermission")
     @ApiOperation(value = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findRoleOfPermission")
@@ -103,7 +104,7 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息")
     @RequiresPermissions("/system/sysPermission/findFileGroupOfPermission")
     @ApiOperation(value = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findFileGroupOfPermission")
@@ -112,7 +113,7 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "为权限添加文件组")
     @RequiresPermissions("/system/sysPermission/addFileGroupToPermission")
     @ApiOperation(value = "为权限添加文件组", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addFileGroupToPermission")
@@ -124,7 +125,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息")
     @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
     @ApiOperation(value = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息",
             httpMethod = "POST", response = Result.class)
@@ -134,7 +135,7 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息")
     @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
     @ApiOperation(value = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findResourcesOfPermission")
@@ -143,7 +144,7 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-
+    @ControllerLog(doAction = "为权限添加菜单")
     @RequiresPermissions("/system/sysPermission/addMenuToPermission")
     @ApiOperation(value = "为权限添加菜单", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addMenuToPermission")
@@ -154,7 +155,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "为权限添加页面功能")
     @RequiresPermissions("/system/sysPermission/addResounceToPermission")
     @ApiOperation(value = "为权限添加页面功能", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addResounceToPermission")
@@ -165,7 +166,7 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-
+    @ControllerLog(doAction = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用")
     @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @ApiOperation(value = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)

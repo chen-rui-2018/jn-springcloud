@@ -2,6 +2,7 @@ package com.jn.system.menu.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.model.SysMenu;
 import com.jn.system.menu.model.SysMenuAdd;
 import com.jn.system.menu.model.SysMenuNameCheck;
@@ -35,6 +36,7 @@ public class SysMenuController extends BaseController {
     @Autowired
     private SysMenuService sysMenuService;
 
+    @ControllerLog(doAction = "查询菜单列表,返回菜单树结构")
     @ApiOperation(value = "查询菜单列表,返回菜单树结构", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysMenu/list")
@@ -43,7 +45,7 @@ public class SysMenuController extends BaseController {
         return new Result(menuTreeVOList);
     }
 
-
+    @ControllerLog(doAction = "修改菜单")
     @ApiOperation(value = "修改菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/system/sysMenu/update")
@@ -53,6 +55,7 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "批量删除菜单")
     @ApiOperation(value = "批量删除菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysMenu/delete")
@@ -62,6 +65,7 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据ID查询菜单")
     @ApiOperation(value = "根据ID查询菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
     @RequiresPermissions("/system/sysMenu/selectById")
@@ -71,6 +75,7 @@ public class SysMenuController extends BaseController {
         return new Result(sysMenu);
     }
 
+    @ControllerLog(doAction = "菜单添加功能")
     @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/insertMenuResources")
     @RequiresPermissions("/system/sysMenu/insertMenuResources")
@@ -87,6 +92,7 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "菜单添加目录或子目录")
     @ApiOperation(value = "菜单添加目录或子目录", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenuDir")
     @RequiresPermissions("/system/sysMenu/addMenuDir")
@@ -97,6 +103,7 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "菜单目录下面添加子菜单")
     @ApiOperation(value = "菜单目录下面添加子菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenu")
     @RequiresPermissions("/system/sysMenu/addMenu")
@@ -107,6 +114,7 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "校验菜单名称,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验菜单名称,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/checkMenuName")
     @RequiresPermissions("/system/sysMenu/checkMenuName")

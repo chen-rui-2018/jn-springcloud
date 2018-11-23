@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.*;
 import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.permission.model.SysRole;
@@ -65,6 +66,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "查询所用用户组信息")
     public PaginationData findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
         List<SysGroupUserRoleVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
@@ -89,6 +91,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @param sysGroup 用户组
      */
     @Override
+    @ServiceLog(doAction = "用户组增加")
     @Transactional(rollbackFor = Exception.class)
     public void addSysGroup(TbSysGroup sysGroup, User user) {
         //判断用户组名是否存在
@@ -125,6 +128,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @param groupIds 用户组id数组
      */
     @Override
+    @ServiceLog(doAction = "逻辑删除用户组")
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
         sysGroupMapper.deleteGroupBranch(groupIds);
@@ -140,6 +144,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
@@ -163,6 +168,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户组id获取用户组信息")
     public TbSysGroup findSysGroupById(String id) {
         TbSysGroup tbSysGroup = tbSysGroupMapper.selectByPrimaryKey(id);
         return tbSysGroup;
@@ -175,6 +181,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息")
     public PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
         List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
@@ -193,6 +200,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @param sysRoleGroupAdd
      */
     @Override
+    @ServiceLog(doAction = "为用户组授权角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd, User user) {
         //插入之前,清除该用户组下面的角色信息
@@ -228,6 +236,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户组id获取用户组下面所有用户")
     public List<SysTUser> findUserOfGroup(String groupId) {
         List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(groupId);
         return userAllOfGroup;
@@ -240,6 +249,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "分页获取除用户组具有的用户以外的用户")
     public PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
         //条件分页获取用户组未拥有用户
@@ -261,6 +271,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @param sysGroupUserAdd
      */
     @Override
+    @ServiceLog(doAction = "用户组授权用户")
     @Transactional(rollbackFor = Exception.class)
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd,User user) {
         //用户组添加用户之前清除用户组以前用户
@@ -295,6 +306,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验用户组名是否可用")
     public String checkGroupName(String groupName) {
         if (StringUtils.isNotBlank(groupName)) {
             List<TbSysGroup> tbSysGroups = checkName(groupName);

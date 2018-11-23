@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dept.entity.TbSysDepartment;
@@ -76,6 +77,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "添加用户")
     @Transactional(rollbackFor = Exception.class)
     public void addSysUser(SysUser sysUser, User user) {
         //根据用户名查询用户账号是否存在
@@ -115,6 +117,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "分页查询用户,返回用户信息及部门岗位")
     public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
@@ -129,6 +132,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param ids
      */
     @Override
+    @ServiceLog(doAction = "删除用户")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
         sysUserMapper.deleteUserBranch(ids);
@@ -145,6 +149,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param sysUser
      */
     @Override
+    @ServiceLog(doAction = "更新用户")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
         if (StringUtils.isNotBlank(sysUser.getAccount())) {
@@ -172,6 +177,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有用户组")
     public PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
         List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
@@ -191,6 +197,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param userId
      */
     @Override
+    @ServiceLog(doAction = "往用户中添加用户组")
     @Transactional(rollbackFor = Exception.class)
     public void saveSysGroupToSysUser(String[] groupIds, String userId, User user) {
         if (groupIds != null && groupIds.length > 0) {
@@ -222,6 +229,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id获取用户具有角色及条件分页查询用户未拥有的角色")
     public SysUserRoleVO findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
         //获取用户已经具有角色
         List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
@@ -239,6 +247,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param userId
      */
     @Override
+    @ServiceLog(doAction = "为用户添加角色权限")
     @Transactional(rollbackFor = Exception.class)
     public void saveSysRoleToSysUser(String[] roleIds, String userId, User user) {
         //清除用户中已经存在的角色
@@ -267,6 +276,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id查询用户已经具有的部门岗位信息")
     public List<SysDepartmentPostVO> findDepartmentandPostByUserId(String userId) {
         List<SysDepartmentPostVO> sysDepartmentPostVOList = sysUserDepartmentPostMapper.findDepartmentAndPostByUserId(userId);
         for (SysDepartmentPostVO sysDepartmentPostVO : sysDepartmentPostVOList) {
@@ -290,6 +300,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "为用户添加部门岗位")
     @Transactional(rollbackFor = Exception.class)
     public void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd, User user) {
         //清除用户已有岗位部门列表
@@ -328,6 +339,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据用户id返回用户信息")
     public SysUser findSysUserById(String id) {
         TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
         SysUser sysUser = new SysUser();
@@ -345,6 +357,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验账号是否存在")
     public String checkUserName(String account) {
         if (StringUtils.isNotBlank(account)) {
             List<TbSysUser> tbSysUsers = checkAccount(account);

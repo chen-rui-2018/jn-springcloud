@@ -1,5 +1,6 @@
 package com.jn.system.permission.service.impl;
 
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.service.SysUserRoleService;
 import com.jn.system.user.dao.SysUserRoleMapper;
@@ -42,6 +43,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @param role
      */
     @Override
+    @ServiceLog(doAction = "新增用户角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserRole(SysUserRole role, User user) {
         role.setId(UUID.randomUUID().toString());
@@ -59,6 +61,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @param role
      */
     @Override
+    @ServiceLog(doAction = "更新用户角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbUserRole(SysUserRole role) {
         TbSysUserRole tbSysUserRole = new TbSysUserRole();
@@ -75,6 +78,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据角色id批量删除用户角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserRoleByRoleIds(String[] roleIds) {
         sysUserRoleMapper.deleteByRoleIds(roleIds);
@@ -88,6 +92,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "批量删除用户角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbUserRoleById(String[] ids) {
         sysUserRoleMapper.deleteByIds(ids);
@@ -100,6 +105,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
      * @param sysUserRoles
      */
     @Override
+    @ServiceLog(doAction = "批量插入用户角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserRoleBatch(List<SysUserRole> sysUserRoles) {
         sysUserRoleMapper.insertBatch(sysUserRoles);

@@ -17,6 +17,7 @@ import com.jn.system.file.model.SysFileGroup;
 import com.jn.system.file.model.SysFileGroupFile;
 import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.*;
 import com.jn.system.file.service.SysFileGroupService;
 import org.slf4j.Logger;
@@ -55,6 +56,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @param sysFileGroup
      */
     @Override
+    @ServiceLog(doAction = "新增文件组")
     @Transactional(rollbackFor = Exception.class)
     public void insertSysFileGroup(SysFileGroup sysFileGroup, User user) {
         //名称校验
@@ -92,6 +94,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @param sysFileGroup
      */
     @Override
+    @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
@@ -116,6 +119,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @param ids
      */
     @Override
+    @ServiceLog(doAction = "批量删除文件组（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileGroupByIds(String[] ids) {
         sysFileGroupMapper.deleteByIds(ids);
@@ -129,6 +133,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据id查询文件组")
     public SysFileGroup selectSysFileGroupByIds(String id) {
         TbSysFileGroup tbSysFileGroup = tbSysFileGroupMapper.selectByPrimaryKey(id);
         SysFileGroup sysFileGroup = new SysFileGroup();
@@ -146,6 +151,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "根据关键字分页查询文件组列表")
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
@@ -177,6 +183,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @param sysFileGroupFileAdd
      */
     @Override
+    @ServiceLog(doAction = "文件组添加文件")
     @Transactional(rollbackFor = Exception.class)
     public void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd, User user) {
 
@@ -211,12 +218,25 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         sysFileGroupFileMapper.insertBatch(sysFileGroupFiles);
     }
 
+    /**
+     * 根据用户获取文件组
+     * @param userId 用户ID
+     * @return
+     */
     @Override
+    @ServiceLog(doAction = "根据用户获取文件组")
     public List<TbSysFileGroup> getUserFileGroupById(String userId) {
         return sysFileGroupFileMapper.getUserFileGroupById(userId);
     }
 
+    /**
+     * 获取用户是否拥有该文件的下载权限
+     * @param userId
+     * @param fileUrl
+     * @return
+     */
     @Override
+    @ServiceLog(doAction = "获取用户是否拥有该文件的下载权限")
     public Boolean getUserFilePermission(String userId, String fileUrl) {
         List<String> userFilePermissionList = sysFileGroupFileMapper.getUserFilePermission(userId, fileUrl);
         if (userFilePermissionList.size() > 0) {
@@ -232,6 +252,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      * @return
      */
     @Override
+    @ServiceLog(doAction = "校验文件组是否存在")
     public String checkFileGroupName(String fileGroupName) {
         if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)) {
             List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);

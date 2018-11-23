@@ -19,9 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author： fengxh
  * @date： Created on 2018/9/20 15:31
  * @version： v1.0
- * @modified By:
+ * @modified By: shenph
  */
-
 @Api(tags = "登录鉴权管理")
 @RestController
 public class LoginController extends BaseController {

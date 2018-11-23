@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author： fengxh
  * @date： Created on 2018/10/01 15:31
  * @version： v1.0
- * @modified By:
+ * @modified By: shenph
  */
 @FeignClient("springcloud-app-system")
 public interface SystemClient {

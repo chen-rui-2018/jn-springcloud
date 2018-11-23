@@ -90,6 +90,7 @@ public class ExceptionHandlerAdvice {
     private Result handleBindResult(BindingResult bindingResult){
         StringBuffer resultBuffer = new StringBuffer();
         List<ObjectError> errors = bindingResult.getAllErrors();
+        Object targetObject = bindingResult.getTarget();
         String tips = "参数不合法";
         if (errors.size() > 0) {
             for(ObjectError objectError :errors) {
@@ -99,7 +100,7 @@ public class ExceptionHandlerAdvice {
             resultBuffer.append(tips) ;
         }
         String result = resultBuffer.toString();
-        logger.warn("参数不合法:{}",result);
+        logger.warn("参数不合法，源文件地址：【{}】，入参：【{}】，校验结果：【{}】",targetObject.getClass().getName(),targetObject.toString(),result);
         return new Result(CommonExceptionEnum.ARGS_ERROR.getCode(),result);
     }
 

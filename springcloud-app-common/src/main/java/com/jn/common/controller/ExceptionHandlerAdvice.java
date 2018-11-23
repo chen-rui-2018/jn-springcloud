@@ -50,14 +50,7 @@ public class ExceptionHandlerAdvice {
     public Result handelIllegalArgumentException(BindException e) {
         return this.handleBindResult(e);
     }
-    /**
-     * 断言判断参数的异常处理
-     */
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public Result handelIllegalArgumentException(IllegalArgumentException e) {
-        logger.error("IllegalArgumentException异常", e);
-        return new Result(CommonExceptionEnum.VALID_ERROR.getCode(), e.getMessage());
-    }
+
     /**
      * 文件上传异常
      */
@@ -105,7 +98,9 @@ public class ExceptionHandlerAdvice {
         }else {
             resultBuffer.append(tips) ;
         }
-        return new Result(CommonExceptionEnum.VALID_ERROR.getCode(),resultBuffer.toString());
+        String result = resultBuffer.toString();
+        logger.warn("参数不合法:{}",result);
+        return new Result(CommonExceptionEnum.ARGS_ERROR.getCode(),result);
     }
 
 

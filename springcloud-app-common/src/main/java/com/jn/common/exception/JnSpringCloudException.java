@@ -40,27 +40,7 @@ public class JnSpringCloudException extends RuntimeException {
         this.msg = msg;
         this.code = codeAndMsg.getCode();
     }
-    /**
-     * 通过接口实例类
-     * @param codeAndMsg
-     * @param throwable 抛出的异常
-     */
-    public JnSpringCloudException(CodeAndMsg codeAndMsg, Throwable throwable) {
-        super(codeAndMsg.getMessage(),throwable);
-        this.msg = codeAndMsg.getMessage();
-        this.code = codeAndMsg.getCode();
-    }
-    /**
-     * 实例
-     * @param codeAndMsg 编码与信息业务方法
-     * @param throwable
-     * @param msg  动态信息
-     */
-    public JnSpringCloudException(CodeAndMsg codeAndMsg, Throwable throwable, String msg) {
-        super(msg,throwable);
-        this.msg = msg;
-        this.code = codeAndMsg.getCode();
-    }
+
 
     /**
      * 通过结果model初始化

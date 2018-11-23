@@ -67,7 +67,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -134,6 +134,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       authorityPage: 1,
       authorityRows: 10,
       authorityData: [],
@@ -405,6 +406,11 @@ export default {
     },
     // 编辑角色
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -422,16 +428,16 @@ export default {
             // 刷新页面显示
             this.initList()
           })
-        } else {
-          this.$message({
-            message: '修改数据不正确',
-            type: 'error'
-          })
         }
       })
     },
     // 新增角色
     createUserData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏

@@ -495,6 +495,9 @@ export default {
     // 编辑用户
     handleUpdate(row) {
       // 打开用户信息更新弹窗
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
       console.log(row)
       this.dialogStatus = 'update'
       this.addDialogTitle = '编辑'
@@ -505,10 +508,6 @@ export default {
       this.temp.phone = row.phone
       this.temp.status = parseInt(row.status)
       this.dialogFormVisible = true
-
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
     },
     updateData() {
       // 避免重复点击提交
@@ -640,9 +639,6 @@ export default {
             })
           })
         }
-        this.$nextTick(() => {
-          this.$refs['resetPassword'].clearValidate()
-        })
       })
     }
   }

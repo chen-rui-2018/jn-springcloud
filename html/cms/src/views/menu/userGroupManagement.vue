@@ -67,7 +67,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -80,7 +80,7 @@
         <span slot="right-footer" size="small" />
       </el-transfer>
     </el-dialog>
-    <!-- 弹出的授權用户对话框 -->
+    <!-- 弹出的授權用户对话框 @input.native="text($event)"  -->
     <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
       <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
         <span slot="left-footer" size="small">
@@ -137,6 +137,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       numberTotal: 0,
       numberRows: 10,
       numberPage: 1,
@@ -186,6 +187,34 @@ export default {
     this.initList()
   },
   methods: {
+    // text(a) {
+    //   this.debounce(() => {
+    //     const html = document.querySelectorAll(".el-input__inner[placeholder='请输入用户名称']")[0]
+    //     console.log(html.value)
+    //     getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, name: html.value, rows: this.userRows }).then(res => {
+    //       console.log(res)
+    //       const userData = []
+    //       const checkUser = []
+    //       this.userTotal = res.data.data.total
+    //       res.data.data.rows.userList.forEach((val, index) => {
+    //         userData.push({
+    //           label: val.name,
+    //           key: val.id
+    //         })
+    //       })
+    //       res.data.data.rows.userAllOfGroup.forEach((val, index) => {
+    //         checkUser.push(val.id)
+    //       })
+    //       this.userData = userData
+    //       this.userIds = checkUser
+    //       this.userLoading = false
+    //     })
+    //   }, 400)
+    // },
+    // debounce(func, delay) {
+    //   clearTimeout(this.timer)
+    //   this.timer = setTimeout(func, delay)
+    // },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -259,9 +288,10 @@ export default {
       this.userdialogVisible = true
       this.getUser()
     },
+
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, name: this.changeText, rows: this.userRows }).then(res => {
+      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -291,13 +321,14 @@ export default {
     },
     // 改变授权用户穿梭框时获取选中的用户
     handleUserChange(value, direction, movedKeys) {
+      console.log(value)
       this.userIds = value
       if (direction === 'left') {
         this.moveArr = -(movedKeys.length)
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUser({ groupId: this.userGroupId, userIds: this.userIds }).then(
+      updataUser({ groupId: this.userGroupId, userIds: value }).then(
         res => {
           if (res.data.code === '0000') {
             this.$message({
@@ -338,6 +369,11 @@ export default {
     },
     // 实现添加用户功能
     createUserData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
@@ -383,6 +419,11 @@ export default {
     },
     // 编辑用户的功能实现
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -468,7 +509,7 @@ export default {
 
 <style lang="scss">
 .management {
-   .filter-container {
+  .filter-container {
     .el-form-item {
       margin-bottom: 0;
     }
@@ -485,10 +526,9 @@ export default {
     position: relative;
   }
 }
-.el-dialog{
-
-.el-dialog__footer{
-  text-align: center ;
-}
+.el-dialog {
+  .el-dialog__footer {
+    text-align: center;
+  }
 }
 </style>

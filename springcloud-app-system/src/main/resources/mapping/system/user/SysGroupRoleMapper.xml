@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.user.dao.SysGroupRoleMapper">
+    <select id="findRoleByGroupId" parameterType="java.lang.String"
+            resultType="com.jn.system.permission.model.SysRole">
+        SELECT
+            r.id,
+            r.role_name as roleName ,
+            r.creator,
+            r.create_time as createTime,
+            r.status
+        FROM tb_sys_group_role gr join tb_sys_role r
+            on gr.role_id = r.id
+        where gr.user_group_id = #{id,jdbcType=VARCHAR}
+            and gr.`status` = '1'
+            and r.`status` = '1'
+    </select>
+
+    <select id="findRolesByGroupId" parameterType="java.lang.String" resultType="java.lang.String">
+        SELECT
+            r.role_name as roleName
+        FROM tb_sys_group_role gr join tb_sys_role r
+            on gr.role_id = r.id
+        where gr.user_group_id = #{id,jdbcType=VARCHAR}
+            and gr.`status` = '1'
+            and r.`status` = '1'
+    </select>
+
+    <update id="deteSysGroupRoleByGroupId" parameterType="java.lang.String">
+        update tb_sys_group_role
+        set `status` = '-1'
+        where user_group_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="insertSysGroupRoleBatch" parameterType="java.util.List">
+        insert into tb_sys_group_role(id,role_id,user_group_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.roleId,jdbcType=VARCHAR},
+            #{item.userGroupId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.createTime,jdbcType=TIMESTAMP},
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <update id="deleteGroupBranch" parameterType="java.lang.String">
+        update tb_sys_group_role set status=-1
+        where user_group_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findUserGroupByRoleId" parameterType="java.lang.String"
+            resultType="com.jn.system.user.model.SysGroup">
+        SELECT DISTINCT
+        t1.id as groupId,
+        t1.group_name as groupName,
+        t1.create_time as createTime,
+        t1.`status`
+        FROM tb_sys_group t1, tb_sys_group_role t2
+        where t1.id = t2.user_group_id and t1.`status` = '1'
+        and t2.`status` = '1' and t2.role_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findOtherUserGroup" parameterType="com.jn.system.permission.model.SysRoleUserGroupPage"
+            resultType="com.jn.system.user.model.SysGroup">
+        select DISTINCT
+        t.id as groupId,
+        t.group_name as groupName,
+        t.create_time as createTime,
+        t.`status`
+        from tb_sys_group t left join
+        (SELECT DISTINCT t1.id,t1.group_name FROM tb_sys_group t1, tb_sys_group_role t2
+        where t1.id = t2.user_group_id and t1.`status` = '1'
+        and t2.`status` = '1' and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupName)">
+            and t.group_name like CONCAT('%', #{userGroupName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
+
+    <select id="findRoleByGroupPage" parameterType="com.jn.system.user.model.SysGroupRolePage"
+            resultType="com.jn.system.permission.model.SysRole">
+        select DISTINCT
+        t.id,
+        t.role_name as roleName,
+        t.create_time as createTime,
+        t.creator,
+        t.`status`
+        from tb_sys_role t left join
+        (SELECT t1.id,t1.role_name FROM `tb_sys_role` t1 ,tb_sys_group_role t2
+        where t1.id = t2.role_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.user_group_id = #{groupId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
+            and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
+</mapper>

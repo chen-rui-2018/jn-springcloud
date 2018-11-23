@@ -1,5 +1,6 @@
 {
   "pages": [
+    "page/minibase/index",
     "page/component/index",
     "page/component/pages/view/view",
     "page/component/pages/scroll-view/scroll-view",

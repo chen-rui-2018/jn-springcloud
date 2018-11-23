@@ -201,6 +201,12 @@ code {
 .text-muted {
     color: #777;
 }
+.text-green{
+  color:#090;
+}
+.text-red{
+  color:#f00;
+}
 
 .text-blue {
     color: #2ca8e7;
@@ -257,4 +263,27 @@ code {
 }
 .bgc{
     background-color: #fff;
+}
+//修复table不对齐bug
+body .el-table th.gutter {
+  display: table-cell !important;
+}
+
+.el-table thead .cell {
+  font-weight: normal;
+  color: #0a2b3a;
+  white-space: nowrap; 
+}
+.el-table--border,
+.el-table--group {
+  border: 1px solid #a3d9f4;
+}
+.el-table thead.has-gutter th {
+  background: #e0f1fc;
+  border-bottom: 1px solid #a3d9f4;
+  border-right: 1px solid #a3d9f4;
+}
+.el-table .cell {
+  position: relative;
+  word-wrap: normal;
 }

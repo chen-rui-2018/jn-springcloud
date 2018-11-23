@@ -40,13 +40,13 @@
 <script>
 import $ from 'jquery'
 import projectGrid from '../components/ProjectGrid'
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   name: 'ProjectPage',
   components: { projectGrid },
   data() {
     return {
-      opts2: [
+      opts: [
         {
           data: {
             content: {
@@ -77,15 +77,14 @@ export default {
             chart: {
               uncompletedArr: ['100%', '100%', '100%', '100%'],
               cycle: ['5月', '7月', '8月', '9月'],
-              currentMonth: '9月',
-              options: {}
+              currentMonth: '9月'
             }
           }
         },
         {
           data: {
             content: {
-              title: '园区路灯安装任务',
+              title: '园区路灯安装任务22',
               scheduleStatus: '正常',
               deadline: '8月6日',
               remainingPercentage: '100%',
@@ -95,8 +94,7 @@ export default {
             chart: {
               uncompletedArr: ['100%', '100%', '100%', '100%'],
               cycle: ['5月', '7月', '8月', '9月'],
-              currentMonth: '9月',
-              options: {}
+              currentMonth: '9月'
             }
           }
         },
@@ -120,7 +118,7 @@ export default {
         {
           data: {
             content: {
-              title: '园区路灯安装任务',
+              title: '园区路灯安装任务123',
               scheduleStatus: '提前',
               deadline: '8月6日',
               remainingPercentage: '20%',
@@ -130,8 +128,7 @@ export default {
             chart: {
               uncompletedArr: ['100%', '100%', '100%', '20%'],
               cycle: ['5月', '7月', '8月', '9月'],
-              currentMonth: '9月',
-              options: {}
+              currentMonth: '9月'
             }
           }
         },
@@ -156,8 +153,8 @@ export default {
       ],
       searchKeyword: '',
       projectStatus: '',
-      scheduleStatus: '',
-      opts: null
+      scheduleStatus: ''
+      // opts: null
     }
   },
   computed: {
@@ -187,7 +184,7 @@ export default {
     }
   },
   mounted() {
-    axios.get('https://easy-mock.com/mock/5bd532347c1abe61ecb48935/test/planning').then(response => (this.$set(this, 'opts', response.data.testdata)))
+    // axios.get('https://easy-mock.com/mock/5bd532347c1abe61ecb48935/test/planning').then(response => (this.$set(this, 'opts', response.data.testdata)))
   },
   methods: {
     filterStatus: function(event) {
@@ -206,5 +203,5 @@ export default {
 }
 </script>
 <style lang='scss' scoped  >
-   @import 'project.scss';
+@import "project.scss";
 </style>

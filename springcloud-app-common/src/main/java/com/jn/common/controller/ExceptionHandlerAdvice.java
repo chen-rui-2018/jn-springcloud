@@ -33,7 +33,7 @@ public class ExceptionHandlerAdvice {
      */
     @ExceptionHandler(JnSpringCloudException.class)
     public Result handleJnSpringCloudException(JnSpringCloudException e) {
-        logger.error("JnSpringCloudException异常:{}:{}", e.getCode(), e.getMsg());
+        logger.warn("JnSpringCloudException异常:{}:{}", e.getCode(), e.getMsg());
         return new Result(e.getCode(), e.getMsg());
     }
     /**

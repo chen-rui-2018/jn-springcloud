@@ -64,20 +64,23 @@
 - /api/** 的路径不会进行拦截，专用于提供内部其他系统调用
 - /guest/** 的路径不会进行拦截，专用于提供外部客户端调用
 - @RequiresPermissions("url") 用于功能权限的控制，只要涉及了功能的链接的路径，都需要使用该注解。  
-- 对象的参数校验，请使用注解进行（https://blog.csdn.net/u012373815/article/details/72049796，如果一些共性校验，例如手机校验、邮箱校验等等，找“公共组”统一建立，如果是业务特殊校验，例如是一些余额校验等等，使用写代码实现(eg:com.jn.system.model.UserLogin)
+- 对象的参数校验，请使用注解进行（https://blog.csdn.net/u012373815/article/details/72049796，如果一些共性校验，例如手机校验、邮箱校验等等，找“公共组”统一建立，如果是业务特殊校验，例如是一些余额校验等等，使用写代码实现(eg:com.jn.system.user.model.UserLogin)
 
 ### 5.领域对象规范
 - 一共分了3种类型：数据库对象（entity）、通信对象(model)、视图对象(vo)
 - 数据库对象，统一由generator逆向生成，不允许自己建立
 - 通信对象，单一对象模型，一般简单的界面，同时也是视图对象模型
 - 视图对象，组合对象模型，有组合对象的，统一在vo包下建立
-- 不同类型对象的转化，使用BeanUtils.copyProperties(userLogin,user) 处理，(eg：com.jn.system.service.impl.UserServiceImpl.findTByT)
+- 不同类型对象的转化，使用BeanUtils.copyProperties(userLogin,user) 处理，(eg：com.jn.system.user.service.impl.SysUserServiceImpl.findTByT)
+- 所有的领域对象都必须要有toString的重写
 
 ### 6.日志规范
-- 不得使用System.out, System.err进行日志记录，请改使用logger.debug、logger.error
-- 注意error和warn级别的区别，导致业务不正常服务的，用error级别；错误是预期会发生的，并且已经有了其他的处理流程，使用warn级别
-- 日志打印不运行使用“+”拼字符串的方式
+- 不得使用System.out, System.err进行日志记录，请改使用logger
+- 注意error和warn级别的区别，导致业务不正常服务的，用error级别；错误是预期会发生的，并且已经有了其他的处理流程，使用warn级别（业务提醒）
+- 日志打印不能使用“+”拼字符串的方式
 - 重要方法入口，业务流程前后及处理的结果等，记录log
+- controller层，必须在方法上加入@ControllerLog注解
+- service具体实现层，必须在方法上加入@ServiceLog注解
 
 ### 7.开发其他规范
 - Controller 返回的统一使用Result<T> 类 返回

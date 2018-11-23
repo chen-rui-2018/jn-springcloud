@@ -368,6 +368,7 @@ public class SysUserServiceImpl implements SysUserService {
         return SysReturnMessageEnum.SUCCESS.getMessage();
     }
 
+    @ServiceLog(doAction = "获取用户")
     @Override
     public List<User> findTByT(User user) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();

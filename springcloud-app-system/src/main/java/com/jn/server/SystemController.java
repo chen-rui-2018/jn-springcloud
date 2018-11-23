@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
@@ -40,12 +41,7 @@ public class SystemController extends BaseController {
     @Autowired
     private SysFileGroupService sysFileGroupService;
 
-    /**
-     * 获取用户
-     *
-     * @param u 用户对象
-     * @return
-     */
+    @ControllerLog(doAction = "获取用户")
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)
     public Result<User> getUser(@RequestBody @Validated User u) {
         logger.info("进入获取用户的API,用户参数：{}", u.toString());
@@ -57,49 +53,28 @@ public class SystemController extends BaseController {
         return new Result(user.get(0));
     }
 
-    /**
-     * 获取用户权限（菜单、功能）
-     *
-     * @param id 用户ID
-     * @return
-     */
+    @ControllerLog(doAction = "获取用户权限（菜单、功能）")
     @RequestMapping(value = "/getResources", method = RequestMethod.POST)
     public Result<Set<String>> getResources(@RequestBody String id) {
         Set<String> resourcesList = sysResourcesService.findPermissionsUrlById(id);
         return new Result(resourcesList);
     }
 
-    /**
-     * 获取菜单、功能资源
-     *
-     * @param id 用户ID
-     * @return
-     */
+    @ControllerLog(doAction = "获取菜单、功能资源")
     @RequestMapping(value = "/getMenuResources", method = RequestMethod.POST)
     public Result<List<MenuResources>> getMenuResources(@RequestBody String id) {
         List<MenuResources> menuResourcesList = sysResourcesService.getMenuResourcesUrlById(id);
         return new Result(menuResourcesList);
     }
 
-    /**
-     * 根据用户获取文件组
-     *
-     * @param userId 用户ID
-     * @return
-     */
+    @ControllerLog(doAction = "根据用户获取文件组")
     @RequestMapping(value = "/getUserFileGroup", method = RequestMethod.POST)
     public Result<List<TbSysFileGroup>> getUserFileGroup(@RequestBody String userId) {
         List<TbSysFileGroup> userFileGruopList = sysFileGroupService.getUserFileGroupById(userId);
         return new Result(userFileGruopList);
     }
 
-    /**
-     * 获取用户是否拥有该文件的下载权限
-     *
-     * @param userId  用户ID
-     * @param fileUrl 文件URL
-     * @return
-     */
+    @ControllerLog(doAction = "获取用户是否拥有该文件的下载权限")
     @RequestMapping(value = "/getUserFilePermission", method = RequestMethod.POST)
     public Result<Boolean> getUserFilePermission(@RequestBody String userId, @RequestParam("fileUrl") String fileUrl) {
         Boolean isUserFilePermission = sysFileGroupService.getUserFilePermission(userId, fileUrl);

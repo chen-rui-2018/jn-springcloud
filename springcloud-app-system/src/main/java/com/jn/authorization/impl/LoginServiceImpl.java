@@ -3,6 +3,7 @@ package com.jn.authorization.impl;
 import com.jn.authorization.LoginService;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.enums.ShiroExceptionEnum;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.user.model.UserLogin;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    @ServiceLog(doAction = "登录")
     @Override
     public void login(UserLogin user) {
         try {
@@ -39,6 +41,7 @@ public class LoginServiceImpl implements LoginService {
         }
     }
 
+    @ServiceLog(doAction = "登出")
     @Override
     public void logoutJSON() {
         Subject subject = SecurityUtils.getSubject();

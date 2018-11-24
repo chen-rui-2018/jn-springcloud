@@ -3,7 +3,7 @@ package com.jn.controller;
 import com.jn.common.model.Result;
 import com.jn.config.FastDfsUploadClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
+import com.jn.common.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

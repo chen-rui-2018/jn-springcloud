@@ -40,9 +40,15 @@ public class LogAspect {
             }
         }
         long start = System.currentTimeMillis();
-        Object result = joinPoint.proceed();
-        long end = System.currentTimeMillis();
-        logger.info("end.用户【{}】，完成【{}】的业务，耗时：【{}】,结果是：【{}】",accountName,log.doAction(),(end-start)+"ms",result+"");
+        Object result = null;
+        try {
+            result = joinPoint.proceed();
+        }catch (Exception e){
+            throw e;
+        }finally {
+            long end = System.currentTimeMillis();
+            logger.info("end.用户【{}】，完成【{}】的业务，耗时：【{}】,结果是：【{}】",accountName,log.doAction(),(end-start)+"ms",result+"");
+        }
         return result;
     }
 

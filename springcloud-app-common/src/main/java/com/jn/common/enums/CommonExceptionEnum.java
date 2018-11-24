@@ -14,9 +14,9 @@ import com.jn.common.api.CodeAndMsg;
 public enum CommonExceptionEnum implements CodeAndMsg {
 
     UN_KNOW("1000999","未知异常"),
-    VALID_ERROR("1000201","参数异常"),
-    UN_AUTH("1000202","鉴权失败"),
-    FILE_ERROR("1000203","文件传输异常");
+    ARGS_ERROR("1000200","参数不合法"),
+    UN_AUTH("1000201","鉴权失败"),
+    FILE_ERROR("1000202","文件传输异常");
     /**
      * 编码
      */

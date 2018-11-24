@@ -33,10 +33,10 @@
     </resultMap>
 
 
-    <update id="deleteBy" parameterType="java.lang.String">
+    <update id="deleteBy" parameterType="java.util.List">
         update tb_sys_menu set status=-1
         where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
             #{id}
         </foreach>
     </update>
@@ -91,22 +91,42 @@
 
     <select id="findMenuByLevelOne" resultType="com.jn.system.menu.vo.SysMenuTreeVO">
         select
-        id as value,
+        id,
         menu_name as label,
         menu_url as menuUrl,
         sort,
+        parent_id as parentId,
+        create_time as createTime,
         is_dir as isDir
-        from tb_sys_menu where `level` = '1' and `status` = '1'
+        from tb_sys_menu
+        where `level` = '1'
+        and `status` = '1'
     </select>
 
     <select id="findMenuByParentId" parameterType="java.lang.String" resultType="com.jn.system.menu.vo.SysMenuTreeVO">
         select
-        id as value,
-        menu_name as label,
-        menu_url as menuUrl,
+        t.menu_name as parentName,
+        tt.id,
+        tt.menu_name as `label`,
+        tt.menu_url as menuUrl,
+        tt.sort,
+        tt.parent_id as parentId,
+        tt.create_time as createTime,
+        tt.is_dir as isDir
+        from tb_sys_menu t,
+        (select
+        id,
+        menu_name,
+        menu_url,
         sort,
-        is_dir as isDir
-        from tb_sys_menu where parent_id = #{id,jdbcType=VARCHAR} and `status` = '1'
+        parent_id,
+        create_time,
+        is_dir
+        from tb_sys_menu
+        where parent_id = #{id,jdbcType=VARCHAR}
+        and `status` = '1') tt
+        where t.id = tt.parent_id
+        and `status` = '1'
     </select>
 
 </mapper>

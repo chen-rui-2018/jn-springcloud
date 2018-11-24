@@ -18,37 +18,46 @@ import java.util.List;
 public class SysMenuTreeVO implements Serializable {
     private static final long serialVersionUID = -6386235821868424583L;
     @ApiModelProperty("菜单id")
-    private String value;
+    private String id;
     @ApiModelProperty("菜单名称")
     private String label ;
     @ApiModelProperty("菜单路径")
     private String menuUrl;
-    @ApiModelProperty("排序")
+    @ApiModelProperty("排序,菜单目录,默认排序为0,子菜单排序从1,往后开始递增")
     private String sort;
     @ApiModelProperty("是否是文件夹,1是,0不是")
     private String isDir;
+    @ApiModelProperty("父级id")
+    private String parentId;
+    @ApiModelProperty("父级id父级名称")
+    private String parentName;
+    @ApiModelProperty("创建时间")
+    private String createTime;
     @ApiModelProperty("子菜单的集合")
     private List<SysMenuTreeVO> children;
 
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String value, String label, String menuUrl, String sort,
-                         String isDir, List<SysMenuTreeVO> children) {
-        this.value = value;
+    public SysMenuTreeVO(String id, String label, String menuUrl, String sort, String isDir, String parentId,
+                         String parentName, String createTime, List<SysMenuTreeVO> children) {
+        this.id = id;
         this.label = label;
         this.menuUrl = menuUrl;
         this.sort = sort;
         this.isDir = isDir;
+        this.parentId = parentId;
+        this.parentName = parentName;
+        this.createTime = createTime;
         this.children = children;
     }
 
-    public String getValue() {
-        return value;
+    public String getId() {
+        return id;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLabel() {
@@ -83,6 +92,30 @@ public class SysMenuTreeVO implements Serializable {
         this.isDir = isDir;
     }
 
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
+
+    public String getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        this.createTime = createTime;
+    }
+
     public List<SysMenuTreeVO> getChildren() {
         return children;
     }
@@ -91,14 +124,18 @@ public class SysMenuTreeVO implements Serializable {
         this.children = children;
     }
 
+
     @Override
     public String toString() {
         return "SysMenuTreeVO{" +
-                "value='" + value + '\'' +
+                "id='" + id + '\'' +
                 ", label='" + label + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
                 ", sort='" + sort + '\'' +
                 ", isDir='" + isDir + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", parentName='" + parentName + '\'' +
+                ", createTime='" + createTime + '\'' +
                 ", children=" + children +
                 '}';
     }

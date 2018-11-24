@@ -47,9 +47,9 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "分页条件查询用户")
+    @ControllerLog(doAction = "条件分页查询用户")
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
-    @ApiOperation(value = "分页条件查询用户", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "条件分页查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
     public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage) {
         PaginationData data = sysUserService.findSysUserByPage(userSysUserPage);
@@ -65,9 +65,9 @@ public class SysUserController extends BaseController {
         return new Result(sysUser);
     }
 
-    @ControllerLog(doAction = "删除用户")
+    @ControllerLog(doAction = "逻辑删除用户")
     @RequiresPermissions("/system/sysUser/deleteSysUser")
-    @ApiOperation(value = "删除用户", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "逻辑删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
     public Result deleteSysUser(@Validated @RequestBody SysUserDelete sysUserDelete) {
         sysUserService.deleteSysUser(sysUserDelete.getUserIds());
@@ -83,9 +83,9 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有的用户组")
+    @ControllerLog(doAction = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息")
     @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
-    @ApiOperation(value = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有的用户组",
+    @ApiOperation(value = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysGroupByUserId")
     public Result findSysGroupByUserId(@Validated @RequestBody SysUserGroupPage sysUserGroupPage) {
@@ -105,9 +105,9 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据用户id获取用户具有角色及条件分页获取用户未拥有角色信息")
+    @ControllerLog(doAction = "查询用户已经具有的角色信息,且条件分页获取用户未拥有的角色信息")
     @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
-    @ApiOperation(value = "根据用户id获取用户具有角色及条件分页获取用户未拥有角色信息",
+    @ApiOperation(value = "查询用户已经具有的角色信息,且条件分页获取用户未拥有的角色信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {

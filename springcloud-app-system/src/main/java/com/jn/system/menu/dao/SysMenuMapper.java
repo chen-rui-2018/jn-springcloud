@@ -21,9 +21,9 @@ public interface SysMenuMapper {
     /**
      * 根据ids批量删除
      *
-     * @param id
+     * @param ids
      */
-    void deleteBy(String[] id);
+    void deleteBy(List<String> ids);
 
     /**
      * 根据主键查询菜单功能列表

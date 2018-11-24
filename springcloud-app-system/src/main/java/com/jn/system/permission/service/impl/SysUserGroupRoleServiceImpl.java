@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 @Service
 public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
-    private Logger logger = LoggerFactory.getLogger(SysUserGroupRoleServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysUserGroupRoleServiceImpl.class);
 
     @Resource
     private SysUserGroupRoleMapper sysUserGroupRoleMapper;

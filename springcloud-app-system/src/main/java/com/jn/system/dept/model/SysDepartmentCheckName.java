@@ -5,29 +5,29 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
- * 部门添加实体
+ * 部门校验名称实体
  * @author： shaobao
- * @date： Created on 2018/11/7 14:16
+ * @date： Created on 2018/11/23 15:55
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentAdd",description = "部门添加实体")
-public class SysDepartmentAdd implements Serializable {
+@ApiModel(value = "SysDepartmentCheckName",description = "部门校验名称实体")
+public class SysDepartmentCheckName implements Serializable {
 
-    private static final long serialVersionUID = -5667858257333477069L;
+    private static final long serialVersionUID = -1675079560991801814L;
+
     @NotBlank(message = "部门父级id不能为空")
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("部门名称数组")
     private String departmentName;
 
-    public SysDepartmentAdd() {
+    public SysDepartmentCheckName() {
     }
 
-    public SysDepartmentAdd(String parentId, String departmentName) {
+    public SysDepartmentCheckName(String parentId, String departmentName) {
         this.parentId = parentId;
         this.departmentName = departmentName;
     }

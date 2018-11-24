@@ -55,13 +55,12 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "批量删除菜单")
-    @ApiOperation(value = "批量删除菜单", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "逻辑删除菜单")
+    @ApiOperation(value = "逻辑删除菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysMenu/delete")
-    public Result delete(@RequestParam(value = "ids") String[] ids) {
-        Assert.noNullElements(ids, "菜单ID不能为空");
-        sysMenuService.deleteSysMenuById(ids);
+    public Result delete(String id) {
+        sysMenuService.deleteSysMenuById(id);
         return new Result();
     }
 
@@ -92,8 +91,8 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "菜单添加目录或子目录")
-    @ApiOperation(value = "菜单添加目录或子目录", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "菜单添加目录菜单")
+    @ApiOperation(value = "菜单添加目录菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenuDir")
     @RequiresPermissions("/system/sysMenu/addMenuDir")
     public Result addMenuDir(@Validated @RequestBody SysMenuAdd sysMenuAdd){
@@ -103,8 +102,8 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "菜单目录下面添加子菜单")
-    @ApiOperation(value = "菜单目录下面添加子菜单", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "目录菜单下面添加子菜单")
+    @ApiOperation(value = "目录菜单下面添加子菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenu")
     @RequiresPermissions("/system/sysMenu/addMenu")
     public Result addMenu(@Validated @RequestBody SysMenuAdd sysMenuAdd){

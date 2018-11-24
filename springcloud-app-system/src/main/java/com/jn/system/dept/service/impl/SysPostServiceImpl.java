@@ -42,7 +42,7 @@ import java.util.UUID;
 @Service
 public class SysPostServiceImpl implements SysPostService {
 
-    private Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
 
     @Autowired
     private TbSysPostMapper tbSysPostMapper;
@@ -79,7 +79,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void addPost(SysPostAdd sysPostAdd,User user) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.info("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
+            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPost tbSysPost = new TbSysPost();
@@ -136,7 +136,7 @@ public class SysPostServiceImpl implements SysPostService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.info("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
+            logger.warn("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysPostMapper.updatePost(sysPost);

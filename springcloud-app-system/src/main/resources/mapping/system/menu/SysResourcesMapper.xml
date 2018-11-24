@@ -33,6 +33,14 @@
         </foreach>
     </update>
 
+    <update id="deleteBy" parameterType="java.util.List">
+        update tb_sys_resources set status=-1
+        where menu_id in
+        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="findMenuResourcesByPage" parameterType="com.jn.system.menu.model.SysResourcesPage"
             resultMap="MenuResourcesResultMap">
         SELECT DISTINCT

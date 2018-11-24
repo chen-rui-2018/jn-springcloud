@@ -30,7 +30,7 @@ import java.util.UUID;
 @Service
 public class SysUserRoleServiceImpl implements SysUserRoleService {
 
-    private Logger logger = LoggerFactory.getLogger(SysUserRoleServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysUserRoleServiceImpl.class);
 
     @Resource
     private SysUserRoleMapper sysUserRoleMapper;

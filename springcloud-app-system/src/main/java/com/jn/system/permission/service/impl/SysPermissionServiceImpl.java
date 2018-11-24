@@ -46,7 +46,7 @@ import java.util.UUID;
 @Service
 public class SysPermissionServiceImpl implements SysPermissionService {
 
-    private Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
 
     @Autowired
     private TbSysPermissionMapper tbSysPermissionMapper;
@@ -77,7 +77,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //判断权限名称是否已经存在
         List<TbSysPermission> tbSysPermissions = checkName(sysPermissionAdd.getPermissionName());
         if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
-            logger.info("[权限] 新增权限信息失败，权限名称已存在！，permissionName:{}", sysPermissionAdd.getPermissionName());
+            logger.warn("[权限] 新增权限信息失败，权限名称已存在！，permissionName:{}", sysPermissionAdd.getPermissionName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPermission tbSysPermission = new TbSysPermission();
@@ -120,7 +120,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
         if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
-            logger.info("[权限] 修改权限信息失败，权限名称已存在！，permissionName:{}", sysPermission.getPermissionName());
+            logger.warn("[权限] 修改权限信息失败，权限名称已存在！，permissionName:{}", sysPermission.getPermissionName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysPermissionMapper.updatePermission(sysPermission);
@@ -201,7 +201,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //创建权限角色实体类
             TbSysRolePermission tbSysRolePermission = new TbSysRolePermission();
             tbSysRolePermission.setId(UUID.randomUUID().toString());
-            tbSysRolePermission.setCreateTime(new Date());
             tbSysRolePermission.setCreator(user.getId());
             tbSysRolePermission.setPermissionId(sysPermissionRolesAdd.getPermissionId());
             tbSysRolePermission.setRoleId(roleId);
@@ -215,13 +214,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 条件分页获取未拥有的角色信息
+     * 获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息
      *
      * @param sysPermissionRolePage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "条件分页获取未拥有的角色信息")
+    @ServiceLog(doAction = "获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息")
     public PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage) {
         List<SysRole> roleOfPermissionList =
                 sysRolePermissionMapper.findRoleOfPermission(sysPermissionRolePage.getPermissionId());
@@ -235,13 +234,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息
+     * 获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息
      *
      * @param sysPermissionFileGroupPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息")
+    @ServiceLog(doAction = "获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息")
     public PaginationData findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage) {
         //获取权限已经具有的文件组信息
         List<SysFileGroup> sysFileGroupOfPermissionList =
@@ -279,7 +278,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //封装权限文件组实体
             TbSysPermissionFiles tbSysPermissionFiles = new TbSysPermissionFiles();
             tbSysPermissionFiles.setId(UUID.randomUUID().toString());
-            tbSysPermissionFiles.setCreateTime(new Date());
             tbSysPermissionFiles.setCreator(user.getId());
             tbSysPermissionFiles.setFileGroupId(fileGroupId);
             tbSysPermissionFiles.setPermissionId(sysPermissionFileGroupAdd.getPermissionId());
@@ -293,13 +291,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息
+     * 获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息
      *
      * @param sysPermissionMenuPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息")
+    @ServiceLog(doAction = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息")
     public PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage) {
         List<SysMenu> sysMenuOfPermissionList =
                 sysPermissionMenuMapper.findMenuOfPermission(sysPermissionMenuPage.getPermissionId());
@@ -313,13 +311,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 获取权限已经具有的功能信息及条件分页获取未拥有的功能信息
+     * 获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息
      *
      * @param sysPermissionResourcePage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息")
+    @ServiceLog(doAction = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息")
     public PaginationData findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage) {
         List<SysResources> sysResourcesOfPermissionList =
                 sysPermissionResourcesMapper.findResourcesOfPermission(sysPermissionResourcePage.getPermissionId());
@@ -373,7 +371,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //生成权限菜单对象
             TbSysPermissionMenu tbSysPermissionMenu = new TbSysPermissionMenu();
             tbSysPermissionMenu.setId(UUID.randomUUID().toString());
-            tbSysPermissionMenu.setCreateTime(new Date());
             tbSysPermissionMenu.setCreator(user.getId());
             tbSysPermissionMenu.setMenuId(menuId);
             tbSysPermissionMenu.setPermissionId(sysPermissionMenuAdd.getPermissionId());
@@ -408,7 +405,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //生产权限页面菜单对象
             TbSysPermissionResources tbSysPermissionResources = new TbSysPermissionResources();
             tbSysPermissionResources.setId(UUID.randomUUID().toString());
-            tbSysPermissionResources.setCreateTime(new Date());
             tbSysPermissionResources.setCreator(user.getId());
             tbSysPermissionResources.setPermissionId(sysPermissionMenuAdd.getPermissionId());
             tbSysPermissionResources.setResourcesId(resourceId);

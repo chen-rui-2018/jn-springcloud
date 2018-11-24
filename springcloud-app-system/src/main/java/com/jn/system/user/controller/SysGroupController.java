@@ -87,8 +87,8 @@ public class SysGroupController extends BaseController {
         return new Result(sysGroup);
     }
 
-    @ControllerLog(doAction = "根据用户组id获取用户组具有的角色信息及条件分页查询用户组未拥有的角色信息")
-    @ApiOperation(value = "根据用户组id获取用户组具有的角色信息及条件分页查询用户组未拥有的角色信息",
+    @ControllerLog(doAction = "查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息")
+    @ApiOperation(value = "查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectGroupRoleAndOtherRole")
     @RequiresPermissions("/system/sysGroup/selectGroupRoleAndOtherRole")
@@ -98,8 +98,7 @@ public class SysGroupController extends BaseController {
     }
 
     @ControllerLog(doAction = "用户组授权角色")
-    @ApiOperation(value = "用户组授权角色",
-            httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "用户组授权角色", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/roleGroupAuthorization")
     @RequiresPermissions("/system/sysGroup/roleGroupAuthorization")
     public Result roleGroupAuthorization(@Validated @RequestBody SysRoleGroupAdd sysRoleGroupAdd) {
@@ -120,8 +119,8 @@ public class SysGroupController extends BaseController {
         return new Result(userOfGroup);
     }
 
-    @ControllerLog(doAction = "分页获取除用户组拥有的用户及用户组未拥有用户")
-    @ApiOperation(value = "分页获取除用户组拥有的用户及用户组未拥有用户",
+    @ControllerLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
+    @ApiOperation(value = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findOtherUserByPage")
     @RequiresPermissions("/system/sysGroup/findOtherUserByPage")

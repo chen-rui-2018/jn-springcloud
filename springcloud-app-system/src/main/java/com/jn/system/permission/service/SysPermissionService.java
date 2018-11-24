@@ -54,7 +54,7 @@ public interface SysPermissionService {
     void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd,User user);
 
     /**
-     * 条件分页获取未拥有的角色信息
+     * 获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息
      *
      * @param sysPermissionRolePage
      * @return
@@ -62,7 +62,7 @@ public interface SysPermissionService {
     PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage);
 
     /**
-     * 获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息
+     * 获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息
      *
      * @param sysPermissionFileGroupPage
      * @return
@@ -77,7 +77,7 @@ public interface SysPermissionService {
     void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd, User user);
 
     /**
-     * 获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息
+     * 获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息
      *
      * @param sysPermissionMenuPage
      * @return
@@ -85,7 +85,7 @@ public interface SysPermissionService {
     PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage);
 
     /**
-     * 获取权限已经具有的功能信息及条件分页获取未拥有的功能信息
+     * 获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息
      *
      * @param sysPermissionResourcePage
      * @return

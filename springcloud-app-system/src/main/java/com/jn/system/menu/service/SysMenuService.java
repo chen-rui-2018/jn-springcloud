@@ -27,15 +27,15 @@ public interface SysMenuService {
     void updateSysMenuById(SysMenu sysMenu);
 
     /**
-     * 批量删除菜单（逻辑删除）
+     * 逻辑删除菜单
      *
-     * @param menuIds
+     * @param menuId
      * @return
      */
-    void deleteSysMenuById(String[] menuIds);
+    void deleteSysMenuById(String menuIds);
 
     /**
-     * 查询所有菜单信息,返回属性结构
+     * 查询所有菜单信息,返回树形结构
      *
      * @return
      */
@@ -57,14 +57,14 @@ public interface SysMenuService {
     void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user);
 
     /**
-     * 菜单添加目录或子目录
+     * 菜单添加目录菜单
      *
      * @param sysMenuAdd
      */
     void addMenuDir(SysMenuAdd sysMenuAdd, User user);
 
     /**
-     * 菜单目录下面添加子菜单
+     * 目录菜单下面添加子菜单
      *
      * @param sysMenuAdd
      */

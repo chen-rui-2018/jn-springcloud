@@ -59,7 +59,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/selectByPrimaryKey")
     @ApiOperation(value = "根据主键获取权限信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectByPrimaryKey")
-    private Result selectByPrimaryKey(String id) {
+    public Result selectByPrimaryKey(String id) {
         SysPermission sysPermission = sysPermissionService.selectByPrimaryKey(id);
         return new Result(sysPermission);
     }
@@ -95,18 +95,18 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息")
+    @ControllerLog(doAction = "获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息")
     @RequiresPermissions("/system/sysPermission/findRoleOfPermission")
-    @ApiOperation(value = "获取权限已经具有的角色信息及条件分页获取未拥有的角色信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findRoleOfPermission")
     public Result findRoleOfPermission(@Validated @RequestBody SysPermissionRolePage sysPermissionRolePage) {
         PaginationData data = sysPermissionService.findRoleOfPermission(sysPermissionRolePage);
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息")
+    @ControllerLog(doAction = "获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息")
     @RequiresPermissions("/system/sysPermission/findFileGroupOfPermission")
-    @ApiOperation(value = "获取除权限已经具有的文件组信息及条件分页获取未拥有的文件组信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findFileGroupOfPermission")
     public Result findFileGroupOfPermission(@Validated @RequestBody SysPermissionFileGroupPage sysPermissionFileGroupPage) {
         PaginationData data = sysPermissionService.findFileGroupOfPermission(sysPermissionFileGroupPage);
@@ -125,9 +125,9 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息")
+    @ControllerLog(doAction = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息")
     @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
-    @ApiOperation(value = "获取权限已经具有的菜单信息及条件分页查询未拥有的菜单信息",
+    @ApiOperation(value = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findMenuOfPermission")
     public Result findMenuOfPermission(@Validated @RequestBody SysPermissionMenuPage sysPermissionMenuPage) {
@@ -135,9 +135,9 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息")
+    @ControllerLog(doAction = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息")
     @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
-    @ApiOperation(value = "获取权限已经具有的功能信息及条件分页获取未拥有的功能信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findResourcesOfPermission")
     public Result findResourcesOfPermission(@Validated @RequestBody SysPermissionResourcePage sysPermissionResourcePage) {
         PaginationData data = sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);

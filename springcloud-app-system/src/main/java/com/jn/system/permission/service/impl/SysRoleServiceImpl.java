@@ -51,7 +51,7 @@ import java.util.UUID;
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
 
-    private Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
     @Resource
     private SysRoleMapper sysRoleMapper;
     @Resource
@@ -94,7 +94,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         //判断角色名称是否已经存在
         List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            logger.info("[角色权限] 新增角色失败，该角色名称已存在！,roleName: {}", role.getRoleName());
+            logger.warn("[角色权限] 新增角色失败，该角色名称已存在！,roleName: {}", role.getRoleName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysRole tbSysRole = new TbSysRole();
@@ -137,7 +137,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            logger.info("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", role.getRoleName(), role.getId());
+            logger.warn("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", role.getRoleName(), role.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysRole tbSysRole = new TbSysRole();
@@ -314,13 +314,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     /**
-     * 查询角色具有的用户信息及条件分页获取为拥有用户信息
+     * 查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息
      *
      * @param sysRoleUserPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "查询角色具有的用户信息及条件分页获取为拥有用户信息")
+    @ServiceLog(doAction = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息")
     public PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
         //根据角色id获取角色已经拥有的用户信息
         List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
@@ -335,13 +335,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     /**
-     * 查询角色具有的用户组信息及条件分页获取为拥有用户组信息
+     * 查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息
      *
      * @param sysRoleUserGroupPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息")
+    @ServiceLog(doAction = "查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息")
     public PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
         //获取角色已经拥有的用户组信息
         List<SysGroup> userGroupOfRoleList = sysGroupRoleMapper.findUserGroupByRoleId(sysRoleUserGroupPage.getRoleId());
@@ -355,7 +355,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     /**
-     * 查询角色具有的权限信息及条件分页获取为拥有权限信息
+     * 查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息
      *
      * @param sysRolePermissionPage
      * @return

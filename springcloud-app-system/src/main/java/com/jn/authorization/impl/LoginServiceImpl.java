@@ -33,11 +33,11 @@ public class LoginServiceImpl implements LoginService {
             UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
             userShiro.login(token);
         } catch (UnknownAccountException e) {
-            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_ACCOUNT, e.getCause());
+            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_ACCOUNT);
         } catch (DisabledAccountException e) {
-            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE, e.getCause());
+            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE);
         } catch (IncorrectCredentialsException e) {
-            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_PASSWORD, e.getCause());
+            throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_PASSWORD);
         }
     }
 

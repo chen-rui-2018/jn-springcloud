@@ -1,6 +1,10 @@
 {
   "pages": [
-    "page/minibase/index",
+    "page/minibase/index/index",
+    "page/minibase/logs/logs",
+    "page/minibase/list/list",
+    "page/minibase/operation/operation",
+
     "page/component/index",
     "page/component/pages/view/view",
     "page/component/pages/scroll-view/scroll-view",

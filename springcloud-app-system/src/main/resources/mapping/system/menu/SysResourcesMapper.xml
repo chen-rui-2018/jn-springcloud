@@ -178,4 +178,23 @@
         and t.`status` = '1' and tt.id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <select id="getResourcesById" resultType="com.jn.system.menu.model.SysResources" parameterType="java.lang.String">
+        SELECT id,resources_name as resourcesName,resources_url as resourcesUrl,
+        menu_id as menuId,create_time as createTime,`status`
+        FROM tb_sys_resources WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
+
+    <select id="getResourcesByMenuId" resultType="com.jn.system.menu.model.SysResources" parameterType="java.lang.String">
+        SELECT
+        id,
+        resources_name as resourcesName,
+        resources_url as resourcesUrl,
+        menu_id as menuId,
+        create_time as createTime,
+        `status`
+        FROM tb_sys_resources
+        WHERE menu_id = #{id,jdbcType=VARCHAR}
+        AND `status` = '1'
+    </select>
+
 </mapper>

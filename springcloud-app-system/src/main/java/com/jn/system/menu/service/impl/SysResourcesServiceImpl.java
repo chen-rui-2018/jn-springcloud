@@ -100,6 +100,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
+        //判断修改信息是否存在
+        SysResources sysResources1 = sysResourcesMapper.getResourcesById(sysResources.getId());
+        if (sysResources1 == null){
+            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", sysResources.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(sysResources.getResourcesName());

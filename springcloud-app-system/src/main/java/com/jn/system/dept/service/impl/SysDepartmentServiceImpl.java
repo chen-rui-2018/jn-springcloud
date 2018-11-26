@@ -2,7 +2,9 @@ package com.jn.system.dept.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -119,6 +121,12 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @ServiceLog(doAction = "修改部门信息")
     @Transactional(rollbackFor = Exception.class)
     public void update(SysDepartment sysDepartment) {
+        //判断数据库中是否存在被修改数据
+        SysDepartment sysDepartment1 = sysDepartmentMapper.getDepartmentById(sysDepartment.getId());
+        if (sysDepartment1 == null){
+            logger.warn("[部门] 部门修改失败,修改信息不存在,departmentId: {}", sysDepartment.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysDepartment tbSysDepartment = new TbSysDepartment();
         BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
         TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();

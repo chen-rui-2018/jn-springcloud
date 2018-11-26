@@ -29,7 +29,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  **/
-@Api(tags = "用户管理及用户授权")
+@Api(tags = "用户管理")
 @RestController
 @RequestMapping("/system/sysUser")
 public class SysUserController extends BaseController {
@@ -79,6 +79,7 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "更新用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateSysUser")
     public Result updateSysUser(@Validated @RequestBody SysUser sysUser) {
+        Assert.notNull(sysUser.getId(),"用户id不能为空");
         sysUserService.updateSysUser(sysUser);
         return new Result();
     }

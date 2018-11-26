@@ -41,7 +41,7 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysMenu/list")
     public Result list() {
-        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuListBySearchKey();
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuList();
         return new Result(menuTreeVOList);
     }
 

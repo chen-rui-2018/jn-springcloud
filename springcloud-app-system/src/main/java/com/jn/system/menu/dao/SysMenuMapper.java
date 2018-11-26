@@ -1,6 +1,7 @@
 package com.jn.system.menu.dao;
 
 
+import com.jn.system.menu.model.SysMenu;
 import com.jn.system.menu.model.SysMenuPage;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.menu.vo.SysMenuVO;
@@ -63,4 +64,11 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuTreeVO> findMenuByParentId(String value);
+
+    /**
+     * 根据菜单id获取菜单信息
+     * @param id
+     * @return
+     */
+    SysMenu getMenuById(String id);
 }

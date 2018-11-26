@@ -19,6 +19,7 @@
         from tb_sys_department
         where parent_id = '1'
         and `status` = '1'
+        ORDER BY create_time ASC
     </select>
 
     <select id="findChildrenDepartment" parameterType="java.lang.String"
@@ -35,7 +36,8 @@
             department_name
             from tb_sys_department
             where parent_id = #{parentId,jdbcType=VARCHAR}
-            and `status` = '1') tt
+            and `status` = '1'
+            ORDER BY create_time ASC) tt
             where
             t.id = tt.parent_id
             and `status` = '1'
@@ -49,5 +51,10 @@
             where parent_id = #{parentId,jdbcType=VARCHAR}
             and department_name = #{departmentName,jdbcType=VARCHAR}
             and `status` = '1' LIMIT 1
+    </select>
+
+    <select id="getDepartmentById" resultType="com.jn.system.dept.model.SysDepartment" parameterType="java.lang.String">
+          SELECT id,department_name as departmentName,parent_id as parentId,`status`
+          FROM `tb_sys_department` where id = #{id,jdbcType=VARCHAR} and `status` != '-1';
     </select>
 </mapper>

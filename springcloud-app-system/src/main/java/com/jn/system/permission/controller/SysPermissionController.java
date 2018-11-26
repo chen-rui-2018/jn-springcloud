@@ -7,6 +7,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.*;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysPermissionService;
+import com.jn.system.permission.vo.SysMenuResourcesVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -174,6 +175,27 @@ public class SysPermissionController extends BaseController {
     public Result checkPermissionName(String permissionName) {
         String result = sysPermissionService.checkPermissionName(permissionName);
         return new Result(result);
+    }
+
+    @ControllerLog(doAction = "权限授权功能,获取菜单及功能信息")
+    @RequiresPermissions("/system/sysPermission/getMenuAndResources")
+    @ApiOperation(value = "权限授权功能,获取菜单及功能信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getMenuAndResources")
+    public Result getMenuAndResources(String permissionId){
+        SysMenuResourcesVO sysMenuResourcesVO = sysPermissionService.getMenuAndResources(permissionId);
+        return new Result(sysMenuResourcesVO);
+    }
+
+    @ControllerLog(doAction = "权限授权菜单及功能信息")
+    @RequiresPermissions("/system/sysPermission/addMenuAndResources")
+    @ApiOperation(value = "权限授权菜单及功能信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/addMenuAndResourcesToPermission")
+    public Result addMenuAndResourcesToPermission(
+            @Validated @RequestBody SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.addMenuAndResourcesToPermission(sysPermissionMenuResourcesAdd,user);
+        return new Result();
     }
 
 }

@@ -21,7 +21,7 @@ public class SysDepartmentCheckName implements Serializable {
     @NotBlank(message = "部门父级id不能为空")
     @ApiModelProperty("父级id")
     private String parentId;
-    @ApiModelProperty("部门名称数组")
+    @ApiModelProperty("部门名称")
     private String departmentName;
 
     public SysDepartmentCheckName() {

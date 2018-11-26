@@ -43,4 +43,11 @@ public interface SysDepartmentMapper {
      * @return
      */
     SysDepartment checkDepartmentName(SysDepartmentCheckName sysDepartmentCheckName);
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    SysDepartment getDepartmentById(String id);
 }

@@ -129,6 +129,12 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "修改岗位信息")
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
+        //判断被修改信息是否存在
+        SysPost sysPost1 = sysPostMapper.getPostById(sysPost.getId());
+        if (sysPost1 == null){
+            logger.warn("[部门] 岗位修改失败,修改信息不存在,postId: {}", sysPost.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(sysPost.getPostName());

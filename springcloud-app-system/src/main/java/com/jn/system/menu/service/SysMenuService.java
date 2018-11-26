@@ -29,7 +29,7 @@ public interface SysMenuService {
     /**
      * 逻辑删除菜单
      *
-     * @param menuId
+     * @param menuIds
      * @return
      */
     void deleteSysMenuById(String menuIds);
@@ -39,7 +39,7 @@ public interface SysMenuService {
      *
      * @return
      */
-    List<SysMenuTreeVO> selectMenuListBySearchKey();
+    List<SysMenuTreeVO> selectMenuList();
 
     /**
      * 根据id获取菜单详情

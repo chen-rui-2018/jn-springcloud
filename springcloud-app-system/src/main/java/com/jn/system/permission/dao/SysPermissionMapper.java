@@ -31,4 +31,11 @@ public interface SysPermissionMapper {
      * @param ids
      */
     void deletePermissionBranch(String[] ids);
+
+    /**
+     * 根据id获取权限信息
+     * @param id
+     * @return
+     */
+    SysPermission getPermissionById(String id);
 }

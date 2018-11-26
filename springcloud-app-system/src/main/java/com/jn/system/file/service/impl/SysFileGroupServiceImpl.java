@@ -97,6 +97,12 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
+        //判断修改信息是否存在
+        SysFileGroup sysFileGroup1 = sysFileGroupMapper.getFileGroupById(sysFileGroup.getId());
+        if (sysFileGroup1 == null){
+            logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());

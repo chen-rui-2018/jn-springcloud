@@ -147,6 +147,13 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
+        //判断用户组信息是否存在
+        SysGroup sysGroup1 = sysGroupMapper.getUserGroupById(sysGroup.getId());
+        if (sysGroup1 == null){
+            logger.warn("[用户组] 用户组修改失败,修改信息不存在,groupId: {}", sysGroup.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
+        //判断名称是否已经存在
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
         TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
         criteria.andGroupNameEqualTo(sysGroup.getGroupName());
@@ -157,6 +164,7 @@ public class SysGroupServiceImpl implements SysGroupService {
             logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        //修改用户组信息
         sysGroupMapper.updateSysGroup(sysGroup);
         logger.info("[用户组] 更新用户组信息成功！,groupName: {}", sysGroup.getGroupName());
     }

@@ -152,6 +152,13 @@ public class SysUserServiceImpl implements SysUserService {
     @ServiceLog(doAction = "更新用户")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
+        //判断修改信息是否存在
+        SysUser sysUser1 = sysUserMapper.getUserById(sysUser.getId());
+        if (sysUser1 == null){
+            logger.warn("[用户] 用户修改失败,修改信息不存在,userId: {}", sysUser.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
+        //判断账号信息是否被修改
         if (StringUtils.isNotBlank(sysUser.getAccount())) {
             TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
             if (!sysUser.getAccount().equals(tbSysUser.getAccount())) {
@@ -159,9 +166,11 @@ public class SysUserServiceImpl implements SysUserService {
                 throw new JnSpringCloudException(SysUserExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
+        //判断是否修改密码
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
         }
+        //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();

@@ -1,8 +1,9 @@
 package com.jn.system.permission.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.*;
+import com.jn.system.permission.vo.SysMenuResourcesVO;
 
 /**
  * @author： shaobao
@@ -51,7 +52,7 @@ public interface SysPermissionService {
      *
      * @param sysPermissionRolesAdd
      */
-    void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd,User user);
+    void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd, User user);
 
     /**
      * 获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息
@@ -112,5 +113,21 @@ public interface SysPermissionService {
      *
      * @param sysPermissionMenuAdd
      */
-    void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd,User user);
+    void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd, User user);
+
+    /**
+     * 权限授权功能,获取菜单及功能信息
+     *
+     * @param permissionId
+     * @return
+     */
+    SysMenuResourcesVO getMenuAndResources(String permissionId);
+
+    /**
+     * 权限授权菜单及功能信息
+     *
+     * @param sysPermissionMenuResourcesAdd
+     * @param user
+     */
+    void addMenuAndResourcesToPermission(SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd, User user);
 }

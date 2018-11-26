@@ -73,4 +73,18 @@ public interface SysResourcesMapper {
      * @param menuIds
      */
     void deleteBy(List<String> menuIds);
+
+    /**
+     * 根据id获取功能信息
+     * @param id
+     * @return
+     */
+    SysResources getResourcesById(String id);
+
+    /**
+     * 根据菜单id获取页面功能信息
+     * @param id
+     * @return
+     */
+    List<SysResources> getResourcesByMenuId(String id);
 }

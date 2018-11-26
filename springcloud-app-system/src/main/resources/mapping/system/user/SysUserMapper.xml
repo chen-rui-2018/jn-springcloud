@@ -221,6 +221,11 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <select id="getUserById" resultType="com.jn.system.user.model.SysUser" parameterType="java.lang.String">
+        SELECT id,account,`name`,phone,email,create_time as createTime,`status`
+        FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
+
     <update id="deleteUserBranch" parameterType="java.lang.String">
         update tb_sys_user set status=-1
         where id in

@@ -15,10 +15,7 @@ import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.entity.TbSysMenu;
 import com.jn.system.menu.entity.TbSysMenuCriteria;
 import com.jn.system.menu.entity.TbSysResources;
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuAdd;
-import com.jn.system.menu.model.SysMenuNameCheck;
-import com.jn.system.menu.model.SysMenuResourcesAdd;
+import com.jn.system.menu.model.*;
 import com.jn.system.model.*;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
@@ -68,6 +65,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     @ServiceLog(doAction = "更新菜单信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysMenuById(SysMenu sysMenu) {
+        //判断修改信息是否存在
+        SysMenu sysMenu1 = sysMenuMapper.getMenuById(sysMenu.getId());
+        if (sysMenu1 == null){
+            logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", sysMenu.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
         criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getCode());
@@ -128,21 +131,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
-     * 查询所有菜单,返回树形结构
-     *
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "查询所有菜单,返回树形结构")
-    public List<SysMenuTreeVO> selectMenuListBySearchKey() {
-        //先查询等级为1的菜单信息
-        List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.findMenuByLevelOne();
-        findChildMenuList(menuTreeVOList);
-        return menuTreeVOList;
-
-    }
-
-    /**
      * 递归查询菜单子菜单
      *
      * @param menuTreeVOList
@@ -163,6 +151,52 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
         }
     }
+
+    /**
+     * 查询所有菜单,返回树形结构
+     *
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "查询所有菜单,返回树形结构")
+    public List<SysMenuTreeVO> selectMenuList() {
+        //先查询等级为1的菜单信息
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.findMenuByLevelOne();
+        getChildMenuAndResourcesList(menuTreeVOList);
+        return menuTreeVOList;
+
+    }
+
+    /**
+     * 递归查询菜单子菜单及菜单页面功能信息
+     *
+     * @param menuTreeVOList
+     */
+    public void getChildMenuAndResourcesList(List<SysMenuTreeVO> menuTreeVOList) {
+        for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
+            //判断菜单项是否是目录菜单,是递归获取子菜单信息
+            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
+                //以菜单id作为父id,去获取菜单子集
+                List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getId());
+                sysMenuTreeVO.setChildren(childrenMenuList);
+                if (childrenMenuList.size() == 0) {
+                    //设置子菜单为空
+                    sysMenuTreeVO.setChildren(null);
+                    continue;
+                } else {
+                    getChildMenuAndResourcesList(childrenMenuList);
+                }
+            }else{
+                //不是目录菜单,查询菜单的页面功能信息
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+                List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
+                sysMenuTreeVO.setResourcesList(resourcesList);
+            }
+        }
+    }
+
+
 
     /**
      * 根据id获取菜单详情

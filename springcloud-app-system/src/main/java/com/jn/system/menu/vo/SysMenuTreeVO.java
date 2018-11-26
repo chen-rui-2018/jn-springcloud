@@ -1,5 +1,6 @@
 package com.jn.system.menu.vo;
 
+import com.jn.system.menu.model.SysResources;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,8 @@ public class SysMenuTreeVO implements Serializable {
     private String id;
     @ApiModelProperty("菜单名称")
     private String label ;
+    @ApiModelProperty("用于显示菜单图标")
+    private String icon;
     @ApiModelProperty("菜单路径")
     private String menuUrl;
     @ApiModelProperty("排序,菜单目录,默认排序为0,子菜单排序从1,往后开始递增")
@@ -35,14 +38,18 @@ public class SysMenuTreeVO implements Serializable {
     private String createTime;
     @ApiModelProperty("子菜单的集合")
     private List<SysMenuTreeVO> children;
+    @ApiModelProperty("菜单功能的集合")
+    private List<SysResources> resourcesList;
 
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String menuUrl, String sort, String isDir, String parentId,
-                         String parentName, String createTime, List<SysMenuTreeVO> children) {
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String sort,
+                         String isDir, String parentId, String parentName, String createTime,
+                         List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
+        this.icon = icon;
         this.menuUrl = menuUrl;
         this.sort = sort;
         this.isDir = isDir;
@@ -50,6 +57,7 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
         this.createTime = createTime;
         this.children = children;
+        this.resourcesList = resourcesList;
     }
 
     public String getId() {
@@ -66,6 +74,14 @@ public class SysMenuTreeVO implements Serializable {
 
     public void setLabel(String label) {
         this.label = label;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getMenuUrl() {
@@ -124,12 +140,20 @@ public class SysMenuTreeVO implements Serializable {
         this.children = children;
     }
 
+    public List<SysResources> getResourcesList() {
+        return resourcesList;
+    }
+
+    public void setResourcesList(List<SysResources> resourcesList) {
+        this.resourcesList = resourcesList;
+    }
 
     @Override
     public String toString() {
         return "SysMenuTreeVO{" +
                 "id='" + id + '\'' +
                 ", label='" + label + '\'' +
+                ", icon='" + icon + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
                 ", sort='" + sort + '\'' +
                 ", isDir='" + isDir + '\'' +
@@ -137,6 +161,7 @@ public class SysMenuTreeVO implements Serializable {
                 ", parentName='" + parentName + '\'' +
                 ", createTime='" + createTime + '\'' +
                 ", children=" + children +
+                ", resourcesList=" + resourcesList +
                 '}';
     }
 }

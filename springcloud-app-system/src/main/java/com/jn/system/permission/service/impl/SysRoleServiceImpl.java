@@ -130,6 +130,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     @ServiceLog(doAction = "更新角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRole(SysRoleUpdate role) {
+        //判断修改信息是否存在
+        SysRole sysRole = sysRoleMapper.getRoleById(role.getId());
+        if (sysRole == null){
+            logger.warn("[角色] 角色修改失败,修改信息不存在,roleId: {}", role.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
+        //判断名称是否已经存在
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(role.getRoleName());
@@ -140,6 +147,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             logger.warn("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", role.getRoleName(), role.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        //修改角色信息
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);

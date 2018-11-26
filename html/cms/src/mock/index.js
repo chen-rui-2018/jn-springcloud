@@ -3,6 +3,7 @@ import loginAPI from './login'
 import articleAPI from './article'
 import remoteSearchAPI from './remoteSearch'
 import transactionAPI from './transaction'
+import permissionAPI from './permissionUser'
 
 // Mock.setup({
 //   timeout: '350-600'
@@ -25,5 +26,9 @@ Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
 
 // 账单相关
 Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
+
+//  权限管理页面-用户管理
+Mock.mock(/\/permission\/user/, 'get', permissionAPI.getList)
+Mock.mock(/\/permission\/userCreate/, 'post', permissionAPI.userCreateData)
 
 export default Mock

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.file.dao.SysFileGroupFileMapper">
+    <resultMap id="BaseResultMap" type="com.jn.system.file.model.SysFileGroupFile">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="file_group_id" jdbcType="VARCHAR" property="fileGroupId"/>
+        <result column="file_id" jdbcType="VARCHAR" property="fileId"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+    </resultMap>
+
+    <update id="deleteByIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByFileIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where file_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteByFileGroupIds" parameterType="java.lang.String">
+        update tb_sys_file_group_file set status=-1
+        where file_group_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!--批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+
+        insert into tb_sys_file_group_file (id, file_group_id,file_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.fileGroupId,jdbcType=VARCHAR},
+            #{item.fileId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <!-- 根据用户获取文件组 -->
+    <select id="getUserFileGroupById" parameterType="java.lang.String"
+            resultMap="BaseResultMap">
+        select
+        sfg.id "id"
+        ,sfg.file_group_name "fileGroupName"
+        ,sfg.file_group_describe "fileGroupDescribe"
+        ,sfg.creator "creator"
+        ,sfg.create_time "createTime"
+        ,sfg.status "status"
+        from
+        tb_sys_user su
+        ,tb_sys_user_role sur
+        ,tb_sys_role sr
+        ,tb_sys_permission sp
+        ,tb_sys_role_permission srp
+        ,tb_sys_file_group sfg
+        ,tb_sys_permission_files spf
+        where su.id = sur.user_id
+        and sr.id = sur.role_id
+        and sr.id = srp.role_id
+        and sp.id = srp.permission_id
+        and sp.id = spf.permission_id
+        and sfg.id = spf.file_group_id
+        and su.status =1
+        and sur.status =1
+        and sr.status = 1
+        and sp.status = 1
+        and srp.status = 1
+        and sfg.status = 1
+        and spf.status = 1
+        and su.id = #{userId,jdbcType=VARCHAR})
+    </select>
+
+    <!-- 获取用户是否拥有该文件的下载权限 -->
+    <select id="getUserFilePermission" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        select
+        sf.file_url
+        from
+        tb_sys_user su
+        ,tb_sys_user_role sur
+        ,tb_sys_role sr
+        ,tb_sys_permission sp
+        ,tb_sys_role_permission srp
+        ,tb_sys_file_group sfg
+        ,tb_sys_permission_files spf
+        ,tb_sys_file sf
+        ,tb_sys_file_group_file sfgf
+        where su.id = sur.user_id
+        and sr.id = sur.role_id
+        and sr.id = srp.role_id
+        and sp.id = srp.permission_id
+        and sp.id = spf.permission_id
+        and sfg.id = spf.file_group_id
+        and sf.id = sfgf.file_id
+        and sfg.id = sfgf.file_group_id
+        and su.status =1
+        and sur.status =1
+        and sr.status = 1
+        and sp.status = 1
+        and srp.status = 1
+        and sfg.status = 1
+        and spf.status = 1
+        and sf.status = 1
+        and sfgf.status = 1
+        and su.id = #{0}
+        and sf.file_url = #{1}
+    </select>
+
+    <select id="findFileGroupNameByFileId" parameterType="java.lang.String"
+            resultType="com.jn.system.file.model.SysFileGroup">
+        select
+        t.id,
+        t.file_group_name as fileGroupName
+        from tb_sys_file_group t,tb_sys_file_group_file tt
+        where t.id = tt.file_group_id and t.`status` = '1'
+        and tt.`status` = '1' and tt.file_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <resultMap id="QueryResultMap" type="com.jn.system.file.vo.SysFileVO">
+        <id column="id" jdbcType="VARCHAR" property="fileId"/>
+        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <collection property="fileGroupNameList" javaType="java.util.List"
+                    ofType="com.jn.system.file.model.SysFileGroup">
+            <id column="file_group_id" property="id" jdbcType="VARCHAR"/>
+            <result column="file_group_name" property="fileGroupName" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="findFileByFileGroupName" parameterType="com.jn.system.file.model.SysFilePage"
+            resultMap="QueryResultMap">
+        select DISTINCT
+        t3.id,
+        t3.file_name,
+        t3.file_url,
+        t3.create_time,
+        t3.`status`,
+        t2.file_group_id,
+        t2.file_group_name
+        from tb_sys_file_group_file t1
+        inner join (select id as file_group_id,file_group_name from tb_sys_file_group
+        where file_group_name like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
+        and `status` = '1') t2
+        on t1.file_group_id = t2.file_group_id
+        inner join (select id ,file_name,file_url,create_time,`status`
+        from tb_sys_file where `status` != '-1') t3 on t1.file_id = t3.id
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
+                and t3.file_name like CONCAT('%', #{fileName,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                and t3.`status`=#{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+</mapper>

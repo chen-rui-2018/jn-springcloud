@@ -22,14 +22,14 @@ public class SysDepartmentAdd implements Serializable {
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("部门名称数组")
-    private String[] departmentNames;
+    private String departmentName;
 
     public SysDepartmentAdd() {
     }
 
-    public SysDepartmentAdd(String parentId, String[] departmentNames) {
+    public SysDepartmentAdd(String parentId, String departmentName) {
         this.parentId = parentId;
-        this.departmentNames = departmentNames;
+        this.departmentName = departmentName;
     }
 
     public String getParentId() {
@@ -40,19 +40,19 @@ public class SysDepartmentAdd implements Serializable {
         this.parentId = parentId;
     }
 
-    public String[] getDepartmentNames() {
-        return departmentNames;
+    public String getDepartmentName() {
+        return departmentName;
     }
 
-    public void setDepartmentNames(String[] departmentNames) {
-        this.departmentNames = departmentNames;
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     @Override
     public String toString() {
         return "SysDepartmentAdd{" +
                 "parentId='" + parentId + '\'' +
-                ", departmentNames=" + Arrays.toString(departmentNames) +
+                ", departmentName='" + departmentName + '\'' +
                 '}';
     }
 }

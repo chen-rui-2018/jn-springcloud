@@ -77,6 +77,10 @@
         </if>
         ORDER BY create_time desc
     </select>
+    <select id="getRoleById" resultType="com.jn.system.permission.model.SysRole" parameterType="java.lang.String">
+        SELECT id,role_name as roleName,create_time as createTime,`status`
+        FROM tb_sys_role WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
 
     <update id="deleteBy" parameterType="java.lang.String">
         update tb_sys_role set status=-1

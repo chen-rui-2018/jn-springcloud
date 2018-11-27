@@ -83,7 +83,7 @@ public interface SysRoleService {
     String checkRoleName(String roleName);
 
     /**
-     * 查询角色具有的用户信息及条件分页获取为拥有用户信息
+     * 查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息
      *
      * @param sysRoleUserPage
      * @return
@@ -91,7 +91,7 @@ public interface SysRoleService {
     PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
 
     /**
-     * 查询角色具有的用户组信息及条件分页获取为拥有用户组信息
+     * 查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息
      *
      * @param sysRoleUserGroupPage
      * @return
@@ -99,7 +99,7 @@ public interface SysRoleService {
     PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
 
     /**
-     * 查询角色具有的权限信息及条件分页获取为拥有权限信息
+     * 查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息
      *
      * @param sysRolePermissionPage
      * @return

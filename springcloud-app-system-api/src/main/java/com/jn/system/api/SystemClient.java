@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.MenuResources;
+import com.jn.system.model.UserLogin;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,14 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @FeignClient("springcloud-app-system")
 public interface SystemClient {
+
+    /**
+     * 用户登录
+     * @param u
+     * @return
+     */
+    @RequestMapping(value = "/api/system/login", method = RequestMethod.POST)
+    Result<User> login(@RequestBody UserLogin u);
 
     /**
      * 获取用户信息

@@ -465,62 +465,52 @@ public class TbSysMenuCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andSortEqualTo(String value) {
+        public Criteria andSortEqualTo(Integer value) {
             addCriterion("sort =", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortNotEqualTo(String value) {
+        public Criteria andSortNotEqualTo(Integer value) {
             addCriterion("sort <>", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortGreaterThan(String value) {
+        public Criteria andSortGreaterThan(Integer value) {
             addCriterion("sort >", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortGreaterThanOrEqualTo(String value) {
+        public Criteria andSortGreaterThanOrEqualTo(Integer value) {
             addCriterion("sort >=", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortLessThan(String value) {
+        public Criteria andSortLessThan(Integer value) {
             addCriterion("sort <", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortLessThanOrEqualTo(String value) {
+        public Criteria andSortLessThanOrEqualTo(Integer value) {
             addCriterion("sort <=", value, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortLike(String value) {
-            addCriterion("sort like", value, "sort");
-            return (Criteria) this;
-        }
-
-        public Criteria andSortNotLike(String value) {
-            addCriterion("sort not like", value, "sort");
-            return (Criteria) this;
-        }
-
-        public Criteria andSortIn(List<String> values) {
+        public Criteria andSortIn(List<Integer> values) {
             addCriterion("sort in", values, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortNotIn(List<String> values) {
+        public Criteria andSortNotIn(List<Integer> values) {
             addCriterion("sort not in", values, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortBetween(String value1, String value2) {
+        public Criteria andSortBetween(Integer value1, Integer value2) {
             addCriterion("sort between", value1, value2, "sort");
             return (Criteria) this;
         }
 
-        public Criteria andSortNotBetween(String value1, String value2) {
+        public Criteria andSortNotBetween(Integer value1, Integer value2) {
             addCriterion("sort not between", value1, value2, "sort");
             return (Criteria) this;
         }

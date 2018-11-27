@@ -73,7 +73,7 @@ public interface SysFileGroupFileMapper {
      * @param fileId
      * @return
      */
-    List<SysFileGroup> findFileGroupNameByFileId(String fileId);
+    List<String> findFileGroupNameByFileId(String fileId);
 
     /**
      * 按文件组查询文件信息

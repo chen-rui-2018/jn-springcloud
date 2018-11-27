@@ -1,10 +1,10 @@
 package com.jn.system.menu.dao;
 
 
-import com.jn.system.model.MenuResources;
 import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.vo.SysResourcesVO;
+import com.jn.system.model.MenuResources;
 
 import java.util.List;
 import java.util.Set;
@@ -61,8 +61,30 @@ public interface SysResourcesMapper {
 
     /**
      * 根据功能id获取菜单名称
+     *
      * @param resourcesId
      * @return
      */
     List<String> findMenuNameByResourcesId(String resourcesId);
+
+    /**
+     * 删除菜单及子菜单的功能信息
+     *
+     * @param menuIds
+     */
+    void deleteBy(List<String> menuIds);
+
+    /**
+     * 根据id获取功能信息
+     * @param id
+     * @return
+     */
+    SysResources getResourcesById(String id);
+
+    /**
+     * 根据菜单id获取页面功能信息
+     * @param id
+     * @return
+     */
+    List<SysResources> getResourcesByMenuId(String id);
 }

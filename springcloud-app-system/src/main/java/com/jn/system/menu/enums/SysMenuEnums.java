@@ -14,6 +14,9 @@ public enum SysMenuEnums implements CodeAndMsg {
     MENU_ISDIR("1","菜单是目录菜单"),
     MENU_ISNOTDIR("0","菜单不是目录菜单"),
 
+    MENU_DIR_ICON("fa fa-folder-o","菜单是目录菜单时对应图标"),
+    MENU_NOTDIR_ICON("fa fa-file-text-o","菜单是子菜单是对应图标"),
+
     MENU_ISDIR_SORT("0","菜单是目录菜单时,排序默认为0"),
     FIRST_SORT("1","一级排序");
 

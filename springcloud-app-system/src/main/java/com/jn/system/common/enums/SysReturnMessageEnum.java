@@ -20,10 +20,11 @@ public enum SysReturnMessageEnum implements CodeAndMsg {
 
     private String message;
 
-    SysReturnMessageEnum(String key, String message) {
-        this.code = key;
+    SysReturnMessageEnum(String code, String message) {
+        this.code = code;
         this.message = message;
     }
+
     /**
      * 获取code
      *

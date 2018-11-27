@@ -132,8 +132,8 @@ public class SysRoleController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "查询角色具有的用户信息及条件分页获取为拥有用户信息")
-    @ApiOperation(value = "查询角色具有的用户信息及条件分页获取为拥有用户信息",
+    @ControllerLog(doAction = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息")
+    @ApiOperation(value = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findUserOfRoleAndOtherUser")
     @RequiresPermissions("/system/sysRole/findUserOfRoleAndOtherUser")
@@ -142,8 +142,8 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息")
-    @ApiOperation(value = "查询角色具有的用户组信息及条件分页获取为拥有用户组信息",
+    @ControllerLog(doAction = "查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息")
+    @ApiOperation(value = "查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findUserGroupOfRoleAndOtherGroup")
     @RequiresPermissions("/system/sysRole/findUserGroupOfRoleAndOtherGroup")
@@ -152,8 +152,8 @@ public class SysRoleController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "查询角色具有的权限信息及条件分页获取为拥有权限信息")
-    @ApiOperation(value = "查询角色具有的权限信息及条件分页获取为拥有权限信息",
+    @ControllerLog(doAction = "查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息")
+    @ApiOperation(value = "查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission")
     @RequiresPermissions("/system/sysRole/findPermissionOrRole")

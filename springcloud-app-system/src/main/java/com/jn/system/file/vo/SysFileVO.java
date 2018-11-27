@@ -59,19 +59,21 @@ public class SysFileVO implements Serializable {
     /**
      * 状态描述
      */
+    @ApiModelProperty("状态描述")
     private String statusDesc;
 
     /**
      * 文件所属文件组
      */
-    private List<SysFileGroup> fileGroupNameList;
+    @ApiModelProperty("文件所属文件组")
+    private List<String> fileGroupNameList;
 
 
     public SysFileVO() {
     }
 
     public SysFileVO(String fileId, String fileName, String fileUrl, String creator, Date createTime,
-                     String status, String statusDesc, List<SysFileGroup> fileGroupNameList) {
+                     String status, String statusDesc, List<String> fileGroupNameList) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
@@ -138,11 +140,11 @@ public class SysFileVO implements Serializable {
         this.statusDesc = statusDesc;
     }
 
-    public List<SysFileGroup> getFileGroupNameList() {
+    public List<String> getFileGroupNameList() {
         return fileGroupNameList;
     }
 
-    public void setFileGroupNameList(List<SysFileGroup> fileGroupNameList) {
+    public void setFileGroupNameList(List<String> fileGroupNameList) {
         this.fileGroupNameList = fileGroupNameList;
     }
 

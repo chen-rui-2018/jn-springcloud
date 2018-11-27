@@ -25,7 +25,7 @@ export function checkRoleName(query) {
     data: param
   })
 }
-// 编辑岗位
+// 编辑角色
 export function editRoleList(query) {
   return request({
     url: 'system/sysRole/update',
@@ -33,7 +33,7 @@ export function editRoleList(query) {
     data: query
   })
 }
-// 删除岗位
+// 删除角色
 export function deleteRoleById(query) {
   const param = new URLSearchParams()
   param.append('ids', query)

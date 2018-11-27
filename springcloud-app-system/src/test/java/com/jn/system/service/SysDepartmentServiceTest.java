@@ -23,12 +23,6 @@ public class SysDepartmentServiceTest {
     public SysDepartmentService sysDepartmentService;
 
     @Test
-    public void findSysDepartmentAll() {
-        List<SysDepartment> data = sysDepartmentService.findSysDepartmentAll();
-        logger.info("测试结果:{}", data.toString());
-    }
-
-    @Test
     public void selectByPrimaryKeyTest() {
         SysDepartment data = sysDepartmentService.selectByPrimaryKey("d001");
         logger.info("测试结果:{}", data.toString());
@@ -36,8 +30,8 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void deleteTest() {
-        String[] ids = {"d001", "d002"};
-        sysDepartmentService.delete(ids);
+        String id =  "d002";
+        sysDepartmentService.delete(id);
     }
 
     @Test

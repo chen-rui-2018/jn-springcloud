@@ -39,7 +39,7 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="300" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="400" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -67,7 +67,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -134,6 +134,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       authorityPage: 1,
       authorityRows: 10,
       authorityData: [],
@@ -168,11 +169,6 @@ export default {
       userId: [],
       roleList: [],
       userData: [],
-      groupManagementdata: [
-        { key: 1, label: '用户组1' },
-        { key: 2, label: '用户组2' },
-        { key: 3, label: '用户组3' }
-      ],
       roledialogFormVisible: false,
       userdialogVisible: false,
       roleform: {
@@ -318,23 +314,6 @@ export default {
         this.userGroup.userGroupLoading = false
       })
     },
-
-    // 提交授权后的用户
-    // submitUserdata() {
-    //   updataUser({ roleId: this.roleId, userId: this.userId }).then(res => {
-    //     console.log(res)
-    //     if (res.data.code === '0000') {
-    //       this.$message({
-    //         message: '授权成功',
-    //         type: 'success'
-    //       })
-    //     } else {
-    //       this.$message.error('授权失败')
-    //     }
-    //     this.userdialogVisible = false
-    //     this.initList()
-    //   })
-    // },
     getUser() {
       getAllUserInfo({
         roleId: this.roleId,
@@ -361,12 +340,6 @@ export default {
         this.userLoading = false
       })
     },
-    // 取消更改
-    // cancelUpdata() {
-    //   this.userdialogVisible = false
-    //   updataUser({ roleId: this.roleId, userId: Array.from(new Set(this.oldOwnUser)) })
-    //   this.oldOwnUser = []
-    // },
     // 授权用户分页功能
     handleUserCurrentChange(val) {
       if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
@@ -402,6 +375,7 @@ export default {
       this.userPage = 1
       this.userLoading = true
       this.roleId = id
+      console.log(id)
       this.userdialogVisible = true
       this.getUser()
     },
@@ -432,13 +406,17 @@ export default {
     },
     // 编辑角色
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
           this.roledialogFormVisible = false
           // // 调用接口发送请求
           editRoleList(this.roleform).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -450,21 +428,22 @@ export default {
             // 刷新页面显示
             this.initList()
           })
-        } else {
-          this.$message({
-            message: '修改数据不正确',
-            type: 'error'
-          })
         }
       })
     },
     // 新增角色
     createUserData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 1000)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
           this.roledialogFormVisible = false
           // 调用接口发送请求
+          console.log(this.roleform)
           addRoleList(this.roleform).then(res => {
             console.log(res)
             if (res.data.code === '0000') {
@@ -479,11 +458,6 @@ export default {
             this.$refs['roleform'].resetFields()
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '请输入数据',
-            type: 'error'
           })
         }
       })
@@ -503,6 +477,7 @@ export default {
     },
     // 搜素功能实现
     handleFilter() {
+      this.listQuery.page = 1
       this.initList()
     },
     // 删除角色功能实现
@@ -577,5 +552,8 @@ export default {
   .el-transfer-panel .el-transfer-panel__footer {
     position: relative;
   }
+}
+.el-pagination{
+  margin-top:10px;
 }
 </style>

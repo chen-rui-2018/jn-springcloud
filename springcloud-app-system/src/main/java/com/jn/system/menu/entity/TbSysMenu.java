@@ -14,7 +14,7 @@ public class TbSysMenu implements Serializable {
 
     private String isDir;
 
-    private String sort;
+    private Integer sort;
 
     private String creator;
 
@@ -66,12 +66,12 @@ public class TbSysMenu implements Serializable {
         this.isDir = isDir == null ? null : isDir.trim();
     }
 
-    public String getSort() {
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
-        this.sort = sort == null ? null : sort.trim();
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public String getCreator() {

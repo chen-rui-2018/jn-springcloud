@@ -32,7 +32,7 @@ public interface SystemClient {
      * @return
      */
     @RequestMapping(value = "/api/system/login", method = RequestMethod.POST)
-    Result<User> login(@RequestBody UserLogin u);
+    Result<String> login(@RequestBody UserLogin u);
 
     /**
      * 获取用户信息

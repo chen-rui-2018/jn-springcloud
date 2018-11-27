@@ -1,24 +1,23 @@
 package com.jn.system.menu.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.system.dept.vo.SysDepartmentVO;
-import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.menu.dao.SysMenuMapper;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
-import com.jn.system.menu.dao.SysResourcesMapper;
-import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.menu.dao.SysMenuMapper;
+import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.entity.TbSysMenu;
 import com.jn.system.menu.entity.TbSysMenuCriteria;
 import com.jn.system.menu.entity.TbSysResources;
+import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.menu.model.*;
-import com.jn.system.model.*;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
+import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionMenuMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -67,13 +66,13 @@ public class SysMenuServiceImpl implements SysMenuService {
     public void updateSysMenuById(SysMenu sysMenu) {
         //判断修改信息是否存在
         SysMenu sysMenu1 = sysMenuMapper.getMenuById(sysMenu.getId());
-        if (sysMenu1 == null){
+        if (sysMenu1 == null) {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", sysMenu.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getCode());
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         criteria.andParentIdEqualTo(sysMenu.getParentId());
         criteria.andMenuNameEqualTo(sysMenu.getMenuName());
         criteria.andIdNotEqualTo(sysMenu.getId());
@@ -101,10 +100,10 @@ public class SysMenuServiceImpl implements SysMenuService {
         List<String> menuIds = new ArrayList<String>();
         //查询菜单子菜单
         List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(menuId);
-        if (childrenMenuList != null && childrenMenuList.size() > 0){
+        if (childrenMenuList != null && childrenMenuList.size() > 0) {
             //递归获取子部门下面的部门信息
             findChildMenuList(childrenMenuList);
-            getChildMenuId(menuIds,childrenMenuList);
+            getChildMenuId(menuIds, childrenMenuList);
         }
         menuIds.add(menuId);
         logger.info("[菜单] 删除菜单及子菜单信息，menuIds:{}", menuIds.toString());
@@ -118,14 +117,15 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 递归获取子部门id
+     *
      * @param menuIds
      * @param childrenMenuList
      */
     private void getChildMenuId(List<String> menuIds, List<SysMenuTreeVO> childrenMenuList) {
-        for (SysMenuTreeVO sysMenuTreeVO:childrenMenuList) {
+        for (SysMenuTreeVO sysMenuTreeVO : childrenMenuList) {
             menuIds.add(sysMenuTreeVO.getId());
-            if (sysMenuTreeVO.getChildren() != null){
-                getChildMenuId(menuIds,sysMenuTreeVO.getChildren());
+            if (sysMenuTreeVO.getChildren() != null) {
+                getChildMenuId(menuIds, sysMenuTreeVO.getChildren());
             }
         }
     }
@@ -187,7 +187,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 } else {
                     getChildMenuAndResourcesList(childrenMenuList);
                 }
-            }else{
+            } else {
                 //不是目录菜单,查询菜单的页面功能信息
                 sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
                 List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
@@ -195,7 +195,6 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
         }
     }
-
 
 
     /**
@@ -209,7 +208,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     public SysMenu selectMenuById(String id) {
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(id);
         SysMenu sysMenu = new SysMenu();
-        if (tbSysMenu != null){
+        if (tbSysMenu != null) {
             BeanUtils.copyProperties(tbSysMenu, sysMenu);
         }
         return sysMenu;
@@ -281,6 +280,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 校验菜单名称
+     *
      * @param menuName
      * @param parentId
      * @return
@@ -288,7 +288,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     private List<TbSysMenu> checkMenusName(String menuName, String parentId) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andSortNotEqualTo(SysStatusEnums.DELETED.getCode());
+        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         criteria.andParentIdEqualTo(parentId);
         criteria.andMenuNameEqualTo(menuName);
         return tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
@@ -302,7 +302,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @ServiceLog(doAction = "菜单添加目录菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void addMenuDir(SysMenuAdd sysMenuAdd,User user) {
+    public void addMenuDir(SysMenuAdd sysMenuAdd, User user) {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
         TbSysMenu tbSysMenu = new TbSysMenu();
@@ -317,16 +317,10 @@ public class SysMenuServiceImpl implements SysMenuService {
                 tbSysMenu.setLevel(String.valueOf(Integer.parseInt(parentMenuLevl) + 1));
             }
         }
-        tbSysMenu.setId(UUID.randomUUID().toString());
-        tbSysMenu.setCreateTime(new Date());
-        tbSysMenu.setCreator(user.getId());
-        tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
-        tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
-        tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setSort(SysMenuEnums.MENU_ISDIR_SORT.getCode());
+        //设置菜单排序
+        menuSetSort(sysMenuAdd, tbSysMenu);
         tbSysMenu.setIsDir(SysMenuEnums.MENU_ISDIR.getCode());
-        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        tbSysMenuMapper.insertSelective(tbSysMenu);
+        createTbSysMenu(sysMenuAdd, user, tbSysMenu);
         logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
     }
 
@@ -338,7 +332,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @ServiceLog(doAction = "目录菜单下面添加子菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void addMenu(SysMenuAdd sysMenuAdd,User user) {
+    public void addMenu(SysMenuAdd sysMenuAdd, User user) {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
         TbSysMenu tbSysMenu = new TbSysMenu();
@@ -347,24 +341,47 @@ public class SysMenuServiceImpl implements SysMenuService {
         if (StringUtils.isNotBlank(parentMenuLevel)) {
             tbSysMenu.setLevel((Integer.parseInt(parentMenuLevel) + 1) + "");
         }
+        //设置菜单排序
+        menuSetSort(sysMenuAdd, tbSysMenu);
+        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
+        createTbSysMenu(sysMenuAdd, user, tbSysMenu);
+        logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
+    }
+
+    /**
+     * 设置菜单排序
+     *
+     * @param sysMenuAdd
+     * @param tbSysMenu
+     */
+    private void menuSetSort(SysMenuAdd sysMenuAdd, TbSysMenu tbSysMenu) {
         //查询文件菜单中子菜单sort的最大值
-        String sortMax = sysMenuMapper.findSortByMenuId(sysMenuAdd.getParentId());
-        if (StringUtils.isNotBlank(sortMax)) {
-            tbSysMenu.setSort((Integer.parseInt(sortMax) + 1) + "");
+        Integer sortMax = sysMenuMapper.findSortByMenuId(sysMenuAdd.getParentId());
+        if (sortMax != null) {
+            tbSysMenu.setSort(sortMax + 1);
         } else {
             //如果查询不到数据,直接设置排序为1
-            tbSysMenu.setSort(SysMenuEnums.FIRST_SORT.getCode());
+            tbSysMenu.setSort(Integer.parseInt(SysMenuEnums.FIRST_SORT.getCode()));
         }
+    }
+
+    /**
+     * 为tbSysMenu属性赋值
+     *
+     * @param sysMenuAdd
+     * @param user
+     * @param tbSysMenu
+     */
+    private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
+        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
         tbSysMenu.setId(UUID.randomUUID().toString());
         tbSysMenu.setCreateTime(new Date());
         tbSysMenu.setCreator(user.getId());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysMenuMapper.insertSelective(tbSysMenu);
-        logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
     }
 
     /**
@@ -383,5 +400,21 @@ public class SysMenuServiceImpl implements SysMenuService {
             }
         }
         return SysReturnMessageEnum.SUCCESS.getMessage();
+    }
+
+    /**
+     * 批量对菜单排序进行更新
+     *
+     * @param sysMenus
+     */
+    @Override
+    @ServiceLog(doAction = "批量对菜单排序进行更新")
+    @Transactional(rollbackFor = Exception.class)
+    public void updateBatch(SysMenus sysMenus) {
+        List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();
+        //如果集合长度大于0,进行批量更新
+        if (sysMenuSortList != null && sysMenuSortList.size() > 0 ){
+            sysMenuMapper.updateBatch(sysMenuSortList);
+        }
     }
 }

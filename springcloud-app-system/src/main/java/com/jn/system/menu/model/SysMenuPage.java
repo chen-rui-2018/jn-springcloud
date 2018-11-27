@@ -53,7 +53,7 @@ public class SysMenuPage extends Page implements Serializable {
      * 排序
      */
     @ApiModelProperty(value = "排序" )
-    private String sort;
+    private Integer sort;
 
     /**
      * 创建人
@@ -81,7 +81,7 @@ public class SysMenuPage extends Page implements Serializable {
     }
 
     public SysMenuPage(String id, String menuName, String menuUrl, String parentId, String isDir,
-                       String sort, String creator, Date createTime, String status, String level) {
+                       Integer sort, String creator, Date createTime, String status, String level) {
         this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
@@ -99,32 +99,7 @@ public class SysMenuPage extends Page implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
-
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.id = id;
     }
 
     public String getMenuName() {
@@ -151,20 +126,44 @@ public class SysMenuPage extends Page implements Serializable {
         this.parentId = parentId;
     }
 
-    public String getSort() {
-        return sort;
-    }
-
-    public void setSort(String sort) {
-        this.sort = sort;
-    }
-
     public String getIsDir() {
         return isDir;
     }
 
     public void setIsDir(String isDir) {
         this.isDir = isDir;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getLevel() {
@@ -183,7 +182,7 @@ public class SysMenuPage extends Page implements Serializable {
                 ", menuUrl='" + menuUrl + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", isDir='" + isDir + '\'' +
-                ", sort='" + sort + '\'' +
+                ", sort=" + sort +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +

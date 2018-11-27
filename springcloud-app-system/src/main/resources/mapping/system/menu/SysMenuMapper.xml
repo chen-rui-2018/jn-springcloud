@@ -41,6 +41,31 @@
         </foreach>
     </update>
 
+    <update id="updateBatch" parameterType="java.util.List">
+            update tb_sys_menu
+            <trim prefix="set" suffixOverrides=",">
+                <trim prefix="menu_name =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then #{item.menuName}
+                    </foreach>
+                </trim>
+                <trim prefix="menu_url =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then #{item.menuUrl}
+                    </foreach>
+                </trim>
+                <trim prefix="sort =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then #{item.sort}
+                    </foreach>
+                </trim>
+            </trim>
+            where id in
+            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+                #{item.id,jdbcType=BIGINT}
+            </foreach>
+    </update>
+
     <select id="selectMenuListBySearchKey" parameterType="com.jn.system.menu.model.SysMenuPage"
             resultMap="MenuResourcesResultMap">
         SELECT
@@ -85,7 +110,7 @@
         SELECT level FROM `tb_sys_menu` where id = #{id,jdbcType=VARCHAR} LIMIT 1
     </select>
 
-    <select id="findSortByMenuId" parameterType="java.lang.String" resultType="java.lang.String">
+    <select id="findSortByMenuId" parameterType="java.lang.String" resultType="java.lang.Integer">
         SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} LIMIT 1
     </select>
 
@@ -101,7 +126,7 @@
         from tb_sys_menu
         where `level` = '1'
         and `status` = '1'
-        ORDER BY create_time ASC
+        ORDER BY `sort` ASC
     </select>
 
     <select id="findMenuByParentId" parameterType="java.lang.String" resultType="com.jn.system.menu.vo.SysMenuTreeVO">
@@ -126,7 +151,7 @@
         from tb_sys_menu
         where parent_id = #{id,jdbcType=VARCHAR}
         and `status` = '1'
-        ORDER BY create_time ASC) tt
+        ORDER BY sort ASC) tt
         where t.id = tt.parent_id
         and `status` = '1'
     </select>

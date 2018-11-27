@@ -1,11 +1,8 @@
 package com.jn.system.menu.service;
 
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuAdd;
-import com.jn.system.menu.model.SysMenuNameCheck;
-import com.jn.system.menu.model.SysMenuResourcesAdd;
-import com.jn.system.model.*;
+import com.jn.system.menu.model.*;
 import com.jn.system.menu.vo.SysMenuTreeVO;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -68,7 +65,7 @@ public interface SysMenuService {
      *
      * @param sysMenuAdd
      */
-    void addMenu(SysMenuAdd sysMenuAdd,User user);
+    void addMenu(SysMenuAdd sysMenuAdd, User user);
 
     /**
      * 校验菜单名称
@@ -77,4 +74,11 @@ public interface SysMenuService {
      * @return
      */
     String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
+
+    /**
+     * 批量对菜单排序进行更新
+     *
+     * @param sysMenus
+     */
+    void updateBatch(SysMenus sysMenus);
 }

@@ -3,10 +3,7 @@ package com.jn.system.menu.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuAdd;
-import com.jn.system.menu.model.SysMenuNameCheck;
-import com.jn.system.menu.model.SysMenuResourcesAdd;
+import com.jn.system.menu.model.*;
 import com.jn.system.model.*;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
@@ -120,5 +117,14 @@ public class SysMenuController extends BaseController {
     public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck){
         String result = sysMenuService.checkMenuName(sysMenuNameCheck);
         return new Result(result);
+    }
+
+    @ControllerLog(doAction = "批量对菜单排序进行更新")
+    @ApiOperation(value = "批量对菜单排序进行更新", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/updateBatch")
+    @RequiresPermissions("/system/sysMenu/updateBatch")
+    public Result updateBatch(@Validated @RequestBody SysMenus sysMenus){
+        sysMenuService.updateBatch(sysMenus);
+        return new Result();
     }
 }

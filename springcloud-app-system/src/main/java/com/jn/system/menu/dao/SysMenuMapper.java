@@ -3,8 +3,10 @@ package com.jn.system.menu.dao;
 
 import com.jn.system.menu.model.SysMenu;
 import com.jn.system.menu.model.SysMenuPage;
+import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.menu.vo.SysMenuVO;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 
@@ -48,7 +50,7 @@ public interface SysMenuMapper {
      * @param parentId
      * @return
      */
-    String findSortByMenuId(String parentId);
+    Integer findSortByMenuId(String parentId);
 
     /**
      * 等级为1的菜单信息
@@ -67,8 +69,16 @@ public interface SysMenuMapper {
 
     /**
      * 根据菜单id获取菜单信息
+     *
      * @param id
      * @return
      */
     SysMenu getMenuById(String id);
+
+    /**
+     * 批量对菜单排序进行更新
+     *
+     * @param sysMenuSortList
+     */
+    void updateBatch(List<SysMenuUpdate> sysMenuSortList);
 }

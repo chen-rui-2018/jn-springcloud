@@ -3,20 +3,23 @@ package com.jn.system.menu.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 
 /**
- * 用于菜单添加
- *
+ * 用于菜单更新
  * @author： shaobao
- * @date： Created on 2018/11/19 10:34
+ * @date： Created on 2018/11/26 20:17
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysMenuAdd",description = "用于菜单添加")
-public class SysMenuAdd implements Serializable {
-    private static final long serialVersionUID = -5712604602274725873L;
+@ApiModel(value = "SysMenuUpdate",description = "用于菜单更新")
+public class SysMenuUpdate implements Serializable {
+    private static final long serialVersionUID = -6561531226340259780L;
+    @ApiModelProperty(value = "id" )
+    @NotBlank(message = "菜单名称不能为空！")
+    private String id;
 
     @ApiModelProperty(value = "菜单名称" )
     @NotBlank(message = "菜单名称不能为空！")
@@ -26,17 +29,25 @@ public class SysMenuAdd implements Serializable {
     @NotBlank(message = "菜单路径不能为空！")
     private String menuUrl;
 
-    @ApiModelProperty(value = "父级菜单ID" )
-    @NotBlank(message = "父级菜单ID不能为空！")
-    private String parentId;
+    @ApiModelProperty(value = "排序" )
+    private Integer sort;
 
-    public SysMenuAdd() {
+    public SysMenuUpdate() {
     }
 
-    public SysMenuAdd(String menuName, String menuUrl, String parentId) {
+    public SysMenuUpdate(String id, String menuName, String menuUrl, Integer sort) {
+        this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
-        this.parentId = parentId;
+        this.sort = sort;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMenuName() {
@@ -55,20 +66,21 @@ public class SysMenuAdd implements Serializable {
         this.menuUrl = menuUrl;
     }
 
-    public String getParentId() {
-        return parentId;
+    public Integer getSort() {
+        return sort;
     }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     @Override
     public String toString() {
-        return "SysMenuAdd{" +
-                "menuName='" + menuName + '\'' +
+        return "SysMenuUpdate{" +
+                "id='" + id + '\'' +
+                ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
-                ", parentId='" + parentId + '\'' +
+                ", sort=" + sort +
                 '}';
     }
 }

@@ -75,4 +75,11 @@ public interface SysGroupMapper {
      * @param groupIds
      */
     void deleteGroupBranch(String[] groupIds);
+
+    /**
+     * 根据id获取用户组信息
+     * @param id
+     * @return
+     */
+    SysGroup getUserGroupById(String id);
 }

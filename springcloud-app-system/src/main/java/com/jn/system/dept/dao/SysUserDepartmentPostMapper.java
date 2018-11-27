@@ -58,7 +58,7 @@ public interface SysUserDepartmentPostMapper {
      *
      * @param ids
      */
-    void deleteDepartmentBranch(String[] ids);
+    void deleteDepartmentBranch(List<String> ids);
 
     /**
      * 批量删除用户对应的信息

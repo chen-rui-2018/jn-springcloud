@@ -206,7 +206,10 @@ export default {
       })
     },
     // 查询功能
-    handleFilter() { this.initList() },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.initList()
+    },
     selectePostStatus(value) {
       this.listQuery.status = value
     },

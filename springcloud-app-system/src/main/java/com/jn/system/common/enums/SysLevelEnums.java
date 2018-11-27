@@ -23,23 +23,14 @@ public enum SysLevelEnums implements CodeAndMsg {
         this.message = message;
     }
 
-    /**
-     * 获取code
-     *
-     * @return
-     */
     @Override
     public String getCode() {
-        return null;
+        return code;
     }
 
-    /**
-     * 获取信息
-     *
-     * @return
-     */
+
     @Override
     public String getMessage() {
-        return null;
+        return message;
     }
 }

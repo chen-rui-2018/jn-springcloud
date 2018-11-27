@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentAdd;
+import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.model.SysDepartmentPage;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
@@ -39,15 +40,6 @@ public class SysDepartmentController extends BaseController {
     @Autowired
     private SysDepartmentService sysDepartmentService;
 
-    @ControllerLog(doAction = "查询所有部门")
-    @RequiresPermissions("/system/sysDepartment/findSysDepartmentAll")
-    @ApiOperation(value = "查询所有部门", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/findSysDepartmentAll")
-    public Result findSysDepartmentAll() {
-        List<SysDepartment> sysDepartmentAll = sysDepartmentService.findSysDepartmentAll();
-        return new Result(sysDepartmentAll);
-    }
-
     @ControllerLog(doAction = "根据部门id获取部门信息")
     @RequiresPermissions("/system/sysDepartment/selectByPrimaryKey")
     @ApiOperation(value = "根据部门id获取部门信息", httpMethod = "POST", response = Result.class)
@@ -61,9 +53,8 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/delete")
     @ApiOperation(value = "逻辑删除部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/delete")
-    public Result delete(String[] departmentIds) {
-        Assert.noNullElements(departmentIds, "部门id不能为空");
-        sysDepartmentService.delete(departmentIds);
+    public Result delete(String departmentId) {
+        sysDepartmentService.delete(departmentId);
         return new Result();
     }
 
@@ -77,9 +68,9 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "批量添加部门")
+    @ControllerLog(doAction = "添加部门")
     @RequiresPermissions("/system/sysDepartment/add")
-    @ApiOperation(value = "批量添加部门", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "添加部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/add")
     public Result add(@Validated @RequestBody SysDepartmentAdd sysDepartmentAdd) {
         Assert.notNull(sysDepartmentAdd.getParentId(), "父级id不能为空");
@@ -89,22 +80,13 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "条件分页查询部门信息")
-    @RequiresPermissions("/system/sysDepartment/list")
-    @ApiOperation(value = "条件分页查询部门信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/list")
-    public Result list(@Validated @RequestBody SysDepartmentPage sysDepartmentPage) {
-        PaginationData data = sysDepartmentService.findSysDepartmentByPage(sysDepartmentPage);
-        return new Result(data);
-    }
-
     @ControllerLog(doAction = "校验部门名称是否存在")
     @RequiresPermissions("/system/sysDepartment/checkDepartmentName")
     @ApiOperation(value = "校验部门名称是否存在,fail表示部门名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
     @RequestMapping("/checkDepartmentName")
-    public Result checkDepartmentName(String departmentName) {
-        String result = sysDepartmentService.checkDepartmentName(departmentName);
+    public Result checkDepartmentName(@Validated @RequestBody SysDepartmentCheckName sysDepartmentCheckName) {
+        String result = sysDepartmentService.checkDepartmentName(sysDepartmentCheckName);
         return new Result(result);
     }
 

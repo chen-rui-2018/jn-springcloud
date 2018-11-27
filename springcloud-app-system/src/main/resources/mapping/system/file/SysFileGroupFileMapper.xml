@@ -119,9 +119,8 @@
     </select>
 
     <select id="findFileGroupNameByFileId" parameterType="java.lang.String"
-            resultType="com.jn.system.file.model.SysFileGroup">
+            resultType="java.lang.String">
         select
-        t.id,
         t.file_group_name as fileGroupName
         from tb_sys_file_group t,tb_sys_file_group_file tt
         where t.id = tt.file_group_id and t.`status` = '1'
@@ -135,9 +134,8 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="status" jdbcType="VARCHAR" property="status"/>
         <collection property="fileGroupNameList" javaType="java.util.List"
-                    ofType="com.jn.system.file.model.SysFileGroup">
-            <id column="file_group_id" property="id" jdbcType="VARCHAR"/>
-            <result column="file_group_name" property="fileGroupName" jdbcType="VARCHAR"/>
+                    ofType="java.lang.String">
+            <result column="file_group_name"  jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -149,7 +147,6 @@
         t3.file_url,
         t3.create_time,
         t3.`status`,
-        t2.file_group_id,
         t2.file_group_name
         from tb_sys_file_group_file t1
         inner join (select id as file_group_id,file_group_name from tb_sys_file_group

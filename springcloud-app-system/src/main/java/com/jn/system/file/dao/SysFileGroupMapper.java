@@ -1,6 +1,7 @@
 package com.jn.system.file.dao;
 
 
+import com.jn.system.file.model.SysFileGroup;
 
 /**
  * 文件组mapper
@@ -20,4 +21,10 @@ public interface SysFileGroupMapper {
     int deleteByIds(String[] id);
 
 
+    /**
+     * 判断文件组是否存在
+     * @param id
+     * @return
+     */
+    SysFileGroup getFileGroupById(String id);
 }

@@ -46,7 +46,7 @@ import java.util.UUID;
  */
 @Service
 public class SysGroupServiceImpl implements SysGroupService {
-    private Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysRoleServiceImpl.class);
 
     @Autowired
     private SysGroupMapper sysGroupMapper;
@@ -97,7 +97,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         //判断用户组名是否存在
         List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
         if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.info("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+            logger.warn("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         //为用户组设置信息
@@ -147,6 +147,13 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
+        //判断用户组信息是否存在
+        SysGroup sysGroup1 = sysGroupMapper.getUserGroupById(sysGroup.getId());
+        if (sysGroup1 == null){
+            logger.warn("[用户组] 用户组修改失败,修改信息不存在,groupId: {}", sysGroup.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
+        //判断名称是否已经存在
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
         TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
         criteria.andGroupNameEqualTo(sysGroup.getGroupName());
@@ -154,9 +161,10 @@ public class SysGroupServiceImpl implements SysGroupService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
         if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.info("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+            logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        //修改用户组信息
         sysGroupMapper.updateSysGroup(sysGroup);
         logger.info("[用户组] 更新用户组信息成功！,groupName: {}", sysGroup.getGroupName());
     }
@@ -181,7 +189,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      * @return
      */
     @Override
-    @ServiceLog(doAction = "根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息")
+    @ServiceLog(doAction = "查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息")
     public PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
         List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
@@ -216,7 +224,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
             sysGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            sysGroupRole.setCreateTime(new Date());
             sysGroupRole.setCreator(user.getId());
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
@@ -243,7 +250,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     }
 
     /**
-     * 分页获取除用户组具有的用户以外的用户
+     * 查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息
      *
      * @param sysGroupUserPage
      * @return
@@ -285,7 +292,6 @@ public class SysGroupServiceImpl implements SysGroupService {
         for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();
             sysGroupUser.setId(UUID.randomUUID().toString());
-            sysGroupUser.setCreateTime(new Date());
             sysGroupUser.setCreator(user.getId());
             sysGroupUser.setStatus(sysGroupUserAdd.getStatus());
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());

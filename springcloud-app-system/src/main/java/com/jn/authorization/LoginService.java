@@ -1,7 +1,6 @@
 package com.jn.authorization;
 
-import com.jn.system.user.model.UserLogin;
-
+import com.jn.system.model.UserLogin;
 
 /**
  * 用户登录

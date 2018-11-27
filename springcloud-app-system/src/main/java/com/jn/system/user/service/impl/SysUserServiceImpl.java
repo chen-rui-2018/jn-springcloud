@@ -52,7 +52,7 @@ import java.util.UUID;
 @Service
 public class SysUserServiceImpl implements SysUserService {
 
-    private Logger logger = LoggerFactory.getLogger(SysUserServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
     @Autowired
     private SysUserMapper sysUserMapper;
@@ -83,7 +83,7 @@ public class SysUserServiceImpl implements SysUserService {
         //根据用户名查询用户账号是否存在
         List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
-            logger.info("[用户] 新增用户失败，该用户账号已存在！,account: {}", sysUser.getAccount());
+            logger.warn("[用户] 新增用户失败，该用户账号已存在！,account: {}", sysUser.getAccount());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysUser.setId(UUID.randomUUID().toString());
@@ -111,13 +111,13 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 分页查询用户,返回用户信息及部门岗位
+     * 条件分页查询用户
      *
      * @param sysUserPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "分页查询用户,返回用户信息及部门岗位")
+    @ServiceLog(doAction = "条件分页查询用户")
     public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
@@ -127,7 +127,7 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 删除用户
+     * 逻辑删除用户
      *
      * @param ids
      */
@@ -152,15 +152,25 @@ public class SysUserServiceImpl implements SysUserService {
     @ServiceLog(doAction = "更新用户")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
+        //判断修改信息是否存在
+        SysUser sysUser1 = sysUserMapper.getUserById(sysUser.getId());
+        if (sysUser1 == null){
+            logger.warn("[用户] 用户修改失败,修改信息不存在,userId: {}", sysUser.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
+        //判断账号信息是否被修改
         if (StringUtils.isNotBlank(sysUser.getAccount())) {
             TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
             if (!sysUser.getAccount().equals(tbSysUser.getAccount())) {
+                logger.warn("[用户] 更新用户失败，该用户账号已存在！,account: {}", sysUser.getAccount());
                 throw new JnSpringCloudException(SysUserExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
+        //判断是否修改密码
         if (StringUtils.isNotBlank(sysUser.getPassword())) {
             sysUser.setPassword(DigestUtils.md5Hex(sysUser.getPassword()));
         }
+        //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
@@ -171,13 +181,13 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 根据用户id获取用户已经存在的用户组及条件分页获取未拥有用户组
+     * 查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息
      *
      * @param sysUserGroupPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "根据用户id获取用户已经存在的用户组及条件分页获取未拥有用户组")
+    @ServiceLog(doAction = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息")
     public PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
         List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
@@ -208,7 +218,6 @@ public class SysUserServiceImpl implements SysUserService {
                 for (String groupId : groupIds) {
                     //设置用户用户组实体类
                     SysGroupUser sysGroupUser = new SysGroupUser();
-                    sysGroupUser.setCreateTime(new Date());
                     sysGroupUser.setCreator(user.getId());
                     sysGroupUser.setGroupId(groupId);
                     sysGroupUser.setUserId(userId);
@@ -311,7 +320,6 @@ public class SysUserServiceImpl implements SysUserService {
             int count = 0;
             for (SysDepartmentPost sysDepartmentPost : sysUserDepartmentPostAdd.getSysDepartmentPostList()) {
                 TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
-                sysUserDepartmentPost.setCreateTime(new Date());
                 sysUserDepartmentPost.setCreator(user.getId());
                 sysUserDepartmentPost.setId(UUID.randomUUID().toString());
                 sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
@@ -322,6 +330,7 @@ public class SysUserServiceImpl implements SysUserService {
                 if ("1".equals(sysDepartmentPost.getIsDefault())) {
                     count++;
                     if (count > 1) {
+                        logger.warn("[用户] 用户添加部门岗位失败,userId: {}", sysUserDepartmentPostAdd.getUserId());
                         throw new JnSpringCloudException(SysUserExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
                     }
                 }

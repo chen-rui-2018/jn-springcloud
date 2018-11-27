@@ -26,7 +26,7 @@ public interface SysUserService {
     void addSysUser(SysUser sysUser, User user);
 
     /**
-     * 查询用户
+     * 条件分页查询用户
      *
      * @param userSysUserPage
      * @return
@@ -34,7 +34,7 @@ public interface SysUserService {
     PaginationData findSysUserByPage(SysUserPage userSysUserPage);
 
     /**
-     * 删除用户
+     * 逻辑删除用户
      *
      * @param ids
      */
@@ -48,7 +48,7 @@ public interface SysUserService {
     void updateSysUser(SysUser sysUser);
 
     /**
-     * 根据用户id获取用户已经存在的用户组及其他用户组
+     * 查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息
      *
      * @param sysUserGroupPage
      * @return

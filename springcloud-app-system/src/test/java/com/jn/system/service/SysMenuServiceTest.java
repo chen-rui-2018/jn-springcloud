@@ -41,8 +41,8 @@ public class SysMenuServiceTest {
      */
     @Test
     public void deleteTest() {
-        String[] ids = {"87a240e8-d425-40d0-b09e-7204460b15c5"};
-        sysMenuService.deleteSysMenuById(ids);
+        String id = "87a240e8-d425-40d0-b09e-7204460b15c5";
+        sysMenuService.deleteSysMenuById(id);
     }
 
     /**

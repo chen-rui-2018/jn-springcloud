@@ -26,6 +26,11 @@
         </if>
         ORDER BY create_time desc
     </select>
+    <select id="getPermissionById" resultType="com.jn.system.permission.model.SysPermission"
+            parameterType="java.lang.String">
+            SELECT id,permission_name as permissionName,create_time as createTime,`status`
+            FROM tb_sys_permission WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
 
     <update id="deletePermissionBranch" parameterType="java.lang.String">
         update tb_sys_permission set status=-1

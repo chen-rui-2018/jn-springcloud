@@ -1,5 +1,6 @@
 package com.jn.server;
 
+import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.file.entity.TbSysFileGroup;
@@ -8,7 +9,9 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
+import com.jn.system.model.UserLogin;
 import com.jn.system.user.service.SysUserService;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,9 @@ public class SystemController extends BaseController {
     private static Logger logger = LoggerFactory.getLogger(SystemController.class);
 
     @Autowired
+    private LoginService loginService;
+
+    @Autowired
     private SysUserService sysUserService;
 
     @Autowired
@@ -40,6 +46,13 @@ public class SystemController extends BaseController {
 
     @Autowired
     private SysFileGroupService sysFileGroupService;
+
+    @ControllerLog(doAction = "用户登录")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Result<String> loginPost(@RequestBody @Validated UserLogin userLogin) {
+        loginService.login(userLogin);
+        return new Result(SecurityUtils.getSubject().getSession().getId());
+    }
 
     @ControllerLog(doAction = "获取用户")
     @RequestMapping(value = "/getUser", method = RequestMethod.POST)

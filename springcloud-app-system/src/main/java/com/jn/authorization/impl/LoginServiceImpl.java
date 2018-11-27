@@ -4,7 +4,7 @@ import com.jn.authorization.LoginService;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.user.model.UserLogin;
+import com.jn.system.model.UserLogin;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;

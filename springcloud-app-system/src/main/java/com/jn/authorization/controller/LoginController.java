@@ -4,7 +4,7 @@ import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.user.model.UserLogin;
+import com.jn.system.model.UserLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;

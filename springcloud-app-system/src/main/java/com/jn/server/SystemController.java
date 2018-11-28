@@ -10,6 +10,7 @@ import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
 import com.jn.system.model.UserLogin;
+import com.jn.system.model.UserNoPasswordLogin;
 import com.jn.system.user.service.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -50,7 +51,17 @@ public class SystemController extends BaseController {
     @ControllerLog(doAction = "用户登录")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<String> loginPost(@RequestBody @Validated UserLogin userLogin) {
-        loginService.login(userLogin);
+        loginService.login(userLogin, Boolean.FALSE);
+        return new Result(SecurityUtils.getSubject().getSession().getId());
+    }
+
+    @ControllerLog(doAction = "免密登录")
+    @RequestMapping(value = "/noPasswordLogin", method = RequestMethod.POST)
+    public Result<String> noPasswordLogin(@RequestBody @Validated UserNoPasswordLogin userNoPasswordLogin) {
+        UserLogin userLogin = new UserLogin();
+        userLogin.setAccount(userNoPasswordLogin.getAccount());
+        userLogin.setPassword("");
+        loginService.login(userLogin, Boolean.TRUE);
         return new Result(SecurityUtils.getSubject().getSession().getId());
     }
 

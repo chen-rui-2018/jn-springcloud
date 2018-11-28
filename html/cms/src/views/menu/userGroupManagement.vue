@@ -73,7 +73,7 @@
     </el-dialog>
     <!-- 弹出授权角色对话框 -->
     <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
-      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '权限拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户组拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
         <span slot="left-footer" size="small">
           <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
         </span>

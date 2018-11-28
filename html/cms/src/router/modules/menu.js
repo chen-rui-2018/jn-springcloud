@@ -56,6 +56,12 @@ const menuRouter = {
       meta: { title: '岗位管理', noCache: true }
     },
     {
+      path: 'menuManagement',
+      component: () => import('@/views/menu/menuManagement'),
+      name: 'menuManagement',
+      meta: { title: '菜单管理', noCache: true }
+    },
+    {
       path: 'fileManagement',
       component: () => import('@/views/menu/fileManagement'),
       name: 'fileManagement',

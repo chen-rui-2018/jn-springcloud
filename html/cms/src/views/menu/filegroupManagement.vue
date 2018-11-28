@@ -40,7 +40,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 新增文件组弹框 -->
     <el-dialog :visible.sync="fileGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form
@@ -246,7 +246,6 @@ export default {
     initList() {
       this.listLoading = true
       allFileGroupList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.fileGroupList = res.data.data.rows
           this.total = res.data.data.total
@@ -259,10 +258,12 @@ export default {
     // 改变每页的数据时触发
     handleSizeChange(val) {
       this.listQuery.rows = val
+      this.initList()
     },
     // 改变当前页码触发
     handleCurrentChange(val) {
       this.listQuery.page = val
+      this.initList()
     }
   }
 }

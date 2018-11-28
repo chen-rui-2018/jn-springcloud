@@ -24,18 +24,18 @@ export function updateDepartment(query) {
 }
 // 校验部门名称是否存在,success表示部门名可用,fail不可用
 export function checkDepartmentName(query) {
-  const param = new URLSearchParams()
-  param.append('departmentName', query)
+  // const param = new URLSearchParams()
+  // param.append('departmentName', query)
   return request({
     url: 'system/sysDepartment/checkDepartmentName',
     method: 'post',
-    data: param
+    data: query
   })
 }
 // 删除部门
 export function deleteDepartmentById(query) {
   const param = new URLSearchParams()
-  param.append('departmentIds', query)
+  param.append('departmentId', query)
   return request({
     url: 'system/sysDepartment/delete',
     method: 'post',

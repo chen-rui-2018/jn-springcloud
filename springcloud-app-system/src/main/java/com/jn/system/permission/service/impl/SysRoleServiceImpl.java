@@ -167,7 +167,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         sysRoleMapper.deleteBy(roleIds);
         userRoleService.deleteTbUserRoleByRoleIds(roleIds);
         rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
-        logger.info("[角色权限] 删除角色成功！,roleIds: {}", roleIds.toString());
+        logger.info("[角色权限] 删除角色成功！,roleIds: {}", Arrays.toString(roleIds));
     }
 
     /**

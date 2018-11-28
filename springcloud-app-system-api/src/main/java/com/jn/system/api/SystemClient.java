@@ -4,6 +4,7 @@ import com.jn.common.model.Result;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
 import com.jn.system.model.UserLogin;
+import com.jn.system.model.UserNoPasswordLogin;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,7 @@ public interface SystemClient {
      * @return
      */
     @RequestMapping(value = "/api/system/noPasswordLogin", method = RequestMethod.POST)
-    Result<String> noPasswordLogin(@RequestBody UserLogin u);
+    Result<String> noPasswordLogin(@RequestBody UserNoPasswordLogin u);
 
     /**
      * 获取用户信息

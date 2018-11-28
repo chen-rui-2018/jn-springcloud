@@ -649,10 +649,10 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.el-dialog {
-  width: 90%;
-  max-width: 400px;
-}
+// .el-dialog {
+//   width: 90%;
+//   max-width: 400px;
+// }
 .pagination-container {
   margin-top: 10px;
 }

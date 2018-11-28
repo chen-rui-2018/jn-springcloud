@@ -31,10 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 用户组service实现
@@ -134,7 +131,7 @@ public class SysGroupServiceImpl implements SysGroupService {
         sysGroupMapper.deleteGroupBranch(groupIds);
         sysGroupUserMapper.deleteGroupBranch(groupIds);
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", groupIds.toString());
+        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}",Arrays.toString(groupIds));
     }
 
     /**
@@ -228,12 +225,12 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("[用户组] 添加用户组授权角色，groupId:{},roleId:{}", groupIds.toString(),
+            logger.info("[用户组] 添加用户组授权角色，groupId:{},roleId:{}", Arrays.toString(groupIds),
                     roleId);
         }
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
-        logger.info("[用户组] 用户组授权角色成功，groupId:{}", groupIds.toString());
+        logger.info("[用户组] 用户组授权角色成功，groupId:{}", Arrays.toString(groupIds));
     }
 
     /**

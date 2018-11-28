@@ -9,7 +9,7 @@
           <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" style="width: 160px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
+          <el-select v-model="listQuery.status" style="width: 150px" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -81,6 +81,7 @@ export default {
     initList() {
       this.fileListLoading = true
       getFileList(this.listQuery).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total

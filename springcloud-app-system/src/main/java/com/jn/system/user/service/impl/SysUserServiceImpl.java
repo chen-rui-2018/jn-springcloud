@@ -36,10 +36,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 用户dao
@@ -139,7 +136,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPostMapper.deleteUserBranch(ids);
         sysUserRoleMapper.deleteUserBranch(ids);
         sysGroupUserMapper.deleteUserBranch(ids);
-        logger.info("[用户] 删除用户成功！，sysUserIds:{}", ids.toString());
+        logger.info("[用户] 删除用户成功！，sysUserIds:{}", Arrays.toString(ids));
 
     }
 

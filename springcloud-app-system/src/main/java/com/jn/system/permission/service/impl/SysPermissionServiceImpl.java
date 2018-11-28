@@ -29,10 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 权限服务层
@@ -182,7 +179,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         sysPermissionMenuMapper.deletePermissionBranch(ids);
         sysRolePermissionMapper.deletePermissionBranch(ids);
         sysPermissionResourcesMapper.deletePermissionBranch(ids);
-        logger.info("[权限] 批量逻辑删除权限信息成功！，sysPermissionIds:{}", ids.toString());
+        logger.info("[权限] 批量逻辑删除权限信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
     }
 
     /**
@@ -220,7 +217,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         sysRolePermissionMapper.addRoleToPermissionBranch(list);
         logger.info("[权限] 批量为权限添加角色信息成功！，sysPermissionId:{},roleIds:{}",
                 sysPermissionRolesAdd.getPermissionId()
-                , sysPermissionRolesAdd.getRoleIds().toString());
+                , Arrays.toString(sysPermissionRolesAdd.getRoleIds()));
     }
 
     /**
@@ -298,7 +295,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //为权限添加新的文件组
         sysPermissionFilesMapper.addFileGroupToPermission(list);
         logger.info("[权限] 批量为权限添加文件组信息成功！，sysPermissionId:{},roleIds:{}",
-                sysPermissionFileGroupAdd.getPermissionId(), sysPermissionFileGroupAdd.getFileGroupIds().toString());
+                sysPermissionFileGroupAdd.getPermissionId(),
+                Arrays.toString(sysPermissionFileGroupAdd.getFileGroupIds()));
     }
 
     /**
@@ -385,7 +383,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //添加新权限菜单数据
         sysPermissionMenuMapper.addMenuToPermission(tbSysPermissionMenuList);
         logger.info("[权限] 权限添加菜单权限成功,permissionId:{},menuIds:{}",
-                sysPermissionMenuAdd.getPermissionId(), sysPermissionMenuAdd.getMenuIds());
+                sysPermissionMenuAdd.getPermissionId(), Arrays.toString(sysPermissionMenuAdd.getMenuIds()));
     }
 
     /**
@@ -415,7 +413,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //添加新权限页面功能数据
         sysPermissionResourcesMapper.addResourceToPermission(tbSysPermissionResourcesList);
         logger.info("[权限] 权限添加菜单及页面功能权限成功,permissionId:{},resourcesIds:{}",
-                sysPermissionMenuAdd.getPermissionId(), sysPermissionMenuAdd.getResourcesIds());
+                sysPermissionMenuAdd.getPermissionId(), Arrays.toString(sysPermissionMenuAdd.getResourcesIds()));
     }
 
     /**
@@ -499,7 +497,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         }
         logger.info("[权限] 权限添加菜单权限成功,permissionId:{},菜单功能id数组:{}",
                 sysPermissionMenuResourcesAdd.getPermissionId(),
-                sysPermissionMenuResourcesAdd.getMenuAndResourcesIds());
+                Arrays.toString(sysPermissionMenuResourcesAdd.getMenuAndResourcesIds()));
     }
 
     /**

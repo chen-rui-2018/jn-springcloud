@@ -51,7 +51,8 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.insert(tbSysGroupRole);
 
-        logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}", userGroupRole.getId(), userGroupRole.getRoleId());
+        logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}",
+                userGroupRole.getId(), userGroupRole.getRoleId());
     }
 
     /**
@@ -66,7 +67,8 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         TbSysGroupRole tbSysGroupRole = new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.updateByPrimaryKeySelective(tbSysGroupRole);
-        logger.info("[用户组角色] 更新用户组角色成功！,userGroupRoleId: {},roleId: {}", userGroupRole.getId(), userGroupRole.getRoleId());
+        logger.info("[用户组角色] 更新用户组角色成功！,userGroupRoleId: {},roleId: {}",
+                userGroupRole.getId(), userGroupRole.getRoleId());
 
     }
 

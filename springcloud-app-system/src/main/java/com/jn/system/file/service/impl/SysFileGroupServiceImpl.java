@@ -177,7 +177,8 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
         //过滤已删除的数据
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
+        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}",
+                sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }

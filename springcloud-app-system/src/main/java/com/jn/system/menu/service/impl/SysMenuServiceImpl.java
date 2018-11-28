@@ -187,11 +187,9 @@ public class SysMenuServiceImpl implements SysMenuService {
                 } else {
                     getChildMenuAndResourcesList(childrenMenuList);
                 }
-            } else {
+            }else {
                 //不是目录菜单,查询菜单的页面功能信息
                 sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
-                List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
-                sysMenuTreeVO.setResourcesList(resourcesList);
             }
         }
     }
@@ -245,15 +243,15 @@ public class SysMenuServiceImpl implements SysMenuService {
             //根据id查询当前功能
             TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(resourcesId[i]);
             if (tbSysResources == null) {
-
-                tbSysResources.setCreator(user.getId());
-                tbSysResources.setId(UUID.randomUUID().toString());
-                tbSysResources.setCreateTime(new Date());
-                tbSysResources.setResourcesName(sysMenuResourcesAdd.getResourcesName());
-                tbSysResources.setResourcesUrl(sysMenuResourcesAdd.getResourcesUrl());
-                tbSysResources.setStatus(sysMenuResourcesAdd.getStatus());
-                tbSysResources.setMenuId(menuId);
-                tbSysResourcesMapper.insert(tbSysResources);
+                TbSysResources tbSysResources1 = new TbSysResources();
+                tbSysResources1.setCreator(user.getId());
+                tbSysResources1.setId(UUID.randomUUID().toString());
+                tbSysResources1.setCreateTime(new Date());
+                tbSysResources1.setResourcesName(sysMenuResourcesAdd.getResourcesName());
+                tbSysResources1.setResourcesUrl(sysMenuResourcesAdd.getResourcesUrl());
+                tbSysResources1.setStatus(sysMenuResourcesAdd.getStatus());
+                tbSysResources1.setMenuId(menuId);
+                tbSysResourcesMapper.insert(tbSysResources1);
             } else {
                 //设置当前菜单
                 tbSysResources.setMenuId(menuId);
@@ -306,6 +304,21 @@ public class SysMenuServiceImpl implements SysMenuService {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
         TbSysMenu tbSysMenu = new TbSysMenu();
+        //设置菜单等级
+        menuSetLevel(sysMenuAdd, tbSysMenu);
+        //设置菜单排序
+        menuSetSort(sysMenuAdd, tbSysMenu);
+        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISDIR.getCode());
+        createTbSysMenu(sysMenuAdd, user, tbSysMenu);
+        logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
+    }
+
+    /**
+     * 设置菜单等级
+     * @param sysMenuAdd
+     * @param tbSysMenu
+     */
+    private void menuSetLevel(SysMenuAdd sysMenuAdd, TbSysMenu tbSysMenu) {
         //判断参数中父级id的值,1表示一级目录
         if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysMenuAdd.getParentId())) {
             //直接添加菜单目录
@@ -317,11 +330,6 @@ public class SysMenuServiceImpl implements SysMenuService {
                 tbSysMenu.setLevel(String.valueOf(Integer.parseInt(parentMenuLevl) + 1));
             }
         }
-        //设置菜单排序
-        menuSetSort(sysMenuAdd, tbSysMenu);
-        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISDIR.getCode());
-        createTbSysMenu(sysMenuAdd, user, tbSysMenu);
-        logger.info("[菜单] 菜单添加成功，menuId:{}", tbSysMenu.getId());
     }
 
     /**
@@ -336,11 +344,8 @@ public class SysMenuServiceImpl implements SysMenuService {
         //校验在该等级中菜单名称是否已经存在
         checkName(sysMenuAdd);
         TbSysMenu tbSysMenu = new TbSysMenu();
-        //查询父级id的等级
-        String parentMenuLevel = sysMenuMapper.findLevelByMenuId(sysMenuAdd.getParentId());
-        if (StringUtils.isNotBlank(parentMenuLevel)) {
-            tbSysMenu.setLevel((Integer.parseInt(parentMenuLevel) + 1) + "");
-        }
+        //设置菜单等级
+        menuSetLevel(sysMenuAdd, tbSysMenu);
         //设置菜单排序
         menuSetSort(sysMenuAdd, tbSysMenu);
         tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
@@ -373,7 +378,6 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param tbSysMenu
      */
     private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
-        tbSysMenu.setIsDir(SysMenuEnums.MENU_ISNOTDIR.getCode());
         tbSysMenu.setId(UUID.randomUUID().toString());
         tbSysMenu.setCreateTime(new Date());
         tbSysMenu.setCreator(user.getId());
@@ -415,6 +419,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         //如果集合长度大于0,进行批量更新
         if (sysMenuSortList != null && sysMenuSortList.size() > 0 ){
             sysMenuMapper.updateBatch(sysMenuSortList);
+            logger.info("[菜单] 菜单批量更新成功");
         }
     }
 }

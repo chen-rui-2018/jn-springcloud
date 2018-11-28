@@ -36,7 +36,7 @@ public class SysMenu implements Serializable {
      * 菜单URL
      */
     @ApiModelProperty(value = "菜单URL" )
-    @NotBlank(message = "菜单名称不能为空！")
+    @NotBlank(message = "菜单路径不能为空！")
     private String menuUrl;
 
     /**
@@ -72,7 +72,6 @@ public class SysMenu implements Serializable {
      * 状态 1:有效 0:无效 -1:删除
      */
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @NotBlank(message = "状态不能为空！")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 

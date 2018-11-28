@@ -7,6 +7,7 @@ import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.model.UserLogin;
+import com.jn.system.model.UserNoPasswordLogin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -44,7 +45,7 @@ public class PlatformLoginController extends BaseController {
         //2、调用系统登录接口
         //Result<String> data = client.login(userLogin);
         //2、免密登录
-        UserLogin u2 = new UserLogin();
+        UserNoPasswordLogin u2 = new UserNoPasswordLogin();
         u2.setAccount(account);
         Result<String> data = client.noPasswordLogin(u2);
 

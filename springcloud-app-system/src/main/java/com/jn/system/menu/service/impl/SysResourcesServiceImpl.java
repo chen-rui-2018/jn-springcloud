@@ -43,7 +43,7 @@ import java.util.UUID;
 @Service
 public class SysResourcesServiceImpl implements SysResourcesService {
 
-    private Logger logger = LoggerFactory.getLogger(SysResourcesServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysResourcesServiceImpl.class);
 
     @Resource
     private SysResourcesMapper sysResourcesMapper;
@@ -63,7 +63,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         //添加名称校验
         List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            logger.info("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
+            logger.warn("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysResources.setId(UUID.randomUUID().toString());
@@ -100,6 +100,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
+        //判断修改信息是否存在
+        SysResources sysResources1 = sysResourcesMapper.getResourcesById(sysResources.getId());
+        if (sysResources1 == null){
+            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", sysResources.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
@@ -108,7 +114,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         criteria.andIdNotEqualTo(sysResources.getId());
         List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            logger.info("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
+            logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysResources tbSysResources = new TbSysResources();
@@ -128,7 +134,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
-        logger.info("[功能] 批量删除功能成功！,resourcesIds:{}" + Arrays.toString(resourcesIds));
+        logger.info("[功能] 批量删除功能成功！,resourcesIds:{}",Arrays.toString(resourcesIds));
     }
 
     /**

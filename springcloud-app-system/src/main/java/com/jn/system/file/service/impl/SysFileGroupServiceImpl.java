@@ -40,7 +40,7 @@ import java.util.*;
 @Service
 public class SysFileGroupServiceImpl implements SysFileGroupService {
 
-    private Logger logger = LoggerFactory.getLogger(SysFileGroupServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysFileGroupServiceImpl.class);
     @Resource
     private SysFileGroupMapper sysFileGroupMapper;
 
@@ -62,7 +62,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //名称校验
         List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.info("[文件组] 添加文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
+            logger.warn("[文件组] 添加文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFileGroup.setId(UUID.randomUUID().toString());
@@ -97,6 +97,12 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
+        //判断修改信息是否存在
+        SysFileGroup sysFileGroup1 = sysFileGroupMapper.getFileGroupById(sysFileGroup.getId());
+        if (sysFileGroup1 == null){
+            logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
@@ -104,7 +110,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         criteria.andIdNotEqualTo(sysFileGroup.getId());
         List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.info("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
+            logger.warn("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
@@ -155,24 +161,24 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
-
+        TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字
-            sysFileGroupCriteria.createCriteria().andFileGroupNameLike("%" + sysFileGroupPage.getFileGroupName() + "%");
+            criteria.andFileGroupNameLike("%" + sysFileGroupPage.getFileGroupName() + "%");
         }
         if (!StringUtils.isEmpty(sysFileGroupPage.getId())) {
             //根据id查询
-            sysFileGroupCriteria.createCriteria().andIdEqualTo(sysFileGroupPage.getId());
+            criteria.andIdEqualTo(sysFileGroupPage.getId());
         }
         if (!StringUtils.isEmpty(sysFileGroupPage.getStatus())) {
             //筛选条件：状态
-            sysFileGroupCriteria.createCriteria().andStatusEqualTo(sysFileGroupPage.getStatus());
+            criteria.andStatusEqualTo(sysFileGroupPage.getStatus());
         }
 
         //过滤已删除的数据
-        sysFileGroupCriteria.createCriteria().andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-
-        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}", sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}",
+                sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }

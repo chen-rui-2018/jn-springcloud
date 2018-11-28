@@ -32,4 +32,9 @@
         </if>
         ORDER BY create_time desc
     </select>
+
+    <select id="getPostById" resultType="com.jn.system.dept.model.SysPost" parameterType="java.lang.String">
+        SELECT id,post_name as postName,create_time as createTime,`status`
+        FROM tb_sys_post WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
 </mapper>

@@ -8,6 +8,7 @@ import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.enums.ShiroUserEnum;
 import com.jn.system.model.User;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.AllowAllCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
@@ -39,7 +40,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
-        UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+        MyUsernamePasswordToken token = (MyUsernamePasswordToken) authcToken;
         Result<User> user = client.getUser(new User(token.getUsername()));
         if (GlobalConstants.SUCCESS_CODE.equals(user.getCode()) && user.getData() == null) {
             throw new UnknownAccountException(ShiroExceptionEnum.UNKNOWN_ACCOUNT.getMessage());
@@ -48,6 +49,11 @@ public class ShiroDbRealm extends AuthorizingRealm {
         } else if (!ShiroUserEnum.ACCOUNT_EFFECTIVE.getCode().equals(user.getData().getStatus())) {
             throw new DisabledAccountException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE.getMessage());
         }
+
+        if (token.isNoPassword()) {
+            setCredentialsMatcher(new AllowAllCredentialsMatcher());
+        }
+
         clearAuthorizationInfoCache(user.getData());
         // 认证缓存信息
         return new SimpleAuthenticationInfo(user.getData(), user.getData().getPassword().toCharArray(), getName());

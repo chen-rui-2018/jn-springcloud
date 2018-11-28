@@ -36,7 +36,7 @@ public class SysMenu implements Serializable {
      * 菜单URL
      */
     @ApiModelProperty(value = "菜单URL" )
-    @NotBlank(message = "菜单名称不能为空！")
+    @NotBlank(message = "菜单路径不能为空！")
     private String menuUrl;
 
     /**
@@ -50,7 +50,7 @@ public class SysMenu implements Serializable {
      * 排序
      */
     @ApiModelProperty(value = "排序" )
-    private String sort;
+    private Integer sort;
 
     /**
      * 是否目录 1:目录 0:文件
@@ -72,7 +72,6 @@ public class SysMenu implements Serializable {
      * 状态 1:有效 0:无效 -1:删除
      */
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @NotBlank(message = "状态不能为空！")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
@@ -85,8 +84,8 @@ public class SysMenu implements Serializable {
     public SysMenu() {
     }
 
-    public SysMenu(String id, String menuName, String menuUrl, String parentId, String sort, String isDir,
-                   String creator, Date createTime, String status, String level) {
+    public SysMenu(String id, String menuName, String menuUrl, String parentId, Integer sort,
+                   String isDir, String creator, Date createTime, String status, String level) {
         this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
@@ -131,12 +130,20 @@ public class SysMenu implements Serializable {
         this.parentId = parentId;
     }
 
-    public String getSort() {
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
+    }
+
+    public String getIsDir() {
+        return isDir;
+    }
+
+    public void setIsDir(String isDir) {
+        this.isDir = isDir;
     }
 
     public String getCreator() {
@@ -163,14 +170,6 @@ public class SysMenu implements Serializable {
         this.status = status;
     }
 
-    public String getIsDir() {
-        return isDir;
-    }
-
-    public void setIsDir(String isDir) {
-        this.isDir = isDir;
-    }
-
     public String getLevel() {
         return level;
     }
@@ -186,7 +185,7 @@ public class SysMenu implements Serializable {
                 ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
                 ", parentId='" + parentId + '\'' +
-                ", sort='" + sort + '\'' +
+                ", sort=" + sort +
                 ", isDir='" + isDir + '\'' +
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +

@@ -9,6 +9,14 @@
         </foreach>
     </update>
 
+    <update id="deleteBy" parameterType="java.util.List">
+        update tb_sys_permission_menu set status=-1
+        where menu_id in
+        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="findMenuOfPermission" parameterType="java.lang.String" resultType="com.jn.system.menu.model.SysMenu">
         select distinct
         t2.id,
@@ -36,7 +44,7 @@
             #{item.permissionId,jdbcType=VARCHAR},
             #{item.menuId,jdbcType=VARCHAR},
             #{item.creator,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=TIMESTAMP},
+            now(),
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>

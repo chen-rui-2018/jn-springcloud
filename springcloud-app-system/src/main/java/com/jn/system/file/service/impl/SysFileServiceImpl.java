@@ -38,7 +38,7 @@ import java.util.*;
 @Service
 public class SysFileServiceImpl implements SysFileService {
 
-    private Logger logger = LoggerFactory.getLogger(SysFileServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysFileServiceImpl.class);
 
     @Resource
     private SysFileMapper sysFileMapper;
@@ -65,7 +65,7 @@ public class SysFileServiceImpl implements SysFileService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
         if (tbSysFiles != null && tbSysFiles.size() > 0) {
-            logger.info("[文件] 添加文件失败，该文件名称已存在！,fileName: {}", sysFile.getFileName());
+            logger.warn("[文件] 添加文件失败，该文件名称已存在！,fileName: {}", sysFile.getFileName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFile.setId(UUID.randomUUID().toString());
@@ -144,7 +144,7 @@ public class SysFileServiceImpl implements SysFileService {
         }else {
             sysFileVOList = sysFileMapper.findFileByPage(sysFilePage);
             for (SysFileVO sysFileVO:sysFileVOList) {
-                List<SysFileGroup> fileGroupNameList = sysFileGroupFileMapper.findFileGroupNameByFileId(sysFileVO.getFileId());
+                List<String> fileGroupNameList = sysFileGroupFileMapper.findFileGroupNameByFileId(sysFileVO.getFileId());
                 sysFileVO.setFileGroupNameList(fileGroupNameList);
             }
         }

@@ -47,25 +47,6 @@ export function checkGroupName(query) {
     data: param
   })
 }
-
-// 根据用户组id获取用户组具有的角色信息和其他角色信息
-export function getAllRole(query) {
-  const param = new URLSearchParams()
-  param.append('id', query)
-  return request({
-    url: 'system/sysGroup/selectGroupRoleAndOtherRole',
-    method: 'post',
-    data: param
-  })
-}
-// 授权角色
-export function updataRole(query) {
-  return request({
-    url: 'system/sysGroup/roleGroupAuthorization',
-    method: 'post',
-    data: query
-  })
-}
 // 根据用户组id获取用户组具有的用户信息和其他用户
 export function getAllUserInfo(query) {
   return request({
@@ -78,6 +59,22 @@ export function getAllUserInfo(query) {
 export function updataUser(query) {
   return request({
     url: 'system/sysGroup/userGroupAuthorization',
+    method: 'post',
+    data: query
+  })
+}
+// 根据用户组id获取权限具有的角色信息和其他角色
+export function getRoleInfo(query) {
+  return request({
+    url: 'system/sysGroup/selectGroupRoleAndOtherRole',
+    method: 'post',
+    data: query
+  })
+}
+// 用户组授权角色(更新数据)
+export function updataRole(query) {
+  return request({
+    url: 'system/sysGroup/roleGroupAuthorization',
     method: 'post',
     data: query
   })

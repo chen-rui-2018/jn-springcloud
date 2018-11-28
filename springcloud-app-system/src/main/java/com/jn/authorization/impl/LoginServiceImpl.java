@@ -2,9 +2,10 @@ package com.jn.authorization.impl;
 
 import com.jn.authorization.LoginService;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.system.config.MyUsernamePasswordToken;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.user.model.UserLogin;
+import com.jn.system.model.UserLogin;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -27,10 +28,11 @@ public class LoginServiceImpl implements LoginService {
 
     @ServiceLog(doAction = "登录")
     @Override
-    public void login(UserLogin user) {
+    public void login(UserLogin user,Boolean isNoPasswordLogin) {
         try {
             Subject userShiro = SecurityUtils.getSubject();
-            UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
+            MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getAccount(), DigestUtils.md5Hex(user.getPassword()).toCharArray());
+            token.setNoPassword(isNoPasswordLogin);
             userShiro.login(token);
         } catch (UnknownAccountException e) {
             throw new JnSpringCloudException(ShiroExceptionEnum.UNKNOWN_ACCOUNT);

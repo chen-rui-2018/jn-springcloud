@@ -33,6 +33,14 @@
         </foreach>
     </update>
 
+    <update id="deleteBy" parameterType="java.util.List">
+        update tb_sys_resources set status=-1
+        where menu_id in
+        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="findMenuResourcesByPage" parameterType="com.jn.system.menu.model.SysResourcesPage"
             resultMap="MenuResourcesResultMap">
         SELECT DISTINCT
@@ -168,6 +176,25 @@
         select t.menu_name from tb_sys_menu t,tb_sys_resources tt
         where t.id = tt.menu_id and tt.`status` != '-1'
         and t.`status` = '1' and tt.id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getResourcesById" resultType="com.jn.system.menu.model.SysResources" parameterType="java.lang.String">
+        SELECT id,resources_name as resourcesName,resources_url as resourcesUrl,
+        menu_id as menuId,create_time as createTime,`status`
+        FROM tb_sys_resources WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
+
+    <select id="getResourcesByMenuId" resultType="com.jn.system.menu.model.SysResources" parameterType="java.lang.String">
+        SELECT
+        id,
+        resources_name as resourcesName,
+        resources_url as resourcesUrl,
+        menu_id as menuId,
+        create_time as createTime,
+        `status`
+        FROM tb_sys_resources
+        WHERE menu_id = #{id,jdbcType=VARCHAR}
+        AND `status` = '1'
     </select>
 
 </mapper>

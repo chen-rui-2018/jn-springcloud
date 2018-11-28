@@ -52,4 +52,11 @@ public interface SysPermissionMenuMapper {
      * @return
      */
     List<SysMenu> findMenuByPermissionPage(SysPermissionMenuPage sysPermissionMenuPage);
+
+    /**
+     * 删除菜单及子菜单对应的权限信息
+     *
+     * @param menuIds
+     */
+    void deleteBy(List<String> menuIds);
 }

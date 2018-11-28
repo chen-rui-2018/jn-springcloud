@@ -31,17 +31,17 @@ const menuRouter = {
       meta: { title: '角色管理', noCache: true }
     },
     {
-      path: 'authorityManagement',
-      component: () => import('@/views/menu/authorityManagement'),
-      name: 'authorityManagement',
+      path: 'permissionManagement',
+      component: () => import('@/views/menu/permissionManagement'),
+      name: 'permissionManagement',
       meta: { title: '权限管理', noCache: true }
       // hidden: true
     },
     {
-      path: 'menuManagement',
-      component: () => import('@/views/menu/menuManagement'),
-      name: 'menuManagement',
-      meta: { title: '菜单管理', noCache: true }
+      path: 'mendepartmentManagementuManagement',
+      component: () => import('@/views/menu/departmentManagement'),
+      name: 'departmentManagement',
+      meta: { title: '部门管理', noCache: true }
     },
     {
       path: 'fileGroupManagement',
@@ -54,6 +54,18 @@ const menuRouter = {
       component: () => import('@/views/menu/postManagement'),
       name: 'postManagement',
       meta: { title: '岗位管理', noCache: true }
+    },
+    {
+      path: 'menuManagement',
+      component: () => import('@/views/menu/menuManagement'),
+      name: 'menuManagement',
+      meta: { title: '菜单管理', noCache: true }
+    },
+    {
+      path: 'fileManagement',
+      component: () => import('@/views/menu/fileManagement'),
+      name: 'fileManagement',
+      meta: { title: '文件管理', noCache: true }
     }
   ]
 }

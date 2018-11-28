@@ -39,7 +39,7 @@
             #{item.roleId,jdbcType=VARCHAR},
             #{item.userGroupId,jdbcType=VARCHAR},
             #{item.creator,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=TIMESTAMP},
+            now(),
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>

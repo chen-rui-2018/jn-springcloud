@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,7 @@ import java.util.UUID;
 @Service
 public class SysPostServiceImpl implements SysPostService {
 
-    private Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysPostServiceImpl.class);
 
     @Autowired
     private TbSysPostMapper tbSysPostMapper;
@@ -79,7 +80,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void addPost(SysPostAdd sysPostAdd,User user) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.info("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
+            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPost tbSysPost = new TbSysPost();
@@ -117,7 +118,7 @@ public class SysPostServiceImpl implements SysPostService {
     public void deletePostBranch(String[] ids) {
         sysPostMapper.deletePostBranch(ids);
         sysUserDepartmentPostMapper.deletePostBranch(ids);
-        logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", ids.toString());
+        logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
     }
 
     /**
@@ -129,6 +130,12 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "修改岗位信息")
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
+        //判断被修改信息是否存在
+        SysPost sysPost1 = sysPostMapper.getPostById(sysPost.getId());
+        if (sysPost1 == null){
+            logger.warn("[部门] 岗位修改失败,修改信息不存在,postId: {}", sysPost.getId());
+            throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(sysPost.getPostName());
@@ -136,7 +143,7 @@ public class SysPostServiceImpl implements SysPostService {
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.info("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
+            logger.warn("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
         sysPostMapper.updatePost(sysPost);

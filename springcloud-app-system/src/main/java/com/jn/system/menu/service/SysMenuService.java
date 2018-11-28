@@ -1,11 +1,8 @@
 package com.jn.system.menu.service;
 
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuAdd;
-import com.jn.system.menu.model.SysMenuNameCheck;
-import com.jn.system.menu.model.SysMenuResourcesAdd;
-import com.jn.system.model.*;
+import com.jn.system.menu.model.*;
 import com.jn.system.menu.vo.SysMenuTreeVO;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -27,19 +24,19 @@ public interface SysMenuService {
     void updateSysMenuById(SysMenu sysMenu);
 
     /**
-     * 批量删除菜单（逻辑删除）
+     * 逻辑删除菜单
      *
      * @param menuIds
      * @return
      */
-    void deleteSysMenuById(String[] menuIds);
+    void deleteSysMenuById(String menuIds);
 
     /**
-     * 查询所有菜单信息,返回属性结构
+     * 查询所有菜单信息,返回树形结构
      *
      * @return
      */
-    List<SysMenuTreeVO> selectMenuListBySearchKey();
+    List<SysMenuTreeVO> selectMenuList();
 
     /**
      * 根据id获取菜单详情
@@ -57,18 +54,18 @@ public interface SysMenuService {
     void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user);
 
     /**
-     * 菜单添加目录或子目录
+     * 菜单添加目录菜单
      *
      * @param sysMenuAdd
      */
     void addMenuDir(SysMenuAdd sysMenuAdd, User user);
 
     /**
-     * 菜单目录下面添加子菜单
+     * 目录菜单下面添加子菜单
      *
      * @param sysMenuAdd
      */
-    void addMenu(SysMenuAdd sysMenuAdd,User user);
+    void addMenu(SysMenuAdd sysMenuAdd, User user);
 
     /**
      * 校验菜单名称
@@ -77,4 +74,11 @@ public interface SysMenuService {
      * @return
      */
     String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
+
+    /**
+     * 批量对菜单排序进行更新
+     *
+     * @param sysMenus
+     */
+    void updateBatch(SysMenus sysMenus);
 }

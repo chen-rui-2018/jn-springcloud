@@ -1,7 +1,10 @@
 package com.jn.system.user.dao;
 
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
-import com.jn.system.user.model.*;
+import com.jn.system.user.model.SysGroupUser;
+import com.jn.system.user.model.SysUser;
+import com.jn.system.user.model.SysUserPage;
+import com.jn.system.user.model.SysUserRole;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
 
@@ -112,4 +115,11 @@ public interface SysUserMapper {
      */
     void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);
 
+    /**
+     * 根据id获取用户信息
+     *
+     * @param id
+     * @return
+     */
+    SysUser getUserById(String id);
 }

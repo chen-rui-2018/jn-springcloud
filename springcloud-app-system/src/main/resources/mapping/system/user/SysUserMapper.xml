@@ -165,9 +165,12 @@
     <insert id="saveSysGroupToSysUser" parameterType="com.jn.system.user.model.SysGroupUser">
         insert into tb_sys_user_group
         (id, group_id,creator, user_id,create_time, status)
-        values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR},
-                 #{creator,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},
-                 #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+        values (#{id,jdbcType=VARCHAR},
+                #{groupId,jdbcType=VARCHAR},
+                #{creator,jdbcType=VARCHAR},
+                #{userId,jdbcType=VARCHAR},
+          	    now(),
+                #{status,jdbcType=VARCHAR})
     </insert>
 
     <!--逻辑删除用户已经具有的角色-->
@@ -198,9 +201,15 @@
             parameterType="com.jn.system.dept.entity.TbSysUserDepartmentPost">
         insert into tb_sys_user_department_post
         (id, user_id, department_id,post_id, is_default, create_time,status,creator)
-        values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR},
-          #{postId,jdbcType=VARCHAR}, #{isDefault,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-          #{status,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR})
+        values
+        (#{id,jdbcType=VARCHAR},
+        #{userId,jdbcType=VARCHAR},
+        #{departmentId,jdbcType=VARCHAR},
+        #{postId,jdbcType=VARCHAR},
+        #{isDefault,jdbcType=VARCHAR},
+        now(),
+        #{status,jdbcType=VARCHAR},
+        #{creator,jdbcType=VARCHAR})
       </insert>
 
     <!--根据用户id返回用户信息-->
@@ -210,6 +219,11 @@
         <include refid="Base_Column_List"/>
         from tb_sys_user
         where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUserById" resultType="com.jn.system.user.model.SysUser" parameterType="java.lang.String">
+        SELECT id,account,`name`,phone,email,create_time as createTime,`status`
+        FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 
     <update id="deleteUserBranch" parameterType="java.lang.String">

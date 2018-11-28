@@ -46,10 +46,11 @@
         </foreach>
     </update>
 
-    <update id="deleteDepartmentBranch" parameterType="java.lang.String">
+    <update id="deleteDepartmentBranch" parameterType="java.util.List">
         update tb_sys_user_department_post set status=-1
         where department_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach collection="list" item="id"
+                 open="(" close=")" index="index" separator=",">
             #{id}
         </foreach>
     </update>

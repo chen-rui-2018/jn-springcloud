@@ -29,7 +29,7 @@ import java.util.UUID;
 @Service
 public class SysRolePermissionServiceImpl implements SysRolePermissionService {
 
-    private Logger logger = LoggerFactory.getLogger(SysRolePermissionServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysRolePermissionServiceImpl.class);
 
     @Resource
     private SysRolePermissionMapper sysRolePermissionMapper;

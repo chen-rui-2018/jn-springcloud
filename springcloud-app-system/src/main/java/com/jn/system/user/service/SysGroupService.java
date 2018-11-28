@@ -56,7 +56,7 @@ public interface SysGroupService {
     TbSysGroup findSysGroupById(String id);
 
     /**
-     * 根据用户组id获取用户组信息及用户组具有的角色信息及条件分页查询用户组为拥有的角色信息
+     * 查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息
      *
      * @param sysGroupRolePage
      * @return
@@ -79,7 +79,7 @@ public interface SysGroupService {
     List<SysTUser> findUserOfGroup(String groupId);
 
     /**
-     * 分页获取除用户组具有的用户以外的用户
+     * 查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息
      *
      * @param sysGroupUserPage
      * @return

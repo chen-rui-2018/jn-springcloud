@@ -28,7 +28,7 @@ import java.util.UUID;
  */
 @Service
 public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
-    private Logger logger = LoggerFactory.getLogger(SysUserGroupRoleServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(SysUserGroupRoleServiceImpl.class);
 
     @Resource
     private SysUserGroupRoleMapper sysUserGroupRoleMapper;
@@ -51,7 +51,8 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.insert(tbSysGroupRole);
 
-        logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}", userGroupRole.getId(), userGroupRole.getRoleId());
+        logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}",
+                userGroupRole.getId(), userGroupRole.getRoleId());
     }
 
     /**
@@ -66,7 +67,8 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         TbSysGroupRole tbSysGroupRole = new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.updateByPrimaryKeySelective(tbSysGroupRole);
-        logger.info("[用户组角色] 更新用户组角色成功！,userGroupRoleId: {},roleId: {}", userGroupRole.getId(), userGroupRole.getRoleId());
+        logger.info("[用户组角色] 更新用户组角色成功！,userGroupRoleId: {},roleId: {}",
+                userGroupRole.getId(), userGroupRole.getRoleId());
 
     }
 

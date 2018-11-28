@@ -1,4 +1,4 @@
-package com.jn.authorization.controller;
+package com.jn.portals.user.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
@@ -41,7 +41,7 @@ public class PlatformLoginController extends BaseController {
     @RequestMapping(value = "/login")
     public Result platformLoginPost(@RequestBody @Validated UserLogin userLogin) {
         //1、各自业务进行认证，并获取用户账号
-        String account = "wangsong";
+        String account = "huangchen";
         //2、调用系统登录接口
         //Result<String> data = client.login(userLogin);
         //2、免密登录

@@ -39,12 +39,32 @@ public class PlatformLoginController extends BaseController {
     @ApiOperation(value = "登录", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/login")
     public Result platformLoginPost(@RequestBody @Validated UserLogin userLogin) {
-        //调用系统登录接口，通过shiro框架进行登录
-        Result<String> data = client.login(userLogin);
+        //1、各自业务进行认证，并获取用户账号
+        String account = "wangsong";
+        //2、调用系统登录接口
+        //Result<String> data = client.login(userLogin);
+        //2、免密登录
+        UserLogin u2 = new UserLogin();
+        u2.setAccount(account);
+        Result<String> data = client.noPasswordLogin(u2);
+
         if (!GlobalConstants.SUCCESS_CODE.equals(data.getCode())) {
             return data;
         }
-        //获取用户信息
+        //3、通过获取用户信息
+        Result<User> user = client.getUser(new User(account));
+        //token
+        data.getData();
+
+        //4、对用户信息进行扩展封装，token 和用户信息 一并返回返回
+        return user;
+    }
+
+    @ControllerLog(doAction = "测试")
+    @ApiOperation(value = "测试", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/test")
+    public Result test() {
+        //获取用户信息，请求时前端需要带上token
         User shiroUser = (User) SecurityUtils.getSubject().getPrincipal();
         //TODO 对用户信息进行扩展封装，返回
         return new Result(shiroUser);

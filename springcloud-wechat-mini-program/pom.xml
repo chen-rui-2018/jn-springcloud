@@ -45,7 +45,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        power
+                        area
                     </contexts>
                     <tableNames>
 

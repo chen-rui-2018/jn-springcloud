@@ -12,7 +12,12 @@ import com.jn.system.model.UserLogin;
  */
 public interface LoginService {
 
-    void login(UserLogin user);
+    /**
+     * 登录
+     * @param user 用户对象
+     * @param isNoPasswordLogin 免密登录
+     */
+    void login(UserLogin user,Boolean isNoPasswordLogin);
 
     void logoutJSON();
 }

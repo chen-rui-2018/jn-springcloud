@@ -33,7 +33,7 @@ public class LoginController extends BaseController {
     @ApiOperation(value = "登录", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/login")
     public Result<String> loginPost(@RequestBody @Validated UserLogin userLogin) {
-        loginService.login(userLogin);
+        loginService.login(userLogin, Boolean.TRUE);
         return new Result(SecurityUtils.getSubject().getSession().getId());
     }
 

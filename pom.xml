@@ -30,7 +30,8 @@
 		<module>springcloud-integrated-app</module>
 		<module>springcloud-wechat-official-accounts</module>
 		<module>springcloud-wechat-mini-program</module>
-	</modules>
+        <module>springcloud-app-config-manager</module>
+    </modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>

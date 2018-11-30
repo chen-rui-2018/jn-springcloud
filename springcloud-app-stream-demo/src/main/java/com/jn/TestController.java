@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TODO:未添加类描述
+ * 发送邮件的TEST测试
  *
  * @author： fengxh
  * @date： Created on 2018/11/9 10:41

@@ -18,6 +18,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
  */
 @EnableFeignClients
 @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+
 @SpringCloudApplication
 public class SpringCloudAppStreamApplication {
   

@@ -1,11 +1,7 @@
 package com.jn.controller;
 
 import com.github.tobato.fastdfs.token.GetToken;
-import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.model.Result;
-import com.jn.system.api.SystemClient;
-import com.jn.system.model.User;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +23,6 @@ public class DownloadTokenController {
     @Autowired
     private GetToken getToken;
 
-    @Autowired
-    private SystemClient client;
 
     /**
      * 获取文件下载的权限
@@ -38,11 +32,7 @@ public class DownloadTokenController {
      */
     @RequestMapping("/download/getToken")
     public Result getToken(String filePath) throws IOException, NoSuchAlgorithmException {
-        User shiroUser = (User) SecurityUtils.getSubject().getPrincipal();
-        Result<Boolean> userFilePermission = client.getUserFilePermission(shiroUser.getId(),filePath);
-        if(!userFilePermission.getData()){
-            return new Result(CommonExceptionEnum.UN_AUTH.getMessage());
-        }
+        // TODO: 2018/11/29 请炮哥补充权限校验
         return new Result(getToken.getToken(filePath));
     }
 

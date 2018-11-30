@@ -1,6 +1,5 @@
 package com.jn;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import com.github.tobato.fastdfs.FdfsClientConfig;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -23,6 +22,8 @@ import org.springframework.jmx.support.RegistrationPolicy;
 @Import(FdfsClientConfig.class)
 // 解决jmx重复注册bean的问题
 @EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class
+})
 @SpringCloudApplication
 public class SpringCloudAppFastDfsApplication {
     public static void main(String[] args) {

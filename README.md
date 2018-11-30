@@ -48,6 +48,7 @@
 - 业务项目命名为spring-xxx  xxx是你需要建立的项目简称
 - 其他的pom 什么的，可以参考springcloud-app-system 这个项目的配置
 - 在springcloud-app-zuul 的配置文件中，加入路由(zuul.routes.springcloud-app-fastdfs=/springcloud-app-fastdfs/**)
+- 启动springcloud-app-config-manager项目，进行对项目的配置文件配置。
 ### 2.建立包规范
 - com.jn.config   config里面放配置JAVA类 
 - com.jn.server  server是你提供给内部接口的服务端类
@@ -131,3 +132,7 @@
 - 第四组，2位为具体异常编码
 - 99 - 未知错误
 - 01 - XXXX
+
+
+## 12.配置文件规范
+- 业务子服务，如果涉及到业务变动，会进行随时调整的配置信息，请丢到配置中心那边进行管理，例如抢购业务，有一个配置为lock是用来控制等待时间的，那么这个配置就需要丢到配置中心进行管理。例子：com.jn.test.controller.TestController

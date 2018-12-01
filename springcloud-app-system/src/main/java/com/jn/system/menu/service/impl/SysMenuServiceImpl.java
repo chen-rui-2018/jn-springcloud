@@ -407,12 +407,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     /**
-     * 批量对菜单排序进行更新
+     * 批量更新菜单
      *
      * @param sysMenus
      */
     @Override
-    @ServiceLog(doAction = "批量对菜单排序进行更新")
+    @ServiceLog(doAction = "批量更新菜单")
     @Transactional(rollbackFor = Exception.class)
     public void updateBatch(SysMenus sysMenus) {
         List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();

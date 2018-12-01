@@ -119,8 +119,8 @@ public class SysMenuController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "批量对菜单排序进行更新")
-    @ApiOperation(value = "批量对菜单排序进行更新", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "批量更新菜单")
+    @ApiOperation(value = "批量更新菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/updateBatch")
     @RequiresPermissions("/system/sysMenu/updateBatch")
     public Result updateBatch(@Validated @RequestBody SysMenus sysMenus){

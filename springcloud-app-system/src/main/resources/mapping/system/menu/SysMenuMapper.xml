@@ -35,9 +35,9 @@
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="menu_name" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
         <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
-        <result column="sort" jdbcType="VARCHAR" property="sort" javaType="java.lang.String"/>
+        <result column="sort" jdbcType="INTEGER" property="sort" javaType="java.lang.Integer"/>
         <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="VARCHAR" property="createTime" javaType="java.lang.String"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.util.Date"/>
         <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
         <result column="parentName" jdbcType="VARCHAR" property="parentName" javaType="java.lang.String"/>
         <collection property="resourcesList" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
@@ -45,7 +45,7 @@
             <result column="resources_name" property="resourcesName" jdbcType="VARCHAR"/>
             <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
             <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
-            <result column="createTime" property="createTime" jdbcType="VARCHAR"/>
+            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
             <result column="status" property="status" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
@@ -130,7 +130,7 @@
     </select>
 
     <select id="findSortByMenuId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} LIMIT 1
+        SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} AND `status` = '1' LIMIT 1
     </select>
 
     <select id="findMenuByLevelOne" resultMap="MenuResourcesMap">
@@ -194,6 +194,49 @@
     <select id="getMenuById" resultType="com.jn.system.menu.model.SysMenu" parameterType="java.lang.String">
         SELECT id,menu_name as menuName,menu_url as menuUrl,parent_id as parentId,is_dir as isDir,sort
         FROM tb_sys_menu WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+    </select>
+
+    <select id="getMenuByLevelOne" resultType="com.jn.system.permission.vo.SysMenuTreeOfPermissionVO">
+        select
+        id,
+        menu_name as label,
+        menu_url as menuUrl,
+        sort,
+        parent_id as parentId,
+        create_time as createTime,
+        is_dir as isDir
+        from tb_sys_menu
+        where `level` = '1'
+        and `status` = '1'
+        ORDER BY create_time ASC
+    </select>
+
+    <select id="findMenuOfPermissionByParentId" parameterType="java.lang.String"
+            resultType="com.jn.system.permission.vo.SysMenuTreeOfPermissionVO">
+        select
+        t.menu_name as parentName,
+        tt.id,
+        tt.menu_name as `label`,
+        tt.menu_url as menuUrl,
+        tt.sort,
+        tt.parent_id as parentId,
+        tt.create_time as createTime,
+        tt.is_dir as isDir
+        from tb_sys_menu t,
+        (select
+        id,
+        menu_name,
+        menu_url,
+        sort,
+        parent_id,
+        create_time,
+        is_dir
+        from tb_sys_menu
+        where parent_id = #{id,jdbcType=VARCHAR}
+        and `status` = '1'
+        ORDER BY create_time ASC) tt
+        where t.id = tt.parent_id
+        and `status` = '1'
     </select>
 
 </mapper>

@@ -10,8 +10,11 @@ import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.service.impl.SysPostServiceImpl;
 import com.jn.system.file.model.SysFileGroup;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.menu.dao.SysMenuMapper;
+import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.entity.TbSysMenu;
+import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.menu.model.SysMenu;
 import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.service.SysMenuService;
@@ -60,6 +63,10 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     private SysMenuService sysMenuService;
     @Autowired
     private TbSysMenuMapper tbSysMenuMapper;
+    @Autowired
+    private SysMenuMapper sysMenuMapper;
+    @Autowired
+    private SysResourcesMapper sysResourcesMapper;
 
     /**
      * 添加权限
@@ -427,8 +434,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     public SysMenuResourcesVO getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = new SysMenuResourcesVO();
         //获取菜单树信息
-        List<SysMenuTreeVO> sysMenuTreeVOList = sysMenuService.selectMenuList();
-        sysMenuResourcesVO.setSysMenuTreeVOList(sysMenuTreeVOList);
+        List<SysMenuTreeOfPermissionVO> sysMenuTreeOfPermissionVOS = selectMenuList();
+        sysMenuResourcesVO.setSysMenuTreeVOList(sysMenuTreeOfPermissionVOS);
         //获取权限已有的菜单信息
         List<SysMenu> sysMenuOfPermissionList =
                 sysPermissionMenuMapper.findMenuOfPermission(permissionId);
@@ -447,6 +454,60 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         sysMenuResourcesVO.setMenuAndResourcesIds(menuAndResourcesIds);
         //返回信息
         return sysMenuResourcesVO;
+    }
+
+    /**
+     * 获取菜单及权限信息
+     * @return
+     */
+    public List<SysMenuTreeOfPermissionVO> selectMenuList() {
+        //先查询等级为1的菜单信息
+        List<SysMenuTreeOfPermissionVO> menuTreeVOList = sysMenuMapper.getMenuByLevelOne();
+        getChildMenuAndResourcesList(menuTreeVOList);
+        return menuTreeVOList;
+
+    }
+
+    /**
+     * 递归查询菜单子菜单及菜单页面功能信息
+     *
+     * @param menuTreeVOList
+     */
+    public void getChildMenuAndResourcesList(List<SysMenuTreeOfPermissionVO> menuTreeVOList) {
+        for (SysMenuTreeOfPermissionVO sysMenuTreeVO : menuTreeVOList) {
+            //判断菜单项是否是目录菜单,是递归获取子菜单信息
+            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
+                //以菜单id作为父id,去获取菜单子集
+                List<SysMenuTreeOfPermissionVO> childrenMenuList =
+                        sysMenuMapper.findMenuOfPermissionByParentId(sysMenuTreeVO.getId());
+                sysMenuTreeVO.setChildren(childrenMenuList);
+                //未查询到数据,设置为空
+                if (childrenMenuList == null || childrenMenuList.size() == 0) {
+                    sysMenuTreeVO.setChildren(null);
+                    continue;
+                } else {
+                    //子集不为空,继续查询子集菜单具有的子集菜单
+                    getChildMenuAndResourcesList(childrenMenuList);
+                }
+            }else{
+                //不是目录菜单,查询菜单的页面功能信息
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+                getResourcesByMenuId(sysMenuTreeVO);
+            }
+        }
+    }
+
+    /**
+     * 根据菜单id获取菜单功能信息
+     * @param sysMenuTreeVO
+     */
+    private void getResourcesByMenuId(SysMenuTreeOfPermissionVO sysMenuTreeVO) {
+        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
+        sysMenuTreeVO.setChildren(resourcesList);
+        if (resourcesList == null || resourcesList.size() == 0) {
+            sysMenuTreeVO.setChildren(null);
+        }
     }
 
     /**

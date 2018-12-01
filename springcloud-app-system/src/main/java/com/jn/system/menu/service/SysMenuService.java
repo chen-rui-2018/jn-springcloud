@@ -76,7 +76,7 @@ public interface SysMenuService {
     String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
 
     /**
-     * 批量对菜单排序进行更新
+     * 批量更新菜单
      *
      * @param sysMenus
      */

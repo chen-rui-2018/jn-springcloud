@@ -41,7 +41,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination-container">
+    <div class="pagination-container  tablePagination">
       <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 弹出的新增岗位对话框 -->

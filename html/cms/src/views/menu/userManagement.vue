@@ -514,7 +514,7 @@ export default {
       this.isDisabled = true
       setTimeout(() => {
         this.isDisable = false
-      }, 5000)
+      }, 500)
       // 更换用户信息
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
@@ -649,10 +649,6 @@ export default {
   display: flex;
   flex-direction: column;
 }
-// .el-dialog {
-//   width: 90%;
-//   max-width: 400px;
-// }
 .pagination-container {
   margin-top: 10px;
 }

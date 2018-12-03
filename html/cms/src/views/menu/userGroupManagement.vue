@@ -52,7 +52,17 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination
+      v-show="total>0"
+      :current-page="listQuery.page"
+      :page-sizes="[5,10,20,30, 50]"
+      :page-size="listQuery.rows"
+      :total="total"
+      class="tablePagination"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange" />
 
     <!-- 弹出的用户组对话框 -->
     <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
@@ -187,34 +197,6 @@ export default {
     this.initList()
   },
   methods: {
-    // text(a) {
-    //   this.debounce(() => {
-    //     const html = document.querySelectorAll(".el-input__inner[placeholder='请输入用户名称']")[0]
-    //     console.log(html.value)
-    //     getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, name: html.value, rows: this.userRows }).then(res => {
-    //       console.log(res)
-    //       const userData = []
-    //       const checkUser = []
-    //       this.userTotal = res.data.data.total
-    //       res.data.data.rows.userList.forEach((val, index) => {
-    //         userData.push({
-    //           label: val.name,
-    //           key: val.id
-    //         })
-    //       })
-    //       res.data.data.rows.userAllOfGroup.forEach((val, index) => {
-    //         checkUser.push(val.id)
-    //       })
-    //       this.userData = userData
-    //       this.userIds = checkUser
-    //       this.userLoading = false
-    //     })
-    //   }, 400)
-    // },
-    // debounce(func, delay) {
-    //   clearTimeout(this.timer)
-    //   this.timer = setTimeout(func, delay)
-    // },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -438,16 +420,8 @@ export default {
             }
             // 重置表单元素的数据
             this.$refs['userGroupform'].resetFields()
-            this.$nextTick(() => {
-              this.$refs['userGroupform'].clearValidate()
-            })
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '输入数据不合法',
-            type: 'error'
           })
         }
       })
@@ -508,6 +482,9 @@ export default {
 </script>
 
 <style lang="scss">
+.tablePagination{
+  margin-top:15px;
+}
 .management {
   .filter-container {
     .el-form-item {

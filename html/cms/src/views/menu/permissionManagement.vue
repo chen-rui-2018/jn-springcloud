@@ -36,7 +36,6 @@
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
           <el-button type="primary" size="mini" @click="showMenuDialog(scope.row.id)">授权菜单</el-button>
-          <!-- <el-button type="primary" size="mini" @click="showPageDialog(scope.row.id)">授权功能</el-button> -->
           <el-button type="primary" size="mini" @click="showFileGroupDialog(scope.row.id)">授权文件组</el-button>
           <!-- 删除按钮 -->
           <el-button size="mini" type="danger" @click="deletePermission(scope.row.id)">删除</el-button>
@@ -44,7 +43,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 新增权限对话框 -->
     <el-dialog :visible.sync="permissiondialogFormVisible" :title="dialogStatus" width="400px" >
       <el-form ref="permissionform" :rules="rules" :model="permissionform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
@@ -99,8 +98,8 @@
       </el-transfer>
     </el-dialog> -->
     <!-- 授权菜单 -->
-    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" width="800px">
-      <el-tree
+    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" >
+      <!-- <el-tree
         v-loading="menuLoading"
         ref="tree"
         :data="data2"
@@ -108,7 +107,22 @@
         :default-checked-keys="[5]"
         :props="defaultProps"
         show-checkbox
-        node-key="id"/>
+        node-key="id"/> -->
+      <el-tree
+        v-loading="menuLoading"
+        ref="tree"
+        :data="data2"
+        :default-expanded-keys="data3"
+        :default-checked-keys="data3"
+        :props="defaultProps"
+        node-key="id"
+        show-checkbox>
+        <span slot-scope="{ node, data }" class="custom-tree-node">
+          <span>
+            <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
+          </span>
+        </span>
+      </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getCheckedKeys">确 定</el-button>
         <el-button @click="menuDialogVisible = false">取 消</el-button>
@@ -126,6 +140,8 @@ import {
   getRoleInfo,
   updataRole,
   deletePermissionById,
+  getAllList,
+  updataAllData,
   // getMenuInfo,
   // updataMenu,
   getFileGroupInfo,
@@ -156,41 +172,8 @@ export default {
       }
     }
     return {
-      data2: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
+      data3: [],
+      data2: [],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -243,12 +226,38 @@ export default {
   },
   methods: {
     getCheckedKeys(a, b) {
-      this.menuDialogVisible = false
-      console.log(this.$refs.tree.getCheckedKeys())
-      console.log(this.$refs.tree.getCurrentKey())
+      const checkData = this.$refs.tree.getCheckedKeys()
+      // console.log(this.$refs.tree.getCheckedKeys())
+      updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: '授权成功',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('授权失败')
+        }
+        this.menuDialogVisible = false
+        this.initList()
+      })
     },
     showMenuDialog(id) {
+      this.permissionId = id
       this.menuDialogVisible = true
+      this.menuLoading = true
+      // 获取权限具有的菜单和功能
+      getAllList(id).then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          this.data2 = res.data.data.sysMenuTreeVOList
+          this.data3 = res.data.data.menuAndResourcesIds
+          // this.permissionList = res.data.data.rows
+          // this.total = res.data.data.total
+        } else {
+          this.$message.error('获取数据失败')
+        }
+        this.menuLoading = false
+      })
     },
     // // 授权页面分页功能
     // handlePageCurrentChange(val) {

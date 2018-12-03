@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
       <el-table-column label="描述" prop="fileGroupDescribe" align="center" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
         </template>
@@ -40,21 +40,23 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 新增文件组弹框 -->
     <el-dialog :visible.sync="fileGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form
         ref="temp"
         :rules="rules"
         :model="temp"
-        label-position="left"
-        style="max-width:300px;margin:0 auto;"
+        label-position="right"
         label-width="80px" >
         <el-form-item label="文件组" prop="fileGroupName">
           <el-input v-model.trim="temp.fileGroupName" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item">
+        <el-form-item label="描述" prop="fileGroupDescribe">
+          <el-input v-model.trim="temp.fileGroupDescribe" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status" >
+          <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -105,7 +107,8 @@ export default {
       temp: {
         id: undefined,
         fileGroupName: undefined,
-        status: undefined
+        status: undefined,
+        fileGroupDescribe: undefined
       },
       listLoading: false,
       fileGroupList: [],
@@ -116,7 +119,7 @@ export default {
           { validator: checkAccount, trigger: 'blur' }
         ],
         status: [
-          { required: true, message: '请选择状态', trigger: '' }
+          { required: true, message: '请选择状态', trigger: 'blur' }
         ]
       }
     }
@@ -137,8 +140,9 @@ export default {
     // 清空信息
     resetTemp() {
       this.temp = {
-        filegroupName: '',
-        filegroupstatus: ''
+        filegroupName: undefined,
+        filegroupstatus: undefined,
+        fileGroupDescribe: undefined
       }
     },
     // 显示新增文件组对话框
@@ -186,6 +190,7 @@ export default {
       this.temp.id = row.id
       this.dialogStatus = '编辑文件组'
       this.oldName = row.fileGroupName
+      this.temp.fileGroupDescribe = row.fileGroupDescribe
       this.fileGroupdialogFormVisible = true
       this.temp.fileGroupName = row.fileGroupName
       this.temp.status = parseInt(row.status)

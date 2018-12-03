@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.4.RELEASE</version>
+		<version>1.5.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jn</groupId>
@@ -31,12 +31,14 @@
 		<module>springcloud-wechat-official-accounts</module>
 		<module>springcloud-wechat-mini-program</module>
         <module>springcloud-app-config-manager</module>
-    </modules>
+		<module>springcloud-app-admin</module>
+	</modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>
 		<janino.version>2.7.8</janino.version>
 		<scca.version>1.1.1-RELEASE</scca.version>
+		<spring-boot-admin>1.5.7</spring-boot-admin>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -158,6 +160,27 @@
 				<groupId>com.didispace</groupId>
 				<artifactId>scca-persistence-db</artifactId>
 				<version>${scca.version}</version>
+			</dependency>
+			<!--spring-boot-admin-->
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-client</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-login</artifactId>
+				<version>${spring-boot-admin}</version>
 			</dependency>
 
 		</dependencies>

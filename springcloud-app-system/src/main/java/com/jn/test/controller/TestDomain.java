@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RefreshScope
 public class TestDomain {
 
-    @Value("${test}")
+    @Value("${test.test}")
     private String test;
 
     @Value("${test.mis}")

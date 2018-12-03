@@ -28,9 +28,9 @@ public class ShiroConfig {
 	
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
-	@Value(value = "${shiro_redis_session}")
+	@Value(value = "${shiro.redis.session}")
 	private int shiroRedisSession;
-	@Value(value = "${shiro_redis_cache}")
+	@Value(value = "${shiro.redis.cache}")
 	private int shiroRedisCache;
 
 
@@ -48,6 +48,29 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon");
         //所有内部提供的api接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/metaData/**", "anon");
+        //健康状态不拦截
+
+        filterChainDefinitionMap.put("/health", "anon");
+        filterChainDefinitionMap.put("/loggers/**", "anon");
+        filterChainDefinitionMap.put("/dump", "anon");
+        filterChainDefinitionMap.put("/info", "anon");
+        filterChainDefinitionMap.put("/env", "anon");
+        filterChainDefinitionMap.put("/env/reset", "anon");
+        filterChainDefinitionMap.put("/metrics", "anon");
+        filterChainDefinitionMap.put("/trace", "anon");
+        filterChainDefinitionMap.put("/heapdump", "anon");
+        filterChainDefinitionMap.put("/features", "anon");
+        filterChainDefinitionMap.put("/archaius", "anon");
+        filterChainDefinitionMap.put("/jolokia", "anon");
+        filterChainDefinitionMap.put("/logfile", "anon");
+        filterChainDefinitionMap.put("/channels", "anon");
+        filterChainDefinitionMap.put("/mappings", "anon");
+        filterChainDefinitionMap.put("/auditevents", "anon");
+        filterChainDefinitionMap.put("/configprops", "anon");
+        filterChainDefinitionMap.put("/autoconfig", "anon");
+        filterChainDefinitionMap.put("/refresh", "anon");
+
         ///v2/api-docs
         filterChainDefinitionMap.put("/v2/api-docs/**", "anon");
         //所有客人访问的接口不需要拦截

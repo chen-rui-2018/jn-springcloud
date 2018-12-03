@@ -12,6 +12,7 @@
 - feign 注解通信
 - config 配置中心
 - bus 实时配置中心功能
+- admin 监控中心（包含业务监控，turbine监控）
 - hystrix 断路器监控
 - turbine 断路器监控聚合
 - zipkin 链路监控

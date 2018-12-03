@@ -161,7 +161,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
-        sysFileGroupCriteria.setOrderByClause("create_time desc");
+        sysFileGroupCriteria.setOrderByClause("create_time desc,id desc");
         TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字

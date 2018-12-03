@@ -60,8 +60,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Autowired
     private SysPermissionResourcesMapper sysPermissionResourcesMapper;
     @Autowired
-    private SysMenuService sysMenuService;
-    @Autowired
     private TbSysMenuMapper tbSysMenuMapper;
     @Autowired
     private SysMenuMapper sysMenuMapper;
@@ -503,7 +501,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      * @param sysMenuTreeVO
      */
     private void getResourcesByMenuId(SysMenuTreeOfPermissionVO sysMenuTreeVO) {
-        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
+        List<SysResourcesOfPermission> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
         sysMenuTreeVO.setChildren(resourcesList);
         if (resourcesList == null || resourcesList.size() == 0) {
             sysMenuTreeVO.setChildren(null);

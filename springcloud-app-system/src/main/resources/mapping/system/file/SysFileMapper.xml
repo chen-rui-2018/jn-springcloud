@@ -84,6 +84,7 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileUrl)">
             and file_url=#{fileUrl,jdbcType=VARCHAR}
         </if>
+        ORDER BY create_time DESC , id DESC
     </select>
 
 </mapper>

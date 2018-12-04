@@ -19,8 +19,6 @@
 		<module>springcloud-app-zuul</module>
 		<module>springcloud-app-system-api</module>
 		<module>springcloud-app-schedule</module>
-		<module>springcloud-app-hystrix</module>
-        <module>springcloud-app-turbine</module>
 		<module>springcloud-app-zipkin</module>
         <module>springcloud-app-fastdfs</module>
 		<module>springcloud-app-stream</module>
@@ -32,7 +30,8 @@
 		<module>springcloud-wechat-mini-program</module>
         <module>springcloud-app-config-manager</module>
 		<module>springcloud-app-admin</module>
-	</modules>
+        <module>springcloud-portals-api</module>
+    </modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>
@@ -182,7 +181,16 @@
 				<artifactId>spring-boot-admin-server-ui-login</artifactId>
 				<version>${spring-boot-admin}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-hystrix</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-turbine</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,7 +14,8 @@ import java.util.HashMap;
 
 /**
  * 1,配置更新测试，如果需要动态更新的配置文件，需要加入@RefreshScope注解
- *2,缓存测试
+ *2,redis缓存测试
+ * 3,hystrix 的使用
  *
  * @author： fengxh
  * @date： Created on 2018/9/20 15:31
@@ -48,6 +50,8 @@ public class TestController extends BaseController {
         return new Result(hashMap);
     }
 
+
+
     @RequestMapping(value = "/guest/test2")
     public Result<Integer> test2() {
         Cache<Integer> cache =redisCacheFactory.initCache("yanzhengma",testDomain.getMis());
@@ -55,6 +59,17 @@ public class TestController extends BaseController {
         cache.put("yanzhengma2",testDomain.getMis());
         return new Result(GlobalConstants.SUCCESS_CODE);
     }
+
+
+    @Autowired
+    private TestService testService;
+
+    @RequestMapping(value = "/guest/test3")
+    public Result<String> hiService() {
+        return new Result(testService.hiService());
+    }
+
+
 
 
 }

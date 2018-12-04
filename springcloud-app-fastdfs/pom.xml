@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jn</groupId>
-            <artifactId>springcloud-app-system-api</artifactId>
+            <artifactId>springcloud-app-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.tobato</groupId>

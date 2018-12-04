@@ -1,6 +1,5 @@
 package com.jn.controller;
 
-import com.github.tobato.fastdfs.domain.Token;
 import com.github.tobato.fastdfs.token.GetToken;
 import com.jn.common.model.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +23,7 @@ public class DownloadTokenController {
     @Autowired
     private GetToken getToken;
 
+
     /**
      * 获取文件下载的权限
      * @param filePath  文件链接地址 eg.http://192.168.10.45:2020/group1/M00/00/00/wKgKLVvazSeAGLAxAAMmpEcA_IM580.png
@@ -31,8 +31,8 @@ public class DownloadTokenController {
      * @throws IOException
      */
     @RequestMapping("/download/getToken")
-    public Result<Token> getToken(String filePath) throws IOException, NoSuchAlgorithmException {
-        // TODO: 2018/11/2 请炮哥完成文件与用户权限的校验
+    public Result getToken(String filePath) throws IOException, NoSuchAlgorithmException {
+        // TODO: 2018/11/29 请炮哥补充权限校验
         return new Result(getToken.getToken(filePath));
     }
 

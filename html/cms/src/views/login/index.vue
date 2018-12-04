@@ -73,7 +73,8 @@ export default {
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!isvalidUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
+      //  callback(new Error('Please enter the correct user name'))
+        callback()
       } else {
         callback()
       }
@@ -87,8 +88,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: 'wangsong',
+        password: 'wangsong'
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -194,7 +195,7 @@ export default {
         height: 47px;
         caret-color: $cursor;
         &:-webkit-autofill {
-        -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
+        // -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
           -webkit-text-fill-color: $cursor !important;
         }
       }

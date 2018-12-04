@@ -55,4 +55,14 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
     public Result(){}
+
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "result='" + result + '\'' +
+                ", code='" + code + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

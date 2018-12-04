@@ -7,11 +7,11 @@ import com.jn.common.util.GlobalConstants;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * 上传工具类
@@ -22,6 +22,7 @@ import java.io.InputStream;
  * @modified By:
  */
 @Component
+@RefreshScope
 public class DefaultFastDfsUploadClient implements FastDfsUploadClient{
 
     @Autowired

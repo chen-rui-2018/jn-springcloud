@@ -25,7 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableFeignClients
 @EnableSwagger2Doc
 @SpringCloudApplication
-@MapperScan("com.jn.*.dao")
+@MapperScan("com.jn.**.dao")
 public class SpringCloudAppSystemApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(SpringCloudAppSystemApplication.class).web(true).run(args);

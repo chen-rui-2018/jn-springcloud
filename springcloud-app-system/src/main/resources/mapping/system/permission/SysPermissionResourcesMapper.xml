@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.permission.dao.SysPermissionResourcesMapper">
+    <update id="deletePermissionBranch" parameterType="java.lang.String">
+        update tb_sys_permission_resources set status=-1
+        where permission_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="findResourcesOfPermission" parameterType="java.lang.String"
+            resultType="com.jn.system.menu.model.SysResources">
+        select distinct
+            t2.id,
+            t2.resources_name as resourcesName,
+            t2.resources_url as resourcesUrl,
+            t2.menu_id as menuId,
+            t2.creator,
+            t2.create_time as createTime,
+            t2.`status`
+        from tb_sys_permission_resources t1,tb_sys_resources t2
+        where t1.resources_id = t2.id and t1.`status` = '1'
+           and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <update id="deleteByPermissionId" parameterType="java.lang.String">
+        update tb_sys_permission_resources set `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <insert id="addResourceToPermission" parameterType="java.util.List">
+        insert into tb_sys_permission_resources (id, permission_id,resources_id,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.permissionId,jdbcType=VARCHAR},
+            #{item.resourcesId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
+    <select id="findResourceByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionResourcePage"
+            resultType="com.jn.system.menu.model.SysResources">
+        select DISTINCT
+        t.id,
+        t.resources_name as resourcesName
+        from tb_sys_resources t left join
+        (select t1.id from tb_sys_resources t1,tb_sys_permission_resources t2
+        where t1.id = t2.resources_id and t1.`status` = '1' and t2.`status` = '1'
+        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(resourceName)">
+            and t.resources_name like CONCAT('%', #{resourceName,jdbcType=VARCHAR}, '%')
+        </if>
+    </select>
+</mapper>

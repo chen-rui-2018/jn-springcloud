@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.4.RELEASE</version>
+		<version>1.5.6.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.jn</groupId>
@@ -19,20 +19,27 @@
 		<module>springcloud-app-zuul</module>
 		<module>springcloud-app-system-api</module>
 		<module>springcloud-app-schedule</module>
-		<module>springcloud-app-hystrix</module>
-        <module>springcloud-app-turbine</module>
 		<module>springcloud-app-zipkin</module>
         <module>springcloud-app-fastdfs</module>
 		<module>springcloud-app-stream</module>
 		<module>springcloud-app-stream-demo</module>
-		<module>springcloud-news</module>
+		<module>springcloud-portals</module>
+		<module>springcloud-portals-management</module>
+		<module>springcloud-integrated-app</module>
+		<module>springcloud-wechat-official-accounts</module>
+		<module>springcloud-wechat-mini-program</module>
+        <module>springcloud-app-config-manager</module>
+		<module>springcloud-app-admin</module>
+        <module>springcloud-portals-api</module>
+        <module>springcloud-news</module>
 		<module>springcloud-news-api</module>
-	</modules>
+    </modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>
 		<janino.version>2.7.8</janino.version>
-
+		<scca.version>1.1.1-RELEASE</scca.version>
+		<spring-boot-admin>1.5.7</spring-boot-admin>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -46,6 +53,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-system-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-portals-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
@@ -119,7 +131,12 @@
 			<dependency>
 				<groupId>com.spring4all</groupId>
 				<artifactId>swagger-spring-boot-starter</artifactId>
-				<version>1.7.0.RELEASE</version>
+				<version>1.8.0.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>27.0-jre</version>
 			</dependency>
 			<!-- 日志文件管理包-提高性能log输出性能 -->
 			<!--  janino -->
@@ -132,6 +149,59 @@
 				<groupId>org.codehaus.janino</groupId>
 				<artifactId>janino</artifactId>
 				<version>${janino.version}</version>
+			</dependency>
+
+			<!--scca-->
+			<dependency>
+				<groupId>com.didispace</groupId>
+				<artifactId>scca-plugin-db</artifactId>
+				<version>${scca.version}</version>
+			</dependency>
+			<dependency>
+			<groupId>com.didispace</groupId>
+			<artifactId>scca-ui</artifactId>
+				<version>${scca.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.didispace</groupId>
+				<artifactId>scca-rest</artifactId>
+				<version>${scca.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.didispace</groupId>
+				<artifactId>scca-persistence-db</artifactId>
+				<version>${scca.version}</version>
+			</dependency>
+			<!--spring-boot-admin-->
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-starter-client</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-login</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-hystrix</artifactId>
+				<version>${spring-boot-admin}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.codecentric</groupId>
+				<artifactId>spring-boot-admin-server-ui-turbine</artifactId>
+				<version>${spring-boot-admin}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

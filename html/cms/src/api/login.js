@@ -1,12 +1,14 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password) {
+export function loginByUsername(account, password) {
+  console.log(account, password)
   const data = {
-    username,
+    account,
     password
   }
+  // 'http://192.168.2.139/springcloud-app-system/login
   return request({
-    url: '/login/login',
+    url: 'login',
     method: 'post',
     data
   })

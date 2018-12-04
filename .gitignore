@@ -10,8 +10,9 @@
 **/overlays
 **/*.log
 **/*.pdb
-**/build
+#**/build
 **/.pdb
+**/*.bak
 
 **/node_modules
 **/*_20*.vue

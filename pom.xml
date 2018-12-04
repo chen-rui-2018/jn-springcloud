@@ -31,6 +31,8 @@
         <module>springcloud-app-config-manager</module>
 		<module>springcloud-app-admin</module>
         <module>springcloud-portals-api</module>
+        <module>springcloud-news</module>
+		<module>springcloud-news-api</module>
     </modules>
 
 	<properties>
@@ -61,6 +63,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-common</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-news-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

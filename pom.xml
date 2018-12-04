@@ -55,6 +55,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.jn</groupId>
+				<artifactId>springcloud-portals-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-common</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>

@@ -1,5 +1,9 @@
 package com.jn.pre;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jn.enums.ZuulExceptionEnum;
+import com.jn.model.Result;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.jn.enums.FilterTypeEnum;
@@ -7,6 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * 接入的过滤器
  *
@@ -16,6 +23,8 @@ import javax.servlet.http.HttpServletRequest;
  * @modified By:
  */
 public class OneToAccessFilter extends ZuulFilter  {
+
+    private final static String[] NOT_ALLOW_URL =  new String[]{"/api/"};
 
     private static Logger log = LoggerFactory.getLogger(OneToAccessFilter.class);
     /**
@@ -32,7 +41,7 @@ public class OneToAccessFilter extends ZuulFilter  {
      */
     @Override
     public int filterOrder() {
-        return 0;
+        return -1;
     }
     /**
      * 是否执行
@@ -51,8 +60,34 @@ public class OneToAccessFilter extends ZuulFilter  {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        log.info("send {} request to {}", request.getMethod(), request.getRequestURL().toString());
-        // TODO: 2018/9/19 进行接入权限校验
+        String requestUrl = request.getRequestURL().toString();
+        log.info("send {} request to {}", request.getMethod(), requestUrl);
+        for(String notAllow : NOT_ALLOW_URL){
+            if(requestUrl.contains(notAllow)){
+                log.warn("不允许访问");
+                HttpServletResponse response = ctx.getResponse();
+                response.setCharacterEncoding("utf-8");
+                response.setContentType("application/json; charset=utf-8");
+                ObjectMapper mapper = new ObjectMapper();
+                String json = null;
+                try {
+                    json = mapper.writeValueAsString(new Result(ZuulExceptionEnum.UN_AUTH_EXCEPTION));
+                } catch (JsonProcessingException e) {
+                    log.error("JsonProcessingException异常",e);
+                }
+                ctx.setSendZuulResponse(false);
+                try {
+                    response.getWriter().write(json);
+                } catch (IOException e) {
+                    log.error("response io异常",e);
+                }
+                ctx.setResponse(response);
+                return null;
+            }
+        }
+
+
+
         return null;
     }
 

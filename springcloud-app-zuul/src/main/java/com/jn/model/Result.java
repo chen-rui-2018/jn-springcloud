@@ -1,5 +1,7 @@
 package com.jn.model;
 
+import com.jn.config.CodeAndMsg;
+
 import java.io.Serializable;
 
 /**
@@ -21,6 +23,11 @@ public class Result implements Serializable {
     public Result(String result, String code) {
         this.result = result;
         this.code = code;
+    }
+
+    public Result(CodeAndMsg codeAndMsg) {
+        this.code = codeAndMsg.getCode();
+        this.result = codeAndMsg.getMessage() ;
     }
 
     public String getResult() {

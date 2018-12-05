@@ -56,10 +56,15 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        user
+                        activity
                     </contexts>
                     <tableNames>
-
+                        tb_activity,
+                        tb_activity_apply,
+                        tb_activity_type,
+                        tb_activity_detail,
+                        tb_activity_like,
+                        tb_activity_comment
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -1,4 +1,4 @@
-package com.jn.portals.activity.model;
+package com.jn.portals.activity.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +15,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ActivityType", description = "活动类型")
-public class ActivityType implements Serializable {
+public class ActivityTypeVO implements Serializable {
     @ApiModelProperty(value = "类型ID")
     private String typeId;
     @ApiModelProperty(value = "类型名称")

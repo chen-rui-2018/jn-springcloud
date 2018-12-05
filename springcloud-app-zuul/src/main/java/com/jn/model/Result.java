@@ -53,4 +53,13 @@ public class Result implements Serializable {
     public void setData(String data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "result='" + result + '\'' +
+                ", code='" + code + '\'' +
+                ", data='" + data + '\'' +
+                '}';
+    }
 }

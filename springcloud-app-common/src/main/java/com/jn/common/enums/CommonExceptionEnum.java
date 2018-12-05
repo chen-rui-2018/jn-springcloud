@@ -1,4 +1,4 @@
-﻿package com.jn.common.enums;
+package com.jn.common.enums;
 
 
 import com.jn.common.api.CodeAndMsg;

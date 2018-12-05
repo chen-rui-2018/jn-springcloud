@@ -100,3 +100,13 @@ export function checkResourcesName(query) {
     data: query
   })
 }
+// 根据菜单id获取当前Id所具有的子菜单
+export function getOldData(query) {
+  const param = new URLSearchParams()
+  param.append('parentId', query)
+  return request({
+    url: 'system/sysMenu/getChildrenMenuByParentId',
+    method: 'post',
+    data: param
+  })
+}

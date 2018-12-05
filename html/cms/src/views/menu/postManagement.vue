@@ -25,7 +25,6 @@
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center" prop="describe" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
@@ -57,7 +56,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -99,6 +98,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       oldPostName: undefined,
       postform: {
         id: '',
@@ -178,6 +178,11 @@ export default {
     },
     // 编辑岗位的功能实现
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -189,6 +194,8 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error('编辑失败')
             }
             // 将对话框隐藏
             this.postdialogFormVisible = false
@@ -215,6 +222,11 @@ export default {
     },
     // 实现新增岗位功能
     createPostData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -226,6 +238,8 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error('编辑失败')
             }
             // 重置表单元素的数据
             this.$refs['postform'].resetFields()

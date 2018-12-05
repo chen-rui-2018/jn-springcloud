@@ -19,11 +19,11 @@
           </el-popover>
         </el-form-item>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-circle-plus-outline" @click="handleCreate">新增用户</el-button>
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
       </el-form>
     </div>
     <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="序列" type="index" align="center" min-width="60"/>
+      <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="姓名" prop="name" align="center" />
       <el-table-column label="账号" prop="account" align="center" min-width="100" />
       <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
@@ -54,10 +54,10 @@
       <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- S 新增弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle">
+    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="400px">
       <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
         <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" maxlength="20" clearable />
+          <el-input v-model="temp.account" :disabled="isAbled" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input v-model="temp.name" maxlength="20" clearable />
@@ -245,6 +245,7 @@ export default {
       return data
     }
     return {
+      isAbled: false,
       passwordType: 'password',
       isDisabled: false,
       userId: undefined,
@@ -476,7 +477,7 @@ export default {
       // 避免重复点击提交
       this.isDisabled = true
       setTimeout(() => {
-        this.isDisable = false
+        this.isDisabled = false
       }, 5000)
 
       this.$refs['dataForm'].validate(valid => {
@@ -495,10 +496,8 @@ export default {
     // 编辑用户
     handleUpdate(row) {
       // 打开用户信息更新弹窗
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
       console.log(row)
+      this.isAbled = true
       this.dialogStatus = 'update'
       this.addDialogTitle = '编辑'
       this.temp.account = row.account
@@ -508,12 +507,15 @@ export default {
       this.temp.phone = row.phone
       this.temp.status = parseInt(row.status)
       this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
     },
     updateData() {
       // 避免重复点击提交
       this.isDisabled = true
       setTimeout(() => {
-        this.isDisable = false
+        this.isDisabled = false
       }, 500)
       // 更换用户信息
       this.$refs['dataForm'].validate(valid => {

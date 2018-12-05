@@ -57,7 +57,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增权限'?createPermissionData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增权限'?createPermissionData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -70,15 +70,6 @@
         <span slot="right-footer" size="small" />
       </el-transfer>
     </el-dialog>
-    <!-- 弹出授权菜单对话框
-    <el-dialog :visible.sync="menudialogVisible" title="授权菜单" width="800px">
-      <el-transfer v-loading="menuLoading" v-model="menuIds" :data="menuData" :titles="['其他菜单', '权限拥有菜单']" filterable filter-placeholder="请输入菜单名称" class="box" @change="handleMenuChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleMenuCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog> -->
     <!-- 弹出授权文件组对话框 -->
     <el-dialog :visible.sync="fileGroupdialogVisible" title="授权文件组" width="800px">
       <el-transfer v-loading="fileGroupLoading" v-model="fileGroupIds" :data="fileGroupData" :titles="['其他文件组', '权限拥有文件组']" filterable filter-placeholder="请输入文件组名称" class="box" @change="handleFileGroupChange">
@@ -88,26 +79,8 @@
         <span slot="right-footer" size="small" />
       </el-transfer>
     </el-dialog>
-    <!-- 弹出授权页面功能对话框
-    <el-dialog :visible.sync="pagedialogVisible" title="授权页面功能" width="800px">
-      <el-transfer v-loading="pageLoading" v-model="pageIds" :data="pageData" :titles="['其他页面功能', '权限拥有页面功能']" filterable filter-placeholder="请输入页面名称" class="box" @change="handlePageChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handlePageCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog> -->
     <!-- 授权菜单 -->
     <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" >
-      <!-- <el-tree
-        v-loading="menuLoading"
-        ref="tree"
-        :data="data2"
-        :default-expanded-keys="[2, 3]"
-        :default-checked-keys="[5]"
-        :props="defaultProps"
-        show-checkbox
-        node-key="id"/> -->
       <el-tree
         v-loading="menuLoading"
         ref="tree"
@@ -142,12 +115,8 @@ import {
   deletePermissionById,
   getAllList,
   updataAllData,
-  // getMenuInfo,
-  // updataMenu,
   getFileGroupInfo,
   updataFileGroup
-  // updataPage,
-  // getPageInfo
 } from '@/api/Permission-model/permissionManagement'
 export default {
 
@@ -172,6 +141,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       data3: [],
       data2: [],
       defaultProps: {
@@ -182,8 +152,6 @@ export default {
       fileGroupIds: [],
       fileGroupLoading: false,
       fileGroupdialogVisible: false,
-      // menuData: [],
-      // menuIds: [],
       menuDialogVisible: false,
       menuLoading: false,
       moveArr: 0,
@@ -251,75 +219,12 @@ export default {
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           this.data3 = res.data.data.menuAndResourcesIds
-          // this.permissionList = res.data.data.rows
-          // this.total = res.data.data.total
         } else {
           this.$message.error('获取数据失败')
         }
         this.menuLoading = false
       })
     },
-    // // 授权页面分页功能
-    // handlePageCurrentChange(val) {
-    //   if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
-    //     this.numberPage = val
-    //   } else {
-    //     this.numberPage = val - 1
-    //   }
-    //   this.pagedialogVisible = true
-    //   this.getPage()
-    // },
-    // // 改变授权页面功能穿梭框时获取选中的页面功能
-    // handlePageChange(value, direction, movedKeys) {
-    //   this.pageIds = value
-    //   if (direction === 'left') {
-    //     this.moveArr = -movedKeys.length
-    //   } else if (direction === 'right') {
-    //     this.moveArr = movedKeys.length
-    //   }
-    //   updataPage({ permissionId: this.permissionId, resourcesIds: value }).then(res => {
-    //     if (res.data.code === '0000') {
-    //       this.$message({
-    //         message: '授权成功',
-    //         type: 'success'
-    //       })
-    //     } else {
-    //       this.$message.error('授权失败')
-    //     }
-    //     this.initList()
-    //   })
-    // },
-    // // 显示授权页面功能对话框
-    // showPageDialog(id) {
-    //   this.numberPage = 1
-    //   this.pageLoading = true
-    //   this.permissionId = id
-    //   this.pagedialogVisible = true
-    //   this.getPage()
-    // },
-    // getPage() {
-    //   getPageInfo({
-    //     permissionId: this.permissionId,
-    //     page: this.numberPage,
-    //     rows: this.numberRows
-    //   }).then(res => {
-    //     const pageData = []
-    //     const checkPage = []
-    //     this.numberTotal = res.data.data.total
-    //     res.data.data.rows.otherResourceList.forEach((val, index) => {
-    //       pageData.push({
-    //         label: val.resourcesName,
-    //         key: val.id
-    //       })
-    //     })
-    //     res.data.data.rows.sysResourcesOfPermissionList.forEach(val => {
-    //       checkPage.push(val.id)
-    //     })
-    //     this.pageData = pageData
-    //     this.pageIds = checkPage
-    //     this.pageLoading = false
-    //   })
-    // },
     // 授权文件组分页功能
     handleFileGroupCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -381,68 +286,6 @@ export default {
         this.fileGroupLoading = false
       })
     },
-
-    // 授权菜单分页功能
-    // handleMenuCurrentChange(val) {
-    //   if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
-    //     this.numberPage = val
-    //   } else {
-    //     this.numberPage = val - 1
-    //   }
-    //   this.menudialogVisible = true
-    //   this.getMenu()
-    // },
-    // // 改变授权菜单穿梭框时获取选中的菜单
-    // handleMenuChange(value, direction, movedKeys) {
-    //   this.menuIds = value
-    //   if (direction === 'left') {
-    //     this.moveArr = -movedKeys.length
-    //   } else if (direction === 'right') {
-    //     this.moveArr = movedKeys.length
-    //   }
-    //   updataMenu({ permissionId: this.permissionId, menuIds: value }).then(res => {
-    //     if (res.data.code === '0000') {
-    //       this.$message({
-    //         message: '授权成功',
-    //         type: 'success'
-    //       })
-    //     } else {
-    //       this.$message.error('授权失败')
-    //     }
-    //     this.initList()
-    //   })
-    // },
-    // // 显示授权菜单对话框
-    // showMenuDialog(id) {
-    //   this.numberPage = 1
-    //   this.menuLoading = true
-    //   this.permissionId = id
-    //   this.menudialogVisible = true
-    //   this.getMenu()
-    // },
-    // getMenu() {
-    //   getMenuInfo({
-    //     permissionId: this.permissionId,
-    //     page: this.numberPage,
-    //     rows: this.numberRows
-    //   }).then(res => {
-    //     const menuData = []
-    //     const checkMenu = []
-    //     this.numberTotal = res.data.data.total
-    //     res.data.data.rows.otherMenuList.forEach((val, index) => {
-    //       menuData.push({
-    //         label: val.menuName,
-    //         key: val.id
-    //       })
-    //     })
-    //     res.data.data.rows.sysMenuOfPermissionList.forEach(val => {
-    //       checkMenu.push(val.id)
-    //     })
-    //     this.menuData = menuData
-    //     this.menuIds = checkMenu
-    //     this.menuLoading = false
-    //   })
-    // },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -533,6 +376,11 @@ export default {
     },
     // 编辑权限
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -574,6 +422,11 @@ export default {
     },
     // 新增权限
     createPermissionData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏

@@ -1,16 +1,37 @@
 <template>
   <div class="departmentManagement">
-    <header>部门管理</header>
     <div class="department-left">
-      <el-tree v-loading="listLoading" :data="departmentList" :expand-on-click-node="false" :render-content="renderContent" node-key="id" default-expand-all @node-click="handleNodeClick"/>
+      <el-tree v-loading="listLoading" :data="departmentList" :expand-on-click-node="false" default-expand-all node-key="id" @node-click="handleNodeClick">
+        <span slot-scope="{ node, data }" class="custom-tree-node">
+          <span>
+            <i style="margin-right:3px"/>{{ node.label }}
+          </span>
+          <span style="margin-left:20px">
+            <i
+              class="el-icon-plus"
+              @click="() => addDepartment(data)"/>
+            <i
+              class="el-icon-edit"
+              @click="() => editDepartment( data)"/>
+            <i
+              class="el-icon-delete"
+              @click="() => deleteDepartment( data.id)"/>
+          </span>
+        </span>
+      </el-tree>
+      <!-- <el-tree v-loading="listLoading" :data="departmentList" :expand-on-click-node="false" :render-content="renderContent" node-key="id" default-expand-all @node-click="handleNodeClick"/> -->
     </div>
     <!-- 弹出的新增和编辑对话框 -->
     <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
       <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px">
-        <el-form-item label="上级部门">
+        <el-form-item label="上级部门:">
           <el-input v-model="departmentForm.parentDepartmentName" disabled style="width:200px;" />
         </el-form-item>
-        <el-form-item label="部门名称" prop="departmentName">
+        <el-form-item v-show="visible" label="新增位置:">
+          <el-radio v-model="location" label="1">同级部门</el-radio>
+          <el-radio v-model="location" label="0">子部门</el-radio>
+        </el-form-item>
+        <el-form-item label="部门名称:" prop="departmentName">
           <el-input v-model="departmentForm.departmentName" style="width:200px;" />
         </el-form-item>
         <el-form-item>
@@ -18,25 +39,7 @@
           <el-button @click="departmentDialogVisible = false">取消</el-button>
         </el-form-item>
       </el-form>
-
     </el-dialog>
-    <!-- 弹出的新增子部门 -->
-    <el-dialog :visible.sync="subDepartmentDialogVisible" title="新增子部门" width="400px">
-      <el-form ref="subDepartmentForm" :rules="rules" :model="subDepartmentForm" label-width="100px">
-        <el-form-item label="上级部门">
-          <el-input v-model="subDepartmentForm.departmentName" disabled style="width:200px;" />
-        </el-form-item>
-        <el-form-item label="部门名称" prop="subDepartmentName">
-          <el-input v-model="subDepartmentForm.subDepartmentName" style="width:200px;" />
-        </el-form-item>
-        <el-form-item>
-          <el-button :disabled="isDisabled" type="primary" @click="submitDepartment">保存</el-button>
-          <el-button @click="subDepartmentDialogVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-
-    </el-dialog>
-
   </div>
 </template>
 
@@ -66,12 +69,9 @@ export default {
       }
     }
     return {
-      subDepartmentDialogVisible: false,
-      subDepartmentForm: {
-        departmentId: undefined,
-        subDepartmentName: undefined,
-        departmentName: undefined
-      },
+      currentId: undefined,
+      visible: false,
+      location: '1',
       oldDepartmentName: undefined,
       isDisabled: false,
       departmentForm: {
@@ -88,10 +88,6 @@ export default {
         departmentName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
-        ],
-        subDepartmentName: [
-          { required: true, message: '请输入部门名称', trigger: 'blur' },
-          { validator: checkAccount, trigger: 'blur' }
         ]
       }
     }
@@ -103,67 +99,6 @@ export default {
     handleNodeClick(data, Node) {
       this.isShow = true
       console.log(data, Node)
-    },
-    renderContent(h, { node, data, store }) {
-      return (
-        <span style=' align-items: center; font-size: 14px'>
-          <span >
-            <span>{node.label}</span>
-          </span>
-          <span style='margin-left:10px' >
-            <el-button type='text' on-click={() => this.addDepartment(data)} >新增</el-button>
-            <el-button type='text'on-click={() => this.addSubDepartment(data)} >新增子部门</el-button>
-
-            <el-button on-click={() => this.editDepartment(data)} type='text'>
-              编辑
-            </el-button>
-            <el-button on-click={() => this.deleteDepartment(data.id)} type='text'>
-              删除
-            </el-button>
-          </span>
-        </span>
-      )
-    },
-    // 新增子部门功能的实现
-    submitDepartment() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
-      this.$refs['subDepartmentForm'].validate(valid => {
-        if (valid) {
-          // 将对话框隐藏
-          this.subDepartmentDialogVisible = false
-          // 调用接口发送请求
-          createDepartment({ departmentName: this.subDepartmentForm.subDepartmentName, parentId: this.subDepartmentForm.departmentId }).then(res => {
-            console.log(res)
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-            } else {
-              this.$message.error('添加失败')
-            }
-            // 重置表单元素的数据
-            this.$refs['subDepartmentForm'].resetFields()
-            // 刷新页面显示
-            this.initList()
-          })
-        }
-      })
-    },
-    // 新增子部门
-    addSubDepartment(data) {
-      this.subDepartmentDialogVisible = true
-      this.subDepartmentForm.subDepartmentName = undefined
-      this.subDepartmentForm.departmentName = data.label
-      this.subDepartmentForm.departmentId = data.id
-      console.log(data)
-      this.$nextTick(() => {
-        this.$refs['subDepartmentForm'].clearValidate()
-      })
     },
     // 删除部门功能实现
     deleteDepartment(id) {
@@ -194,6 +129,10 @@ export default {
     },
     // 显示编辑对话框
     editDepartment(data) {
+      this.$nextTick(() => {
+        this.$refs['departmentForm'].clearValidate()
+      })
+      this.visible = false
       console.log(data)
       this.dialogStatus = '编辑部门'
       this.oldDepartmentName = data.label
@@ -245,13 +184,15 @@ export default {
       setTimeout(() => {
         this.isDisabled = false
       }, 500)
+      if (this.location === '0') {
+        this.departmentForm.parentId = this.currentId
+      }
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
           this.departmentDialogVisible = false
           // 调用接口发送请求
           createDepartment(this.departmentForm).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -270,9 +211,12 @@ export default {
     },
     // 显示新增部门对话框
     addDepartment(data) {
+      console.log(data)
+      this.visible = true
       this.dialogStatus = '新增部门'
       this.departmentDialogVisible = true
       this.departmentForm.departmentName = undefined
+      this.location = '1'
       if (data.parentName) {
         this.departmentForm.parentDepartmentName = data.parentName
         this.departmentForm.parentId = data.parentId
@@ -280,6 +224,7 @@ export default {
         this.departmentForm.parentDepartmentName = ''
         this.departmentForm.parentId = '1'
       }
+      this.currentId = data.id
       console.log(data)
       this.$nextTick(() => {
         this.$refs['departmentForm'].clearValidate()
@@ -303,13 +248,19 @@ export default {
 
 <style lang="scss" scoped>
 .departmentManagement{
- header{
-   margin-bottom: 20px;
- }
 .department-left{
   .el-tree{
+    width: 30%;
   padding: 20px;
   }
 }
+ .custom-tree-node {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    padding-right: 8px;
+  }
 }
 </style>

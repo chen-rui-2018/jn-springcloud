@@ -1,12 +1,12 @@
 <template>
   <div v-loading="listLoading" class="menuManagement">
     <div class="menu-left">
-      <el-tree :data="menuList" :expand-on-click-node="false" node-key="id" @node-click="handleNodeClick">
+      <el-tree :data="menuList" :expand-on-click-node="false" default-expand-all node-key="id" @node-click="handleNodeClick">
         <span slot-scope="{ node, data }" class="custom-tree-node">
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>
-          <span>
+          <span style="margin-left:20px">
             <i
               class="el-icon-plus"
               @click="() => addMenu(data)"/>
@@ -32,10 +32,10 @@
               :key="index"
               :prop="'menuData.'+index+'.label'"
               :rules="menuDataRules.label">
-              <el-input v-model="item.label" @focus="checkOldName(item.label)" @blur="checkoutName(item.label)" /><a href="javascript:;" class="fa fa-long-arrow-up" @click="menuUp(item,index)"/><a href="javascript:;" class="fa fa-long-arrow-down" @click="menuDown(item,index)"/> <span v-show="isError" class="hint">名称已重复</span>
+              <el-input v-model="item.label" /><a href="javascript:;" class="fa fa-long-arrow-up" @click="menuUp(item,index)"/><a href="javascript:;" class="fa fa-long-arrow-down" @click="menuDown(item,index)"/>
             </el-form-item>
             <el-form-item>
-              <el-button :disabled="isDisabled" type="primary" @click="submitMenuInfo(subForm)" >保存</el-button>
+              <el-button :disabled="isDisabled" type="primary" @click="submitMenuInfo('subForm')" >保存</el-button>
               <el-button @click="cencalEdit('subForm')" >取消</el-button>
             </el-form-item>
           </el-form>
@@ -111,7 +111,7 @@
 
 <script>
 import {
-  getMenuList, checkMenuName, createMenu, createMenuDir, updateMenu, deleteMenuById, updateAllMenu, addResources, editResources, deleteResourcesById, getAllResources, checkResourcesName
+  getMenuList, checkMenuName, createMenu, createMenuDir, updateMenu, deleteMenuById, updateAllMenu, addResources, editResources, deleteResourcesById, getAllResources, checkResourcesName, getOldData
 } from '@/api/Permission-model/menuManagement'
 export default {
   data() {
@@ -154,44 +154,32 @@ export default {
       }
     }
     var checkLabel = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的菜单名称'))
+      debugger
+      // const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
+      if (value.length > 20) {
+        callback(new Error('菜单名称不能超过20个字符'))
       } else {
-        // console.log(this.oldSubName, this.currentSubMenuName)
-        // var count = 0
-        // this.subForm.menuData.forEach((val, index) => {
-        //   if (value === val.label) {
-        //     count = count + 1
-        //     console.log(count)
-        //     if (count > 1) {
-        //       console.log(value)
-        //       callback(new Error('菜单名称已重复'))
-        //       console.log('1')
-        checkMenuName({ menuName: value, parentId: this.currentParentId }).then(response => {
-          const result = response.data.data
-          if (result === 'success') {
-            callback()
-            // this.isDisabled = false
-          } else {
-            console.log(123)
-            // alert(123)
-            callback(new Error('菜单名称已重复'))
-            this.isDisabled = true
+        var count = 0
+        // 循环整个数组 判断有没有重名的字段
+        this.subForm.menuData.forEach((val, index) => {
+          // debugger
+          if (value === val.label) {
+            count = count + 1
+            if (count > 1) {
+              this.isSubmit = false
+              callback(new Error('菜单名称已重复'))
+            } else {
+              this.isSubmit = true
+              // this.$refs['subForm'].clearValidate()
+              // callback()
+            }
           }
-          // })
-          // } else {
-          //   callback()
-          // }
-          // }
         })
       }
     }
     return {
-      currentSubMenuName: undefined,
-      currentParentId: undefined,
-      oldSubName: undefined,
-      isError: false,
+      isSubmit: false,
+      parentId: undefined,
       oldResourcesName: undefined,
       resourcesForm: {
         id: undefined,
@@ -241,9 +229,6 @@ export default {
         resourcesName: [
           { required: true, message: '请输入功能名称', trigger: 'blur' },
           { validator: checkResources, trigger: 'blur' }]
-        // ],
-        // label: [{ required: true, message: '请输入菜单名称', trigger: 'blur' },
-        //   { validator: checkLabel, trigger: 'blur' }]
       },
       menuDataRules: {
         label: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }, { validator: checkLabel, trigger: 'blur' }]
@@ -264,36 +249,6 @@ export default {
     this.initList()
   },
   methods: {
-    checkOldName(oldName) {
-      this.oldSubName = oldName
-      console.log(this.oldSubName)
-    },
-    // 当input框失去焦点的时候判断名称有没有重复
-    checkoutName(value) {
-      this.currentSubMenuName = value
-      // console.log(this.currentSubMenuName)
-      // console.log(value)
-    //   debugger
-    //   // console.log(name)
-    //   // console.log(this.menuData)
-    //   // for (let i = 0; i <= this.menuData.length; i++) {
-    //   //   console.log(i, this.menuData[i])
-    //   //   if (this.menuData[i] === name) {
-    //   //   }
-    //   // }
-    //   var count = 0
-    //   this.subForm.menuData.forEach((val, index) => {
-    //     if (value === val.label) {
-    //       count = count + 1
-    //       console.log(count)
-    //       if (count > 1) {
-    //         this.isError = index
-    //       } else {
-    //         this.isError = false
-    //       }
-    //     }
-    //   })
-    },
     // 删除页面的功能
     deleteResourcesName(id) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
@@ -407,12 +362,14 @@ export default {
       })
     },
     cencalEdit(formName) {
-      console.log(this.subForm.menuData)
-      console.log(this.oldMenuData)
-      // this.subForm.menuData = this.oldMenuData
-      this.$refs[formName].clearValidate()
-      this.isDisabled = false
-      // this.initList()
+      getOldData(this.parentId).then(res => {
+        if (res.data.code === '0000') {
+          this.subForm.menuData = res.data.data
+          this.$refs['subForm'].clearValidate()
+        } else {
+          this.$message.error('取消失败')
+        }
+      })
     },
     // 点击向下移动的时候
     menuDown(item, index) {
@@ -456,6 +413,7 @@ export default {
         this.isDisabled = false
       }, 500)
       const newData = []
+      // 对数组进行遍历 得到与后台要求的数据一样
       this.subForm.menuData.forEach((val) => {
         newData.push({
           id: val.id,
@@ -464,25 +422,23 @@ export default {
           sort: val.sort
         })
       })
-      // 调用接口进行批量更新
-      updateAllMenu({ sysMenuSortList: newData }).then(res => {
-        console.log(res)
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
-          })
-        } else {
-          this.$message.error('res.result')
-        }
-        // this.$refs[formName].clearValidate()
-        // 刷新页面显示
-        this.initList()
-      })
+      if (this.isSubmit === true) {
+        // 调用接口发送请求 进行批量更新
+        updateAllMenu({ sysMenuSortList: newData }).then(res => {
+          if (res.data.code === '0000') {
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+          } else { this.$message.error('保存失败') }
+          // 刷新页面显示
+          this.initList()
+        })
+      }
     },
     handleNodeClick(data) {
+      this.parentId = data.id
       if (data.isDir === '1') {
-        this.currentParentId = data.id
         this.currentMenuName = data.label
         this.isShowMenuDir = false
         this.subForm.menuData = data.children
@@ -493,20 +449,10 @@ export default {
         } else {
           this.isData = false
           this.isShowInfo = true
-          const arr = []
-          data.children.forEach(val => {
-            arr.push({
-              id: val.id,
-              label: val.label,
-              menuUrl: val.menuUrl,
-              sort: val.sort
-            })
-          })
-          this.oldMenuData = Array.from(new Set(arr))
-          console.log(this.oldMenuData)
         }
       } else if (data.isDir === '0') {
         this.tableData = data.resourcesList
+        this.isData = false
         this.isShowMenuDir = true
         this.isShowInfo = false
         this.isShowTable = true
@@ -542,7 +488,7 @@ export default {
           })
         })
     },
-    // 编辑部门功能的实现
+    // 编辑菜单的实现
     updateData() {
       // 避免重复点击提交
       this.isDisabled = true
@@ -573,6 +519,9 @@ export default {
     },
     // 显示编辑对话框
     editMenu(data) {
+      this.$nextTick(() => {
+        this.$refs['menuForm'].clearValidate()
+      })
       this.isTrue = true
       this.dialogStatus = '编辑'
       this.visible = false
@@ -652,6 +601,7 @@ export default {
     addMenu(data) {
       this.radio = '1'
       this.location = '1'
+      this.isTrue = false
       this.dialogStatus = '新增'
       this.menuDialogVisible = true
       this.menuForm.menuName = undefined
@@ -691,10 +641,10 @@ export default {
 
 <style lang="scss" >
 .menuManagement{
+  height: 100%;
   display: flex;
-  // background-color: #fff;
+  background-color: #fff;
  .menu-left{
-   width: 30%;
     height: 100%;
   .el-tree{
     height: 100%;
@@ -703,6 +653,8 @@ export default {
   }
 }
 .menu-right{
+  height: 100%;
+  overflow: auto;
   margin-left:20px;
   flex:1;
   padding :20px;

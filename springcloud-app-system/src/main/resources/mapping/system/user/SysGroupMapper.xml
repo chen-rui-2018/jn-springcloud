@@ -19,7 +19,7 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
             and status = #{status,jdbcType=VARCHAR}
         </if>
-        order by create_time desc
+        order by create_time desc,id desc
     </select>
 
     <select id="findGroupAll" resultType="com.jn.system.user.entity.TbSysGroup">

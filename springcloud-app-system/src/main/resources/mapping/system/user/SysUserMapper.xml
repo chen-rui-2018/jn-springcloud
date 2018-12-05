@@ -114,7 +114,7 @@
                 #{id}
             </foreach>
         </if>
-        ORDER BY t.create_time desc
+        ORDER BY t.create_time desc, t.id desc
     </select>
 
     <update id="deleteSysUser" parameterType="java.lang.String">

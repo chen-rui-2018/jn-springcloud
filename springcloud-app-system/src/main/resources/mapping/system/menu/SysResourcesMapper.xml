@@ -196,6 +196,7 @@
         FROM tb_sys_resources
         WHERE menu_id = #{id,jdbcType=VARCHAR}
         AND `status` = '1'
+        ORDER BY create_time DESC
     </select>
 
 </mapper>

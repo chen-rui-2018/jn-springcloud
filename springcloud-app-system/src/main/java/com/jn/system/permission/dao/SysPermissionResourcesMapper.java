@@ -44,11 +44,4 @@ public interface SysPermissionResourcesMapper {
      */
     void addResourceToPermission(List<TbSysPermissionResources> tbSysPermissionResourcesList);
 
-    /**
-     * 条件分页获取未拥有的功能信息
-     *
-     * @param sysPermissionResourcePage
-     * @return
-     */
-    List<SysResources> findResourceByPermissionPage(SysPermissionResourcePage sysPermissionResourcePage);
 }

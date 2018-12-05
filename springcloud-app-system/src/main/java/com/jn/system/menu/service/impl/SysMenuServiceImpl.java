@@ -187,7 +187,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 } else {
                     getChildMenuAndResourcesList(childrenMenuList);
                 }
-            }else {
+            } else {
                 //不是目录菜单,查询菜单的页面功能信息
                 sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
             }
@@ -210,57 +210,6 @@ public class SysMenuServiceImpl implements SysMenuService {
             BeanUtils.copyProperties(tbSysMenu, sysMenu);
         }
         return sysMenu;
-    }
-
-    /**
-     * 菜单分配功能
-     *
-     * @param sysMenuResourcesAdd
-     */
-    @Override
-    @ServiceLog(doAction = "菜单分配功能")
-    @Transactional(rollbackFor = Exception.class)
-    public void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user) {
-        //功能
-        String[] resourcesId = sysMenuResourcesAdd.getResourcesId();
-        //菜单
-        String menuId = sysMenuResourcesAdd.getMenuId();
-        if (resourcesId.length == 0) {
-            //获取当前登录用户信息
-            TbSysResources tbSysResources = new TbSysResources();
-            tbSysResources.setCreator(user.getId());
-            tbSysResources.setId(UUID.randomUUID().toString());
-            tbSysResources.setCreateTime(new Date());
-            tbSysResources.setResourcesName(sysMenuResourcesAdd.getResourcesName());
-            tbSysResources.setResourcesUrl(sysMenuResourcesAdd.getResourcesUrl());
-            tbSysResources.setStatus(sysMenuResourcesAdd.getStatus());
-            tbSysResources.setMenuId(menuId);
-            tbSysResourcesMapper.insert(tbSysResources);
-            return;
-        }
-
-        for (int i = 0; i < resourcesId.length; i++) {
-            //根据id查询当前功能
-            TbSysResources tbSysResources = tbSysResourcesMapper.selectByPrimaryKey(resourcesId[i]);
-            if (tbSysResources == null) {
-                TbSysResources tbSysResources1 = new TbSysResources();
-                tbSysResources1.setCreator(user.getId());
-                tbSysResources1.setId(UUID.randomUUID().toString());
-                tbSysResources1.setCreateTime(new Date());
-                tbSysResources1.setResourcesName(sysMenuResourcesAdd.getResourcesName());
-                tbSysResources1.setResourcesUrl(sysMenuResourcesAdd.getResourcesUrl());
-                tbSysResources1.setStatus(sysMenuResourcesAdd.getStatus());
-                tbSysResources1.setMenuId(menuId);
-                tbSysResourcesMapper.insert(tbSysResources1);
-            } else {
-                //设置当前菜单
-                tbSysResources.setMenuId(menuId);
-                //更新功能中的菜单
-                tbSysResourcesMapper.updateByPrimaryKey(tbSysResources);
-            }
-
-        }
-
     }
 
     /**
@@ -315,6 +264,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     /**
      * 设置菜单等级
+     *
      * @param sysMenuAdd
      * @param tbSysMenu
      */
@@ -417,9 +367,30 @@ public class SysMenuServiceImpl implements SysMenuService {
     public void updateBatch(SysMenus sysMenus) {
         List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();
         //如果集合长度大于0,进行批量更新
-        if (sysMenuSortList != null && sysMenuSortList.size() > 0 ){
+        if (sysMenuSortList != null && sysMenuSortList.size() > 0) {
             sysMenuMapper.updateBatch(sysMenuSortList);
             logger.info("[菜单] 菜单批量更新成功");
         }
+    }
+
+    /**
+     * 根据父菜单id获取子下一级所有菜单信息
+     *
+     * @param parentId
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "根据父菜单id获取子下一级所有菜单信息")
+    public List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId) {
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.getChildrenMenuByParentId(parentId);
+        for (SysMenuTreeVO menuTreeVO : menuTreeVOList) {
+            Boolean flag = SysMenuEnums.MENU_ISDIR.getCode().equals(menuTreeVO.getIsDir())? Boolean.TRUE:Boolean.FALSE;
+            if (flag){
+                menuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
+            }else {
+                menuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+            }
+        }
+        return menuTreeVOList;
     }
 }

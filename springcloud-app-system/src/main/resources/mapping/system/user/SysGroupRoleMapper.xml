@@ -72,13 +72,22 @@
         t.create_time as createTime,
         t.`status`
         from tb_sys_group t left join
-        (SELECT DISTINCT t1.id,t1.group_name FROM tb_sys_group t1, tb_sys_group_role t2
-        where t1.id = t2.user_group_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        (SELECT DISTINCT
+        t1.id,
+        t1.group_name
+        FROM tb_sys_group t1,
+        tb_sys_group_role t2
+        where t1.id = t2.user_group_id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
+        and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id
+        where t.`status` = '1'
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupName)">
             and t.group_name like CONCAT('%', #{userGroupName,jdbcType=VARCHAR}, '%')
         </if>
+        ORDER BY t.create_time DESC,t.id DESC
     </select>
 
     <select id="findRoleByGroupPage" parameterType="com.jn.system.user.model.SysGroupRolePage"
@@ -90,12 +99,29 @@
         t.creator,
         t.`status`
         from tb_sys_role t left join
-        (SELECT t1.id,t1.role_name FROM `tb_sys_role` t1 ,tb_sys_group_role t2
-        where t1.id = t2.role_id and t1.`status` = '1' and t2.`status` = '1'
+        (SELECT
+        t1.id,
+        t1.role_name
+        FROM `tb_sys_role` t1 ,
+        tb_sys_group_role t2
+        where t1.id = t2.role_id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
         and t2.user_group_id = #{groupId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        on t.id = tt.id
+        where t.`status` = '1'
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
-    </select>
+        ORDER BY t.create_time DESC, t.id DESC
+</select>
+
+    <update id="deleteTbSysGroupRoleByRoleIds" parameterType="java.lang.String">
+        update tb_sys_group_role set status='-1'
+        where role_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
 </mapper>

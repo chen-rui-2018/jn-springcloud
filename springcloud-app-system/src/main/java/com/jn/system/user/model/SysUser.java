@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,6 +33,7 @@ public class SysUser implements Serializable {
     private String password;
 
     @ApiModelProperty("用户名称")
+    @Size(max = 10,message = "用户名称长度不能超过10个字")
     private String name;
 
     @ApiModelProperty("手机号码")

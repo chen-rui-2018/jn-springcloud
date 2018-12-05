@@ -2,48 +2,35 @@ package com.jn.system.user.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
- * 用户组更新实体
+ * 用户组添加实体类
+ *
  * @author： shaobao
- * @date： Created on 2018/11/19 19:37
+ * @date： Created on 2018/12/4 16:21
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysGroupUpdate",description = "用户组更新实体")
-public class SysGroupUpdate implements Serializable {
-    private static final long serialVersionUID = -6740363506874538711L;
-    @ApiModelProperty("用户组id")
-    @NotBlank(message = "用户组id不能为空")
-    private String id;
+@ApiModel(value = "SysGroupAdd", description = "用户组添加实体类")
+public class SysGroupAdd implements Serializable {
+    private static final long serialVersionUID = 4267579545005088033L;
     @ApiModelProperty("用户组名称")
     @Size(max = 20,message = "用户组名称字数不能超过20个")
     private String groupName;
     @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
+    @Pattern(regexp = "^\\-1|[01]$", message = "{status:'状态值只允许为0,1,-1'}")
     private String status;
 
-    public SysGroupUpdate() {
+    public SysGroupAdd() {
     }
 
-    public SysGroupUpdate(String id, String groupName, String status) {
-        this.id = id;
+    public SysGroupAdd(String groupName, String status) {
         this.groupName = groupName;
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getGroupName() {
@@ -62,11 +49,11 @@ public class SysGroupUpdate implements Serializable {
         this.status = status;
     }
 
+
     @Override
     public String toString() {
-        return "SysGroupUpdate{" +
-                "id='" + id + '\'' +
-                ", groupName='" + groupName + '\'' +
+        return "SysGroupAdd{" +
+                "groupName='" + groupName + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }

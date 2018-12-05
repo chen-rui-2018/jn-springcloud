@@ -46,14 +46,6 @@ public interface SysPermissionMenuMapper {
     void addMenuToPermission(List<TbSysPermissionMenu> tbSysPermissionMenuList);
 
     /**
-     * 条件分页查询未拥有的菜单信息
-     *
-     * @param sysPermissionMenuPage
-     * @return
-     */
-    List<SysMenu> findMenuByPermissionPage(SysPermissionMenuPage sysPermissionMenuPage);
-
-    /**
      * 删除菜单及子菜单对应的权限信息
      *
      * @param menuIds

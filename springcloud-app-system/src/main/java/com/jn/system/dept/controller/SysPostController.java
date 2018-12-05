@@ -88,9 +88,9 @@ public class SysPostController extends BaseController {
         return new Result(sysPost);
     }
 
-    @ControllerLog(doAction = "分页获取岗位信息及岗位对应的用户")
+    @ControllerLog(doAction = "条件分页获取岗位信息列表")
     @RequiresPermissions("/system/sysPost/list")
-    @ApiOperation(value = "分页获取岗位信息及岗位对应的用户", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "条件分页获取岗位信息列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/list")
     public Result list(@Validated @RequestBody SysPostPage sysPostPage) {
         PaginationData data = sysPostService.findByPage(sysPostPage);
@@ -98,9 +98,9 @@ public class SysPostController extends BaseController {
     }
 
     @ControllerLog(doAction = "校验岗位名称是否存在,fail表示名称已存在,success表示可以使用")
-    @RequiresPermissions("/system/sysPost/checkPostName")
     @ApiOperation(value = "校验岗位名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkPostName")
+    @RequiresPermissions("/system/sysPost/checkPostName")
     public Result checkPostName(String postName){
         String result = sysPostService.checkPostName(postName);
         return new Result(result);

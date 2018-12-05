@@ -40,18 +40,4 @@
         </foreach>
     </insert>
 
-    <select id="findResourceByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionResourcePage"
-            resultType="com.jn.system.menu.model.SysResources">
-        select DISTINCT
-        t.id,
-        t.resources_name as resourcesName
-        from tb_sys_resources t left join
-        (select t1.id from tb_sys_resources t1,tb_sys_permission_resources t2
-        where t1.id = t2.resources_id and t1.`status` = '1' and t2.`status` = '1'
-        and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(resourceName)">
-            and t.resources_name like CONCAT('%', #{resourceName,jdbcType=VARCHAR}, '%')
-        </if>
-    </select>
 </mapper>

@@ -222,6 +222,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "根据菜单id获取菜单所有页面功能")
     public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        tbSysResourcesCriteria.setOrderByClause("create_time desc");
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());

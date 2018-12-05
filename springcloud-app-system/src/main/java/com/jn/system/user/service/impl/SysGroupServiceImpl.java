@@ -27,6 +27,8 @@ import com.jn.system.user.vo.SysGroupUserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,7 +92,7 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @ServiceLog(doAction = "用户组增加")
     @Transactional(rollbackFor = Exception.class)
-    public void addSysGroup(TbSysGroup sysGroup, User user) {
+    public void addSysGroup(SysGroupAdd sysGroup, User user) {
         //判断用户组名是否存在
         List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
         if (tbSysGroups != null && tbSysGroups.size() > 0) {
@@ -98,11 +100,13 @@ public class SysGroupServiceImpl implements SysGroupService {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         //为用户组设置信息
-        sysGroup.setId(UUID.randomUUID().toString());
-        sysGroup.setCreateTime(new Date());
-        sysGroup.setCreator(user.getId());
-        tbSysGroupMapper.insert(sysGroup);
-        logger.info("[用户组] 添加用户组信息成功,groupId:{}", sysGroup.getId());
+        TbSysGroup tbSysGroup = new TbSysGroup();
+        BeanUtils.copyProperties(sysGroup,tbSysGroup);
+        tbSysGroup.setId(UUID.randomUUID().toString());
+        tbSysGroup.setCreateTime(new Date());
+        tbSysGroup.setCreator(user.getId());
+        tbSysGroupMapper.insert(tbSysGroup);
+        logger.info("[用户组] 添加用户组信息成功,groupId:{}", tbSysGroup.getId());
     }
 
     /**
@@ -234,32 +238,19 @@ public class SysGroupServiceImpl implements SysGroupService {
     }
 
     /**
-     * 根据用户组id获取用户组下面所有用户
-     *
-     * @param groupId 用户组id
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "根据用户组id获取用户组下面所有用户")
-    public List<SysTUser> findUserOfGroup(String groupId) {
-        List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(groupId);
-        return userAllOfGroup;
-    }
-
-    /**
      * 查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息
      *
      * @param sysGroupUserPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "分页获取除用户组具有的用户以外的用户")
+    @ServiceLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
     public PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
+        //获取用户组已拥有用户
+        List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupUserPage.getGroupId());
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());
         //条件分页获取用户组未拥有用户
         List<SysTUser> userList = sysGroupUserMapper.findOtherUserByPage(sysGroupUserPage);
-        //获取用户组已拥有用户
-        List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupUserPage.getGroupId());
         //将以用户用户放入分页查询到的集合中,方便前端解析
         userList.addAll(userAllOfGroup);
         SysGroupUserVO sysGroupUserVO = new SysGroupUserVO();

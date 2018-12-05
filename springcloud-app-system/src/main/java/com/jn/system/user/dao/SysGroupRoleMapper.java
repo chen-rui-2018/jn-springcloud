@@ -75,4 +75,10 @@ public interface SysGroupRoleMapper {
      * @return
      */
     List<SysRole> findRoleByGroupPage(SysGroupRolePage sysGroupRolePage);
+
+    /**
+     * 根据角色id批量删除角色用户组信息
+     * @param roleIds
+     */
+    void deleteTbSysGroupRoleByRoleIds(String[] roleIds);
 }

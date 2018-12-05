@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,6 +19,7 @@ import java.util.Date;
 public class SysPostAdd implements Serializable {
     private static final long serialVersionUID = 7770105271133774300L;
     @ApiModelProperty("岗位名称")
+    @Size(max = 20,message = "岗位名称字数不能超过20个字")
     private String postName;
     @ApiModelProperty("状态")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")

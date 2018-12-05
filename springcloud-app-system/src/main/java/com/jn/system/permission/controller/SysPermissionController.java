@@ -126,51 +126,10 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息")
-    @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
-    @ApiOperation(value = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息",
-            httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findMenuOfPermission")
-    public Result findMenuOfPermission(@Validated @RequestBody SysPermissionMenuPage sysPermissionMenuPage) {
-        PaginationData data = sysPermissionService.findMenuOfPermission(sysPermissionMenuPage);
-        return new Result(data);
-    }
-
-    @ControllerLog(doAction = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息")
-    @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
-    @ApiOperation(value = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findResourcesOfPermission")
-    public Result findResourcesOfPermission(@Validated @RequestBody SysPermissionResourcePage sysPermissionResourcePage) {
-        PaginationData data = sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);
-        return new Result(data);
-    }
-
-    @ControllerLog(doAction = "为权限添加菜单")
-    @RequiresPermissions("/system/sysPermission/addMenuToPermission")
-    @ApiOperation(value = "为权限添加菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/addMenuToPermission")
-    public Result addMenuToPermission(@Validated @RequestBody SysPermissionMenuAdd sysPermissionMenuAdd) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addMenuToPermission(sysPermissionMenuAdd,user);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "为权限添加页面功能")
-    @RequiresPermissions("/system/sysPermission/addResounceToPermission")
-    @ApiOperation(value = "为权限添加页面功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/addResounceToPermission")
-    public Result addResounceToPermission(@Validated @RequestBody SysPermissionResourceAdd sysPermissionMenuAdd) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addResourceToPermission(sysPermissionMenuAdd,user);
-        return new Result();
-    }
-
     @ControllerLog(doAction = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用")
-    @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @ApiOperation(value = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @RequestMapping(value = "/checkPerssionName")
     public Result checkPermissionName(String permissionName) {
         String result = sysPermissionService.checkPermissionName(permissionName);

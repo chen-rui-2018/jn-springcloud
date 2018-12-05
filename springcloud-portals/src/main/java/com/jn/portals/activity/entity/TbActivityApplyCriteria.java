@@ -245,73 +245,73 @@ public class TbActivityApplyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNull() {
-            addCriterion("activityApply.user_id is null");
+        public Criteria andAccountIsNull() {
+            addCriterion("activityApply.account is null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIsNotNull() {
-            addCriterion("activityApply.user_id is not null");
+        public Criteria andAccountIsNotNull() {
+            addCriterion("activityApply.account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdEqualTo(String value) {
-            addCriterion("activityApply.user_id =", value, "userId");
+        public Criteria andAccountEqualTo(String value) {
+            addCriterion("activityApply.account =", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotEqualTo(String value) {
-            addCriterion("activityApply.user_id <>", value, "userId");
+        public Criteria andAccountNotEqualTo(String value) {
+            addCriterion("activityApply.account <>", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThan(String value) {
-            addCriterion("activityApply.user_id >", value, "userId");
+        public Criteria andAccountGreaterThan(String value) {
+            addCriterion("activityApply.account >", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityApply.user_id >=", value, "userId");
+        public Criteria andAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activityApply.account >=", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThan(String value) {
-            addCriterion("activityApply.user_id <", value, "userId");
+        public Criteria andAccountLessThan(String value) {
+            addCriterion("activityApply.account <", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLessThanOrEqualTo(String value) {
-            addCriterion("activityApply.user_id <=", value, "userId");
+        public Criteria andAccountLessThanOrEqualTo(String value) {
+            addCriterion("activityApply.account <=", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdLike(String value) {
-            addCriterion("activityApply.user_id like", value, "userId");
+        public Criteria andAccountLike(String value) {
+            addCriterion("activityApply.account like", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotLike(String value) {
-            addCriterion("activityApply.user_id not like", value, "userId");
+        public Criteria andAccountNotLike(String value) {
+            addCriterion("activityApply.account not like", value, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdIn(List<String> values) {
-            addCriterion("activityApply.user_id in", values, "userId");
+        public Criteria andAccountIn(List<String> values) {
+            addCriterion("activityApply.account in", values, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotIn(List<String> values) {
-            addCriterion("activityApply.user_id not in", values, "userId");
+        public Criteria andAccountNotIn(List<String> values) {
+            addCriterion("activityApply.account not in", values, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdBetween(String value1, String value2) {
-            addCriterion("activityApply.user_id between", value1, value2, "userId");
+        public Criteria andAccountBetween(String value1, String value2) {
+            addCriterion("activityApply.account between", value1, value2, "account");
             return (Criteria) this;
         }
 
-        public Criteria andUserIdNotBetween(String value1, String value2) {
-            addCriterion("activityApply.user_id not between", value1, value2, "userId");
+        public Criteria andAccountNotBetween(String value1, String value2) {
+            addCriterion("activityApply.account not between", value1, value2, "account");
             return (Criteria) this;
         }
 

@@ -245,73 +245,73 @@ public class TbActivityLikeCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdIsNull() {
-            addCriterion("activityLike.like_user_id is null");
+        public Criteria andLikeAccountIsNull() {
+            addCriterion("activityLike.like_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdIsNotNull() {
-            addCriterion("activityLike.like_user_id is not null");
+        public Criteria andLikeAccountIsNotNull() {
+            addCriterion("activityLike.like_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdEqualTo(String value) {
-            addCriterion("activityLike.like_user_id =", value, "likeUserId");
+        public Criteria andLikeAccountEqualTo(String value) {
+            addCriterion("activityLike.like_account =", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdNotEqualTo(String value) {
-            addCriterion("activityLike.like_user_id <>", value, "likeUserId");
+        public Criteria andLikeAccountNotEqualTo(String value) {
+            addCriterion("activityLike.like_account <>", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdGreaterThan(String value) {
-            addCriterion("activityLike.like_user_id >", value, "likeUserId");
+        public Criteria andLikeAccountGreaterThan(String value) {
+            addCriterion("activityLike.like_account >", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityLike.like_user_id >=", value, "likeUserId");
+        public Criteria andLikeAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activityLike.like_account >=", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdLessThan(String value) {
-            addCriterion("activityLike.like_user_id <", value, "likeUserId");
+        public Criteria andLikeAccountLessThan(String value) {
+            addCriterion("activityLike.like_account <", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdLessThanOrEqualTo(String value) {
-            addCriterion("activityLike.like_user_id <=", value, "likeUserId");
+        public Criteria andLikeAccountLessThanOrEqualTo(String value) {
+            addCriterion("activityLike.like_account <=", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdLike(String value) {
-            addCriterion("activityLike.like_user_id like", value, "likeUserId");
+        public Criteria andLikeAccountLike(String value) {
+            addCriterion("activityLike.like_account like", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdNotLike(String value) {
-            addCriterion("activityLike.like_user_id not like", value, "likeUserId");
+        public Criteria andLikeAccountNotLike(String value) {
+            addCriterion("activityLike.like_account not like", value, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdIn(List<String> values) {
-            addCriterion("activityLike.like_user_id in", values, "likeUserId");
+        public Criteria andLikeAccountIn(List<String> values) {
+            addCriterion("activityLike.like_account in", values, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdNotIn(List<String> values) {
-            addCriterion("activityLike.like_user_id not in", values, "likeUserId");
+        public Criteria andLikeAccountNotIn(List<String> values) {
+            addCriterion("activityLike.like_account not in", values, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdBetween(String value1, String value2) {
-            addCriterion("activityLike.like_user_id between", value1, value2, "likeUserId");
+        public Criteria andLikeAccountBetween(String value1, String value2) {
+            addCriterion("activityLike.like_account between", value1, value2, "likeAccount");
             return (Criteria) this;
         }
 
-        public Criteria andLikeUserIdNotBetween(String value1, String value2) {
-            addCriterion("activityLike.like_user_id not between", value1, value2, "likeUserId");
+        public Criteria andLikeAccountNotBetween(String value1, String value2) {
+            addCriterion("activityLike.like_account not between", value1, value2, "likeAccount");
             return (Criteria) this;
         }
 

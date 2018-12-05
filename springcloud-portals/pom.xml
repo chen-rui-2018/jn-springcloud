@@ -68,7 +68,8 @@
                         tb_activity_type,
                         tb_activity_detail,
                         tb_activity_like,
-                        tb_activity_comment
+                        tb_activity_comment,
+                        tb_activity_file
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

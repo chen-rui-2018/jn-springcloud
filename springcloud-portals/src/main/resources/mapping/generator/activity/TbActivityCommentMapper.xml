@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityComment">
     <result column="activityComment_id" jdbcType="VARCHAR" property="id" />
     <result column="activityComment_p_id" jdbcType="VARCHAR" property="pId" />
-    <result column="activityComment_com_user_id" jdbcType="VARCHAR" property="comUserId" />
+    <result column="activityComment_com_account" jdbcType="VARCHAR" property="comAccount" />
     <result column="activityComment_com_time" jdbcType="TIMESTAMP" property="comTime" />
     <result column="activityComment_like_num" jdbcType="INTEGER" property="likeNum" />
     <result column="activityComment_state" jdbcType="VARCHAR" property="state" />
@@ -70,7 +70,7 @@
   </sql>
   <sql id="Base_Column_List">
     activityComment.id as activityComment_id, activityComment.p_id as activityComment_p_id, 
-    activityComment.com_user_id as activityComment_com_user_id, activityComment.com_time as activityComment_com_time, 
+    activityComment.com_account as activityComment_com_account, activityComment.com_time as activityComment_com_time, 
     activityComment.like_num as activityComment_like_num, activityComment.state as activityComment_state, 
     activityComment.com_type as activityComment_com_type
   </sql>
@@ -98,10 +98,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_comment (p_id, com_user_id, com_time, 
+    insert into tb_activity_comment (p_id, com_account, com_time, 
       like_num, state, com_type
       )
-    values (#{pId,jdbcType=VARCHAR}, #{comUserId,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
+    values (#{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
       #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}
       )
   </insert>
@@ -114,8 +114,8 @@
       <if test="pId != null">
         p_id,
       </if>
-      <if test="comUserId != null">
-        com_user_id,
+      <if test="comAccount != null">
+        com_account,
       </if>
       <if test="comTime != null">
         com_time,
@@ -134,8 +134,8 @@
       <if test="pId != null">
         #{pId,jdbcType=VARCHAR},
       </if>
-      <if test="comUserId != null">
-        #{comUserId,jdbcType=VARCHAR},
+      <if test="comAccount != null">
+        #{comAccount,jdbcType=VARCHAR},
       </if>
       <if test="comTime != null">
         #{comTime,jdbcType=TIMESTAMP},
@@ -166,8 +166,8 @@
       <if test="record.pId != null">
         activityComment.p_id = #{record.pId,jdbcType=VARCHAR},
       </if>
-      <if test="record.comUserId != null">
-        activityComment.com_user_id = #{record.comUserId,jdbcType=VARCHAR},
+      <if test="record.comAccount != null">
+        activityComment.com_account = #{record.comAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.comTime != null">
         activityComment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
@@ -190,7 +190,7 @@
     update tb_activity_comment activityComment
     set activityComment.id = #{record.id,jdbcType=VARCHAR},
       activityComment.p_id = #{record.pId,jdbcType=VARCHAR},
-      activityComment.com_user_id = #{record.comUserId,jdbcType=VARCHAR},
+      activityComment.com_account = #{record.comAccount,jdbcType=VARCHAR},
       activityComment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
       activityComment.like_num = #{record.likeNum,jdbcType=INTEGER},
       activityComment.state = #{record.state,jdbcType=VARCHAR},

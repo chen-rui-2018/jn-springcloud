@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityLike">
     <result column="activityLike_id" jdbcType="VARCHAR" property="id" />
     <result column="activityLike_activity_id" jdbcType="VARCHAR" property="activityId" />
-    <result column="activityLike_like_user_id" jdbcType="VARCHAR" property="likeUserId" />
+    <result column="activityLike_like_account" jdbcType="VARCHAR" property="likeAccount" />
     <result column="activityLike_like_time" jdbcType="TIMESTAMP" property="likeTime" />
     <result column="activityLike_state" jdbcType="VARCHAR" property="state" />
   </resultMap>
@@ -68,7 +68,7 @@
   </sql>
   <sql id="Base_Column_List">
     activityLike.id as activityLike_id, activityLike.activity_id as activityLike_activity_id, 
-    activityLike.like_user_id as activityLike_like_user_id, activityLike.like_time as activityLike_like_time, 
+    activityLike.like_account as activityLike_like_account, activityLike.like_time as activityLike_like_time, 
     activityLike.state as activityLike_state
   </sql>
   <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbActivityLikeCriteria" resultMap="BaseResultMap">
@@ -95,9 +95,9 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_like (activity_id, like_user_id, like_time, 
+    insert into tb_activity_like (activity_id, like_account, like_time, 
       state)
-    values (#{activityId,jdbcType=VARCHAR}, #{likeUserId,jdbcType=VARCHAR}, #{likeTime,jdbcType=TIMESTAMP}, 
+    values (#{activityId,jdbcType=VARCHAR}, #{likeAccount,jdbcType=VARCHAR}, #{likeTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityLike">
@@ -109,8 +109,8 @@
       <if test="activityId != null">
         activity_id,
       </if>
-      <if test="likeUserId != null">
-        like_user_id,
+      <if test="likeAccount != null">
+        like_account,
       </if>
       <if test="likeTime != null">
         like_time,
@@ -123,8 +123,8 @@
       <if test="activityId != null">
         #{activityId,jdbcType=VARCHAR},
       </if>
-      <if test="likeUserId != null">
-        #{likeUserId,jdbcType=VARCHAR},
+      <if test="likeAccount != null">
+        #{likeAccount,jdbcType=VARCHAR},
       </if>
       <if test="likeTime != null">
         #{likeTime,jdbcType=TIMESTAMP},
@@ -149,8 +149,8 @@
       <if test="record.activityId != null">
         activityLike.activity_id = #{record.activityId,jdbcType=VARCHAR},
       </if>
-      <if test="record.likeUserId != null">
-        activityLike.like_user_id = #{record.likeUserId,jdbcType=VARCHAR},
+      <if test="record.likeAccount != null">
+        activityLike.like_account = #{record.likeAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.likeTime != null">
         activityLike.like_time = #{record.likeTime,jdbcType=TIMESTAMP},
@@ -167,7 +167,7 @@
     update tb_activity_like activityLike
     set activityLike.id = #{record.id,jdbcType=VARCHAR},
       activityLike.activity_id = #{record.activityId,jdbcType=VARCHAR},
-      activityLike.like_user_id = #{record.likeUserId,jdbcType=VARCHAR},
+      activityLike.like_account = #{record.likeAccount,jdbcType=VARCHAR},
       activityLike.like_time = #{record.likeTime,jdbcType=TIMESTAMP},
       activityLike.state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null">

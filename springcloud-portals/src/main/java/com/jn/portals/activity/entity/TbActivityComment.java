@@ -8,7 +8,7 @@ public class TbActivityComment implements Serializable {
 
     private String pId;
 
-    private String comUserId;
+    private String comAccount;
 
     private Date comTime;
 
@@ -36,12 +36,12 @@ public class TbActivityComment implements Serializable {
         this.pId = pId == null ? null : pId.trim();
     }
 
-    public String getComUserId() {
-        return comUserId;
+    public String getComAccount() {
+        return comAccount;
     }
 
-    public void setComUserId(String comUserId) {
-        this.comUserId = comUserId == null ? null : comUserId.trim();
+    public void setComAccount(String comAccount) {
+        this.comAccount = comAccount == null ? null : comAccount.trim();
     }
 
     public Date getComTime() {
@@ -90,7 +90,7 @@ public class TbActivityComment implements Serializable {
         TbActivityComment other = (TbActivityComment) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getpId() == null ? other.getpId() == null : this.getpId().equals(other.getpId()))
-            && (this.getComUserId() == null ? other.getComUserId() == null : this.getComUserId().equals(other.getComUserId()))
+            && (this.getComAccount() == null ? other.getComAccount() == null : this.getComAccount().equals(other.getComAccount()))
             && (this.getComTime() == null ? other.getComTime() == null : this.getComTime().equals(other.getComTime()))
             && (this.getLikeNum() == null ? other.getLikeNum() == null : this.getLikeNum().equals(other.getLikeNum()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()))
@@ -103,7 +103,7 @@ public class TbActivityComment implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getpId() == null) ? 0 : getpId().hashCode());
-        result = prime * result + ((getComUserId() == null) ? 0 : getComUserId().hashCode());
+        result = prime * result + ((getComAccount() == null) ? 0 : getComAccount().hashCode());
         result = prime * result + ((getComTime() == null) ? 0 : getComTime().hashCode());
         result = prime * result + ((getLikeNum() == null) ? 0 : getLikeNum().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
@@ -119,7 +119,7 @@ public class TbActivityComment implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", pId=").append(pId);
-        sb.append(", comUserId=").append(comUserId);
+        sb.append(", comAccount=").append(comAccount);
         sb.append(", comTime=").append(comTime);
         sb.append(", likeNum=").append(likeNum);
         sb.append(", state=").append(state);

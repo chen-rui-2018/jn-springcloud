@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbActivityTypeCriteria {
+public class TbActivityFileCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbActivityTypeCriteria() {
+    public TbActivityFileCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,473 +105,473 @@ public class TbActivityTypeCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("activityFile.id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("activityFile.id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(String value) {
+            addCriterion("activityFile.id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(String value) {
+            addCriterion("activityFile.id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(String value) {
+            addCriterion("activityFile.id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
+            addCriterion("activityFile.id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(String value) {
+            addCriterion("activityFile.id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(String value) {
+            addCriterion("activityFile.id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLike(String value) {
+            addCriterion("activityFile.id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("activityFile.id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
+            addCriterion("activityFile.id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<String> values) {
+            addCriterion("activityFile.id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(String value1, String value2) {
+            addCriterion("activityFile.id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(String value1, String value2) {
+            addCriterion("activityFile.id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIdIsNull() {
-            addCriterion("activityType.type_id is null");
+            addCriterion("activityFile.type_id is null");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdIsNotNull() {
-            addCriterion("activityType.type_id is not null");
+            addCriterion("activityFile.type_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdEqualTo(String value) {
-            addCriterion("activityType.type_id =", value, "typeId");
+            addCriterion("activityFile.type_id =", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdNotEqualTo(String value) {
-            addCriterion("activityType.type_id <>", value, "typeId");
+            addCriterion("activityFile.type_id <>", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdGreaterThan(String value) {
-            addCriterion("activityType.type_id >", value, "typeId");
+            addCriterion("activityFile.type_id >", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityType.type_id >=", value, "typeId");
+            addCriterion("activityFile.type_id >=", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdLessThan(String value) {
-            addCriterion("activityType.type_id <", value, "typeId");
+            addCriterion("activityFile.type_id <", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdLessThanOrEqualTo(String value) {
-            addCriterion("activityType.type_id <=", value, "typeId");
+            addCriterion("activityFile.type_id <=", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdLike(String value) {
-            addCriterion("activityType.type_id like", value, "typeId");
+            addCriterion("activityFile.type_id like", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdNotLike(String value) {
-            addCriterion("activityType.type_id not like", value, "typeId");
+            addCriterion("activityFile.type_id not like", value, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdIn(List<String> values) {
-            addCriterion("activityType.type_id in", values, "typeId");
+            addCriterion("activityFile.type_id in", values, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdNotIn(List<String> values) {
-            addCriterion("activityType.type_id not in", values, "typeId");
+            addCriterion("activityFile.type_id not in", values, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdBetween(String value1, String value2) {
-            addCriterion("activityType.type_id between", value1, value2, "typeId");
+            addCriterion("activityFile.type_id between", value1, value2, "typeId");
             return (Criteria) this;
         }
 
         public Criteria andTypeIdNotBetween(String value1, String value2) {
-            addCriterion("activityType.type_id not between", value1, value2, "typeId");
+            addCriterion("activityFile.type_id not between", value1, value2, "typeId");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameIsNull() {
-            addCriterion("activityType.type_name is null");
+        public Criteria andFileSrcIsNull() {
+            addCriterion("activityFile.file_src is null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameIsNotNull() {
-            addCriterion("activityType.type_name is not null");
+        public Criteria andFileSrcIsNotNull() {
+            addCriterion("activityFile.file_src is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameEqualTo(String value) {
-            addCriterion("activityType.type_name =", value, "typeName");
+        public Criteria andFileSrcEqualTo(String value) {
+            addCriterion("activityFile.file_src =", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameNotEqualTo(String value) {
-            addCriterion("activityType.type_name <>", value, "typeName");
+        public Criteria andFileSrcNotEqualTo(String value) {
+            addCriterion("activityFile.file_src <>", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameGreaterThan(String value) {
-            addCriterion("activityType.type_name >", value, "typeName");
+        public Criteria andFileSrcGreaterThan(String value) {
+            addCriterion("activityFile.file_src >", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameGreaterThanOrEqualTo(String value) {
-            addCriterion("activityType.type_name >=", value, "typeName");
+        public Criteria andFileSrcGreaterThanOrEqualTo(String value) {
+            addCriterion("activityFile.file_src >=", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameLessThan(String value) {
-            addCriterion("activityType.type_name <", value, "typeName");
+        public Criteria andFileSrcLessThan(String value) {
+            addCriterion("activityFile.file_src <", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameLessThanOrEqualTo(String value) {
-            addCriterion("activityType.type_name <=", value, "typeName");
+        public Criteria andFileSrcLessThanOrEqualTo(String value) {
+            addCriterion("activityFile.file_src <=", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameLike(String value) {
-            addCriterion("activityType.type_name like", value, "typeName");
+        public Criteria andFileSrcLike(String value) {
+            addCriterion("activityFile.file_src like", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameNotLike(String value) {
-            addCriterion("activityType.type_name not like", value, "typeName");
+        public Criteria andFileSrcNotLike(String value) {
+            addCriterion("activityFile.file_src not like", value, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameIn(List<String> values) {
-            addCriterion("activityType.type_name in", values, "typeName");
+        public Criteria andFileSrcIn(List<String> values) {
+            addCriterion("activityFile.file_src in", values, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameNotIn(List<String> values) {
-            addCriterion("activityType.type_name not in", values, "typeName");
+        public Criteria andFileSrcNotIn(List<String> values) {
+            addCriterion("activityFile.file_src not in", values, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameBetween(String value1, String value2) {
-            addCriterion("activityType.type_name between", value1, value2, "typeName");
+        public Criteria andFileSrcBetween(String value1, String value2) {
+            addCriterion("activityFile.file_src between", value1, value2, "fileSrc");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNameNotBetween(String value1, String value2) {
-            addCriterion("activityType.type_name not between", value1, value2, "typeName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountIsNull() {
-            addCriterion("activityType.create_account is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountIsNotNull() {
-            addCriterion("activityType.create_account is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountEqualTo(String value) {
-            addCriterion("activityType.create_account =", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountNotEqualTo(String value) {
-            addCriterion("activityType.create_account <>", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountGreaterThan(String value) {
-            addCriterion("activityType.create_account >", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("activityType.create_account >=", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountLessThan(String value) {
-            addCriterion("activityType.create_account <", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountLessThanOrEqualTo(String value) {
-            addCriterion("activityType.create_account <=", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountLike(String value) {
-            addCriterion("activityType.create_account like", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountNotLike(String value) {
-            addCriterion("activityType.create_account not like", value, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountIn(List<String> values) {
-            addCriterion("activityType.create_account in", values, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountNotIn(List<String> values) {
-            addCriterion("activityType.create_account not in", values, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountBetween(String value1, String value2) {
-            addCriterion("activityType.create_account between", value1, value2, "createAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreateAccountNotBetween(String value1, String value2) {
-            addCriterion("activityType.create_account not between", value1, value2, "createAccount");
+        public Criteria andFileSrcNotBetween(String value1, String value2) {
+            addCriterion("activityFile.file_src not between", value1, value2, "fileSrc");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNull() {
-            addCriterion("activityType.create_time is null");
+            addCriterion("activityFile.create_time is null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIsNotNull() {
-            addCriterion("activityType.create_time is not null");
+            addCriterion("activityFile.create_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeEqualTo(Date value) {
-            addCriterion("activityType.create_time =", value, "createTime");
+            addCriterion("activityFile.create_time =", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotEqualTo(Date value) {
-            addCriterion("activityType.create_time <>", value, "createTime");
+            addCriterion("activityFile.create_time <>", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThan(Date value) {
-            addCriterion("activityType.create_time >", value, "createTime");
+            addCriterion("activityFile.create_time >", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("activityType.create_time >=", value, "createTime");
+            addCriterion("activityFile.create_time >=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThan(Date value) {
-            addCriterion("activityType.create_time <", value, "createTime");
+            addCriterion("activityFile.create_time <", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("activityType.create_time <=", value, "createTime");
+            addCriterion("activityFile.create_time <=", value, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeIn(List<Date> values) {
-            addCriterion("activityType.create_time in", values, "createTime");
+            addCriterion("activityFile.create_time in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotIn(List<Date> values) {
-            addCriterion("activityType.create_time not in", values, "createTime");
+            addCriterion("activityFile.create_time not in", values, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeBetween(Date value1, Date value2) {
-            addCriterion("activityType.create_time between", value1, value2, "createTime");
+            addCriterion("activityFile.create_time between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("activityType.create_time not between", value1, value2, "createTime");
+            addCriterion("activityFile.create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountIsNull() {
-            addCriterion("activityType.update_account is null");
+            addCriterion("activityFile.update_account is null");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountIsNotNull() {
-            addCriterion("activityType.update_account is not null");
+            addCriterion("activityFile.update_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountEqualTo(String value) {
-            addCriterion("activityType.update_account =", value, "updateAccount");
+            addCriterion("activityFile.update_account =", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountNotEqualTo(String value) {
-            addCriterion("activityType.update_account <>", value, "updateAccount");
+            addCriterion("activityFile.update_account <>", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountGreaterThan(String value) {
-            addCriterion("activityType.update_account >", value, "updateAccount");
+            addCriterion("activityFile.update_account >", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("activityType.update_account >=", value, "updateAccount");
+            addCriterion("activityFile.update_account >=", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountLessThan(String value) {
-            addCriterion("activityType.update_account <", value, "updateAccount");
+            addCriterion("activityFile.update_account <", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountLessThanOrEqualTo(String value) {
-            addCriterion("activityType.update_account <=", value, "updateAccount");
+            addCriterion("activityFile.update_account <=", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountLike(String value) {
-            addCriterion("activityType.update_account like", value, "updateAccount");
+            addCriterion("activityFile.update_account like", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountNotLike(String value) {
-            addCriterion("activityType.update_account not like", value, "updateAccount");
+            addCriterion("activityFile.update_account not like", value, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountIn(List<String> values) {
-            addCriterion("activityType.update_account in", values, "updateAccount");
+            addCriterion("activityFile.update_account in", values, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountNotIn(List<String> values) {
-            addCriterion("activityType.update_account not in", values, "updateAccount");
+            addCriterion("activityFile.update_account not in", values, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountBetween(String value1, String value2) {
-            addCriterion("activityType.update_account between", value1, value2, "updateAccount");
+            addCriterion("activityFile.update_account between", value1, value2, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateAccountNotBetween(String value1, String value2) {
-            addCriterion("activityType.update_account not between", value1, value2, "updateAccount");
+            addCriterion("activityFile.update_account not between", value1, value2, "updateAccount");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeIsNull() {
-            addCriterion("activityType.update_time is null");
+            addCriterion("activityFile.update_time is null");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeIsNotNull() {
-            addCriterion("activityType.update_time is not null");
+            addCriterion("activityFile.update_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeEqualTo(Date value) {
-            addCriterion("activityType.update_time =", value, "updateTime");
+            addCriterion("activityFile.update_time =", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeNotEqualTo(Date value) {
-            addCriterion("activityType.update_time <>", value, "updateTime");
+            addCriterion("activityFile.update_time <>", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeGreaterThan(Date value) {
-            addCriterion("activityType.update_time >", value, "updateTime");
+            addCriterion("activityFile.update_time >", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("activityType.update_time >=", value, "updateTime");
+            addCriterion("activityFile.update_time >=", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeLessThan(Date value) {
-            addCriterion("activityType.update_time <", value, "updateTime");
+            addCriterion("activityFile.update_time <", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeLessThanOrEqualTo(Date value) {
-            addCriterion("activityType.update_time <=", value, "updateTime");
+            addCriterion("activityFile.update_time <=", value, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeIn(List<Date> values) {
-            addCriterion("activityType.update_time in", values, "updateTime");
+            addCriterion("activityFile.update_time in", values, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeNotIn(List<Date> values) {
-            addCriterion("activityType.update_time not in", values, "updateTime");
+            addCriterion("activityFile.update_time not in", values, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeBetween(Date value1, Date value2) {
-            addCriterion("activityType.update_time between", value1, value2, "updateTime");
+            addCriterion("activityFile.update_time between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andUpdateTimeNotBetween(Date value1, Date value2) {
-            addCriterion("activityType.update_time not between", value1, value2, "updateTime");
+            addCriterion("activityFile.update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
 
         public Criteria andStateIsNull() {
-            addCriterion("activityType.state is null");
+            addCriterion("activityFile.state is null");
             return (Criteria) this;
         }
 
         public Criteria andStateIsNotNull() {
-            addCriterion("activityType.state is not null");
+            addCriterion("activityFile.state is not null");
             return (Criteria) this;
         }
 
         public Criteria andStateEqualTo(String value) {
-            addCriterion("activityType.state =", value, "state");
+            addCriterion("activityFile.state =", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotEqualTo(String value) {
-            addCriterion("activityType.state <>", value, "state");
+            addCriterion("activityFile.state <>", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateGreaterThan(String value) {
-            addCriterion("activityType.state >", value, "state");
+            addCriterion("activityFile.state >", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateGreaterThanOrEqualTo(String value) {
-            addCriterion("activityType.state >=", value, "state");
+            addCriterion("activityFile.state >=", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLessThan(String value) {
-            addCriterion("activityType.state <", value, "state");
+            addCriterion("activityFile.state <", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLessThanOrEqualTo(String value) {
-            addCriterion("activityType.state <=", value, "state");
+            addCriterion("activityFile.state <=", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLike(String value) {
-            addCriterion("activityType.state like", value, "state");
+            addCriterion("activityFile.state like", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotLike(String value) {
-            addCriterion("activityType.state not like", value, "state");
+            addCriterion("activityFile.state not like", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateIn(List<String> values) {
-            addCriterion("activityType.state in", values, "state");
+            addCriterion("activityFile.state in", values, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotIn(List<String> values) {
-            addCriterion("activityType.state not in", values, "state");
+            addCriterion("activityFile.state not in", values, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateBetween(String value1, String value2) {
-            addCriterion("activityType.state between", value1, value2, "state");
+            addCriterion("activityFile.state between", value1, value2, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotBetween(String value1, String value2) {
-            addCriterion("activityType.state not between", value1, value2, "state");
+            addCriterion("activityFile.state not between", value1, value2, "state");
             return (Criteria) this;
         }
     }

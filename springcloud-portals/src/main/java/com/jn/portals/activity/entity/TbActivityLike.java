@@ -8,7 +8,7 @@ public class TbActivityLike implements Serializable {
 
     private String activityId;
 
-    private String likeUserId;
+    private String likeAccount;
 
     private Date likeTime;
 
@@ -32,12 +32,12 @@ public class TbActivityLike implements Serializable {
         this.activityId = activityId == null ? null : activityId.trim();
     }
 
-    public String getLikeUserId() {
-        return likeUserId;
+    public String getLikeAccount() {
+        return likeAccount;
     }
 
-    public void setLikeUserId(String likeUserId) {
-        this.likeUserId = likeUserId == null ? null : likeUserId.trim();
+    public void setLikeAccount(String likeAccount) {
+        this.likeAccount = likeAccount == null ? null : likeAccount.trim();
     }
 
     public Date getLikeTime() {
@@ -70,7 +70,7 @@ public class TbActivityLike implements Serializable {
         TbActivityLike other = (TbActivityLike) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getActivityId() == null ? other.getActivityId() == null : this.getActivityId().equals(other.getActivityId()))
-            && (this.getLikeUserId() == null ? other.getLikeUserId() == null : this.getLikeUserId().equals(other.getLikeUserId()))
+            && (this.getLikeAccount() == null ? other.getLikeAccount() == null : this.getLikeAccount().equals(other.getLikeAccount()))
             && (this.getLikeTime() == null ? other.getLikeTime() == null : this.getLikeTime().equals(other.getLikeTime()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()));
     }
@@ -81,7 +81,7 @@ public class TbActivityLike implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getActivityId() == null) ? 0 : getActivityId().hashCode());
-        result = prime * result + ((getLikeUserId() == null) ? 0 : getLikeUserId().hashCode());
+        result = prime * result + ((getLikeAccount() == null) ? 0 : getLikeAccount().hashCode());
         result = prime * result + ((getLikeTime() == null) ? 0 : getLikeTime().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
         return result;
@@ -95,7 +95,7 @@ public class TbActivityLike implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", activityId=").append(activityId);
-        sb.append(", likeUserId=").append(likeUserId);
+        sb.append(", likeAccount=").append(likeAccount);
         sb.append(", likeTime=").append(likeTime);
         sb.append(", state=").append(state);
         sb.append(", serialVersionUID=").append(serialVersionUID);

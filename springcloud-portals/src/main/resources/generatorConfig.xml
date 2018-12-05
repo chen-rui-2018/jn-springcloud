@@ -117,5 +117,10 @@
         <table tableName="tb_activity_comment" alias="activityComment">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
+
+        <table tableName="tb_activity_file" alias="activityFile">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+
     </context>
 </generatorConfiguration>

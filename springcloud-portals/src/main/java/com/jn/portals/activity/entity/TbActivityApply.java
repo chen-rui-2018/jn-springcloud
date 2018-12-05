@@ -8,7 +8,7 @@ public class TbActivityApply implements Serializable {
 
     private String activityId;
 
-    private String userId;
+    private String account;
 
     private Date applyTime;
 
@@ -38,12 +38,12 @@ public class TbActivityApply implements Serializable {
         this.activityId = activityId == null ? null : activityId.trim();
     }
 
-    public String getUserId() {
-        return userId;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setAccount(String account) {
+        this.account = account == null ? null : account.trim();
     }
 
     public Date getApplyTime() {
@@ -100,7 +100,7 @@ public class TbActivityApply implements Serializable {
         TbActivityApply other = (TbActivityApply) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getActivityId() == null ? other.getActivityId() == null : this.getActivityId().equals(other.getActivityId()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
+            && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
             && (this.getApplyTime() == null ? other.getApplyTime() == null : this.getApplyTime().equals(other.getApplyTime()))
             && (this.getApplyState() == null ? other.getApplyState() == null : this.getApplyState().equals(other.getApplyState()))
             && (this.getSignState() == null ? other.getSignState() == null : this.getSignState().equals(other.getSignState()))
@@ -114,7 +114,7 @@ public class TbActivityApply implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getActivityId() == null) ? 0 : getActivityId().hashCode());
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
+        result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getApplyTime() == null) ? 0 : getApplyTime().hashCode());
         result = prime * result + ((getApplyState() == null) ? 0 : getApplyState().hashCode());
         result = prime * result + ((getSignState() == null) ? 0 : getSignState().hashCode());
@@ -131,7 +131,7 @@ public class TbActivityApply implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", activityId=").append(activityId);
-        sb.append(", userId=").append(userId);
+        sb.append(", account=").append(account);
         sb.append(", applyTime=").append(applyTime);
         sb.append(", applyState=").append(applyState);
         sb.append(", signState=").append(signState);

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.portals.activity.dao.TbActivityTypeMapper">
-  <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityType">
-    <result column="activityType_type_id" jdbcType="VARCHAR" property="typeId" />
-    <result column="activityType_type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="activityType_create_account" jdbcType="VARCHAR" property="createAccount" />
-    <result column="activityType_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="activityType_update_account" jdbcType="VARCHAR" property="updateAccount" />
-    <result column="activityType_update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="activityType_state" jdbcType="VARCHAR" property="state" />
+<mapper namespace="com.jn.portals.activity.dao.TbActivityFileMapper">
+  <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityFile">
+    <result column="activityFile_id" jdbcType="VARCHAR" property="id" />
+    <result column="activityFile_type_id" jdbcType="VARCHAR" property="typeId" />
+    <result column="activityFile_file_src" jdbcType="VARCHAR" property="fileSrc" />
+    <result column="activityFile_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="activityFile_update_account" jdbcType="VARCHAR" property="updateAccount" />
+    <result column="activityFile_update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="activityFile_state" jdbcType="VARCHAR" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,18 +69,18 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityType.type_id as activityType_type_id, activityType.type_name as activityType_type_name, 
-    activityType.create_account as activityType_create_account, activityType.create_time as activityType_create_time, 
-    activityType.update_account as activityType_update_account, activityType.update_time as activityType_update_time, 
-    activityType.state as activityType_state
+    activityFile.id as activityFile_id, activityFile.type_id as activityFile_type_id, 
+    activityFile.file_src as activityFile_file_src, activityFile.create_time as activityFile_create_time, 
+    activityFile.update_account as activityFile_update_account, activityFile.update_time as activityFile_update_time, 
+    activityFile.state as activityFile_state
   </sql>
-  <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbActivityTypeCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_type activityType
+    from tb_activity_file activityFile
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,34 +88,34 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityTypeCriteria">
-    delete from tb_activity_type activityType
+  <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityFileCriteria">
+    delete from tb_activity_file activityFile
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityType">
-    <selectKey keyProperty="typeId" order="AFTER" resultType="java.lang.String">
+  <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityFile">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_type (type_name, create_account, create_time, 
+    insert into tb_activity_file (type_id, file_src, create_time, 
       update_account, update_time, state
       )
-    values (#{typeName,jdbcType=VARCHAR}, #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{typeId,jdbcType=VARCHAR}, #{fileSrc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityType">
-    <selectKey keyProperty="typeId" order="AFTER" resultType="java.lang.String">
+  <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityFile">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_type
+    insert into tb_activity_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="typeName != null">
-        type_name,
+      <if test="typeId != null">
+        type_id,
       </if>
-      <if test="createAccount != null">
-        create_account,
+      <if test="fileSrc != null">
+        file_src,
       </if>
       <if test="createTime != null">
         create_time,
@@ -131,11 +131,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="typeName != null">
-        #{typeName,jdbcType=VARCHAR},
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
       </if>
-      <if test="createAccount != null">
-        #{createAccount,jdbcType=VARCHAR},
+      <if test="fileSrc != null">
+        #{fileSrc,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -151,35 +151,35 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.portals.activity.entity.TbActivityTypeCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_type activityType
+  <select id="countByExample" parameterType="com.jn.portals.activity.entity.TbActivityFileCriteria" resultType="java.lang.Long">
+    select count(*) from tb_activity_file activityFile
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_type activityType
+    update tb_activity_file activityFile
     <set>
+      <if test="record.id != null">
+        activityFile.id = #{record.id,jdbcType=VARCHAR},
+      </if>
       <if test="record.typeId != null">
-        activityType.type_id = #{record.typeId,jdbcType=VARCHAR},
+        activityFile.type_id = #{record.typeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.typeName != null">
-        activityType.type_name = #{record.typeName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createAccount != null">
-        activityType.create_account = #{record.createAccount,jdbcType=VARCHAR},
+      <if test="record.fileSrc != null">
+        activityFile.file_src = #{record.fileSrc,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        activityType.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        activityFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateAccount != null">
-        activityType.update_account = #{record.updateAccount,jdbcType=VARCHAR},
+        activityFile.update_account = #{record.updateAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTime != null">
-        activityType.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        activityFile.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.state != null">
-        activityType.state = #{record.state,jdbcType=VARCHAR},
+        activityFile.state = #{record.state,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -187,14 +187,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_type activityType
-    set activityType.type_id = #{record.typeId,jdbcType=VARCHAR},
-      activityType.type_name = #{record.typeName,jdbcType=VARCHAR},
-      activityType.create_account = #{record.createAccount,jdbcType=VARCHAR},
-      activityType.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      activityType.update_account = #{record.updateAccount,jdbcType=VARCHAR},
-      activityType.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      activityType.state = #{record.state,jdbcType=VARCHAR}
+    update tb_activity_file activityFile
+    set activityFile.id = #{record.id,jdbcType=VARCHAR},
+      activityFile.type_id = #{record.typeId,jdbcType=VARCHAR},
+      activityFile.file_src = #{record.fileSrc,jdbcType=VARCHAR},
+      activityFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      activityFile.update_account = #{record.updateAccount,jdbcType=VARCHAR},
+      activityFile.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      activityFile.state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

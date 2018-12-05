@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityApply">
     <result column="activityApply_id" jdbcType="VARCHAR" property="id" />
     <result column="activityApply_activity_id" jdbcType="VARCHAR" property="activityId" />
-    <result column="activityApply_user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="activityApply_account" jdbcType="VARCHAR" property="account" />
     <result column="activityApply_apply_time" jdbcType="TIMESTAMP" property="applyTime" />
     <result column="activityApply_apply_state" jdbcType="VARCHAR" property="applyState" />
     <result column="activityApply_sign_state" jdbcType="VARCHAR" property="signState" />
@@ -71,7 +71,7 @@
   </sql>
   <sql id="Base_Column_List">
     activityApply.id as activityApply_id, activityApply.activity_id as activityApply_activity_id, 
-    activityApply.user_id as activityApply_user_id, activityApply.apply_time as activityApply_apply_time, 
+    activityApply.account as activityApply_account, activityApply.apply_time as activityApply_apply_time, 
     activityApply.apply_state as activityApply_apply_state, activityApply.sign_state as activityApply_sign_state, 
     activityApply.sign_time as activityApply_sign_time, activityApply.sign_type as activityApply_sign_type
   </sql>
@@ -99,10 +99,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_apply (activity_id, user_id, apply_time, 
+    insert into tb_activity_apply (activity_id, account, apply_time, 
       apply_state, sign_state, sign_time, 
       sign_type)
-    values (#{activityId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+    values (#{activityId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
       #{applyState,jdbcType=VARCHAR}, #{signState,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
       #{signType,jdbcType=VARCHAR})
   </insert>
@@ -115,8 +115,8 @@
       <if test="activityId != null">
         activity_id,
       </if>
-      <if test="userId != null">
-        user_id,
+      <if test="account != null">
+        account,
       </if>
       <if test="applyTime != null">
         apply_time,
@@ -138,8 +138,8 @@
       <if test="activityId != null">
         #{activityId,jdbcType=VARCHAR},
       </if>
-      <if test="userId != null">
-        #{userId,jdbcType=VARCHAR},
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
       </if>
       <if test="applyTime != null">
         #{applyTime,jdbcType=TIMESTAMP},
@@ -173,8 +173,8 @@
       <if test="record.activityId != null">
         activityApply.activity_id = #{record.activityId,jdbcType=VARCHAR},
       </if>
-      <if test="record.userId != null">
-        activityApply.user_id = #{record.userId,jdbcType=VARCHAR},
+      <if test="record.account != null">
+        activityApply.account = #{record.account,jdbcType=VARCHAR},
       </if>
       <if test="record.applyTime != null">
         activityApply.apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
@@ -200,7 +200,7 @@
     update tb_activity_apply activityApply
     set activityApply.id = #{record.id,jdbcType=VARCHAR},
       activityApply.activity_id = #{record.activityId,jdbcType=VARCHAR},
-      activityApply.user_id = #{record.userId,jdbcType=VARCHAR},
+      activityApply.account = #{record.account,jdbcType=VARCHAR},
       activityApply.apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       activityApply.apply_state = #{record.applyState,jdbcType=VARCHAR},
       activityApply.sign_state = #{record.signState,jdbcType=VARCHAR},

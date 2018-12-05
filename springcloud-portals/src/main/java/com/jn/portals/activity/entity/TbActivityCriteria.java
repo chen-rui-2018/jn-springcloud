@@ -1076,73 +1076,73 @@ public class TbActivityCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIsNull() {
-            addCriterion("activity.create_user_id is null");
+        public Criteria andCreateAccountIsNull() {
+            addCriterion("activity.create_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIsNotNull() {
-            addCriterion("activity.create_user_id is not null");
+        public Criteria andCreateAccountIsNotNull() {
+            addCriterion("activity.create_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdEqualTo(String value) {
-            addCriterion("activity.create_user_id =", value, "createUserId");
+        public Criteria andCreateAccountEqualTo(String value) {
+            addCriterion("activity.create_account =", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotEqualTo(String value) {
-            addCriterion("activity.create_user_id <>", value, "createUserId");
+        public Criteria andCreateAccountNotEqualTo(String value) {
+            addCriterion("activity.create_account <>", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThan(String value) {
-            addCriterion("activity.create_user_id >", value, "createUserId");
+        public Criteria andCreateAccountGreaterThan(String value) {
+            addCriterion("activity.create_account >", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activity.create_user_id >=", value, "createUserId");
+        public Criteria andCreateAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activity.create_account >=", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThan(String value) {
-            addCriterion("activity.create_user_id <", value, "createUserId");
+        public Criteria andCreateAccountLessThan(String value) {
+            addCriterion("activity.create_account <", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLessThanOrEqualTo(String value) {
-            addCriterion("activity.create_user_id <=", value, "createUserId");
+        public Criteria andCreateAccountLessThanOrEqualTo(String value) {
+            addCriterion("activity.create_account <=", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdLike(String value) {
-            addCriterion("activity.create_user_id like", value, "createUserId");
+        public Criteria andCreateAccountLike(String value) {
+            addCriterion("activity.create_account like", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotLike(String value) {
-            addCriterion("activity.create_user_id not like", value, "createUserId");
+        public Criteria andCreateAccountNotLike(String value) {
+            addCriterion("activity.create_account not like", value, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdIn(List<String> values) {
-            addCriterion("activity.create_user_id in", values, "createUserId");
+        public Criteria andCreateAccountIn(List<String> values) {
+            addCriterion("activity.create_account in", values, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotIn(List<String> values) {
-            addCriterion("activity.create_user_id not in", values, "createUserId");
+        public Criteria andCreateAccountNotIn(List<String> values) {
+            addCriterion("activity.create_account not in", values, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdBetween(String value1, String value2) {
-            addCriterion("activity.create_user_id between", value1, value2, "createUserId");
+        public Criteria andCreateAccountBetween(String value1, String value2) {
+            addCriterion("activity.create_account between", value1, value2, "createAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCreateUserIdNotBetween(String value1, String value2) {
-            addCriterion("activity.create_user_id not between", value1, value2, "createUserId");
+        public Criteria andCreateAccountNotBetween(String value1, String value2) {
+            addCriterion("activity.create_account not between", value1, value2, "createAccount");
             return (Criteria) this;
         }
 
@@ -1206,73 +1206,73 @@ public class TbActivityCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdIsNull() {
-            addCriterion("activity.update_user_id is null");
+        public Criteria andUpdateAccountIsNull() {
+            addCriterion("activity.update_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdIsNotNull() {
-            addCriterion("activity.update_user_id is not null");
+        public Criteria andUpdateAccountIsNotNull() {
+            addCriterion("activity.update_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdEqualTo(String value) {
-            addCriterion("activity.update_user_id =", value, "updateUserId");
+        public Criteria andUpdateAccountEqualTo(String value) {
+            addCriterion("activity.update_account =", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdNotEqualTo(String value) {
-            addCriterion("activity.update_user_id <>", value, "updateUserId");
+        public Criteria andUpdateAccountNotEqualTo(String value) {
+            addCriterion("activity.update_account <>", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdGreaterThan(String value) {
-            addCriterion("activity.update_user_id >", value, "updateUserId");
+        public Criteria andUpdateAccountGreaterThan(String value) {
+            addCriterion("activity.update_account >", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activity.update_user_id >=", value, "updateUserId");
+        public Criteria andUpdateAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activity.update_account >=", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdLessThan(String value) {
-            addCriterion("activity.update_user_id <", value, "updateUserId");
+        public Criteria andUpdateAccountLessThan(String value) {
+            addCriterion("activity.update_account <", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdLessThanOrEqualTo(String value) {
-            addCriterion("activity.update_user_id <=", value, "updateUserId");
+        public Criteria andUpdateAccountLessThanOrEqualTo(String value) {
+            addCriterion("activity.update_account <=", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdLike(String value) {
-            addCriterion("activity.update_user_id like", value, "updateUserId");
+        public Criteria andUpdateAccountLike(String value) {
+            addCriterion("activity.update_account like", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdNotLike(String value) {
-            addCriterion("activity.update_user_id not like", value, "updateUserId");
+        public Criteria andUpdateAccountNotLike(String value) {
+            addCriterion("activity.update_account not like", value, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdIn(List<String> values) {
-            addCriterion("activity.update_user_id in", values, "updateUserId");
+        public Criteria andUpdateAccountIn(List<String> values) {
+            addCriterion("activity.update_account in", values, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdNotIn(List<String> values) {
-            addCriterion("activity.update_user_id not in", values, "updateUserId");
+        public Criteria andUpdateAccountNotIn(List<String> values) {
+            addCriterion("activity.update_account not in", values, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdBetween(String value1, String value2) {
-            addCriterion("activity.update_user_id between", value1, value2, "updateUserId");
+        public Criteria andUpdateAccountBetween(String value1, String value2) {
+            addCriterion("activity.update_account between", value1, value2, "updateAccount");
             return (Criteria) this;
         }
 
-        public Criteria andUpdateUserIdNotBetween(String value1, String value2) {
-            addCriterion("activity.update_user_id not between", value1, value2, "updateUserId");
+        public Criteria andUpdateAccountNotBetween(String value1, String value2) {
+            addCriterion("activity.update_account not between", value1, value2, "updateAccount");
             return (Criteria) this;
         }
 

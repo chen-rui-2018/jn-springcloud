@@ -245,73 +245,73 @@ public class TbActivityCommentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdIsNull() {
-            addCriterion("activityComment.com_user_id is null");
+        public Criteria andComAccountIsNull() {
+            addCriterion("activityComment.com_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdIsNotNull() {
-            addCriterion("activityComment.com_user_id is not null");
+        public Criteria andComAccountIsNotNull() {
+            addCriterion("activityComment.com_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdEqualTo(String value) {
-            addCriterion("activityComment.com_user_id =", value, "comUserId");
+        public Criteria andComAccountEqualTo(String value) {
+            addCriterion("activityComment.com_account =", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdNotEqualTo(String value) {
-            addCriterion("activityComment.com_user_id <>", value, "comUserId");
+        public Criteria andComAccountNotEqualTo(String value) {
+            addCriterion("activityComment.com_account <>", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdGreaterThan(String value) {
-            addCriterion("activityComment.com_user_id >", value, "comUserId");
+        public Criteria andComAccountGreaterThan(String value) {
+            addCriterion("activityComment.com_account >", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_user_id >=", value, "comUserId");
+        public Criteria andComAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activityComment.com_account >=", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdLessThan(String value) {
-            addCriterion("activityComment.com_user_id <", value, "comUserId");
+        public Criteria andComAccountLessThan(String value) {
+            addCriterion("activityComment.com_account <", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_user_id <=", value, "comUserId");
+        public Criteria andComAccountLessThanOrEqualTo(String value) {
+            addCriterion("activityComment.com_account <=", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdLike(String value) {
-            addCriterion("activityComment.com_user_id like", value, "comUserId");
+        public Criteria andComAccountLike(String value) {
+            addCriterion("activityComment.com_account like", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdNotLike(String value) {
-            addCriterion("activityComment.com_user_id not like", value, "comUserId");
+        public Criteria andComAccountNotLike(String value) {
+            addCriterion("activityComment.com_account not like", value, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdIn(List<String> values) {
-            addCriterion("activityComment.com_user_id in", values, "comUserId");
+        public Criteria andComAccountIn(List<String> values) {
+            addCriterion("activityComment.com_account in", values, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdNotIn(List<String> values) {
-            addCriterion("activityComment.com_user_id not in", values, "comUserId");
+        public Criteria andComAccountNotIn(List<String> values) {
+            addCriterion("activityComment.com_account not in", values, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdBetween(String value1, String value2) {
-            addCriterion("activityComment.com_user_id between", value1, value2, "comUserId");
+        public Criteria andComAccountBetween(String value1, String value2) {
+            addCriterion("activityComment.com_account between", value1, value2, "comAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComUserIdNotBetween(String value1, String value2) {
-            addCriterion("activityComment.com_user_id not between", value1, value2, "comUserId");
+        public Criteria andComAccountNotBetween(String value1, String value2) {
+            addCriterion("activityComment.com_account not between", value1, value2, "comAccount");
             return (Criteria) this;
         }
 

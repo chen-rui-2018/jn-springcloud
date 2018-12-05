@@ -17,9 +17,9 @@
     <result column="activity_acti_poster_url" jdbcType="VARCHAR" property="actiPosterUrl" />
     <result column="activity_state" jdbcType="VARCHAR" property="state" />
     <result column="activity_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="activity_create_user_id" jdbcType="VARCHAR" property="createUserId" />
+    <result column="activity_create_account" jdbcType="VARCHAR" property="createAccount" />
     <result column="activity_update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="activity_update_user_id" jdbcType="VARCHAR" property="updateUserId" />
+    <result column="activity_update_account" jdbcType="VARCHAR" property="updateAccount" />
     <result column="activity_acti_views" jdbcType="INTEGER" property="actiViews" />
     <result column="activity_acti_like" jdbcType="INTEGER" property="actiLike" />
     <result column="activity_apply_num" jdbcType="INTEGER" property="applyNum" />
@@ -94,8 +94,8 @@
     activity.mes_send_time as activity_mes_send_time, activity.acti_address as activity_acti_address, 
     activity.acti_cost as activity_acti_cost, activity.acti_organizer as activity_acti_organizer, 
     activity.acti_number as activity_acti_number, activity.acti_poster_url as activity_acti_poster_url, 
-    activity.state as activity_state, activity.create_time as activity_create_time, activity.create_user_id as activity_create_user_id, 
-    activity.update_time as activity_update_time, activity.update_user_id as activity_update_user_id, 
+    activity.state as activity_state, activity.create_time as activity_create_time, activity.create_account as activity_create_account, 
+    activity.update_time as activity_update_time, activity.update_account as activity_update_account, 
     activity.acti_views as activity_acti_views, activity.acti_like as activity_acti_like, 
     activity.apply_num as activity_apply_num, activity.partic_num as activity_partic_num, 
     activity.is_top as activity_is_top, activity.top_time as activity_top_time, activity.is_apply as activity_is_apply, 
@@ -129,8 +129,8 @@
       acti_end_time, apply_start_time, apply_end_time, 
       mes_send_time, acti_address, acti_cost, 
       acti_organizer, acti_number, acti_poster_url, 
-      state, create_time, create_user_id, 
-      update_time, update_user_id, acti_views, 
+      state, create_time, create_account, 
+      update_time, update_account, acti_views, 
       acti_like, apply_num, partic_num, 
       is_top, top_time, is_apply, 
       acti_order)
@@ -138,8 +138,8 @@
       #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, #{applyEndTime,jdbcType=TIMESTAMP}, 
       #{mesSendTime,jdbcType=TIMESTAMP}, #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, 
       #{actiOrganizer,jdbcType=VARCHAR}, #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, 
-      #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, 
+      #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createAccount,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, 
       #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, 
       #{isTop,jdbcType=VARCHAR}, #{topTime,jdbcType=TIMESTAMP}, #{isApply,jdbcType=VARCHAR}, 
       #{actiOrder,jdbcType=INTEGER})
@@ -192,14 +192,14 @@
       <if test="createTime != null">
         create_time,
       </if>
-      <if test="createUserId != null">
-        create_user_id,
+      <if test="createAccount != null">
+        create_account,
       </if>
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="updateUserId != null">
-        update_user_id,
+      <if test="updateAccount != null">
+        update_account,
       </if>
       <if test="actiViews != null">
         acti_views,
@@ -269,14 +269,14 @@
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createUserId != null">
-        #{createUserId,jdbcType=VARCHAR},
+      <if test="createAccount != null">
+        #{createAccount,jdbcType=VARCHAR},
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateUserId != null">
-        #{updateUserId,jdbcType=VARCHAR},
+      <if test="updateAccount != null">
+        #{updateAccount,jdbcType=VARCHAR},
       </if>
       <if test="actiViews != null">
         #{actiViews,jdbcType=INTEGER},
@@ -358,14 +358,14 @@
       <if test="record.createTime != null">
         activity.create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createUserId != null">
-        activity.create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      <if test="record.createAccount != null">
+        activity.create_account = #{record.createAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTime != null">
         activity.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateUserId != null">
-        activity.update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      <if test="record.updateAccount != null">
+        activity.update_account = #{record.updateAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.actiViews != null">
         activity.acti_views = #{record.actiViews,jdbcType=INTEGER},
@@ -413,9 +413,9 @@
       activity.acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
       activity.state = #{record.state,jdbcType=VARCHAR},
       activity.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      activity.create_user_id = #{record.createUserId,jdbcType=VARCHAR},
+      activity.create_account = #{record.createAccount,jdbcType=VARCHAR},
       activity.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      activity.update_user_id = #{record.updateUserId,jdbcType=VARCHAR},
+      activity.update_account = #{record.updateAccount,jdbcType=VARCHAR},
       activity.acti_views = #{record.actiViews,jdbcType=INTEGER},
       activity.acti_like = #{record.actiLike,jdbcType=INTEGER},
       activity.apply_num = #{record.applyNum,jdbcType=INTEGER},

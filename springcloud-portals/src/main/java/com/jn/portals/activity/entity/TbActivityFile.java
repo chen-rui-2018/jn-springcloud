@@ -3,12 +3,12 @@ package com.jn.portals.activity.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbActivityType implements Serializable {
+public class TbActivityFile implements Serializable {
+    private String id;
+
     private String typeId;
 
-    private String typeName;
-
-    private String createAccount;
+    private String fileSrc;
 
     private Date createTime;
 
@@ -20,6 +20,14 @@ public class TbActivityType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
+    }
+
     public String getTypeId() {
         return typeId;
     }
@@ -28,20 +36,12 @@ public class TbActivityType implements Serializable {
         this.typeId = typeId == null ? null : typeId.trim();
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getFileSrc() {
+        return fileSrc;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
-    }
-
-    public String getCreateAccount() {
-        return createAccount;
-    }
-
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount == null ? null : createAccount.trim();
+    public void setFileSrc(String fileSrc) {
+        this.fileSrc = fileSrc == null ? null : fileSrc.trim();
     }
 
     public Date getCreateTime() {
@@ -87,10 +87,10 @@ public class TbActivityType implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbActivityType other = (TbActivityType) that;
-        return (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
-            && (this.getTypeName() == null ? other.getTypeName() == null : this.getTypeName().equals(other.getTypeName()))
-            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
+        TbActivityFile other = (TbActivityFile) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
+            && (this.getFileSrc() == null ? other.getFileSrc() == null : this.getFileSrc().equals(other.getFileSrc()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -101,9 +101,9 @@ public class TbActivityType implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
-        result = prime * result + ((getTypeName() == null) ? 0 : getTypeName().hashCode());
-        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
+        result = prime * result + ((getFileSrc() == null) ? 0 : getFileSrc().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -117,9 +117,9 @@ public class TbActivityType implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", typeId=").append(typeId);
-        sb.append(", typeName=").append(typeName);
-        sb.append(", createAccount=").append(createAccount);
+        sb.append(", fileSrc=").append(fileSrc);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateAccount=").append(updateAccount);
         sb.append(", updateTime=").append(updateTime);

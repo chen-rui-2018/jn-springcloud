@@ -11,7 +11,8 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum ActivityExceptionEnum implements CodeAndMsg {
-    NETWORK_ANOMALY("11100301", "网络异常，请稍后重试。");
+    NETWORK_ANOMALY("11110301", "网络异常，请稍后重试。"),
+    ACTIVITY_ID_CANNOT_EMPTY("11110201","活动id不能为空");
 
     /**
      * 编码

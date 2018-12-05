@@ -9,6 +9,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.HashMap;
 
@@ -22,6 +23,7 @@ import java.util.HashMap;
  * @version： v1.0
  * @modified By: shenph
  */
+@ApiIgnore
 @RestController
 public class TestController extends BaseController {
 

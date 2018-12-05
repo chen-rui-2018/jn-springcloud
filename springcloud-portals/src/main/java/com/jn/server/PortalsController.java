@@ -4,8 +4,8 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCache;
-import com.jn.portals.enums.PortalsExceptionEnum;
-import com.jn.portals.model.PortalsUser;
+import com.jn.portalsLogin.enums.PortalsLoginExceptionEnum;
+import com.jn.portalsLogin.model.PortalsUser;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -52,8 +52,8 @@ public class PortalsController extends BaseController {
         Result<PortalsUser> result=new Result();
         //判断用户账号是否为空
         if(StringUtils.isBlank(account)){
-            result.setCode(PortalsExceptionEnum.ACCOUNT_CANNOT_EMPTY.getCode());
-            result.setResult(PortalsExceptionEnum.ACCOUNT_CANNOT_EMPTY.getMessage());
+            result.setCode(PortalsLoginExceptionEnum.ACCOUNT_CANNOT_EMPTY.getCode());
+            result.setResult(PortalsLoginExceptionEnum.ACCOUNT_CANNOT_EMPTY.getMessage());
             return  result;
         }
         //从redis中取出用户扩展信息
@@ -61,8 +61,8 @@ public class PortalsController extends BaseController {
         PortalsUser portalsUser =(PortalsUser) cache.get(redisUserKey + "_" + account);
         if(portalsUser==null){
             logger.info("----登录用户扩展信息没有或已失效----");
-            result.setCode(PortalsExceptionEnum.NO_USER_EXTENSION.getCode());
-            result.setResult(PortalsExceptionEnum.NO_USER_EXTENSION.getMessage());
+            result.setCode(PortalsLoginExceptionEnum.NO_USER_EXTENSION.getCode());
+            result.setResult(PortalsLoginExceptionEnum.NO_USER_EXTENSION.getMessage());
             return  result;
         }
         result.setData(portalsUser);

@@ -11,7 +11,7 @@
 - ribbon 通信
 - feign 注解通信
 - config 配置中心
-- bus 实时配置中心功能
+- bus 消息通信
 - admin 监控中心（包含业务监控，turbine监控）
 - hystrix 断路器监控
 - turbine 断路器监控聚合
@@ -34,17 +34,18 @@
 - 4.启动配置中心springcloud-app-config
 - 5.启动路由中心springcloud-app-zuul
 - 6.启动用户服务中心springcloud-app-system
-- 0.0 第7到10点可以不用启动
+- 7.启动nginx 访问端口80/html
+- 0.0 后面可以不启动
 - 7.启动调度中心springcloud-app-schedule
-- 8.启动断路器监控汇总springcloud-app-turbine 访问端口8989
-- 9.启动断路器监控springcloud-app-hystrix 访问端口1301/hystrix
-- 10.启动链路追踪springcloud-app-zipkin 访问端口9411
-- 11.启动nginx 访问端口80/html
+- 8.启动链路追踪springcloud-app-zipkin 访问端口9411
+- 9.启动服务治理监控springcloud-app-admin
+- 10.启动配置中心配置项目springcloud-app-config-manager
 
 
 ## 运维项目
-- 1.springcloud-app-admin 该项目主要是服务治理，启动该项目可以监控到全部服务的健康情况
-- 2.springcloud-config-manager 该项目是配置化管理中心，启动该项目可以配置全部服务的配置文件。
+- 1.springcloud-app-eureka 注册中心项目，可以看到微服务注册到里面的情况。
+- 2.springcloud-app-admin 该项目主要是服务治理，启动该项目可以监控到全部服务的健康情况。
+- 3.springcloud-config-manager 该项目是配置化管理中心，启动该项目可以配置全部服务的配置文件。
 
 
 

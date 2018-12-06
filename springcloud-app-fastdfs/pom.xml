@@ -17,6 +17,10 @@
             <artifactId>springcloud-app-common</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-fastdfs-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.tobato</groupId>
             <artifactId>fastdfs-jn-client</artifactId>
         </dependency>

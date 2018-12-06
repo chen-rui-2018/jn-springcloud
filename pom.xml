@@ -34,6 +34,7 @@
         <module>springcloud-news</module>
 		<module>springcloud-news-api</module>
         <module>springcloud-portals-management-api</module>
+        <module>springcloud-app-fastdfs-api</module>
     </modules>
 
 	<properties>
@@ -74,6 +75,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-news-api</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-app-fastdfs-api</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>

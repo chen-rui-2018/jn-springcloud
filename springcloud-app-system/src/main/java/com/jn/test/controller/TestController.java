@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 1,配置更新测试，如果需要动态更新的配置文件，需要加入@RefreshScope注解
@@ -72,6 +74,14 @@ public class TestController extends BaseController {
     }
 
 
-
+    @RequestMapping(value = "/guest/test4")
+    public Result<String> heapOutOfMemory() {
+        List<TestDomain> list = new ArrayList<>();
+        int coutnt = 0;
+        while (true) {
+            list.add(new TestDomain());
+            System.out.println(coutnt++);
+        }
+    }
 
 }

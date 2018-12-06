@@ -50,21 +50,21 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的部门名称'))
+      if (value.length > 20) {
+        callback(new Error('部门名称的长度不能超过20个字符'))
       } else {
         if (this.oldDepartmentName !== this.departmentForm.departmentName) {
-          checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
+          checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('部门名称已重复'))
+              }
             } else {
-              callback(new Error('response.result'))
+              callback()
             }
           })
-        } else {
-          callback()
         }
       }
     }

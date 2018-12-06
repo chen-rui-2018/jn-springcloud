@@ -50,7 +50,7 @@
           <el-input v-model.trim="postform.postName" max-length="20" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="postform.status" class="filter-item" >
+          <el-select v-model="postform.status" placeholder="请选择" class="filter-item" >
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -79,17 +79,17 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入字母或汉字组成的岗位名称'))
+      if (value && value.length > 20) {
+        callback(new Error('岗位名称的长度不能超过20个字符'))
       } else {
         if (this.oldPostName !== this.postform.postName) {
-          checkPostName(this.postform.postName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('岗位名称已重复'))
+          checkPostName(this.postform.postName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('岗位名称已重复'))
+              }
             }
           })
         } else {
@@ -119,7 +119,7 @@ export default {
       statusOptions: ['未生效', '生效'],
       rules: {
         postName: [
-          { required: true, message: '请输入用户组名称', trigger: 'blur' },
+          { required: true, message: '请输入岗位名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
         status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
@@ -139,12 +139,14 @@ export default {
       })
         .then(() => {
           deletePostById(id).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -204,11 +206,6 @@ export default {
             // 刷新页面显示
             this.initList()
           })
-        } else {
-          this.$message({
-            message: '请修改数据',
-            type: 'error'
-          })
         }
       })
     },
@@ -245,11 +242,6 @@ export default {
             this.$refs['postform'].resetFields()
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '请输入内容',
-            type: 'error'
           })
         }
       })

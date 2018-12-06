@@ -13,7 +13,7 @@
         <el-form-item label="部门">
           <el-popover placement="bottom" trigger="click" width="400">
             <div>
-              <el-tree ref="departmentList" :data="departmentList" :default-expanded-keys="[2, 3]" :default-checked-keys="[5]" :props="defaultProps" show-checkbox node-key="value" @check-change="getDepartment()" />
+              <el-tree ref="departmentList" :data="departmentList" :default-expanded-keys="[2, 3]" :default-checked-keys="[5]" :props="defaultProps" show-checkbox node-key="id" @check-change="getDepartment()" />
             </div>
             <el-input slot="reference" v-model="checkedDepartment" placeholder="请选择部门" clearable @clear="resetCheckedDepartment" />
           </el-popover>
@@ -24,7 +24,7 @@
     </div>
     <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="序列" type="index" align="center" width="60"/>
-      <el-table-column label="姓名" prop="name" align="center" />
+      <el-table-column label="姓名" prop="name" align="center" min-width="100" />
       <el-table-column label="账号" prop="account" align="center" min-width="100" />
       <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
       <el-table-column label="手机" prop="phone" align="center" min-width="120" />
@@ -40,10 +40,11 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column fit label="操作" align="center" width="auto" min-width="400">
+      <el-table-column fit label="操作" align="center" width="auto" min-width="560">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleSectorUpdata(scope.row)">部门岗位</el-button>
-          <el-button type="primary" size="mini" @click="handleRoleUpdata(scope.row)">角色</el-button>
+          <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
+          <!-- <el-button type="primary" size="mini" @click="handleUserGroupUpdata(scope.row)">授权用户组</el-button> -->
           <el-button type="primary" size="mini" @click="handleResetPasswordDialog(scope.row)">重置密码</el-button>
           <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)" />
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)" />
@@ -113,18 +114,18 @@
       </div>
     </el-dialog>
     <!-- E 部门岗位 -->
-    <!-- S 角色岗位 -->
-    <el-dialog :visible.sync="dialogRoleVisible" title="角色" class="role-dialog">
-      <el-transfer :filter-method="filterMethod" :titles="[ '角色列表', '已选中角色' ]" :data="data2" v-model="value2" filterable filter-placeholder="请输入角色拼音" />
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogRoleVisible = false">取消</el-button>
-        <el-button type="primary">确认</el-button>
-      </div>
+    <!-- 授权角色 -->
+    <el-dialog :visible.sync="roledialogVisible" title="授权角色" class="roleBox" width="800px">
+      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+        <span slot="left-footer" size="small">
+          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
+        </span>
+        <span slot="right-footer" size="small" />
+      </el-transfer>
     </el-dialog>
-    <!-- E 角色岗位 -->
     <!-- S 重置密码 -->
-    <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码">
-      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="70px">
+    <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
+      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="50px">
         <el-form-item label="密码" prop="password">
           <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
           <span class="show-pwd" @click="showPwd">
@@ -152,7 +153,9 @@ import {
   findDepartmentandPostByUserId,
   saveDepartmentandPostOfUser,
   updateSysUser,
-  editUser
+  editUser,
+  getRoleInfo,
+  updataRole
 } from '@/api/Permission-model/userManagement'
 import waves from '@/directive/waves' // 水波纹指令
 
@@ -208,43 +211,22 @@ export default {
       }
     }
     var checkPassword = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_!~&@]{6,14}$/
+      const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到14位由字母或数字组成的密码'))
+        callback(new Error('请输入6到16位由字母或数字组成的密码'))
       } else {
         callback()
       }
     }
-    const generateData2 = _ => {
-      const data = []
-      const cities = [
-        '角色一',
-        '角色二',
-        '角色三',
-        '角色四',
-        '角色五',
-        '角色六',
-        '角色七'
-      ]
-      const pinyin = [
-        'juese1',
-        'juese2',
-        'juese3',
-        'juese4',
-        'juese5',
-        'juese6',
-        'juese7'
-      ]
-      cities.forEach((city, index) => {
-        data.push({
-          label: city,
-          key: index,
-          pinyin: pinyin[index]
-        })
-      })
-      return data
-    }
     return {
+      roleIds: [],
+      roleData: [],
+      roleLoading: false,
+      roledialogVisible: false,
+      numberTotal: 0,
+      numberRows: 10,
+      numberPage: 1,
+      moveArr: 0,
       isAbled: false,
       passwordType: 'password',
       isDisabled: false,
@@ -267,10 +249,6 @@ export default {
       userStatusOptions: ['未生效', '生效'],
       departmentOptions: [],
       positionOptions: [],
-      sortOptions: [
-        { label: 'ID Ascending', key: '+id' },
-        { label: 'ID Descending', key: '-id' }
-      ],
       temp: {
         name: undefined,
         account: undefined,
@@ -282,7 +260,6 @@ export default {
       dialogFormVisible: false,
       dialogStatus: '',
       dialogSectorVisible: false,
-      dialogRoleVisible: false,
       dialogResetPasswordVisible: false,
       addUserDialogRules: {
         name: [
@@ -321,11 +298,6 @@ export default {
       },
       userPositionData: [],
       departmentList: undefined,
-      data2: generateData2(),
-      value2: [],
-      filterMethod(query, item) {
-        return item.pinyin.indexOf(query) > -1
-      },
       resetPassword: {
         id: '',
         password: ''
@@ -372,6 +344,72 @@ export default {
     this.findSysPostAll()
   },
   methods: {
+    // 授权角色分页功能
+    handleRoleCurrentChange(val) {
+      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+        this.numberPage = val
+      } else {
+        this.numberPage = val - 1
+      }
+      this.roledialogVisible = true
+      this.getRole()
+    },
+    // 改变授权角色穿梭框时获取选中的角色
+    handleRoleChange(value, direction, movedKeys) {
+      this.roleIds = value
+      if (direction === 'left') {
+        this.moveArr = -movedKeys.length
+      } else if (direction === 'right') {
+        this.moveArr = movedKeys.length
+      }
+      updataRole({ userId: this.userId, roleIds: value }).then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: '授权成功',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('授权失败')
+        }
+        // this.getUserList()
+      })
+    },
+    // 显示授权角色对话框
+    showRoleDialog(id) {
+      this.numberPage = 1
+      this.roleLoading = true
+      this.userId = id
+      this.roledialogVisible = true
+      this.getRole()
+    },
+    getRole() {
+      getRoleInfo({
+        userId: this.userId,
+        page: this.numberPage,
+        rows: this.numberRows
+      }).then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          const roleData = []
+          const checkRole = []
+          this.numberTotal = res.data.data.total
+          res.data.data.rows.otherRoleList.forEach((val, index) => {
+            roleData.push({
+              label: val.roleName,
+              key: val.id
+            })
+          })
+          res.data.data.rows.sysRoleOfUserList.forEach(val => {
+            checkRole.push(val.id)
+          })
+          this.roleData = roleData
+          this.roleIds = checkRole
+          this.roleLoading = false
+        } else {
+          this.$message.error('获取数据失败')
+        }
+      })
+    },
     // 显示密码
     showPwd() {
       if (this.passwordType === 'password') {
@@ -441,9 +479,6 @@ export default {
         this.userPositionData = sectorArr
       })
     },
-    handleRoleUpdata(row) {
-      this.dialogRoleVisible = true
-    },
     handleFilter() {
       this.listQuery.page = 1
       this.getUserList()
@@ -465,6 +500,7 @@ export default {
         email: '',
         status: ''
       }
+      this.isAbled = false
       this.dialogStatus = 'create'
       this.addDialogTitle = '新增'
       this.dialogFormVisible = true
@@ -554,6 +590,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.getUserList()
             } else {
               this.$message.error('删除失败')
@@ -581,11 +620,13 @@ export default {
     },
     getDepartment() {
       this.listQuery.departmentIds = this.$refs.departmentList.getCheckedKeys()
-      this.checkedDepartment = this.$refs.departmentList
+      let checkedArr = []
+      checkedArr = this.$refs.departmentList
         .getCheckedNodes()
         .map(function(item) {
           return item.label
         })
+      this.checkedDepartment = checkedArr.join('、')
     },
     resetCheckedDepartment() {
       // 清空所选部门
@@ -622,12 +663,12 @@ export default {
     },
     // 显示重置密码对话框
     handleResetPasswordDialog(row) {
-      this.$nextTick(() => {
-        this.$refs['resetPassword'].clearValidate()
-      })
       this.dialogResetPasswordVisible = true
       this.resetPassword.id = row.id
       this.resetPassword.password = ''
+      this.$nextTick(() => {
+        this.$refs['resetPassword'].clearValidate()
+      })
     },
     // 重置密码
     handlerResetPassword() {
@@ -647,6 +688,25 @@ export default {
 }
 </script>
 <style lang="scss">
+.roleBox{
+   .el-dialog__body{
+     height: 500px;
+  }
+}
+.box {
+  .el-transfer-panel {
+    width: 320px;
+  }
+  .el-transfer-panel .el-transfer-panel__footer {
+    position: relative;
+  }
+  .el-transfer-panel__body.is-with-footer{
+    height: 350px;
+  }
+  .el-transfer-panel__list.is-filterable{
+    height: 310px;
+  }
+}
 .flex-box-column {
   display: flex;
   flex-direction: column;
@@ -656,22 +716,17 @@ export default {
 }
 .sector-dialog {
   .el-dialog {
-    max-width: 800px;
+  min-width: 800px;
   }
   .item-box {
     padding: 5px;
     border: 1px solid #d7d7d7;
   }
 }
-.role-dialog {
-  .el-dialog {
-    max-width: 540px;
-  }
   .el-transfer {
     display: inline-block;
     white-space: nowrap;
   }
-}
 .el-dialog__body {
   padding-top: 10px;
   padding-bottom: 0;

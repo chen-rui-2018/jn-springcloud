@@ -40,7 +40,7 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -83,7 +83,15 @@
     </el-dialog>
     <!-- 弹出授权角色对话框 -->
     <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
-      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户组拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+      <el-transfer
+        v-loading="roleLoading"
+        v-model="roleIds"
+        :data="roleData"
+        :titles="['其他角色', '用户组拥有角色']"
+        filterable
+        filter-placeholder="请输入角色名称"
+        class="box"
+        @change="handleRoleChange">
         <span slot="left-footer" size="small">
           <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
         </span>
@@ -132,12 +140,13 @@ export default {
         callback(new Error('用户组名称不能超过20个字符'))
       } else {
         if (this.oldGroupName !== this.userGroupform.groupName) {
-          checkGroupName(this.userGroupform.groupName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('用户组名称已重复'))
+          checkGroupName(this.userGroupform.groupName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('用户组名称已重复'))
+              }
             }
           })
         } else {
@@ -198,6 +207,7 @@ export default {
   methods: {
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
+      console.log(this.numberTotal)
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
@@ -421,7 +431,6 @@ export default {
     },
     // 删除用户功能实现
     deleteUsergroup(row) {
-      console.log(row)
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -434,6 +443,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -476,6 +488,10 @@ export default {
 </script>
 
 <style lang="scss">
+.el-tooltip__popper{
+   text-align: center;
+    width:200px;
+}
 .tablePagination{
   margin-top:15px;
 }

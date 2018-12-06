@@ -67,7 +67,7 @@
       </div>
     </div>
     <!-- 弹出的新增菜单和编辑菜单对话框 -->
-    <el-dialog :visible.sync="menuDialogVisible" :title="dialogStatus" width="400px">
+    <el-dialog :visible.sync="menuDialogVisible" :title="dialogStatus" width="500px">
       <el-form ref="menuForm" :rules="rules" :model="menuForm" label-width="100px">
         <el-form-item v-show="visible" label="新增位置:" prop="location">
           <el-radio v-model="location" label="1">同级菜单</el-radio>
@@ -78,10 +78,10 @@
           <el-radio v-model="radio" label="2">页面</el-radio>
         </el-form-item>
         <el-form-item label="菜单名称:" prop="menuName">
-          <el-input v-model="menuForm.menuName" style="width:200px;" />
+          <el-input v-model="menuForm.menuName" style="width:340px;" @blur="checkoutMenuName()"/>
         </el-form-item>
-        <el-form-item v-show="isShow" label="url地址:">
-          <el-input v-model="menuForm.menuUrl" style="width:200px;" />
+        <el-form-item v-show="isShow" label="url地址:" prop="menuUrl">
+          <el-input v-model="menuForm.menuUrl" style="width:340px;" />
         </el-form-item>
         <el-form-item>
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增'?createData():updateData()">保存</el-button>
@@ -92,12 +92,12 @@
     </el-dialog>
     <!-- 新增功能和编辑功能弹框 -->
     <el-dialog :visible.sync="resourcesDialogVisible" :title="dialogStatus" width="500px">
-      <el-form ref="resourcesForm" :rules="rules" :model="resourcesForm" label-width="100px">
+      <el-form ref="resourcesForm" :rules="rules" :model="resourcesForm" label-width="100px" class="resourcesBox">
         <el-form-item label="功能名称:" prop="resourcesName">
-          <el-input v-model="resourcesForm.resourcesName" style="width:300px;" />
+          <el-input v-model="resourcesForm.resourcesName" />
         </el-form-item>
-        <el-form-item label="功能地址:">
-          <el-input v-model="resourcesForm.resourcesUrl" style="width:300px;" />
+        <el-form-item label="功能地址:" prop="resourcesUrl">
+          <el-input v-model="resourcesForm.resourcesUrl" style="width:340px;" />
         </el-form-item>
         <el-form-item>
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增功能'?createResources():updateResources()">保存</el-button>
@@ -116,9 +116,8 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的菜单名称'))
+      if (value && value.length > 20) {
+        callback(new Error('菜单名称的长度不能超过20个字符'))
       } else {
         if (this.oldMenuName !== this.menuForm.menuName) {
           checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
@@ -135,9 +134,8 @@ export default {
       }
     }
     var checkResources = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的功能名称'))
+      if (value && value.length > 20) {
+        callback(new Error('功能名称的长度不能超过20个字符'))
       } else {
         if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
           checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(response => {
@@ -153,10 +151,16 @@ export default {
         }
       }
     }
+    var checkoutUrl = (rule, value, callback) => {
+      if (value && value.length > 50) {
+        callback(new Error('url路径的长度不能超过50个字符'))
+      } else {
+        callback()
+      }
+    }
     var checkLabel = (rule, value, callback) => {
-      debugger
       // const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (value.length > 20) {
+      if (value && value.length > 20) {
         callback(new Error('菜单名称不能超过20个字符'))
       } else {
         var count = 0
@@ -178,6 +182,8 @@ export default {
       }
     }
     return {
+      checkoutId: undefined,
+      checkoutParentId: undefined,
       isSubmit: false,
       parentId: undefined,
       oldResourcesName: undefined,
@@ -214,7 +220,7 @@ export default {
         id: undefined,
         parentId: undefined,
         menuName: undefined,
-        menuUrl: '/'
+        menuUrl: undefined
       },
       dialogStatus: undefined,
       menuDialogVisible: false,
@@ -225,7 +231,8 @@ export default {
           { required: true, message: '请输入菜单名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        url: [{ required: true, message: '请填写url', trigger: 'blur' }],
+        menuUrl: [{ required: true, message: 'url不能为空', trigger: 'blur' }, { validator: checkoutUrl, trigger: 'blur' }],
+        resourcesUrl: [{ required: true, message: 'url不能为空', trigger: 'blur' }, { validator: checkoutUrl, trigger: 'blur' }],
         resourcesName: [
           { required: true, message: '请输入功能名称', trigger: 'blur' },
           { validator: checkResources, trigger: 'blur' }]
@@ -243,12 +250,29 @@ export default {
       } else if (this.radio === '2') {
         this.isShow = true
       }
+    },
+    'location': function() {
+      if (this.location === '1') {
+        this.menuForm.parentId = this.checkoutParentId
+      } else if (this.location === '0') {
+        this.menuForm.parentId = this.checkoutId
+      }
     }
   },
   created() {
     this.initList()
   },
   methods: {
+    // 失去焦点的时候判断子菜单的名字是否又重复
+    checkoutSubName() {
+      const arr = []
+      this.subForm.menuData.forEach(val => {
+        arr.push(val.label)
+      })
+      if ((new Set(arr)).size === arr.length) {
+        this.$refs['subForm'].clearValidate()
+      }
+    },
     // 删除页面的功能
     deleteResourcesName(id) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
@@ -313,6 +337,7 @@ export default {
       this.resourcesForm.resourcesName = row.resourcesName
       this.resourcesForm.menuId = row.menuId
       this.resourcesForm.resourcesUrl = row.resourcesUrl
+      this.$refs['resourcesForm'].clearValidate()
     },
     // 实现添加功能
     createResources() {
@@ -519,9 +544,6 @@ export default {
     },
     // 显示编辑对话框
     editMenu(data) {
-      this.$nextTick(() => {
-        this.$refs['menuForm'].clearValidate()
-      })
       this.isTrue = true
       this.dialogStatus = '编辑'
       this.visible = false
@@ -536,11 +558,14 @@ export default {
       }
       if (data.isDir === '1') {
         this.isShow = false
-        this.menuForm.menuUrl = '/'
+        this.menuForm.menuUrl = undefined
       } else if (data.isDir === '0') {
         this.isShow = true
         this.menuForm.menuUrl = data.menuUrl
       }
+      this.$nextTick(() => {
+        this.$refs['menuForm'].clearValidate()
+      })
     },
     // 实现新增菜单
     createData(data) {
@@ -606,6 +631,8 @@ export default {
       this.menuDialogVisible = true
       this.menuForm.menuName = undefined
       this.menuId = data.id
+      this.checkoutId = data.id
+      this.checkoutParentId = data.parentId
       if (data.parentName) {
         this.menuForm.parentId = data.parentId
       } else {
@@ -618,7 +645,7 @@ export default {
         // this.isShow = false
         this.visible = true
       }
-      this.menuForm.menuUrl = '/'
+      this.menuForm.menuUrl = undefined
       this.$nextTick(() => {
         this.$refs['menuForm'].clearValidate()
       })
@@ -641,6 +668,15 @@ export default {
 
 <style lang="scss" >
 .menuManagement{
+  .resourcesBox{
+    .el-input--medium .el-input__inner{
+      height: 40px;
+      line-height: 40px;
+    }
+    .el-input{
+      width: 340px;
+    }
+  }
   height: 100%;
   display: flex;
   background-color: #fff;

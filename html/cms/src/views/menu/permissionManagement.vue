@@ -122,17 +122,17 @@ export default {
 
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的权限名称'))
+      if (value.length > 20) {
+        callback(new Error('权限名称的长度不能超过20个字符'))
       } else {
         if (this.oldPermissionName !== this.permissionform.permissionName) {
-          checkPermissionName(this.permissionform.permissionName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('权限名称已重复'))
+          checkPermissionName(this.permissionform.permissionName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('权限名称已重复'))
+              }
             }
           })
         } else {
@@ -361,6 +361,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -511,16 +514,27 @@ export default {
   }
 }
 .box {
-  .el-transfer-panel {
+   .el-transfer-panel {
+    height: 440px;
     width: 320px;
   }
   .el-transfer-panel .el-transfer-panel__footer {
     position: relative;
   }
+  .el-transfer-panel__body.is-with-footer{
+    height: 350px;
+  }
+  .el-transfer-panel__list.is-filterable{
+    height: 310px;
+  }
 }
 .el-dialog {
   .el-dialog__footer {
     text-align: center;
+  }
+  .el-tree{
+    height: 360px;
+    overflow: auto;
   }
 }
 </style>

@@ -49,13 +49,16 @@
         :model="temp"
         label-position="right"
         label-width="80px" >
-        <el-form-item label="文件组" prop="fileGroupName">
+        <el-form-item label="文件组:" prop="fileGroupName">
           <el-input v-model.trim="temp.fileGroupName" />
         </el-form-item>
-        <el-form-item label="描述" prop="fileGroupDescribe">
-          <el-input v-model.trim="temp.fileGroupDescribe" />
+        <el-form-item label="描述:" prop="fileGroupDescribe">
+          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea"/>
         </el-form-item>
-        <el-form-item label="状态" prop="status" >
+        <!-- <el-form-item label="描述" prop="fileGroupDescribe">
+          <el-input v-model.trim="temp.fileGroupDescribe" />
+        </el-form-item> -->
+        <el-form-item label="状态:" prop="status" >
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
@@ -74,22 +77,29 @@ import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的文件组名称'))
+      if (value.length > 20) {
+        callback(new Error('文件组名称的长度不能超过20个字符'))
       } else {
         if (this.oldName !== this.temp.fileGroupName) {
-          checkFileGroupName(this.temp.fileGroupName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('文件组名称已重复'))
+          checkFileGroupName(this.temp.fileGroupName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('文件组名称已重复'))
+              }
             }
           })
         } else {
           callback()
         }
+      }
+    }
+    var checkoutDescribe = (rule, value, callback) => {
+      if (value && value.length > 50) {
+        callback(new Error('描述的长度不能超过50个字符'))
+      } else {
+        callback()
       }
     }
     return {
@@ -120,7 +130,8 @@ export default {
         ],
         status: [
           { required: true, message: '请选择状态', trigger: 'blur' }
-        ]
+        ],
+        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'blur' }]
       }
     }
   },
@@ -160,7 +171,7 @@ export default {
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
-      }, 1000)
+      }, 500)
       this.$refs['temp'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
@@ -186,7 +197,6 @@ export default {
     },
     // 显示编辑文件组对话框
     handleUpdate(row) {
-      console.log(row)
       this.temp.id = row.id
       this.dialogStatus = '编辑文件组'
       this.oldName = row.fileGroupName
@@ -194,6 +204,9 @@ export default {
       this.fileGroupdialogFormVisible = true
       this.temp.fileGroupName = row.fileGroupName
       this.temp.status = parseInt(row.status)
+      this.$nextTick(() => {
+        this.$refs['temp'].clearValidate()
+      })
     },
     // 编辑文件组信息
     updateData() {
@@ -234,6 +247,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -274,10 +290,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .filter-container {
     .el-form-item {
       margin-bottom: 0;
     }
+  }
+  .el-dialog{
+  .el-textarea__inner{
+    min-height: 100px !important;
+  }
   }
 </style>

@@ -236,14 +236,16 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "根据用户id获取用户具有角色及条件分页查询用户未拥有的角色")
-    public SysUserRoleVO findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
+    public PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
         //获取用户已经具有角色
         List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
         //条件分页获取用户未拥有的角色信息
+        Page<Object> objects = PageHelper.startPage(sysUserRolePage.getPage(), sysUserRolePage.getRows());
         List<SysRole> otherRoleList = sysUserRoleMapper.findRoleByUserPage(sysUserRolePage);
         otherRoleList.addAll(sysRoleOfUserList);
         SysUserRoleVO sysUserRoleVO = new SysUserRoleVO(sysRoleOfUserList, otherRoleList);
-        return sysUserRoleVO;
+        PaginationData data = new PaginationData(sysUserRoleVO, objects.getTotal());
+        return data;
     }
 
     /**

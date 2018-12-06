@@ -19,7 +19,7 @@ public class SysUserRoleVO implements Serializable {
     private static final long serialVersionUID = -6753835711994878991L;
     @ApiModelProperty("用户具有的角色")
     private List<SysRole> sysRoleOfUserList;
-    @ApiModelProperty("所有角色")
+    @ApiModelProperty("用户未拥有角色")
     private List<SysRole> otherRoleList;
 
     public SysUserRoleVO() {

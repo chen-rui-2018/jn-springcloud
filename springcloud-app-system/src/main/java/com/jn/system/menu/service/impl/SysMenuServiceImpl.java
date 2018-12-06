@@ -16,9 +16,11 @@ import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.menu.model.*;
 import com.jn.system.menu.service.SysMenuService;
+import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionMenuMapper;
+import com.jn.system.permission.model.SysResourcesOfPermission;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 菜单serviceImpl
@@ -54,6 +53,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysResourcesMapper sysResourcesMapper;
     @Resource
     private SysPermissionMenuMapper sysPermissionMenuMapper;
+    @Resource
+    private SysResourcesService sysResourcesService;
 
     /**
      * 更新菜单信息
@@ -81,6 +82,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             logger.warn("[菜单] 菜单更新失败，菜单名称已存在！，menuName:{}", sysMenu.getMenuName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        sysMenu.setMenuUrl(StringUtils.trim(sysMenu.getMenuUrl()));
         TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
@@ -98,21 +100,46 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysMenuById(String menuId) {
         List<String> menuIds = new ArrayList<String>();
-        //查询菜单子菜单
-        List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(menuId);
-        if (childrenMenuList != null && childrenMenuList.size() > 0) {
-            //递归获取子部门下面的部门信息
-            findChildMenuList(childrenMenuList);
-            getChildMenuId(menuIds, childrenMenuList);
+        List<String> resourcesIds = new ArrayList<String>();
+        //判断菜单是否是目录菜单
+        TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(menuId);
+        Boolean flag = SysMenuEnums.MENU_ISDIR.getCode().equals(tbSysMenu.getIsDir())?Boolean.TRUE:Boolean.FALSE;
+        if (flag){
+            //查询菜单子菜单
+            List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(menuId);
+            if (childrenMenuList != null && childrenMenuList.size() > 0) {
+                //递归获取子菜单下面的菜单信息
+                findChildMenuList(resourcesIds,childrenMenuList);
+                //获取子菜单id
+                getChildMenuId(menuIds, childrenMenuList);
+            }
+        }else{
+            //获取菜单具有的resourcesid
+            getResourcesIdByMenuId(menuId, resourcesIds);
         }
         menuIds.add(menuId);
         logger.info("[菜单] 删除菜单及子菜单信息，menuIds:{}", menuIds.toString());
         sysMenuMapper.deleteBy(menuIds);
-        logger.info("[菜单功能] 删除菜单及子菜单的功能信息，menuIds:{}", menuIds.toString());
-        sysResourcesMapper.deleteBy(menuIds);
         logger.info("[菜单权限] 删除菜单及子菜单对应的权限信息，menuIds:{}", menuIds.toString());
         sysPermissionMenuMapper.deleteBy(menuIds);
+        logger.info("[菜单功能] 删除菜单及子菜单的功能信息，删除功能对应权限信息,menuIds:{}", resourcesIds.toString());
+        String [] ids = resourcesIds.toArray(new String[resourcesIds.size()]);
+        if(ids.length > 0){
+            sysResourcesService.deleteResourcesById(ids);
+        }
         logger.info("[菜单] 菜单逻辑删除成功，menuIds:{}", menuIds.toString());
+    }
+
+    /**
+     * 通过菜单id获取菜单具有的功能id
+     * @param menuId
+     * @param resourcesIds
+     */
+    private void getResourcesIdByMenuId(String menuId, List<String> resourcesIds) {
+        List<SysResourcesOfPermission> resourcesList = sysResourcesMapper.getResourcesByMenuId(menuId);
+        for (SysResourcesOfPermission sysResourcesOfPermission : resourcesList) {
+            resourcesIds.add(sysResourcesOfPermission.getId());
+        }
     }
 
     /**
@@ -135,9 +162,9 @@ public class SysMenuServiceImpl implements SysMenuService {
      *
      * @param menuTreeVOList
      */
-    public void findChildMenuList(List<SysMenuTreeVO> menuTreeVOList) {
+    public void findChildMenuList(List<String> resourcesIds,List<SysMenuTreeVO> menuTreeVOList) {
         for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
-            //判断菜单项是否是文件夹,是再递归获取数据
+            //判断菜单项是否是目录菜单,是再递归获取数据
             if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
                 //以菜单id作为父id,去获取菜单子集
                 List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getId());
@@ -146,8 +173,11 @@ public class SysMenuServiceImpl implements SysMenuService {
                     sysMenuTreeVO.setChildren(null);
                     continue;
                 } else {
-                    findChildMenuList(childrenMenuList);
+                    findChildMenuList(resourcesIds,childrenMenuList);
                 }
+            }else{
+                //不是目录菜单,采取菜单功能id
+                getResourcesIdByMenuId(sysMenuTreeVO.getId(), resourcesIds);
             }
         }
     }
@@ -332,7 +362,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         tbSysMenu.setCreateTime(new Date());
         tbSysMenu.setCreator(user.getId());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
-        tbSysMenu.setMenuUrl(sysMenuAdd.getMenuUrl());
+        tbSysMenu.setMenuUrl(StringUtils.trim(sysMenuAdd.getMenuUrl()));
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
         tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysMenuMapper.insertSelective(tbSysMenu);

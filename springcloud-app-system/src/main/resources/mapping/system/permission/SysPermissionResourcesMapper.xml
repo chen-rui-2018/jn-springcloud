@@ -40,4 +40,12 @@
         </foreach>
     </insert>
 
+    <update id="deleteByResourcesIds" parameterType="java.lang.String">
+        update tb_sys_permission_resources set status=-1
+        where resources_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

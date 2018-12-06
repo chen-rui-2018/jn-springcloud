@@ -90,7 +90,7 @@ public class SysUserServiceTest {
         SysUserRolePage sysUserRolePage = new SysUserRolePage();
         sysUserRolePage.setPage(1);
         sysUserRolePage.setRows(10);
-        SysUserRoleVO data = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        PaginationData data = sysUserService.findSysRoleByUserId(sysUserRolePage);
         logger.info("测试结果:{}", data.toString());
     }
 

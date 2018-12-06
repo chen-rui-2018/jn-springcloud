@@ -44,4 +44,9 @@ public interface SysPermissionResourcesMapper {
      */
     void addResourceToPermission(List<TbSysPermissionResources> tbSysPermissionResourcesList);
 
+    /**
+     * 根据功能id批量删除表信息
+     * @param resourcesIds
+     */
+    void deleteByResourcesIds(String[] resourcesIds);
 }

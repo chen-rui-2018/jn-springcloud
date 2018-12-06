@@ -69,7 +69,7 @@ public interface SysUserService {
      * @param sysUserRolePage
      * @return
      */
-    SysUserRoleVO findSysRoleByUserId(SysUserRolePage sysUserRolePage);
+    PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage);
 
     /**
      * 为用户添加角色权限

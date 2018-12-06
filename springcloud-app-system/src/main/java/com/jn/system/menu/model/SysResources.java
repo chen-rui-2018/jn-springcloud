@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,12 +29,15 @@ public class SysResources implements Serializable {
      */
     @ApiModelProperty(value = "功能名称" )
     @NotBlank(message = "功能名称不能为空！")
+    @Size(max = 20,message = "页面功能名称长度不能超度20字")
     private String resourcesName;
 
     /**
      * 功能URL
      */
     @ApiModelProperty(value = "功能路径" )
+    @NotBlank(message = "功能路径不能为空！")
+    @Size(max = 50,message = "页面功能路径长度不能超度50字")
     private String resourcesUrl;
 
 
@@ -41,6 +45,7 @@ public class SysResources implements Serializable {
      * 菜单id
      */
     @ApiModelProperty(value = "菜单id" )
+    @NotBlank(message = "菜单id不能为空！")
     private String menuId;
 
     /**

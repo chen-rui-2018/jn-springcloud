@@ -112,8 +112,8 @@ public class SysUserController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {
-        SysUserRoleVO sysUserRoleVO = sysUserService.findSysRoleByUserId(sysUserRolePage);
-        return new Result(sysUserRoleVO);
+        PaginationData data = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        return new Result(data);
     }
 
     @ControllerLog(doAction = "为用户添加角色权限")

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.portals.activity.dao.TbActivityCommentMapper">
-  <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityComment">
-    <result column="activityComment_id" jdbcType="VARCHAR" property="id" />
-    <result column="activityComment_p_id" jdbcType="VARCHAR" property="pId" />
-    <result column="activityComment_com_account" jdbcType="VARCHAR" property="comAccount" />
-    <result column="activityComment_com_time" jdbcType="TIMESTAMP" property="comTime" />
-    <result column="activityComment_like_num" jdbcType="INTEGER" property="likeNum" />
-    <result column="activityComment_state" jdbcType="VARCHAR" property="state" />
-    <result column="activityComment_com_type" jdbcType="VARCHAR" property="comType" />
+<mapper namespace="com.jn.portals.activity.dao.TbCommentMapper">
+  <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbComment">
+    <result column="comment_id" jdbcType="VARCHAR" property="id" />
+    <result column="comment_p_id" jdbcType="VARCHAR" property="pId" />
+    <result column="comment_com_account" jdbcType="VARCHAR" property="comAccount" />
+    <result column="comment_com_time" jdbcType="TIMESTAMP" property="comTime" />
+    <result column="comment_like_num" jdbcType="INTEGER" property="likeNum" />
+    <result column="comment_state" jdbcType="VARCHAR" property="state" />
+    <result column="comment_com_type" jdbcType="VARCHAR" property="comType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,18 +69,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityComment.id as activityComment_id, activityComment.p_id as activityComment_p_id, 
-    activityComment.com_account as activityComment_com_account, activityComment.com_time as activityComment_com_time, 
-    activityComment.like_num as activityComment_like_num, activityComment.state as activityComment_state, 
-    activityComment.com_type as activityComment_com_type
+    comment.id as comment_id, comment.p_id as comment_p_id, comment.com_account as comment_com_account, 
+    comment.com_time as comment_com_time, comment.like_num as comment_like_num, comment.state as comment_state, 
+    comment.com_type as comment_com_type
   </sql>
-  <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbActivityCommentCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_comment activityComment
+    from tb_comment comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,28 +87,28 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityCommentCriteria">
-    delete from tb_activity_comment activityComment
+  <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbCommentCriteria">
+    delete from tb_comment comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityComment">
+  <insert id="insert" parameterType="com.jn.portals.activity.entity.TbComment">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_comment (p_id, com_account, com_time, 
+    insert into tb_comment (p_id, com_account, com_time, 
       like_num, state, com_type
       )
     values (#{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
       #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityComment">
+  <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbComment">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_activity_comment
+    insert into tb_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="pId != null">
         p_id,
@@ -151,35 +150,35 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.portals.activity.entity.TbActivityCommentCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_comment activityComment
+  <select id="countByExample" parameterType="com.jn.portals.activity.entity.TbCommentCriteria" resultType="java.lang.Long">
+    select count(*) from tb_comment comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_comment activityComment
+    update tb_comment comment
     <set>
       <if test="record.id != null">
-        activityComment.id = #{record.id,jdbcType=VARCHAR},
+        comment.id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.pId != null">
-        activityComment.p_id = #{record.pId,jdbcType=VARCHAR},
+        comment.p_id = #{record.pId,jdbcType=VARCHAR},
       </if>
       <if test="record.comAccount != null">
-        activityComment.com_account = #{record.comAccount,jdbcType=VARCHAR},
+        comment.com_account = #{record.comAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.comTime != null">
-        activityComment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
+        comment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.likeNum != null">
-        activityComment.like_num = #{record.likeNum,jdbcType=INTEGER},
+        comment.like_num = #{record.likeNum,jdbcType=INTEGER},
       </if>
       <if test="record.state != null">
-        activityComment.state = #{record.state,jdbcType=VARCHAR},
+        comment.state = #{record.state,jdbcType=VARCHAR},
       </if>
       <if test="record.comType != null">
-        activityComment.com_type = #{record.comType,jdbcType=VARCHAR},
+        comment.com_type = #{record.comType,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -187,14 +186,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_comment activityComment
-    set activityComment.id = #{record.id,jdbcType=VARCHAR},
-      activityComment.p_id = #{record.pId,jdbcType=VARCHAR},
-      activityComment.com_account = #{record.comAccount,jdbcType=VARCHAR},
-      activityComment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
-      activityComment.like_num = #{record.likeNum,jdbcType=INTEGER},
-      activityComment.state = #{record.state,jdbcType=VARCHAR},
-      activityComment.com_type = #{record.comType,jdbcType=VARCHAR}
+    update tb_comment comment
+    set comment.id = #{record.id,jdbcType=VARCHAR},
+      comment.p_id = #{record.pId,jdbcType=VARCHAR},
+      comment.com_account = #{record.comAccount,jdbcType=VARCHAR},
+      comment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
+      comment.like_num = #{record.likeNum,jdbcType=INTEGER},
+      comment.state = #{record.state,jdbcType=VARCHAR},
+      comment.com_type = #{record.comType,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

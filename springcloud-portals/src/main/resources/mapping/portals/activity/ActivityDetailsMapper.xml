@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.portals.activity.dao.ActivityDetailsMapper">
+    <select id="getActivityDetails" resultMap="com.jn.portals.activity.vo.ActivityDetailVO">
+        select
+        t1.id as "activityId"                                                                    <!--活动id-->
+        ,t1.acti_type  as "activityType"                                                         <!--活动类型-->
+        ,t1.acti_name as "activityName"                                                          <!--活动名称-->
+        ,date_format(t1.acti_start_time,'yyyy-MM-dd HH:mm:ss') as "activityStartTime"            <!--活动开始时间-->
+        ,date_format(t1.acti_end_time,'yyyy-MM-dd HH:mm:ss') as "activityEndTime"                <!--活动结束时间-->
+        ,date_format(t1.apply_start_time,'yyyy-MM-dd HH:mm:ss') as "applyStartTime"              <!--报名开始时间-->
+        ,date_format(t1.apply_end_time,'yyyy-MM-dd HH:mm:ss') as "applyEndTime"                  <!--报名结束时间-->
+        ,date_format(t1.mes_send_time,'yyyy-MM-dd HH:mm:ss') as "mesSenTime"                     <!--活动推送时间-->
+        ,t1.acti_address as "activityAdress"                                                     <!--活动地址-->
+        ,t1.acti_cost as "actiCost"                                                              <!--活动费用-->
+        ,t1.acti_organizer as "activityOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_number as "activityNumber"                                                      <!--活动人数-->
+        ,t1.acti_poster_url as "activityPosterUrl"                                               <!--活动主海报-->
+        ,t1.acti_views as "activityViews"                                                        <!--阅读人数-->
+        ,t1.acti_like as "activityLike"                                                          <!--感兴趣人数-->
+        ,t1.apply_num as "applyNum"                                                              <!--报名人数-->
+        ,t1.partic_num as "particNum"                                                            <!--活动参加人数-->
+        ,t1.state as "state"                                                                     <!--活动状态-->
+        ,date_format(t1.create_time , 'yyyy-MM-dd HH:mm:ss') as "createTime"                     <!--创建时间-->
+        ,t1.create_account as "createAccount"                                                    <!--创建人-->
+        ,date_format(t1.issue_time ,'yyyy-MM-dd HH:mm:ss') as "issueTime"                        <!--发布时间-->
+        ,t1.issue_account as "issueAccount"                                                      <!--发布人-->
+        ,date_format(t1.update_time,'yyyy-MM-dd HH:mm:ss') as "updateTime"                       <!--修改时间-->
+        ,t1.update_account as "updateAccount"                                                    <!--修改人-->
+        ,t1.is_top as "isTop"                                                                    <!--是否置顶-->
+        ,date_format(t1.top_time,'yyyy-MM-dd HH:mm:ss') as "topTime"                             <!--置顶时间-->
+        ,t1.is_apply as "isApply"                                                                <!--是否可报名-->
+        ,t2.acti_detail as "activityDetail"                                                      <!--活动内容-->
+        from tb_activity t1
+        left join tb_activity_detail t2
+        on t1.id=t2.activity_id
+        where 1=1
+        and t1.id=#{id}
+        and t1.state not in ('0','7')                                                           <!--草稿、已删除的活动不能被查询出来-->
+        order by t1.create_time
+
+
+    </select>
+</mapper>

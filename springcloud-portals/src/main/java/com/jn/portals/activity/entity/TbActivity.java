@@ -57,6 +57,10 @@ public class TbActivity implements Serializable {
 
     private Integer actiOrder;
 
+    private Date issueTime;
+
+    private String issueAccount;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -267,6 +271,22 @@ public class TbActivity implements Serializable {
         this.actiOrder = actiOrder;
     }
 
+    public Date getIssueTime() {
+        return issueTime;
+    }
+
+    public void setIssueTime(Date issueTime) {
+        this.issueTime = issueTime;
+    }
+
+    public String getIssueAccount() {
+        return issueAccount;
+    }
+
+    public void setIssueAccount(String issueAccount) {
+        this.issueAccount = issueAccount == null ? null : issueAccount.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -304,7 +324,9 @@ public class TbActivity implements Serializable {
             && (this.getIsTop() == null ? other.getIsTop() == null : this.getIsTop().equals(other.getIsTop()))
             && (this.getTopTime() == null ? other.getTopTime() == null : this.getTopTime().equals(other.getTopTime()))
             && (this.getIsApply() == null ? other.getIsApply() == null : this.getIsApply().equals(other.getIsApply()))
-            && (this.getActiOrder() == null ? other.getActiOrder() == null : this.getActiOrder().equals(other.getActiOrder()));
+            && (this.getActiOrder() == null ? other.getActiOrder() == null : this.getActiOrder().equals(other.getActiOrder()))
+            && (this.getIssueTime() == null ? other.getIssueTime() == null : this.getIssueTime().equals(other.getIssueTime()))
+            && (this.getIssueAccount() == null ? other.getIssueAccount() == null : this.getIssueAccount().equals(other.getIssueAccount()));
     }
 
     @Override
@@ -337,6 +359,8 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getTopTime() == null) ? 0 : getTopTime().hashCode());
         result = prime * result + ((getIsApply() == null) ? 0 : getIsApply().hashCode());
         result = prime * result + ((getActiOrder() == null) ? 0 : getActiOrder().hashCode());
+        result = prime * result + ((getIssueTime() == null) ? 0 : getIssueTime().hashCode());
+        result = prime * result + ((getIssueAccount() == null) ? 0 : getIssueAccount().hashCode());
         return result;
     }
 
@@ -372,6 +396,8 @@ public class TbActivity implements Serializable {
         sb.append(", topTime=").append(topTime);
         sb.append(", isApply=").append(isApply);
         sb.append(", actiOrder=").append(actiOrder);
+        sb.append(", issueTime=").append(issueTime);
+        sb.append(", issueAccount=").append(issueAccount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

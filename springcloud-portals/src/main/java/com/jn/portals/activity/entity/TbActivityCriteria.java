@@ -1775,6 +1775,136 @@ public class TbActivityCriteria {
             addCriterion("activity.acti_order not between", value1, value2, "actiOrder");
             return (Criteria) this;
         }
+
+        public Criteria andIssueTimeIsNull() {
+            addCriterion("activity.issue_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeIsNotNull() {
+            addCriterion("activity.issue_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeEqualTo(Date value) {
+            addCriterion("activity.issue_time =", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeNotEqualTo(Date value) {
+            addCriterion("activity.issue_time <>", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeGreaterThan(Date value) {
+            addCriterion("activity.issue_time >", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("activity.issue_time >=", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeLessThan(Date value) {
+            addCriterion("activity.issue_time <", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeLessThanOrEqualTo(Date value) {
+            addCriterion("activity.issue_time <=", value, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeIn(List<Date> values) {
+            addCriterion("activity.issue_time in", values, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeNotIn(List<Date> values) {
+            addCriterion("activity.issue_time not in", values, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeBetween(Date value1, Date value2) {
+            addCriterion("activity.issue_time between", value1, value2, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTimeNotBetween(Date value1, Date value2) {
+            addCriterion("activity.issue_time not between", value1, value2, "issueTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountIsNull() {
+            addCriterion("activity.issue_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountIsNotNull() {
+            addCriterion("activity.issue_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountEqualTo(String value) {
+            addCriterion("activity.issue_account =", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountNotEqualTo(String value) {
+            addCriterion("activity.issue_account <>", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountGreaterThan(String value) {
+            addCriterion("activity.issue_account >", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("activity.issue_account >=", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountLessThan(String value) {
+            addCriterion("activity.issue_account <", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountLessThanOrEqualTo(String value) {
+            addCriterion("activity.issue_account <=", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountLike(String value) {
+            addCriterion("activity.issue_account like", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountNotLike(String value) {
+            addCriterion("activity.issue_account not like", value, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountIn(List<String> values) {
+            addCriterion("activity.issue_account in", values, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountNotIn(List<String> values) {
+            addCriterion("activity.issue_account not in", values, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountBetween(String value1, String value2) {
+            addCriterion("activity.issue_account between", value1, value2, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueAccountNotBetween(String value1, String value2) {
+            addCriterion("activity.issue_account not between", value1, value2, "issueAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

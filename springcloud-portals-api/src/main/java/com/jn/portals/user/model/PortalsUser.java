@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "User", description = "用户信息")
+@ApiModel(value = "PortalsUser", description = "用户信息")
 public class PortalsUser implements Serializable {
     //todo:数据库表未建，待表建好好再完善
     private static final long serialVersionUID = -7484136779753770396L;

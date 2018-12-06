@@ -35,8 +35,7 @@ public class ActivityDetailsController extends BaseController {
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getActivityDetails")
     public Result getActivityDetails(@RequestBody String id){
-        activityDetailsService.getActivityDetails(id);
-        return null;
+        return activityDetailsService.getActivityDetails(id);
     }
 
 

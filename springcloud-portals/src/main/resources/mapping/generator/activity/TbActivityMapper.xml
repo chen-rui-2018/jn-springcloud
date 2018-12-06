@@ -28,6 +28,8 @@
     <result column="activity_top_time" jdbcType="TIMESTAMP" property="topTime" />
     <result column="activity_is_apply" jdbcType="VARCHAR" property="isApply" />
     <result column="activity_acti_order" jdbcType="INTEGER" property="actiOrder" />
+    <result column="activity_issue_time" jdbcType="TIMESTAMP" property="issueTime" />
+    <result column="activity_issue_account" jdbcType="VARCHAR" property="issueAccount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -99,7 +101,8 @@
     activity.acti_views as activity_acti_views, activity.acti_like as activity_acti_like, 
     activity.apply_num as activity_apply_num, activity.partic_num as activity_partic_num, 
     activity.is_top as activity_is_top, activity.top_time as activity_top_time, activity.is_apply as activity_is_apply, 
-    activity.acti_order as activity_acti_order
+    activity.acti_order as activity_acti_order, activity.issue_time as activity_issue_time, 
+    activity.issue_account as activity_issue_account
   </sql>
   <select id="selectByExample" parameterType="com.jn.portals.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
     select
@@ -133,7 +136,8 @@
       update_time, update_account, acti_views, 
       acti_like, apply_num, partic_num, 
       is_top, top_time, is_apply, 
-      acti_order)
+      acti_order, issue_time, issue_account
+      )
     values (#{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, #{actiStartTime,jdbcType=TIMESTAMP}, 
       #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, #{applyEndTime,jdbcType=TIMESTAMP}, 
       #{mesSendTime,jdbcType=TIMESTAMP}, #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, 
@@ -142,7 +146,8 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, 
       #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, 
       #{isTop,jdbcType=VARCHAR}, #{topTime,jdbcType=TIMESTAMP}, #{isApply,jdbcType=VARCHAR}, 
-      #{actiOrder,jdbcType=INTEGER})
+      #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
@@ -225,6 +230,12 @@
       <if test="actiOrder != null">
         acti_order,
       </if>
+      <if test="issueTime != null">
+        issue_time,
+      </if>
+      <if test="issueAccount != null">
+        issue_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="actiType != null">
@@ -301,6 +312,12 @@
       </if>
       <if test="actiOrder != null">
         #{actiOrder,jdbcType=INTEGER},
+      </if>
+      <if test="issueTime != null">
+        #{issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issueAccount != null">
+        #{issueAccount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -391,6 +408,12 @@
       <if test="record.actiOrder != null">
         activity.acti_order = #{record.actiOrder,jdbcType=INTEGER},
       </if>
+      <if test="record.issueTime != null">
+        activity.issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.issueAccount != null">
+        activity.issue_account = #{record.issueAccount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -423,7 +446,9 @@
       activity.is_top = #{record.isTop,jdbcType=VARCHAR},
       activity.top_time = #{record.topTime,jdbcType=TIMESTAMP},
       activity.is_apply = #{record.isApply,jdbcType=VARCHAR},
-      activity.acti_order = #{record.actiOrder,jdbcType=INTEGER}
+      activity.acti_order = #{record.actiOrder,jdbcType=INTEGER},
+      activity.issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
+      activity.issue_account = #{record.issueAccount,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

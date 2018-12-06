@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbActivityCommentCriteria {
+public class TbCommentCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbActivityCommentCriteria() {
+    public TbCommentCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -106,472 +106,472 @@ public class TbActivityCommentCriteria {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("activityComment.id is null");
+            addCriterion("comment.id is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("activityComment.id is not null");
+            addCriterion("comment.id is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(String value) {
-            addCriterion("activityComment.id =", value, "id");
+            addCriterion("comment.id =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(String value) {
-            addCriterion("activityComment.id <>", value, "id");
+            addCriterion("comment.id <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(String value) {
-            addCriterion("activityComment.id >", value, "id");
+            addCriterion("comment.id >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.id >=", value, "id");
+            addCriterion("comment.id >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(String value) {
-            addCriterion("activityComment.id <", value, "id");
+            addCriterion("comment.id <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.id <=", value, "id");
+            addCriterion("comment.id <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLike(String value) {
-            addCriterion("activityComment.id like", value, "id");
+            addCriterion("comment.id like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotLike(String value) {
-            addCriterion("activityComment.id not like", value, "id");
+            addCriterion("comment.id not like", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<String> values) {
-            addCriterion("activityComment.id in", values, "id");
+            addCriterion("comment.id in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<String> values) {
-            addCriterion("activityComment.id not in", values, "id");
+            addCriterion("comment.id not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(String value1, String value2) {
-            addCriterion("activityComment.id between", value1, value2, "id");
+            addCriterion("comment.id between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(String value1, String value2) {
-            addCriterion("activityComment.id not between", value1, value2, "id");
+            addCriterion("comment.id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andPIdIsNull() {
-            addCriterion("activityComment.p_id is null");
+            addCriterion("comment.p_id is null");
             return (Criteria) this;
         }
 
         public Criteria andPIdIsNotNull() {
-            addCriterion("activityComment.p_id is not null");
+            addCriterion("comment.p_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andPIdEqualTo(String value) {
-            addCriterion("activityComment.p_id =", value, "pId");
+            addCriterion("comment.p_id =", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdNotEqualTo(String value) {
-            addCriterion("activityComment.p_id <>", value, "pId");
+            addCriterion("comment.p_id <>", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdGreaterThan(String value) {
-            addCriterion("activityComment.p_id >", value, "pId");
+            addCriterion("comment.p_id >", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.p_id >=", value, "pId");
+            addCriterion("comment.p_id >=", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdLessThan(String value) {
-            addCriterion("activityComment.p_id <", value, "pId");
+            addCriterion("comment.p_id <", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.p_id <=", value, "pId");
+            addCriterion("comment.p_id <=", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdLike(String value) {
-            addCriterion("activityComment.p_id like", value, "pId");
+            addCriterion("comment.p_id like", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdNotLike(String value) {
-            addCriterion("activityComment.p_id not like", value, "pId");
+            addCriterion("comment.p_id not like", value, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdIn(List<String> values) {
-            addCriterion("activityComment.p_id in", values, "pId");
+            addCriterion("comment.p_id in", values, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdNotIn(List<String> values) {
-            addCriterion("activityComment.p_id not in", values, "pId");
+            addCriterion("comment.p_id not in", values, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdBetween(String value1, String value2) {
-            addCriterion("activityComment.p_id between", value1, value2, "pId");
+            addCriterion("comment.p_id between", value1, value2, "pId");
             return (Criteria) this;
         }
 
         public Criteria andPIdNotBetween(String value1, String value2) {
-            addCriterion("activityComment.p_id not between", value1, value2, "pId");
+            addCriterion("comment.p_id not between", value1, value2, "pId");
             return (Criteria) this;
         }
 
         public Criteria andComAccountIsNull() {
-            addCriterion("activityComment.com_account is null");
+            addCriterion("comment.com_account is null");
             return (Criteria) this;
         }
 
         public Criteria andComAccountIsNotNull() {
-            addCriterion("activityComment.com_account is not null");
+            addCriterion("comment.com_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andComAccountEqualTo(String value) {
-            addCriterion("activityComment.com_account =", value, "comAccount");
+            addCriterion("comment.com_account =", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountNotEqualTo(String value) {
-            addCriterion("activityComment.com_account <>", value, "comAccount");
+            addCriterion("comment.com_account <>", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountGreaterThan(String value) {
-            addCriterion("activityComment.com_account >", value, "comAccount");
+            addCriterion("comment.com_account >", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_account >=", value, "comAccount");
+            addCriterion("comment.com_account >=", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountLessThan(String value) {
-            addCriterion("activityComment.com_account <", value, "comAccount");
+            addCriterion("comment.com_account <", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_account <=", value, "comAccount");
+            addCriterion("comment.com_account <=", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountLike(String value) {
-            addCriterion("activityComment.com_account like", value, "comAccount");
+            addCriterion("comment.com_account like", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountNotLike(String value) {
-            addCriterion("activityComment.com_account not like", value, "comAccount");
+            addCriterion("comment.com_account not like", value, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountIn(List<String> values) {
-            addCriterion("activityComment.com_account in", values, "comAccount");
+            addCriterion("comment.com_account in", values, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountNotIn(List<String> values) {
-            addCriterion("activityComment.com_account not in", values, "comAccount");
+            addCriterion("comment.com_account not in", values, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountBetween(String value1, String value2) {
-            addCriterion("activityComment.com_account between", value1, value2, "comAccount");
+            addCriterion("comment.com_account between", value1, value2, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComAccountNotBetween(String value1, String value2) {
-            addCriterion("activityComment.com_account not between", value1, value2, "comAccount");
+            addCriterion("comment.com_account not between", value1, value2, "comAccount");
             return (Criteria) this;
         }
 
         public Criteria andComTimeIsNull() {
-            addCriterion("activityComment.com_time is null");
+            addCriterion("comment.com_time is null");
             return (Criteria) this;
         }
 
         public Criteria andComTimeIsNotNull() {
-            addCriterion("activityComment.com_time is not null");
+            addCriterion("comment.com_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andComTimeEqualTo(Date value) {
-            addCriterion("activityComment.com_time =", value, "comTime");
+            addCriterion("comment.com_time =", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeNotEqualTo(Date value) {
-            addCriterion("activityComment.com_time <>", value, "comTime");
+            addCriterion("comment.com_time <>", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeGreaterThan(Date value) {
-            addCriterion("activityComment.com_time >", value, "comTime");
+            addCriterion("comment.com_time >", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("activityComment.com_time >=", value, "comTime");
+            addCriterion("comment.com_time >=", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeLessThan(Date value) {
-            addCriterion("activityComment.com_time <", value, "comTime");
+            addCriterion("comment.com_time <", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeLessThanOrEqualTo(Date value) {
-            addCriterion("activityComment.com_time <=", value, "comTime");
+            addCriterion("comment.com_time <=", value, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeIn(List<Date> values) {
-            addCriterion("activityComment.com_time in", values, "comTime");
+            addCriterion("comment.com_time in", values, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeNotIn(List<Date> values) {
-            addCriterion("activityComment.com_time not in", values, "comTime");
+            addCriterion("comment.com_time not in", values, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeBetween(Date value1, Date value2) {
-            addCriterion("activityComment.com_time between", value1, value2, "comTime");
+            addCriterion("comment.com_time between", value1, value2, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andComTimeNotBetween(Date value1, Date value2) {
-            addCriterion("activityComment.com_time not between", value1, value2, "comTime");
+            addCriterion("comment.com_time not between", value1, value2, "comTime");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumIsNull() {
-            addCriterion("activityComment.like_num is null");
+            addCriterion("comment.like_num is null");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumIsNotNull() {
-            addCriterion("activityComment.like_num is not null");
+            addCriterion("comment.like_num is not null");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumEqualTo(Integer value) {
-            addCriterion("activityComment.like_num =", value, "likeNum");
+            addCriterion("comment.like_num =", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumNotEqualTo(Integer value) {
-            addCriterion("activityComment.like_num <>", value, "likeNum");
+            addCriterion("comment.like_num <>", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumGreaterThan(Integer value) {
-            addCriterion("activityComment.like_num >", value, "likeNum");
+            addCriterion("comment.like_num >", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("activityComment.like_num >=", value, "likeNum");
+            addCriterion("comment.like_num >=", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumLessThan(Integer value) {
-            addCriterion("activityComment.like_num <", value, "likeNum");
+            addCriterion("comment.like_num <", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumLessThanOrEqualTo(Integer value) {
-            addCriterion("activityComment.like_num <=", value, "likeNum");
+            addCriterion("comment.like_num <=", value, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumIn(List<Integer> values) {
-            addCriterion("activityComment.like_num in", values, "likeNum");
+            addCriterion("comment.like_num in", values, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumNotIn(List<Integer> values) {
-            addCriterion("activityComment.like_num not in", values, "likeNum");
+            addCriterion("comment.like_num not in", values, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumBetween(Integer value1, Integer value2) {
-            addCriterion("activityComment.like_num between", value1, value2, "likeNum");
+            addCriterion("comment.like_num between", value1, value2, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andLikeNumNotBetween(Integer value1, Integer value2) {
-            addCriterion("activityComment.like_num not between", value1, value2, "likeNum");
+            addCriterion("comment.like_num not between", value1, value2, "likeNum");
             return (Criteria) this;
         }
 
         public Criteria andStateIsNull() {
-            addCriterion("activityComment.state is null");
+            addCriterion("comment.state is null");
             return (Criteria) this;
         }
 
         public Criteria andStateIsNotNull() {
-            addCriterion("activityComment.state is not null");
+            addCriterion("comment.state is not null");
             return (Criteria) this;
         }
 
         public Criteria andStateEqualTo(String value) {
-            addCriterion("activityComment.state =", value, "state");
+            addCriterion("comment.state =", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotEqualTo(String value) {
-            addCriterion("activityComment.state <>", value, "state");
+            addCriterion("comment.state <>", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateGreaterThan(String value) {
-            addCriterion("activityComment.state >", value, "state");
+            addCriterion("comment.state >", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.state >=", value, "state");
+            addCriterion("comment.state >=", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLessThan(String value) {
-            addCriterion("activityComment.state <", value, "state");
+            addCriterion("comment.state <", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.state <=", value, "state");
+            addCriterion("comment.state <=", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateLike(String value) {
-            addCriterion("activityComment.state like", value, "state");
+            addCriterion("comment.state like", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotLike(String value) {
-            addCriterion("activityComment.state not like", value, "state");
+            addCriterion("comment.state not like", value, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateIn(List<String> values) {
-            addCriterion("activityComment.state in", values, "state");
+            addCriterion("comment.state in", values, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotIn(List<String> values) {
-            addCriterion("activityComment.state not in", values, "state");
+            addCriterion("comment.state not in", values, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateBetween(String value1, String value2) {
-            addCriterion("activityComment.state between", value1, value2, "state");
+            addCriterion("comment.state between", value1, value2, "state");
             return (Criteria) this;
         }
 
         public Criteria andStateNotBetween(String value1, String value2) {
-            addCriterion("activityComment.state not between", value1, value2, "state");
+            addCriterion("comment.state not between", value1, value2, "state");
             return (Criteria) this;
         }
 
         public Criteria andComTypeIsNull() {
-            addCriterion("activityComment.com_type is null");
+            addCriterion("comment.com_type is null");
             return (Criteria) this;
         }
 
         public Criteria andComTypeIsNotNull() {
-            addCriterion("activityComment.com_type is not null");
+            addCriterion("comment.com_type is not null");
             return (Criteria) this;
         }
 
         public Criteria andComTypeEqualTo(String value) {
-            addCriterion("activityComment.com_type =", value, "comType");
+            addCriterion("comment.com_type =", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeNotEqualTo(String value) {
-            addCriterion("activityComment.com_type <>", value, "comType");
+            addCriterion("comment.com_type <>", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeGreaterThan(String value) {
-            addCriterion("activityComment.com_type >", value, "comType");
+            addCriterion("comment.com_type >", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_type >=", value, "comType");
+            addCriterion("comment.com_type >=", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeLessThan(String value) {
-            addCriterion("activityComment.com_type <", value, "comType");
+            addCriterion("comment.com_type <", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeLessThanOrEqualTo(String value) {
-            addCriterion("activityComment.com_type <=", value, "comType");
+            addCriterion("comment.com_type <=", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeLike(String value) {
-            addCriterion("activityComment.com_type like", value, "comType");
+            addCriterion("comment.com_type like", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeNotLike(String value) {
-            addCriterion("activityComment.com_type not like", value, "comType");
+            addCriterion("comment.com_type not like", value, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeIn(List<String> values) {
-            addCriterion("activityComment.com_type in", values, "comType");
+            addCriterion("comment.com_type in", values, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeNotIn(List<String> values) {
-            addCriterion("activityComment.com_type not in", values, "comType");
+            addCriterion("comment.com_type not in", values, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeBetween(String value1, String value2) {
-            addCriterion("activityComment.com_type between", value1, value2, "comType");
+            addCriterion("comment.com_type between", value1, value2, "comType");
             return (Criteria) this;
         }
 
         public Criteria andComTypeNotBetween(String value1, String value2) {
-            addCriterion("activityComment.com_type not between", value1, value2, "comType");
+            addCriterion("comment.com_type not between", value1, value2, "comType");
             return (Criteria) this;
         }
     }

@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "UserLogin", description = "用户信息")
+@ApiModel(value = "PortalUserLogin", description = "用户信息")
 public class PortalUserLogin {
     private static final long serialVersionUID = -7484136779753770396L;
 

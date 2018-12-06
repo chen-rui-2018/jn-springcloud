@@ -11,9 +11,23 @@ import com.jn.common.model.Result;
  */
 public interface ActivityDetailsService {
     /**
-     * 获取活动详情
+     * 根据活动id获取活动详情
      * @param id 活动id
      * @return
      */
     Result getActivityDetails(String id);
+
+    /**
+     * 根据活动id获取活动点评信息
+     * @param id 活动id
+     * @return
+     */
+    Result getCommentInfo(String id);
+
+    /**
+     * 根据活动id获取活动点赞信息
+     * @param id 活动id
+     * @return
+     */
+    Result getActivityLikeInfo(String id);
 }

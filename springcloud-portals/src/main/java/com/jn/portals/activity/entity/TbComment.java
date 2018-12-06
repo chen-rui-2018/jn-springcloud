@@ -3,7 +3,7 @@ package com.jn.portals.activity.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbActivityComment implements Serializable {
+public class TbComment implements Serializable {
     private String id;
 
     private String pId;
@@ -87,7 +87,7 @@ public class TbActivityComment implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbActivityComment other = (TbActivityComment) that;
+        TbComment other = (TbComment) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getpId() == null ? other.getpId() == null : this.getpId().equals(other.getpId()))
             && (this.getComAccount() == null ? other.getComAccount() == null : this.getComAccount().equals(other.getComAccount()))

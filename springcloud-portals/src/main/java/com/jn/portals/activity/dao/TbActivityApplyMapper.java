@@ -2,8 +2,9 @@ package com.jn.portals.activity.dao;
 
 import com.jn.portals.activity.entity.TbActivityApply;
 import com.jn.portals.activity.entity.TbActivityApplyCriteria;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface TbActivityApplyMapper {
     long countByExample(TbActivityApplyCriteria example);

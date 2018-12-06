@@ -100,26 +100,19 @@
         </javaClientGenerator>
 
         <table tableName="tb_activity" alias="activity">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="tb_activity_apply" alias="activityApply">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="tb_activity_type" alias="activityType">
-            <generatedKey column="type_id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="tb_activity_detail" alias="activityDetail">
-            <generatedKey column="activity_id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="tb_activity_like" alias="activityLike">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <table tableName="tb_comment" alias="comment">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
         <table tableName="tb_activity_file" alias="activityFile">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>

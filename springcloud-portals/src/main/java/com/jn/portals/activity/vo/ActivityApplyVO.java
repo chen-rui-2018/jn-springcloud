@@ -32,6 +32,8 @@ public class ActivityApplyVO implements Serializable {
     private Date signTime;
     @ApiModelProperty(value = "签到方式(0：app签到，1：现场签到)")
     private String signType;
+    @ApiModelProperty(value = "报名人数")
+    private String applyNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -97,5 +99,13 @@ public class ActivityApplyVO implements Serializable {
 
     public void setSignType(String signType) {
         this.signType = signType;
+    }
+
+    public String getApplyNum() {
+        return applyNum;
+    }
+
+    public void setApplyNum(String applyNum) {
+        this.applyNum = applyNum;
     }
 }

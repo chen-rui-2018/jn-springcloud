@@ -135,36 +135,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_activity (acti_type, acti_name, acti_start_time, 
-      acti_end_time, apply_start_time, apply_end_time, 
-      mes_send_time, acti_address, acti_cost, 
-      acti_organizer, acti_number, acti_poster_url, 
-      state, create_time, create_account, 
-      update_time, update_account, acti_views, 
-      acti_like, apply_num, partic_num, 
-      is_top, top_time, is_apply, 
-      acti_order, issue_time, issue_account
-      )
-    values (#{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, #{actiStartTime,jdbcType=TIMESTAMP}, 
-      #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, #{applyEndTime,jdbcType=TIMESTAMP}, 
-      #{mesSendTime,jdbcType=TIMESTAMP}, #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, 
-      #{actiOrganizer,jdbcType=VARCHAR}, #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, 
-      #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createAccount,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, 
-      #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, 
-      #{isTop,jdbcType=VARCHAR}, #{topTime,jdbcType=TIMESTAMP}, #{isApply,jdbcType=VARCHAR}, 
-      #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}
-      )
+    insert into tb_activity (id, acti_type, acti_name, 
+      acti_start_time, acti_end_time, apply_start_time, 
+      apply_end_time, mes_send_time, acti_address, 
+      acti_cost, acti_organizer, acti_number, 
+      acti_poster_url, state, create_time, 
+      create_account, update_time, update_account, 
+      acti_views, acti_like, apply_num, 
+      partic_num, is_top, top_time, 
+      is_apply, acti_order, issue_time, 
+      issue_account)
+    values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
+      #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
+      #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{actiAddress,jdbcType=VARCHAR}, 
+      #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, #{actiNumber,jdbcType=INTEGER}, 
+      #{actiPosterUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
+      #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, 
+      #{particNum,jdbcType=INTEGER}, #{isTop,jdbcType=VARCHAR}, #{topTime,jdbcType=TIMESTAMP}, 
+      #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
+      #{issueAccount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_activity
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="actiType != null">
         acti_type,
       </if>
@@ -248,6 +245,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="actiType != null">
         #{actiType,jdbcType=VARCHAR},
       </if>

@@ -120,23 +120,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityDetail">
-    <selectKey keyProperty="activityId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_activity_detail (acti_detail)
-    values (#{actiDetail,jdbcType=LONGVARCHAR})
+    insert into tb_activity_detail (activity_id, acti_detail)
+    values (#{activityId,jdbcType=VARCHAR}, #{actiDetail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityDetail">
-    <selectKey keyProperty="activityId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_activity_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        activity_id,
+      </if>
       <if test="actiDetail != null">
         acti_detail,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="activityId != null">
+        #{activityId,jdbcType=VARCHAR},
+      </if>
       <if test="actiDetail != null">
         #{actiDetail,jdbcType=LONGVARCHAR},
       </if>

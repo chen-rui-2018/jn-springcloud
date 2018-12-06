@@ -26,6 +26,8 @@ public class ActivityLikeVO implements Serializable {
     private Date likeTime;
     @ApiModelProperty(value = "点赞状态(0点赞 1点赞取消)")
     private String state;
+    @ApiModelProperty(value = "点赞数")
+    private String likeAccount;
 
     private static final long serialVersionUID = 1L;
 
@@ -69,4 +71,11 @@ public class ActivityLikeVO implements Serializable {
         this.state = state == null ? null : state.trim();
     }
 
+    public String getLikeAccount() {
+        return likeAccount;
+    }
+
+    public void setLikeAccount(String likeAccount) {
+        this.likeAccount = likeAccount;
+    }
 }

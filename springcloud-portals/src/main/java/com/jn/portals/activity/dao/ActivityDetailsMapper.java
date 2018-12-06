@@ -1,6 +1,8 @@
 package com.jn.portals.activity.dao;
 
-import com.jn.portals.activity.vo.ActivityDetailVO;
+import com.jn.portals.activity.model.ActivityApply;
+import com.jn.portals.activity.model.ActivityDetail;
+import com.jn.portals.activity.model.Comment;
 import feign.Param;
 import org.springframework.stereotype.Repository;
 
@@ -15,11 +17,24 @@ import java.util.List;
  */
 @Repository
 public interface ActivityDetailsMapper {
-    //todo:表中需要关联个人用户扩展表和企业用户扩展表关联查询用户头像
     /**
      * 获取活动详情
      * @param id 活动id
      * @return
      */
-    List<ActivityDetailVO> getActivityDetails(@Param(value = "id") String id);
+    List<ActivityDetail> getActivityDetails(@Param(value = "id") String id);
+
+    /**
+     * 获取点评信息
+     * @param id 活动id
+     * @return
+     */
+    List<Comment>getCommentInfo(@Param(value = "id") String id);
+
+    /**
+     * 获取活动报名信息
+     * @param id 活动id
+     * @return
+     */
+    List<ActivityApply>getActivityApplyInfo(@Param(value = "id") String id);
 }

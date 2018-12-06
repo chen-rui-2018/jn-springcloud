@@ -105,22 +105,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityType">
-    <selectKey keyProperty="typeId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_activity_type (type_name, create_account, create_time, 
-      update_account, update_time, state
-      )
-    values (#{typeName,jdbcType=VARCHAR}, #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}
-      )
+    insert into tb_activity_type (type_id, type_name, create_account, 
+      create_time, update_account, update_time, 
+      state)
+    values (#{typeId,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{createAccount,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityType">
-    <selectKey keyProperty="typeId" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_activity_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="typeId != null">
+        type_id,
+      </if>
       <if test="typeName != null">
         type_name,
       </if>
@@ -141,6 +138,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="typeId != null">
+        #{typeId,jdbcType=VARCHAR},
+      </if>
       <if test="typeName != null">
         #{typeName,jdbcType=VARCHAR},
       </if>

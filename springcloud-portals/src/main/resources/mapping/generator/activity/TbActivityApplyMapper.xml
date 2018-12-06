@@ -106,22 +106,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityApply">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_activity_apply (activity_id, account, apply_time, 
-      apply_state, sign_state, sign_time, 
-      sign_type)
-    values (#{activityId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
-      #{applyState,jdbcType=VARCHAR}, #{signState,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
-      #{signType,jdbcType=VARCHAR})
+    insert into tb_activity_apply (id, activity_id, account, 
+      apply_time, apply_state, sign_state, 
+      sign_time, sign_type)
+    values (#{id,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{applyState,jdbcType=VARCHAR}, #{signState,jdbcType=VARCHAR}, 
+      #{signTime,jdbcType=TIMESTAMP}, #{signType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityApply">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_activity_apply
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="activityId != null">
         activity_id,
       </if>
@@ -145,6 +142,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="activityId != null">
         #{activityId,jdbcType=VARCHAR},
       </if>

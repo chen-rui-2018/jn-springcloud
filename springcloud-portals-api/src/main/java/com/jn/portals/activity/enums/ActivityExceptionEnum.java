@@ -12,7 +12,11 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum ActivityExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("11110301", "网络异常，请稍后重试。"),
-    ACTIVITY_ID_CANNOT_EMPTY("11110201","活动id不能为空");
+    ACTIVITY_ID_CANNOT_EMPTY("11110201","活动id不能为空"),
+    ACTIVITY_NOT_EXIST("11110202","活动未发布在或已被删除"),
+    ACTIVITY_CANNOT_EMPTY("11110203","活动报名截止时间不能为空"),
+    ACTIVITY_CUTOFF("11110501","报名已截止，不能报名或取消报名")
+    ;
 
     /**
      * 编码

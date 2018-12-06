@@ -30,4 +30,18 @@ public interface ActivityDetailsService {
      * @return
      */
     Result getActivityLikeInfo(String id);
+
+    /**
+     * 根据活动id查询活动报名信息
+     * @param id 活动id
+     * @return
+     */
+    Result getActivityApplyInfo(String id);
+
+    /**
+     * 根据活动id获取园区活动信息
+     * @param id 活动id
+     * @return
+     */
+    Result getActivityInfo(String id);
 }

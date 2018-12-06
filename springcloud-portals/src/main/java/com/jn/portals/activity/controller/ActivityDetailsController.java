@@ -2,12 +2,15 @@ package com.jn.portals.activity.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.GlobalConstants;
 import com.jn.portals.activity.service.ActivityDetailsService;
+import com.jn.portals.activity.vo.ActivityDetailVO;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +38,14 @@ public class ActivityDetailsController extends BaseController {
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getActivityDetails")
     public Result getActivityDetails(@RequestBody String id){
-        return activityDetailsService.getActivityDetails(id);
+        Result result=activityDetailsService.getActivityDetails(id);
+        if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode()) || result.getData()==null) {
+            return result;
+        }
+        ActivityDetailVO activityDetailVO= new ActivityDetailVO();
+        BeanUtils.copyProperties(result.getData(), activityDetailVO);
+        result.setData(activityDetailVO);
+        return result;
     }
 
 

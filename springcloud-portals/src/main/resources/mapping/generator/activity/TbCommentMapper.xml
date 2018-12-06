@@ -94,22 +94,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbComment">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_comment (p_id, com_account, com_time, 
-      like_num, state, com_type
-      )
-    values (#{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
-      #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}
-      )
+    insert into tb_comment (id, p_id, com_account, 
+      com_time, like_num, state, 
+      com_type)
+    values (#{id,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, 
+      #{comTime,jdbcType=TIMESTAMP}, #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, 
+      #{comType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbComment">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="pId != null">
         p_id,
       </if>
@@ -130,6 +127,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="pId != null">
         #{pId,jdbcType=VARCHAR},
       </if>

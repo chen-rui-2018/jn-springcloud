@@ -105,22 +105,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.portals.activity.entity.TbActivityFile">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_activity_file (type_id, file_src, create_time, 
-      update_account, update_time, state
-      )
-    values (#{typeId,jdbcType=VARCHAR}, #{fileSrc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR}
-      )
+    insert into tb_activity_file (id, type_id, file_src, 
+      create_time, update_account, update_time, 
+      state)
+    values (#{id,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{fileSrc,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.portals.activity.entity.TbActivityFile">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_activity_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="typeId != null">
         type_id,
       </if>
@@ -141,6 +138,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="typeId != null">
         #{typeId,jdbcType=VARCHAR},
       </if>

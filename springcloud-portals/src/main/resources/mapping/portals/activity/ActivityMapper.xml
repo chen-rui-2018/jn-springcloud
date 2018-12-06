@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.portals.activity.dao.ActivityMapper">
-    <select id="selectActivityList" parameterType="com.jn.portals.activity.model.Activity" resultMap="com.jn.portals.activity.model.Activity">
+    <select id="selectActivityList" parameterType="com.jn.portals.activity.model.Activity" resultType="com.jn.portals.activity.model.Activity">
         select a.id as "id", a.acti_type as "actiType", a.acti_name as "actiName",
                a.acti_start_time as "actiStartTime", a.acti_end_time as "actiEndTime",
                a.apply_start_time as "applyStartTime", a.apply_end_time as "applyEndTime",

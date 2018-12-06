@@ -93,7 +93,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
             return result;
         }
-        TbCommentCriteria  example=new TbCommentCriteria();
+        TbCommentCriteria example=new TbCommentCriteria();
         example.createCriteria().andPIdEqualTo(id);
         List<TbComment> tbComments = tbCommentMapper.selectByExample(example);
         result.setData(tbComments);

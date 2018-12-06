@@ -10,6 +10,8 @@ public interface TbActivityDetailMapper {
 
     int deleteByExample(TbActivityDetailCriteria example);
 
+    int deleteByPrimaryKey(String activityId);
+
     int insert(TbActivityDetail record);
 
     int insertSelective(TbActivityDetail record);
@@ -18,9 +20,15 @@ public interface TbActivityDetailMapper {
 
     List<TbActivityDetail> selectByExample(TbActivityDetailCriteria example);
 
+    TbActivityDetail selectByPrimaryKey(String activityId);
+
     int updateByExampleSelective(@Param("record") TbActivityDetail record, @Param("example") TbActivityDetailCriteria example);
 
     int updateByExampleWithBLOBs(@Param("record") TbActivityDetail record, @Param("example") TbActivityDetailCriteria example);
 
     int updateByExample(@Param("record") TbActivityDetail record, @Param("example") TbActivityDetailCriteria example);
+
+    int updateByPrimaryKeySelective(TbActivityDetail record);
+
+    int updateByPrimaryKeyWithBLOBs(TbActivityDetail record);
 }

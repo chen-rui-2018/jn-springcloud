@@ -2,14 +2,15 @@ package com.jn.portals.activity.dao;
 
 import com.jn.portals.activity.entity.TbActivityApply;
 import com.jn.portals.activity.entity.TbActivityApplyCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbActivityApplyMapper {
     long countByExample(TbActivityApplyCriteria example);
 
     int deleteByExample(TbActivityApplyCriteria example);
+
+    int deleteByPrimaryKey(String id);
 
     int insert(TbActivityApply record);
 
@@ -17,7 +18,13 @@ public interface TbActivityApplyMapper {
 
     List<TbActivityApply> selectByExample(TbActivityApplyCriteria example);
 
+    TbActivityApply selectByPrimaryKey(String id);
+
     int updateByExampleSelective(@Param("record") TbActivityApply record, @Param("example") TbActivityApplyCriteria example);
 
     int updateByExample(@Param("record") TbActivityApply record, @Param("example") TbActivityApplyCriteria example);
+
+    int updateByPrimaryKeySelective(TbActivityApply record);
+
+    int updateByPrimaryKey(TbActivityApply record);
 }

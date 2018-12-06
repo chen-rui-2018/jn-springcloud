@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.portals.activity.dao.TbActivityMapper">
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivity">
-    <result column="activity_id" jdbcType="VARCHAR" property="id" />
+    <id column="activity_id" jdbcType="VARCHAR" property="id" />
     <result column="activity_acti_type" jdbcType="VARCHAR" property="actiType" />
     <result column="activity_acti_name" jdbcType="VARCHAR" property="actiName" />
     <result column="activity_acti_start_time" jdbcType="TIMESTAMP" property="actiStartTime" />
@@ -118,6 +118,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity activity
+    where activity.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_activity
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityCriteria">
     delete from tb_activity activity
     <if test="_parameter != null">
@@ -452,5 +462,123 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.portals.activity.entity.TbActivity">
+    update tb_activity
+    <set>
+      <if test="actiType != null">
+        acti_type = #{actiType,jdbcType=VARCHAR},
+      </if>
+      <if test="actiName != null">
+        acti_name = #{actiName,jdbcType=VARCHAR},
+      </if>
+      <if test="actiStartTime != null">
+        acti_start_time = #{actiStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actiEndTime != null">
+        acti_end_time = #{actiEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyStartTime != null">
+        apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyEndTime != null">
+        apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mesSendTime != null">
+        mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actiAddress != null">
+        acti_address = #{actiAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actiCost != null">
+        acti_cost = #{actiCost,jdbcType=DECIMAL},
+      </if>
+      <if test="actiOrganizer != null">
+        acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiNumber != null">
+        acti_number = #{actiNumber,jdbcType=INTEGER},
+      </if>
+      <if test="actiPosterUrl != null">
+        acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createAccount != null">
+        create_account = #{createAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAccount != null">
+        update_account = #{updateAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="actiViews != null">
+        acti_views = #{actiViews,jdbcType=INTEGER},
+      </if>
+      <if test="actiLike != null">
+        acti_like = #{actiLike,jdbcType=INTEGER},
+      </if>
+      <if test="applyNum != null">
+        apply_num = #{applyNum,jdbcType=INTEGER},
+      </if>
+      <if test="particNum != null">
+        partic_num = #{particNum,jdbcType=INTEGER},
+      </if>
+      <if test="isTop != null">
+        is_top = #{isTop,jdbcType=VARCHAR},
+      </if>
+      <if test="topTime != null">
+        top_time = #{topTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isApply != null">
+        is_apply = #{isApply,jdbcType=VARCHAR},
+      </if>
+      <if test="actiOrder != null">
+        acti_order = #{actiOrder,jdbcType=INTEGER},
+      </if>
+      <if test="issueTime != null">
+        issue_time = #{issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issueAccount != null">
+        issue_account = #{issueAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.portals.activity.entity.TbActivity">
+    update tb_activity
+    set acti_type = #{actiType,jdbcType=VARCHAR},
+      acti_name = #{actiName,jdbcType=VARCHAR},
+      acti_start_time = #{actiStartTime,jdbcType=TIMESTAMP},
+      acti_end_time = #{actiEndTime,jdbcType=TIMESTAMP},
+      apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+      apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+      mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      acti_address = #{actiAddress,jdbcType=VARCHAR},
+      acti_cost = #{actiCost,jdbcType=DECIMAL},
+      acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      acti_number = #{actiNumber,jdbcType=INTEGER},
+      acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
+      state = #{state,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_account = #{createAccount,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_account = #{updateAccount,jdbcType=VARCHAR},
+      acti_views = #{actiViews,jdbcType=INTEGER},
+      acti_like = #{actiLike,jdbcType=INTEGER},
+      apply_num = #{applyNum,jdbcType=INTEGER},
+      partic_num = #{particNum,jdbcType=INTEGER},
+      is_top = #{isTop,jdbcType=VARCHAR},
+      top_time = #{topTime,jdbcType=TIMESTAMP},
+      is_apply = #{isApply,jdbcType=VARCHAR},
+      acti_order = #{actiOrder,jdbcType=INTEGER},
+      issue_time = #{issueTime,jdbcType=TIMESTAMP},
+      issue_account = #{issueAccount,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

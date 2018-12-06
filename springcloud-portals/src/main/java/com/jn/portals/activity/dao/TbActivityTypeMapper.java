@@ -10,13 +10,21 @@ public interface TbActivityTypeMapper {
 
     int deleteByExample(TbActivityTypeCriteria example);
 
+    int deleteByPrimaryKey(String typeId);
+
     int insert(TbActivityType record);
 
     int insertSelective(TbActivityType record);
 
     List<TbActivityType> selectByExample(TbActivityTypeCriteria example);
 
+    TbActivityType selectByPrimaryKey(String typeId);
+
     int updateByExampleSelective(@Param("record") TbActivityType record, @Param("example") TbActivityTypeCriteria example);
 
     int updateByExample(@Param("record") TbActivityType record, @Param("example") TbActivityTypeCriteria example);
+
+    int updateByPrimaryKeySelective(TbActivityType record);
+
+    int updateByPrimaryKey(TbActivityType record);
 }

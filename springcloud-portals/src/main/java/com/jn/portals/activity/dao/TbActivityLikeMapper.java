@@ -10,13 +10,21 @@ public interface TbActivityLikeMapper {
 
     int deleteByExample(TbActivityLikeCriteria example);
 
+    int deleteByPrimaryKey(String id);
+
     int insert(TbActivityLike record);
 
     int insertSelective(TbActivityLike record);
 
     List<TbActivityLike> selectByExample(TbActivityLikeCriteria example);
 
+    TbActivityLike selectByPrimaryKey(String id);
+
     int updateByExampleSelective(@Param("record") TbActivityLike record, @Param("example") TbActivityLikeCriteria example);
 
     int updateByExample(@Param("record") TbActivityLike record, @Param("example") TbActivityLikeCriteria example);
+
+    int updateByPrimaryKeySelective(TbActivityLike record);
+
+    int updateByPrimaryKey(TbActivityLike record);
 }

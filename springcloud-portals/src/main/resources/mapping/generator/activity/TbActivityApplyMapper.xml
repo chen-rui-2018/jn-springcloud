@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.portals.activity.dao.TbActivityApplyMapper">
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityApply">
-    <result column="activityApply_id" jdbcType="VARCHAR" property="id" />
+    <id column="activityApply_id" jdbcType="VARCHAR" property="id" />
     <result column="activityApply_activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="activityApply_account" jdbcType="VARCHAR" property="account" />
     <result column="activityApply_apply_time" jdbcType="TIMESTAMP" property="applyTime" />
@@ -89,6 +89,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity_apply activityApply
+    where activityApply.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_activity_apply
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityApplyCriteria">
     delete from tb_activity_apply activityApply
     <if test="_parameter != null">
@@ -209,5 +219,43 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.portals.activity.entity.TbActivityApply">
+    update tb_activity_apply
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+        apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyState != null">
+        apply_state = #{applyState,jdbcType=VARCHAR},
+      </if>
+      <if test="signState != null">
+        sign_state = #{signState,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null">
+        sign_time = #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signType != null">
+        sign_type = #{signType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.portals.activity.entity.TbActivityApply">
+    update tb_activity_apply
+    set activity_id = #{activityId,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      apply_state = #{applyState,jdbcType=VARCHAR},
+      sign_state = #{signState,jdbcType=VARCHAR},
+      sign_time = #{signTime,jdbcType=TIMESTAMP},
+      sign_type = #{signType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

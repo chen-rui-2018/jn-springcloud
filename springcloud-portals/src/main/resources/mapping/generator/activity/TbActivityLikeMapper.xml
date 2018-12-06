@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.portals.activity.dao.TbActivityLikeMapper">
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityLike">
-    <result column="activityLike_id" jdbcType="VARCHAR" property="id" />
+    <id column="activityLike_id" jdbcType="VARCHAR" property="id" />
     <result column="activityLike_activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="activityLike_like_account" jdbcType="VARCHAR" property="likeAccount" />
     <result column="activityLike_like_time" jdbcType="TIMESTAMP" property="likeTime" />
@@ -85,6 +85,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity_like activityLike
+    where activityLike.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_activity_like
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityLikeCriteria">
     delete from tb_activity_like activityLike
     <if test="_parameter != null">
@@ -173,5 +183,31 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.portals.activity.entity.TbActivityLike">
+    update tb_activity_like
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=VARCHAR},
+      </if>
+      <if test="likeAccount != null">
+        like_account = #{likeAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="likeTime != null">
+        like_time = #{likeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.portals.activity.entity.TbActivityLike">
+    update tb_activity_like
+    set activity_id = #{activityId,jdbcType=VARCHAR},
+      like_account = #{likeAccount,jdbcType=VARCHAR},
+      like_time = #{likeTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

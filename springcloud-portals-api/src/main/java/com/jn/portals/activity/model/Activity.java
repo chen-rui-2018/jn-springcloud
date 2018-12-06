@@ -1,5 +1,6 @@
 package com.jn.portals.activity.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +17,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "Activity", description = "活动信息")
-public class Activity implements Serializable {
+public class Activity extends Page implements Serializable {
     @ApiModelProperty(value = "活动ID")
     private String id;
     @ApiModelProperty(value = "活动类型")
@@ -69,6 +70,8 @@ public class Activity implements Serializable {
     private String isApply;
     @ApiModelProperty(value = "排序")
     private Integer actiOrder;
+    @ApiModelProperty(value = "活动类型名称")
+    private String typeName;
 
     private static final long serialVersionUID = 1L;
 
@@ -279,4 +282,13 @@ public class Activity implements Serializable {
     public void setActiOrder(Integer actiOrder) {
         this.actiOrder = actiOrder;
     }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
 }

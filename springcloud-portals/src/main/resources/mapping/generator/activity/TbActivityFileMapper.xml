@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.portals.activity.dao.TbActivityFileMapper">
   <resultMap id="BaseResultMap" type="com.jn.portals.activity.entity.TbActivityFile">
-    <result column="activityFile_id" jdbcType="VARCHAR" property="id" />
+    <id column="activityFile_id" jdbcType="VARCHAR" property="id" />
     <result column="activityFile_type_id" jdbcType="VARCHAR" property="typeId" />
     <result column="activityFile_file_src" jdbcType="VARCHAR" property="fileSrc" />
     <result column="activityFile_create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -88,6 +88,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity_file activityFile
+    where activityFile.id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_activity_file
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.portals.activity.entity.TbActivityFileCriteria">
     delete from tb_activity_file activityFile
     <if test="_parameter != null">
@@ -198,5 +208,39 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.portals.activity.entity.TbActivityFile">
+    update tb_activity_file
+    <set>
+      <if test="typeId != null">
+        type_id = #{typeId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileSrc != null">
+        file_src = #{fileSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateAccount != null">
+        update_account = #{updateAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.portals.activity.entity.TbActivityFile">
+    update tb_activity_file
+    set type_id = #{typeId,jdbcType=VARCHAR},
+      file_src = #{fileSrc,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_account = #{updateAccount,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

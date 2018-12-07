@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.jn</groupId>
-            <artifactId>springcloud-app-common</artifactId>
+            <artifactId>springcloud-app-system-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>

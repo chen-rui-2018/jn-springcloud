@@ -77,7 +77,7 @@ public interface SystemClient {
      * @return
      */
     @RequestMapping(value = "/api/system/getUserFileGroup", method = RequestMethod.POST)
-    Result<Set<String>> getUserFileGroup(@RequestBody String userId);
+    Result getUserFileGroup(@RequestBody String userId);
 
     /**
      * 获取用户是否拥有该文件的下载权限

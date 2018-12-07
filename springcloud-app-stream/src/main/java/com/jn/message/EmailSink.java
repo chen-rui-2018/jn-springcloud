@@ -30,6 +30,7 @@ public class EmailSink {
 
     private static Logger log = LoggerFactory.getLogger(EmailSink.class);
 
+    // TODO: 2018/12/5 需要修改String emailVo  变成对象
     @StreamListener(MessageSink.EMAIL)
     public void listenEmail(String emailVo) {
         log.info("收到Email的信息:{}",emailVo) ;

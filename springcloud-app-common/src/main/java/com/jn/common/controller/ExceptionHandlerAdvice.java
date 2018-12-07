@@ -69,17 +69,6 @@ public class ExceptionHandlerAdvice {
         logger.error("Exception异常", e);
         return new Result(CommonExceptionEnum.UN_KNOW.getCode(), e.getMessage());
     }
-    /**
-     * 最顶层的异常处理
-     *
-     * @param e
-     * @return
-     */
-    @ExceptionHandler(Throwable.class)
-    public Result handleThrowable(Throwable e) {
-        logger.error("Throwable异常", e);
-        return new Result(CommonExceptionEnum.UN_KNOW.getCode(), e.getMessage());
-    }
 
 
     /**

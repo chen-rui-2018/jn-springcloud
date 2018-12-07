@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.jn</groupId>
 		<artifactId>jn-springcloud-app</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-RELEASE</version>
 	</parent>
     <artifactId>springcloud-app-eureka</artifactId>
     <packaging>jar</packaging>

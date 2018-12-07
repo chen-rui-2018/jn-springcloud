@@ -5,7 +5,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.stereotype.Service;
 
 /**
- * TODO:未添加类描述
+ * 断路器测试
  *
  * @author： fengxh
  * @date： Created on 2018/12/3 17:36

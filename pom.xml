@@ -9,32 +9,42 @@
 	</parent>
 	<groupId>com.jn</groupId>
 	<artifactId>jn-springcloud-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<modules>
-		<module>springcloud-app-common</module>
-		<module>springcloud-app-system</module>
+
 		<module>springcloud-app-eureka</module>
 		<module>springcloud-app-config</module>
+		<module>springcloud-app-config-manager</module>
+		<module>springcloud-app-common</module>
 		<module>springcloud-app-zuul</module>
-		<module>springcloud-app-system-api</module>
 		<module>springcloud-app-schedule</module>
 		<module>springcloud-app-zipkin</module>
         <module>springcloud-app-fastdfs</module>
+        <module>springcloud-app-fastdfs-api</module>
 		<module>springcloud-app-stream</module>
 		<module>springcloud-app-stream-demo</module>
-		<module>springcloud-portals</module>
-		<module>springcloud-portals-management</module>
-		<module>springcloud-integrated-app</module>
-		<module>springcloud-wechat-official-accounts</module>
-		<module>springcloud-wechat-mini-program</module>
-        <module>springcloud-app-config-manager</module>
 		<module>springcloud-app-admin</module>
-        <module>springcloud-portals-api</module>
+		<module>springcloud-app-system</module>
+		<module>springcloud-app-system-api</module>
+
+        <module>springcloud-enterprise</module>
+        <module>springcloud-enterprise-api</module>
+        <module>springcloud-hardware</module>
+        <module>springcloud-hardware-api</module>
         <module>springcloud-news</module>
 		<module>springcloud-news-api</module>
-        <module>springcloud-portals-management-api</module>
-        <module>springcloud-app-fastdfs-api</module>
+        <module>springcloud-park</module>
+        <module>springcloud-park-api</module>
+        <module>springcloud-payment</module>
+        <module>springcloud-payment-api</module>
+        <module>springcloud-user</module>
+        <module>springcloud-user-api</module>
+        <module>springcloud-wechat</module>
+        <module>springcloud-wechat-api</module>
+        <module>springcloud-wechat-miniprogram</module>
+        <module>springcloud-wechat-miniprogram-api</module>
+
     </modules>
 
 	<properties>
@@ -55,32 +65,57 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-system-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.jn</groupId>
-				<artifactId>springcloud-portals-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-			</dependency>
-			<dependency>
-				<groupId>com.jn</groupId>
-				<artifactId>springcloud-portals-management-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-common</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-news-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-enterprise-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-hardware-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-park-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-payment-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-user-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-wechat-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-wechat-miniprogram-api</artifactId>
+				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-fastdfs-api</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -221,12 +256,9 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+                    <groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
-					<version>2.3.2</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
+					<version>2.1.1.RELEASE</version>
 				</plugin>
 
 				<!-- mybatis逆向代码生成 -->

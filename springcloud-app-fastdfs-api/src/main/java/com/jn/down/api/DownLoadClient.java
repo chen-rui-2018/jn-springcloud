@@ -1,6 +1,6 @@
-package com.jn.client;
+package com.jn.down.api;
 
-import com.jn.domain.DownLoad;
+import com.jn.down.model.DownLoad;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

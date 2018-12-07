@@ -250,6 +250,13 @@
 				<artifactId>spring-boot-admin-server-ui-turbine</artifactId>
 				<version>${spring-boot-admin}</version>
 			</dependency>
+
+			<!--  引入文件feign文件上传依赖 -->
+			<dependency>
+				<groupId>io.github.openfeign.form</groupId>
+				<artifactId>feign-form-spring</artifactId>
+				<version>3.4.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>

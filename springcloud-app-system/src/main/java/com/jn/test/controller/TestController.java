@@ -1,20 +1,24 @@
 package com.jn.test.controller;
 
-import com.jn.client.DownLoadClient;
+import com.jn.common.util.file.MultipartFileUtil;
+import com.jn.down.api.DownLoadClient;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
-import com.jn.domain.DownLoad;
+import com.jn.down.model.DownLoad;
+import com.jn.upload.api.UploadClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -22,6 +26,7 @@ import java.util.HashMap;
  *2,redis缓存测试
  * 3,hystrix 的使用
  * 4,服务间的文件的下载
+ * 5,服务间的文件上传
  *
  * @author： fengxh
  * @date： Created on 2018/9/20 15:31
@@ -78,7 +83,7 @@ public class TestController extends BaseController {
     @Autowired
     private DownLoadClient downLoadClient;
     @RequestMapping(value = "/guest/test4")
-    public Result<String> heapOutOfMemory() {
+    public Result<String> downLoad() {
         DownLoad downLoad = new DownLoad("http://192.168.10.45:2020/group1/M00/00/00/wKgKLVwJHT2Abtp3AAQdy_tf4s4411.png",Boolean.TRUE);
         ResponseEntity<byte[]> responseEntity = this.downLoadClient.downLoad(downLoad);
         byte[] bytes = responseEntity.getBody();
@@ -93,8 +98,19 @@ public class TestController extends BaseController {
             e.printStackTrace();
         }
         return new Result<>();
-
-
     }
+
+
+    @Autowired
+    private UploadClient uploadClient;
+    @RequestMapping(value = "/guest/test5")
+    public Result<String> uploadFile() throws IOException {
+        File file = new File("D:\\test\\test.png");
+        MultipartFile multipartFile = MultipartFileUtil.from(file,null);
+        return uploadClient.uploadFile(multipartFile,Boolean.FALSE);
+    }
+
+
+
 
 }

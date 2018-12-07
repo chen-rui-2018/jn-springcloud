@@ -20,40 +20,50 @@
         </el-form-item>
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
+        <el-button type="primary" class="filter-item">导出</el-button>
+
       </el-form>
     </div>
-    <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
-      <el-table-column label="序列" type="index" align="center" width="60"/>
-      <el-table-column label="姓名" prop="name" align="center" min-width="100" />
-      <el-table-column label="账号" prop="account" align="center" min-width="100" />
-      <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
-      <el-table-column label="手机" prop="phone" align="center" min-width="120" />
-      <el-table-column label="创建时间" prop="createTime" align="center" min-width="150">
-        <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
-      </el-table-column>
-      <el-table-column label="部门" prop="departmentName" align="center" min-width="80" />
-      <el-table-column label="岗位" prop="postName" align="center" min-width="75" />
-      <el-table-column label="状态" prop="status" align="center" min-width="70">
-        <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column fit label="操作" align="center" width="auto" min-width="560">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleSectorUpdata(scope.row)">部门岗位</el-button>
-          <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
-          <!-- <el-button type="primary" size="mini" @click="handleUserGroupUpdata(scope.row)">授权用户组</el-button> -->
-          <el-button type="primary" size="mini" @click="handleResetPasswordDialog(scope.row)">重置密码</el-button>
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)" />
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)" />
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="pagination-container">
-      <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <div class="userManagement-content">
+      <div class="userManagement-content-left">
+        <el-tree :data="departmentList" :props="defaultProps" @node-click="handleNodeClick"/>
+      </div>
+      <div class="userManagement-content-right">
+        <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
+          <el-table-column label="序列" type="index" align="center" width="60"/>
+          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
+          <el-table-column label="账号" prop="account" align="center" min-width="100" />
+          <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
+          <el-table-column label="手机" prop="phone" align="center" min-width="120" />
+          <el-table-column label="创建时间" prop="createTime" align="center" min-width="150">
+            <template slot-scope="scope">
+              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+            </template>
+          </el-table-column>
+          <el-table-column label="部门" prop="departmentName" align="center" min-width="80" />
+          <el-table-column label="岗位" prop="postName" align="center" min-width="75" />
+          <el-table-column label="状态" prop="status" align="center" min-width="70">
+            <template slot-scope="scope">
+              <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column fit label="操作" align="center" width="auto" min-width="560">
+            <template slot-scope="scope">
+              <el-button type="primary" size="mini" @click="handleSectorUpdata(scope.row)">部门岗位</el-button>
+              <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
+              <el-button type="primary" size="mini" @click="showUserGroupDialog(scope.row.id)">授权用户组</el-button>
+              <el-button type="primary" size="mini" @click="handleResetPasswordDialog(scope.row)">重置密码</el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)" />
+              <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)" />
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="pagination-container">
+          <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        </div>
+      </div>
     </div>
+
     <!-- S 新增弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="400px">
       <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
@@ -139,6 +149,15 @@
       </div>
     </el-dialog>
     <!-- E 重置密码 -->
+    <!-- 弹出的授权用户组对话框 -->
+    <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+      <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
+        <span slot="left-footer" size="small">
+          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
+        </span>
+        <span slot="right-footer" size="small" />
+      </el-transfer>
+    </el-dialog>
   </div>
 </template>
 
@@ -155,7 +174,9 @@ import {
   updateSysUser,
   editUser,
   getRoleInfo,
-  updataRole
+  updataRole,
+  getUserGroupInfo,
+  updataUserGroup
 } from '@/api/Permission-model/userManagement'
 import waves from '@/directive/waves' // 水波纹指令
 
@@ -194,9 +215,8 @@ export default {
       }
     }
     var checkName = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的名字格式'))
+      if (value && value.length > 20) {
+        callback(new Error('名字的长度不能超过20个字符'))
       } else {
         callback()
       }
@@ -219,6 +239,15 @@ export default {
       }
     }
     return {
+      userPage: 1,
+      userRows: 10,
+      userTotal: null,
+      userGroup: {
+        userGroupdialogVisible: false,
+        userGroupLoading: false,
+        userGroupId: [],
+        userGroupData: []
+      },
       roleIds: [],
       roleData: [],
       roleLoading: false,
@@ -344,6 +373,67 @@ export default {
     this.findSysPostAll()
   },
   methods: {
+    // 改变授权用户组穿梭框时获取选中的用户组
+    handleUserGroupChange(value, direction, movedKeys) {
+      this.userGroup.userGroupId = value
+      if (direction === 'left') {
+        this.moveArr = -movedKeys.length
+      } else if (direction === 'right') {
+        this.moveArr = movedKeys.length
+      }
+      updataUserGroup({ userId: this.userId, groupIds: value }).then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: '授权成功',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('授权失败')
+        }
+        // this.initList()
+      })
+    },
+    // 授权用户组分页功能
+    handleUserGroupCurrentChange(val) {
+      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+        this.userPage = val
+      } else {
+        this.userPage = val - 1
+      }
+      this.userGroup.userGroupLoading = true
+      this.getUserGroup()
+    },
+    // 显示授权用户组对话框
+    showUserGroupDialog(id) {
+      this.userPage = 1
+      this.userGroup.userGroupLoading = true
+      this.userId = id
+      this.userGroup.userGroupdialogVisible = true
+      this.getUserGroup()
+    },
+    getUserGroup() {
+      getUserGroupInfo({
+        userId: this.userId,
+        page: this.userPage,
+        rows: this.userRows
+      }).then(res => {
+        const userGroupData = []
+        const checkUserGroup = []
+        this.userTotal = res.data.data.total
+        res.data.data.rows.otherGroupList.forEach((val, index) => {
+          userGroupData.push({
+            label: val.groupName,
+            key: val.groupId
+          })
+        })
+        res.data.data.rows.sysGroupOfUserList.forEach(val => {
+          checkUserGroup.push(val.groupId)
+        })
+        this.userGroup.userGroupData = userGroupData
+        this.userGroup.userGroupId = checkUserGroup
+        this.userGroup.userGroupLoading = false
+      })
+    },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -371,7 +461,6 @@ export default {
         } else {
           this.$message.error('授权失败')
         }
-        // this.getUserList()
       })
     },
     // 显示授权角色对话框
@@ -424,15 +513,15 @@ export default {
     selecteDepartment(value) {
       this.listQuery.department = value
     },
+    // 获取所有部门列表
     findDepartmentAllByLevel() {
-      // 获取所有部门列表
       findDepartmentAllByLevel().then(response => {
         const data = response.data.data
         this.departmentList = data
       })
     },
+    // 获取所有岗位
     findSysPostAll() {
-      // 获取所有岗位
       findSysPostAll().then(response => {
         const data = response.data.data
         this.positionOptions = data.map(function(item) {
@@ -447,17 +536,18 @@ export default {
       // 获取用户列表
       this.listLoading = true
       userList(this.listQuery).then(response => {
-        const data = response.data.data
-        this.userList = data.rows
-        this.total = data.total
-        // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 5e2)
+        if (response.data.code === '0000') {
+          const data = response.data.data
+          this.userList = data.rows
+          this.total = data.total
+        } else {
+          this.$message.error('获取数据失败')
+        }
+        this.listLoading = false
       })
     },
+    // 编辑用户岗位
     handleSectorUpdata(row) {
-      // 编辑用户岗位
       this.dialogSectorVisible = true
       this.userPositionData = null
       this.sectorLoading = true
@@ -483,8 +573,8 @@ export default {
       this.listQuery.page = 1
       this.getUserList()
     },
+    // 分页数更改
     handleSizeChange(val) {
-      // 分页数更改
       this.listQuery.rows = val
       this.getUserList()
     },
@@ -688,7 +778,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.roleBox{
+.roleBox,.groupBox{
    .el-dialog__body{
      height: 500px;
   }

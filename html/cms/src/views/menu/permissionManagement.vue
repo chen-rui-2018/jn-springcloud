@@ -17,7 +17,7 @@
     <!-- 表格 -->
     <el-table v-loading="permissionLoading" :data="permissionList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="权限名称" align="center" prop="permissionName" />
       <el-table-column label="创建时间" min-width="150" align="center" prop="creationTime">

@@ -19,7 +19,7 @@
     <!-- 表格 -->
     <el-table v-loading="fileListLoading" :data="fileList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="文件名称" align="center" prop="fileName" />
       <el-table-column :show-overflow-tooltip="true" label="归属文件组" align="center" prop="fileGroupNameList">
@@ -81,7 +81,6 @@ export default {
     initList() {
       this.fileListLoading = true
       getFileList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total

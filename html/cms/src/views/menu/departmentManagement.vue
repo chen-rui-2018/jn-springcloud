@@ -19,7 +19,6 @@
           </span>
         </span>
       </el-tree>
-      <!-- <el-tree v-loading="listLoading" :data="departmentList" :expand-on-click-node="false" :render-content="renderContent" node-key="id" default-expand-all @node-click="handleNodeClick"/> -->
     </div>
     <!-- 弹出的新增和编辑对话框 -->
     <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
@@ -61,14 +60,16 @@ export default {
               } else {
                 callback(new Error('部门名称已重复'))
               }
-            } else {
-              callback()
             }
           })
+        } else {
+          callback()
         }
       }
     }
     return {
+      checkoutParentId: undefined,
+      checkoutId: undefined,
       currentId: undefined,
       visible: false,
       location: '1',
@@ -92,7 +93,17 @@ export default {
       }
     }
   },
-  created() {
+  watch: {
+    // 监听location
+    'location': function() {
+      if (this.location === '1') {
+        this.departmentForm.parentId = this.checkoutParentId
+      } else if (this.location === '0') {
+        this.departmentForm.parentId = this.checkoutId
+      }
+    }
+  },
+  mounted() {
     this.initList()
   },
   methods: {
@@ -216,6 +227,8 @@ export default {
       this.dialogStatus = '新增部门'
       this.departmentDialogVisible = true
       this.departmentForm.departmentName = undefined
+      this.checkoutId = data.id
+      this.checkoutParentId = data.parentId
       this.location = '1'
       if (data.parentName) {
         this.departmentForm.parentDepartmentName = data.parentName

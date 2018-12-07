@@ -20,7 +20,7 @@
         </span>
       </el-tree>
     </div>
-    <div class="menu-right bgc">
+    <div v-show="isRight" class="menu-right bgc">
       <div v-if="isData" class="noData">没有子菜单</div>
       <div v-show="isShowInfo" class="menuInfo">
         <div class="menuInfo-title">下级菜单</div>
@@ -78,12 +78,12 @@
           <el-radio v-model="radio" label="2">页面</el-radio>
         </el-form-item>
         <el-form-item label="菜单名称:" prop="menuName">
-          <el-input v-model="menuForm.menuName" style="width:340px;" @blur="checkoutMenuName()"/>
+          <el-input v-model="menuForm.menuName" style="width:340px;"/>
         </el-form-item>
-        <el-form-item v-show="isShow" label="url地址:" prop="menuUrl">
+        <el-form-item v-if="isShow" label="url地址:" prop="menuUrl">
           <el-input v-model="menuForm.menuUrl" style="width:340px;" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="footer" label-width="0px">
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增'?createData():updateData()">保存</el-button>
           <el-button @click="menuDialogVisible = false">取消</el-button>
         </el-form-item>
@@ -99,7 +99,7 @@
         <el-form-item label="功能地址:" prop="resourcesUrl">
           <el-input v-model="resourcesForm.resourcesUrl" style="width:340px;" />
         </el-form-item>
-        <el-form-item>
+        <el-form-item class="footer" label-width="0px">
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增功能'?createResources():updateResources()">保存</el-button>
           <el-button @click="resourcesDialogVisible = false">取消</el-button>
         </el-form-item>
@@ -116,16 +116,17 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value && value.length > 20) {
+      if (value.length > 20) {
         callback(new Error('菜单名称的长度不能超过20个字符'))
       } else {
         if (this.oldMenuName !== this.menuForm.menuName) {
           checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
+            console.log(response)
+            if (response.data.data === 'fail') {
+              console.log(123)
               callback(new Error('菜单名称已重复'))
+            } else {
+              callback()
             }
           })
         } else {
@@ -138,12 +139,13 @@ export default {
         callback(new Error('功能名称的长度不能超过20个字符'))
       } else {
         if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
-          checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('功能名称已重复'))
+          checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('功能名称已重复'))
+              }
             }
           })
         } else {
@@ -169,22 +171,26 @@ export default {
           // debugger
           if (value === val.label) {
             count = count + 1
-            if (count > 1) {
-              this.isSubmit = false
-              callback(new Error('菜单名称已重复'))
-            } else {
-              this.isSubmit = true
-              // this.$refs['subForm'].clearValidate()
-              // callback()
-            }
+
+            // else {
+            //   this.isSubmit = true
+            //   // this.$refs['subForm'].clearValidate()
+            //   // callback()
+            // }
           }
         })
+        if (count > 1) {
+          this.isSubmit = false
+          callback(new Error('菜单名称已重复'))
+        }
       }
     }
     return {
+      currentId: undefined,
+      isRight: true,
       checkoutId: undefined,
       checkoutParentId: undefined,
-      isSubmit: false,
+      isSubmit: true,
       parentId: undefined,
       oldResourcesName: undefined,
       resourcesForm: {
@@ -220,7 +226,7 @@ export default {
         id: undefined,
         parentId: undefined,
         menuName: undefined,
-        menuUrl: undefined
+        menuUrl: '/'
       },
       dialogStatus: undefined,
       menuDialogVisible: false,
@@ -379,7 +385,7 @@ export default {
     // 显示新增功能对话框
     handleCreate() {
       this.resourcesForm.resourcesName = undefined
-      this.resourcesForm.resourcesUrl = undefined
+      this.resourcesForm.resourcesUrl = '/'
       this.dialogStatus = '新增功能'
       this.resourcesDialogVisible = true
       this.$nextTick(() => {
@@ -447,21 +453,27 @@ export default {
           sort: val.sort
         })
       })
-      if (this.isSubmit === true) {
-        // 调用接口发送请求 进行批量更新
-        updateAllMenu({ sysMenuSortList: newData }).then(res => {
-          if (res.data.code === '0000') {
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-          } else { this.$message.error('保存失败') }
-          // 刷新页面显示
-          this.initList()
-        })
-      }
+      // this.$refs['subForm'].validate(valid => {
+      //   if (valid) {
+      // if (this.isSubmit === true) {
+      // 调用接口发送请求 进行批量更新
+      updateAllMenu({ sysMenuSortList: newData }).then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+        } else { this.$message.error(res.data.result) }
+        // 刷新页面显示
+        this.initList()
+      })
+      // }
+      // })
     },
     handleNodeClick(data) {
+      console.log(data)
+      this.currentId = data.id
+      this.isRight = true
       this.parentId = data.id
       if (data.isDir === '1') {
         this.currentMenuName = data.label
@@ -488,7 +500,7 @@ export default {
     },
     // 删除菜单实现
     deleteMenu(id) {
-      this.$confirm(`此操作将永久删除这个菜单及其子菜单, 是否继续?`, '删除提示', {
+      this.$confirm(`此操作将永久删除这个菜单的数据及其子菜单数据, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -500,7 +512,12 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
-              this.initList()
+              if (this.currentId === id) {
+                this.isRight = false
+                this.initList()
+              } else {
+                this.isRight = true
+              }
             } else {
               this.$message.error('删除失败')
             }
@@ -532,7 +549,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('res.result')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['menuForm'].resetFields()
@@ -558,7 +575,7 @@ export default {
       }
       if (data.isDir === '1') {
         this.isShow = false
-        this.menuForm.menuUrl = undefined
+        this.menuForm.menuUrl = '/'
       } else if (data.isDir === '0') {
         this.isShow = true
         this.menuForm.menuUrl = data.menuUrl
@@ -579,10 +596,7 @@ export default {
           // 调用接口发送请求
           // 判断用户选择的是目录还是页面
           if (this.radio === '1') {
-            // 判断用户选择的是同级菜单还是子菜单
-            if (this.location === '0') {
-              this.menuForm.parentId = this.menuId
-            }
+            console.log(this.menuForm.menuUrl)
             createMenuDir(this.menuForm).then(res => {
               if (res.data.code === '0000') {
                 this.$message({
@@ -598,10 +612,6 @@ export default {
               this.initList()
             })
           } else if (this.radio === '2') {
-            // 判断用户选择的是同级菜单还是子菜单
-            if (this.location === '0') {
-              this.menuForm.parentId = this.menuId
-            }
             createMenu(this.menuForm).then(res => {
               if (res.data.code === '0000') {
                 this.$message({
@@ -645,7 +655,7 @@ export default {
         // this.isShow = false
         this.visible = true
       }
-      this.menuForm.menuUrl = undefined
+      this.menuForm.menuUrl = '/'
       this.$nextTick(() => {
         this.$refs['menuForm'].clearValidate()
       })
@@ -668,6 +678,9 @@ export default {
 
 <style lang="scss" >
 .menuManagement{
+  height: 100%;
+  display: flex;
+  background-color: #fff;
   .resourcesBox{
     .el-input--medium .el-input__inner{
       height: 40px;
@@ -677,9 +690,6 @@ export default {
       width: 340px;
     }
   }
-  height: 100%;
-  display: flex;
-  background-color: #fff;
  .menu-left{
     height: 100%;
   .el-tree{
@@ -702,7 +712,8 @@ export default {
     width: 188px;
   }
 }
-
+.footer{
+  text-align: center;}
 .el-form-item{
   margin-bottom: 20px;
   .fa-long-arrow-up{

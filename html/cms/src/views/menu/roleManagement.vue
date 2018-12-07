@@ -17,7 +17,7 @@
     <!-- 表格 -->
     <el-table v-loading="rolelistLoading" :data="roleList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="角色名称" align="center" prop="roleName" />
       <el-table-column :show-overflow-tooltip="true" label="拥有用户" align="center" min-width="100" prop="sysUserRoles">

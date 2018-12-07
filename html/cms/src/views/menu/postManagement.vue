@@ -17,10 +17,10 @@
     <!-- 表格 -->
     <el-table v-loading="listLoading" :data="postList" border fit highlight-current-row style="width: 100%;height:100%;">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="岗位名称" align="center" prop="postName" />
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
+      <el-table-column label="创建时间" align="center" prop="creationTime">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
@@ -30,7 +30,7 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -235,8 +235,10 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+            } else if (res.data.result === null) {
+              this.$message.error('添加失败')
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['postform'].resetFields()
@@ -288,8 +290,14 @@ export default {
 
 <style lang="scss" scoped>
 .postManagement {
+  .pagination-container{
+    margin-top:15px;
+  }
   .filter-container {
     margin-left: 20px;
+    .el-form-item{
+      margin-bottom: 0px;
+    }
   }
 }
 </style>

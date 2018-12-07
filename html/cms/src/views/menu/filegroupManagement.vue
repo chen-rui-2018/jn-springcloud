@@ -16,7 +16,7 @@
     </div>
     <el-table v-loading="listLoading" :data="fileGroupList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="文件组名称" align="center" prop="fileGroupName" />
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">

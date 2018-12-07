@@ -184,7 +184,7 @@
         FROM tb_sys_resources WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 
-    <select id="getResourcesByMenuId" resultType="com.jn.system.permission.model.SysResourcesOfPermission"
+    <select id="getResourcesByMenuId" resultType="com.jn.system.menu.model.SysResources"
             parameterType="java.lang.String">
         SELECT
         id,

@@ -5,7 +5,6 @@ import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.vo.SysResourcesVO;
 import com.jn.system.model.MenuResources;
-import com.jn.system.permission.model.SysResourcesOfPermission;
 
 import java.util.List;
 import java.util.Set;
@@ -87,5 +86,5 @@ public interface SysResourcesMapper {
      * @param id
      * @return
      */
-    List<SysResourcesOfPermission> getResourcesByMenuId(String id);
+    List<SysResources> getResourcesByMenuId(String id);
 }

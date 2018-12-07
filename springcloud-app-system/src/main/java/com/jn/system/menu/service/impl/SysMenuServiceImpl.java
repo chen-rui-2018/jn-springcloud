@@ -12,7 +12,6 @@ import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.entity.TbSysMenu;
 import com.jn.system.menu.entity.TbSysMenuCriteria;
-import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.menu.model.*;
 import com.jn.system.menu.service.SysMenuService;
@@ -20,7 +19,6 @@ import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionMenuMapper;
-import com.jn.system.permission.model.SysResourcesOfPermission;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -136,8 +134,8 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param resourcesIds
      */
     private void getResourcesIdByMenuId(String menuId, List<String> resourcesIds) {
-        List<SysResourcesOfPermission> resourcesList = sysResourcesMapper.getResourcesByMenuId(menuId);
-        for (SysResourcesOfPermission sysResourcesOfPermission : resourcesList) {
+        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(menuId);
+        for (SysResources sysResourcesOfPermission : resourcesList) {
             resourcesIds.add(sysResourcesOfPermission.getId());
         }
     }

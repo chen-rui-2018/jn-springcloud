@@ -3,6 +3,7 @@ package com.jn.system.user.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -32,6 +33,8 @@ public class SysUserVO implements Serializable {
     private Date createTime;
     @ApiModelProperty("状态")
     private String status;
+    @ApiModelProperty("微信账号")
+    private String wechatAccount;
     @ApiModelProperty("部门名称")
     private String departmentName;
     @ApiModelProperty("岗位名称")
@@ -40,8 +43,8 @@ public class SysUserVO implements Serializable {
     public SysUserVO() {
     }
 
-    public SysUserVO(String id, String account, String name, String phone, String email,
-                     Date createTime, String status, String departmentName, String postName) {
+    public SysUserVO(String id, String account, String name, String phone, String email, Date createTime,
+                     String status, String wechatAccount, String departmentName, String postName) {
         this.id = id;
         this.account = account;
         this.name = name;
@@ -49,6 +52,7 @@ public class SysUserVO implements Serializable {
         this.email = email;
         this.createTime = createTime;
         this.status = status;
+        this.wechatAccount = wechatAccount;
         this.departmentName = departmentName;
         this.postName = postName;
     }
@@ -109,6 +113,14 @@ public class SysUserVO implements Serializable {
         this.status = status;
     }
 
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
+    }
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -135,6 +147,7 @@ public class SysUserVO implements Serializable {
                 ", email='" + email + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", wechatAccount='" + wechatAccount + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", postName='" + postName + '\'' +
                 '}';

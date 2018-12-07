@@ -64,15 +64,40 @@
     </insert>
 
     <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
-       SELECT *
-       from tb_sys_user u left join
-            (select t2.id as departmentId,t2.department_name,
-            t3.id as postId ,t3.post_name,t1.user_id
-            from tb_sys_user_department_post t1,tb_sys_department t2,
-            tb_sys_post t3 where t1.department_id = t2.id AND
-            t1.post_id = t3.id and t1.`status` = '1'
-            and t2.`status` = '1' and t3.`status` = '1') tt
-            on u.id = tt.user_id where u.id = #{id,jdbcType=VARCHAR}
+        SELECT
+        u.id,
+        u.account,
+        u.`name`,
+        u.phone,
+        u.email,
+        u.create_time,
+        u.`status`,
+        tt.departmentId,
+        tt.department_name,
+        tt.postId,
+        tt.post_name,
+        tt.parent_id,
+        tt.`level`
+        from tb_sys_user u
+        left join
+        (select
+        t2.id as departmentId,
+        t2.department_name,
+        t2.parent_id,
+        t2.`level`,
+        t3.id as postId ,
+        t3.post_name,
+        t1.user_id
+        from tb_sys_user_department_post t1,
+        tb_sys_department t2,
+        tb_sys_post t3
+        where t1.department_id = t2.id
+        and t1.post_id = t3.id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
+        and t3.`status` = '1') tt
+        on u.id = tt.user_id
+        where u.id = #{id,jdbcType=VARCHAR}
     </select>
 
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
@@ -85,6 +110,7 @@
         t.email,
         t.status,
         t.create_time as createTime,
+        t.wechat_account as wechatAccount,
         tt.department_name as departmentName,
         tt.post_name as postName,
         tt.department_id
@@ -96,23 +122,22 @@
         ,tb_sys_user_department_post t3
         where t1.id = t3.department_id
         and t2.id = t3.post_id
-        and t1.status = 1
-        and t2.status = 1
-        and t3.status = 1
-        and t3.is_default = 1
+        and t1.status = '1'
+        and t2.status = '1'
+        and t3.status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
+            and t3.is_default = '1'
+        </if>
         ) tt on t.id = tt.user_id
         where t.status != '-1'
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
-            and name like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+            and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and status = #{status,jdbcType=VARCHAR}
+            and t.status = #{status,jdbcType=VARCHAR}
         </if>
-        <if test="departmentIds != null and departmentIds.length > 0">
-            and department_id in
-            <foreach item="id" collection="departmentIds" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
         ORDER BY t.create_time desc, t.id desc
     </select>

@@ -22,6 +22,8 @@ public class TbSysUser implements Serializable {
 
     private String status;
 
+    private String wechatAccount;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -96,6 +98,14 @@ public class TbSysUser implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount == null ? null : wechatAccount.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -116,7 +126,8 @@ public class TbSysUser implements Serializable {
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getWechatAccount() == null ? other.getWechatAccount() == null : this.getWechatAccount().equals(other.getWechatAccount()));
     }
 
     @Override
@@ -132,6 +143,7 @@ public class TbSysUser implements Serializable {
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getWechatAccount() == null) ? 0 : getWechatAccount().hashCode());
         return result;
     }
 
@@ -150,6 +162,7 @@ public class TbSysUser implements Serializable {
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
+        sb.append(", wechatAccount=").append(wechatAccount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

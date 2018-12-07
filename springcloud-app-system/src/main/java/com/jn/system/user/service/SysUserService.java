@@ -23,15 +23,15 @@ public interface SysUserService {
      *
      * @param sysUser
      */
-    void addSysUser(SysUser sysUser, User user);
+    void addSysUser(SysUserAdd sysUser, User user);
 
     /**
      * 条件分页查询用户
      *
-     * @param userSysUserPage
+     * @param userPage
      * @return
      */
-    PaginationData findSysUserByPage(SysUserPage userSysUserPage);
+    PaginationData findSysUserByPage(SysUserPage userPage);
 
     /**
      * 逻辑删除用户

@@ -33,6 +33,12 @@ public class SysResources implements Serializable {
     private String resourcesName;
 
     /**
+     * 权限界面,返回功能名称是方面菜单树解析,使用lable返回功能名称
+     */
+    @ApiModelProperty(value = "功能名称" )
+    private String label;
+
+    /**
      * 功能URL
      */
     @ApiModelProperty(value = "功能路径" )
@@ -68,10 +74,11 @@ public class SysResources implements Serializable {
     public SysResources() {
     }
 
-    public SysResources(String id, String resourcesName, String resourcesUrl,
+    public SysResources(String id, String resourcesName, String label, String resourcesUrl,
                         String menuId, String creator, Date createTime, String status) {
         this.id = id;
         this.resourcesName = resourcesName;
+        this.label = label;
         this.resourcesUrl = resourcesUrl;
         this.menuId = menuId;
         this.creator = creator;
@@ -93,6 +100,14 @@ public class SysResources implements Serializable {
 
     public void setResourcesName(String resourcesName) {
         this.resourcesName = resourcesName;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getResourcesUrl() {
@@ -140,6 +155,7 @@ public class SysResources implements Serializable {
         return "SysResources{" +
                 "id='" + id + '\'' +
                 ", resourcesName='" + resourcesName + '\'' +
+                ", label='" + label + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
                 ", menuId='" + menuId + '\'' +
                 ", creator='" + creator + '\'' +

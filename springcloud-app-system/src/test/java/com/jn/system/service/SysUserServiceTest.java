@@ -32,7 +32,7 @@ public class SysUserServiceTest {
 
     @Test
     public void addSysUserTest() {
-        SysUser sysUser = new SysUser();
+        SysUserAdd sysUser = new SysUserAdd();
         sysUser.setAccount("datang11");
         sysUser.setEmail("1233458@163.com");
         sysUser.setName("大唐");

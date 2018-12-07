@@ -40,7 +40,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/addSysUser")
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addSysUser")
-    public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
+    public Result addSysUser(@Validated @RequestBody SysUserAdd sysUser) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysUserService.addSysUser(sysUser,user);
@@ -51,8 +51,8 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "条件分页查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage) {
-        PaginationData data = sysUserService.findSysUserByPage(userSysUserPage);
+    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userPage) {
+        PaginationData data = sysUserService.findSysUserByPage(userPage);
         return new Result(data);
     }
 

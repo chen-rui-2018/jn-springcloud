@@ -724,6 +724,76 @@ public class TbSysUserCriteria {
             addCriterion("user.status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andWechatAccountIsNull() {
+            addCriterion("user.wechat_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountIsNotNull() {
+            addCriterion("user.wechat_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountEqualTo(String value) {
+            addCriterion("user.wechat_account =", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotEqualTo(String value) {
+            addCriterion("user.wechat_account <>", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountGreaterThan(String value) {
+            addCriterion("user.wechat_account >", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("user.wechat_account >=", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLessThan(String value) {
+            addCriterion("user.wechat_account <", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLessThanOrEqualTo(String value) {
+            addCriterion("user.wechat_account <=", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountLike(String value) {
+            addCriterion("user.wechat_account like", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotLike(String value) {
+            addCriterion("user.wechat_account not like", value, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountIn(List<String> values) {
+            addCriterion("user.wechat_account in", values, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotIn(List<String> values) {
+            addCriterion("user.wechat_account not in", values, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountBetween(String value1, String value2) {
+            addCriterion("user.wechat_account between", value1, value2, "wechatAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andWechatAccountNotBetween(String value1, String value2) {
+            addCriterion("user.wechat_account not between", value1, value2, "wechatAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

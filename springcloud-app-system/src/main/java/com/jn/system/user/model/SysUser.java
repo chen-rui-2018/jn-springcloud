@@ -25,7 +25,7 @@ public class SysUser implements Serializable {
     private String id;
 
     @ApiModelProperty("用户账号")
-    @Pattern(regexp="^[A-Za-z0-9]{4,16}$",message="{\"account\":\"账号只允许6-16位数字及字母\"}")
+    @Pattern(regexp="^[A-Za-z0-9]{6,16}$",message="{\"account\":\"账号只允许6-16位数字及字母\"}")
     private String account;
 
     @ApiModelProperty("用户密码")
@@ -56,11 +56,15 @@ public class SysUser implements Serializable {
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
+    @ApiModelProperty("微信账号")
+    @Pattern(regexp="^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$",message="{weixinAccount:'微信号校验错误'}")
+    private String wechatAccount;
+
     public SysUser() {
     }
 
     public SysUser(String id, String account, String password, String name, String phone,
-                   String email, String creator, Date createTime, String status) {
+                   String email, String creator, Date createTime, String status, String wechatAccount) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -70,10 +74,7 @@ public class SysUser implements Serializable {
         this.creator = creator;
         this.createTime = createTime;
         this.status = status;
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+        this.wechatAccount = wechatAccount;
     }
 
     public String getId() {
@@ -148,6 +149,14 @@ public class SysUser implements Serializable {
         this.status = status;
     }
 
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
+    }
+
     @Override
     public String toString() {
         return "SysUser{" +
@@ -160,6 +169,7 @@ public class SysUser implements Serializable {
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", wechatAccount='" + wechatAccount + '\'' +
                 '}';
     }
 }

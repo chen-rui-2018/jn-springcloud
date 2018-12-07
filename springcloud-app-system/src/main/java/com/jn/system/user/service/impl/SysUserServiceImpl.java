@@ -7,17 +7,18 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
-import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
+import com.jn.system.dept.dao.TbSysUserDepartmentPostMapper;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
 import com.jn.system.dept.model.SysDepartmentPost;
 import com.jn.system.dept.vo.SysDepartmentPostVO;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.permission.model.SysRole;
 import com.jn.system.user.dao.*;
+import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.user.entity.TbSysUser;
 import com.jn.system.user.entity.TbSysUserCriteria;
 import com.jn.system.user.model.*;
@@ -65,6 +66,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserRoleMapper sysUserRoleMapper;
     @Autowired
     private SysGroupUserMapper sysGroupUserMapper;
+    @Autowired
+    private TbSysUserDepartmentPostMapper tbSysUserDepartmentPostMapper;
 
 
     /**
@@ -76,21 +79,62 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @ServiceLog(doAction = "添加用户")
     @Transactional(rollbackFor = Exception.class)
-    public void addSysUser(SysUser sysUser, User user) {
-        //根据用户名查询用户账号是否存在
+    public void addSysUser(SysUserAdd sysUser, User user) {
+        String departmentId = sysUser.getDepartmentId();
+        String postId = sysUser.getPostId();
+
+        //判断部门岗位id是否有一个为空
+        Boolean flag = (StringUtils.isNotBlank(departmentId) && StringUtils.isBlank(postId)) ||
+                (StringUtils.isBlank(departmentId) && StringUtils.isNotBlank(postId));
+        if (flag) {
+            logger.warn("[用户] 新增用户失败，部门或岗位信息有一个为空！,account: {}", sysUser.getAccount());
+            throw new JnSpringCloudException(SysUserExceptionEnums.ADD_DEPRTMENTPOST_ERROR);
+        }
+
+        //根据添加账号当前用户账号是否存在
         List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
             logger.warn("[用户] 新增用户失败，该用户账号已存在！,account: {}", sysUser.getAccount());
-            throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
+            throw new JnSpringCloudException(SysUserExceptionEnums.ADDERR_NAME_EXIST);
         }
-        sysUser.setId(UUID.randomUUID().toString());
-        sysUser.setCreateTime(new Date());
-        sysUser.setCreator(user.getId());
-        sysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+
+        //生成用户实体
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
+        tbSysUser.setId(UUID.randomUUID().toString());
+        tbSysUser.setCreateTime(new Date());
+        tbSysUser.setCreator(user.getId());
+        tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
-        logger.info("[用户] 新增用户成功！，sysUserId:{}", sysUser.getId());
+
+        //如果部门岗位信息不为空
+        if (StringUtils.isNotBlank(departmentId) && StringUtils.isNotBlank(postId)) {
+            //为用户添加部门岗位信息
+            addDepartmentPostToUser(sysUser, user, tbSysUser);
+            logger.info("[用户] 用户添加部门岗位信息系成功！，sysUserId:{}", tbSysUser.getId());
+        }
+        logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
+    }
+
+    /**
+     * 生成用户部门岗位关联实体
+     *
+     * @param sysUser
+     * @param user
+     * @param tbSysUser
+     */
+    private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
+        TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
+        sysUserDepartmentPost.setCreator(user.getId());
+        sysUserDepartmentPost.setId(UUID.randomUUID().toString());
+        sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        sysUserDepartmentPost.setUserId(tbSysUser.getId());
+        sysUserDepartmentPost.setDepartmentId(sysUser.getDepartmentId());
+        sysUserDepartmentPost.setPostId(sysUser.getPostId());
+        sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
+        sysUserDepartmentPost.setCreateTime(new Date());
+        tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
     }
 
     /**
@@ -150,16 +194,14 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional(rollbackFor = Exception.class)
     public void updateSysUser(SysUser sysUser) {
         //判断修改信息是否存在
-        SysUser sysUser1 = sysUserMapper.getUserById(sysUser.getId());
-        if (sysUser1 == null){
+        TbSysUser tbSysUser1 = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
+        if (tbSysUser1 == null) {
             logger.warn("[用户] 用户修改失败,修改信息不存在,userId: {}", sysUser.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
-        }
-        //判断账号信息是否被修改
-        if (StringUtils.isNotBlank(sysUser.getAccount())) {
-            TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
-            if (!sysUser.getAccount().equals(tbSysUser.getAccount())) {
-                logger.warn("[用户] 更新用户失败，该用户账号已存在！,account: {}", sysUser.getAccount());
+        } else if (StringUtils.isNotBlank(sysUser.getAccount())) {
+            if (!tbSysUser1.getAccount().equals(sysUser.getAccount())) {
+                //判断账号信息是否被修改
+                logger.warn("[用户] 更新用户失败，用户账号不允许修改！,account: {}", sysUser.getAccount());
                 throw new JnSpringCloudException(SysUserExceptionEnums.NOT_MODIFY_ACCOUNT);
             }
         }
@@ -326,7 +368,9 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
                 sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
                 sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
-                if ("1".equals(sysDepartmentPost.getIsDefault())) {
+                Boolean flag =
+                        SysStatusEnums.EFFECTIVE.getCode().equals(sysDepartmentPost.getIsDefault()) ? Boolean.TRUE : Boolean.FALSE;
+                if (flag) {
                     count++;
                     if (count > 1) {
                         logger.warn("[用户] 用户添加部门岗位失败,userId: {}", sysUserDepartmentPostAdd.getUserId());

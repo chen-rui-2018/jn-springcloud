@@ -1,23 +1,27 @@
 package com.jn.test.controller;
 
+import com.jn.client.DownLoadClient;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.jn.domain.DownLoad;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 1,配置更新测试，如果需要动态更新的配置文件，需要加入@RefreshScope注解
  *2,redis缓存测试
  * 3,hystrix 的使用
+ * 4,服务间的文件的下载
  *
  * @author： fengxh
  * @date： Created on 2018/9/20 15:31
@@ -71,15 +75,26 @@ public class TestController extends BaseController {
         return new Result(testService.hiService());
     }
 
-
+    @Autowired
+    private DownLoadClient downLoadClient;
     @RequestMapping(value = "/guest/test4")
     public Result<String> heapOutOfMemory() {
-        List<TestDomain> list = new ArrayList<>();
-        int coutnt = 0;
-        while (true) {
-            list.add(new TestDomain());
-            System.out.println(coutnt++);
+        DownLoad downLoad = new DownLoad("http://192.168.10.45:2020/group1/M00/00/00/wKgKLVwJHT2Abtp3AAQdy_tf4s4411.png",Boolean.TRUE);
+        ResponseEntity<byte[]> responseEntity = this.downLoadClient.downLoad(downLoad);
+        byte[] bytes = responseEntity.getBody();
+        File dir = new File("D:\\test");
+        if (!dir.exists()&&dir.isDirectory()){
+            dir.mkdirs();
         }
+        File file = new File("D:\\test\\test.png");
+        try(FileOutputStream fileOutputStream = new FileOutputStream(file); BufferedOutputStream buffer= new BufferedOutputStream(fileOutputStream)){
+            buffer.write(bytes);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new Result<>();
+
+
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * 邮件发送客户端
- *
+ *PS ...业务项目异步通知，不需要使用该接口。
  * @Author： cm
  * @Date： Created on 2018/11/15 15:00
  * @Version： v1.0

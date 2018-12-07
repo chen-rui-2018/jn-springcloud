@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jn-springcloud-app</artifactId>
         <groupId>com.jn</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0.0-RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <description>配置中心的管理</description>

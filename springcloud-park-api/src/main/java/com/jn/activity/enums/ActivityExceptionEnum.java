@@ -18,7 +18,8 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_CUTOFF("11110501","报名已截止，不能报名或取消报名"),
     ACTIVITY_TYPE_NAME_EMPTY("11110201","活动类型名称不能为空"),
     ACTIVITY_TYPE_STATUS_EMPTY("11110201","活动类型状态不能为空"),
-    ACTIVITY_TYPE_NAME_REPEAT("1111201","活动类型名称不能重复")
+    ACTIVITY_TYPE_NAME_REPEAT("1111201","活动类型名称不能重复"),
+    ACTIVITY_LIKE_ACCOUNT_REPEAT("11110502","当前活动存在多个相同点赞用户，无法点赞")
     ;
 
     /**

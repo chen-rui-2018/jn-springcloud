@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * 活动详情信息
@@ -73,12 +72,6 @@ public class ActivityDetail implements Serializable {
     private String isApply;
     @ApiModelProperty(value = "活动内容")
     private String activityDetail;
-    @ApiModelProperty(value = "活动点评信息，点评id/活动id、点评人、点评时间、点评获赞数、点评状态、点评人数")
-    private List commentList;
-    @ApiModelProperty(value = "活动点赞信息，活动id、点赞人、点赞时间、点赞状态、点赞人数")
-    private List activityLikeList;
-    @ApiModelProperty(value = "活动报名信息，活动id、报名人、报名时间、报名状态、签到状态、签到时间、签到方式、报名人数")
-    private List activityApplyList;
 
     public String getActivityId() {
         return activityId;
@@ -302,29 +295,5 @@ public class ActivityDetail implements Serializable {
 
     public void setActivityDetail(String activityDetail) {
         this.activityDetail = activityDetail;
-    }
-
-    public List getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(List commentList) {
-        this.commentList = commentList;
-    }
-
-    public List getActivityLikeList() {
-        return activityLikeList;
-    }
-
-    public void setActivityLikeList(List activityLikeList) {
-        this.activityLikeList = activityLikeList;
-    }
-
-    public List getActivityApplyList() {
-        return activityApplyList;
-    }
-
-    public void setActivityApplyList(List activityApplyList) {
-        this.activityApplyList = activityApplyList;
     }
 }

@@ -1,9 +1,6 @@
 package com.jn.activity.vo;
 
 
-import com.jn.activity.entity.TbActivityApply;
-import com.jn.activity.entity.TbActivityLike;
-import com.jn.activity.entity.TbComment;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -80,12 +77,17 @@ public class ActivityDetailVO implements Serializable {
     @ApiModelProperty(value = "活动内容")
     private String activityDetail;
     @ApiModelProperty(value = "活动点评信息，点评id/活动id、点评人、点评时间、点评获赞数、点评状态、点评人数")
-    private List<TbComment> commentList;
+    private List commentList;
+    @ApiModelProperty(value = "点评人数)")
+    private int commentNum;
     @ApiModelProperty(value = "活动点赞信息，活动id、点赞人、点赞时间、点赞状态、点赞人数")
-    private List<TbActivityLike> activityLikeList;
+    private List activityLikeList;
+    @ApiModelProperty(value = "点赞数)")
+    private int likeNum;
     @ApiModelProperty(value = "活动报名信息，活动id、报名人、报名时间、报名状态、签到状态、签到时间、签到方式、报名人数")
-    private List<TbActivityApply> activityApplyList;
-
+    private List activityApplyList;
+    @ApiModelProperty(value = "实际报名人数")
+    private int realapplyNum;
 
     public String getActivityId() {
         return activityId;
@@ -311,64 +313,51 @@ public class ActivityDetailVO implements Serializable {
         this.activityDetail = activityDetail;
     }
 
-    public List<TbComment> getCommentList() {
+    public List getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(List<TbComment> commentList) {
+    public void setCommentList(List commentList) {
         this.commentList = commentList;
     }
 
-    public List<TbActivityLike> getActivityLikeList() {
+    public int getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(int commentNum) {
+        this.commentNum = commentNum;
+    }
+
+    public List getActivityLikeList() {
         return activityLikeList;
     }
 
-    public void setActivityLikeList(List<TbActivityLike> activityLikeList) {
+    public void setActivityLikeList(List activityLikeList) {
         this.activityLikeList = activityLikeList;
     }
 
-    public List<TbActivityApply> getActivityApplyList() {
+    public int getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public List getActivityApplyList() {
         return activityApplyList;
     }
 
-    public void setActivityApplyList(List<TbActivityApply> activityApplyList) {
+    public void setActivityApplyList(List activityApplyList) {
         this.activityApplyList = activityApplyList;
     }
 
-    @Override
-    public String toString() {
-        return "ActivityDetailVO{" +
-                "activityId='" + activityId + '\'' +
-                ", activityType='" + activityType + '\'' +
-                ", activityName='" + activityName + '\'' +
-                ", activityStartTime='" + activityStartTime + '\'' +
-                ", activityEndTime='" + activityEndTime + '\'' +
-                ", applyStartTime='" + applyStartTime + '\'' +
-                ", applyEndTime='" + applyEndTime + '\'' +
-                ", mesSenTime='" + mesSenTime + '\'' +
-                ", activityAdress='" + activityAdress + '\'' +
-                ", actiCost='" + actiCost + '\'' +
-                ", activityOrganizer='" + activityOrganizer + '\'' +
-                ", activityNumber='" + activityNumber + '\'' +
-                ", activityPosterUrl='" + activityPosterUrl + '\'' +
-                ", activityViews='" + activityViews + '\'' +
-                ", activityLike='" + activityLike + '\'' +
-                ", applyNum='" + applyNum + '\'' +
-                ", particNum='" + particNum + '\'' +
-                ", state='" + state + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", createAccount='" + createAccount + '\'' +
-                ", issueTime='" + issueTime + '\'' +
-                ", issueAccount='" + issueAccount + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", updateAccount='" + updateAccount + '\'' +
-                ", isTop='" + isTop + '\'' +
-                ", topTime='" + topTime + '\'' +
-                ", isApply='" + isApply + '\'' +
-                ", activityDetail='" + activityDetail + '\'' +
-                ", commentList=" + commentList +
-                ", activityLikeList=" + activityLikeList +
-                ", activityApplyList=" + activityApplyList +
-                '}';
+    public int getRealapplyNum() {
+        return realapplyNum;
+    }
+
+    public void setRealapplyNum(int realapplyNum) {
+        this.realapplyNum = realapplyNum;
     }
 }

@@ -4,8 +4,10 @@ import com.jn.activity.service.ActivityApplyService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +36,19 @@ public class ActivityApplyController extends BaseController {
     @ControllerLog(doAction = "快速报名")
     @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
-    public Result quickApply(@RequestBody String id, @RequestBody String account){
+    public Result quickApply(@RequestBody String id){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        String account=user.getAccount();
         Result result=activityApplyService.quickApply(id,account);
         return result;
     }
 
     @ControllerLog(doAction = "取消报名")
-    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/cancelApply")
-    public Result cancelApply(@RequestBody String id, @RequestBody String account){
+    public Result cancelApply(@RequestBody String id){
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        String account=user.getAccount();
         Result result=activityApplyService.cancelApply(id,account);
         return result;
     }

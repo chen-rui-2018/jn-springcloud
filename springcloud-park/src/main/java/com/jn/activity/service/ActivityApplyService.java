@@ -25,4 +25,12 @@ public interface ActivityApplyService {
      * @return
      */
     Result cancelApply(String id, String account);
+
+    /**
+     * 前端参数非空校验
+     * @param id      活动id
+     * @param account 用户账号
+     * @return
+     */
+    Result checkDataEmpty(String id,String account);
 }

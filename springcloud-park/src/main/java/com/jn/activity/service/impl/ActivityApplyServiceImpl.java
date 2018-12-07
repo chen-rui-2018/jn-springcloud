@@ -11,13 +11,14 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
+import com.jn.portals.user.api.PortalLoginClient;
 import com.jn.portals.user.enums.PortalsLoginExceptionEnum;
+import com.jn.portals.user.model.PortalsUser;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -43,6 +44,9 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @Autowired
     private ActivityDetailsService activityDetailsService;
 
+    @Autowired
+    private PortalLoginClient portalLoginClient;
+
     /**
      * 快速报名
      * @param id        活动id
@@ -51,7 +55,6 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "快速报名")
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public Result quickApply(String id, String account) {
         //前端参数非空校验
         Result result=checkDataEmpty(id,account);
@@ -63,6 +66,11 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
             return result;
         }
+        //获取用户拓展信息，判断信息是否完整，若不完整，需要完善信息
+        Result<PortalsUser> userExtension = portalLoginClient.getUserExtension(account);
+        //判断人员头像、名称、性别、公司名称、岗位名称、签到状态是否都有
+        //todo:完善
+
         //数据校验通过，可以报名，往活动表插入报名数据
         TbActivityApply activityApply=new TbActivityApply();
         //主键id
@@ -113,12 +121,13 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     /**
      * 前端参数非空校验
-     * @param id
-     * @param account
+     * @param id      活动id
+     * @param account 用户账号
      * @return
      */
     @ServiceLog(doAction = "前端参数非空校验")
-    private Result checkDataEmpty(String id, String account){
+    @Override
+    public  Result checkDataEmpty(String id,String account){
         //只有当前时间未超过报名截止时间，是否可以报名的状态为"是"才可以取消报名
         Result result=new Result();
         //非空校验

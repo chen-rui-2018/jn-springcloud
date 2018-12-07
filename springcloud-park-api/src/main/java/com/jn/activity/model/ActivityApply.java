@@ -32,8 +32,6 @@ public class ActivityApply implements Serializable {
     private Date signTime;
     @ApiModelProperty(value = "签到方式(0：app签到，1：现场签到)")
     private String signType;
-    @ApiModelProperty(value = "报名人数")
-    private String applyNum;
     @ApiModelProperty(value = "报名人头像")
     private String avatar;
 
@@ -101,14 +99,6 @@ public class ActivityApply implements Serializable {
 
     public void setSignType(String signType) {
         this.signType = signType;
-    }
-
-    public String getApplyNum() {
-        return applyNum;
-    }
-
-    public void setApplyNum(String applyNum) {
-        this.applyNum = applyNum;
     }
 
     public String getAvatar() {

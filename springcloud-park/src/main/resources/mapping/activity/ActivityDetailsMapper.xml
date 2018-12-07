@@ -59,7 +59,6 @@
           then t3.avatar
           else t2.avatar
         end as "avatar"                                                   <!--点评人头像-->
-        ,count(1) as "commentNum"                                         <!--点评人数-->
         from tb_comment t1
         left join tb_user_person t2
         on t1.com_account =t2.account
@@ -88,7 +87,6 @@
         then t3.avatar
         else t2.avatar
         end as "avatar"                                                   <!--报名人头像-->
-        ,count(1) as "applyNum"                                           <!--报名人数-->
         from tb_activity_apply t1
         left join tb_user_person t2
         on t1.account=t2.account

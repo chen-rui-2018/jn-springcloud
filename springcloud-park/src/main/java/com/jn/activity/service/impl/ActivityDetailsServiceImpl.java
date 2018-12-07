@@ -9,12 +9,14 @@ import com.jn.activity.model.ActivityApply;
 import com.jn.activity.model.ActivityDetail;
 import com.jn.activity.model.Comment;
 import com.jn.activity.service.ActivityDetailsService;
+import com.jn.activity.vo.ActivityDetailVO;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,26 +64,31 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         List<ActivityDetail> list=activityDetailsMapper.getActivityDetails(id);
         if(list.size()>0){
             ActivityDetail activityDetail=list.get(0);
+            ActivityDetailVO activityDetailVO=new ActivityDetailVO();
+            BeanUtils.copyProperties(activityDetail, activityDetailVO);
             //根据活动id查询点评信息
             Result commentInfo = getCommentInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(commentInfo.getCode())) {
+            if (GlobalConstants.SUCCESS_CODE.equals(commentInfo.getCode()) && commentInfo.getData()!=null) {
                 List<TbComment> commentList = (List<TbComment>)commentInfo.getData();
-                activityDetail.setCommentList(commentList);
+                activityDetailVO.setCommentList(commentList);
+                activityDetailVO.setCommentNum(commentList.size());
             }
             //根据活动id查询点赞信息
             Result activityLikeInfo = getActivityLikeInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode())) {
+            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode()) && activityLikeInfo.getData()!=null) {
                 List<TbActivityLike> activityLikeList = (List<TbActivityLike>)activityLikeInfo.getData();
-                activityDetail.setActivityLikeList(activityLikeList);
+                activityDetailVO.setActivityLikeList(activityLikeList);
+                activityDetailVO.setLikeNum(activityLikeList.size());
             }
             //根据活动id查询活动报名信息
             Result activityApplyInfo = getActivityApplyInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode())) {
+            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode())&& activityApplyInfo.getData()!=null) {
                 List<TbActivityApply> activityApplyList = (List<TbActivityApply>)activityApplyInfo.getData();
-                activityDetail.setActivityApplyList(activityApplyList);
+                activityDetailVO.setActivityApplyList(activityApplyList);
+                activityDetailVO.setRealapplyNum(activityApplyList.size());
             }
             //把活动详情封装到result中返回前端
-            result.setData(activityDetail);
+            result.setData(activityDetailVO);
         }
         return result;
     }
@@ -124,9 +131,12 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             return result;
         }
         TbActivityLikeCriteria example=new TbActivityLikeCriteria();
-        example.createCriteria().andActivityIdEqualTo(id);
+        //根据活动id获取点赞状态为点赞（"1"）的数据
+        example.createCriteria().andActivityIdEqualTo(id).andStateEqualTo("1");
         List<TbActivityLike> tbActivityLikes = tbActivityLikeMapper.selectByExample(example);
-        result.setData(tbActivityLikes);
+        if(tbActivityLikes.size()>0){
+            result.setData(tbActivityLikes);
+        }
         return result;
     }
 

@@ -31,8 +31,6 @@ public class Comment implements Serializable {
     private String comType;
     @ApiModelProperty(value = "点评人头像)")
     private String avatar;
-    @ApiModelProperty(value = "点评人数)")
-    private String commentNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -98,13 +96,5 @@ public class Comment implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public String getCommentNum() {
-        return commentNum;
-    }
-
-    public void setCommentNum(String commentNum) {
-        this.commentNum = commentNum;
     }
 }

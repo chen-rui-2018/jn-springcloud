@@ -66,7 +66,7 @@
 ### 3.类命名规范
 - 遵守驼峰规范 
 - config包：xxxConfig、xxxFilter等等
-- server包：xxxController xxx是你的模块名，每个模块一个服务端类
+- server包：xxxController xxx是你的API项目中的接口类名，服务端类必须实现API接口类，参考eg.com.jn.upload.api.UploadClient。
 - 其他的按照正规的来就行
 ### 4.注解规范
 - 统一使用@RestController  不能用Controller 注解
@@ -144,3 +144,8 @@
 
 ## 12.配置文件规范
 - 业务子服务，如果涉及到业务变动，会进行随时调整的配置信息，请丢到配置中心那边进行管理，例如抢购业务，有一个配置为lock是用来控制等待时间的，那么这个配置就需要丢到配置中心进行管理。例子：com.jn.test.controller.TestController
+
+## 13.版本管理规范
+- 由业务子服务，在API 维护README.md，进行一个版本号和说明
+- 1.0.0-RELEASE（初始化版本）
+- 初始化

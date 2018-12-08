@@ -17,6 +17,7 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableFeignClients
 @SpringBootApplication
 public class SpringCloudNewsApplication {
+    // TODO: 2018/12/6 陈苗，1，干掉stream项目，由news来接管；2，判断消息消费成功与否，只跟异常有关系 3，文件方式；
 
     public static void main(String[] args) {
         SpringApplication.run(SpringCloudNewsApplication.class, args);

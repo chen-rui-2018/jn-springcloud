@@ -44,7 +44,7 @@ public class SysGroupServiceTest {
 
     @Test
     public void addSysGroupTest() {
-        TbSysGroup sysGroup = new TbSysGroup();
+        SysGroupAdd sysGroup = new SysGroupAdd();
         sysGroup.setGroupName("财务组");
         sysGroup.setStatus("1");
         User user = new User();
@@ -88,11 +88,6 @@ public class SysGroupServiceTest {
         sysGroupService.roleGroupAuthorization(sysRoleGroupAdd, user);
     }
 
-    @Test
-    public void findUserOfGroupTest() {
-        List<SysTUser> data = sysGroupService.findUserOfGroup("g002");
-        logger.info("测试结果:{}", data.toString());
-    }
 
     @Test
     public void findOtherUserByPageTest() {

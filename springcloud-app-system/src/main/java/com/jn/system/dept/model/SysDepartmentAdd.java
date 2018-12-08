@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -22,6 +23,7 @@ public class SysDepartmentAdd implements Serializable {
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("部门名称数组")
+    @Size(max = 20,message = "部门名称长度不能超过20字")
     private String departmentName;
 
     public SysDepartmentAdd() {

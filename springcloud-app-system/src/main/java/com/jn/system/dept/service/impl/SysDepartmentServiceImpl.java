@@ -200,6 +200,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     public List<SysDepartmentVO> findDepartmentAllByLevel() {
         //查询所有部门
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentMapper.findSysDepartmentAll();
+        //递归查找子部门
         findChildrenDepartment(sysDepartmentVOList);
         return sysDepartmentVOList;
     }
@@ -211,14 +212,27 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      */
     public void findChildrenDepartment(List<SysDepartmentVO> sysDepartmentVOList) {
         for (SysDepartmentVO sysDepartmentVO : sysDepartmentVOList) {
-            List<SysDepartmentVO> childrenDepartList =
-                    sysDepartmentMapper.findChildrenDepartment(sysDepartmentVO.getId());
-            sysDepartmentVO.setChildren(childrenDepartList);
-            if (childrenDepartList.size() == 0) {
+            List<SysDepartmentVO> children = sysDepartmentVO.getChildren();
+            //判断部门的子部门是否为空,为空,忽略,不为空,继续查找子部门的下一级部门
+            if (children != null && children.size() > 0){
+                for (SysDepartmentVO child : children) {
+                    child.setParentName(sysDepartmentVO.getLabel());
+                    //根据父级部门id,查询子部门集合
+                    List<SysDepartmentVO> childrenDepartList =
+                            sysDepartmentMapper.findChildrenDepartment(child.getId());
+                    child.setChildren(childrenDepartList);
+                    //如果为查到子部门,设置子集为null
+                    if (childrenDepartList == null || childrenDepartList.size() == 0) {
+                        child.setChildren(null);
+                        continue;
+                    } else {
+                        //继续查找子部门的下一级部门
+                        findChildrenDepartment(childrenDepartList);
+                    }
+                }
+            }else{
+                //子集可能是长度为空,这里设置为null
                 sysDepartmentVO.setChildren(null);
-                continue;
-            } else {
-                findChildrenDepartment(childrenDepartList);
             }
         }
     }

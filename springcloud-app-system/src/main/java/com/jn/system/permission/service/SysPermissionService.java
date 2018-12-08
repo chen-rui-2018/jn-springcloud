@@ -78,42 +78,12 @@ public interface SysPermissionService {
     void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd, User user);
 
     /**
-     * 获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息
-     *
-     * @param sysPermissionMenuPage
-     * @return
-     */
-    PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage);
-
-    /**
-     * 获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息
-     *
-     * @param sysPermissionResourcePage
-     * @return
-     */
-    PaginationData findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage);
-
-    /**
      * 校验权限名是否已经存在
      *
      * @param permissionName
      * @return
      */
     String checkPermissionName(String permissionName);
-
-    /**
-     * 为权限添加菜单
-     *
-     * @param sysPermissionMenuAdd
-     */
-    void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd, User user);
-
-    /**
-     * 为权限添加页面功能
-     *
-     * @param sysPermissionMenuAdd
-     */
-    void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd, User user);
 
     /**
      * 权限授权功能,获取菜单及功能信息

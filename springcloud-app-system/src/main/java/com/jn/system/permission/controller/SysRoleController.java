@@ -125,8 +125,8 @@ public class SysRoleController extends BaseController {
     @ControllerLog(doAction = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkRoleName")
     @RequiresPermissions("/system/sysRole/checkRoleName")
+    @RequestMapping(value = "/checkRoleName")
     public Result checkRoleName(String roleName){
         String result = tbRoleService.checkRoleName(roleName);
         return new Result(result);
@@ -156,7 +156,7 @@ public class SysRoleController extends BaseController {
     @ApiOperation(value = "查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息",
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findPermissionOrRoleAndOtherPermission")
-    @RequiresPermissions("/system/sysRole/findPermissionOrRole")
+    @RequiresPermissions("/system/sysRole/findPermissionTORole")
     public Result findPermissionOrRoleAndOtherPermission(@Validated @RequestBody SysRolePermissionPage sysRolePermissionPage){
         PaginationData data = tbRoleService.findPermissionOrRoleAndOtherPermission(sysRolePermissionPage);
         return new Result(data);

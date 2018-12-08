@@ -1,4 +1,4 @@
-package com.jn.system.menu.vo;
+package com.jn.system.permission.vo;
 
 import com.jn.system.menu.model.SysResources;
 import io.swagger.annotations.ApiModel;
@@ -9,16 +9,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 用于返回菜单树实体类
+ * 用于权限授权返回菜单树实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/19 14:39
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysMenuTreeVO",description = "用于返回菜单树实体类")
-public class SysMenuTreeVO implements Serializable {
-    private static final long serialVersionUID = -6386235821868424583L;
+@ApiModel(value = "SysMenuTreeOfPermissionVO",description = "用于权限授权返回菜单树实体类")
+public class SysMenuTreeOfPermissionVO implements Serializable {
+    private static final long serialVersionUID = -57546156581797863L;
     @ApiModelProperty("菜单id")
     private String id;
     @ApiModelProperty("菜单名称")
@@ -37,17 +37,15 @@ public class SysMenuTreeVO implements Serializable {
     private String parentName;
     @ApiModelProperty("创建时间")
     private Date createTime;
-    @ApiModelProperty("子菜单的集合")
-    private List<SysMenuTreeVO> children;
-    @ApiModelProperty("菜单功能的集合")
-    private List<SysResources> resourcesList;
+    @ApiModelProperty("子集合,用于封装子菜单或功能信息")
+    private List children;
 
-    public SysMenuTreeVO() {
+    public SysMenuTreeOfPermissionVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, Integer sort,
-                         String isDir, String parentId, String parentName, Date createTime,
-                         List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
+    public SysMenuTreeOfPermissionVO(String id, String label, String icon, String menuUrl,
+                                     Integer sort, String isDir, String parentId, String parentName,
+                                     Date createTime, List children) {
         this.id = id;
         this.label = label;
         this.icon = icon;
@@ -58,7 +56,6 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
         this.createTime = createTime;
         this.children = children;
-        this.resourcesList = resourcesList;
     }
 
     public String getId() {
@@ -133,25 +130,17 @@ public class SysMenuTreeVO implements Serializable {
         this.createTime = createTime;
     }
 
-    public List<SysMenuTreeVO> getChildren() {
+    public List getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenuTreeVO> children) {
+    public void setChildren(List children) {
         this.children = children;
-    }
-
-    public List<SysResources> getResourcesList() {
-        return resourcesList;
-    }
-
-    public void setResourcesList(List<SysResources> resourcesList) {
-        this.resourcesList = resourcesList;
     }
 
     @Override
     public String toString() {
-        return "SysMenuTreeVO{" +
+        return "SysMenuTreeOfPermissionVO{" +
                 "id='" + id + '\'' +
                 ", label='" + label + '\'' +
                 ", icon='" + icon + '\'' +
@@ -162,7 +151,6 @@ public class SysMenuTreeVO implements Serializable {
                 ", parentName='" + parentName + '\'' +
                 ", createTime=" + createTime +
                 ", children=" + children +
-                ", resourcesList=" + resourcesList +
                 '}';
     }
 }

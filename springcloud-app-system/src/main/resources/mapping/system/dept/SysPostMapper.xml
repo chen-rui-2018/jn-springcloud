@@ -30,7 +30,7 @@
         <if test="status != null and status != ''">
             and status = #{status,jdbcType=VARCHAR}
         </if>
-        ORDER BY create_time desc
+        ORDER BY create_time desc,id desc
     </select>
 
     <select id="getPostById" resultType="com.jn.system.dept.model.SysPost" parameterType="java.lang.String">

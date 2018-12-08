@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -18,6 +19,7 @@ public class SysRoleAdd implements Serializable {
     private static final long serialVersionUID = -120055469547530683L;
 
     @ApiModelProperty(value = "角色名称")
+    @Size(max = 20,message = "角色名称字数不能超过20个字")
     private String roleName;
 
     @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")

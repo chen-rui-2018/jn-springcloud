@@ -2,6 +2,7 @@ package com.jn.system.menu.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
@@ -17,8 +18,10 @@ import java.io.Serializable;
 public class SysResourceCheckName implements Serializable {
     private static final long serialVersionUID = -8238684478373749160L;
     @ApiModelProperty("页面功能名称")
+    @NotBlank(message = "功能名称不能为空")
     private String resourceName;
     @ApiModelProperty("菜单id")
+    @NotBlank(message = "菜单id不能为空")
     private String menuId;
 
     public SysResourceCheckName() {

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,12 +29,21 @@ public class SysResources implements Serializable {
      */
     @ApiModelProperty(value = "功能名称" )
     @NotBlank(message = "功能名称不能为空！")
+    @Size(max = 20,message = "页面功能名称长度不能超度20字")
     private String resourcesName;
+
+    /**
+     * 权限界面,返回功能名称是方面菜单树解析,使用lable返回功能名称
+     */
+    @ApiModelProperty(value = "功能名称" )
+    private String label;
 
     /**
      * 功能URL
      */
     @ApiModelProperty(value = "功能路径" )
+    @NotBlank(message = "功能路径不能为空！")
+    @Size(max = 50,message = "页面功能路径长度不能超度50字")
     private String resourcesUrl;
 
 
@@ -41,6 +51,7 @@ public class SysResources implements Serializable {
      * 菜单id
      */
     @ApiModelProperty(value = "菜单id" )
+    @NotBlank(message = "菜单id不能为空！")
     private String menuId;
 
     /**
@@ -63,10 +74,11 @@ public class SysResources implements Serializable {
     public SysResources() {
     }
 
-    public SysResources(String id, String resourcesName, String resourcesUrl,
+    public SysResources(String id, String resourcesName, String label, String resourcesUrl,
                         String menuId, String creator, Date createTime, String status) {
         this.id = id;
         this.resourcesName = resourcesName;
+        this.label = label;
         this.resourcesUrl = resourcesUrl;
         this.menuId = menuId;
         this.creator = creator;
@@ -88,6 +100,14 @@ public class SysResources implements Serializable {
 
     public void setResourcesName(String resourcesName) {
         this.resourcesName = resourcesName;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
     }
 
     public String getResourcesUrl() {
@@ -135,6 +155,7 @@ public class SysResources implements Serializable {
         return "SysResources{" +
                 "id='" + id + '\'' +
                 ", resourcesName='" + resourcesName + '\'' +
+                ", label='" + label + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
                 ", menuId='" + menuId + '\'' +
                 ", creator='" + creator + '\'' +

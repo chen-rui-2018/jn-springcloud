@@ -113,13 +113,19 @@
         from tb_sys_permission t left join
         (select t1.id,
         t1.permission_name
-        from tb_sys_permission t1,tb_sys_role_permission t2
-        where t1.id = t2.permission_id and t1.`status` = '1' and t2.`status` = '1'
+        from tb_sys_permission t1,
+        tb_sys_role_permission t2
+        where t1.id = t2.permission_id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
         and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        on t.id = tt.id
+        where t.`status` = '1'
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(permissionName)">
             and t.permission_name like CONCAT('%', #{permissionName,jdbcType=VARCHAR}, '%')
         </if>
+        ORDER BY t.create_time DESC,t.id DESC
     </select>
 
     <select id="findRoleByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionRolePage"
@@ -138,5 +144,6 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
+        order by t.create_time desc,t.id desc
     </select>
 </mapper>

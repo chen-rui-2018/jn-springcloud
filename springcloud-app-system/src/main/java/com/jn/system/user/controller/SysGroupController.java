@@ -51,7 +51,7 @@ public class SysGroupController extends BaseController {
     @ApiOperation(value = "用户组添加", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysGroup/add")
-    public Result add(@Validated @RequestBody TbSysGroup sysGroup) {
+    public Result add(@Validated @RequestBody SysGroupAdd sysGroup) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysGroupService.addSysGroup(sysGroup, user);
@@ -109,16 +109,6 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取用户组下面所有用户")
-    @ApiOperation(value = "获取用户组下面所有用户",
-            httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findUserOfGroup")
-    @RequiresPermissions("/system/sysGroup/findUserOfGroup")
-    public Result findUserOfGroup(String groupId) {
-        List<SysTUser> userOfGroup = sysGroupService.findUserOfGroup(groupId);
-        return new Result(userOfGroup);
-    }
-
     @ControllerLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
     @ApiOperation(value = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息",
             httpMethod = "POST", response = Result.class)
@@ -146,8 +136,8 @@ public class SysGroupController extends BaseController {
     @ControllerLog(doAction = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkGroupName")
     @RequiresPermissions("/system/sysGroup/checkGroupName")
+    @RequestMapping(value = "/checkGroupName")
     public Result checkGroupName(String groupName) {
         String result = sysGroupService.checkGroupName(groupName);
         return new Result(result);

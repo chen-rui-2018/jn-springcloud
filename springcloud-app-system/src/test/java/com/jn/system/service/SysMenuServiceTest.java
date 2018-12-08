@@ -55,21 +55,4 @@ public class SysMenuServiceTest {
         System.out.println(menu.toString());
     }
 
-    /**
-     * 菜单添加功能
-     */
-    @Test
-    public void insertMenuResources() {
-        SysMenuResourcesAdd sysMenuResourcesAd = new SysMenuResourcesAdd();
-        sysMenuResourcesAd.setMenuId("87a240e8-d425-40d0-b09e-7204460b15c5");
-        String[] resourcesIds = {"17ff9b4e-a920-4866-8cf8-35eab5c8ccde"};
-        sysMenuResourcesAd.setResourcesId(resourcesIds);
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysMenuService.insertMenuResources(sysMenuResourcesAd, user);
-
-    }
-
-
 }

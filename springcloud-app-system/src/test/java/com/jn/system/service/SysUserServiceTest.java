@@ -32,7 +32,7 @@ public class SysUserServiceTest {
 
     @Test
     public void addSysUserTest() {
-        SysUser sysUser = new SysUser();
+        SysUserAdd sysUser = new SysUserAdd();
         sysUser.setAccount("datang11");
         sysUser.setEmail("1233458@163.com");
         sysUser.setName("大唐");
@@ -90,7 +90,7 @@ public class SysUserServiceTest {
         SysUserRolePage sysUserRolePage = new SysUserRolePage();
         sysUserRolePage.setPage(1);
         sysUserRolePage.setRows(10);
-        SysUserRoleVO data = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        PaginationData data = sysUserService.findSysRoleByUserId(sysUserRolePage);
         logger.info("测试结果:{}", data.toString());
     }
 

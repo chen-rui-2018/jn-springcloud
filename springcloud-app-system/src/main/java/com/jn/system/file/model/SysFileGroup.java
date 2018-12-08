@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -29,12 +30,14 @@ public class SysFileGroup implements Serializable {
      */
     @ApiModelProperty(value = "文件组名称" )
     @NotBlank(message = "文件组名称不能为空！")
+    @Size(max = 20, message = "文件组描述,字数不能超过20个字")
     private String fileGroupName;
 
     /**
      * 文件组名称
      */
     @ApiModelProperty(value = "文件组描述" )
+    @Size(max = 50, message = "文件组描述,字数不能超过50个字")
     private String fileGroupDescribe;
 
     /**

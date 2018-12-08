@@ -168,13 +168,13 @@ public class SysPostServiceImpl implements SysPostService {
     }
 
     /**
-     * 分页获取岗位信息及对应的用户
+     * 条件分页获取岗位信息列表
      *
      * @param sysPostPage
      * @return
      */
     @Override
-    @ServiceLog(doAction = "分页获取岗位信息及对应的用户")
+    @ServiceLog(doAction = "条件分页获取岗位信息列表")
     public PaginationData findByPage(SysPostPage sysPostPage) {
         Page<Object> objects = PageHelper.startPage(sysPostPage.getPage(), sysPostPage.getRows());
         List<SysPostVO> sysPostVOList = sysPostMapper.findByPage(sysPostPage);

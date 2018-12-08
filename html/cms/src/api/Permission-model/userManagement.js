@@ -112,4 +112,35 @@ export function addFilegroupList(query) {
     data: query
   })
 }
-
+// 根据用户id获取权限具有的角色信息和其他角色
+export function getRoleInfo(query) {
+  return request({
+    url: 'system/sysUser/findSysRoleByUserId',
+    method: 'post',
+    data: query
+  })
+}
+// 用户授权角色(更新数据)
+export function updataRole(query) {
+  return request({
+    url: 'system/sysUser/saveSysRoleToSysUser',
+    method: 'post',
+    data: query
+  })
+}
+// 根据用户id获取权限具有的用户组信息和其他用户组
+export function getUserGroupInfo(query) {
+  return request({
+    url: 'system/sysUser/findSysGroupByUserId',
+    method: 'post',
+    data: query
+  })
+}
+// 用户授权用户组(更新数据)
+export function updataUserGroup(query) {
+  return request({
+    url: 'system/sysUser/saveSysGroupToSysUser',
+    method: 'post',
+    data: query
+  })
+}

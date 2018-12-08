@@ -45,7 +45,7 @@ public interface SysRoleService {
     void deleteTbRoleById(String[] roleIds);
 
     /**
-     * 分页查询角色授权列表信息
+     * 分页查询角色列表信息
      *
      * @param rolePage
      * @return

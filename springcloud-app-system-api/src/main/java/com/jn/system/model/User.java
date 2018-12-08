@@ -3,7 +3,7 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,12 +11,12 @@ import java.util.Date;
 /**
  * 用户信息
  */
-@ApiModel(value = "User" ,description = "用户信息")
-public class User implements Serializable{
+@ApiModel(value = "User", description = "用户信息")
+public class User implements Serializable {
 
-	private static final long serialVersionUID = -7484136779753770396L;
+    private static final long serialVersionUID = -7484136779753770396L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
     @ApiModelProperty(value = "账户名")
     private String account;
@@ -41,6 +41,10 @@ public class User implements Serializable{
 
     @ApiModelProperty("状态")
     private String status;
+
+    @ApiModelProperty("微信账号")
+    @Pattern(regexp = "^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$", message = "{weixinAccount:'微信号校验错误'}")
+    private String wechatAccount;
 
 
     public User(String account) {
@@ -122,6 +126,13 @@ public class User implements Serializable{
         this.status = status;
     }
 
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
+    }
 
     @Override
     public String toString() {
@@ -135,6 +146,7 @@ public class User implements Serializable{
                 ", creator='" + creator + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", wechatAccount='" + wechatAccount + '\'' +
                 '}';
     }
 }

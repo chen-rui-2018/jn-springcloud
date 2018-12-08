@@ -6,7 +6,7 @@ import com.jn.system.menu.model.SysMenuPage;
 import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.menu.vo.SysMenuVO;
-import io.swagger.models.auth.In;
+import com.jn.system.permission.vo.SysMenuTreeOfPermissionVO;
 
 import java.util.List;
 
@@ -81,4 +81,27 @@ public interface SysMenuMapper {
      * @param sysMenuSortList
      */
     void updateBatch(List<SysMenuUpdate> sysMenuSortList);
+
+    /**
+     * 查询一级菜单信息
+     *
+     * @return
+     */
+    List<SysMenuTreeOfPermissionVO> getMenuByLevelOne();
+
+    /**
+     * 根据菜单父级菜单id获取子菜单
+     *
+     * @param id
+     * @return
+     */
+    List<SysMenuTreeOfPermissionVO> findMenuOfPermissionByParentId(String id);
+
+    /**
+     * 根据父菜单id获取子下一级所有菜单信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
 }

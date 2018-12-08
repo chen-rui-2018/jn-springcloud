@@ -66,7 +66,7 @@
 ### 3.类命名规范
 - 遵守驼峰规范 
 - config包：xxxConfig、xxxFilter等等
-- server包：xxxController xxx是你的模块名，每个模块一个服务端类
+- server包：xxxController xxx是你的API项目中的接口类名，服务端类必须实现API接口类，参考eg.com.jn.upload.api.UploadClient。
 - 其他的按照正规的来就行
 ### 4.注解规范
 - 统一使用@RestController  不能用Controller 注解

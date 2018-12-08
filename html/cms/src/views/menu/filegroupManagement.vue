@@ -16,7 +16,7 @@
     </div>
     <el-table v-loading="listLoading" :data="fileGroupList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="文件组名称" align="center" prop="fileGroupName" />
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
@@ -25,12 +25,12 @@
         </template>
       </el-table-column>
       <el-table-column label="描述" prop="fileGroupDescribe" align="center" />
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="status" >
         <template slot-scope="scope">
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="180" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -40,21 +40,26 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 新增文件组弹框 -->
     <el-dialog :visible.sync="fileGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form
         ref="temp"
         :rules="rules"
         :model="temp"
-        label-position="left"
-        style="max-width:300px;margin:0 auto;"
+        label-position="right"
         label-width="80px" >
-        <el-form-item label="文件组" prop="fileGroupName">
+        <el-form-item label="文件组:" prop="fileGroupName">
           <el-input v-model.trim="temp.fileGroupName" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item">
+        <el-form-item label="描述:" prop="fileGroupDescribe">
+          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea"/>
+        </el-form-item>
+        <!-- <el-form-item label="描述" prop="fileGroupDescribe">
+          <el-input v-model.trim="temp.fileGroupDescribe" />
+        </el-form-item> -->
+        <el-form-item label="状态:" prop="status" >
+          <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -72,22 +77,29 @@ import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的文件组名称'))
+      if (value.length > 20) {
+        callback(new Error('文件组名称的长度不能超过20个字符'))
       } else {
         if (this.oldName !== this.temp.fileGroupName) {
-          checkFileGroupName(this.temp.fileGroupName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('文件组名称已重复'))
+          checkFileGroupName(this.temp.fileGroupName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('文件组名称已重复'))
+              }
             }
           })
         } else {
           callback()
         }
+      }
+    }
+    var checkoutDescribe = (rule, value, callback) => {
+      if (value && value.length > 50) {
+        callback(new Error('描述的长度不能超过50个字符'))
+      } else {
+        callback()
       }
     }
     return {
@@ -105,7 +117,8 @@ export default {
       temp: {
         id: undefined,
         fileGroupName: undefined,
-        status: undefined
+        status: undefined,
+        fileGroupDescribe: undefined
       },
       listLoading: false,
       fileGroupList: [],
@@ -116,8 +129,9 @@ export default {
           { validator: checkAccount, trigger: 'blur' }
         ],
         status: [
-          { required: true, message: '请选择状态', trigger: '' }
-        ]
+          { required: true, message: '请选择状态', trigger: 'blur' }
+        ],
+        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'blur' }]
       }
     }
   },
@@ -137,8 +151,9 @@ export default {
     // 清空信息
     resetTemp() {
       this.temp = {
-        filegroupName: '',
-        filegroupstatus: ''
+        filegroupName: undefined,
+        filegroupstatus: undefined,
+        fileGroupDescribe: undefined
       }
     },
     // 显示新增文件组对话框
@@ -156,7 +171,7 @@ export default {
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
-      }, 1000)
+      }, 500)
       this.$refs['temp'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
@@ -182,13 +197,16 @@ export default {
     },
     // 显示编辑文件组对话框
     handleUpdate(row) {
-      console.log(row)
       this.temp.id = row.id
       this.dialogStatus = '编辑文件组'
       this.oldName = row.fileGroupName
+      this.temp.fileGroupDescribe = row.fileGroupDescribe
       this.fileGroupdialogFormVisible = true
       this.temp.fileGroupName = row.fileGroupName
       this.temp.status = parseInt(row.status)
+      this.$nextTick(() => {
+        this.$refs['temp'].clearValidate()
+      })
     },
     // 编辑文件组信息
     updateData() {
@@ -229,6 +247,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -269,10 +290,15 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .filter-container {
     .el-form-item {
       margin-bottom: 0;
     }
+  }
+  .el-dialog{
+  .el-textarea__inner{
+    min-height: 100px !important;
+  }
   }
 </style>

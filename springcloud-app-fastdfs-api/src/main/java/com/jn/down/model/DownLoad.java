@@ -1,4 +1,4 @@
-package com.jn.domain;
+package com.jn.down.model;
 
 import java.io.Serializable;
 

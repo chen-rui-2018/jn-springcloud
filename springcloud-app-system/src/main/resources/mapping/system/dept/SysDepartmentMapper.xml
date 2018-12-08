@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dept.dao.SysDepartmentMapper">
+    <resultMap id="departmentTreeMap" type="com.jn.system.dept.vo.SysDepartmentVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="department_name" jdbcType="VARCHAR" property="label"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="parentName" jdbcType="VARCHAR" property="parentName"/>
+        <collection property="children" ofType="com.jn.system.dept.vo.SysDepartmentVO">
+            <id column="childId" property="id" jdbcType="VARCHAR"/>
+            <result column="childName" property="label" jdbcType="VARCHAR"/>
+            <result column="childPartntId" jdbcType="VARCHAR" property="parentId"/>
+        </collection>
+    </resultMap>
 
     <update id="deleteDepartmentBranch" parameterType="java.util.List">
         update tb_sys_department set status=-1
@@ -11,36 +22,54 @@
         </foreach>
     </update>
 
-    <select id="findSysDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
-        select
-        id,
-        parent_id as parentId,
-        department_name as label
-        from tb_sys_department
-        where parent_id = '1'
-        and `status` = '1'
-        ORDER BY create_time ASC
+    <select id="findSysDepartmentAll" resultMap="departmentTreeMap">
+          SELECT
+            t.id,
+            t.department_name,
+            t.parent_id,
+            (SELECT department_name
+            from tb_sys_department
+            where id = t.parent_id) as parentName,
+            tt.id as childId,
+            tt.parent_id as childPartntId,
+            tt.department_name as childName
+            FROM
+            `tb_sys_department` t
+            LEFT JOIN
+            (SELECT
+            id,department_name,
+            parent_id,create_time
+            FROM tb_sys_department
+            WHERE `status` = '1') tt
+            ON t.id = tt.parent_id
+            WHERE t.`level` = '1'
+            AND t.`status` = '1'
+            ORDER BY t.create_time ASC,tt.create_time ASC;
     </select>
 
     <select id="findChildrenDepartment" parameterType="java.lang.String"
-            resultType="com.jn.system.dept.vo.SysDepartmentVO">
-         select
-            t.department_name as parentName,
-            tt.id,
-            tt.department_name as label,
-            tt.parent_id as parentId
-            from tb_sys_department t,
-            (select
-            id,
-            parent_id,
-            department_name
+            resultMap="departmentTreeMap">
+          SELECT
+            t.id,
+            t.department_name,
+            t.parent_id,
+            (SELECT department_name
             from tb_sys_department
-            where parent_id = #{parentId,jdbcType=VARCHAR}
-            and `status` = '1'
-            ORDER BY create_time ASC) tt
-            where
-            t.id = tt.parent_id
-            and `status` = '1'
+            where id = t.parent_id) as parentName,
+            tt.id as childId,
+            tt.parent_id as childPartntId,
+            tt.department_name as childName
+            FROM tb_sys_department t
+            LEFT JOIN
+            (SELECT
+            id,department_name,
+            parent_id,create_time
+            FROM tb_sys_department
+            WHERE `status` = '1') tt
+            ON t.id = tt.parent_id
+            WHERE t.parent_id = #{id,jdbcType=VARCHAR}
+            AND t.`status` = '1'
+            ORDER BY t.create_time ASC,tt.create_time ASC;
     </select>
 
     <select id="checkDepartmentName" parameterType="com.jn.system.dept.model.SysDepartmentCheckName"

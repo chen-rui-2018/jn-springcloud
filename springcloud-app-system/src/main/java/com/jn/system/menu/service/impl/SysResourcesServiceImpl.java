@@ -19,10 +19,12 @@ import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.menu.vo.SysResourcesVO;
 import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
+import com.jn.system.permission.dao.SysPermissionResourcesMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +53,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Resource
     private TbSysResourcesMapper tbSysResourcesMapper;
 
+    @Autowired
+    private SysPermissionResourcesMapper sysPermissionResourcesMapper;
+
     /**
      * 新增功能
      *
@@ -66,6 +71,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
             logger.warn("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
+        sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         sysResources.setId(UUID.randomUUID().toString());
         sysResources.setCreator(user.getId());
         TbSysResources tbSysResources = new TbSysResources();
@@ -117,6 +123,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
             logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
@@ -134,6 +141,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
+        sysPermissionResourcesMapper.deleteByResourcesIds(resourcesIds);
         logger.info("[功能] 批量删除功能成功！,resourcesIds:{}",Arrays.toString(resourcesIds));
     }
 
@@ -222,6 +230,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "根据菜单id获取菜单所有页面功能")
     public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
+        tbSysResourcesCriteria.setOrderByClause("create_time desc");
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());

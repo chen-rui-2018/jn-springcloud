@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -30,6 +31,7 @@ public class SysMenu implements Serializable {
      */
     @ApiModelProperty(value = "菜单名称" )
     @NotBlank(message = "菜单名称不能为空！")
+    @Size(max = 20,message = "菜单名称长度不能超度20字")
     private String menuName;
 
     /**
@@ -37,6 +39,7 @@ public class SysMenu implements Serializable {
      */
     @ApiModelProperty(value = "菜单URL" )
     @NotBlank(message = "菜单路径不能为空！")
+    @Size(max = 50,message = "菜单路径长度不能超度50字")
     private String menuUrl;
 
     /**

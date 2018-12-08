@@ -75,7 +75,7 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
             and status=#{status,jdbcType=VARCHAR}
         </if>
-        ORDER BY create_time desc
+        ORDER BY create_time desc,id desc
     </select>
     <select id="getRoleById" resultType="com.jn.system.permission.model.SysRole" parameterType="java.lang.String">
         SELECT id,role_name as roleName,create_time as createTime,`status`

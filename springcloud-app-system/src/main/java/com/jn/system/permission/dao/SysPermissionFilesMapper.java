@@ -52,4 +52,11 @@ public interface SysPermissionFilesMapper {
      * @return
      */
     List<SysFileGroup> findFileGroupByPermissionPage(SysPermissionFileGroupPage sysPermissionFileGroupPage);
+
+    /**
+     * 根据文件组id批量权限文件组信息
+     *
+     * @param ids
+     */
+    void deleteByFileGroupIds(String[] ids);
 }

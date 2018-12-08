@@ -71,23 +71,6 @@ public class SysMenuController extends BaseController {
         return new Result(sysMenu);
     }
 
-    @ControllerLog(doAction = "菜单添加功能")
-    @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/insertMenuResources")
-    @RequiresPermissions("/system/sysMenu/insertMenuResources")
-    public Result insertMenuResources(@Validated @RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
-        Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
-        if (sysMenuResourcesAdd.getResourcesId().length == 0) {
-            Assert.notNull(sysMenuResourcesAdd.getResourcesName(), "功能名称不能为空");
-            Assert.notNull(sysMenuResourcesAdd.getResourcesUrl(), "功能路径不能为空");
-            Assert.notNull(sysMenuResourcesAdd.getStatus(), "功能状态不能为空");
-        }
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysMenuService.insertMenuResources(sysMenuResourcesAdd,user);
-        return new Result();
-    }
-
     @ControllerLog(doAction = "菜单添加目录菜单")
     @ApiOperation(value = "菜单添加目录菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenuDir")
@@ -112,19 +95,28 @@ public class SysMenuController extends BaseController {
 
     @ControllerLog(doAction = "校验菜单名称,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验菜单名称,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/checkMenuName")
     @RequiresPermissions("/system/sysMenu/checkMenuName")
+    @PostMapping(value = "/checkMenuName")
     public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck){
         String result = sysMenuService.checkMenuName(sysMenuNameCheck);
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "批量对菜单排序进行更新")
-    @ApiOperation(value = "批量对菜单排序进行更新", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "批量更新菜单")
+    @ApiOperation(value = "批量更新菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/updateBatch")
     @RequiresPermissions("/system/sysMenu/updateBatch")
     public Result updateBatch(@Validated @RequestBody SysMenus sysMenus){
         sysMenuService.updateBatch(sysMenus);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "根据父菜单id获取子下一级所有菜单信息")
+    @ApiOperation(value = "根据父菜单id获取子下一级所有菜单信息", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/getChildrenMenuByParentId")
+    @RequiresPermissions("/system/sysMenu/getChildrenMenuByParentId")
+    public Result getChildrenMenuByParentId(String parentId){
+        List<SysMenuTreeVO> list = sysMenuService.getChildrenMenuByParentId(parentId);
+        return new Result(list);
     }
 }

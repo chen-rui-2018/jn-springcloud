@@ -17,21 +17,20 @@
     <!-- 表格 -->
     <el-table v-loading="listLoading" :data="postList" border fit highlight-current-row style="width: 100%;height:100%;">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="岗位名称" align="center" prop="postName" />
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
+      <el-table-column label="创建时间" align="center" prop="creationTime">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center" prop="describe" />
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -41,7 +40,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination-container">
+    <div class="pagination-container  tablePagination">
       <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 弹出的新增岗位对话框 -->
@@ -51,13 +50,13 @@
           <el-input v-model.trim="postform.postName" max-length="20" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="postform.status" class="filter-item" >
+          <el-select v-model="postform.status" placeholder="请选择" class="filter-item" >
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -80,17 +79,17 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入字母或汉字组成的岗位名称'))
+      if (value && value.length > 20) {
+        callback(new Error('岗位名称的长度不能超过20个字符'))
       } else {
         if (this.oldPostName !== this.postform.postName) {
-          checkPostName(this.postform.postName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('岗位名称已重复'))
+          checkPostName(this.postform.postName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('岗位名称已重复'))
+              }
             }
           })
         } else {
@@ -99,6 +98,7 @@ export default {
       }
     }
     return {
+      isDisabled: false,
       oldPostName: undefined,
       postform: {
         id: '',
@@ -119,7 +119,7 @@ export default {
       statusOptions: ['未生效', '生效'],
       rules: {
         postName: [
-          { required: true, message: '请输入用户组名称', trigger: 'blur' },
+          { required: true, message: '请输入岗位名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
         status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
@@ -139,12 +139,14 @@ export default {
       })
         .then(() => {
           deletePostById(id).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -178,6 +180,11 @@ export default {
     },
     // 编辑岗位的功能实现
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -189,6 +196,8 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error('编辑失败')
             }
             // 将对话框隐藏
             this.postdialogFormVisible = false
@@ -196,11 +205,6 @@ export default {
             this.$refs['postform'].resetFields()
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '请修改数据',
-            type: 'error'
           })
         }
       })
@@ -215,6 +219,11 @@ export default {
     },
     // 实现新增岗位功能
     createPostData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -226,16 +235,15 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+            } else if (res.data.result === null) {
+              this.$message.error('添加失败')
+            } else {
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['postform'].resetFields()
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '请输入内容',
-            type: 'error'
           })
         }
       })
@@ -282,8 +290,14 @@ export default {
 
 <style lang="scss" scoped>
 .postManagement {
+  .pagination-container{
+    margin-top:15px;
+  }
   .filter-container {
     margin-left: 20px;
+    .el-form-item{
+      margin-bottom: 0px;
+    }
   }
 }
 </style>

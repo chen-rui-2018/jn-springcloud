@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.activity.dao.TbActivityTypeMapper">
   <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityType">
-    <id column="activityType_type_id" jdbcType="VARCHAR" property="typeId" />
-    <result column="activityType_type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="activityType_create_account" jdbcType="VARCHAR" property="createAccount" />
-    <result column="activityType_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="activityType_update_account" jdbcType="VARCHAR" property="updateAccount" />
-    <result column="activityType_update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="activityType_state" jdbcType="VARCHAR" property="state" />
+    <id column="type_id" jdbcType="VARCHAR" property="typeId" />
+    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,10 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityType.type_id as activityType_type_id, activityType.type_name as activityType_type_name, 
-    activityType.create_account as activityType_create_account, activityType.create_time as activityType_create_time, 
-    activityType.update_account as activityType_update_account, activityType.update_time as activityType_update_time, 
-    activityType.state as activityType_state
+    type_id, type_name, create_account, create_time, update_account, update_time, state
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityTypeCriteria" resultMap="BaseResultMap">
     select
@@ -80,7 +77,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_type activityType
+    from tb_activity_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,15 +88,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_activity_type activityType
-    where activityType.type_id = #{typeId,jdbcType=VARCHAR}
+    from tb_activity_type
+    where type_id = #{typeId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_activity_type
     where type_id = #{typeId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityTypeCriteria">
-    delete from tb_activity_type activityType
+    delete from tb_activity_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -162,34 +159,34 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityTypeCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_type activityType
+    select count(*) from tb_activity_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_type activityType
+    update tb_activity_type
     <set>
       <if test="record.typeId != null">
-        activityType.type_id = #{record.typeId,jdbcType=VARCHAR},
+        type_id = #{record.typeId,jdbcType=VARCHAR},
       </if>
       <if test="record.typeName != null">
-        activityType.type_name = #{record.typeName,jdbcType=VARCHAR},
+        type_name = #{record.typeName,jdbcType=VARCHAR},
       </if>
       <if test="record.createAccount != null">
-        activityType.create_account = #{record.createAccount,jdbcType=VARCHAR},
+        create_account = #{record.createAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        activityType.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateAccount != null">
-        activityType.update_account = #{record.updateAccount,jdbcType=VARCHAR},
+        update_account = #{record.updateAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTime != null">
-        activityType.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.state != null">
-        activityType.state = #{record.state,jdbcType=VARCHAR},
+        state = #{record.state,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -197,14 +194,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_type activityType
-    set activityType.type_id = #{record.typeId,jdbcType=VARCHAR},
-      activityType.type_name = #{record.typeName,jdbcType=VARCHAR},
-      activityType.create_account = #{record.createAccount,jdbcType=VARCHAR},
-      activityType.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      activityType.update_account = #{record.updateAccount,jdbcType=VARCHAR},
-      activityType.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      activityType.state = #{record.state,jdbcType=VARCHAR}
+    update tb_activity_type
+    set type_id = #{record.typeId,jdbcType=VARCHAR},
+      type_name = #{record.typeName,jdbcType=VARCHAR},
+      create_account = #{record.createAccount,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_account = #{record.updateAccount,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.activity.dao.TbCommentMapper">
   <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbComment">
-    <result column="comment_id" jdbcType="VARCHAR" property="id" />
-    <result column="comment_p_id" jdbcType="VARCHAR" property="pId" />
-    <result column="comment_com_account" jdbcType="VARCHAR" property="comAccount" />
-    <result column="comment_com_time" jdbcType="TIMESTAMP" property="comTime" />
-    <result column="comment_like_num" jdbcType="INTEGER" property="likeNum" />
-    <result column="comment_state" jdbcType="VARCHAR" property="state" />
-    <result column="comment_com_type" jdbcType="VARCHAR" property="comType" />
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="p_id" jdbcType="VARCHAR" property="pId" />
+    <result column="com_account" jdbcType="VARCHAR" property="comAccount" />
+    <result column="com_time" jdbcType="TIMESTAMP" property="comTime" />
+    <result column="like_num" jdbcType="INTEGER" property="likeNum" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="com_type" jdbcType="VARCHAR" property="comType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,9 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    comment.id as comment_id, comment.p_id as comment_p_id, comment.com_account as comment_com_account, 
-    comment.com_time as comment_com_time, comment.like_num as comment_like_num, comment.state as comment_state, 
-    comment.com_type as comment_com_type
+    id, p_id, com_account, com_time, like_num, state, com_type
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
@@ -79,7 +77,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_comment comment
+    from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,7 +86,7 @@
     </if>
   </select>
   <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbCommentCriteria">
-    delete from tb_comment comment
+    delete from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -151,34 +149,34 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbCommentCriteria" resultType="java.lang.Long">
-    select count(*) from tb_comment comment
+    select count(*) from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_comment comment
+    update tb_comment
     <set>
       <if test="record.id != null">
-        comment.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.pId != null">
-        comment.p_id = #{record.pId,jdbcType=VARCHAR},
+        p_id = #{record.pId,jdbcType=VARCHAR},
       </if>
       <if test="record.comAccount != null">
-        comment.com_account = #{record.comAccount,jdbcType=VARCHAR},
+        com_account = #{record.comAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.comTime != null">
-        comment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
+        com_time = #{record.comTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.likeNum != null">
-        comment.like_num = #{record.likeNum,jdbcType=INTEGER},
+        like_num = #{record.likeNum,jdbcType=INTEGER},
       </if>
       <if test="record.state != null">
-        comment.state = #{record.state,jdbcType=VARCHAR},
+        state = #{record.state,jdbcType=VARCHAR},
       </if>
       <if test="record.comType != null">
-        comment.com_type = #{record.comType,jdbcType=VARCHAR},
+        com_type = #{record.comType,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -186,14 +184,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_comment comment
-    set comment.id = #{record.id,jdbcType=VARCHAR},
-      comment.p_id = #{record.pId,jdbcType=VARCHAR},
-      comment.com_account = #{record.comAccount,jdbcType=VARCHAR},
-      comment.com_time = #{record.comTime,jdbcType=TIMESTAMP},
-      comment.like_num = #{record.likeNum,jdbcType=INTEGER},
-      comment.state = #{record.state,jdbcType=VARCHAR},
-      comment.com_type = #{record.comType,jdbcType=VARCHAR}
+    update tb_comment
+    set id = #{record.id,jdbcType=VARCHAR},
+      p_id = #{record.pId,jdbcType=VARCHAR},
+      com_account = #{record.comAccount,jdbcType=VARCHAR},
+      com_time = #{record.comTime,jdbcType=TIMESTAMP},
+      like_num = #{record.likeNum,jdbcType=INTEGER},
+      state = #{record.state,jdbcType=VARCHAR},
+      com_type = #{record.comType,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

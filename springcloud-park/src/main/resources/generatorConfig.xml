@@ -99,19 +99,19 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_activity" alias="activity">
+        <table tableName="tb_activity">
         </table>
-        <table tableName="tb_activity_apply" alias="activityApply">
+        <table tableName="tb_activity_apply">
         </table>
-        <table tableName="tb_activity_type" alias="activityType">
+        <table tableName="tb_activity_type">
         </table>
-        <table tableName="tb_activity_detail" alias="activityDetail">
+        <table tableName="tb_activity_detail">
         </table>
-        <table tableName="tb_activity_like" alias="activityLike">
+        <table tableName="tb_activity_like">
         </table>
-        <table tableName="tb_comment" alias="comment">
+        <table tableName="tb_comment">
         </table>
-        <table tableName="tb_activity_file" alias="activityFile">
+        <table tableName="tb_activity_file">
         </table>
 
     </context>

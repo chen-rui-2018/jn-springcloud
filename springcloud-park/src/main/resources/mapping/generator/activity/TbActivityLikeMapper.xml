@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.activity.dao.TbActivityLikeMapper">
   <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityLike">
-    <id column="activityLike_id" jdbcType="VARCHAR" property="id" />
-    <result column="activityLike_activity_id" jdbcType="VARCHAR" property="activityId" />
-    <result column="activityLike_like_account" jdbcType="VARCHAR" property="likeAccount" />
-    <result column="activityLike_like_time" jdbcType="TIMESTAMP" property="likeTime" />
-    <result column="activityLike_state" jdbcType="VARCHAR" property="state" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="like_account" jdbcType="VARCHAR" property="likeAccount" />
+    <result column="like_time" jdbcType="TIMESTAMP" property="likeTime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,9 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityLike.id as activityLike_id, activityLike.activity_id as activityLike_activity_id, 
-    activityLike.like_account as activityLike_like_account, activityLike.like_time as activityLike_like_time, 
-    activityLike.state as activityLike_state
+    id, activity_id, like_account, like_time, state
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityLikeCriteria" resultMap="BaseResultMap">
     select
@@ -77,7 +75,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_like activityLike
+    from tb_activity_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -88,15 +86,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_activity_like activityLike
-    where activityLike.id = #{id,jdbcType=VARCHAR}
+    from tb_activity_like
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_activity_like
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityLikeCriteria">
-    delete from tb_activity_like activityLike
+    delete from tb_activity_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -145,28 +143,28 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityLikeCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_like activityLike
+    select count(*) from tb_activity_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_like activityLike
+    update tb_activity_like
     <set>
       <if test="record.id != null">
-        activityLike.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.activityId != null">
-        activityLike.activity_id = #{record.activityId,jdbcType=VARCHAR},
+        activity_id = #{record.activityId,jdbcType=VARCHAR},
       </if>
       <if test="record.likeAccount != null">
-        activityLike.like_account = #{record.likeAccount,jdbcType=VARCHAR},
+        like_account = #{record.likeAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.likeTime != null">
-        activityLike.like_time = #{record.likeTime,jdbcType=TIMESTAMP},
+        like_time = #{record.likeTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.state != null">
-        activityLike.state = #{record.state,jdbcType=VARCHAR},
+        state = #{record.state,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -174,12 +172,12 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_like activityLike
-    set activityLike.id = #{record.id,jdbcType=VARCHAR},
-      activityLike.activity_id = #{record.activityId,jdbcType=VARCHAR},
-      activityLike.like_account = #{record.likeAccount,jdbcType=VARCHAR},
-      activityLike.like_time = #{record.likeTime,jdbcType=TIMESTAMP},
-      activityLike.state = #{record.state,jdbcType=VARCHAR}
+    update tb_activity_like
+    set id = #{record.id,jdbcType=VARCHAR},
+      activity_id = #{record.activityId,jdbcType=VARCHAR},
+      like_account = #{record.likeAccount,jdbcType=VARCHAR},
+      like_time = #{record.likeTime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

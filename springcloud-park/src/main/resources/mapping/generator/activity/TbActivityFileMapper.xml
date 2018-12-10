@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.activity.dao.TbActivityFileMapper">
   <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityFile">
-    <id column="activityFile_id" jdbcType="VARCHAR" property="id" />
-    <result column="activityFile_type_id" jdbcType="VARCHAR" property="typeId" />
-    <result column="activityFile_file_src" jdbcType="VARCHAR" property="fileSrc" />
-    <result column="activityFile_create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="activityFile_update_account" jdbcType="VARCHAR" property="updateAccount" />
-    <result column="activityFile_update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="activityFile_state" jdbcType="VARCHAR" property="state" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="type_id" jdbcType="VARCHAR" property="typeId" />
+    <result column="file_src" jdbcType="VARCHAR" property="fileSrc" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="state" jdbcType="VARCHAR" property="state" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,10 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityFile.id as activityFile_id, activityFile.type_id as activityFile_type_id, 
-    activityFile.file_src as activityFile_file_src, activityFile.create_time as activityFile_create_time, 
-    activityFile.update_account as activityFile_update_account, activityFile.update_time as activityFile_update_time, 
-    activityFile.state as activityFile_state
+    id, type_id, file_src, create_time, update_account, update_time, state
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
     select
@@ -80,7 +77,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_file activityFile
+    from tb_activity_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,15 +88,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_activity_file activityFile
-    where activityFile.id = #{id,jdbcType=VARCHAR}
+    from tb_activity_file
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_activity_file
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria">
-    delete from tb_activity_file activityFile
+    delete from tb_activity_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -162,34 +159,34 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_file activityFile
+    select count(*) from tb_activity_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_file activityFile
+    update tb_activity_file
     <set>
       <if test="record.id != null">
-        activityFile.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.typeId != null">
-        activityFile.type_id = #{record.typeId,jdbcType=VARCHAR},
+        type_id = #{record.typeId,jdbcType=VARCHAR},
       </if>
       <if test="record.fileSrc != null">
-        activityFile.file_src = #{record.fileSrc,jdbcType=VARCHAR},
+        file_src = #{record.fileSrc,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        activityFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.updateAccount != null">
-        activityFile.update_account = #{record.updateAccount,jdbcType=VARCHAR},
+        update_account = #{record.updateAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.updateTime != null">
-        activityFile.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.state != null">
-        activityFile.state = #{record.state,jdbcType=VARCHAR},
+        state = #{record.state,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -197,14 +194,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_file activityFile
-    set activityFile.id = #{record.id,jdbcType=VARCHAR},
-      activityFile.type_id = #{record.typeId,jdbcType=VARCHAR},
-      activityFile.file_src = #{record.fileSrc,jdbcType=VARCHAR},
-      activityFile.create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      activityFile.update_account = #{record.updateAccount,jdbcType=VARCHAR},
-      activityFile.update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      activityFile.state = #{record.state,jdbcType=VARCHAR}
+    update tb_activity_file
+    set id = #{record.id,jdbcType=VARCHAR},
+      type_id = #{record.typeId,jdbcType=VARCHAR},
+      file_src = #{record.fileSrc,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_account = #{record.updateAccount,jdbcType=VARCHAR},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

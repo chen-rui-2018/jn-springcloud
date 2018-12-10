@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.activity.dao.TbActivityApplyMapper">
   <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityApply">
-    <id column="activityApply_id" jdbcType="VARCHAR" property="id" />
-    <result column="activityApply_activity_id" jdbcType="VARCHAR" property="activityId" />
-    <result column="activityApply_account" jdbcType="VARCHAR" property="account" />
-    <result column="activityApply_apply_time" jdbcType="TIMESTAMP" property="applyTime" />
-    <result column="activityApply_apply_state" jdbcType="VARCHAR" property="applyState" />
-    <result column="activityApply_sign_state" jdbcType="VARCHAR" property="signState" />
-    <result column="activityApply_sign_time" jdbcType="TIMESTAMP" property="signTime" />
-    <result column="activityApply_sign_type" jdbcType="VARCHAR" property="signType" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="apply_state" jdbcType="VARCHAR" property="applyState" />
+    <result column="sign_state" jdbcType="VARCHAR" property="signState" />
+    <result column="sign_time" jdbcType="TIMESTAMP" property="signTime" />
+    <result column="sign_type" jdbcType="VARCHAR" property="signType" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,10 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    activityApply.id as activityApply_id, activityApply.activity_id as activityApply_activity_id, 
-    activityApply.account as activityApply_account, activityApply.apply_time as activityApply_apply_time, 
-    activityApply.apply_state as activityApply_apply_state, activityApply.sign_state as activityApply_sign_state, 
-    activityApply.sign_time as activityApply_sign_time, activityApply.sign_type as activityApply_sign_type
+    id, activity_id, account, apply_time, apply_state, sign_state, sign_time, sign_type
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityApplyCriteria" resultMap="BaseResultMap">
     select
@@ -81,7 +78,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_apply activityApply
+    from tb_activity_apply
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,15 +89,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_activity_apply activityApply
-    where activityApply.id = #{id,jdbcType=VARCHAR}
+    from tb_activity_apply
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_activity_apply
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityApplyCriteria">
-    delete from tb_activity_apply activityApply
+    delete from tb_activity_apply
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -169,37 +166,37 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityApplyCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_apply activityApply
+    select count(*) from tb_activity_apply
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_apply activityApply
+    update tb_activity_apply
     <set>
       <if test="record.id != null">
-        activityApply.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.activityId != null">
-        activityApply.activity_id = #{record.activityId,jdbcType=VARCHAR},
+        activity_id = #{record.activityId,jdbcType=VARCHAR},
       </if>
       <if test="record.account != null">
-        activityApply.account = #{record.account,jdbcType=VARCHAR},
+        account = #{record.account,jdbcType=VARCHAR},
       </if>
       <if test="record.applyTime != null">
-        activityApply.apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+        apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.applyState != null">
-        activityApply.apply_state = #{record.applyState,jdbcType=VARCHAR},
+        apply_state = #{record.applyState,jdbcType=VARCHAR},
       </if>
       <if test="record.signState != null">
-        activityApply.sign_state = #{record.signState,jdbcType=VARCHAR},
+        sign_state = #{record.signState,jdbcType=VARCHAR},
       </if>
       <if test="record.signTime != null">
-        activityApply.sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+        sign_time = #{record.signTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.signType != null">
-        activityApply.sign_type = #{record.signType,jdbcType=VARCHAR},
+        sign_type = #{record.signType,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -207,15 +204,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_apply activityApply
-    set activityApply.id = #{record.id,jdbcType=VARCHAR},
-      activityApply.activity_id = #{record.activityId,jdbcType=VARCHAR},
-      activityApply.account = #{record.account,jdbcType=VARCHAR},
-      activityApply.apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
-      activityApply.apply_state = #{record.applyState,jdbcType=VARCHAR},
-      activityApply.sign_state = #{record.signState,jdbcType=VARCHAR},
-      activityApply.sign_time = #{record.signTime,jdbcType=TIMESTAMP},
-      activityApply.sign_type = #{record.signType,jdbcType=VARCHAR}
+    update tb_activity_apply
+    set id = #{record.id,jdbcType=VARCHAR},
+      activity_id = #{record.activityId,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
+      apply_state = #{record.applyState,jdbcType=VARCHAR},
+      sign_state = #{record.signState,jdbcType=VARCHAR},
+      sign_time = #{record.signTime,jdbcType=TIMESTAMP},
+      sign_type = #{record.signType,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

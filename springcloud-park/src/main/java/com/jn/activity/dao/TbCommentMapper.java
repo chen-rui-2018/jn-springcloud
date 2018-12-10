@@ -2,9 +2,8 @@ package com.jn.activity.dao;
 
 import com.jn.activity.entity.TbComment;
 import com.jn.activity.entity.TbCommentCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbCommentMapper {
     long countByExample(TbCommentCriteria example);

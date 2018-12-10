@@ -105,72 +105,72 @@ public class TbActivityDetailCriteria {
         }
 
         public Criteria andActivityIdIsNull() {
-            addCriterion("activityDetail.activity_id is null");
+            addCriterion("activity_id is null");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdIsNotNull() {
-            addCriterion("activityDetail.activity_id is not null");
+            addCriterion("activity_id is not null");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdEqualTo(String value) {
-            addCriterion("activityDetail.activity_id =", value, "activityId");
+            addCriterion("activity_id =", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdNotEqualTo(String value) {
-            addCriterion("activityDetail.activity_id <>", value, "activityId");
+            addCriterion("activity_id <>", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdGreaterThan(String value) {
-            addCriterion("activityDetail.activity_id >", value, "activityId");
+            addCriterion("activity_id >", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activityDetail.activity_id >=", value, "activityId");
+            addCriterion("activity_id >=", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdLessThan(String value) {
-            addCriterion("activityDetail.activity_id <", value, "activityId");
+            addCriterion("activity_id <", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdLessThanOrEqualTo(String value) {
-            addCriterion("activityDetail.activity_id <=", value, "activityId");
+            addCriterion("activity_id <=", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdLike(String value) {
-            addCriterion("activityDetail.activity_id like", value, "activityId");
+            addCriterion("activity_id like", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdNotLike(String value) {
-            addCriterion("activityDetail.activity_id not like", value, "activityId");
+            addCriterion("activity_id not like", value, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdIn(List<String> values) {
-            addCriterion("activityDetail.activity_id in", values, "activityId");
+            addCriterion("activity_id in", values, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdNotIn(List<String> values) {
-            addCriterion("activityDetail.activity_id not in", values, "activityId");
+            addCriterion("activity_id not in", values, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdBetween(String value1, String value2) {
-            addCriterion("activityDetail.activity_id between", value1, value2, "activityId");
+            addCriterion("activity_id between", value1, value2, "activityId");
             return (Criteria) this;
         }
 
         public Criteria andActivityIdNotBetween(String value1, String value2) {
-            addCriterion("activityDetail.activity_id not between", value1, value2, "activityId");
+            addCriterion("activity_id not between", value1, value2, "activityId");
             return (Criteria) this;
         }
     }

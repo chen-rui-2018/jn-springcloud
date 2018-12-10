@@ -1,7 +1,7 @@
 package com.jn.activity.dao;
 
 
-import com.jn.activity.vo.ActivityTypeVO;
+import com.jn.activity.model.ActivityType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,5 +20,19 @@ public interface ActivityTypeMapper {
      * @param state
      * @return
      */
-    List<ActivityTypeVO> findActivityTypeListByState(@Param("state") String state);
+    List<ActivityType> findActivityTypeListByState(@Param("state") String state);
+
+    /**
+     * 根据活动类型ID,获取当前活动信息
+     * @param typeId
+     * @return
+     */
+    ActivityType  findActivityTypeById(String typeId);
+
+    /**
+     * 删除活动类型
+     * @param typeId
+     */
+    void deleteActivityTypeList(List<String> typeId);
 }
+

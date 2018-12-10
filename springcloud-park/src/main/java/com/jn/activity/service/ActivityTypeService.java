@@ -2,6 +2,10 @@ package com.jn.activity.service;
 
 
 import com.github.pagehelper.PageInfo;
+
+
+import com.jn.activity.model.ActivityType;
+import com.jn.activity.vo.ActivityTypeVO;
 import com.jn.system.model.User;
 
 import java.util.List;
@@ -32,6 +36,28 @@ public interface ActivityTypeService {
      * @param rows
      * @return
      */
-    PageInfo findActivityTypeListByState(String state, String page, String rows);
+    PageInfo findActivityTypeListByState(String state,String page,String rows);
 
+    /**
+     * 根据活动类型id(typeId) 获取当前活动类型内容
+     * @param typeId
+     * @return
+     */
+    ActivityType findActivityTypeById(String typeId);
+    /**
+     * 根据活动类型id(typeId) 获取当前活动类型内容
+     * @param typeName
+     * @param state
+     * @param templateList
+     * @param typeId
+     * @param user
+     * @return
+     */
+    void updateActivityType(String typeId,String typeName, String state, List<String> templateList, User user);
+
+    /**
+     *
+     * @param typeId
+     */
+    void deleteActivityTypeList(List<String> typeId);
 }

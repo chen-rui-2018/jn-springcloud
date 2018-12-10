@@ -1,14 +1,12 @@
 package com.jn.activity.service.impl;
 
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jn.activity.dao.ActivityFileMapper;
-import com.jn.activity.dao.ActivityTypeMapper;
-import com.jn.activity.dao.TbActivityTypeMapper;
-import com.jn.activity.entity.TbActivityFile;
-import com.jn.activity.entity.TbActivityType;
-import com.jn.activity.entity.TbActivityTypeCriteria;
+import com.jn.activity.dao.*;
+import com.jn.activity.entity.*;
 import com.jn.activity.enums.ActivityExceptionEnum;
+import com.jn.activity.model.ActivityType;
 import com.jn.activity.service.ActivityTypeService;
 import com.jn.activity.vo.ActivityTypeVO;
 import com.jn.common.exception.JnSpringCloudException;
@@ -37,6 +35,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     private ActivityFileMapper activityFileMapper;
     @Autowired
     private ActivityTypeMapper activityTypeMapper;
+    @Autowired
+    private TbActivityMapper tbActivityMapper;
+    @Autowired
+    private TbActivityFileMapper tbActivityFileMapper;
 
     /**
      * 新增活动类型
@@ -49,19 +51,8 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "新增活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertActivityType(String typeName, String state, List<String> templateList, User user ) {
-        if (StringUtils.isBlank(typeName)) {
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY, "活动类型名称不能为空");
-        }
-        if (StringUtils.isBlank(state)) {
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY, "活动类型名称不能为空");
-        }
-        TbActivityTypeCriteria criteria = new TbActivityTypeCriteria();
-        criteria.createCriteria().andTypeNameEqualTo(typeName);
-        List<TbActivityType> activityTypesList = tbActivityTypeMapper.selectByExample(criteria);
-        if(activityTypesList.size()>0){
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_NAME_REPEAT, "活动类型名称不能重复");
-        }
+    public void insertActivityType(String typeName, String state, List<String> templateList, User user) {
+        String type = "insert";
         // 插入活动类型基本信息
         TbActivityType activityType = new TbActivityType();
         String typeId = UUID.randomUUID().toString().replaceAll("-", "");
@@ -73,11 +64,83 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         tbActivityTypeMapper.insertSelective(activityType);
 
         // 使用map封装,有多个模板时进行批量插入
-        if (templateList.size() > 0) {
+        insertActivityTypeFile(templateList, typeId, user,type);
+
+    }
+
+    @ServiceLog(doAction = "查询活动类型列表")
+    @Override
+    public PageInfo findActivityTypeListByState(String state, String page, String rows) {
+        int pageNumber = 0;
+        int pageSize = 15;
+        if (StringUtils.isNotBlank(page)) {
+            pageNumber = Integer.parseInt(page);
+        }
+        if (StringUtils.isNotBlank(rows)) {
+            pageSize = Integer.parseInt(rows);
+        }
+        PageHelper.startPage(pageNumber, pageSize, true);
+        List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
+        return new PageInfo<ActivityType>(activityTypeList);
+    }
+
+    @ServiceLog(doAction = "根据活动类型ID,获取活动类型内容")
+    @Override
+    public ActivityType findActivityTypeById(String typeId) {
+        ActivityType activityType = activityTypeMapper.findActivityTypeById(typeId);
+        return activityType;
+    }
+
+    @ServiceLog(doAction = "更新活动类型内容")
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateActivityType(String typeId, String typeName, String state, List<String> templateList, User user) {
+        //更新类型内容
+        String type= "update";
+        TbActivityType activityType = new TbActivityType();
+        activityType.setTypeId(typeId);
+        activityType.setUpdateTime(new Date());
+        activityType.setUpdateAccount(user.getAccount());
+        activityType.setTypeName(typeName);
+        activityType.setState(state);
+        tbActivityTypeMapper.updateByPrimaryKeySelective(activityType);
+        //删除原先的模板
+        TbActivityFileCriteria criteria = new TbActivityFileCriteria();
+        criteria.createCriteria().andTypeIdEqualTo(typeId);
+        tbActivityFileMapper.deleteByExample(criteria);
+        //插入更新模板内容
+        insertActivityTypeFile(templateList, typeId, user,type);
+    }
+
+    @ServiceLog(doAction = "删除活动类型")
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteActivityTypeList(List<String> typeId) {
+        TbActivityCriteria criteria = new TbActivityCriteria();
+        criteria.createCriteria().andActiTypeIn(typeId);
+        List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);
+        if (activities.size() > 0) {
+            for (TbActivity activity: activities) {
+                String actiType= activity.getActiType();
+                ActivityType vo=   findActivityTypeById(actiType);
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型"+vo.getTypeName()+"已关联活动,不能删除");
+            }
+        }
+        activityTypeMapper.deleteActivityTypeList(typeId);
+
+    }
+
+    private void insertActivityTypeFile(List<String> templateList, String typeId, User user,String type) {
+        if (templateList != null && templateList.size() > 0) {
             List<TbActivityFile> activityFileList = new ArrayList<>();
             for (String tempUrl : templateList) {
                 TbActivityFile activityFile = new TbActivityFile();
+                if("insert".equals(type)){
                 activityFile.setCreateTime(new Date());
+                }
+                if("update".equals(type)){
+                    activityFile.setUpdateTime(new Date());
+                }
                 activityFile.setTypeId(typeId);
                 activityFile.setState("1");
                 activityFile.setUpdateAccount(user.getAccount());
@@ -89,22 +152,5 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             map.put("list", activityFileList);
             activityFileMapper.insertActivityTypeTemp(map);
         }
-
-    }
-
-    @ServiceLog(doAction = "查询活动类型列表")
-    @Override
-    public PageInfo findActivityTypeListByState(String state,String page,String rows) {
-        int pageNumber = 0;
-        int pageSize = 15;
-       if(StringUtils.isNotBlank(page)){
-           pageNumber = Integer.parseInt(page);
-       }
-       if(StringUtils.isNotBlank(rows)){
-           pageSize = Integer.parseInt(rows);
-       }
-        PageHelper.startPage(pageNumber,pageSize,true);
-        List<ActivityTypeVO> activityTypeList =  activityTypeMapper.findActivityTypeListByState(state);
-        return new PageInfo<ActivityTypeVO>(activityTypeList);
     }
 }

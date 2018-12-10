@@ -2,9 +2,10 @@ package com.jn.activity.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
  * 活动类型信息
@@ -22,14 +23,20 @@ public class ActivityType implements Serializable {
     private String typeName;
     @ApiModelProperty(value = "创建人ID")
     private String createUserId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm;ss")
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private String createTime;
     @ApiModelProperty(value = "更新用户ID")
     private String updateUserId;
     @ApiModelProperty(value = "更新时间")
-    private Date updateTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm;ss")
+    private String  updateTime;
     @ApiModelProperty(value = "状态(0：无效，1：有效，-1：删除)")
     private String state;
+    @ApiModelProperty(value = "活动类型模板列表")
+    private List<String> templateList;
+    @ApiModelProperty(value = "拥有模板数量")
+    private String  fileTotal;
 
     private static final long serialVersionUID = 1L;
 
@@ -57,11 +64,11 @@ public class ActivityType implements Serializable {
         this.createUserId = createUserId == null ? null : createUserId.trim();
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -73,11 +80,11 @@ public class ActivityType implements Serializable {
         this.updateUserId = updateUserId == null ? null : updateUserId.trim();
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -89,4 +96,19 @@ public class ActivityType implements Serializable {
         this.state = state == null ? null : state.trim();
     }
 
+    public List<String> getTemplateList() {
+        return templateList;
+    }
+
+    public void setTemplateList(List<String> templateList) {
+        this.templateList = templateList;
+    }
+
+    public String getFileTotal() {
+        return fileTotal;
+    }
+
+    public void setFileTotal(String fileTotal) {
+        this.fileTotal = fileTotal;
+    }
 }

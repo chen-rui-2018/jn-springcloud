@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.activity.dao.TbCommentMapper">
-  <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbComment">
+<mapper namespace="com.jn.park.activity.dao.TbCommentMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbComment">
     <result column="id" jdbcType="VARCHAR" property="id" />
     <result column="p_id" jdbcType="VARCHAR" property="pId" />
     <result column="com_account" jdbcType="VARCHAR" property="comAccount" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, p_id, com_account, com_time, like_num, state, com_type
   </sql>
-  <select id="selectByExample" parameterType="com.jn.activity.entity.TbCommentCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -85,13 +85,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbCommentCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria">
     delete from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.activity.entity.TbComment">
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbComment">
     insert into tb_comment (id, p_id, com_account, 
       com_time, like_num, state, 
       com_type)
@@ -99,7 +99,7 @@
       #{comTime,jdbcType=TIMESTAMP}, #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, 
       #{comType,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.activity.entity.TbComment">
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbComment">
     insert into tb_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -148,7 +148,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.activity.entity.TbCommentCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria" resultType="java.lang.Long">
     select count(*) from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

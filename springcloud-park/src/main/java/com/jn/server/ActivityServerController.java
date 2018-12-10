@@ -1,17 +1,14 @@
 package com.jn.server;
 
-import com.jn.activity.entity.TbActivityApply;
-import com.jn.activity.enums.ActivityExceptionEnum;
-import com.jn.activity.model.Activity;
-import com.jn.activity.model.ActivityDetail;
-import com.jn.activity.service.ActivityApplyService;
-import com.jn.activity.service.ActivityService;
+import com.jn.park.activity.entity.TbActivityApply;
+import com.jn.park.activity.model.Activity;
+import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.service.ActivityService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.Assert;
-import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;

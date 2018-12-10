@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.activity.dao.TbActivityDetailMapper">
-  <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityDetail">
+<mapper namespace="com.jn.park.activity.dao.TbActivityDetailMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivityDetail">
     <id column="activity_id" jdbcType="VARCHAR" property="activityId" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.activity.entity.TbActivityDetail">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.activity.entity.TbActivityDetail">
     <result column="acti_detail" jdbcType="LONGVARCHAR" property="actiDetail" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -71,7 +71,7 @@
   <sql id="Blob_Column_List">
     acti_detail
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.activity.entity.TbActivityDetailCriteria" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.park.activity.entity.TbActivityDetailCriteria" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -87,7 +87,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityDetailCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityDetailCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -113,17 +113,17 @@
     delete from tb_activity_detail
     where activity_id = #{activityId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityDetailCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbActivityDetailCriteria">
     delete from tb_activity_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.activity.entity.TbActivityDetail">
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityDetail">
     insert into tb_activity_detail (activity_id, acti_detail)
     values (#{activityId,jdbcType=VARCHAR}, #{actiDetail,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.activity.entity.TbActivityDetail">
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityDetail">
     insert into tb_activity_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="activityId != null">
@@ -142,7 +142,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityDetailCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbActivityDetailCriteria" resultType="java.lang.Long">
     select count(*) from tb_activity_detail
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -177,7 +177,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.activity.entity.TbActivityDetail">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbActivityDetail">
     update tb_activity_detail
     <set>
       <if test="actiDetail != null">
@@ -186,7 +186,7 @@
     </set>
     where activity_id = #{activityId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.activity.entity.TbActivityDetail">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.park.activity.entity.TbActivityDetail">
     update tb_activity_detail
     set acti_detail = #{actiDetail,jdbcType=LONGVARCHAR}
     where activity_id = #{activityId,jdbcType=VARCHAR}

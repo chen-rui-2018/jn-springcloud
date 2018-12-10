@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.activity.dao.TbActivityFileMapper">
-  <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivityFile">
+<mapper namespace="com.jn.park.activity.dao.TbActivityFileMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivityFile">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="type_id" jdbcType="VARCHAR" property="typeId" />
     <result column="file_src" jdbcType="VARCHAR" property="fileSrc" />
@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, type_id, file_src, create_time, update_account, update_time, state
   </sql>
-  <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -95,13 +95,13 @@
     delete from tb_activity_file
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbActivityFileCriteria">
     delete from tb_activity_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.activity.entity.TbActivityFile">
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file (id, type_id, file_src, 
       create_time, update_account, update_time, 
       state)
@@ -109,7 +109,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.activity.entity.TbActivityFile">
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -158,7 +158,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityFileCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbActivityFileCriteria" resultType="java.lang.Long">
     select count(*) from tb_activity_file
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -206,7 +206,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.activity.entity.TbActivityFile">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbActivityFile">
     update tb_activity_file
     <set>
       <if test="typeId != null">
@@ -230,7 +230,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.activity.entity.TbActivityFile">
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbActivityFile">
     update tb_activity_file
     set type_id = #{typeId,jdbcType=VARCHAR},
       file_src = #{fileSrc,jdbcType=VARCHAR},

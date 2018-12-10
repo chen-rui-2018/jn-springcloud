@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.activity.dao.TbActivityMapper">
-  <resultMap id="BaseResultMap" type="com.jn.activity.entity.TbActivity">
+<mapper namespace="com.jn.park.activity.dao.TbActivityMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivity">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="acti_type" jdbcType="VARCHAR" property="actiType" />
     <result column="acti_name" jdbcType="VARCHAR" property="actiName" />
@@ -98,7 +98,7 @@
     apply_num, partic_num, is_top, top_time, is_apply, acti_order, issue_time, issue_account, 
     show_apply_num
   </sql>
-  <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -122,13 +122,13 @@
     delete from tb_activity
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.activity.entity.TbActivityCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria">
     delete from tb_activity
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.activity.entity.TbActivity">
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity (id, acti_type, acti_name, 
       acti_start_time, acti_end_time, apply_start_time, 
       apply_end_time, mes_send_time, park_id, 
@@ -152,7 +152,7 @@
       #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.activity.entity.TbActivity">
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -339,7 +339,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultType="java.lang.Long">
     select count(*) from tb_activity
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -479,7 +479,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.activity.entity.TbActivity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbActivity">
     update tb_activity
     <set>
       <if test="actiType != null">
@@ -572,7 +572,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.activity.entity.TbActivity">
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbActivity">
     update tb_activity
     set acti_type = #{actiType,jdbcType=VARCHAR},
       acti_name = #{actiName,jdbcType=VARCHAR},

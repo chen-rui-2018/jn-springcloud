@@ -1,6 +1,12 @@
 package com.jn.activity.service;
 
-import com.jn.common.model.Result;
+import com.jn.activity.entity.TbActivity;
+import com.jn.activity.entity.TbActivityLike;
+import com.jn.activity.model.ActivityApply;
+import com.jn.activity.model.Comment;
+import com.jn.activity.vo.ActivityDetailVO;
+
+import java.util.List;
 
 /**
  * 活动详情
@@ -12,36 +18,37 @@ import com.jn.common.model.Result;
 public interface ActivityDetailsService {
     /**
      * 根据活动id获取活动详情
-     * @param id 活动id
+     * @param id       活动id
+     * @param account  当前登录用户账号
      * @return
      */
-    Result getActivityDetails(String id);
+    ActivityDetailVO findActivityDetails(String id , String account);
 
     /**
      * 根据活动id获取活动点评信息
      * @param id 活动id
      * @return
      */
-    Result getCommentInfo(String id);
+    List<Comment> getCommentInfo(String id);
 
     /**
      * 根据活动id获取活动点赞信息
      * @param id 活动id
      * @return
      */
-    Result getActivityLikeInfo(String id);
+    List<TbActivityLike> getActivityLikeInfo(String id);
 
     /**
      * 根据活动id查询活动报名信息
      * @param id 活动id
      * @return
      */
-    Result getActivityApplyInfo(String id);
+    List<ActivityApply> getActivityApplyInfo(String id);
 
     /**
      * 根据活动id获取园区活动信息
      * @param id 活动id
      * @return
      */
-    Result getActivityInfo(String id);
+    TbActivity getActivityInfo(String id);
 }

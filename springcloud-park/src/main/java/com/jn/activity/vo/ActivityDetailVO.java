@@ -88,6 +88,11 @@ public class ActivityDetailVO implements Serializable {
     private List activityApplyList;
     @ApiModelProperty(value = "实际报名人数")
     private int realapplyNum;
+    @ApiModelProperty(value = "系统当前时间")
+    private String sysTemTime;
+    @ApiModelProperty(value = "报名成功标志，报名成功为true，否则为false,默认为true")
+    private boolean applySuccess=true;
+
 
     public String getActivityId() {
         return activityId;
@@ -359,5 +364,21 @@ public class ActivityDetailVO implements Serializable {
 
     public void setRealapplyNum(int realapplyNum) {
         this.realapplyNum = realapplyNum;
+    }
+
+    public String getSysTemTime() {
+        return sysTemTime;
+    }
+
+    public void setSysTemTime(String sysTemTime) {
+        this.sysTemTime = sysTemTime;
+    }
+
+    public boolean isApplySuccess() {
+        return applySuccess;
+    }
+
+    public void setApplySuccess(boolean applySuccess) {
+        this.applySuccess = applySuccess;
     }
 }

@@ -3,6 +3,7 @@ package com.jn.activity.controller;
 import com.jn.activity.service.ActivityLikeService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "活动点赞")
 @RestController
+@RequestMapping(value = "/activity/activityLike")
 public class ActivityLikeController extends BaseController {
     /**
      * 日志组件
@@ -37,19 +39,21 @@ public class ActivityLikeController extends BaseController {
     @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/activityLike")
     public Result activityLike(@RequestBody String id){
+        Assert.notNull(id,"活动id不为空");
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account=user.getAccount();
-        Result result=activityLikeService.activityLike(id,account);
-        return result;
+        activityLikeService.activityLike(id,account);
+        return new Result();
     }
 
     @ControllerLog(doAction = "取消点赞")
     @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
-    @RequestMapping(value = "/candelLike")
-    public Result candelLike(@RequestBody String id){
+    @RequestMapping(value = "/cancelLike")
+    public Result cancelLike(@RequestBody String id){
+        Assert.notNull(id,"活动id不为空");
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account=user.getAccount();
-        Result result=activityLikeService.candelLike(id,account);
-        return result;
+        activityLikeService.cancelLike(id,account);
+        return new Result();
     }
 }

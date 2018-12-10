@@ -1,7 +1,5 @@
 package com.jn.activity.service;
 
-import com.jn.common.model.Result;
-
 /**
  * 活动点赞
  * @Author: yangph
@@ -16,7 +14,7 @@ public interface ActivityLikeService {
      * @param account  用户账号
      * @return
      */
-    Result activityLike(String id,String account);
+    void activityLike(String id,String account);
 
     /**
      * 取消点赞
@@ -24,5 +22,5 @@ public interface ActivityLikeService {
      * @param account   用户账号
      * @return
      */
-    Result candelLike(String id,String account);
+    void cancelLike(String id,String account);
 }

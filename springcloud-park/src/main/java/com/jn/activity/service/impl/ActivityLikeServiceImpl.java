@@ -6,6 +6,7 @@ import com.jn.activity.entity.TbActivityLikeCriteria;
 import com.jn.activity.enums.ActivityExceptionEnum;
 import com.jn.activity.service.ActivityApplyService;
 import com.jn.activity.service.ActivityLikeService;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
@@ -45,37 +46,27 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
      */
     @ServiceLog(doAction = "活动点赞")
     @Override
-    public Result activityLike(String id,String account) {
-        //参数非空校验
-        Result result=activityApplyService.checkDataEmpty(id, account);
-        if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
-            return result;
+    public void activityLike(String id,String account) {
+        //根据account和活动id查询活动点赞表（tb_activity_like）是否有该用户的数据
+        TbActivityLikeCriteria example=new TbActivityLikeCriteria();
+        example.createCriteria().andActivityIdEqualTo(account).andActivityIdEqualTo(id);
+        long num = tbActivityLikeMapper.countByExample(example);
+        //数据库查询统计没有数据
+        int noInfo=0;
+        //数据库查询统计有一条数据
+        int oneInfo=1;
+        //根据查询结果进行新增、修改操作
+        if(num==noInfo){
+            //当前活动没有当前用户信息，新增
+            addActivityLike(id, account);
+        }else if(num==oneInfo){
+            //当前活动有且只有一条当前用户信息，更新状态 0：取消点赞  1：点赞
+            updateActivityLikeState(id, account);
+        }else if(num>oneInfo){
+            //当前活动有多条当前用户信息，数据重复
+            logger.info("当前活动存在多个相同点赞用户[{}]，无法点赞",account);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_LIKE_ACCOUNT_REPEAT);
         }
-        try {
-            //根据account和活动id查询活动点赞表（tb_activity_like）是否有该用户的数据
-            TbActivityLikeCriteria example=new TbActivityLikeCriteria();
-            example.createCriteria().andActivityIdEqualTo(account).andActivityIdEqualTo(id);
-            List<TbActivityLike> activityLikeList = tbActivityLikeMapper.selectByExample(example);
-            //根据查询结果进行新增、修改操作
-            if(activityLikeList.size()==0){
-                //当前活动没有当前用户信息，新增
-                addActivityLike(id, account);
-            }else if(activityLikeList.size()==1){
-                //当前活动有且只有一条当前用户信息，更新状态 0：取消点赞  1：点赞
-                updateActivityLikeState(id, account);
-            }else if(activityLikeList.size()>1){
-                //当前活动有多条当前用户信息，数据重复
-                result.setCode(ActivityExceptionEnum.ACTIVITY_LIKE_ACCOUNT_REPEAT.getCode());
-                result.setCode(ActivityExceptionEnum.ACTIVITY_LIKE_ACCOUNT_REPEAT.getMessage());
-                logger.info("当前活动存在多个相同点赞用户[{}]，无法点赞",account);
-                return result;
-            }
-        } catch (Exception e) {
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            logger.info("活动点赞失败，失败原因：{}",e.getMessage());
-        }
-        return result;
     }
 
     /**
@@ -87,7 +78,9 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
         TbActivityLikeCriteria example=new TbActivityLikeCriteria();
         example.createCriteria().andActivityIdEqualTo(account).andActivityIdEqualTo(id);
         TbActivityLike activityLike=new TbActivityLike();
-        activityLike.setState("1");
+        //状态 0：取消点赞  1：点赞
+        String likeState="1";
+        activityLike.setState(likeState);
         tbActivityLikeMapper.updateByExampleSelective(activityLike, example);
     }
 
@@ -108,7 +101,8 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
         //点赞时间
         activityLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //状态 0：取消点赞  1：点赞
-        activityLike.setState("1");
+        String likeState="1";
+        activityLike.setState(likeState);
         tbActivityLikeMapper.insertSelective(activityLike);
     }
 
@@ -120,25 +114,14 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
      */
     @ServiceLog(doAction = "取消点赞")
     @Override
-    public Result candelLike(String id, String account) {
-        //参数非空校验
-        Result result=activityApplyService.checkDataEmpty(id, account);
-        if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
-            return result;
-        }
+    public void  cancelLike(String id, String account) {
         TbActivityLikeCriteria example=new TbActivityLikeCriteria();
         example.createCriteria().andActivityIdEqualTo(account).andActivityIdEqualTo(id);
         //创建Bean
         TbActivityLike activityLike=new TbActivityLike();
         //更新状态 0：取消点赞  1：点赞
-        activityLike.setState("0");
-        try {
-            tbActivityLikeMapper.updateByExampleSelective(activityLike, example);
-        } catch (Exception e) {
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            logger.info("取消点赞失败，失败原因：{}",e.getMessage());
-        }
-        return result;
+        String cancelState="0";
+        activityLike.setState(cancelState);
+        tbActivityLikeMapper.updateByExampleSelective(activityLike, example);
     }
 }

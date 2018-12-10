@@ -1,8 +1,10 @@
 package com.jn.activity.controller;
 
+import com.jn.activity.enums.ActivityExceptionEnum;
 import com.jn.activity.service.ActivityApplyService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "活动报名")
 @RestController
+@RequestMapping(value = "/activity/activityApply")
 public class ActivityApplyController extends BaseController {
     /**
      * 日志组件
@@ -37,9 +40,16 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
     public Result quickApply(@RequestBody String id){
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String account=user.getAccount();
-        Result result=activityApplyService.quickApply(id,account);
+        Assert.notNull(id,"活动id不能为空");
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Result result=new Result();
+        if(user ==null){
+            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
+            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
+            logger.info("快速报名获取用户信息失败");
+            return result;
+        }
+        activityApplyService.quickApply(id,user.getAccount());
         return result;
     }
 
@@ -47,9 +57,16 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/cancelApply")
     public Result cancelApply(@RequestBody String id){
-        User user = (User)SecurityUtils.getSubject().getPrincipal();
-        String account=user.getAccount();
-        Result result=activityApplyService.cancelApply(id,account);
+        Assert.notNull(id,"活动id不能为空");
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Result result=new Result();
+        if(user ==null){
+            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
+            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
+            logger.info("取消报名获取用户信息失败");
+            return result;
+        }
+        activityApplyService.cancelApply(id,user.getAccount());
         return result;
     }
 }

@@ -1,6 +1,7 @@
 package com.jn.activity.service.impl;
 
 import com.jn.activity.dao.ActivityDetailsMapper;
+import com.jn.activity.dao.TbActivityApplyMapper;
 import com.jn.activity.dao.TbActivityLikeMapper;
 import com.jn.activity.dao.TbActivityMapper;
 import com.jn.activity.entity.*;
@@ -8,9 +9,11 @@ import com.jn.activity.enums.ActivityExceptionEnum;
 import com.jn.activity.model.ActivityApply;
 import com.jn.activity.model.ActivityDetail;
 import com.jn.activity.model.Comment;
+import com.jn.activity.service.ActivityApplyService;
 import com.jn.activity.service.ActivityDetailsService;
 import com.jn.activity.vo.ActivityDetailVO;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.GlobalConstants;
 import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ServiceLog;
@@ -46,51 +49,70 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Autowired
     private TbActivityMapper tbActivityMapper;
 
+    @Autowired
+    private TbActivityApplyMapper tbActivityApplyMapper;
+
     /**
      * 根据活动id获取活动详情
-     * @param id 活动id
+     * @param id       活动id
+     * @param account  当前登录用户账号
      * @return
      */
     @ServiceLog(doAction = "获取活动详情")
     @Override
-    public Result getActivityDetails(String id) {
-        Result result=new Result();
-        if(StringUtils.isBlank(id)){
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode());
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-            logger.info("获取活动详情的活动id为空");
-            return result;
-        }
+    public ActivityDetailVO findActivityDetails(String id,String account) {
         List<ActivityDetail> list=activityDetailsMapper.getActivityDetails(id);
         if(list.size()>0){
             ActivityDetail activityDetail=list.get(0);
             ActivityDetailVO activityDetailVO=new ActivityDetailVO();
             BeanUtils.copyProperties(activityDetail, activityDetailVO);
             //根据活动id查询点评信息
-            Result commentInfo = getCommentInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(commentInfo.getCode()) && commentInfo.getData()!=null) {
-                List<TbComment> commentList = (List<TbComment>)commentInfo.getData();
-                activityDetailVO.setCommentList(commentList);
-                activityDetailVO.setCommentNum(commentList.size());
+            List<Comment> commentInfo = getCommentInfo(id);
+            if (commentInfo!=null) {
+                activityDetailVO.setCommentList(commentInfo);
+                activityDetailVO.setCommentNum(commentInfo.size());
             }
             //根据活动id查询点赞信息
-            Result activityLikeInfo = getActivityLikeInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode()) && activityLikeInfo.getData()!=null) {
-                List<TbActivityLike> activityLikeList = (List<TbActivityLike>)activityLikeInfo.getData();
-                activityDetailVO.setActivityLikeList(activityLikeList);
-                activityDetailVO.setLikeNum(activityLikeList.size());
+            List<TbActivityLike> activityLikeInfo = getActivityLikeInfo(id);
+            if (activityLikeInfo!=null) {
+                activityDetailVO.setActivityLikeList(activityLikeInfo);
+                activityDetailVO.setLikeNum(activityLikeInfo.size());
             }
             //根据活动id查询活动报名信息
-            Result activityApplyInfo = getActivityApplyInfo(id);
-            if (GlobalConstants.SUCCESS_CODE.equals(activityLikeInfo.getCode())&& activityApplyInfo.getData()!=null) {
-                List<TbActivityApply> activityApplyList = (List<TbActivityApply>)activityApplyInfo.getData();
-                activityDetailVO.setActivityApplyList(activityApplyList);
-                activityDetailVO.setRealapplyNum(activityApplyList.size());
+            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(id);
+            if (activityApplyInfo!=null) {
+                activityDetailVO.setActivityApplyList(activityApplyInfo);
+                activityDetailVO.setRealapplyNum(activityApplyInfo.size());
             }
+            //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
+            applyCountdown(id, account, activityDetailVO);
             //把活动详情封装到result中返回前端
-            result.setData(activityDetailVO);
+            return  activityDetailVO;
+        }else {
+            logger.info("活动详情没有数据");
         }
-        return result;
+        return null;
+    }
+
+    /**
+     * 报名截止倒计时信息
+     * @param id
+     * @param account
+     * @param activityDetailVO
+     */
+    private void applyCountdown(String id, String account, ActivityDetailVO activityDetailVO) {
+        //根据用户账号和活动id查询当前登录用户是否已报名当前活动
+        TbActivityApplyCriteria example=new TbActivityApplyCriteria();
+        example.createCriteria().andActivityIdEqualTo(id).andAccountEqualTo(account);
+        List<TbActivityApply> tbActivityApplies = tbActivityApplyMapper.selectByExample(example);
+        //若已报名该活动,报名成功标志位true,否则为false
+        if(tbActivityApplies.size()==0){
+            //没有数据，表示没有报名成功
+            activityDetailVO.setApplySuccess(false);
+        }
+        //获取系统当前时间
+        String sysTemTime = DateUtils.getDate("yyyy-MM-dd HH:mm:ss");
+        activityDetailVO.setSysTemTime(sysTemTime);
     }
 
     /**
@@ -100,19 +122,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public Result getCommentInfo(String id){
-        Result result=new Result();
-        if(StringUtils.isBlank(id)){
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode());
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-            logger.info("获取活动点评信息的活动id为空");
-            return result;
-        }
-        List<Comment>commentList=activityDetailsMapper.getCommentInfo(id);
-        if(commentList.size()>0){
-            result.setData(commentList);
-        }
-        return result;
+    public List<Comment> getCommentInfo(String id){
+        return activityDetailsMapper.getCommentInfo(id);
     }
 
 
@@ -123,21 +134,12 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "获取活动点赞信息")
     @Override
-    public Result getActivityLikeInfo(String id){
-        Result result=new Result();
-        if(StringUtils.isBlank(id)){
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode());
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-            return result;
-        }
+    public List<TbActivityLike> getActivityLikeInfo(String id){
         TbActivityLikeCriteria example=new TbActivityLikeCriteria();
         //根据活动id获取点赞状态为点赞（"1"）的数据
         example.createCriteria().andActivityIdEqualTo(id).andStateEqualTo("1");
         List<TbActivityLike> tbActivityLikes = tbActivityLikeMapper.selectByExample(example);
-        if(tbActivityLikes.size()>0){
-            result.setData(tbActivityLikes);
-        }
-        return result;
+        return tbActivityLikes;
     }
 
     /**
@@ -147,19 +149,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "活动报名信息")
     @Override
-    public Result getActivityApplyInfo(String id){
-        Result result=new Result();
-        if(StringUtils.isBlank(id)){
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode());
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-            logger.info("获取活动报名信息的活动id为空");
-            return result;
-        }
-        List<ActivityApply>applyList=activityDetailsMapper.getActivityApplyInfo(id);
-        if(applyList.size()>0){
-            result.setData(applyList);
-        }
-        return result;
+    public List<ActivityApply> getActivityApplyInfo(String id){
+        return activityDetailsMapper.getActivityApplyInfo(id);
     }
 
     /**
@@ -169,27 +160,18 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "获取园区活动信息")
     @Override
-    public Result getActivityInfo(String id){
-        Result result=new Result();
-        //非空校验
-        if(StringUtils.isBlank(id)){
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode());
-            result.setCode(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-            logger.info("获取园区活动信息的活动id为空");
-            return result;
-        }
+    public TbActivity getActivityInfo(String id){
         TbActivityCriteria example=new TbActivityCriteria();
         List<String> stateList=new ArrayList<>(16);
         //草稿
-        stateList.add("1");
+        String draftState="1";
+        stateList.add(draftState);
         //已删除活动
-        stateList.add("5");
+        String delState="5";
+        stateList.add(delState);
         //草稿、已删除的活动不能被查询出来
         example.createCriteria().andIdEqualTo(id).andStateNotIn(stateList);
         TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(id);
-        if(tbActivity!=null){
-            result.setData(tbActivity);
-        }
-        return result;
+        return tbActivity;
     }
 }

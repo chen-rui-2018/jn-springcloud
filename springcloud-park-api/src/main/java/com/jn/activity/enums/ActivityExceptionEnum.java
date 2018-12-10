@@ -43,7 +43,8 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_DRAFT_DELETE_ERROR("11110300","只能删除活动草稿数据"),
     ACTIVITY_DELETE_ERROR("11110300","数据删除异常"),
     ACTIVITY_CANCEL_ERROR("11110300","数据取消异常"),
-    ACTIVITY_UPDATE_ERROR("11110221","活动信息修改异常")
+    ACTIVITY_UPDATE_ERROR("11110221","活动信息修改异常"),
+    INCOMPLETE_INFORMATION("11110503","用户信息不完善，请完善用户信息")
     ;
 
     /**

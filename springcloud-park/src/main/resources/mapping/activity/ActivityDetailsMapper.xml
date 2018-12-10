@@ -62,7 +62,7 @@
         from tb_comment t1
         left join tb_user_person t2
         on t1.com_account =t2.account
-        left join tb_usre_company t3
+        left join tb_user_company t3
         on t1.com_account=t3.account
         where  1=1
         and t1.com_account=#{id}
@@ -90,7 +90,7 @@
         from tb_activity_apply t1
         left join tb_user_person t2
         on t1.account=t2.account
-        left join tb_usre_company t3
+        left join tb_user_company t3
         on t1.account=t3.account
         where  1=1
         and t1.com_account=#{id}

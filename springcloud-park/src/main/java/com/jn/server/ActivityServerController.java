@@ -1,10 +1,17 @@
 package com.jn.server;
 
+import com.jn.activity.entity.TbActivityApply;
+import com.jn.activity.enums.ActivityExceptionEnum;
 import com.jn.activity.model.Activity;
+import com.jn.activity.model.ActivityDetail;
+import com.jn.activity.service.ActivityApplyService;
 import com.jn.activity.service.ActivityService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -12,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 活动 内部使用API接口
@@ -20,68 +30,73 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Version v1.0
  * @modified By:
  */
-public class ActivityController extends BaseController {
+
+@RestController
+@RequestMapping("/api/activity")
+public class ActivityServerController extends BaseController {
     /**
      * 日志组件
      */
-    private static Logger logger = LoggerFactory.getLogger(ActivityController.class);
+    private static Logger logger = LoggerFactory.getLogger(ActivityServerController.class);
 
     @Autowired
     private ActivityService activityService;
+
+    private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "获取活动列表")
     @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectActivityList")
     public Result selectActivityList(@RequestBody Activity activity) {
-        return activityService.selectActivityList(activity);
+        PaginationData paginationData = activityService.selectActivityList(activity);
+        return new Result(paginationData);
     }
 
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(@RequestBody String activityId) {
-        return activityService.getActivityDetailsForManage(activityId);
+        ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
+        return new Result(activityDetailsForManage);
     }
 
     @ControllerLog(doAction = "活动报名管理")
     @ApiOperation(value = "活动报名管理", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityApply")
     public Result updateActivityApply(@RequestBody String activityId,String state) {
-        return activityService.updateActivityApply(activityId,state);
-    }
-
-    @ControllerLog(doAction = "添加/修改活动")
-    @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/insterOrUpdateActivity")
-    public Result insterOrUpdateActivity(@RequestBody Activity activity) {
-        return activityService.insterOrUpdateActivity(activity);
+        int i = activityService.updateActivityApply(activityId, state);
+        return new Result(i);
     }
 
     @ControllerLog(doAction = "删除草稿活动")
     @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteDraftActivity")
     public Result deleteDraftActivity(@RequestBody String activityId) {
-        return activityService.deleteDraftActivity(activityId);
+        int i = activityService.deleteDraftActivity(activityId);
+        return new Result(i);
     }
 
     @ControllerLog(doAction = "删除活动")
     @ApiOperation(value = "删除活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteActivity")
     public Result deleteActivity(@RequestBody String activityId) {
-        return activityService.deleteActivity(activityId);
+        int i = activityService.deleteActivity(activityId);
+        return new Result(i);
     }
 
     @ControllerLog(doAction = "取消活动")
     @ApiOperation(value = "取消活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelActivity")
     public Result cancelActivity(@RequestBody String activityId) {
-        return activityService.cancelActivity(activityId);
+        int i = activityService.cancelActivity(activityId);
+        return new Result(i);
     }
 
-    @ControllerLog(doAction = "取消活动")
-    @ApiOperation(value = "取消活动", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/cancelActivity")
+    @ControllerLog(doAction = "活动报名列表")
+    @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(@RequestBody String activityId, Page page) {
-        return activityService.applyActivityList(activityId,page);
+        List<TbActivityApply> applies = activityApplyService.applyActivityList(activityId, page);
+        return new Result(applies);
     }
 }

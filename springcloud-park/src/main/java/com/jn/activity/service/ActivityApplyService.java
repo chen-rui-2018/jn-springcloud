@@ -1,6 +1,10 @@
 package com.jn.activity.service;
 
+import com.jn.activity.entity.TbActivityApply;
+import com.jn.common.model.Page;
 import com.jn.common.model.Result;
+
+import java.util.List;
 
 /**
  * 活动报名
@@ -33,4 +37,13 @@ public interface ActivityApplyService {
      * @return
      */
     Result checkDataEmpty(String id,String account);
+
+    /**
+     * 后台管理-查询活动报名信息列表
+     * @param activityId
+     * @param page
+     * @return
+     */
+    public List<TbActivityApply> applyActivityList(String activityId, Page page);
+
 }

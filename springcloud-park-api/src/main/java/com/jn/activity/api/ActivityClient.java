@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @Version v1.0
  * @modified By:
  */
-@FeignClient("springcloud-portals")
+@FeignClient("springcloud-park")
 public interface ActivityClient {
 
     /**

@@ -10,6 +10,7 @@
     <result column="activity_apply_start_time" jdbcType="TIMESTAMP" property="applyStartTime" />
     <result column="activity_apply_end_time" jdbcType="TIMESTAMP" property="applyEndTime" />
     <result column="activity_mes_send_time" jdbcType="TIMESTAMP" property="mesSendTime" />
+    <result column="activity_park_id" jdbcType="VARCHAR" property="parkId" />
     <result column="activity_acti_address" jdbcType="VARCHAR" property="actiAddress" />
     <result column="activity_acti_cost" jdbcType="DECIMAL" property="actiCost" />
     <result column="activity_acti_organizer" jdbcType="VARCHAR" property="actiOrganizer" />
@@ -30,6 +31,7 @@
     <result column="activity_acti_order" jdbcType="INTEGER" property="actiOrder" />
     <result column="activity_issue_time" jdbcType="TIMESTAMP" property="issueTime" />
     <result column="activity_issue_account" jdbcType="VARCHAR" property="issueAccount" />
+    <result column="activity_show_apply_num" jdbcType="VARCHAR" property="showApplyNum" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -93,16 +95,17 @@
     activity.id as activity_id, activity.acti_type as activity_acti_type, activity.acti_name as activity_acti_name, 
     activity.acti_start_time as activity_acti_start_time, activity.acti_end_time as activity_acti_end_time, 
     activity.apply_start_time as activity_apply_start_time, activity.apply_end_time as activity_apply_end_time, 
-    activity.mes_send_time as activity_mes_send_time, activity.acti_address as activity_acti_address, 
-    activity.acti_cost as activity_acti_cost, activity.acti_organizer as activity_acti_organizer, 
-    activity.acti_number as activity_acti_number, activity.acti_poster_url as activity_acti_poster_url, 
-    activity.state as activity_state, activity.create_time as activity_create_time, activity.create_account as activity_create_account, 
+    activity.mes_send_time as activity_mes_send_time, activity.park_id as activity_park_id, 
+    activity.acti_address as activity_acti_address, activity.acti_cost as activity_acti_cost, 
+    activity.acti_organizer as activity_acti_organizer, activity.acti_number as activity_acti_number, 
+    activity.acti_poster_url as activity_acti_poster_url, activity.state as activity_state, 
+    activity.create_time as activity_create_time, activity.create_account as activity_create_account, 
     activity.update_time as activity_update_time, activity.update_account as activity_update_account, 
     activity.acti_views as activity_acti_views, activity.acti_like as activity_acti_like, 
     activity.apply_num as activity_apply_num, activity.partic_num as activity_partic_num, 
     activity.is_top as activity_is_top, activity.top_time as activity_top_time, activity.is_apply as activity_is_apply, 
     activity.acti_order as activity_acti_order, activity.issue_time as activity_issue_time, 
-    activity.issue_account as activity_issue_account
+    activity.issue_account as activity_issue_account, activity.show_apply_num as activity_show_apply_num
   </sql>
   <select id="selectByExample" parameterType="com.jn.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
     select
@@ -137,24 +140,26 @@
   <insert id="insert" parameterType="com.jn.activity.entity.TbActivity">
     insert into tb_activity (id, acti_type, acti_name, 
       acti_start_time, acti_end_time, apply_start_time, 
-      apply_end_time, mes_send_time, acti_address, 
-      acti_cost, acti_organizer, acti_number, 
-      acti_poster_url, state, create_time, 
-      create_account, update_time, update_account, 
-      acti_views, acti_like, apply_num, 
-      partic_num, is_top, top_time, 
-      is_apply, acti_order, issue_time, 
-      issue_account)
+      apply_end_time, mes_send_time, park_id, 
+      acti_address, acti_cost, acti_organizer, 
+      acti_number, acti_poster_url, state, 
+      create_time, create_account, update_time, 
+      update_account, acti_views, acti_like, 
+      apply_num, partic_num, is_top, 
+      top_time, is_apply, acti_order, 
+      issue_time, issue_account, show_apply_num
+      )
     values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
       #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
-      #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{actiAddress,jdbcType=VARCHAR}, 
-      #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, #{actiNumber,jdbcType=INTEGER}, 
-      #{actiPosterUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
-      #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, #{applyNum,jdbcType=INTEGER}, 
-      #{particNum,jdbcType=INTEGER}, #{isTop,jdbcType=VARCHAR}, #{topTime,jdbcType=TIMESTAMP}, 
-      #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
-      #{issueAccount,jdbcType=VARCHAR})
+      #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
+      #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, 
+      #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
+      #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isTop,jdbcType=VARCHAR}, 
+      #{topTime,jdbcType=TIMESTAMP}, #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, 
+      #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.activity.entity.TbActivity">
     insert into tb_activity
@@ -182,6 +187,9 @@
       </if>
       <if test="mesSendTime != null">
         mes_send_time,
+      </if>
+      <if test="parkId != null">
+        park_id,
       </if>
       <if test="actiAddress != null">
         acti_address,
@@ -243,6 +251,9 @@
       <if test="issueAccount != null">
         issue_account,
       </if>
+      <if test="showApplyNum != null">
+        show_apply_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -268,6 +279,9 @@
       </if>
       <if test="mesSendTime != null">
         #{mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkId != null">
+        #{parkId,jdbcType=VARCHAR},
       </if>
       <if test="actiAddress != null">
         #{actiAddress,jdbcType=VARCHAR},
@@ -329,6 +343,9 @@
       <if test="issueAccount != null">
         #{issueAccount,jdbcType=VARCHAR},
       </if>
+      <if test="showApplyNum != null">
+        #{showApplyNum,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.activity.entity.TbActivityCriteria" resultType="java.lang.Long">
@@ -363,6 +380,9 @@
       </if>
       <if test="record.mesSendTime != null">
         activity.mes_send_time = #{record.mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parkId != null">
+        activity.park_id = #{record.parkId,jdbcType=VARCHAR},
       </if>
       <if test="record.actiAddress != null">
         activity.acti_address = #{record.actiAddress,jdbcType=VARCHAR},
@@ -424,6 +444,9 @@
       <if test="record.issueAccount != null">
         activity.issue_account = #{record.issueAccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.showApplyNum != null">
+        activity.show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -439,6 +462,7 @@
       activity.apply_start_time = #{record.applyStartTime,jdbcType=TIMESTAMP},
       activity.apply_end_time = #{record.applyEndTime,jdbcType=TIMESTAMP},
       activity.mes_send_time = #{record.mesSendTime,jdbcType=TIMESTAMP},
+      activity.park_id = #{record.parkId,jdbcType=VARCHAR},
       activity.acti_address = #{record.actiAddress,jdbcType=VARCHAR},
       activity.acti_cost = #{record.actiCost,jdbcType=DECIMAL},
       activity.acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
@@ -458,7 +482,8 @@
       activity.is_apply = #{record.isApply,jdbcType=VARCHAR},
       activity.acti_order = #{record.actiOrder,jdbcType=INTEGER},
       activity.issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
-      activity.issue_account = #{record.issueAccount,jdbcType=VARCHAR}
+      activity.issue_account = #{record.issueAccount,jdbcType=VARCHAR},
+      activity.show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -486,6 +511,9 @@
       </if>
       <if test="mesSendTime != null">
         mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkId != null">
+        park_id = #{parkId,jdbcType=VARCHAR},
       </if>
       <if test="actiAddress != null">
         acti_address = #{actiAddress,jdbcType=VARCHAR},
@@ -547,6 +575,9 @@
       <if test="issueAccount != null">
         issue_account = #{issueAccount,jdbcType=VARCHAR},
       </if>
+      <if test="showApplyNum != null">
+        show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -559,6 +590,7 @@
       apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
       apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
       mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      park_id = #{parkId,jdbcType=VARCHAR},
       acti_address = #{actiAddress,jdbcType=VARCHAR},
       acti_cost = #{actiCost,jdbcType=DECIMAL},
       acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
@@ -578,7 +610,8 @@
       is_apply = #{isApply,jdbcType=VARCHAR},
       acti_order = #{actiOrder,jdbcType=INTEGER},
       issue_time = #{issueTime,jdbcType=TIMESTAMP},
-      issue_account = #{issueAccount,jdbcType=VARCHAR}
+      issue_account = #{issueAccount,jdbcType=VARCHAR},
+      show_apply_num = #{showApplyNum,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -40,6 +40,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_APPLY_TIME_ERROR("11110300","活动报名时间不能小于活动开始时间"),
     ACTIVITY_DRAFT_DELETE_ERROR("11110300","只能删除活动草稿数据"),
     ACTIVITY_DELETE_ERROR("11110300","数据删除异常"),
+    ACTIVITY_CANCEL_ERROR("11110300","数据取消异常"),
     ACTIVITY_UPDATE_ERROR("11110221","活动信息修改异常")
     ;
 

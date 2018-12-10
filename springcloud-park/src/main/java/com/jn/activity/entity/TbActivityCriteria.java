@@ -616,6 +616,76 @@ public class TbActivityCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andParkIdIsNull() {
+            addCriterion("activity.park_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdIsNotNull() {
+            addCriterion("activity.park_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdEqualTo(String value) {
+            addCriterion("activity.park_id =", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdNotEqualTo(String value) {
+            addCriterion("activity.park_id <>", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdGreaterThan(String value) {
+            addCriterion("activity.park_id >", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdGreaterThanOrEqualTo(String value) {
+            addCriterion("activity.park_id >=", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdLessThan(String value) {
+            addCriterion("activity.park_id <", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdLessThanOrEqualTo(String value) {
+            addCriterion("activity.park_id <=", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdLike(String value) {
+            addCriterion("activity.park_id like", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdNotLike(String value) {
+            addCriterion("activity.park_id not like", value, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdIn(List<String> values) {
+            addCriterion("activity.park_id in", values, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdNotIn(List<String> values) {
+            addCriterion("activity.park_id not in", values, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdBetween(String value1, String value2) {
+            addCriterion("activity.park_id between", value1, value2, "parkId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkIdNotBetween(String value1, String value2) {
+            addCriterion("activity.park_id not between", value1, value2, "parkId");
+            return (Criteria) this;
+        }
+
         public Criteria andActiAddressIsNull() {
             addCriterion("activity.acti_address is null");
             return (Criteria) this;
@@ -1903,6 +1973,76 @@ public class TbActivityCriteria {
 
         public Criteria andIssueAccountNotBetween(String value1, String value2) {
             addCriterion("activity.issue_account not between", value1, value2, "issueAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumIsNull() {
+            addCriterion("activity.show_apply_num is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumIsNotNull() {
+            addCriterion("activity.show_apply_num is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumEqualTo(String value) {
+            addCriterion("activity.show_apply_num =", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumNotEqualTo(String value) {
+            addCriterion("activity.show_apply_num <>", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumGreaterThan(String value) {
+            addCriterion("activity.show_apply_num >", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumGreaterThanOrEqualTo(String value) {
+            addCriterion("activity.show_apply_num >=", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumLessThan(String value) {
+            addCriterion("activity.show_apply_num <", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumLessThanOrEqualTo(String value) {
+            addCriterion("activity.show_apply_num <=", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumLike(String value) {
+            addCriterion("activity.show_apply_num like", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumNotLike(String value) {
+            addCriterion("activity.show_apply_num not like", value, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumIn(List<String> values) {
+            addCriterion("activity.show_apply_num in", values, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumNotIn(List<String> values) {
+            addCriterion("activity.show_apply_num not in", values, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumBetween(String value1, String value2) {
+            addCriterion("activity.show_apply_num between", value1, value2, "showApplyNum");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowApplyNumNotBetween(String value1, String value2) {
+            addCriterion("activity.show_apply_num not between", value1, value2, "showApplyNum");
             return (Criteria) this;
         }
     }

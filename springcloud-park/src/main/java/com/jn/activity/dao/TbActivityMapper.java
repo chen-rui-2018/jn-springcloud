@@ -2,9 +2,8 @@ package com.jn.activity.dao;
 
 import com.jn.activity.entity.TbActivity;
 import com.jn.activity.entity.TbActivityCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbActivityMapper {
     long countByExample(TbActivityCriteria example);

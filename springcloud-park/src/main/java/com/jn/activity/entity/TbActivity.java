@@ -21,6 +21,8 @@ public class TbActivity implements Serializable {
 
     private Date mesSendTime;
 
+    private String parkId;
+
     private String actiAddress;
 
     private BigDecimal actiCost;
@@ -60,6 +62,8 @@ public class TbActivity implements Serializable {
     private Date issueTime;
 
     private String issueAccount;
+
+    private String showApplyNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -125,6 +129,14 @@ public class TbActivity implements Serializable {
 
     public void setMesSendTime(Date mesSendTime) {
         this.mesSendTime = mesSendTime;
+    }
+
+    public String getParkId() {
+        return parkId;
+    }
+
+    public void setParkId(String parkId) {
+        this.parkId = parkId == null ? null : parkId.trim();
     }
 
     public String getActiAddress() {
@@ -287,6 +299,14 @@ public class TbActivity implements Serializable {
         this.issueAccount = issueAccount == null ? null : issueAccount.trim();
     }
 
+    public String getShowApplyNum() {
+        return showApplyNum;
+    }
+
+    public void setShowApplyNum(String showApplyNum) {
+        this.showApplyNum = showApplyNum == null ? null : showApplyNum.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -307,6 +327,7 @@ public class TbActivity implements Serializable {
             && (this.getApplyStartTime() == null ? other.getApplyStartTime() == null : this.getApplyStartTime().equals(other.getApplyStartTime()))
             && (this.getApplyEndTime() == null ? other.getApplyEndTime() == null : this.getApplyEndTime().equals(other.getApplyEndTime()))
             && (this.getMesSendTime() == null ? other.getMesSendTime() == null : this.getMesSendTime().equals(other.getMesSendTime()))
+            && (this.getParkId() == null ? other.getParkId() == null : this.getParkId().equals(other.getParkId()))
             && (this.getActiAddress() == null ? other.getActiAddress() == null : this.getActiAddress().equals(other.getActiAddress()))
             && (this.getActiCost() == null ? other.getActiCost() == null : this.getActiCost().equals(other.getActiCost()))
             && (this.getActiOrganizer() == null ? other.getActiOrganizer() == null : this.getActiOrganizer().equals(other.getActiOrganizer()))
@@ -326,7 +347,8 @@ public class TbActivity implements Serializable {
             && (this.getIsApply() == null ? other.getIsApply() == null : this.getIsApply().equals(other.getIsApply()))
             && (this.getActiOrder() == null ? other.getActiOrder() == null : this.getActiOrder().equals(other.getActiOrder()))
             && (this.getIssueTime() == null ? other.getIssueTime() == null : this.getIssueTime().equals(other.getIssueTime()))
-            && (this.getIssueAccount() == null ? other.getIssueAccount() == null : this.getIssueAccount().equals(other.getIssueAccount()));
+            && (this.getIssueAccount() == null ? other.getIssueAccount() == null : this.getIssueAccount().equals(other.getIssueAccount()))
+            && (this.getShowApplyNum() == null ? other.getShowApplyNum() == null : this.getShowApplyNum().equals(other.getShowApplyNum()));
     }
 
     @Override
@@ -341,6 +363,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getApplyStartTime() == null) ? 0 : getApplyStartTime().hashCode());
         result = prime * result + ((getApplyEndTime() == null) ? 0 : getApplyEndTime().hashCode());
         result = prime * result + ((getMesSendTime() == null) ? 0 : getMesSendTime().hashCode());
+        result = prime * result + ((getParkId() == null) ? 0 : getParkId().hashCode());
         result = prime * result + ((getActiAddress() == null) ? 0 : getActiAddress().hashCode());
         result = prime * result + ((getActiCost() == null) ? 0 : getActiCost().hashCode());
         result = prime * result + ((getActiOrganizer() == null) ? 0 : getActiOrganizer().hashCode());
@@ -361,6 +384,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getActiOrder() == null) ? 0 : getActiOrder().hashCode());
         result = prime * result + ((getIssueTime() == null) ? 0 : getIssueTime().hashCode());
         result = prime * result + ((getIssueAccount() == null) ? 0 : getIssueAccount().hashCode());
+        result = prime * result + ((getShowApplyNum() == null) ? 0 : getShowApplyNum().hashCode());
         return result;
     }
 
@@ -378,6 +402,7 @@ public class TbActivity implements Serializable {
         sb.append(", applyStartTime=").append(applyStartTime);
         sb.append(", applyEndTime=").append(applyEndTime);
         sb.append(", mesSendTime=").append(mesSendTime);
+        sb.append(", parkId=").append(parkId);
         sb.append(", actiAddress=").append(actiAddress);
         sb.append(", actiCost=").append(actiCost);
         sb.append(", actiOrganizer=").append(actiOrganizer);
@@ -398,6 +423,7 @@ public class TbActivity implements Serializable {
         sb.append(", actiOrder=").append(actiOrder);
         sb.append(", issueTime=").append(issueTime);
         sb.append(", issueAccount=").append(issueAccount);
+        sb.append(", showApplyNum=").append(showApplyNum);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

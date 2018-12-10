@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -186,4 +187,13 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         return  result;
     }
+
+    @Override
+    public List<TbActivityApply> applyActivityList(String activityId, com.jn.common.model.Page page){
+        TbActivityApplyCriteria applyCriteria = new TbActivityApplyCriteria();
+        applyCriteria.createCriteria().andActivityIdEqualTo(activityId);
+        List<TbActivityApply> tbActivityApplies = tbActivityApplyMapper.selectByExample(applyCriteria);
+        return tbActivityApplies;
+    }
+
 }

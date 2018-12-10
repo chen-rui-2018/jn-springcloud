@@ -125,7 +125,7 @@ public class TestController extends BaseController {
         try{
             this.testService.doService(key,account);
         }catch (JnSpringCloudLockException e){
-            //对锁发送的异常行为，进行业务处理。。。
+            //对锁发生的异常行为，进行业务处理。。。
         }catch (Exception e){
             throw e;
         }

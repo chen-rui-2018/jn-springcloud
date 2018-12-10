@@ -42,7 +42,7 @@ public class RedisLockAspect {
     private Lock redisLock;
 
     @Around(value = " @annotation(lock)", argNames = "joinPoint, lock")
-    public Object methodAround(ProceedingJoinPoint joinPoint, LockAnnotation lock) throws Throwable {
+    public Object redisLockMethodAround(ProceedingJoinPoint joinPoint, LockAnnotation lock) throws Throwable {
         //获取参数MAP
         Object[] args = joinPoint.getArgs();
         String classType = joinPoint.getTarget().getClass().getName();    

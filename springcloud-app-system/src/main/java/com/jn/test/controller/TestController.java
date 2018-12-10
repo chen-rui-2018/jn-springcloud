@@ -1,6 +1,7 @@
 package com.jn.test.controller;
 
 import com.jn.common.util.file.MultipartFileUtil;
+import com.jn.common.util.lock.JnSpringCloudLockException;
 import com.jn.common.util.lock.LockAnnotation;
 import com.jn.down.api.DownLoadClient;
 import com.jn.common.controller.BaseController;
@@ -121,7 +122,14 @@ public class TestController extends BaseController {
 
     @RequestMapping(value = "/guest/test6")
     public Result jedis11(String key,String account) {
-        this.testService.doService(key,account);
+        try{
+            this.testService.doService(key,account);
+        }catch (JnSpringCloudLockException e){
+            //对锁发送的异常行为，进行业务处理。。。
+        }catch (Exception e){
+            throw e;
+        }
+
         return new Result() ;
     }
 

@@ -31,5 +31,5 @@ public interface UploadClient {
      */
     @RequestMapping(value = "/api/uploadFile",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
     Result<String> uploadFile(@RequestPart("file") MultipartFile file,
-                              @RequestParam("name") Boolean token) throws IOException;
+                              @RequestParam("token") Boolean token) throws IOException;
 }

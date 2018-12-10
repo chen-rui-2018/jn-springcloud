@@ -29,7 +29,7 @@ public class UploadClientController implements UploadClient {
 
     @Override
     public Result<String> uploadFile(@RequestPart("file") MultipartFile file,
-                             @RequestParam("name") Boolean token) throws IOException{
+                             @RequestParam("token") Boolean token) throws IOException{
         Assert.notNull(file,"文件不能为空");
         Result<String> result = new Result();
         if (token){

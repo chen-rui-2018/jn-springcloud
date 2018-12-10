@@ -1,6 +1,7 @@
 package com.jn.test.controller;
 
 import com.jn.common.util.file.MultipartFileUtil;
+import com.jn.common.util.lock.LockAnnotation;
 import com.jn.down.api.DownLoadClient;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
@@ -10,10 +11,13 @@ import com.jn.common.util.cache.service.Cache;
 import com.jn.down.model.DownLoad;
 import com.jn.upload.api.UploadClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import redis.clients.jedis.Jedis;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -111,6 +115,14 @@ public class TestController extends BaseController {
     }
 
 
+    @Autowired
+    private Jedis jedis;
 
+
+    @RequestMapping(value = "/guest/test6")
+    public Result jedis11(String key,String account) {
+        this.testService.doService(key,account);
+        return new Result() ;
+    }
 
 }

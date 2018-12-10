@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbSysPostCriteria {
+public class TbSysPostTypeCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbSysPostCriteria() {
+    public TbSysPostTypeCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -175,73 +175,73 @@ public class TbSysPostCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPostNameIsNull() {
-            addCriterion("post_name is null");
+        public Criteria andPostTypeNameIsNull() {
+            addCriterion("post_type_name is null");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameIsNotNull() {
-            addCriterion("post_name is not null");
+        public Criteria andPostTypeNameIsNotNull() {
+            addCriterion("post_type_name is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameEqualTo(String value) {
-            addCriterion("post_name =", value, "postName");
+        public Criteria andPostTypeNameEqualTo(String value) {
+            addCriterion("post_type_name =", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameNotEqualTo(String value) {
-            addCriterion("post_name <>", value, "postName");
+        public Criteria andPostTypeNameNotEqualTo(String value) {
+            addCriterion("post_type_name <>", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameGreaterThan(String value) {
-            addCriterion("post_name >", value, "postName");
+        public Criteria andPostTypeNameGreaterThan(String value) {
+            addCriterion("post_type_name >", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameGreaterThanOrEqualTo(String value) {
-            addCriterion("post_name >=", value, "postName");
+        public Criteria andPostTypeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("post_type_name >=", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameLessThan(String value) {
-            addCriterion("post_name <", value, "postName");
+        public Criteria andPostTypeNameLessThan(String value) {
+            addCriterion("post_type_name <", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameLessThanOrEqualTo(String value) {
-            addCriterion("post_name <=", value, "postName");
+        public Criteria andPostTypeNameLessThanOrEqualTo(String value) {
+            addCriterion("post_type_name <=", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameLike(String value) {
-            addCriterion("post_name like", value, "postName");
+        public Criteria andPostTypeNameLike(String value) {
+            addCriterion("post_type_name like", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameNotLike(String value) {
-            addCriterion("post_name not like", value, "postName");
+        public Criteria andPostTypeNameNotLike(String value) {
+            addCriterion("post_type_name not like", value, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameIn(List<String> values) {
-            addCriterion("post_name in", values, "postName");
+        public Criteria andPostTypeNameIn(List<String> values) {
+            addCriterion("post_type_name in", values, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameNotIn(List<String> values) {
-            addCriterion("post_name not in", values, "postName");
+        public Criteria andPostTypeNameNotIn(List<String> values) {
+            addCriterion("post_type_name not in", values, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameBetween(String value1, String value2) {
-            addCriterion("post_name between", value1, value2, "postName");
+        public Criteria andPostTypeNameBetween(String value1, String value2) {
+            addCriterion("post_type_name between", value1, value2, "postTypeName");
             return (Criteria) this;
         }
 
-        public Criteria andPostNameNotBetween(String value1, String value2) {
-            addCriterion("post_name not between", value1, value2, "postName");
+        public Criteria andPostTypeNameNotBetween(String value1, String value2) {
+            addCriterion("post_type_name not between", value1, value2, "postTypeName");
             return (Criteria) this;
         }
 
@@ -442,76 +442,6 @@ public class TbSysPostCriteria {
 
         public Criteria andStatusNotBetween(String value1, String value2) {
             addCriterion("status not between", value1, value2, "status");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdIsNull() {
-            addCriterion("post_type_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdIsNotNull() {
-            addCriterion("post_type_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdEqualTo(String value) {
-            addCriterion("post_type_id =", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdNotEqualTo(String value) {
-            addCriterion("post_type_id <>", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdGreaterThan(String value) {
-            addCriterion("post_type_id >", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdGreaterThanOrEqualTo(String value) {
-            addCriterion("post_type_id >=", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdLessThan(String value) {
-            addCriterion("post_type_id <", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdLessThanOrEqualTo(String value) {
-            addCriterion("post_type_id <=", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdLike(String value) {
-            addCriterion("post_type_id like", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdNotLike(String value) {
-            addCriterion("post_type_id not like", value, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdIn(List<String> values) {
-            addCriterion("post_type_id in", values, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdNotIn(List<String> values) {
-            addCriterion("post_type_id not in", values, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdBetween(String value1, String value2) {
-            addCriterion("post_type_id between", value1, value2, "postTypeId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPostTypeIdNotBetween(String value1, String value2) {
-            addCriterion("post_type_id not between", value1, value2, "postTypeId");
             return (Criteria) this;
         }
     }

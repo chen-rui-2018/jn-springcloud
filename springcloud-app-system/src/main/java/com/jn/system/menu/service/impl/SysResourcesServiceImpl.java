@@ -153,7 +153,6 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     @ServiceLog(doAction = "分页查询功能功能列表信息")
-    @Transactional(rollbackFor = Exception.class)
     public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
         List<SysResourcesVO> sysResourcesVOList = sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage);

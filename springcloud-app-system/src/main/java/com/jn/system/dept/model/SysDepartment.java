@@ -22,6 +22,7 @@ public class SysDepartment implements Serializable {
     @ApiModelProperty("id")
     private String id;
     @ApiModelProperty("部门名称")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "部门名称校验失败")
     private String departmentName;
     @ApiModelProperty("创建时间")
     private Date createTime;

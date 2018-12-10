@@ -32,7 +32,10 @@
     <!--通过用户id获取用户组-->
     <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.user.model.SysGroup">
         select
-        <include refid="Base_Column_List"/>
+        id as groupId,
+        group_name as groupName,
+        create_time as createTime,
+        `status`
         from tb_sys_group
         where id in
         (select tsug.group_id

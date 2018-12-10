@@ -105,7 +105,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
      */
     private void getChildDepartmentId(List<String> ids, List<SysDepartmentVO> childrenDepartment) {
         for (SysDepartmentVO sysDepartmentVO:childrenDepartment) {
-            ids.add(sysDepartmentVO.getId());
+            ids.add(sysDepartmentVO.getValue());
             if (sysDepartmentVO.getChildren() != null){
                 getChildDepartmentId(ids,sysDepartmentVO.getChildren());
             }
@@ -219,7 +219,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
                     child.setParentName(sysDepartmentVO.getLabel());
                     //根据父级部门id,查询子部门集合
                     List<SysDepartmentVO> childrenDepartList =
-                            sysDepartmentMapper.findChildrenDepartment(child.getId());
+                            sysDepartmentMapper.findChildrenDepartment(child.getValue());
                     child.setChildren(childrenDepartList);
                     //如果为查到子部门,设置子集为null
                     if (childrenDepartList == null || childrenDepartList.size() == 0) {

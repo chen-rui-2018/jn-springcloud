@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dept.dao.SysDepartmentMapper">
     <resultMap id="departmentTreeMap" type="com.jn.system.dept.vo.SysDepartmentVO">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <id column="id" jdbcType="VARCHAR" property="value"/>
         <result column="department_name" jdbcType="VARCHAR" property="label"/>
         <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
         <result column="parentName" jdbcType="VARCHAR" property="parentName"/>
         <collection property="children" ofType="com.jn.system.dept.vo.SysDepartmentVO">
-            <id column="childId" property="id" jdbcType="VARCHAR"/>
+            <id column="childId" property="value" jdbcType="VARCHAR"/>
             <result column="childName" property="label" jdbcType="VARCHAR"/>
             <result column="childPartntId" jdbcType="VARCHAR" property="parentId"/>
         </collection>

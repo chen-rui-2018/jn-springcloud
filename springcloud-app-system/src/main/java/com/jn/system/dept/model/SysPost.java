@@ -21,7 +21,7 @@ public class SysPost implements Serializable {
     @ApiModelProperty("id")
     private String id;
     @ApiModelProperty("岗位名称")
-    @Size(max = 20,message = "岗位名称字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
     @ApiModelProperty("创建时间")
     private Date createTime;

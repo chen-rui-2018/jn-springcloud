@@ -109,17 +109,17 @@ public interface SysUserMapper {
     SysUserDepartmentPostVO findDepartmentAndPostByUserId(String userId);
 
     /**
-     * 为用户添加岗位信息
-     *
-     * @param sysUserDepartmentPost
-     */
-    void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);
-
-    /**
      * 根据id获取用户信息
      *
      * @param id
      * @return
      */
     SysUser getUserById(String id);
+
+    /**
+     * 用户批量添加部门岗位信息
+     *
+     * @param list
+     */
+    void addDepartmentAndPostToUserBatch(List<TbSysUserDepartmentPost> list);
 }

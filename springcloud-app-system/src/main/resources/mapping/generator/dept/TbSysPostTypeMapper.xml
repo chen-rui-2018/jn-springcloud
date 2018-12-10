@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.system.dept.dao.TbSysPostMapper">
-  <resultMap id="BaseResultMap" type="com.jn.system.dept.entity.TbSysPost">
+<mapper namespace="com.jn.system.dept.dao.TbSysPostTypeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.system.dept.entity.TbSysPostType">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="post_type_name" jdbcType="VARCHAR" property="postTypeName" />
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="post_type_id" jdbcType="VARCHAR" property="postTypeId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, post_name, creator, create_time, status, post_type_id
+    id, post_type_name, creator, create_time, status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.system.dept.entity.TbSysPostCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.system.dept.entity.TbSysPostTypeCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_sys_post
+    from tb_sys_post_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -87,35 +86,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_sys_post
+    from tb_sys_post_type
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_sys_post
+    delete from tb_sys_post_type
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.system.dept.entity.TbSysPostCriteria">
-    delete from tb_sys_post
+  <delete id="deleteByExample" parameterType="com.jn.system.dept.entity.TbSysPostTypeCriteria">
+    delete from tb_sys_post_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.system.dept.entity.TbSysPost">
-    insert into tb_sys_post (id, post_name, creator, 
-      create_time, status, post_type_id
-      )
-    values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{postTypeId,jdbcType=VARCHAR}
-      )
+  <insert id="insert" parameterType="com.jn.system.dept.entity.TbSysPostType">
+    insert into tb_sys_post_type (id, post_type_name, creator, 
+      create_time, status)
+    values (#{id,jdbcType=VARCHAR}, #{postTypeName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.system.dept.entity.TbSysPost">
-    insert into tb_sys_post
+  <insert id="insertSelective" parameterType="com.jn.system.dept.entity.TbSysPostType">
+    insert into tb_sys_post_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="postName != null">
-        post_name,
+      <if test="postTypeName != null">
+        post_type_name,
       </if>
       <if test="creator != null">
         creator,
@@ -126,16 +123,13 @@
       <if test="status != null">
         status,
       </if>
-      <if test="postTypeId != null">
-        post_type_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="postName != null">
-        #{postName,jdbcType=VARCHAR},
+      <if test="postTypeName != null">
+        #{postTypeName,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         #{creator,jdbcType=VARCHAR},
@@ -146,25 +140,22 @@
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="postTypeId != null">
-        #{postTypeId,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.system.dept.entity.TbSysPostCriteria" resultType="java.lang.Long">
-    select count(*) from tb_sys_post
+  <select id="countByExample" parameterType="com.jn.system.dept.entity.TbSysPostTypeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_sys_post_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_sys_post
+    update tb_sys_post_type
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.postName != null">
-        post_name = #{record.postName,jdbcType=VARCHAR},
+      <if test="record.postTypeName != null">
+        post_type_name = #{record.postTypeName,jdbcType=VARCHAR},
       </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=VARCHAR},
@@ -175,31 +166,27 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
       </if>
-      <if test="record.postTypeId != null">
-        post_type_id = #{record.postTypeId,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_sys_post
+    update tb_sys_post_type
     set id = #{record.id,jdbcType=VARCHAR},
-      post_name = #{record.postName,jdbcType=VARCHAR},
+      post_type_name = #{record.postTypeName,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR},
-      post_type_id = #{record.postTypeId,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.system.dept.entity.TbSysPost">
-    update tb_sys_post
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.system.dept.entity.TbSysPostType">
+    update tb_sys_post_type
     <set>
-      <if test="postName != null">
-        post_name = #{postName,jdbcType=VARCHAR},
+      <if test="postTypeName != null">
+        post_type_name = #{postTypeName,jdbcType=VARCHAR},
       </if>
       <if test="creator != null">
         creator = #{creator,jdbcType=VARCHAR},
@@ -210,19 +197,15 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="postTypeId != null">
-        post_type_id = #{postTypeId,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.system.dept.entity.TbSysPost">
-    update tb_sys_post
-    set post_name = #{postName,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.system.dept.entity.TbSysPostType">
+    update tb_sys_post_type
+    set post_type_name = #{postTypeName,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR},
-      post_type_id = #{postTypeId,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

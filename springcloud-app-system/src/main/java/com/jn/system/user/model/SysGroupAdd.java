@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class SysGroupAdd implements Serializable {
     private static final long serialVersionUID = 4267579545005088033L;
     @ApiModelProperty("用户组名称")
-    @Size(max = 20,message = "用户组名称字数不能超过20个")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "用户组名校验失败")
     private String groupName;
     @ApiModelProperty("状态")
     @Pattern(regexp = "^\\-1|[01]$", message = "{status:'状态值只允许为0,1,-1'}")

@@ -31,7 +31,7 @@ public class SysMenu implements Serializable {
      */
     @ApiModelProperty(value = "菜单名称" )
     @NotBlank(message = "菜单名称不能为空！")
-    @Size(max = 20,message = "菜单名称长度不能超度20字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "菜单名称校验失败")
     private String menuName;
 
     /**

@@ -3,18 +3,16 @@ package com.jn.system.dept.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbSysPost implements Serializable {
+public class TbSysPostType implements Serializable {
     private String id;
 
-    private String postName;
+    private String postTypeName;
 
     private String creator;
 
     private Date createTime;
 
     private String status;
-
-    private String postTypeId;
 
     private static final long serialVersionUID = 1L;
 
@@ -26,12 +24,12 @@ public class TbSysPost implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getPostName() {
-        return postName;
+    public String getPostTypeName() {
+        return postTypeName;
     }
 
-    public void setPostName(String postName) {
-        this.postName = postName == null ? null : postName.trim();
+    public void setPostTypeName(String postTypeName) {
+        this.postTypeName = postTypeName == null ? null : postTypeName.trim();
     }
 
     public String getCreator() {
@@ -58,14 +56,6 @@ public class TbSysPost implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public String getPostTypeId() {
-        return postTypeId;
-    }
-
-    public void setPostTypeId(String postTypeId) {
-        this.postTypeId = postTypeId == null ? null : postTypeId.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -77,13 +67,12 @@ public class TbSysPost implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbSysPost other = (TbSysPost) that;
+        TbSysPostType other = (TbSysPostType) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getPostName() == null ? other.getPostName() == null : this.getPostName().equals(other.getPostName()))
+            && (this.getPostTypeName() == null ? other.getPostTypeName() == null : this.getPostTypeName().equals(other.getPostTypeName()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getPostTypeId() == null ? other.getPostTypeId() == null : this.getPostTypeId().equals(other.getPostTypeId()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -91,11 +80,10 @@ public class TbSysPost implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getPostName() == null) ? 0 : getPostName().hashCode());
+        result = prime * result + ((getPostTypeName() == null) ? 0 : getPostTypeName().hashCode());
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getPostTypeId() == null) ? 0 : getPostTypeId().hashCode());
         return result;
     }
 
@@ -106,11 +94,10 @@ public class TbSysPost implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", postName=").append(postName);
+        sb.append(", postTypeName=").append(postTypeName);
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
-        sb.append(", postTypeId=").append(postTypeId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

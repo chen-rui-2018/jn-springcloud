@@ -214,28 +214,27 @@
           #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
      </insert>
 
+    <insert id="addDepartmentAndPostToUserBatch" parameterType="java.util.List">
+        insert into tb_sys_user_department_post
+        (id, user_id,department_id,post_id,is_default,creator,create_time,status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.userId,jdbcType=VARCHAR},
+            #{item.departmentId,jdbcType=VARCHAR},
+            #{item.postId,jdbcType=VARCHAR},
+            #{item.isDefault,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+
     <!--清除用户原有部门岗位信息-->
     <update id="deleDepartmentandPost" parameterType="java.lang.String">
         update tb_sys_user_department_post
         set `status` = '-1'
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
-
-    <!--添加用户部门岗位信息-->
-    <insert id="saveDepartmentandPostOfUser"
-            parameterType="com.jn.system.dept.entity.TbSysUserDepartmentPost">
-        insert into tb_sys_user_department_post
-        (id, user_id, department_id,post_id, is_default, create_time,status,creator)
-        values
-        (#{id,jdbcType=VARCHAR},
-        #{userId,jdbcType=VARCHAR},
-        #{departmentId,jdbcType=VARCHAR},
-        #{postId,jdbcType=VARCHAR},
-        #{isDefault,jdbcType=VARCHAR},
-        now(),
-        #{status,jdbcType=VARCHAR},
-        #{creator,jdbcType=VARCHAR})
-      </insert>
 
     <!--根据用户id返回用户信息-->
     <select id="findSysUserById" parameterType="java.lang.String"

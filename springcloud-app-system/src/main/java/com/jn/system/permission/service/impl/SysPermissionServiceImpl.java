@@ -198,9 +198,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     public void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd, User user) {
         //清除权限已经具有的角色
         sysRolePermissionMapper.deleteByPermissionId(sysPermissionRolesAdd.getPermissionId());
-        if (sysPermissionRolesAdd.getRoleIds().length == 0) {
-            return;
-        }
         Boolean isDelete = sysPermissionRolesAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             logger.info("[权限授权角色] 删除该权限下角色信息成功！permissionId:{}", sysPermissionRolesAdd.getPermissionId());

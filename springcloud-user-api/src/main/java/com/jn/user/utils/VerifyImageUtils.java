@@ -1,4 +1,4 @@
-package com.jn.user.userinfo.utils;
+package com.jn.user.utils;
 
 import com.jn.common.util.StringUtils;
 import org.slf4j.LoggerFactory;

@@ -1,7 +1,7 @@
-package com.jn.user.userinfo.api;
+package com.jn.user.api;
 
 import com.jn.common.model.Result;
-import com.jn.user.userinfo.model.UserExtension;
+import com.jn.user.model.UserExtension;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

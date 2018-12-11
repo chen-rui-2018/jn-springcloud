@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class SysMenuTreeVO implements Serializable {
     @ApiModelProperty("菜单路径")
     private String menuUrl;
     @ApiModelProperty("排序,菜单目录,默认排序为0,子菜单排序从1,往后开始递增")
-    private String sort;
+    private Integer sort;
     @ApiModelProperty("是否是文件夹,1是,0不是")
     private String isDir;
     @ApiModelProperty("父级id")
@@ -35,7 +36,7 @@ public class SysMenuTreeVO implements Serializable {
     @ApiModelProperty("父级id父级名称")
     private String parentName;
     @ApiModelProperty("创建时间")
-    private String createTime;
+    private Date createTime;
     @ApiModelProperty("子菜单的集合")
     private List<SysMenuTreeVO> children;
     @ApiModelProperty("菜单功能的集合")
@@ -44,8 +45,8 @@ public class SysMenuTreeVO implements Serializable {
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String sort,
-                         String isDir, String parentId, String parentName, String createTime,
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, Integer sort,
+                         String isDir, String parentId, String parentName, Date createTime,
                          List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
@@ -92,11 +93,11 @@ public class SysMenuTreeVO implements Serializable {
         this.menuUrl = menuUrl;
     }
 
-    public String getSort() {
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 
@@ -124,11 +125,11 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
@@ -155,11 +156,11 @@ public class SysMenuTreeVO implements Serializable {
                 ", label='" + label + '\'' +
                 ", icon='" + icon + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
-                ", sort='" + sort + '\'' +
+                ", sort=" + sort +
                 ", isDir='" + isDir + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
-                ", createTime='" + createTime + '\'' +
+                ", createTime=" + createTime +
                 ", children=" + children +
                 ", resourcesList=" + resourcesList +
                 '}';

@@ -17,7 +17,7 @@
     <!-- 表格 -->
     <el-table v-loading="rolelistLoading" :data="roleList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="角色名称" align="center" prop="roleName" />
       <el-table-column :show-overflow-tooltip="true" label="拥有用户" align="center" min-width="100" prop="sysUserRoles">
@@ -52,16 +52,16 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!-- 新增角色 -->
     <el-dialog :visible.sync="roledialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="roleform" :rules="rules" :model="roleform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="名称" prop="roleName">
+        <el-form-item label="名称:" prop="roleName">
           <el-input v-model="roleform.roleName" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="roleform.status" class="filter-item">
+        <el-form-item label="状态:" prop="status" >
+          <el-select v-model="roleform.status" placeholder="请选择" class="filter-item">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -115,18 +115,18 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的角色名称'))
+      if (value.length > 20) {
+        callback(new Error('角色名称的长度不能超过20个字符'))
       } else {
         if (this.oldRoleName !== this.roleform.roleName) {
-          checkRoleName(this.roleform.roleName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
+          checkRoleName(this.roleform.roleName).then(res => {
+            // if (res.data.code === '0000') {
+            if (res.data.data === 'success') {
               callback()
             } else {
               callback(new Error('角色名称已重复'))
             }
+            // }
           })
         } else {
           callback()
@@ -320,6 +320,7 @@ export default {
         page: this.userPage,
         rows: this.userRows
       }).then(res => {
+        console.log(res)
         res.data.data.rows.userOfRoleList.forEach(val => {
           this.oldOwnUser.push(val.id)
         })
@@ -494,6 +495,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -545,15 +549,23 @@ export default {
     width: auto;
   }
 }
+.el-tooltip__popper{
+   text-align: center;
+    width:200px;
+}
 .box {
-  .el-transfer-panel {
+   .el-transfer-panel {
+    height: 440px;
     width: 320px;
   }
   .el-transfer-panel .el-transfer-panel__footer {
     position: relative;
   }
-}
-.el-pagination{
-  margin-top:10px;
+  .el-transfer-panel__body.is-with-footer{
+    height: 350px;
+  }
+  .el-transfer-panel__list.is-filterable{
+    height: 310px;
+  }
 }
 </style>

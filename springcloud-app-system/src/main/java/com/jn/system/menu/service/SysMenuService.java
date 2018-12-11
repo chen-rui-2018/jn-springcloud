@@ -47,13 +47,6 @@ public interface SysMenuService {
     SysMenu selectMenuById(String id);
 
     /**
-     * 菜单分配功能
-     *
-     * @param sysMenuResourcesAdd
-     */
-    void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user);
-
-    /**
      * 菜单添加目录菜单
      *
      * @param sysMenuAdd
@@ -76,9 +69,17 @@ public interface SysMenuService {
     String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
 
     /**
-     * 批量对菜单排序进行更新
+     * 批量更新菜单
      *
      * @param sysMenus
      */
     void updateBatch(SysMenus sysMenus);
+
+    /**
+     * 根据父菜单id获取子下一级所有菜单信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
 }

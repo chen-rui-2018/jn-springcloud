@@ -24,7 +24,7 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
             and status = #{status,jdbcType=VARCHAR}
         </if>
-        ORDER BY create_time desc
+        ORDER BY create_time desc,id desc
     </select>
     <select id="getPermissionById" resultType="com.jn.system.permission.model.SysPermission"
             parameterType="java.lang.String">

@@ -30,7 +30,7 @@ public interface SysGroupService {
      *
      * @param sysGroup 用户组
      */
-    void addSysGroup(TbSysGroup sysGroup, User user);
+    void addSysGroup(SysGroupAdd sysGroup, User user);
 
     /**
      * 逻辑删除用户组
@@ -69,14 +69,6 @@ public interface SysGroupService {
      * @param sysRoleGroupAdd
      */
     void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd, User user);
-
-    /**
-     * 根据用户组id获取用户组下面所有用户
-     *
-     * @param groupId 用户组id
-     * @return
-     */
-    List<SysTUser> findUserOfGroup(String groupId);
 
     /**
      * 查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息

@@ -36,19 +36,27 @@
 
     <select id="findOtherUserByPage" parameterType="com.jn.system.user.model.SysGroupUserPage"
             resultType="com.jn.system.user.model.SysTUser">
-        select t.id,t.`name`
-        from tb_sys_user t left join
-        (select t1.id ,t1.name
-        from tb_sys_user t1,tb_sys_user_group t2
+        select
+        t.id,
+        t.`name`
+        from tb_sys_user t
+        left join
+        (select
+        t1.id ,
+        t1.name
+        from tb_sys_user t1,
+        tb_sys_user_group t2
         where t2.`status` = '1'
         and t1.`status` = '1'
-        and t1.id = t2.user_id and t2.group_id = #{groupId,jdbcType=VARCHAR}) tt
+        and t1.id = t2.user_id
+        and t2.group_id = #{groupId,jdbcType=VARCHAR}) tt
         on t.id = tt.id
         where tt.id is null
         and t.`status` = '1'
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
         </if>
+        ORDER BY t.create_time DESC, t.id DESC
     </select>
 
     <update id="deleteUserOfGroup" parameterType="java.lang.String">

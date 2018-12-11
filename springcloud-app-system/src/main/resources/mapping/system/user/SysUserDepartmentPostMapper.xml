@@ -78,7 +78,6 @@
         (SELECT @l:= LEVEL FROM tb_sys_department WHERE id = @r ) AS LEVEL,
         @r AS _id,
         (SELECT @r := parent_id FROM tb_sys_department WHERE id = _id) AS parent_id
-
         FROM
         (SELECT @r := #{id,jdbcType=VARCHAR} ) vars,
         tb_sys_department h
@@ -86,6 +85,7 @@
         JOIN tb_sys_department T2
         ON T1._id = T2.id
         WHERE T1.level >=1
+        AND T2.`status` = '1'
         ORDER BY T1.level asc;
     </select>
 

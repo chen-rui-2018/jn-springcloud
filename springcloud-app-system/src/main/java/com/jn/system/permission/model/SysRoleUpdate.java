@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,6 +25,7 @@ public class SysRoleUpdate implements Serializable {
 
     @ApiModelProperty(value = "角色名称")
     @NotBlank(message = "角色名称不能为空！")
+    @Size(max = 20,message = "角色名称字数不能超过20个字")
     private String roleName;
 
     @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")

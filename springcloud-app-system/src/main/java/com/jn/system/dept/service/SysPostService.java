@@ -55,7 +55,7 @@ public interface SysPostService {
     SysPost selectByPrimaryKey(String id);
 
     /**
-     * 分页获取岗位信息及对应的用户
+     * 条件分页获取岗位信息列表
      *
      * @param sysPostPage
      * @return

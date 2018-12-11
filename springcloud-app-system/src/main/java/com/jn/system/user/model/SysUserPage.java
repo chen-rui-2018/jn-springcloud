@@ -28,15 +28,15 @@ public class SysUserPage extends Page implements Serializable {
     private String status;
 
     @ApiModelProperty("部门id")
-    private String[] departmentIds;
+    private String departmentId;
 
     public SysUserPage() {
     }
 
-    public SysUserPage(String name, String status, String[] departmentIds) {
+    public SysUserPage(String name, String status, String departmentId) {
         this.name = name;
         this.status = status;
-        this.departmentIds = departmentIds;
+        this.departmentId = departmentId;
     }
 
     public String getName() {
@@ -55,12 +55,12 @@ public class SysUserPage extends Page implements Serializable {
         this.status = status;
     }
 
-    public String[] getDepartmentIds() {
-        return departmentIds;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartmentIds(String[] departmentIds) {
-        this.departmentIds = departmentIds;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class SysUserPage extends Page implements Serializable {
         return "SysUserPage{" +
                 "name='" + name + '\'' +
                 ", status='" + status + '\'' +
-                ", departmentIds=" + Arrays.toString(departmentIds) +
+                ", departmentId='" + departmentId + '\'' +
                 '}';
     }
 }

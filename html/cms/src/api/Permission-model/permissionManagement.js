@@ -107,3 +107,21 @@ export function updataFileGroup(query) {
 //     data: query
 //   })
 // }
+// 获取权限拥有的菜单和功能
+export function getAllList(query) {
+  const param = new URLSearchParams()
+  param.append('permissionId', query)
+  return request({
+    url: 'system/sysPermission/getMenuAndResources',
+    method: 'post',
+    data: param
+  })
+}
+// 权限授权页面(更新数据)
+export function updataAllData(query) {
+  return request({
+    url: 'system/sysPermission/addMenuAndResourcesToPermission',
+    method: 'post',
+    data: query
+  })
+}

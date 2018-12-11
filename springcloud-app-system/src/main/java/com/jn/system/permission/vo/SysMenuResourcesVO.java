@@ -21,12 +21,12 @@ public class SysMenuResourcesVO implements Serializable {
     @ApiModelProperty("菜单及功能id集合")
     private List<String> menuAndResourcesIds;
     @ApiModelProperty("菜单树信息")
-    private List<SysMenuTreeVO> sysMenuTreeVOList;
+    private List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList;
 
     public SysMenuResourcesVO() {
     }
 
-    public SysMenuResourcesVO(List<String> menuAndResourcesIds, List<SysMenuTreeVO> sysMenuTreeVOList) {
+    public SysMenuResourcesVO(List<String> menuAndResourcesIds, List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList) {
         this.menuAndResourcesIds = menuAndResourcesIds;
         this.sysMenuTreeVOList = sysMenuTreeVOList;
     }
@@ -39,11 +39,11 @@ public class SysMenuResourcesVO implements Serializable {
         this.menuAndResourcesIds = menuAndResourcesIds;
     }
 
-    public List<SysMenuTreeVO> getSysMenuTreeVOList() {
+    public List<SysMenuTreeOfPermissionVO> getSysMenuTreeVOList() {
         return sysMenuTreeVOList;
     }
 
-    public void setSysMenuTreeVOList(List<SysMenuTreeVO> sysMenuTreeVOList) {
+    public void setSysMenuTreeVOList(List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList) {
         this.sysMenuTreeVOList = sysMenuTreeVOList;
     }
 

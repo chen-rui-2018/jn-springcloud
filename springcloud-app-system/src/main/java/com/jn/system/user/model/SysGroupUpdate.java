@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class SysGroupUpdate implements Serializable {
     @NotBlank(message = "用户组id不能为空")
     private String id;
     @ApiModelProperty("用户组名称")
+    @Size(max = 20,message = "用户组名称字数不能超过20个")
     private String groupName;
     @ApiModelProperty("状态")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")

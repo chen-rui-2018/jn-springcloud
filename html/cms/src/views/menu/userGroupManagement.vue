@@ -18,7 +18,7 @@
     <!-- 表格 -->
     <el-table v-loading="listLoading" :key="tableKey" :data="usergroupList" border fit highlight-current-row style="width: 100%;height:100%;">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" width="60" label="序号" align="center" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="用户组名称" align="center" prop="groupName" />
       <el-table-column :show-overflow-tooltip="true" label="拥有用户" align="center" min-width="100" prop="sysTUserList">
@@ -40,40 +40,58 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="200" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="300" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showuserGruopDialog(scope.row)">授权用户</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
           <!-- 删除按钮 -->
-          <el-button size="mini" type="danger" @click="deleteUsergroup(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="danger" @click="deleteUsergroup(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination
+      v-show="total>0"
+      :current-page="listQuery.page"
+      :page-sizes="[5,10,20,30, 50]"
+      :page-size="listQuery.rows"
+      :total="total"
+      class="tablePagination"
+      background
+      layout="total, sizes, prev, pager, next, jumper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange" />
 
     <!-- 弹出的用户组对话框 -->
     <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
-      <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="用户组" prop="groupName">
+      <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
+        <el-form-item label="用户组:" prop="groupName">
           <el-input v-model.trim="userGroupform.groupName" max-length="20" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="userGroupform.status" class="filter-item">
-            <el-option v-for="(item,index) in statusOptions" :key="item" :label="item" :value="index" />
+        <el-form-item label="状态:" prop="status">
+          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item">
+            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
-        <el-button @click="cancelEdit()">取消</el-button>
+        <el-button @click="userGroupdialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 弹出授权角色对话框 -->
     <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
-      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户组拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+      <el-transfer
+        v-loading="roleLoading"
+        v-model="roleIds"
+        :data="roleData"
+        :titles="['其他角色', '用户组拥有角色']"
+        filterable
+        filter-placeholder="请输入角色名称"
+        class="box"
+        @change="handleRoleChange">
         <span slot="left-footer" size="small">
           <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
         </span>
@@ -118,17 +136,17 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的用户组名称'))
+      if (value.length > 20) {
+        callback(new Error('用户组名称不能超过20个字符'))
       } else {
         if (this.oldGroupName !== this.userGroupform.groupName) {
-          checkGroupName(this.userGroupform.groupName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('用户组名称已重复'))
+          checkGroupName(this.userGroupform.groupName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('用户组名称已重复'))
+              }
             }
           })
         } else {
@@ -172,7 +190,7 @@ export default {
       userGroupform: {
         id: '',
         groupName: undefined,
-        status: undefined
+        status: '生效'
       },
       rules: {
         groupName: [
@@ -187,36 +205,9 @@ export default {
     this.initList()
   },
   methods: {
-    // text(a) {
-    //   this.debounce(() => {
-    //     const html = document.querySelectorAll(".el-input__inner[placeholder='请输入用户名称']")[0]
-    //     console.log(html.value)
-    //     getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, name: html.value, rows: this.userRows }).then(res => {
-    //       console.log(res)
-    //       const userData = []
-    //       const checkUser = []
-    //       this.userTotal = res.data.data.total
-    //       res.data.data.rows.userList.forEach((val, index) => {
-    //         userData.push({
-    //           label: val.name,
-    //           key: val.id
-    //         })
-    //       })
-    //       res.data.data.rows.userAllOfGroup.forEach((val, index) => {
-    //         checkUser.push(val.id)
-    //       })
-    //       this.userData = userData
-    //       this.userIds = checkUser
-    //       this.userLoading = false
-    //     })
-    //   }, 400)
-    // },
-    // debounce(func, delay) {
-    //   clearTimeout(this.timer)
-    //   this.timer = setTimeout(func, delay)
-    // },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
+      console.log(this.numberTotal)
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
@@ -338,7 +329,6 @@ export default {
           } else {
             this.$message.error('授权失败')
           }
-          // this.userdialogVisible = false
           this.initList()
         }
       )
@@ -373,7 +363,7 @@ export default {
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
-      }, 1000)
+      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
@@ -383,6 +373,8 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error('添加失败')
             }
             // 将对话框隐藏
             this.userGroupdialogFormVisible = false
@@ -391,20 +383,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
-        } else {
-          this.$message({
-            message: '请输入数据',
-            type: 'error'
-          })
         }
       })
-    },
-    // 取消编辑
-    cancelEdit() {
-      this.$nextTick(() => {
-        this.$refs['userGroupform'].clearValidate()
-      })
-      this.userGroupdialogFormVisible = false
     },
     // 弹出编辑对话框
     handleUpdate(row) {
@@ -416,6 +396,9 @@ export default {
       this.userGroupform.groupName = row.groupName
       this.userGroupform.status = parseInt(row.status)
       this.userGroupform.id = row.id
+      this.$nextTick(() => {
+        this.$refs['userGroupform'].clearValidate()
+      })
     },
     // 编辑用户的功能实现
     updateData() {
@@ -423,7 +406,7 @@ export default {
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
-      }, 1000)
+      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -435,37 +418,34 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error('编辑失败')
             }
             // 重置表单元素的数据
             this.$refs['userGroupform'].resetFields()
-            this.$nextTick(() => {
-              this.$refs['userGroupform'].clearValidate()
-            })
             // 刷新页面显示
             this.initList()
-          })
-        } else {
-          this.$message({
-            message: '输入数据不合法',
-            type: 'error'
           })
         }
       })
     },
     // 删除用户功能实现
-    deleteUsergroup(id) {
+    deleteUsergroup(row) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          deleteUsergroupById(id).then(res => {
+          deleteUsergroupById(row.id).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -508,6 +488,13 @@ export default {
 </script>
 
 <style lang="scss">
+.el-tooltip__popper{
+   text-align: center;
+    width:200px;
+}
+.tablePagination{
+  margin-top:15px;
+}
 .management {
   .filter-container {
     .el-form-item {
@@ -520,10 +507,17 @@ export default {
 }
 .box {
   .el-transfer-panel {
+    height: 440px;
     width: 320px;
   }
   .el-transfer-panel .el-transfer-panel__footer {
     position: relative;
+  }
+  .el-transfer-panel__body.is-with-footer{
+    height: 350px;
+  }
+  .el-transfer-panel__list.is-filterable{
+    height: 310px;
   }
 }
 .el-dialog {

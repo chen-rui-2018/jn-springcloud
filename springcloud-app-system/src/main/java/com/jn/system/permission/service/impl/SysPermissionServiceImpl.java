@@ -10,8 +10,11 @@ import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.service.impl.SysPostServiceImpl;
 import com.jn.system.file.model.SysFileGroup;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.menu.dao.SysMenuMapper;
+import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.entity.TbSysMenu;
+import com.jn.system.menu.enums.SysMenuEnums;
 import com.jn.system.menu.model.SysMenu;
 import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.service.SysMenuService;
@@ -57,9 +60,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Autowired
     private SysPermissionResourcesMapper sysPermissionResourcesMapper;
     @Autowired
-    private SysMenuService sysMenuService;
-    @Autowired
     private TbSysMenuMapper tbSysMenuMapper;
+    @Autowired
+    private SysMenuMapper sysMenuMapper;
+    @Autowired
+    private SysResourcesMapper sysResourcesMapper;
 
     /**
      * 添加权限
@@ -300,48 +305,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息
-     *
-     * @param sysPermissionMenuPage
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息")
-    public PaginationData findMenuOfPermission(SysPermissionMenuPage sysPermissionMenuPage) {
-        List<SysMenu> sysMenuOfPermissionList =
-                sysPermissionMenuMapper.findMenuOfPermission(sysPermissionMenuPage.getPermissionId());
-        //条件分页查询未拥有的菜单信息
-        Page<Object> objects = PageHelper.startPage(sysPermissionMenuPage.getPage(), sysPermissionMenuPage.getRows());
-        List<SysMenu> otherMenuList = sysPermissionMenuMapper.findMenuByPermissionPage(sysPermissionMenuPage);
-        otherMenuList.addAll(sysMenuOfPermissionList);
-        SysPermissionMenuVO sysPermissionMenuVO = new SysPermissionMenuVO(sysMenuOfPermissionList, otherMenuList);
-        PaginationData data = new PaginationData(sysPermissionMenuVO, objects.getTotal());
-        return data;
-    }
-
-    /**
-     * 获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息
-     *
-     * @param sysPermissionResourcePage
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息")
-    public PaginationData findResourcesOfPermission(SysPermissionResourcePage sysPermissionResourcePage) {
-        List<SysResources> sysResourcesOfPermissionList =
-                sysPermissionResourcesMapper.findResourcesOfPermission(sysPermissionResourcePage.getPermissionId());
-        //条件分页获取未拥有的功能信息
-        Page<Object> objects = PageHelper.startPage(sysPermissionResourcePage.getPage(), sysPermissionResourcePage.getRows());
-        List<SysResources> otherResourceList =
-                sysPermissionResourcesMapper.findResourceByPermissionPage(sysPermissionResourcePage);
-        otherResourceList.addAll(sysResourcesOfPermissionList);
-        SysPermissionResourcesVO sysPermissionResourcesVO = new
-                SysPermissionResourcesVO(sysResourcesOfPermissionList, otherResourceList);
-        PaginationData data = new PaginationData(sysPermissionResourcesVO, objects.getTotal());
-        return data;
-    }
-
-    /**
      * 校验权限明显名称是否已经存在
      *
      * @param permissionName
@@ -358,65 +321,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 为权限添加菜单
-     *
-     * @param sysPermissionMenuAdd
-     */
-    @Override
-    @ServiceLog(doAction = "为权限添加菜单")
-    @Transactional(rollbackFor = Exception.class)
-    public void addMenuToPermission(SysPermissionMenuAdd sysPermissionMenuAdd, User user) {
-        //逻辑删除原权限菜单数据
-        sysPermissionMenuMapper.deleteByPermissionId(sysPermissionMenuAdd.getPermissionId());
-
-        Boolean isDelete = sysPermissionMenuAdd.getMenuIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
-        if (isDelete) {
-            logger.info("[权限授权菜单] 删除该权限下菜单信息成功！permissionId:{}", sysPermissionMenuAdd.getPermissionId());
-            return;
-        }
-
-        List<TbSysPermissionMenu> tbSysPermissionMenuList = new ArrayList<TbSysPermissionMenu>();
-        for (String menuId : sysPermissionMenuAdd.getMenuIds()) {
-            //生成权限菜单对象
-            createPermissionMenu(user, tbSysPermissionMenuList, menuId, sysPermissionMenuAdd.getPermissionId());
-        }
-        //添加新权限菜单数据
-        sysPermissionMenuMapper.addMenuToPermission(tbSysPermissionMenuList);
-        logger.info("[权限] 权限添加菜单权限成功,permissionId:{},menuIds:{}",
-                sysPermissionMenuAdd.getPermissionId(), Arrays.toString(sysPermissionMenuAdd.getMenuIds()));
-    }
-
-    /**
-     * 为权限添加页面功能
-     *
-     * @param sysPermissionMenuAdd
-     */
-    @Override
-    @ServiceLog(doAction = "为权限添加页面功能")
-    @Transactional(rollbackFor = Exception.class)
-    public void addResourceToPermission(SysPermissionResourceAdd sysPermissionMenuAdd, User user) {
-        //逻辑删除原有权限页面功能数据
-        sysPermissionResourcesMapper.deleteByPermissionId(sysPermissionMenuAdd.getPermissionId());
-
-        Boolean isDelete = sysPermissionMenuAdd.getResourcesIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
-        if (isDelete) {
-            logger.info("[权限授权页面功能] 删除该权限下页面功能信息成功！permissionId:{}",
-                    sysPermissionMenuAdd.getPermissionId());
-            return;
-        }
-
-        List<TbSysPermissionResources> tbSysPermissionResourcesList = new ArrayList<TbSysPermissionResources>();
-        for (String resourceId : sysPermissionMenuAdd.getResourcesIds()) {
-            //生产权限页面菜单对象
-            createPermissionResources(user, tbSysPermissionResourcesList, resourceId, sysPermissionMenuAdd.getPermissionId());
-        }
-        //添加新权限页面功能数据
-        sysPermissionResourcesMapper.addResourceToPermission(tbSysPermissionResourcesList);
-        logger.info("[权限] 权限添加菜单及页面功能权限成功,permissionId:{},resourcesIds:{}",
-                sysPermissionMenuAdd.getPermissionId(), Arrays.toString(sysPermissionMenuAdd.getResourcesIds()));
-    }
-
-    /**
      * 权限授权功能,获取菜单及功能信息
      *
      * @param permissionId
@@ -427,8 +331,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     public SysMenuResourcesVO getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = new SysMenuResourcesVO();
         //获取菜单树信息
-        List<SysMenuTreeVO> sysMenuTreeVOList = sysMenuService.selectMenuList();
-        sysMenuResourcesVO.setSysMenuTreeVOList(sysMenuTreeVOList);
+        List<SysMenuTreeOfPermissionVO> sysMenuTreeOfPermissionVOS = selectMenuList();
+        sysMenuResourcesVO.setSysMenuTreeVOList(sysMenuTreeOfPermissionVOS);
         //获取权限已有的菜单信息
         List<SysMenu> sysMenuOfPermissionList =
                 sysPermissionMenuMapper.findMenuOfPermission(permissionId);
@@ -447,6 +351,60 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         sysMenuResourcesVO.setMenuAndResourcesIds(menuAndResourcesIds);
         //返回信息
         return sysMenuResourcesVO;
+    }
+
+    /**
+     * 获取菜单及权限信息
+     * @return
+     */
+    public List<SysMenuTreeOfPermissionVO> selectMenuList() {
+        //先查询等级为1的菜单信息
+        List<SysMenuTreeOfPermissionVO> menuTreeVOList = sysMenuMapper.getMenuByLevelOne();
+        getChildMenuAndResourcesList(menuTreeVOList);
+        return menuTreeVOList;
+
+    }
+
+    /**
+     * 递归查询菜单子菜单及菜单页面功能信息
+     *
+     * @param menuTreeVOList
+     */
+    public void getChildMenuAndResourcesList(List<SysMenuTreeOfPermissionVO> menuTreeVOList) {
+        for (SysMenuTreeOfPermissionVO sysMenuTreeVO : menuTreeVOList) {
+            //判断菜单项是否是目录菜单,是递归获取子菜单信息
+            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
+                //以菜单id作为父id,去获取菜单子集
+                List<SysMenuTreeOfPermissionVO> childrenMenuList =
+                        sysMenuMapper.findMenuOfPermissionByParentId(sysMenuTreeVO.getId());
+                sysMenuTreeVO.setChildren(childrenMenuList);
+                //未查询到数据,设置为空
+                if (childrenMenuList == null || childrenMenuList.size() == 0) {
+                    sysMenuTreeVO.setChildren(null);
+                    continue;
+                } else {
+                    //子集不为空,继续查询子集菜单具有的子集菜单
+                    getChildMenuAndResourcesList(childrenMenuList);
+                }
+            }else{
+                //不是目录菜单,查询菜单的页面功能信息
+                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+                getResourcesByMenuId(sysMenuTreeVO);
+            }
+        }
+    }
+
+    /**
+     * 根据菜单id获取菜单功能信息
+     * @param sysMenuTreeVO
+     */
+    private void getResourcesByMenuId(SysMenuTreeOfPermissionVO sysMenuTreeVO) {
+        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
+        sysMenuTreeVO.setChildren(resourcesList);
+        if (resourcesList == null || resourcesList.size() == 0) {
+            sysMenuTreeVO.setChildren(null);
+        }
     }
 
     /**

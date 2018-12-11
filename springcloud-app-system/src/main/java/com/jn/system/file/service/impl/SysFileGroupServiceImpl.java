@@ -20,9 +20,11 @@ import com.jn.system.file.model.SysFileGroupPage;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.*;
 import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.permission.dao.SysPermissionFilesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,9 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
     @Resource
     private SysFileGroupFileMapper sysFileGroupFileMapper;
+
+    @Autowired
+    private SysPermissionFilesMapper sysPermissionFilesMapper;
 
     /**
      * 新增文件组
@@ -128,8 +133,14 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @ServiceLog(doAction = "批量删除文件组（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysFileGroupByIds(String[] ids) {
+        //删除对应文件组
         sysFileGroupMapper.deleteByIds(ids);
-        logger.info("[文件组] 批量删除文件组成功！,fileGroupIds: {}", Arrays.toString(ids));
+        //删除对应文件组文件关联信息
+        sysFileGroupFileMapper.deleteByFileGroupIds(ids);
+        //删除文件组对应权限信息
+        sysPermissionFilesMapper.deleteByFileGroupIds(ids);
+        logger.info("[文件组] 批量删除文件组信息,文件组与文件关联表信息,文件组关联权限信息成功！,fileGroupIds: {}",
+                Arrays.toString(ids));
     }
 
     /**
@@ -161,6 +172,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
+        sysFileGroupCriteria.setOrderByClause("create_time desc,id desc");
         TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字

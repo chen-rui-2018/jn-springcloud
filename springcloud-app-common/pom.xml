@@ -114,5 +114,9 @@
 			<groupId>com.google.zxing</groupId>
 			<artifactId>javase</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.github.openfeign.form</groupId>
+			<artifactId>feign-form-spring</artifactId>
+		</dependency>
 	</dependencies>
 </project>

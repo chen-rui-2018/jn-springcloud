@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class SysPermission implements Serializable {
     @ApiModelProperty("权限id")
     private String id;
     @ApiModelProperty("权限名称")
+    @Size(max = 20,message = "权限名称字数不能超过20个字")
     private String permissionName;
     @ApiModelProperty("创建时间")
     private Date createTime;

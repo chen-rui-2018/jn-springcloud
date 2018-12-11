@@ -17,7 +17,7 @@
     <!-- 表格 -->
     <el-table v-loading="permissionLoading" :data="permissionList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
-      <el-table-column type="index" align="center" />
+      <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="权限名称" align="center" prop="permissionName" />
       <el-table-column label="创建时间" min-width="150" align="center" prop="creationTime">
@@ -36,7 +36,6 @@
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
           <el-button type="primary" size="mini" @click="showMenuDialog(scope.row.id)">授权菜单</el-button>
-          <!-- <el-button type="primary" size="mini" @click="showPageDialog(scope.row.id)">授权功能</el-button> -->
           <el-button type="primary" size="mini" @click="showFileGroupDialog(scope.row.id)">授权文件组</el-button>
           <!-- 删除按钮 -->
           <el-button size="mini" type="danger" @click="deletePermission(scope.row.id)">删除</el-button>
@@ -44,7 +43,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+    <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 新增权限对话框 -->
     <el-dialog :visible.sync="permissiondialogFormVisible" :title="dialogStatus" width="400px" >
       <el-form ref="permissionform" :rules="rules" :model="permissionform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
@@ -58,7 +57,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button type="primary" @click="dialogStatus==='新增权限'?createPermissionData():updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增权限'?createPermissionData():updateData()">提交</el-button>
         <el-button @click="cancelEdit()">取消</el-button>
       </div>
     </el-dialog>
@@ -71,15 +70,6 @@
         <span slot="right-footer" size="small" />
       </el-transfer>
     </el-dialog>
-    <!-- 弹出授权菜单对话框
-    <el-dialog :visible.sync="menudialogVisible" title="授权菜单" width="800px">
-      <el-transfer v-loading="menuLoading" v-model="menuIds" :data="menuData" :titles="['其他菜单', '权限拥有菜单']" filterable filter-placeholder="请输入菜单名称" class="box" @change="handleMenuChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleMenuCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog> -->
     <!-- 弹出授权文件组对话框 -->
     <el-dialog :visible.sync="fileGroupdialogVisible" title="授权文件组" width="800px">
       <el-transfer v-loading="fileGroupLoading" v-model="fileGroupIds" :data="fileGroupData" :titles="['其他文件组', '权限拥有文件组']" filterable filter-placeholder="请输入文件组名称" class="box" @change="handleFileGroupChange">
@@ -89,26 +79,23 @@
         <span slot="right-footer" size="small" />
       </el-transfer>
     </el-dialog>
-    <!-- 弹出授权页面功能对话框
-    <el-dialog :visible.sync="pagedialogVisible" title="授权页面功能" width="800px">
-      <el-transfer v-loading="pageLoading" v-model="pageIds" :data="pageData" :titles="['其他页面功能', '权限拥有页面功能']" filterable filter-placeholder="请输入页面名称" class="box" @change="handlePageChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handlePageCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog> -->
     <!-- 授权菜单 -->
-    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" width="800px">
+    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" >
       <el-tree
         v-loading="menuLoading"
         ref="tree"
         :data="data2"
-        :default-expanded-keys="[2, 3]"
-        :default-checked-keys="[5]"
+        :default-expanded-keys="data3"
+        :default-checked-keys="data3"
         :props="defaultProps"
-        show-checkbox
-        node-key="id"/>
+        node-key="id"
+        show-checkbox>
+        <span slot-scope="{ node, data }" class="custom-tree-node">
+          <span>
+            <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
+          </span>
+        </span>
+      </el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="getCheckedKeys">确 定</el-button>
         <el-button @click="menuDialogVisible = false">取 消</el-button>
@@ -126,28 +113,26 @@ import {
   getRoleInfo,
   updataRole,
   deletePermissionById,
-  // getMenuInfo,
-  // updataMenu,
+  getAllList,
+  updataAllData,
   getFileGroupInfo,
   updataFileGroup
-  // updataPage,
-  // getPageInfo
 } from '@/api/Permission-model/permissionManagement'
 export default {
 
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (!reg.test(value)) {
-        callback(new Error('请输入正确的权限名称'))
+      if (value.length > 20) {
+        callback(new Error('权限名称的长度不能超过20个字符'))
       } else {
         if (this.oldPermissionName !== this.permissionform.permissionName) {
-          checkPermissionName(this.permissionform.permissionName).then(response => {
-            const result = response.data.data
-            if (result === 'success') {
-              callback()
-            } else {
-              callback(new Error('权限名称已重复'))
+          checkPermissionName(this.permissionform.permissionName).then(res => {
+            if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('权限名称已重复'))
+              }
             }
           })
         } else {
@@ -156,41 +141,9 @@ export default {
       }
     }
     return {
-      data2: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
+      isDisabled: false,
+      data3: [],
+      data2: [],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -199,8 +152,6 @@ export default {
       fileGroupIds: [],
       fileGroupLoading: false,
       fileGroupdialogVisible: false,
-      // menuData: [],
-      // menuIds: [],
       menuDialogVisible: false,
       menuLoading: false,
       moveArr: 0,
@@ -243,74 +194,37 @@ export default {
   },
   methods: {
     getCheckedKeys(a, b) {
-      this.menuDialogVisible = false
-      console.log(this.$refs.tree.getCheckedKeys())
-      console.log(this.$refs.tree.getCurrentKey())
+      const checkData = this.$refs.tree.getCheckedKeys()
+      // console.log(this.$refs.tree.getCheckedKeys())
+      updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: '授权成功',
+            type: 'success'
+          })
+        } else {
+          this.$message.error('授权失败')
+        }
+        this.menuDialogVisible = false
+        this.initList()
+      })
     },
     showMenuDialog(id) {
+      this.permissionId = id
       this.menuDialogVisible = true
+      this.menuLoading = true
+      // 获取权限具有的菜单和功能
+      getAllList(id).then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          this.data2 = res.data.data.sysMenuTreeVOList
+          this.data3 = res.data.data.menuAndResourcesIds
+        } else {
+          this.$message.error('获取数据失败')
+        }
+        this.menuLoading = false
+      })
     },
-    // // 授权页面分页功能
-    // handlePageCurrentChange(val) {
-    //   if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
-    //     this.numberPage = val
-    //   } else {
-    //     this.numberPage = val - 1
-    //   }
-    //   this.pagedialogVisible = true
-    //   this.getPage()
-    // },
-    // // 改变授权页面功能穿梭框时获取选中的页面功能
-    // handlePageChange(value, direction, movedKeys) {
-    //   this.pageIds = value
-    //   if (direction === 'left') {
-    //     this.moveArr = -movedKeys.length
-    //   } else if (direction === 'right') {
-    //     this.moveArr = movedKeys.length
-    //   }
-    //   updataPage({ permissionId: this.permissionId, resourcesIds: value }).then(res => {
-    //     if (res.data.code === '0000') {
-    //       this.$message({
-    //         message: '授权成功',
-    //         type: 'success'
-    //       })
-    //     } else {
-    //       this.$message.error('授权失败')
-    //     }
-    //     this.initList()
-    //   })
-    // },
-    // // 显示授权页面功能对话框
-    // showPageDialog(id) {
-    //   this.numberPage = 1
-    //   this.pageLoading = true
-    //   this.permissionId = id
-    //   this.pagedialogVisible = true
-    //   this.getPage()
-    // },
-    // getPage() {
-    //   getPageInfo({
-    //     permissionId: this.permissionId,
-    //     page: this.numberPage,
-    //     rows: this.numberRows
-    //   }).then(res => {
-    //     const pageData = []
-    //     const checkPage = []
-    //     this.numberTotal = res.data.data.total
-    //     res.data.data.rows.otherResourceList.forEach((val, index) => {
-    //       pageData.push({
-    //         label: val.resourcesName,
-    //         key: val.id
-    //       })
-    //     })
-    //     res.data.data.rows.sysResourcesOfPermissionList.forEach(val => {
-    //       checkPage.push(val.id)
-    //     })
-    //     this.pageData = pageData
-    //     this.pageIds = checkPage
-    //     this.pageLoading = false
-    //   })
-    // },
     // 授权文件组分页功能
     handleFileGroupCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -372,68 +286,6 @@ export default {
         this.fileGroupLoading = false
       })
     },
-
-    // 授权菜单分页功能
-    // handleMenuCurrentChange(val) {
-    //   if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
-    //     this.numberPage = val
-    //   } else {
-    //     this.numberPage = val - 1
-    //   }
-    //   this.menudialogVisible = true
-    //   this.getMenu()
-    // },
-    // // 改变授权菜单穿梭框时获取选中的菜单
-    // handleMenuChange(value, direction, movedKeys) {
-    //   this.menuIds = value
-    //   if (direction === 'left') {
-    //     this.moveArr = -movedKeys.length
-    //   } else if (direction === 'right') {
-    //     this.moveArr = movedKeys.length
-    //   }
-    //   updataMenu({ permissionId: this.permissionId, menuIds: value }).then(res => {
-    //     if (res.data.code === '0000') {
-    //       this.$message({
-    //         message: '授权成功',
-    //         type: 'success'
-    //       })
-    //     } else {
-    //       this.$message.error('授权失败')
-    //     }
-    //     this.initList()
-    //   })
-    // },
-    // // 显示授权菜单对话框
-    // showMenuDialog(id) {
-    //   this.numberPage = 1
-    //   this.menuLoading = true
-    //   this.permissionId = id
-    //   this.menudialogVisible = true
-    //   this.getMenu()
-    // },
-    // getMenu() {
-    //   getMenuInfo({
-    //     permissionId: this.permissionId,
-    //     page: this.numberPage,
-    //     rows: this.numberRows
-    //   }).then(res => {
-    //     const menuData = []
-    //     const checkMenu = []
-    //     this.numberTotal = res.data.data.total
-    //     res.data.data.rows.otherMenuList.forEach((val, index) => {
-    //       menuData.push({
-    //         label: val.menuName,
-    //         key: val.id
-    //       })
-    //     })
-    //     res.data.data.rows.sysMenuOfPermissionList.forEach(val => {
-    //       checkMenu.push(val.id)
-    //     })
-    //     this.menuData = menuData
-    //     this.menuIds = checkMenu
-    //     this.menuLoading = false
-    //   })
-    // },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
@@ -509,6 +361,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
               this.initList()
             } else {
               this.$message.error('删除失败')
@@ -524,6 +379,11 @@ export default {
     },
     // 编辑权限
     updateData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -565,6 +425,11 @@ export default {
     },
     // 新增权限
     createPermissionData() {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -649,16 +514,27 @@ export default {
   }
 }
 .box {
-  .el-transfer-panel {
+   .el-transfer-panel {
+    height: 440px;
     width: 320px;
   }
   .el-transfer-panel .el-transfer-panel__footer {
     position: relative;
   }
+  .el-transfer-panel__body.is-with-footer{
+    height: 350px;
+  }
+  .el-transfer-panel__list.is-filterable{
+    height: 310px;
+  }
 }
 .el-dialog {
   .el-dialog__footer {
     text-align: center;
+  }
+  .el-tree{
+    height: 360px;
+    overflow: auto;
   }
 }
 </style>

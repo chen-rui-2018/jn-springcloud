@@ -1,4 +1,4 @@
-package com.jn.user.entity;
+package com.jn.user.userinfo.entity;
 
 import java.io.Serializable;
 import java.util.Date;

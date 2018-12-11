@@ -1,7 +1,7 @@
-package com.jn.user.dao;
+package com.jn.user.userinfo.dao;
 
-import com.jn.user.entity.TbUserCompany;
-import com.jn.user.entity.TbUserCompanyCriteria;
+import com.jn.user.userinfo.entity.TbUserCompany;
+import com.jn.user.userinfo.entity.TbUserCompanyCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

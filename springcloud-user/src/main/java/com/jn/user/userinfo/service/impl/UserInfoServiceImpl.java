@@ -1,24 +1,22 @@
-package com.jn.user.service.impl;
+package com.jn.user.userinfo.service.impl;
 
-import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCache;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.user.dao.TbUserCompanyMapper;
-import com.jn.user.dao.TbUserPersonMapper;
-import com.jn.user.entity.TbUserCompany;
-import com.jn.user.entity.TbUserCompanyCriteria;
-import com.jn.user.entity.TbUserPerson;
-import com.jn.user.entity.TbUserPersonCriteria;
 import com.jn.user.model.UserCompany;
 import com.jn.user.model.UserExtension;
 import com.jn.user.model.UserPerson;
-import com.jn.user.service.UserInfoService;
+import com.jn.user.userinfo.dao.TbUserCompanyMapper;
+import com.jn.user.userinfo.dao.TbUserPersonMapper;
+import com.jn.user.userinfo.entity.TbUserCompany;
+import com.jn.user.userinfo.entity.TbUserCompanyCriteria;
+import com.jn.user.userinfo.entity.TbUserPerson;
+import com.jn.user.userinfo.entity.TbUserPersonCriteria;
+import com.jn.user.userinfo.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

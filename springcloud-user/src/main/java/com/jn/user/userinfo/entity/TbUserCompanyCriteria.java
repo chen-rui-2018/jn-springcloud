@@ -1,4 +1,4 @@
-package com.jn.user.entity;
+package com.jn.user.userinfo.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

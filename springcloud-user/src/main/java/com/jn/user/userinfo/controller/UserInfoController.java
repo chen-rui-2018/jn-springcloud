@@ -1,4 +1,4 @@
-package com.jn.user.controller;
+package com.jn.user.userinfo.controller;
 
 /**
  * 用户信息

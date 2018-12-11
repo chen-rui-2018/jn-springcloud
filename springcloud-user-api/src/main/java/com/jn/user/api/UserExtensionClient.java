@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * 登录客户端
+ * 用户信息客户端
  *
  * @Author: yangph
  * @Date: 2018/11/28 19:30
@@ -23,6 +23,6 @@ public interface UserExtensionClient {
      * @param account 用户账号
      * @return
      */
-    @RequestMapping(value = "/api/portals/getUserExtension", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/user/getUserExtension", method = RequestMethod.POST)
     Result<UserExtension> getUserExtension(@RequestBody String account);
 }

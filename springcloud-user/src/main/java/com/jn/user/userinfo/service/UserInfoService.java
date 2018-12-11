@@ -1,4 +1,5 @@
-package com.jn.user.service;
+package com.jn.user.userinfo.service;
+
 
 import com.jn.user.model.UserExtension;
 

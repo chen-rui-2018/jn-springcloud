@@ -1,4 +1,4 @@
-package com.jn.user.dao;
+package com.jn.user.userinfo.dao;
 
 /**
  * 用户信息

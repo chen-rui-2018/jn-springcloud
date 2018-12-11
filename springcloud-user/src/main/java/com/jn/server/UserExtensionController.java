@@ -6,7 +6,7 @@ import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtension;
-import com.jn.user.service.UserInfoService;
+import com.jn.user.userinfo.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

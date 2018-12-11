@@ -1,4 +1,4 @@
-package com.jn.park.activity.enums;
+package com.jn.park.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

@@ -1,4 +1,4 @@
-package com.jn.park.activity.entity;
+package com.jn.park.comment.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +17,8 @@ public class TbComment implements Serializable {
     private String state;
 
     private String comType;
+
+    private String comContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -76,6 +78,14 @@ public class TbComment implements Serializable {
         this.comType = comType == null ? null : comType.trim();
     }
 
+    public String getComContent() {
+        return comContent;
+    }
+
+    public void setComContent(String comContent) {
+        this.comContent = comContent == null ? null : comContent.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -94,7 +104,8 @@ public class TbComment implements Serializable {
             && (this.getComTime() == null ? other.getComTime() == null : this.getComTime().equals(other.getComTime()))
             && (this.getLikeNum() == null ? other.getLikeNum() == null : this.getLikeNum().equals(other.getLikeNum()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()))
-            && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()));
+            && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()))
+            && (this.getComContent() == null ? other.getComContent() == null : this.getComContent().equals(other.getComContent()));
     }
 
     @Override
@@ -108,6 +119,7 @@ public class TbComment implements Serializable {
         result = prime * result + ((getLikeNum() == null) ? 0 : getLikeNum().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
         result = prime * result + ((getComType() == null) ? 0 : getComType().hashCode());
+        result = prime * result + ((getComContent() == null) ? 0 : getComContent().hashCode());
         return result;
     }
 
@@ -124,6 +136,7 @@ public class TbComment implements Serializable {
         sb.append(", likeNum=").append(likeNum);
         sb.append(", state=").append(state);
         sb.append(", comType=").append(comType);
+        sb.append(", comContent=").append(comContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

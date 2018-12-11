@@ -2,11 +2,8 @@ package com.jn.park.activity.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.Activity;
-import com.jn.park.activity.model.ActivityDetail;
-import com.jn.park.activity.model.ActivitySlim;
-
-import java.util.List;
+import com.jn.park.model.Activity;
+import com.jn.park.model.ActivityDetail;
 
 /**
  * 活动

@@ -3,7 +3,6 @@ package com.jn.park.activity.dao;
 import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.entity.TbActivityDetailCriteria;
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface TbActivityDetailMapper {

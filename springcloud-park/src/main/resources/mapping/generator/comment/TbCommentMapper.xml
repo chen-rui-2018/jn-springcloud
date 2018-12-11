@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.activity.dao.TbCommentMapper">
-  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbComment">
-    <result column="id" jdbcType="VARCHAR" property="id" />
+<mapper namespace="com.jn.park.comment.dao.TbCommentMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.comment.entity.TbComment">
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="p_id" jdbcType="VARCHAR" property="pId" />
     <result column="com_account" jdbcType="VARCHAR" property="comAccount" />
     <result column="com_time" jdbcType="TIMESTAMP" property="comTime" />
     <result column="like_num" jdbcType="INTEGER" property="likeNum" />
     <result column="state" jdbcType="VARCHAR" property="state" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
+    <result column="com_content" jdbcType="VARCHAR" property="comContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,9 +70,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, p_id, com_account, com_time, like_num, state, com_type
+    id, p_id, com_account, com_time, like_num, state, com_type, com_content
   </sql>
-  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -85,21 +86,31 @@
       order by ${orderByClause}
     </if>
   </select>
-  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_comment
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria">
     delete from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.park.activity.entity.TbComment">
+  <insert id="insert" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment (id, p_id, com_account, 
       com_time, like_num, state, 
-      com_type)
+      com_type, com_content)
     values (#{id,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, 
       #{comTime,jdbcType=TIMESTAMP}, #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, 
-      #{comType,jdbcType=VARCHAR})
+      #{comType,jdbcType=VARCHAR}, #{comContent,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbComment">
+  <insert id="insertSelective" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -122,6 +133,9 @@
       </if>
       <if test="comType != null">
         com_type,
+      </if>
+      <if test="comContent != null">
+        com_content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -146,9 +160,12 @@
       <if test="comType != null">
         #{comType,jdbcType=VARCHAR},
       </if>
+      <if test="comContent != null">
+        #{comContent,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbCommentCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria" resultType="java.lang.Long">
     select count(*) from tb_comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -178,6 +195,9 @@
       <if test="record.comType != null">
         com_type = #{record.comType,jdbcType=VARCHAR},
       </if>
+      <if test="record.comContent != null">
+        com_content = #{record.comContent,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -191,9 +211,48 @@
       com_time = #{record.comTime,jdbcType=TIMESTAMP},
       like_num = #{record.likeNum,jdbcType=INTEGER},
       state = #{record.state,jdbcType=VARCHAR},
-      com_type = #{record.comType,jdbcType=VARCHAR}
+      com_type = #{record.comType,jdbcType=VARCHAR},
+      com_content = #{record.comContent,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.comment.entity.TbComment">
+    update tb_comment
+    <set>
+      <if test="pId != null">
+        p_id = #{pId,jdbcType=VARCHAR},
+      </if>
+      <if test="comAccount != null">
+        com_account = #{comAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="comTime != null">
+        com_time = #{comTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="likeNum != null">
+        like_num = #{likeNum,jdbcType=INTEGER},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=VARCHAR},
+      </if>
+      <if test="comType != null">
+        com_type = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="comContent != null">
+        com_content = #{comContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.comment.entity.TbComment">
+    update tb_comment
+    set p_id = #{pId,jdbcType=VARCHAR},
+      com_account = #{comAccount,jdbcType=VARCHAR},
+      com_time = #{comTime,jdbcType=TIMESTAMP},
+      like_num = #{likeNum,jdbcType=INTEGER},
+      state = #{state,jdbcType=VARCHAR},
+      com_type = #{comType,jdbcType=VARCHAR},
+      com_content = #{comContent,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

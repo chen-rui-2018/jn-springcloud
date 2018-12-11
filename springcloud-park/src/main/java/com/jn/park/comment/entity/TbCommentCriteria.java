@@ -1,4 +1,4 @@
-package com.jn.park.activity.entity;
+package com.jn.park.comment.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -572,6 +572,76 @@ public class TbCommentCriteria {
 
         public Criteria andComTypeNotBetween(String value1, String value2) {
             addCriterion("com_type not between", value1, value2, "comType");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentIsNull() {
+            addCriterion("com_content is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentIsNotNull() {
+            addCriterion("com_content is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentEqualTo(String value) {
+            addCriterion("com_content =", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentNotEqualTo(String value) {
+            addCriterion("com_content <>", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentGreaterThan(String value) {
+            addCriterion("com_content >", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentGreaterThanOrEqualTo(String value) {
+            addCriterion("com_content >=", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentLessThan(String value) {
+            addCriterion("com_content <", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentLessThanOrEqualTo(String value) {
+            addCriterion("com_content <=", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentLike(String value) {
+            addCriterion("com_content like", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentNotLike(String value) {
+            addCriterion("com_content not like", value, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentIn(List<String> values) {
+            addCriterion("com_content in", values, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentNotIn(List<String> values) {
+            addCriterion("com_content not in", values, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentBetween(String value1, String value2) {
+            addCriterion("com_content between", value1, value2, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andComContentNotBetween(String value1, String value2) {
+            addCriterion("com_content not between", value1, value2, "comContent");
             return (Criteria) this;
         }
     }

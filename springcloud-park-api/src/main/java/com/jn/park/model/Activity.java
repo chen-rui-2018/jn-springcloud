@@ -1,4 +1,4 @@
-package com.jn.park.activity.model;
+package com.jn.park.model;
 
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 活动信息

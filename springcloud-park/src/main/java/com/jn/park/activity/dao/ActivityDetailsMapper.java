@@ -1,9 +1,9 @@
 package com.jn.park.activity.dao;
 
 
-import com.jn.park.activity.model.ActivityApply;
-import com.jn.park.activity.model.ActivityDetail;
-import com.jn.park.activity.model.Comment;
+import com.jn.park.model.ActivityApply;
+import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.Comment;
 import feign.Param;
 import org.springframework.stereotype.Repository;
 

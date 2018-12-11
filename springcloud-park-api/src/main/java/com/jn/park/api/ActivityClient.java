@@ -1,6 +1,6 @@
-package com.jn.park.activity.api;
+package com.jn.park.api;
 
-import com.jn.park.activity.model.Activity;
+import com.jn.park.model.Activity;
 import com.jn.common.model.Page;
 import com.jn.common.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;

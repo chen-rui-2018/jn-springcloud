@@ -1,25 +1,23 @@
 package com.jn.park.activity.controller;
 
-import com.jn.common.exception.JnSpringCloudException;
-import com.jn.park.activity.entity.TbActivityApply;
-import com.jn.park.activity.enums.ActivityExceptionEnum;
-import com.jn.park.activity.model.Activity;
-import com.jn.park.activity.model.ActivityDetail;
-import com.jn.park.activity.model.ActivitySlim;
-import com.jn.park.activity.service.ActivityApplyService;
-import com.jn.park.activity.service.ActivityService;
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.entity.TbActivityApply;
+import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.service.ActivityService;
+import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.Activity;
+import com.jn.park.model.ActivityDetail;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

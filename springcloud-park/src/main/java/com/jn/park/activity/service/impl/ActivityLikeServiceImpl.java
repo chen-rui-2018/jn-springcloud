@@ -3,7 +3,7 @@ package com.jn.park.activity.service.impl;
 import com.jn.park.activity.dao.TbActivityLikeMapper;
 import com.jn.park.activity.entity.TbActivityLike;
 import com.jn.park.activity.entity.TbActivityLikeCriteria;
-import com.jn.park.activity.enums.ActivityExceptionEnum;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityLikeService;
 import com.jn.common.exception.JnSpringCloudException;

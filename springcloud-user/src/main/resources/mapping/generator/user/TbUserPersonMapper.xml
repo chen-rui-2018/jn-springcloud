@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.portals.user.dao.TbUserPersonMapper">
-  <resultMap id="BaseResultMap" type="com.jn.portals.user.entity.TbUserPerson">
+<mapper namespace="com.jn.user.userinfo.dao.TbUserPersonMapper">
+  <resultMap id="BaseResultMap" type="com.jn.user.userinfo.entity.TbUserPerson">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -84,7 +84,7 @@
     id, account, phone, email, name, sex, age, ID_card, company, post, education, avatar, 
     user_type, point, birthday, creater, modifier, create_time, modify_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.portals.user.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -108,13 +108,13 @@
     delete from tb_user_person
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.portals.user.entity.TbUserPersonCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria">
     delete from tb_user_person
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.portals.user.entity.TbUserPerson">
+  <insert id="insert" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person (id, account, phone, 
       email, name, sex, age, 
       ID_card, company, post, 
@@ -130,7 +130,7 @@
       #{modifier,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.portals.user.entity.TbUserPerson">
+  <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -251,7 +251,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.portals.user.entity.TbUserPersonCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultType="java.lang.Long">
     select count(*) from tb_user_person
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -347,7 +347,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.portals.user.entity.TbUserPerson">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     update tb_user_person
     <set>
       <if test="account != null">
@@ -407,7 +407,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.portals.user.entity.TbUserPerson">
+  <update id="updateByPrimaryKey" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     update tb_user_person
     set account = #{account,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},

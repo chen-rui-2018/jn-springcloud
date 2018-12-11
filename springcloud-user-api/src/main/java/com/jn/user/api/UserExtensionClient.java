@@ -23,6 +23,6 @@ public interface UserExtensionClient {
      * @param account 用户账号
      * @return
      */
-    @RequestMapping(value = "/api/portals/getUserExtension", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/user/getUserExtension", method = RequestMethod.POST)
     Result<UserExtension> getUserExtension(@RequestBody String account);
 }

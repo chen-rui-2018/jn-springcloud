@@ -1,6 +1,7 @@
 package com.jn.user.userinfo.service;
 
-import com.jn.user.userinfo.model.UserExtension;
+
+import com.jn.user.model.UserExtension;
 
 /**
  * 获取用户信息

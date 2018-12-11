@@ -2,15 +2,15 @@ package com.jn.user.userinfo.service.impl;
 
 import com.jn.common.util.cache.RedisCache;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.model.UserCompany;
+import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserPerson;
 import com.jn.user.userinfo.dao.TbUserCompanyMapper;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserCompany;
 import com.jn.user.userinfo.entity.TbUserCompanyCriteria;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
-import com.jn.user.userinfo.model.UserCompany;
-import com.jn.user.userinfo.model.UserExtension;
-import com.jn.user.userinfo.model.UserPerson;
 import com.jn.user.userinfo.service.UserInfoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

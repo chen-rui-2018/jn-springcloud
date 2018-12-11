@@ -1,4 +1,4 @@
-package com.jn.user.server;
+package com.jn.server;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;

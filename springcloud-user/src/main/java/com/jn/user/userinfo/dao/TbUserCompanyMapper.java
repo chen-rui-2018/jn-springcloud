@@ -2,9 +2,8 @@ package com.jn.user.userinfo.dao;
 
 import com.jn.user.userinfo.entity.TbUserCompany;
 import com.jn.user.userinfo.entity.TbUserCompanyCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbUserCompanyMapper {
     long countByExample(TbUserCompanyCriteria example);

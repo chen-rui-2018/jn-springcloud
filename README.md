@@ -59,7 +59,7 @@
 - 启动springcloud-app-config-manager项目，进行对项目的配置文件配置。
 ### 2.建立包规范
 - com.jn.config   config里面放配置JAVA类 
-- com.jn.user.server  server是你提供给内部接口的服务端类
+- com.jn.server   server是你提供给内部接口的服务端类
 - com.jn.XXX XXX是项目的模块包
 - XXX 下面建立 controller（外部接口）、dao（数据库）、model（通信对象，单对象）、entity(数据库对象,由generator生成器生成，不需要自己处理,严禁修改)、service（业务方法）、vo（视图对象-用于组合VO）、enums(枚举)、api(内部接口客户端) 共8个包
 - 8个包下面按照各自需求建立包
@@ -94,7 +94,7 @@
 ### 7.开发其他规范
 - Controller 返回的统一使用Result<T> 类 返回
 - 对象的参数校验，代码实现的：统一使用Assert 断言来判断，统一在controller层实现(eg:com.jn.controller.UploadController.upload)
-- 业务校验统一使用抛异常JnSpringCloudException来实现（eg：com.jn.user.server.SystemController.getUser）
+- 业务校验统一使用抛异常JnSpringCloudException来实现（eg：com.jn.server.SystemController.getUser）
 - controller层，不需要捕获任何的异常,已经有统一地方进行了处理
 - controller层，都需要继承BaseController，用于统一处理参数
 - 不允许使用SimpleDateFormate 类，请使用com.jn.common.util.DateUtils

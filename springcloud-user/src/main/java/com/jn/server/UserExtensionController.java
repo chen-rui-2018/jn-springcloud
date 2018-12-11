@@ -1,4 +1,4 @@
-package com.jn.user.server;
+package com.jn.server;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;

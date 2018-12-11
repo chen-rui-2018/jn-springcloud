@@ -1,4 +1,4 @@
-package com.jn.user.server;
+package com.jn.server;
 
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.jn.config.FastDfsDownClient;

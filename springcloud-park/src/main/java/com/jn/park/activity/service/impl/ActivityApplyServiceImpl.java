@@ -1,5 +1,10 @@
 package com.jn.park.activity.service.impl;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
@@ -14,6 +19,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtension;
 import org.slf4j.Logger;
@@ -22,6 +28,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -160,6 +170,55 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         applyCriteria.createCriteria().andActivityIdEqualTo(activityId);
         List<TbActivityApply> tbActivityApplies = tbActivityApplyMapper.selectByExample(applyCriteria);
         return tbActivityApplies;
+    }
+
+
+    @Override
+    public void getQrCode (OutputStream outputStream, String data) throws IOException{
+        try {
+
+            String dataHandle = new String(data.getBytes("UTF-8"),"UTF-8");
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(dataHandle, BarcodeFormat.QR_CODE, 800, 800);
+            //取得输出流
+            //写入文件刷新
+            MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
+            outputStream.flush();
+            //关闭输出流
+            outputStream.close();
+        }catch (WriterException e){
+            logger.error("[二维码生成],WriterException，URL:{}", data,e);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_WRITER_EXPEPTION);
+        }
+
+    }
+
+    @Override
+    public int signInActivity(User user, String activityId){
+        if(null == user){
+            logger.warn("[活动签到]，用户未登录，不允许签到：activityId: {}",activityId);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_LOGIN_EXPEPTION);
+        }
+        TbActivityApplyCriteria applyCriteria = new TbActivityApplyCriteria();
+        applyCriteria.createCriteria().andActivityIdEqualTo(activityId);
+        List<TbActivityApply> applies = tbActivityApplyMapper.selectByExample(applyCriteria);
+        if(applies == null || applies.size() == 0){
+            logger.warn("[活动签到]，活动报名信息列表为空，不允许签到：activityId: {}",activityId);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_INFO_IS_NULL);
+        }
+        TbActivityApply activityApply = null;
+        for(TbActivityApply apply:applies){
+            if(StringUtils.equals(apply.getAccount(),user.getAccount())){
+                activityApply = apply;
+            }
+        }
+        //activityApply !=null ,代表该用户已报名参加活动，可以进行签到
+        if(activityApply == null){
+            logger.warn("[活动签到]，用户{}未报名活动：activityId: {},不能进行签到", user.getAccount(),activityId);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_NOT_APPLY);
+        }else{
+
+        }
+        return 0;
     }
 
 }

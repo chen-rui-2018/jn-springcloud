@@ -1,6 +1,8 @@
 package com.jn.server;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.park.activity.entity.TbActivityApply;
+import com.jn.park.activity.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
@@ -14,10 +16,14 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -42,7 +48,6 @@ public class ActivityServerController extends BaseController {
     private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "获取活动列表")
-    @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectActivityList")
     public Result selectActivityList(@RequestBody Activity activity) {
         PaginationData paginationData = activityService.selectActivityList(activity);
@@ -50,7 +55,6 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取活动详情")
-    @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(@RequestBody String activityId) {
         ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
@@ -58,7 +62,6 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动报名管理")
-    @ApiOperation(value = "活动报名管理", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityApply")
     public Result updateActivityApply(@RequestBody String activityId,String state) {
         int i = activityService.updateActivityApply(activityId, state);
@@ -66,7 +69,6 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除草稿活动")
-    @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteDraftActivity")
     public Result deleteDraftActivity(@RequestBody String activityId) {
         int i = activityService.deleteDraftActivity(activityId);
@@ -74,7 +76,6 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除活动")
-    @ApiOperation(value = "删除活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteActivity")
     public Result deleteActivity(@RequestBody String activityId) {
         int i = activityService.deleteActivity(activityId);
@@ -82,7 +83,6 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消活动")
-    @ApiOperation(value = "取消活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelActivity")
     public Result cancelActivity(@RequestBody String activityId) {
         int i = activityService.cancelActivity(activityId);
@@ -90,10 +90,22 @@ public class ActivityServerController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动报名列表")
-    @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(@RequestBody String activityId, Page page) {
         List<TbActivityApply> applies = activityApplyService.applyActivityList(activityId, page);
         return new Result(applies);
     }
+
+    @ControllerLog(doAction = "根据Data获得对应二维码")
+    @RequestMapping(value = "/getQrCode")
+    public void getQrCode(OutputStream outputStream, @Validated String data){
+        try{
+            activityApplyService.getQrCode(outputStream,data);
+        }catch (IOException e){
+            logger.error("[二维码生成],IO异常，URL：{}", data,e);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_IO_EXPEPTION);
+        }
+    }
+
+
 }

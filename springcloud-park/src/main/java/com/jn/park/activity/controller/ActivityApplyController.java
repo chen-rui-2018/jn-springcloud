@@ -69,4 +69,16 @@ public class ActivityApplyController extends BaseController {
         activityApplyService.cancelApply(id,user.getAccount());
         return result;
     }
+
+
+
+    @ControllerLog(doAction = "在线签到")
+    @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class,
+            notes ="用户需登录。活动ID：activityId。" )
+    @RequestMapping(value = "/signInActivity")
+    public void signInActivity(String activityId){
+        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        activityApplyService.signInActivity(user,activityId);
+    }
 }

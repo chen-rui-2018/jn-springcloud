@@ -4,7 +4,6 @@ import com.jn.park.activity.dao.ActivityDetailsMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityLikeMapper;
 import com.jn.park.activity.dao.TbActivityMapper;
-import com.jn.activity.entity.*;
 import com.jn.park.activity.entity.*;
 import com.jn.park.activity.model.ActivityApply;
 import com.jn.park.activity.model.ActivityDetail;

@@ -19,14 +19,14 @@ public interface ActivityService {
      * @return
      */
 
-    public PaginationData selectActivityList(Activity activity);
+    PaginationData selectActivityList(Activity activity);
 
     /**
      * 查询活动详情
      * @param activityId
      * @return
      */
-    public ActivityDetail getActivityDetailsForManage(String activityId);
+    ActivityDetail getActivityDetailsForManage(String activityId);
 
     /**
      * 活动状态管理(修改)
@@ -34,35 +34,35 @@ public interface ActivityService {
      * @param state 1可报名 0不可报名
      * @return
      */
-    public int updateActivityApply(String activityId, String state);
+    int updateActivityApply(String activityId, String state);
 
     /**
      * 发布活动/保存草稿
      * @param activity
      * @return
      */
-    public int insterOrUpdateActivity(Activity activity);
+    int insterOrUpdateActivity(Activity activity);
 
     /**
      * 删除草稿活动数据
      * @param activityId . 多个id用,拼接
      * @return
      */
-    public int deleteDraftActivity(String activityId);
+    int deleteDraftActivity(String activityId);
 
     /**
      * 删除活动(已发布列表，需管理员才能删除)
      * @param activityId . 多个id用,拼接
      * @return
      */
-    public int deleteActivity(String activityId);
+    int deleteActivity(String activityId);
 
     /**
      * 取消活动
      * @param activityId
      * @return
      */
-    public int cancelActivity(String activityId);
+    int cancelActivity(String activityId);
 
 
 }

@@ -1,5 +1,6 @@
 package com.jn.park.activity.controller;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.Activity;
@@ -13,6 +14,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -23,6 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -146,4 +155,23 @@ public class ActivityController extends BaseController {
         List<TbActivityApply> applies = activityApplyService.applyActivityList(activityId, page);
         return new Result(applies);
     }
+
+    @ControllerLog(doAction = "下载签到二维码")
+    @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class,
+            notes ="下载条件：activityId" )
+    @RequestMapping(value = "/downloadSignCodeImg")
+    public void downloadSignCodeImg(HttpServletResponse httpServletResponse, @Validated String activityId){
+        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        httpServletResponse.reset();//清空输出流
+        try{
+            OutputStream outputStream = httpServletResponse.getOutputStream();
+            String url = "/activity/signInActivity?activityId="+activityId;
+            activityApplyService.getQrCode(outputStream,url);
+        }catch (IOException e){
+            logger.error("[活动二维码下载],IO异常，activityId: {},查询响应条数{}", activityId,e);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_IO_EXPEPTION);
+        }
+    }
+
+
 }

@@ -2,7 +2,12 @@ package com.jn.park.activity.service;
 
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.common.model.Page;
+import com.jn.system.model.User;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -37,4 +42,20 @@ public interface ActivityApplyService {
      * @return
      */
     List<TbActivityApply> applyActivityList(String activityId, Page page);
+
+    /**
+     * 生成二维码
+     * @param outputStream
+     * @param data :需要生成二维码的数据
+     */
+    void getQrCode (OutputStream outputStream, String data) throws IOException;
+
+    /**
+     * 前台用户签到接口
+     * @param user
+     * @param activityId
+     * @return
+     */
+    int signInActivity(User user,String activityId);
+
 }

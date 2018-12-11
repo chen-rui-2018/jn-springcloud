@@ -19,8 +19,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 锁切面
@@ -32,7 +34,7 @@ import java.util.Map;
  */
 @Component
 @Aspect
-@Order(1)
+@Order(2)
 public class RedisLockAspect {
 
     private static Logger logger = LoggerFactory.getLogger(RedisLockAspect.class);
@@ -116,12 +118,18 @@ public class RedisLockAspect {
         LocalVariableAttribute attr = (LocalVariableAttribute) codeAttribute.getAttribute(LocalVariableAttribute.tag);
         if (attr == null) {
             throw new JnSpringCloudLockException(CommonLockExceptionEnum.LOCK_INTO_ERROR);
-        }    
+        }
+        String[] parameterNames = new String[args.length];
         int pos = Modifier.isStatic(cm.getModifiers()) ? 0 : 1;
-        for (int i = 0; i < cm.getParameterTypes().length; i++){    
-            map.put( attr.variableName(i + pos),args[i]);
-        }    
-        return map;    
+        TreeMap<Integer, String> sortMap = new TreeMap<>();
+        for(int i = 0; i < attr.tableLength(); i++) {
+            sortMap.put(attr.index(i), attr.variableName(i));
+        }
+        parameterNames = Arrays.copyOfRange(sortMap.values().toArray(new String[0]), pos, parameterNames.length + pos);
+        for(int i = 0; i< parameterNames.length;i++){
+            map.put(parameterNames[i],args[i]);
+        }
+        return map;
     }    
 
 

@@ -32,6 +32,7 @@ import java.util.HashMap;
  * 3,hystrix 的使用
  * 4,服务间的文件的下载
  * 5,服务间的文件上传
+ * 6，锁的使用
  *
  * @author： fengxh
  * @date： Created on 2018/9/20 15:31
@@ -123,7 +124,7 @@ public class TestController extends BaseController {
     @RequestMapping(value = "/guest/test6")
     public Result jedis11(String key,String account) {
         try{
-            this.testService.doService(key,account);
+            this.testService.doService(key,account,0.1,1L);
         }catch (JnSpringCloudLockException e){
             //对锁发生的异常行为，进行业务处理。。。
         }catch (Exception e){

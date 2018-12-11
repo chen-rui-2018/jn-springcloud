@@ -98,6 +98,7 @@
 - controller层，不需要捕获任何的异常,已经有统一地方进行了处理
 - controller层，都需要继承BaseController，用于统一处理参数
 - 不允许使用SimpleDateFormate 类，请使用com.jn.common.util.DateUtils
+- 项目上不运行使用synchronized，lock的锁方式来完成业务，请使用redis锁，eg.com.jn.test.controller.TestController.jedis11
 - 遗留问题，或者防止遗忘的，使用todo方式。
 
 ### 8.文件规范
@@ -122,9 +123,10 @@
 
 - 一共分为4组：eg.1000999---代表公共性的未知异常
 - 第一组，2位为系统编码
-- 10			common
-- 11			system
-- 12			file
+- 10			common  所有业务服务的公共性异常
+- 11			system  基础服务
+- 12			file    文件服务
+
 - 第二组，2位为模块编码
 - 00		common
 - eg.

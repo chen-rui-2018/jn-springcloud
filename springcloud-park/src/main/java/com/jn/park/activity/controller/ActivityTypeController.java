@@ -1,6 +1,8 @@
 package com.jn.park.activity.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.ActivityType;
 import com.jn.park.activity.service.ActivityTypeService;
@@ -32,7 +34,7 @@ import java.util.Map;
  */
 @Api(tags = "门户活动类型")
 @RestController
-@RequestMapping(value = "/guest/portals/activityType")
+@RequestMapping(value = "/activity/activityType")
 public class ActivityTypeController extends BaseController {
     /**
      * 日志组件
@@ -60,8 +62,8 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityTypeList")
-    public Result findActivityTypeListByState(String state, String page, String rows) {
-        PageInfo activityTypeList = activityTypeService.findActivityTypeListByState(state, page, rows);
+    public Result findActivityTypeListByState(String state, @RequestBody  Page page) {
+        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(state,page);
         return new Result(activityTypeList);
     }
 

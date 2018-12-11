@@ -1,8 +1,12 @@
 package com.jn.park.activity.service;
 
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityDetail;
-import com.jn.common.model.PaginationData;
+import com.jn.park.activity.model.ActivitySlim;
+
+import java.util.List;
 
 /**
  * 活动
@@ -64,5 +68,14 @@ public interface ActivityService {
      */
     int cancelActivity(String activityId);
 
+    /**
+     * 活动列表App
+     * @param typeId
+     * @param page
+     * @param keyWord
+     * @return
+     */
+
+    PaginationData activityListSlim(String typeId, Page page, String keyWord);
 
 }

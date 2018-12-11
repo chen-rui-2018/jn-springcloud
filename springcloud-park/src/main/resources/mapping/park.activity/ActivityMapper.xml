@@ -29,4 +29,55 @@
             and a.acti_name = #{actiName}
         </if>
     </select>
+
+    <select id="activityListSlim" resultMap="SlimMap">
+          select
+            ta.id as id
+            ,ta.acti_name as actiName
+            ,ta.acti_address as actiAddress
+            ,ta.acti_start_time as actiStartTime
+            ,ta.acti_end_time as actiEndTime
+            ,ta.apply_num as applyNum
+            ,ta.acti_like as actiLike
+            ,ta.acti_number as actiNumber
+            ,ta.acti_poster_url as actiPosterUrl
+            , case when  tp.avatar is not null and tc.avatar is null
+                  then tp.avatar
+                  when tp.avatar is null and tc.avatar is not null
+                  then tc.avatar
+                  else tp.avatar
+                  end as "avatar"
+            from tb_activity ta
+            inner join tb_activity_detail td on td.activity_id = ta.id
+            left join  tb_activity_apply ty on ty.activity_id = ta.id
+            left join tb_sys_user tu on tu.account =ty.account
+            left join tb_user_person tp on tp.account = tu.account
+            left join tb_user_company tc on tc.account = tu.account
+            where 1=1
+            and ta.state != -1
+            <if test="typeId != null and type!=''">
+                and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
+            </if>
+            <if test="keyWord != null and keyWord !=''">
+            and ta.acti_name LIKE concat(concat('%',#{keyWord}),'%')
+            or ta.acti_address LIKE concat(concat('%',#{keyWord}),'%')
+            or td.acti_detail LIKE concat(concat('%',#{keyWord}),'%')
+            </if>
+    </select>
+    <resultMap id="SlimMap" type="com.jn.park.activity.model.ActivitySlim">
+        <id column="id" property="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="actiName" property="actiName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="actiAddress" property="actiAddress" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="actiStartTime" property="actiStartTime" javaType="java.lang.String" />
+        <result column="actiEndTime" property="actiEndTime" javaType="java.lang.String" />
+        <result column="applyNum" property="applyNum" javaType="java.lang.Integer" jdbcType="VARCHAR"/>
+        <result column="actiLike" property="actiLike" javaType="java.lang.Integer" jdbcType="VARCHAR"/>
+        <result column="actiNumber" property="actiNumber" javaType="java.lang.Integer" jdbcType="VARCHAR"/>
+        <result column="actiPosterUrl" property="actiPosterUrl" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <collection property="avatar"   ofType="java.lang.String">
+            <constructor>
+                <arg column="avatar"/>
+            </constructor>
+        </collection>
+    </resultMap>
 </mapper>

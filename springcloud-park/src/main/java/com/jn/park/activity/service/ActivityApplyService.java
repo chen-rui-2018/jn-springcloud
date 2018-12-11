@@ -1,5 +1,6 @@
 package com.jn.park.activity.service;
 
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.common.model.Page;
 import com.jn.system.model.User;
@@ -58,4 +59,11 @@ public interface ActivityApplyService {
      */
     int signInActivity(User user,String activityId);
 
+    /**
+     * 报名人列表信息
+     * @param activityId
+     * @param page
+     * @return
+     */
+    PaginationData findApplyActivityList(String activityId, Page page);
 }

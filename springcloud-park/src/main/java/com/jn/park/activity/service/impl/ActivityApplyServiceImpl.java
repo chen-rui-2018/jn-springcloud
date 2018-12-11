@@ -1,23 +1,27 @@
 package com.jn.park.activity.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
+import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
 import com.jn.park.activity.enums.ActivityExceptionEnum;
+import com.jn.park.activity.model.ActivityApplyDetail;
 import com.jn.park.activity.model.ApplyUserInfo;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
-import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.Page;
-import com.jn.common.model.Result;
-import com.jn.common.util.DateUtils;
-import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
@@ -28,8 +32,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.Duration;
@@ -59,6 +61,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+    @Autowired
+    private ActivityApplyMapper activityApplyMapper;
 
     /**
      * 快速报名
@@ -219,6 +223,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
         }
         return 0;
+    }
+    @ServiceLog(doAction = "报名人列表信息")
+    @Override
+    public PaginationData findApplyActivityList(String activityId, Page page) { int pageNumber = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        com.github.pagehelper.Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId);
+        return new PaginationData(activityApplyList,objects.getTotal());
     }
 
 }

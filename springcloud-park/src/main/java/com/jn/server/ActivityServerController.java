@@ -11,6 +11,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -44,9 +45,23 @@ public class ActivityServerController extends BaseController {
 
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ActivityTypeService activityTypeService;
 
     private ActivityApplyService activityApplyService;
 
+    @ControllerLog(doAction = "获取活动类型列表")
+    @RequestMapping(value = "/findActivityTypeList")
+    public Result findActivityTypeList(Page page) {
+        PaginationData paginationData = activityTypeService.findActivityTypeListByState("1",page);
+        return new Result(paginationData);
+    }
+    @ControllerLog(doAction = "前台获取简单活动列表")
+    @RequestMapping(value = "/activityListSlim")
+    public Result activityListSlim(String typeId,String keyWord,Page page) {
+        PaginationData paginationData = activityService.activityListSlim( typeId,page, keyWord);
+        return new Result(paginationData);
+    }
     @ControllerLog(doAction = "获取活动列表")
     @RequestMapping(value = "/selectActivityList")
     public Result selectActivityList(@RequestBody Activity activity) {

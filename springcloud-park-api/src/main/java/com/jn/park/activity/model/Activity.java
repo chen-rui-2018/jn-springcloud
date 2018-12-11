@@ -76,6 +76,16 @@ public class Activity extends Page implements Serializable {
     private String typeName;
     @ApiModelProperty(value = "活动详情")
     private String actiDetail;
+    @ApiModelProperty(value = "活动报名人头像列表")
+    private String avatar;
+
+    public String getApplyList() {
+        return avatar;
+    }
+
+    public void setApplyList(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getId() {
         return id;

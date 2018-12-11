@@ -1,5 +1,7 @@
 package com.jn.park.activity.controller;
 
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.enums.ActivityExceptionEnum;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.common.controller.BaseController;
@@ -69,9 +71,6 @@ public class ActivityApplyController extends BaseController {
         activityApplyService.cancelApply(id,user.getAccount());
         return result;
     }
-
-
-
     @ControllerLog(doAction = "在线签到")
     @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class,
             notes ="用户需登录。活动ID：activityId。" )
@@ -80,5 +79,15 @@ public class ActivityApplyController extends BaseController {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         activityApplyService.signInActivity(user,activityId);
+    }
+
+    @ControllerLog(doAction = "报名人列表查看")
+    @ApiOperation(value = "报名人列表查看", httpMethod = "POST", response = Result.class,
+            notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
+    @RequestMapping(value = "/activityApplyList")
+    public Result activityApplyList(String activityId,@RequestBody Page page){
+        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityId,page);
+        return new Result(activityApplyList);
     }
 }

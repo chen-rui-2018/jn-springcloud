@@ -12,6 +12,7 @@ import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.activity.model.ActivitySlim;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -205,7 +206,15 @@ public class ActivityServiceImpl implements ActivityService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_CANCEL_ERROR);
         }
     }
-
+    @ServiceLog(doAction = "前台简单活动列表")
+    @Override
+    public PaginationData activityListSlim(String typeId, com.jn.common.model.Page page, String keyWord) {
+        int pageNumber = page.getPage();
+        int pageSize = page.getRows()==0?15:page.getRows();
+        Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
+        List<ActivitySlim> activitySlimList=activityMapper.activityListSlim(typeId,keyWord);
+        return new PaginationData(activitySlimList,objects.getTotal());
+    }
 
 
 }

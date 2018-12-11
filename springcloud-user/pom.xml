@@ -55,10 +55,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        userExtension
                     </contexts>
                     <tableNames>
-
+                        tb_user_person,
+                        tb_user_company
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

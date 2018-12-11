@@ -3,10 +3,10 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="权限名称:">
-          <el-input v-model="listQuery.permissionName" placeholder="请输入权限名称" style="width: 150px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          <el-input v-model="listQuery.permissionName" placeholder="请输入权限名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" style="width: 150px;" clearable class="filter-item" @change="selecteUserStatus">
+          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -30,7 +30,7 @@
           <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" min-width="320" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" min-width="280" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -48,17 +48,17 @@
     <el-dialog :visible.sync="permissiondialogFormVisible" :title="dialogStatus" width="400px" >
       <el-form ref="permissionform" :rules="rules" :model="permissionform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
         <el-form-item label="名称" prop="permissionName">
-          <el-input v-model="permissionform.permissionName" />
+          <el-input v-model="permissionform.permissionName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="permissionform.status" class="filter-item">
+          <el-select v-model="permissionform.status" class="filter-item" placeholder="请选择" clearable >
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增权限'?createPermissionData():updateData()">提交</el-button>
-        <el-button @click="cancelEdit()">取消</el-button>
+        <el-button @click="permissiondialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- 弹出授权角色对话框 -->
@@ -80,7 +80,7 @@
       </el-transfer>
     </el-dialog>
     <!-- 授权菜单 -->
-    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单" >
+    <el-dialog :visible.sync="menuDialogVisible" title="授权菜单和功能" width="500px">
       <el-tree
         v-loading="menuLoading"
         ref="tree"
@@ -122,8 +122,9 @@ export default {
 
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('权限名称的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldPermissionName !== this.permissionform.permissionName) {
           checkPermissionName(this.permissionform.permissionName).then(res => {
@@ -193,9 +194,9 @@ export default {
     this.initList()
   },
   methods: {
-    getCheckedKeys(a, b) {
+    getCheckedKeys() {
+      // 获取选中的数据
       const checkData = this.$refs.tree.getCheckedKeys()
-      // console.log(this.$refs.tree.getCheckedKeys())
       updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -203,10 +204,10 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
         this.menuDialogVisible = false
-        this.initList()
+        // this.initList()
       })
     },
     showMenuDialog(id) {
@@ -215,12 +216,11 @@ export default {
       this.menuLoading = true
       // 获取权限具有的菜单和功能
       getAllList(id).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           this.data3 = res.data.data.menuAndResourcesIds
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.menuLoading = false
       })
@@ -250,9 +250,9 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
-        this.initList()
+        // this.initList()
       })
     },
     // 显示授权文件组对话框
@@ -311,9 +311,9 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
-        this.initList()
+        // this.initList()
       })
     },
     // 显示授权角色对话框
@@ -366,7 +366,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -390,12 +390,13 @@ export default {
           this.permissiondialogFormVisible = false
           // // 调用接口发送请求
           editPermissionList(this.permissionform).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
               })
+            } else {
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['permissionform'].resetFields()
@@ -415,13 +416,9 @@ export default {
       this.permissionform.permissionName = row.permissionName
       this.permissionform.status = parseInt(row.status)
       this.permissionform.id = row.id
-    },
-    // 取消编辑
-    cancelEdit() {
       this.$nextTick(() => {
         this.$refs['permissionform'].clearValidate()
       })
-      this.permissiondialogFormVisible = false
     },
     // 新增权限
     createPermissionData() {
@@ -442,7 +439,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('添加数据失败')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['permissionform'].resetFields()
@@ -484,7 +481,7 @@ export default {
           this.permissionList = res.data.data.rows
           this.total = res.data.data.total
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.permissionLoading = false
       })

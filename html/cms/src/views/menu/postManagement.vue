@@ -12,6 +12,7 @@
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
+        <el-button type="primary" class="filter-item">导出</el-button>
       </el-form>
     </div>
     <!-- 表格 -->
@@ -20,6 +21,7 @@
       <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="岗位名称" align="center" prop="postName" />
+      <el-table-column label="岗位类型" align="center" prop="postTypeName" />
       <el-table-column label="创建时间" align="center" prop="creationTime">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
@@ -48,6 +50,11 @@
       <el-form ref="postform" :rules="rules" :model="postform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px">
         <el-form-item label="岗位名称" prop="postName">
           <el-input v-model.trim="postform.postName" max-length="20" />
+        </el-form-item>
+        <el-form-item label="岗位类型" prop="postTypeName">
+          <el-select v-model="postform.postTypeName" placeholder="请选择" class="filter-item" >
+            <el-option v-for="(item,index) in postTypeNameOptions" :key="index" :label="item" :value="index" />
+          </el-select>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="postform.status" placeholder="请选择" class="filter-item" >
@@ -98,6 +105,7 @@ export default {
       }
     }
     return {
+      postTypeNameOptions: [],
       isDisabled: false,
       oldPostName: undefined,
       postform: {
@@ -122,6 +130,7 @@ export default {
           { required: true, message: '请输入岗位名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
+        postTypeName: [{ required: true, message: '请选择岗位类型', trigger: 'blur' }],
         status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
     }

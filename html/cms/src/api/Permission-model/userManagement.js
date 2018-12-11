@@ -56,7 +56,7 @@ export function findSysDepartmentAll(query) {
 }
 
 // 获取部门数据树
-export function findDepartmentAllByLevel(query) {
+export function getDepartment(query) {
   return request({
     url: 'system/sysDepartment/findDepartmentAllByLevel',
     method: 'post',

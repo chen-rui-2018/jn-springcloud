@@ -269,7 +269,7 @@ export default {
     this.initList()
   },
   methods: {
-    // 失去焦点的时候判断子菜单的名字是否又重复
+    // 失去焦点的时候判断子菜单的名字是否有重复
     checkoutSubName() {
       const arr = []
       this.subForm.menuData.forEach(val => {
@@ -295,7 +295,7 @@ export default {
               })
               this.getResources()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -400,6 +400,7 @@ export default {
         } else {
           this.$message.error('取消失败')
         }
+        this.initList()
       })
     },
     // 点击向下移动的时候

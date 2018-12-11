@@ -15,17 +15,35 @@
               @click="() => editDepartment( data)"/>
             <i
               class="el-icon-delete"
-              @click="() => deleteDepartment( data.id)"/>
+              @click="() => deleteDepartment( data.value)"/>
           </span>
         </span>
       </el-tree>
     </div>
+    <div class="department-right">
+      <div v-if="isSubForm">没有子部门</div>
+      <div v-show="isDepartmentInfo">
+        <div class="department-title">下级部门</div>
+        <div class="department-content">
+          <span>{{ currentDepartmentName }}</span>
+          <el-form ref="subForm" :rules="rules" :model="subForm" label-width="100px">
+            <el-form-item
+              v-for="(item,index) in subForm.departmentData"
+              :key="index"
+              :prop="'departmentData.'+index+'.label'">
+              <el-input v-model="item.label" />
+            </el-form-item>
+            <el-form-item>
+              <el-button :disabled="isDisabled" type="primary" @click="submitDepartmentInfo('subForm')" >保存</el-button>
+              <el-button @click="cencalEdit('subForm')" >取消</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
     <!-- 弹出的新增和编辑对话框 -->
     <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
       <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px">
-        <el-form-item label="上级部门:">
-          <el-input v-model="departmentForm.parentDepartmentName" disabled style="width:200px;" />
-        </el-form-item>
         <el-form-item v-show="visible" label="新增位置:">
           <el-radio v-model="location" label="1">同级部门</el-radio>
           <el-radio v-model="location" label="0">子部门</el-radio>
@@ -49,8 +67,9 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('部门名称的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldDepartmentName !== this.departmentForm.departmentName) {
           checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
@@ -68,9 +87,15 @@ export default {
       }
     }
     return {
+      currentId: undefined,
+      isDepartmentInfo: false,
+      isSubForm: false,
+      subForm: {
+        departmentData: [{ label: '' }]
+      },
+      currentDepartmentName: undefined,
       checkoutParentId: undefined,
       checkoutId: undefined,
-      currentId: undefined,
       visible: false,
       location: '1',
       oldDepartmentName: undefined,
@@ -78,8 +103,7 @@ export default {
       departmentForm: {
         parentId: undefined,
         id: undefined,
-        departmentName: undefined,
-        parentDepartmentName: undefined
+        departmentName: undefined
       },
       departmentDialogVisible: false,
       dialogStatus: undefined,
@@ -100,6 +124,7 @@ export default {
         this.departmentForm.parentId = this.checkoutParentId
       } else if (this.location === '0') {
         this.departmentForm.parentId = this.checkoutId
+        console.log(this.departmentForm.parentId)
       }
     }
   },
@@ -107,12 +132,24 @@ export default {
     this.initList()
   },
   methods: {
+    cencalEdit() {},
+    submitDepartmentInfo() {},
     handleNodeClick(data, Node) {
-      this.isShow = true
       console.log(data, Node)
+      this.currentId = data.value
+      this.currentDepartmentName = data.label
+      if (data.children === null) {
+        this.isDepartmentInfo = false
+        this.isSubForm = true
+      } else {
+        this.isSubForm = false
+        this.isDepartmentInfo = true
+        this.subForm.departmentData = data.children
+      }
     },
     // 删除部门功能实现
     deleteDepartment(id) {
+      console.log(id)
       this.$confirm(`此操作将永久删除这个部门及其子部门, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -127,7 +164,7 @@ export default {
               })
               this.initList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -140,23 +177,21 @@ export default {
     },
     // 显示编辑对话框
     editDepartment(data) {
-      this.$nextTick(() => {
-        this.$refs['departmentForm'].clearValidate()
-      })
       this.visible = false
       console.log(data)
       this.dialogStatus = '编辑部门'
       this.oldDepartmentName = data.label
-      this.departmentForm.id = data.id
+      this.departmentForm.id = data.value
       this.departmentDialogVisible = true
       this.departmentForm.departmentName = data.label
       if (data.parentName) {
-        this.departmentForm.parentDepartmentName = data.parentName
         this.departmentForm.parentId = data.parentId
       } else {
-        this.departmentForm.parentDepartmentName = ''
         this.departmentForm.parentId = '1'
       }
+      this.$nextTick(() => {
+        this.$refs['departmentForm'].clearValidate()
+      })
     },
     // 编辑部门功能的实现
     updateData() {
@@ -178,7 +213,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('res.result')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['departmentForm'].resetFields()
@@ -195,9 +230,6 @@ export default {
       setTimeout(() => {
         this.isDisabled = false
       }, 500)
-      if (this.location === '0') {
-        this.departmentForm.parentId = this.currentId
-      }
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
           // 将对话框隐藏
@@ -210,7 +242,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('res.result')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['departmentForm'].resetFields()
@@ -224,21 +256,17 @@ export default {
     addDepartment(data) {
       console.log(data)
       this.visible = true
+      // this.location = '1'
       this.dialogStatus = '新增部门'
       this.departmentDialogVisible = true
       this.departmentForm.departmentName = undefined
-      this.checkoutId = data.id
+      this.checkoutId = data.value
       this.checkoutParentId = data.parentId
-      this.location = '1'
       if (data.parentName) {
-        this.departmentForm.parentDepartmentName = data.parentName
         this.departmentForm.parentId = data.parentId
       } else {
-        this.departmentForm.parentDepartmentName = ''
         this.departmentForm.parentId = '1'
       }
-      this.currentId = data.id
-      console.log(data)
       this.$nextTick(() => {
         this.$refs['departmentForm'].clearValidate()
       })
@@ -250,7 +278,7 @@ export default {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
@@ -261,9 +289,9 @@ export default {
 
 <style lang="scss" scoped>
 .departmentManagement{
+  display: flex;
 .department-left{
   .el-tree{
-    width: 30%;
   padding: 20px;
   }
 }
@@ -276,4 +304,16 @@ export default {
     padding-right: 8px;
   }
 }
+</style>
+<style lang="scss">
+ .department-right{
+    padding: 20px;
+    .department-content{
+      display: flex;
+      align-items: center;
+      >span{
+        margin-right:100px;
+      }
+    }
+  }
 </style>

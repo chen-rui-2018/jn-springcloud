@@ -2,7 +2,6 @@ package com.jn.system.dept.dao;
 
 import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
-import com.jn.system.dept.vo.SysPostVO;
 
 import java.util.List;
 
@@ -21,25 +20,10 @@ public interface SysPostMapper {
     void deletePostBranch(String[] ids);
 
     /**
-     * 修改岗位信息
-     *
-     * @param sysPost
-     */
-    void updatePost(SysPost sysPost);
-
-    /**
      * 条件分页获取岗位信息
      *
      * @param sysPostPage
      * @return
      */
-    List<SysPostVO> findByPage(SysPostPage sysPostPage);
-
-    /**
-     * 判断被修改信息是否存在
-     *
-     * @param id
-     * @return
-     */
-    SysPost getPostById(String id);
+    List<SysPost> findByPage(SysPostPage sysPostPage);
 }

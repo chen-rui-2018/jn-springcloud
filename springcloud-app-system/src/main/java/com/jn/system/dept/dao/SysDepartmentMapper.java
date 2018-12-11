@@ -35,19 +35,4 @@ public interface SysDepartmentMapper {
      * @return
      */
     List<SysDepartmentVO> findChildrenDepartment(String departmentId);
-
-    /**
-     * 校验同级部门中部门名称是否存在
-     *
-     * @param sysDepartmentCheckName
-     * @return
-     */
-    SysDepartment checkDepartmentName(SysDepartmentCheckName sysDepartmentCheckName);
-
-    /**
-     *
-     * @param id
-     * @return
-     */
-    SysDepartment getDepartmentById(String id);
 }

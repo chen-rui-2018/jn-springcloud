@@ -18,16 +18,21 @@ import java.io.Serializable;
 public class SysPostPage extends Page implements Serializable {
     private static final long serialVersionUID = 4641296367346454971L;
     @ApiModelProperty("岗位名称")
+    @Pattern(regexp = "^$|[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
     @ApiModelProperty("状态")
+    @Pattern(regexp="^$|\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
+    @ApiModelProperty("岗位类型id")
+    private String postTypeId;
 
     public SysPostPage() {
     }
 
-    public SysPostPage(String postName, String status) {
+    public SysPostPage(String postName, String status, String postTypeId) {
         this.postName = postName;
         this.status = status;
+        this.postTypeId = postTypeId;
     }
 
     public String getPostName() {
@@ -46,11 +51,20 @@ public class SysPostPage extends Page implements Serializable {
         this.status = status;
     }
 
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId;
+    }
+
     @Override
     public String toString() {
         return "SysPostPage{" +
                 "postName='" + postName + '\'' +
                 ", status='" + status + '\'' +
+                ", postTypeId='" + postTypeId + '\'' +
                 '}';
     }
 }

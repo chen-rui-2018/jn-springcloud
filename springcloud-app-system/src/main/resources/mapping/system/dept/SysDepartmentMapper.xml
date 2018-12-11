@@ -71,19 +71,4 @@
             AND t.`status` = '1'
             ORDER BY t.create_time ASC,tt.create_time ASC;
     </select>
-
-    <select id="checkDepartmentName" parameterType="com.jn.system.dept.model.SysDepartmentCheckName"
-            resultType="com.jn.system.dept.model.SysDepartment">
-          SELECT
-            id,department_name
-            from tb_sys_department
-            where parent_id = #{parentId,jdbcType=VARCHAR}
-            and department_name = #{departmentName,jdbcType=VARCHAR}
-            and `status` = '1' LIMIT 1
-    </select>
-
-    <select id="getDepartmentById" resultType="com.jn.system.dept.model.SysDepartment" parameterType="java.lang.String">
-          SELECT id,department_name as departmentName,parent_id as parentId,`status`
-          FROM `tb_sys_department` where id = #{id,jdbcType=VARCHAR} and `status` != '-1';
-    </select>
 </mapper>

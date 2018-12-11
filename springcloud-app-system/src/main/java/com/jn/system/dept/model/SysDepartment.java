@@ -2,6 +2,7 @@ package com.jn.system.dept.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -19,17 +20,17 @@ import java.util.Date;
 public class SysDepartment implements Serializable {
 
     private static final long serialVersionUID = 3850036433256084982L;
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id",required = true)
     private String id;
-    @ApiModelProperty("部门名称")
+    @ApiModelProperty(value = "部门名称",required = true)
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "部门名称校验失败")
     private String departmentName;
     @ApiModelProperty("创建时间")
     private Date createTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
-    @ApiModelProperty("父级id")
+    @ApiModelProperty(value = "父级id",required = true)
+    @NotBlank(message = "父级id不能为空")
     private String parentId;
 
     public SysDepartment() {

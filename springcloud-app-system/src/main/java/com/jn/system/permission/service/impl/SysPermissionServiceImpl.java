@@ -114,28 +114,31 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @ServiceLog(doAction = "修改权限")
     @Transactional(rollbackFor = Exception.class)
     public void updatePermission(SysPermission sysPermission) {
-        //判断修改信息是否存在
-        SysPermission sysPermission1 = sysPermissionMapper.getPermissionById(sysPermission.getId());
-        if (sysPermission1 == null) {
-            logger.warn("[权限] 权限信息修改失败,修改信息不存在,permissionId: {}", sysPermission.getId());
+        String permissionId = sysPermission.getId();
+        String permissionName = sysPermission.getPermissionName();
+
+        //1.判断修改信息是否存在
+        TbSysPermission tbSysPermission = tbSysPermissionMapper.selectByPrimaryKey(permissionId);
+        if (tbSysPermission == null || SysStatusEnums.DELETED.getCode().equals(tbSysPermission.getStatus())) {
+            logger.warn("[权限] 权限信息修改失败,修改信息不存在,permissionId: {}", permissionId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
 
-        //判断权限名称是否已经存在
-        TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
-        TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
-        criteria.andPermissionNameEqualTo(sysPermission.getPermissionName());
-        criteria.andIdNotEqualTo(sysPermission.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        List<TbSysPermission> tbSysPermissions = tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
-        if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
-            logger.warn("[权限] 修改权限信息失败，权限名称已存在！，permissionName:{}", sysPermission.getPermissionName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+        //2.如果修改了权限名称,判断权限名称是否已经存在
+        if (!tbSysPermission.getPermissionName().equals(permissionName)){
+            List<TbSysPermission> tbSysPermissions = checkName(permissionName);
+            if (tbSysPermissions != null && tbSysPermissions.size() > 0) {
+                logger.warn("[权限] 修改权限信息失败，权限名称已存在！，permissionName:{}", permissionName);
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
+
         }
 
-        //更新权限信息
-        sysPermissionMapper.updatePermission(sysPermission);
-        logger.info("[权限] 修改权限信息成功！，sysPermissionId:{}", sysPermission.getId());
+        //3.更新权限信息
+        TbSysPermission tbSysPermission1 = new TbSysPermission();
+        BeanUtils.copyProperties(sysPermission,tbSysPermission1);
+        tbSysPermissionMapper.updateByPrimaryKeySelective(tbSysPermission1);
+        logger.info("[权限] 修改权限信息成功！，sysPermissionId:{}", permissionId);
     }
 
     /**
@@ -179,12 +182,16 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @ServiceLog(doAction = "批量逻辑删除权限")
     @Transactional(rollbackFor = Exception.class)
     public void deletePermissionBranch(String[] ids) {
-        sysPermissionMapper.deletePermissionBranch(ids);
-        sysPermissionFilesMapper.deletePermissionBranch(ids);
-        sysPermissionMenuMapper.deletePermissionBranch(ids);
-        sysRolePermissionMapper.deletePermissionBranch(ids);
-        sysPermissionResourcesMapper.deletePermissionBranch(ids);
         logger.info("[权限] 批量逻辑删除权限信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
+        sysPermissionMapper.deletePermissionBranch(ids);
+        logger.info("[权限] 批量逻辑删除权限关联文件组信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
+        sysPermissionFilesMapper.deletePermissionBranch(ids);
+        logger.info("[权限] 批量逻辑删除权限关联菜单信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
+        sysPermissionMenuMapper.deletePermissionBranch(ids);
+        logger.info("[权限] 批量逻辑删除权限关联角色信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
+        sysRolePermissionMapper.deletePermissionBranch(ids);
+        logger.info("[权限] 批量逻辑删除权限关联功能信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
+        sysPermissionResourcesMapper.deletePermissionBranch(ids);
     }
 
     /**

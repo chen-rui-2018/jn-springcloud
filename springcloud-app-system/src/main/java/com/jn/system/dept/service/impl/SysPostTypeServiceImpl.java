@@ -64,7 +64,7 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
         //校验添加岗位类型名称是否已经存在
         String flag = checkPostTypeName(postTypeName);
         if (SysReturnMessageEnum.FAIL.getMessage().equals(flag)) {
-            logger.warn("[岗位] 新增岗位类型失败，该岗位类型名称已存在！,postTypeName: {}", postTypeName);
+            logger.warn("[岗位类型] 新增岗位类型失败，该岗位类型名称已存在！,postTypeName: {}", postTypeName);
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         //生成岗位类型实体
@@ -145,24 +145,37 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     @Transactional(rollbackFor = Exception.class)
     public void update(SysPostType postType) {
         String postTypeName = postType.getPostTypeName();
-        TbSysPostType tbSysPostType1 = tbSysPostTypeMapper.selectByPrimaryKey(postType.getId());
-        //判断修改信息是否存在
+        String postTypeId = postType.getId();
+        TbSysPostType tbSysPostType1 = tbSysPostTypeMapper.selectByPrimaryKey(postTypeId);
+        //1.判断修改信息是否存在
         if (tbSysPostType1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysPostType1.getStatus())) {
-            logger.warn("[部门] 岗位类型修改失败,修改信息不存在,postId: {}", postType.getId());
+            logger.warn("[岗位类型] 岗位类型修改失败,修改信息不存在,postTypeId: {}", postTypeId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
-        } else {
-            //判断名称是否修改,若修改,判断修改后的名称是否已经存在
-            Boolean flag = tbSysPostType1.getPostTypeName().equals(postTypeName);
-            if (!flag) {
-                String result = checkPostTypeName(postTypeName);
-                if (SysReturnMessageEnum.FAIL.getMessage().equals(result)) {
-                    logger.warn("[岗位] 修改岗位类型失败，该岗位类型名称已存在！,postTypeName: {}", postTypeName);
-                    throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
-                }
+        }
+
+        //2.判断是否修改了岗位类型状态
+        if (SysStatusEnums.EFFECTIVE.getCode().equals(tbSysPostType1.getStatus()) &&
+                SysStatusEnums.INVALID.getCode().equals(postType.getStatus())){
+            //如果修改状态,判断当前岗位类型是否正在被使用,若正在被使用,不允许修改
+            List<TbSysPost> tbSysPosts = getTbSysPosts(postTypeId);
+            if (tbSysPosts != null && tbSysPosts.size() > 0){
+                logger.warn("[岗位类型] 修改岗位类型失败，岗位类型正在被使用,不允许修改为无效！,postTypeId: {}",
+                        postTypeId);
+                throw new JnSpringCloudException(SysPostExceptionEnums.UPDATE_STATUS_ERR);
             }
         }
 
-        //对岗位类型信息进行修改
+        //3.判断名称是否修改,若修改,判断修改后的名称是否已经存在
+        Boolean flag = tbSysPostType1.getPostTypeName().equals(postTypeName);
+        if (!flag) {
+            String result = checkPostTypeName(postTypeName);
+            if (SysReturnMessageEnum.FAIL.getMessage().equals(result)) {
+                logger.warn("[岗位类型] 修改岗位类型失败，该岗位类型名称已存在！,postTypeId: {}", postTypeId);
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
+        }
+
+        //4.对岗位类型信息进行修改
         TbSysPostType tbSysPostType = new TbSysPostType();
         BeanUtils.copyProperties(postType, tbSysPostType);
         tbSysPostTypeMapper.updateByPrimaryKeySelective(tbSysPostType);
@@ -182,11 +195,7 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
         Result result = new Result();
         if (StringUtils.isNotBlank(postTypeId)) {
             //判断该岗位类型,是否正在被岗位使用
-            TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-            TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-            criteria.andPostTypeIdEqualTo(postTypeId);
-            List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
+            List<TbSysPost> tbSysPosts = getTbSysPosts(postTypeId);
             //如果岗位类型正在被使用,则不允许删除
             if (tbSysPosts != null && tbSysPosts.size() > 0) {
                 logger.info("[岗位类型] 删除岗位类型失败,岗位类型正在被使用,不允许删除,postTypeId:{}", postTypeId);
@@ -204,6 +213,19 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
         }
         logger.info("[岗位类型] 删除岗位类型成功,postTypeId:{}", postTypeId);
         return result;
+    }
+
+    /**
+     * 根据岗位类型id获取岗位信息
+     * @param postTypeId
+     * @return
+     */
+    private List<TbSysPost> getTbSysPosts(String postTypeId) {
+        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        criteria.andPostTypeIdEqualTo(postTypeId);
+        return tbSysPostMapper.selectByExample(tbSysPostCriteria);
     }
 
     /**

@@ -62,4 +62,12 @@ public interface SysDepartmentService {
      * @return
      */
     List<SysDepartmentVO> findDepartmentAllByLevel();
+
+    /**
+     * 批量添加更新部门信息
+     *
+     * @param sysDepartmentList
+     * @param user
+     */
+    void addDepartmentBatch(List<SysDepartment> sysDepartmentList, User user);
 }

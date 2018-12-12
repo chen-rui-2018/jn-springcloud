@@ -88,7 +88,7 @@ public class SysUserServiceImpl implements SysUserService {
         checkDepartmentIdAndPostId(departmentId, postId, account, warnMessage);
 
         //根据添加账号当前用户账号是否存在
-        List<TbSysUser> tbSysUsers = checkAccount(sysUser.getAccount());
+        List<TbSysUser> tbSysUsers = checkAccount(account);
         if (tbSysUsers != null && tbSysUsers.size() > 0) {
             logger.warn("[用户] 新增用户失败，该用户账号已存在！,account: {}", account);
             throw new JnSpringCloudException(SysUserExceptionEnums.ADDERR_NAME_EXIST);
@@ -189,12 +189,14 @@ public class SysUserServiceImpl implements SysUserService {
     @ServiceLog(doAction = "删除用户")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
-        sysUserMapper.deleteUserBranch(ids);
-        sysUserDepartmentPostMapper.deleteUserBranch(ids);
-        sysUserRoleMapper.deleteUserBranch(ids);
-        sysGroupUserMapper.deleteUserBranch(ids);
         logger.info("[用户] 删除用户成功！，sysUserIds:{}", Arrays.toString(ids));
-
+        sysUserMapper.deleteUserBranch(ids);
+        logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserIds:{}", Arrays.toString(ids));
+        sysUserDepartmentPostMapper.deleteUserBranch(ids);
+        logger.info("[用户] 删除用户关联角色成功！，sysUserIds:{}", Arrays.toString(ids));
+        sysUserRoleMapper.deleteUserBranch(ids);
+        logger.info("[用户] 删除用户关联用户组成功！，sysUserIds:{}", Arrays.toString(ids));
+        sysGroupUserMapper.deleteUserBranch(ids);
     }
 
     /**
@@ -208,7 +210,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void updateSysUser(SysUser sysUser) {
         //判断修改信息是否存在
         TbSysUser tbSysUser1 = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
-        if (tbSysUser1 == null) {
+        if (tbSysUser1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysUser1.getStatus())) {
             logger.warn("[用户] 用户修改失败,修改信息不存在,userId: {}", sysUser.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else if (StringUtils.isNotBlank(sysUser.getAccount())) {
@@ -225,10 +227,7 @@ public class SysUserServiceImpl implements SysUserService {
         //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
-        TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
-        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
-        criteria.andIdEqualTo(tbSysUser.getId());
-        tbSysUserMapper.updateByExampleSelective(tbSysUser, tbSysUserCriteria);
+        tbSysUserMapper.updateByPrimaryKeySelective(tbSysUser);
         logger.info("[用户] 更新用户成功！，sysUserId:{}", sysUser.getId());
     }
 
@@ -264,6 +263,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void saveSysGroupToSysUser(String[] groupIds, String userId, User user) {
         //清除用户中已经存在的用户组
         sysUserMapper.deleGroupOfUser(userId);
+        List<SysGroupUser> list = new ArrayList<SysGroupUser>(32);
         if (groupIds != null && groupIds.length > 0) {
             //往用户中添加新的用户组
             for (String groupId : groupIds) {
@@ -274,8 +274,9 @@ public class SysUserServiceImpl implements SysUserService {
                 sysGroupUser.setUserId(userId);
                 sysGroupUser.setId(UUID.randomUUID().toString());
                 sysGroupUser.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-                sysUserMapper.saveSysGroupToSysUser(sysGroupUser);
+                list.add(sysGroupUser);
             }
+            sysGroupUserMapper.addGroupToUser(list);
             logger.info("[用户] 用户添加用户组成功！，sysUserId:{}", userId);
         }
 
@@ -313,6 +314,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void saveSysRoleToSysUser(String[] roleIds, String userId, User user) {
         //清除用户中已经存在的角色
         sysUserMapper.deleRoleOfUser(userId);
+        List<SysUserRole> list = new ArrayList<SysUserRole>(32);
         if (roleIds != null && roleIds.length > 0) {
             //为用户添加新的角色
             for (String roleId : roleIds) {
@@ -323,8 +325,9 @@ public class SysUserServiceImpl implements SysUserService {
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
                 sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-                sysUserMapper.saveSysRoleToSysUser(sysUserRole);
+                list.add(sysUserRole);
             }
+            sysUserRoleMapper.insertBatch(list);
             logger.info("[用户] 用户添加角色成功！，sysUserId:{}", userId);
         }
 

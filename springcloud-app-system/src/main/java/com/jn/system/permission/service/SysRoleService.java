@@ -15,12 +15,6 @@ import java.util.List;
  * @modified By:yuanyy
  **/
 public interface SysRoleService {
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    List<SysRole> findSysRoleAll();
 
     /**
      * 新增角色

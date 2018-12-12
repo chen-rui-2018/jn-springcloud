@@ -13,6 +13,7 @@ import com.jn.system.menu.dao.TbSysResourcesMapper;
 import com.jn.system.menu.entity.TbSysMenu;
 import com.jn.system.menu.entity.TbSysMenuCriteria;
 import com.jn.system.menu.enums.SysMenuEnums;
+import com.jn.system.menu.enums.SysMenuExceptionEnums;
 import com.jn.system.menu.model.*;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.service.SysResourcesService;
@@ -63,28 +64,27 @@ public class SysMenuServiceImpl implements SysMenuService {
     @ServiceLog(doAction = "更新菜单信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysMenuById(SysMenu sysMenu) {
+        String menuId = sysMenu.getId();
+        String parentId = sysMenu.getParentId();
+        String menuName = sysMenu.getMenuName();
         //判断修改信息是否存在
-        SysMenu sysMenu1 = sysMenuMapper.getMenuById(sysMenu.getId());
-        if (sysMenu1 == null) {
-            logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", sysMenu.getId());
+        TbSysMenu tbSysMenu1 = tbSysMenuMapper.selectByPrimaryKey(menuId);
+        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getStatus())) {
+            logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
-        TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
-        criteria.andParentIdEqualTo(sysMenu.getParentId());
-        criteria.andMenuNameEqualTo(sysMenu.getMenuName());
-        criteria.andIdNotEqualTo(sysMenu.getId());
-        List<TbSysMenu> tbSysMenus = tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
-        if (tbSysMenus != null && tbSysMenus.size() > 0) {
-            logger.warn("[菜单] 菜单更新失败，菜单名称已存在！，menuName:{}", sysMenu.getMenuName());
+        //判断名称是否已经存在
+        List<TbSysMenu> tbSysMenuList = checkMenusName(menuName, parentId);
+        if (tbSysMenuList != null && tbSysMenuList.size() > 0) {
+            logger.warn("[菜单] 菜单更新失败，菜单名称已存在！，menuName:{}", menuName);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
         }
+        //对信息进行修改操作
         sysMenu.setMenuUrl(StringUtils.trim(sysMenu.getMenuUrl()));
         TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
-        logger.info("[菜单] 菜单更新成功，menuId:{}", sysMenu.getId());
+        logger.info("[菜单] 菜单更新成功，menuId:{}", menuId);
     }
 
     /**
@@ -394,6 +394,15 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Transactional(rollbackFor = Exception.class)
     public void updateBatch(SysMenus sysMenus) {
         List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();
+        HashSet<String> set = new HashSet<String>();
+        //判断批量修改菜单中名称是否有重复的存在,使用set去重
+        for (SysMenuUpdate sysMenuUpdate : sysMenuSortList) {
+            set.add(sysMenuUpdate.getMenuName());
+        }
+        if (set.size() != sysMenuSortList.size()){
+            logger.warn("[菜单] 批量更新菜单失败,菜单名称重复，更新菜单项:{}",sysMenuSortList);
+            throw new JnSpringCloudException(SysMenuExceptionEnums.MENU_NAME_REPEAAT);
+        }
         //如果集合长度大于0,进行批量更新
         if (sysMenuSortList != null && sysMenuSortList.size() > 0) {
             sysMenuMapper.updateBatch(sysMenuSortList);

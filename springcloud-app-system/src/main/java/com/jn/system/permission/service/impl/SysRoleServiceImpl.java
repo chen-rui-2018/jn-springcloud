@@ -69,18 +69,6 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Autowired
     private SysGroupRoleMapper sysGroupRoleMapper;
 
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "查询所有角色")
-    public List<SysRole> findSysRoleAll() {
-        List<SysRole> sysRoleAll = sysRoleMapper.findSysRoleAll();
-        return sysRoleAll;
-    }
-
 
     /**
      * 新增角色
@@ -130,24 +118,25 @@ public class SysRoleServiceImpl implements SysRoleService {
     @ServiceLog(doAction = "更新角色信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateTbRole(SysRoleUpdate role) {
-        //判断修改信息是否存在
-        SysRole sysRole = sysRoleMapper.getRoleById(role.getId());
-        if (sysRole == null){
-            logger.warn("[角色] 角色修改失败,修改信息不存在,roleId: {}", role.getId());
+        String roleId = role.getId();
+        String roleName = role.getRoleName();
+        //1.判断修改信息是否存在
+        TbSysRole tbSysRole1 = tbSysRoleMapper.selectByPrimaryKey(roleId);
+        if (tbSysRole1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysRole1.getStatus())){
+            logger.warn("[角色] 角色修改失败,修改信息不存在,roleId: {}", roleId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        //判断名称是否已经存在
-        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
-        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
-        criteria.andRoleNameEqualTo(role.getRoleName());
-        criteria.andIdNotEqualTo(role.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
-        if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            logger.warn("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", role.getRoleName(), role.getId());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+        //2.如果修改了角色名称,判断名称是否已经存在
+        if (!tbSysRole1.getRoleName().equals(roleName)){
+            List<TbSysRole> tbSysRoles = checkName(roleName);
+            if (tbSysRoles != null && tbSysRoles.size() > 0) {
+                logger.warn("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}",
+                        roleName, roleId);
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
-        //修改角色信息
+
+        //3.修改角色信息
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRoleMapper.updateByPrimaryKeySelective(tbSysRole);
@@ -164,11 +153,14 @@ public class SysRoleServiceImpl implements SysRoleService {
     @ServiceLog(doAction = "批量删除角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
     public void deleteTbRoleById(String[] roleIds) {
-        sysRoleMapper.deleteBy(roleIds);
-        userRoleService.deleteTbUserRoleByRoleIds(roleIds);
-        rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
-        sysGroupRoleMapper.deleteTbSysGroupRoleByRoleIds(roleIds);
         logger.info("[角色权限] 删除角色成功！,roleIds: {}", Arrays.toString(roleIds));
+        sysRoleMapper.deleteBy(roleIds);
+        logger.info("[角色权限] 删除角色关联用户信息成功！,roleIds: {}", Arrays.toString(roleIds));
+        userRoleService.deleteTbUserRoleByRoleIds(roleIds);
+        logger.info("[角色权限] 删除角色关联权限成功！,roleIds: {}", Arrays.toString(roleIds));
+        rolePermissionService.deleteTbRolePermissionByRoleIds(roleIds);
+        logger.info("[角色权限] 删除角色关联用户组信息成功！,roleIds: {}", Arrays.toString(roleIds));
+        sysGroupRoleMapper.deleteTbSysGroupRoleByRoleIds(roleIds);
     }
 
     /**

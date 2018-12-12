@@ -1,36 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.menu.dao.SysMenuMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.menu.model.SysMenu">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="menu_name" jdbcType="VARCHAR" property="menuName" javaType="java.lang.String"/>
-        <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
-        <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
-        <result column="sort" jdbcType="VARCHAR" property="sort" javaType="java.lang.String"/>
-        <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-        <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
-    </resultMap>
-    <resultMap id="MenuResourcesResultMap" type="com.jn.system.menu.vo.SysMenuVO">
-        <id column="m_menuId" jdbcType="VARCHAR" property="menuId"/>
-        <result column="m_menuName" jdbcType="VARCHAR" property="menuName" javaType="java.lang.String"/>
-        <result column="m_menuUrl" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
-        <result column="m_parentId" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
-        <result column="m_parentMenuName" jdbcType="VARCHAR" property="parentMenuName" javaType="java.lang.String"/>
-        <result column="m_sort" jdbcType="VARCHAR" property="sort" javaType="java.lang.String"/>
-        <result column="m_isDir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
-        <result column="m_creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="m_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="m_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-        <result column="m_level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
-        <collection property="sysResources" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
-            <id column="r_id" property="id" jdbcType="VARCHAR"/>
-            <result column="r_resourcesName" property="resourcesName" jdbcType="VARCHAR"/>
-            <result column="r_resourcesUrl" property="resourcesUrl" jdbcType="VARCHAR"/>
-        </collection>
-    </resultMap>
     <resultMap id="MenuResourcesMap" type="com.jn.system.menu.vo.SysMenuTreeVO">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="menu_name" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
@@ -84,46 +54,6 @@
                 #{item.id,jdbcType=BIGINT}
             </foreach>
     </update>
-
-    <select id="selectMenuListBySearchKey" parameterType="com.jn.system.menu.model.SysMenuPage"
-            resultMap="MenuResourcesResultMap">
-        SELECT
-
-        m.id as m_menuId,
-        m.menu_url as m_menuUrl,
-        m.menu_name as m_menuName,
-        u.name as m_creator,
-        m.status as m_status,
-        m.create_time as m_createTime,
-        m.sort as m_sort,
-        m.is_dir as m_isDir,
-        m.parent_id as m_parentId,
-        m.level as m_level,
-        mm.menu_name as m_parentMenuName,
-        r.id as r_id,
-        r.resources_name as r_resourcesName,
-        r.resources_url as r_resourcesUrl
-        FROM
-        tb_sys_menu m
-        LEFT JOIN tb_sys_menu mm on mm.id=m.parent_id
-        LEFT JOIN ( SELECT * FROM tb_sys_resources r WHERE r.STATUS !=- 1 ) r ON m.id = r.menu_id
-        LEFT JOIN tb_sys_user u ON u.id = m.creator
-        WHERE
-        1=1
-        and m.status!=-1
-
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(menuName)">
-            and m.menu_name like CONCAT('%', #{menuName,jdbcType=VARCHAR}, '%')
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
-            and m.id=#{id,jdbcType=VARCHAR}
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and m.status=#{status,jdbcType=VARCHAR}
-        </if>
-        order by m.sort asc
-
-    </select>
 
     <select id="findLevelByMenuId" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT level FROM `tb_sys_menu` where id = #{id,jdbcType=VARCHAR} LIMIT 1
@@ -210,11 +140,6 @@
         where `status` = '1') tt on
         t.id = tt.menu_id
         ORDER BY t.`sort` ASC , tt.create_time DESC
-    </select>
-
-    <select id="getMenuById" resultType="com.jn.system.menu.model.SysMenu" parameterType="java.lang.String">
-        SELECT id,menu_name as menuName,menu_url as menuUrl,parent_id as parentId,is_dir as isDir,sort
-        FROM tb_sys_menu WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 
     <select id="getMenuByLevelOne" resultType="com.jn.system.permission.vo.SysMenuTreeOfPermissionVO">

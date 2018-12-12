@@ -186,33 +186,12 @@
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <!--为用户添加用户组-->
-    <insert id="saveSysGroupToSysUser" parameterType="com.jn.system.user.model.SysGroupUser">
-        insert into tb_sys_user_group
-        (id, group_id,creator, user_id,create_time, status)
-        values (#{id,jdbcType=VARCHAR},
-                #{groupId,jdbcType=VARCHAR},
-                #{creator,jdbcType=VARCHAR},
-                #{userId,jdbcType=VARCHAR},
-          	    now(),
-                #{status,jdbcType=VARCHAR})
-    </insert>
-
     <!--逻辑删除用户已经具有的角色-->
     <update id="deleRoleOfUser" parameterType="java.lang.String">
         update tb_sys_user_role
         set `status` = '-1'
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
-
-    <!--为用户添加添加角色-->
-    <insert id="saveSysRoleToSysUser" parameterType="com.jn.system.user.model.SysUserRole">
-        insert into tb_sys_user_role
-        (id, role_id, user_id,creator,create_time, status)
-        values (#{id,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR},
-         #{userId,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},
-          #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
-     </insert>
 
     <insert id="addDepartmentAndPostToUserBatch" parameterType="java.util.List">
         insert into tb_sys_user_department_post

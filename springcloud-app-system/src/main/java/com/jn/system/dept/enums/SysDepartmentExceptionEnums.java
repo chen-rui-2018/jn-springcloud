@@ -10,14 +10,13 @@ import com.jn.common.api.CodeAndMsg;
  * @version： v1.0
  * @modified By:
  **/
-public enum SysPostExceptionEnums implements CodeAndMsg {
-    DELETE_ERR_POSTTYPE("1112501","删除失败,岗位类型正在被使用"),
-    UPDATE_STATUS_ERR("1112502","修改失败,岗位类型正在被使用,不能修改为无效");
+public enum SysDepartmentExceptionEnums implements CodeAndMsg {
+    DEPARTMENT_NAME_REPEAAT("1113501","添加失败,部门名称重复");
 
     private String code;
     private String message;
 
-    SysPostExceptionEnums(String code, String message) {
+    SysDepartmentExceptionEnums(String code, String message) {
         this.code = code;
         this.message = message;
     }

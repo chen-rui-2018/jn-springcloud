@@ -50,13 +50,6 @@ public interface SysUserMapper {
     void updateSysUser(SysUserVO sysUserVO);
 
     /**
-     * 往用户中添加用户组
-     *
-     * @param sysGroupUser
-     */
-    void saveSysGroupToSysUser(SysGroupUser sysGroupUser);
-
-    /**
      * 清除用户组中已经存在的用户组
      *
      * @param userId
@@ -69,13 +62,6 @@ public interface SysUserMapper {
      * @param userId
      */
     void deleRoleOfUser(String userId);
-
-    /**
-     * 为用户添加权限
-     *
-     * @param sysUserRole
-     */
-    void saveSysRoleToSysUser(SysUserRole sysUserRole);
 
     /**
      * 清除用户原有部门岗位信息

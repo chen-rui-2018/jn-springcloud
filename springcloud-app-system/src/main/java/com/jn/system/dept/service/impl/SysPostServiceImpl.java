@@ -117,9 +117,10 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "批量删除岗位")
     @Transactional(rollbackFor = Exception.class)
     public void deletePostBranch(String[] ids) {
-        sysPostMapper.deletePostBranch(ids);
-        sysUserDepartmentPostMapper.deletePostBranch(ids);
         logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
+        sysPostMapper.deletePostBranch(ids);
+        logger.info("[岗位] 批量删除岗位关联用户信息成功！，sysPostIds:{}", Arrays.toString(ids));
+        sysUserDepartmentPostMapper.deletePostBranch(ids);
     }
 
     /**

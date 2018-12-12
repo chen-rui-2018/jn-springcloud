@@ -29,14 +29,6 @@ public interface SysMenuMapper {
     void deleteBy(List<String> ids);
 
     /**
-     * 根据主键查询菜单功能列表
-     *
-     * @param sysMenuPage
-     * @return
-     */
-    List<SysMenuVO> selectMenuListBySearchKey(SysMenuPage sysMenuPage);
-
-    /**
      * 根据菜单id获取菜单的等级
      *
      * @param parentId
@@ -66,14 +58,6 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuTreeVO> findMenuByParentId(String value);
-
-    /**
-     * 根据菜单id获取菜单信息
-     *
-     * @param id
-     * @return
-     */
-    SysMenu getMenuById(String id);
 
     /**
      * 批量对菜单排序进行更新

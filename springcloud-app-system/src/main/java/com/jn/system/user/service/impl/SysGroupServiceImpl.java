@@ -9,7 +9,6 @@ import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.permission.model.SysRole;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.permission.service.impl.SysRoleServiceImpl;
@@ -52,8 +51,6 @@ public class SysGroupServiceImpl implements SysGroupService {
     private SysGroupUserMapper sysGroupUserMapper;
     @Autowired
     private SysGroupRoleMapper sysGroupRoleMapper;
-    @Autowired
-    private SysRoleMapper sysRoleMapper;
     @Autowired
     private TbSysGroupMapper tbSysGroupMapper;
 
@@ -131,10 +128,12 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "逻辑删除用户组")
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
-        sysGroupMapper.deleteGroupBranch(groupIds);
-        sysGroupUserMapper.deleteGroupBranch(groupIds);
-        sysGroupRoleMapper.deleteGroupBranch(groupIds);
         logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", Arrays.toString(groupIds));
+        sysGroupMapper.deleteGroupBranch(groupIds);
+        logger.info("[用户组] 逻辑删除用户组关联用户信息,groupIds:{}", Arrays.toString(groupIds));
+        sysGroupUserMapper.deleteGroupBranch(groupIds);
+        logger.info("[用户组] 逻辑删除用户组关联角色信息,groupIds:{}", Arrays.toString(groupIds));
+        sysGroupRoleMapper.deleteGroupBranch(groupIds);
     }
 
     /**
@@ -147,25 +146,29 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
-        //判断用户组信息是否存在
-        SysGroup sysGroup1 = sysGroupMapper.getUserGroupById(sysGroup.getId());
-        if (sysGroup1 == null) {
+        String groupName = sysGroup.getGroupName();
+        String groupId = sysGroup.getId();
+
+        //1.判断用户组信息是否存在
+        TbSysGroup tbSysGroup1 = tbSysGroupMapper.selectByPrimaryKey(groupId);
+        if (tbSysGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysGroup1.getStatus())) {
             logger.warn("[用户组] 用户组修改失败,修改信息不存在,groupId: {}", sysGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        //判断名称是否已经存在
-        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-        criteria.andGroupNameEqualTo(sysGroup.getGroupName());
-        criteria.andIdNotEqualTo(sysGroup.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
-        if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+
+        //2.如果修改了用户组,判断名称是否已经存在
+        if (!tbSysGroup1.getGroupName().equals(groupName)) {
+            List<TbSysGroup> tbSysGroups = checkName(groupName);
+            if (tbSysGroups != null && tbSysGroups.size() > 0) {
+                logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
-        //修改用户组信息
-        sysGroupMapper.updateSysGroup(sysGroup);
+
+        //3.修改用户组信息
+        TbSysGroup tbSysGroup = new TbSysGroup();
+        BeanUtils.copyProperties(sysGroup, tbSysGroup);
+        tbSysGroupMapper.updateByPrimaryKeySelective(tbSysGroup);
         logger.info("[用户组] 更新用户组信息成功！,groupName: {}", sysGroup.getGroupName());
     }
 

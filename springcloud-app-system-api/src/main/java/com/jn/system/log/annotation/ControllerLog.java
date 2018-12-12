@@ -1,7 +1,5 @@
 package com.jn.system.log.annotation;
 
-import com.jn.system.log.enums.LogEnum;
-
 import java.lang.annotation.*;
 
 /**

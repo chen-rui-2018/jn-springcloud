@@ -17,10 +17,10 @@ import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
-import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -173,16 +173,29 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     }
 
 
+    /**
+     * 查询表名信息列表（后台）
+     * @param activityId
+     * @param page  不分页传null
+     * @return
+     */
     @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public List<ActivityApplyDetail> applyActivityList(String activityId, Page page){
+    public PaginationData applyActivityList(String activityId, Page page){
+        com.github.pagehelper.Page<Object> objects=null;
         if(null != page){
-            PageHelper.startPage(page.getPage(), page.getRows()==0?15:page.getRows(), true);
+            objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
         }
         List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId);
-        return activityApplyList;
+        return new PaginationData(activityApplyList,objects!=null?0:objects.getTotal());
     }
 
+    /**
+     * 二维码生成
+     * @param outputStream
+     * @param data :需要生成二维码的数据
+     * @throws IOException
+     */
     @ServiceLog(doAction = "二维码生成")
     @Override
     public void getQrCode (OutputStream outputStream, String data) throws IOException{
@@ -204,6 +217,12 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     }
 
+    /***
+     * 前台用户签到
+     * @param user
+     * @param activityId
+     * @return
+     */
     @ServiceLog(doAction = "前台用户签到")
     @Override
     public int signInActivity(User user, String activityId){
@@ -244,6 +263,13 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         return i;
     }
+    
+    /**
+     * 报名人列表信息
+     * @param activityId
+     * @param page
+     * @return
+     */
     @ServiceLog(doAction = "报名人列表信息")
     @Override
     public PaginationData findApplyActivityList(String activityId, Page page) { int pageNumber = page.getPage();

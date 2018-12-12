@@ -7,7 +7,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
-import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -158,8 +157,8 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(@RequestBody @Validated String activityId, @Validated Page page) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        List<ActivityApplyDetail> applies = activityApplyService.applyActivityList(activityId, page);
-        return new Result(applies);
+        PaginationData paginationData = activityApplyService.applyActivityList(activityId, page);
+        return new Result(paginationData);
     }
 
     @ControllerLog(doAction = "下载签到二维码")
@@ -188,6 +187,26 @@ public class ActivityController extends BaseController {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.sendMsgForActivate(activityId);
         return new Result(i);
+    }
+
+    @ControllerLog(doAction = "数据导出")
+    @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/exportDataExcel")
+    public void exportDataExcel(@RequestBody  String id,@RequestBody String exportColName, @RequestBody String exportTitle,HttpServletResponse response){
+       Assert.notNull(id, "活动id不能为空");
+        Assert.notNull(exportColName, "excel导出的字段别名不能为空");
+        Assert.notNull(exportTitle, "excel导出字段的标题不能为空");
+        //下载文件名
+        String codedFileName="活动报名人";
+        //单行表头
+        String isMoreHead="0";
+        //导出方式  xlsx
+        int exportAs=2;
+        //单行表头  rowIndex为0
+        int rowIndex=0;
+        PaginationData paginationData = activityApplyService.applyActivityList(id, null);
+        List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
+        activityService.exportDataExcel(codedFileName,exportColName,exportTitle,isMoreHead,exportAs,rowIndex,activityApplyDetails,null,response);
     }
 
 }

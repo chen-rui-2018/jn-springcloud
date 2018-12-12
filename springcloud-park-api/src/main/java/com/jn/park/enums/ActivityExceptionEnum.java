@@ -53,6 +53,11 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_APPLYED_SIGN_CODE_EXPEPTION("11110300","您已进行签到操作，无需再次签到"),
     ACTIVITY_SEND_MSG_TIME_EXPEPTION("11110300","当前时间不处于活动开始前24小时，不能推送消息"),
     ACTIVITY_USER_NOT_APPLY("11110300","您未报名该活动，不能进行签到"),
+    EXPORT_FAILED("11110504","导出失败"),
+    EXPORT_PARAMETER_NUM("11110205","excel导出字段别名[exportColName]个数和excel导出字段标题[exportTitle]个数不匹配"),
+    EXPORT_PARAMETER_MORE_HEAD("11110206","是否多行表头[isMoreHead]值只能是“0”、“1”"),
+    EXPORT_PARAMETER_INDEX_OR_TEMP("11110207","多行表头从哪一行开始写数据[rowIndex]的值至少是3，多行表头导出模板[temp]不能为空"),
+    EXPORT_CANNOT_EMPTY("11110208","没有数据，不能导出"),
     ;
 
     /**

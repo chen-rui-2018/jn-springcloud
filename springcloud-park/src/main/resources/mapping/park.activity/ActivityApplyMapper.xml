@@ -6,12 +6,13 @@
       ifnull(tp.account,tc.account) as account ,
       ifnull(tp.avatar,tc.avatar)as avatar,
       ifnull(tp.name,tc.com_name)as name,
-      ifnull(tp.phone,tc.con_phone) as phone,
+      ifnull(tp.phone,tc.phone) as phone,
       tp.sex as sex,
       tp.age as age,
       tp.company as company,
       tp.post as post,
-      ta.sign_state as singState
+      ta.sign_state as signState,
+      ta.activity_Id as activityId
     from tb_activity_apply ta
     left join tb_user_person tp
     on ta.account = tp.account

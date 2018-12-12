@@ -56,7 +56,7 @@
             left join tb_user_company tc on tc.account = tu.account
             where 1=1
             and ta.state != -1
-            <if test="typeId != null and type!=''">
+            <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>
             <if test="keyWord != null and keyWord !=''">

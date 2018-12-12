@@ -49,6 +49,9 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_APPLY_CODE_DOWN_WRITER_EXPEPTION("11110300","签到二维码下载读取异常"),
     ACTIVITY_USER_LOGIN_EXPEPTION("11110300","请先进行登录操作"),
     ACTIVITY_APPLY_INFO_IS_NULL("11110300","该活动报名信息为空，不允许签到"),
+    ACTIVITY_APPLYED_CODE_EXPEPTION("11110300","您已取消报名，不允许签到"),
+    ACTIVITY_APPLYED_SIGN_CODE_EXPEPTION("11110300","您已进行签到操作，无需再次签到"),
+    ACTIVITY_SEND_MSG_TIME_EXPEPTION("11110300","当前时间不处于活动开始前24小时，不能推送消息"),
     ACTIVITY_USER_NOT_APPLY("11110300","您未报名该活动，不能进行签到"),
     ;
 

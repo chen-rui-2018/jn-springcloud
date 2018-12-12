@@ -49,12 +49,12 @@ public class Activity extends Page implements Serializable {
     private String state;
     @ApiModelProperty(value = "活动发布时间")
     private String createTime;
-    @ApiModelProperty(value = "活动创建人ID")
-    private String createUserId;
+    @ApiModelProperty(value = "活动创建人")
+    private String createAccount;
     @ApiModelProperty(value = "修改时间")
     private String updateTime;
     @ApiModelProperty(value = "修改人")
-    private String updateUserId;
+    private String updateAccount;
     @ApiModelProperty(value = "阅读人数")
     private Integer actiViews;
     @ApiModelProperty(value = "点赞人数")
@@ -75,16 +75,12 @@ public class Activity extends Page implements Serializable {
     private String typeName;
     @ApiModelProperty(value = "活动详情")
     private String actiDetail;
-    @ApiModelProperty(value = "活动报名人头像列表")
-    private String avatar;
-
-    public String getApplyList() {
-        return avatar;
-    }
-
-    public void setApplyList(String avatar) {
-        this.avatar = avatar;
-    }
+    @ApiModelProperty(value = "活动发布时间")
+    private String issueTime;
+    @ApiModelProperty(value = "发布人")
+    private String issueAccount;
+    @ApiModelProperty(value = "是否展示报名人-0否1是")
+    private String showApplyNum;
 
     public String getId() {
         return id;
@@ -206,12 +202,12 @@ public class Activity extends Page implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getCreateUserId() {
-        return createUserId;
+    public String getCreateAccount() {
+        return createAccount;
     }
 
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateAccount(String createAccount) {
+        this.createAccount = createAccount;
     }
 
     public String getUpdateTime() {
@@ -222,12 +218,12 @@ public class Activity extends Page implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getUpdateUserId() {
-        return updateUserId;
+    public String getUpdateAccount() {
+        return updateAccount;
     }
 
-    public void setUpdateUserId(String updateUserId) {
-        this.updateUserId = updateUserId;
+    public void setUpdateAccount(String updateAccount) {
+        this.updateAccount = updateAccount;
     }
 
     public Integer getActiViews() {
@@ -308,5 +304,29 @@ public class Activity extends Page implements Serializable {
 
     public void setActiDetail(String actiDetail) {
         this.actiDetail = actiDetail;
+    }
+
+    public String getIssueTime() {
+        return issueTime;
+    }
+
+    public void setIssueTime(String issueTime) {
+        this.issueTime = issueTime;
+    }
+
+    public String getIssueAccount() {
+        return issueAccount;
+    }
+
+    public void setIssueAccount(String issueAccount) {
+        this.issueAccount = issueAccount;
+    }
+
+    public String getShowApplyNum() {
+        return showApplyNum;
+    }
+
+    public void setShowApplyNum(String showApplyNum) {
+        this.showApplyNum = showApplyNum;
     }
 }

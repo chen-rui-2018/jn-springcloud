@@ -17,7 +17,7 @@ import com.jn.park.activity.dao.TbActivityApplyMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
-import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,6 +64,15 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     private UserExtensionClient userExtensionClient;
     @Autowired
     private ActivityApplyMapper activityApplyMapper;
+
+    /**
+     * 报名已签到
+     */
+    private static final String ACTIVITY_APPLYED_SIGN_CODE="1";
+    /**
+     * 已报名
+     */
+    private static final String ACTIVITY_APPLYED_STATED="1";
 
     /**
      * 快速报名
@@ -162,27 +172,25 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
     }
 
-    /**
-     * 后台管理-查询活动报名信息列表
-     * @param activityId
-     * @param page
-     * @return
-     */
+
+    @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public List<TbActivityApply> applyActivityList(String activityId, Page page){
-        TbActivityApplyCriteria applyCriteria = new TbActivityApplyCriteria();
-        applyCriteria.createCriteria().andActivityIdEqualTo(activityId);
-        List<TbActivityApply> tbActivityApplies = tbActivityApplyMapper.selectByExample(applyCriteria);
-        return tbActivityApplies;
+    public List<ActivityApplyDetail> applyActivityList(String activityId, Page page){
+        if(null != page){
+            PageHelper.startPage(page.getPage(), page.getRows()==0?15:page.getRows(), true);
+        }
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId);
+        return activityApplyList;
     }
 
-
+    @ServiceLog(doAction = "二维码生成")
     @Override
     public void getQrCode (OutputStream outputStream, String data) throws IOException{
         try {
 
             String dataHandle = new String(data.getBytes("UTF-8"),"UTF-8");
             BitMatrix bitMatrix = new MultiFormatWriter().encode(dataHandle, BarcodeFormat.QR_CODE, 800, 800);
+
             //取得输出流
             //写入文件刷新
             MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
@@ -196,6 +204,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     }
 
+    @ServiceLog(doAction = "前台用户签到")
     @Override
     public int signInActivity(User user, String activityId){
         if(null == user){
@@ -215,14 +224,25 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
                 activityApply = apply;
             }
         }
+        int i ;
         //activityApply !=null ,代表该用户已报名参加活动，可以进行签到
         if(activityApply == null){
             logger.warn("[活动签到]，用户{}未报名活动：activityId: {},不能进行签到", user.getAccount(),activityId);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_NOT_APPLY);
         }else{
-
+            if(StringUtils.equals(activityApply.getSignType(),ACTIVITY_APPLYED_SIGN_CODE)){
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXPEPTION);
+            }
+            if(!StringUtils.equals(activityApply.getApplyState(),ACTIVITY_APPLYED_STATED)){
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXPEPTION);
+            }else{
+                activityApply.setSignType("0");
+                activityApply.setSignState("1");
+                activityApply.setSignTime(new Date());
+                i = tbActivityApplyMapper.updateByPrimaryKeySelective(activityApply);
+            }
         }
-        return 0;
+        return i;
     }
     @ServiceLog(doAction = "报名人列表信息")
     @Override

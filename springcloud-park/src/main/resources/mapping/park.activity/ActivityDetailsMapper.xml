@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.portals.activity.dao.ActivityDetailsMapper">
+<mapper namespace="com.jn.park.activity.dao.ActivityDetailsMapper">
     <!--获取活动详情-->
     <select id="getActivityDetails" resultType="com.jn.park.model.ActivityDetail">
         select

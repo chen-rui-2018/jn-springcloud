@@ -75,10 +75,11 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class,
             notes ="用户需登录。活动ID：activityId。" )
     @RequestMapping(value = "/signInActivity")
-    public void signInActivity(String activityId){
+    public Result signInActivity(String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        activityApplyService.signInActivity(user,activityId);
+        int i = activityApplyService.signInActivity(user, activityId);
+        return new Result(i);
     }
 
     @ControllerLog(doAction = "报名人列表查看")

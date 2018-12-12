@@ -40,9 +40,10 @@ public interface ActivityService {
     /**
      * 发布活动/保存草稿
      * @param activity
+     * @param account 当前登录用户
      * @return
      */
-    int insterOrUpdateActivity(Activity activity);
+    int insertOrUpdateActivity(Activity activity, String account);
 
     /**
      * 删除草稿活动数据
@@ -75,4 +76,10 @@ public interface ActivityService {
 
     PaginationData activityListSlim(String typeId, Page page, String keyWord);
 
+	 /**
+     * 手动发送活动通知接口
+     * @param activityId
+     * @return
+     */
+    int sendMsgForActivate(String activityId);
 }

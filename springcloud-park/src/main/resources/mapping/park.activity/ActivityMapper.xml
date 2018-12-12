@@ -28,6 +28,7 @@
         <if test="actiName != null">
             and a.acti_name = #{actiName}
         </if>
+        order by a.create_time desc
     </select>
 
     <select id="activityListSlim" resultMap="SlimMap">
@@ -64,7 +65,7 @@
             or td.acti_detail LIKE concat(concat('%',#{keyWord}),'%')
             </if>
     </select>
-    <resultMap id="SlimMap" type="com.jn.park.activity.model.ActivitySlim">
+    <resultMap id="SlimMap" type="com.jn.park.model.ActivitySlim">
         <id column="id" property="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="actiName" property="actiName" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="actiAddress" property="actiAddress" javaType="java.lang.String" jdbcType="VARCHAR"/>

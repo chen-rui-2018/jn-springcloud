@@ -13,7 +13,7 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
-import com.jn.park.activity.model.ActivitySlim;
+import com.jn.park.model.ActivitySlim;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.Activity;
@@ -61,6 +61,10 @@ public class ActivityServiceImpl implements ActivityService {
      * 活动草稿
      */
     private static final String ACTIVITY_STATE_DRAFT = "1";
+    /**
+     * 活动发布
+     */
+    private static final String ACTIVITY_STATE_PUBLISH = "2";
 
     /**
      * 日志组件
@@ -76,16 +80,18 @@ public class ActivityServiceImpl implements ActivityService {
         return data;
     }
 
+    @ServiceLog(doAction = "查询活动详情")
     @Override
     public ActivityDetail getActivityDetailsForManage(String activityId){
         List<ActivityDetail> activityDetails = activityDetailsMapper.getActivityDetails(activityId);
-        if(null == activityDetails||activityDetails.size()>0){
+        if(null == activityDetails||activityDetails.size()==0){
             logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId,activityDetails==null?0:activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESUT_ERROR);
         }
         return activityDetails.get(0);
     }
 
+    @ServiceLog(doAction = "修改活动报名状态")
     @Override
     public int updateActivityApply(String activityId, String state){
         if(StringUtils.equals(state,ACTIVITY_STATE_FALSE)|| StringUtils.equals(state,ACTIVITY_STATE_TRUE)){
@@ -103,43 +109,57 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+    @ServiceLog(doAction = "新增/修改活动")
     @Override
-    public int insterOrUpdateActivity(Activity activity){
+    public int insertOrUpdateActivity(Activity activity,String account){
 
         if(null == activity.getActiOrder()){
             //如果排序为空，默认值为0.
             activity.setActiOrder(0);
         }
-        try{
-            Date actiStartDate = DateUtils.parseDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
-            Date actiEndDate = DateUtils.parseDate(activity.getActiEndTime(), "yyyy-MM-dd HH:mm:ss");
-            Date actiApplyEndDate = DateUtils.parseDate(activity.getApplyEndTime(), "yyyy-MM-dd HH:mm:ss");
-            if(actiStartDate.before(actiEndDate)){
-                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_ERROR);
-            }
-            if(actiApplyEndDate.after(actiStartDate)){
-                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_TIME_ERROR);
-            }
-        }catch (ParseException e){
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR);
-        }
-
-        //TODO ---调用定时器发送消息
-        //TODO ---调用定时器修改活动状态
-
         TbActivity tbActivity = new TbActivity();
         BeanUtils.copyProperties(activity,tbActivity);
+        if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getState())){
+            try{
+                Date actiStartDate = DateUtils.parseDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
+                Date actiEndDate = DateUtils.parseDate(activity.getActiEndTime(), "yyyy-MM-dd HH:mm:ss");
+                Date actiApplyEndDate = DateUtils.parseDate(activity.getApplyEndTime(), "yyyy-MM-dd HH:mm:ss");
+                if(actiEndDate.before(actiStartDate)){
+                    throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_ERROR);
+                }
+                if(actiApplyEndDate.after(actiStartDate)){
+                    throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_TIME_ERROR);
+                }
+            }catch (ParseException e){
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR);
+            }
+
+            //TODO jiangyl 调用定时器发送消息
+            //TODO jiangyl 调用定时器修改活动状态
+
+            tbActivity.setApplyStartTime(DateUtils.parseDate(activity.getApplyStartTime()));
+            tbActivity.setApplyEndTime(DateUtils.parseDate(activity.getApplyEndTime()));
+            tbActivity.setActiStartTime(DateUtils.parseDate(activity.getActiStartTime()));
+            tbActivity.setActiEndTime(DateUtils.parseDate(activity.getActiEndTime()));
+            tbActivity.setMesSendTime(DateUtils.parseDate(activity.getMesSendTime()));
+            tbActivity.setIssueTime(DateUtils.parseDate(activity.getIssueTime()));
+        }
+
         TbActivityDetail tbActivityDetail = new TbActivityDetail();
         tbActivityDetail.setActiDetail(activity.getActiDetail());
         int num = 0 ;
         if(StringUtils.isEmpty(activity.getId())){
             //新增
+            tbActivity.setCreateTime(new Date());
             tbActivity.setId(UUID.randomUUID().toString());
+            tbActivity.setCreateAccount(account);
             num = tbActivityMapper.insert(tbActivity);
             tbActivityDetail.setActivityId(tbActivity.getId());
             tbActivityDetailMapper.insert(tbActivityDetail);
         }else{
             //修改
+            tbActivity.setUpdateTime(new Date());
+            tbActivity.setUpdateAccount(account);
             TbActivity tbActivity1 = tbActivityMapper.selectByPrimaryKey(activity.getId());
             if(null == tbActivity1){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
@@ -155,6 +175,7 @@ public class ActivityServiceImpl implements ActivityService {
         return num;
     }
 
+    @ServiceLog(doAction = "删除活动草稿")
     @Override
     public int deleteDraftActivity(String activityId){
         String[] split = activityId.split(",");
@@ -179,6 +200,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+    @ServiceLog(doAction = "删除活动（管理员权限）")
     @Override
     public int deleteActivity(String activityId){
         String[] split = activityId.split(",");
@@ -196,6 +218,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
+    @ServiceLog(doAction = "取消活动")
     @Override
     public int cancelActivity(String activityId){
         TbActivity tbActivity = new TbActivity();
@@ -216,6 +239,26 @@ public class ActivityServiceImpl implements ActivityService {
         Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
         List<ActivitySlim> activitySlimList=activityMapper.activityListSlim(typeId,keyWord);
         return new PaginationData(activitySlimList,objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "推动活动消息")
+    @Override
+    public int sendMsgForActivate(String activityId){
+        TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
+        if(null == tbActivity){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
+        }
+        //判断是否为活动开始前24小时之内
+        Date actiStartTime = tbActivity.getActiStartTime();
+        Date nowDate = new Date();
+        Date date = DateUtils.addHours(nowDate, 24);
+        if(actiStartTime.before(date)||nowDate.before(actiStartTime)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXPEPTION);
+        }else{
+            //TODO jiangyl 调用消息接口推送消息。
+
+        }
+        return 0;
     }
 
 

@@ -12,10 +12,13 @@ import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.Activity;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityDetail;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,7 +99,7 @@ public class ActivityController extends BaseController {
             notes = "新增活动不需要传ID,传ID即为修改。修改只能修改活动状态state为1(草稿)的数据。" +
                     "新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。排序字段为空，后台自动对其排序为0(靠后排序)")
     @RequestMapping(value = "/insterOrUpdateActivity")
-    public Result insterOrUpdateActivity(@RequestBody @Validated Activity activity) {
+    public Result insertOrUpdateActivity(@RequestBody @Validated Activity activity) {
         Assert.notNull(activity.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
         if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getState())) {
             Assert.notNull(activity.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
@@ -113,7 +116,8 @@ public class ActivityController extends BaseController {
             Assert.notNull(activity.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
 
         }
-        int i = activityService.insterOrUpdateActivity(activity);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityService.insertOrUpdateActivity(activity,user.getAccount());
         return new Result(i);
     }
 
@@ -154,7 +158,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(@RequestBody @Validated String activityId, @Validated Page page) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        List<TbActivityApply> applies = activityApplyService.applyActivityList(activityId, page);
+        List<ActivityApplyDetail> applies = activityApplyService.applyActivityList(activityId, page);
         return new Result(applies);
     }
 
@@ -162,7 +166,7 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class,
             notes = "下载条件：activityId")
     @RequestMapping(value = "/downloadSignCodeImg")
-    public void downloadSignCodeImg(HttpServletResponse httpServletResponse, @Validated String activityId) {
+    public void downloadSignCodeImg(HttpServletResponse httpServletResponse, @RequestBody @Validated String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         httpServletResponse.reset();//清空输出流
         try {
@@ -175,6 +179,15 @@ public class ActivityController extends BaseController {
         }
     }
 
+
+    @ControllerLog(doAction = "发送活动通知")
+    @ApiOperation(value = "发送活动通知", httpMethod = "POST", response = Result.class,
+            notes ="activityId:活动ID，只能在活动开始前24小时才能发送" )
+    @RequestMapping(value = "/sendMsgForActivate")
+    public Result sendMsgForActivate(@RequestBody @Validated String activityId) {
+        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        int i = activityService.sendMsgForActivate(activityId);
+        return new Result(i);
+    }
+
 }
-
-

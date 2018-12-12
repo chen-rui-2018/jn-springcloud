@@ -3,6 +3,7 @@ package com.jn.park.activity.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.common.model.Page;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.system.model.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,14 +36,14 @@ public interface ActivityApplyService {
      */
     void cancelApply(String id, String account);
 
-    
+
     /**
      * 后台管理-查询活动报名信息列表
      * @param activityId
-     * @param page
+     * @param page  不分页传null
      * @return
      */
-    List<TbActivityApply> applyActivityList(String activityId, Page page);
+    List<ActivityApplyDetail> applyActivityList(String activityId, Page page);
 
     /**
      * 生成二维码

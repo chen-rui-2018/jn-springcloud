@@ -1,6 +1,10 @@
 package com.jn.park.activity.controller;
 
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityDetailsService;
+import com.jn.park.activity.service.ActivityService;
+import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
@@ -19,21 +23,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 活动详情
- * @Author: yangph
+ * @Author: 活动相关信息展示
  * @Date: 2018/12/5 15:07
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "活动详情")
+@Api(tags = "活动相关信息展示")
 @RestController
-public class ActivityDetailsController extends BaseController {
+public class ActivityInfoController extends BaseController {
     /**
      * 日志组件
      */
-    private static Logger logger = LoggerFactory.getLogger(ActivityDetailsController.class);
+    private static Logger logger = LoggerFactory.getLogger(ActivityInfoController.class);
 
     @Autowired
     private ActivityDetailsService activityDetailsService;
+
+    @Autowired
+    private ActivityService activityService;
+    @Autowired
+    private ActivityTypeService activityTypeService;
 
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,notes = "id:活动id")
@@ -50,6 +59,19 @@ public class ActivityDetailsController extends BaseController {
         result.setData(activityDetailVO);
         return result;
     }
-
-
+    @ControllerLog(doAction = "前台获取简单活动列表")
+    @ApiOperation(value = "前台获取简单活动列表", httpMethod = "POST", response = Result.class,
+            notes = "查询条件,活动类型,分页参数,关键字")
+    @RequestMapping(value = "/guest/activityListSlim")
+    public Result activityListSlim(String typeId,String keyWord,@RequestBody Page page  ) {
+        PaginationData paginationData = activityService.activityListSlim(typeId,page,keyWord);
+        return new Result(paginationData);
+    }
+    @ControllerLog(doAction = "查询活动类型列表")
+    @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/guest/findActivityTypeList")
+    public Result findActivityTypeListByState(String state, @RequestBody  Page page) {
+        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(state,page);
+        return new Result(activityTypeList);
+    }
 }

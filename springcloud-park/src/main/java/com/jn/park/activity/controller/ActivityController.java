@@ -65,14 +65,7 @@ public class ActivityController extends BaseController {
         PaginationData paginationData = activityService.selectActivityList(activity);
         return new Result(paginationData);
     }
-    @ControllerLog(doAction = "前台获取简单活动列表")
-    @ApiOperation(value = "前台获取简单活动列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件,活动类型,分页参数,关键字")
-    @RequestMapping(value = "/activityListSlim")
-    public Result activityListSlim(String typeId,String keyWord,@RequestBody  Page page  ) {
-        PaginationData paginationData = activityService.activityListSlim(typeId,page,keyWord);
-        return new Result(paginationData);
-    }
+
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,
             notes = "查询条件activityId")

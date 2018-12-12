@@ -560,7 +560,7 @@ export default {
 }
 .el-tooltip__popper{
    text-align: center;
-    width:200px;
+    width:260px;
 }
 .box {
    .el-transfer-panel {

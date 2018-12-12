@@ -586,15 +586,19 @@ export default {
     },
     // 获取所有岗位
     findSysPostAll() {
-      findSysPostAll().then(response => {
-        console.log(response)
-        const data = response.data.data
-        this.positionOptions = data.map(function(item) {
-          return {
-            label: item.postName,
-            value: item.id
-          }
-        })
+      findSysPostAll().then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          const data = res.data.data
+          this.positionOptions = data.map(function(item) {
+            return {
+              label: item.postName,
+              value: item.id
+            }
+          })
+        } else {
+          this.$message.error(res.data.result)
+        }
       })
     },
     getUserList() {
@@ -931,9 +935,6 @@ export default {
     padding-bottom: 0px;
   }
 }
-// .filter-bar .el-form-item {
-//   margin-bottom: 0;
-// }
 .filter-container {
   padding-bottom: 0;
 }

@@ -1,9 +1,9 @@
 <template>
-  <div class="postManagement">
+  <div class="postTypeManagegement">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
-        <el-form-item label="岗位名称:">
-          <el-input v-model="listQuery.postName" placeholder="请输入名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        <el-form-item label="岗位类型名称:">
+          <el-input v-model="listQuery.postTypeName" placeholder="请输入名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selectePostStatus">
@@ -12,16 +12,12 @@
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
-        <el-button type="primary" class="filter-item">导出</el-button>
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table v-loading="listLoading" :data="postList" border fit highlight-current-row style="width: 100%;height:100%;">
-      <!-- 表格第一列  序号 -->
+    <el-table v-loading="listLoading" :data="postTypeList" border fit highlight-current-row style="width: 100%;height:100%;">
       <el-table-column type="index" align="center" label="序号" width="60" />
-      <!-- 表格第二列  姓名 -->
-      <el-table-column label="岗位名称" align="center" prop="postName" />
-      <el-table-column label="岗位类型" align="center" prop="postTypeName" />
+      <el-table-column label="岗位类型名称" align="center" prop="postTypeName" />
       <el-table-column label="创建时间" align="center" prop="creationTime">
         <template slot-scope="scope">
           {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
@@ -29,7 +25,7 @@
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
+          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -37,7 +33,7 @@
           <!-- 编辑按钮 -->
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <!-- 删除按钮 -->
-          <el-button size="mini" type="danger" @click="deletePost(scope.row.id)">删除</el-button>
+          <el-button size="mini" type="danger" @click="deletePostType(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -46,57 +42,41 @@
       <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     </div>
     <!-- 弹出的新增岗位对话框 -->
-    <el-dialog :visible.sync="postdialogFormVisible" :title="dialogStatus" width="400px">
-      <el-form ref="postform" :rules="rules" :model="postform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="岗位名称" prop="postName">
-          <el-input v-model.trim="postform.postName" max-length="20" clearable/>
-        </el-form-item>
-        <el-form-item label="岗位类型" prop="postTypeId">
-          <el-select v-model="postform.postTypeId" placeholder="请选择" class="filter-item" clearable>
-            <el-option v-for="(item,index) in postTypeNameOptions" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
+    <el-dialog :visible.sync="postTypeDialogFormVisible" :title="dialogStatus" width="400px">
+      <el-form ref="postTypeForm" :rules="rules" :model="postTypeForm" label-position="right" label-width="120px" style="max-width:300px;margin-left:20px">
+        <el-form-item label="岗位类型名称" prop="postTypeName">
+          <el-input v-model.trim="postTypeForm.postTypeName" max-length="20" clearable/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="postform.status" placeholder="请选择" class="filter-item" >
+          <el-select v-model="postTypeForm.status" placeholder="请选择" class="filter-item" >
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
-        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增岗位'?createPostData():updateData()">提交</el-button>
-        <el-button @click="postdialogFormVisible = false">取消</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增岗位类型'?createPostTypeData():updateData()">提交</el-button>
+        <el-button @click="postTypeDialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {
-  getAllList, addPostList, checkPostName, editPostList, deletePostById, getAllPostType
-} from '@/api/Permission-model/postManagement'
+import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById, checkPostTypeName } from '@/api/Permission-model/postTypeManagement'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        0: '未生效',
-        1: '生效'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     var checkAccount = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldPostName !== this.postform.postName) {
-          checkPostName(this.postform.postName).then(res => {
+        if (this.oldPostTypeName !== this.postTypeForm.postTypeName) {
+          checkPostTypeName(this.postTypeForm.postTypeName).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
               } else {
-                callback(new Error('岗位名称已重复'))
+                callback(new Error('岗位类型名称已使用'))
               }
             }
           })
@@ -106,66 +86,46 @@ export default {
       }
     }
     return {
-      postTypeNameOptions: [],
-      isDisabled: false,
-      oldPostName: undefined,
-      postform: {
-        id: '',
-        postName: undefined,
-        postTypeId: undefined,
+      postTypeForm: {
+        id: undefined,
+        postTypeName: undefined,
         status: undefined
       },
-      dialogStatus: '',
-      postdialogFormVisible: false,
+      isDisabled: false,
+      dialogStatus: undefined,
+      postTypeDialogFormVisible: false,
       total: 0,
-      postList: [],
       listLoading: false,
+      postTypeList: [],
+      statusOptions: ['未生效', '生效'],
       listQuery: {
-        postName: undefined,
+        postTypeName: undefined,
         status: undefined,
         page: 1,
         rows: 10
       },
-      statusOptions: ['未生效', '生效'],
       rules: {
-        postName: [
-          { required: true, message: '请输入岗位名称', trigger: 'blur' },
+        postTypeName: [
+          { required: true, message: '请输入岗位类型名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        postTypeId: [{ required: true, message: '请选择岗位类型', trigger: 'blur' }],
         status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
     }
   },
   created() {
     this.initList()
-    this.getPostType()
   },
   methods: {
-    // 获取岗位类型
-    getPostType() {
-      getAllPostType().then(res => {
-        if (res.data.code === '0000') {
-          res.data.data.forEach(val => {
-            this.postTypeNameOptions.push({
-              value: val.id,
-              label: val.postTypeName
-            })
-          })
-        } else {
-          this.$message.error(res.data.result)
-        }
-      })
-    },
     // 删除岗位功能实现
-    deletePost(id) {
+    deletePostType(id) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          deletePostById(id).then(res => {
+          deletePostTypeById(id).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -187,31 +147,31 @@ export default {
           })
         })
     },
-    // 弹出编辑岗位对话框
+    // 弹出编辑岗位类型对话框
     handleUpdate(row) {
       // 显示对话框
-      this.postdialogFormVisible = true
-      this.oldPostName = row.postName
+      this.postTypeDialogFormVisible = true
+      this.oldPostTypeName = row.postTypeName
       //   添加默认数据
-      this.dialogStatus = '编辑岗位'
-      this.postform.id = row.id
-      this.postform.postName = row.postName
-      this.postform.status = parseInt(row.status)
+      this.dialogStatus = '编辑岗位类型'
+      this.postTypeForm.id = row.id
+      this.postTypeForm.postTypeName = row.postTypeName
+      this.postTypeForm.status = parseInt(row.status)
       this.$nextTick(() => {
-        this.$refs['postform'].clearValidate()
+        this.$refs['postTypeForm'].clearValidate()
       })
     },
-    // 编辑岗位的功能实现
+    // 编辑岗位类型的功能实现
     updateData() {
       // 避免重复点击提交
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
       }, 500)
-      this.$refs['postform'].validate(valid => {
+      this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
           // // 调用接口发送请求
-          editPostList(this.postform).then(res => {
+          editPostTypeList(this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -221,32 +181,24 @@ export default {
               this.$message.error(res.data.result)
             }
             // 将对话框隐藏
-            this.postdialogFormVisible = false
+            this.postTypeDialogFormVisible = false
             // 刷新页面显示
             this.initList()
           })
         }
       })
     },
-    // 查询功能
-    handleFilter() {
-      this.listQuery.page = 1
-      this.initList()
-    },
-    selectePostStatus(value) {
-      this.listQuery.status = value
-    },
-    // 实现新增岗位功能
-    createPostData() {
+    // 实现新增岗位类型功能
+    createPostTypeData() {
       // 避免重复点击提交
       this.isDisabled = true
       setTimeout(() => {
         this.isDisabled = false
       }, 500)
-      this.$refs['postform'].validate(valid => {
+      this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addPostList(this.postform).then(res => {
+          addPostTypeList(this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -256,40 +208,34 @@ export default {
               this.$message.error(res.data.result)
             }
             // 将对话框隐藏
-            this.postdialogFormVisible = false
+            this.postTypeDialogFormVisible = false
             // 重置表单元素的数据
-            this.$refs['postform'].resetFields()
+            this.$refs['postTypeForm'].resetFields()
             // 刷新页面显示
             this.initList()
           })
         }
       })
     },
-    // 显示新增岗位对话框
+    // 显示新增岗位类型对话框
     handleCreate() {
-      this.resetuserGroupform()
-      this.dialogStatus = '新增岗位'
-      this.postdialogFormVisible = true
+      this.postTypeForm.postTypeName = undefined
+      this.postTypeForm.status = undefined
+      this.postTypeForm.id = undefined
+      this.dialogStatus = '新增岗位类型'
+      this.postTypeDialogFormVisible = true
       this.$nextTick(() => {
-        this.$refs['postform'].clearValidate()
+        this.$refs['postTypeForm'].clearValidate()
       })
     },
-    // 清空信息
-    resetuserGroupform() {
-      this.postform = {
-        postName: undefined,
-        status: undefined
-      }
+    // 查询功能
+    handleFilter() {
+      this.listQuery.page = 1
+      this.initList()
     },
-    // 项目初始化
-    initList() {
-      this.listLoading = true
-      getAllList(this.listQuery).then(response => {
-        console.log(response)
-        this.postList = response.data.data.rows
-        this.total = response.data.data.total
-        this.listLoading = false
-      })
+    // 状态改变
+    selectePostStatus(value) {
+      this.listQuery.status = value
     },
     // 表格分页功能
     handleSizeChange(val) {
@@ -300,26 +246,28 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.initList()
+    },
+    initList() {
+      this.listLoading = true
+      getPostTypeList(this.listQuery).then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          this.postTypeList = res.data.data.rows
+          this.total = res.data.data.total
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.listLoading = false
+      })
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-.postManagement {
-  .pagination-container{
-    margin-top:15px;
-  }
-  .filter-container {
-    margin-left: 20px;
-    .el-form-item{
-      margin-bottom: 0px;
+<style lang="scss">
+   .filter-container {
+    .el-form-item {
+      margin-bottom: 0;
     }
   }
-  .el-dialog{
-  .el-form-item{
-    margin-bottom: 32px;
-  }
-}
-}
 </style>

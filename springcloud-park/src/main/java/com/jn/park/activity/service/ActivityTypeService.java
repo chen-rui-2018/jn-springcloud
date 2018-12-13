@@ -25,7 +25,7 @@ public interface ActivityTypeService {
      * @param user
      * @return
      */
-    void  insertActivityType(String typeName, String state, List<String> templateList, User user);
+    void  insertActivityType(String typeName, String state, String templateList, User user);
 
     /**
      * 查询活动类型列表
@@ -50,11 +50,11 @@ public interface ActivityTypeService {
      * @param user
      * @return
      */
-    void updateActivityType(String typeId,String typeName, String state, List<String> templateList, User user);
+    void updateActivityType(String typeId,String typeName, String state, String templateList, User user);
 
     /**
      *
      * @param typeId
      */
-    void deleteActivityTypeList(List<String> typeId);
+    void deleteActivityTypeList(String typeId);
 }

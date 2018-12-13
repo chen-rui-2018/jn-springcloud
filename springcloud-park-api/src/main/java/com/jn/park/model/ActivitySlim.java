@@ -1,6 +1,7 @@
 package com.jn.park.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 /**
@@ -30,8 +31,21 @@ public class ActivitySlim {
     private Integer actiLike;
     @ApiModelProperty(value = "报名人数")
     private Integer applyNum;
+    @ApiModelProperty(value = "报名人头像列表串,以逗号分隔")
+    private String avatar;
     @ApiModelProperty(value = "报名人头像列表")
-    private List<String> avatar;
+    private List<String> avatarList;
+    @ApiModelProperty(value = "是否展示报名人")
+    private String showApplyNum;
+
+
+    public String getShowApplyNum() {
+        return showApplyNum;
+    }
+
+    public void setShowApplyNum(String showApplyNum) {
+        this.showApplyNum = showApplyNum;
+    }
 
     public String getId() {
         return id;
@@ -105,11 +119,19 @@ public class ActivitySlim {
         this.applyNum = applyNum;
     }
 
-    public List<String> getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(List<String> avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public List<String> getAvatarList() {
+        return avatarList;
+    }
+
+    public void setAvatarList(List<String> avatarList) {
+        this.avatarList = avatarList;
     }
 }

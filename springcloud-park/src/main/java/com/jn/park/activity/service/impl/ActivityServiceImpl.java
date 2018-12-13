@@ -252,8 +252,18 @@ public class ActivityServiceImpl implements ActivityService {
     public PaginationData activityListSlim(String typeId, com.jn.common.model.Page page, String keyWord) {
         int pageNumber = page.getPage();
         int pageSize = page.getRows()==0?15:page.getRows();
+        List<ActivitySlim> list = new ArrayList<>();
+        String invalid = "0";
         Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
         List<ActivitySlim> activitySlimList=activityMapper.activityListSlim(typeId,keyWord);
+        for(ActivitySlim slim : activitySlimList){
+            if(invalid.equals(slim.getShowApplyNum())){
+                slim.setAvatar(null);
+            }
+            if(StringUtils.isNotBlank(slim.getAvatar())){
+                slim.setAvatarList(Arrays.asList(slim.getAvatar().split(",")));
+            }
+        }
         return new PaginationData(activitySlimList,objects.getTotal());
     }
 

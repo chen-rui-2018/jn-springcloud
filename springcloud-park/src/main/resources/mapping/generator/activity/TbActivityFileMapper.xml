@@ -5,6 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="type_id" jdbcType="VARCHAR" property="typeId" />
     <result column="file_src" jdbcType="VARCHAR" property="fileSrc" />
+    <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, type_id, file_src, create_time, update_account, update_time, state
+    id, type_id, file_src, create_account, create_time, update_account, update_time, 
+    state
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
     select
@@ -103,11 +105,11 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file (id, type_id, file_src, 
-      create_time, update_account, update_time, 
-      state)
+      create_account, create_time, update_account, 
+      update_time, state)
     values (#{id,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{fileSrc,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{state,jdbcType=VARCHAR})
+      #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file
@@ -120,6 +122,9 @@
       </if>
       <if test="fileSrc != null">
         file_src,
+      </if>
+      <if test="createAccount != null">
+        create_account,
       </if>
       <if test="createTime != null">
         create_time,
@@ -143,6 +148,9 @@
       </if>
       <if test="fileSrc != null">
         #{fileSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="createAccount != null">
+        #{createAccount,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -176,6 +184,9 @@
       <if test="record.fileSrc != null">
         file_src = #{record.fileSrc,jdbcType=VARCHAR},
       </if>
+      <if test="record.createAccount != null">
+        create_account = #{record.createAccount,jdbcType=VARCHAR},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -198,6 +209,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       type_id = #{record.typeId,jdbcType=VARCHAR},
       file_src = #{record.fileSrc,jdbcType=VARCHAR},
+      create_account = #{record.createAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_account = #{record.updateAccount,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -214,6 +226,9 @@
       </if>
       <if test="fileSrc != null">
         file_src = #{fileSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="createAccount != null">
+        create_account = #{createAccount,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -234,6 +249,7 @@
     update tb_activity_file
     set type_id = #{typeId,jdbcType=VARCHAR},
       file_src = #{fileSrc,jdbcType=VARCHAR},
+      create_account = #{createAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_account = #{updateAccount,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

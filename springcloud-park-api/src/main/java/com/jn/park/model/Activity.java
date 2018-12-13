@@ -63,9 +63,9 @@ public class Activity extends Page implements Serializable {
     private Integer applyNum;
     @ApiModelProperty(value = "实际参加人数")
     private Integer particNum;
-    @ApiModelProperty(value = "是否置顶")
+    @ApiModelProperty(value = "是否首页展示")
     private String isTop;
-    @ApiModelProperty(value = "置顶时间")
+    @ApiModelProperty(value = "首页展示时间")
     private String topTime;
     @ApiModelProperty(value = "是否可报名")
     private String isApply;

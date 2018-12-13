@@ -3,16 +3,19 @@ package com.jn.park.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
- * 活动信息部分字段
+ * 活动报名信息字段
  *
  * @Author: chenr
  * @Date: 2018/12/11 11:15
  * @Version v1.0
- * @modified By:
+ * @modified By:jiangyl
  */
 public class ActivityApplyDetail implements Serializable {
+    @ApiModelProperty(value = "报名标识")
+    private String id;
     @ApiModelProperty(value = "活动ID")
     private String activityId;
     @ApiModelProperty(value = "用户账号")
@@ -33,6 +36,10 @@ public class ActivityApplyDetail implements Serializable {
     private String avatar;
     @ApiModelProperty(value = "签到状态")
     private String signState;
+    @ApiModelProperty(value = "报名状态")
+    private String applyState;
+    @ApiModelProperty(value = "报名时间")
+    private Date applyTime;
 
     public String getActivityId() {
         return activityId;
@@ -112,5 +119,29 @@ public class ActivityApplyDetail implements Serializable {
 
     public void setSignState(String signState) {
         this.signState = signState;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getApplyState() {
+        return applyState;
+    }
+
+    public void setApplyState(String applyState) {
+        this.applyState = applyState;
+    }
+
+    public Date getApplyTime() {
+        return applyTime;
+    }
+
+    public void setApplyTime(Date applyTime) {
+        this.applyTime = applyTime;
     }
 }

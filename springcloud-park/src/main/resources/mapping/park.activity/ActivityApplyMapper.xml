@@ -12,7 +12,10 @@
       tp.company as company,
       tp.post as post,
       ta.sign_state as signState,
-      ta.activity_Id as activityId
+      ta.apply_state as applyState,
+      ta.activity_Id as activityId,
+      ta.apply_time as applyTime,
+      ta.id as id
     from tb_activity_apply ta
     left join tb_user_person tp
     on ta.account = tp.account
@@ -20,7 +23,11 @@
     on tc.account = ta.account
     where
         1=1
-    and
-    ta.activity_id=#{activityId}
+        <if test="activityId !=null and activityId !='' ">
+            and ta.activity_id=#{activityId}
+        </if>
+        <if test="applyState !=null and applyState !='' ">
+            and ta.apply_state = #{applyState}
+        </if>
    </select>
 </mapper>

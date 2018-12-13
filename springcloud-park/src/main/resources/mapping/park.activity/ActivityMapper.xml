@@ -8,7 +8,7 @@
         date_format(a.apply_start_time,'yyyy-MM-dd HH:mm:ss') as "applyStartTime",
         date_format(a.apply_end_time,'yyyy-MM-dd HH:mm:ss') as "applyEndTime",
         date_format(a.mes_send_time,'yyyy-MM-dd HH:mm:ss') as "mesSendTime",
-        a.acti_address as "actiAddress",a.state as "state",
+        a.acti_address as "actiAddress",a.state as "state",a.is_top as "isTop",
         a.acti_cost as "actiCost", a.acti_organizer as "actiOrganizer",
         a.acti_number as "actiNumber", a.acti_poster_url as "actiPosterUrl",
         date_format(a.create_time,'yyyy-MM-dd HH:mm:ss') as "createTime", a.create_account as "createAccount",
@@ -28,6 +28,10 @@
         <if test="actiName != null">
             and a.acti_name = #{actiName}
         </if>
+        <if test="is_top != null">
+            and a.is_top = #{isTop}
+        </if>
+
         order by a.create_time desc
     </select>
 

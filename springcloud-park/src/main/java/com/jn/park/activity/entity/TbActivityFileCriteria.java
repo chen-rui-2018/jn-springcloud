@@ -315,6 +315,76 @@ public class TbActivityFileCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andCreateAccountIsNull() {
+            addCriterion("create_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountIsNotNull() {
+            addCriterion("create_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountEqualTo(String value) {
+            addCriterion("create_account =", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountNotEqualTo(String value) {
+            addCriterion("create_account <>", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountGreaterThan(String value) {
+            addCriterion("create_account >", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("create_account >=", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountLessThan(String value) {
+            addCriterion("create_account <", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountLessThanOrEqualTo(String value) {
+            addCriterion("create_account <=", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountLike(String value) {
+            addCriterion("create_account like", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountNotLike(String value) {
+            addCriterion("create_account not like", value, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountIn(List<String> values) {
+            addCriterion("create_account in", values, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountNotIn(List<String> values) {
+            addCriterion("create_account not in", values, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountBetween(String value1, String value2) {
+            addCriterion("create_account between", value1, value2, "createAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateAccountNotBetween(String value1, String value2) {
+            addCriterion("create_account not between", value1, value2, "createAccount");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

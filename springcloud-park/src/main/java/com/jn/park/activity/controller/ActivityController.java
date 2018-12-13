@@ -59,7 +59,7 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "获取活动列表")
     @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件")
+            notes = "查询条件[actiType:活动分类ID,state:活动状态,actiName:活动名,isTop:是否首页展示]  分页：page：1第一页 rows：每页行数")
     @RequestMapping(value = "/selectActivityList")
     public Result selectActivityList(@RequestBody @Validated Activity activity) {
         PaginationData paginationData = activityService.selectActivityList(activity);
@@ -146,7 +146,7 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "活动报名列表")
     @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class,
-            notes = "导出条件：activityId，分页页码及行数，不传页码行数默认查询前15条")
+            notes = "查询条件：activityId，分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(@RequestBody @Validated String activityId, @Validated Page page) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());

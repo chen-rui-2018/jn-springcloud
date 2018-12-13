@@ -186,7 +186,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         if(null != page){
             objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
         }
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId);
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,null);
         return new PaginationData(activityApplyList,objects!=null?0:objects.getTotal());
     }
 
@@ -275,7 +275,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public PaginationData findApplyActivityList(String activityId, Page page) { int pageNumber = page.getPage();
         int pageSize = page.getRows()==0?15:page.getRows();
         com.github.pagehelper.Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId);
+        //前端查询有效报名状态数据
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,"0");
         return new PaginationData(activityApplyList,objects.getTotal());
     }
 

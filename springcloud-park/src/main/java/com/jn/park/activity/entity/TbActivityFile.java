@@ -10,6 +10,8 @@ public class TbActivityFile implements Serializable {
 
     private String fileSrc;
 
+    private String createAccount;
+
     private Date createTime;
 
     private String updateAccount;
@@ -42,6 +44,14 @@ public class TbActivityFile implements Serializable {
 
     public void setFileSrc(String fileSrc) {
         this.fileSrc = fileSrc == null ? null : fileSrc.trim();
+    }
+
+    public String getCreateAccount() {
+        return createAccount;
+    }
+
+    public void setCreateAccount(String createAccount) {
+        this.createAccount = createAccount == null ? null : createAccount.trim();
     }
 
     public Date getCreateTime() {
@@ -91,6 +101,7 @@ public class TbActivityFile implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
             && (this.getFileSrc() == null ? other.getFileSrc() == null : this.getFileSrc().equals(other.getFileSrc()))
+            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -104,6 +115,7 @@ public class TbActivityFile implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         result = prime * result + ((getFileSrc() == null) ? 0 : getFileSrc().hashCode());
+        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -120,6 +132,7 @@ public class TbActivityFile implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", typeId=").append(typeId);
         sb.append(", fileSrc=").append(fileSrc);
+        sb.append(", createAccount=").append(createAccount);
         sb.append(", createTime=").append(createTime);
         sb.append(", updateAccount=").append(updateAccount);
         sb.append(", updateTime=").append(updateTime);

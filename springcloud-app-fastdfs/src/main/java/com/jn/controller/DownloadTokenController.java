@@ -1,8 +1,9 @@
 package com.jn.controller;
 
 import com.github.tobato.fastdfs.token.GetToken;
-import com.jn.common.enums.CommonExceptionEnum;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.enums.FastDfsExceptionEnum;
 import com.jn.system.api.SystemClient;
 import com.jn.system.model.User;
 import org.apache.shiro.SecurityUtils;
@@ -33,16 +34,17 @@ public class DownloadTokenController {
 
     /**
      * 获取文件下载的权限
-     * @param filePath  文件链接地址 eg.http://192.168.10.45:2020/group1/M00/00/00/wKgKLVvazSeAGLAxAAMmpEcA_IM580.png
-     * @return  token  然后在文件链接地址后面加上token=XXXXXXX&ts=XXXXXXX
+     *
+     * @param filePath 文件链接地址 eg.http://192.168.10.45:2020/group1/M00/00/00/wKgKLVvazSeAGLAxAAMmpEcA_IM580.png
+     * @return token  然后在文件链接地址后面加上token=XXXXXXX&ts=XXXXXXX
      * @throws IOException
      */
     @RequestMapping("/download/getToken")
     public Result getToken(String filePath) throws IOException, NoSuchAlgorithmException {
         User shiroUser = (User) SecurityUtils.getSubject().getPrincipal();
-        Result<Boolean> userFilePermission = client.getUserFilePermission(shiroUser.getId(),filePath);
-        if(!userFilePermission.getData()){
-            return new Result(CommonExceptionEnum.UN_AUTH.getMessage());
+        Result<Boolean> userFilePermission = client.getUserFilePermission(shiroUser.getId(), filePath);
+        if (!userFilePermission.getData()) {
+            throw new JnSpringCloudException(FastDfsExceptionEnum.FAST_DFS_NOT_FILE);
         }
         return new Result(getToken.getToken(filePath));
     }

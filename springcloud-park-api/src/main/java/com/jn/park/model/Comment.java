@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 活动点评信息
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "Comment", description = "活动报名信息")
+@ApiModel(value = "Comment", description = "活动点评信息")
 public class Comment implements Serializable {
     @ApiModelProperty(value = "点评ID")
     private String id;
@@ -27,10 +28,16 @@ public class Comment implements Serializable {
     private Integer likeNum;
     @ApiModelProperty(value = "点评状态")
     private String state;
-    @ApiModelProperty(value = "点评类型(0：活动点评，1：服务点评...)")
+    @ApiModelProperty(value = "点评类型(0：活动点评，1：服务点评)")
     private String comType;
+    @ApiModelProperty(value = "点评内容")
+    private String comContent;
     @ApiModelProperty(value = "点评人头像)")
     private String avatar;
+    @ApiModelProperty(value = "点评子节点)")
+    private List<Comment> childList;
+    @ApiModelProperty(value = "当前评论的子节点个数")
+    private int childNum;
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +46,7 @@ public class Comment implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getpId() {
@@ -47,7 +54,7 @@ public class Comment implements Serializable {
     }
 
     public void setpId(String pId) {
-        this.pId = pId == null ? null : pId.trim();
+        this.pId = pId;
     }
 
     public String getComAccount() {
@@ -79,7 +86,7 @@ public class Comment implements Serializable {
     }
 
     public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+        this.state = state;
     }
 
     public String getComType() {
@@ -87,7 +94,15 @@ public class Comment implements Serializable {
     }
 
     public void setComType(String comType) {
-        this.comType = comType == null ? null : comType.trim();
+        this.comType = comType;
+    }
+
+    public String getComContent() {
+        return comContent;
+    }
+
+    public void setComContent(String comContent) {
+        this.comContent = comContent;
     }
 
     public String getAvatar() {
@@ -96,5 +111,21 @@ public class Comment implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public List<Comment> getChildList() {
+        return childList;
+    }
+
+    public void setChildList(List<Comment> childList) {
+        this.childList = childList;
+    }
+
+    public int getChildNum() {
+        return childNum;
+    }
+
+    public void setChildNum(int childNum) {
+        this.childNum = childNum;
     }
 }

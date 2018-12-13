@@ -15,7 +15,6 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/activity/activityApply")
 public class ActivityApplyController extends BaseController {
+    //todo:待权限系统完成添加权限注解
+
     /**
      * 日志组件
      */
@@ -41,7 +42,7 @@ public class ActivityApplyController extends BaseController {
     @ControllerLog(doAction = "快速报名")
     @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
-    public Result quickApply(@RequestBody String id){
+    public Result quickApply(String id){
         Assert.notNull(id,"活动id不能为空");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -58,7 +59,7 @@ public class ActivityApplyController extends BaseController {
     @ControllerLog(doAction = "取消报名")
     @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/cancelApply")
-    public Result cancelApply(@RequestBody String id){
+    public Result cancelApply(String id){
         Assert.notNull(id,"活动id不能为空");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -86,7 +87,7 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "报名人列表查看", httpMethod = "POST", response = Result.class,
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList")
-    public Result activityApplyList(String activityId,@RequestBody Page page){
+    public Result activityApplyList(String activityId,Page page){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
        PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityId,page);
         return new Result(activityApplyList);

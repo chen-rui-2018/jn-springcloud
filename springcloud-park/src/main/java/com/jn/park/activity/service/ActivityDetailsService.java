@@ -1,10 +1,11 @@
 package com.jn.park.activity.service;
 
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityLike;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.Comment;
 import com.jn.park.activity.vo.ActivityDetailVO;
+import com.jn.park.model.ActivityApply;
 
 import java.util.List;
 
@@ -25,11 +26,14 @@ public interface ActivityDetailsService {
     ActivityDetailVO findActivityDetails(String id , String account);
 
     /**
+     *
      * 根据活动id获取活动点评信息
      * @param id 活动id
+     * @param page 分页信息
+     * @param isPage  是否分页  true：分页   false:不分页
      * @return
      */
-    List<Comment> getCommentInfo(String id);
+    PaginationData getCommentInfo(String id, Page page,boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息

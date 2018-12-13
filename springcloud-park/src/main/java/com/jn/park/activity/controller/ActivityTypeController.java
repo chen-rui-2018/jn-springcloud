@@ -16,7 +16,6 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +34,7 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/activity/activityType")
 public class ActivityTypeController extends BaseController {
+    //todo:待权限系统完成添加权限注解
     /**
      * 日志组件
      */

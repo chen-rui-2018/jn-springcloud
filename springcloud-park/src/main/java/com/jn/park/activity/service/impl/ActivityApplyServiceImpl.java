@@ -14,9 +14,11 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityApplyMapper;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
+import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
+import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -64,6 +66,9 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     private UserExtensionClient userExtensionClient;
     @Autowired
     private ActivityApplyMapper activityApplyMapper;
+
+    @Autowired
+    private TbActivityMapper tbActivityMapper;
 
     /**
      * 报名已签到
@@ -117,6 +122,27 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         String applyState="1";
         activityApply.setApplyState(applyState);
         tbActivityApplyMapper.insertSelective(activityApply);
+        //修改园区活动的感兴趣人数  报名成功一个加1
+        int change=1;
+        updateActivityApplyNum(id,change);
+    }
+
+    /**
+     * 修改园区活动报名人数
+     * @param id      活动id
+     * @param change  增加人数为正数，减少人数为负数
+     */
+    private void updateActivityApplyNum(String id,int change) {
+        TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(id);
+        TbActivityCriteria example =new TbActivityCriteria();
+        example.createCriteria().andIdEqualTo(id);
+        Integer applyNum = tbActivity.getApplyNum();
+        //若报名人数为0，更新为1，否则加1
+        int aciApplyNum=applyNum!=null?tbActivity.getApplyNum()+change:change;
+        //若是报名人数更新后，为负数，强制转换为0
+        aciApplyNum=aciApplyNum<0?0:aciApplyNum;
+        tbActivity.setActiLike(aciApplyNum);
+        tbActivityMapper.updateByExampleSelective(tbActivity, example);
     }
 
 
@@ -138,6 +164,9 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         //报名状态设置为"0"，取消报名
         activityApply.setApplyState("0");
         tbActivityApplyMapper.updateByExampleSelective(activityApply, example);
+        //修改园区活动的感兴趣人数  取消一个报名减1
+        int change=-1;
+        updateActivityApplyNum(id,change);
     }
 
     /**
@@ -187,7 +216,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
         }
         List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,null);
-        return new PaginationData(activityApplyList,objects!=null?0:objects.getTotal());
+        return new PaginationData(activityApplyList,objects==null?0:objects.getTotal());
     }
 
     /**

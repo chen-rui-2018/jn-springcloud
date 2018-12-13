@@ -1,20 +1,20 @@
 package com.jn.park.activity.service.impl;
 
-import com.jn.park.activity.dao.ActivityDetailsMapper;
-import com.jn.park.activity.dao.TbActivityApplyMapper;
-import com.jn.park.activity.dao.TbActivityLikeMapper;
-import com.jn.park.activity.dao.TbActivityMapper;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
+import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.*;
+import com.jn.park.activity.service.ActivityDetailsService;
+import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.Comment;
-import com.jn.park.activity.service.ActivityDetailsService;
-import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.common.util.DateUtils;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +47,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Autowired
     private TbActivityApplyMapper tbActivityApplyMapper;
 
+
     /**
      * 根据活动id获取活动详情
      * @param id       活动id
@@ -60,33 +61,48 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         if(list.size()>0){
             ActivityDetail activityDetail=list.get(0);
             ActivityDetailVO activityDetailVO=new ActivityDetailVO();
-            BeanUtils.copyProperties(activityDetail, activityDetailVO);
-            //根据活动id查询点评信息
-            List<Comment> commentInfo = getCommentInfo(id);
-            if (commentInfo!=null) {
-                activityDetailVO.setCommentList(commentInfo);
-                activityDetailVO.setCommentNum(commentInfo.size());
-            }
+            activityDetailVO.setActivityDetail(activityDetail);
             //根据活动id查询点赞信息
             List<TbActivityLike> activityLikeInfo = getActivityLikeInfo(id);
             if (activityLikeInfo!=null) {
                 activityDetailVO.setActivityLikeList(activityLikeInfo);
                 activityDetailVO.setLikeNum(activityLikeInfo.size());
             }
-            //根据活动id查询活动报名信息
-            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(id);
-            if (activityApplyInfo!=null) {
-                activityDetailVO.setActivityApplyList(activityApplyInfo);
-                activityDetailVO.setRealapplyNum(activityApplyInfo.size());
+            //是否展示报名人(0：否   1：是）若不展示报名人，不查询报名信息
+            String showApplyNum="1";
+            if(showApplyNum.equals(activityDetail.getShowApplyNum())){
+                //根据活动id查询活动报名信息
+                List<ActivityApply> activityApplyInfo = getActivityApplyInfo(id);
+                if (activityApplyInfo!=null) {
+                    activityDetailVO.setActivityApplyList(activityApplyInfo);
+                    activityDetailVO.setRealapplyNum(activityApplyInfo.size());
+                }
             }
             //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
             applyCountdown(id, account, activityDetailVO);
+            //更新园区活动的阅读人数
+            updateActivityViews(id, activityDetail.getActivityViews());
             //把活动详情封装到result中返回前端
             return  activityDetailVO;
         }else {
             logger.info("活动详情没有数据");
         }
         return null;
+    }
+
+    /**
+     * 更新园区活动人数
+     * @param id  活动id
+     * @param activityViews  园区活动原有阅读人数
+     */
+    private void updateActivityViews(String id, String activityViews) {
+        TbActivityCriteria example=new TbActivityCriteria();
+        example.createCriteria().andIdEqualTo(id);
+        TbActivity tbActivity=new TbActivity();
+        //阅读人数加1   若没有人，阅读人数设置为1
+        int viewsNum= StringUtils.isNumeric(activityViews)?Integer.parseInt(activityViews)+1:1;
+        tbActivity.setActiViews(viewsNum);
+        tbActivityMapper.updateByExampleSelective(tbActivity,example );
     }
 
     /**
@@ -112,13 +128,33 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param id
+     * @param id 活动id
+     * @param page 分页信息
+     * @param isPage  是否分页  true：分页   false:不分页
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public List<Comment> getCommentInfo(String id){
-        return activityDetailsMapper.getCommentInfo(id);
+    public PaginationData getCommentInfo(String id, Page page,boolean isPage){
+        com.github.pagehelper.Page<Object> objects=null;
+        if(isPage){
+            //默认查询前15条
+            objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
+        }
+        List<Comment>list=activityDetailsMapper.getCommentInfo(id);
+        List<Comment> resultList = getComments(list);
+        return new PaginationData(resultList,objects==null?0:objects.getTotal());
+    }
+
+    private List<Comment> getComments(List<Comment> list) {
+        for(Comment comment:list){
+            //有子节点
+             if(comment.getChildNum()>0){
+                List<Comment>resultList=activityDetailsMapper.getCommentInfo(comment.getId());
+                comment.setChildList(getComments(resultList));
+            }
+        }
+        return list;
     }
 
 

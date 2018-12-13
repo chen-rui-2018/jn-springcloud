@@ -15,7 +15,6 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ActivityDetail", description = "活动详情信息")
 public class ActivityDetail implements Serializable {
-    private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "活动ID")
     private String activityId;
     @ApiModelProperty(value = "活动类型")
@@ -72,6 +71,11 @@ public class ActivityDetail implements Serializable {
     private String isApply;
     @ApiModelProperty(value = "活动内容")
     private String activityDetail;
+    @ApiModelProperty(value = "是否展示报名人(0否1是)")
+    private String showApplyNum;
+
+
+    private static final long serialVersionUID = 1L;
 
     public String getActivityId() {
         return activityId;
@@ -296,4 +300,13 @@ public class ActivityDetail implements Serializable {
     public void setActivityDetail(String activityDetail) {
         this.activityDetail = activityDetail;
     }
+
+    public String getShowApplyNum() {
+        return showApplyNum;
+    }
+
+    public void setShowApplyNum(String showApplyNum) {
+        this.showApplyNum = showApplyNum;
+    }
+
 }

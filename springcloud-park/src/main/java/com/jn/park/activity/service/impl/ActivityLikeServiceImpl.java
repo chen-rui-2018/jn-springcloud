@@ -1,13 +1,16 @@
 package com.jn.park.activity.service.impl;
 
-import com.jn.park.activity.dao.TbActivityLikeMapper;
-import com.jn.park.activity.entity.TbActivityLike;
-import com.jn.park.activity.entity.TbActivityLikeCriteria;
-import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.activity.service.ActivityApplyService;
-import com.jn.park.activity.service.ActivityLikeService;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
+import com.jn.park.activity.dao.TbActivityLikeMapper;
+import com.jn.park.activity.dao.TbActivityMapper;
+import com.jn.park.activity.entity.TbActivity;
+import com.jn.park.activity.entity.TbActivityCriteria;
+import com.jn.park.activity.entity.TbActivityLike;
+import com.jn.park.activity.entity.TbActivityLikeCriteria;
+import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.activity.service.ActivityLikeService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +36,7 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
     private TbActivityLikeMapper tbActivityLikeMapper;
 
     @Autowired
-    private ActivityApplyService activityApplyService;
+    private TbActivityMapper tbActivityMapper;
 
     /**
      * 活动点赞
@@ -64,6 +67,8 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
             logger.info("当前活动存在多个相同点赞用户[{}]，无法点赞",account);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_LIKE_ACCOUNT_REPEAT);
         }
+        //修改园区活动的感兴趣人数  多一个点赞加1
+        updateActivityLikeNum(id,1);
     }
 
     /**
@@ -120,5 +125,26 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
         String cancelState="0";
         activityLike.setState(cancelState);
         tbActivityLikeMapper.updateByExampleSelective(activityLike, example);
+        //修改园区活动的感兴趣人数  取消一个点赞减1
+        updateActivityLikeNum(id,-1);
     }
+
+    /**
+     * 修改园区活动感兴趣人数
+     * @param id      活动id
+     * @param change  增加人数为正数，减少人数为负数
+     */
+    private void updateActivityLikeNum(String id,int change) {
+        TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(id);
+        TbActivityCriteria example =new TbActivityCriteria();
+        example.createCriteria().andIdEqualTo(id);
+        Integer actiLike = tbActivity.getActiLike();
+        //若感兴趣人数为0，更新为1，否则加1
+        int actLikeNum=actiLike!=null?tbActivity.getActiLike()+change:change;
+        //若是感兴趣人数更新后，为负数，强制转换为0
+        actLikeNum=actLikeNum<0?0:actLikeNum;
+        tbActivity.setActiLike(actLikeNum);
+        tbActivityMapper.updateByExampleSelective(tbActivity, example);
+    }
+
 }

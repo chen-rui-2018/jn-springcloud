@@ -36,17 +36,17 @@
 
     <select id="activityListSlim" resultType="com.jn.park.model.ActivitySlim">
           select
-            ta.id as id
-            ,ta.acti_name as actiName
-            ,ta.acti_address as actiAddress
-            ,ta.acti_start_time as actiStartTime
-            ,ta.acti_end_time as actiEndTime
-            ,ta.apply_num as applyNum
-            ,ta.acti_like as actiLike
-            ,ta.acti_number as actiNumber
-            ,ta.acti_poster_url as actiPosterUrl
-            ,ta.show_apply_num as showApplyNum
-            ,group_concat(ifnull(tc.avatar,tp.avatar))as avatar
+            ta.id as "id"
+            ,ta.acti_name as "actiName"
+            ,ta.acti_address as "actiAddress"
+            ,date_format(ta.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"
+            ,date_format(ta.acti_end_time,'%Y-%m-%d %H:%i:%s') as "actiEndTime"
+            ,ta.apply_num as "applyNum"
+            ,ta.acti_like as "actiLike"
+            ,ta.acti_number as "actiNumber"
+            ,ta.acti_poster_url as "actiPosterUrl"
+            ,ta.show_apply_num as "showApplyNum"
+            ,group_concat(ifnull(tc.avatar,tp.avatar))as "avatar"
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
             left join  tb_activity_apply ty on ty.activity_id = ta.id
@@ -58,11 +58,12 @@
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>
             <if test="keyWord != null and keyWord !=''">
-            and ta.acti_name LIKE concat(concat('%',#{keyWord}),'%')
-            or ta.acti_address LIKE concat(concat('%',#{keyWord}),'%')
-            or td.acti_detail LIKE concat(concat('%',#{keyWord}),'%')
+            and ta.acti_name LIKE concat('%',#{keyWord},'%')
+            or ta.acti_address LIKE concat('%',#{keyWord},'%')
+            or td.acti_detail LIKE concat('%',#{keyWord},'%')
             </if>
         group by ta.id
+        order by ta.acti_order desc
     </select>
 
 

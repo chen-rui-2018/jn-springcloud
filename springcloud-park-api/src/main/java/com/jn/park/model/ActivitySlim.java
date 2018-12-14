@@ -17,7 +17,7 @@ public class ActivitySlim {
     private String id;
     @ApiModelProperty(value = "活动名称")
     private String actiName;
-    @ApiModelProperty(value = "活动名称")
+    @ApiModelProperty(value = "活动地址")
     private String actiAddress;
     @ApiModelProperty(value = "活动开始时间")
     private String  actiStartTime;

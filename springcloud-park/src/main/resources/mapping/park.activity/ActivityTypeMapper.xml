@@ -5,14 +5,14 @@
     <!--活动类型列表查询 -->
     <select id="findActivityTypeListByState" resultType="com.jn.park.model.ActivityType">
         select
-        t.type_id as typeId
-        ,t.type_name as typeName
-        ,t.state as state
-        ,t.create_account as createUserId
-        ,t.create_time as createTime
-        ,t.update_account as updateUserId
-        ,t.update_time as updateTime
-        ,count(f.type_id) as fileTotal
+        t.type_id as "typeId"
+        ,t.type_name as "typeName"
+        ,t.state as "state"
+        ,t.create_account as "createUserId"
+        ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"
+        ,date_format(t.update_account,'%Y-%m-%d %H:%i:%s') as "updateUserId"
+        ,date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as "updateTime"
+        ,count(f.type_id) as "fileTotal"
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
         where 1=1
@@ -25,15 +25,15 @@
 
     <!--具体活动类型展示-->
     <select id="findActivityTypeById" resultMap="ActivityMap">
-        select t.type_id as typeId
-            ,t.type_name as typeName
-            ,t.state as state
-            ,f.file_src as fileSrc
-            ,t.create_account as createAccount
-            ,t.create_time as createTime
-            ,t.update_account as updateAccount
-            ,t.update_time as updateTime
-            ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as fileTotal
+        select t.type_id as "typeId"
+            ,t.type_name as "typeName"
+            ,t.state as "state"
+            ,f.file_src as "fileSrc"
+            ,t.create_account as "createAccount"
+            ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"
+            ,date_format(t.update_account,'%Y-%m-%d %H:%i:%s') as "updateUserId"
+            ,date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as "updateTime"
+            ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as "fileTotal"
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
         where 1=1

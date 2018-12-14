@@ -301,7 +301,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "报名人列表信息")
     @Override
-    public PaginationData findApplyActivityList(String activityId, Page page) { int pageNumber = page.getPage();
+    public PaginationData findApplyActivityList(String activityId, Page page) {
+        int pageNumber = page.getPage();
         int pageSize = page.getRows()==0?15:page.getRows();
         com.github.pagehelper.Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
         //前端查询有效报名状态数据

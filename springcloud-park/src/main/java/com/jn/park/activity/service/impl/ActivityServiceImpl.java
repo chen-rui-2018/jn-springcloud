@@ -183,7 +183,9 @@ public class ActivityServiceImpl implements ActivityService {
             }
             num = tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
             tbActivityDetail.setActivityId(tbActivity.getId());
-            tbActivityDetailMapper.updateByPrimaryKeySelective(tbActivityDetail);
+            if(StringUtils.isNotEmpty(tbActivityDetail.getActiDetail())){
+                tbActivityDetailMapper.updateByPrimaryKeySelective(tbActivityDetail);
+            }
         }
         return num;
     }
@@ -205,7 +207,6 @@ public class ActivityServiceImpl implements ActivityService {
             }
         }
         TbActivity tbActivity1 = new TbActivity();
-        tbActivity1.setId(activityId);
         tbActivity1.setUpdateTime(new Date());
         tbActivity1.setState("5");
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity1, tbActivityCriteria);
@@ -223,7 +224,6 @@ public class ActivityServiceImpl implements ActivityService {
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
         TbActivity tbActivity = new TbActivity();
-        tbActivity.setId(activityId);
         tbActivity.setState("5");
         tbActivity.setUpdateTime(new Date());
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity, tbActivityCriteria);
@@ -273,6 +273,9 @@ public class ActivityServiceImpl implements ActivityService {
         TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
         if(null == tbActivity){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
+        }
+        if(StringUtils.equals(tbActivity.getState(),ACTIVITY_STATE_PUBLISH)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXPEPTION);
         }
         //判断是否为活动开始前24小时之内
         Date actiStartTime = tbActivity.getActiStartTime();

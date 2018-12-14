@@ -64,9 +64,7 @@ public class Activity extends Page implements Serializable {
     @ApiModelProperty(value = "实际参加人数")
     private Integer particNum;
     @ApiModelProperty(value = "是否首页展示")
-    private String isTop;
-    @ApiModelProperty(value = "首页展示时间")
-    private String topTime;
+    private String isIndex;
     @ApiModelProperty(value = "是否可报名")
     private String isApply;
     @ApiModelProperty(value = "排序")
@@ -258,22 +256,6 @@ public class Activity extends Page implements Serializable {
         this.particNum = particNum;
     }
 
-    public String getIsTop() {
-        return isTop;
-    }
-
-    public void setIsTop(String isTop) {
-        this.isTop = isTop;
-    }
-
-    public String getTopTime() {
-        return topTime;
-    }
-
-    public void setTopTime(String topTime) {
-        this.topTime = topTime;
-    }
-
     public String getIsApply() {
         return isApply;
     }
@@ -328,5 +310,13 @@ public class Activity extends Page implements Serializable {
 
     public void setShowApplyNum(String showApplyNum) {
         this.showApplyNum = showApplyNum;
+    }
+
+    public String getIsIndex() {
+        return isIndex;
+    }
+
+    public void setIsIndex(String isIndex) {
+        this.isIndex = isIndex;
     }
 }

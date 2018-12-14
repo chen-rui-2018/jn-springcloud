@@ -3,20 +3,19 @@
 <mapper namespace="com.jn.park.activity.dao.ActivityMapper">
     <select id="selectActivityList" parameterType="com.jn.park.model.Activity" resultType="com.jn.park.model.Activity">
         select a.id as "id", a.acti_type as "actiType", a.acti_name as "actiName",
-        date_format(a.acti_start_time,'yyyy-MM-dd HH:mm:ss') as "actiStartTime",
-        date_format(a.acti_end_time,'yyyy-MM-dd HH:mm:ss') as "actiEndTime",
-        date_format(a.apply_start_time,'yyyy-MM-dd HH:mm:ss') as "applyStartTime",
-        date_format(a.apply_end_time,'yyyy-MM-dd HH:mm:ss') as "applyEndTime",
-        date_format(a.mes_send_time,'yyyy-MM-dd HH:mm:ss') as "mesSendTime",
-        a.acti_address as "actiAddress",a.state as "state",a.is_top as "isTop",
+        date_format(a.acti_start_time,'%Y-%m-%d %H:%i:%S') as "actiStartTime",
+        date_format(a.acti_end_time,'%Y-%m-%d %H:%i:%S') as "actiEndTime",
+        date_format(a.apply_start_time,'%Y-%m-%d %H:%i:%S') as "applyStartTime",
+        date_format(a.apply_end_time,'%Y-%m-%d %H:%i:%S') as "applyEndTime",
+        date_format(a.mes_send_time,'%Y-%m-%d %H:%i:%S') as "mesSendTime",
+        a.acti_address as "actiAddress",a.state as "state",a.is_index as "isIndex",
         a.acti_cost as "actiCost", a.acti_organizer as "actiOrganizer",
         a.acti_number as "actiNumber", a.acti_poster_url as "actiPosterUrl",
-        date_format(a.create_time,'yyyy-MM-dd HH:mm:ss') as "createTime", a.create_account as "createAccount",
-        date_format(a.update_time,'yyyy-MM-dd HH:mm:ss') as "updateTime", a.update_account as "updateAccount",
+        date_format(a.create_time,'%Y-%m-%d %H:%i:%S') as "createTime", a.create_account as "createAccount",
+        date_format(a.update_time,'%Y-%m-%d %H:%i:%S') as "updateTime", a.update_account as "updateAccount",
         a.acti_views as "actiViews", a.acti_like as "actiLike", a.apply_num as "applyNum",
-        a.partic_num as "particNum", a.is_top as "isTop",
-        date_format(a.top_time,'yyyy-MM-dd HH:mm:ss') as "topTime",
-        a.is_apply as "isApply", a.acti_order as "actiOrder",t.type_name as "typeName"
+        a.partic_num as "particNum",a.is_apply as "isApply",
+        a.acti_order as "actiOrder",t.type_name as "typeName"
         from tb_activity a left join tb_activity_type t on a.acti_type = t.type_id
         where 1=1  and a.state != '5'
         <if test="actiType != null">
@@ -26,10 +25,10 @@
             and a.state = #{state}
         </if>
         <if test="actiName != null">
-            and a.acti_name = #{actiName}
+            and a.acti_name LIKE concat(concat('%',#{actiName}),'%')
         </if>
-        <if test="is_top != null">
-            and a.is_top = #{isTop}
+        <if test="isIndex != null">
+            and a.is_index = #{isIndex}
         </if>
 
         order by a.create_time desc

@@ -29,7 +29,7 @@ public class SysResources implements Serializable {
      */
     @ApiModelProperty(value = "功能名称" )
     @NotBlank(message = "功能名称不能为空！")
-    @Size(max = 20,message = "页面功能名称长度不能超度20字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "功能名称校验失败")
     private String resourcesName;
 
     /**
@@ -43,7 +43,7 @@ public class SysResources implements Serializable {
      */
     @ApiModelProperty(value = "功能路径" )
     @NotBlank(message = "功能路径不能为空！")
-    @Size(max = 50,message = "页面功能路径长度不能超度50字")
+    @Size(max = 150,message = "页面功能路径长度不能超度150字")
     private String resourcesUrl;
 
 

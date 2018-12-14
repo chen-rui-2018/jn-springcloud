@@ -30,14 +30,14 @@ public class SysFileGroup implements Serializable {
      */
     @ApiModelProperty(value = "文件组名称" )
     @NotBlank(message = "文件组名称不能为空！")
-    @Size(max = 20, message = "文件组描述,字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "文件组名称校验失败")
     private String fileGroupName;
 
     /**
      * 文件组名称
      */
     @ApiModelProperty(value = "文件组描述" )
-    @Size(max = 50, message = "文件组描述,字数不能超过50个字")
+    @Size(max = 150, message = "文件组描述,字数不能超过150个字")
     private String fileGroupDescribe;
 
     /**

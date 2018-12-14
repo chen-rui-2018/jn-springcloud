@@ -12,9 +12,10 @@ import com.jn.common.api.CodeAndMsg;
 public enum SysUserExceptionEnums implements CodeAndMsg {
 
     NOT_MODIFY_ACCOUNT("1110501","用户账号不允许修改"),
-    DEPARTMENTPOST_DEFAULE_NOTUNIQUE("1110502","用户默认部门岗位信息不唯一"),
+    DEPARTMENTPOST_DEFAULE_NOTUNIQUE("1110502","添加失败,部门岗位信息需要且只能有一个默认值"),
     ADD_DEPRTMENTPOST_ERROR("1110503","添加失败,部门岗位必须同时添加"),
-    ADDERR_NAME_EXIST("1110504","添加失败,用户账号已存在");
+    ADDERR_NAME_EXIST("1110504","添加失败,用户账号已存在"),
+    ADD_DEPARTMENT_POST_REPEAT("1110505","添加失败,部门岗位信息不能重复添加");
 
 
 

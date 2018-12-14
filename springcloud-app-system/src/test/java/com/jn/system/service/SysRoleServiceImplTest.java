@@ -120,7 +120,7 @@ public class SysRoleServiceImplTest {
         User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd, user);
+        tbRoleService.userGroupRoleAuthorization(sysUserGroupRoleAdd, user);
 
     }
 

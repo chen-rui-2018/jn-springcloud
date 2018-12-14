@@ -31,8 +31,9 @@
               v-for="(item,index) in subForm.menuData"
               :key="index"
               :prop="'menuData.'+index+'.label'"
-              :rules="menuDataRules.label">
-              <el-input v-model="item.label" /><a href="javascript:;" class="fa fa-long-arrow-up" @click="menuUp(item,index)"/><a href="javascript:;" class="fa fa-long-arrow-down" @click="menuDown(item,index)"/>
+              :rules="menuDataRules.label"
+            >
+              <el-input v-model="item.label" @blur="checkoutSubName"/><a href="javascript:;" class="fa fa-long-arrow-up" @click="menuUp(item,index)"/><a href="javascript:;" class="fa fa-long-arrow-down" @click="menuDown(item,index)"/>
             </el-form-item>
             <el-form-item>
               <el-button :disabled="isDisabled" type="primary" @click="submitMenuInfo('subForm')" >保存</el-button>
@@ -42,13 +43,15 @@
         </div>
       </div>
       <div v-show="isShowMenuDir" class="menuDirInfo">
-        <el-form :model="dataForm" label-position="right" label-width="80px">
+        <div> <span>页面名称：</span> {{ dataForm.menuName }}</div>
+        <div> <span>url地址：</span> {{ dataForm.menuUrl }}</div>
+        <!-- <el-form :model="dataForm" label-position="right" label-width="80px">
           <el-form-item label="页面名称" >
           <el-input v-model="dataForm.menuName" disabled style="width: 300px"/></el-form-item>
           <el-form-item label="url地址" >
             <el-input v-model="dataForm.menuUrl" disabled style="width: 300px"/>
           </el-form-item>
-        </el-form>
+        </el-form> -->
         <div class="menuDirInfo-content">
           <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">新增功能</el-button>
           <el-table :data="tableData" fit border style="width: 100%">
@@ -116,8 +119,9 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('菜单名称的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldMenuName !== this.menuForm.menuName) {
           checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
@@ -135,8 +139,9 @@ export default {
       }
     }
     var checkResources = (rule, value, callback) => {
-      if (value && value.length > 20) {
-        callback(new Error('功能名称的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
           checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
@@ -161,36 +166,30 @@ export default {
       }
     }
     var checkLabel = (rule, value, callback) => {
-      // const reg = /[a-zA-Z]{1,20}|[\u4e00-\u9fa5]{1,10}/
-      if (value && value.length > 20) {
-        callback(new Error('菜单名称不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         var count = 0
         // 循环整个数组 判断有没有重名的字段
         this.subForm.menuData.forEach((val, index) => {
-          // debugger
           if (value === val.label) {
             count = count + 1
-
-            // else {
-            //   this.isSubmit = true
-            //   // this.$refs['subForm'].clearValidate()
-            //   // callback()
-            // }
           }
         })
         if (count > 1) {
-          this.isSubmit = false
           callback(new Error('菜单名称已重复'))
+        } else {
+          callback()
         }
       }
     }
     return {
+      currentData: undefined,
       currentId: undefined,
       isRight: true,
       checkoutId: undefined,
       checkoutParentId: undefined,
-      isSubmit: true,
       parentId: undefined,
       oldResourcesName: undefined,
       resourcesForm: {
@@ -265,11 +264,11 @@ export default {
       }
     }
   },
-  created() {
+  mounted() {
     this.initList()
   },
   methods: {
-    // 失去焦点的时候判断子菜单的名字是否又重复
+    // 失去焦点的时候判断子菜单的名字是否有重复
     checkoutSubName() {
       const arr = []
       this.subForm.menuData.forEach(val => {
@@ -293,9 +292,10 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              this.initList()
               this.getResources()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -315,8 +315,6 @@ export default {
       }, 1000)
       this.$refs['resourcesForm'].validate(valid => {
         if (valid) {
-          // 将对话框隐藏
-          this.resourcesDialogVisible = false
           // 调用接口发送请求
           editResources(this.resourcesForm).then(res => {
             if (res.data.code === '0000') {
@@ -325,10 +323,13 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
+            // 将对话框隐藏
+            this.resourcesDialogVisible = false
             // 重置表单元素的数据
             this.$refs['resourcesForm'].resetFields()
+            this.initList()
             this.getResources()
           })
         }
@@ -361,11 +362,12 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
-            } else { this.$message.error('添加失败') }
+            } else { this.$message.error(res.data.result) }
             // 将对话框隐藏
             this.resourcesDialogVisible = false
             // 重置表单元素的数据
             this.$refs['resourcesForm'].resetFields()
+            this.initList()
             this.getResources()
           })
         }
@@ -377,7 +379,7 @@ export default {
         if (res.data.code === '0000') {
           this.tableData = res.data.data
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
       })
     },
@@ -385,7 +387,7 @@ export default {
     // 显示新增功能对话框
     handleCreate() {
       this.resourcesForm.resourcesName = undefined
-      this.resourcesForm.resourcesUrl = '/'
+      this.resourcesForm.resourcesUrl = undefined
       this.dialogStatus = '新增功能'
       this.resourcesDialogVisible = true
       this.$nextTick(() => {
@@ -398,8 +400,9 @@ export default {
           this.subForm.menuData = res.data.data
           this.$refs['subForm'].clearValidate()
         } else {
-          this.$message.error('取消失败')
+          this.$message.error(res.data.result)
         }
+        this.initList()
       })
     },
     // 点击向下移动的时候
@@ -453,22 +456,21 @@ export default {
           sort: val.sort
         })
       })
-      // this.$refs['subForm'].validate(valid => {
-      //   if (valid) {
-      // if (this.isSubmit === true) {
-      // 调用接口发送请求 进行批量更新
-      updateAllMenu({ sysMenuSortList: newData }).then(res => {
-        if (res.data.code === '0000') {
-          this.$message({
-            message: '保存成功',
-            type: 'success'
+      this.$refs['subForm'].validate(valid => {
+        if (valid) {
+          // 调用接口发送请求 进行批量更新
+          updateAllMenu({ sysMenuSortList: newData }).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+            } else { this.$message.error(res.data.result) }
+            // 刷新页面显示
+            this.initList()
           })
-        } else { this.$message.error(res.data.result) }
-        // 刷新页面显示
-        this.initList()
+        }
       })
-      // }
-      // })
     },
     handleNodeClick(data) {
       console.log(data)
@@ -519,7 +521,7 @@ export default {
                 this.isRight = true
               }
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -539,8 +541,6 @@ export default {
       }, 500)
       this.$refs['menuForm'].validate(valid => {
         if (valid) {
-          // 将对话框隐藏
-          this.menuDialogVisible = false
           // // 调用接口发送请求
           updateMenu(this.menuForm).then(res => {
             if (res.data.code === '0000') {
@@ -548,11 +548,19 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
+              if (this.currentData.isDir === '0') {
+                this.dataForm.menuName = this.menuForm.menuName
+                this.dataForm.menuUrl = this.menuForm.menuUrl
+              } else if (this.currentData.isDir === '1') {
+                this.currentMenuName = this.menuForm.menuName
+              }
             } else {
               this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['menuForm'].resetFields()
+            // 将对话框隐藏
+            this.menuDialogVisible = false
             // 刷新页面显示
             this.initList()
           })
@@ -563,6 +571,7 @@ export default {
     editMenu(data) {
       this.isTrue = true
       this.dialogStatus = '编辑'
+      this.currentData = data
       this.visible = false
       this.oldMenuName = data.label
       this.menuForm.id = data.id
@@ -585,7 +594,7 @@ export default {
       })
     },
     // 实现新增菜单
-    createData(data) {
+    createData() {
       // 避免重复点击提交
       this.isDisabled = true
       setTimeout(() => {
@@ -593,50 +602,61 @@ export default {
       }, 500)
       this.$refs['menuForm'].validate(valid => {
         if (valid) {
-          // 调用接口发送请求
           // 判断用户选择的是目录还是页面
           if (this.radio === '1') {
-            console.log(this.menuForm.menuUrl)
-            createMenuDir(this.menuForm).then(res => {
+            createMenuDir({ menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
               if (res.data.code === '0000') {
                 this.$message({
                   message: '添加成功',
                   type: 'success'
                 })
+                // 刷新页面显示
+                this.initList()
+                this.updataRight()
               } else {
                 this.$message.error(res.data.result)
               }
-              // 重置表单元素的数据
-              this.$refs['menuForm'].resetFields()
-              // 刷新页面显示
-              this.initList()
             })
           } else if (this.radio === '2') {
-            createMenu(this.menuForm).then(res => {
+            createMenu({ menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
               if (res.data.code === '0000') {
                 this.$message({
                   message: '添加成功',
                   type: 'success'
                 })
+                // 刷新页面显示
+                this.initList()
+                this.updataRight()
               } else {
                 this.$message.error(res.data.result)
               }
-              // 重置表单元素的数据
-              this.$refs['menuForm'].resetFields()
-              // 刷新页面显示
-              this.initList()
             })
           }
+          // 重置表单元素的数据
+          this.$refs['menuForm'].resetFields()
           // 将对话框隐藏
           this.menuDialogVisible = false
         }
       })
+    },
+    // 更新右侧页面
+    updataRight() {
+      if (this.location === '0') {
+        getOldData(this.checkoutId).then(res => {
+          if (res.data.code === '0000') {
+            this.subForm.menuData = res.data.data
+          } else {
+            this.$message.error(res.data.result)
+          }
+        })
+      }
     },
     // 显示新增弹框
     addMenu(data) {
       this.radio = '1'
       this.location = '1'
       this.isTrue = false
+      this.isShow = false
       this.dialogStatus = '新增'
       this.menuDialogVisible = true
       this.menuForm.menuName = undefined
@@ -649,10 +669,8 @@ export default {
         this.menuForm.parentId = '1'
       }
       if (data.isDir === '0') {
-        // this.isShow = true
         this.visible = false
       } else if (data.isDir === '1') {
-        // this.isShow = false
         this.visible = true
       }
       this.menuForm.menuUrl = '/'
@@ -667,7 +685,7 @@ export default {
         if (res.data.code === '0000') {
           this.menuList = res.data.data
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
@@ -707,6 +725,9 @@ export default {
   .menu-content{
     display: flex;
     align-items: center;
+    >span{
+      margin-right: 100px;
+    }
   }
   .el-input--medium{
     width: 188px;

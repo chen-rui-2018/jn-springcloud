@@ -109,5 +109,6 @@
             and t2.`status` = '1'
             and t3.`status` = '1'
             and t1.user_id = #{id,jdbcType=VARCHAR}
+            ORDER BY t1.is_default DESC
     </select>
 </mapper>

@@ -3,13 +3,13 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="文件名称:">
-          <el-input v-model="listQuery.fileName" placeholder="请输入文件名称" style="width: 150px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.fileName" placeholder="请输入文件名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="文件组名称:">
-          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" style="width: 160px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" style="width: 150px" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
+          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -85,7 +85,7 @@ export default {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.fileListLoading = false
       })
@@ -104,7 +104,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
    .filter-container {
     .el-form-item {
       margin-bottom: 0;

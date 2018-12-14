@@ -30,6 +30,7 @@ public class SysMenuUpdate implements Serializable {
     private String menuUrl;
 
     @ApiModelProperty(value = "排序" )
+    @NotBlank(message = "排序不能为空！")
     private Integer sort;
 
     public SysMenuUpdate() {

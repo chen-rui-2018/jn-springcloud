@@ -3,10 +3,10 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="文件组名称:">
-          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" style="width: 160px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" maxlenth="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" style="width: 150px;" clearable class="filter-item" @change="selecteFileGroupStatus">
+          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileGroupStatus">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -48,16 +48,13 @@
         :rules="rules"
         :model="temp"
         label-position="right"
-        label-width="80px" >
-        <el-form-item label="文件组:" prop="fileGroupName">
-          <el-input v-model.trim="temp.fileGroupName" />
+        label-width="100px" >
+        <el-form-item label="文件组名称:" prop="fileGroupName">
+          <el-input v-model.trim="temp.fileGroupName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="描述:" prop="fileGroupDescribe">
-          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea"/>
+          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" clearable/>
         </el-form-item>
-        <!-- <el-form-item label="描述" prop="fileGroupDescribe">
-          <el-input v-model.trim="temp.fileGroupDescribe" />
-        </el-form-item> -->
         <el-form-item label="状态:" prop="status" >
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
@@ -77,8 +74,9 @@ import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('文件组名称的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldName !== this.temp.fileGroupName) {
           checkFileGroupName(this.temp.fileGroupName).then(res => {
@@ -131,7 +129,7 @@ export default {
         status: [
           { required: true, message: '请选择状态', trigger: 'blur' }
         ],
-        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'blur' }]
+        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'change' }]
       }
     }
   },
@@ -183,7 +181,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('添加失败')
+              this.$message.error(res.data.result)
             }
             // 将对话框隐藏
             this.fileGroupdialogFormVisible = false
@@ -225,7 +223,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
             this.fileGroupdialogFormVisible = false
             this.initList()
@@ -252,7 +250,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -271,7 +269,7 @@ export default {
           this.fileGroupList = res.data.data.rows
           this.total = res.data.data.total
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })

@@ -2,16 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dept.dao.SysDepartmentMapper">
     <resultMap id="departmentTreeMap" type="com.jn.system.dept.vo.SysDepartmentVO">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <id column="id" jdbcType="VARCHAR" property="value"/>
         <result column="department_name" jdbcType="VARCHAR" property="label"/>
         <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
         <result column="parentName" jdbcType="VARCHAR" property="parentName"/>
         <collection property="children" ofType="com.jn.system.dept.vo.SysDepartmentVO">
-            <id column="childId" property="id" jdbcType="VARCHAR"/>
+            <id column="childId" property="value" jdbcType="VARCHAR"/>
             <result column="childName" property="label" jdbcType="VARCHAR"/>
             <result column="childPartntId" jdbcType="VARCHAR" property="parentId"/>
         </collection>
     </resultMap>
+
+    <insert id="addDepartmentBatch" parameterType="java.util.List" >
+        insert into tb_sys_department (id, department_name,parent_id,creator,create_time,status,`level`) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.departmentName,jdbcType=VARCHAR},
+            #{item.parentId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR},
+            #{item.level,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
 
     <update id="deleteDepartmentBranch" parameterType="java.util.List">
         update tb_sys_department set status=-1
@@ -19,6 +32,21 @@
         <foreach collection="list" item="id"
                  open="(" close=")" index="index" separator=",">
             #{id}
+        </foreach>
+    </update>
+
+    <update id="updateDepartmentBatch" parameterType="java.util.List" >
+        update tb_sys_department
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="department_name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.departmentName}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
         </foreach>
     </update>
 
@@ -72,18 +100,20 @@
             ORDER BY t.create_time ASC,tt.create_time ASC;
     </select>
 
-    <select id="checkDepartmentName" parameterType="com.jn.system.dept.model.SysDepartmentCheckName"
-            resultType="com.jn.system.dept.model.SysDepartment">
-          SELECT
-            id,department_name
-            from tb_sys_department
-            where parent_id = #{parentId,jdbcType=VARCHAR}
-            and department_name = #{departmentName,jdbcType=VARCHAR}
-            and `status` = '1' LIMIT 1
-    </select>
-
-    <select id="getDepartmentById" resultType="com.jn.system.dept.model.SysDepartment" parameterType="java.lang.String">
-          SELECT id,department_name as departmentName,parent_id as parentId,`status`
-          FROM `tb_sys_department` where id = #{id,jdbcType=VARCHAR} and `status` != '-1';
+    <select id="getChildDepartmentByParentId" resultType="com.jn.system.dept.vo.SysDepartmentVO"
+            parameterType="java.lang.String">
+            SELECT
+            id as `value`,
+            department_name as label,
+            parent_id as parentId,
+            (SELECT
+            department_name
+            FROM tb_sys_department
+            where id = t.parent_id) as parentName
+            FROM
+            `tb_sys_department` t
+            where parent_id = #{id,jdbcType=VARCHAR}
+            and `status` = '1'
+            ORDER BY create_time ASC;
     </select>
 </mapper>

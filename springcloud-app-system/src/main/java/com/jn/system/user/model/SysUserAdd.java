@@ -24,7 +24,7 @@ public class SysUserAdd implements Serializable {
     private String account;
 
     @ApiModelProperty("用户名称")
-    @Size(max = 10, message = "用户名称长度不能超过10个字")
+    @Size(max = 16, message = "用户名称长度不能超过16个字")
     private String name;
 
     @ApiModelProperty("手机号码")

@@ -102,22 +102,24 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
+        String fileGroupName = sysFileGroup.getFileGroupName();
         //判断修改信息是否存在
-        SysFileGroup sysFileGroup1 = sysFileGroupMapper.getFileGroupById(sysFileGroup.getId());
-        if (sysFileGroup1 == null){
+        TbSysFileGroup tbSysFileGroup1 = tbSysFileGroupMapper.selectByPrimaryKey(sysFileGroup.getId());
+        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getStatus())){
             logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }else {
+            //判断名称是否修改
+            if (!tbSysFileGroup1.getFileGroupName().equals(fileGroupName)){
+                //校验名称是否已经在数据库中存在
+                List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);
+                if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+                    logger.warn("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
+                    throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+                }
+            }
         }
-        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
-        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
-        criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        criteria.andIdNotEqualTo(sysFileGroup.getId());
-        List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
-        if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.warn("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
-        }
+        //对文件组信息进行修改操作
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.updateByPrimaryKeySelective(tbSysFileGroup);

@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="用户组名称:">
-          <el-input v-model="listQuery.groupName" placeholder="请输入名称" style="width: 150px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.groupName" maxlength="20" placeholder="请输入名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
@@ -68,10 +68,10 @@
     <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
         <el-form-item label="用户组:" prop="groupName">
-          <el-input v-model.trim="userGroupform.groupName" max-length="20" />
+          <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="状态:" prop="status">
-          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item">
+          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item" clearable>
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -136,8 +136,9 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('用户组名称不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldGroupName !== this.userGroupform.groupName) {
           checkGroupName(this.userGroupform.groupName).then(res => {
@@ -231,7 +232,7 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
         this.initList()
       })
@@ -267,7 +268,7 @@ export default {
           this.roleIds = checkRole
           this.roleLoading = false
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
       })
     },
@@ -327,7 +328,7 @@ export default {
               type: 'success'
             })
           } else {
-            this.$message.error('授权失败')
+            this.$message.error(res.data.result)
           }
           this.initList()
         }
@@ -374,7 +375,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('添加失败')
+              this.$message.error(res.data.result)
             }
             // 将对话框隐藏
             this.userGroupdialogFormVisible = false
@@ -419,7 +420,7 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
             // 重置表单元素的数据
             this.$refs['userGroupform'].resetFields()
@@ -448,7 +449,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -467,7 +468,7 @@ export default {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
@@ -490,7 +491,7 @@ export default {
 <style lang="scss">
 .el-tooltip__popper{
    text-align: center;
-    width:200px;
+    width:260px;
 }
 .tablePagination{
   margin-top:15px;

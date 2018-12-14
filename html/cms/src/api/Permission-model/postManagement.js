@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// 获取角色所有数据
+// 获取岗位所有数据
 export function getAllList(query) {
   return request({
     url: 'system/sysPost/list',
@@ -7,7 +7,7 @@ export function getAllList(query) {
     data: query
   })
 }
-// 新增角色
+// 新增岗位
 export function addPostList(query) {
   return request({
     url: 'system/sysPost/add',
@@ -41,5 +41,13 @@ export function deletePostById(query) {
     url: 'system/sysPost/delete',
     method: 'post',
     data: param
+  })
+}
+// 获取所有岗位类型
+export function getAllPostType(query) {
+  return request({
+    url: 'system/sysPostType/getPostTypeAll',
+    method: 'post',
+    data: query
   })
 }

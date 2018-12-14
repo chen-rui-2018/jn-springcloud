@@ -1,5 +1,6 @@
 <template>
   <el-scrollbar wrap-class="scrollbar-wrapper">
+    <div class="logo"/>
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"
@@ -29,3 +30,15 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+    .logo{
+      // width: 100%;
+      height: 56px;
+      background:url('~@/assets/images/logo.jpg') center center / 100% 100% no-repeat ;
+      // img{
+      //   // width: 100%;
+      //   height: 100%;
+      // }
+    }
+</style>

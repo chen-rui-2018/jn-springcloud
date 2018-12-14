@@ -14,6 +14,8 @@ public class TbSysPost implements Serializable {
 
     private String status;
 
+    private String postTypeId;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -56,6 +58,14 @@ public class TbSysPost implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId == null ? null : postTypeId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -72,7 +82,8 @@ public class TbSysPost implements Serializable {
             && (this.getPostName() == null ? other.getPostName() == null : this.getPostName().equals(other.getPostName()))
             && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+            && (this.getPostTypeId() == null ? other.getPostTypeId() == null : this.getPostTypeId().equals(other.getPostTypeId()));
     }
 
     @Override
@@ -84,6 +95,7 @@ public class TbSysPost implements Serializable {
         result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getPostTypeId() == null) ? 0 : getPostTypeId().hashCode());
         return result;
     }
 
@@ -98,6 +110,7 @@ public class TbSysPost implements Serializable {
         sb.append(", creator=").append(creator);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
+        sb.append(", postTypeId=").append(postTypeId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

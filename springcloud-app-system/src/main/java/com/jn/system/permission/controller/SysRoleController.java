@@ -97,7 +97,7 @@ public class SysRoleController extends BaseController {
         Assert.notNull(sysUserGroupRoleAdd.getRoleId(), "角色ID不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd,user);
+        tbRoleService.userGroupRoleAuthorization(sysUserGroupRoleAdd,user);
         return new Result();
     }
 
@@ -111,15 +111,6 @@ public class SysRoleController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         tbRoleService.userRoleAuthorization(sysUserRoleAdd,user);
         return new Result();
-    }
-
-    @ControllerLog(doAction = "查询所有角色")
-    @ApiOperation(value = "查询所有角色", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findSysRoleAll",method = RequestMethod.POST)
-    @RequiresPermissions("/system/sysRole/findSysRoleAll")
-    public Result findSysRoleAll() {
-        List<SysRole> sysRoleAll = tbRoleService.findSysRoleAll();
-        return new Result(sysRoleAll);
     }
 
     @ControllerLog(doAction = "校验角色名称是否已经存在,fail表示名称已存在,success表示可以使用")

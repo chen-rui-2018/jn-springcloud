@@ -20,7 +20,7 @@ public class SysPermissionAdd implements Serializable {
 
     private static final long serialVersionUID = -438470231901712531L;
     @ApiModelProperty("权限名称")
-    @Size(max = 20,message = "权限名称字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "权限名称校验失败")
     private String permissionName;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")

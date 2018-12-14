@@ -19,7 +19,7 @@ import java.util.List;
 public interface SysGroupService {
 
     /**
-     * 查询所有用户组信息
+     * 查询用户组信息列表
      *
      * @return
      */

@@ -15,12 +15,6 @@ import java.util.List;
  * @modified By:yuanyy
  **/
 public interface SysRoleService {
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    List<SysRole> findSysRoleAll();
 
     /**
      * 新增角色
@@ -72,7 +66,7 @@ public interface SysRoleService {
      *
      * @param sysUserGroupRoleAdd
      */
-    void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
+    void userGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
 
     /**
      * 校验角色名称是否已经存在

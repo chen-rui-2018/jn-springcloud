@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.menu.dao.SysResourcesMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.menu.model.SysResources">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="resources_name" jdbcType="VARCHAR" property="resourcesName"/>
-        <result column="resources_url" jdbcType="VARCHAR" property="resourcesUrl"/>
-        <result column="menu_id" jdbcType="VARCHAR" property="menuId"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
-    </resultMap>
-
     <resultMap id="MenuResourcesResultMap" type="com.jn.system.menu.vo.SysResourcesVO">
         <id column="r_resourcesId" jdbcType="VARCHAR" property="resourcesId"/>
         <result column="r_resourcesName" jdbcType="VARCHAR" property="resourcesName"/>
@@ -176,12 +166,6 @@
         select t.menu_name from tb_sys_menu t,tb_sys_resources tt
         where t.id = tt.menu_id and tt.`status` != '-1'
         and t.`status` = '1' and tt.id = #{id,jdbcType=VARCHAR}
-    </select>
-
-    <select id="getResourcesById" resultType="com.jn.system.menu.model.SysResources" parameterType="java.lang.String">
-        SELECT id,resources_name as resourcesName,resources_url as resourcesUrl,
-        menu_id as menuId,create_time as createTime,`status`
-        FROM tb_sys_resources WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 
     <select id="getResourcesByMenuId" resultType="com.jn.system.menu.model.SysResources"

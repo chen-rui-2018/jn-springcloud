@@ -279,4 +279,36 @@ public class ActivityVO implements Serializable {
     public void setActiOrder(Integer actiOrder) {
         this.actiOrder = actiOrder;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityVO{" +
+                "id='" + id + '\'' +
+                ", actiType='" + actiType + '\'' +
+                ", actiName='" + actiName + '\'' +
+                ", actiStartTime=" + actiStartTime +
+                ", actiEndTime=" + actiEndTime +
+                ", applyStartTime=" + applyStartTime +
+                ", applyEndTime=" + applyEndTime +
+                ", mesSendTime=" + mesSendTime +
+                ", actiAddress='" + actiAddress + '\'' +
+                ", actiCost=" + actiCost +
+                ", actiOrganizer='" + actiOrganizer + '\'' +
+                ", actiNumber=" + actiNumber +
+                ", actiPosterUrl='" + actiPosterUrl + '\'' +
+                ", state='" + state + '\'' +
+                ", createTime=" + createTime +
+                ", createUserId='" + createUserId + '\'' +
+                ", updateTime=" + updateTime +
+                ", updateUserId='" + updateUserId + '\'' +
+                ", actiViews=" + actiViews +
+                ", actiLike=" + actiLike +
+                ", applyNum=" + applyNum +
+                ", particNum=" + particNum +
+                ", isTop='" + isTop + '\'' +
+                ", topTime=" + topTime +
+                ", isApply='" + isApply + '\'' +
+                ", actiOrder=" + actiOrder +
+                '}';
+    }
 }

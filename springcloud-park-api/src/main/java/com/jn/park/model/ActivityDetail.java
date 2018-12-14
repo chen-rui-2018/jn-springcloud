@@ -63,10 +63,8 @@ public class ActivityDetail implements Serializable {
     private String updateTime;
     @ApiModelProperty(value = "修改人")
     private String updateAccount;
-    @ApiModelProperty(value = "是否置顶")
-    private String isTop;
-    @ApiModelProperty(value = "置顶时间")
-    private String topTime;
+    @ApiModelProperty(value = "是否首页展示")
+    private String isIndex;
     @ApiModelProperty(value = "是否可报名")
     private String isApply;
     @ApiModelProperty(value = "活动内容")
@@ -269,20 +267,12 @@ public class ActivityDetail implements Serializable {
         this.updateAccount = updateAccount;
     }
 
-    public String getIsTop() {
-        return isTop;
+    public String getIsIndex() {
+        return isIndex;
     }
 
-    public void setIsTop(String isTop) {
-        this.isTop = isTop;
-    }
-
-    public String getTopTime() {
-        return topTime;
-    }
-
-    public void setTopTime(String topTime) {
-        this.topTime = topTime;
+    public void setIsIndex(String isIndex) {
+        this.isIndex = isIndex;
     }
 
     public String getIsApply() {

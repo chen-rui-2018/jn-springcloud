@@ -78,4 +78,16 @@ public class ActivityLikeVO implements Serializable {
     public void setLikeAccount(String likeAccount) {
         this.likeAccount = likeAccount;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityLikeVO{" +
+                "id='" + id + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", likeUserId='" + likeUserId + '\'' +
+                ", likeTime=" + likeTime +
+                ", state='" + state + '\'' +
+                ", likeAccount='" + likeAccount + '\'' +
+                '}';
+    }
 }

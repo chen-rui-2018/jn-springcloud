@@ -29,8 +29,7 @@
         ,t1.issue_account as "issueAccount"                                                      <!--发布人-->
         ,date_format(t1.update_time,'%Y-%m-%d %H:%i:%s') as "updateTime"                         <!--修改时间-->
         ,t1.update_account as "updateAccount"                                                    <!--修改人-->
-        ,t1.is_top as "isTop"                                                                    <!--是否置顶-->
-        ,date_format(t1.top_time,'%Y-%m-%d %H:%i:%s') as "topTime"                               <!--置顶时间-->
+        ,t1.is_index as "isIndex"                                                                <!--是否首页展示-->
         ,t1.is_apply as "isApply"                                                                <!--是否可报名-->
         ,t1.show_apply_num as "showApplyNum"                                                     <!--是否展示报名人(0否1是)-->
         ,t2.acti_detail as "activityDetail"                                                      <!--活动内容-->
@@ -98,7 +97,8 @@
         left join tb_user_company t3
         on t1.account=t3.account
         where  1=1
-        and t1.com_account=#{id}
+        and t1.activity_id=#{activityId}
+        and t1.account=#{account}
         and t1.apply_state='1'
     </select>
 </mapper>

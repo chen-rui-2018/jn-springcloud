@@ -90,4 +90,17 @@ public class ActivityDetailVO implements Serializable {
     public void setApplySuccess(Boolean applySuccess) {
         this.applySuccess = applySuccess;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityDetailVO{" +
+                "activityDetail=" + activityDetail +
+                ", activityLikeList=" + activityLikeList +
+                ", likeNum=" + likeNum +
+                ", activityApplyList=" + activityApplyList +
+                ", realapplyNum=" + realapplyNum +
+                ", sysTemTime='" + sysTemTime + '\'' +
+                ", applySuccess=" + applySuccess +
+                '}';
+    }
 }

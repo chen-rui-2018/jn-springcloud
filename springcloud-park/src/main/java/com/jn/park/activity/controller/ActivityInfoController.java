@@ -48,7 +48,6 @@ public class ActivityInfoController extends BaseController {
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/guest/getActivityDetails")
     public Result getActivityDetails(String id){
-
         Assert.notNull(id,"活动id不能为空");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();

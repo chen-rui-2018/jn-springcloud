@@ -64,16 +64,18 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             activityDetailVO.setActivityDetail(activityDetail);
             //根据活动id查询点赞信息
             List<TbActivityLike> activityLikeInfo = getActivityLikeInfo(id);
-            if (activityLikeInfo!=null) {
+            int minLikeNum=0;
+            if (activityLikeInfo.size()>minLikeNum) {
                 activityDetailVO.setActivityLikeList(activityLikeInfo);
                 activityDetailVO.setLikeNum(activityLikeInfo.size());
             }
             //是否展示报名人(0：否   1：是）若不展示报名人，不查询报名信息
             String showApplyNum="1";
             if(showApplyNum.equals(activityDetail.getShowApplyNum())){
-                //根据活动id查询活动报名信息
-                List<ActivityApply> activityApplyInfo = getActivityApplyInfo(id);
-                if (activityApplyInfo!=null) {
+                //根据活动id和account查询活动报名信息
+                List<ActivityApply> activityApplyInfo = getActivityApplyInfo(id,account);
+                int minApplyNum=0;
+                if (activityApplyInfo.size()>minApplyNum) {
                     activityDetailVO.setActivityApplyList(activityApplyInfo);
                     activityDetailVO.setRealapplyNum(activityApplyInfo.size());
                 }
@@ -115,9 +117,13 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         //根据用户账号和活动id查询当前登录用户是否已报名当前活动
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
         example.createCriteria().andActivityIdEqualTo(id).andAccountEqualTo(account);
-        List<TbActivityApply> tbActivityApplies = tbActivityApplyMapper.selectByExample(example);
+        long applyNum = tbActivityApplyMapper.countByExample(example);
+        //默认报名成功
+        activityDetailVO.setApplySuccess(true);
         //若已报名该活动,报名成功标志位true,否则为false
-        if(tbActivityApplies.size()==0){
+        //没有报名
+        int noApplyNum=0;
+        if(applyNum==noApplyNum){
             //没有数据，表示没有报名成功
             activityDetailVO.setApplySuccess(false);
         }
@@ -142,16 +148,21 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
         }
         List<Comment>list=activityDetailsMapper.getCommentInfo(id);
-        List<Comment> resultList = getComments(list);
+        List<Comment> resultList = recursiveGetComments(list);
         return new PaginationData(resultList,objects==null?0:objects.getTotal());
     }
 
-    private List<Comment> getComments(List<Comment> list) {
+    /**
+     * 递归查询活动点评信息
+     * @param list
+     * @return
+     */
+    private List<Comment> recursiveGetComments(List<Comment> list) {
         for(Comment comment:list){
             //有子节点
              if(comment.getChildNum()>0){
                 List<Comment>resultList=activityDetailsMapper.getCommentInfo(comment.getId());
-                comment.setChildList(getComments(resultList));
+                comment.setChildList(recursiveGetComments(resultList));
             }
         }
         return list;
@@ -174,14 +185,16 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     }
 
     /**
-     * 根据活动id查询活动报名信息
-     * @param id
+     * 根据活动id,account查询活动报名信息
+     * @param id       活动id
+     * @param account  账号
      * @return
      */
     @ServiceLog(doAction = "活动报名信息")
     @Override
-    public List<ActivityApply> getActivityApplyInfo(String id){
-        return activityDetailsMapper.getActivityApplyInfo(id);
+    public List<ActivityApply> getActivityApplyInfo(String id,String account){
+        List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(id, account);
+        return activityApplyInfo;
     }
 
     /**

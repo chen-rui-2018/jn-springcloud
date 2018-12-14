@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 活动报名信息
@@ -20,16 +19,16 @@ public class ActivityApply implements Serializable {
     private String id;
     @ApiModelProperty(value = "活动ID")
     private String activityId;
-    @ApiModelProperty(value = "用户ID")
-    private String userId;
+    @ApiModelProperty(value = "用户账号")
+    private String account;
     @ApiModelProperty(value = "申请时间")
-    private Date applyTime;
+    private String applyTime;
     @ApiModelProperty(value = "申请状态")
     private String applyState;
     @ApiModelProperty(value = "签到状态")
     private String signState;
     @ApiModelProperty(value = "签到时间")
-    private Date signTime;
+    private String signTime;
     @ApiModelProperty(value = "签到方式(0：app签到，1：现场签到)")
     private String signType;
     @ApiModelProperty(value = "报名人头像")
@@ -42,7 +41,7 @@ public class ActivityApply implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getActivityId() {
@@ -50,22 +49,22 @@ public class ActivityApply implements Serializable {
     }
 
     public void setActivityId(String activityId) {
-        this.activityId = activityId == null ? null : activityId.trim();
+        this.activityId = activityId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getAccount() {
+        return account;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId == null ? null : userId.trim();
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public Date getApplyTime() {
+    public String getApplyTime() {
         return applyTime;
     }
 
-    public void setApplyTime(Date applyTime) {
+    public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
     }
 
@@ -85,11 +84,11 @@ public class ActivityApply implements Serializable {
         this.signState = signState;
     }
 
-    public Date getSignTime() {
+    public String getSignTime() {
         return signTime;
     }
 
-    public void setSignTime(Date signTime) {
+    public void setSignTime(String signTime) {
         this.signTime = signTime;
     }
 

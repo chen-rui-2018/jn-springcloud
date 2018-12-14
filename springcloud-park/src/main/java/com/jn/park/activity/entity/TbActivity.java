@@ -51,9 +51,7 @@ public class TbActivity implements Serializable {
 
     private Integer particNum;
 
-    private String isTop;
-
-    private Date topTime;
+    private String isIndex;
 
     private String isApply;
 
@@ -251,20 +249,12 @@ public class TbActivity implements Serializable {
         this.particNum = particNum;
     }
 
-    public String getIsTop() {
-        return isTop;
+    public String getIsIndex() {
+        return isIndex;
     }
 
-    public void setIsTop(String isTop) {
-        this.isTop = isTop == null ? null : isTop.trim();
-    }
-
-    public Date getTopTime() {
-        return topTime;
-    }
-
-    public void setTopTime(Date topTime) {
-        this.topTime = topTime;
+    public void setIsIndex(String isIndex) {
+        this.isIndex = isIndex == null ? null : isIndex.trim();
     }
 
     public String getIsApply() {
@@ -342,8 +332,7 @@ public class TbActivity implements Serializable {
             && (this.getActiLike() == null ? other.getActiLike() == null : this.getActiLike().equals(other.getActiLike()))
             && (this.getApplyNum() == null ? other.getApplyNum() == null : this.getApplyNum().equals(other.getApplyNum()))
             && (this.getParticNum() == null ? other.getParticNum() == null : this.getParticNum().equals(other.getParticNum()))
-            && (this.getIsTop() == null ? other.getIsTop() == null : this.getIsTop().equals(other.getIsTop()))
-            && (this.getTopTime() == null ? other.getTopTime() == null : this.getTopTime().equals(other.getTopTime()))
+            && (this.getIsIndex() == null ? other.getIsIndex() == null : this.getIsIndex().equals(other.getIsIndex()))
             && (this.getIsApply() == null ? other.getIsApply() == null : this.getIsApply().equals(other.getIsApply()))
             && (this.getActiOrder() == null ? other.getActiOrder() == null : this.getActiOrder().equals(other.getActiOrder()))
             && (this.getIssueTime() == null ? other.getIssueTime() == null : this.getIssueTime().equals(other.getIssueTime()))
@@ -378,8 +367,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getActiLike() == null) ? 0 : getActiLike().hashCode());
         result = prime * result + ((getApplyNum() == null) ? 0 : getApplyNum().hashCode());
         result = prime * result + ((getParticNum() == null) ? 0 : getParticNum().hashCode());
-        result = prime * result + ((getIsTop() == null) ? 0 : getIsTop().hashCode());
-        result = prime * result + ((getTopTime() == null) ? 0 : getTopTime().hashCode());
+        result = prime * result + ((getIsIndex() == null) ? 0 : getIsIndex().hashCode());
         result = prime * result + ((getIsApply() == null) ? 0 : getIsApply().hashCode());
         result = prime * result + ((getActiOrder() == null) ? 0 : getActiOrder().hashCode());
         result = prime * result + ((getIssueTime() == null) ? 0 : getIssueTime().hashCode());
@@ -417,8 +405,7 @@ public class TbActivity implements Serializable {
         sb.append(", actiLike=").append(actiLike);
         sb.append(", applyNum=").append(applyNum);
         sb.append(", particNum=").append(particNum);
-        sb.append(", isTop=").append(isTop);
-        sb.append(", topTime=").append(topTime);
+        sb.append(", isIndex=").append(isIndex);
         sb.append(", isApply=").append(isApply);
         sb.append(", actiOrder=").append(actiOrder);
         sb.append(", issueTime=").append(issueTime);

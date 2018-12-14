@@ -43,11 +43,12 @@ public interface ActivityDetailsService {
     List<TbActivityLike> getActivityLikeInfo(String id);
 
     /**
-     * 根据活动id查询活动报名信息
-     * @param id 活动id
+     * 根据活动id,account查询活动报名信息
+     * @param id       活动id
+     * @param account  账号
      * @return
      */
-    List<ActivityApply> getActivityApplyInfo(String id);
+    List<ActivityApply> getActivityApplyInfo(String id, String account);
 
     /**
      * 根据活动id获取园区活动信息

@@ -110,4 +110,19 @@ public class ActivityTypeVO implements Serializable {
     public void setFileTotal(String fileTotal) {
         this.fileTotal = fileTotal;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityTypeVO{" +
+                "typeId='" + typeId + '\'' +
+                ", typeName='" + typeName + '\'' +
+                ", createAccount='" + createAccount + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", updateAccount='" + updateAccount + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", state='" + state + '\'' +
+                ", templateList=" + templateList +
+                ", fileTotal='" + fileTotal + '\'' +
+                '}';
+    }
 }

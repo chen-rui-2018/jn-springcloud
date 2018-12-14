@@ -3,7 +3,6 @@ package com.jn.park.model;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 活动报名信息字段
@@ -39,7 +38,7 @@ public class ActivityApplyDetail implements Serializable {
     @ApiModelProperty(value = "报名状态")
     private String applyState;
     @ApiModelProperty(value = "报名时间")
-    private Date applyTime;
+    private String applyTime;
 
     public String getActivityId() {
         return activityId;
@@ -137,11 +136,11 @@ public class ActivityApplyDetail implements Serializable {
         this.applyState = applyState;
     }
 
-    public Date getApplyTime() {
+    public String getApplyTime() {
         return applyTime;
     }
 
-    public void setApplyTime(Date applyTime) {
+    public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
     }
 }

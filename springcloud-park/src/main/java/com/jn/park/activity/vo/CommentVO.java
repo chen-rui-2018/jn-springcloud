@@ -106,4 +106,19 @@ public class CommentVO implements Serializable {
     public void setCommentNum(String commentNum) {
         this.commentNum = commentNum;
     }
+
+    @Override
+    public String toString() {
+        return "CommentVO{" +
+                "id='" + id + '\'' +
+                ", pId='" + pId + '\'' +
+                ", comAccount='" + comAccount + '\'' +
+                ", comTime='" + comTime + '\'' +
+                ", likeNum=" + likeNum +
+                ", state='" + state + '\'' +
+                ", comType='" + comType + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", commentNum='" + commentNum + '\'' +
+                '}';
+    }
 }

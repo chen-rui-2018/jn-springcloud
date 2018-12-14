@@ -25,8 +25,7 @@
     <result column="acti_like" jdbcType="INTEGER" property="actiLike" />
     <result column="apply_num" jdbcType="INTEGER" property="applyNum" />
     <result column="partic_num" jdbcType="INTEGER" property="particNum" />
-    <result column="is_top" jdbcType="VARCHAR" property="isTop" />
-    <result column="top_time" jdbcType="TIMESTAMP" property="topTime" />
+    <result column="is_index" jdbcType="VARCHAR" property="isIndex" />
     <result column="is_apply" jdbcType="VARCHAR" property="isApply" />
     <result column="acti_order" jdbcType="INTEGER" property="actiOrder" />
     <result column="issue_time" jdbcType="TIMESTAMP" property="issueTime" />
@@ -95,7 +94,7 @@
     id, acti_type, acti_name, acti_start_time, acti_end_time, apply_start_time, apply_end_time, 
     mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_number, acti_poster_url, 
     state, create_time, create_account, update_time, update_account, acti_views, acti_like, 
-    apply_num, partic_num, is_top, top_time, is_apply, acti_order, issue_time, issue_account, 
+    apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
     show_apply_num
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
@@ -136,10 +135,9 @@
       acti_number, acti_poster_url, state, 
       create_time, create_account, update_time, 
       update_account, acti_views, acti_like, 
-      apply_num, partic_num, is_top, 
-      top_time, is_apply, acti_order, 
-      issue_time, issue_account, show_apply_num
-      )
+      apply_num, partic_num, is_index, 
+      is_apply, acti_order, issue_time, 
+      issue_account, show_apply_num)
     values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
       #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
       #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
@@ -147,10 +145,9 @@
       #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
-      #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isTop,jdbcType=VARCHAR}, 
-      #{topTime,jdbcType=TIMESTAMP}, #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, 
-      #{issueTime,jdbcType=TIMESTAMP}, #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}
-      )
+      #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
+      #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
+      #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity
@@ -224,11 +221,8 @@
       <if test="particNum != null">
         partic_num,
       </if>
-      <if test="isTop != null">
-        is_top,
-      </if>
-      <if test="topTime != null">
-        top_time,
+      <if test="isIndex != null">
+        is_index,
       </if>
       <if test="isApply != null">
         is_apply,
@@ -316,11 +310,8 @@
       <if test="particNum != null">
         #{particNum,jdbcType=INTEGER},
       </if>
-      <if test="isTop != null">
-        #{isTop,jdbcType=VARCHAR},
-      </if>
-      <if test="topTime != null">
-        #{topTime,jdbcType=TIMESTAMP},
+      <if test="isIndex != null">
+        #{isIndex,jdbcType=VARCHAR},
       </if>
       <if test="isApply != null">
         #{isApply,jdbcType=VARCHAR},
@@ -417,11 +408,8 @@
       <if test="record.particNum != null">
         partic_num = #{record.particNum,jdbcType=INTEGER},
       </if>
-      <if test="record.isTop != null">
-        is_top = #{record.isTop,jdbcType=VARCHAR},
-      </if>
-      <if test="record.topTime != null">
-        top_time = #{record.topTime,jdbcType=TIMESTAMP},
+      <if test="record.isIndex != null">
+        is_index = #{record.isIndex,jdbcType=VARCHAR},
       </if>
       <if test="record.isApply != null">
         is_apply = #{record.isApply,jdbcType=VARCHAR},
@@ -468,8 +456,7 @@
       acti_like = #{record.actiLike,jdbcType=INTEGER},
       apply_num = #{record.applyNum,jdbcType=INTEGER},
       partic_num = #{record.particNum,jdbcType=INTEGER},
-      is_top = #{record.isTop,jdbcType=VARCHAR},
-      top_time = #{record.topTime,jdbcType=TIMESTAMP},
+      is_index = #{record.isIndex,jdbcType=VARCHAR},
       is_apply = #{record.isApply,jdbcType=VARCHAR},
       acti_order = #{record.actiOrder,jdbcType=INTEGER},
       issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
@@ -548,11 +535,8 @@
       <if test="particNum != null">
         partic_num = #{particNum,jdbcType=INTEGER},
       </if>
-      <if test="isTop != null">
-        is_top = #{isTop,jdbcType=VARCHAR},
-      </if>
-      <if test="topTime != null">
-        top_time = #{topTime,jdbcType=TIMESTAMP},
+      <if test="isIndex != null">
+        is_index = #{isIndex,jdbcType=VARCHAR},
       </if>
       <if test="isApply != null">
         is_apply = #{isApply,jdbcType=VARCHAR},
@@ -596,8 +580,7 @@
       acti_like = #{actiLike,jdbcType=INTEGER},
       apply_num = #{applyNum,jdbcType=INTEGER},
       partic_num = #{particNum,jdbcType=INTEGER},
-      is_top = #{isTop,jdbcType=VARCHAR},
-      top_time = #{topTime,jdbcType=TIMESTAMP},
+      is_index = #{isIndex,jdbcType=VARCHAR},
       is_apply = #{isApply,jdbcType=VARCHAR},
       acti_order = #{actiOrder,jdbcType=INTEGER},
       issue_time = #{issueTime,jdbcType=TIMESTAMP},

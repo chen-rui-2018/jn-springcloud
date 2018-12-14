@@ -1,5 +1,6 @@
 package com.jn.park.model;
 
+import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +16,7 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "Comment", description = "活动点评信息")
-public class Comment implements Serializable {
+public class Comment extends Page implements Serializable {
     @ApiModelProperty(value = "点评ID")
     private String id;
     @ApiModelProperty(value = "点评父ID(点评ID/活动ID)")

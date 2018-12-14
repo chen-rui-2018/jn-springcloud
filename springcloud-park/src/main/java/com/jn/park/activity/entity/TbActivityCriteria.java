@@ -1586,133 +1586,73 @@ public class TbActivityCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNull() {
-            addCriterion("is_top is null");
+        public Criteria andIsIndexIsNull() {
+            addCriterion("is_index is null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIsNotNull() {
-            addCriterion("is_top is not null");
+        public Criteria andIsIndexIsNotNull() {
+            addCriterion("is_index is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopEqualTo(String value) {
-            addCriterion("is_top =", value, "isTop");
+        public Criteria andIsIndexEqualTo(String value) {
+            addCriterion("is_index =", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotEqualTo(String value) {
-            addCriterion("is_top <>", value, "isTop");
+        public Criteria andIsIndexNotEqualTo(String value) {
+            addCriterion("is_index <>", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThan(String value) {
-            addCriterion("is_top >", value, "isTop");
+        public Criteria andIsIndexGreaterThan(String value) {
+            addCriterion("is_index >", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopGreaterThanOrEqualTo(String value) {
-            addCriterion("is_top >=", value, "isTop");
+        public Criteria andIsIndexGreaterThanOrEqualTo(String value) {
+            addCriterion("is_index >=", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThan(String value) {
-            addCriterion("is_top <", value, "isTop");
+        public Criteria andIsIndexLessThan(String value) {
+            addCriterion("is_index <", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLessThanOrEqualTo(String value) {
-            addCriterion("is_top <=", value, "isTop");
+        public Criteria andIsIndexLessThanOrEqualTo(String value) {
+            addCriterion("is_index <=", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopLike(String value) {
-            addCriterion("is_top like", value, "isTop");
+        public Criteria andIsIndexLike(String value) {
+            addCriterion("is_index like", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotLike(String value) {
-            addCriterion("is_top not like", value, "isTop");
+        public Criteria andIsIndexNotLike(String value) {
+            addCriterion("is_index not like", value, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopIn(List<String> values) {
-            addCriterion("is_top in", values, "isTop");
+        public Criteria andIsIndexIn(List<String> values) {
+            addCriterion("is_index in", values, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotIn(List<String> values) {
-            addCriterion("is_top not in", values, "isTop");
+        public Criteria andIsIndexNotIn(List<String> values) {
+            addCriterion("is_index not in", values, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopBetween(String value1, String value2) {
-            addCriterion("is_top between", value1, value2, "isTop");
+        public Criteria andIsIndexBetween(String value1, String value2) {
+            addCriterion("is_index between", value1, value2, "isIndex");
             return (Criteria) this;
         }
 
-        public Criteria andIsTopNotBetween(String value1, String value2) {
-            addCriterion("is_top not between", value1, value2, "isTop");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeIsNull() {
-            addCriterion("top_time is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeIsNotNull() {
-            addCriterion("top_time is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeEqualTo(Date value) {
-            addCriterion("top_time =", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeNotEqualTo(Date value) {
-            addCriterion("top_time <>", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeGreaterThan(Date value) {
-            addCriterion("top_time >", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("top_time >=", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeLessThan(Date value) {
-            addCriterion("top_time <", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeLessThanOrEqualTo(Date value) {
-            addCriterion("top_time <=", value, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeIn(List<Date> values) {
-            addCriterion("top_time in", values, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeNotIn(List<Date> values) {
-            addCriterion("top_time not in", values, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeBetween(Date value1, Date value2) {
-            addCriterion("top_time between", value1, value2, "topTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andTopTimeNotBetween(Date value1, Date value2) {
-            addCriterion("top_time not between", value1, value2, "topTime");
+        public Criteria andIsIndexNotBetween(String value1, String value2) {
+            addCriterion("is_index not between", value1, value2, "isIndex");
             return (Criteria) this;
         }
 

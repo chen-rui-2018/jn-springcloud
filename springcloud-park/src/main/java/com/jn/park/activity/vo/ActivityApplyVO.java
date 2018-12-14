@@ -108,4 +108,19 @@ public class ActivityApplyVO implements Serializable {
     public void setApplyNum(String applyNum) {
         this.applyNum = applyNum;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityApplyVO{" +
+                "id='" + id + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", applyTime=" + applyTime +
+                ", applyState='" + applyState + '\'' +
+                ", signState='" + signState + '\'' +
+                ", signTime=" + signTime +
+                ", signType='" + signType + '\'' +
+                ", applyNum='" + applyNum + '\'' +
+                '}';
+    }
 }

@@ -4,7 +4,7 @@ package com.jn.park.activity.dao;
 import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.Comment;
-import feign.Param;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,19 +23,20 @@ public interface ActivityDetailsMapper {
      * @param id 活动id
      * @return
      */
-    List<ActivityDetail> getActivityDetails(@Param(value = "id") String id);
+    List<ActivityDetail> getActivityDetails(@Param("id") String id);
 
     /**
      * 获取点评信息
      * @param id 活动id
      * @return
      */
-    List<Comment>getCommentInfo(@Param(value = "id") String id);
+    List<Comment>getCommentInfo(@Param("id") String id);
 
     /**
      * 获取活动报名信息
      * @param id 活动id
+     * @param account  账号
      * @return
      */
-    List<ActivityApply>getActivityApplyInfo(@Param(value = "id") String id);
+    List<ActivityApply>getActivityApplyInfo(@Param("activityId") String id, @Param("account") String account);
 }

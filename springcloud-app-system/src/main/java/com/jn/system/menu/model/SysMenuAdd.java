@@ -27,7 +27,7 @@ public class SysMenuAdd implements Serializable {
 
     @ApiModelProperty(value = "菜单URL" )
     @NotBlank(message = "菜单路径不能为空！")
-    @Size(max = 50,message = "菜单路径长度不能超度50字")
+    @Size(max = 150,message = "菜单路径长度不能超度150字")
     private String menuUrl;
 
     @ApiModelProperty(value = "父级菜单ID" )

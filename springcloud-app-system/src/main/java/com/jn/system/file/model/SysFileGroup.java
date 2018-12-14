@@ -37,7 +37,7 @@ public class SysFileGroup implements Serializable {
      * 文件组名称
      */
     @ApiModelProperty(value = "文件组描述" )
-    @Size(max = 50, message = "文件组描述,字数不能超过50个字")
+    @Size(max = 150, message = "文件组描述,字数不能超过150个字")
     private String fileGroupDescribe;
 
     /**

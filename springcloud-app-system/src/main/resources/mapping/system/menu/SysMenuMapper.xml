@@ -204,4 +204,38 @@
         ORDER BY t.`sort` ASC
     </select>
 
+    <select id="getDynamicMenu" resultType="com.jn.system.menu.model.SysMenu"
+            parameterType="com.jn.system.menu.model.SysMenu">
+        select distinct
+        sm.id,
+        sm.menu_name as menuName,
+        sm.is_dir as isDir,
+        sm.`level`,
+        sm.parent_id as parentId,
+        sm.sort,
+        sm.menu_url as menuUrl
+        from
+        tb_sys_user su
+        ,tb_sys_user_role sur
+        ,tb_sys_role sr
+        ,tb_sys_permission sp
+        ,tb_sys_role_permission srp
+        ,tb_sys_menu sm
+        ,tb_sys_permission_menu spm
+        where su.id = sur.user_id
+        and sr.id = sur.role_id
+        and sr.id = srp.role_id
+        and sp.id = srp.permission_id
+        and sp.id = spm.permission_id
+        and sm.id = spm.menu_id
+        and su.status =1
+        and sur.status =1
+        and sr.status = 1
+        and sp.status = 1
+        and srp.status = 1
+        and sm.status = 1
+        and spm.status = 1
+        and su.id = #{id,jdbcType=VARCHAR}
+    </select>
+
 </mapper>

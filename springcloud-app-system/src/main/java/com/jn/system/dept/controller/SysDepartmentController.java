@@ -110,4 +110,13 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "根据父级id获取所有子部门信息")
+    @RequiresPermissions("/system/sysDepartment/getChild")
+    @ApiOperation(value = "根据父级id获取所有子部门信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/getChildDepartmentByParentId")
+    public Result getChildDepartmentByParentId(String parentId){
+        List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentService.getChildDepartmentByParentId(parentId);
+        return new Result(sysDepartmentVOList);
+    }
+
 }

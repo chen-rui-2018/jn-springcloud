@@ -39,13 +39,23 @@ public interface SysDepartmentMapper {
 
     /**
      * 批量添加部门信息
+     *
      * @param addeList
      */
     void addDepartmentBatch(List<TbSysDepartment> addeList);
 
     /**
      * 批量更新部门信息
+     *
      * @param updateList
      */
     void updateDepartmentBatch(List<TbSysDepartment> updateList);
+
+    /**
+     * 根据父级id获取所有子部门信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
 }

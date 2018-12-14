@@ -2,13 +2,12 @@ package com.jn.system.menu.dao;
 
 
 import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuPage;
 import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
-import com.jn.system.menu.vo.SysMenuVO;
 import com.jn.system.permission.vo.SysMenuTreeOfPermissionVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单mapper
@@ -88,4 +87,12 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
+
+    /**
+     * 根据用户权限动态获取菜单信息
+     *
+     * @param userId
+     * @return
+     */
+    Set<SysMenu> getDynamicMenu(String userId);
 }

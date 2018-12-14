@@ -1,10 +1,14 @@
 package com.jn.system.menu.service;
 
-import com.jn.system.menu.model.*;
+import com.jn.system.menu.model.SysMenu;
+import com.jn.system.menu.model.SysMenuAdd;
+import com.jn.system.menu.model.SysMenuNameCheck;
+import com.jn.system.menu.model.SysMenus;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单service
@@ -82,4 +86,11 @@ public interface SysMenuService {
      * @return
      */
     List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
+
+    /**
+     * 根据用户权限动态获取菜单信息
+     *
+     * @return
+     */
+    Set<SysMenu> getDynamicMenu(String userId);
 }

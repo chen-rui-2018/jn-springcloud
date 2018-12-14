@@ -15,6 +15,7 @@
         post_name as postName,
         create_time as createTime,
         `status`,
+        post_type_id as postTypeId,
         (SELECT post_type_name
             from tb_sys_post_type
             where id = post_type_id

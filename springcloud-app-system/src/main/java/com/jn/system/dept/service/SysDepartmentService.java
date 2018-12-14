@@ -1,10 +1,8 @@
 package com.jn.system.dept.service;
 
-import com.jn.common.model.PaginationData;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentAdd;
 import com.jn.system.dept.model.SysDepartmentCheckName;
-import com.jn.system.dept.model.SysDepartmentPage;
 import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.model.User;
 
@@ -70,4 +68,12 @@ public interface SysDepartmentService {
      * @param user
      */
     void addDepartmentBatch(List<SysDepartment> sysDepartmentList, User user);
+
+    /**
+     * 根据父级id获取所有子部门信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
 }

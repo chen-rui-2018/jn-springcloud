@@ -66,7 +66,7 @@ public interface SysRoleService {
      *
      * @param sysUserGroupRoleAdd
      */
-    void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
+    void userGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
 
     /**
      * 校验角色名称是否已经存在

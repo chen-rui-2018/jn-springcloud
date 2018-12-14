@@ -369,6 +369,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd, User user) {
         String userId = sysUserDepartmentPostAdd.getUserId();
         List<TbSysUserDepartmentPost> list = new ArrayList<TbSysUserDepartmentPost>(16);
+        HashSet<SysDepartmentPost> set = new HashSet<SysDepartmentPost>(16);
         if (sysUserDepartmentPostAdd.getSysDepartmentPostList() != null
                 && sysUserDepartmentPostAdd.getSysDepartmentPostList().size() > 0) {
             //为用户添加新部门岗位信息
@@ -389,18 +390,28 @@ public class SysUserServiceImpl implements SysUserService {
                         SysStatusEnums.EFFECTIVE.getCode().equals(sysDepartmentPost.getIsDefault()) ? Boolean.TRUE : Boolean.FALSE;
                 if (flag) {
                     count++;
-
                 }
+                //将数据添加到set中,判断用户添加的部门岗位信息是否存在重复项
+                sysDepartmentPost.setIsDefault(null);
+                set.add(sysDepartmentPost);
             }
+            //判断部门岗位默认是否超过一个或不到一个
             if (count != 1) {
                 logger.warn("[用户] 用户添加部门岗位失败,userId: {}", userId);
                 throw new JnSpringCloudException(SysUserExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
+            }
+            //判断部门岗位信息是否重复
+            if(set.size() != list.size()){
+                logger.warn("[用户] 用户添加部门岗位失败,部门岗位信息重复,userId: {}", userId);
+                throw new JnSpringCloudException(SysUserExceptionEnums.ADD_DEPARTMENT_POST_REPEAT);
             }
         }
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
         //用户批量添加部门岗位信息
-        sysUserMapper.addDepartmentAndPostToUserBatch(list);
+        if(list.size() > 0){
+            sysUserMapper.addDepartmentAndPostToUserBatch(list);
+        }
         logger.info("[用户] 用户添加部门岗位成功！，sysUserId:{}", userId);
     }
 

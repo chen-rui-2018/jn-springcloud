@@ -99,4 +99,21 @@
             AND t.`status` = '1'
             ORDER BY t.create_time ASC,tt.create_time ASC;
     </select>
+
+    <select id="getChildDepartmentByParentId" resultType="com.jn.system.dept.vo.SysDepartmentVO"
+            parameterType="java.lang.String">
+            SELECT
+            id as `value`,
+            department_name as label,
+            parent_id as parentId,
+            (SELECT
+            department_name
+            FROM tb_sys_department
+            where id = t.parent_id) as parentName
+            FROM
+            `tb_sys_department` t
+            where parent_id = #{id,jdbcType=VARCHAR}
+            and `status` = '1'
+            ORDER BY create_time ASC;
+    </select>
 </mapper>

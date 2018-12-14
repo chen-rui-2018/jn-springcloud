@@ -273,22 +273,22 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         //1.获取父级id,修改部门集合及添加部门集合
         for (SysDepartment sysDepartment : sysDepartmentList) {
             set.add(sysDepartment.getDepartmentName());
-            if (StringUtils.isBlank(sysDepartment.getId())){
+            if (StringUtils.isBlank(sysDepartment.getId())) {
                 TbSysDepartment tbSysDepartment = new TbSysDepartment();
-                BeanUtils.copyProperties(sysDepartment,tbSysDepartment);
+                BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
                 addeList.add(tbSysDepartment);
                 parentId = sysDepartment.getParentId();
-            }else{
+            } else {
                 TbSysDepartment tbSysDepartment = new TbSysDepartment();
-                BeanUtils.copyProperties(sysDepartment,tbSysDepartment);
+                BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
                 updateList.add(tbSysDepartment);
                 parentId = sysDepartment.getParentId();
             }
         }
 
         //2.判断部门名称中是否有重名
-        if (set.size() != sysDepartmentList.size()){
-            logger.warn("[部门] 部门批量修改失败，部门名称重复！,departmentName: {}",sysDepartmentList );
+        if (set.size() != sysDepartmentList.size()) {
+            logger.warn("[部门] 部门批量修改失败，部门名称重复！,departmentName: {}", sysDepartmentList);
             throw new JnSpringCloudException(SysDepartmentExceptionEnums.DEPARTMENT_NAME_REPEAAT);
         }
 
@@ -305,12 +305,24 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         }
 
         //5.进行批量添加及批量更新
-        if (addeList.size() > 0){
+        if (addeList.size() > 0) {
             sysDepartmentMapper.addDepartmentBatch(addeList);
         }
-        if (updateList.size() > 0){
+        if (updateList.size() > 0) {
             sysDepartmentMapper.updateDepartmentBatch(updateList);
         }
         logger.info("[部门] 批量修改部门信息成功,部门父id为parentId: {}", parentId);
+    }
+
+    /**
+     * 根据父级id获取所有子部门信息
+     *
+     * @param parentId
+     * @return
+     */
+    @Override
+    public List<SysDepartmentVO> getChildDepartmentByParentId(String parentId) {
+        List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getChildDepartmentByParentId(parentId);
+        return departmentVOList;
     }
 }

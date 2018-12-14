@@ -268,7 +268,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     @Override
     @ServiceLog(doAction = "添加角色授权（用户组）")
     @Transactional(rollbackFor = Exception.class)
-    public void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user) {
+    public void userGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user) {
         String[] roleIds = {sysUserGroupRoleAdd.getRoleId()};
         //插入前删除该角色的所有用户组角色数据
         sysUserGroupRoleService.deleteTbUserGroupRoleByRoleIds(roleIds);

@@ -43,7 +43,7 @@ public class SysResources implements Serializable {
      */
     @ApiModelProperty(value = "功能路径" )
     @NotBlank(message = "功能路径不能为空！")
-    @Size(max = 50,message = "页面功能路径长度不能超度50字")
+    @Size(max = 150,message = "页面功能路径长度不能超度150字")
     private String resourcesUrl;
 
 

@@ -21,7 +21,6 @@ public class SysPostTypePage extends Page implements Serializable {
     private static final long serialVersionUID = 2236826545957217059L;
 
     @ApiModelProperty("岗位类型名称")
-    @Pattern(regexp = "^$|[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位类型名称校验失败")
     private String postTypeName;
 
     @ApiModelProperty("状态")

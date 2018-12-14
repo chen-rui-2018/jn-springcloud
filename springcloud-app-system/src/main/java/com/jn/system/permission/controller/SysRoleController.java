@@ -97,7 +97,7 @@ public class SysRoleController extends BaseController {
         Assert.notNull(sysUserGroupRoleAdd.getRoleId(), "角色ID不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd,user);
+        tbRoleService.userGroupRoleAuthorization(sysUserGroupRoleAdd,user);
         return new Result();
     }
 

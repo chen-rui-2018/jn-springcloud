@@ -82,7 +82,7 @@
           <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
         </el-form-item>
         <el-form-item label="微信" prop="wechatAccount">
-          <el-input v-model="temp.wechatAccount" maxlength="19" clearable />
+          <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
         </el-form-item>
         <el-form-item v-if="Visible" label="部门">
           <el-cascader
@@ -408,7 +408,7 @@ export default {
       deep: true
     }
   },
-  created() {
+  mounted() {
     this.getUserList()
     this.getAllDepartment()
     this.findSysPostAll()
@@ -477,7 +477,6 @@ export default {
         page: this.userPage,
         rows: this.userRows
       }).then(res => {
-        console.log(res)
         const userGroupData = []
         const checkUserGroup = []
         this.userTotal = res.data.data.total
@@ -538,6 +537,7 @@ export default {
         page: this.numberPage,
         rows: this.numberRows
       }).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           const roleData = []
           const checkRole = []
@@ -576,7 +576,6 @@ export default {
       this.departmentListLoading = true
       getDepartment().then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -605,7 +604,6 @@ export default {
       // 获取用户列表
       this.listLoading = true
       userList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.userList = res.data.data.rows
           this.total = res.data.data.total
@@ -686,7 +684,6 @@ export default {
 
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          // this.temp.departmentName = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
           userCreate(this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -694,6 +691,9 @@ export default {
                 type: 'success'
               })
               this.dialogFormVisible = false
+              // 重置表单元素的数据
+              this.$refs['dataForm'].resetFields()
+              this.currentDepartmentIds = []
               this.getUserList()
             } else {
               this.$message.error(res.data.result)
@@ -742,8 +742,6 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
-            // 重置表单元素的数据
-            this.$refs['dataForm'].resetFields()
             // 刷新页面显示
             this.getUserList()
           })
@@ -805,7 +803,6 @@ export default {
       if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
         var count = 0
         userDepartmentPostList.sysDepartmentPostList.forEach((val, index) => {
-          console.log(val)
           if (val.isDefault === '1') {
             count = count + 1
           }

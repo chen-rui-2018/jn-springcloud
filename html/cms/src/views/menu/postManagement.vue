@@ -3,7 +3,12 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="岗位名称:">
-          <el-input v-model="listQuery.postName" placeholder="请输入名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.postName" placeholder="请输入岗位名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="岗位类型">
+          <el-select v-model="listQuery.postTypeId" placeholder="请输入岗位类型名称" class="filter-item" clearable>
+            <el-option v-for="(item,index) in postTypeNameOptions" :key="index" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selectePostStatus">
@@ -121,6 +126,7 @@ export default {
       postList: [],
       listLoading: false,
       listQuery: {
+        postTypeName: undefined,
         postName: undefined,
         status: undefined,
         page: 1,
@@ -132,8 +138,8 @@ export default {
           { required: true, message: '请输入岗位名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        postTypeId: [{ required: true, message: '请选择岗位类型', trigger: 'blur' }],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        postTypeId: [{ required: true, message: '请选择岗位类型', trigger: 'change' }],
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -197,19 +203,17 @@ export default {
       this.postform.id = row.id
       this.postform.postName = row.postName
       this.postform.status = parseInt(row.status)
+      this.postform.postTypeId = row.postTypeName
       this.$nextTick(() => {
         this.$refs['postform'].clearValidate()
       })
     },
     // 编辑岗位的功能实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
+          // 避免重复点击提交
+          this.isDisabled = true
           // // 调用接口发送请求
           editPostList(this.postform).then(res => {
             if (res.data.code === '0000') {
@@ -220,6 +224,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.postdialogFormVisible = false
             // 刷新页面显示

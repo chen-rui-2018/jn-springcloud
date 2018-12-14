@@ -30,10 +30,11 @@
             <el-form-item
               v-for="(item,index) in subForm.departmentData"
               :key="index"
-              :prop="'departmentData.'+index+'.label'">
-              <el-input v-model="item.label" />
+              :prop="'departmentData.'+index+'.label'"
+              :rules="departmentDataRules.label">
+              <el-input v-model="item.label" clearable maxlength="20" @blur="checkoutSubName" />
             </el-form-item>
-            <el-form-item>
+            <el-form-item class="footer">
               <el-button :disabled="isDisabled" type="primary" @click="submitDepartmentInfo('subForm')" >保存</el-button>
               <el-button @click="cencalEdit('subForm')" >取消</el-button>
             </el-form-item>
@@ -62,12 +63,12 @@
 
 <script>
 import {
-  getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById
+  getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById, updateAllMenu, getOldData
 } from '@/api/Permission-model/departmentManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -86,12 +87,31 @@ export default {
         }
       }
     }
+    var checkLabel = (rule, value, callback) => {
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
+      } else {
+        var count = 0
+        // 循环整个数组 判断有没有重名的字段
+        this.subForm.departmentData.forEach((val, index) => {
+          if (value === val.label) {
+            count = count + 1
+          }
+        })
+        if (count > 1) {
+          callback(new Error('部门名称已重复'))
+        } else {
+          callback()
+        }
+      }
+    }
     return {
       currentId: undefined,
       isDepartmentInfo: false,
       isSubForm: false,
       subForm: {
-        departmentData: [{ label: '' }]
+        departmentData: []
       },
       currentDepartmentName: undefined,
       checkoutParentId: undefined,
@@ -114,6 +134,9 @@ export default {
           { required: true, message: '请输入部门名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ]
+      },
+      departmentDataRules: {
+        label: [{ required: true, message: '请输入部门名称', trigger: 'blur' }, { validator: checkLabel, trigger: 'blur' }]
       }
     }
   },
@@ -132,10 +155,60 @@ export default {
     this.initList()
   },
   methods: {
-    cencalEdit() {},
-    submitDepartmentInfo() {},
-    handleNodeClick(data, Node) {
-      console.log(data, Node)
+    // 失去焦点的时候判断子部门的名字是否有重复
+    checkoutSubName() {
+      const arr = []
+      this.subForm.departmentData.forEach(val => {
+        arr.push(val.label)
+      })
+      if ((new Set(arr)).size === arr.length) {
+        this.$refs['subForm'].clearValidate()
+      }
+    },
+    cencalEdit(formName) {
+      getOldData(this.currentId).then(res => {
+        if (res.data.code === '0000') {
+          this.subForm.departmentData = res.data.data
+          this.$refs['subForm'].clearValidate()
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.initList()
+      })
+    },
+    // 点击保存的时候
+    submitDepartmentInfo(formName) {
+      // 避免重复点击提交
+      this.isDisabled = true
+      setTimeout(() => {
+        this.isDisabled = false
+      }, 500)
+      const newData = []
+      // 对数组进行遍历 得到与后台要求的数据一样
+      this.subForm.departmentData.forEach((val) => {
+        newData.push({
+          id: val.value,
+          departmentName: val.label,
+          parentId: this.currentId
+        })
+      })
+      this.$refs['subForm'].validate(valid => {
+        if (valid) {
+          // 调用接口发送请求 进行批量更新
+          updateAllMenu(newData).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+            } else { this.$message.error(res.data.result) }
+            // 刷新页面显示
+            this.initList()
+          })
+        }
+      })
+    },
+    handleNodeClick(data) {
       this.currentId = data.value
       this.currentDepartmentName = data.label
       if (data.children === null) {
@@ -219,6 +292,7 @@ export default {
             this.$refs['departmentForm'].resetFields()
             // 刷新页面显示
             this.initList()
+            this.updataRight()
           })
         }
       })
@@ -232,8 +306,6 @@ export default {
       }, 500)
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
-          // 将对话框隐藏
-          this.departmentDialogVisible = false
           // 调用接口发送请求
           createDepartment(this.departmentForm).then(res => {
             if (res.data.code === '0000') {
@@ -241,6 +313,8 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+              // 将对话框隐藏
+              this.departmentDialogVisible = false
             } else {
               this.$message.error(res.data.result)
             }
@@ -248,6 +322,7 @@ export default {
             this.$refs['departmentForm'].resetFields()
             // 刷新页面显示
             this.initList()
+            this.updataRight()
           })
         }
       })
@@ -256,7 +331,7 @@ export default {
     addDepartment(data) {
       console.log(data)
       this.visible = true
-      // this.location = '1'
+      this.location = '1'
       this.dialogStatus = '新增部门'
       this.departmentDialogVisible = true
       this.departmentForm.departmentName = undefined
@@ -270,6 +345,18 @@ export default {
       this.$nextTick(() => {
         this.$refs['departmentForm'].clearValidate()
       })
+    },
+    // 更新右侧页面
+    updataRight() {
+      if (this.location === '0') {
+        getOldData(this.checkoutId).then(res => {
+          if (res.data.code === '0000') {
+            this.subForm.departmentData = res.data.data
+          } else {
+            this.$message.error(res.data.result)
+          }
+        })
+      }
     },
     // 初始化项目
     initList() {
@@ -289,9 +376,13 @@ export default {
 
 <style lang="scss" scoped>
 .departmentManagement{
+  height: 100%;
   display: flex;
 .department-left{
+  height: 100%;
   .el-tree{
+    height: 100%;
+    overflow: auto;
   padding: 20px;
   }
 }
@@ -307,6 +398,9 @@ export default {
 </style>
 <style lang="scss">
  .department-right{
+   height: 100%;
+   width: 100%;
+   overflow:auto;
     padding: 20px;
     .department-content{
       display: flex;
@@ -314,6 +408,12 @@ export default {
       >span{
         margin-right:100px;
       }
+    .el-form-item{
+      width: 360px;
+    }
+    .footer{
+      width: 370px;
+    }
     }
   }
 </style>

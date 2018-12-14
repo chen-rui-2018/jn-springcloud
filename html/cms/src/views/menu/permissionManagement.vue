@@ -386,8 +386,6 @@ export default {
       }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
-          // 将对话框隐藏
-          this.permissiondialogFormVisible = false
           // // 调用接口发送请求
           editPermissionList(this.permissionform).then(res => {
             if (res.data.code === '0000') {
@@ -398,6 +396,8 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            // 将对话框隐藏
+            this.permissiondialogFormVisible = false
             // 重置表单元素的数据
             this.$refs['permissionform'].resetFields()
             // 刷新页面显示
@@ -429,8 +429,6 @@ export default {
       }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
-          // 将对话框隐藏
-          this.permissiondialogFormVisible = false
           // 调用接口发送请求
           addPermissionList(this.permissionform).then(res => {
             if (res.data.code === '0000') {
@@ -438,6 +436,8 @@ export default {
                 message: '添加成功',
                 type: 'success'
               })
+              // 将对话框隐藏
+              this.permissiondialogFormVisible = false
             } else {
               this.$message.error(res.data.result)
             }
@@ -461,7 +461,7 @@ export default {
     // 清空信息
     resetPermissionform() {
       this.permissionform = {
-        rpermissionName: undefined,
+        permissionName: undefined,
         status: undefined
       }
     },

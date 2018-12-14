@@ -50,10 +50,10 @@
         label-position="right"
         label-width="100px" >
         <el-form-item label="文件组名称:" prop="fileGroupName">
-          <el-input v-model.trim="temp.fileGroupName" maxlength="20"/>
+          <el-input v-model.trim="temp.fileGroupName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="描述:" prop="fileGroupDescribe">
-          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea"/>
+          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" clearable/>
         </el-form-item>
         <el-form-item label="状态:" prop="status" >
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
@@ -74,7 +74,7 @@ import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {

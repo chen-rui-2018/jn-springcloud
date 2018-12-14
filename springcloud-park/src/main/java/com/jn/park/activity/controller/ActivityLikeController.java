@@ -41,7 +41,10 @@ public class ActivityLikeController extends BaseController {
     public Result activityLike(String id){
         Assert.notNull(id,"活动id不为空");
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String account=user.getAccount();
+        String account="";
+        if(user !=null && user.getAccount()!=null){
+            account=user.getAccount();
+        }
         activityLikeService.activityLike(id,account);
         return new Result();
     }
@@ -52,7 +55,10 @@ public class ActivityLikeController extends BaseController {
     public Result cancelLike(String id){
         Assert.notNull(id,"活动id不为空");
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String account=user.getAccount();
+        String account="";
+        if(user !=null && user.getAccount()!=null){
+            account=user.getAccount();
+        }
         activityLikeService.cancelLike(id,account);
         return new Result();
     }

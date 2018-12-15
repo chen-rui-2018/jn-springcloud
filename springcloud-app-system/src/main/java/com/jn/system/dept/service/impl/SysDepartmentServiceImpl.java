@@ -259,31 +259,17 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
 
 
     /**
-     * 批量添加更新部门信息
+     * 批量更新部门信息
      *
      * @param sysDepartmentList
-     * @param user
      */
     @Override
-    public void addDepartmentBatch(List<SysDepartment> sysDepartmentList, User user) {
+    public void addDepartmentBatch(List<SysDepartment> sysDepartmentList) {
         String parentId = null;
         HashSet<String> set = new HashSet<String>();
-        List<TbSysDepartment> updateList = new ArrayList<TbSysDepartment>();
-        List<TbSysDepartment> addeList = new ArrayList<TbSysDepartment>();
         //1.获取父级id,修改部门集合及添加部门集合
         for (SysDepartment sysDepartment : sysDepartmentList) {
             set.add(sysDepartment.getDepartmentName());
-            if (StringUtils.isBlank(sysDepartment.getId())) {
-                TbSysDepartment tbSysDepartment = new TbSysDepartment();
-                BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
-                addeList.add(tbSysDepartment);
-                parentId = sysDepartment.getParentId();
-            } else {
-                TbSysDepartment tbSysDepartment = new TbSysDepartment();
-                BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
-                updateList.add(tbSysDepartment);
-                parentId = sysDepartment.getParentId();
-            }
         }
 
         //2.判断部门名称中是否有重名
@@ -292,24 +278,9 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             throw new JnSpringCloudException(SysDepartmentExceptionEnums.DEPARTMENT_NAME_REPEAAT);
         }
 
-        //3.获取父级部门等级
-        TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(parentId);
-        String level = String.valueOf(Integer.parseInt(tbSysDepartment.getLevel()) + 1);
-
-        //4.为批量添加部门设置其他信息
-        for (TbSysDepartment tbsysDepartment : addeList) {
-            tbsysDepartment.setId(UUID.randomUUID().toString());
-            tbsysDepartment.setCreator(user.getId());
-            tbsysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            tbsysDepartment.setLevel(level);
-        }
-
-        //5.进行批量添加及批量更新
-        if (addeList.size() > 0) {
-            sysDepartmentMapper.addDepartmentBatch(addeList);
-        }
-        if (updateList.size() > 0) {
-            sysDepartmentMapper.updateDepartmentBatch(updateList);
+        //3.进行批量添加及批量更新
+        if (sysDepartmentList.size() > 0) {
+            sysDepartmentMapper.updateDepartmentBatch(sysDepartmentList);
         }
         logger.info("[部门] 批量修改部门信息成功,部门父id为parentId: {}", parentId);
     }

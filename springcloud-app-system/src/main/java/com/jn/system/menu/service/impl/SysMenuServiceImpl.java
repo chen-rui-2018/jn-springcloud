@@ -73,11 +73,13 @@ public class SysMenuServiceImpl implements SysMenuService {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        //判断名称是否已经存在
-        List<TbSysMenu> tbSysMenuList = checkMenusName(menuName, parentId);
-        if (tbSysMenuList != null && tbSysMenuList.size() > 0) {
-            logger.warn("[菜单] 菜单更新失败，菜单名称已存在！，menuName:{}", menuName);
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+        if(!tbSysMenu1.getMenuName().equals(menuName)){
+            //判断名称是否已经存在
+            List<TbSysMenu> tbSysMenuList = checkMenusName(menuName, parentId);
+            if (tbSysMenuList != null && tbSysMenuList.size() > 0) {
+                logger.warn("[菜单] 菜单更新失败，菜单名称已存在！，menuName:{}", menuName);
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
         //对信息进行修改操作
         sysMenu.setMenuUrl(StringUtils.trim(sysMenu.getMenuUrl()));

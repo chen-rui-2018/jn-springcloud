@@ -99,14 +99,12 @@ public class SysDepartmentController extends BaseController {
         return new Result(sysDepartmentVOList);
     }
 
-    @ControllerLog(doAction = "批量添加更新部门信息")
+    @ControllerLog(doAction = "批量修改部门信息")
     @RequiresPermissions("/system/sysDepartment/addDepartmentBatch")
-    @ApiOperation(value = "批量添加更新部门信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "批量更新部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/addDepartmentBatch")
     public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList){
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysDepartmentService.addDepartmentBatch(sysDepartmentList,user);
+        sysDepartmentService.addDepartmentBatch(sysDepartmentList);
         return new Result();
     }
 

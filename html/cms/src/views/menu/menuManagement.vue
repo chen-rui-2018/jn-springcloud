@@ -44,14 +44,7 @@
       </div>
       <div v-show="isShowMenuDir" class="menuDirInfo">
         <div> <span>页面名称：</span> {{ dataForm.menuName }}</div>
-        <div> <span>url地址：</span> {{ dataForm.menuUrl }}</div>
-        <!-- <el-form :model="dataForm" label-position="right" label-width="80px">
-          <el-form-item label="页面名称" >
-          <el-input v-model="dataForm.menuName" disabled style="width: 300px"/></el-form-item>
-          <el-form-item label="url地址" >
-            <el-input v-model="dataForm.menuUrl" disabled style="width: 300px"/>
-          </el-form-item>
-        </el-form> -->
+        <div class="urlAddress"> <span>url地址：</span> {{ dataForm.menuUrl }}</div>
         <div class="menuDirInfo-content">
           <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleCreate">新增功能</el-button>
           <el-table :data="tableData" fit border style="width: 100%">
@@ -81,10 +74,10 @@
           <el-radio v-model="radio" label="2">页面</el-radio>
         </el-form-item>
         <el-form-item label="菜单名称:" prop="menuName">
-          <el-input v-model="menuForm.menuName" style="width:340px;"/>
+          <el-input v-model="menuForm.menuName" style="width:340px;" maxlength="20"/>
         </el-form-item>
         <el-form-item v-if="isShow" label="url地址:" prop="menuUrl">
-          <el-input v-model="menuForm.menuUrl" style="width:340px;" />
+          <el-input v-model="menuForm.menuUrl" style="width:340px;" maxlength="150" />
         </el-form-item>
         <el-form-item class="footer" label-width="0px">
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增'?createData():updateData()">保存</el-button>
@@ -97,10 +90,10 @@
     <el-dialog :visible.sync="resourcesDialogVisible" :title="dialogStatus" width="500px">
       <el-form ref="resourcesForm" :rules="rules" :model="resourcesForm" label-width="100px" class="resourcesBox">
         <el-form-item label="功能名称:" prop="resourcesName">
-          <el-input v-model="resourcesForm.resourcesName" />
+          <el-input v-model="resourcesForm.resourcesName" maxlength="20" />
         </el-form-item>
         <el-form-item label="功能地址:" prop="resourcesUrl">
-          <el-input v-model="resourcesForm.resourcesUrl" style="width:340px;" />
+          <el-input v-model="resourcesForm.resourcesUrl" style="width:340px;" maxlength="150"/>
         </el-form-item>
         <el-form-item class="footer" label-width="0px">
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增功能'?createResources():updateResources()">保存</el-button>
@@ -125,9 +118,7 @@ export default {
       } else {
         if (this.oldMenuName !== this.menuForm.menuName) {
           checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
-            console.log(response)
             if (response.data.data === 'fail') {
-              console.log(123)
               callback(new Error('菜单名称已重复'))
             } else {
               callback()
@@ -159,8 +150,8 @@ export default {
       }
     }
     var checkoutUrl = (rule, value, callback) => {
-      if (value && value.length > 50) {
-        callback(new Error('url路径的长度不能超过50个字符'))
+      if (value && value.length > 150) {
+        callback(new Error('url路径的长度不能超过150个字符'))
       } else {
         callback()
       }
@@ -309,12 +300,9 @@ export default {
     // 实现编辑功能
     updateResources() {
       // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 1000)
       this.$refs['resourcesForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           editResources(this.resourcesForm).then(res => {
             if (res.data.code === '0000') {
@@ -325,6 +313,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.resourcesDialogVisible = false
             // 重置表单元素的数据
@@ -348,13 +337,9 @@ export default {
     },
     // 实现添加功能
     createResources() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 1000)
       this.$refs['resourcesForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addResources(this.resourcesForm).then(res => {
             if (res.data.code === '0000') {
@@ -363,6 +348,7 @@ export default {
                 type: 'success'
               })
             } else { this.$message.error(res.data.result) }
+            this.isDisabled = false
             // 将对话框隐藏
             this.resourcesDialogVisible = false
             // 重置表单元素的数据
@@ -441,11 +427,6 @@ export default {
     },
     // 点击保存的时候
     submitMenuInfo(formName) {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       const newData = []
       // 对数组进行遍历 得到与后台要求的数据一样
       this.subForm.menuData.forEach((val) => {
@@ -458,6 +439,7 @@ export default {
       })
       this.$refs['subForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求 进行批量更新
           updateAllMenu({ sysMenuSortList: newData }).then(res => {
             if (res.data.code === '0000') {
@@ -466,6 +448,7 @@ export default {
                 type: 'success'
               })
             } else { this.$message.error(res.data.result) }
+            this.isDisabled = false
             // 刷新页面显示
             this.initList()
           })
@@ -473,7 +456,6 @@ export default {
       })
     },
     handleNodeClick(data) {
-      console.log(data)
       this.currentId = data.id
       this.isRight = true
       this.parentId = data.id
@@ -514,9 +496,9 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+              this.initList()
               if (this.currentId === id) {
                 this.isRight = false
-                this.initList()
               } else {
                 this.isRight = true
               }
@@ -534,13 +516,9 @@ export default {
     },
     // 编辑菜单的实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['menuForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // // 调用接口发送请求
           updateMenu(this.menuForm).then(res => {
             if (res.data.code === '0000') {
@@ -557,6 +535,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['menuForm'].resetFields()
             // 将对话框隐藏
@@ -595,13 +574,10 @@ export default {
     },
     // 实现新增菜单
     createData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['menuForm'].validate(valid => {
         if (valid) {
+          // 避免重复点击提交
+          this.isDisabled = true
           // 判断用户选择的是目录还是页面
           if (this.radio === '1') {
             createMenuDir({ menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
@@ -616,6 +592,7 @@ export default {
               } else {
                 this.$message.error(res.data.result)
               }
+              this.isDisabled = false
             })
           } else if (this.radio === '2') {
             createMenu({ menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
@@ -630,6 +607,7 @@ export default {
               } else {
                 this.$message.error(res.data.result)
               }
+              this.isDisabled = false
             })
           }
           // 重置表单元素的数据
@@ -731,6 +709,9 @@ export default {
   }
   .el-input--medium{
     width: 188px;
+  }
+  .urlAddress{
+    margin:10px 0px;
   }
 }
 .footer{

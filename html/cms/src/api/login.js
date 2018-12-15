@@ -23,8 +23,8 @@ export function logout() {
 
 export function getUserInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get',
+    url: 'system/sysMenu/getDynamicMenu',
+    method: 'post',
     params: { token }
   })
 }

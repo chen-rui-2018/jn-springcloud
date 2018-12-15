@@ -6,7 +6,7 @@
           <el-input v-model="listQuery.postName" placeholder="请输入岗位名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="岗位类型">
-          <el-select v-model="listQuery.postTypeId" placeholder="请输入岗位类型名称" class="filter-item" clearable>
+          <el-select v-model="listQuery.postTypeId" placeholder="请选择岗位类型" class="filter-item" clearable>
             <el-option v-for="(item,index) in postTypeNameOptions" :key="index" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -54,7 +54,7 @@
     <el-dialog :visible.sync="postdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="postform" :rules="rules" :model="postform" label-position="right" label-width="100px" style="max-width:300px;margin-left:20px">
         <el-form-item label="岗位名称" prop="postName">
-          <el-input v-model.trim="postform.postName" max-length="20" clearable/>
+          <el-input v-model.trim="postform.postName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="岗位类型" prop="postTypeId">
           <el-select v-model="postform.postTypeId" placeholder="请选择" class="filter-item" clearable>
@@ -91,7 +91,7 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -243,13 +243,9 @@ export default {
     },
     // 实现新增岗位功能
     createPostData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['postform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addPostList(this.postform).then(res => {
             if (res.data.code === '0000') {
@@ -260,6 +256,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.postdialogFormVisible = false
             // 重置表单元素的数据

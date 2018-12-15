@@ -136,7 +136,7 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -198,7 +198,7 @@ export default {
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -360,13 +360,9 @@ export default {
     },
     // 实现添加用户功能
     createUserData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addgroupList(this.userGroupform).then(res => {
             if (res.data.code === '0000') {
@@ -377,6 +373,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.userGroupdialogFormVisible = false
             // 重置表单元素的数据
@@ -403,13 +400,9 @@ export default {
     },
     // 编辑用户的功能实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
@@ -422,6 +415,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['userGroupform'].resetFields()
             // 刷新页面显示

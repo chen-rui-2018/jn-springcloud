@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Aspect
-@Order(1)
+@Order(0)
 public class LogAspect {
 
     private static Logger logger = LoggerFactory.getLogger(LogAspect.class);

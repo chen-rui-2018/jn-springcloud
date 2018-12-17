@@ -67,6 +67,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         UserExtension userExtension = (UserExtension) cache.get(redisUserKey + "_" + account);
         if(userExtension!=null){
             return  userExtension;
+        }else{
+            userExtension=new UserExtension();
         }
         //redis中没有数据，从数据库中获取
         List<TbUserPerson> tbUserPeople = getTbUserPeople(account);

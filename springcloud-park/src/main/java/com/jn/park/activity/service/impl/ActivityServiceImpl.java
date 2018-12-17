@@ -18,8 +18,6 @@ import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.Activity;
 import com.jn.park.model.ActivityDetail;
-import com.jn.park.parkCode.entity.TbParkCode;
-import com.jn.park.parkCode.service.ParkCodeService;
 import com.jn.park.utils.ExcelUtils;
 import com.jn.park.utils.ObjToMapUtil;
 import com.jn.system.log.annotation.ServiceLog;
@@ -52,8 +50,6 @@ public class ActivityServiceImpl implements ActivityService {
     private TbActivityMapper tbActivityMapper;
     @Autowired
     private TbActivityDetailMapper tbActivityDetailMapper;
-    @Autowired
-    private ParkCodeService parkCodeService;
 
     /**
      * 活动可报名
@@ -94,9 +90,9 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId,activityDetails==null?0:activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESUT_ERROR);
         }
-        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        //List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
-        activityDetail.setParkCodes(parkCodeByType);
+        //activityDetail.setParkCodes(parkCodeByType);
         return activityDetail;
     }
 

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -20,6 +21,7 @@ public class CommentAdd implements Serializable {
     @Pattern(regexp="^[0-1]$",message="{comType:'类型只能是0(活动点评)和1(服务点评)'}")
     private String comType;
     @ApiModelProperty(value = "评论内容")
+    @Size(max=512)
     private String comContent;
 
     private static final long serialVersionUID = 1L;

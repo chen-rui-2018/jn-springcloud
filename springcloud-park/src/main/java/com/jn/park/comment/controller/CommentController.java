@@ -39,7 +39,8 @@ public class CommentController extends BaseController {
     private CommentService commentService;
 
     @ControllerLog(doAction = "活动评论/回复")
-    @ApiOperation(value = "活动评论/回复", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "活动评论/回复", httpMethod = "POST", response = Result.class
+            ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评   comContent：评论内容,最大长度为512")
     @RequestMapping(value = "/commentActivity")
     public Result commentActivity(@Validated @RequestBody CommentAdd commentAdd){
         Assert.notNull(commentAdd.getId(),"活动/点评id不能为空");

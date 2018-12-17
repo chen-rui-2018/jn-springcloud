@@ -185,7 +185,9 @@ public class ActivityController extends BaseController {
     }
 
     @ControllerLog(doAction = "数据导出")
-    @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class
+                ,notes = "id:活动id    exportColName:导出excel导出的字段别名 比如：name,phone,sex ...多个字段以逗号(,)分隔" +
+                "   exportTitle：excel导出字段的标题 比如：姓名,手机,性别...多个字段以逗号(,)分隔 ")
     @RequestMapping(value = "/exportDataExcel")
     public void exportDataExcel( String id,String exportColName, String exportTitle,HttpServletResponse response){
        Assert.notNull(id, "活动id不能为空");

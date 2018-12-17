@@ -62,4 +62,11 @@ public interface ActivityApplyService {
      * @return
      */
     PaginationData findApplyActivityList(String activityId, Page page);
+
+    /**
+     * 新增活动报名信息
+     * @param id        活动id
+     * @param account   用户账号
+     */
+    void addApplyInfo(String id, String account);
 }

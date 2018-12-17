@@ -226,7 +226,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public int deleteActivity(String activityId){
         String[] split = activityId.split(",");
-        TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
+         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
         TbActivity tbActivity = new TbActivity();
         tbActivity.setState("5");
@@ -285,7 +285,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(null == tbActivity){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
-        if(StringUtils.equals(tbActivity.getState(),ACTIVITY_STATE_PUBLISH)){
+        if(!StringUtils.equals(tbActivity.getState(),ACTIVITY_STATE_PUBLISH)){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXPEPTION);
         }
         //判断是否为活动开始前24小时之内

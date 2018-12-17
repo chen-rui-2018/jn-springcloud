@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityLikeService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -39,7 +40,7 @@ public class ActivityLikeController extends BaseController {
     @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/activityLike")
     public Result activityLike(String id){
-        Assert.notNull(id,"活动id不为空");
+        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
         if(user !=null && user.getAccount()!=null){
@@ -53,7 +54,7 @@ public class ActivityLikeController extends BaseController {
     @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/cancelLike")
     public Result cancelLike(String id){
-        Assert.notNull(id,"活动id不为空");
+        Assert.notNull(id, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
         if(user !=null && user.getAccount()!=null){

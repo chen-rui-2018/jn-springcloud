@@ -9,6 +9,7 @@ import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.activity.vo.ActivityDetailVO;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -48,7 +49,7 @@ public class ActivityInfoController extends BaseController {
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/guest/getActivityDetails")
     public Result getActivityDetails(String id){
-        Assert.notNull(id,"活动id不能为空");
+        Assert.notNull(id, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         String account="";
@@ -64,7 +65,7 @@ public class ActivityInfoController extends BaseController {
     @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/guest/getCommentInfo")
     public Result getCommentInfo(String id,Page page){
-        Assert.notNull(id,"活动id不能为空");
+        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         PaginationData commentInfo = activityDetailsService.getCommentInfo(id, page,true);
         return new Result(commentInfo);
     }

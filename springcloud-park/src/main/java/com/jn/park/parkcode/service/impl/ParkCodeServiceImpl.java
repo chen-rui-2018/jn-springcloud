@@ -1,5 +1,6 @@
 package com.jn.park.parkcode.service.impl;
 
+import com.jn.park.parkcode.dao.TbParkCodeMapper;
 import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.entity.TbParkCodeCriteria;
 import com.jn.park.parkcode.service.ParkCodeService;
@@ -23,12 +24,12 @@ import java.util.List;
 public class ParkCodeServiceImpl implements ParkCodeService {
     private static Logger logger = LoggerFactory.getLogger(ParkCodeServiceImpl.class);
     @Autowired
-    private com.jn.park.parkcode.dao.TbParkCodeMapper tbParkCodeMapper;
+    private TbParkCodeMapper tbParkCodeMapper;
 
     @Override
     @ServiceLog(doAction = "查询园区字典编码")
     public List<TbParkCode> getParkCodeByType(String codeType){
-         TbParkCodeCriteria tbParkCodeCriteria = new TbParkCodeCriteria();
+        TbParkCodeCriteria tbParkCodeCriteria = new TbParkCodeCriteria();
         tbParkCodeCriteria.createCriteria().andGroupIdEqualTo(codeType).andStateEqualTo("1");
         return tbParkCodeMapper.selectByExample(tbParkCodeCriteria);
     }

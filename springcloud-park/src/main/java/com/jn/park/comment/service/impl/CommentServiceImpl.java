@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 评论/点评
@@ -64,6 +61,9 @@ public class CommentServiceImpl implements CommentService {
         //从redis中获取敏感词词库
         RedisCache cache = new RedisCache(redisTemplate, prefix, expire);
         List<String> wordList = ( List<String>) cache.get(redisWordKey);
+        if(wordList==null){
+            wordList=new ArrayList<>();
+        }
         //判断敏感词条数是否为0条
         int wordNum=0;
         if(wordList.size()==wordNum){

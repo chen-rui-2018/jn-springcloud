@@ -43,7 +43,7 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
     public Result quickApply(String id){
-        Assert.notNull(id,"活动id不能为空");
+        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         if(user ==null){
@@ -60,7 +60,7 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "id:活动id")
     @RequestMapping(value = "/cancelApply")
     public Result cancelApply(String id){
-        Assert.notNull(id,"活动id不能为空");
+        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         if(user ==null){

@@ -18,5 +18,5 @@ public interface ParkCodeService {
      * @param codeType
      * @return
      */
-    public List<TbParkCode> getParkCodeByType(String codeType);
+    List<TbParkCode> getParkCodeByType(String codeType);
 }

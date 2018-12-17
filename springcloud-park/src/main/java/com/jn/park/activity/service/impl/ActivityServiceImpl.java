@@ -21,13 +21,13 @@ import com.jn.park.model.ActivityDetail;
 import com.jn.park.utils.ExcelUtils;
 import com.jn.park.utils.ObjToMapUtil;
 import com.jn.system.log.annotation.ServiceLog;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.jn.park.parkcode.entity.TbParkCode;
+import com.jn.park.parkcode.service.ParkCodeService;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -50,6 +50,8 @@ public class ActivityServiceImpl implements ActivityService {
     private TbActivityMapper tbActivityMapper;
     @Autowired
     private TbActivityDetailMapper tbActivityDetailMapper;
+    @Autowired
+    private ParkCodeService parkCodeService;
 
     /**
      * 活动可报名
@@ -90,9 +92,9 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId,activityDetails==null?0:activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESUT_ERROR);
         }
-        //List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
-        //activityDetail.setParkCodes(parkCodeByType);
+        activityDetail.setParkCodes(parkCodeByType);
         return activityDetail;
     }
 

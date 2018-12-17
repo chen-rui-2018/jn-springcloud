@@ -158,4 +158,15 @@ public class SysUserController extends BaseController {
         return new Result(result);
     }
 
+    @ControllerLog(doAction = "获取登录用户信息")
+    @RequiresPermissions("/system/sysUser/getUserInfo")
+    @ApiOperation(value = "获取登录用户信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getUserInfo")
+    public Result getUserInfo(){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        user.setPassword("");
+        return new Result(user);
+    }
+
 }

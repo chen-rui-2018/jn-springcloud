@@ -6,11 +6,15 @@ import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 权限模块文件组service单元测试
@@ -43,7 +47,7 @@ public class SysFileGroupServiceTest {
     @Test
     public void addTest() {
         SysFileGroup sysFileGroup = new SysFileGroup();
-        sysFileGroup.setFileGroupName("文件测试1");
+        sysFileGroup.setFileGroupName("文件测试"+ RandomStringUtils.randomNumeric(4));
         sysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user = new User();
         user.setId("123");
@@ -57,8 +61,8 @@ public class SysFileGroupServiceTest {
     @Test
     public void updateTest() {
         SysFileGroup sysFileGroup = new SysFileGroup();
-        sysFileGroup.setId("b0e96afc-7d94-4a3e-b0a4-40774244bda0");
-        sysFileGroup.setFileGroupName("文件测试2");
+        sysFileGroup.setId("17a66583-c67f-401e-bff0-ad7e042e62a2");
+        sysFileGroup.setFileGroupName("文件96");
         sysFileGroup.setStatus(SysStatusEnums.INVALID.getCode());
         sysFileGroupService.updateSysFileGroupById(sysFileGroup);
     }

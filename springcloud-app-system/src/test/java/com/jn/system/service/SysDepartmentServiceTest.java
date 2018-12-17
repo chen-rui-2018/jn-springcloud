@@ -37,7 +37,7 @@ public class SysDepartmentServiceTest {
     public void updateTest() {
         SysDepartment SysDepartment = new SysDepartment();
         SysDepartment.setId("d002");
-        SysDepartment.setStatus("-1");
+        SysDepartment.setStatus("1");
         SysDepartment.setCreateTime(new Date());
         SysDepartment.setDepartmentName("工程部");
         SysDepartment.setParentId("2");

@@ -30,8 +30,8 @@ public class SysMenuServiceTest {
     @Test
     public void updateTest() {
         SysMenu menu = new SysMenu();
-        menu.setId("87a240e8-d425-40d0-b09e-7204460b15c5");
-        menu.setMenuName("菜单测试2");
+        menu.setId("35190724-485f-4f5d-bd79-652ce8909e9e");
+        menu.setMenuName("页面菜单1");
         menu.setMenuUrl("xxx/xxx/b.html");
         sysMenuService.updateSysMenuById(menu);
     }

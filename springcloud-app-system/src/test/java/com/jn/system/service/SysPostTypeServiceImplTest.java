@@ -7,6 +7,7 @@ import com.jn.system.dept.model.SysPostTypeAdd;
 import com.jn.system.dept.model.SysPostTypePage;
 import com.jn.system.dept.service.SysPostTypeService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class SysPostTypeServiceImplTest {
     @Test
     public void add() {
         SysPostTypeAdd postTypeAdd = new SysPostTypeAdd();
-        postTypeAdd.setPostTypeName("xxx");
+        postTypeAdd.setPostTypeName("xxx"+ RandomStringUtils.randomNumeric(4));
         postTypeAdd.setStatus("1");
         User user = new User();
         user.setId("10000");
@@ -56,9 +57,9 @@ public class SysPostTypeServiceImplTest {
     @Test
     public void update() {
         SysPostType sysPostType = new SysPostType();
-        sysPostType.setId("13f65da6-1af8-43d3-b2ca-a730c9772da9");
-        sysPostType.setPostTypeName("xxxx");
-        sysPostType.setStatus("0");
+        sysPostType.setId("f0d34f97-4c5b-4252-83c3-723d46c37c9e");
+        sysPostType.setPostTypeName("公司高层8");
+        sysPostType.setStatus("1");
         sysPostTypeService.update(sysPostType);
     }
 

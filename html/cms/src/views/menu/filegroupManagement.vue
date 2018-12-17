@@ -53,7 +53,7 @@
           <el-input v-model.trim="temp.fileGroupName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="描述:" prop="fileGroupDescribe">
-          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" clearable/>
+          <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" maxlength="150" clearable/>
         </el-form-item>
         <el-form-item label="状态:" prop="status" >
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
@@ -94,8 +94,8 @@ export default {
       }
     }
     var checkoutDescribe = (rule, value, callback) => {
-      if (value && value.length > 50) {
-        callback(new Error('描述的长度不能超过50个字符'))
+      if (value && value.length > 150) {
+        callback(new Error('描述的长度不能超过150个字符'))
       } else {
         callback()
       }
@@ -127,9 +127,9 @@ export default {
           { validator: checkAccount, trigger: 'blur' }
         ],
         status: [
-          { required: true, message: '请选择状态', trigger: 'blur' }
+          { required: true, message: '请选择状态', trigger: 'change' }
         ],
-        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'change' }]
+        fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'blur' }]
       }
     }
   },
@@ -165,16 +165,11 @@ export default {
     },
     // 实现新增文件组信息
     createFileGroupData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['temp'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addFileGroupList(this.temp).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -183,6 +178,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.fileGroupdialogFormVisible = false
             // 重置表单元素的数据
@@ -208,12 +204,9 @@ export default {
     },
     // 编辑文件组信息
     updateData() {
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 1000)
       this.$refs['temp'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 通过验证
           updataFileGroup(this.temp).then(res => {
             if (res.data.code === '0000') {
@@ -225,6 +218,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             this.fileGroupdialogFormVisible = false
             this.initList()
           })
@@ -268,6 +262,10 @@ export default {
         if (res.data.code === '0000') {
           this.fileGroupList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.fileGroupList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

@@ -6,6 +6,7 @@ import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class SysResourcesServiceTest {
     @Test
     public void addTest() {
         SysResources resources = new SysResources();
-        resources.setResourcesName("功能测试1");
+        resources.setResourcesName("功能测试"+ RandomStringUtils.randomNumeric(4));
         resources.setResourcesUrl("xxx/xxx/a.html");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user = new User();
@@ -59,9 +60,10 @@ public class SysResourcesServiceTest {
     @Test
     public void updateTest() {
         SysResources resources = new SysResources();
-        resources.setId("17ff9b4e-a920-4866-8cf8-35eab5c8ccde");
-        resources.setResourcesName("功能测试2");
+        resources.setId("067f36d3-ee53-4d44-9d97-247ab5b6cb72");
+        resources.setResourcesName("这是一个神奇的功能1");
         resources.setResourcesUrl("xxx/xxx/a.html");
+        resources.setMenuId("1111");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         sysResourcesService.updateResourcesById(resources);
     }

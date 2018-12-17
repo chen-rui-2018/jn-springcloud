@@ -47,7 +47,7 @@
     <!-- 新增权限对话框 -->
     <el-dialog :visible.sync="permissiondialogFormVisible" :title="dialogStatus" width="400px" >
       <el-form ref="permissionform" :rules="rules" :model="permissionform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="名称" prop="permissionName">
+        <el-form-item label="权限名称" prop="permissionName">
           <el-input v-model="permissionform.permissionName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
@@ -122,7 +122,7 @@ export default {
 
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -379,13 +379,9 @@ export default {
     },
     // 编辑权限
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // // 调用接口发送请求
           editPermissionList(this.permissionform).then(res => {
             if (res.data.code === '0000') {
@@ -396,6 +392,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.permissiondialogFormVisible = false
             // 重置表单元素的数据
@@ -422,13 +419,9 @@ export default {
     },
     // 新增权限
     createPermissionData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addPermissionList(this.permissionform).then(res => {
             if (res.data.code === '0000') {
@@ -441,6 +434,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['permissionform'].resetFields()
             // 刷新页面显示
@@ -480,6 +474,10 @@ export default {
         if (res.data.code === '0000') {
           this.permissionList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.permissionList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

@@ -45,7 +45,7 @@
     <el-dialog :visible.sync="postTypeDialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="postTypeForm" :rules="rules" :model="postTypeForm" label-position="right" label-width="120px" style="max-width:300px;margin-left:20px">
         <el-form-item label="岗位类型名称" prop="postTypeName">
-          <el-input v-model.trim="postTypeForm.postTypeName" max-length="20" clearable/>
+          <el-input v-model.trim="postTypeForm.postTypeName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="postTypeForm.status" placeholder="请选择" class="filter-item" >
@@ -66,7 +66,7 @@ import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById,
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -109,7 +109,7 @@ export default {
           { required: true, message: '请输入岗位类型名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -163,13 +163,9 @@ export default {
     },
     // 编辑岗位类型的功能实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // // 调用接口发送请求
           editPostTypeList(this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
@@ -180,6 +176,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.postTypeDialogFormVisible = false
             // 刷新页面显示
@@ -190,13 +187,9 @@ export default {
     },
     // 实现新增岗位类型功能
     createPostTypeData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addPostTypeList(this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
@@ -207,6 +200,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.postTypeDialogFormVisible = false
             // 重置表单元素的数据
@@ -250,10 +244,13 @@ export default {
     initList() {
       this.listLoading = true
       getPostTypeList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.postTypeList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.postTypeList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

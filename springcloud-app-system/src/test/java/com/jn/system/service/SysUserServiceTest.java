@@ -7,6 +7,7 @@ import com.jn.system.model.User;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
 import com.jn.system.user.vo.SysUserRoleVO;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -33,10 +34,10 @@ public class SysUserServiceTest {
     @Test
     public void addSysUserTest() {
         SysUserAdd sysUser = new SysUserAdd();
-        sysUser.setAccount("datang11");
+        sysUser.setAccount("datang11"+ RandomStringUtils.randomNumeric(4));
         sysUser.setEmail("1233458@163.com");
         sysUser.setName("大唐");
-        sysUser.setPhone("12345678998");
+        sysUser.setPhone("13345678901");
         sysUser.setStatus("1");
         User user = new User();
         user.setId("10000");
@@ -61,9 +62,9 @@ public class SysUserServiceTest {
     @Test
     public void updateSysUserTest() {
         SysUser sysUser = new SysUser();
-        sysUser.setId("10000");
-        sysUser.setPassword("1gfddfgsdlg");
-        sysUser.setName("管理员3");
+        sysUser.setId("125c3ce8-02ac-4132-9ec1-fa6b5e9685df");
+        sysUser.setPassword("123456");
+        sysUser.setName("旺财10");
         sysUserService.updateSysUser(sysUser);
     }
 
@@ -117,6 +118,7 @@ public class SysUserServiceTest {
         SysDepartmentPost sysDepartmentPost = new SysDepartmentPost();
         sysDepartmentPost.setDepartmentId("d006");
         sysDepartmentPost.setPostId("p006");
+        sysDepartmentPost.setIsDefault("1");
         list.add(sysDepartmentPost);
         sysUserDepartmentPost.setSysDepartmentPostList(list);
         User user = new User();

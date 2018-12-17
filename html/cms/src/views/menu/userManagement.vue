@@ -27,8 +27,8 @@
       <div class="userManagement-content-right">
         <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
           <el-table-column label="序列" type="index" align="center" width="60"/>
-          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
           <el-table-column label="账号" prop="account" align="center" min-width="100" />
+          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
           <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
           <el-table-column label="手机" prop="phone" align="center" min-width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" min-width="120" />
@@ -68,7 +68,7 @@
           <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" maxlength="16" clearable />
+          <el-input v-model.trim="temp.name" maxlength="20" clearable />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
@@ -213,7 +213,7 @@ export default {
     var checkAccount = (rule, value, callback) => {
       const reg = /[A-Za-z0-9]{6,16}$/
       if (!reg.test(value)) {
-        callback(new Error('账号只允许6到16位长度字符的数字及字母'))
+        callback(new Error('请输入6到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
           checkUserName(this.temp.account).then(response => {
@@ -221,7 +221,7 @@ export default {
             if (result === 'success') {
               callback()
             } else {
-              callback(new Error(response.data.result))
+              callback(new Error('账号已使用'))
             }
           })
         } else {
@@ -230,7 +230,7 @@ export default {
       }
     }
     var checkName = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -240,7 +240,7 @@ export default {
     var checkPhoneNumber = (rule, value, callback) => {
       const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入正确手机号码'))
+        callback(new Error('请输入正确的手机号码'))
       } else {
         callback()
       }
@@ -254,10 +254,10 @@ export default {
       }
     }
     var checkWechatAccount = (rule, value, callback) => {
+      const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
       if (value !== '') {
-        const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
         if (!reg.test(value)) {
-          callback(new Error('您输入的微信格式不正确'))
+          callback(new Error('请输入6到20位字母或数字'))
         } else {
           callback()
         }
@@ -336,7 +336,7 @@ export default {
         status: [
           {
             required: true,
-            message: '状态不能为空',
+            message: '请选择状态',
             trigger: 'change'
           }
         ],
@@ -374,7 +374,6 @@ export default {
     userDepartmentPostList: function() {
       // 部门和岗位的数据
       const userPositionData = this.userPositionData
-      console.log(userPositionData)
       const sysDepartmentPostList = userPositionData.map(function(item) {
         // 选中的部门数组
         const departmentArr = item.department
@@ -383,7 +382,6 @@ export default {
         item.postId = item.position
         return item
       })
-      console.log(sysDepartmentPostList)
       return {
         sysDepartmentPostList,
         userId: this.userId
@@ -393,9 +391,11 @@ export default {
   watch: {
     userPositionData: {
       handler: function() {
+        console.log(this.userPositionData)
         const userPosition = this.userPositionData.filter(function(item) {
           return item.department !== '' && item.position
         })
+        console.log(userPosition)
         if (this.userPositionData.length < userPosition.length + 2) {
           this.userPositionData.push({
             department: [],
@@ -424,12 +424,14 @@ export default {
       this.title = !this.title
       this.isShow = !this.isShow
       if (!this.isShow) {
+        this.listQuery.page = 1
         this.listQuery.departmentId = undefined
         this.getUserList()
       }
     },
     // 点击部门树的节点
     handleNodeClick(data) {
+      this.listQuery.page = 1
       this.listQuery.departmentId = data.value
       this.getUserList()
     },
@@ -586,7 +588,6 @@ export default {
     // 获取所有岗位
     findSysPostAll() {
       findSysPostAll().then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           const data = res.data.data
           this.positionOptions = data.map(function(item) {
@@ -607,6 +608,10 @@ export default {
         if (res.data.code === '0000') {
           this.userList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.userList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.getUserList()
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -615,7 +620,6 @@ export default {
     },
     // 显示编辑用户部门和岗位
     handleSectorUpdata(row) {
-      console.log(row)
       this.dialogSectorVisible = true
       this.userPositionData = []
       this.sectorLoading = true
@@ -625,6 +629,7 @@ export default {
         if (response.data.code === '0000') {
           this.sectorLoading = false
           const data = response.data.data
+          console.log(data)
           const sectorArr = []
           data.map(function(item, index) {
             const departmentIds = item.departmentId.split(',')
@@ -676,14 +681,9 @@ export default {
     },
     // 新增用户
     createUserData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
-
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           userCreate(this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -698,6 +698,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
           })
         }
       })
@@ -723,15 +724,10 @@ export default {
     },
     // 编辑用户
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       // 更换用户信息
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          this.dialogFormVisible = false
+          this.isDisabled = true
           // // 调用接口发送请求
           editUser(this.temp).then(res => {
             if (res.data.code === '0000') {
@@ -739,11 +735,13 @@ export default {
                 message: '编辑成功',
                 type: 'success'
               })
+              // 刷新页面显示
+              this.getUserList()
+              this.dialogFormVisible = false
             } else {
               this.$message.error(res.data.result)
             }
-            // 刷新页面显示
-            this.getUserList()
+            this.isDisabled = false
           })
         }
       })
@@ -796,9 +794,11 @@ export default {
       // 清除空的数据
       const filterList = userDepartmentPostList.sysDepartmentPostList.filter(
         function(item) {
-          return item.department !== '' && item.postId
+          console.log(item)
+          return item.department && item.position
         }
       )
+      console.log(filterList)
       userDepartmentPostList.sysDepartmentPostList = filterList
       if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
         var count = 0

@@ -115,7 +115,7 @@ import {
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -182,7 +182,7 @@ export default {
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -414,13 +414,9 @@ export default {
     },
     // 编辑角色
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // // 调用接口发送请求
           editRoleList(this.roleform).then(res => {
             if (res.data.code === '0000') {
@@ -431,6 +427,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['roleform'].resetFields()
             // 将对话框隐藏
@@ -443,13 +440,9 @@ export default {
     },
     // 新增角色
     createUserData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['roleform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           console.log(this.roleform)
           addRoleList(this.roleform).then(res => {
@@ -462,6 +455,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['roleform'].resetFields()
             // 将对话框隐藏
@@ -527,6 +521,10 @@ export default {
         if (res.data.code === '0000') {
           this.roleList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.roleList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

@@ -60,6 +60,34 @@ public class SysDepartmentPost implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SysDepartmentPost)) {
+            return false;
+        }
+
+        SysDepartmentPost that = (SysDepartmentPost) o;
+
+        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) {
+            return false;
+        }
+        if (postId != null ? !postId.equals(that.postId) : that.postId != null) {
+            return false;
+        }
+        return isDefault != null ? isDefault.equals(that.isDefault) : that.isDefault == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = departmentId != null ? departmentId.hashCode() : 0;
+        result = 31 * result + (postId != null ? postId.hashCode() : 0);
+        result = 31 * result + (isDefault != null ? isDefault.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "SysDepartmentPost{" +
                 "departmentId='" + departmentId + '\'' +

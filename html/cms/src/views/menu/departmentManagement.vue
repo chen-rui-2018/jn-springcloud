@@ -20,7 +20,7 @@
         </span>
       </el-tree>
     </div>
-    <div class="department-right">
+    <div v-if="isData" class="department-right">
       <div v-if="isSubForm">没有子部门</div>
       <div v-show="isDepartmentInfo">
         <div class="department-title">下级部门</div>
@@ -50,7 +50,7 @@
           <el-radio v-model="location" label="0">子部门</el-radio>
         </el-form-item>
         <el-form-item label="部门名称:" prop="departmentName">
-          <el-input v-model="departmentForm.departmentName" style="width:200px;" />
+          <el-input v-model.trim="departmentForm.departmentName" style="width:200px;" maxlength="20" />
         </el-form-item>
         <el-form-item>
           <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增部门'?createData():updateData()">保存</el-button>
@@ -107,6 +107,7 @@ export default {
       }
     }
     return {
+      isData: false,
       currentId: undefined,
       isDepartmentInfo: false,
       isSubForm: false,
@@ -178,11 +179,6 @@ export default {
     },
     // 点击保存的时候
     submitDepartmentInfo(formName) {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       const newData = []
       // 对数组进行遍历 得到与后台要求的数据一样
       this.subForm.departmentData.forEach((val) => {
@@ -194,6 +190,7 @@ export default {
       })
       this.$refs['subForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求 进行批量更新
           updateAllMenu(newData).then(res => {
             if (res.data.code === '0000') {
@@ -202,6 +199,7 @@ export default {
                 type: 'success'
               })
             } else { this.$message.error(res.data.result) }
+            this.isDisabled = false
             // 刷新页面显示
             this.initList()
           })
@@ -209,6 +207,7 @@ export default {
       })
     },
     handleNodeClick(data) {
+      this.isData = true
       this.currentId = data.value
       this.currentDepartmentName = data.label
       if (data.children === null) {
@@ -218,6 +217,13 @@ export default {
         this.isSubForm = false
         this.isDepartmentInfo = true
         this.subForm.departmentData = data.children
+      }
+      const arr = []
+      this.subForm.departmentData.forEach(val => {
+        arr.push(val.label)
+      })
+      if ((new Set(arr)).size === arr.length) {
+        this.$refs['subForm'].clearValidate()
       }
     },
     // 删除部门功能实现
@@ -235,7 +241,12 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
-              this.initList()
+              if (this.currentId === id) {
+                this.isData = false
+                this.initList()
+              } else {
+                this.isData = true
+              }
             } else {
               this.$message.error(res.data.result)
             }
@@ -251,7 +262,6 @@ export default {
     // 显示编辑对话框
     editDepartment(data) {
       this.visible = false
-      console.log(data)
       this.dialogStatus = '编辑部门'
       this.oldDepartmentName = data.label
       this.departmentForm.id = data.value
@@ -268,13 +278,9 @@ export default {
     },
     // 编辑部门功能的实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 将对话框隐藏
           this.departmentDialogVisible = false
           console.log(this.departmentForm)
@@ -288,6 +294,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['departmentForm'].resetFields()
             // 刷新页面显示
@@ -299,13 +306,9 @@ export default {
     },
     // 新增部门功能的实现
     createData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           createDepartment(this.departmentForm).then(res => {
             if (res.data.code === '0000') {
@@ -318,6 +321,7 @@ export default {
             } else {
               this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['departmentForm'].resetFields()
             // 刷新页面显示

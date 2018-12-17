@@ -47,9 +47,9 @@ public interface SysDepartmentMapper {
     /**
      * 批量更新部门信息
      *
-     * @param updateList
+     * @param list
      */
-    void updateDepartmentBatch(List<TbSysDepartment> updateList);
+    void updateDepartmentBatch(List<SysDepartment> list);
 
     /**
      * 根据父级id获取所有子部门信息

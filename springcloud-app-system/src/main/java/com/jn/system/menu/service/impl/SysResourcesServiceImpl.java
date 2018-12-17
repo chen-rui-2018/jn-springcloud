@@ -115,7 +115,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
         //2.判断名称是否被修改
-        if (!tbSysResources1.getResourcesName().equals(tbSysResources1)){
+        if (!tbSysResources1.getResourcesName().equals(resourcesName)){
             //查询数据库,判断菜单中功能名称是否已经存在
             List<TbSysResources> tbSysResources = checkName(resourcesName, sysResources.getMenuId());
             if (tbSysResources != null && tbSysResources.size() > 0) {

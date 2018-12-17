@@ -100,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
     public void commentActivityLike(CommentAdd commentAdd, String account) {
         //根据点评id/活动id和点评人获取点评获赞数
         TbCommentCriteria example =new TbCommentCriteria();
-        example.createCriteria().andPIdEqualTo(commentAdd.getId()).andComAccountEqualTo(account).andStateEqualTo(commentAdd.getComType());
+        example.createCriteria().andIdEqualTo(commentAdd.getId());
         //在原有的点赞数上加1
         long likeNum = tbCommentMapper.countByExample(example)+1;
         TbComment tbComment=new TbComment();
@@ -131,6 +131,9 @@ public class CommentServiceImpl implements CommentService {
         tbComment.setState(state);
         //点评类型
         tbComment.setComType(commentAdd.getComType());
+        //点评内容
+        tbComment.setComContent(commentAdd.getComContent());
+
         tbCommentMapper.insertSelective(tbComment);
     }
 }

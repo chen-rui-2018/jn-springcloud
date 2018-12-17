@@ -27,6 +27,7 @@ import com.jn.park.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserCompany;
 import com.jn.user.model.UserExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,12 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             }
         }else if(userExtension.getUserCompanyInfo()!=null){
             //企业用户
-            //todo:有争议，待完善
+            UserCompany userCompanyInfo = userExtension.getUserCompanyInfo();
+            //判断手机号和企业名称不为空
+            if(StringUtils.isBlank(userCompanyInfo.getPhone()) || StringUtils.isBlank(userCompanyInfo.getComName())){
+                //用户信息不完善，跳转到信息完善页
+                throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
+            }
         }else{
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);

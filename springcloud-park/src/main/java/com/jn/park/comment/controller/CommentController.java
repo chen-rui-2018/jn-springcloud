@@ -58,7 +58,8 @@ public class CommentController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动评论点赞")
-    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class
+                ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评  comContent:点赞时可传空 ")
     @RequestMapping(value = "/commentActivityLike")
     public Result commentActivityLike(@Validated @RequestBody CommentAdd commentAdd){
         Assert.notNull(commentAdd.getId(),"活动/点评id不能为空");

@@ -18,9 +18,12 @@ import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.Activity;
 import com.jn.park.model.ActivityDetail;
+import com.jn.park.parkCode.entity.TbParkCode;
+import com.jn.park.parkCode.service.ParkCodeService;
 import com.jn.park.utils.ExcelUtils;
 import com.jn.park.utils.ObjToMapUtil;
 import com.jn.system.log.annotation.ServiceLog;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -49,7 +52,8 @@ public class ActivityServiceImpl implements ActivityService {
     private TbActivityMapper tbActivityMapper;
     @Autowired
     private TbActivityDetailMapper tbActivityDetailMapper;
-
+    @Autowired
+    private ParkCodeService parkCodeService;
 
     /**
      * 活动可报名
@@ -90,7 +94,10 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId,activityDetails==null?0:activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESUT_ERROR);
         }
-        return activityDetails.get(0);
+        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        ActivityDetail activityDetail = activityDetails.get(0);
+        activityDetail.setParkCodes(parkCodeByType);
+        return activityDetail;
     }
 
     @ServiceLog(doAction = "修改活动报名状态")
@@ -237,6 +244,13 @@ public class ActivityServiceImpl implements ActivityService {
     @ServiceLog(doAction = "取消活动")
     @Override
     public int cancelActivity(String activityId){
+        TbActivity activity = tbActivityMapper.selectByPrimaryKey(activityId);
+        if(null == activity){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
+        }
+        if(StringUtils.equals(activity.getState(),ACTIVITY_STATE_DRAFT)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_CANCEL_EXPEPTION);
+        }
         TbActivity tbActivity = new TbActivity();
         tbActivity.setId(activityId);
         tbActivity.setState("4");

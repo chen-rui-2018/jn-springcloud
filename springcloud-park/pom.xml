@@ -53,15 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        activity
+                        parkCode
                     </contexts>
                     <tableNames>
-                        tb_activity,
-                        tb_activity_apply,
-                        tb_activity_type,
-                        tb_activity_detail,
-                        tb_activity_like,
-                        tb_activity_file
+                        tb_park_code
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

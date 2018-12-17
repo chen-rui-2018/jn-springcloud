@@ -2,8 +2,10 @@ package com.jn.park.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 活动详情信息
@@ -71,7 +73,8 @@ public class ActivityDetail implements Serializable {
     private String activityDetail;
     @ApiModelProperty(value = "是否展示报名人(0否1是)")
     private String showApplyNum;
-
+    @ApiModelProperty(value = "园区列表")
+    private List<?> parkCodes;
 
     private static final long serialVersionUID = 1L;
 
@@ -299,4 +302,11 @@ public class ActivityDetail implements Serializable {
         this.showApplyNum = showApplyNum;
     }
 
+    public List<?> getParkCodes() {
+        return parkCodes;
+    }
+
+    public void setParkCodes(List<?> parkCodes) {
+        this.parkCodes = parkCodes;
+    }
 }

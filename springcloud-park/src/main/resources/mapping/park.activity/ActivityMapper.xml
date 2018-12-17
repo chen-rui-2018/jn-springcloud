@@ -36,24 +36,24 @@
 
     <select id="activityListSlim" resultType="com.jn.park.model.ActivitySlim">
           select
-            ta.id as "id"
-            ,ta.acti_name as "actiName"
-            ,ta.acti_address as "actiAddress"
-            ,date_format(ta.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"
-            ,date_format(ta.acti_end_time,'%Y-%m-%d %H:%i:%s') as "actiEndTime"
-            ,ta.apply_num as "applyNum"
-            ,ta.acti_like as "actiLike"
-            ,ta.acti_number as "actiNumber"
-            ,ta.acti_poster_url as "actiPosterUrl"
-            ,ta.show_apply_num as "showApplyNum"
-            ,group_concat(ifnull(tc.avatar,tp.avatar))as "avatar"
+            ta.id as "id"                                                                                 <!--活动id-->
+            ,ta.acti_name as "actiName"                                                                   <!--活动名称-->
+            ,ta.acti_address as "actiAddress"                                                             <!--活动地址-->
+            ,date_format(ta.acti_start_time,'%Y-%m-%d %H:%i:%s') as "actiStartTime"                       <!--活动开始时间-->
+            ,date_format(ta.acti_end_time,'%Y-%m-%d %H:%i:%s') as "actiEndTime"                           <!--活动结束时间-->
+            ,ta.apply_num as "applyNum"                                                                   <!--活动报名人数-->
+            ,ta.acti_like as "actiLike"                                                                   <!--活动点赞人数-->
+            ,ta.acti_number as "actiNumber"                                                               <!--活动人数-->
+            ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
+            ,ta.show_apply_num as "showApplyNum"                                                          <!--是否展示报名人列表-->
+            ,group_concat(ifnull(tc.avatar,tp.avatar))as "avatar"                                         <!--报名人头像列表-->
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
             left join  tb_activity_apply ty on ty.activity_id = ta.id
             left join tb_user_person tp on tp.account = ty.account
             left join tb_user_company tc on tc.account = ty.account
             where 1=1
-            and ta.state != -1
+            and ta.state  not in ('1','5')                                                               <!--不展示活动状态为草稿(state=1),和已删除的的活动(state=5)-->
             <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>

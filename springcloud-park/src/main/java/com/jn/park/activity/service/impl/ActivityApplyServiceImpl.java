@@ -423,7 +423,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         int pageSize = page.getRows()==0?15:page.getRows();
         com.github.pagehelper.Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
         //前端查询有效报名状态数据
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,"0");
+        String state = "1";
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,state);
         return new PaginationData(activityApplyList,objects.getTotal());
     }
 

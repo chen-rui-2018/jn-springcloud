@@ -1,7 +1,7 @@
 package com.jn.park.parkcode.dao;
 
 import com.jn.park.parkcode.entity.TbParkCode;
-import com.jn.park.parkCode.entity.TbParkCodeCriteria;
+import com.jn.park.parkcode.entity.TbParkCodeCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

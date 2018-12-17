@@ -3,19 +3,19 @@
 <mapper namespace="com.jn.park.activity.dao.ActivityApplyMapper">
    <select id="findApplyActivityList" resultType="com.jn.park.model.ActivityApplyDetail">
     select
-      ifnull(tp.account,tc.account) as "account" ,
-      ifnull(tp.avatar,tc.avatar)as "avatar",
-      ifnull(tp.name,tc.com_name)as "name",
-      ifnull(tp.phone,tc.phone) as "phone",
-      tp.sex as "sex",
-      tp.age as "age",
-      tp.company as "company",
-      tp.post as "post",
-      ta.sign_state as "signState",
-      ta.apply_state as "applyState",
-      ta.activity_Id as "activityId",
-      date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",
-      ta.id as "id"
+      ifnull(tp.account,tc.account) as "account" ,                      <!--报名人账号-->
+      ifnull(tp.avatar,tc.avatar)as "avatar",                           <!--报名人头像-->
+      ifnull(tp.name,tc.com_name)as "name",                             <!--报名人名称-->
+      ifnull(tp.phone,tc.phone) as "phone",                             <!--报名人电话-->
+      tp.sex as "sex",                                                  <!--性别-->
+      tp.age as "age",                                                  <!--年龄-->
+      tp.company as "company",                                          <!--公司-->
+      tp.post as "post",                                                <!--岗位-->
+      ta.sign_state as "signState",                                     <!--签到状态-->
+      ta.apply_state as "applyState",                                   <!--报名状态-->
+      ta.activity_Id as "activityId",                                   <!--活动ID-->
+      date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",   <!--报名时间-->
+      ta.id as "id"                                                     <!--id-->
     from tb_activity_apply ta
     left join tb_user_person tp
     on ta.account = tp.account

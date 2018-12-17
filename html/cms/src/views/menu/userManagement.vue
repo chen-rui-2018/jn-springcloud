@@ -68,7 +68,7 @@
           <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" maxlength="20" clearable />
+          <el-input v-model.trim="temp.name" maxlength="16" clearable />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
@@ -230,7 +230,7 @@ export default {
       }
     }
     var checkName = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -254,8 +254,8 @@ export default {
       }
     }
     var checkWechatAccount = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
-      if (value !== '') {
+      if (value !== '' && value !== null) {
+        const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
         if (!reg.test(value)) {
           callback(new Error('请输入6到20位字母或数字'))
         } else {
@@ -318,7 +318,8 @@ export default {
         phone: undefined,
         id: undefined,
         departmentId: undefined,
-        postId: undefined
+        postId: undefined,
+        wechatAccount: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -326,7 +327,7 @@ export default {
       dialogResetPasswordVisible: false,
       addUserDialogRules: {
         name: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { required: true, message: '姓名不能为空', trigger: 'blur' },
           { validator: checkName, trigger: 'blur' }
         ],
         account: [
@@ -629,7 +630,6 @@ export default {
         if (response.data.code === '0000') {
           this.sectorLoading = false
           const data = response.data.data
-          console.log(data)
           const sectorArr = []
           data.map(function(item, index) {
             const departmentIds = item.departmentId.split(',')
@@ -798,7 +798,7 @@ export default {
           return item.department && item.position
         }
       )
-      console.log(filterList)
+      // console.log(filterList)
       userDepartmentPostList.sysDepartmentPostList = filterList
       if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
         var count = 0

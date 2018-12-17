@@ -10,7 +10,7 @@
 
         <div class="avatar-wrapper">
           <span class="userName">
-            {{ userName }}
+            {{ account }}
           </span>
           <a href="javascript:void(0)" style="display:inline-block;" @click="logout">退出</a>
         </div>
@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      userName: 'wangsong'
+      account: 'wangsong'
     }
   },
   computed: {
@@ -42,6 +42,9 @@ export default {
       // 'avatar',
       'device'
     ])
+  },
+  mounted() {
+    this.account = localStorage.getItem('account')
   },
   methods: {
     toggleSideBar() {

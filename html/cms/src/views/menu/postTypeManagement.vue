@@ -244,10 +244,13 @@ export default {
     initList() {
       this.listLoading = true
       getPostTypeList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.postTypeList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.postTypeList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

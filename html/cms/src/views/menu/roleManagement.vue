@@ -521,6 +521,10 @@ export default {
         if (res.data.code === '0000') {
           this.roleList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.roleList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }

@@ -27,8 +27,8 @@
       <div class="userManagement-content-right">
         <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
           <el-table-column label="序列" type="index" align="center" width="60"/>
-          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
           <el-table-column label="账号" prop="account" align="center" min-width="100" />
+          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
           <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
           <el-table-column label="手机" prop="phone" align="center" min-width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" min-width="120" />
@@ -391,9 +391,11 @@ export default {
   watch: {
     userPositionData: {
       handler: function() {
+        console.log(this.userPositionData)
         const userPosition = this.userPositionData.filter(function(item) {
           return item.department !== '' && item.position
         })
+        console.log(userPosition)
         if (this.userPositionData.length < userPosition.length + 2) {
           this.userPositionData.push({
             department: [],
@@ -423,6 +425,7 @@ export default {
       this.isShow = !this.isShow
       if (!this.isShow) {
         this.listQuery.page = 1
+        this.listQuery.departmentId = undefined
         this.getUserList()
       }
     },
@@ -585,7 +588,6 @@ export default {
     // 获取所有岗位
     findSysPostAll() {
       findSysPostAll().then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           const data = res.data.data
           this.positionOptions = data.map(function(item) {
@@ -604,11 +606,12 @@ export default {
       this.listLoading = true
       userList(this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          if (this.listQuery.departmentId === undefined) {
-            this.allUserList = res.data.data.rows
-          }
           this.userList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.userList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.getUserList()
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -617,7 +620,6 @@ export default {
     },
     // 显示编辑用户部门和岗位
     handleSectorUpdata(row) {
-      console.log(row)
       this.dialogSectorVisible = true
       this.userPositionData = []
       this.sectorLoading = true
@@ -627,6 +629,7 @@ export default {
         if (response.data.code === '0000') {
           this.sectorLoading = false
           const data = response.data.data
+          console.log(data)
           const sectorArr = []
           data.map(function(item, index) {
             const departmentIds = item.departmentId.split(',')
@@ -791,9 +794,11 @@ export default {
       // 清除空的数据
       const filterList = userDepartmentPostList.sysDepartmentPostList.filter(
         function(item) {
-          return item.department !== '' && item.postId
+          console.log(item)
+          return item.department && item.position
         }
       )
+      console.log(filterList)
       userDepartmentPostList.sysDepartmentPostList = filterList
       if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
         var count = 0

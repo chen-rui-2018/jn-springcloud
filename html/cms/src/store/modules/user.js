@@ -47,19 +47,15 @@ const user = {
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
-      console.log(userInfo.password)
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
-          console.log(response)
           const data = response.data
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
-
             resolve()
           } else {
-            console.log(data.result)
             Message({
               message: '登录失败,' + data.result,
               type: 'error',
@@ -76,7 +72,7 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          console.log(response)
+          // console.log(response)
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }

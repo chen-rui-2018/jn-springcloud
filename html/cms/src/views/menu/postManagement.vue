@@ -203,7 +203,7 @@ export default {
       this.postform.id = row.id
       this.postform.postName = row.postName
       this.postform.status = parseInt(row.status)
-      this.postform.postTypeId = row.postTypeName
+      this.postform.postTypeId = row.postTypeId
       this.$nextTick(() => {
         this.$refs['postform'].clearValidate()
       })
@@ -288,8 +288,16 @@ export default {
       this.listLoading = true
       getAllList(this.listQuery).then(response => {
         console.log(response)
-        this.postList = response.data.data.rows
-        this.total = response.data.data.total
+        if (response.data.code === '0000') {
+          this.postList = response.data.data.rows
+          this.total = response.data.data.total
+          if (this.postList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
+        } else {
+          this.$message.error(response.data.result)
+        }
         this.listLoading = false
       })
     },

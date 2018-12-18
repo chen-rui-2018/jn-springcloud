@@ -46,7 +46,7 @@ public class ActivityTypeController extends BaseController {
 
     @ControllerLog(doAction = "增加活动类型")
     @ApiOperation(value = "增加活动类型", httpMethod = "POST", response = Result.class,
-    notes = "参数:typeName-活动类型名称,state-活动类型状态,templateList-模板列表,多个模板时使用逗号分隔")
+    notes = "参数:typeName-活动类型名称(长度不大于20个中文),state-活动类型状态(0:无效,1:有效),templateList-模板列表,多个模板时使用逗号分隔")
     @RequestMapping(value = "/add")
     public Result insertActivityType( String typeName,String state,String templateList) {
         Assert.notNull(typeName, ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY.getMessage());
@@ -58,7 +58,7 @@ public class ActivityTypeController extends BaseController {
 
     @ControllerLog(doAction = "查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class,
-    notes = "参数:state-活动状态,page-分页参数,不传值则默认返回第一页,15条数据")
+    notes = "参数:state-活动状态(0:无效,1:有效),page-分页参数(表示第几页,不传则默认返回第一页),rows-分页参数(表示一页的数据条数,不传值则默认返回第一页,15条数据)")
     @RequestMapping(value = "/findActivityTypeList")
     public Result findActivityTypeListByState(String state,   Page page) {
         PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(state,page);
@@ -66,7 +66,8 @@ public class ActivityTypeController extends BaseController {
     }
 
     @ControllerLog(doAction = "展示当前活动类型")
-    @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class,
+    notes ="参数:活动类型的ID")
     @RequestMapping(value = "/findActivityType")
     public Result findActivityTypeById(String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
@@ -75,7 +76,8 @@ public class ActivityTypeController extends BaseController {
     }
 
     @ControllerLog(doAction = "编辑当前活动类型")
-    @ApiOperation(value = "编辑当前活动类型", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "编辑当前活动类型", httpMethod = "POST", response = Result.class,
+    notes = "参数:typeName-活动类型名称(长度不大于20个中文),state-活动类型状态(0:无效,1:有效--不可将已关联活动的类型改为无效),templateList-模板列表,多个模板时使用逗号分隔")
     @RequestMapping(value = "/updateActivityType")
     public Result updateActivityType(String typeId,String typeName,String state,String templateList) {
         Assert.notNull(typeName, ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY.getMessage());
@@ -86,7 +88,7 @@ public class ActivityTypeController extends BaseController {
     }
     @ControllerLog(doAction = "删除活动类型")
     @ApiOperation(value = "删除活动类型", httpMethod = "POST", response = Result.class,
-    notes = "根据ID对活动类型进行逻辑删除,多个时使用逗号分隔;")
+    notes = "根据活动类型ID对活动类型进行逻辑删除,多个时使用逗号分隔;不可将已关联活动的类型进行删除")
     @RequestMapping(value = "/deleteActivityTypeList")
     public Result deleteActivityTypeList(String typeId){
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());

@@ -100,7 +100,7 @@ public class SysDepartmentController extends BaseController {
     }
 
     @ControllerLog(doAction = "批量修改部门信息")
-    @RequiresPermissions("/system/sysDepartment/addDepartmentBatch")
+    @RequiresPermissions("/system/sysDepartment/updateDepartmentBatch")
     @ApiOperation(value = "批量更新部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/addDepartmentBatch")
     public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList){

@@ -103,14 +103,13 @@ public class SysUserServiceImpl implements SysUserService {
         tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
-
+        logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
         //如果部门岗位信息不为空
         if (StringUtils.isNotBlank(departmentId) && StringUtils.isNotBlank(postId)) {
             //为用户添加部门岗位信息
             addDepartmentPostToUser(sysUser, user, tbSysUser);
             logger.info("[用户] 用户添加部门岗位信息系成功！，sysUserId:{}", tbSysUser.getId());
         }
-        logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
     }
 
     /**
@@ -189,14 +188,14 @@ public class SysUserServiceImpl implements SysUserService {
     @ServiceLog(doAction = "删除用户")
     @Transactional(rollbackFor = Exception.class)
     public void deleteSysUser(String[] ids) {
-        logger.info("[用户] 删除用户成功！，sysUserIds:{}", Arrays.toString(ids));
         sysUserMapper.deleteUserBranch(ids);
-        logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserIds:{}", Arrays.toString(ids));
+        logger.info("[用户] 删除用户成功！，sysUserIds:{}", Arrays.toString(ids));
         sysUserDepartmentPostMapper.deleteUserBranch(ids);
-        logger.info("[用户] 删除用户关联角色成功！，sysUserIds:{}", Arrays.toString(ids));
+        logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserIds:{}", Arrays.toString(ids));
         sysUserRoleMapper.deleteUserBranch(ids);
-        logger.info("[用户] 删除用户关联用户组成功！，sysUserIds:{}", Arrays.toString(ids));
+        logger.info("[用户] 删除用户关联角色成功！，sysUserIds:{}", Arrays.toString(ids));
         sysGroupUserMapper.deleteUserBranch(ids);
+        logger.info("[用户] 删除用户关联用户组成功！，sysUserIds:{}", Arrays.toString(ids));
     }
 
     /**
@@ -263,6 +262,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void saveSysGroupToSysUser(String[] groupIds, String userId, User user) {
         //清除用户中已经存在的用户组
         sysUserMapper.deleGroupOfUser(userId);
+        logger.info("[用户] 删除用户关联用户组信息成功！，sysUserId:{}", userId);
         List<SysGroupUser> list = new ArrayList<SysGroupUser>(32);
         if (groupIds != null && groupIds.length > 0) {
             //往用户中添加新的用户组
@@ -314,6 +314,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void saveSysRoleToSysUser(String[] roleIds, String userId, User user) {
         //清除用户中已经存在的角色
         sysUserMapper.deleRoleOfUser(userId);
+        logger.info("[用户] 删除用户关联角色信息成功！，sysUserId:{}", userId);
         List<SysUserRole> list = new ArrayList<SysUserRole>(32);
         if (roleIds != null && roleIds.length > 0) {
             //为用户添加新的角色
@@ -408,6 +409,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         //清除用户已有岗位部门列表
         sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
+        logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserId:{}", userId);
         //用户批量添加部门岗位信息
         if(list.size() > 0){
             sysUserMapper.addDepartmentAndPostToUserBatch(list);

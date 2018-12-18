@@ -35,7 +35,8 @@ export default {
     .logo{
       // width: 100%;
       height: 56px;
-      background:url('~@/assets/images/logo.jpg') center center / 100% 100% no-repeat ;
+      background:url('/static/corporate/logo/logo.jpg') center center / 100% 100% no-repeat ;
+      // background:url('~@/assets/images/logo.jpg') center center / 100% 100% no-repeat ;
       // img{
       //   // width: 100%;
       //   height: 100%;

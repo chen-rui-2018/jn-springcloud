@@ -3,10 +3,10 @@ package com.jn.park.activity.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbActivityLike implements Serializable {
+public class TbParkLike implements Serializable {
     private String id;
 
-    private String activityId;
+    private String likeParentId;
 
     private String likeAccount;
 
@@ -24,12 +24,12 @@ public class TbActivityLike implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getActivityId() {
-        return activityId;
+    public String getLikeParentId() {
+        return likeParentId;
     }
 
-    public void setActivityId(String activityId) {
-        this.activityId = activityId == null ? null : activityId.trim();
+    public void setLikeParentId(String likeParentId) {
+        this.likeParentId = likeParentId == null ? null : likeParentId.trim();
     }
 
     public String getLikeAccount() {
@@ -67,9 +67,9 @@ public class TbActivityLike implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbActivityLike other = (TbActivityLike) that;
+        TbParkLike other = (TbParkLike) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getActivityId() == null ? other.getActivityId() == null : this.getActivityId().equals(other.getActivityId()))
+            && (this.getLikeParentId() == null ? other.getLikeParentId() == null : this.getLikeParentId().equals(other.getLikeParentId()))
             && (this.getLikeAccount() == null ? other.getLikeAccount() == null : this.getLikeAccount().equals(other.getLikeAccount()))
             && (this.getLikeTime() == null ? other.getLikeTime() == null : this.getLikeTime().equals(other.getLikeTime()))
             && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()));
@@ -80,7 +80,7 @@ public class TbActivityLike implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getActivityId() == null) ? 0 : getActivityId().hashCode());
+        result = prime * result + ((getLikeParentId() == null) ? 0 : getLikeParentId().hashCode());
         result = prime * result + ((getLikeAccount() == null) ? 0 : getLikeAccount().hashCode());
         result = prime * result + ((getLikeTime() == null) ? 0 : getLikeTime().hashCode());
         result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
@@ -94,7 +94,7 @@ public class TbActivityLike implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", activityId=").append(activityId);
+        sb.append(", likeParentId=").append(likeParentId);
         sb.append(", likeAccount=").append(likeAccount);
         sb.append(", likeTime=").append(likeTime);
         sb.append(", state=").append(state);

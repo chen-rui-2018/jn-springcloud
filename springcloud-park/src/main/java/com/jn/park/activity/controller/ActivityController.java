@@ -10,9 +10,10 @@ import com.jn.common.util.StringUtils;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.Activity;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityDetail;
+import com.jn.park.activity.model.Activity;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.export.service.ExportExcelService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -55,6 +56,10 @@ public class ActivityController extends BaseController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private ExportExcelService exportDataExcel;
+
     @Autowired
     private ActivityApplyService activityApplyService;
 
@@ -203,7 +208,7 @@ public class ActivityController extends BaseController {
         int rowIndex=0;
         PaginationData paginationData = activityApplyService.applyActivityList(id, null);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
-        activityService.exportDataExcel(codedFileName,exportColName,exportTitle,isMoreHead,exportAs,rowIndex,activityApplyDetails,null,response);
+        exportDataExcel.exportDataExcel(codedFileName,exportColName,exportTitle,isMoreHead,exportAs,rowIndex,activityApplyDetails,null,response);
     }
 
 }

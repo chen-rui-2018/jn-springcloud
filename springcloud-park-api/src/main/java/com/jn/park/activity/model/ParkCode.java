@@ -1,4 +1,4 @@
-package com.jn.park.model;
+package com.jn.park.activity.model;
 
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;

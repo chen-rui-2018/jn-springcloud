@@ -62,6 +62,8 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     EXPORT_PARAMETER_MORE_HEAD("11110206","是否多行表头[isMoreHead]值只能是“0”、“1”"),
     EXPORT_PARAMETER_INDEX_OR_TEMP("11110207","多行表头从哪一行开始写数据[rowIndex]的值至少是3，多行表头导出模板[temp]不能为空"),
     EXPORT_CANNOT_EMPTY("11110208","没有数据，不能导出"),
+    LIKE_STATE_NOT_ALLOW("11110209","点状状态只能是点赞(1)和取消点赞(0)"),
+    APPLY_IS_NOT_EXIST("11110210","点赞评论或服务不存在"),
     ;
 
     /**

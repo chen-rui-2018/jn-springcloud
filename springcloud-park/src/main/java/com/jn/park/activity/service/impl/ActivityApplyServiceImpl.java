@@ -22,8 +22,8 @@ import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ApplyUserInfo;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
@@ -83,16 +83,16 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     /**
      * 快速报名
-     * @param id        活动id
-     * @param account   报名人账号
+     * @param activityId 活动id
+     * @param account    报名人账号
      * @return
      */
     @ServiceLog(doAction = "快速报名")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void quickApply(String id, String account) {
+    public void quickApply(String activityId, String account) {
         //校验是否可以报名/取消报名
-        checkIsApply(id);
+        checkIsApply(activityId);
         //获取用户拓展信息，判断信息是否完整，若不完整，需要完善信息
         Result<UserExtension> list = userExtensionClient.getUserExtension(account);
         //判断人员头像、名称、性别、公司名称、岗位名称是否都有
@@ -124,59 +124,59 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }
         //根据id和account，通过状态（0：取消报名，1：报名成功））查询用户信息是否已存在
-        boolean existApplyFlag = existApplyInfo(id, account);
+        boolean existApplyFlag = existApplyInfo(activityId, account);
         //已报名状态
         String applyState="1";
         //判断是否已报名，主要是防止重复报名/取消报名
-        boolean existStateFlag = existApplyOrCancelApply(id, account, applyState);
+        boolean existStateFlag = existApplyOrCancelApply(activityId, account, applyState);
         //没有报名
         if(!existStateFlag){
             //用户信息已存在
             if(existApplyFlag){
                 //更新报名状态为报名成功   0：取消报名  1：报名成功
                 String state="1";
-                updateApplyState(id, account, state);
+                updateApplyState(activityId, account, state);
             }else{
                 //新增活动报名信息
-                addApplyInfo(id, account);
+                addApplyInfo(activityId, account);
             }
             //修改园区活动的报名人数  报名成功一个加1
             int change=1;
-            updateActivityApplyNum(id,change);
+            updateActivityApplyNum(activityId,change);
         }
     }
 
     /**
      * 取消报名
-     * @param id        活动id
-     * @param account   报名人账号
+     * @param activityId 活动id
+     * @param account    报名人账号
      * @return
      */
     @ServiceLog(doAction = "取消报名")
     @Override
-    public void cancelApply(String id, String account) {
+    public void cancelApply(String activityId, String account) {
         //校验是否可以报名/取消报名
-        checkIsApply(id);
+        checkIsApply(activityId);
         //根据id和account，通过状态（0：取消报名，1：报名成功））查询用户信息是否已存在
-        boolean existApplyFlag = existApplyInfo(id, account);
+        boolean existApplyFlag = existApplyInfo(activityId, account);
         //取消报名状态
         String applyState="0";
         //判断是否已报名，主要是防止重复报名/取消报名
-        boolean existStateFlag = existApplyOrCancelApply(id, account, applyState);
+        boolean existStateFlag = existApplyOrCancelApply(activityId, account, applyState);
         //没有取消报名
         if(!existStateFlag){
             //用户信息已存在
             if(existApplyFlag){
                 //更新报名状态为取消报名  0：取消报名  1：报名成功
                 String state="0";
-                updateApplyState(id, account, state);
+                updateApplyState(activityId, account, state);
             }else{
                 //删除活动报名信息
-                deleteApplyInfo(id,account);
+                deleteApplyInfo(activityId,account);
             }
             //修改园区活动的报名人数  取消一个报名减1
             int change=-1;
-            updateActivityApplyNum(id,change);
+            updateActivityApplyNum(activityId,change);
         }
     }
 
@@ -201,6 +201,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      * @param account   用户账号
      * @return
      */
+    @ServiceLog(doAction = "是否存在当前活动的用户信息")
     private boolean existApplyInfo(String id,String account){
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
         example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id);

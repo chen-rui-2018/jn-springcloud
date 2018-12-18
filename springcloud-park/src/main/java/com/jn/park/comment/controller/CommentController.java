@@ -43,8 +43,8 @@ public class CommentController extends BaseController {
             ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评   comContent：评论内容,最大长度为512")
     @RequestMapping(value = "/commentActivity")
     public Result commentActivity(@Validated @RequestBody CommentAdd commentAdd){
-        Assert.notNull(commentAdd.getId(),"活动/点评id不能为空");
-        Assert.notNull(commentAdd.getComContent(),"评论内容不能为空");
+        Assert.notNull(commentAdd.getId(),CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
+        Assert.notNull(commentAdd.getComContent(),CommentExceptionEnum.APPLY_CONTENT_NOT_EMPTY.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -59,10 +59,10 @@ public class CommentController extends BaseController {
 
     @ControllerLog(doAction = "活动评论点赞")
     @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class
-                ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评  comContent:点赞时可传空 ")
+                ,notes = "id:点评ID/活动ID")
     @RequestMapping(value = "/commentActivityLike")
-    public Result commentActivityLike(@Validated @RequestBody CommentAdd commentAdd){
-        Assert.notNull(commentAdd.getId(),"活动/点评id不能为空");
+    public Result commentActivityLike(String id){
+        Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -71,7 +71,25 @@ public class CommentController extends BaseController {
             result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
             return result;
         }
-        commentService.commentActivityLike(commentAdd,user.getAccount());
+        commentService.commentActivityLike(id,user.getAccount());
+        return result;
+    }
+
+    @ControllerLog(doAction = "活动评论取消点赞")
+    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class
+            ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评  comContent:取消点赞时传空 ")
+    @RequestMapping(value = "/commentActivityCancelLike")
+    public Result commentActivityCancelLike(String id){
+        Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
+        Result result=new Result();
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("活动评论取消点赞获取用户账号失败");
+            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
+            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
+            return result;
+        }
+        commentService.commentActivityCancelLike(id,user.getAccount());
         return result;
     }
 

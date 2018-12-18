@@ -1,7 +1,7 @@
 package com.jn.park.activity.dao;
 
 
-import com.jn.park.model.ActivityType;
+import com.jn.park.activity.model.ActivityType;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

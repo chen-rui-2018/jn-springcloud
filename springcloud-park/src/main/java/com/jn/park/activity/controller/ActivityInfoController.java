@@ -46,27 +46,27 @@ public class ActivityInfoController extends BaseController {
     private ActivityTypeService activityTypeService;
 
     @ControllerLog(doAction = "获取活动详情")
-    @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,notes = "id:活动id")
+    @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/guest/getActivityDetails")
-    public Result getActivityDetails(String id){
-        Assert.notNull(id, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+    public Result getActivityDetails(String activityId){
+        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         String account="";
         if(user !=null && user.getAccount()!=null){
            account=user.getAccount();
         }
-        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(id,account);
+        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,account);
         result.setData(activityDetailVO);
         return result;
     }
 
     @ControllerLog(doAction = "获取评论信息")
-    @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class,notes = "id:活动id")
+    @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/guest/getCommentInfo")
-    public Result getCommentInfo(String id,Page page){
-        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(id, page,true);
+    public Result getCommentInfo(String activityId,Page page){
+        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityId, page,true);
         return new Result(commentInfo);
     }
 

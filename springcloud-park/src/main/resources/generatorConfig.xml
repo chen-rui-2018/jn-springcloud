@@ -108,7 +108,7 @@
     </table>
     <table tableName="tb_activity_detail">
     </table>
-    <table tableName="tb_activity_like">
+    <table tableName="tb_park_like">
     </table>
     <table tableName="tb_activity_file">
     </table>

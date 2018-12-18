@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbActivityLikeCriteria {
+public class TbParkLikeCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbActivityLikeCriteria() {
+    public TbParkLikeCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -175,73 +175,73 @@ public class TbActivityLikeCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdIsNull() {
-            addCriterion("activity_id is null");
+        public Criteria andLikeParentIdIsNull() {
+            addCriterion("like_parent_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdIsNotNull() {
-            addCriterion("activity_id is not null");
+        public Criteria andLikeParentIdIsNotNull() {
+            addCriterion("like_parent_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdEqualTo(String value) {
-            addCriterion("activity_id =", value, "activityId");
+        public Criteria andLikeParentIdEqualTo(String value) {
+            addCriterion("like_parent_id =", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdNotEqualTo(String value) {
-            addCriterion("activity_id <>", value, "activityId");
+        public Criteria andLikeParentIdNotEqualTo(String value) {
+            addCriterion("like_parent_id <>", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdGreaterThan(String value) {
-            addCriterion("activity_id >", value, "activityId");
+        public Criteria andLikeParentIdGreaterThan(String value) {
+            addCriterion("like_parent_id >", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdGreaterThanOrEqualTo(String value) {
-            addCriterion("activity_id >=", value, "activityId");
+        public Criteria andLikeParentIdGreaterThanOrEqualTo(String value) {
+            addCriterion("like_parent_id >=", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdLessThan(String value) {
-            addCriterion("activity_id <", value, "activityId");
+        public Criteria andLikeParentIdLessThan(String value) {
+            addCriterion("like_parent_id <", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdLessThanOrEqualTo(String value) {
-            addCriterion("activity_id <=", value, "activityId");
+        public Criteria andLikeParentIdLessThanOrEqualTo(String value) {
+            addCriterion("like_parent_id <=", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdLike(String value) {
-            addCriterion("activity_id like", value, "activityId");
+        public Criteria andLikeParentIdLike(String value) {
+            addCriterion("like_parent_id like", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdNotLike(String value) {
-            addCriterion("activity_id not like", value, "activityId");
+        public Criteria andLikeParentIdNotLike(String value) {
+            addCriterion("like_parent_id not like", value, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdIn(List<String> values) {
-            addCriterion("activity_id in", values, "activityId");
+        public Criteria andLikeParentIdIn(List<String> values) {
+            addCriterion("like_parent_id in", values, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdNotIn(List<String> values) {
-            addCriterion("activity_id not in", values, "activityId");
+        public Criteria andLikeParentIdNotIn(List<String> values) {
+            addCriterion("like_parent_id not in", values, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdBetween(String value1, String value2) {
-            addCriterion("activity_id between", value1, value2, "activityId");
+        public Criteria andLikeParentIdBetween(String value1, String value2) {
+            addCriterion("like_parent_id between", value1, value2, "likeParentId");
             return (Criteria) this;
         }
 
-        public Criteria andActivityIdNotBetween(String value1, String value2) {
-            addCriterion("activity_id not between", value1, value2, "activityId");
+        public Criteria andLikeParentIdNotBetween(String value1, String value2) {
+            addCriterion("like_parent_id not between", value1, value2, "likeParentId");
             return (Criteria) this;
         }
 

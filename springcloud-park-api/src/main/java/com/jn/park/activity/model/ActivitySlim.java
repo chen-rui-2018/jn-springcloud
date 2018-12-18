@@ -1,7 +1,6 @@
-package com.jn.park.model;
+package com.jn.park.activity.model;
 
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
 /**

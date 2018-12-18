@@ -9,7 +9,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.*;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityType;
+import com.jn.park.activity.model.ActivityType;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;

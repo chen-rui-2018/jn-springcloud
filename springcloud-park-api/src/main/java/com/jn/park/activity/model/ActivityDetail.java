@@ -1,8 +1,7 @@
-package com.jn.park.model;
+package com.jn.park.activity.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
 import java.util.List;

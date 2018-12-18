@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.activity.dao.ActivityApplyMapper">
-   <select id="findApplyActivityList" resultType="com.jn.park.model.ActivityApplyDetail">
+   <select id="findApplyActivityList" resultType="com.jn.park.activity.model.ActivityApplyDetail">
     select
       ifnull(tp.account,tc.account) as "account" ,                      <!--报名人账号-->
       ifnull(tp.avatar,tc.avatar)as "avatar",                           <!--报名人头像-->

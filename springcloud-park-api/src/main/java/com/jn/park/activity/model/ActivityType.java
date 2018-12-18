@@ -1,8 +1,7 @@
-package com.jn.park.model;
+package com.jn.park.activity.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.List;

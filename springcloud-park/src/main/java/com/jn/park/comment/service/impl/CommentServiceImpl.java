@@ -2,12 +2,17 @@ package com.jn.park.comment.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCache;
+import com.jn.park.activity.dao.TbParkLikeMapper;
+import com.jn.park.activity.entity.TbParkLike;
+import com.jn.park.activity.entity.TbParkLikeCriteria;
 import com.jn.park.comment.dao.TbCommentMapper;
 import com.jn.park.comment.entity.TbComment;
 import com.jn.park.comment.entity.TbCommentCriteria;
 import com.jn.park.comment.model.CommentAdd;
 import com.jn.park.comment.service.CommentService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
 import com.jn.park.utils.SensitiveWordUtil;
 import com.jn.system.log.annotation.ServiceLog;
@@ -36,9 +41,21 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private TbCommentMapper tbCommentMapper;
+    
+    @Autowired
+    private TbParkLikeMapper tbParkLikeMapper;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 点赞状态：1:点赞
+     */
+    private static final String PARK_LIKE_STATE="1";
+    /**
+     * 点赞状态：0:取消点赞
+     */
+    private static final String PARK_CANCEL_LIKE_STATE="0";
 
 
     @Value(value = "${sensitive.word.key}")
@@ -93,18 +110,89 @@ public class CommentServiceImpl implements CommentService {
 
     /**
      * 活动评论点赞
-     * @param commentAdd 点评信息   活动id,点评类型、
+     * @param id         点评ID/活动ID
+     * @param account    用户账号/点评人
+     */
+    @ServiceLog(doAction = "活动评论点赞")
+    @Override
+    public void commentActivityLike(String  id,String account) {
+        //状态为点赞  0：取消点赞  1：点赞
+        String state="1";
+        updateApplyLikeNumAndParkLikeInfo(id, account, state);
+
+    }
+
+    /**
+     * 活动评论取消点赞
+     * @param id         点评ID/活动ID
      * @param account    用户账号/点评人
      */
     @Override
-    public void commentActivityLike(CommentAdd commentAdd, String account) {
-        //根据点评id/活动id和点评人获取点评获赞数
-        TbCommentCriteria example =new TbCommentCriteria();
-        example.createCriteria().andIdEqualTo(commentAdd.getId());
-        //在原有的点赞数上加1
-        long likeNum = tbCommentMapper.countByExample(example)+1;
-        TbComment tbComment=new TbComment();
-        tbComment.setLikeNum((int)likeNum);
+    public void commentActivityCancelLike(String id,String account) {
+        //状态为点赞  0：取消点赞  1：点赞
+        String state="0";
+        updateApplyLikeNumAndParkLikeInfo(id, account, state);
+    }
+
+    /**
+     * 更新点评表操作数和点赞表信息
+     * @param id        点评id/点赞父id
+     * @param account   用户账号
+     * @param state     点赞状态   0：取消点赞   1：点赞
+     */
+    @ServiceLog(doAction = "更新点评表操作数和点赞表信息")
+    private void updateApplyLikeNumAndParkLikeInfo(String id, String account, String state) {
+        //查询点评表，判断点赞的活动、评论或服务存在
+        //根据活动、评论、服务id以及点评状态为有效查询点评信息
+        TbCommentCriteria example=new TbCommentCriteria();
+        //有效点评状态
+        String applyState="1";
+        example.createCriteria().andIdEqualTo(id).andStateEqualTo(applyState);
+        List<TbComment> commentList = tbCommentMapper.selectByExample(example);
+        if(commentList==null || commentList.size()==0){
+            throw new JnSpringCloudException(ActivityExceptionEnum.APPLY_IS_NOT_EXIST);
+        }
+        //查询园区点赞表（tb_park_like），根据活动id/评论id,用户判断是否存在点赞信息
+        TbParkLikeCriteria existExample=new TbParkLikeCriteria();
+        existExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account);
+        long existLikeNum = tbParkLikeMapper.countByExample(existExample);
+        //查询园区点赞表（tb_park_like），根据活动id/评论id,用户以及状态为点赞来判断是否已点赞/取消点赞
+        TbParkLikeCriteria optionLikeExample=new TbParkLikeCriteria();
+        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account).andStateEqualTo(state);
+        long optionLikeNum = tbParkLikeMapper.countByExample(optionLikeExample);
+        //已点赞/已取消点赞，不做操作
+        if(optionLikeNum>0){
+            //ignore
+        }else if(existLikeNum>0){
+            //当前活动、评论、服务存在当前用户的点赞信息，更新点赞表点赞状态
+            updateParkLikeState(id, account, state);
+            //若是点赞，点评表对应活动、评论、服务的点赞数加1，否则点赞数减1
+            updateApplyLikeNum(id, applyState, commentList, state);
+        }else{
+            //没有点过赞，点赞表新增点赞
+            addActivityLike(id,account);
+            //评论表新增点评获赞数
+            String addState="1";
+            updateApplyLikeNum(id, applyState, commentList, addState);
+        }
+    }
+
+    /**
+     * 更新点评表点评获赞数
+     * @param id            当前活动、评论、服务的id(非pid)
+     * @param applyState    有效点评装填  0：无效  1：有效
+     * @param commentList   点评信息
+     * @param state         点赞状态  0：取消点赞  1：点赞
+     */
+    @ServiceLog(doAction = "更新点评表点评获赞数")
+    private void updateApplyLikeNum(String id,String applyState,List<TbComment> commentList, String state) {
+        TbComment tbComment = commentList.get(0);
+        //若是点赞标志，若是点赞加1，否则减1
+        String addFlag="1";
+        int likeNum=state.equals(addFlag)?1:-1;
+        tbComment.setLikeNum(tbComment.getLikeNum()+likeNum);
+        TbCommentCriteria example=new TbCommentCriteria();
+        example.createCriteria().andIdEqualTo(id).andStateEqualTo(applyState);
         tbCommentMapper.updateByExampleSelective(tbComment, example);
     }
 
@@ -113,6 +201,7 @@ public class CommentServiceImpl implements CommentService {
      * @param commentAdd 点评信息
      * @param account    用户账号
      */
+    @ServiceLog(doAction = "新增活动点评")
     private void addActivityComment(CommentAdd commentAdd, String account) {
         TbComment tbComment=new TbComment();
         //id
@@ -136,4 +225,48 @@ public class CommentServiceImpl implements CommentService {
 
         tbCommentMapper.insertSelective(tbComment);
     }
+
+
+    /**
+     * 更新点赞状态
+     * @param likeParentId  点赞父id
+     * @param account       用户账号
+     * @param state         点赞状态  0：取消点赞   1：点赞
+     */
+    @ServiceLog(doAction = "更新点赞状态")
+    @Override
+    public void updateParkLikeState(String likeParentId, String account, String state) {
+        if( !StringUtils.equals(PARK_LIKE_STATE, state) && !StringUtils.equals(PARK_CANCEL_LIKE_STATE, state)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.LIKE_STATE_NOT_ALLOW);
+        }
+        TbParkLikeCriteria example=new TbParkLikeCriteria();
+        example.createCriteria().andLikeParentIdEqualTo(likeParentId).andLikeAccountEqualTo(account);
+        TbParkLike tbParkLike=new TbParkLike();
+        tbParkLike.setState(state);
+        tbParkLikeMapper.updateByExampleSelective(tbParkLike, example);
+    }
+
+    /**
+     * 新增点赞信息
+     * @param id       活动id
+     * @param account  用户账号
+     */
+    @ServiceLog(doAction = "新增点赞信息")
+    @Override
+    public void addActivityLike(String id, String account) {
+        TbParkLike parkLike=new TbParkLike();
+        //点赞id
+        parkLike.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        //点赞父id
+        parkLike.setLikeParentId(id);
+        //点赞人
+        parkLike.setLikeAccount(account);
+        //点赞时间
+        parkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
+        //状态 0：取消点赞  1：点赞
+        String likeState="1";
+        parkLike.setState(likeState);
+        tbParkLikeMapper.insertSelective(parkLike);
+    }
+
 }

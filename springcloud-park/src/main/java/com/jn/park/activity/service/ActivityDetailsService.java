@@ -3,9 +3,9 @@ package com.jn.park.activity.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
-import com.jn.park.activity.entity.TbActivityLike;
+import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
+import com.jn.park.activity.model.ActivityApply;
 
 import java.util.List;
 
@@ -19,28 +19,28 @@ import java.util.List;
 public interface ActivityDetailsService {
     /**
      * 根据活动id获取活动详情
-     * @param id       活动id
-     * @param account  当前登录用户账号
+     * @param activityId 活动id
+     * @param account    当前登录用户账号
      * @return
      */
-    ActivityDetailVO findActivityDetails(String id , String account);
+    ActivityDetailVO findActivityDetails(String activityId , String account);
 
     /**
      *
      * 根据活动id获取活动点评信息
-     * @param id 活动id
-     * @param page 分页信息
-     * @param isPage  是否分页  true：分页   false:不分页
+     * @param activityId 活动id
+     * @param page       分页信息
+     * @param isPage     是否分页  true：分页   false:不分页
      * @return
      */
-    PaginationData getCommentInfo(String id, Page page,boolean isPage);
+    PaginationData getCommentInfo(String activityId, Page page,boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息
-     * @param id 活动id
+     * @param activityId 活动id
      * @return
      */
-    List<TbActivityLike> getActivityLikeInfo(String id);
+    List<TbParkLike> getActivityLikeInfo(String activityId);
 
     /**
      * 根据活动id,account查询活动报名信息

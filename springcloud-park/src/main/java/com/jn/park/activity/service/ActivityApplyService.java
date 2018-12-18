@@ -17,19 +17,19 @@ import java.io.OutputStream;
 public interface ActivityApplyService {
     /**
      * 快速报名
-     * @param id        活动id
-     * @param account   报名人账号
+     * @param activityId 活动id
+     * @param account    报名人账号
      * @return
      */
-    void quickApply(String id, String account);
+    void quickApply(String activityId, String account);
 
     /**
      * 取消报名
-     * @param id        活动id
-     * @param account   报名人账号
+     * @param activityId 活动id
+     * @param account    报名人账号
      * @return
      */
-    void cancelApply(String id, String account);
+    void cancelApply(String activityId, String account);
 
 
     /**

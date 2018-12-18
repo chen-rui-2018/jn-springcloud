@@ -37,30 +37,30 @@ public class ActivityLikeController extends BaseController {
     private ActivityLikeService activityLikeService;
 
     @ControllerLog(doAction = "活动点赞")
-    @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
+    @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/activityLike")
-    public Result activityLike(String id){
-        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+    public Result activityLike(String activityId){
+        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
         if(user !=null && user.getAccount()!=null){
             account=user.getAccount();
         }
-        activityLikeService.activityLike(id,account);
+        activityLikeService.activityLike(activityId,account);
         return new Result();
     }
 
     @ControllerLog(doAction = "取消点赞")
-    @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class,notes = "id:活动id")
+    @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/cancelLike")
-    public Result cancelLike(String id){
-        Assert.notNull(id, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+    public Result cancelLike(String activityId){
+        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
         if(user !=null && user.getAccount()!=null){
             account=user.getAccount();
         }
-        activityLikeService.cancelLike(id,account);
+        activityLikeService.cancelLike(activityId,account);
         return new Result();
     }
 }

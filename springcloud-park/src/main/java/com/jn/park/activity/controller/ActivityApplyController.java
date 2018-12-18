@@ -40,10 +40,10 @@ public class ActivityApplyController extends BaseController {
     private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "快速报名")
-    @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/quickApply")
-    public Result quickApply(String id){
-        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+    public Result quickApply(String activityId){
+        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         if(user ==null){
@@ -52,15 +52,15 @@ public class ActivityApplyController extends BaseController {
             logger.info("快速报名获取用户信息失败");
             return result;
         }
-        activityApplyService.quickApply(id,user.getAccount());
+        activityApplyService.quickApply(activityId,user.getAccount());
         return result;
     }
 
     @ControllerLog(doAction = "取消报名")
-    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "id:活动id")
+    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
     @RequestMapping(value = "/cancelApply")
-    public Result cancelApply(String id){
-        Assert.notNull(id,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+    public Result cancelApply(String activityId){
+        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
         if(user ==null){
@@ -69,7 +69,7 @@ public class ActivityApplyController extends BaseController {
             logger.info("取消报名获取用户信息失败");
             return result;
         }
-        activityApplyService.cancelApply(id,user.getAccount());
+        activityApplyService.cancelApply(activityId,user.getAccount());
         return result;
     }
     @ControllerLog(doAction = "在线签到")

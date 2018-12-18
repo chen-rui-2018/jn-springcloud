@@ -1,6 +1,6 @@
 package com.jn.park.activity.dao;
 
-import com.jn.park.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyDetail;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
 /**

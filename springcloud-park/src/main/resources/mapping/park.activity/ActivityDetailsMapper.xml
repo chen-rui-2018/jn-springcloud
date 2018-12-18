@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.activity.dao.ActivityDetailsMapper">
     <!--获取活动详情-->
-    <select id="getActivityDetails" resultType="com.jn.park.model.ActivityDetail">
+    <select id="getActivityDetails" resultType="com.jn.park.activity.model.ActivityDetail">
         select
         t1.id as "activityId"                                                                    <!--活动id-->
         ,t1.acti_type  as "activityType"                                                         <!--活动类型-->
@@ -43,7 +43,7 @@
     </select>
 
     <!--获取点评信息-->
-    <select id="getCommentInfo" resultType="com.jn.park.model.Comment">
+    <select id="getCommentInfo" resultType="com.jn.park.activity.model.Comment">
         select
         t1.id as "id"                                                     <!--点评id-->
         ,t1.p_id as "pId"                                                 <!--点评父ID(点评ID/活动ID)-->
@@ -74,7 +74,7 @@
     </select>
 
     <!--获取活动报名信息-->
-    <select id="getActivityApplyInfo" resultType="com.jn.park.model.ActivityApply">
+    <select id="getActivityApplyInfo" resultType="com.jn.park.activity.model.ActivityApply">
         select
         t1.id as "id"                                                     <!--活动报名id-->
         ,t1.activity_id as "activityId"                                   <!--活动ID-->

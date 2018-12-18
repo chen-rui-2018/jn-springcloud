@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.activity.dao.TbActivityLikeMapper">
-  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivityLike">
+<mapper namespace="com.jn.park.activity.dao.TbParkLikeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbParkLike">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
+    <result column="like_parent_id" jdbcType="VARCHAR" property="likeParentId" />
     <result column="like_account" jdbcType="VARCHAR" property="likeAccount" />
     <result column="like_time" jdbcType="TIMESTAMP" property="likeTime" />
     <result column="state" jdbcType="VARCHAR" property="state" />
@@ -67,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, like_account, like_time, state
+    id, like_parent_id, like_account, like_time, state
   </sql>
-  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityLikeCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbParkLikeCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_activity_like
+    from tb_park_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -86,33 +86,33 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_activity_like
+    from tb_park_like
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_activity_like
+    delete from tb_park_like
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbActivityLikeCriteria">
-    delete from tb_activity_like
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbParkLikeCriteria">
+    delete from tb_park_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityLike">
-    insert into tb_activity_like (id, activity_id, like_account, 
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbParkLike">
+    insert into tb_park_like (id, like_parent_id, like_account, 
       like_time, state)
-    values (#{id,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{likeAccount,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{likeParentId,jdbcType=VARCHAR}, #{likeAccount,jdbcType=VARCHAR}, 
       #{likeTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityLike">
-    insert into tb_activity_like
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbParkLike">
+    insert into tb_park_like
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="activityId != null">
-        activity_id,
+      <if test="likeParentId != null">
+        like_parent_id,
       </if>
       <if test="likeAccount != null">
         like_account,
@@ -128,8 +128,8 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="activityId != null">
-        #{activityId,jdbcType=VARCHAR},
+      <if test="likeParentId != null">
+        #{likeParentId,jdbcType=VARCHAR},
       </if>
       <if test="likeAccount != null">
         #{likeAccount,jdbcType=VARCHAR},
@@ -142,20 +142,20 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbActivityLikeCriteria" resultType="java.lang.Long">
-    select count(*) from tb_activity_like
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbParkLikeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_park_like
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_activity_like
+    update tb_park_like
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.activityId != null">
-        activity_id = #{record.activityId,jdbcType=VARCHAR},
+      <if test="record.likeParentId != null">
+        like_parent_id = #{record.likeParentId,jdbcType=VARCHAR},
       </if>
       <if test="record.likeAccount != null">
         like_account = #{record.likeAccount,jdbcType=VARCHAR},
@@ -172,9 +172,9 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_activity_like
+    update tb_park_like
     set id = #{record.id,jdbcType=VARCHAR},
-      activity_id = #{record.activityId,jdbcType=VARCHAR},
+      like_parent_id = #{record.likeParentId,jdbcType=VARCHAR},
       like_account = #{record.likeAccount,jdbcType=VARCHAR},
       like_time = #{record.likeTime,jdbcType=TIMESTAMP},
       state = #{record.state,jdbcType=VARCHAR}
@@ -182,11 +182,11 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbActivityLike">
-    update tb_activity_like
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbParkLike">
+    update tb_park_like
     <set>
-      <if test="activityId != null">
-        activity_id = #{activityId,jdbcType=VARCHAR},
+      <if test="likeParentId != null">
+        like_parent_id = #{likeParentId,jdbcType=VARCHAR},
       </if>
       <if test="likeAccount != null">
         like_account = #{likeAccount,jdbcType=VARCHAR},
@@ -200,9 +200,9 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbActivityLike">
-    update tb_activity_like
-    set activity_id = #{activityId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbParkLike">
+    update tb_park_like
+    set like_parent_id = #{likeParentId,jdbcType=VARCHAR},
       like_account = #{likeAccount,jdbcType=VARCHAR},
       like_time = #{likeTime,jdbcType=TIMESTAMP},
       state = #{state,jdbcType=VARCHAR}

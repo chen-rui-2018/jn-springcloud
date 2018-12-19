@@ -1,6 +1,8 @@
 package com.jn.user.userinfo.service.impl;
 
 import com.jn.common.util.cache.RedisCache;
+import com.jn.common.util.cache.RedisCacheFactory;
+import com.jn.common.util.cache.service.Cache;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.model.UserCompany;
 import com.jn.user.model.UserExtension;
@@ -36,24 +38,23 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     private static Logger logger = LoggerFactory.getLogger(UserInfoServiceImpl.class);
 
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
     @Autowired
     private TbUserPersonMapper tbUserPersonMapper;
 
     @Autowired
     private TbUserCompanyMapper tbUserCompanyMapper;
 
-    @Value(value = "${user.outreach.information.key}")
-    private String redisUserKey;
+    @Autowired
+    private RedisCacheFactory redisCacheFactory;
 
     @Value(value = "${user.outhrache.information.expire}")
     private int expire;
 
-    @Value(value = "${user.outhrache.information.prefix}")
-    private String prefix;
+    /**
+     * 用户拓展信息组名
+     */
+    private static final String USER_EXTENSION_INFO="user_extension_info";
+
     /**
      * 根据账号获取用户扩展信息
      * @param account 用户账号
@@ -63,8 +64,8 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public UserExtension getUserInfo(String account) {
         //从redis中取出用户扩展信息
-        RedisCache cache = new RedisCache(redisTemplate, prefix, expire);
-        UserExtension userExtension = (UserExtension) cache.get(redisUserKey + "_" + account);
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        UserExtension userExtension = (UserExtension)cache.get(account);
         if(userExtension!=null){
             return  userExtension;
         }else{
@@ -79,7 +80,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             BeanUtils.copyProperties(tbUserPerson, userPerson);
             userExtension.setUserPersonInfo(userPerson);
             //把用户拓展信息写入redis中
-            cache.put(redisUserKey + "_" + account, userExtension);
+            cache.put(account, userExtension);
             return userExtension;
         }
         //个人用户信息表没有数据，查询企业用户信息表
@@ -88,7 +89,7 @@ public class UserInfoServiceImpl implements UserInfoService {
             UserCompany userCompany=new UserCompany();
             BeanUtils.copyProperties(tbUserCompany, userCompany);
             //把用户拓展信息写入redis中
-            cache.put(redisUserKey + "_" + account, userExtension);
+            cache.put(account, userExtension);
         }
         return userExtension;
     }

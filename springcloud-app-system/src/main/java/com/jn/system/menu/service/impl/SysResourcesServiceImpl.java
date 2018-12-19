@@ -142,8 +142,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
-        sysPermissionResourcesMapper.deleteByResourcesIds(resourcesIds);
         logger.info("[功能] 批量删除功能成功！,resourcesIds:{}",Arrays.toString(resourcesIds));
+        sysPermissionResourcesMapper.deleteByResourcesIds(resourcesIds);
+        logger.info("[功能] 批量删除功能关联权限信息成功！,resourcesIds:{}",Arrays.toString(resourcesIds));
     }
 
     /**

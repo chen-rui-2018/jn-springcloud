@@ -128,12 +128,12 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "逻辑删除用户组")
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
-        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", Arrays.toString(groupIds));
         sysGroupMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联用户信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", Arrays.toString(groupIds));
         sysGroupUserMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联角色信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联用户信息,groupIds:{}", Arrays.toString(groupIds));
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
+        logger.info("[用户组] 逻辑删除用户组关联角色信息,groupIds:{}", Arrays.toString(groupIds));
     }
 
     /**
@@ -217,8 +217,8 @@ public class SysGroupServiceImpl implements SysGroupService {
         //插入之前,清除该用户组下面的角色信息
         sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
         Boolean isDelete = sysRoleGroupAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
+        logger.info("[用户组授权角色] 删除该用户组下角色信息成功！groupId:{}", sysRoleGroupAdd.getGroupId());
         if (isDelete) {
-            logger.info("[用户组授权角色] 删除该用户组下角色信息成功！groupId:{}", sysRoleGroupAdd.getGroupId());
             return;
         }
         String[] groupIds = {sysRoleGroupAdd.getGroupId()};
@@ -231,8 +231,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("[用户组] 添加用户组授权角色，groupId:{},roleId:{}", Arrays.toString(groupIds),
-                    roleId);
         }
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
@@ -273,9 +271,9 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd, User user) {
         //用户组添加用户之前清除用户组以前用户
         sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
+        logger.info("[用户组授权用户] 删除该用户组下用户信息成功！groupId:{}", sysGroupUserAdd.getGroupId());
         Boolean isDelete = sysGroupUserAdd.getUserIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
-            logger.info("[用户组授权用户] 删除该用户组下用户信息成功！groupId:{}", sysGroupUserAdd.getGroupId());
             return;
         }
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
@@ -287,8 +285,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
-            logger.info("[用户组] 添加用户组授权用户，groupId:{},userId:{}", sysGroupUserAdd.getGroupId(),
-                    userId);
         }
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
@@ -312,6 +308,4 @@ public class SysGroupServiceImpl implements SysGroupService {
         }
         return SysReturnMessageEnum.SUCCESS.getMessage();
     }
-
-
 }

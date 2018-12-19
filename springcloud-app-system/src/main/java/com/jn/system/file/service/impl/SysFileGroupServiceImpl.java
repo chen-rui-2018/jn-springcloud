@@ -137,12 +137,13 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public void deleteSysFileGroupByIds(String[] ids) {
         //删除对应文件组
         sysFileGroupMapper.deleteByIds(ids);
+        logger.info("[文件组] 批量删除文件组信息成功！,fileGroupIds: {}", Arrays.toString(ids));
         //删除对应文件组文件关联信息
         sysFileGroupFileMapper.deleteByFileGroupIds(ids);
+        logger.info("[文件组] 批量删除文件组关联文件信息成功！,fileGroupIds: {}", Arrays.toString(ids));
         //删除文件组对应权限信息
         sysPermissionFilesMapper.deleteByFileGroupIds(ids);
-        logger.info("[文件组] 批量删除文件组信息,文件组与文件关联表信息,文件组关联权限信息成功！,fileGroupIds: {}",
-                Arrays.toString(ids));
+        logger.info("[文件组] 批量删除文件组关联权限信息成功！,fileGroupIds: {}", Arrays.toString(ids));
     }
 
     /**
@@ -191,8 +192,6 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
         //过滤已删除的数据
         criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}",
-                sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }
@@ -226,7 +225,6 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
             sysFileGroupFiles.add(sysFileGroupFile);
             logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId, Arrays.toString(fileId));
-
         }
         logger.info("[文件组] 文件组添加文件,新增前删除该的所有该文件组的文件数据,fileId：{}", fileGroupId, Arrays.toString(fileId));
 

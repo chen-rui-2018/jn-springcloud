@@ -85,11 +85,11 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         }
         ids.add(id);
         //逻辑删除部门子部门信息
-        logger.info("[部门] 逻辑删除部门成功,departmentIds: {}", ids.toString());
         sysDepartmentMapper.deleteDepartmentBranch(ids);
+        logger.info("[部门] 批量逻辑删除部门成功,departmentIds: {}", ids.toString());
         //逻辑删除部门及子部门对应的用户信息
-        logger.info("[部门] 逻辑删除部门关联用户信息成功,departmentIds: {}", ids.toString());
         sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
+        logger.info("[部门] 批量逻辑删除部门关联用户信息成功,departmentIds: {}", ids.toString());
     }
 
     /**

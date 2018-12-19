@@ -481,6 +481,13 @@ export default {
         this.dataForm.menuUrl = data.menuUrl
         this.resourcesForm.menuId = data.id
       }
+      const arr = []
+      this.subForm.menuData.forEach(val => {
+        arr.push(val.label)
+      })
+      if ((new Set(arr)).size === arr.length) {
+        this.$refs['subForm'].clearValidate()
+      }
     },
     // 删除菜单实现
     deleteMenu(id) {

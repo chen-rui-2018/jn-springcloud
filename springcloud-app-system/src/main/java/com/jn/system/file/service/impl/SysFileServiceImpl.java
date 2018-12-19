@@ -69,10 +69,8 @@ public class SysFileServiceImpl implements SysFileService {
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         sysFile.setId(UUID.randomUUID().toString());
-
         sysFile.setCreator(user.getId());
         sysFile.setCreateTime(new Date());
-
         TbSysFile tbSysFile = new TbSysFile();
         BeanUtils.copyProperties(sysFile, tbSysFile);
         tbSysFileMapper.insert(tbSysFile);
@@ -182,16 +180,16 @@ public class SysFileServiceImpl implements SysFileService {
             logger.info("[文件] 文件添加文件组,fileId: {}",fileId);
 
         }
-        logger.info("[文件] 文件添加文件组,新增前删除该的所有该文件的文件组数据成功,fileGroupId: {}",Arrays.toString(fileGroupId));
 
         //新增前删除该的所有该文件的文件组数据
         String[] fileIds = {fileId};
         sysFileGroupFileMapper.deleteByFileIds(fileIds);
+        logger.info("[文件] 文件添加文件组,新增前删除该的所有该文件的文件组数据成功,fileGroupId: {}",
+                Arrays.toString(fileGroupId));
 
         //批量新增文件组文件信息
         sysFileGroupFileMapper.insertBatch(sysFileGroupFiles);
-
-
+        logger.info("[文件] 文件添加文件组信息成功,fileGroupId: {}", Arrays.toString(fileGroupId));
     }
 
     /**

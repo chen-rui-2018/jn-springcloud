@@ -6,6 +6,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.activity.model.ActivityType;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 /**
  * 活动类型服务类
  * @Author: chenr
@@ -51,8 +53,14 @@ public interface ActivityTypeService {
     void updateActivityType(String typeId,String typeName, String state, String templateList, User user);
 
     /**
-     *
+     *根据类型Id删除活动类型
      * @param typeId
      */
     void deleteActivityTypeList(String typeId);
+
+    /**
+     * 返回所有活动类型列表
+     * @return
+     */
+    List<ActivityType> findAllActivityType();
 }

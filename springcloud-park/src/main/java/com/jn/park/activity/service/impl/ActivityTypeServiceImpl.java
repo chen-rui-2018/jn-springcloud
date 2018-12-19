@@ -181,4 +181,14 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             activityFileMapper.insertActivityTypeTemp(map);
         }
     }
+
+    @ServiceLog(doAction = "返回所有有效活动类型")
+    @Override
+    public List<ActivityType> findAllActivityType() {
+        //返回所有有效的活动类型
+        String state = "1";
+        List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
+        return activityTypeList;
+    }
+
 }

@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 活动类型
  *
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "门户活动类型")
+@Api(tags = "活动类型管理")
 @RestController
 @RequestMapping(value = "/activity/activityType")
 public class ActivityTypeController extends BaseController {
@@ -53,7 +55,7 @@ public class ActivityTypeController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "查询活动类型列表")
+    @ControllerLog(doAction = "分页查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class,
     notes = "参数:state-活动状态(0:无效,1:有效),page-分页参数(表示第几页,不传则默认返回第一页),rows-分页参数(表示一页的数据条数,不传值则默认返回第一页,15条数据)")
     @RequestMapping(value = "/findActivityTypeList")
@@ -91,5 +93,13 @@ public class ActivityTypeController extends BaseController {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         activityTypeService.deleteActivityTypeList(typeId);
         return new Result();
+    }
+    @ControllerLog(doAction = "查询所有活动类型列表")
+    @ApiOperation(value = "查询所有活动类型列表", httpMethod = "POST", response = Result.class,
+            notes = "返回所有活动类型")
+    @RequestMapping(value = "/findAllActivityType")
+    public Result findAllActivityType() {
+        List<ActivityType>  activityTypeList = activityTypeService.findAllActivityType();
+        return new Result(activityTypeList);
     }
 }

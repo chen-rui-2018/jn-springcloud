@@ -19,7 +19,7 @@ public class SysDepartmentVO implements Serializable {
     private static final long serialVersionUID = 8857934360566700442L;
 
     @ApiModelProperty("部门id")
-    private String id;
+    private String value;
     @ApiModelProperty("部门名称")
     private String label;
     @ApiModelProperty("父级id")
@@ -32,20 +32,20 @@ public class SysDepartmentVO implements Serializable {
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String id, String label, String parentId, String parentName, List<SysDepartmentVO> children) {
-        this.id = id;
+    public SysDepartmentVO(String value, String label, String parentId, String parentName, List<SysDepartmentVO> children) {
+        this.value = value;
         this.label = label;
         this.parentId = parentId;
         this.parentName = parentName;
         this.children = children;
     }
 
-    public String getId() {
-        return id;
+    public String getValue() {
+        return value;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getLabel() {
@@ -80,10 +80,11 @@ public class SysDepartmentVO implements Serializable {
         this.children = children;
     }
 
+
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
-                "id='" + id + '\'' +
+                "value='" + value + '\'' +
                 ", label='" + label + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +

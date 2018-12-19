@@ -4,21 +4,20 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.system.dept.dao.SysPostMapper;
-import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.dept.dao.SysPostMapper;
+import com.jn.system.dept.dao.SysUserDepartmentPostMapper;
 import com.jn.system.dept.dao.TbSysPostMapper;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.entity.TbSysPostCriteria;
 import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
+import com.jn.system.dept.service.SysPostService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.system.dept.service.SysPostService;
-import com.jn.system.dept.vo.SysPostVO;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,6 +61,7 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "查询所有岗位")
     public List<TbSysPost> findSysPostAll() {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
+        tbSysPostCriteria.setOrderByClause("create_time desc");
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
         List<TbSysPost> sysPostList = tbSysPostMapper.selectByExample(tbSysPostCriteria);
@@ -77,10 +77,10 @@ public class SysPostServiceImpl implements SysPostService {
     @Override
     @ServiceLog(doAction = "增加岗位")
     @Transactional(rollbackFor = Exception.class)
-    public void addPost(SysPostAdd sysPostAdd,User user) {
+    public void addPost(SysPostAdd sysPostAdd, User user) {
         List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}",sysPostAdd.getPostName());
+            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}", sysPostAdd.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
         TbSysPost tbSysPost = new TbSysPost();
@@ -89,6 +89,7 @@ public class SysPostServiceImpl implements SysPostService {
         tbSysPost.setStatus(sysPostAdd.getStatus());
         tbSysPost.setCreateTime(new Date());
         tbSysPost.setPostName(sysPostAdd.getPostName());
+        tbSysPost.setPostTypeId(sysPostAdd.getPostTypeId());
         tbSysPostMapper.insertSelective(tbSysPost);
         logger.info("[岗位] 新增岗位成功！，sysPostId:{}", tbSysPost.getId());
     }
@@ -116,9 +117,10 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "批量删除岗位")
     @Transactional(rollbackFor = Exception.class)
     public void deletePostBranch(String[] ids) {
-        sysPostMapper.deletePostBranch(ids);
-        sysUserDepartmentPostMapper.deletePostBranch(ids);
         logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
+        sysPostMapper.deletePostBranch(ids);
+        logger.info("[岗位] 批量删除岗位关联用户信息成功！，sysPostIds:{}", Arrays.toString(ids));
+        sysUserDepartmentPostMapper.deletePostBranch(ids);
     }
 
     /**
@@ -130,23 +132,28 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "修改岗位信息")
     @Transactional(rollbackFor = Exception.class)
     public void updatePost(SysPost sysPost) {
+        String postName = sysPost.getPostName();
         //判断被修改信息是否存在
-        SysPost sysPost1 = sysPostMapper.getPostById(sysPost.getId());
-        if (sysPost1 == null){
+        TbSysPost sysPost1 = tbSysPostMapper.selectByPrimaryKey(sysPost.getId());
+        if (sysPost1 == null || SysStatusEnums.DELETED.getCode().equals(sysPost1.getStatus())) {
             logger.warn("[部门] 岗位修改失败,修改信息不存在,postId: {}", sysPost.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        }else {
+            //判断名称是否被修改
+            if (!sysPost1.getPostName().equals(postName)){
+                //名称被修改,判断修改的名称数据库是都已经存在
+                String flag = checkPostName(postName);
+                if (SysReturnMessageEnum.FAIL.getMessage().equals(flag)){
+                    //数据库已经存在名称,则不允许修改
+                    logger.warn("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}", sysPost.getPostName());
+                    throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+                }
+            }
         }
-        TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-        TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        criteria.andPostNameEqualTo(sysPost.getPostName());
-        criteria.andIdNotEqualTo(sysPost.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        List<TbSysPost> tbSysPosts = tbSysPostMapper.selectByExample(tbSysPostCriteria);
-        if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.warn("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}",sysPost.getPostName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
-        }
-        sysPostMapper.updatePost(sysPost);
+        //对信息进行修改操作
+        TbSysPost tbSysPost = new TbSysPost();
+        BeanUtils.copyProperties(sysPost,tbSysPost);
+        tbSysPostMapper.updateByPrimaryKeySelective(tbSysPost);
         logger.info("[岗位] 修改岗位信息成功！，sysPostId:{}", sysPost.getId());
     }
 
@@ -177,8 +184,8 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "条件分页获取岗位信息列表")
     public PaginationData findByPage(SysPostPage sysPostPage) {
         Page<Object> objects = PageHelper.startPage(sysPostPage.getPage(), sysPostPage.getRows());
-        List<SysPostVO> sysPostVOList = sysPostMapper.findByPage(sysPostPage);
-        PaginationData data = new PaginationData(sysPostVOList, objects.getTotal());
+        List<SysPost> sysPostList = sysPostMapper.findByPage(sysPostPage);
+        PaginationData data = new PaginationData(sysPostList, objects.getTotal());
         return data;
     }
 

@@ -1,5 +1,6 @@
 package com.jn.system.dept.dao;
 
+import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.vo.SysDepartmentVO;
@@ -37,17 +38,24 @@ public interface SysDepartmentMapper {
     List<SysDepartmentVO> findChildrenDepartment(String departmentId);
 
     /**
-     * 校验同级部门中部门名称是否存在
+     * 批量添加部门信息
      *
-     * @param sysDepartmentCheckName
-     * @return
+     * @param addeList
      */
-    SysDepartment checkDepartmentName(SysDepartmentCheckName sysDepartmentCheckName);
+    void addDepartmentBatch(List<TbSysDepartment> addeList);
 
     /**
+     * 批量更新部门信息
      *
-     * @param id
+     * @param list
+     */
+    void updateDepartmentBatch(List<SysDepartment> list);
+
+    /**
+     * 根据父级id获取所有子部门信息
+     *
+     * @param parentId
      * @return
      */
-    SysDepartment getDepartmentById(String id);
+    List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
 }

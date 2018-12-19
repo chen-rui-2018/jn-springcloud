@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单controller
@@ -118,5 +119,16 @@ public class SysMenuController extends BaseController {
     public Result getChildrenMenuByParentId(String parentId){
         List<SysMenuTreeVO> list = sysMenuService.getChildrenMenuByParentId(parentId);
         return new Result(list);
+    }
+
+    @ControllerLog(doAction = "根据用户权限动态获取菜单信息")
+    @ApiOperation(value = "根据用户权限动态获取菜单信息", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/getDynamicMenu")
+    @RequiresPermissions("/system/sysMenu/getDynamicMenu")
+    public Result getDynamicMenu(){
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Set<SysMenu> menuSet = sysMenuService.getDynamicMenu(user.getId());
+        return new Result(menuSet);
     }
 }

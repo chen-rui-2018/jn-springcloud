@@ -16,14 +16,6 @@ import java.util.List;
  */
 public interface SysRoleMapper {
 
-
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    List<SysRole> findSysRoleAll();
-
     /**
      * 根据用户id获取用户已经具有的角色
      *
@@ -47,12 +39,4 @@ public interface SysRoleMapper {
      * @param id
      */
     void deleteBy(String[] id);
-
-    /**
-     * 根据id获取角色信息
-     *
-     * @param id
-     * @return
-     */
-    SysRole getRoleById(String id);
 }

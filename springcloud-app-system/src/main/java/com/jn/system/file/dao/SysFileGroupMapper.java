@@ -19,12 +19,4 @@ public interface SysFileGroupMapper {
      * @return
      */
     int deleteByIds(String[] id);
-
-
-    /**
-     * 判断文件组是否存在
-     * @param id
-     * @return
-     */
-    SysFileGroup getFileGroupById(String id);
 }

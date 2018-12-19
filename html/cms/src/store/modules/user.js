@@ -47,7 +47,6 @@ const user = {
   actions: {
     // 用户名登录
     LoginByUsername({ commit }, userInfo) {
-      console.log(userInfo.password)
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
@@ -55,10 +54,8 @@ const user = {
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
-
             resolve()
           } else {
-            console.log(data.result)
             Message({
               message: '登录失败,' + data.result,
               type: 'error',
@@ -75,9 +72,10 @@ const user = {
     GetUserInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          // if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
-          //  reject('error')
-          // }
+          // console.log(response)
+          if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
+            reject('error')
+          }
           // const data = response.data
 
           // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
@@ -96,20 +94,6 @@ const user = {
         })
       })
     },
-
-    // 第三方验证登录
-    // LoginByThirdparty({ commit, state }, code) {
-    //   return new Promise((resolve, reject) => {
-    //     commit('SET_CODE', code)
-    //     loginByThirdparty(state.status, state.email, state.code).then(response => {
-    //       commit('SET_TOKEN', response.data.token)
-    //       setToken(response.data.token)
-    //       resolve()
-    //     }).catch(error => {
-    //       reject(error)
-    //     })
-    //   })
-    // },
 
     // 登出
     LogOut({ commit, state }) {

@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="用户组名称:">
-          <el-input v-model="listQuery.groupName" placeholder="请输入名称" style="width: 150px" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+          <el-input v-model="listQuery.groupName" maxlength="20" placeholder="请输入名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
@@ -68,10 +68,10 @@
     <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
       <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
         <el-form-item label="用户组:" prop="groupName">
-          <el-input v-model.trim="userGroupform.groupName" max-length="20" />
+          <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
         </el-form-item>
         <el-form-item label="状态:" prop="status">
-          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item">
+          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item" clearable>
             <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -136,8 +136,9 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      if (value.length > 20) {
-        callback(new Error('用户组名称不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.oldGroupName !== this.userGroupform.groupName) {
           checkGroupName(this.userGroupform.groupName).then(res => {
@@ -197,7 +198,7 @@ export default {
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -231,7 +232,7 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
         this.initList()
       })
@@ -267,7 +268,7 @@ export default {
           this.roleIds = checkRole
           this.roleLoading = false
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
       })
     },
@@ -327,7 +328,7 @@ export default {
               type: 'success'
             })
           } else {
-            this.$message.error('授权失败')
+            this.$message.error(res.data.result)
           }
           this.initList()
         }
@@ -359,13 +360,9 @@ export default {
     },
     // 实现添加用户功能
     createUserData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 调用接口发送请求
           addgroupList(this.userGroupform).then(res => {
             if (res.data.code === '0000') {
@@ -374,8 +371,9 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('添加失败')
+              this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 将对话框隐藏
             this.userGroupdialogFormVisible = false
             // 重置表单元素的数据
@@ -402,13 +400,9 @@ export default {
     },
     // 编辑用户的功能实现
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
+          this.isDisabled = true
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
@@ -419,8 +413,9 @@ export default {
                 type: 'success'
               })
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
+            this.isDisabled = false
             // 重置表单元素的数据
             this.$refs['userGroupform'].resetFields()
             // 刷新页面显示
@@ -448,7 +443,7 @@ export default {
               }
               this.initList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
@@ -466,8 +461,12 @@ export default {
         if (res.data.code === '0000') {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total
+          if (this.usergroupList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
@@ -490,7 +489,7 @@ export default {
 <style lang="scss">
 .el-tooltip__popper{
    text-align: center;
-    width:200px;
+    width:260px;
 }
 .tablePagination{
   margin-top:15px;

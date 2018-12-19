@@ -444,6 +444,76 @@ public class TbSysPostCriteria {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andPostTypeIdIsNull() {
+            addCriterion("post_type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdIsNotNull() {
+            addCriterion("post_type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdEqualTo(String value) {
+            addCriterion("post_type_id =", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdNotEqualTo(String value) {
+            addCriterion("post_type_id <>", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdGreaterThan(String value) {
+            addCriterion("post_type_id >", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("post_type_id >=", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdLessThan(String value) {
+            addCriterion("post_type_id <", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdLessThanOrEqualTo(String value) {
+            addCriterion("post_type_id <=", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdLike(String value) {
+            addCriterion("post_type_id like", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdNotLike(String value) {
+            addCriterion("post_type_id not like", value, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdIn(List<String> values) {
+            addCriterion("post_type_id in", values, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdNotIn(List<String> values) {
+            addCriterion("post_type_id not in", values, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdBetween(String value1, String value2) {
+            addCriterion("post_type_id between", value1, value2, "postTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPostTypeIdNotBetween(String value1, String value2) {
+            addCriterion("post_type_id not between", value1, value2, "postTypeId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

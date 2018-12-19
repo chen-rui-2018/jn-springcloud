@@ -42,3 +42,21 @@ export function deleteDepartmentById(query) {
     data: param
   })
 }
+// 批量编辑部门
+export function updateAllMenu(query) {
+  return request({
+    url: 'system/sysDepartment/addDepartmentBatch',
+    method: 'post',
+    data: query
+  })
+}
+// 根据部门id获取当前Id所具有的子部门
+export function getOldData(query) {
+  const param = new URLSearchParams()
+  param.append('parentId', query)
+  return request({
+    url: 'system/sysDepartment/getChildDepartmentByParentId',
+    method: 'post',
+    data: param
+  })
+}

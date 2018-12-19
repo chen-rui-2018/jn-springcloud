@@ -77,4 +77,10 @@ public interface SysGroupUserMapper {
      * @return
      */
     List<SysGroup> findGroupByPage(SysUserGroupPage sysUserGroupPage);
+
+    /**
+     * 批量添加用户用户组信息
+     * @param list
+     */
+    void addGroupToUser(List<SysGroupUser> list);
 }

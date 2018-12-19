@@ -1,12 +1,11 @@
 import request from '@/utils/request'
 
 export function loginByUsername(account, password) {
-  console.log(account, password)
+  localStorage.setItem('account', account)
   const data = {
     account,
     password
   }
-  // 'http://192.168.2.139/springcloud-app-system/login
   return request({
     url: 'login',
     method: 'post',
@@ -23,8 +22,8 @@ export function logout() {
 
 export function getUserInfo(token) {
   return request({
-    url: '/user/info',
-    method: 'get',
+    url: 'system/sysMenu/getDynamicMenu',
+    method: 'post',
     params: { token }
   })
 }

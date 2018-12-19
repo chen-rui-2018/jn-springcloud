@@ -6,6 +6,7 @@ import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysGroupService;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class SysGroupServiceTest {
     @Test
     public void addSysGroupTest() {
         SysGroupAdd sysGroup = new SysGroupAdd();
-        sysGroup.setGroupName("财务组");
+        sysGroup.setGroupName("财务组"+ RandomStringUtils.randomNumeric(4));
         sysGroup.setStatus("1");
         User user = new User();
         user.setId("123");
@@ -62,8 +63,8 @@ public class SysGroupServiceTest {
     @Test
     public void updateSysGroupTest() {
         SysGroupUpdate sysGroup = new SysGroupUpdate();
-        sysGroup.setId("g001");
-        sysGroup.setGroupName("");
+        sysGroup.setId("492c6244-c103-4992-b944-569ff3870396");
+        sysGroup.setGroupName("员工组24");
         sysGroupService.updateSysGroup(sysGroup);
     }
 

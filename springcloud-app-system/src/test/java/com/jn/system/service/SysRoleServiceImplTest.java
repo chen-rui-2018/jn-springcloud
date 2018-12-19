@@ -9,6 +9,7 @@ import com.jn.system.permission.model.SysRoleUpdate;
 import com.jn.system.permission.service.SysRoleService;
 import com.jn.system.user.model.SysUserGroupRoleAdd;
 import com.jn.system.user.model.SysUserRoleAdd;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -46,7 +47,7 @@ public class SysRoleServiceImplTest {
     @Test
     public void insertTbSystemRole() {
         SysRoleAdd role = new SysRoleAdd();
-        role.setRoleName("普通用户");
+        role.setRoleName("普通用户"+ RandomStringUtils.randomNumeric(4));
         role.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user = new User();
         user.setId("123");
@@ -60,8 +61,8 @@ public class SysRoleServiceImplTest {
     @Test
     public void updateTbRole() {
         SysRoleUpdate role = new SysRoleUpdate();
-        role.setId("6c877a03-fc6c-4d0b-81d3-b4040ff732b3");
-        role.setRoleName("普通用户1");
+        role.setId("11dec777-730e-4f1e-a94d-6bf40c462920");
+        role.setRoleName("角色测试72");
         role.setStatus(SysStatusEnums.INVALID.getCode());
         tbRoleService.updateTbRole(role);
     }
@@ -120,7 +121,7 @@ public class SysRoleServiceImplTest {
         User user = new User();
         user.setId("123");
         user.setAccount("xxx");
-        tbRoleService.UserGroupRoleAuthorization(sysUserGroupRoleAdd, user);
+        tbRoleService.userGroupRoleAuthorization(sysUserGroupRoleAdd, user);
 
     }
 

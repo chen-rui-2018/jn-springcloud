@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -38,7 +37,7 @@ public class SysDepartmentServiceTest {
     public void updateTest() {
         SysDepartment SysDepartment = new SysDepartment();
         SysDepartment.setId("d002");
-        SysDepartment.setStatus("-1");
+        SysDepartment.setStatus("1");
         SysDepartment.setCreateTime(new Date());
         SysDepartment.setDepartmentName("工程部");
         SysDepartment.setParentId("2");

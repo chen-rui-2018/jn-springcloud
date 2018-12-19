@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 @Documented
 public @interface LockAnnotation {
     /**
-     * 锁关键参数名字
+     * 锁（唯一键）参数名字
      * @return
      */
     String lockPrefix() ;
     /**
-     * 操作人账号
+     * 操作人账号参数名字
      * @return
      */
     String account() default "guest";

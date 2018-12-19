@@ -17,8 +17,8 @@ import com.jn.system.model.User;
 public interface SysFileService {
     /**
      * 新增文件
-     *
      * @param sysFile
+     * @param user
      */
     void insertSysFile(SysFile sysFile, User user);
 
@@ -54,8 +54,8 @@ public interface SysFileService {
 
     /**
      * 文件添加文件组
-     *
      * @param sysFileAddFileGroup
+     * @param user
      */
     void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup , User user);
 

@@ -3,6 +3,7 @@ package com.jn.system.service;
 import com.jn.system.model.User;
 import com.jn.system.permission.model.SysPermissionAdd;
 import com.jn.system.permission.service.SysPermissionService;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class SysPermissionServiceTest {
     @Test
     public void addPermissionTest() {
         SysPermissionAdd sysPermissionAdd = new SysPermissionAdd();
-        sysPermissionAdd.setPermissionName("测试权限1");
+        sysPermissionAdd.setPermissionName("测试权限1"+ RandomStringUtils.randomNumeric(4) );
         sysPermissionAdd.setStatus("1");
         User user = new User();
         user.setId("123");

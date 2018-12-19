@@ -99,4 +99,22 @@ public class SysDepartmentController extends BaseController {
         return new Result(sysDepartmentVOList);
     }
 
+    @ControllerLog(doAction = "批量修改部门信息")
+    @RequiresPermissions("/system/sysDepartment/addDepartmentBatch")
+    @ApiOperation(value = "批量更新部门信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/addDepartmentBatch")
+    public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList){
+        sysDepartmentService.addDepartmentBatch(sysDepartmentList);
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "根据父级id获取所有子部门信息")
+    @RequiresPermissions("/system/sysDepartment/getChild")
+    @ApiOperation(value = "根据父级id获取所有子部门信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/getChildDepartmentByParentId")
+    public Result getChildDepartmentByParentId(String parentId){
+        List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentService.getChildDepartmentByParentId(parentId);
+        return new Result(sysDepartmentVOList);
+    }
+
 }

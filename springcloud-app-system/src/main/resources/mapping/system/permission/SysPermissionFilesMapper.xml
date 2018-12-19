@@ -28,6 +28,7 @@
         from tb_sys_permission_files t1 , tb_sys_file_group t2
         where t1.file_group_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
         and t1.permission_id = #{id,jdbcType=VARCHAR}
+        ORDER BY t2.create_time ASC
     </select>
 
 

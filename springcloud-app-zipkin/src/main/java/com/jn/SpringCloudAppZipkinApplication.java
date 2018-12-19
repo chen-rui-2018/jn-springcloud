@@ -2,7 +2,8 @@ package com.jn;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.sleuth.zipkin.stream.EnableZipkinStreamServer;
+import zipkin.server.internal.EnableZipkinServer;
+
 /**
  * 链路追踪
  *
@@ -11,7 +12,7 @@ import org.springframework.cloud.sleuth.zipkin.stream.EnableZipkinStreamServer;
  * @version： v1.0
  * @modified By:
  */
-@EnableZipkinStreamServer
+@EnableZipkinServer
 @SpringBootApplication
 public class SpringCloudAppZipkinApplication {
     public static void main(String[] args) {

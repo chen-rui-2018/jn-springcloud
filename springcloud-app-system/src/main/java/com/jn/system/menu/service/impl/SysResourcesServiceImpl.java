@@ -106,28 +106,29 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
-        //判断修改信息是否存在
-        SysResources sysResources1 = sysResourcesMapper.getResourcesById(sysResources.getId());
-        if (sysResources1 == null){
-            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", sysResources.getId());
+        String resourcesId = sysResources.getId();
+        String resourcesName = sysResources.getResourcesName();
+        //1.判断修改信息是否存在
+        TbSysResources tbSysResources1 = tbSysResourcesMapper.selectByPrimaryKey(resourcesId);
+        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getStatus())){
+            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", resourcesId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
-        criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        criteria.andMenuIdEqualTo(sysResources.getMenuId());
-        criteria.andIdNotEqualTo(sysResources.getId());
-        List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
-        if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+        //2.判断名称是否被修改
+        if (!tbSysResources1.getResourcesName().equals(resourcesName)){
+            //查询数据库,判断菜单中功能名称是否已经存在
+            List<TbSysResources> tbSysResources = checkName(resourcesName, sysResources.getMenuId());
+            if (tbSysResources != null && tbSysResources.size() > 0) {
+                logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
+        //3.对菜单信息进行更新
         sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
-        logger.info("[功能] 更新功能信息成功！,resourcesId:{}", sysResources.getId());
+        logger.info("[功能] 更新功能信息成功！,resourcesId:{}", resourcesId);
     }
 
     /**
@@ -153,7 +154,6 @@ public class SysResourcesServiceImpl implements SysResourcesService {
      */
     @Override
     @ServiceLog(doAction = "分页查询功能功能列表信息")
-    @Transactional(rollbackFor = Exception.class)
     public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
         Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
         List<SysResourcesVO> sysResourcesVOList = sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage);

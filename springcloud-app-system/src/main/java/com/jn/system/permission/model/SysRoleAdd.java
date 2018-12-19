@@ -19,7 +19,7 @@ public class SysRoleAdd implements Serializable {
     private static final long serialVersionUID = -120055469547530683L;
 
     @ApiModelProperty(value = "角色名称")
-    @Size(max = 20,message = "角色名称字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "角色名称校验失败")
     private String roleName;
 
     @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")

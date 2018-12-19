@@ -6,11 +6,14 @@ import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.service.SysFileService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
 
 /**
  * 权限模块文件service单元测试
@@ -43,7 +46,7 @@ public class SysFileServiceTest {
     @Test
     public void addTest() {
         SysFile file = new SysFile();
-        file.setFileName("文件测试2");
+        file.setFileName("文件测试"+ RandomStringUtils.randomNumeric(4));
         file.setFileUrl("xxx/xxx/a.html");
         file.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user = new User();
@@ -58,8 +61,8 @@ public class SysFileServiceTest {
     @Test
     public void updateTest() {
         SysFile file = new SysFile();
-        file.setId("1cc32378-3272-4ec6-901f-c91c28e74aef");
-        file.setFileName("文件测试2");
+        file.setId("6289d227-c5a0-4941-a4f1-f7b853f57b85");
+        file.setFileName("文件28");
         file.setFileUrl("xxx/xxx/a.html");
         sysFileService.updateSysFileById(file);
     }

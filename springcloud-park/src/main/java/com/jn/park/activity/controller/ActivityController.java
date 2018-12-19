@@ -204,15 +204,11 @@ public class ActivityController extends BaseController {
         Assert.notNull(exportTitle, "excel导出字段的标题不能为空");
         //下载文件名
         String codedFileName="活动报名人";
-        //单行表头
-        String isMoreHead="0";
         //导出方式  xlsx
         int exportAs=2;
-        //单行表头  rowIndex为0
-        int rowIndex=0;
         PaginationData paginationData = activityApplyService.applyActivityList(id, null);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
-        exportDataExcel.exportDataExcel(codedFileName,exportColName,exportTitle,isMoreHead,exportAs,rowIndex,activityApplyDetails,null,response);
+        exportDataExcel.singleRowHeaderExport(codedFileName,exportColName,exportTitle,exportAs,activityApplyDetails,response);
     }
 
 }

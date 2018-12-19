@@ -32,11 +32,63 @@ public class ExportExcelServiceImpl implements ExportExcelService {
     private static Logger logger= LoggerFactory.getLogger(ExportExcelServiceImpl.class);
 
     /**
-     * 数据导出  只支持excel（xls和xlsx）导出
+     * 单行表头数据导出  只支持excel（xls和xlsx）导出
+     * @param codedFileName  下载文件名  不包含后缀
+     * @param exportColName  excel导出的字段别名 比如：name,phone
+     * @param exportTitle    excel导出字段的标题 比如：姓名，手机
+     * @param exportAs       导出格式   1：导出xls格式  2：导出为xlsx格式
+     * @param dataList       要导出的数据，一般为查询页面所展示的数据（不支持分页）
+     * @param response       响应
+     */
+    @ServiceLog(doAction = "数据导出")
+    @Override
+    public void singleRowHeaderExport(String codedFileName , String exportColName, String exportTitle,int exportAs, List<?>dataList, HttpServletResponse response) {
+        //导出入参校验
+        exportAs = checkExportParameter(exportColName, exportTitle, false, 0, exportAs, dataList, null);
+        //(1)下载文件名
+        //xls导出方式
+        int xlsFlag=1;
+        //xlsx导出方式
+        int xlsxFlag=2;
+        if(exportAs==xlsFlag){
+            codedFileName=codedFileName+".xls";
+        }else if(exportAs==xlsxFlag){
+            codedFileName=codedFileName+".xlsx";
+        }
+        try {
+            codedFileName = new String(codedFileName.getBytes("gb2312"), "iso8859-1");
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
+
+            //(2)导出字段名
+            String []fields=exportColName.split(",");
+            //数组转换成list
+            List<String> fieldList=new ArrayList<>(Arrays.asList(fields));
+
+            //(3)导出数据
+            //list<bean>转换 List<Map<String, Object>>
+            List<Map<String, Object>> exportList = ObjToMapUtil.listToMap(dataList);
+
+            //（4）单行表头、多行表头
+
+            //单行表头导出
+            String[] title = exportTitle.split(",");
+            //数组转换成list
+            List<String> titleList= new ArrayList<String>(Arrays.asList(title));
+            //导出方法，按照表头、列、数据、导出方式、输出流的顺序放入参数   后缀名是xlsx  ，传递2
+            ExcelUtils.exportData(titleList, fieldList, exportList, exportAs, response.getOutputStream());
+        } catch (Exception e) {
+            logger.info("导出失败，失败原因：{}",e.getMessage());
+            throw new JnSpringCloudException(ActivityExceptionEnum.EXPORT_FAILED);
+        }
+    }
+
+
+    /**
+     * 多行表头数据导出  只支持excel（xls和xlsx）导出
      * @param codedFileName 下载文件名  不包含后缀
      * @param exportColName excel导出的字段别名 比如：name,phone
      * @param exportTitle   excel导出字段的标题 比如：姓名，手机
-     * @param isMoreHead    是否多行表头  1：多行表头  0：单行表头
      * @param exportAs      导出格式   1：导出xls格式  2：导出为xlsx格式
      * @param rowIndex      多行表头从哪一行开始写数据，一般是多行表头占用行数加1,单行表头传0
      * @param dataList      要导出的数据，一般为查询页面所展示的数据（不支持分页）
@@ -45,9 +97,9 @@ public class ExportExcelServiceImpl implements ExportExcelService {
      */
     @ServiceLog(doAction = "数据导出")
     @Override
-    public void exportDataExcel(String codedFileName , String exportColName, String exportTitle, String isMoreHead,int exportAs, int rowIndex, List<?>dataList, InputStream temp, HttpServletResponse response) {
+    public void multiRowHeaderExport(String codedFileName , String exportColName, String exportTitle, int exportAs, int rowIndex, List<?>dataList, InputStream temp, HttpServletResponse response) {
         //导出入参校验
-        exportAs = checkExportParameter(exportColName, exportTitle, isMoreHead, rowIndex, exportAs, dataList, temp);
+        exportAs = checkExportParameter(exportColName, exportTitle, true, rowIndex, exportAs, dataList, temp);
         try(OutputStream fOut=response.getOutputStream()) {
             //(1)下载文件名
             //xls导出方式
@@ -72,43 +124,32 @@ public class ExportExcelServiceImpl implements ExportExcelService {
             //list<bean>转换 List<Map<String, Object>>
             List<Map<String, Object>> exportList = ObjToMapUtil.listToMap(dataList);
 
-            //（4）单行表头、多行表头
-            //单行表头状态值
-            String siginHead="0";
-            //多行表头状态值
-            String moreHead="1";
-            if (isMoreHead == null || siginHead.equals(isMoreHead)) {
-                //单行表头导出
-                String[] title = exportTitle.split(",");
-                //数组转换成list
-                List<String> titleList= new ArrayList<String>(Arrays.asList(title));
-                //导出方法，按照表头、列、数据、导出方式、输出流的顺序放入参数   后缀名是xlsx  ，传递2
-                ExcelUtils.exportData(titleList, fieldList, exportList, exportAs, response.getOutputStream());
-            }else if(moreHead.equals(isMoreHead)){
-                //多行表头导出
-                String []title = new String[]{};
-                //数组转换成list
-                List<String>titleList = new ArrayList<String>(Arrays.asList(title));
-                ExcelUtils.exportDataTemplate(titleList, fieldList, exportList, temp, fOut, rowIndex);
-            }
+            //（4）多行表头
+            //多行表头导出
+            String []title = new String[]{};
+            //数组转换成list
+            List<String>titleList = new ArrayList<String>(Arrays.asList(title));
+            ExcelUtils.exportDataTemplate(titleList, fieldList, exportList, temp, fOut, rowIndex);
         }catch (Exception e){
             logger.info("导出失败，失败原因：{}",e.getMessage());
             throw new JnSpringCloudException(ActivityExceptionEnum.EXPORT_FAILED);
         }
     }
 
+
+
     /**
      * 导出入参校验
-     * @param exportColName
-     * @param exportTitle
-     * @param isMoreHead
-     * @param rowIndex
-     * @param exportAs
-     * @param dataList
+     * @param exportColName  excel导出的字段别名 比如：name,phone
+     * @param exportTitle    excel导出字段的标题 比如：姓名，手机
+     * @param isMoreHead     是否多行表头  是：true  否：导出
+     * @param rowIndex       多行表头从哪一行开始写数据，一般是多行表头占用行数加1，至少为3,单行表头传0
+     * @param exportAs       导出格式   1：导出xls格式  2：导出为xlsx格式
+     * @param dataList       要导出的数据，一般为查询页面所展示的数据（不支持分页）
      * @param temp
      * @return
      */
-    private int checkExportParameter(String exportColName, String exportTitle, String isMoreHead, int rowIndex, int exportAs, List<?> dataList, InputStream temp) {
+    private int checkExportParameter(String exportColName, String exportTitle, boolean isMoreHead, int rowIndex, int exportAs, List<?> dataList, InputStream temp) {
         //至少要导出一条数据,否则不能导出
         int minDataList=1;
         if(dataList.size()<minDataList){
@@ -121,17 +162,8 @@ public class ExportExcelServiceImpl implements ExportExcelService {
             logger.info("excel导出字段别名[exportColName]个数和excel导出字段标题[exportTitle]个数不匹配");
             throw new JnSpringCloudException(ActivityExceptionEnum.EXPORT_PARAMETER_MORE_HEAD);
         }
-        //单行表头状态值
-        String siginHead="0";
-        //多行表头状态值
-        String moreHead="1";
-        //既不是单行表头，又不是多行表头
-        if(!(siginHead.equals(isMoreHead) || moreHead.equals(isMoreHead))){
-            logger.info("是否多行表头[isMoreHead]值只能是“0”、“1”");
-            throw new JnSpringCloudException(ActivityExceptionEnum.EXPORT_PARAMETER_MORE_HEAD);
-        }
         //若是多行表头，rowIndex至少是3，导出模板temp不能为空
-        if(moreHead.equals(isMoreHead)){
+        if(isMoreHead){
             int miniRowIndex=3;
             if(rowIndex<=miniRowIndex || temp==null){
                 logger.info("多行表头从哪一行开始写数据[rowIndex]的值至少是3，多行表头导出模板[temp]不能为空");

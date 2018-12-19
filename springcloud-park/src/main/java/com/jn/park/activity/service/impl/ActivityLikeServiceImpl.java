@@ -105,9 +105,6 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
                 .andStateEqualTo(cancelState);
         long cancelLikeNum = tbParkLikeMapper.countByExample(cancelExample);
         //获取完状态信息后再更新点赞状态
-        TbParkLike parkLike=new TbParkLike();
-        parkLike.setState(cancelState);
-        //更新点赞状态
         commentService.updateParkLikeState(id,account,cancelState);
         //防止重复操作
         int noCancleLikeNum=0;

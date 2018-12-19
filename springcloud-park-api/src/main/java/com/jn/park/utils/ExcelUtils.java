@@ -55,7 +55,7 @@ public class ExcelUtils {
         Workbook workbook = createWorkbook(exportAs);
         logger.info("createWorkbook 成功");
         Map<String, CellStyle> style = createCellStyle(workbook);
-        logger.error("createCellStyle 成功");
+        logger.info("createCellStyle 成功");
         Map<String, String> titleMap = createTitleMap(titles, fields);
         logger.info("createTitleMap 成功");
         createSheets(workbook, titleMap, data, exportAs, style);
@@ -69,7 +69,7 @@ public class ExcelUtils {
         Workbook workbook = createWorkbookTemplate(is);
         logger.info("createWorkbook 成功");
         Map<String, CellStyle> style = createCellStyle(workbook);
-        logger.error("createCellStyle 成功");
+        logger.info("createCellStyle 成功");
         Map<String, String> titleMap = createTitleMap(titles, fields);
         logger.info("createTitleMap 成功");
         createSheetsTemplate(workbook, titleMap, data, exportAs, style, rowIndex);

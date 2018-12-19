@@ -1,6 +1,7 @@
 package com.jn.park.activity.dao;
 
 
+import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivitySlim;
 import com.jn.park.activity.model.Activity;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface ActivityMapper {
 
-    public List<Activity> selectActivityList(Activity activity);
+    public List<Activity> selectActivityList(ActivityContentBean activity);
 
     /**
      * 活动类表展示接口

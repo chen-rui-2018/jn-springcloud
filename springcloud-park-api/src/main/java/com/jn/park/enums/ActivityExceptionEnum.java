@@ -35,6 +35,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_COST_NOT_NULL("11110300","活动费用不能为空"),
     ACTIVITY_ORGANIZER_NOT_NULL("11110300","活动主办方不能为空"),
     ACTIVITY_NUMBER_NOT_NULL("11110300","活动主人数不能为空"),
+    ACTIVITY_PARK_ID_NOT_NULL("11110300","活动园区不能为空"),
     ACTIVITY_POSTER_URL_NOT_NULL("11110300","活动海报不能为空"),
     ACTIVITY_DETAIL_NOT_NULL("11110300","活动详情不能为空"),
     ACTIVITY_STATE_NOT_DRAFT("11110300","活动不为草稿，不能修改"),

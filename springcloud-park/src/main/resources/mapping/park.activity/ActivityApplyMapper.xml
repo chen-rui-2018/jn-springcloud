@@ -15,6 +15,7 @@
       ta.apply_state as "applyState",                                   <!--报名状态-->
       ta.activity_Id as "activityId",                                   <!--活动ID-->
       date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",   <!--报名时间-->
+       date_format(ta.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime",   <!--报名时间-->
       ta.id as "id"                                                     <!--id-->
     from tb_activity_apply ta
     left join tb_user_person tp

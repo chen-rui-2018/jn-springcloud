@@ -13,13 +13,12 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
+import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivitySlim;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityDetail;
-import com.jn.park.utils.ExcelUtils;
-import com.jn.park.utils.ObjToMapUtil;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,9 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.service.ParkCodeService;
-import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.text.ParseException;
 import java.util.*;
 
@@ -77,7 +74,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "查询活动列表")
     @Override
-    public PaginationData selectActivityList(Activity activity){
+    public PaginationData selectActivityList(ActivityContentBean activity){
         Page<Object> objects = PageHelper.startPage(activity.getPage(), activity.getRows() == 0?15:activity.getRows());
         List<Activity> activities = activityMapper.selectActivityList(activity);
         PaginationData data = new PaginationData(activities, objects.getTotal());
@@ -118,7 +115,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "新增/修改活动")
     @Override
-    public int insertOrUpdateActivity(Activity activity,String account){
+    public int insertOrUpdateActivity(ActivityContentBean activity, String account){
         if(null == activity.getActiOrder()){
             //如果排序为空，默认值为0.
             activity.setActiOrder(0);
@@ -147,9 +144,6 @@ public class ActivityServiceImpl implements ActivityService {
             if(null !=actiStartDate && null!= actiApplyEndDate && actiApplyEndDate.after(actiStartDate)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_TIME_ERROR);
             }
-            if(StringUtils.isNotEmpty(activity.getApplyStartTime())){
-                tbActivity.setApplyStartTime(DateUtils.parseDate(activity.getApplyStartTime()));
-            }
             if(StringUtils.isNotEmpty(activity.getMesSendTime())){
                 tbActivity.setMesSendTime(DateUtils.parseDate(activity.getMesSendTime()));
             }
@@ -160,6 +154,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getState())){
             //发布时间
             tbActivity.setIssueTime(new Date());
+            tbActivity.setApplyStartTime(new Date());
             //TODO jiangyl 调用定时器发送消息
             //TODO jiangyl 调用定时器修改活动状态
             logger.info("添加/修改活动成果，待调用定时器发送消息以及定时修改活动状态---------------------------------------------------");
@@ -170,7 +165,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(StringUtils.isEmpty(activity.getId())){
             //新增
             tbActivity.setCreateTime(new Date());
-            tbActivity.setId(UUID.randomUUID().toString());
+            tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbActivity.setCreateAccount(account);
             num = tbActivityMapper.insert(tbActivity);
             tbActivityDetail.setActivityId(tbActivity.getId());

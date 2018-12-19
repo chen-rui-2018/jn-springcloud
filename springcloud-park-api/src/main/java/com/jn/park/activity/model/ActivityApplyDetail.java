@@ -39,6 +39,9 @@ public class ActivityApplyDetail implements Serializable {
     private String applyState;
     @ApiModelProperty(value = "报名时间")
     private String applyTime;
+    @ApiModelProperty(value = "签到时间")
+    private String signTime;
+
 
     public String getActivityId() {
         return activityId;
@@ -142,5 +145,13 @@ public class ActivityApplyDetail implements Serializable {
 
     public void setApplyTime(String applyTime) {
         this.applyTime = applyTime;
+    }
+
+    public String getSignTime() {
+        return signTime;
+    }
+
+    public void setSignTime(String signTime) {
+        this.signTime = signTime;
     }
 }

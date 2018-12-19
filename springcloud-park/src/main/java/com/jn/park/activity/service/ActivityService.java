@@ -2,7 +2,7 @@ package com.jn.park.activity.service;
 
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.Activity;
+import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivityDetail;
 
 /**
@@ -20,7 +20,7 @@ public interface ActivityService {
      * @return
      */
 
-    PaginationData selectActivityList(Activity activity);
+    PaginationData selectActivityList(ActivityContentBean activity);
 
     /**
      * 查询活动详情
@@ -43,7 +43,7 @@ public interface ActivityService {
      * @param account 当前登录用户
      * @return
      */
-    int insertOrUpdateActivity(Activity activity, String account);
+    int insertOrUpdateActivity(ActivityContentBean activity, String account);
 
     /**
      * 删除草稿活动数据

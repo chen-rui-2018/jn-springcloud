@@ -10,8 +10,8 @@ import com.jn.common.util.StringUtils;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivityDetail;
 import com.jn.park.export.service.ExportExcelService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -65,9 +65,9 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "获取活动列表")
     @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件[actiType:活动分类ID,state:活动状态,actiName:活动名,isTop:是否首页展示]  分页：page：1第一页 rows：每页行数")
+            notes = "查询条件[actiType:活动分类ID,state:活动状态,actiName:活动名,isTop:是否首页展示]  分页：page：1第一页 rows：每页行数。不传页码行数默认查询前15条")
     @RequestMapping(value = "/selectActivityList")
-    public Result selectActivityList(@RequestBody @Validated Activity activity) {
+    public Result selectActivityList(@RequestBody @Validated ActivityContentBean activity) {
         PaginationData paginationData = activityService.selectActivityList(activity);
         return new Result(paginationData);
     }
@@ -95,28 +95,32 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "添加/修改活动")
     @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class,
-            notes = "新增活动不需要传ID,传ID即为修改。修改只能修改活动状态state为1(草稿)的数据。" +
-                    "新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。排序字段为空，后台自动对其排序为0(靠后排序)")
+            notes = "新增活动ID不传则为新增,传ID即为修改。修改只能修改活动状态state为1(草稿)的数据。" +
+                    "新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。排序字段为空，后台自动对其排序为0(靠后排序)。时间统一格式为yyyy-MM-dd HH:mm:ss" +
+                    "actiType：活动类型(传通过/findActivityTypeList查询出的活动类型值)、actiName：活动名称、actiStartTime：活动开始时间、" +
+                    "actiEndTime：活动结束时间、applyEndTime：活动报名结束时间、mesSendTime：活动消息发送时间、parkId：活动园区(传通过/getParkCodeByType查询的园区列表值)、" +
+                    "actiAddress：活动地址、actiCost：活动费用、actiOrganizer：活动主办方、actiNumber：活动人数、actiPosterUrl：活动海报路径、state：活动状态、" +
+                    "isIndex：是否首页展示、actiOrder：排序、actiDetail：活动详情、showApplyNum：是否展示报名人-0否1是")
     @RequestMapping(value = "/insterOrUpdateActivity")
-    public Result insertOrUpdateActivity(@RequestBody @Validated Activity activity) {
-        Assert.notNull(activity.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
-        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getState())) {
-            Assert.notNull(activity.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activity.getApplyEndTime(), ActivityExceptionEnum.ACTIVITY_APPLY_END_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activity.getMesSendTime(), ActivityExceptionEnum.ACTIVITY_MES_SEND_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiAddress(), ActivityExceptionEnum.ACTIVITY_ADDRESS_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiCost(), ActivityExceptionEnum.ACTIVITY_COST_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiOrganizer(), ActivityExceptionEnum.ACTIVITY_ORGANIZER_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiPosterUrl(), ActivityExceptionEnum.ACTIVITY_POSTER_URL_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiDetail(), ActivityExceptionEnum.ACTIVITY_DETAIL_NOT_NULL.getMessage());
-            Assert.notNull(activity.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
-
+    public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContentBean activityContent) {
+        Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
+        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getState())) {
+            Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getApplyEndTime(), ActivityExceptionEnum.ACTIVITY_APPLY_END_TIME_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getMesSendTime(), ActivityExceptionEnum.ACTIVITY_MES_SEND_TIME_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiAddress(), ActivityExceptionEnum.ACTIVITY_ADDRESS_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiCost(), ActivityExceptionEnum.ACTIVITY_COST_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiOrganizer(), ActivityExceptionEnum.ACTIVITY_ORGANIZER_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiPosterUrl(), ActivityExceptionEnum.ACTIVITY_POSTER_URL_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiDetail(), ActivityExceptionEnum.ACTIVITY_DETAIL_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getParkId(), ActivityExceptionEnum.ACTIVITY_PARK_ID_NOT_NULL.getMessage());
         }
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        int i = activityService.insertOrUpdateActivity(activity,user.getAccount());
+        int i = activityService.insertOrUpdateActivity(activityContent,user.getAccount());
         return new Result(i);
     }
 
@@ -153,7 +157,7 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "活动报名列表")
     @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件：activityId，分页页码及行数，不传页码行数默认查询前15条")
+            notes = "查询条件：activityId,分页：page：1第一页 rows：每页行数。不传页码行数默认查询前15条")
     @RequestMapping(value = "/applyActivityList")
     public Result applyActivityList(String activityId, @Validated Page page) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());

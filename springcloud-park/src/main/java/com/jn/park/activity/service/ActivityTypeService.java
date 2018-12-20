@@ -1,12 +1,11 @@
 package com.jn.park.activity.service;
 
 
-import com.jn.common.model.Page;
+
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.model.ActivityType;
 import com.jn.system.model.User;
 
-import java.util.List;
 
 /**
  * 活动类型服务类
@@ -31,9 +30,11 @@ public interface ActivityTypeService {
      * 查询活动类型列表
      * @param state
      * @param page
+     * @param rows
+     * @param isPage
      * @return
      */
-    PaginationData findActivityTypeListByState(String state, Page page);
+    PaginationData findActivityTypeListByState(String state, Integer page,Integer rows ,boolean isPage);
 
     /**
      * 根据活动类型id(typeId) 获取当前活动类型内容
@@ -58,9 +59,5 @@ public interface ActivityTypeService {
      */
     void deleteActivityTypeList(String typeId);
 
-    /**
-     * 返回所有活动类型列表
-     * @return
-     */
-    List<ActivityType> findAllActivityType();
+
 }

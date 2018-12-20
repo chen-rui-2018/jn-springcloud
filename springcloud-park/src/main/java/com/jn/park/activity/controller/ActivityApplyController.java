@@ -88,9 +88,11 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "报名人列表查看", httpMethod = "POST", response = Result.class,
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList")
-    public Result activityApplyList(String activityId,Page page){
+    public Result activityApplyList(@ApiParam(name="activityId",value ="活动id",required = true) @RequestParam String activityId,
+                                    @ApiParam(name="page",value ="页码",required = true) @RequestParam(required = false)Integer page,
+                                    @ApiParam(name="rows",value ="每页显示数量",required = true) @RequestParam(required = false)Integer rows){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityId,page);
+       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityId,page,rows);
         return new Result(activityApplyList);
     }
 }

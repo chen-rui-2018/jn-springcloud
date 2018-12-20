@@ -416,19 +416,12 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         return i;
     }
-    
-    /**
-     * 报名人列表信息
-     * @param activityId
-     * @param page
-     * @return
-     */
+
     @ServiceLog(doAction = "报名人列表信息")
     @Override
-    public PaginationData findApplyActivityList(String activityId, Page page) {
-        int pageNumber = page.getPage();
-        int pageSize = page.getRows()==0?15:page.getRows();
-        com.github.pagehelper.Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
+    public PaginationData findApplyActivityList(String activityId, Integer page,Integer rows) {
+        int pageSize = rows==0?15:rows;
+        com.github.pagehelper.Page<Object> objects= PageHelper.startPage(page, pageSize, true);
         //前端查询有效报名状态数据
         String state = "1";
         List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,state);

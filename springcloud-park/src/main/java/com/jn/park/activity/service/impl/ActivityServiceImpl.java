@@ -263,9 +263,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
     @ServiceLog(doAction = "前台简单活动列表")
     @Override
-    public PaginationData activityListSlim(String typeId, com.jn.common.model.Page page, String keyWord) {
-        int pageNumber = page.getPage();
-        int pageSize = page.getRows()==0?15:page.getRows();
+    public PaginationData activityListSlim(String typeId, Integer page, Integer rows, String keyWord) {
+        int pageSize = rows==null?15:rows;
+        int pageNumber = page == null ? 0 : page;
         String invalid = "0";
         Page<Object> objects= PageHelper.startPage(pageNumber, pageSize, true);
         List<ActivitySlim> activitySlimList=activityMapper.activityListSlim(typeId,keyWord);

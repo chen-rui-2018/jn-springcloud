@@ -1,6 +1,5 @@
 package com.jn.park.activity.service;
 
-import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivityDetail;
@@ -71,14 +70,15 @@ public interface ActivityService {
     int cancelActivity(String activityId);
 
     /**
-     * 活动列表App
+     * 前台获取的活动列表
      * @param typeId
      * @param page
+     * @param rows
      * @param keyWord
      * @return
      */
 
-    PaginationData activityListSlim(String typeId, Page page, String keyWord);
+    PaginationData activityListSlim(String typeId, Integer page,Integer rows, String keyWord);
 
 	 /**
      * 手动发送活动通知接口

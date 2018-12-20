@@ -73,23 +73,4 @@ public class ActivityInfoController extends BaseController {
         PaginationData commentInfo = activityDetailsService.getCommentInfo(activityId, page,rows,true);
         return new Result(commentInfo);
     }
-
-    @ControllerLog(doAction = "前台获取简单活动列表")
-    @ApiOperation(value = "前台获取简单活动列表", httpMethod = "POST", response = Result.class,
-    notes = "查询条件:活动类型-选择对应活动类型id,分页参数:page-分页参数(表示第几页,不传则默认返回第一页),rows-分页参数(表示一页的数据条数,不传值则默认返回第一页,15条数据),关键字:(标题/内容/地点)")
-    @RequestMapping(value = "/guest/activityListSlim")
-    public Result activityListSlim(String typeId,String keyWord,Page page ) {
-        PaginationData paginationData = activityService.activityListSlim(typeId,page,keyWord);
-        return new Result(paginationData);
-    }
-    @ControllerLog(doAction = "查询活动类型列表")
-    @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class,
-    notes = "分页参数:page-分页参数(表示第几页,不传则默认返回第一页),rows-分页参数(表示一页的数据条数,不传值则默认返回第一页,15条数据)")
-    @RequestMapping(value = "/guest/findActivityTypeList")
-    public Result findActivityTypeListByState(Page page) {
-        //前台获取活动类型作为查询条件,只返回有效的活动类型;
-        String state = "1";
-        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(state,page);
-        return new Result(activityTypeList);
-    }
 }

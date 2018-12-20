@@ -46,6 +46,7 @@ public interface ActivityApplyService {
      * 生成二维码
      * @param outputStream
      * @param data :需要生成二维码的数据
+     * @throws  IOException
      */
     void getQrCode (OutputStream outputStream, String data) throws IOException;
 
@@ -61,9 +62,10 @@ public interface ActivityApplyService {
      * 报名人列表信息
      * @param activityId
      * @param page
+     * @param rows
      * @return
      */
-    PaginationData findApplyActivityList(String activityId, Page page);
+    PaginationData findApplyActivityList(String activityId, Integer page,Integer rows);
 
     /**
      * 新增活动报名信息

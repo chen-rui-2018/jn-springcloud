@@ -81,12 +81,15 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @ServiceLog(doAction = "查询活动类型列表")
     @Override
-    public PaginationData findActivityTypeListByState(String state,com.jn.common.model.Page page) {
-        int pageNumber = page.getPage();
-        int pageSize = page.getRows()==0?15:page.getRows();
-        Page<Object> pages= PageHelper.startPage(pageNumber, pageSize, true);
-        List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
-        return new PaginationData(activityTypeList,pages.getTotal());
+    public PaginationData findActivityTypeListByState(String state,Integer page,Integer rows,boolean isPage) {
+        Page<Object> objects=null;
+        if(isPage) {
+            int pageSize = rows == null ? 15 : rows;
+            int pageNumber= page ==null ? 0 : page;
+            objects  = PageHelper.startPage(pageNumber, pageSize, true);
+        }
+            List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
+            return new PaginationData(activityTypeList,objects==null?0:objects.getTotal());
     }
 
     @ServiceLog(doAction = "根据活动类型ID,获取活动类型内容")
@@ -181,14 +184,4 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             activityFileMapper.insertActivityTypeTemp(map);
         }
     }
-
-    @ServiceLog(doAction = "返回所有有效活动类型")
-    @Override
-    public List<ActivityType> findAllActivityType() {
-        //返回所有有效的活动类型
-        String state = "1";
-        List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
-        return activityTypeList;
-    }
-
 }

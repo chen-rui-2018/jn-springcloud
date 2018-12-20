@@ -1,8 +1,8 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.ActivityContentBean;
-import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.model.ActivityContentBean;
+import com.jn.park.model.ActivityDetail;
 
 /**
  * 活动

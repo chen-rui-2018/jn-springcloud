@@ -2,9 +2,9 @@ package com.cn.park.service;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.ActivityApplyDetail;
-import com.jn.park.activity.model.ActivityContentBean;
-import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.model.ActivityApplyDetail;
+import com.jn.park.model.ActivityContentBean;
+import com.jn.park.model.ActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import org.junit.Before;

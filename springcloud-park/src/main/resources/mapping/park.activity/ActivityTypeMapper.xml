@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.activity.dao.ActivityTypeMapper">
 
     <!--活动类型列表查询 -->
-    <select id="findActivityTypeListByState" resultType="com.jn.park.activity.model.ActivityType">
+    <select id="findActivityTypeListByState" resultType="com.jn.park.model.ActivityType">
         select
         t.type_id as "typeId"                                                     <!--类型ID-->
         ,t.type_name as "typeName"                                                <!--类型名称-->
@@ -39,7 +39,7 @@
         where 1=1
         and   t.type_id = #{typeId,jdbcType=VARCHAR};
     </select>
-    <resultMap id="ActivityMap" type="com.jn.park.activity.model.ActivityType">
+    <resultMap id="ActivityMap" type="com.jn.park.model.ActivityType">
         <id column="typeId" property="typeId" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="typeName" property="typeName" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="state" property="state" javaType="java.lang.String" jdbcType="VARCHAR"/>

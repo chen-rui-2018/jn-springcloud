@@ -1,13 +1,12 @@
 package com.jn.park.activity.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.activity.model.ActivityType;
+import com.jn.park.model.ActivityType;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -20,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 活动类型管理

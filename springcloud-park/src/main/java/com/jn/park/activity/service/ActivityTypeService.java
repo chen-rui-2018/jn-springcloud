@@ -3,7 +3,7 @@ package com.jn.park.activity.service;
 
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.ActivityType;
+import com.jn.park.model.ActivityType;
 import com.jn.system.model.User;
 
 

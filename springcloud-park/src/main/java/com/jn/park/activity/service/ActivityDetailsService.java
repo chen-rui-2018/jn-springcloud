@@ -3,7 +3,7 @@ package com.jn.park.activity.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
-import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.model.ActivityApply;
 import com.jn.park.activity.vo.ActivityDetailVO;
 
 import java.util.List;

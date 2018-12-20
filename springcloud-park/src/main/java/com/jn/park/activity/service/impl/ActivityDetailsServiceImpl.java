@@ -1,7 +1,6 @@
 package com.jn.park.activity.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
@@ -9,9 +8,9 @@ import com.jn.park.activity.dao.*;
 import com.jn.park.activity.entity.*;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.activity.model.ActivityApply;
-import com.jn.park.activity.model.ActivityDetail;
-import com.jn.park.activity.model.Comment;
+import com.jn.park.model.ActivityApply;
+import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

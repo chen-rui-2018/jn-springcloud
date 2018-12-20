@@ -10,17 +10,17 @@ package com.jn.park.activity.service;
 public interface ActivityLikeService {
     /**
      * 活动点赞
-     * @param id       活动id
-     * @param account  用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
      * @return
      */
-    void activityLike(String id,String account);
+    void activityLike(String activityId,String account);
 
     /**
      * 取消点赞
-     * @param id        活动id
-     * @param account   用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
      * @return
      */
-    void cancelLike(String id,String account);
+    void cancelLike(String activityId,String account);
 }

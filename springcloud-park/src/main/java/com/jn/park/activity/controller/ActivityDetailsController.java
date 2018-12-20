@@ -1,13 +1,10 @@
 package com.jn.park.activity.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityDetailsService;
-import com.jn.park.activity.service.ActivityService;
-import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.system.log.annotation.ControllerLog;
@@ -32,20 +29,15 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "活动详情")
 @RestController
-public class ActivityInfoController extends BaseController {
+public class ActivityDetailsController extends BaseController {
     //todo:待权限系统完成添加权限注解  yangph
     /**
      * 日志组件
      */
-    private static Logger logger = LoggerFactory.getLogger(ActivityInfoController.class);
+    private static Logger logger = LoggerFactory.getLogger(ActivityDetailsController.class);
 
     @Autowired
     private ActivityDetailsService activityDetailsService;
-
-    @Autowired
-    private ActivityService activityService;
-    @Autowired
-    private ActivityTypeService activityTypeService;
 
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)

@@ -334,10 +334,10 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public PaginationData applyActivityList(String activityId, Page page){
+    public PaginationData applyActivityList(String activityId,Boolean needPage, Integer page,Integer rows){
         com.github.pagehelper.Page<Object> objects=null;
-        if(null != page){
-            objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
+        if(needPage){
+            objects = PageHelper.startPage(page == null?1:page , rows == null ? 15 : rows, true);
         }
         List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,null);
         return new PaginationData(activityApplyList,objects==null?0:objects.getTotal());
@@ -372,14 +372,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     /***
      * 前台用户签到
-     * @param user
+     * @param account
      * @param activityId
      * @return
      */
     @ServiceLog(doAction = "前台用户签到")
     @Override
-    public int signInActivity(User user, String activityId){
-        if(null == user){
+    public int signInActivity(String account, String activityId){
+        if(StringUtils.isEmpty(account)){
             logger.warn("[活动签到]，用户未登录，不允许签到：activityId: {}",activityId);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_LOGIN_EXPEPTION);
         }
@@ -392,14 +392,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         TbActivityApply activityApply = null;
         for(TbActivityApply apply:applies){
-            if(StringUtils.equals(apply.getAccount(),user.getAccount())){
+            if(StringUtils.equals(apply.getAccount(),account)){
                 activityApply = apply;
             }
         }
         int i ;
         //activityApply !=null ,代表该用户已报名参加活动，可以进行签到
         if(activityApply == null){
-            logger.warn("[活动签到]，用户{}未报名活动：activityId: {},不能进行签到", user.getAccount(),activityId);
+            logger.warn("[活动签到]，用户{}未报名活动：activityId: {},不能进行签到", account,activityId);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_NOT_APPLY);
         }else{
             if(StringUtils.equals(activityApply.getSignType(),ACTIVITY_APPLYED_SIGN_CODE)){

@@ -37,6 +37,8 @@ public class Activity extends Page implements Serializable {
     private String mesSendTime;
     @ApiModelProperty(value = "活动园区")
     private String parkId;
+    @ApiModelProperty(value = "活动园区名字")
+    private String parkName;
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
     @ApiModelProperty(value = "活动费用")
@@ -328,5 +330,13 @@ public class Activity extends Page implements Serializable {
 
     public void setParkId(String parkId) {
         this.parkId = parkId;
+    }
+
+    public String getParkName() {
+        return parkName;
+    }
+
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
     }
 }

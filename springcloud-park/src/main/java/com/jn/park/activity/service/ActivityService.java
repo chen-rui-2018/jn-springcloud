@@ -16,11 +16,15 @@ public interface ActivityService {
 
     /**
      * 查询后台管理活动列表
-     * @param activity
+     * @param actiType
+     * @param state
+     * @param actiName
+     * @param isIndex
+     * @param page
+     * @param rows
      * @return
      */
-
-    PaginationData selectActivityList(ActivityContentBean activity);
+    PaginationData selectActivityList(String actiType,String state,String actiName,String isIndex,Integer page,Integer rows);
 
     /**
      * 查询活动详情

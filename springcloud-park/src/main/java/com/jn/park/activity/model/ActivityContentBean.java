@@ -17,11 +17,11 @@ import java.math.BigDecimal;
 public class ActivityContentBean extends Page implements Serializable {
     @ApiModelProperty(value = "活动ID(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "活动类型")
+    @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值)")
     private String actiType;
     @ApiModelProperty(value = "活动名称")
     private String actiName;
-    @ApiModelProperty(value = "活动开始时间")
+    @ApiModelProperty(value = "活动开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss)")
     private String actiStartTime;
     @ApiModelProperty(value = "活动结束时间")
     private String actiEndTime;
@@ -29,7 +29,7 @@ public class ActivityContentBean extends Page implements Serializable {
     private String applyEndTime;
     @ApiModelProperty(value = "活动消息发送时间")
     private String mesSendTime;
-    @ApiModelProperty(value = "活动园区")
+    @ApiModelProperty(value = "活动园区(传通过/getParkCodeByType查询的园区列表值)")
     private String parkId;
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
@@ -41,11 +41,11 @@ public class ActivityContentBean extends Page implements Serializable {
     private Integer actiNumber;
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
-    @ApiModelProperty(value = "活动状态")
+    @ApiModelProperty(value = "活动状态(修改只能修改活动状态state为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)")
     private String state;
     @ApiModelProperty(value = "是否首页展示")
     private String isIndex;
-    @ApiModelProperty(value = "排序")
+    @ApiModelProperty(value = "排序-若排序字段为空，后台自动对其排序为0(靠后排序)")
     private Integer actiOrder;
     @ApiModelProperty(value = "活动详情")
     private String actiDetail;

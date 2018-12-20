@@ -72,6 +72,10 @@ public class ActivityDetail implements Serializable {
     private String activityDetail;
     @ApiModelProperty(value = "是否展示报名人(0否1是)")
     private String showApplyNum;
+    @ApiModelProperty(value = "活动园区")
+    private String parkId;
+    @ApiModelProperty(value = "活动园区名字")
+    private String parkName;
     @ApiModelProperty(value = "园区列表")
     private List<?> parkCodes;
 
@@ -307,5 +311,21 @@ public class ActivityDetail implements Serializable {
 
     public void setParkCodes(List<?> parkCodes) {
         this.parkCodes = parkCodes;
+    }
+
+    public String getParkId() {
+        return parkId;
+    }
+
+    public void setParkId(String parkId) {
+        this.parkId = parkId;
+    }
+
+    public String getParkName() {
+        return parkName;
+    }
+
+    public void setParkName(String parkName) {
+        this.parkName = parkName;
     }
 }

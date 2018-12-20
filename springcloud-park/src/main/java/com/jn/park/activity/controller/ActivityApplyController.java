@@ -79,7 +79,7 @@ public class ActivityApplyController extends BaseController {
     public Result signInActivity(String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        int i = activityApplyService.signInActivity(user, activityId);
+        int i = activityApplyService.signInActivity(user==null?"":user.getAccount(), activityId);
         return new Result(i);
     }
 

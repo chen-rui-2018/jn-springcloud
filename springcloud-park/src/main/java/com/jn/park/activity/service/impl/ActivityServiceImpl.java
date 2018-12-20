@@ -74,8 +74,15 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "查询活动列表")
     @Override
-    public PaginationData selectActivityList(ActivityContentBean activity){
-        Page<Object> objects = PageHelper.startPage(activity.getPage(), activity.getRows() == 0?15:activity.getRows());
+    public PaginationData selectActivityList(String actiType,String state,String actiName,String isIndex,Integer page,Integer rows){
+        Page<Object> objects = PageHelper.startPage(page == null?1:page,rows == null?15:rows);
+        ActivityContentBean activity = new ActivityContentBean();
+        activity.setActiType(actiType);
+        activity.setState(state);
+        activity.setActiName(actiName);
+        activity.setIsIndex(isIndex);
+        activity.setPage(page);
+        activity.setRows(rows);
         List<Activity> activities = activityMapper.selectActivityList(activity);
         PaginationData data = new PaginationData(activities, objects.getTotal());
         return data;

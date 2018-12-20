@@ -18,6 +18,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,11 +65,16 @@ public class ActivityController extends BaseController {
     private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "获取活动列表")
-    @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件[actiType:活动分类ID,state:活动状态,actiName:活动名,isTop:是否首页展示]  分页：page：1第一页 rows：每页行数。不传页码行数默认查询前15条")
+    @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectActivityList")
-    public Result selectActivityList(@RequestBody @Validated ActivityContentBean activity) {
-        PaginationData paginationData = activityService.selectActivityList(activity);
+    public Result selectActivityList(
+            @ApiParam(name="actiType",value = "活动分类ID",required = true)String actiType,
+            @ApiParam(name="state",value = "活动状态",required = true)String state,
+            @ApiParam(name="actiName",value = "活动名",required = true)String actiName,
+            @ApiParam(name="isTop",value = "是否首页展示",required = true)String isIndex,
+            @ApiParam(name="page",value = "当前页数。不传默认查询第一页",required = true)Integer page,
+            @ApiParam(name="rows",value = "每页行数。不传默认为15条",required = true)Integer rows) {
+        PaginationData paginationData = activityService.selectActivityList(actiType,state,actiName,isIndex,page,rows);
         return new Result(paginationData);
     }
 
@@ -83,10 +89,11 @@ public class ActivityController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改活动可报名状态")
-    @ApiOperation(value = "修改活动可报名状态", httpMethod = "POST", response = Result.class,
-            notes = "修改条件：activityId,state只能传(0,1) 0代表停止报名 1开始报名")
+    @ApiOperation(value = "修改活动可报名状态", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityApply")
-    public Result updateActivityApply(String activityId,String state) {
+    public Result updateActivityApply(
+            @ApiParam(name="activityId",value = "修改条件",required = true) String activityId,
+            @ApiParam(name="state",value = "state只能传(0,1) 0代表停止报名 1开始报名",required = true) String state) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         Assert.notNull(state, ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
         int i = activityService.updateActivityApply(activityId, state);
@@ -94,13 +101,7 @@ public class ActivityController extends BaseController {
     }
 
     @ControllerLog(doAction = "添加/修改活动")
-    @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class,
-            notes = "新增活动ID不传则为新增,传ID即为修改。修改只能修改活动状态state为1(草稿)的数据。" +
-                    "新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。排序字段为空，后台自动对其排序为0(靠后排序)。时间统一格式为yyyy-MM-dd HH:mm:ss" +
-                    "actiType：活动类型(传通过/findActivityTypeList查询出的活动类型值)、actiName：活动名称、actiStartTime：活动开始时间、" +
-                    "actiEndTime：活动结束时间、applyEndTime：活动报名结束时间、mesSendTime：活动消息发送时间、parkId：活动园区(传通过/getParkCodeByType查询的园区列表值)、" +
-                    "actiAddress：活动地址、actiCost：活动费用、actiOrganizer：活动主办方、actiNumber：活动人数、actiPosterUrl：活动海报路径、state：活动状态、" +
-                    "isIndex：是否首页展示、actiOrder：排序、actiDetail：活动详情、showApplyNum：是否展示报名人-0否1是")
+    @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/insterOrUpdateActivity")
     public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContentBean activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
@@ -126,50 +127,52 @@ public class ActivityController extends BaseController {
 
 
     @ControllerLog(doAction = "删除草稿活动")
-    @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class,
-            notes = "修改条件：activityId,只能删除草稿数据，多个Id用,拼接")
+    @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteDraftActivity")
-    public Result deleteDraftActivity(String activityId) {
+    public Result deleteDraftActivity(
+            @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.deleteDraftActivity(activityId);
         return new Result(i);
     }
 
     @ControllerLog(doAction = "删除非草稿活动(超级管理权限)")
-    @ApiOperation(value = "删除非草稿活动(超级管理权限)", httpMethod = "POST", response = Result.class,
-            notes = "修改条件：activityId,能删除任何活动数据，多个Id用,拼接")
+    @ApiOperation(value = "删除非草稿活动(超级管理权限)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteActivity")
-    public Result deleteActivity(String activityId) {
+    public Result deleteActivity(
+            @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.deleteActivity(activityId);
         return new Result(i);
     }
 
     @ControllerLog(doAction = "取消活动")
-    @ApiOperation(value = "取消活动", httpMethod = "POST", response = Result.class,
-            notes = "取消条件：activityId，不能批量取消")
+    @ApiOperation(value = "取消活动(不能批量取消)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelActivity")
-    public Result cancelActivity(String activityId) {
+    public Result cancelActivity(
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.cancelActivity(activityId);
         return new Result(i);
     }
 
     @ControllerLog(doAction = "活动报名列表")
-    @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class,
-            notes = "查询条件：activityId,分页：page：1第一页 rows：每页行数。不传页码行数默认查询前15条")
+    @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/applyActivityList")
-    public Result applyActivityList(String activityId, @Validated Page page) {
+    public Result applyActivityList(
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)String activityId,
+            @ApiParam(name="page",value = "当前页数。不传默认查询第一页",required = true)Integer page,
+            @ApiParam(name="rows",value = "每页行数。不传默认为15条",required = true)Integer rows) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        PaginationData paginationData = activityApplyService.applyActivityList(activityId, page);
+        PaginationData paginationData = activityApplyService.applyActivityList(activityId,true, page,rows);
         return new Result(paginationData);
     }
 
     @ControllerLog(doAction = "下载签到二维码")
-    @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class,
-            notes = "下载条件：activityId")
+    @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/downloadSignCodeImg")
-    public void downloadSignCodeImg(HttpServletResponse httpServletResponse, String activityId){
+    public void downloadSignCodeImg(HttpServletResponse httpServletResponse,
+                                    @ApiParam(name="activityId",value = "activityId:活动ID",required = true)String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         httpServletResponse.reset();//清空输出流
         try {
@@ -184,10 +187,10 @@ public class ActivityController extends BaseController {
 
 
     @ControllerLog(doAction = "发送活动通知")
-    @ApiOperation(value = "发送活动通知", httpMethod = "POST", response = Result.class,
-            notes ="activityId:活动ID，只能在活动开始前24小时才能发送" )
+    @ApiOperation(value = "发送活动通知(只能在活动开始前24小时才能发送)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/sendMsgForActivate")
-    public Result sendMsgForActivate(String activityId) {
+    public Result sendMsgForActivate(
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.sendMsgForActivate(activityId);
         return new Result(i);
@@ -199,14 +202,14 @@ public class ActivityController extends BaseController {
                 "   exportTitle：excel导出字段的标题 比如：姓名,手机,性别...多个字段以逗号(,)分隔 ")
     @RequestMapping(value = "/exportDataExcel")
     public void exportDataExcel( String id,String exportColName, String exportTitle,HttpServletResponse response){
-       Assert.notNull(id, "活动id不能为空");
+        Assert.notNull(id, "活动id不能为空");
         Assert.notNull(exportColName, "excel导出的字段别名不能为空");
         Assert.notNull(exportTitle, "excel导出字段的标题不能为空");
         //下载文件名
         String codedFileName="活动报名人";
         //导出方式  xlsx
         int exportAs=2;
-        PaginationData paginationData = activityApplyService.applyActivityList(id, null);
+        PaginationData paginationData = activityApplyService.applyActivityList(id, false,null,null);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
         exportDataExcel.singleRowHeaderExport(codedFileName,exportColName,exportTitle,exportAs,activityApplyDetails,response);
     }

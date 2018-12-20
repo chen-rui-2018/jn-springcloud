@@ -35,10 +35,12 @@ public interface ActivityApplyService {
     /**
      * 后台管理-查询活动报名信息列表
      * @param activityId
-     * @param page  不分页传null
+     * @param page
+     * @param rows
+     * @param needPage 是否需要分页
      * @return
      */
-    PaginationData applyActivityList(String activityId, Page page);
+    PaginationData applyActivityList(String activityId,Boolean needPage, Integer page,Integer rows);
 
     /**
      * 生成二维码
@@ -49,11 +51,11 @@ public interface ActivityApplyService {
 
     /**
      * 前台用户签到接口
-     * @param user
+     * @param account
      * @param activityId
      * @return
      */
-    int signInActivity(User user,String activityId);
+    int signInActivity(String account,String activityId);
 
     /**
      * 报名人列表信息

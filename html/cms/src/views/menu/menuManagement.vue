@@ -570,7 +570,7 @@ export default {
       }
       if (data.isDir === '1') {
         this.isShow = false
-        this.menuForm.menuUrl = '/'
+        this.menuForm.menuUrl = ''
       } else if (data.isDir === '0') {
         this.isShow = true
         this.menuForm.menuUrl = data.menuUrl
@@ -658,7 +658,7 @@ export default {
       } else if (data.isDir === '1') {
         this.visible = true
       }
-      this.menuForm.menuUrl = '/'
+      this.menuForm.menuUrl = ''
       this.$nextTick(() => {
         this.$refs['menuForm'].clearValidate()
       })

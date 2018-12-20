@@ -186,7 +186,7 @@ export default {
         permissionName: [{ required: true, message: '请输入权限名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },

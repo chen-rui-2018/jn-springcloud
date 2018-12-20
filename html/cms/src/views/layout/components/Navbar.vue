@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
-    <breadcrumb class="breadcrumb-container"/>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
@@ -10,11 +10,12 @@
 
         <div class="avatar-wrapper">
           <span class="userName">
-            {{ account }}
+            {{ userName }}
           </span>
           <a href="javascript:void(0)" style="display:inline-block;" @click="logout">退出</a>
         </div>
-    </template></div>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -22,6 +23,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+// import { loginByUsername } from '@/api/login'
 // import ErrorLog from '@/components/ErrorLog'
 
 export default {
@@ -32,7 +34,8 @@ export default {
   },
   data() {
     return {
-      account: 'wangsong'
+      // account: 'wangsong',
+      userName: ''
     }
   },
   computed: {
@@ -44,7 +47,8 @@ export default {
     ])
   },
   mounted() {
-    this.account = localStorage.getItem('account')
+    // this.account = localStorage.getItem('account')
+    this.userName = localStorage.getItem('userName')
   },
   methods: {
     toggleSideBar() {
@@ -70,7 +74,7 @@ export default {
     float: left;
     padding: 0 10px;
   }
-  .breadcrumb-container{
+  .breadcrumb-container {
     float: left;
   }
   .errLog-container {
@@ -80,19 +84,19 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
-    &:focus{
-     outline: none;
+    &:focus {
+      outline: none;
     }
     .right-menu-item {
       display: inline-block;
       margin: 0 8px;
     }
-    .international{
+    .international {
       vertical-align: top;
     }
-      .avatar-wrapper {
-        margin-right: 30px;
-      }
+    .avatar-wrapper {
+      margin-right: 30px;
+    }
   }
 }
 </style>

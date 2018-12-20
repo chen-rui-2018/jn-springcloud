@@ -45,6 +45,12 @@ public class AcitvityTest {
     private String userAccount;
     private String state;
     private String url;
+    private String typeId;
+    private String keyWord;
+    private Integer page;
+    private Integer rows;
+
+
 
     @Before
     public void setUp() throws Exception{
@@ -52,6 +58,10 @@ public class AcitvityTest {
         state = "1";
         userAccount = "wangsong";
         url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
+        typeId = "";
+        keyWord="";
+        page=1;
+        rows = 15;
     }
 
     @Test
@@ -148,6 +158,15 @@ public class AcitvityTest {
         }catch (Exception e){
             logger.error("二维码导出异常",e);
         }
+    }
+
+    /**
+     * 查询前台活动列表
+     */
+    @Test
+    public void activityListSlim(){
+        PaginationData  data= activityService.activityListSlim(typeId,page,rows,keyWord);
+        assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
     }
 
 }

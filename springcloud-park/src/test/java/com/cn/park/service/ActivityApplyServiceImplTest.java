@@ -1,6 +1,7 @@
 package com.cn.park.service;
 
 import com.jn.SpringCloudParkApplication;
+import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityApplyService;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.assertThat;
 
@@ -106,6 +108,9 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void findApplyActivityList() {
+        PaginationData data =  activityApplyService.applyActivityList(activityId,true,1,15);
+        assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
+
     }
 
 }

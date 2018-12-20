@@ -59,8 +59,16 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void insertActivityType(String typeName, String state,String templateList, User user) {
-        String type = "insert";
         List<String> list= new ArrayList<>();
+        TbActivityTypeCriteria criteria= new TbActivityTypeCriteria();
+        criteria.createCriteria().andTypeNameEqualTo(typeName);
+        List<TbActivityType> activityTypeList =  tbActivityTypeMapper.selectByExample(criteria);
+        if(activityTypeList != null){
+            if(activityTypeList.size()>0){
+                logger.warn("[活动类型添加]，活动类型{}已关存在：typeName: {},不能重复添加",typeName,activityTypeList.get(0).getTypeName());
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_NAME_REPEAT, "活动类型"+typeName+"已存在,不能重复添加");
+            }
+        }
         // 插入活动类型基本信息
         TbActivityType activityType = new TbActivityType();
         String typeId = UUID.randomUUID().toString().replaceAll("-", "");
@@ -75,7 +83,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         if(StringUtils.isNotBlank(templateList)){
             list=Arrays.asList(templateList.split(","));
         }
-        insertActivityTypeFile(list, typeId, user,type);
+        insertActivityTypeFile(list, typeId, user.getAccount());
 
     }
 
@@ -103,8 +111,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateActivityType(String typeId, String typeName, String state, String templateList, User user) {
-        //更新类型内容
-        String type= "update";
+
         String invalid="-1";
         List<String> list= new ArrayList<>();
         TbActivityType activityType = new TbActivityType();
@@ -129,7 +136,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         if(StringUtils.isNotBlank(templateList)){
             list=Arrays.asList(templateList.split(","));
         }
-        insertActivityTypeFile(list, typeId, user,type);
+        insertActivityTypeFile(list, typeId, user.getAccount());
     }
 
     @ServiceLog(doAction = "删除活动类型")
@@ -158,23 +165,19 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
      * 批量插入活动类型模板
      * @param templateList
      * @param typeId
-     * @param user
+     * @param account
      * @param type
      */
-    private void insertActivityTypeFile(List<String> templateList, String typeId, User user,String type) {
+    private void insertActivityTypeFile(List<String> templateList, String typeId, String account) {
         if (templateList != null && templateList.size() > 0) {
             List<TbActivityFile> activityFileList = new ArrayList<>();
             for (String tempUrl : templateList) {
                 TbActivityFile activityFile = new TbActivityFile();
-                if("insert".equals(type)){
                 activityFile.setCreateTime(new Date());
-                }
-                if("update".equals(type)){
-                    activityFile.setUpdateTime(new Date());
-                }
+                activityFile.setCreateAccount(account);
                 activityFile.setTypeId(typeId);
                 activityFile.setState("1");
-                activityFile.setUpdateAccount(user.getAccount());
+
                 activityFile.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 activityFile.setFileSrc(tempUrl);
                 activityFileList.add(activityFile);

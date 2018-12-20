@@ -18,28 +18,28 @@
         a.acti_order as "actiOrder",t.type_name as "typeName",a.show_apply_num as "showApplyNum"
         from tb_activity a left join tb_activity_type t on a.acti_type = t.type_id left join tb_park_code co on co.id = a.park_id
         where 1=1  and a.state != '5'
-        <if test="actiType != null">
+        <if test="actiType != null and actiType != ''">
             and a.acti_type = #{actiType}
         </if>
-        <if test="state != null">
+        <if test="state != null and state != ''">
             and a.state = #{state}
         </if>
-        <if test="actiName != null">
+        <if test="actiName != null and actiName != ''">
             and a.acti_name LIKE concat(concat('%',#{actiName}),'%')
         </if>
-        <if test="isIndex != null">
+        <if test="isIndex != null and isIndex!= ''">
             and a.is_index = #{isIndex}
         </if>
-        <if test="actiAddress != null">
+        <if test="actiAddress != null and actiAddress != ''">
             and a.acti_address = #{actiAddress}
         </if>
-        <if test="actiCost != null">
+        <if test="actiCost != null and actiCost != ''">
             and a.acti_cost = #{actiCost}
         </if>
-        <if test="actiOrganizer != null">
+        <if test="actiOrganizer != null and actiOrganizer != ''">
             and a.acti_organizer = #{actiOrganizer}
         </if>
-        <if test="showApplyNum != null">
+        <if test="showApplyNum != null and showApplyNum != ''">
             and a.show_apply_num = #{showApplyNum}
         </if>
         order by a.create_time desc

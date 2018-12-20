@@ -81,8 +81,8 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setState(state);
         activity.setActiName(actiName);
         activity.setIsIndex(isIndex);
-        activity.setPage(page);
-        activity.setRows(rows);
+        activity.setPage(page == null?1:page);
+        activity.setRows(rows == null?15:rows);
         List<Activity> activities = activityMapper.selectActivityList(activity);
         PaginationData data = new PaginationData(activities, objects.getTotal());
         return data;

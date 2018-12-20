@@ -1,7 +1,7 @@
 package com.cn.park.service;
 
+import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
-import com.jn.park.activity.model.Activity;
 import com.jn.park.activity.model.ActivityApplyDetail;
 import com.jn.park.activity.model.ActivityContentBean;
 import com.jn.park.activity.model.ActivityDetail;
@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -27,15 +26,15 @@ import java.util.List;
  * @modified By:
  */
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest(classes={SpringCloudParkApplication.class})
 public class AcitvityTest {
     private Logger logger = LoggerFactory.getLogger(AcitvityTest.class);
 
     @Autowired
-    public ActivityService activityService;
+    private ActivityService activityService;
     @Autowired
-    public ActivityApplyService activityApplyService;
+    private ActivityApplyService activityApplyService;
 
     @Test
     public void selectActivityList(){

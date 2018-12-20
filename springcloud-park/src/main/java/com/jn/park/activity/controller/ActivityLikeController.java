@@ -9,11 +9,13 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/activity/activityLike")
 public class ActivityLikeController extends BaseController {
-    //todo:待权限系统完成添加权限注解
+    //todo:待权限系统完成添加权限注解 yangph
     /**
      * 日志组件
      */
@@ -37,9 +39,9 @@ public class ActivityLikeController extends BaseController {
     private ActivityLikeService activityLikeService;
 
     @ControllerLog(doAction = "活动点赞")
-    @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
+    @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityLike")
-    public Result activityLike(String activityId){
+    public Result activityLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
@@ -51,9 +53,9 @@ public class ActivityLikeController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消点赞")
-    @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
+    @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelLike")
-    public Result cancelLike(String activityId){
+    public Result cancelLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";

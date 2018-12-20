@@ -97,6 +97,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * @param activityId    活动id
      * @param activityViews  园区活动原有阅读人数
      */
+    @ServiceLog(doAction = "更新园区活动人数")
     private void updateActivityViews(String activityId, String activityViews) {
         TbActivityCriteria example=new TbActivityCriteria();
         example.createCriteria().andIdEqualTo(activityId);
@@ -113,6 +114,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * @param account
      * @param activityDetailVO
      */
+    @ServiceLog(doAction = "报名截止倒计时信息")
     private void applyCountdown(String activityId, String account, ActivityDetailVO activityDetailVO) {
         //根据用户账号和活动id查询当前登录用户是否已报名当前活动
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
@@ -135,17 +137,18 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     /**
      * 根据活动id获取活动点评信息
      * @param activityId 活动id
-     * @param page       分页信息
+     * @param page       页码
+     * @param rows       每页显示数量
      * @param isPage     是否分页  true：分页   false:不分页
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(String activityId, Page page,boolean isPage){
+    public PaginationData getCommentInfo(String activityId, Integer page,Integer rows,boolean isPage){
         com.github.pagehelper.Page<Object> objects=null;
         if(isPage){
             //默认查询前15条
-            objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
+            objects = PageHelper.startPage(page, rows == 0 ? 15 :rows, true);
         }
         List<Comment>list=activityDetailsMapper.getCommentInfo(activityId);
         List<Comment> resultList = recursiveGetComments(list);

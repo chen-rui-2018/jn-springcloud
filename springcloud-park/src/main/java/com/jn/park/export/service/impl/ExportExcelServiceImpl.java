@@ -54,6 +54,9 @@ public class ExportExcelServiceImpl implements ExportExcelService {
             codedFileName=codedFileName+".xls";
         }else if(exportAs==xlsxFlag){
             codedFileName=codedFileName+".xlsx";
+        }else{
+            logger.info("导出格式非系统支持格式，系统支持xls格式和xlsx两种导出格式");
+            throw new JnSpringCloudException(ActivityExceptionEnum.EXPORT_FAILED);
         }
         try {
             codedFileName = new String(codedFileName.getBytes("gb2312"), "iso8859-1");

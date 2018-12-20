@@ -10,6 +10,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -39,8 +41,7 @@ public class CommentController extends BaseController {
     private CommentService commentService;
 
     @ControllerLog(doAction = "活动评论/回复")
-    @ApiOperation(value = "活动评论/回复", httpMethod = "POST", response = Result.class
-            ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评   comContent：评论内容,最大长度为512")
+    @ApiOperation(value = "活动评论/回复", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivity")
     public Result commentActivity(@Validated @RequestBody CommentAdd commentAdd){
         Assert.notNull(commentAdd.getId(),CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
@@ -58,10 +59,9 @@ public class CommentController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动评论点赞")
-    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class
-                ,notes = "id:点评ID/活动ID")
+    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityLike")
-    public Result commentActivityLike(String id){
+    public Result commentActivityLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String id){
         Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -76,10 +76,9 @@ public class CommentController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动评论取消点赞")
-    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class
-            ,notes = "id:点评ID/活动ID， comType:类型,0:活动点评  1：服务点评  comContent:取消点赞时传空 ")
+    @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityCancelLike")
-    public Result commentActivityCancelLike(String id){
+    public Result commentActivityCancelLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String id){
         Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -93,5 +92,5 @@ public class CommentController extends BaseController {
         return result;
     }
 
-    //todo:删除评论待确认需求后再做
+    //todo:删除评论待确认需求后再做 yangph
 }

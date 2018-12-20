@@ -11,11 +11,13 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/activity/activityApply")
 public class ActivityApplyController extends BaseController {
-    //todo:待权限系统完成添加权限注解
+    //todo:待权限系统完成添加权限注解 yangph
 
     /**
      * 日志组件
@@ -40,9 +42,9 @@ public class ActivityApplyController extends BaseController {
     private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "快速报名")
-    @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
+    @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
-    public Result quickApply(String activityId){
+    public Result quickApply(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -57,9 +59,9 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消报名")
-    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class,notes = "activityId:活动id")
+    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelApply")
-    public Result cancelApply(String activityId){
+    public Result cancelApply(@ApiParam(value = "活动id",required = true) @RequestParam String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -73,10 +75,9 @@ public class ActivityApplyController extends BaseController {
         return result;
     }
     @ControllerLog(doAction = "在线签到")
-    @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class,
-            notes ="用户需登录。活动ID：activityId。" )
+    @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class )
     @RequestMapping(value = "/signInActivity")
-    public Result signInActivity(String activityId){
+    public Result signInActivity(@ApiParam(value = "活动id",required = true) @RequestParam String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivity(user==null?"":user.getAccount(), activityId);

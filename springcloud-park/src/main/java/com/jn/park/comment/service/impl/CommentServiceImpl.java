@@ -4,6 +4,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCache;
+import com.jn.common.util.cache.RedisCacheFactory;
+import com.jn.common.util.cache.service.Cache;
 import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.entity.TbParkLikeCriteria;
@@ -46,7 +48,7 @@ public class CommentServiceImpl implements CommentService {
     private TbParkLikeMapper tbParkLikeMapper;
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisCacheFactory redisCacheFactory;
 
     /**
      * 点赞状态：1:点赞
@@ -57,15 +59,18 @@ public class CommentServiceImpl implements CommentService {
      */
     private static final String PARK_CANCEL_LIKE_STATE="0";
 
-
-    @Value(value = "${sensitive.word.key}")
-    private String redisWordKey;
+    /**
+     * 敏感词redis组名
+     */
+    private static final String SENSITIVE_WORD_CACHE="sensitive_word_cache";
+    /**
+     * 敏感词redis的key
+     */
+    private static final String SENSITIVE_WORD="sensitive_word";
 
     @Value(value = "${sensitive.word.expire}")
     private int expire;
 
-    @Value(value = "${sensitive.word.prefix}")
-    private String prefix;
 
     /**
      * 活动评论/回复
@@ -76,8 +81,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void commentActivity(CommentAdd commentAdd, String account) {
         //从redis中获取敏感词词库
-        RedisCache cache = new RedisCache(redisTemplate, prefix, expire);
-        List<String> wordList = ( List<String>) cache.get(redisWordKey);
+        Cache<Object> cache = redisCacheFactory.getCache(SENSITIVE_WORD_CACHE, expire);
+        List<String> wordList = ( List<String>) cache.get(SENSITIVE_WORD);
         if(wordList==null){
             wordList=new ArrayList<>();
         }
@@ -90,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
             wordList.add("哈哈");
             wordList.add("发呆");
             //把数据库获取词库写入redis中
-            cache.put(redisWordKey, wordList);
+            cache.put(SENSITIVE_WORD, wordList);
         }
         //初始化敏感词库
         Set<String> sensitiveWordSet = new HashSet<>();
@@ -127,6 +132,7 @@ public class CommentServiceImpl implements CommentService {
      * @param id         点评ID/活动ID
      * @param account    用户账号/点评人
      */
+    @ServiceLog(doAction = "活动评论取消点赞")
     @Override
     public void commentActivityCancelLike(String id,String account) {
         //状态为点赞  0：取消点赞  1：点赞
@@ -268,5 +274,4 @@ public class CommentServiceImpl implements CommentService {
         parkLike.setState(likeState);
         tbParkLikeMapper.insertSelective(parkLike);
     }
-
 }

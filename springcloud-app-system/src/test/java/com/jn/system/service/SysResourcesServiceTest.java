@@ -47,6 +47,7 @@ public class SysResourcesServiceTest {
         SysResources resources = new SysResources();
         resources.setResourcesName("功能测试"+ RandomStringUtils.randomNumeric(4));
         resources.setResourcesUrl("xxx/xxx/a.html");
+        resources.setMenuId("1");
         resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         User user = new User();
         user.setId("123");

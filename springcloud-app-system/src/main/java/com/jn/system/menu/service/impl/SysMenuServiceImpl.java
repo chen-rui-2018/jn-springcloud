@@ -119,15 +119,14 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         menuIds.add(menuId);
         sysMenuMapper.deleteBy(menuIds);
-        logger.info("[菜单] 删除菜单及子菜单信息，menuIds:{}", menuIds.toString());
+        logger.info("[菜单] 删除菜单及子菜单信息成功，menuIds:{}", menuIds.toString());
         sysPermissionMenuMapper.deleteBy(menuIds);
-        logger.info("[菜单权限] 删除菜单及子菜单对应的权限信息，menuIds:{}", menuIds.toString());
+        logger.info("[菜单权限] 删除菜单及子菜单对应的权限信息成功，menuIds:{}", menuIds.toString());
         String[] ids = resourcesIds.toArray(new String[resourcesIds.size()]);
-        logger.info("[菜单功能] 删除菜单及子菜单的功能信息，删除功能对应权限信息,menuIds:{}", resourcesIds.toString());
         if (ids.length > 0) {
             sysResourcesService.deleteResourcesById(ids);
+            logger.info("[菜单功能] 删除菜单及子菜单的功能信息，删除功能对应权限信息成功,menuIds:{}", resourcesIds.toString());
         }
-        logger.info("[菜单] 菜单逻辑删除成功，menuIds:{}", menuIds.toString());
     }
 
     /**

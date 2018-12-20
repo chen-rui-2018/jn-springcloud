@@ -129,11 +129,11 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
         sysGroupMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupUserMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联用户信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联用户信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联角色信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联角色信息成功,groupIds:{}", Arrays.toString(groupIds));
     }
 
     /**

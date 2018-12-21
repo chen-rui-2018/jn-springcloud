@@ -1,6 +1,7 @@
 package com.cn.park.service;
 
 import com.jn.SpringCloudParkApplication;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.model.ActivityType;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 /**
@@ -66,9 +68,13 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void insertActivityType() {
-        activityTypeService.insertActivityType(typeName, state, templateList, user);
-        //todo 返回值为void时如何断言,确定后由陈蕊完成;
-        assertThat("",anything());
+        //活动名称重复
+        try {
+            activityTypeService.insertActivityType(typeName, state, templateList, user);
+        }catch (JnSpringCloudException e){
+            logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
+            assertThat(e.getCode(),equalTo("1111201"));
+        }
     }
 
     /**
@@ -95,9 +101,14 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void updateActivityType() {
-        activityTypeService.updateActivityType(typeId,typeName,state,templateList,user);
-        //todo 返回值为void时如何断言,确定后由陈蕊完成;
-        assertThat("",anything());
+        try {
+            typeId = "956dc8ab83f84c0cbb6b6cea2547f449";
+            activityTypeService.updateActivityType(typeId, typeName, "0", templateList, user);
+        }catch (JnSpringCloudException e){
+            logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
+            assertThat(e.getCode(),equalTo("11110202"));
+        }
+
     }
 
     /**
@@ -105,8 +116,13 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void deleteActivityTypeList() {
-        activityTypeService.deleteActivityTypeList(typeIds);
-        //todo 返回值为void时如何断言,确定后由陈蕊完成;
-        assertThat("",anything());
+        try {
+            typeIds = typeIds+",956dc8ab83f84c0cbb6b6cea2547f449";
+            activityTypeService.deleteActivityTypeList(typeIds);
+        }catch (JnSpringCloudException e){
+            logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
+            assertThat(e.getCode(),equalTo("11110202"));
+        }
+
     }
 }

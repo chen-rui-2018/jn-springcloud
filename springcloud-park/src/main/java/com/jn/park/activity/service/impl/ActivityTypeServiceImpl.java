@@ -111,8 +111,8 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateActivityType(String typeId, String typeName, String status, String templateList, User user) {
-
-        String invalid="-1";
+        //修改为无效
+        String invalid="0";
         List<String> list= new ArrayList<>();
         TbActivityType activityType = new TbActivityType();
         activityType.setTypeId(typeId);
@@ -124,8 +124,8 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         criteria.createCriteria().andActiTypeEqualTo(typeId);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);
         if(activities.size()>0 && status.equals(invalid)){
-            logger.warn("[活动类型删除]，活动类型{}已关联活动：typeId: {},不能修改为失效",activityType.getTypeName(),typeId);
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型"+activityType.getTypeName()+"已关联活动,不能修改为失效");
+            logger.warn("[活动类型编辑]，活动类型{}已关联活动：typeId: {},不能修改为失效",activityType.getTypeName(),typeId);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型'"+activityType.getTypeName()+"'已关联活动,不能修改为失效");
         }
         tbActivityTypeMapper.updateByPrimaryKeySelective(activityType);
         //删除原先的模板
@@ -154,8 +154,8 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             for (TbActivity activity: activities) {
                 String actiType= activity.getActiType();
                 ActivityType vo=   findActivityTypeById(actiType);
-                logger.warn("[活动类型删除]，活动类型{}已关联活动：typeId: {},不能进行删除",vo.getTypeName(),typeId);
-                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型"+vo.getTypeName()+"已关联活动,不能删除");
+                logger.warn("[活动类型删除]，活动类型{}已关联活动：typeId: {},不能进行删除",vo.getTypeName(),vo.getTypeId());
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型'"+vo.getTypeName()+"'已关联活动,不能删除");
             }
         }
         activityTypeMapper.deleteActivityTypeList(list);

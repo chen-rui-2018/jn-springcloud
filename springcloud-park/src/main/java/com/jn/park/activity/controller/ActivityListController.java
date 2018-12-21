@@ -54,10 +54,10 @@ public class ActivityListController extends BaseController {
     @RequestMapping(value = "/guest/findActivityTypeList")
     public Result findActivityTypeListByState() {
         //只返回有效活动类型
-        String state = "1";
+        String status = "1";
         int page = 0;
         int rows =  0;
-        PaginationData  activityTypeList = activityTypeService.findActivityTypeListByState(state,page,rows,false);
+        PaginationData  activityTypeList = activityTypeService.findActivityTypeListByState(status,page,rows,false);
         return new Result(activityTypeList);
     }
 

@@ -8,7 +8,7 @@
         date_format(a.apply_start_time,'%Y-%m-%d %H:%i:%S') as "applyStartTime",
         date_format(a.apply_end_time,'%Y-%m-%d %H:%i:%S') as "applyEndTime",
         date_format(a.mes_send_time,'%Y-%m-%d %H:%i:%S') as "mesSendTime",
-        a.acti_address as "actiAddress",a.state as "state",a.is_index as "isIndex",
+        a.acti_address as "actiAddress",a.status as "status",a.is_index as "isIndex",
         a.acti_cost as "actiCost", a.acti_organizer as "actiOrganizer",
         a.acti_number as "actiNumber", a.acti_poster_url as "actiPosterUrl",
         date_format(a.create_time,'%Y-%m-%d %H:%i:%S') as "createTime", a.create_account as "createAccount",
@@ -17,12 +17,12 @@
         a.partic_num as "particNum",a.is_apply as "isApply",a.park_id as "parkId",co.code_name as "parkName",
         a.acti_order as "actiOrder",t.type_name as "typeName",a.show_apply_num as "showApplyNum"
         from tb_activity a left join tb_activity_type t on a.acti_type = t.type_id left join tb_park_code co on co.id = a.park_id
-        where 1=1  and a.state != '5'
+        where 1=1  and a.status != '5'
         <if test="actiType != null and actiType != ''">
             and a.acti_type = #{actiType}
         </if>
-        <if test="state != null and state != ''">
-            and a.state = #{state}
+        <if test="status != null and status != ''">
+            and a.status = #{status}
         </if>
         <if test="actiName != null and actiName != ''">
             and a.acti_name LIKE concat(concat('%',#{actiName}),'%')
@@ -64,7 +64,7 @@
             left join tb_user_person tp on tp.account = ty.account
             left join tb_user_company tc on tc.account = ty.account
             where 1=1
-            and ta.state  not in ('1','5')                                                               <!--不展示活动状态为草稿(state=1),和已删除的的活动(state=5)-->
+            and ta.status  not in ('1','5')                                                               <!--不展示活动状态为草稿(status=1),和已删除的的活动(status=5)-->
             <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>

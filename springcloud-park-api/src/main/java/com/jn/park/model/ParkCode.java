@@ -26,7 +26,7 @@ public class ParkCode extends Page implements Serializable {
 
     private String codeName;
 
-    private String state;
+    private String status;
 
     private String createAccount;
 
@@ -35,4 +35,84 @@ public class ParkCode extends Page implements Serializable {
     private String updateAccount;
 
     private Date updateTime;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getCodeValue() {
+        return codeValue;
+    }
+
+    public void setCodeValue(String codeValue) {
+        this.codeValue = codeValue;
+    }
+
+    public String getCodeName() {
+        return codeName;
+    }
+
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getCreateAccount() {
+        return createAccount;
+    }
+
+    public void setCreateAccount(String createAccount) {
+        this.createAccount = createAccount;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getUpdateAccount() {
+        return updateAccount;
+    }
+
+    public void setUpdateAccount(String updateAccount) {
+        this.updateAccount = updateAccount;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
 }

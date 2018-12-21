@@ -51,7 +51,7 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "活动参加人数")
     private String particNum;
     @ApiModelProperty(value = "活动状态")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "创建时间")
     private String createTime;
     @ApiModelProperty(value = "创建人")
@@ -217,12 +217,12 @@ public class ActivityDetail implements Serializable {
         this.particNum = particNum;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCreateTime() {

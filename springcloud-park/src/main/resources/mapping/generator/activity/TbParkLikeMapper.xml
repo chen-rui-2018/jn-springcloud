@@ -6,7 +6,7 @@
     <result column="like_parent_id" jdbcType="VARCHAR" property="likeParentId" />
     <result column="like_account" jdbcType="VARCHAR" property="likeAccount" />
     <result column="like_time" jdbcType="TIMESTAMP" property="likeTime" />
-    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +67,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, like_parent_id, like_account, like_time, state
+    id, like_parent_id, like_account, like_time, status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbParkLikeCriteria" resultMap="BaseResultMap">
     select
@@ -101,9 +101,9 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbParkLike">
     insert into tb_park_like (id, like_parent_id, like_account, 
-      like_time, state)
+      like_time, status)
     values (#{id,jdbcType=VARCHAR}, #{likeParentId,jdbcType=VARCHAR}, #{likeAccount,jdbcType=VARCHAR}, 
-      #{likeTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR})
+      #{likeTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbParkLike">
     insert into tb_park_like
@@ -120,8 +120,8 @@
       <if test="likeTime != null">
         like_time,
       </if>
-      <if test="state != null">
-        state,
+      <if test="status != null">
+        status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -137,8 +137,8 @@
       <if test="likeTime != null">
         #{likeTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -163,8 +163,8 @@
       <if test="record.likeTime != null">
         like_time = #{record.likeTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -177,7 +177,7 @@
       like_parent_id = #{record.likeParentId,jdbcType=VARCHAR},
       like_account = #{record.likeAccount,jdbcType=VARCHAR},
       like_time = #{record.likeTime,jdbcType=TIMESTAMP},
-      state = #{record.state,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -194,8 +194,8 @@
       <if test="likeTime != null">
         like_time = #{likeTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -205,7 +205,7 @@
     set like_parent_id = #{likeParentId,jdbcType=VARCHAR},
       like_account = #{likeAccount,jdbcType=VARCHAR},
       like_time = #{likeTime,jdbcType=TIMESTAMP},
-      state = #{state,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

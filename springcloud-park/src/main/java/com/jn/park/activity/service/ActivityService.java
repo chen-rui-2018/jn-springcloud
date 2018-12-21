@@ -16,14 +16,14 @@ public interface ActivityService {
     /**
      * 查询后台管理活动列表
      * @param actiType
-     * @param state
+     * @param status
      * @param actiName
      * @param isIndex
      * @param page
      * @param rows
      * @return
      */
-    PaginationData selectActivityList(String actiType,String state,String actiName,String isIndex,Integer page,Integer rows);
+    PaginationData selectActivityList(String actiType,String status,String actiName,String isIndex,Integer page,Integer rows);
 
     /**
      * 查询活动详情
@@ -35,10 +35,10 @@ public interface ActivityService {
     /**
      * 活动状态管理(修改)
      * @param activityId
-     * @param state 1可报名 0不可报名
+     * @param status 1可报名 0不可报名
      * @return
      */
-    int updateActivityApply(String activityId, String state);
+    int updateActivityApply(String activityId, String status);
 
     /**
      * 发布活动/保存草稿

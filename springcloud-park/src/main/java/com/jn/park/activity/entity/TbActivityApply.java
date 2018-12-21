@@ -12,9 +12,9 @@ public class TbActivityApply implements Serializable {
 
     private Date applyTime;
 
-    private String applyState;
+    private String applyStatus;
 
-    private String signState;
+    private String signStatus;
 
     private Date signTime;
 
@@ -54,20 +54,20 @@ public class TbActivityApply implements Serializable {
         this.applyTime = applyTime;
     }
 
-    public String getApplyState() {
-        return applyState;
+    public String getApplyStatus() {
+        return applyStatus;
     }
 
-    public void setApplyState(String applyState) {
-        this.applyState = applyState == null ? null : applyState.trim();
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus == null ? null : applyStatus.trim();
     }
 
-    public String getSignState() {
-        return signState;
+    public String getSignStatus() {
+        return signStatus;
     }
 
-    public void setSignState(String signState) {
-        this.signState = signState == null ? null : signState.trim();
+    public void setSignStatus(String signStatus) {
+        this.signStatus = signStatus == null ? null : signStatus.trim();
     }
 
     public Date getSignTime() {
@@ -102,8 +102,8 @@ public class TbActivityApply implements Serializable {
             && (this.getActivityId() == null ? other.getActivityId() == null : this.getActivityId().equals(other.getActivityId()))
             && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
             && (this.getApplyTime() == null ? other.getApplyTime() == null : this.getApplyTime().equals(other.getApplyTime()))
-            && (this.getApplyState() == null ? other.getApplyState() == null : this.getApplyState().equals(other.getApplyState()))
-            && (this.getSignState() == null ? other.getSignState() == null : this.getSignState().equals(other.getSignState()))
+            && (this.getApplyStatus() == null ? other.getApplyStatus() == null : this.getApplyStatus().equals(other.getApplyStatus()))
+            && (this.getSignStatus() == null ? other.getSignStatus() == null : this.getSignStatus().equals(other.getSignStatus()))
             && (this.getSignTime() == null ? other.getSignTime() == null : this.getSignTime().equals(other.getSignTime()))
             && (this.getSignType() == null ? other.getSignType() == null : this.getSignType().equals(other.getSignType()));
     }
@@ -116,8 +116,8 @@ public class TbActivityApply implements Serializable {
         result = prime * result + ((getActivityId() == null) ? 0 : getActivityId().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getApplyTime() == null) ? 0 : getApplyTime().hashCode());
-        result = prime * result + ((getApplyState() == null) ? 0 : getApplyState().hashCode());
-        result = prime * result + ((getSignState() == null) ? 0 : getSignState().hashCode());
+        result = prime * result + ((getApplyStatus() == null) ? 0 : getApplyStatus().hashCode());
+        result = prime * result + ((getSignStatus() == null) ? 0 : getSignStatus().hashCode());
         result = prime * result + ((getSignTime() == null) ? 0 : getSignTime().hashCode());
         result = prime * result + ((getSignType() == null) ? 0 : getSignType().hashCode());
         return result;
@@ -133,8 +133,8 @@ public class TbActivityApply implements Serializable {
         sb.append(", activityId=").append(activityId);
         sb.append(", account=").append(account);
         sb.append(", applyTime=").append(applyTime);
-        sb.append(", applyState=").append(applyState);
-        sb.append(", signState=").append(signState);
+        sb.append(", applyStatus=").append(applyStatus);
+        sb.append(", signStatus=").append(signStatus);
         sb.append(", signTime=").append(signTime);
         sb.append(", signType=").append(signType);
         sb.append(", serialVersionUID=").append(serialVersionUID);

@@ -69,12 +69,12 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/selectActivityList")
     public Result selectActivityList(
             @ApiParam(name="actiType",value = "活动分类ID")@RequestParam(required = false) String actiType,
-            @ApiParam(name="state",value = "活动状态")@RequestParam(required = false) String state,
+            @ApiParam(name="status",value = "活动状态")@RequestParam(required = false) String status,
             @ApiParam(name="actiName",value = "活动名")@RequestParam(required = false) String actiName,
-            @ApiParam(name="isTop",value = "是否首页展示")@RequestParam(required = false) String isIndex,
+            @ApiParam(name="isIndex",value = "是否首页展示")@RequestParam(required = false) String isIndex,
             @ApiParam(name="page",value = "当前页数。不传默认查询第一页")@RequestParam(required = false) Integer page,
             @ApiParam(name="rows",value = "每页行数。不传默认为15条")@RequestParam(required = false) Integer rows) {
-        PaginationData paginationData = activityService.selectActivityList(actiType,state,actiName,isIndex,page,rows);
+        PaginationData paginationData = activityService.selectActivityList(actiType,status,actiName,isIndex,page,rows);
         return new Result(paginationData);
     }
 
@@ -83,7 +83,7 @@ public class ActivityController extends BaseController {
             notes = "查询条件activityId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(
-            @ApiParam(name="rows",value = "活动ID",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "活动ID",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
         return new Result(activityDetailsForManage);
@@ -94,10 +94,10 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/updateActivityApply")
     public Result updateActivityApply(
             @ApiParam(name="activityId",value = "修改条件",required = true)@RequestParam String activityId,
-            @ApiParam(name="state",value = "state只能传(0,1) 0代表停止报名 1开始报名",required = true)@RequestParam String state) {
+            @ApiParam(name="status",value = "status只能传(0,1) 0代表停止报名 1开始报名",required = true)@RequestParam String status) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        Assert.notNull(state, ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
-        int i = activityService.updateActivityApply(activityId, state);
+        Assert.notNull(status, ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
+        int i = activityService.updateActivityApply(activityId, status);
         return new Result(i);
     }
 
@@ -106,7 +106,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/insterOrUpdateActivity")
     public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContentBean activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
-        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getState())) {
+        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getStatus())) {
             Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());

@@ -24,9 +24,9 @@ public class ActivityApply implements Serializable {
     @ApiModelProperty(value = "申请时间")
     private String applyTime;
     @ApiModelProperty(value = "申请状态")
-    private String applyState;
+    private String applyStatus;
     @ApiModelProperty(value = "签到状态")
-    private String signState;
+    private String signStatus;
     @ApiModelProperty(value = "签到时间")
     private String signTime;
     @ApiModelProperty(value = "签到方式(0：app签到，1：现场签到)")
@@ -68,20 +68,20 @@ public class ActivityApply implements Serializable {
         this.applyTime = applyTime;
     }
 
-    public String getApplyState() {
-        return applyState;
+    public String getApplyStatus() {
+        return applyStatus;
     }
 
-    public void setApplyState(String applyState) {
-        this.applyState = applyState;
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus;
     }
 
-    public String getSignState() {
-        return signState;
+    public String getSignStatus() {
+        return signStatus;
     }
 
-    public void setSignState(String signState) {
-        this.signState = signState;
+    public void setSignStatus(String signStatus) {
+        this.signStatus = signStatus;
     }
 
     public String getSignTime() {

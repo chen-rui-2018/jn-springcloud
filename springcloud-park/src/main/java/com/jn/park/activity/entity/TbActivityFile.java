@@ -18,7 +18,7 @@ public class TbActivityFile implements Serializable {
 
     private Date updateTime;
 
-    private String state;
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -78,12 +78,12 @@ public class TbActivityFile implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     @Override
@@ -105,7 +105,7 @@ public class TbActivityFile implements Serializable {
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -119,7 +119,7 @@ public class TbActivityFile implements Serializable {
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -136,7 +136,7 @@ public class TbActivityFile implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", updateAccount=").append(updateAccount);
         sb.append(", updateTime=").append(updateTime);
-        sb.append(", state=").append(state);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

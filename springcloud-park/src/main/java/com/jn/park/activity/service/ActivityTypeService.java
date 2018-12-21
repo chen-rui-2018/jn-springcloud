@@ -19,22 +19,22 @@ public interface ActivityTypeService {
     /**
      * 新增活动类型
      * @param typeName
-     * @param state
+     * @param status
      * @param templateList
      * @param user
      * @return
      */
-    void  insertActivityType(String typeName, String state, String templateList, User user);
+    void  insertActivityType(String typeName, String status, String templateList, User user);
 
     /**
      * 查询活动类型列表
-     * @param state
+     * @param status
      * @param page
      * @param rows
      * @param isPage
      * @return
      */
-    PaginationData findActivityTypeListByState(String state, Integer page,Integer rows ,boolean isPage);
+    PaginationData findActivityTypeListByState(String status, Integer page,Integer rows ,boolean isPage);
 
     /**
      * 根据活动类型id(typeId) 获取当前活动类型内容
@@ -45,13 +45,13 @@ public interface ActivityTypeService {
     /**
      * 根据活动类型id(typeId) 获取当前活动类型内容
      * @param typeName
-     * @param state
+     * @param status
      * @param templateList
      * @param typeId
      * @param user
      * @return
      */
-    void updateActivityType(String typeId,String typeName, String state, String templateList, User user);
+    void updateActivityType(String typeId,String typeName, String status, String templateList, User user);
 
     /**
      *根据类型Id删除活动类型

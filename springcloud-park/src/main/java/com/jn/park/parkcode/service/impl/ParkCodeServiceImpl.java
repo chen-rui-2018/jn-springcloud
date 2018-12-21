@@ -30,7 +30,7 @@ public class ParkCodeServiceImpl implements ParkCodeService {
     @ServiceLog(doAction = "查询园区字典编码")
     public List<TbParkCode> getParkCodeByType(String codeType){
         TbParkCodeCriteria tbParkCodeCriteria = new TbParkCodeCriteria();
-        tbParkCodeCriteria.createCriteria().andGroupIdEqualTo(codeType).andStateEqualTo("1");
+        tbParkCodeCriteria.createCriteria().andGroupIdEqualTo(codeType).andStatusEqualTo("1");
         return tbParkCodeMapper.selectByExample(tbParkCodeCriteria);
     }
 

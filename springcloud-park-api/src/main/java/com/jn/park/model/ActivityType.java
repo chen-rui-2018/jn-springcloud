@@ -29,7 +29,7 @@ public class ActivityType implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private String  updateTime;
     @ApiModelProperty(value = "状态(0：无效，1：有效，-1：删除)")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "活动类型模板列表")
     private List<String> templateList;
     @ApiModelProperty(value = "拥有模板数量")
@@ -85,12 +85,12 @@ public class ActivityType implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public List<String> getTemplateList() {

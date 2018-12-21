@@ -51,14 +51,14 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
      * 新增活动类型
      *
      * @param typeName
-     * @param state
+     * @param status
      * @param templateList
      * @return
      */
     @ServiceLog(doAction = "新增活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertActivityType(String typeName, String state,String templateList, User user) {
+    public void insertActivityType(String typeName, String status,String templateList, User user) {
         List<String> list= new ArrayList<>();
         TbActivityTypeCriteria criteria= new TbActivityTypeCriteria();
         criteria.createCriteria().andTypeNameEqualTo(typeName);
@@ -76,7 +76,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         activityType.setCreateTime(new Date());
         activityType.setCreateAccount(user.getAccount());
         activityType.setTypeName(typeName);
-        activityType.setState(state);
+        activityType.setStatus(status);
         tbActivityTypeMapper.insertSelective(activityType);
 
         // 使用map封装,有多个模板时进行批量插入
@@ -89,14 +89,14 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @ServiceLog(doAction = "查询活动类型列表")
     @Override
-    public PaginationData findActivityTypeListByState(String state,Integer page,Integer rows,boolean isPage) {
+    public PaginationData findActivityTypeListByState(String status,Integer page,Integer rows,boolean isPage) {
         Page<Object> objects=null;
         if(isPage) {
             int pageSize = rows == null ? 15 : rows;
             int pageNumber= page ==null ? 0 : page;
             objects  = PageHelper.startPage(pageNumber, pageSize, true);
         }
-            List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(state);
+            List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(status);
             return new PaginationData(activityTypeList,objects==null?0:objects.getTotal());
     }
 
@@ -110,7 +110,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "更新活动类型内容")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateActivityType(String typeId, String typeName, String state, String templateList, User user) {
+    public void updateActivityType(String typeId, String typeName, String status, String templateList, User user) {
 
         String invalid="-1";
         List<String> list= new ArrayList<>();
@@ -119,11 +119,11 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         activityType.setUpdateTime(new Date());
         activityType.setUpdateAccount(user.getAccount());
         activityType.setTypeName(typeName);
-        activityType.setState(state);
+        activityType.setStatus(status);
         TbActivityCriteria criteria = new TbActivityCriteria();
         criteria.createCriteria().andActiTypeEqualTo(typeId);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);
-        if(activities.size()>0 && state.equals(invalid)){
+        if(activities.size()>0 && status.equals(invalid)){
             logger.warn("[活动类型删除]，活动类型{}已关联活动：typeId: {},不能修改为失效",activityType.getTypeName(),typeId);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED, "活动类型"+activityType.getTypeName()+"已关联活动,不能修改为失效");
         }
@@ -176,7 +176,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
                 activityFile.setCreateTime(new Date());
                 activityFile.setCreateAccount(account);
                 activityFile.setTypeId(typeId);
-                activityFile.setState("1");
+                activityFile.setStatus("1");
 
                 activityFile.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 activityFile.setFileSrc(tempUrl);

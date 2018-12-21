@@ -41,8 +41,8 @@ public class ActivityContentBean extends Page implements Serializable {
     private Integer actiNumber;
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
-    @ApiModelProperty(value = "活动状态(修改只能修改活动状态state为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)")
-    private String state;
+    @ApiModelProperty(value = "活动状态(修改只能修改活动状态status为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)")
+    private String status;
     @ApiModelProperty(value = "是否首页展示")
     private String isIndex;
     @ApiModelProperty(value = "排序-若排序字段为空，后台自动对其排序为0(靠后排序)")
@@ -148,12 +148,12 @@ public class ActivityContentBean extends Page implements Serializable {
         this.actiPosterUrl = actiPosterUrl;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getIsIndex() {

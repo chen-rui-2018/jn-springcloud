@@ -33,7 +33,7 @@ public class TbActivity implements Serializable {
 
     private String actiPosterUrl;
 
-    private String state;
+    private String status;
 
     private Date createTime;
 
@@ -177,12 +177,12 @@ public class TbActivity implements Serializable {
         this.actiPosterUrl = actiPosterUrl == null ? null : actiPosterUrl.trim();
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public Date getCreateTime() {
@@ -323,7 +323,7 @@ public class TbActivity implements Serializable {
             && (this.getActiOrganizer() == null ? other.getActiOrganizer() == null : this.getActiOrganizer().equals(other.getActiOrganizer()))
             && (this.getActiNumber() == null ? other.getActiNumber() == null : this.getActiNumber().equals(other.getActiNumber()))
             && (this.getActiPosterUrl() == null ? other.getActiPosterUrl() == null : this.getActiPosterUrl().equals(other.getActiPosterUrl()))
-            && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()))
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
@@ -358,7 +358,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getActiOrganizer() == null) ? 0 : getActiOrganizer().hashCode());
         result = prime * result + ((getActiNumber() == null) ? 0 : getActiNumber().hashCode());
         result = prime * result + ((getActiPosterUrl() == null) ? 0 : getActiPosterUrl().hashCode());
-        result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
@@ -396,7 +396,7 @@ public class TbActivity implements Serializable {
         sb.append(", actiOrganizer=").append(actiOrganizer);
         sb.append(", actiNumber=").append(actiNumber);
         sb.append(", actiPosterUrl=").append(actiPosterUrl);
-        sb.append(", state=").append(state);
+        sb.append(", status=").append(status);
         sb.append(", createTime=").append(createTime);
         sb.append(", createAccount=").append(createAccount);
         sb.append(", updateTime=").append(updateTime);

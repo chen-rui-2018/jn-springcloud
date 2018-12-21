@@ -43,7 +43,7 @@ public class AcitvityTest {
 
     private String activityId ;
     private String userAccount;
-    private String state;
+    private String status;
     private String url;
     private String typeId;
     private String keyWord;
@@ -55,7 +55,7 @@ public class AcitvityTest {
     @Before
     public void setUp() throws Exception{
         activityId = "56ad4d018554586b1117f27391ae9bf8";
-        state = "1";
+        status = "1";
         userAccount = "wangsong";
         url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
         typeId = "";
@@ -67,12 +67,12 @@ public class AcitvityTest {
     @Test
     public void selectActivityList(){
         String actiType = "";
-        String state = "";
+        String status = "";
         String actiName = "";
         String isIndex = "";
         Integer page = 1;
         Integer rows = 15;
-        PaginationData paginationData = activityService.selectActivityList(actiType,state,actiName,isIndex,page,rows);
+        PaginationData paginationData = activityService.selectActivityList(actiType,status,actiName,isIndex,page,rows);
         List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }
@@ -85,7 +85,7 @@ public class AcitvityTest {
 
     @Test
     public void updateActivityApply(){
-        int i = activityService.updateActivityApply(activityId, state);
+        int i = activityService.updateActivityApply(activityId, status);
         assertThat(i,is(1));
     }
 
@@ -104,7 +104,7 @@ public class AcitvityTest {
         activityContent.setActiPosterUrl("http://politics.people.com.cn/NMediaFile/2018/1219/MAIN201812191525000321021630650.jpg");
         activityContent.setActiOrganizer("管委会");
         activityContent.setActiNumber(1000);
-        activityContent.setState("2");
+        activityContent.setStatus("2");
         activityContent.setShowApplyNum("1");
         int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
         assertThat(i,is(1));

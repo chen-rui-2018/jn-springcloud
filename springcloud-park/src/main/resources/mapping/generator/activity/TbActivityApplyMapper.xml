@@ -6,8 +6,8 @@
     <result column="activity_id" jdbcType="VARCHAR" property="activityId" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
-    <result column="apply_state" jdbcType="VARCHAR" property="applyState" />
-    <result column="sign_state" jdbcType="VARCHAR" property="signState" />
+    <result column="apply_status" jdbcType="VARCHAR" property="applyStatus" />
+    <result column="sign_status" jdbcType="VARCHAR" property="signStatus" />
     <result column="sign_time" jdbcType="TIMESTAMP" property="signTime" />
     <result column="sign_type" jdbcType="VARCHAR" property="signType" />
   </resultMap>
@@ -70,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, activity_id, account, apply_time, apply_state, sign_state, sign_time, sign_type
+    id, activity_id, account, apply_time, apply_status, sign_status, sign_time, sign_type
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityApplyCriteria" resultMap="BaseResultMap">
     select
@@ -104,10 +104,10 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityApply">
     insert into tb_activity_apply (id, activity_id, account, 
-      apply_time, apply_state, sign_state, 
+      apply_time, apply_status, sign_status, 
       sign_time, sign_type)
     values (#{id,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{applyTime,jdbcType=TIMESTAMP}, #{applyState,jdbcType=VARCHAR}, #{signState,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{applyStatus,jdbcType=VARCHAR}, #{signStatus,jdbcType=VARCHAR}, 
       #{signTime,jdbcType=TIMESTAMP}, #{signType,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityApply">
@@ -125,11 +125,11 @@
       <if test="applyTime != null">
         apply_time,
       </if>
-      <if test="applyState != null">
-        apply_state,
+      <if test="applyStatus != null">
+        apply_status,
       </if>
-      <if test="signState != null">
-        sign_state,
+      <if test="signStatus != null">
+        sign_status,
       </if>
       <if test="signTime != null">
         sign_time,
@@ -151,11 +151,11 @@
       <if test="applyTime != null">
         #{applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="applyState != null">
-        #{applyState,jdbcType=VARCHAR},
+      <if test="applyStatus != null">
+        #{applyStatus,jdbcType=VARCHAR},
       </if>
-      <if test="signState != null">
-        #{signState,jdbcType=VARCHAR},
+      <if test="signStatus != null">
+        #{signStatus,jdbcType=VARCHAR},
       </if>
       <if test="signTime != null">
         #{signTime,jdbcType=TIMESTAMP},
@@ -186,11 +186,11 @@
       <if test="record.applyTime != null">
         apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.applyState != null">
-        apply_state = #{record.applyState,jdbcType=VARCHAR},
+      <if test="record.applyStatus != null">
+        apply_status = #{record.applyStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.signState != null">
-        sign_state = #{record.signState,jdbcType=VARCHAR},
+      <if test="record.signStatus != null">
+        sign_status = #{record.signStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.signTime != null">
         sign_time = #{record.signTime,jdbcType=TIMESTAMP},
@@ -209,8 +209,8 @@
       activity_id = #{record.activityId,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       apply_time = #{record.applyTime,jdbcType=TIMESTAMP},
-      apply_state = #{record.applyState,jdbcType=VARCHAR},
-      sign_state = #{record.signState,jdbcType=VARCHAR},
+      apply_status = #{record.applyStatus,jdbcType=VARCHAR},
+      sign_status = #{record.signStatus,jdbcType=VARCHAR},
       sign_time = #{record.signTime,jdbcType=TIMESTAMP},
       sign_type = #{record.signType,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -229,11 +229,11 @@
       <if test="applyTime != null">
         apply_time = #{applyTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="applyState != null">
-        apply_state = #{applyState,jdbcType=VARCHAR},
+      <if test="applyStatus != null">
+        apply_status = #{applyStatus,jdbcType=VARCHAR},
       </if>
-      <if test="signState != null">
-        sign_state = #{signState,jdbcType=VARCHAR},
+      <if test="signStatus != null">
+        sign_status = #{signStatus,jdbcType=VARCHAR},
       </if>
       <if test="signTime != null">
         sign_time = #{signTime,jdbcType=TIMESTAMP},
@@ -249,8 +249,8 @@
     set activity_id = #{activityId,jdbcType=VARCHAR},
       account = #{account,jdbcType=VARCHAR},
       apply_time = #{applyTime,jdbcType=TIMESTAMP},
-      apply_state = #{applyState,jdbcType=VARCHAR},
-      sign_state = #{signState,jdbcType=VARCHAR},
+      apply_status = #{applyStatus,jdbcType=VARCHAR},
+      sign_status = #{signStatus,jdbcType=VARCHAR},
       sign_time = #{signTime,jdbcType=TIMESTAMP},
       sign_type = #{signType,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}

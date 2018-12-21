@@ -164,7 +164,7 @@ public class CommentServiceImpl implements CommentService {
         long existLikeNum = tbParkLikeMapper.countByExample(existExample);
         //查询园区点赞表（tb_park_like），根据活动id/评论id,用户以及状态为点赞来判断是否已点赞/取消点赞
         TbParkLikeCriteria optionLikeExample=new TbParkLikeCriteria();
-        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account).andStateEqualTo(state);
+        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account).andStatusEqualTo(state);
         long optionLikeNum = tbParkLikeMapper.countByExample(optionLikeExample);
         //已点赞/已取消点赞，不做操作
         if(optionLikeNum>0){
@@ -248,7 +248,7 @@ public class CommentServiceImpl implements CommentService {
         TbParkLikeCriteria example=new TbParkLikeCriteria();
         example.createCriteria().andLikeParentIdEqualTo(likeParentId).andLikeAccountEqualTo(account);
         TbParkLike tbParkLike=new TbParkLike();
-        tbParkLike.setState(state);
+        tbParkLike.setStatus(state);
         tbParkLikeMapper.updateByExampleSelective(tbParkLike, example);
     }
 
@@ -271,7 +271,7 @@ public class CommentServiceImpl implements CommentService {
         parkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //状态 0：取消点赞  1：点赞
         String likeState="1";
-        parkLike.setState(likeState);
+        parkLike.setStatus(likeState);
         tbParkLikeMapper.insertSelective(parkLike);
     }
 }

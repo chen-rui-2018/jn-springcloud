@@ -22,7 +22,7 @@
         ,t1.acti_like as "activityLike"                                                          <!--感兴趣人数-->
         ,t1.apply_num as "applyNum"                                                              <!--报名人数-->
         ,t1.partic_num as "particNum"                                                            <!--活动参加人数-->
-        ,t1.state as "state"                                                                     <!--活动状态-->
+        ,t1.status as "status"                                                                     <!--活动状态-->
         ,date_format(t1.create_time , '%Y-%m-%d %H:%i:%s') as "createTime"                       <!--创建时间-->
         ,t1.create_account as "createAccount"                                                    <!--创建人-->
         ,date_format(t1.issue_time ,'%Y-%m-%d %H:%i:%s') as "issueTime"                          <!--发布时间-->
@@ -40,7 +40,7 @@
         on t1.id=t2.activity_id
         where 1=1
         and t1.id=#{id}
-        and t1.state not in ('1','5')                                                           <!--草稿、已删除的活动不能被查询出来-->
+        and t1.status not in ('1','5')                                                           <!--草稿、已删除的活动不能被查询出来-->
         order by t1.create_time
     </select>
 
@@ -52,7 +52,7 @@
         ,t1.com_account as "comAccount"                                   <!--点评人-->
         ,date_format(t1.com_time, '%Y-%m-%d %H:%i:%s') as "comTime"       <!--点评时间-->
         ,t1.like_num as "likeNum"                                         <!--点评点赞数-->
-        ,t1.state as "state"                                              <!--点评状态-->
+        ,t1.status as "status"                                              <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
         ,case
@@ -71,7 +71,7 @@
         on t1.com_account=t3.account
         where  1=1
         and t1.p_id=#{id}
-        and t1.state='1'                                                 <!--有效点评-->
+        and t1.status='1'                                                 <!--有效点评-->
         order by t1.com_time
     </select>
 
@@ -82,8 +82,8 @@
         ,t1.activity_id as "activityId"                                   <!--活动ID-->
         ,t1.account as "account"                                          <!--报名人-->
         ,date_format(t1.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime"   <!--报名时间-->
-        ,t1.apply_state as "applyState"                                   <!--报名状态-->
-        ,t1.sign_state as "signState"                                     <!--签到状态-->
+        ,t1.apply_status as "applyStatus"                                   <!--报名状态-->
+        ,t1.sign_status as "signStatus"                                     <!--签到状态-->
         ,date_format(t1.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"     <!--签到时间-->
         ,t1.sign_type as "signType"                                       <!--签到方式-->
         ,case
@@ -101,6 +101,6 @@
         where  1=1
         and t1.activity_id=#{activityId}
         and t1.account=#{account}
-        and t1.apply_state='1'
+        and t1.apply_status='1'
     </select>
 </mapper>

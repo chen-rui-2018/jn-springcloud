@@ -74,11 +74,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "查询活动列表")
     @Override
-    public PaginationData selectActivityList(String actiType,String state,String actiName,String isIndex,Integer page,Integer rows){
+    public PaginationData selectActivityList(String actiType,String status,String actiName,String isIndex,Integer page,Integer rows){
         Page<Object> objects = PageHelper.startPage(page == null?1:page,rows == null?15:rows);
         ActivityContentBean activity = new ActivityContentBean();
         activity.setActiType(actiType);
-        activity.setState(state);
+        activity.setStatus(status);
         activity.setActiName(actiName);
         activity.setIsIndex(isIndex);
         activity.setPage(page == null?1:page);
@@ -104,11 +104,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "修改活动报名状态")
     @Override
-    public int updateActivityApply(String activityId, String state){
-        if(StringUtils.equals(state,ACTIVITY_STATE_FALSE)|| StringUtils.equals(state,ACTIVITY_STATE_TRUE)){
+    public int updateActivityApply(String activityId, String status){
+        if(StringUtils.equals(status,ACTIVITY_STATE_FALSE)|| StringUtils.equals(status,ACTIVITY_STATE_TRUE)){
             TbActivity activity = new TbActivity();
             activity.setId(activityId);
-            activity.setIsApply(state);
+            activity.setIsApply(status);
             int i = tbActivityMapper.updateByPrimaryKeySelective(activity);
             if(i==1){
                return i;
@@ -158,7 +158,7 @@ public class ActivityServiceImpl implements ActivityService {
             logger.info("新增活动时间转换失败。失败原因{}",e.getMessage(),e);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR);
         }
-        if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getState())){
+        if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getStatus())){
             //发布时间
             tbActivity.setIssueTime(new Date());
             tbActivity.setApplyStartTime(new Date());
@@ -185,7 +185,7 @@ public class ActivityServiceImpl implements ActivityService {
             if(null == tbActivity1){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
             }
-            if(StringUtils.equals(tbActivity1.getState(),ACTIVITY_STATE_DRAFT)){
+            if(StringUtils.equals(tbActivity1.getStatus(),ACTIVITY_STATE_DRAFT)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT);
             }
             num = tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
@@ -209,13 +209,13 @@ public class ActivityServiceImpl implements ActivityService {
         }
         for(int a=0;a<tbActivities.size();a++){
             //校验是否有非草稿数据
-            if(!StringUtils.equals(tbActivities.get(a).getState(),ACTIVITY_STATE_DRAFT)){
+            if(!StringUtils.equals(tbActivities.get(a).getStatus(),ACTIVITY_STATE_DRAFT)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_DRAFT_DELETE_ERROR);
             }
         }
         TbActivity tbActivity1 = new TbActivity();
         tbActivity1.setUpdateTime(new Date());
-        tbActivity1.setState("5");
+        tbActivity1.setStatus("5");
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity1, tbActivityCriteria);
         if(i1>0){
             return i1;
@@ -231,7 +231,7 @@ public class ActivityServiceImpl implements ActivityService {
          TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
         TbActivity tbActivity = new TbActivity();
-        tbActivity.setState("5");
+        tbActivity.setStatus("5");
         tbActivity.setUpdateTime(new Date());
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity, tbActivityCriteria);
         if(i1>0){
@@ -248,12 +248,12 @@ public class ActivityServiceImpl implements ActivityService {
         if(null == activity){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
-        if(StringUtils.equals(activity.getState(),ACTIVITY_STATE_DRAFT)){
+        if(StringUtils.equals(activity.getStatus(),ACTIVITY_STATE_DRAFT)){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_CANCEL_EXPEPTION);
         }
         TbActivity tbActivity = new TbActivity();
         tbActivity.setId(activityId);
-        tbActivity.setState("4");
+        tbActivity.setStatus("4");
         int i = tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
         if(i>0){
             return i;
@@ -287,7 +287,7 @@ public class ActivityServiceImpl implements ActivityService {
         if(null == tbActivity){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
-        if(!StringUtils.equals(tbActivity.getState(),ACTIVITY_STATE_PUBLISH)){
+        if(!StringUtils.equals(tbActivity.getStatus(),ACTIVITY_STATE_PUBLISH)){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXPEPTION);
         }
         //判断是否为活动开始前24小时之内

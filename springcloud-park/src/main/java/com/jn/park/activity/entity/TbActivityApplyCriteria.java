@@ -375,143 +375,143 @@ public class TbActivityApplyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateIsNull() {
-            addCriterion("apply_state is null");
+        public Criteria andApplyStatusIsNull() {
+            addCriterion("apply_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateIsNotNull() {
-            addCriterion("apply_state is not null");
+        public Criteria andApplyStatusIsNotNull() {
+            addCriterion("apply_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateEqualTo(String value) {
-            addCriterion("apply_state =", value, "applyState");
+        public Criteria andApplyStatusEqualTo(String value) {
+            addCriterion("apply_status =", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateNotEqualTo(String value) {
-            addCriterion("apply_state <>", value, "applyState");
+        public Criteria andApplyStatusNotEqualTo(String value) {
+            addCriterion("apply_status <>", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateGreaterThan(String value) {
-            addCriterion("apply_state >", value, "applyState");
+        public Criteria andApplyStatusGreaterThan(String value) {
+            addCriterion("apply_status >", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateGreaterThanOrEqualTo(String value) {
-            addCriterion("apply_state >=", value, "applyState");
+        public Criteria andApplyStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("apply_status >=", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateLessThan(String value) {
-            addCriterion("apply_state <", value, "applyState");
+        public Criteria andApplyStatusLessThan(String value) {
+            addCriterion("apply_status <", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateLessThanOrEqualTo(String value) {
-            addCriterion("apply_state <=", value, "applyState");
+        public Criteria andApplyStatusLessThanOrEqualTo(String value) {
+            addCriterion("apply_status <=", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateLike(String value) {
-            addCriterion("apply_state like", value, "applyState");
+        public Criteria andApplyStatusLike(String value) {
+            addCriterion("apply_status like", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateNotLike(String value) {
-            addCriterion("apply_state not like", value, "applyState");
+        public Criteria andApplyStatusNotLike(String value) {
+            addCriterion("apply_status not like", value, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateIn(List<String> values) {
-            addCriterion("apply_state in", values, "applyState");
+        public Criteria andApplyStatusIn(List<String> values) {
+            addCriterion("apply_status in", values, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateNotIn(List<String> values) {
-            addCriterion("apply_state not in", values, "applyState");
+        public Criteria andApplyStatusNotIn(List<String> values) {
+            addCriterion("apply_status not in", values, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateBetween(String value1, String value2) {
-            addCriterion("apply_state between", value1, value2, "applyState");
+        public Criteria andApplyStatusBetween(String value1, String value2) {
+            addCriterion("apply_status between", value1, value2, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApplyStateNotBetween(String value1, String value2) {
-            addCriterion("apply_state not between", value1, value2, "applyState");
+        public Criteria andApplyStatusNotBetween(String value1, String value2) {
+            addCriterion("apply_status not between", value1, value2, "applyStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateIsNull() {
-            addCriterion("sign_state is null");
+        public Criteria andSignStatusIsNull() {
+            addCriterion("sign_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateIsNotNull() {
-            addCriterion("sign_state is not null");
+        public Criteria andSignStatusIsNotNull() {
+            addCriterion("sign_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateEqualTo(String value) {
-            addCriterion("sign_state =", value, "signState");
+        public Criteria andSignStatusEqualTo(String value) {
+            addCriterion("sign_status =", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateNotEqualTo(String value) {
-            addCriterion("sign_state <>", value, "signState");
+        public Criteria andSignStatusNotEqualTo(String value) {
+            addCriterion("sign_status <>", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateGreaterThan(String value) {
-            addCriterion("sign_state >", value, "signState");
+        public Criteria andSignStatusGreaterThan(String value) {
+            addCriterion("sign_status >", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateGreaterThanOrEqualTo(String value) {
-            addCriterion("sign_state >=", value, "signState");
+        public Criteria andSignStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("sign_status >=", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateLessThan(String value) {
-            addCriterion("sign_state <", value, "signState");
+        public Criteria andSignStatusLessThan(String value) {
+            addCriterion("sign_status <", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateLessThanOrEqualTo(String value) {
-            addCriterion("sign_state <=", value, "signState");
+        public Criteria andSignStatusLessThanOrEqualTo(String value) {
+            addCriterion("sign_status <=", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateLike(String value) {
-            addCriterion("sign_state like", value, "signState");
+        public Criteria andSignStatusLike(String value) {
+            addCriterion("sign_status like", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateNotLike(String value) {
-            addCriterion("sign_state not like", value, "signState");
+        public Criteria andSignStatusNotLike(String value) {
+            addCriterion("sign_status not like", value, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateIn(List<String> values) {
-            addCriterion("sign_state in", values, "signState");
+        public Criteria andSignStatusIn(List<String> values) {
+            addCriterion("sign_status in", values, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateNotIn(List<String> values) {
-            addCriterion("sign_state not in", values, "signState");
+        public Criteria andSignStatusNotIn(List<String> values) {
+            addCriterion("sign_status not in", values, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateBetween(String value1, String value2) {
-            addCriterion("sign_state between", value1, value2, "signState");
+        public Criteria andSignStatusBetween(String value1, String value2) {
+            addCriterion("sign_status between", value1, value2, "signStatus");
             return (Criteria) this;
         }
 
-        public Criteria andSignStateNotBetween(String value1, String value2) {
-            addCriterion("sign_state not between", value1, value2, "signState");
+        public Criteria andSignStatusNotBetween(String value1, String value2) {
+            addCriterion("sign_status not between", value1, value2, "signStatus");
             return (Criteria) this;
         }
 

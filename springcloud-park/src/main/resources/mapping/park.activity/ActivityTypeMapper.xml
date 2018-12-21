@@ -7,7 +7,7 @@
         select
         t.type_id as "typeId"                                                     <!--类型ID-->
         ,t.type_name as "typeName"                                                <!--类型名称-->
-        ,t.state as "state"                                                       <!--类型状态-->
+        ,t.status as "status"                                                       <!--类型状态-->
         ,t.create_account as "createAccount"                                      <!--创建人账号-->
         ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"           <!--创建时间-->
         ,t.update_account as "updateAccount"                                      <!--修改人账号-->
@@ -16,9 +16,9 @@
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
         where 1=1
-        and   t.state != '-1'
-        <if test="state != null and state!=''">
-            and t.state = #{state,jdbcType=VARCHAR}
+        and   t.status != '-1'
+        <if test="status != null and status!=''">
+            and t.status = #{status,jdbcType=VARCHAR}
         </if>
         group by   t.type_id
     </select>
@@ -27,7 +27,7 @@
     <select id="findActivityTypeById" resultMap="ActivityMap">
         select t.type_id as "typeId"                                                                                    <!--类型ID-->
             ,t.type_name as "typeName"                                                                                   <!--类型名称-->
-            ,t.state as "state"                                                                                          <!--类型状态-->
+            ,t.status as "status"                                                                                          <!--类型状态-->
             ,f.file_src as "fileSrc"                                                                                     <!--模板列表-->
             ,t.create_account as "createAccount"                                                                         <!--创建人账号-->
             ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"                                              <!--创建时间-->
@@ -42,7 +42,7 @@
     <resultMap id="ActivityMap" type="com.jn.park.model.ActivityType">
         <id column="typeId" property="typeId" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="typeName" property="typeName" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="state" property="state" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="status" property="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="fileTotal" property="fileTotal" javaType="java.lang.String"/>
         <result column="createAccount" property="createAccount" javaType="java.lang.String"/>
         <result column="createTime" property="createTime" javaType="java.lang.String"/>
@@ -56,7 +56,7 @@
     </resultMap>
     <!--删除活动类型-->
     <update id="deleteActivityTypeList" parameterType="java.util.List">
-        update tb_activity_type t set t.state = "-1",t.update_time = now() where t.type_Id in
+        update tb_activity_type t set t.status = "-1",t.update_time = now() where t.type_Id in
         <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>

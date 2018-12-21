@@ -45,22 +45,22 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "增加活动类型", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     public Result insertActivityType(@ApiParam(name = "typeName", value = "活动名称(最大长度20个中文)", required = true) @RequestParam String typeName,
-                                     @ApiParam(name = "state", value = "活动类型状态(0:无效,1:有效)", required = true) @RequestParam String state,
+                                     @ApiParam(name = "status", value = "活动类型状态(0:无效,1:有效)", required = true) @RequestParam String status,
                                      @ApiParam(name = "templateList", value = "模板列表(多个使用逗号','分隔)") @RequestParam(required = false) String templateList) {
         Assert.notNull(typeName, ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY.getMessage());
-        Assert.notNull(state, ActivityExceptionEnum.ACTIVITY_TYPE_STATUS_EMPTY.getMessage());
+        Assert.notNull(status, ActivityExceptionEnum.ACTIVITY_TYPE_STATUS_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        activityTypeService.insertActivityType(typeName, state, templateList, user);
+        activityTypeService.insertActivityType(typeName, status, templateList, user);
         return new Result();
     }
 
     @ControllerLog(doAction = "分页查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityTypeList")
-    public Result findActivityTypeListByState(@ApiParam(name = "state", value = "活动类型状态(0:无效,1:有效,不输入:全部)") @RequestParam(required = false) String state,
+    public Result findActivityTypeListByStatus(@ApiParam(name = "status", value = "活动类型状态(0:无效,1:有效,不输入:全部)") @RequestParam(required = false) String status,
                                               @ApiParam(name = "page", value = "页码") @RequestParam(required = false) Integer page,
                                               @ApiParam(name = "rows", value = "每页显示数量") @RequestParam(required = false) Integer rows) {
-        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(state, page, rows, true);
+        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(status, page, rows, true);
         return new Result(activityTypeList);
     }
 
@@ -78,12 +78,12 @@ public class ActivityTypeController extends BaseController {
     @RequestMapping(value = "/updateActivityType")
     public Result updateActivityType(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam String typeId,
                                      @ApiParam(name = "typeName", value = "活动名称(最大长度20个中文)", required = true) @RequestParam String typeName,
-                                     @ApiParam(name = "state", value = "活动类型状态(0:无效,1:有效)", required = true) @RequestParam String state,
+                                     @ApiParam(name = "status", value = "活动类型状态(0:无效,1:有效)", required = true) @RequestParam String status,
                                      @ApiParam(name = "templateList", value = "模板列表(多个使用逗号','分隔)") @RequestParam(required = false) String templateList) {
         Assert.notNull(typeName, ActivityExceptionEnum.ACTIVITY_TYPE_NAME_EMPTY.getMessage());
-        Assert.notNull(state, ActivityExceptionEnum.ACTIVITY_TYPE_STATUS_EMPTY.getMessage());
+        Assert.notNull(status, ActivityExceptionEnum.ACTIVITY_TYPE_STATUS_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        activityTypeService.updateActivityType(typeId, typeName, state, templateList, user);
+        activityTypeService.updateActivityType(typeId, typeName, status, templateList, user);
         return new Result();
     }
 

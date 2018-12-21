@@ -182,7 +182,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     public List<TbParkLike> getActivityLikeInfo(String activityId){
         TbParkLikeCriteria example=new TbParkLikeCriteria();
         //根据活动id获取点赞状态为点赞（"1"）的数据
-        example.createCriteria().andLikeParentIdEqualTo(activityId).andStateEqualTo("1");
+        example.createCriteria().andLikeParentIdEqualTo(activityId).andStatusEqualTo("1");
         List<TbParkLike> tbActivityLikes = tbParkLikeMapper.selectByExample(example);
         return tbActivityLikes;
     }
@@ -217,7 +217,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         String delState="5";
         stateList.add(delState);
         //草稿、已删除的活动不能被查询出来
-        example.createCriteria().andIdEqualTo(activityId).andStateNotIn(stateList);
+        example.createCriteria().andIdEqualTo(activityId).andStatusNotIn(stateList);
         TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
         return tbActivity;
     }

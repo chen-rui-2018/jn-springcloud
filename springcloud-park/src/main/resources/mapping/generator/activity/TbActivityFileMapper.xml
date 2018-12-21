@@ -9,7 +9,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,7 +71,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, type_id, file_src, create_account, create_time, update_account, update_time, 
-    state
+    status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityFileCriteria" resultMap="BaseResultMap">
     select
@@ -106,10 +106,10 @@
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file (id, type_id, file_src, 
       create_account, create_time, update_account, 
-      update_time, state)
+      update_time, status)
     values (#{id,jdbcType=VARCHAR}, #{typeId,jdbcType=VARCHAR}, #{fileSrc,jdbcType=VARCHAR}, 
       #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{state,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityFile">
     insert into tb_activity_file
@@ -135,8 +135,8 @@
       <if test="updateTime != null">
         update_time,
       </if>
-      <if test="state != null">
-        state,
+      <if test="status != null">
+        status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -161,8 +161,8 @@
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -196,8 +196,8 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -213,7 +213,7 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_account = #{record.updateAccount,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      state = #{record.state,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -239,8 +239,8 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -253,7 +253,7 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_account = #{updateAccount,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      state = #{state,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

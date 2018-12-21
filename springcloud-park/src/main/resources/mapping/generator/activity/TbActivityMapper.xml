@@ -16,7 +16,7 @@
     <result column="acti_organizer" jdbcType="VARCHAR" property="actiOrganizer" />
     <result column="acti_number" jdbcType="INTEGER" property="actiNumber" />
     <result column="acti_poster_url" jdbcType="VARCHAR" property="actiPosterUrl" />
-    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -93,7 +93,7 @@
   <sql id="Base_Column_List">
     id, acti_type, acti_name, acti_start_time, acti_end_time, apply_start_time, apply_end_time, 
     mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_number, acti_poster_url, 
-    state, create_time, create_account, update_time, update_account, acti_views, acti_like, 
+    status, create_time, create_account, update_time, update_account, acti_views, acti_like, 
     apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
     show_apply_num
   </sql>
@@ -132,7 +132,7 @@
       acti_start_time, acti_end_time, apply_start_time, 
       apply_end_time, mes_send_time, park_id, 
       acti_address, acti_cost, acti_organizer, 
-      acti_number, acti_poster_url, state, 
+      acti_number, acti_poster_url, status, 
       create_time, create_account, update_time, 
       update_account, acti_views, acti_like, 
       apply_num, partic_num, is_index, 
@@ -142,7 +142,7 @@
       #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
       #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
       #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, 
-      #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
       #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
@@ -194,8 +194,8 @@
       <if test="actiPosterUrl != null">
         acti_poster_url,
       </if>
-      <if test="state != null">
-        state,
+      <if test="status != null">
+        status,
       </if>
       <if test="createTime != null">
         create_time,
@@ -283,8 +283,8 @@
       <if test="actiPosterUrl != null">
         #{actiPosterUrl,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -381,8 +381,8 @@
       <if test="record.actiPosterUrl != null">
         acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -447,7 +447,7 @@
       acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
       acti_number = #{record.actiNumber,jdbcType=INTEGER},
       acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
-      state = #{record.state,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_account = #{record.createAccount,jdbcType=VARCHAR},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -508,8 +508,8 @@
       <if test="actiPosterUrl != null">
         acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -571,7 +571,7 @@
       acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
       acti_number = #{actiNumber,jdbcType=INTEGER},
       acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
-      state = #{state,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_account = #{createAccount,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

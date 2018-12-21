@@ -50,7 +50,7 @@ public class Activity extends Page implements Serializable {
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
     @ApiModelProperty(value = "活动状态")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "活动发布时间")
     private String createTime;
     @ApiModelProperty(value = "活动创建人")
@@ -188,12 +188,12 @@ public class Activity extends Page implements Serializable {
         this.actiPosterUrl = actiPosterUrl;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getCreateTime() {

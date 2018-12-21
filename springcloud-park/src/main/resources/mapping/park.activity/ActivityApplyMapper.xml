@@ -11,8 +11,8 @@
       tp.age as "age",                                                  <!--年龄-->
       tp.company as "company",                                          <!--公司-->
       tp.post as "post",                                                <!--岗位-->
-      ta.sign_state as "signState",                                     <!--签到状态-->
-      ta.apply_state as "applyState",                                   <!--报名状态-->
+      ta.sign_status as "signStatus",                                     <!--签到状态-->
+      ta.apply_status as "applyStatus",                                   <!--报名状态-->
       ta.activity_Id as "activityId",                                   <!--活动ID-->
       date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",   <!--报名时间-->
        date_format(ta.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime",   <!--报名时间-->
@@ -27,8 +27,8 @@
         <if test="activityId !=null and activityId !='' ">
             and ta.activity_id=#{activityId}
         </if>
-        <if test="applyState !=null and applyState !='' ">
-            and ta.apply_state = #{applyState}
+        <if test="applyStatus !=null and applyStatus !='' ">
+            and ta.apply_status = #{applyStatus}
         </if>
    </select>
 </mapper>

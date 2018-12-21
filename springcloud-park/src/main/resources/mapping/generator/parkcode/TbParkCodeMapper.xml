@@ -7,7 +7,7 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="code_value" jdbcType="VARCHAR" property="codeValue" />
     <result column="code_name" jdbcType="VARCHAR" property="codeName" />
-    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, group_id, group_name, code_value, code_name, state, create_account, create_time, 
+    id, group_id, group_name, code_value, code_name, status, create_account, create_time, 
     update_account, update_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parkcode.entity.TbParkCodeCriteria" resultMap="BaseResultMap">
@@ -107,11 +107,11 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.parkcode.entity.TbParkCode">
     insert into tb_park_code (id, group_id, group_name, 
-      code_value, code_name, state, 
+      code_value, code_name, status, 
       create_account, create_time, update_account, 
       update_time)
     values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
-      #{codeValue,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, #{state,jdbcType=VARCHAR}, 
+      #{codeValue,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
@@ -133,8 +133,8 @@
       <if test="codeName != null">
         code_name,
       </if>
-      <if test="state != null">
-        state,
+      <if test="status != null">
+        status,
       </if>
       <if test="createAccount != null">
         create_account,
@@ -165,8 +165,8 @@
       <if test="codeName != null">
         #{codeName,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="createAccount != null">
         #{createAccount,jdbcType=VARCHAR},
@@ -206,8 +206,8 @@
       <if test="record.codeName != null">
         code_name = #{record.codeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.createAccount != null">
         create_account = #{record.createAccount,jdbcType=VARCHAR},
@@ -233,7 +233,7 @@
       group_name = #{record.groupName,jdbcType=VARCHAR},
       code_value = #{record.codeValue,jdbcType=VARCHAR},
       code_name = #{record.codeName,jdbcType=VARCHAR},
-      state = #{record.state,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       create_account = #{record.createAccount,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_account = #{record.updateAccount,jdbcType=VARCHAR},
@@ -257,8 +257,8 @@
       <if test="codeName != null">
         code_name = #{codeName,jdbcType=VARCHAR},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="createAccount != null">
         create_account = #{createAccount,jdbcType=VARCHAR},
@@ -281,7 +281,7 @@
       group_name = #{groupName,jdbcType=VARCHAR},
       code_value = #{codeValue,jdbcType=VARCHAR},
       code_name = #{codeName,jdbcType=VARCHAR},
-      state = #{state,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       create_account = #{createAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_account = #{updateAccount,jdbcType=VARCHAR},

@@ -132,8 +132,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             //用户信息已存在
             if(existApplyFlag){
                 //更新报名状态为报名成功   0：取消报名  1：报名成功
-                String state="1";
-                updateApplyState(activityId, account, state);
+                String status="1";
+                updateApplyState(activityId, account, status);
             }else{
                 //新增活动报名信息
                 addApplyInfo(activityId, account);
@@ -166,8 +166,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             //用户信息已存在
             if(existApplyFlag){
                 //更新报名状态为取消报名  0：取消报名  1：报名成功
-                String state="0";
-                updateApplyState(activityId, account, state);
+                String status="0";
+                updateApplyState(activityId, account, status);
             }else{
                 //删除活动报名信息
                 deleteApplyInfo(activityId,account);
@@ -182,14 +182,14 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      * 更新报名状态
      * @param id       活动id
      * @param account  用户账号
-     * @param state    状态
+     * @param status    状态
      */
     @ServiceLog(doAction = "更新报名状态")
-    private void updateApplyState(String id, String account, String state) {
+    private void updateApplyState(String id, String account, String status) {
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
         example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id);
         TbActivityApply tbActivityApply=new TbActivityApply();
-        tbActivityApply.setApplyState(state);
+        tbActivityApply.setApplyStatus(status);
         tbActivityApplyMapper.updateByExampleSelective(tbActivityApply, example);
     }
 
@@ -214,13 +214,13 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      * 是否已报名或取消报名
      * @param id        活动id
      * @param account   用户账号
-     * @param state     报名状态   0：取消报名，1：报名成功
+     * @param status     报名状态   0：取消报名，1：报名成功
      * @return
      */
     @ServiceLog(doAction = "是否已存在报名或取消报名信息")
-    private boolean  existApplyOrCancelApply(String id, String account,String state) {
+    private boolean  existApplyOrCancelApply(String id, String account,String status) {
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
-        example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id).andApplyStateEqualTo(state);
+        example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id).andApplyStatusEqualTo(status);
         long applyInfoNum = tbActivityApplyMapper.countByExample(example);
         if(applyInfoNum>0){
             return true;
@@ -248,10 +248,10 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         activityApply.setApplyTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //报名状态   0：取消报名，1：报名成功
         String applyState="1";
-        activityApply.setApplyState(applyState);
+        activityApply.setApplyStatus(applyState);
         //签到状态  0：未签到，1：已签到
         String notSignedIn="0";
-        activityApply.setSignState(notSignedIn);
+        activityApply.setSignStatus(notSignedIn);
         tbActivityApplyMapper.insertSelective(activityApply);
     }
 
@@ -288,7 +288,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         example.createCriteria().andActivityIdEqualTo(id).andAccountEqualTo(account);
         TbActivityApply activityApply=new TbActivityApply();
         //报名状态设置为"0"，取消报名
-        activityApply.setApplyState("0");
+        activityApply.setApplyStatus("0");
         tbActivityApplyMapper.updateByExampleSelective(activityApply, example);
     }
 
@@ -403,11 +403,11 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             if(StringUtils.equals(activityApply.getSignType(),ACTIVITY_APPLYED_SIGN_CODE)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXPEPTION);
             }
-            if(!StringUtils.equals(activityApply.getApplyState(),ACTIVITY_APPLYED_STATED)){
+            if(!StringUtils.equals(activityApply.getApplyStatus(),ACTIVITY_APPLYED_STATED)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXPEPTION);
             }else{
                 activityApply.setSignType("0");
-                activityApply.setSignState("1");
+                activityApply.setSignStatus("1");
                 activityApply.setSignTime(new Date());
                 i = tbActivityApplyMapper.updateByPrimaryKeySelective(activityApply);
             }
@@ -421,8 +421,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         int pageSize = rows==0?15:rows;
         com.github.pagehelper.Page<Object> objects= PageHelper.startPage(page, pageSize, true);
         //前端查询有效报名状态数据
-        String state = "1";
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,state);
+        String status = "1";
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,status);
         return new PaginationData(activityApplyList,objects.getTotal());
     }
 

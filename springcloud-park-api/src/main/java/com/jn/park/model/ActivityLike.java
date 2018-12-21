@@ -25,7 +25,7 @@ public class ActivityLike implements Serializable {
     @ApiModelProperty(value = "点赞时间")
     private Date likeTime;
     @ApiModelProperty(value = "点赞状态(0点赞 1点赞取消)")
-    private String state;
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -61,12 +61,11 @@ public class ActivityLike implements Serializable {
         this.likeTime = likeTime;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+    public void setStatus(String status) {
+        this.status = status;
     }
-
 }

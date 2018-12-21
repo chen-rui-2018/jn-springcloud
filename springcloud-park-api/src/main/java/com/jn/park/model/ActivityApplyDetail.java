@@ -34,9 +34,9 @@ public class ActivityApplyDetail implements Serializable {
     @ApiModelProperty(value = "头像地址")
     private String avatar;
     @ApiModelProperty(value = "签到状态")
-    private String signState;
+    private String signStatus;
     @ApiModelProperty(value = "报名状态")
-    private String applyState;
+    private String applyStatus;
     @ApiModelProperty(value = "报名时间")
     private String applyTime;
     @ApiModelProperty(value = "签到时间")
@@ -115,28 +115,12 @@ public class ActivityApplyDetail implements Serializable {
         this.avatar = avatar;
     }
 
-    public String getSignState() {
-        return signState;
-    }
-
-    public void setSignState(String signState) {
-        this.signState = signState;
-    }
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getApplyState() {
-        return applyState;
-    }
-
-    public void setApplyState(String applyState) {
-        this.applyState = applyState;
     }
 
     public String getApplyTime() {
@@ -153,5 +137,21 @@ public class ActivityApplyDetail implements Serializable {
 
     public void setSignTime(String signTime) {
         this.signTime = signTime;
+    }
+
+    public String getSignStatus() {
+        return signStatus;
+    }
+
+    public void setSignStatus(String signStatus) {
+        this.signStatus = signStatus;
+    }
+
+    public String getApplyStatus() {
+        return applyStatus;
+    }
+
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus;
     }
 }

@@ -12,7 +12,7 @@ public class TbParkLike implements Serializable {
 
     private Date likeTime;
 
-    private String state;
+    private String status;
 
     private static final long serialVersionUID = 1L;
 
@@ -48,12 +48,12 @@ public class TbParkLike implements Serializable {
         this.likeTime = likeTime;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class TbParkLike implements Serializable {
             && (this.getLikeParentId() == null ? other.getLikeParentId() == null : this.getLikeParentId().equals(other.getLikeParentId()))
             && (this.getLikeAccount() == null ? other.getLikeAccount() == null : this.getLikeAccount().equals(other.getLikeAccount()))
             && (this.getLikeTime() == null ? other.getLikeTime() == null : this.getLikeTime().equals(other.getLikeTime()))
-            && (this.getState() == null ? other.getState() == null : this.getState().equals(other.getState()));
+            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class TbParkLike implements Serializable {
         result = prime * result + ((getLikeParentId() == null) ? 0 : getLikeParentId().hashCode());
         result = prime * result + ((getLikeAccount() == null) ? 0 : getLikeAccount().hashCode());
         result = prime * result + ((getLikeTime() == null) ? 0 : getLikeTime().hashCode());
-        result = prime * result + ((getState() == null) ? 0 : getState().hashCode());
+        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         return result;
     }
 
@@ -97,7 +97,7 @@ public class TbParkLike implements Serializable {
         sb.append(", likeParentId=").append(likeParentId);
         sb.append(", likeAccount=").append(likeAccount);
         sb.append(", likeTime=").append(likeTime);
-        sb.append(", state=").append(state);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

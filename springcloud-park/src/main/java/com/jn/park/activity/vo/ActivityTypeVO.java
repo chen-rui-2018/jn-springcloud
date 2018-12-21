@@ -32,7 +32,7 @@ public class ActivityTypeVO implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private String updateTime;
     @ApiModelProperty(value = "状态(0：无效，1：有效，-1：删除)")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "活动类型模板列表")
     private List<String> templateList;
     @ApiModelProperty(value = "拥有模板数量")
@@ -87,14 +87,6 @@ public class ActivityTypeVO implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
-    }
-
     public List<String> getTemplateList() {
         return templateList;
     }
@@ -111,6 +103,14 @@ public class ActivityTypeVO implements Serializable {
         this.fileTotal = fileTotal;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "ActivityTypeVO{" +
@@ -120,7 +120,7 @@ public class ActivityTypeVO implements Serializable {
                 ", createTime='" + createTime + '\'' +
                 ", updateAccount='" + updateAccount + '\'' +
                 ", updateTime='" + updateTime + '\'' +
-                ", state='" + state + '\'' +
+                ", status='" + status + '\'' +
                 ", templateList=" + templateList +
                 ", fileTotal='" + fileTotal + '\'' +
                 '}';

@@ -25,9 +25,9 @@ public class ActivityApplyVO implements Serializable {
     @ApiModelProperty(value = "申请时间")
     private Date applyTime;
     @ApiModelProperty(value = "申请状态")
-    private String applyState;
+    private String applyStatus;
     @ApiModelProperty(value = "签到状态")
-    private String signState;
+    private String signStatus;
     @ApiModelProperty(value = "签到时间")
     private Date signTime;
     @ApiModelProperty(value = "签到方式(0：app签到，1：现场签到)")
@@ -69,20 +69,20 @@ public class ActivityApplyVO implements Serializable {
         this.applyTime = applyTime;
     }
 
-    public String getApplyState() {
-        return applyState;
+    public String getApplyStatus() {
+        return applyStatus;
     }
 
-    public void setApplyState(String applyState) {
-        this.applyState = applyState;
+    public void setApplyStatus(String applyStatus) {
+        this.applyStatus = applyStatus;
     }
 
-    public String getSignState() {
-        return signState;
+    public String getSignStatus() {
+        return signStatus;
     }
 
-    public void setSignState(String signState) {
-        this.signState = signState;
+    public void setSignStatus(String signStatus) {
+        this.signStatus = signStatus;
     }
 
     public Date getSignTime() {
@@ -116,8 +116,8 @@ public class ActivityApplyVO implements Serializable {
                 ", activityId='" + activityId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", applyTime=" + applyTime +
-                ", applyState='" + applyState + '\'' +
-                ", signState='" + signState + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                ", signStatus='" + signStatus + '\'' +
                 ", signTime=" + signTime +
                 ", signType='" + signType + '\'' +
                 ", applyNum='" + applyNum + '\'' +

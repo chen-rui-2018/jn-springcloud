@@ -2,9 +2,7 @@ package com.cn.park.service;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityContentBean;
-import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import org.junit.Before;
@@ -66,13 +64,8 @@ public class AcitvityTest {
 
     @Test
     public void selectActivityList(){
-        String actiType = "";
-        String status = "";
-        String actiName = "";
-        String isIndex = "";
-        Integer page = 1;
-        Integer rows = 15;
-        PaginationData paginationData = activityService.selectActivityList(actiType,status,actiName,isIndex,page,rows);
+        ActivityParment activityParment = new ActivityParment();
+        PaginationData paginationData = activityService.selectActivityList(activityParment);
         List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }
@@ -91,7 +84,7 @@ public class AcitvityTest {
 
     @Test
     public void insertOrUpdateActivity(){
-        ActivityContentBean activityContent = new ActivityContentBean();
+        ActivityContent activityContent = new ActivityContent();
         activityContent.setActiName("活动名称");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
         activityContent.setActiStartTime("2018-12-30 18:00:00");
@@ -130,9 +123,8 @@ public class AcitvityTest {
 
     @Test
     public void applyActivityList(){
-        Integer page = 1;
-        Integer rows = 15;
-        PaginationData paginationData = activityApplyService.applyActivityList(activityId,true, page,rows);
+        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
         List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }

@@ -22,6 +22,7 @@ import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
+import com.jn.park.model.ActivityApplyParment;
 import com.jn.park.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -326,18 +327,18 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
 
     /**
      * 查询表名信息列表（后台）
-     * @param activityId
-     * @param page  不分页传null
+     * @param activityApplyParment
+     * @param needPage  是否需要分页
      * @return
      */
     @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public PaginationData applyActivityList(String activityId,Boolean needPage, Integer page,Integer rows){
+    public PaginationData applyActivityList(ActivityApplyParment activityApplyParment, Boolean needPage){
         com.github.pagehelper.Page<Object> objects=null;
         if(needPage){
-            objects = PageHelper.startPage(page == null?1:page , rows == null ? 15 : rows, true);
+            objects = PageHelper.startPage(activityApplyParment.getPage() ,activityApplyParment.getRows()==0?15:activityApplyParment.getRows(), true);
         }
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,null);
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityApplyParment.getActivityId(),null);
         return new PaginationData(activityApplyList,objects==null?0:objects.getTotal());
     }
 

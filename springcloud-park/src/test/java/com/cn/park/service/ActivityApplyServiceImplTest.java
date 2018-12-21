@@ -3,6 +3,7 @@ package com.cn.park.service;
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.model.ActivityApplyParment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -108,7 +109,8 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void findApplyActivityList() {
-        PaginationData data =  activityApplyService.applyActivityList(activityId,true,1,15);
+        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
+        PaginationData data =  activityApplyService.applyActivityList(activityApplyParment,true);
         assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
 
     }

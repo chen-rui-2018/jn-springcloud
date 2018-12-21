@@ -25,7 +25,7 @@ public class ActivityLikeVO implements Serializable {
     @ApiModelProperty(value = "点赞时间")
     private Date likeTime;
     @ApiModelProperty(value = "点赞状态(0点赞 1点赞取消)")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "点赞数")
     private String likeAccount;
 
@@ -63,20 +63,20 @@ public class ActivityLikeVO implements Serializable {
         this.likeTime = likeTime;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
-    }
-
     public String getLikeAccount() {
         return likeAccount;
     }
 
     public void setLikeAccount(String likeAccount) {
         this.likeAccount = likeAccount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ActivityLikeVO implements Serializable {
                 ", activityId='" + activityId + '\'' +
                 ", likeUserId='" + likeUserId + '\'' +
                 ", likeTime=" + likeTime +
-                ", state='" + state + '\'' +
+                ", status='" + status + '\'' +
                 ", likeAccount='" + likeAccount + '\'' +
                 '}';
     }

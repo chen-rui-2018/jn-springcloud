@@ -13,8 +13,8 @@ import java.math.BigDecimal;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityContentBean", description = "活动基本信息")
-public class ActivityContentBean extends Page implements Serializable {
+@ApiModel(value = "ActivityContent", description = "活动基本信息")
+public class ActivityContent extends Page implements Serializable {
     @ApiModelProperty(value = "活动ID(新增时传空，修改时必传)")
     private String id;
     @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值)")

@@ -25,7 +25,7 @@ public class CommentVO implements Serializable {
     @ApiModelProperty(value = "点评点赞数")
     private Integer likeNum;
     @ApiModelProperty(value = "点评状态")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "点评类型(0：活动点评，1：服务点评...)")
     private String comType;
     @ApiModelProperty(value = "点评人头像)")
@@ -75,12 +75,12 @@ public class CommentVO implements Serializable {
         this.likeNum = likeNum;
     }
 
-    public String getState() {
-        return state;
+    public String getStatus() {
+        return status;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getComType() {
@@ -115,7 +115,7 @@ public class CommentVO implements Serializable {
                 ", comAccount='" + comAccount + '\'' +
                 ", comTime='" + comTime + '\'' +
                 ", likeNum=" + likeNum +
-                ", state='" + state + '\'' +
+                ", status='" + status + '\'' +
                 ", comType='" + comType + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", commentNum='" + commentNum + '\'' +

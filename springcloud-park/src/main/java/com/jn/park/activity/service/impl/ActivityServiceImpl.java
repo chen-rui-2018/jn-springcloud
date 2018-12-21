@@ -13,12 +13,9 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
-import com.jn.park.model.ActivityContentBean;
-import com.jn.park.model.ActivitySlim;
+import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.Activity;
-import com.jn.park.model.ActivityDetail;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,15 +71,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "查询活动列表")
     @Override
-    public PaginationData selectActivityList(String actiType,String status,String actiName,String isIndex,Integer page,Integer rows){
-        Page<Object> objects = PageHelper.startPage(page == null?1:page,rows == null?15:rows);
-        ActivityContentBean activity = new ActivityContentBean();
-        activity.setActiType(actiType);
-        activity.setStatus(status);
-        activity.setActiName(actiName);
-        activity.setIsIndex(isIndex);
-        activity.setPage(page == null?1:page);
-        activity.setRows(rows == null?15:rows);
+    public PaginationData selectActivityList(ActivityParment activityParment){
+        Page<Object> objects = PageHelper.startPage(activityParment.getPage(),activityParment.getRows()==0?15:activityParment.getRows());
+        ActivityContent activity = new ActivityContent();
+        BeanUtils.copyProperties(activityParment,activity);
         List<Activity> activities = activityMapper.selectActivityList(activity);
         PaginationData data = new PaginationData(activities, objects.getTotal());
         return data;
@@ -122,7 +114,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "新增/修改活动")
     @Override
-    public int insertOrUpdateActivity(ActivityContentBean activity, String account){
+    public int insertOrUpdateActivity(ActivityContent activity, String account){
         if(null == activity.getActiOrder()){
             //如果排序为空，默认值为0.
             activity.setActiOrder(0);

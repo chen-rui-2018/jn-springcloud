@@ -6,9 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityContentBean;
-import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -67,14 +65,8 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "获取活动列表")
     @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectActivityList")
-    public Result selectActivityList(
-            @ApiParam(name="actiType",value = "活动分类ID")@RequestParam(required = false) String actiType,
-            @ApiParam(name="status",value = "活动状态")@RequestParam(required = false) String status,
-            @ApiParam(name="actiName",value = "活动名")@RequestParam(required = false) String actiName,
-            @ApiParam(name="isIndex",value = "是否首页展示")@RequestParam(required = false) String isIndex,
-            @ApiParam(name="page",value = "当前页数。不传默认查询第一页")@RequestParam(required = false) Integer page,
-            @ApiParam(name="rows",value = "每页行数。不传默认为15条")@RequestParam(required = false) Integer rows) {
-        PaginationData paginationData = activityService.selectActivityList(actiType,status,actiName,isIndex,page,rows);
+    public Result selectActivityList(@RequestBody @Validated ActivityParment activityParment) {
+        PaginationData paginationData = activityService.selectActivityList(activityParment);
         return new Result(paginationData);
     }
 
@@ -104,7 +96,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "添加/修改活动")
     @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/insterOrUpdateActivity")
-    public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContentBean activityContent) {
+    public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContent activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
         if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getStatus())) {
             Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
@@ -160,12 +152,9 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动报名列表")
     @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/applyActivityList")
-    public Result applyActivityList(
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId,
-            @ApiParam(name="page",value = "当前页数。不传默认查询第一页")@RequestParam(required = false) Integer page,
-            @ApiParam(name="rows",value = "每页行数。不传默认为15条")@RequestParam(required = false) Integer rows) {
-        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        PaginationData paginationData = activityApplyService.applyActivityList(activityId,true, page,rows);
+    public Result applyActivityList(@RequestBody @Validated ActivityApplyParment activityApplyParment) {
+        Assert.notNull(activityApplyParment.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
         return new Result(paginationData);
     }
 
@@ -199,20 +188,18 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "数据导出")
     @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
-    public void exportDataExcel(@ApiParam(value = "活动id",required = true) @RequestParam String activityId ,
-                                @ApiParam(value = "导出excel导出的字段别名 比如：name,phone,sex ...多个字段以逗号(,)分隔",required = true) @RequestParam String exportColName,
-                                @ApiParam(value = "excel导出字段的标题 比如：姓名,手机,性别...多个字段以逗号(,)分隔",required = true) @RequestParam String exportTitle,
+    public void exportDataExcel(@RequestBody @Validated ActivityApplyParment activityApplyParment,
                                 HttpServletResponse response){
-        Assert.notNull(activityId, "活动id不能为空");
-        Assert.notNull(exportColName, "excel导出的字段别名不能为空");
-        Assert.notNull(exportTitle, "excel导出字段的标题不能为空");
+        Assert.notNull(activityApplyParment.getActivityId(), "活动id不能为空");
+        Assert.notNull(activityApplyParment.getExportColName(), "excel导出的字段别名不能为空");
+        Assert.notNull(activityApplyParment.getExportTitle(), "excel导出字段的标题不能为空");
         //下载文件名
         String codedFileName="活动报名人";
         //导出方式 1:xls    2:xlsx
         int exportAs=2;
-        PaginationData paginationData = activityApplyService.applyActivityList(activityId, false,null,null);
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment, false);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
-        exportDataExcel.singleRowHeaderExport(codedFileName,exportColName,exportTitle,exportAs,activityApplyDetails,response);
+        exportDataExcel.singleRowHeaderExport(codedFileName,activityApplyParment.getExportColName(),activityApplyParment.getExportTitle(),exportAs,activityApplyDetails,response);
     }
 
 }

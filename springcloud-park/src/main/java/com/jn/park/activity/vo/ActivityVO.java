@@ -44,7 +44,7 @@ public class ActivityVO implements Serializable {
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
     @ApiModelProperty(value = "活动状态")
-    private String state;
+    private String status;
     @ApiModelProperty(value = "活动发布时间")
     private Date createTime;
     @ApiModelProperty(value = "活动创建人ID")
@@ -176,14 +176,6 @@ public class ActivityVO implements Serializable {
         this.actiPosterUrl = actiPosterUrl == null ? null : actiPosterUrl.trim();
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state == null ? null : state.trim();
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -280,6 +272,14 @@ public class ActivityVO implements Serializable {
         this.actiOrder = actiOrder;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "ActivityVO{" +
@@ -296,7 +296,7 @@ public class ActivityVO implements Serializable {
                 ", actiOrganizer='" + actiOrganizer + '\'' +
                 ", actiNumber=" + actiNumber +
                 ", actiPosterUrl='" + actiPosterUrl + '\'' +
-                ", state='" + state + '\'' +
+                ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", createUserId='" + createUserId + '\'' +
                 ", updateTime=" + updateTime +

@@ -1,8 +1,9 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityContentBean;
+import com.jn.park.model.ActivityContent;
 import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.ActivityParment;
 
 /**
  * 活动
@@ -15,15 +16,10 @@ public interface ActivityService {
 
     /**
      * 查询后台管理活动列表
-     * @param actiType
-     * @param status
-     * @param actiName
-     * @param isIndex
-     * @param page
-     * @param rows
+     * @param activityParment
      * @return
      */
-    PaginationData selectActivityList(String actiType,String status,String actiName,String isIndex,Integer page,Integer rows);
+    PaginationData selectActivityList(ActivityParment activityParment);
 
     /**
      * 查询活动详情
@@ -46,7 +42,7 @@ public interface ActivityService {
      * @param account 当前登录用户
      * @return
      */
-    int insertOrUpdateActivity(ActivityContentBean activity, String account);
+    int insertOrUpdateActivity(ActivityContent activity, String account);
 
     /**
      * 删除草稿活动数据

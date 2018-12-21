@@ -48,11 +48,13 @@
     <select id="getCommentInfo" resultType="com.jn.park.model.Comment">
         select
         t1.id as "id"                                                     <!--点评id-->
+        ,t1.root_id as "rootId"                                           <!--根节点id(活动id/服务id)-->
         ,t1.p_id as "pId"                                                 <!--点评父ID(点评ID/活动ID)-->
         ,t1.com_account as "comAccount"                                   <!--点评人-->
+        ,t1.parent_account as "parentAccount"                             <!--被点评人-->
         ,date_format(t1.com_time, '%Y-%m-%d %H:%i:%s') as "comTime"       <!--点评时间-->
         ,t1.like_num as "likeNum"                                         <!--点评点赞数-->
-        ,t1.status as "status"                                              <!--点评状态-->
+        ,t1.status as "status"                                            <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
         ,case
@@ -62,15 +64,19 @@
           then t3.avatar
           else t2.avatar
         end as "avatar"                                                  <!--点评人头像-->
-        ,(select count(1) from tb_comment tt2
-        where tt2.p_id=t1.id) as "childNum"                              <!--当前评论的子节点个数-->
         from tb_comment t1
         left join tb_user_person t2
         on t1.com_account =t2.account
         left join tb_user_company t3
         on t1.com_account=t3.account
+        left join tb_comment t4
+        on t1.id=t4.p_id
         where  1=1
-        and t1.p_id=#{id}
+        and t1.root_id=#{activityId}
+        and t1.p_id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
         and t1.status='1'                                                 <!--有效点评-->
         order by t1.com_time
     </select>

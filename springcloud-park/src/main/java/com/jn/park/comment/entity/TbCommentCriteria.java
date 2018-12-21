@@ -175,6 +175,76 @@ public class TbCommentCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRootIdIsNull() {
+            addCriterion("root_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIsNotNull() {
+            addCriterion("root_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdEqualTo(String value) {
+            addCriterion("root_id =", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotEqualTo(String value) {
+            addCriterion("root_id <>", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThan(String value) {
+            addCriterion("root_id >", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdGreaterThanOrEqualTo(String value) {
+            addCriterion("root_id >=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThan(String value) {
+            addCriterion("root_id <", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLessThanOrEqualTo(String value) {
+            addCriterion("root_id <=", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdLike(String value) {
+            addCriterion("root_id like", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotLike(String value) {
+            addCriterion("root_id not like", value, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdIn(List<String> values) {
+            addCriterion("root_id in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotIn(List<String> values) {
+            addCriterion("root_id not in", values, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdBetween(String value1, String value2) {
+            addCriterion("root_id between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
+
+        public Criteria andRootIdNotBetween(String value1, String value2) {
+            addCriterion("root_id not between", value1, value2, "rootId");
+            return (Criteria) this;
+        }
+
         public Criteria andPIdIsNull() {
             addCriterion("p_id is null");
             return (Criteria) this;
@@ -242,6 +312,76 @@ public class TbCommentCriteria {
 
         public Criteria andPIdNotBetween(String value1, String value2) {
             addCriterion("p_id not between", value1, value2, "pId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountIsNull() {
+            addCriterion("parent_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountIsNotNull() {
+            addCriterion("parent_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountEqualTo(String value) {
+            addCriterion("parent_account =", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountNotEqualTo(String value) {
+            addCriterion("parent_account <>", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountGreaterThan(String value) {
+            addCriterion("parent_account >", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("parent_account >=", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountLessThan(String value) {
+            addCriterion("parent_account <", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountLessThanOrEqualTo(String value) {
+            addCriterion("parent_account <=", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountLike(String value) {
+            addCriterion("parent_account like", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountNotLike(String value) {
+            addCriterion("parent_account not like", value, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountIn(List<String> values) {
+            addCriterion("parent_account in", values, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountNotIn(List<String> values) {
+            addCriterion("parent_account not in", values, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountBetween(String value1, String value2) {
+            addCriterion("parent_account between", value1, value2, "parentAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andParentAccountNotBetween(String value1, String value2) {
+            addCriterion("parent_account not between", value1, value2, "parentAccount");
             return (Criteria) this;
         }
 
@@ -435,73 +575,73 @@ public class TbCommentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andStateIsNull() {
-            addCriterion("state is null");
+        public Criteria andStatusIsNull() {
+            addCriterion("status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStateIsNotNull() {
-            addCriterion("state is not null");
+        public Criteria andStatusIsNotNull() {
+            addCriterion("status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStateEqualTo(String value) {
-            addCriterion("state =", value, "state");
+        public Criteria andStatusEqualTo(String value) {
+            addCriterion("status =", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotEqualTo(String value) {
-            addCriterion("state <>", value, "state");
+        public Criteria andStatusNotEqualTo(String value) {
+            addCriterion("status <>", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateGreaterThan(String value) {
-            addCriterion("state >", value, "state");
+        public Criteria andStatusGreaterThan(String value) {
+            addCriterion("status >", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateGreaterThanOrEqualTo(String value) {
-            addCriterion("state >=", value, "state");
+        public Criteria andStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("status >=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateLessThan(String value) {
-            addCriterion("state <", value, "state");
+        public Criteria andStatusLessThan(String value) {
+            addCriterion("status <", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateLessThanOrEqualTo(String value) {
-            addCriterion("state <=", value, "state");
+        public Criteria andStatusLessThanOrEqualTo(String value) {
+            addCriterion("status <=", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateLike(String value) {
-            addCriterion("state like", value, "state");
+        public Criteria andStatusLike(String value) {
+            addCriterion("status like", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotLike(String value) {
-            addCriterion("state not like", value, "state");
+        public Criteria andStatusNotLike(String value) {
+            addCriterion("status not like", value, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateIn(List<String> values) {
-            addCriterion("state in", values, "state");
+        public Criteria andStatusIn(List<String> values) {
+            addCriterion("status in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotIn(List<String> values) {
-            addCriterion("state not in", values, "state");
+        public Criteria andStatusNotIn(List<String> values) {
+            addCriterion("status not in", values, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateBetween(String value1, String value2) {
-            addCriterion("state between", value1, value2, "state");
+        public Criteria andStatusBetween(String value1, String value2) {
+            addCriterion("status between", value1, value2, "status");
             return (Criteria) this;
         }
 
-        public Criteria andStateNotBetween(String value1, String value2) {
-            addCriterion("state not between", value1, value2, "state");
+        public Criteria andStatusNotBetween(String value1, String value2) {
+            addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
 

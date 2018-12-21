@@ -53,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        parkCode
+                        comment
                     </contexts>
                     <tableNames>
-                        tb_park_code
+                        tb_comment
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

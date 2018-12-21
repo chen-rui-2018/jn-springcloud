@@ -3,11 +3,13 @@
 <mapper namespace="com.jn.park.comment.dao.TbCommentMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.comment.entity.TbComment">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="root_id" jdbcType="VARCHAR" property="rootId" />
     <result column="p_id" jdbcType="VARCHAR" property="pId" />
+    <result column="parent_account" jdbcType="VARCHAR" property="parentAccount" />
     <result column="com_account" jdbcType="VARCHAR" property="comAccount" />
     <result column="com_time" jdbcType="TIMESTAMP" property="comTime" />
     <result column="like_num" jdbcType="INTEGER" property="likeNum" />
-    <result column="state" jdbcType="VARCHAR" property="state" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
     <result column="com_content" jdbcType="VARCHAR" property="comContent" />
   </resultMap>
@@ -70,7 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, p_id, com_account, com_time, like_num, state, com_type, com_content
+    id, root_id, p_id, parent_account, com_account, com_time, like_num, status, com_type, 
+    com_content
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
@@ -103,12 +106,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.comment.entity.TbComment">
-    insert into tb_comment (id, p_id, com_account, 
-      com_time, like_num, state, 
-      com_type, com_content)
-    values (#{id,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, 
-      #{comTime,jdbcType=TIMESTAMP}, #{likeNum,jdbcType=INTEGER}, #{state,jdbcType=VARCHAR}, 
-      #{comType,jdbcType=VARCHAR}, #{comContent,jdbcType=VARCHAR})
+    insert into tb_comment (id, root_id, p_id, 
+      parent_account, com_account, com_time, 
+      like_num, status, com_type, 
+      com_content)
+    values (#{id,jdbcType=VARCHAR}, #{rootId,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, 
+      #{parentAccount,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
+      #{likeNum,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
+      #{comContent,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment
@@ -116,8 +121,14 @@
       <if test="id != null">
         id,
       </if>
+      <if test="rootId != null">
+        root_id,
+      </if>
       <if test="pId != null">
         p_id,
+      </if>
+      <if test="parentAccount != null">
+        parent_account,
       </if>
       <if test="comAccount != null">
         com_account,
@@ -128,8 +139,8 @@
       <if test="likeNum != null">
         like_num,
       </if>
-      <if test="state != null">
-        state,
+      <if test="status != null">
+        status,
       </if>
       <if test="comType != null">
         com_type,
@@ -142,8 +153,14 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="rootId != null">
+        #{rootId,jdbcType=VARCHAR},
+      </if>
       <if test="pId != null">
         #{pId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccount != null">
+        #{parentAccount,jdbcType=VARCHAR},
       </if>
       <if test="comAccount != null">
         #{comAccount,jdbcType=VARCHAR},
@@ -154,8 +171,8 @@
       <if test="likeNum != null">
         #{likeNum,jdbcType=INTEGER},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="comType != null">
         #{comType,jdbcType=VARCHAR},
@@ -177,8 +194,14 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.rootId != null">
+        root_id = #{record.rootId,jdbcType=VARCHAR},
+      </if>
       <if test="record.pId != null">
         p_id = #{record.pId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentAccount != null">
+        parent_account = #{record.parentAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.comAccount != null">
         com_account = #{record.comAccount,jdbcType=VARCHAR},
@@ -189,8 +212,8 @@
       <if test="record.likeNum != null">
         like_num = #{record.likeNum,jdbcType=INTEGER},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=VARCHAR},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.comType != null">
         com_type = #{record.comType,jdbcType=VARCHAR},
@@ -206,11 +229,13 @@
   <update id="updateByExample" parameterType="map">
     update tb_comment
     set id = #{record.id,jdbcType=VARCHAR},
+      root_id = #{record.rootId,jdbcType=VARCHAR},
       p_id = #{record.pId,jdbcType=VARCHAR},
+      parent_account = #{record.parentAccount,jdbcType=VARCHAR},
       com_account = #{record.comAccount,jdbcType=VARCHAR},
       com_time = #{record.comTime,jdbcType=TIMESTAMP},
       like_num = #{record.likeNum,jdbcType=INTEGER},
-      state = #{record.state,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       com_type = #{record.comType,jdbcType=VARCHAR},
       com_content = #{record.comContent,jdbcType=VARCHAR}
     <if test="_parameter != null">
@@ -220,8 +245,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.comment.entity.TbComment">
     update tb_comment
     <set>
+      <if test="rootId != null">
+        root_id = #{rootId,jdbcType=VARCHAR},
+      </if>
       <if test="pId != null">
         p_id = #{pId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentAccount != null">
+        parent_account = #{parentAccount,jdbcType=VARCHAR},
       </if>
       <if test="comAccount != null">
         com_account = #{comAccount,jdbcType=VARCHAR},
@@ -232,8 +263,8 @@
       <if test="likeNum != null">
         like_num = #{likeNum,jdbcType=INTEGER},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=VARCHAR},
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="comType != null">
         com_type = #{comType,jdbcType=VARCHAR},
@@ -246,11 +277,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.comment.entity.TbComment">
     update tb_comment
-    set p_id = #{pId,jdbcType=VARCHAR},
+    set root_id = #{rootId,jdbcType=VARCHAR},
+      p_id = #{pId,jdbcType=VARCHAR},
+      parent_account = #{parentAccount,jdbcType=VARCHAR},
       com_account = #{comAccount,jdbcType=VARCHAR},
       com_time = #{comTime,jdbcType=TIMESTAMP},
       like_num = #{likeNum,jdbcType=INTEGER},
-      state = #{state,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       com_type = #{comType,jdbcType=VARCHAR},
       com_content = #{comContent,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}

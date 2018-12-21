@@ -19,17 +19,17 @@ public interface CommentService {
 
     /**
      * 活动评论点赞
-     * @param id         点评ID/活动ID
-     * @param account    用户账号/点评人
+     * @param activityId  点评ID/活动ID
+     * @param account     用户账号/点评人
      */
-    void commentActivityLike(String  id,String account);
+    void commentActivityLike(String  activityId,String account);
 
     /**
      * 活动评论取消点赞
-     * @param id         点评ID/活动ID
-     * @param account    用户账号/点评人
+     * @param activityId  点评ID/活动ID
+     * @param account     用户账号/点评人
      */
-    void commentActivityCancelLike(String id,String account);
+    void commentActivityCancelLike(String activityId,String account);
 
     /**
      * 更新点赞状态
@@ -41,8 +41,8 @@ public interface CommentService {
 
     /**
      * 新增点赞信息
-     * @param id       活动id
-     * @param account  用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
      */
-    void addActivityLike(String id, String account);
+    void addActivityLike(String activityId, String account);
 }

@@ -153,7 +153,7 @@ public class CommentServiceImpl implements CommentService {
         TbCommentCriteria example=new TbCommentCriteria();
         //有效点评状态
         String applyState="1";
-        example.createCriteria().andIdEqualTo(id).andStateEqualTo(applyState);
+        example.createCriteria().andIdEqualTo(id).andStatusEqualTo(applyState);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
         if(commentList==null || commentList.size()==0){
             throw new JnSpringCloudException(ActivityExceptionEnum.APPLY_IS_NOT_EXIST);
@@ -198,7 +198,7 @@ public class CommentServiceImpl implements CommentService {
         int likeNum=state.equals(addFlag)?1:-1;
         tbComment.setLikeNum(tbComment.getLikeNum()+likeNum);
         TbCommentCriteria example=new TbCommentCriteria();
-        example.createCriteria().andIdEqualTo(id).andStateEqualTo(applyState);
+        example.createCriteria().andIdEqualTo(id).andStatusEqualTo(applyState);
         tbCommentMapper.updateByExampleSelective(tbComment, example);
     }
 
@@ -212,18 +212,28 @@ public class CommentServiceImpl implements CommentService {
         TbComment tbComment=new TbComment();
         //id
         tbComment.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        //根节点id  活动id/服务id
+        tbComment.setRootId(commentAdd.getRootId());
         //点评父标识（点评ID/活动id）
-        tbComment.setpId(commentAdd.getId());
+        tbComment.setpId(commentAdd.getpId());
         //点评人
         tbComment.setComAccount(account);
+        //点评状态 0:无效  1：有效 新增点评的状态为有效
+        String state="1";
+        tbComment.setStatus(state);
+        //根据点评父id得到被点评人
+        TbCommentCriteria example=new TbCommentCriteria();
+        example.createCriteria().andIdEqualTo(commentAdd.getpId()).andStatusEqualTo(state);
+        List<TbComment> commentList = tbCommentMapper.selectByExample(example);
+        if(commentList!=null && commentList.size()>0){
+            //把被点评信息的点评人设置为当前信息的被点评人
+            tbComment.setParentAccount(commentList.get(0).getComAccount());
+        }
         //点评时间
         tbComment.setComTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //点评获赞数 ,新增点评的获赞数为0
         int num=0;
         tbComment.setLikeNum(num);
-        //点评状态 0:无效  1：有效 新增点评的状态为有效
-        String state="1";
-        tbComment.setState(state);
         //点评类型
         tbComment.setComType(commentAdd.getComType());
         //点评内容

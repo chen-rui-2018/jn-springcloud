@@ -27,10 +27,11 @@ public interface ActivityDetailsMapper {
 
     /**
      * 获取点评信息
-     * @param id 活动id
+     * @param activityId 活动id
+     * @param parentIds  评论id/活动id
      * @return
      */
-    List<Comment>getCommentInfo(@Param("id") String id);
+    List<Comment>getCommentInfo(@Param("activityId") String activityId,@Param("list") List<String> parentIds);
 
     /**
      * 获取活动报名信息

@@ -19,10 +19,14 @@ import java.util.List;
 public class Comment extends Page implements Serializable {
     @ApiModelProperty(value = "点评ID")
     private String id;
+    @ApiModelProperty(value = "根节点id，活动id/服务id")
+    private String rootId;
     @ApiModelProperty(value = "点评父ID(点评ID/活动ID)")
     private String pId;
     @ApiModelProperty(value = "点评人")
     private String comAccount;
+    @ApiModelProperty(value = "被点评人")
+    private  String parentAccount;
     @ApiModelProperty(value = "点评时间")
     private String comTime;
     @ApiModelProperty(value = "点评点赞数")
@@ -50,6 +54,14 @@ public class Comment extends Page implements Serializable {
         this.id = id;
     }
 
+    public String getRootId() {
+        return rootId;
+    }
+
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
     public String getpId() {
         return pId;
     }
@@ -64,6 +76,14 @@ public class Comment extends Page implements Serializable {
 
     public void setComAccount(String comAccount) {
         this.comAccount = comAccount;
+    }
+
+    public String getParentAccount() {
+        return parentAccount;
+    }
+
+    public void setParentAccount(String parentAccount) {
+        this.parentAccount = parentAccount;
     }
 
     public String getComTime() {

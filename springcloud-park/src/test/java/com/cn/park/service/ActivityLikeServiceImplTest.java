@@ -15,6 +15,7 @@ import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.*;
 
 /**
+ * 活动点赞测试类
  * @Author: yangph
  * @Date: 2018/12/20 20:21
  * @Version v1.0

@@ -12,6 +12,7 @@ import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
+import org.apache.http.client.entity.GzipCompressingEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,24 +150,37 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             //默认查询前15条
             objects = PageHelper.startPage(page, rows == 0 ? 15 :rows, true);
         }
-        List<Comment>list=activityDetailsMapper.getCommentInfo(activityId);
-        List<Comment> resultList = recursiveGetComments(list);
-        return new PaginationData(resultList,objects==null?0:objects.getTotal());
+        //获取第一层级评论
+        List<String>parentIds=new ArrayList<>(16);
+        parentIds.add(activityId);
+        List<Comment>list=activityDetailsMapper.getCommentInfo(activityId,parentIds);
+        list= getCommentChildComment(list,activityId);
+        return new PaginationData(list,objects==null?0:objects.getTotal());
     }
 
     /**
-     * 递归查询活动点评信息
+     * 获取评论的子评论
      * @param list
      * @return
      */
-    @ServiceLog(doAction = "递归查询活动点评信息")
-    private List<Comment> recursiveGetComments(List<Comment> list) {
+    @ServiceLog(doAction = "获取评论的子评论")
+    private List<Comment> getCommentChildComment(List<Comment> list,String activityId) {
+        //获取第一层评论的id
+        List<String>parentIds=new ArrayList<>(16);
+        for(Comment cm:list){
+            parentIds.add(cm.getId());
+        }
+        //根据第一层评论id查询下一层的评论信息
+        List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds);
         for(Comment comment:list){
-            //有子节点
-             if(comment.getChildNum()>0){
-                List<Comment>resultList=activityDetailsMapper.getCommentInfo(comment.getId());
-                comment.setChildList(recursiveGetComments(resultList));
+            List<Comment>nextList=new ArrayList<>(16);
+            for(Comment nextComment:commentInfo){
+                if(StringUtils.equals(comment.getId(), nextComment.getpId())){
+                    nextList.add(nextComment);
+                }
             }
+            comment.setChildList(nextList);
+            comment.setChildNum(nextList.size());
         }
         return list;
     }

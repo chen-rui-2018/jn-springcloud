@@ -8,15 +8,18 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
+ * 新增评论的传值信息
  * @Author: yangph
  * @Date: 2018/12/11 11:33
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ApplyUserInfo", description = "新增评论")
+@ApiModel(value = "ApplyUserInfo", description = "新增评论的传值信息")
 public class CommentAdd implements Serializable {
+    @ApiModelProperty(value = "活动id/服务id")
+    private String rootId;
     @ApiModelProperty(value = "点评ID/活动ID")
-    private String id;
+    private String pId;
     @ApiModelProperty(value = "类型")
     @Pattern(regexp="^[0-1]$",message="{comType:'类型只能是0(活动点评)和1(服务点评)'}")
     private String comType;
@@ -26,12 +29,20 @@ public class CommentAdd implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
-        return id;
+    public String getRootId() {
+        return rootId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setRootId(String rootId) {
+        this.rootId = rootId;
+    }
+
+    public String getpId() {
+        return pId;
+    }
+
+    public void setpId(String pId) {
+        this.pId = pId;
     }
 
     public String getComType() {

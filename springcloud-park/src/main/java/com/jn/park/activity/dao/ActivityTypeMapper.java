@@ -17,10 +17,10 @@ import java.util.List;
 public interface ActivityTypeMapper {
     /**
      * 查询活动类型列表
-     * @param state
+     * @param status
      * @return
      */
-    List<ActivityType> findActivityTypeListByState(@Param("state") String state);
+    List<ActivityType> findActivityTypeListByState(@Param("status") String status);
 
     /**
      * 根据活动类型ID,获取当前活动信息

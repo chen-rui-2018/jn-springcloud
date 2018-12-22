@@ -68,7 +68,6 @@ const user = {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
             getUsername().then(res => {
-              console.log(res)
               if (res.data.code === '0000') {
                 localStorage.setItem('userName', res.data.data.name)
               }
@@ -94,7 +93,9 @@ const user = {
     }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          // console.log(response)
+          console.log(response)
+          console.log(response.data.data)
+          // console.log(response.request.response)
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }

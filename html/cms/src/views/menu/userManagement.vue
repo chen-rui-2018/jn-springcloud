@@ -392,11 +392,11 @@ export default {
   watch: {
     userPositionData: {
       handler: function() {
-        console.log(this.userPositionData)
+        // console.log(this.userPositionData)
         const userPosition = this.userPositionData.filter(function(item) {
           return item.department !== '' && item.position
         })
-        console.log(userPosition)
+        // console.log(userPosition)
         if (this.userPositionData.length < userPosition.length + 2) {
           this.userPositionData.push({
             department: [],
@@ -791,6 +791,16 @@ export default {
     // 编辑用户部门和岗位
     saveDepartmentandPostOfUser() {
       const userDepartmentPostList = this.userDepartmentPostList
+      for (const it of userDepartmentPostList.sysDepartmentPostList) {
+        if (it.departmentId || it.postId) {
+          if (!it.departmentId) {
+            return this.$message.error('请选择部门')
+          }
+          if (!it.postId) {
+            return this.$message.error('请选择岗位')
+          }
+        }
+      }
       // 清除空的数据
       const filterList = userDepartmentPostList.sysDepartmentPostList.filter(
         function(item) {

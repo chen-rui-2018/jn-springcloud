@@ -20,7 +20,7 @@
         </span>
       </el-tree>
     </div>
-    <div v-if="isData" class="department-right">
+    <div v-show="isData" class="department-right">
       <div v-if="isSubForm">没有子部门</div>
       <div v-show="isDepartmentInfo">
         <div class="department-title">下级部门</div>

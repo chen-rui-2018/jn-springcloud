@@ -1,4 +1,4 @@
-package com.cn.park.service;
+package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.util.DateUtils;
@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**

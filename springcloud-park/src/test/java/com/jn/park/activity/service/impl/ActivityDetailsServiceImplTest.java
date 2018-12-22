@@ -1,4 +1,4 @@
-package com.cn.park.service;
+package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
@@ -20,7 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * 活动详情测试类

@@ -1,10 +1,10 @@
-package com.cn.park.service;
+package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
+import com.jn.park.model.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,14 +13,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author： jiangyl

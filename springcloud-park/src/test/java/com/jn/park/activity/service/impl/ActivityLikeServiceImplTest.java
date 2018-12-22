@@ -1,4 +1,4 @@
-package com.cn.park.service;
+package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.park.activity.service.ActivityLikeService;
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.core.IsAnything.anything;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * 活动点赞测试类

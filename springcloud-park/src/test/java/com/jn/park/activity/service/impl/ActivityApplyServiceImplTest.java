@@ -1,4 +1,4 @@
-package com.cn.park.service;
+package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;

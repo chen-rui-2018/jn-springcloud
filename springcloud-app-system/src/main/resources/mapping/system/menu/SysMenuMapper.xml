@@ -204,16 +204,16 @@
         ORDER BY t.`sort` ASC
     </select>
 
-    <select id="getDynamicMenu" resultType="com.jn.system.menu.model.SysMenu"
-            parameterType="com.jn.system.menu.model.SysMenu">
+    <select id="getDynamicMenu" resultType="com.jn.system.menu.vo.SysMenuTreeVO"
+            parameterType="java.lang.String">
         select distinct
         sm.id,
-        sm.menu_name as menuName,
+        sm.menu_name as label,
         sm.is_dir as isDir,
         sm.`level`,
         sm.parent_id as parentId,
         sm.sort,
-        sm.menu_url as menuUrl
+        sm.menu_url as path
         from
         tb_sys_user su
         ,tb_sys_user_role sur

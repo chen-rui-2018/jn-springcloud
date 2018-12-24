@@ -30,13 +30,17 @@ public class SysUserPage extends Page implements Serializable {
     @ApiModelProperty("部门id")
     private String departmentId;
 
+    @ApiModelProperty("岗位或岗位类型名称")
+    private String postOrTypeName;
+
     public SysUserPage() {
     }
 
-    public SysUserPage(String name, String status, String departmentId) {
+    public SysUserPage(String name, String status, String departmentId, String postOrTypeName) {
         this.name = name;
         this.status = status;
         this.departmentId = departmentId;
+        this.postOrTypeName = postOrTypeName;
     }
 
     public String getName() {
@@ -63,12 +67,21 @@ public class SysUserPage extends Page implements Serializable {
         this.departmentId = departmentId;
     }
 
+    public String getPostOrTypeName() {
+        return postOrTypeName;
+    }
+
+    public void setPostOrTypeName(String postOrTypeName) {
+        this.postOrTypeName = postOrTypeName;
+    }
+
     @Override
     public String toString() {
         return "SysUserPage{" +
                 "name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", departmentId='" + departmentId + '\'' +
+                ", postOrTypeName='" + postOrTypeName + '\'' +
                 '}';
     }
 }

@@ -73,7 +73,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        if(!tbSysMenu1.getMenuName().equals(menuName)){
+        if (!tbSysMenu1.getMenuName().equals(menuName)) {
             //判断名称是否已经存在
             List<TbSysMenu> tbSysMenuList = checkMenusName(menuName, parentId);
             if (tbSysMenuList != null && tbSysMenuList.size() > 0) {
@@ -103,6 +103,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         List<String> resourcesIds = new ArrayList<String>();
         //判断菜单是否是目录菜单
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(menuId);
+        if (tbSysMenu == null) {
+            return;
+        }
         Boolean flag = SysMenuEnums.MENU_ISDIR.getCode().equals(tbSysMenu.getIsDir()) ? Boolean.TRUE : Boolean.FALSE;
         if (flag) {
             //查询菜单子菜单
@@ -274,13 +277,16 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
      * 菜单添加目录菜单
      *
-     * @param sysMenuAdd
+     * @param sysMenuDirAdd
      */
     @Override
     @ServiceLog(doAction = "菜单添加目录菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void addMenuDir(SysMenuAdd sysMenuAdd, User user) {
+    public void addMenuDir(SysMenuDirAdd sysMenuDirAdd, User user) {
         //校验在该等级中菜单名称是否已经存在
+        SysMenuAdd sysMenuAdd = new SysMenuAdd();
+        BeanUtils.copyProperties(sysMenuDirAdd, sysMenuAdd);
+        sysMenuAdd.setMenuUrl("/");
         checkName(sysMenuAdd);
         TbSysMenu tbSysMenu = new TbSysMenu();
         //设置菜单等级
@@ -358,7 +364,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @param tbSysMenu
      */
     private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
-        tbSysMenu.setId(UUID.randomUUID().toString());
+        tbSysMenu.setId(sysMenuAdd.getId());
         tbSysMenu.setCreateTime(new Date());
         tbSysMenu.setCreator(user.getId());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
@@ -439,8 +445,26 @@ public class SysMenuServiceImpl implements SysMenuService {
      * @return
      */
     @Override
-    public Set<SysMenu> getDynamicMenu(String userId) {
-        Set<SysMenu> menuSet = sysMenuMapper.getDynamicMenu(userId);
-        return menuSet;
+    public List<SysMenuTreeVO> getDynamicMenu(String userId) {
+        List<SysMenuTreeVO> list = new ArrayList<SysMenuTreeVO>(16);
+        //根据用户id获取用户权限具有的菜单信息
+        Set<SysMenuTreeVO> menuSet = sysMenuMapper.getDynamicMenu(userId);
+        for (SysMenuTreeVO menuTreeVO : menuSet) {
+            //判断如果是一级菜单,添加进list
+            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(menuTreeVO.getLevel())) {
+                list.add(menuTreeVO);
+            }
+            //根据父级id层级关系,将子级菜单封装建父级的children中
+            List<SysMenuTreeVO> childList = new ArrayList<SysMenuTreeVO>(16);
+            for (SysMenuTreeVO sysMenuTreeVO : menuSet) {
+                if (menuTreeVO.getId().equals(sysMenuTreeVO.getParentId())) {
+                    childList.add(sysMenuTreeVO);
+                }
+            }
+            if (childList.size() > 0) {
+                menuTreeVO.setChildren(childList);
+            }
+        }
+        return list;
     }
 }

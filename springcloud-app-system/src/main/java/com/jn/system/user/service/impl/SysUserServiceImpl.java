@@ -97,7 +97,6 @@ public class SysUserServiceImpl implements SysUserService {
         //生成用户实体
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
-        tbSysUser.setId(UUID.randomUUID().toString());
         tbSysUser.setCreateTime(new Date());
         tbSysUser.setCreator(user.getId());
         tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
@@ -114,6 +113,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 校验部门岗位id添加时是否有一个为空
+     *
      * @param departmentId
      * @param postId
      * @param account
@@ -174,7 +174,14 @@ public class SysUserServiceImpl implements SysUserService {
     public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
-        List<SysUserVO> sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
+        List<SysUserVO> sysUserVOList = new ArrayList<SysUserVO>();
+        if (StringUtils.isBlank(sysUserPage.getPostOrTypeName())) {
+            //当查询条件中岗位或岗位类型名称为空时
+            sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
+        } else {
+            //当查询条件中岗位或岗位类型名称不为空时
+            sysUserVOList = sysUserMapper.getSysUserByPageAndPost(sysUserPage);
+        }
         PaginationData data = new PaginationData(sysUserVOList, objects.getTotal());
         return data;
     }
@@ -402,7 +409,7 @@ public class SysUserServiceImpl implements SysUserService {
                 throw new JnSpringCloudException(SysUserExceptionEnums.DEPARTMENTPOST_DEFAULE_NOTUNIQUE);
             }
             //判断部门岗位信息是否重复
-            if(set.size() != list.size()){
+            if (set.size() != list.size()) {
                 logger.warn("[用户] 用户添加部门岗位失败,部门岗位信息重复,userId: {}", userId);
                 throw new JnSpringCloudException(SysUserExceptionEnums.ADD_DEPARTMENT_POST_REPEAT);
             }
@@ -411,7 +418,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
         logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserId:{}", userId);
         //用户批量添加部门岗位信息
-        if(list.size() > 0){
+        if (list.size() > 0) {
             sysUserMapper.addDepartmentAndPostToUserBatch(list);
         }
         logger.info("[用户] 用户添加部门岗位成功！，sysUserId:{}", userId);
@@ -419,6 +426,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 生成用户部门岗位实体
+     *
      * @param user
      * @param userId
      * @param sysDepartmentPost

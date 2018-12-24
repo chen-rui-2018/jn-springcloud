@@ -94,5 +94,5 @@ public interface SysMenuMapper {
      * @param userId
      * @return
      */
-    Set<SysMenu> getDynamicMenu(String userId);
+    Set<SysMenuTreeVO> getDynamicMenu(String userId);
 }

@@ -2,9 +2,7 @@ package com.jn.system.file.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.file.model.SysFile;
-import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
-import com.jn.system.model.User;
 
 /**
  * 文件service
@@ -17,10 +15,10 @@ import com.jn.system.model.User;
 public interface SysFileService {
     /**
      * 新增文件
+     *
      * @param sysFile
-     * @param user
      */
-    void insertSysFile(SysFile sysFile, User user);
+    void insertSysFile(SysFile sysFile);
 
     /**
      * 根据id更新文件
@@ -51,13 +49,6 @@ public interface SysFileService {
      * @return
      */
     PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage);
-
-    /**
-     * 文件添加文件组
-     * @param sysFileAddFileGroup
-     * @param user
-     */
-    void sysFileAddFileGroup(SysFileAddFileGroup sysFileAddFileGroup , User user);
 
     /**
      * 校验文件名称

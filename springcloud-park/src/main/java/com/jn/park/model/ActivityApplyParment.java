@@ -3,6 +3,7 @@ package com.jn.park.model;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 活动申请人查询/导出入参Bean
@@ -15,6 +16,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "ActivityApplyParment",description = "活动申请人查询入参")
 public class ActivityApplyParment extends Page {
     @ApiModelProperty(value = "活动ID")
+    @NotBlank(message = "活动id不能为空！")
     private String activityId;
 
     @ApiModelProperty(value = "[查询时传空]导出excel导出的字段别名 比如：name,phone,sex ...多个字段以逗号(,)分隔")

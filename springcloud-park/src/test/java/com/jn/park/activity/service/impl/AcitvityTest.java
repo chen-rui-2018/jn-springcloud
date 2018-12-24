@@ -80,7 +80,10 @@ public class AcitvityTest {
 
     @Test
     public void updateActivityApply(){
-        int i = activityService.updateActivityApply(activityId, status);
+        ActivitySataus activitySataus = new ActivitySataus();
+        activitySataus.setActivityId(activityId);
+        activitySataus.setStatus(status);
+        int i = activityService.updateActivityApply(activitySataus);
         assertThat(i,is(1));
     }
 

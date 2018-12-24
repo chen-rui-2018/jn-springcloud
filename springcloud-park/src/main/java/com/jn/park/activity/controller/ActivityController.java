@@ -84,12 +84,10 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "修改活动可报名状态")
     @ApiOperation(value = "修改活动可报名状态", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityApply")
-    public Result updateActivityApply(
-            @ApiParam(name="activityId",value = "修改条件",required = true)@RequestParam String activityId,
-            @ApiParam(name="status",value = "status只能传(0,1) 0代表停止报名 1开始报名",required = true)@RequestParam String status) {
-        Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        Assert.notNull(status, ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
-        int i = activityService.updateActivityApply(activityId, status);
+    public Result updateActivityApply(@RequestBody @Validated ActivitySataus activitySataus) {
+        Assert.notNull(activitySataus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        Assert.notNull(activitySataus.getStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
+        int i = activityService.updateActivityApply(activitySataus);
         return new Result(i);
     }
 

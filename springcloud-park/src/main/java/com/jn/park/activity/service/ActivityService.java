@@ -4,6 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.model.ActivityContent;
 import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.ActivityParment;
+import com.jn.park.model.ActivitySataus;
 
 /**
  * 活动
@@ -30,11 +31,10 @@ public interface ActivityService {
 
     /**
      * 活动状态管理(修改)
-     * @param activityId
-     * @param status 1可报名 0不可报名
+     * @param activitySataus
      * @return
      */
-    int updateActivityApply(String activityId, String status);
+    int updateActivityApply( ActivitySataus activitySataus);
 
     /**
      * 发布活动/保存草稿

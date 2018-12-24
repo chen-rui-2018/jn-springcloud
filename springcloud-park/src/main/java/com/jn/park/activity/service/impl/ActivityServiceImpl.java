@@ -96,11 +96,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "修改活动报名状态")
     @Override
-    public int updateActivityApply(String activityId, String status){
-        if(StringUtils.equals(status,ACTIVITY_STATE_FALSE)|| StringUtils.equals(status,ACTIVITY_STATE_TRUE)){
+    public int updateActivityApply( ActivitySataus activitySataus){
+        if(StringUtils.equals(activitySataus.getStatus(),ACTIVITY_STATE_FALSE)|| StringUtils.equals(activitySataus.getStatus(),ACTIVITY_STATE_TRUE)){
             TbActivity activity = new TbActivity();
-            activity.setId(activityId);
-            activity.setIsApply(status);
+            activity.setId(activitySataus.getActivityId());
+            activity.setIsApply(activitySataus.getStatus());
             int i = tbActivityMapper.updateByPrimaryKeySelective(activity);
             if(i==1){
                return i;

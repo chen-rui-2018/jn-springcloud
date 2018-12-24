@@ -62,8 +62,8 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "活动评论点赞")
     @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityLike")
-    public Result commentActivityLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String activityId){
-        Assert.notNull(activityId,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
+    public Result commentActivityLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String id){
+        Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -72,15 +72,15 @@ public class CommentController extends BaseController {
             result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
             return result;
         }
-        commentService.commentActivityLike(activityId,user.getAccount());
+        commentService.commentActivityLike(id,user.getAccount());
         return result;
     }
 
     @ControllerLog(doAction = "活动评论取消点赞")
     @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityCancelLike")
-    public Result commentActivityCancelLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String activityId){
-        Assert.notNull(activityId,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
+    public Result commentActivityCancelLike(@ApiParam(value = "点评ID/活动ID" ,required = true) @RequestParam String id){
+        Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -89,7 +89,7 @@ public class CommentController extends BaseController {
             result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
             return result;
         }
-        commentService.commentActivityCancelLike(activityId,user.getAccount());
+        commentService.commentActivityCancelLike(id,user.getAccount());
         return result;
     }
 

@@ -1,9 +1,8 @@
 package com.jn.park.activity.service;
 
-import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.park.model.ActivityApplyParment;
-import com.jn.system.model.User;
+import com.jn.park.model.ActivityQueryPaging;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -59,12 +58,11 @@ public interface ActivityApplyService {
 
     /**
      * 报名人列表信息
-     * @param activityId
-     * @param page
-     * @param rows
+     * @param activityQueryPaging
+     * @param isPage  true：分页  false:不分页
      * @return
      */
-    PaginationData findApplyActivityList(String activityId, Integer page,Integer rows);
+    PaginationData findApplyActivityList( ActivityQueryPaging activityQueryPaging,Boolean isPage);
 
     /**
      * 新增活动报名信息

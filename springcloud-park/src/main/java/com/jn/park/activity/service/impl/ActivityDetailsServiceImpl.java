@@ -4,15 +4,18 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.park.activity.dao.*;
+import com.jn.park.activity.dao.ActivityDetailsMapper;
+import com.jn.park.activity.dao.TbActivityApplyMapper;
+import com.jn.park.activity.dao.TbActivityMapper;
+import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.*;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityDetail;
+import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
-import org.apache.http.client.entity.GzipCompressingEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,25 +139,23 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param activityId 活动id
-     * @param page       页码
-     * @param rows       每页显示数量
+     * @param activityQueryPaging
      * @param isPage     是否分页  true：分页   false:不分页
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(String activityId, Integer page,Integer rows,boolean isPage){
+    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage){
         com.github.pagehelper.Page<Object> objects=null;
         if(isPage){
             //默认查询前15条
-            objects = PageHelper.startPage(page, rows == 0 ? 15 :rows, true);
+            objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
         }
         //获取第一层级评论
         List<String>parentIds=new ArrayList<>(16);
-        parentIds.add(activityId);
-        List<Comment>list=activityDetailsMapper.getCommentInfo(activityId,parentIds);
-        list= getCommentChildComment(list,activityId);
+        parentIds.add(activityQueryPaging.getActivityId());
+        List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+        list= getCommentChildComment(list,activityQueryPaging.getActivityId());
         return new PaginationData(list,objects==null?0:objects.getTotal());
     }
 

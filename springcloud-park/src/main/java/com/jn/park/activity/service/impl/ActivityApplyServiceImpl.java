@@ -23,6 +23,7 @@ import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParment;
+import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -416,14 +417,23 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         return i;
     }
 
+    /**
+     * 报名人列表信息
+     * @param activityQueryPaging
+     * @param isPage  true：分页  false:不分页
+     * @return
+     */
     @ServiceLog(doAction = "报名人列表信息")
     @Override
-    public PaginationData findApplyActivityList(String activityId, Integer page,Integer rows) {
-        int pageSize = rows==0?15:rows;
-        com.github.pagehelper.Page<Object> objects= PageHelper.startPage(page, pageSize, true);
+    public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging,Boolean isPage) {
+        com.github.pagehelper.Page<Object> objects=null;
+        if(isPage){
+            //默认查询前15条
+            objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
+        }
         //前端查询有效报名状态数据
         String status = "1";
-        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityId,status);
+        List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(),status);
         return new PaginationData(activityApplyList,objects.getTotal());
     }
 

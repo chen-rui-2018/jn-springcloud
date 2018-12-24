@@ -7,6 +7,7 @@ import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
+import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.Comment;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,12 +51,17 @@ public class ActivityDetailsServiceImplTest {
      */
     private String account;
 
+    ActivityQueryPaging activityQueryPaging;
+
     @Before
     public void setUp() throws Exception {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
         account="qianqi";
+        activityQueryPaging.setActivityId(activityId);
+        activityQueryPaging.setPage(1);
+        activityQueryPaging.setRows(15);
     }
 
     /**
@@ -72,7 +78,7 @@ public class ActivityDetailsServiceImplTest {
      */
     @Test
     public void getCommentInfo() {
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityId, 0, 0, true);
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging, true);
         List<Comment> list= (List<Comment>)commentInfo.getRows();
         assertThat(list.size(), greaterThan(0));
     }

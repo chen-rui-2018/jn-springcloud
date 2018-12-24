@@ -258,23 +258,26 @@ public class CommentServiceImpl implements CommentService {
         TbParkLikeCriteria example=new TbParkLikeCriteria();
         example.createCriteria().andLikeParentIdEqualTo(likeParentId).andLikeAccountEqualTo(account);
         TbParkLike tbParkLike=new TbParkLike();
+        //状态
         tbParkLike.setStatus(state);
+        //点赞时间
+        tbParkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         tbParkLikeMapper.updateByExampleSelective(tbParkLike, example);
     }
 
     /**
      * 新增点赞信息
-     * @param id       活动id
-     * @param account  用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
      */
     @ServiceLog(doAction = "新增点赞信息")
     @Override
-    public void addActivityLike(String id, String account) {
+    public void addActivityLike(String activityId, String account) {
         TbParkLike parkLike=new TbParkLike();
         //点赞id
         parkLike.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //点赞父id
-        parkLike.setLikeParentId(id);
+        parkLike.setLikeParentId(activityId);
         //点赞人
         parkLike.setLikeAccount(account);
         //点赞时间

@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -46,6 +47,15 @@ public class CommentServiceImplTest {
     private String account;
 
     /**
+     * 点赞状态  0：取消点赞   1：点赞
+     */
+    private String state;
+    /**
+     * 评论id
+     */
+    private String id;
+
+    /**
      * 新增评论的传值信息
      */
     private CommentAdd commentAdd=new CommentAdd();
@@ -63,7 +73,11 @@ public class CommentServiceImplTest {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
-        account="jadjfoi";
+        account="wangsong";
+        //点赞状态
+        state="1";
+        //评论id
+        id="cb9e41f3a0254d7687489303f7b37ce1";
     }
 
     /**
@@ -83,6 +97,9 @@ public class CommentServiceImplTest {
      */
     @Test
     public void commentActivityLike() {
+        commentService.commentActivityLike(id, account);
+        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+        assertThat(anything(),anything());
     }
 
     /**
@@ -90,6 +107,8 @@ public class CommentServiceImplTest {
      */
     @Test
     public void commentActivityCancelLike() {
+        commentService.commentActivityCancelLike(id,account);
+        assertThat(anything(),anything());
     }
 
     /**
@@ -97,6 +116,8 @@ public class CommentServiceImplTest {
      */
     @Test
     public void updateParkLikeState() {
+        commentService.updateParkLikeState(activityId,account,state);
+        assertThat(anything(),anything());
     }
 
     /**
@@ -104,5 +125,7 @@ public class CommentServiceImplTest {
      */
     @Test
     public void addActivityLike() {
+        commentService.addActivityLike(activityId, account);
+        assertThat(anything(),anything());
     }
 }

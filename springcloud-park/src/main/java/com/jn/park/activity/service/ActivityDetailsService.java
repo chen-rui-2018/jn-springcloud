@@ -3,8 +3,9 @@ package com.jn.park.activity.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
-import com.jn.park.model.ActivityApply;
 import com.jn.park.activity.vo.ActivityDetailVO;
+import com.jn.park.model.ActivityApply;
+import com.jn.park.model.ActivityQueryPaging;
 
 import java.util.List;
 
@@ -28,13 +29,11 @@ public interface ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param activityId 活动id
-     * @param page       页码
-     * @param rows       每页显示数量
+     * @param activityQueryPaging
      * @param isPage     是否分页  true：分页   false:不分页
      * @return
      */
-    PaginationData getCommentInfo(String activityId, Integer page,Integer rows,boolean isPage);
+    PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息

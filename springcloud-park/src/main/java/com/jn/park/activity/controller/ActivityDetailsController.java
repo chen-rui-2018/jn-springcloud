@@ -7,6 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.ActivityQueryPaging;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -16,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,11 +60,8 @@ public class ActivityDetailsController extends BaseController {
     @ControllerLog(doAction = "获取评论信息")
     @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/getCommentInfo")
-    public Result getCommentInfo(@ApiParam(value = "活动id",required = true) @RequestParam String activityId,
-                                 @ApiParam(value = "页码") @RequestParam(required = false) Integer page,
-                                 @ApiParam(value = "每页显示数量") @RequestParam(required = false) Integer rows){
-        Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityId, page,rows,true);
+    public Result getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,Boolean.TRUE);
         return new Result(commentInfo);
     }
 }

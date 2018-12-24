@@ -30,24 +30,23 @@ public class RedisCacheFactory {
 
     private static String KEY_PREFIX = "cache_";
 
+    private static Integer DEFALUT_TIME= 120;
+
     @Value("${spring.application.name}")
     private String applicationName;
 
 
-    public <V> Cache<V> getCache(String groupName){
+    public <V> Cache<V> getCache(String groupName, Integer expire){
         logger.debug("获取名称为:{}的RedisCache实例",groupName);
-        return caches.get(groupName);
+        Cache var = caches.get(groupName);
+        if(var == null) {
+            String keyPrefix = KEY_PREFIX+applicationName+"_"+groupName+":";
+            expire = expire==null?DEFALUT_TIME:expire ;
+            var = new RedisCache<V>(redisTemplate, keyPrefix,expire);
+            logger.debug("初始名称为: {}，key是{},有效时间为{}秒的RedisCache实例",groupName,keyPrefix,expire);
+            caches.put(groupName, var);
+        }
+        return var ;
     }
-
-    public <V> Cache<V> initCache(String groupName, Integer expire) {
-        logger.debug("初始名称为: {}，有效时间为{}秒的RedisCache实例",groupName,expire);
-        String keyPrefix = KEY_PREFIX+applicationName+"_"+groupName+":";
-        Cache c = new RedisCache<V>(redisTemplate, keyPrefix,expire);
-        caches.put(groupName, c);
-
-        return c;
-    }
-
-
 
 }

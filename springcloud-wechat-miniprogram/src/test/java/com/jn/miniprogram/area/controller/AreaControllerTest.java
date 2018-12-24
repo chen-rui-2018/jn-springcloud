@@ -2,13 +2,16 @@ package com.jn.miniprogram.area.controller;
 
 import com.jn.miniprogram.area.entity.TbMiniProgramArea;
 import com.jn.miniprogram.area.service.AreaService;
+import org.hamcrest.CoreMatchers;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
 import java.util.List;
@@ -20,54 +23,57 @@ import java.util.UUID;
  * @version： v1.0
  * @modified By:
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AreaControllerTest {
-
-    private Logger logger = LoggerFactory.getLogger(AreaControllerTest.class);
 
     @Autowired
     private AreaService areaService;
 
+    private static String areaId;
+
+    @BeforeClass
+    public static void setUp() {
+        areaId = UUID.randomUUID().toString();
+    }
+
     @Test
-    public void listArea() {
+    public void AlistArea() {
         List<TbMiniProgramArea> areas = areaService.queryArea();
-        logger.info("info：{}", areas.size());
+        Assert.assertThat(areas, CoreMatchers.anything());
     }
 
     @Test
-    public void getAreaById() {
-        String areaId = "dd2f28bf-8846-415c-ba21-227ee88d577d";
-        TbMiniProgramArea area = areaService.selectByPrimaryKey(areaId);
-        logger.info("info：{}", area.getAreaId());
-    }
-
-    @Test
-    public void addArea() {
+    public void BaddArea() {
         TbMiniProgramArea area = new TbMiniProgramArea();
         area.setAreaName("测试");
         area.setCreateTime(new Date());
         area.setUpdateTime(new Date());
-        area.setAreaId(UUID.randomUUID().toString());
+        area.setAreaId(areaId);
         boolean isSuccess = areaService.insert(area);
-        logger.info("info：{}", isSuccess);
+        Assert.assertTrue(isSuccess);
+    }
+
+    @Test(timeout = 3000)
+    public void CgetAreaById() {
+        TbMiniProgramArea area = areaService.selectByPrimaryKey(areaId);
+        Assert.assertThat(area, CoreMatchers.anything());
     }
 
     @Test
-    public void modifyArea() {
-        String areaId = "dd2f28bf-8846-415c-ba21-227ee88d577d";
+    public void DmodifyArea() {
         TbMiniProgramArea area = new TbMiniProgramArea();
         area.setAreaId(areaId);
         area.setAreaName("测试1");
         area.setUpdateTime(new Date());
         boolean isSuccess = areaService.updateByPrimaryKeySelective(area);
-        logger.info("info：{}", isSuccess);
+        Assert.assertTrue(isSuccess);
     }
 
-    @Test
-    public void removeArea() {
-        String areaId = "12345";
+    @Test(timeout = 2000)
+    public void EremoveArea() {
         boolean isSuccess = areaService.deleteByPrimaryKey(areaId);
-        logger.info("info：{}", isSuccess);
+        Assert.assertTrue(isSuccess);
     }
 }

@@ -10,8 +10,8 @@ import com.jn.common.api.CodeAndMsg;
  * @version： v1.0
  * @modified By:
  */
-public enum ParkCodeExcptionEnum implements CodeAndMsg {
-    CODE_TYPE_NOT_NULL("11110301", "字典类型不能为空");
+public enum ParkCodeExceptionEnum implements CodeAndMsg {
+    CODE_TYPE_NOT_NULL("4020201", "字典类型不能为空");
 
     /**
      * 编码
@@ -22,7 +22,7 @@ public enum ParkCodeExcptionEnum implements CodeAndMsg {
      */
     private String message;
 
-    ParkCodeExcptionEnum(String code, String message) {
+    ParkCodeExceptionEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

@@ -3,6 +3,7 @@ package com.jn.park.activity.service.impl;
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParment;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.assertThat;
 
@@ -45,12 +51,18 @@ public class ActivityApplyServiceImplTest {
      */
     private String account;
 
+    /**
+     * 生成二维码数据
+     */
+    private String url;
+
     @Before
     public void setUp() throws Exception {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
          account="qianqi";
+        url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
     }
 
 
@@ -88,6 +100,10 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void applyActivityList() {
+        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
+        List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
+        assertThat(a.size(),greaterThanOrEqualTo(0));
     }
 
     /**
@@ -95,6 +111,19 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void getQrCode() {
+        //TODO jiangyl 二维码下载断言及处理
+        OutputStream outputStream = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+
+            }
+        };
+
+        try{
+            activityApplyService.getQrCode(outputStream, url);
+        }catch (Exception e){
+            logger.error("二维码导出异常",e);
+        }
     }
 
     /**
@@ -102,6 +131,8 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void signInActivity() {
+        int i = activityApplyService.signInActivity(account, activityId);
+        assertThat(i,is(1));
     }
 
     /**

@@ -86,7 +86,7 @@ public class ActivityServiceImpl implements ActivityService {
         List<ActivityDetail> activityDetails = activityDetailsMapper.getActivityDetails(activityId);
         if(null == activityDetails||activityDetails.size()==0){
             logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId,activityDetails==null?0:activityDetails.size());
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESUT_ERROR);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR);
         }
         List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
@@ -285,14 +285,14 @@ public class ActivityServiceImpl implements ActivityService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
         if(!StringUtils.equals(tbActivity.getStatus(),ACTIVITY_STATE_PUBLISH)){
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXPEPTION);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXCEPTION);
         }
         //判断是否为活动开始前24小时之内
         Date actiStartTime = tbActivity.getActiStartTime();
         Date nowDate = new Date();
         Date date = DateUtils.addHours(nowDate, 24);
         if(actiStartTime.after(date)||nowDate.after(actiStartTime)){
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXPEPTION);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXCEPTION);
         }else{
             //TODO jiangyl 调用消息接口推送消息。
 

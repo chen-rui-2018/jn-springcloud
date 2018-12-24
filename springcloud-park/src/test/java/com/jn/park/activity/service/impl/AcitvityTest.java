@@ -38,13 +38,10 @@ public class AcitvityTest {
 
     @Autowired
     private ActivityService activityService;
-    @Autowired
-    private ActivityApplyService activityApplyService;
 
     private String activityId ;
     private String userAccount;
     private String status;
-    private String url;
     private ActivitySlimQuery activitySlimQuery;
 
 
@@ -55,7 +52,6 @@ public class AcitvityTest {
         activityId = "56ad4d018554586b1117f27391ae9bf8";
         status = "1";
         userAccount = "wangsong";
-        url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
         activitySlimQuery = new ActivitySlimQuery();
         activitySlimQuery.setKeyWord("");
         activitySlimQuery.setTypeId("");
@@ -126,13 +122,6 @@ public class AcitvityTest {
         assertThat(i,is(1));
     }
 
-    @Test
-    public void applyActivityList(){
-        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
-        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
-        List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
-        assertThat(a.size(),greaterThanOrEqualTo(0));
-    }
 
     @Test
     public void sendMsgForActivate(){
@@ -140,22 +129,6 @@ public class AcitvityTest {
         assertThat(i,is(1));
     }
 
-    @Test
-    public void downloadSignCodeImg(){
-        //TODO jiangyl 二维码下载断言及处理
-        OutputStream outputStream = new OutputStream() {
-            @Override
-            public void write(int b) throws IOException {
-
-            }
-        };
-
-        try{
-            activityApplyService.getQrCode(outputStream, url);
-        }catch (Exception e){
-            logger.error("二维码导出异常",e);
-        }
-    }
 
     /**
      * 查询前台活动列表

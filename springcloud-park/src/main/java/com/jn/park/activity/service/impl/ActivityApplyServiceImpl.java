@@ -365,7 +365,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             outputStream.close();
         }catch (WriterException e){
             logger.error("[二维码生成],WriterException，URL:{}", data,e);
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_WRITER_EXPEPTION);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_WRITER_EXCEPTION);
         }
 
     }
@@ -381,7 +381,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public int signInActivity(String account, String activityId){
         if(StringUtils.isEmpty(account)){
             logger.warn("[活动签到]，用户未登录，不允许签到：activityId: {}",activityId);
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_LOGIN_EXPEPTION);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_LOGIN_EXCEPTION);
         }
         TbActivityApplyCriteria applyCriteria = new TbActivityApplyCriteria();
         applyCriteria.createCriteria().andActivityIdEqualTo(activityId);
@@ -403,10 +403,10 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_USER_NOT_APPLY);
         }else{
             if(StringUtils.equals(activityApply.getSignType(),ACTIVITY_APPLYED_SIGN_CODE)){
-                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXPEPTION);
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXCEPTION);
             }
             if(!StringUtils.equals(activityApply.getApplyStatus(),ACTIVITY_APPLYED_STATED)){
-                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXPEPTION);
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXCEPTION);
             }else{
                 activityApply.setSignType("0");
                 activityApply.setSignStatus("1");

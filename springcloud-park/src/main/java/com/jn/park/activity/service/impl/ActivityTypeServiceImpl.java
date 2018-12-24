@@ -175,7 +175,6 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
      * @param templateList
      * @param typeId
      * @param account
-     * @param type
      */
     private void insertActivityTypeFile(List<String> templateList, String typeId, String account) {
         if (templateList != null && templateList.size() > 0) {

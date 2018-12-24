@@ -169,7 +169,7 @@ public class ActivityController extends BaseController {
             activityApplyService.getQrCode(outputStream, url);
         } catch (IOException e) {
             logger.error("[活动二维码下载],IO异常，activityId: {},查询响应条数{}", activityId, e);
-            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_IO_EXPEPTION);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_CODE_DOWN_IO_EXCEPTION);
         }
     }
 

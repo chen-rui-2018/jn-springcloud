@@ -3,7 +3,7 @@ package com.jn.park.parkcode.controller;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.park.enums.ParkCodeExcptionEnum;
+import com.jn.park.enums.ParkCodeExceptionEnum;
 import com.jn.park.parkcode.service.ParkCodeService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -36,7 +36,7 @@ public class ParkCodeController  {
             notes = "codeType：查询的字典类型（例如查询园区列表,codeType=parkName）")
     @RequestMapping(value = "/getParkCodeByType")
     public Result getParkCodeByType(String codeType){
-        Assert.notNull(codeType, ParkCodeExcptionEnum.CODE_TYPE_NOT_NULL.getMessage());
+        Assert.notNull(codeType, ParkCodeExceptionEnum.CODE_TYPE_NOT_NULL.getMessage());
         List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType(codeType);
         return new Result(parkCodeByType);
     }

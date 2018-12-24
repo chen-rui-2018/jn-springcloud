@@ -257,6 +257,13 @@
 				<artifactId>feign-form-spring</artifactId>
 				<version>3.4.1</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>easyexcel</artifactId>
+				<version>1.1.2-beta5</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<build>

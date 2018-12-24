@@ -11,6 +11,9 @@ import com.jn.park.activity.entity.*;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityType;
 import com.jn.park.activity.service.ActivityTypeService;
+import com.jn.park.model.ActivityTypeAdd;
+import com.jn.park.model.ActivityTypeQuery;
+import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -47,18 +50,14 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Autowired
     private TbActivityFileMapper tbActivityFileMapper;
 
-    /**
-     * 新增活动类型
-     *
-     * @param typeName
-     * @param status
-     * @param templateList
-     * @return
-     */
+
     @ServiceLog(doAction = "新增活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertActivityType(String typeName, String status,String templateList, User user) {
+    public void insertActivityType(ActivityTypeAdd activityTypeAdd, User user) {
+        String typeName = activityTypeAdd.getTypeName();
+        String status = activityTypeAdd.getStatus();
+        String templateList = activityTypeAdd.getTemplateList();
         List<String> list= new ArrayList<>();
         TbActivityTypeCriteria criteria= new TbActivityTypeCriteria();
         criteria.createCriteria().andTypeNameEqualTo(typeName);
@@ -89,13 +88,19 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @ServiceLog(doAction = "查询活动类型列表")
     @Override
-    public PaginationData findActivityTypeListByState(String status,Integer page,Integer rows,boolean isPage) {
+    public PaginationData findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage) {
+        String valid = "1";
         Page<Object> objects=null;
         if(isPage) {
-            int pageSize = rows == null ? 15 : rows;
-            int pageNumber= page ==null ? 0 : page;
+            int pageSize = activityTypeQuery.getRows() == 0 ? 15 : activityTypeQuery.getRows();
+            int pageNumber= activityTypeQuery.getPage();
             objects  = PageHelper.startPage(pageNumber, pageSize, true);
         }
+        //不分页,则表示前端获取列表作为活动的查询条件或添加时的活动类型,只返回有效的活动类型
+        if(!isPage){
+            activityTypeQuery.setStatus(valid);
+        }
+            String status = activityTypeQuery.getStatus();
             List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(status);
             return new PaginationData(activityTypeList,objects==null?0:objects.getTotal());
     }
@@ -110,9 +115,13 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "更新活动类型内容")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateActivityType(String typeId, String typeName, String status, String templateList, User user) {
+    public void updateActivityType(ActivityTypeUpdate activityTypeUpdate, User user) {
         //修改为无效
         String invalid="0";
+        String typeId = activityTypeUpdate.getTypeId();
+        String  typeName = activityTypeUpdate.getTypeName();
+        String status = activityTypeUpdate.getStatus();
+        String templateList = activityTypeUpdate.getTemplateList();
         List<String> list= new ArrayList<>();
         TbActivityType activityType = new TbActivityType();
         activityType.setTypeId(typeId);

@@ -45,10 +45,8 @@ public class AcitvityTest {
     private String userAccount;
     private String status;
     private String url;
-    private String typeId;
-    private String keyWord;
-    private Integer page;
-    private Integer rows;
+    private ActivitySlimQuery activitySlimQuery;
+
 
 
 
@@ -58,10 +56,12 @@ public class AcitvityTest {
         status = "1";
         userAccount = "wangsong";
         url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
-        typeId = "";
-        keyWord="";
-        page=1;
-        rows = 15;
+        activitySlimQuery = new ActivitySlimQuery();
+        activitySlimQuery.setKeyWord("");
+        activitySlimQuery.setTypeId("");
+        activitySlimQuery.setPage(1);
+        activitySlimQuery.setRows(15);
+
     }
 
     @Test
@@ -162,7 +162,7 @@ public class AcitvityTest {
      */
     @Test
     public void activityListSlim(){
-        PaginationData  data= activityService.activityListSlim(typeId,page,rows,keyWord);
+        PaginationData  data= activityService.activityListSlim(activitySlimQuery);
         assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
     }
 

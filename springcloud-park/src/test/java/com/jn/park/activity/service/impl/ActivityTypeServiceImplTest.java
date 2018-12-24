@@ -5,6 +5,9 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.model.ActivityType;
+import com.jn.park.model.ActivityTypeAdd;
+import com.jn.park.model.ActivityTypeQuery;
+import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -38,25 +41,28 @@ public class ActivityTypeServiceImplTest {
 
      private String typeId;
      private String templateList;
-     private String state;
+     private String status;
      private String typeName;
      private Integer page;
      private Integer rows;
      private User user;
      private String typeIds;
+     private ActivityTypeAdd activityTypeAdd;
+     private ActivityTypeUpdate activityTypeUpdate;
+     private ActivityTypeQuery activityTypeQuery;
     @Before
     public void setUp() throws Exception {
         typeId = "aeaa1a3bbd0141cb93e7a5dbd12973dd";
-        typeName="圣诞活动";
-        state = "1";
+        typeName="junit活动类型测试";
+        status = "1";
         templateList="http://192.168.10.20:2020/group2/M00/00/1F/wKgKFFwbRa6AJ_ucAAFG1sygtYE708.jpg," +
                 "http://192.168.10.20:2020/group2/M00/00/1F/wKgKFFwbR0CAbcVwAACTbiUHV4g697.jpg," +
                 "http://192.168.10.20:2020/group2/M00/00/1F/wKgKFFwbR2iAIJ7HAACAPkYqwSw461.jpg";
-        page = 1;
-        rows = 15;
         user = new User();
         user.setAccount("wangsong");
         typeIds="f0396c4fd4d1462b8a4142f395d1e914,aeaa1a3bbd0141cb93e7a5dbd12973dd";
+        page = 1;
+        rows = 15;
     }
 
     @After
@@ -68,9 +74,13 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void insertActivityType() {
+        activityTypeAdd = new ActivityTypeAdd();
+        activityTypeAdd.setStatus(status);
+        activityTypeAdd.setTypeName(" ");
+        activityTypeAdd.setTemplateList(templateList);
         //活动名称重复
         try {
-            activityTypeService.insertActivityType(typeName, state, templateList, user);
+            activityTypeService.insertActivityType(activityTypeAdd, user);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
             assertThat(e.getCode(),equalTo("1111201"));
@@ -82,7 +92,11 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void findActivityTypeListByState() {
-        PaginationData data =  activityTypeService.findActivityTypeListByState(state,page,rows,true);
+        activityTypeQuery = new ActivityTypeQuery();
+        activityTypeQuery.setStatus(status);
+        activityTypeQuery.setPage(page);
+        activityTypeQuery.setRows(rows);
+        PaginationData data =  activityTypeService.findActivityTypeListByState(activityTypeQuery,true);
         int length =(int) data.getTotal();
         assertThat(length,greaterThanOrEqualTo(0));
     }
@@ -101,9 +115,14 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void updateActivityType() {
+        activityTypeUpdate= new ActivityTypeUpdate();
+        activityTypeUpdate.setTypeId(typeId);
+        activityTypeUpdate.setStatus(status);
+        activityTypeUpdate.setTemplateList(templateList);
+        activityTypeUpdate.setTypeName(typeName);
         try {
             typeId = "956dc8ab83f84c0cbb6b6cea2547f449";
-            activityTypeService.updateActivityType(typeId, typeName, "0", templateList, user);
+            activityTypeService.updateActivityType(activityTypeUpdate, user);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
             assertThat(e.getCode(),equalTo("11110202"));
@@ -121,8 +140,11 @@ public class ActivityTypeServiceImplTest {
             activityTypeService.deleteActivityTypeList(typeIds);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
+
             assertThat(e.getCode(),equalTo("11110202"));
         }
 
     }
+
+
 }

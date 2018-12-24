@@ -5,6 +5,7 @@ import com.jn.park.model.ActivityContent;
 import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.ActivityParment;
 import com.jn.park.model.ActivitySataus;
+import com.jn.park.model.ActivitySlimQuery;
 
 /**
  * 活动
@@ -66,15 +67,12 @@ public interface ActivityService {
     int cancelActivity(String activityId);
 
     /**
-     * 前台获取的活动列表
-     * @param typeId
-     * @param page
-     * @param rows
-     * @param keyWord
+     * 前台分页获取的活动列表
+     * @param activitySlimQuery
      * @return
      */
 
-    PaginationData activityListSlim(String typeId, Integer page,Integer rows, String keyWord);
+    PaginationData activityListSlim(ActivitySlimQuery activitySlimQuery);
 
 	 /**
      * 手动发送活动通知接口

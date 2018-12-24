@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.menu.entity.TbSysResources;
@@ -81,8 +82,8 @@ public class SysResourcesServiceTest {
     public void addTest() {
         try {
             sysResourcesService.insertResources(tbSysResources);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -97,8 +98,8 @@ public class SysResourcesServiceTest {
         resources.setMenuId(menuId);
         try {
             sysResourcesService.updateResourcesById(resources);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

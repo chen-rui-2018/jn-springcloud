@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -67,8 +68,8 @@ public class SysDepartmentServiceTest {
     public void add() {
         try {
             sysDepartmentService.add(tbSysDepartment);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -87,8 +88,8 @@ public class SysDepartmentServiceTest {
         SysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         try {
             sysDepartmentService.update(SysDepartment);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -119,8 +120,8 @@ public class SysDepartmentServiceTest {
         list.add(department);
         try {
             sysDepartmentService.addDepartmentBatch(list);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

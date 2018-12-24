@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -78,8 +79,8 @@ public class SysRoleServiceTest {
     public void addTbSystemRole() {
         try {
             sysRoleService.insertTbRole(tbSysRole);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -104,8 +105,8 @@ public class SysRoleServiceTest {
         role.setStatus(SysStatusEnums.INVALID.getCode());
         try {
             sysRoleService.updateTbRole(role);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -72,8 +73,8 @@ public class SysUserServiceTest {
     public void addSysUserTest() {
         try {
             sysUserService.addSysUser(sysUser, user);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -94,8 +95,8 @@ public class SysUserServiceTest {
         sysUser.setStatus(SysStatusEnums.INVALID.getCode());
         try {
             sysUserService.updateSysUser(sysUser);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -147,8 +148,8 @@ public class SysUserServiceTest {
             //查询该用户线面具有的部门岗位信息
             List<SysDepartmentPostVO> data = sysUserService.findDepartmentandPostByUserId(userId);
             Assert.assertThat(Long.valueOf(data.size()).doubleValue(), Matchers.anything());
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

@@ -1,9 +1,9 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.file.model.SysFile;
-import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.service.SysFileService;
 import com.jn.system.model.User;
@@ -74,8 +74,8 @@ public class SysFileServiceTest {
     public void addTest() {
         try {
             sysFileService.insertSysFile(sysFile);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -102,8 +102,8 @@ public class SysFileServiceTest {
         file.setFileName(fileName);
         try {
             sysFileService.updateSysFileById(file);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

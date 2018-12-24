@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -64,8 +65,8 @@ public class SysPostTypeServiceTest {
     public void add() {
         try {
             sysPostTypeService.add(tbSysPostType);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -93,8 +94,8 @@ public class SysPostTypeServiceTest {
         sysPostType.setStatus(SysStatusEnums.INVALID.getCode());
         try {
             sysPostTypeService.update(sysPostType);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.menu.model.*;
@@ -73,8 +74,8 @@ public class SysMenuServiceTest {
     public void addMenuDir() {
         try {
             sysMenuService.addMenu(sysMenuAdd, user);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.startsWith("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -88,8 +89,8 @@ public class SysMenuServiceTest {
         menu.setMenuName(menuName);
         try {
             sysMenuService.updateSysMenuById(menu);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("修改失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 
@@ -132,8 +133,8 @@ public class SysMenuServiceTest {
         sysMenus.setSysMenuSortList(list);
         try {
             sysMenuService.updateBatch(sysMenus);
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), Matchers.containsString("添加失败"));
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
         }
     }
 

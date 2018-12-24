@@ -13,7 +13,7 @@
             </el-select>
           </el-form-item>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" icon="el-icon-plus" type="primary" @click="handleCreate">新增</el-button>
           <el-button type="primary" class="filter-item">导出</el-button>
 
         </el-form>
@@ -27,24 +27,24 @@
       <div class="userManagement-content-right">
         <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
           <el-table-column label="序列" type="index" align="center" width="60"/>
-          <el-table-column label="账号" prop="account" align="center" min-width="100" />
-          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
-          <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
-          <el-table-column label="手机" prop="phone" align="center" min-width="120" />
-          <el-table-column label="微信" prop="wechatAccount" align="center" min-width="120" />
-          <el-table-column label="创建时间" prop="createTime" align="center" min-width="100">
+          <el-table-column label="账号" prop="account" align="center" width="100" />
+          <el-table-column label="姓名" prop="name" align="center" width="100" />
+          <el-table-column label="邮箱" prop="email" align="center" width="150" />
+          <el-table-column label="手机" prop="phone" align="center" width="120" />
+          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
+          <el-table-column label="创建时间" prop="createTime" align="center" width="100">
             <template slot-scope="scope">
               {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
             </template>
           </el-table-column>
-          <el-table-column label="部门" prop="departmentName" align="center" min-width="100" />
-          <el-table-column label="岗位" prop="postName" align="center" min-width="85" />
-          <el-table-column label="状态" prop="status" align="center" min-width="70">
+          <el-table-column label="部门" prop="departmentName" align="center" width="100" />
+          <el-table-column label="岗位" prop="postName" align="center" width="85" />
+          <el-table-column label="状态" prop="status" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
             </template>
           </el-table-column>
-          <el-table-column fit label="操作" align="center" width="auto" min-width="560">
+          <el-table-column fit label="操作" align="center" width="560">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleSectorUpdata(scope.row)">部门岗位</el-button>
               <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
@@ -391,11 +391,9 @@ export default {
   watch: {
     userPositionData: {
       handler: function() {
-        console.log(this.userPositionData)
         const userPosition = this.userPositionData.filter(function(item) {
           return item.department !== '' && item.position
         })
-        console.log(userPosition)
         if (this.userPositionData.length < userPosition.length + 2) {
           this.userPositionData.push({
             department: [],

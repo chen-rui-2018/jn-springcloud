@@ -9,8 +9,11 @@
         <!-- <error-log class="errLog-container right-menu-item"/> -->
 
         <div class="avatar-wrapper">
-          <span class="userName">
+          <span v-if="userName!==null">
             {{ userName }}
+          </span>
+          <span v-else>
+            {{ account }}
           </span>
           <a href="javascript:void(0)" style="display:inline-block;" @click="logout">退出</a>
         </div>
@@ -23,7 +26,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-// import { loginByUsername } from '@/api/login'
+import { loginByUsername } from '@/api/login'
 // import ErrorLog from '@/components/ErrorLog'
 
 export default {
@@ -34,7 +37,7 @@ export default {
   },
   data() {
     return {
-      // account: 'wangsong',
+      account: '',
       userName: ''
     }
   },
@@ -47,8 +50,12 @@ export default {
     ])
   },
   mounted() {
-    // this.account = localStorage.getItem('account')
     this.userName = localStorage.getItem('userName')
+    if (this.userName === null) {
+      loginByUsername().then(res => {
+        this.account = localStorage.getItem('account')
+      })
+    }
   },
   methods: {
     toggleSideBar() {

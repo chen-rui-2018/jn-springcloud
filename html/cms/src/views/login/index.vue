@@ -3,14 +3,14 @@
 
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
-      <div class="title-container">
+      <!-- <div class="title-container">
         <h3 class="title">登陆系统</h3>
-      </div>
+      </div> -->
 
       <el-form-item prop="username">
-        <span class="svg-container">
+        <!-- <span class="svg-container">
           <svg-icon icon-class="user" />
-        </span>
+        </span> -->
         <el-input
           v-model="loginForm.username"
           placeholder="请输入用户名"
@@ -22,9 +22,9 @@
       </el-form-item>
 
       <el-form-item prop="password">
-        <span class="svg-container">
+        <!-- <span class="svg-container">
           <svg-icon icon-class="password" />
-        </span>
+        </span> -->
         <el-input
           :type="passwordType"
           v-model="loginForm.password"
@@ -32,12 +32,12 @@
           name="password"
           auto-complete="on"
           @keyup.enter.native="handleLogin" />
-        <span class="show-pwd" @click="showPwd">
+          <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
-        </span>
+        </span> -->
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登陆</el-button>
+      <el-button :loading="loading" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
     </el-form>
 
   </div>
@@ -144,18 +144,21 @@ export default {
 
   /* reset element-ui css */
   .login-container {
+    background: url("/static/corporate/logo/bg.jpg") 100% 100% / 100% 100% no-repeat;
     .el-input {
       display: inline-block;
-      height: 47px;
+      height: 42px;
       width: 90%;
       input {
         background: transparent;
+        text-align: center;
+        font-family:"微软雅黑";
         border: 0px;
         -webkit-appearance: none;
         border-radius: 0px;
         padding: 12px 5px 12px 15px;
         color: $light_gray;
-        height: 47px;
+        height: 42px;
         caret-color: $cursor;
         &:-webkit-autofill {
         // -webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
@@ -166,9 +169,11 @@ export default {
     .el-form-item {
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.1);
+      background: #80d5c2;
       border-radius: 5px;
       color: #454545;
     }
+
   }
 </style>
 
@@ -184,11 +189,12 @@ $light_gray:#eee;
   background-color: $bg;
   .login-form {
     position: absolute;
-    left: 0;
+    top:15%;
+    left: -26%;
     right: 0;
-    width: 520px;
+    width: 350px;
     max-width: 100%;
-    padding: 35px 35px 15px 35px;
+    // padding: 35px 35px 15px 35px;
     margin: 120px auto;
   }
   .tips {
@@ -227,5 +233,11 @@ $light_gray:#eee;
     cursor: pointer;
     user-select: none;
   }
+  .el-button{
+      height: 42px;
+      font-size: 16px;
+      font-family:"微软雅黑";
+      color:#898989;
+    }
 }
 </style>

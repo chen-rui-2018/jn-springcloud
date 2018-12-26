@@ -198,6 +198,7 @@ export default {
       // 获取选中的数据
       const checkData = this.$refs.tree.getCheckedKeys()
       updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',

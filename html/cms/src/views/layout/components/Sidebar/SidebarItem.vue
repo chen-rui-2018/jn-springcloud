@@ -1,41 +1,16 @@
 <template>
-  <div v-if="!item.hidden&&item.children" class="menu-wrapper">
-
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
-      <app-link :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" >
-          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" :title="generateTitle(onlyOneChild.meta.title)" />
-        </el-menu-item>
-      </app-link>
-    </template>
-
-    <el-submenu v-else ref="submenu" :index="resolvePath(item.path)">
+  <div class="menu-wrapper">
+    <el-submenu v-if="item.children && item.children.length >= 1" :index="item.id + ''">
       <template slot="title">
-        <item v-if="item.meta" :icon="item.meta.icon" :title="generateTitle(item.meta.title)" />
-        <!-- <i class="el-icon-menu" /> -->
-        <span>{{ item.label }}</span>
+        <i class="el-icon-menu"/>
+        <span slot="title">{{ item.label }}</span>
       </template>
-      <el-menu-item v-for="subItem in item.children" :key="subItem.id" :index="'/'+subItem.path" background-color="">
-        <span>{{ subItem.label }}</span>
-      </el-menu-item>
-
-      <!-- <template v-for="child in item.children" v-if="!child.hidden">
-        <sidebar-item
-          v-if="child.children&&child.children.length>0"
-          :is-nest="true"
-          :item="child"
-          :key="child.path"
-          :base-path="resolvePath(child.path)"
-          class="nest-menu" />
-
-        <app-link v-else :to="resolvePath(child.path)" :key="child.name">
-          <el-menu-item :index="resolvePath(child.path)">
-            <item v-if="child.meta" :icon="child.meta.icon" :title="generateTitle(child.meta.title)" />
-          </el-menu-item>
-        </app-link>
-      </template> -->
+      <sidebar-item v-for="subItem in item.children" :key="subItem.id" :item="subItem"/>
     </el-submenu>
-
+    <el-menu-item v-else :index="item.id + ''" @click="handleRoute(item)">
+      <i :class="item.icon"/>
+      <span slot="title">{{ item.label }}</span>
+    </el-menu-item>
   </div>
 </template>
 
@@ -104,6 +79,10 @@ export default {
     },
     isExternalLink(routePath) {
       return isExternal(routePath)
+    },
+    handleRoute(item) {
+      // 通过菜单URL跳转至指定路由
+      this.$router.push('/' + item.path)
     },
     generateTitle
   }

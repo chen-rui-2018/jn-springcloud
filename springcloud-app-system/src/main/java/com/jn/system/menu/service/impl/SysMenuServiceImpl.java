@@ -448,15 +448,15 @@ public class SysMenuServiceImpl implements SysMenuService {
     public List<SysMenuTreeVO> getDynamicMenu(String userId) {
         List<SysMenuTreeVO> list = new ArrayList<SysMenuTreeVO>(16);
         //根据用户id获取用户权限具有的菜单信息
-        Set<SysMenuTreeVO> menuSet = sysMenuMapper.getDynamicMenu(userId);
-        for (SysMenuTreeVO menuTreeVO : menuSet) {
+        List<SysMenuTreeVO> menuList = sysMenuMapper.getDynamicMenu(userId);
+        for (SysMenuTreeVO menuTreeVO : menuList) {
             //判断如果是一级菜单,添加进list
             if (SysLevelEnums.FIRST_LEVEL.getCode().equals(menuTreeVO.getLevel())) {
                 list.add(menuTreeVO);
             }
             //根据父级id层级关系,将子级菜单封装建父级的children中
             List<SysMenuTreeVO> childList = new ArrayList<SysMenuTreeVO>(16);
-            for (SysMenuTreeVO sysMenuTreeVO : menuSet) {
+            for (SysMenuTreeVO sysMenuTreeVO : menuList) {
                 if (menuTreeVO.getId().equals(sysMenuTreeVO.getParentId())) {
                     childList.add(sysMenuTreeVO);
                 }

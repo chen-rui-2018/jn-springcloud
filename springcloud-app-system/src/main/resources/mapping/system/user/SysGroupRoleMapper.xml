@@ -20,11 +20,12 @@
     <select id="findRolesByGroupId" parameterType="java.lang.String" resultType="java.lang.String">
         SELECT
             r.role_name as roleName
-        FROM tb_sys_group_role gr join tb_sys_role r
-            on gr.role_id = r.id
-        where gr.user_group_id = #{id,jdbcType=VARCHAR}
-            and gr.`status` = '1'
-            and r.`status` = '1'
+        FROM tb_sys_group_role gr JOIN tb_sys_role r
+            ON gr.role_id = r.id
+        WHERE gr.user_group_id = #{id,jdbcType=VARCHAR}
+            AND gr.`status` = '1'
+            AND r.`status` = '1'
+            ORDER BY r.create_time ASC
     </select>
 
     <update id="deteSysGroupRoleByGroupId" parameterType="java.lang.String">

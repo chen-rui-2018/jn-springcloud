@@ -484,9 +484,11 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public List<User> findTByT(User user) {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
+        TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
-            tbSysUserCriteria.createCriteria().andAccountLike(user.getAccount());
+            criteria.andAccountEqualTo(user.getAccount());
         }
+        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
         List<User> users = new ArrayList<>();
         for (TbSysUser tbSysUser1 : tbSysUsers) {

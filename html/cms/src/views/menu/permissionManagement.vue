@@ -217,6 +217,7 @@ export default {
       this.menuLoading = true
       // 获取权限具有的菜单和功能
       getAllList(id).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           this.data3 = res.data.data.menuAndResourcesIds

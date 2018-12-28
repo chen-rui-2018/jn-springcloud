@@ -269,7 +269,10 @@ export default {
     },
     // 显示新增岗位对话框
     handleCreate() {
-      this.resetuserGroupform()
+      // this.resetuserGroupform()
+      this.postform.postName = undefined
+      this.postform.status = undefined
+      this.postform.postTypeId = undefined
       this.dialogStatus = '新增岗位'
       this.postdialogFormVisible = true
       this.$nextTick(() => {
@@ -277,12 +280,12 @@ export default {
       })
     },
     // 清空信息
-    resetuserGroupform() {
-      this.postform = {
-        postName: undefined,
-        status: undefined
-      }
-    },
+    // resetuserGroupform() {
+    //   this.postform = {
+    //     postName: undefined,
+    //     status: undefined
+    //   }
+    // },
     // 项目初始化
     initList() {
       this.listLoading = true

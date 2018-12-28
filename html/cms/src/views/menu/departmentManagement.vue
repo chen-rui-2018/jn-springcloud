@@ -6,7 +6,7 @@
           <span>
             <i style="margin-right:3px"/>{{ node.label }}
           </span>
-          <span style="margin-left:20px">
+          <span style="margin-left:20px;padding-right:18px">
             <i
               class="el-icon-plus"
               @click="() => addDepartment(data)"/>
@@ -44,7 +44,7 @@
     </div>
     <!-- 弹出的新增和编辑对话框 -->
     <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
-      <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px">
+      <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px" @submit.native.prevent>
         <el-form-item v-show="visible" label="新增位置:">
           <el-radio v-model="location" label="1">同级部门</el-radio>
           <el-radio v-model="location" label="0">子部门</el-radio>

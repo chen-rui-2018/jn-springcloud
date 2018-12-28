@@ -147,16 +147,19 @@ export default {
       this.listQuery.status = value
     },
     // 清空信息
-    resetTemp() {
-      this.temp = {
-        filegroupName: undefined,
-        filegroupstatus: undefined,
-        fileGroupDescribe: undefined
-      }
-    },
+    // resetTemp() {
+    //   this.temp = {
+    //     filegroupName: undefined,
+    //     filegroupstatus: undefined,
+    //     fileGroupDescribe: undefined
+    //   }
+    // },
     // 显示新增文件组对话框
     handleCreate() {
-      this.resetTemp()
+      // this.resetTemp()
+      this.temp.fileGroupName = undefined
+      this.temp.status = undefined
+      this.temp.fileGroupDescribe = undefined
       this.dialogStatus = '新增文件组'
       this.fileGroupdialogFormVisible = true
       this.$nextTick(() => {

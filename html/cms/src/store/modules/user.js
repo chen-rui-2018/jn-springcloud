@@ -69,7 +69,12 @@ const user = {
             setToken(response.data.data)
             getUsername().then(res => {
               if (res.data.code === '0000') {
-                localStorage.setItem('userName', res.data.data.name)
+                if (res.data.data.name) {
+                  localStorage.setItem('userName', res.data.data.name)
+                } else {
+                  localStorage.setItem('account', res.data.data.account)
+                }
+                // localStorage.setItem('account', res.data.data.account)
               }
             })
             resolve()
@@ -129,6 +134,8 @@ const user = {
         }).catch(error => {
           reject(error)
         })
+        localStorage.removeItem('userName')
+        localStorage.removeItem('account')
       })
     },
 

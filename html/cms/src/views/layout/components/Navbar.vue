@@ -26,7 +26,7 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import { loginByUsername } from '@/api/login'
+// import { loginByUsername } from '@/api/login'
 // import ErrorLog from '@/components/ErrorLog'
 
 export default {
@@ -51,11 +51,12 @@ export default {
   },
   mounted() {
     this.userName = localStorage.getItem('userName')
-    if (this.userName === null) {
-      loginByUsername().then(res => {
-        this.account = localStorage.getItem('account')
-      })
-    }
+    this.account = localStorage.getItem('account')
+    // if (this.userName === null) {
+    //   this.account = localStorage.getItem('account')
+    // } else {
+    //   this.userName = localStorage.getItem('userName')
+    // }
   },
   methods: {
     toggleSideBar() {

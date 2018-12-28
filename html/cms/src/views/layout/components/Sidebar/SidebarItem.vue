@@ -7,7 +7,7 @@
       </template>
       <sidebar-item v-for="subItem in item.children" :key="subItem.id" :item="subItem"/>
     </el-submenu>
-    <el-menu-item v-else :index="item.id + ''" @click="handleRoute(item)">
+    <el-menu-item v-else :index="`/${item.path}`">
       <i :class="item.icon"/>
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import path from 'path'
+// import path from 'path'
 import { generateTitle } from '@/utils/i18n'
-import { isExternal } from '@/utils'
+// import { isExternal } from '@/utils'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
@@ -71,19 +71,19 @@ export default {
 
       return false
     },
-    resolvePath(routePath) {
-      if (this.isExternalLink(routePath)) {
-        return routePath
-      }
-      return path.resolve(this.basePath, routePath)
-    },
-    isExternalLink(routePath) {
-      return isExternal(routePath)
-    },
-    handleRoute(item) {
-      // 通过菜单URL跳转至指定路由
-      this.$router.push('/' + item.path)
-    },
+    // resolvePath(routePath) {
+    //   if (this.isExternalLink(routePath)) {
+    //     return routePath
+    //   }
+    //   return path.resolve(this.basePath, routePath)
+    // },
+    // isExternalLink(routePath) {
+    //   return isExternal(routePath)
+    // },
+    // handleRoute(item) {
+    //   // 通过菜单URL跳转至指定路由
+    //   this.$router.push('/' + item.path)
+    // },
     generateTitle
   }
 }

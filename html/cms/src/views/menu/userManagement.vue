@@ -154,7 +154,7 @@
     </el-dialog>
     <!-- S 重置密码 -->
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
-      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="50px">
+      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
           <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
           <span class="show-pwd" @click="showPwd">

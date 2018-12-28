@@ -1,9 +1,9 @@
 package com.jn.system.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
-import com.jn.system.api.SystemClient;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.enums.ShiroUserEnum;
 import com.jn.system.model.User;
@@ -14,7 +14,15 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 
@@ -29,7 +37,7 @@ import java.util.Set;
 public class ShiroDbRealm extends AuthorizingRealm {
 
     @Autowired
-    private SystemClient client;
+    private LoadBalancerClient loadBalancerClient;
 
     /**
      * 用户登录认证
@@ -41,12 +49,21 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         MyUsernamePasswordToken token = (MyUsernamePasswordToken) authcToken;
-        Result<User> user = client.getUser(new User(token.getUsername()));
-        if (GlobalConstants.SUCCESS_CODE.equals(user.getCode()) && user.getData() == null) {
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("account", token.getUsername());
+        Result result = this.getSystemApiPostForEntity(
+                "springcloud-app-system",
+                "/api/system/getUser",
+                jsonObject.toString());
+        ObjectMapper mapper = new ObjectMapper();
+        User user = mapper.convertValue(result.getData(), User.class);
+
+        if (GlobalConstants.SUCCESS_CODE.equals(result.getCode()) && result.getData() == null) {
             throw new UnknownAccountException(ShiroExceptionEnum.UNKNOWN_ACCOUNT.getMessage());
-        } else if (!GlobalConstants.SUCCESS_CODE.equals(user.getCode())) {
-            throw new JnSpringCloudException(user);
-        } else if (!ShiroUserEnum.ACCOUNT_EFFECTIVE.getCode().equals(user.getData().getStatus())) {
+        } else if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
+            throw new JnSpringCloudException(result);
+        } else if (!ShiroUserEnum.ACCOUNT_EFFECTIVE.getCode().equals(user.getStatus())) {
             throw new DisabledAccountException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE.getMessage());
         }
 
@@ -54,9 +71,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
             setCredentialsMatcher(new AllowAllCredentialsMatcher());
         }
 
-        clearAuthorizationInfoCache(user.getData());
+        clearAuthorizationInfoCache(user);
         // 认证缓存信息
-        return new SimpleAuthenticationInfo(user.getData(), user.getData().getPassword().toCharArray(), getName());
+        return new SimpleAuthenticationInfo(user, user.getPassword().toCharArray(), getName());
     }
 
     /**
@@ -68,9 +85,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Override
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User shiroUser = (User) principals.getPrimaryPrincipal();
-        Result<Set<String>> roleList = client.getResources(shiroUser.getId());
+
+        Result result = this.getSystemApiPostForEntity(
+                "springcloud-app-system",
+                "/api/system/getResources",
+                shiroUser.getId());
+        ObjectMapper mapper = new ObjectMapper();
+        Set<String> roliList = mapper.convertValue(result.getData(), Set.class);
+
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        info.addStringPermissions(roleList.getData());
+        info.addStringPermissions(roliList);
         return info;
     }
 
@@ -82,6 +106,29 @@ public class ShiroDbRealm extends AuthorizingRealm {
     private void clearAuthorizationInfoCache(User user) {
         Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
         cache.remove(user.getId());
+    }
+
+
+    /**
+     * RestTemplate 调用接口
+     *
+     * @param client     请求spring.application.name
+     * @param url        请求地址
+     * @param jsonObject 请求参数
+     * @return
+     */
+    private Result getSystemApiPostForEntity(String client, String url, String jsonObject) {
+        ServiceInstance si = this.loadBalancerClient.choose(client);
+        StringBuffer sb = new StringBuffer();
+        sb.append("http://").append(si.getHost()).append(":").append(si.getPort()).append(url);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        MediaType type = MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        headers.setContentType(type);
+        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
+        HttpEntity<String> formEntity = new HttpEntity<String>(jsonObject.toString(), headers);
+        ResponseEntity<Result> response = restTemplate.postForEntity(sb.toString(), formEntity, Result.class);
+        return response.getBody();
     }
 
 

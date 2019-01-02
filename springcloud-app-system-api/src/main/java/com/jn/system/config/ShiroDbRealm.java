@@ -39,6 +39,20 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
+    @Autowired
+    private RestTemplate restTemplate;
+    /**
+     * 获取用户的服务ID
+     */
+    private final static String SYSTEM_CLIENT = "springcloud-app-system";
+    /**
+     * 获取用户的服务地址
+     */
+    private final static String SYSTEM_CLIENT_USER_SERVICE = "/api/system/getUser";
+    /**
+     * 获取资源的服务地址
+     */
+    private final static String SYSTEM_CLIENT_RESOURCE_SERVICE = "/api/system/getUser";
     /**
      * 用户登录认证
      *
@@ -49,12 +63,11 @@ public class ShiroDbRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
         MyUsernamePasswordToken token = (MyUsernamePasswordToken) authcToken;
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("account", token.getUsername());
         Result result = this.getSystemApiPostForEntity(
-                "springcloud-app-system",
-                "/api/system/getUser",
+                SYSTEM_CLIENT,
+                SYSTEM_CLIENT_USER_SERVICE,
                 jsonObject.toString());
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.convertValue(result.getData(), User.class);
@@ -87,8 +100,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
         User shiroUser = (User) principals.getPrimaryPrincipal();
 
         Result result = this.getSystemApiPostForEntity(
-                "springcloud-app-system",
-                "/api/system/getResources",
+                SYSTEM_CLIENT,
+                SYSTEM_CLIENT_RESOURCE_SERVICE,
                 shiroUser.getId());
         ObjectMapper mapper = new ObjectMapper();
         Set<String> roliList = mapper.convertValue(result.getData(), Set.class);
@@ -121,12 +134,11 @@ public class ShiroDbRealm extends AuthorizingRealm {
         ServiceInstance si = this.loadBalancerClient.choose(client);
         StringBuffer sb = new StringBuffer();
         sb.append("http://").append(si.getHost()).append(":").append(si.getPort()).append(url);
-        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         MediaType type = MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         headers.setContentType(type);
         headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
-        HttpEntity<String> formEntity = new HttpEntity<String>(jsonObject.toString(), headers);
+        HttpEntity<String> formEntity = new HttpEntity<>(jsonObject, headers);
         ResponseEntity<Result> response = restTemplate.postForEntity(sb.toString(), formEntity, Result.class);
         return response.getBody();
     }

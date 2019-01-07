@@ -4,9 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.system.dept.entity.TbSysPostType;
 import com.jn.system.dept.model.SysPostType;
-import com.jn.system.dept.model.SysPostTypeAdd;
 import com.jn.system.dept.model.SysPostTypePage;
-import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -23,9 +21,9 @@ public interface SysPostTypeService {
     /**
      * 增加岗位类型
      *
-     * @param postTypeAdd 岗位类型增加实体
+     * @param tbSysPostType 岗位类型增加实体
      */
-    void add(SysPostTypeAdd postTypeAdd, User user);
+    void add(TbSysPostType tbSysPostType);
 
     /**
      * 列表查询岗位类型

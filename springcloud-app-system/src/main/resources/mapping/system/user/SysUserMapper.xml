@@ -25,6 +25,21 @@
         id,account,password,name,phone,email,creator,create_time as createTime,status
     </sql>
 
+    <sql id="Get_User_Page_Column">
+        t.id,
+        t.account,
+        t.name,
+        t.phone,
+        t.email,
+        t.status,
+        t.create_time as createTime,
+        t.wechat_account as wechatAccount,
+        tt.department_name as departmentName,
+        tt.post_name as postName,
+        tt.postTypeName,
+        tt.department_id
+    </sql>
+
     <sql id="Column_list">
             tsu.id,
             tsu.account,
@@ -103,20 +118,18 @@
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
             parameterType="com.jn.system.user.model.SysUserPage">
         select
-        t.id,
-        t.account,
-        t.name,
-        t.phone,
-        t.email,
-        t.status,
-        t.create_time as createTime,
-        t.wechat_account as wechatAccount,
-        tt.department_name as departmentName,
-        tt.post_name as postName,
-        tt.department_id
+        <include refid="Get_User_Page_Column"/>
         from tb_sys_user t
         left join
-        (select t1.department_name,t3.department_id,t2.post_name,t3.user_id,t3.is_default
+        (select
+        t1.department_name,
+        t3.department_id,
+        t2.post_name,
+        (select post_type_name
+        from tb_sys_post_type
+        where id =  t2.post_type_id) as postTypeName,
+        t3.user_id,
+        t3.is_default
         from tb_sys_department t1
         ,tb_sys_post t2
         ,tb_sys_user_department_post t3
@@ -140,6 +153,91 @@
             and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
         ORDER BY t.create_time desc, t.id desc
+    </select>
+
+    <select id="getSysUserByPageAndPost" resultType="com.jn.system.user.vo.SysUserVO"
+            parameterType="com.jn.system.user.model.SysUserPage">
+        SELECT
+        t.id,
+        t.account,
+        t.`name`,
+        t.phone,
+        t.email,
+        t.`status`,
+        t.createTime,
+        t.wechatAccount,
+        t.departmentName,
+        t.postName,
+        t.postTypeName,
+        t.department_id
+        from
+        (select distinct
+        <include refid="Get_User_Page_Column"/>
+        from tb_sys_user t
+        left join
+        (select
+        t1.department_name,
+        t3.department_id,
+        t2.post_name,
+        (select post_type_name
+        from tb_sys_post_type
+        where id =  t2.post_type_id) as postTypeName,
+        t3.user_id,
+        t3.is_default
+        from tb_sys_department t1
+        ,tb_sys_post t2
+        ,tb_sys_user_department_post t3
+        where t1.id = t3.department_id
+        and t2.id = t3.post_id
+        and t1.status = '1'
+        and t2.status = '1'
+        and t3.status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
+            and t3.is_default = '1'
+        </if>
+        ) tt on t.id = tt.user_id
+        where t.status != '-1'
+        and tt.`post_name` like CONCAT('%', #{postOrTypeName,jdbcType=VARCHAR}, '%')
+        UNION
+        select distinct
+        <include refid="Get_User_Page_Column"/>
+        from tb_sys_user t
+        left join
+        (select
+        t1.department_name,
+        t3.department_id,
+        t2.post_name,
+        (select post_type_name
+        from tb_sys_post_type
+        where id =  t2.post_type_id) as postTypeName,
+        t3.user_id,
+        t3.is_default
+        from tb_sys_department t1
+        ,tb_sys_post t2
+        ,tb_sys_user_department_post t3
+        where t1.id = t3.department_id
+        and t2.id = t3.post_id
+        and t1.status = '1'
+        and t2.status = '1'
+        and t3.status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
+            and t3.is_default = '1'
+        </if>
+        ) tt on t.id = tt.user_id
+        where t.status != '-1'
+        and tt.`postTypeName` like CONCAT('%', #{postOrTypeName,jdbcType=VARCHAR}, '%')) t
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+                and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
+                and t.status = #{status,jdbcType=VARCHAR}
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+                and t.department_id = #{departmentId,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY t.createTime DESC,t.id DESC
     </select>
 
     <update id="deleteSysUser" parameterType="java.lang.String">

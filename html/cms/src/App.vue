@@ -9,3 +9,8 @@ export default{
   name: 'App'
 }
 </script>
+<style lang='scss'>
+body{
+  padding-right:0 !important
+}
+</style>

@@ -15,13 +15,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 岗位类型管理
@@ -56,7 +59,13 @@ public class SysPostTypeController extends BaseController {
     public Result add(@Validated @RequestBody SysPostTypeAdd postTypeAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPostTypeService.add(postTypeAdd, user);
+        //封装岗位类型对象
+        TbSysPostType tbSysPostType = new TbSysPostType();
+        BeanUtils.copyProperties(postTypeAdd, tbSysPostType);
+        tbSysPostType.setId(UUID.randomUUID().toString());
+        tbSysPostType.setCreateTime(new Date());
+        tbSysPostType.setCreator(user.getId());
+        sysPostTypeService.add(tbSysPostType);
         return new Result();
     }
 

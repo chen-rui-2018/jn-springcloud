@@ -12,13 +12,10 @@ import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.entity.TbSysDepartmentCriteria;
 import com.jn.system.dept.enums.SysDepartmentExceptionEnums;
 import com.jn.system.dept.model.SysDepartment;
-import com.jn.system.dept.model.SysDepartmentAdd;
 import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -26,7 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * 部门service实现
@@ -143,14 +142,14 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     /**
      * 添加部门
      *
-     * @param sysDepartmentAdd
+     * @param tbSysDepartment
      */
     @Override
     @ServiceLog(doAction = "添加部门")
     @Transactional(rollbackFor = Exception.class)
-    public void add(SysDepartmentAdd sysDepartmentAdd, User user) {
-        String parentId = sysDepartmentAdd.getParentId();
-        String departmentName = sysDepartmentAdd.getDepartmentName();
+    public void add(TbSysDepartment tbSysDepartment) {
+        String parentId = tbSysDepartment.getParentId();
+        String departmentName = tbSysDepartment.getDepartmentName();
         //1.判断同级部门中,部门名称是否已经存在
         SysDepartmentCheckName checkName = new SysDepartmentCheckName(parentId, departmentName);
         String value = checkDepartmentName(checkName);
@@ -168,23 +167,14 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             level = SysLevelEnums.FIRST_LEVEL.getCode();
         } else {
             //查询父级部门等级
-            TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(parentId);
-            level = String.valueOf(Integer.parseInt(tbSysDepartment.getLevel()) + 1);
+            TbSysDepartment tbSysDepartment1 = tbSysDepartmentMapper.selectByPrimaryKey(parentId);
+            level = String.valueOf(Integer.parseInt(tbSysDepartment1.getLevel()) + 1);
         }
-
-        //3.封装部门数据
-        TbSysDepartment tbSysDepartment = new TbSysDepartment();
-        tbSysDepartment.setId(UUID.randomUUID().toString());
-        tbSysDepartment.setParentId(parentId);
-        tbSysDepartment.setDepartmentName(departmentName);
-        tbSysDepartment.setCreator(user.getId());
-        tbSysDepartment.setCreateTime(new Date());
-        tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysDepartment.setLevel(level);
-        //4.插入部门数据
+
+        //3.插入部门数据
         tbSysDepartmentMapper.insertSelective(tbSysDepartment);
-        logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}", tbSysDepartment.getId(),
-                sysDepartmentAdd.getParentId());
+        logger.info("[部门] 添加部门信息成功,departmentId:{},父级id:{}", tbSysDepartment.getId(), parentId);
     }
 
 

@@ -31,7 +31,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户组service实现
@@ -83,24 +86,18 @@ public class SysGroupServiceImpl implements SysGroupService {
     /**
      * 用户组增加
      *
-     * @param sysGroup 用户组
+     * @param tbSysGroup 用户组
      */
     @Override
     @ServiceLog(doAction = "用户组增加")
     @Transactional(rollbackFor = Exception.class)
-    public void addSysGroup(SysGroupAdd sysGroup, User user) {
+    public void addSysGroup(TbSysGroup tbSysGroup) {
         //判断用户组名是否存在
-        List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
+        List<TbSysGroup> tbSysGroups = checkName(tbSysGroup.getGroupName());
         if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.warn("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+            logger.warn("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", tbSysGroup.getGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        //为用户组设置信息
-        TbSysGroup tbSysGroup = new TbSysGroup();
-        BeanUtils.copyProperties(sysGroup, tbSysGroup);
-        tbSysGroup.setId(UUID.randomUUID().toString());
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(tbSysGroup);
         logger.info("[用户组] 添加用户组信息成功,groupId:{}", tbSysGroup.getId());
     }
@@ -129,11 +126,11 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
         sysGroupMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupUserMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联用户信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联用户信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组关联角色信息,groupIds:{}", Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联角色信息成功,groupIds:{}", Arrays.toString(groupIds));
     }
 
     /**

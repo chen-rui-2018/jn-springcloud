@@ -73,24 +73,19 @@ public class SysRoleServiceImpl implements SysRoleService {
     /**
      * 新增角色
      *
-     * @param role
+     * @param tbSysRole
      */
     @Override
     @ServiceLog(doAction = "新增角色")
     @Transactional(rollbackFor = Exception.class)
-    public void insertTbRole(SysRoleAdd role, User user) {
+    public void insertTbRole(TbSysRole tbSysRole) {
         //判断角色名称是否已经存在
-        List<TbSysRole> tbSysRoles = checkName(role.getRoleName());
+        List<TbSysRole> tbSysRoles = checkName(tbSysRole.getRoleName());
         if (tbSysRoles != null && tbSysRoles.size() > 0) {
-            logger.warn("[角色权限] 新增角色失败，该角色名称已存在！,roleName: {}", role.getRoleName());
+            logger.warn("[角色权限] 新增角色失败，该角色名称已存在！,roleName: {}", tbSysRole.getRoleName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        TbSysRole tbSysRole = new TbSysRole();
-        tbSysRole.setId(UUID.randomUUID().toString());
-        tbSysRole.setCreator(user.getId());
-        tbSysRole.setRoleName(role.getRoleName());
-        tbSysRole.setStatus(role.getStatus());
-        tbSysRoleMapper.insert(tbSysRole);
+        tbSysRoleMapper.insertSelective(tbSysRole);
         logger.info("[角色权限] 新增角色成功！,roleId: {}", tbSysRole.getId());
 
     }
@@ -122,12 +117,12 @@ public class SysRoleServiceImpl implements SysRoleService {
         String roleName = role.getRoleName();
         //1.判断修改信息是否存在
         TbSysRole tbSysRole1 = tbSysRoleMapper.selectByPrimaryKey(roleId);
-        if (tbSysRole1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysRole1.getStatus())){
+        if (tbSysRole1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysRole1.getStatus())) {
             logger.warn("[角色] 角色修改失败,修改信息不存在,roleId: {}", roleId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
         //2.如果修改了角色名称,判断名称是否已经存在
-        if (!tbSysRole1.getRoleName().equals(roleName)){
+        if (!tbSysRole1.getRoleName().equals(roleName)) {
             List<TbSysRole> tbSysRoles = checkName(roleName);
             if (tbSysRoles != null && tbSysRoles.size() > 0) {
                 logger.warn("[角色权限] 更新角色失败，该角色名称已存在！,roleName: {},roleId: {}", roleName, roleId);

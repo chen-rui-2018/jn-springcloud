@@ -3,8 +3,10 @@ package com.jn.system.permission.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
+import com.jn.system.permission.entity.TbSysPermission;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysPermissionService;
 import com.jn.system.permission.vo.SysMenuResourcesVO;
@@ -12,12 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 权限管理
@@ -42,7 +47,13 @@ public class SysPermissionController extends BaseController {
     public Result add(@Validated @RequestBody SysPermissionAdd sysPermissionAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addPermission(sysPermissionAdd,user);
+        //封装权限对象
+        TbSysPermission tbSysPermission = new TbSysPermission();
+        BeanUtils.copyProperties(sysPermissionAdd, tbSysPermission);
+        tbSysPermission.setId(UUID.randomUUID().toString());
+        tbSysPermission.setCreateTime(new Date());
+        tbSysPermission.setCreator(user.getId());
+        sysPermissionService.addPermission(tbSysPermission);
         return new Result();
     }
 
@@ -92,7 +103,7 @@ public class SysPermissionController extends BaseController {
         Assert.notNull(sysPermissionRolesAdd.getPermissionId(), "权限id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd,user);
+        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd, user);
         return new Result();
     }
 
@@ -122,7 +133,7 @@ public class SysPermissionController extends BaseController {
         Assert.notNull(sysPermissionFileGroupAdd.getPermissionId(), "权限id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd,user);
+        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd, user);
         return new Result();
     }
 
@@ -140,7 +151,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/getMenuAndResources")
     @ApiOperation(value = "权限授权功能,获取菜单及功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getMenuAndResources")
-    public Result getMenuAndResources(String permissionId){
+    public Result getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = sysPermissionService.getMenuAndResources(permissionId);
         return new Result(sysMenuResourcesVO);
     }
@@ -150,10 +161,10 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "权限授权菜单及功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addMenuAndResourcesToPermission")
     public Result addMenuAndResourcesToPermission(
-            @Validated @RequestBody SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd){
+            @Validated @RequestBody SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addMenuAndResourcesToPermission(sysPermissionMenuResourcesAdd,user);
+        sysPermissionService.addMenuAndResourcesToPermission(sysPermissionMenuResourcesAdd, user);
         return new Result();
     }
 

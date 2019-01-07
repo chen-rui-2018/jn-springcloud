@@ -34,20 +34,6 @@
         </foreach>
     </update>
 
-    <!--批量插入 -->
-    <insert id="insertBatch" parameterType="java.util.List">
-
-        insert into tb_sys_file_group_file (id, file_group_id,file_id,creator,create_time,status) values
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
-            #{item.fileGroupId,jdbcType=VARCHAR},
-            #{item.fileId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
-            now(),
-            #{item.status,jdbcType=VARCHAR})
-        </foreach>
-    </insert>
-
     <!-- 根据用户获取文件组 -->
     <select id="getUserFileGroupById" parameterType="java.lang.String"
             resultMap="BaseResultMap">

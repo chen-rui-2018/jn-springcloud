@@ -186,7 +186,7 @@ export default {
         permissionName: [{ required: true, message: '请输入权限名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -198,6 +198,7 @@ export default {
       // 获取选中的数据
       const checkData = this.$refs.tree.getCheckedKeys()
       updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -216,6 +217,7 @@ export default {
       this.menuLoading = true
       // 获取权限具有的菜单和功能
       getAllList(id).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           this.data3 = res.data.data.menuAndResourcesIds

@@ -3,9 +3,7 @@ package com.jn.system.file.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
-import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -21,9 +19,9 @@ public interface SysFileGroupService {
     /**
      * 新增文件组
      *
-     * @param sysFileGroup
+     * @param tbSysFileGroup
      */
-    void insertSysFileGroup(SysFileGroup sysFileGroup,User user);
+    void insertSysFileGroup(TbSysFileGroup tbSysFileGroup);
 
     /**
      * 根据id更新文件组
@@ -54,14 +52,6 @@ public interface SysFileGroupService {
      * @return
      */
     PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage);
-
-
-    /**
-     * 文件组添加文件
-     *
-     * @param sysFileGroupFileAdd
-     */
-    void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd,User user);
 
     /**
      * 根据用户获取文件组

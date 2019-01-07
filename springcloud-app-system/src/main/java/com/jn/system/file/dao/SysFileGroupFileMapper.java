@@ -43,14 +43,6 @@ public interface SysFileGroupFileMapper {
     int deleteByFileGroupIds(String[] id);
 
     /**
-     * 批量插入文件组文件
-     *
-     * @param sysFileGroupFiles
-     * @return
-     */
-    int insertBatch(List<SysFileGroupFile> sysFileGroupFiles);
-
-    /**
      * 根据用户获取文件组
      *
      * @param userId 用户ID

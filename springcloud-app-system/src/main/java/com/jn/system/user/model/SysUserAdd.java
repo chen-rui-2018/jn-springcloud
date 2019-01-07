@@ -19,6 +19,9 @@ import java.io.Serializable;
 public class SysUserAdd implements Serializable {
     private static final long serialVersionUID = -2990338272082087290L;
 
+    @ApiModelProperty("用户id")
+    private String id;
+
     @ApiModelProperty("用户账号")
     @Pattern(regexp = "^[A-Za-z0-9]{6,16}$", message = "{\"account\":\"账号只允许6-16位数字及字母\"}")
     private String account;
@@ -54,8 +57,9 @@ public class SysUserAdd implements Serializable {
     public SysUserAdd() {
     }
 
-    public SysUserAdd(String account, String name, String phone, String email, String status,
-                      String wechatAccount, String departmentId, String postId) {
+    public SysUserAdd(String id, String account, String name, String phone, String email,
+                      String status, String wechatAccount, String departmentId, String postId) {
+        this.id = id;
         this.account = account;
         this.name = name;
         this.phone = phone;
@@ -64,6 +68,14 @@ public class SysUserAdd implements Serializable {
         this.wechatAccount = wechatAccount;
         this.departmentId = departmentId;
         this.postId = postId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAccount() {
@@ -130,11 +142,11 @@ public class SysUserAdd implements Serializable {
         this.postId = postId;
     }
 
-
     @Override
     public String toString() {
         return "SysUserAdd{" +
-                "account='" + account + '\'' +
+                "id='" + id + '\'' +
+                ", account='" + account + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

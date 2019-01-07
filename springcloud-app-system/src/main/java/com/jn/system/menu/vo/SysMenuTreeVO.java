@@ -27,12 +27,16 @@ public class SysMenuTreeVO implements Serializable {
     private String icon;
     @ApiModelProperty("菜单路径")
     private String menuUrl;
+    @ApiModelProperty("菜单路径")
+    private String path;
     @ApiModelProperty("排序,菜单目录,默认排序为0,子菜单排序从1,往后开始递增")
     private Integer sort;
     @ApiModelProperty("是否是文件夹,1是,0不是")
     private String isDir;
     @ApiModelProperty("父级id")
     private String parentId;
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
     @ApiModelProperty("父级id父级名称")
     private String parentName;
     @ApiModelProperty("创建时间")
@@ -45,16 +49,18 @@ public class SysMenuTreeVO implements Serializable {
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, Integer sort,
-                         String isDir, String parentId, String parentName, Date createTime,
-                         List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path,
+                         Integer sort, String isDir, String parentId, String level, String parentName,
+                         Date createTime, List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
         this.icon = icon;
         this.menuUrl = menuUrl;
+        this.path = path;
         this.sort = sort;
         this.isDir = isDir;
         this.parentId = parentId;
+        this.level = level;
         this.parentName = parentName;
         this.createTime = createTime;
         this.children = children;
@@ -93,6 +99,14 @@ public class SysMenuTreeVO implements Serializable {
         this.menuUrl = menuUrl;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public Integer getSort() {
         return sort;
     }
@@ -115,6 +129,14 @@ public class SysMenuTreeVO implements Serializable {
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getParentName() {
@@ -156,9 +178,11 @@ public class SysMenuTreeVO implements Serializable {
                 ", label='" + label + '\'' +
                 ", icon='" + icon + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
+                ", path='" + path + '\'' +
                 ", sort=" + sort +
                 ", isDir='" + isDir + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", level='" + level + '\'' +
                 ", parentName='" + parentName + '\'' +
                 ", createTime=" + createTime +
                 ", children=" + children +

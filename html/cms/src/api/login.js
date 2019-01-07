@@ -12,6 +12,12 @@ export function loginByUsername(account, password) {
     data
   })
 }
+export function getUsername() {
+  return request({
+    url: 'system/sysUser/getUserInfo',
+    method: 'post'
+  })
+}
 
 export function logout() {
   return request({

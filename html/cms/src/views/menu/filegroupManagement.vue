@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="文件组名称:">
-          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" maxlenth="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
           <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileGroupStatus">
@@ -147,16 +147,19 @@ export default {
       this.listQuery.status = value
     },
     // 清空信息
-    resetTemp() {
-      this.temp = {
-        filegroupName: undefined,
-        filegroupstatus: undefined,
-        fileGroupDescribe: undefined
-      }
-    },
+    // resetTemp() {
+    //   this.temp = {
+    //     filegroupName: undefined,
+    //     filegroupstatus: undefined,
+    //     fileGroupDescribe: undefined
+    //   }
+    // },
     // 显示新增文件组对话框
     handleCreate() {
-      this.resetTemp()
+      // this.resetTemp()
+      this.temp.fileGroupName = undefined
+      this.temp.status = undefined
+      this.temp.fileGroupDescribe = undefined
       this.dialogStatus = '新增文件组'
       this.fileGroupdialogFormVisible = true
       this.$nextTick(() => {

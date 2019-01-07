@@ -1,12 +1,11 @@
 package com.jn.system.permission.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
+import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
 import com.jn.system.user.model.SysUserGroupRoleAdd;
 import com.jn.system.user.model.SysUserRoleAdd;
-
-import java.util.List;
 
 /**
  * @author： shaobao
@@ -19,9 +18,9 @@ public interface SysRoleService {
     /**
      * 新增角色
      *
-     * @param role
+     * @param tbSysRole
      */
-    void insertTbRole(SysRoleAdd role, User user);
+    void insertTbRole(TbSysRole tbSysRole);
 
     /**
      * 更新角色信息

@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * @modified By:
  */
 @ApiModel(value = "Activity", description = "活动信息")
-public class Activity extends Page implements Serializable {
+public class Activity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "活动ID")
@@ -83,6 +83,8 @@ public class Activity extends Page implements Serializable {
     private String issueAccount;
     @ApiModelProperty(value = "是否展示报名人-0否1是")
     private String showApplyNum;
+    @ApiModelProperty(value = "是否可以手动推送-0否1是")
+    private String isSendMessage;
 
     public String getId() {
         return id;
@@ -338,5 +340,13 @@ public class Activity extends Page implements Serializable {
 
     public void setParkName(String parkName) {
         this.parkName = parkName;
+    }
+
+    public String getIsSendMessage() {
+        return isSendMessage;
+    }
+
+    public void setIsSendMessage(String isSendMessage) {
+        this.isSendMessage = isSendMessage;
     }
 }

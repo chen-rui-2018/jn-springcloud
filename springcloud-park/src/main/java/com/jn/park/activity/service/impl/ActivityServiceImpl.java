@@ -76,6 +76,16 @@ public class ActivityServiceImpl implements ActivityService {
         ActivityContent activity = new ActivityContent();
         BeanUtils.copyProperties(activityParment,activity);
         List<Activity> activities = activityMapper.selectActivityList(activity);
+        for(Activity at :activities){
+            String actiStartTime = at.getActiStartTime();
+            Date date = DateUtils.parseDate(actiStartTime);
+            Date nowDate = new Date();
+            if(DateUtils.addHours(nowDate,24).after(date)&&nowDate.before(date)){
+                at.setIsSendMessage("1");
+            }else{
+                at.setIsSendMessage("0");
+            }
+        }
         PaginationData data = new PaginationData(activities, objects.getTotal());
         return data;
     }

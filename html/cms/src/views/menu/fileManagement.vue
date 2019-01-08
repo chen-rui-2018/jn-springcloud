@@ -1,5 +1,5 @@
 <template>
-  <div class="fileManagement">
+  <div v-loading="fileListLoading" class="fileManagement">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="文件名称:">
@@ -17,7 +17,7 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table v-loading="fileListLoading" :data="fileList" border fit highlight-current-row style="width: 100%;height:100%">
+    <el-table :data="fileList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->

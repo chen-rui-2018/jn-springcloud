@@ -1,5 +1,5 @@
 <template>
-  <div class="postManagement">
+  <div v-loading="listLoading" class="postManagement">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="岗位名称:">
@@ -21,7 +21,7 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table v-loading="listLoading" :data="postList" border fit highlight-current-row style="width: 100%;height:100%;">
+    <el-table :data="postList" border fit highlight-current-row style="width: 100%;height:100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
@@ -185,12 +185,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 弹出编辑岗位对话框
@@ -243,9 +239,9 @@ export default {
     },
     // 实现新增岗位功能
     createPostData() {
+      this.isDisabled = true
       this.$refs['postform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           addPostList(this.postform).then(res => {
             if (res.data.code === '0000') {
@@ -264,6 +260,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -290,7 +288,6 @@ export default {
     initList() {
       this.listLoading = true
       getAllList(this.listQuery).then(response => {
-        console.log(response)
         if (response.data.code === '0000') {
           this.postList = response.data.data.rows
           this.total = response.data.data.total

@@ -25,7 +25,7 @@
       </el-form-item>
 
       <!-- <el-button :loading="loading" style="width:100%;margin-bottom:20px;" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button> -->
-      <el-button :loading="loading" style="width:100%;margin-bottom:20px;" @click="submitForm('loginForm')" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
+      <el-button :loading="loading" style="width:100%;margin-bottom:20px;" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
       <div class="formFooter">
         <input id="checkBox" type="checkbox" checked><label for="checkBox"><span class="remeberpw">&nbsp;&nbsp;记住密码</span></label>
         <a href="javascript:void(0)" class="forgetpw">忘记密码</a>
@@ -90,9 +90,6 @@ export default {
   //     immediate: true
   //   }
   // },
-  mounted() {
-    this.getCookie()
-  },
   created() {
     // window.addEventListener('hashchange', this.afterQRScan)
   },
@@ -108,58 +105,29 @@ export default {
       }
     },
     handleLogin() {
+      if (this.loading) {
+        return
+      }
+      const _this = this
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
           this.$store
             .dispatch('LoginByUsername', this.loginForm)
-            .then(() => {
-              this.loading = false
-              this.$router.push({ path: this.redirect || '/' })
+            .then((res) => {
+              _this.loading = false
+              if (res.code === '0000') {
+                _this.$router.push({ path: this.redirect || '/' })
+              }
             })
             .catch(() => {
-              this.loading = false
+              _this.loading = false
             })
         } else {
           return false
         }
       })
-    },
-    submitForm(formName) {
-      const self = this
-      if (self.checked === true) {
-        console.log('checked == true')
-        self.setCookie(self.loginForm.username, self.loginForm.password, 7)
-      } else {
-        console.log('清空Cookie')
-        self.clearCookie()
-      }
-    },
-    setCookie(c_name, c_pwd, exdays) {
-      var exdate = new Date() // 获取时间
-      exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays) // 保存的天数//字符串拼接cookie
-      window.document.cookie = 'userName' + '=' + c_name + ';path=/;expires=' + exdate.toGMTString()
-      window.document.cookie = 'userPwd' + '=' + c_pwd + ';path=/;expires=' + exdate.toGMTString()
-    },
-    // 读取cookie
-    getCookie: function() {
-      if (document.cookie.length > 0) {
-        var arr = document.cookie.split('; ')
-        for (var i = 0; i < arr.length; i++) {
-          var arr2 = arr[i].split('=')
-          if (arr2[0] === 'userName') {
-            this.loginForm.username = arr2[1]
-          } else if (arr2[0] === 'userPwd') {
-            this.loginForm.password = arr2[1]
-          }
-        }
-      }
-    },
-    // 清除cookie
-    clearCookie: function() {
-      this.setCookie('', '', -1) // 修改2值都为空，天数为负1天就好了
     }
-
   }
 }
 </script>

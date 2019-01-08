@@ -1,5 +1,5 @@
 <template>
-  <div class="postTypeManagegement">
+  <div v-loading="listLoading" class="postTypeManagegement">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="岗位类型名称:">
@@ -15,7 +15,7 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table v-loading="listLoading" :data="postTypeList" border fit highlight-current-row style="width: 100%;height:100%;">
+    <el-table :data="postTypeList" border fit highlight-current-row style="width: 100%;height:100%;">
       <el-table-column type="index" align="center" label="序号" width="60" />
       <el-table-column label="岗位类型名称" align="center" prop="postTypeName" />
       <el-table-column label="创建时间" align="center" prop="creationTime">
@@ -139,12 +139,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 弹出编辑岗位类型对话框
@@ -187,9 +183,9 @@ export default {
     },
     // 实现新增岗位类型功能
     createPostTypeData() {
+      this.isDisabled = true
       this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           addPostTypeList(this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
@@ -208,6 +204,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },

@@ -1,12 +1,9 @@
 package com.jn.system.menu.service;
 
-import com.jn.common.model.PaginationData;
 import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
-import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
 
 import java.util.List;
 import java.util.Set;
@@ -25,9 +22,9 @@ public interface SysResourcesService {
     /**
      * 新增功能
      *
-     * @param sysResources
+     * @param tbSysResources
      */
-    void insertResources(SysResources sysResources, User user);
+    void insertResources(TbSysResources tbSysResources);
 
     /**
      * 更新功能信息
@@ -43,14 +40,6 @@ public interface SysResourcesService {
      * @return
      */
     void deleteResourcesById(String[] resourcesIds);
-
-    /**
-     * 分页查询功能功能列表信息
-     *
-     * @param sysResourcesPage
-     * @return
-     */
-    PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage);
 
     /**
      * 根据id查询功能详情

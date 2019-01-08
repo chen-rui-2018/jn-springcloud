@@ -44,8 +44,9 @@
         <module>springcloud-wechat-api</module>
         <module>springcloud-wechat-miniprogram</module>
         <module>springcloud-wechat-miniprogram-api</module>
-
-    </modules>
+		<module>springcloud-app-delay-stream</module>
+		<module>springcloud-app-delay-stream-api</module>
+	</modules>
 
 	<properties>
 		<mysql-connector-java>5.1.42</mysql-connector-java>
@@ -117,6 +118,11 @@
 			<dependency>
 				<groupId>com.jn</groupId>
 				<artifactId>springcloud-app-fastdfs-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-app-delay-stream-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
 			<dependency>
@@ -270,6 +276,19 @@
 				<artifactId>feign-form-spring</artifactId>
 				<version>3.4.1</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.alibaba</groupId>
+				<artifactId>easyexcel</artifactId>
+				<version>1.1.2-beta5</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>3.3.3</version>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 	<build>

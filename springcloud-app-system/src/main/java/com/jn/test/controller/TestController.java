@@ -53,10 +53,7 @@ public class TestController extends BaseController {
 
     @RequestMapping(value = "/guest/test1")
     public Result<Integer> test1() {
-        Cache<Integer> cache =redisCacheFactory.getCache("yanzhengma",120);
-        if (cache==null) {
-            return new Result(testDomain.getMis());
-        }
+        Cache<Integer> cache =redisCacheFactory.getCache("yanzhengma",testDomain.getMis());
         HashMap<String,Integer> hashMap = new HashMap();
         hashMap.put("yanzhengma1",cache.get("yanzhengma1"));
         hashMap.put("size",cache.size());
@@ -67,7 +64,7 @@ public class TestController extends BaseController {
 
     @RequestMapping(value = "/guest/test2")
     public Result<Integer> test2() {
-        Cache<Integer> cache =redisCacheFactory.initCache("yanzhengma",testDomain.getMis());
+        Cache<Integer> cache =redisCacheFactory.getCache("yanzhengma",testDomain.getMis());
         cache.put("yanzhengma1",testDomain.getMis());
         cache.put("yanzhengma2",testDomain.getMis());
         return new Result(GlobalConstants.SUCCESS_CODE);

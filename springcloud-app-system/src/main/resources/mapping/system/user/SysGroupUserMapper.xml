@@ -33,6 +33,7 @@
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
 			and tsug.`status` = '1'
 			and tsu.`status` = '1'
+			ORDER BY tsu.create_time ASC
     </select>
 
     <select id="findOtherUserByPage" parameterType="com.jn.system.user.model.SysGroupUserPage"

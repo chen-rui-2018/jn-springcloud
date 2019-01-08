@@ -2,6 +2,7 @@ package com.jn.system.permission.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
+import com.jn.system.permission.entity.TbSysPermission;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.vo.SysMenuResourcesVO;
 
@@ -15,9 +16,9 @@ public interface SysPermissionService {
     /**
      * 添加权限
      *
-     * @param sysPermissionAdd
+     * @param tbSysPermission
      */
-    void addPermission(SysPermissionAdd sysPermissionAdd, User user);
+    void addPermission(TbSysPermission tbSysPermission);
 
     /**
      * 修改权限

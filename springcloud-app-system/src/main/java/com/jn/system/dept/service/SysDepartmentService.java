@@ -1,10 +1,9 @@
 package com.jn.system.dept.service;
 
+import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
-import com.jn.system.dept.model.SysDepartmentAdd;
 import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.vo.SysDepartmentVO;
-import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -41,9 +40,9 @@ public interface SysDepartmentService {
     /**
      * 添加部门
      *
-     * @param sysDepartmentAdd
+     * @param tbSysDepartment
      */
-    void add(SysDepartmentAdd sysDepartmentAdd, User user);
+    void add(TbSysDepartment tbSysDepartment);
 
 
     /**

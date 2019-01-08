@@ -16,11 +16,9 @@ import com.jn.system.dept.entity.TbSysPostType;
 import com.jn.system.dept.entity.TbSysPostTypeCriteria;
 import com.jn.system.dept.enums.SysPostExceptionEnums;
 import com.jn.system.dept.model.SysPostType;
-import com.jn.system.dept.model.SysPostTypeAdd;
 import com.jn.system.dept.model.SysPostTypePage;
 import com.jn.system.dept.service.SysPostTypeService;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 岗位类型管理service实现
@@ -54,26 +50,19 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     /**
      * 增加岗位类型
      *
-     * @param postTypeAdd 岗位类型增加实体
+     * @param tbSysPostType 岗位类型增加实体
      */
     @Override
     @ServiceLog(doAction = "增加岗位类型")
     @Transactional(rollbackFor = Exception.class)
-    public void add(SysPostTypeAdd postTypeAdd, User user) {
-        String postTypeName = postTypeAdd.getPostTypeName();
+    public void add(TbSysPostType tbSysPostType) {
+        String postTypeName = tbSysPostType.getPostTypeName();
         //校验添加岗位类型名称是否已经存在
         String flag = checkPostTypeName(postTypeName);
         if (SysReturnMessageEnum.FAIL.getMessage().equals(flag)) {
             logger.warn("[岗位类型] 新增岗位类型失败，该岗位类型名称已存在！,postTypeName: {}", postTypeName);
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        //生成岗位类型实体
-        TbSysPostType tbSysPostType = new TbSysPostType();
-        tbSysPostType.setId(UUID.randomUUID().toString());
-        tbSysPostType.setPostTypeName(postTypeName);
-        tbSysPostType.setCreateTime(new Date());
-        tbSysPostType.setCreator(user.getId());
-        tbSysPostType.setStatus(postTypeAdd.getStatus());
         //添加岗位类型
         tbSysPostTypeMapper.insertSelective(tbSysPostType);
         logger.info("[岗位类型] 添加岗位类型成功,postTypeId:{}", tbSysPostType.getId());
@@ -155,10 +144,10 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
 
         //2.判断是否修改了岗位类型状态
         if (SysStatusEnums.EFFECTIVE.getCode().equals(tbSysPostType1.getStatus()) &&
-                SysStatusEnums.INVALID.getCode().equals(postType.getStatus())){
+                SysStatusEnums.INVALID.getCode().equals(postType.getStatus())) {
             //如果修改状态,判断当前岗位类型是否正在被使用,若正在被使用,不允许修改
             List<TbSysPost> tbSysPosts = getTbSysPosts(postTypeId);
-            if (tbSysPosts != null && tbSysPosts.size() > 0){
+            if (tbSysPosts != null && tbSysPosts.size() > 0) {
                 logger.warn("[岗位类型] 修改岗位类型失败，岗位类型正在被使用,不允许修改为无效！,postTypeId: {}",
                         postTypeId);
                 throw new JnSpringCloudException(SysPostExceptionEnums.UPDATE_STATUS_ERR);
@@ -217,6 +206,7 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
 
     /**
      * 根据岗位类型id获取岗位信息
+     *
      * @param postTypeId
      * @return
      */

@@ -1,12 +1,13 @@
 package com.jn.system.dept.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentAdd;
 import com.jn.system.dept.model.SysDepartmentCheckName;
-import com.jn.system.dept.model.SysDepartmentPage;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.log.annotation.ControllerLog;
@@ -15,14 +16,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 部门管理
@@ -76,7 +79,14 @@ public class SysDepartmentController extends BaseController {
         Assert.notNull(sysDepartmentAdd.getParentId(), "父级id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysDepartmentService.add(sysDepartmentAdd, user);
+        //封装部门对象
+        TbSysDepartment tbSysDepartment = new TbSysDepartment();
+        BeanUtils.copyProperties(sysDepartmentAdd, tbSysDepartment);
+        tbSysDepartment.setId(UUID.randomUUID().toString());
+        tbSysDepartment.setCreator(user.getId());
+        tbSysDepartment.setCreateTime(new Date());
+        tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        sysDepartmentService.add(tbSysDepartment);
         return new Result();
     }
 
@@ -100,10 +110,10 @@ public class SysDepartmentController extends BaseController {
     }
 
     @ControllerLog(doAction = "批量修改部门信息")
-    @RequiresPermissions("/system/sysDepartment/addDepartmentBatch")
+    @RequiresPermissions("/system/sysDepartment/updateDepartmentBatch")
     @ApiOperation(value = "批量更新部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/addDepartmentBatch")
-    public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList){
+    public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList) {
         sysDepartmentService.addDepartmentBatch(sysDepartmentList);
         return new Result();
     }
@@ -112,7 +122,7 @@ public class SysDepartmentController extends BaseController {
     @RequiresPermissions("/system/sysDepartment/getChild")
     @ApiOperation(value = "根据父级id获取所有子部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/getChildDepartmentByParentId")
-    public Result getChildDepartmentByParentId(String parentId){
+    public Result getChildDepartmentByParentId(String parentId) {
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentService.getChildDepartmentByParentId(parentId);
         return new Result(sysDepartmentVOList);
     }

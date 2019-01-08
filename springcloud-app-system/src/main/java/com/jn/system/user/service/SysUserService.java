@@ -1,10 +1,9 @@
 package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
-import com.jn.system.user.model.*;
 import com.jn.system.dept.vo.SysDepartmentPostVO;
-import com.jn.system.user.vo.SysUserRoleVO;
+import com.jn.system.model.User;
+import com.jn.system.user.model.*;
 
 import java.util.List;
 
@@ -61,7 +60,7 @@ public interface SysUserService {
      * @param groupIds
      * @param userId
      */
-    void saveSysGroupToSysUser(String[] groupIds, String userId,User user);
+    void saveSysGroupToSysUser(String[] groupIds, String userId, User user);
 
     /**
      * 根据用户id获取用户具有角色及条件查询用户未拥有的角色
@@ -77,7 +76,7 @@ public interface SysUserService {
      * @param roleIds
      * @param userId
      */
-    void saveSysRoleToSysUser(String[] roleIds, String userId,User user);
+    void saveSysRoleToSysUser(String[] roleIds, String userId, User user);
 
     /**
      * 根据用户id查询用户已经具有的部门岗位信息及用户信息
@@ -105,6 +104,7 @@ public interface SysUserService {
 
     /**
      * 校验用户账号是否存在
+     *
      * @param account
      * @return
      */

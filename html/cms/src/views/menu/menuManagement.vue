@@ -6,7 +6,7 @@
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>
-          <span style="margin-left:20px">
+          <span style="margin-left:20px;padding-right:18px">
             <i
               class="el-icon-plus"
               @click="() => addMenu(data)"/>
@@ -64,7 +64,7 @@
     </div>
     <!-- 弹出的新增菜单和编辑菜单对话框 -->
     <el-dialog :visible.sync="menuDialogVisible" :title="dialogStatus" width="500px">
-      <el-form ref="menuForm" :rules="rules" :model="menuForm" label-width="100px">
+      <el-form ref="menuForm" :rules="rules" :model="menuForm" label-width="100px" @submit.native.prevent>
         <el-form-item v-show="visible" label="新增位置:" prop="location">
           <el-radio v-model="location" label="1">同级菜单</el-radio>
           <el-radio v-model="location" label="0">子菜单</el-radio>
@@ -481,6 +481,13 @@ export default {
         this.dataForm.menuUrl = data.menuUrl
         this.resourcesForm.menuId = data.id
       }
+      const arr = []
+      this.subForm.menuData.forEach(val => {
+        arr.push(val.label)
+      })
+      if ((new Set(arr)).size === arr.length) {
+        this.$refs['subForm'].clearValidate()
+      }
     },
     // 删除菜单实现
     deleteMenu(id) {
@@ -563,7 +570,7 @@ export default {
       }
       if (data.isDir === '1') {
         this.isShow = false
-        this.menuForm.menuUrl = '/'
+        this.menuForm.menuUrl = data.menuUrl
       } else if (data.isDir === '0') {
         this.isShow = true
         this.menuForm.menuUrl = data.menuUrl
@@ -651,7 +658,7 @@ export default {
       } else if (data.isDir === '1') {
         this.visible = true
       }
-      this.menuForm.menuUrl = '/'
+      this.menuForm.menuUrl = ''
       this.$nextTick(() => {
         this.$refs['menuForm'].clearValidate()
       })

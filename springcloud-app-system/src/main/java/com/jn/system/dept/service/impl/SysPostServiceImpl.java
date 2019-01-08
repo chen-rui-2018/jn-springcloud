@@ -13,11 +13,9 @@ import com.jn.system.dept.dao.TbSysPostMapper;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.entity.TbSysPostCriteria;
 import com.jn.system.dept.model.SysPost;
-import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 岗位service实现
@@ -72,24 +68,17 @@ public class SysPostServiceImpl implements SysPostService {
     /**
      * 增加岗位
      *
-     * @param sysPostAdd
+     * @param tbSysPost
      */
     @Override
     @ServiceLog(doAction = "增加岗位")
     @Transactional(rollbackFor = Exception.class)
-    public void addPost(SysPostAdd sysPostAdd, User user) {
-        List<TbSysPost> tbSysPosts = checkName(sysPostAdd.getPostName());
+    public void addPost(TbSysPost tbSysPost) {
+        List<TbSysPost> tbSysPosts = checkName(tbSysPost.getPostName());
         if (tbSysPosts != null && tbSysPosts.size() > 0) {
-            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}", sysPostAdd.getPostName());
+            logger.warn("[岗位] 新增岗位失败，该岗位名称已存在！,postName: {}", tbSysPost.getPostName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        TbSysPost tbSysPost = new TbSysPost();
-        tbSysPost.setId(UUID.randomUUID().toString());
-        tbSysPost.setCreator(user.getId());
-        tbSysPost.setStatus(sysPostAdd.getStatus());
-        tbSysPost.setCreateTime(new Date());
-        tbSysPost.setPostName(sysPostAdd.getPostName());
-        tbSysPost.setPostTypeId(sysPostAdd.getPostTypeId());
         tbSysPostMapper.insertSelective(tbSysPost);
         logger.info("[岗位] 新增岗位成功！，sysPostId:{}", tbSysPost.getId());
     }
@@ -117,10 +106,10 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "批量删除岗位")
     @Transactional(rollbackFor = Exception.class)
     public void deletePostBranch(String[] ids) {
-        logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
         sysPostMapper.deletePostBranch(ids);
-        logger.info("[岗位] 批量删除岗位关联用户信息成功！，sysPostIds:{}", Arrays.toString(ids));
+        logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
         sysUserDepartmentPostMapper.deletePostBranch(ids);
+        logger.info("[岗位] 批量删除岗位关联用户信息成功！，sysPostIds:{}", Arrays.toString(ids));
     }
 
     /**
@@ -138,12 +127,12 @@ public class SysPostServiceImpl implements SysPostService {
         if (sysPost1 == null || SysStatusEnums.DELETED.getCode().equals(sysPost1.getStatus())) {
             logger.warn("[部门] 岗位修改失败,修改信息不存在,postId: {}", sysPost.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
-        }else {
+        } else {
             //判断名称是否被修改
-            if (!sysPost1.getPostName().equals(postName)){
+            if (!sysPost1.getPostName().equals(postName)) {
                 //名称被修改,判断修改的名称数据库是都已经存在
                 String flag = checkPostName(postName);
-                if (SysReturnMessageEnum.FAIL.getMessage().equals(flag)){
+                if (SysReturnMessageEnum.FAIL.getMessage().equals(flag)) {
                     //数据库已经存在名称,则不允许修改
                     logger.warn("[岗位] 修改岗位失败，该岗位名称已存在！,postName: {}", sysPost.getPostName());
                     throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
@@ -152,7 +141,7 @@ public class SysPostServiceImpl implements SysPostService {
         }
         //对信息进行修改操作
         TbSysPost tbSysPost = new TbSysPost();
-        BeanUtils.copyProperties(sysPost,tbSysPost);
+        BeanUtils.copyProperties(sysPost, tbSysPost);
         tbSysPostMapper.updateByPrimaryKeySelective(tbSysPost);
         logger.info("[岗位] 修改岗位信息成功！，sysPostId:{}", sysPost.getId());
     }

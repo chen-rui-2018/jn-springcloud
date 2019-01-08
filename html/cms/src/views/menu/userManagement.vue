@@ -12,6 +12,9 @@
               <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
             </el-select>
           </el-form-item>
+          <el-form-item label="岗位">
+            <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位或岗位类型" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          </el-form-item>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button class="filter-item" style="margin-left: 10px;" icon="el-icon-plus" type="primary" @click="handleCreate">新增</el-button>
           <el-button type="primary" class="filter-item">导出</el-button>
@@ -39,6 +42,7 @@
           </el-table-column>
           <el-table-column label="部门" prop="departmentName" align="center" width="100" />
           <el-table-column label="岗位" prop="postName" align="center" width="85" />
+          <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
           <el-table-column label="状态" prop="status" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
@@ -68,7 +72,7 @@
           <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" maxlength="20" clearable />
+          <el-input v-model.trim="temp.name" maxlength="16" clearable />
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
@@ -150,7 +154,7 @@
     </el-dialog>
     <!-- S 重置密码 -->
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
-      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="50px">
+      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
           <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
           <span class="show-pwd" @click="showPwd">
@@ -230,7 +234,7 @@ export default {
       }
     }
     var checkName = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
@@ -254,8 +258,8 @@ export default {
       }
     }
     var checkWechatAccount = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
-      if (value !== '') {
+      if (value !== '' && value !== null) {
+        const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
         if (!reg.test(value)) {
           callback(new Error('请输入6到20位字母或数字'))
         } else {
@@ -306,7 +310,8 @@ export default {
         departmentId: undefined,
         position: undefined,
         departmentName: undefined,
-        departmentIds: undefined
+        departmentIds: undefined,
+        postOrTypeName: undefined
       },
       userStatusOptions: ['未生效', '生效'],
       positionOptions: [],
@@ -318,7 +323,8 @@ export default {
         phone: undefined,
         id: undefined,
         departmentId: undefined,
-        postId: undefined
+        postId: undefined,
+        wechatAccount: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -326,7 +332,7 @@ export default {
       dialogResetPasswordVisible: false,
       addUserDialogRules: {
         name: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { required: true, message: '姓名不能为空', trigger: 'blur' },
           { validator: checkName, trigger: 'blur' }
         ],
         account: [
@@ -391,9 +397,11 @@ export default {
   watch: {
     userPositionData: {
       handler: function() {
+        // console.log(this.userPositionData)
         const userPosition = this.userPositionData.filter(function(item) {
           return item.department !== '' && item.position
         })
+        // console.log(userPosition)
         if (this.userPositionData.length < userPosition.length + 2) {
           this.userPositionData.push({
             department: [],
@@ -537,7 +545,6 @@ export default {
         page: this.numberPage,
         rows: this.numberRows
       }).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           const roleData = []
           const checkRole = []
@@ -627,7 +634,6 @@ export default {
         if (response.data.code === '0000') {
           this.sectorLoading = false
           const data = response.data.data
-          console.log(data)
           const sectorArr = []
           data.map(function(item, index) {
             const departmentIds = item.departmentId.split(',')
@@ -789,6 +795,16 @@ export default {
     // 编辑用户部门和岗位
     saveDepartmentandPostOfUser() {
       const userDepartmentPostList = this.userDepartmentPostList
+      for (const it of userDepartmentPostList.sysDepartmentPostList) {
+        if (it.departmentId || it.postId) {
+          if (!it.departmentId) {
+            return this.$message.error('请选择部门')
+          }
+          if (!it.postId) {
+            return this.$message.error('请选择岗位')
+          }
+        }
+      }
       // 清除空的数据
       const filterList = userDepartmentPostList.sysDepartmentPostList.filter(
         function(item) {
@@ -796,7 +812,7 @@ export default {
           return item.department && item.position
         }
       )
-      console.log(filterList)
+      // console.log(filterList)
       userDepartmentPostList.sysDepartmentPostList = filterList
       if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
         var count = 0

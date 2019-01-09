@@ -36,6 +36,12 @@ public class QueueConfig {
      */
     final static String DELAY_EXCHANGE_NAME = "delay_exchange";
     /**
+     * 失败后的消息保存
+     */
+    final static String DLQ = "delay_process_queue.dlq";
+
+    final static String DLQ_EXCHANGE_NAME = "DLX";
+    /**
      * 创建DLX exchange
      *
      * @return
@@ -64,6 +70,8 @@ public class QueueConfig {
     @Bean
     Queue delayProcessQueue() {
         return QueueBuilder.durable(DELAY_PROCESS_QUEUE_NAME)
+                .withArgument("x-dead-letter-exchange", DLQ_EXCHANGE_NAME)
+                .withArgument("x-dead-letter-routing-key", DLQ)
                 .build();
     }
     /**
@@ -80,29 +88,32 @@ public class QueueConfig {
                              .with(DELAY_PROCESS_QUEUE_NAME);
     }
 
-  /*  *//**
+    /**
      * 创建delay_process_queue.dlq队列
      *
      * @return
-     *//*
+     */
     @Bean
     Queue delayProcessDlqQueue() {
-        return QueueBuilder.durable(DELAY_PROCESS_FAIL_QUEUE_NAME)
+        return QueueBuilder.durable(DLQ)
                 .build();
     }
-    *//**
-     * 将DLq绑定到DLX
-     *
+    @Bean
+    DirectExchange dlxExchange() {
+        return new DirectExchange(DLQ_EXCHANGE_NAME);
+    }
+
+    /**
+     * 失败后的绑定
      * @param delayProcessDlqQueue
-     * @param delayExchange
      * @return
-     *//*
+     */
     @Bean
     Binding dlqBinding(Queue delayProcessDlqQueue) {
         return BindingBuilder.bind(delayProcessDlqQueue)
-                .to(delayExchange)
-                .with(DELAY_PROCESS_QUEUE_NAME);
-    }*/
+                .to(dlxExchange())
+                .with(DLQ);
+    }
 
 
 

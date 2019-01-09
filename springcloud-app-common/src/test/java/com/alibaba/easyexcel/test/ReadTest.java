@@ -2,11 +2,11 @@ package com.alibaba.easyexcel.test;
 
 import com.alibaba.easyexcel.test.listen.ExcelListener;
 import com.alibaba.easyexcel.test.model.ReadModel2;
-import com.alibaba.easyexcel.test.util.FileUtil;
 import com.alibaba.easyexcel.test.model.ReadModel;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.metadata.Sheet;
+import com.jn.common.util.file.FileUtil;
 import org.junit.Test;
 
 import java.io.IOException;

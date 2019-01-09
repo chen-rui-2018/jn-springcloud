@@ -43,7 +43,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     /**
      * 获取资源的服务地址
      */
-    private final static String SYSTEM_CLIENT_RESOURCE_SERVICE = "/api/system/getUser";
+    private final static String SYSTEM_CLIENT_RESOURCE_SERVICE = "/api/system/getResources";
     /**
      * 用户登录认证
      *

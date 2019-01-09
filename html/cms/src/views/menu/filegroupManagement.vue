@@ -1,5 +1,5 @@
 <template>
-  <div class="file-group-management">
+  <div v-loading="listLoading" class="file-group-management">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="文件组名称:">
@@ -14,7 +14,7 @@
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
-    <el-table v-loading="listLoading" :data="fileGroupList" border fit highlight-current-row style="width: 100%;">
+    <el-table :data="fileGroupList" border fit highlight-current-row style="width: 100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
@@ -168,9 +168,9 @@ export default {
     },
     // 实现新增文件组信息
     createFileGroupData() {
+      this.isDisabled = true
       this.$refs['temp'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           addFileGroupList(this.temp).then(res => {
             if (res.data.code === '0000') {
@@ -189,6 +189,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -213,7 +215,6 @@ export default {
           // 通过验证
           updataFileGroup(this.temp).then(res => {
             if (res.data.code === '0000') {
-              console.log(res)
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -250,12 +251,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 项目初始化

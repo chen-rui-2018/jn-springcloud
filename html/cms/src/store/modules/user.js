@@ -68,17 +68,18 @@ const user = {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
             getUsername().then(res => {
+              console.log(res)
               if (res.data.code === '0000') {
                 if (res.data.data.name) {
                   localStorage.setItem('userName', res.data.data.name)
                 } else {
                   localStorage.setItem('account', res.data.data.account)
                 }
-                // localStorage.setItem('account', res.data.data.account)
               }
             })
-            resolve()
+            resolve(data)
           } else {
+            resolve(data)
             Message({
               message: '登录失败,' + data.result,
               type: 'error',

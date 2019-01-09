@@ -1,5 +1,5 @@
 <template>
-  <div class="rolemanagement">
+  <div v-loading="rolelistLoading" class="rolemanagement">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="角色名称:">
@@ -15,7 +15,7 @@
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table v-loading="rolelistLoading" :data="roleList" border fit highlight-current-row style="width: 100%;height:100%">
+    <el-table :data="roleList" border fit highlight-current-row style="width: 100%;height:100%">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
@@ -55,49 +55,57 @@
     <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10, 20, 30, 40]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
 
     <!-- 新增角色 -->
-    <el-dialog :visible.sync="roledialogFormVisible" :title="dialogStatus" width="400px">
-      <el-form ref="roleform" :rules="rules" :model="roleform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="名称:" prop="roleName">
-          <el-input v-model="roleform.roleName" maxlength="20"/>
-        </el-form-item>
-        <el-form-item label="状态:" prop="status" >
-          <el-select v-model="roleform.status" placeholder="请选择" class="filter-item">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
-        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
-        <el-button @click="roledialogFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
+    <template v-if="roledialogFormVisible">
+      <el-dialog :visible.sync="roledialogFormVisible" :title="dialogStatus" width="400px">
+        <el-form ref="roleform" :rules="rules" :model="roleform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
+          <el-form-item label="名称:" prop="roleName">
+            <el-input v-model="roleform.roleName" maxlength="20"/>
+          </el-form-item>
+          <el-form-item label="状态:" prop="status" >
+            <el-select v-model="roleform.status" placeholder="请选择" class="filter-item">
+              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" align="center">
+          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增角色'?createUserData():updateData()">提交</el-button>
+          <el-button @click="roledialogFormVisible = false">取消</el-button>
+        </div>
+      </el-dialog>
+    </template>
     <!-- 弹出的授权用户对话框 -->
-    <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
-      <el-transfer v-loading="userLoading" v-model="userId" :data="userData" :titles="['其他用户', '角色拥有用户']" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="userdialogVisible">
+      <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
+        <el-transfer v-loading="userLoading" v-model="userId" :data="userData" :titles="['其他用户', '角色拥有用户']" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
     <!-- 弹出的授权用户组对话框 -->
-    <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" width="800px">
-      <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '角色拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="userGroup.userGroupdialogVisible">
+      <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" width="800px">
+        <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '角色拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
     <!-- 弹出的授权权限对话框 -->
-    <el-dialog :visible.sync="authoritydialogVisible" title="授权权限" width="800px">
-      <el-transfer v-loading="authorityLoading" v-model="authorityIds" :data="authorityData" :titles="['其他权限', '角色拥有权限']" filterable filter-placeholder="请输入权限名称" class="box" @change="handleAuthorityChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="authorityPage" :pager-count="5" :total="authorityTotal" background layout="prev, pager, next" @current-change="handleAuthorityCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="authoritydialogVisible">
+      <el-dialog :visible.sync="authoritydialogVisible" title="授权权限" width="800px">
+        <el-transfer v-loading="authorityLoading" v-model="authorityIds" :data="authorityData" :titles="['其他权限', '角色拥有权限']" filterable filter-placeholder="请输入权限名称" class="box" @change="handleAuthorityChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="authorityPage" :pager-count="5" :total="authorityTotal" background layout="prev, pager, next" @current-change="handleAuthorityCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -440,13 +448,11 @@ export default {
     },
     // 新增角色
     createUserData() {
+      this.isDisabled = true
       this.$refs['roleform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
-          console.log(this.roleform)
           addRoleList(this.roleform).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -463,6 +469,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -506,12 +514,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 项目初始化

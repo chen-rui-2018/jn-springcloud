@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -61,6 +61,34 @@ service.interceptors.response.use(
   //     return response.data
   //   }
   // },
+
+  response => {
+    const res = response
+    if (res.code !== 200) {
+      Message({
+        message: res.message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      if (res.code === 'index') {
+        // 请自行在引入 MessageBox
+        // import { Message, MessageBox } from 'element-ui'
+        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('FedLogOut').then(() => {
+            location.reload() // 为了重新实例化vue-router对象 避免bug
+            location.href = '#/login'
+          })
+        })
+      }
+      return Promise.reject('error')
+    } else {
+      return response.data
+    }
+  },
   error => {
     console.log('err' + error) // for debug
     Message({

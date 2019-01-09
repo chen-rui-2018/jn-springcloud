@@ -5,7 +5,11 @@ import 'babel-polyfill'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -26,8 +30,8 @@ import './mock' // simulation data
 import * as filters from './filters' // global filters
 
 Vue.use(Element, {
-  size: Cookies.get('size') || 'medium', // set element-ui default size
-  i18n: (key, value) => i18n.t(key, value)
+  size: Cookies.get('size') || 'medium' // set element-ui default size
+  // i18n: (key, value) => i18n.t(key, value)
 })
 
 // register global utility filters.

@@ -61,7 +61,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer" align="center">
         <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增活动类型'?createUserData():updateData()">提交</el-button>
-        <el-button @click="userGroupdialogFormVisible = false">取消</el-button>
+        <el-button @click="activityTypedialogFormVisible = false">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -74,6 +74,11 @@ import {
 export default {
   data() {
     return {
+      isDisabled: false,
+      activityTypeForm: {
+        typeName: undefined,
+        status: undefined
+      },
       dialogStatus: undefined,
       activityTypedialogFormVisible: false,
       total: undefined,
@@ -93,6 +98,8 @@ export default {
     this.initList()
   },
   methods: {
+    updateData() {},
+    createUserData() {},
     //   搜素功能的实现
     handleFilter() {
       this.listQuery.page = 1

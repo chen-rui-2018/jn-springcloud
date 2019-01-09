@@ -1,5 +1,5 @@
 <template>
-  <div class="activity">
+  <div v-loading="listLoading" class="activity">
     <el-row>
       <el-col :span="5"><div class="grid-content bg-purple">
         <el-radio-group v-model="listQuery.status">
@@ -27,13 +27,14 @@
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" icon="el-icon-plus" type="primary" @click="handleCreate">新增</el-button>
-        <el-button type="primary" class="filter-item">删除</el-button>
+        <el-button type="primary" class="filter-item" @click="handleBatchDeleteActivity()">批量删除</el-button>
       </el-form></div></el-col>
     </el-row>
-    <el-table v-loading="listLoading" :data="activityList" border fit highlight-current-row style="width: 100%;">
+    <el-table :data="activityList" border fit highlight-current-row style="width: 100%;" @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
-        width="40"/>
+        width="40"
+      />
       <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="名称" prop="actiName" align="center" min-width="100" />
       <el-table-column label="类型" prop="typeName" align="center" min-width="100" />
@@ -98,19 +99,19 @@
             v-if="scope.row.status==='2'&& scope.row.isApply==='1'"
             type="text"
             class="operation"
-            @click="editDo(scope.row)">停止报名
+            @click="cancelApply(scope.row)">停止报名
           </el-button>
           <el-button
             v-if="scope.row.status==='2'&& scope.row.isApply==='0'"
             type="text"
             class="operation"
-            @click="editDo(scope.row)">恢复报名
+            @click="recoverApply(scope.row)">恢复报名
           </el-button>
           <el-button
             v-if="scope.row.status==='2'"
             type="text"
             class="operation"
-            @click="editDo(scope.row)">取消活动
+            @click="handleCancelActivity(scope.row)">取消活动
           </el-button>
           <el-button
             v-if="scope.row.status==='3'|| scope.row.status==='4'|| scope.row.status==='5'"
@@ -122,7 +123,13 @@
             v-if="scope.row.status==='1'||scope.row.status==='3'|| scope.row.status==='4'|| scope.row.status==='5'"
             type="text"
             class="operation"
-            @click="deleteDo(scope.row)">删除
+            @click="handleDeleteActivity(scope.row)">删除
+          </el-button>
+          <el-button
+            v-if="scope.row.isSendMessage==='1'"
+            type="text"
+            class="operation"
+            @click="handlePushMessage(scope.row)">推送
           </el-button>
         </template>
       </el-table-column>
@@ -135,11 +142,13 @@
 
 <script>
 import {
-  getActivityList, getActivityType
+  getActivityList, getActivityType, cancelActivity, deleteActivity, cancelApply, pushMessage
 } from '@/api/portalManagement/activity'
 export default {
   data() {
     return {
+      checkActivity: [],
+      selectionActivity: [],
       createTime: [],
       typeOptions: [],
       listLoading: false,
@@ -160,6 +169,159 @@ export default {
     this.getActivityType()
   },
   methods: {
+    // 推送消息
+    handlePushMessage(row) {
+      this.$confirm(`是否推送消息？`, '取消提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          pushMessage(row.id).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '推送消息成功',
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
+    // 恢复报名
+    recoverApply(row) {
+      this.$confirm(`是否恢复报名？`, '取消提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          cancelApply({ activityId: row.id, status: '1' }).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '恢复报名成功',
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
+    // 停止报名
+    cancelApply(row) {
+      console.log(row)
+      this.$confirm(`是否停止报名？`, '取消提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          cancelApply({ activityId: row.id, status: '0' }).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '停止报名成功',
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
+    // 批量删除
+    handleBatchDeleteActivity() {
+      if (this.checkActivity.length > 0) {
+        this.$confirm(`是否删除这些活动？`, '取消提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        })
+          .then(() => {
+            deleteActivity(this.checkActivity).then(res => {
+              if (res.data.code === '0000') {
+                this.$message({
+                  message: '删除成功',
+                  type: 'success'
+                })
+                this.initList()
+              } else {
+                this.$message.error(res.data.result)
+              }
+            })
+          })
+          .catch(() => {
+          })
+      } else {
+        alert('请选择要删除的活动')
+      }
+    },
+    handleSelectionChange(val) {
+      this.selectionActivity = val
+      var checkId = []
+      this.selectionActivity.forEach(val => {
+        checkId.push(val.id)
+      })
+      this.checkActivity = checkId.join(',')
+    },
+    // 删除活动
+    handleDeleteActivity(row) {
+      console.log(row)
+      this.$confirm(`是否删除此活动？`, '取消提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          deleteActivity(row.id).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
+    // 取消活动
+    handleCancelActivity(row) {
+      console.log(row)
+      this.$confirm(`是否取消此活动？`, '取消提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          cancelActivity(row.id).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '取消成功',
+                type: 'success'
+              })
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
     handleCreate() {
       this.$router.push({ name: 'activityAdd' })
     },
@@ -187,7 +349,6 @@ export default {
     initList() {
       this.listLoading = true
       getActivityList(this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.activityList = res.data.data.rows
           this.total = res.data.data.total
@@ -202,7 +363,6 @@ export default {
       })
     },
     selecteType(value) {
-      console.log(value)
       this.listQuery.actiType = value
     },
     // 表格分页功能

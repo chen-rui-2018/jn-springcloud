@@ -1985,6 +1985,76 @@ public class TbActivityCriteria {
             addCriterion("show_apply_num not between", value1, value2, "showApplyNum");
             return (Criteria) this;
         }
+
+        public Criteria andApplyCheckIsNull() {
+            addCriterion("apply_check is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckIsNotNull() {
+            addCriterion("apply_check is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckEqualTo(String value) {
+            addCriterion("apply_check =", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckNotEqualTo(String value) {
+            addCriterion("apply_check <>", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckGreaterThan(String value) {
+            addCriterion("apply_check >", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckGreaterThanOrEqualTo(String value) {
+            addCriterion("apply_check >=", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckLessThan(String value) {
+            addCriterion("apply_check <", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckLessThanOrEqualTo(String value) {
+            addCriterion("apply_check <=", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckLike(String value) {
+            addCriterion("apply_check like", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckNotLike(String value) {
+            addCriterion("apply_check not like", value, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckIn(List<String> values) {
+            addCriterion("apply_check in", values, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckNotIn(List<String> values) {
+            addCriterion("apply_check not in", values, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckBetween(String value1, String value2) {
+            addCriterion("apply_check between", value1, value2, "applyCheck");
+            return (Criteria) this;
+        }
+
+        public Criteria andApplyCheckNotBetween(String value1, String value2) {
+            addCriterion("apply_check not between", value1, value2, "applyCheck");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

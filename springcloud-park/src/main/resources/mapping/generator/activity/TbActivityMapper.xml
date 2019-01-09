@@ -31,6 +31,7 @@
     <result column="issue_time" jdbcType="TIMESTAMP" property="issueTime" />
     <result column="issue_account" jdbcType="VARCHAR" property="issueAccount" />
     <result column="show_apply_num" jdbcType="VARCHAR" property="showApplyNum" />
+    <result column="apply_check" jdbcType="VARCHAR" property="applyCheck" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -95,7 +96,7 @@
     mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_number, acti_poster_url, 
     status, create_time, create_account, update_time, update_account, acti_views, acti_like, 
     apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
-    show_apply_num
+    show_apply_num, apply_check
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
     select
@@ -137,7 +138,8 @@
       update_account, acti_views, acti_like, 
       apply_num, partic_num, is_index, 
       is_apply, acti_order, issue_time, 
-      issue_account, show_apply_num)
+      issue_account, show_apply_num, apply_check
+      )
     values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
       #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
       #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
@@ -147,7 +149,8 @@
       #{updateAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
       #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
       #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
-      #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR})
+      #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}, #{applyCheck,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity
@@ -239,6 +242,9 @@
       <if test="showApplyNum != null">
         show_apply_num,
       </if>
+      <if test="applyCheck != null">
+        apply_check,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -327,6 +333,9 @@
       </if>
       <if test="showApplyNum != null">
         #{showApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCheck != null">
+        #{applyCheck,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -426,6 +435,9 @@
       <if test="record.showApplyNum != null">
         show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.applyCheck != null">
+        apply_check = #{record.applyCheck,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -461,7 +473,8 @@
       acti_order = #{record.actiOrder,jdbcType=INTEGER},
       issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
       issue_account = #{record.issueAccount,jdbcType=VARCHAR},
-      show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR}
+      show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
+      apply_check = #{record.applyCheck,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -553,6 +566,9 @@
       <if test="showApplyNum != null">
         show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
       </if>
+      <if test="applyCheck != null">
+        apply_check = #{applyCheck,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -585,7 +601,8 @@
       acti_order = #{actiOrder,jdbcType=INTEGER},
       issue_time = #{issueTime,jdbcType=TIMESTAMP},
       issue_account = #{issueAccount,jdbcType=VARCHAR},
-      show_apply_num = #{showApplyNum,jdbcType=VARCHAR}
+      show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
+      apply_check = #{applyCheck,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

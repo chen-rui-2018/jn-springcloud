@@ -65,9 +65,11 @@ public interface ActivityApplyService {
     PaginationData findApplyActivityList( ActivityQueryPaging activityQueryPaging,Boolean isPage);
 
     /**
+     *
      * 新增活动报名信息
-     * @param id        活动id
-     * @param account   用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
+     * @param status     报名状态 0:取消报名   1：报名成功   2：待审核
      */
-    void addApplyInfo(String id, String account);
+    void addApplyInfo(String activityId, String account,String status);
 }

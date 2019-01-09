@@ -22,7 +22,7 @@
         ,t1.acti_like as "activityLike"                                                          <!--感兴趣人数-->
         ,t1.apply_num as "applyNum"                                                              <!--报名人数-->
         ,t1.partic_num as "particNum"                                                            <!--活动参加人数-->
-        ,t1.status as "status"                                                                     <!--活动状态-->
+        ,t1.status as "status"                                                                   <!--活动状态-->
         ,date_format(t1.create_time , '%Y-%m-%d %H:%i:%s') as "createTime"                       <!--创建时间-->
         ,t1.create_account as "createAccount"                                                    <!--创建人-->
         ,date_format(t1.issue_time ,'%Y-%m-%d %H:%i:%s') as "issueTime"                          <!--发布时间-->
@@ -88,8 +88,8 @@
         ,t1.activity_id as "activityId"                                   <!--活动ID-->
         ,t1.account as "account"                                          <!--报名人-->
         ,date_format(t1.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime"   <!--报名时间-->
-        ,t1.apply_status as "applyStatus"                                   <!--报名状态-->
-        ,t1.sign_status as "signStatus"                                     <!--签到状态-->
+        ,t1.apply_status as "applyStatus"                                 <!--报名状态-->
+        ,t1.sign_status as "signStatus"                                   <!--签到状态-->
         ,date_format(t1.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"     <!--签到时间-->
         ,t1.sign_type as "signType"                                       <!--签到方式-->
         ,case

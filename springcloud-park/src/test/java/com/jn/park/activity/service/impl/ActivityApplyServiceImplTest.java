@@ -91,7 +91,7 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void addApplyInfo() {
-        activityApplyService.addApplyInfo(activityId, account);
+        activityApplyService.addApplyInfo(activityId, account,"1");
         //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
     }
 

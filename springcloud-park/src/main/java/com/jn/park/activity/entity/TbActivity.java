@@ -63,6 +63,8 @@ public class TbActivity implements Serializable {
 
     private String showApplyNum;
 
+    private String applyCheck;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -297,6 +299,14 @@ public class TbActivity implements Serializable {
         this.showApplyNum = showApplyNum == null ? null : showApplyNum.trim();
     }
 
+    public String getApplyCheck() {
+        return applyCheck;
+    }
+
+    public void setApplyCheck(String applyCheck) {
+        this.applyCheck = applyCheck == null ? null : applyCheck.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -337,7 +347,8 @@ public class TbActivity implements Serializable {
             && (this.getActiOrder() == null ? other.getActiOrder() == null : this.getActiOrder().equals(other.getActiOrder()))
             && (this.getIssueTime() == null ? other.getIssueTime() == null : this.getIssueTime().equals(other.getIssueTime()))
             && (this.getIssueAccount() == null ? other.getIssueAccount() == null : this.getIssueAccount().equals(other.getIssueAccount()))
-            && (this.getShowApplyNum() == null ? other.getShowApplyNum() == null : this.getShowApplyNum().equals(other.getShowApplyNum()));
+            && (this.getShowApplyNum() == null ? other.getShowApplyNum() == null : this.getShowApplyNum().equals(other.getShowApplyNum()))
+            && (this.getApplyCheck() == null ? other.getApplyCheck() == null : this.getApplyCheck().equals(other.getApplyCheck()));
     }
 
     @Override
@@ -373,6 +384,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getIssueTime() == null) ? 0 : getIssueTime().hashCode());
         result = prime * result + ((getIssueAccount() == null) ? 0 : getIssueAccount().hashCode());
         result = prime * result + ((getShowApplyNum() == null) ? 0 : getShowApplyNum().hashCode());
+        result = prime * result + ((getApplyCheck() == null) ? 0 : getApplyCheck().hashCode());
         return result;
     }
 
@@ -411,6 +423,7 @@ public class TbActivity implements Serializable {
         sb.append(", issueTime=").append(issueTime);
         sb.append(", issueAccount=").append(issueAccount);
         sb.append(", showApplyNum=").append(showApplyNum);
+        sb.append(", applyCheck=").append(applyCheck);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

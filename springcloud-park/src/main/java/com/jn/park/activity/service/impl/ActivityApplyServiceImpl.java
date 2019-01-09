@@ -1,5 +1,6 @@
 package com.jn.park.activity.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -131,18 +132,41 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         boolean existStateFlag = existApplyOrCancelApply(activityId, account, applyState);
         //没有报名
         if(!existStateFlag){
+            //判断当前活动报名是否需要审核
+            boolean needToReview = activityNeddToReview(activityId);
+            //报名状态   0：取消报名  1：报名成功  2：待审核
+            String status="1";
+            //判断当前活动报名是否需要审核
+            if(needToReview){
+                status="2";
+            }
             //用户信息已存在
             if(existApplyFlag){
-                //更新报名状态为报名成功   0：取消报名  1：报名成功
-                String status="1";
                 updateApplyState(activityId, account, status);
             }else{
                 //新增活动报名信息
-                addApplyInfo(activityId, account);
+                addApplyInfo(activityId, account,status);
             }
             //修改园区活动的报名人数  报名成功一个加1
             int change=1;
             updateActivityApplyNum(activityId,change);
+        }
+    }
+
+    /**
+     * 判断当前活动报名是否需要审核
+     * @param activityId
+     * @return true:需要审核  false:不需要审核
+     */
+    @ServiceLog(doAction = "判断当前活动报名是否需要审核")
+    private boolean activityNeddToReview(String activityId) {
+        TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
+        //报名是否需要审核   0：不需要审核   1：需要审核
+        String applyCheck="1";
+        if(applyCheck.equals(tbActivity.getApplyCheck())){
+            return true;
+        }else {
+            return false;
         }
     }
 
@@ -231,26 +255,27 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     }
 
     /**
+     *
      * 新增活动报名信息
-     * @param id        活动id
-     * @param account   用户账号
+     * @param activityId 活动id
+     * @param account    用户账号
+     * @param status     报名状态
      */
     @ServiceLog(doAction = "新增活动报名信息")
     @Override
-    public void addApplyInfo(String id, String account) {
+    public void addApplyInfo(String activityId, String account,String status) {
         //数据校验通过，可以报名，往活动表插入报名数据
         TbActivityApply activityApply=new TbActivityApply();
         //主键id
         activityApply.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //活动id
-        activityApply.setActivityId(id);
+        activityApply.setActivityId(activityId);
         //报名人
         activityApply.setAccount(account);
         //报名时间
         activityApply.setApplyTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
-        //报名状态   0：取消报名，1：报名成功
-        String applyState="1";
-        activityApply.setApplyStatus(applyState);
+        //报名状态
+        activityApply.setApplyStatus(status);
         //签到状态  0：未签到，1：已签到
         String notSignedIn="0";
         activityApply.setSignStatus(notSignedIn);
@@ -426,7 +451,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "报名人列表信息")
     @Override
     public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging,Boolean isPage) {
-        com.github.pagehelper.Page<Object> objects=null;
+        com.github.pagehelper.Page<Object> objects=new Page<>();
         if(isPage){
             //默认查询前15条
             objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);

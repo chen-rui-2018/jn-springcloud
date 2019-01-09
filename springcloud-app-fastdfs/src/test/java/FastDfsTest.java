@@ -1,6 +1,6 @@
 import com.jn.SpringCloudAppFastDfsApplication;
+import com.jn.common.util.file.FileUtil;
 import com.jn.config.FastDfsUploadClient;
-import com.jn.util.FileUtil;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

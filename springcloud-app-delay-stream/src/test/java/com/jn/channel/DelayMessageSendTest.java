@@ -117,6 +117,7 @@ public class DelayMessageSendTest {
         if(isUp){
             delay.setTtl("10000");
             delaySendMessageClient.delaySend(delay);
+
         }else {
             log.warn("需要先启动springcloud-app-system,springcloud-app-delay-stream项目");
         }

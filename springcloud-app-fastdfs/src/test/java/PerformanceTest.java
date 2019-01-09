@@ -1,11 +1,16 @@
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.service.AppendFileStorageClient;
 import org.apache.commons.io.FileUtils;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -18,11 +23,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PerformanceTest {
 
-    public static final String PERFORM_FILE_PATH = "D://images//gs.jpg";
+    public static String PERFORM_FILE_PATH;
+
     @Autowired
     protected AppendFileStorageClient storageClient;
 
-    // @Test
+    @BeforeClass
+    public static void setUp() throws FileNotFoundException {
+        File file = ResourceUtils.getFile("classpath:images");
+        PERFORM_FILE_PATH = file.getPath() + File.separator + "gs.jpg";
+    }
+
+    @Ignore
+    @Test
     public void testPerformance() {
         final AtomicInteger failCount = new AtomicInteger(0);
         final AtomicInteger count = new AtomicInteger(0);

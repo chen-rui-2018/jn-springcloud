@@ -136,6 +136,7 @@
 - 15            wetChat     微信
 - 16            payment     支付平台
 - 17            hardware    硬件平台
+- 18            delayStream 消息延时
 - 30            user        用户服务
 - 40            park        园区服务
 - 50            enterprise  企业服务

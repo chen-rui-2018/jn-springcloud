@@ -20,6 +20,9 @@ import java.io.Serializable;
 public class SysMenuAdd implements Serializable {
     private static final long serialVersionUID = -5712604602274725873L;
 
+    @ApiModelProperty(value = "菜单名称",required = false)
+    private String id;
+
     @ApiModelProperty(value = "菜单名称" )
     @NotBlank(message = "菜单名称不能为空！")
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "菜单名称校验失败")
@@ -37,10 +40,19 @@ public class SysMenuAdd implements Serializable {
     public SysMenuAdd() {
     }
 
-    public SysMenuAdd(String menuName, String menuUrl, String parentId) {
+    public SysMenuAdd(String id, String menuName, String menuUrl, String parentId) {
+        this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMenuName() {
@@ -70,7 +82,8 @@ public class SysMenuAdd implements Serializable {
     @Override
     public String toString() {
         return "SysMenuAdd{" +
-                "menuName='" + menuName + '\'' +
+                "id='" + id + '\'' +
+                ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
                 ", parentId='" + parentId + '\'' +
                 '}';

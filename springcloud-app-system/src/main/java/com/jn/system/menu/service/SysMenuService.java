@@ -1,14 +1,10 @@
 package com.jn.system.menu.service;
 
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuAdd;
-import com.jn.system.menu.model.SysMenuNameCheck;
-import com.jn.system.menu.model.SysMenus;
+import com.jn.system.menu.model.*;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 菜单service
@@ -55,7 +51,7 @@ public interface SysMenuService {
      *
      * @param sysMenuAdd
      */
-    void addMenuDir(SysMenuAdd sysMenuAdd, User user);
+    void addMenuDir(SysMenuDirAdd sysMenuAdd, User user);
 
     /**
      * 目录菜单下面添加子菜单
@@ -92,5 +88,5 @@ public interface SysMenuService {
      *
      * @return
      */
-    Set<SysMenu> getDynamicMenu(String userId);
+    List<SysMenuTreeVO> getDynamicMenu(String userId);
 }

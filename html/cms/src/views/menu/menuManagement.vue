@@ -6,7 +6,7 @@
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>
-          <span style="margin-left:20px">
+          <span style="margin-left:20px;padding-right:18px">
             <i
               class="el-icon-plus"
               @click="() => addMenu(data)"/>
@@ -63,29 +63,30 @@
       </div>
     </div>
     <!-- 弹出的新增菜单和编辑菜单对话框 -->
-    <el-dialog :visible.sync="menuDialogVisible" :title="dialogStatus" width="500px">
-      <el-form ref="menuForm" :rules="rules" :model="menuForm" label-width="100px">
-        <el-form-item v-show="visible" label="新增位置:" prop="location">
-          <el-radio v-model="location" label="1">同级菜单</el-radio>
-          <el-radio v-model="location" label="0">子菜单</el-radio>
-        </el-form-item>
-        <el-form-item v-show="!isTrue" label="菜单类型:" prop="type">
-          <el-radio v-model="radio" label="1">目录</el-radio>
-          <el-radio v-model="radio" label="2">页面</el-radio>
-        </el-form-item>
-        <el-form-item label="菜单名称:" prop="menuName">
-          <el-input v-model="menuForm.menuName" style="width:340px;" maxlength="20"/>
-        </el-form-item>
-        <el-form-item v-if="isShow" label="url地址:" prop="menuUrl">
-          <el-input v-model="menuForm.menuUrl" style="width:340px;" maxlength="150" />
-        </el-form-item>
-        <el-form-item class="footer" label-width="0px">
-          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增'?createData():updateData()">保存</el-button>
-          <el-button @click="menuDialogVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-
-    </el-dialog>
+    <template v-if="menuDialogVisible">
+      <el-dialog :visible.sync="menuDialogVisible" :title="dialogStatus" width="500px">
+        <el-form ref="menuForm" :rules="rules" :model="menuForm" label-width="100px" @submit.native.prevent>
+          <el-form-item v-show="visible" label="新增位置:" prop="location">
+            <el-radio v-model="location" label="1">同级菜单</el-radio>
+            <el-radio v-model="location" label="0">子菜单</el-radio>
+          </el-form-item>
+          <el-form-item v-show="!isTrue" label="菜单类型:" prop="type">
+            <el-radio v-model="radio" label="1">目录</el-radio>
+            <el-radio v-model="radio" label="2">页面</el-radio>
+          </el-form-item>
+          <el-form-item label="菜单名称:" prop="menuName">
+            <el-input v-model="menuForm.menuName" style="width:340px;" maxlength="20"/>
+          </el-form-item>
+          <el-form-item v-if="isShow" label="url地址:" prop="menuUrl">
+            <el-input v-model="menuForm.menuUrl" style="width:340px;" maxlength="150" />
+          </el-form-item>
+          <el-form-item class="footer" label-width="0px">
+            <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增'?createData():updateData()">保存</el-button>
+            <el-button @click="menuDialogVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+    </template>
     <!-- 新增功能和编辑功能弹框 -->
     <el-dialog :visible.sync="resourcesDialogVisible" :title="dialogStatus" width="500px">
       <el-form ref="resourcesForm" :rules="rules" :model="resourcesForm" label-width="100px" class="resourcesBox">
@@ -337,9 +338,9 @@ export default {
     },
     // 实现添加功能
     createResources() {
+      this.isDisabled = true
       this.$refs['resourcesForm'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           addResources(this.resourcesForm).then(res => {
             if (res.data.code === '0000') {
@@ -356,6 +357,8 @@ export default {
             this.initList()
             this.getResources()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -513,12 +516,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 编辑菜单的实现
@@ -570,7 +569,7 @@ export default {
       }
       if (data.isDir === '1') {
         this.isShow = false
-        this.menuForm.menuUrl = '/'
+        this.menuForm.menuUrl = data.menuUrl
       } else if (data.isDir === '0') {
         this.isShow = true
         this.menuForm.menuUrl = data.menuUrl
@@ -658,7 +657,7 @@ export default {
       } else if (data.isDir === '1') {
         this.visible = true
       }
-      this.menuForm.menuUrl = '/'
+      this.menuForm.menuUrl = ''
       this.$nextTick(() => {
         this.$refs['menuForm'].clearValidate()
       })

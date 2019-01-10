@@ -28,7 +28,7 @@ public interface SysUserMapper {
     void addSysUser(SysUser sysUser);
 
     /**
-     * 当查询部门的条件为空时的查询方法
+     * 当查询岗位或岗位类型为空时的查询方法
      *
      * @param userSysUserPage
      * @return
@@ -108,4 +108,11 @@ public interface SysUserMapper {
      * @param list
      */
     void addDepartmentAndPostToUserBatch(List<TbSysUserDepartmentPost> list);
+
+    /**
+     * 当查询条件中,岗位后岗位类型名称不为空时查询方法
+     * @param sysUserPage
+     * @return
+     */
+    List<SysUserVO> getSysUserByPageAndPost(SysUserPage sysUserPage);
 }

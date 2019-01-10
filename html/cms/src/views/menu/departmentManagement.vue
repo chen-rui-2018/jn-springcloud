@@ -6,7 +6,7 @@
           <span>
             <i style="margin-right:3px"/>{{ node.label }}
           </span>
-          <span style="margin-left:20px">
+          <span style="margin-left:20px;padding-right:18px">
             <i
               class="el-icon-plus"
               @click="() => addDepartment(data)"/>
@@ -20,7 +20,7 @@
         </span>
       </el-tree>
     </div>
-    <div v-if="isData" class="department-right">
+    <div v-show="isData" class="department-right">
       <div v-if="isSubForm">没有子部门</div>
       <div v-show="isDepartmentInfo">
         <div class="department-title">下级部门</div>
@@ -43,21 +43,23 @@
       </div>
     </div>
     <!-- 弹出的新增和编辑对话框 -->
-    <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
-      <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px">
-        <el-form-item v-show="visible" label="新增位置:">
-          <el-radio v-model="location" label="1">同级部门</el-radio>
-          <el-radio v-model="location" label="0">子部门</el-radio>
-        </el-form-item>
-        <el-form-item label="部门名称:" prop="departmentName">
-          <el-input v-model.trim="departmentForm.departmentName" style="width:200px;" maxlength="20" />
-        </el-form-item>
-        <el-form-item>
-          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增部门'?createData():updateData()">保存</el-button>
-          <el-button @click="departmentDialogVisible = false">取消</el-button>
-        </el-form-item>
-      </el-form>
-    </el-dialog>
+    <template v-if="departmentDialogVisible">
+      <el-dialog :visible.sync="departmentDialogVisible" :title="dialogStatus" width="400px">
+        <el-form ref="departmentForm" :rules="rules" :model="departmentForm" label-width="100px" @submit.native.prevent>
+          <el-form-item v-show="visible" label="新增位置:">
+            <el-radio v-model="location" label="1">同级部门</el-radio>
+            <el-radio v-model="location" label="0">子部门</el-radio>
+          </el-form-item>
+          <el-form-item label="部门名称:" prop="departmentName">
+            <el-input v-model.trim="departmentForm.departmentName" style="width:200px;" maxlength="20" />
+          </el-form-item>
+          <el-form-item>
+            <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增部门'?createData():updateData()">保存</el-button>
+            <el-button @click="departmentDialogVisible = false">取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -148,7 +150,6 @@ export default {
         this.departmentForm.parentId = this.checkoutParentId
       } else if (this.location === '0') {
         this.departmentForm.parentId = this.checkoutId
-        console.log(this.departmentForm.parentId)
       }
     }
   },
@@ -228,7 +229,6 @@ export default {
     },
     // 删除部门功能实现
     deleteDepartment(id) {
-      console.log(id)
       this.$confirm(`此操作将永久删除这个部门及其子部门, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -251,12 +251,8 @@ export default {
               this.$message.error(res.data.result)
             }
           })
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+        }).catch(() => {
+
         })
     },
     // 显示编辑对话框
@@ -283,7 +279,6 @@ export default {
           this.isDisabled = true
           // 将对话框隐藏
           this.departmentDialogVisible = false
-          console.log(this.departmentForm)
           // // 调用接口发送请求
           updateDepartment(this.departmentForm).then(res => {
             if (res.data.code === '0000') {
@@ -306,9 +301,9 @@ export default {
     },
     // 新增部门功能的实现
     createData() {
+      this.isDisabled = true
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           createDepartment(this.departmentForm).then(res => {
             if (res.data.code === '0000') {
@@ -328,12 +323,13 @@ export default {
             this.initList()
             this.updataRight()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
     // 显示新增部门对话框
     addDepartment(data) {
-      console.log(data)
       this.visible = true
       this.location = '1'
       this.dialogStatus = '新增部门'

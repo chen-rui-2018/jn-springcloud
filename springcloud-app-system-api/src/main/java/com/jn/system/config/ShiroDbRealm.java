@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.GlobalConstants;
+import com.jn.common.util.LoadBalancerUtil;
 import com.jn.system.enums.ShiroExceptionEnum;
 import com.jn.system.enums.ShiroUserEnum;
 import com.jn.system.model.User;
@@ -16,13 +17,6 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Set;
 
@@ -36,11 +30,8 @@ import java.util.Set;
  */
 public class ShiroDbRealm extends AuthorizingRealm {
 
-    @Autowired
-    private LoadBalancerClient loadBalancerClient;
-
-    @Autowired
-    private RestTemplate restTemplate;
+   @Autowired
+   private LoadBalancerUtil loadBalancerUtils;
     /**
      * 获取用户的服务ID
      */
@@ -52,7 +43,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     /**
      * 获取资源的服务地址
      */
-    private final static String SYSTEM_CLIENT_RESOURCE_SERVICE = "/api/system/getUser";
+    private final static String SYSTEM_CLIENT_RESOURCE_SERVICE = "/api/system/getResources";
     /**
      * 用户登录认证
      *
@@ -65,7 +56,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
         MyUsernamePasswordToken token = (MyUsernamePasswordToken) authcToken;
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("account", token.getUsername());
-        Result result = this.getSystemApiPostForEntity(
+        Result result = loadBalancerUtils.getClientPostForEntity(
                 SYSTEM_CLIENT,
                 SYSTEM_CLIENT_USER_SERVICE,
                 jsonObject.toString());
@@ -99,7 +90,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
     public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         User shiroUser = (User) principals.getPrimaryPrincipal();
 
-        Result result = this.getSystemApiPostForEntity(
+        Result result = loadBalancerUtils.getClientPostForEntity(
                 SYSTEM_CLIENT,
                 SYSTEM_CLIENT_RESOURCE_SERVICE,
                 shiroUser.getId());
@@ -120,28 +111,4 @@ public class ShiroDbRealm extends AuthorizingRealm {
         Cache<Object, AuthorizationInfo> cache = getAuthorizationCache();
         cache.remove(user.getId());
     }
-
-
-    /**
-     * RestTemplate 调用接口
-     *
-     * @param client     请求spring.application.name
-     * @param url        请求地址
-     * @param jsonObject 请求参数
-     * @return
-     */
-    private Result getSystemApiPostForEntity(String client, String url, String jsonObject) {
-        ServiceInstance si = this.loadBalancerClient.choose(client);
-        StringBuffer sb = new StringBuffer();
-        sb.append("http://").append(si.getHost()).append(":").append(si.getPort()).append(url);
-        HttpHeaders headers = new HttpHeaders();
-        MediaType type = MediaType.parseMediaType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-        headers.setContentType(type);
-        headers.add(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON.toString());
-        HttpEntity<String> formEntity = new HttpEntity<>(jsonObject, headers);
-        ResponseEntity<Result> response = restTemplate.postForEntity(sb.toString(), formEntity, Result.class);
-        return response.getBody();
-    }
-
-
 }

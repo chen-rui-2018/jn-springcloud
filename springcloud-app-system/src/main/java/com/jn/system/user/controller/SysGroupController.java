@@ -3,6 +3,7 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
@@ -13,14 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 用户组管理
@@ -54,7 +56,14 @@ public class SysGroupController extends BaseController {
     public Result add(@Validated @RequestBody SysGroupAdd sysGroup) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysGroupService.addSysGroup(sysGroup, user);
+        //为用户组其他属性进行复值
+        TbSysGroup tbSysGroup = new TbSysGroup();
+        BeanUtils.copyProperties(sysGroup, tbSysGroup);
+        tbSysGroup.setId(UUID.randomUUID().toString());
+        tbSysGroup.setCreateTime(new Date());
+        tbSysGroup.setCreator(user.getId());
+        //传参到业务层
+        sysGroupService.addSysGroup(tbSysGroup);
         return new Result();
     }
 

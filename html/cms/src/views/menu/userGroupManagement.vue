@@ -1,5 +1,5 @@
 <template>
-  <div class="management">
+  <div v-loading="listLoading" class="management">
     <div class="filter-container">
       <el-form :inline="true" :model="listQuery">
         <el-form-item label="用户组名称:">
@@ -16,7 +16,7 @@
     </div>
 
     <!-- 表格 -->
-    <el-table v-loading="listLoading" :key="tableKey" :data="usergroupList" border fit highlight-current-row style="width: 100%;height:100%;">
+    <el-table :key="tableKey" :data="usergroupList" border fit highlight-current-row style="width: 100%;height:100%;">
       <!-- 表格第一列  序号 -->
       <el-table-column type="index" width="60" label="序号" align="center" />
       <!-- 表格第二列  姓名 -->
@@ -65,49 +65,54 @@
       @current-change="handleCurrentChange" />
 
     <!-- 弹出的用户组对话框 -->
-    <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
-      <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
-        <el-form-item label="用户组:" prop="groupName">
-          <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
-        </el-form-item>
-        <el-form-item label="状态:" prop="status">
-          <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item" clearable>
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer" align="center">
-        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
-        <el-button @click="userGroupdialogFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
+    <template v-if="userGroupdialogFormVisible">
+      <el-dialog :visible.sync="userGroupdialogFormVisible" :title="dialogStatus" width="400px">
+        <el-form ref="userGroupform" :rules="rules" :model="userGroupform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
+          <el-form-item label="用户组:" prop="groupName">
+            <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
+          </el-form-item>
+          <el-form-item label="状态:" prop="status">
+            <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item" clearable>
+              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer" align="center">
+          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='新增用户组'?createUserData():updateData()">提交</el-button>
+          <el-button @click="userGroupdialogFormVisible = false">取消</el-button>
+        </div>
+      </el-dialog>
+    </template>
     <!-- 弹出授权角色对话框 -->
-    <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
-      <el-transfer
-        v-loading="roleLoading"
-        v-model="roleIds"
-        :data="roleData"
-        :titles="['其他角色', '用户组拥有角色']"
-        filterable
-        filter-placeholder="请输入角色名称"
-        class="box"
-        @change="handleRoleChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="roledialogVisible">
+      <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+        <el-transfer
+          v-loading="roleLoading"
+          v-model="roleIds"
+          :data="roleData"
+          :titles="['其他角色', '用户组拥有角色']"
+          filterable
+          filter-placeholder="请输入角色名称"
+          class="box"
+          @change="handleRoleChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
     <!-- 弹出的授權用户对话框 @input.native="text($event)"  -->
-    <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
-      <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :page-size="userRows" :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
-
+    <template v-if="userdialogVisible">
+      <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
+        <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :page-size="userRows" :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
   </div>
 
 </template>
@@ -208,7 +213,6 @@ export default {
   methods: {
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      console.log(this.numberTotal)
       if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
@@ -313,7 +317,6 @@ export default {
     },
     // 改变授权用户穿梭框时获取选中的用户
     handleUserChange(value, direction, movedKeys) {
-      console.log(value)
       this.userIds = value
       if (direction === 'left') {
         this.moveArr = -(movedKeys.length)
@@ -360,9 +363,9 @@ export default {
     },
     // 实现添加用户功能
     createUserData() {
+      this.isDisabled = true
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求
           addgroupList(this.userGroupform).then(res => {
             if (res.data.code === '0000') {
@@ -377,10 +380,12 @@ export default {
             // 将对话框隐藏
             this.userGroupdialogFormVisible = false
             // 重置表单元素的数据
-            this.$refs['userGroupform'].resetFields()
+            // this.$refs['userGroupform'].resetFields()
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -417,7 +422,7 @@ export default {
             }
             this.isDisabled = false
             // 重置表单元素的数据
-            this.$refs['userGroupform'].resetFields()
+            // this.$refs['userGroupform'].resetFields()
             // 刷新页面显示
             this.initList()
           })
@@ -448,10 +453,7 @@ export default {
           })
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+
         })
     },
     // 项目初始化

@@ -2,8 +2,6 @@ package com.jn.system.menu.dao;
 
 
 import com.jn.system.menu.model.SysResources;
-import com.jn.system.menu.model.SysResourcesPage;
-import com.jn.system.menu.vo.SysResourcesVO;
 import com.jn.system.model.MenuResources;
 
 import java.util.List;
@@ -28,14 +26,6 @@ public interface SysResourcesMapper {
     void deleteByIds(String[] id);
 
     /**
-     * 根据主键查询功能菜单列表
-     *
-     * @param sysResourcesPage
-     * @return
-     */
-    List<SysResourcesVO> findMenuResourcesByPage(SysResourcesPage sysResourcesPage);
-
-    /**
      * 根据id查找用户拥有权限列表
      *
      * @param id 用户ID
@@ -58,14 +48,6 @@ public interface SysResourcesMapper {
      * @return
      */
     SysResources findResourceById(String id);
-
-    /**
-     * 根据功能id获取菜单名称
-     *
-     * @param resourcesId
-     * @return
-     */
-    List<String> findMenuNameByResourcesId(String resourcesId);
 
     /**
      * 删除菜单及子菜单的功能信息

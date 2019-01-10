@@ -1,6 +1,17 @@
-import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { Message } from 'element-ui'
+import {
+  loginByUsername,
+  logout,
+  getUserInfo,
+  getUsername
+} from '@/api/login'
+import {
+  getToken,
+  setToken,
+  removeToken
+} from '@/utils/auth'
+import {
+  Message
+} from 'element-ui'
 
 const user = {
   state: {
@@ -46,7 +57,9 @@ const user = {
 
   actions: {
     // 用户名登录
-    LoginByUsername({ commit }, userInfo) {
+    LoginByUsername({
+      commit
+    }, userInfo) {
       const username = userInfo.username.trim()
       return new Promise((resolve, reject) => {
         loginByUsername(username, userInfo.password).then(response => {
@@ -54,8 +67,19 @@ const user = {
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
-            resolve()
+            getUsername().then(res => {
+              console.log(res)
+              if (res.data.code === '0000') {
+                if (res.data.data.name) {
+                  localStorage.setItem('userName', res.data.data.name)
+                } else {
+                  localStorage.setItem('account', res.data.data.account)
+                }
+              }
+            })
+            resolve(data)
           } else {
+            resolve(data)
             Message({
               message: '登录失败,' + data.result,
               type: 'error',
@@ -69,10 +93,12 @@ const user = {
     },
 
     // 获取用户信息
-    GetUserInfo({ commit, state }) {
+    GetUserInfo({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         getUserInfo(state.token).then(response => {
-          // console.log(response)
           if (!response.data) { // 由于mockjs 不支持自定义状态码只能这样hack
             reject('error')
           }
@@ -96,7 +122,10 @@ const user = {
     },
 
     // 登出
-    LogOut({ commit, state }) {
+    LogOut({
+      commit,
+      state
+    }) {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
@@ -106,11 +135,15 @@ const user = {
         }).catch(error => {
           reject(error)
         })
+        localStorage.removeItem('userName')
+        localStorage.removeItem('account')
       })
     },
 
     // 前端 登出
-    FedLogOut({ commit }) {
+    FedLogOut({
+      commit
+    }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
         removeToken()
@@ -119,7 +152,10 @@ const user = {
     },
 
     // 动态修改权限
-    ChangeRoles({ commit, dispatch }, role) {
+    ChangeRoles({
+      commit,
+      dispatch
+    }, role) {
       return new Promise(resolve => {
         commit('SET_TOKEN', role)
         setToken(role)

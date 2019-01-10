@@ -3,20 +3,22 @@ package com.jn.system.file.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.file.model.SysFile;
-import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
+import com.jn.system.file.service.SysFileService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
-import com.jn.system.file.service.SysFileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 文件controller
@@ -50,7 +52,10 @@ public class SysFileController extends BaseController {
     public Result add(@Validated @RequestBody SysFile sysFile) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysFileService.insertSysFile(sysFile,user);
+        sysFile.setId(UUID.randomUUID().toString());
+        sysFile.setCreator(user.getId());
+        sysFile.setCreateTime(new Date());
+        sysFileService.insertSysFile(sysFile);
         return new Result();
     }
 
@@ -84,23 +89,11 @@ public class SysFileController extends BaseController {
         return new Result(sysFile);
     }
 
-    @ControllerLog(doAction = "文件添加文件组")
-    @ApiOperation(value = "文件添加文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sysFileAddFileGroup")
-    @RequiresPermissions("/system/sysFile/sysFileAddFileGroup")
-    public Result sysFileAddFileGroup(@RequestBody SysFileAddFileGroup sysFileAddFileGroup) {
-        Assert.notNull(sysFileAddFileGroup.getFileId(), "文件ID不能为空");
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysFileService.sysFileAddFileGroup(sysFileAddFileGroup,user);
-        return new Result();
-    }
-
     @ControllerLog(doAction = "校验文件名称")
     @ApiOperation(value = "校验文件名称", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/checkFileName")
     @RequiresPermissions("/system/sysFile/checkFileName")
-    public Result checkFileName(String fileName){
+    public Result checkFileName(String fileName) {
         String result = sysFileService.checkFileName(fileName);
         return new Result(result);
     }

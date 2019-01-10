@@ -87,6 +87,7 @@ public class SysMenuServiceTest {
         SysMenu menu = new SysMenu();
         menu.setId(menuId);
         menu.setMenuName(menuName);
+        menu.setParentId(parentId);
         try {
             sysMenuService.updateSysMenuById(menu);
         } catch (JnSpringCloudException e) {

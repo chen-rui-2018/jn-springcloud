@@ -120,7 +120,8 @@ public class SysPermissionServiceTest {
         page.setRows(10);
         page.setPermissionId(permissionId);
         PaginationData data = sysPermissionService.findRoleOfPermission(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -138,7 +139,8 @@ public class SysPermissionServiceTest {
         page.setRows(10);
         page.setPermissionId(permissionId);
         PaginationData data = sysPermissionService.findFileGroupOfPermission(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test

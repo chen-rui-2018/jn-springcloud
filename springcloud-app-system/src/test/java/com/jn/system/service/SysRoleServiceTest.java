@@ -125,7 +125,8 @@ public class SysRoleServiceTest {
         page.setRows(10);
         page.setRoleId(roleId);
         PaginationData data = sysRoleService.findUserOfRoleAndOtherUser(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -143,7 +144,8 @@ public class SysRoleServiceTest {
         page.setRows(10);
         page.setRoleId(roleId);
         PaginationData data = sysRoleService.findUserGroupOfRoleAndOtherGroup(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -161,7 +163,8 @@ public class SysRoleServiceTest {
         page.setRows(10);
         page.setRoleId(roleId);
         PaginationData data = sysRoleService.findPermissionOrRoleAndOtherPermission(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
 

@@ -51,7 +51,7 @@ public class ActivityDetailsServiceImplTest {
      */
     private String account;
 
-    ActivityQueryPaging activityQueryPaging;
+    ActivityQueryPaging activityQueryPaging =new ActivityQueryPaging();
 
     @Before
     public void setUp() throws Exception {

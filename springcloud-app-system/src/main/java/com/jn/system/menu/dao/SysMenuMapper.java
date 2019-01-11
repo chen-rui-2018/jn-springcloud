@@ -2,13 +2,12 @@ package com.jn.system.menu.dao;
 
 
 import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuPage;
 import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
-import com.jn.system.menu.vo.SysMenuVO;
 import com.jn.system.permission.vo.SysMenuTreeOfPermissionVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜单mapper
@@ -27,14 +26,6 @@ public interface SysMenuMapper {
      * @param ids
      */
     void deleteBy(List<String> ids);
-
-    /**
-     * 根据主键查询菜单功能列表
-     *
-     * @param sysMenuPage
-     * @return
-     */
-    List<SysMenuVO> selectMenuListBySearchKey(SysMenuPage sysMenuPage);
 
     /**
      * 根据菜单id获取菜单的等级
@@ -68,14 +59,6 @@ public interface SysMenuMapper {
     List<SysMenuTreeVO> findMenuByParentId(String value);
 
     /**
-     * 根据菜单id获取菜单信息
-     *
-     * @param id
-     * @return
-     */
-    SysMenu getMenuById(String id);
-
-    /**
      * 批量对菜单排序进行更新
      *
      * @param sysMenuSortList
@@ -104,4 +87,12 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
+
+    /**
+     * 根据用户权限动态获取菜单信息
+     *
+     * @param userId
+     * @return
+     */
+    List<SysMenuTreeVO> getDynamicMenu(String userId);
 }

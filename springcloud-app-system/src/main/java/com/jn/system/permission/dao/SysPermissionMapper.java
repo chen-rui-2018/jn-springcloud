@@ -13,11 +13,6 @@ import java.util.List;
  * @modified By:
  **/
 public interface SysPermissionMapper {
-    /**
-     * 根据权限id修改权限信息
-     * @param sysPermission
-     */
-    void updatePermission(SysPermission sysPermission);
 
     /**
      * 分页条件查询
@@ -31,11 +26,4 @@ public interface SysPermissionMapper {
      * @param ids
      */
     void deletePermissionBranch(String[] ids);
-
-    /**
-     * 根据id获取权限信息
-     * @param id
-     * @return
-     */
-    SysPermission getPermissionById(String id);
 }

@@ -1,12 +1,10 @@
 package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.*;
-
-import java.util.List;
 
 /**
  * 用户组
@@ -19,7 +17,7 @@ import java.util.List;
 public interface SysGroupService {
 
     /**
-     * 查询所有用户组信息
+     * 查询用户组信息列表
      *
      * @return
      */
@@ -28,9 +26,9 @@ public interface SysGroupService {
     /**
      * 增加用户组
      *
-     * @param sysGroup 用户组
+     * @param tbSysGroup 用户组
      */
-    void addSysGroup(SysGroupAdd sysGroup, User user);
+    void addSysGroup(TbSysGroup tbSysGroup);
 
     /**
      * 逻辑删除用户组

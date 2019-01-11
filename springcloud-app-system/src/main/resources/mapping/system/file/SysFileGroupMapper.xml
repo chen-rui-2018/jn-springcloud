@@ -16,7 +16,4 @@
             #{id}
         </foreach>
     </update>
-    <select id="getFileGroupById" resultType="com.jn.system.file.model.SysFileGroup" parameterType="java.lang.String">
-        SELECT * FROM tb_sys_file_group WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
-    </select>
 </mapper>

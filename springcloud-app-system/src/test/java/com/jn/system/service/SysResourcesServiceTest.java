@@ -1,16 +1,30 @@
 package com.jn.system.service;
 
-import com.jn.common.model.PaginationData;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.menu.entity.TbSysResources;
+import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
-import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.service.SysResourcesService;
+import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * 权限模块功能service单元测试
@@ -22,20 +36,43 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SysResourcesServiceTest {
+
     @Autowired
     private SysResourcesService sysResourcesService;
 
-    /**
-     * 搜索关键字分页查询功能列表
-     */
-    @Test
-    public void selectListBySearchKeyTest() {
-        SysResourcesPage page = new SysResourcesPage();
-        page.setPage(1);
-        page.setRows(10);
-        page.setResourcesName("");
-        PaginationData data = sysResourcesService.selectResourcesListBySearchKey(page);
+    //功能id
+    private static String resourcesId;
+    //功能名称
+    private static String resourcesName;
+    //菜单id
+    private static String menuId;
+    //创建者
+    private static User user;
+    //功能对象
+    private static TbSysResources tbSysResources;
+
+    @BeforeClass
+    public static void init() {
+        //初始化添加用户
+        user = new User();
+        user.setId("10000");
+
+        //初始化功能id及功能名称
+        resourcesId = UUID.randomUUID().toString();
+        resourcesName = "测试功能" + RandomStringUtils.randomNumeric(4);
+        menuId = "m001";
+
+        //初始化功能对象
+        tbSysResources = new TbSysResources();
+        tbSysResources.setId(resourcesId);
+        tbSysResources.setResourcesName(resourcesName);
+        tbSysResources.setCreateTime(new Date());
+        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysResources.setCreator(user.getId());
+        tbSysResources.setMenuId(menuId);
+        tbSysResources.setResourcesUrl("/xxx/xxx");
     }
 
     /**
@@ -43,14 +80,11 @@ public class SysResourcesServiceTest {
      */
     @Test
     public void addTest() {
-        SysResources resources = new SysResources();
-        resources.setResourcesName("功能测试1");
-        resources.setResourcesUrl("xxx/xxx/a.html");
-        resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysResourcesService.insertResources(resources, user);
+        try {
+            sysResourcesService.insertResources(tbSysResources);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
     /**
@@ -59,31 +93,62 @@ public class SysResourcesServiceTest {
     @Test
     public void updateTest() {
         SysResources resources = new SysResources();
-        resources.setId("17ff9b4e-a920-4866-8cf8-35eab5c8ccde");
-        resources.setResourcesName("功能测试2");
-        resources.setResourcesUrl("xxx/xxx/a.html");
-        resources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        sysResourcesService.updateResourcesById(resources);
-    }
-
-    /**
-     * 批量删除功能(逻辑删除)
-     */
-    @Test
-    public void deleteTest() {
-        String[] ids = {"17ff9b4e-a920-4866-8cf8-35eab5c8ccde"};
-        sysResourcesService.deleteResourcesById(ids);
+        resources.setId(resourcesId);
+        resources.setResourcesName(resourcesName);
+        resources.setMenuId(menuId);
+        try {
+            sysResourcesService.updateResourcesById(resources);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
     /**
      * 根据id查询功能
      */
     @Test
-    public void selectByIdTest() {
-        String id = "17ff9b4e-a920-4866-8cf8-35eab5c8ccde";
-        SysResources resources = sysResourcesService.selectSysResourcesById(id);
-        System.out.println(resources.toString());
+    public void selectSysResourcesById() {
+        SysResources data = sysResourcesService.selectSysResourcesById(resourcesId);
+        Assert.assertThat(data, Matchers.anything());
     }
 
+    @Test
+    public void findPermissionsUrlById() {
+        String permissionId = "P001";
+        Set<String> data = sysResourcesService.findPermissionsUrlById(permissionId);
+        Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
+    public void getMenuResourcesUrlById() {
+        String userId = "10000";
+        List<MenuResources> data = sysResourcesService.getMenuResourcesUrlById(userId);
+        Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
+    public void checkResourceName() {
+        SysResourceCheckName resource = new SysResourceCheckName();
+        resource.setMenuId(menuId);
+        resource.setResourceName(resourcesName);
+        String result = sysResourcesService.checkResourceName(resource);
+        Assert.assertThat(result, Matchers.anyOf(Matchers.equalTo(SysReturnMessageEnum.FAIL.getMessage()),
+                Matchers.equalTo(SysReturnMessageEnum.SUCCESS.getMessage())));
+    }
+
+    @Test
+    public void findResourcesByMenuId() {
+        List<TbSysResources> data = sysResourcesService.findResourcesByMenuId(menuId);
+        Assert.assertThat(data, Matchers.anything());
+    }
+
+    /**
+     * 批量删除功能(逻辑删除)
+     */
+    @Test
+    public void zdeleteTest() {
+        String[] ids = {resourcesId};
+        sysResourcesService.deleteResourcesById(ids);
+    }
 
 }

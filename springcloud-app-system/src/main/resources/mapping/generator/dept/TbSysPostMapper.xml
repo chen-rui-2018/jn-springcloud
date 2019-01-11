@@ -7,6 +7,7 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="post_type_id" jdbcType="VARCHAR" property="postTypeId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,7 +68,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, post_name, creator, create_time, status
+    id, post_name, creator, create_time, status, post_type_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.dept.entity.TbSysPostCriteria" resultMap="BaseResultMap">
     select
@@ -101,9 +102,11 @@
   </delete>
   <insert id="insert" parameterType="com.jn.system.dept.entity.TbSysPost">
     insert into tb_sys_post (id, post_name, creator, 
-      create_time, status)
+      create_time, status, post_type_id
+      )
     values (#{id,jdbcType=VARCHAR}, #{postName,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR})
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{postTypeId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.dept.entity.TbSysPost">
     insert into tb_sys_post
@@ -123,6 +126,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="postTypeId != null">
+        post_type_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,6 +145,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="postTypeId != null">
+        #{postTypeId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -166,6 +175,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
       </if>
+      <if test="record.postTypeId != null">
+        post_type_id = #{record.postTypeId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -177,7 +189,8 @@
       post_name = #{record.postName,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      status = #{record.status,jdbcType=VARCHAR},
+      post_type_id = #{record.postTypeId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -197,6 +210,9 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
+      <if test="postTypeId != null">
+        post_type_id = #{postTypeId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -205,7 +221,8 @@
     set post_name = #{postName,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      status = #{status,jdbcType=VARCHAR},
+      post_type_id = #{postTypeId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

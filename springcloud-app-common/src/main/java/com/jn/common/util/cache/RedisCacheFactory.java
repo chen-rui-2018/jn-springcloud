@@ -49,15 +49,4 @@ public class RedisCacheFactory {
         return var ;
     }
 
-    public <V> Cache<V> initCache(String groupName, Integer expire) {
-        logger.debug("初始名称为: {}，有效时间为{}秒的RedisCache实例",groupName,expire);
-        String keyPrefix = KEY_PREFIX+applicationName+"_"+groupName+":";
-        Cache c = new RedisCache<V>(redisTemplate, keyPrefix,expire);
-        caches.put(groupName, c);
-
-        return c;
-    }
-
-
-
 }

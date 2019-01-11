@@ -2,6 +2,7 @@ package com.jn.system.dept.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -18,19 +19,26 @@ import java.util.Date;
 @ApiModel(value = "SysPostAdd",description = "岗位添加")
 public class SysPostAdd implements Serializable {
     private static final long serialVersionUID = 7770105271133774300L;
+
     @ApiModelProperty("岗位名称")
-    @Size(max = 20,message = "岗位名称字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
+
     @ApiModelProperty("状态")
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
 
+    @ApiModelProperty("岗位类型id")
+    @NotBlank(message = "岗位类型不能为空")
+    private String postTypeId;
+
     public SysPostAdd() {
     }
 
-    public SysPostAdd(String postName, String status) {
+    public SysPostAdd(String postName, String status, String postTypeId) {
         this.postName = postName;
         this.status = status;
+        this.postTypeId = postTypeId;
     }
 
     public String getPostName() {
@@ -49,11 +57,20 @@ public class SysPostAdd implements Serializable {
         this.status = status;
     }
 
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId;
+    }
+
     @Override
     public String toString() {
         return "SysPostAdd{" +
                 "postName='" + postName + '\'' +
                 ", status='" + status + '\'' +
+                ", postTypeId='" + postTypeId + '\'' +
                 '}';
     }
 }

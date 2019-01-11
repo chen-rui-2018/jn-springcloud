@@ -9,32 +9,28 @@
         </foreach>
     </update>
 
-    <update id="updatePost" parameterType="com.jn.system.dept.model.SysPost">
-        update tb_sys_post
-        set `status`= #{status,jdbcType=VARCHAR},
-        post_name = #{postName,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=VARCHAR}
-    </update>
-
     <select id="findByPage" parameterType="com.jn.system.dept.model.SysPostPage"
-            resultType="com.jn.system.dept.vo.SysPostVO">
+            resultType="com.jn.system.dept.model.SysPost">
         select id,
         post_name as postName,
         create_time as createTime,
-        `status`
+        `status`,
+        post_type_id as postTypeId,
+        (SELECT post_type_name
+            from tb_sys_post_type
+            where id = post_type_id
+            and status = '1') as postTypeName
         from tb_sys_post
         where `status` != '-1'
-        <if test="postName != null and postName != ''">
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postName)">
             and post_name like CONCAT('%', #{postName,jdbcType=VARCHAR}, '%')
         </if>
-        <if test="status != null and status != ''">
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
             and status = #{status,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(postTypeId)">
+            and post_type_id = #{postTypeId,jdbcType=VARCHAR}
+        </if>
         ORDER BY create_time desc,id desc
-    </select>
-
-    <select id="getPostById" resultType="com.jn.system.dept.model.SysPost" parameterType="java.lang.String">
-        SELECT id,post_name as postName,create_time as createTime,`status`
-        FROM tb_sys_post WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 </mapper>

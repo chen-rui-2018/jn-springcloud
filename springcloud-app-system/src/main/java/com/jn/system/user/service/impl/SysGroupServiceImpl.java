@@ -8,19 +8,18 @@ import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.*;
-import com.jn.system.permission.dao.SysRoleMapper;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRole;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.permission.service.impl.SysRoleServiceImpl;
+import com.jn.system.user.dao.SysGroupMapper;
+import com.jn.system.user.dao.SysGroupRoleMapper;
+import com.jn.system.user.dao.SysGroupUserMapper;
 import com.jn.system.user.dao.TbSysGroupMapper;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.entity.TbSysGroupCriteria;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysGroupService;
-import com.jn.system.user.dao.SysGroupMapper;
-import com.jn.system.user.dao.SysGroupRoleMapper;
-import com.jn.system.user.dao.SysGroupUserMapper;
 import com.jn.system.user.vo.SysGroupRoleVO;
 import com.jn.system.user.vo.SysGroupUserRoleVO;
 import com.jn.system.user.vo.SysGroupUserVO;
@@ -28,12 +27,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户组service实现
@@ -53,8 +54,6 @@ public class SysGroupServiceImpl implements SysGroupService {
     private SysGroupUserMapper sysGroupUserMapper;
     @Autowired
     private SysGroupRoleMapper sysGroupRoleMapper;
-    @Autowired
-    private SysRoleMapper sysRoleMapper;
     @Autowired
     private TbSysGroupMapper tbSysGroupMapper;
 
@@ -87,24 +86,18 @@ public class SysGroupServiceImpl implements SysGroupService {
     /**
      * 用户组增加
      *
-     * @param sysGroup 用户组
+     * @param tbSysGroup 用户组
      */
     @Override
     @ServiceLog(doAction = "用户组增加")
     @Transactional(rollbackFor = Exception.class)
-    public void addSysGroup(SysGroupAdd sysGroup, User user) {
+    public void addSysGroup(TbSysGroup tbSysGroup) {
         //判断用户组名是否存在
-        List<TbSysGroup> tbSysGroups = checkName(sysGroup.getGroupName());
+        List<TbSysGroup> tbSysGroups = checkName(tbSysGroup.getGroupName());
         if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.warn("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+            logger.warn("[用户组] 添加用户组信息失败，该用户组名称已存在！,groupName: {}", tbSysGroup.getGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        //为用户组设置信息
-        TbSysGroup tbSysGroup = new TbSysGroup();
-        BeanUtils.copyProperties(sysGroup,tbSysGroup);
-        tbSysGroup.setId(UUID.randomUUID().toString());
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
         tbSysGroupMapper.insert(tbSysGroup);
         logger.info("[用户组] 添加用户组信息成功,groupId:{}", tbSysGroup.getId());
     }
@@ -133,9 +126,11 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void deleSysGroup(String[] groupIds) {
         sysGroupMapper.deleteGroupBranch(groupIds);
+        logger.info("[用户组] 逻辑删除用户组信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupUserMapper.deleteGroupBranch(groupIds);
+        logger.info("[用户组] 逻辑删除用户组关联用户信息成功,groupIds:{}", Arrays.toString(groupIds));
         sysGroupRoleMapper.deleteGroupBranch(groupIds);
-        logger.info("[用户组] 逻辑删除用户组信息,groupIds:{}",Arrays.toString(groupIds));
+        logger.info("[用户组] 逻辑删除用户组关联角色信息成功,groupIds:{}", Arrays.toString(groupIds));
     }
 
     /**
@@ -148,25 +143,29 @@ public class SysGroupServiceImpl implements SysGroupService {
     @ServiceLog(doAction = "修改用户组信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateSysGroup(SysGroupUpdate sysGroup) {
-        //判断用户组信息是否存在
-        SysGroup sysGroup1 = sysGroupMapper.getUserGroupById(sysGroup.getId());
-        if (sysGroup1 == null){
+        String groupName = sysGroup.getGroupName();
+        String groupId = sysGroup.getId();
+
+        //1.判断用户组信息是否存在
+        TbSysGroup tbSysGroup1 = tbSysGroupMapper.selectByPrimaryKey(groupId);
+        if (tbSysGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysGroup1.getStatus())) {
             logger.warn("[用户组] 用户组修改失败,修改信息不存在,groupId: {}", sysGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        //判断名称是否已经存在
-        TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
-        TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
-        criteria.andGroupNameEqualTo(sysGroup.getGroupName());
-        criteria.andIdNotEqualTo(sysGroup.getId());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        List<TbSysGroup> tbSysGroups = tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
-        if (tbSysGroups != null && tbSysGroups.size() > 0) {
-            logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+
+        //2.如果修改了用户组,判断名称是否已经存在
+        if (!tbSysGroup1.getGroupName().equals(groupName)) {
+            List<TbSysGroup> tbSysGroups = checkName(groupName);
+            if (tbSysGroups != null && tbSysGroups.size() > 0) {
+                logger.warn("[用户组] 更新用户组信息失败，该用户组名称已存在！,groupName: {}", sysGroup.getGroupName());
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
-        //修改用户组信息
-        sysGroupMapper.updateSysGroup(sysGroup);
+
+        //3.修改用户组信息
+        TbSysGroup tbSysGroup = new TbSysGroup();
+        BeanUtils.copyProperties(sysGroup, tbSysGroup);
+        tbSysGroupMapper.updateByPrimaryKeySelective(tbSysGroup);
         logger.info("[用户组] 更新用户组信息成功！,groupName: {}", sysGroup.getGroupName());
     }
 
@@ -214,9 +213,9 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd, User user) {
         //插入之前,清除该用户组下面的角色信息
         sysGroupRoleMapper.deteSysGroupRoleByGroupId(sysRoleGroupAdd.getGroupId());
-        Boolean isDelete=sysRoleGroupAdd.getRoleIds().length==0?Boolean.TRUE:Boolean.FALSE;
+        Boolean isDelete = sysRoleGroupAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
+        logger.info("[用户组授权角色] 删除该用户组下角色信息成功！groupId:{}", sysRoleGroupAdd.getGroupId());
         if (isDelete) {
-            logger.info("[用户组授权角色] 删除该用户组下角色信息成功！groupId:{}",sysRoleGroupAdd.getGroupId());
             return;
         }
         String[] groupIds = {sysRoleGroupAdd.getGroupId()};
@@ -229,8 +228,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
-            logger.info("[用户组] 添加用户组授权角色，groupId:{},roleId:{}", Arrays.toString(groupIds),
-                    roleId);
         }
         //添加新的角色信息
         sysGroupRoleMapper.insertSysGroupRoleBatch(sysGroupRoleList);
@@ -268,12 +265,12 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Override
     @ServiceLog(doAction = "用户组授权用户")
     @Transactional(rollbackFor = Exception.class)
-    public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd,User user) {
+    public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd, User user) {
         //用户组添加用户之前清除用户组以前用户
         sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
-        Boolean isDelete=sysGroupUserAdd.getUserIds().length==0?Boolean.TRUE:Boolean.FALSE;
+        logger.info("[用户组授权用户] 删除该用户组下用户信息成功！groupId:{}", sysGroupUserAdd.getGroupId());
+        Boolean isDelete = sysGroupUserAdd.getUserIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
-            logger.info("[用户组授权用户] 删除该用户组下用户信息成功！groupId:{}",sysGroupUserAdd.getGroupId());
             return;
         }
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
@@ -285,8 +282,6 @@ public class SysGroupServiceImpl implements SysGroupService {
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
-            logger.info("[用户组] 添加用户组授权用户，groupId:{},userId:{}", sysGroupUserAdd.getGroupId(),
-                    userId);
         }
         //批量插入信息新的用户
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
@@ -310,6 +305,4 @@ public class SysGroupServiceImpl implements SysGroupService {
         }
         return SysReturnMessageEnum.SUCCESS.getMessage();
     }
-
-
 }

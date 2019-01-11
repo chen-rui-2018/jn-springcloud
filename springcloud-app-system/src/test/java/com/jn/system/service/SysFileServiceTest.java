@@ -1,16 +1,26 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.file.model.SysFile;
-import com.jn.system.file.model.SysFileAddFileGroup;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.service.SysFileService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 权限模块文件service单元测试
@@ -22,9 +32,52 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SysFileServiceTest {
+
     @Autowired
     private SysFileService sysFileService;
+
+    //文件id
+    private static String fileId;
+    //文件名称
+    private static String fileName;
+    //创建者
+    private static User user;
+    //文件对象
+    private static SysFile sysFile;
+
+    @BeforeClass
+    public static void init() {
+        //初始化添加用户
+        user = new User();
+        user.setId("10000");
+
+        //初始化文件id及文件对象
+        fileId = UUID.randomUUID().toString();
+        fileName = "测试文件" + RandomStringUtils.randomNumeric(4);
+
+        //初始化文件对象
+        sysFile = new SysFile();
+        sysFile.setId(fileId);
+        sysFile.setFileName(fileName);
+        sysFile.setFileUrl("https://localhost:8080/picture.png");
+        sysFile.setCreateTime(new Date());
+        sysFile.setCreator(user.getId());
+        sysFile.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+    }
+
+    /**
+     * 新增文件
+     */
+    @Test
+    public void addTest() {
+        try {
+            sysFileService.insertSysFile(sysFile);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
 
     /**
      * 搜索关键字分页查询文件列表
@@ -34,23 +87,10 @@ public class SysFileServiceTest {
         SysFilePage page = new SysFilePage();
         page.setPage(1);
         page.setRows(10);
-        sysFileService.selectSysFileListBySearchKey(page);
+        PaginationData data = sysFileService.selectSysFileListBySearchKey(page);
+        Assert.assertThat(data, Matchers.anything());
     }
 
-    /**
-     * 新增文件
-     */
-    @Test
-    public void addTest() {
-        SysFile file = new SysFile();
-        file.setFileName("文件测试2");
-        file.setFileUrl("xxx/xxx/a.html");
-        file.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysFileService.insertSysFile(file, user);
-    }
 
     /**
      * 修改文件
@@ -58,19 +98,13 @@ public class SysFileServiceTest {
     @Test
     public void updateTest() {
         SysFile file = new SysFile();
-        file.setId("1cc32378-3272-4ec6-901f-c91c28e74aef");
-        file.setFileName("文件测试2");
-        file.setFileUrl("xxx/xxx/a.html");
-        sysFileService.updateSysFileById(file);
-    }
-
-    /**
-     * 批量删除文件(逻辑删除)
-     */
-    @Test
-    public void deleteTest() {
-        String[] ids = {"1cc32378-3272-4ec6-901f-c91c28e74aef"};
-        sysFileService.deleteSysFileByIds(ids);
+        file.setId(fileId);
+        file.setFileName(fileName);
+        try {
+            sysFileService.updateSysFileById(file);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
     /**
@@ -78,24 +112,17 @@ public class SysFileServiceTest {
      */
     @Test
     public void selectByIdTest() {
-        String id = "1cc32378-3272-4ec6-901f-c91c28e74aef";
-        SysFile file = sysFileService.selectSysFileByIds(id);
-
+        SysFile data = sysFileService.selectSysFileByIds(fileId);
+        Assert.assertThat(data, Matchers.anything());
     }
 
+    /**
+     * 批量删除文件(逻辑删除)
+     */
     @Test
-    public void sysFileAddFileGroupTest() {
-
-        SysFileAddFileGroup sysFileAddFileGroup = new SysFileAddFileGroup();
-        sysFileAddFileGroup.setFileId("f0c9e7dc-a1fc-4172-a12c-a8511cfd1538");
-        String[] fileGroupId = {"b0e96afc-7d94-4a3e-b0a4-40774244bda0"};
-        sysFileAddFileGroup.setFileGroupId(fileGroupId);
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysFileService.sysFileAddFileGroup(sysFileAddFileGroup, user);
-
+    public void zDeleteTest() {
+        String[] ids = {fileId};
+        sysFileService.deleteSysFileByIds(ids);
     }
-
 
 }

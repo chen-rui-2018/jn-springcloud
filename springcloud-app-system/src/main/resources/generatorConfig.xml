@@ -286,6 +286,8 @@
         <table tableName="tb_sys_user_department_post" />
         <!-- 数据权限表 -->
         <table tableName="tb_sys_permission_db" />
+        <!-- 岗位类型表 -->
+        <table tableName="tb_sys_post_type" />
 
     </context>
 

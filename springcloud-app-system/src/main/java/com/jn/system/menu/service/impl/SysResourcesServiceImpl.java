@@ -1,9 +1,6 @@
 package com.jn.system.menu.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -14,11 +11,8 @@ import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.entity.TbSysResourcesCriteria;
 import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
-import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.service.SysResourcesService;
-import com.jn.system.menu.vo.SysResourcesVO;
 import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionResourcesMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +26,6 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * 功能serviceImpl
@@ -59,26 +52,21 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     /**
      * 新增功能
      *
-     * @param sysResources
+     * @param tbSysResources
      */
     @Override
     @ServiceLog(doAction = "新增功能")
     @Transactional(rollbackFor = Exception.class)
-    public void insertResources(SysResources sysResources, User user) {
+    public void insertResources(TbSysResources tbSysResources) {
         //添加名称校验
-        List<TbSysResources> tbSysResourcesList = checkName(sysResources.getResourcesName(), sysResources.getMenuId());
+        List<TbSysResources> tbSysResourcesList = checkName(tbSysResources.getResourcesName(), tbSysResources.getMenuId());
         if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            logger.warn("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
+            logger.warn("[[功能] 新增功能失败，该功能名称已存在！,resourcesName: {}", tbSysResources.getResourcesName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
-        sysResources.setId(UUID.randomUUID().toString());
-        sysResources.setCreator(user.getId());
-        TbSysResources tbSysResources = new TbSysResources();
-        BeanUtils.copyProperties(sysResources, tbSysResources);
-        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
         tbSysResourcesMapper.insert(tbSysResources);
-        logger.info("[功能] 新增功能成功！,resourcesName:{},resourcesId:{}", sysResources.getResourcesName(), sysResources.getId());
+        logger.info("[功能] 新增功能成功！,resourcesName:{},resourcesId:{}", tbSysResources.getResourcesName(),
+                tbSysResources.getId());
     }
 
     /**
@@ -106,28 +94,29 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourcesById(SysResources sysResources) {
-        //判断修改信息是否存在
-        SysResources sysResources1 = sysResourcesMapper.getResourcesById(sysResources.getId());
-        if (sysResources1 == null){
-            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", sysResources.getId());
+        String resourcesId = sysResources.getId();
+        String resourcesName = sysResources.getResourcesName();
+        //1.判断修改信息是否存在
+        TbSysResources tbSysResources1 = tbSysResourcesMapper.selectByPrimaryKey(resourcesId);
+        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getStatus())) {
+            logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", resourcesId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
-        TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-        TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
-        criteria.andResourcesNameEqualTo(sysResources.getResourcesName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        criteria.andMenuIdEqualTo(sysResources.getMenuId());
-        criteria.andIdNotEqualTo(sysResources.getId());
-        List<TbSysResources> tbSysResourcesList = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
-        if (tbSysResourcesList != null && tbSysResourcesList.size() > 0) {
-            logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+        //2.判断名称是否被修改
+        if (!tbSysResources1.getResourcesName().equals(resourcesName)) {
+            //查询数据库,判断菜单中功能名称是否已经存在
+            List<TbSysResources> tbSysResources = checkName(resourcesName, sysResources.getMenuId());
+            if (tbSysResources != null && tbSysResources.size() > 0) {
+                logger.warn("[[功能] 更新功能失败，该功能名称已存在！,resourcesName: {}", sysResources.getResourcesName());
+                throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+            }
         }
+        //3.对菜单信息进行更新
         sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
-        logger.info("[功能] 更新功能信息成功！,resourcesId:{}", sysResources.getId());
+        logger.info("[功能] 更新功能信息成功！,resourcesId:{}", resourcesId);
     }
 
     /**
@@ -141,28 +130,9 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Transactional(rollbackFor = Exception.class)
     public void deleteResourcesById(String[] resourcesIds) {
         sysResourcesMapper.deleteByIds(resourcesIds);
+        logger.info("[功能] 批量删除功能成功！,resourcesIds:{}", Arrays.toString(resourcesIds));
         sysPermissionResourcesMapper.deleteByResourcesIds(resourcesIds);
-        logger.info("[功能] 批量删除功能成功！,resourcesIds:{}",Arrays.toString(resourcesIds));
-    }
-
-    /**
-     * 分页查询功能功能列表信息
-     *
-     * @param sysResourcesPage
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "分页查询功能功能列表信息")
-    @Transactional(rollbackFor = Exception.class)
-    public PaginationData selectResourcesListBySearchKey(SysResourcesPage sysResourcesPage) {
-        Page<Object> objects = PageHelper.startPage(sysResourcesPage.getPage(), sysResourcesPage.getRows());
-        List<SysResourcesVO> sysResourcesVOList = sysResourcesMapper.findMenuResourcesByPage(sysResourcesPage);
-        for (SysResourcesVO sysResourcesVO : sysResourcesVOList) {
-            List<String> menuNameList = sysResourcesMapper.findMenuNameByResourcesId(sysResourcesVO.getResourcesId());
-            sysResourcesVO.setMenuName(menuNameList);
-        }
-        return new PaginationData(sysResourcesVOList
-                , objects.getTotal());
+        logger.info("[功能] 批量删除功能关联权限信息成功！,resourcesIds:{}", Arrays.toString(resourcesIds));
     }
 
     /**

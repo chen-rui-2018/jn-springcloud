@@ -1,16 +1,29 @@
 package com.jn.system.service;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
+import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.model.User;
+import org.apache.commons.lang.RandomStringUtils;
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Date;
+import java.util.UUID;
+
 
 /**
  * 权限模块文件组service单元测试
@@ -22,9 +35,52 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class SysFileGroupServiceTest {
+
     @Autowired
     private SysFileGroupService sysFileGroupService;
+
+    //文件组id
+    private static String fileGroupId;
+    //文件组名称
+    private static String fileGroupName;
+    //创建者
+    private static User user;
+    //文件组对象
+    private static TbSysFileGroup tbSysFileGroup;
+
+    @BeforeClass
+    public static void init() {
+        //初始化添加用户
+        user = new User();
+        user.setId("10000");
+
+        //初始换文件组id及文件组名称
+        fileGroupId = UUID.randomUUID().toString();
+        fileGroupName = "测试文件组" + RandomStringUtils.randomNumeric(4);
+
+        //初始化文件组对象
+        tbSysFileGroup = new TbSysFileGroup();
+        tbSysFileGroup.setId(fileGroupId);
+        tbSysFileGroup.setFileGroupName(fileGroupName);
+        tbSysFileGroup.setCreateTime(new Date());
+        tbSysFileGroup.setCreator(user.getId());
+        tbSysFileGroup.setFileGroupDescribe("这是junit文件组测试");
+        tbSysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+    }
+
+    /**
+     * 新增文件组
+     */
+    @Test
+    public void addTest() {
+        try {
+            sysFileGroupService.insertSysFileGroup(tbSysFileGroup);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
+    }
 
     /**
      * 搜索关键字分页查询文件组列表
@@ -34,21 +90,8 @@ public class SysFileGroupServiceTest {
         SysFileGroupPage page = new SysFileGroupPage();
         page.setPage(1);
         page.setRows(10);
-        sysFileGroupService.selectSysFileGroupListBySearchKey(page);
-    }
-
-    /**
-     * 新增文件组
-     */
-    @Test
-    public void addTest() {
-        SysFileGroup sysFileGroup = new SysFileGroup();
-        sysFileGroup.setFileGroupName("文件测试1");
-        sysFileGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysFileGroupService.insertSysFileGroup(sysFileGroup, user);
+        PaginationData data = sysFileGroupService.selectSysFileGroupListBySearchKey(page);
+        Assert.assertThat(data, Matchers.anything());
     }
 
     /**
@@ -57,19 +100,14 @@ public class SysFileGroupServiceTest {
     @Test
     public void updateTest() {
         SysFileGroup sysFileGroup = new SysFileGroup();
-        sysFileGroup.setId("b0e96afc-7d94-4a3e-b0a4-40774244bda0");
-        sysFileGroup.setFileGroupName("文件测试2");
+        sysFileGroup.setId(fileGroupId);
+        sysFileGroup.setFileGroupName(fileGroupName);
         sysFileGroup.setStatus(SysStatusEnums.INVALID.getCode());
-        sysFileGroupService.updateSysFileGroupById(sysFileGroup);
-    }
-
-    /**
-     * 批量删除文件组(逻辑删除)
-     */
-    @Test
-    public void deleteTest() {
-        String[] ids = {"b0e96afc-7d94-4a3e-b0a4-40774244bda0"};
-        sysFileGroupService.deleteSysFileGroupByIds(ids);
+        try {
+            sysFileGroupService.updateSysFileGroupById(sysFileGroup);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
     /**
@@ -77,24 +115,24 @@ public class SysFileGroupServiceTest {
      */
     @Test
     public void selectByIdTest() {
-        String id = "b0e96afc-7d94-4a3e-b0a4-40774244bda0";
-        SysFileGroup fileGroup = sysFileGroupService.selectSysFileGroupByIds(id);
+        SysFileGroup data = sysFileGroupService.selectSysFileGroupByIds(fileGroupId);
+        Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
+    public void checkFileGroupName() {
+        String result = sysFileGroupService.checkFileGroupName(fileGroupName);
+        Assert.assertThat(result, Matchers.anyOf(Matchers.equalTo(SysReturnMessageEnum.FAIL.getMessage()),
+                Matchers.equalTo(SysReturnMessageEnum.SUCCESS.getMessage())));
     }
 
     /**
-     * 文件组添加文件
+     * 批量删除文件组(逻辑删除)
      */
     @Test
-    public void sysFileGroupFileAdd() {
-        SysFileGroupFileAdd sysFileGroupFileAdd = new SysFileGroupFileAdd();
-        sysFileGroupFileAdd.setFileGroupId("b0e96afc-7d94-4a3e-b0a4-40774244bda0");
-        String[] fileIds = {"1cc32378-3272-4ec6-901f-c91c28e74aef", "f0c9e7dc-a1fc-4172-a12c-a8511cfd1538"};
-        sysFileGroupFileAdd.setFileId(fileIds);
-        User user = new User();
-        user.setId("123");
-        user.setAccount("xxx");
-        sysFileGroupService.sysFileGroupFileAdd(sysFileGroupFileAdd, user);
+    public void zDeleteTest() {
+        String[] ids = {fileGroupId};
+        sysFileGroupService.deleteSysFileGroupByIds(ids);
     }
-
 
 }

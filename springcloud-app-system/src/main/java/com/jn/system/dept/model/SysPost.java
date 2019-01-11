@@ -2,6 +2,7 @@ package com.jn.system.dept.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -18,25 +19,32 @@ import java.util.Date;
 @ApiModel(value = "SysPost",description = "岗位")
 public class SysPost implements Serializable {
     private static final long serialVersionUID = -983797756680764097L;
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id",required = true)
     private String id;
-    @ApiModelProperty("岗位名称")
-    @Size(max = 20,message = "岗位名称字数不能超过20个字")
+    @ApiModelProperty(value ="岗位名称",required = true)
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
     @ApiModelProperty("创建时间")
     private Date createTime;
-    @ApiModelProperty("状态")
+    @ApiModelProperty(value ="状态",required = true)
     @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
     private String status;
+    @ApiModelProperty(value ="岗位类型id",required = true)
+    @NotBlank(message = "岗位类型不能为空")
+    private String postTypeId;
+    @ApiModelProperty("岗位类型名称")
+    private String postTypeName;
 
     public SysPost() {
     }
 
-    public SysPost(String id, String postName, Date createTime, String status) {
+    public SysPost(String id, String postName, Date createTime, String status, String postTypeId, String postTypeName) {
         this.id = id;
         this.postName = postName;
         this.createTime = createTime;
         this.status = status;
+        this.postTypeId = postTypeId;
+        this.postTypeName = postTypeName;
     }
 
     public String getId() {
@@ -71,6 +79,22 @@ public class SysPost implements Serializable {
         this.status = status;
     }
 
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId;
+    }
+
+    public String getPostTypeName() {
+        return postTypeName;
+    }
+
+    public void setPostTypeName(String postTypeName) {
+        this.postTypeName = postTypeName;
+    }
+
     @Override
     public String toString() {
         return "SysPost{" +
@@ -78,6 +102,8 @@ public class SysPost implements Serializable {
                 ", postName='" + postName + '\'' +
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
+                ", postTypeId='" + postTypeId + '\'' +
+                ", postTypeName='" + postTypeName + '\'' +
                 '}';
     }
 }

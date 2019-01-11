@@ -12,7 +12,8 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum FastDfsExceptionEnum implements CodeAndMsg {
 
-    FAST_DFS_NOT_SUPPORT("1200101", "解析文件路径错误");
+    FAST_DFS_NOT_SUPPORT("1200101", "解析文件路径错误"),
+    FAST_DFS_NOT_FILE("1200102", "文件无权限或不存在");
 
     private String code;
     private String message;

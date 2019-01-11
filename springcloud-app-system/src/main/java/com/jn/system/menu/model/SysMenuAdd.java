@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -19,14 +20,17 @@ import java.io.Serializable;
 public class SysMenuAdd implements Serializable {
     private static final long serialVersionUID = -5712604602274725873L;
 
+    @ApiModelProperty(value = "菜单名称",required = false)
+    private String id;
+
     @ApiModelProperty(value = "菜单名称" )
     @NotBlank(message = "菜单名称不能为空！")
-    @Size(max = 20,message = "菜单名称长度不能超度20字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "菜单名称校验失败")
     private String menuName;
 
     @ApiModelProperty(value = "菜单URL" )
     @NotBlank(message = "菜单路径不能为空！")
-    @Size(max = 50,message = "菜单路径长度不能超度50字")
+    @Size(max = 150,message = "菜单路径长度不能超度150字")
     private String menuUrl;
 
     @ApiModelProperty(value = "父级菜单ID" )
@@ -36,10 +40,19 @@ public class SysMenuAdd implements Serializable {
     public SysMenuAdd() {
     }
 
-    public SysMenuAdd(String menuName, String menuUrl, String parentId) {
+    public SysMenuAdd(String id, String menuName, String menuUrl, String parentId) {
+        this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMenuName() {
@@ -69,7 +82,8 @@ public class SysMenuAdd implements Serializable {
     @Override
     public String toString() {
         return "SysMenuAdd{" +
-                "menuName='" + menuName + '\'' +
+                "id='" + id + '\'' +
+                ", menuName='" + menuName + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
                 ", parentId='" + parentId + '\'' +
                 '}';

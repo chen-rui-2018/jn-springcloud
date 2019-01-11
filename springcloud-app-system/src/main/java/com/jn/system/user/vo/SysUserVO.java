@@ -39,12 +39,14 @@ public class SysUserVO implements Serializable {
     private String departmentName;
     @ApiModelProperty("岗位名称")
     private String postName;
+    @ApiModelProperty("岗位类型名称")
+    private String postTypeName;
 
     public SysUserVO() {
     }
 
     public SysUserVO(String id, String account, String name, String phone, String email, Date createTime,
-                     String status, String wechatAccount, String departmentName, String postName) {
+                     String status, String wechatAccount, String departmentName, String postName, String postTypeName) {
         this.id = id;
         this.account = account;
         this.name = name;
@@ -55,6 +57,7 @@ public class SysUserVO implements Serializable {
         this.wechatAccount = wechatAccount;
         this.departmentName = departmentName;
         this.postName = postName;
+        this.postTypeName = postTypeName;
     }
 
     public String getId() {
@@ -137,6 +140,14 @@ public class SysUserVO implements Serializable {
         this.postName = postName;
     }
 
+    public String getPostTypeName() {
+        return postTypeName;
+    }
+
+    public void setPostTypeName(String postTypeName) {
+        this.postTypeName = postTypeName;
+    }
+
     @Override
     public String toString() {
         return "SysUserVO{" +
@@ -150,6 +161,7 @@ public class SysUserVO implements Serializable {
                 ", wechatAccount='" + wechatAccount + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", postName='" + postName + '\'' +
+                ", postTypeName='" + postTypeName + '\'' +
                 '}';
     }
 }

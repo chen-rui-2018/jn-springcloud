@@ -16,12 +16,13 @@
     <select id="findUserByGroupId" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">
 	   select
-			tsu.id,tsu.`name`
+			tsu.id,tsu.`name`,tsu.create_time
 		from tb_sys_user_group tsug join tb_sys_user tsu
 			on tsug.user_id = tsu.id
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
 			and tsug.`status` = '1'
 			and tsu.`status` = '1'
+			ORDER BY tsu.create_time ASC
     </select>
 
     <select id="findUsersByGroupId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -32,6 +33,7 @@
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
 			and tsug.`status` = '1'
 			and tsu.`status` = '1'
+			ORDER BY tsu.create_time ASC
     </select>
 
     <select id="findOtherUserByPage" parameterType="com.jn.system.user.model.SysGroupUserPage"
@@ -74,6 +76,17 @@
             #{item.status,jdbcType=VARCHAR})
         </foreach>
     </insert>
+    <insert id="addGroupToUser" parameterType="java.util.List">
+        insert into tb_sys_user_group (id, group_id,creator, user_id,create_time, status) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=BIGINT},
+            #{item.groupId,jdbcType=VARCHAR},
+            #{item.creator,jdbcType=VARCHAR},
+            #{item.userId,jdbcType=VARCHAR},
+            now(),
+            #{item.status,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
 
     <update id="deleteGroupBranch" parameterType="java.lang.String">
         update tb_sys_user_group set status=-1
@@ -107,5 +120,6 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupName)">
             and t.group_name like CONCAT('%', #{userGroupName,jdbcType=VARCHAR},'%')
         </if>
+        ORDER BY t.create_time DESC,t.id DESC
     </select>
 </mapper>

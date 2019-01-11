@@ -3,9 +3,7 @@ package com.jn.system.dept.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.model.SysPost;
-import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
-import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -28,9 +26,9 @@ public interface SysPostService {
     /**
      * 添加岗位
      *
-     * @param sysPostAdd
+     * @param tbSysPost
      */
-    void addPost(SysPostAdd sysPostAdd, User user);
+    void addPost(TbSysPost tbSysPost);
 
     /**
      * 批量删除岗位
@@ -63,7 +61,8 @@ public interface SysPostService {
     PaginationData findByPage(SysPostPage sysPostPage);
 
     /**
-     *  校验岗位名称是否已存在
+     * 校验岗位名称是否已存在
+     *
      * @param postName
      * @return
      */

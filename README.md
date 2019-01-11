@@ -12,19 +12,22 @@
 - feign 注解通信
 - config 配置中心
 - bus 消息通信
-- admin 监控中心（包含业务监控，turbine监控）
-- hystrix 断路器监控
-- turbine 断路器监控聚合
+- admin 监控中心（包含各个项目健康监控，hystrix 断路器监控，turbine监控聚合）
 - zipkin 链路监控
 - spring 框架
-- mybatis ORM  
+- mybatis ORM
 - shiro 会话
 - redis 集群会话，shiro缓存，mybatis二级缓存
 - 连接池 druid
-- FastDfs 文件服务器
+- FastDfs 分布式文件服务器
 - swagger 接口API文档
 - VUE js框架
 - ElementUI  页面UI框架
+###自定义技术
+- RedisCacheFactory 缓存实现
+- @LockAnnotation   锁切面
+- MultipartSupportConfig    服务间文件通信配置
+- @ControllerLog、@ServiceLog    日志切面
 
 
 ## 启动
@@ -35,7 +38,7 @@
 - 5.启动路由中心springcloud-app-zuul
 - 6.启动用户服务中心springcloud-app-system
 - 7.启动nginx 访问端口80/html
-- 0.0 后面可以不启动
+##### 后面可以不启动
 - 7.启动调度中心springcloud-app-schedule
 - 8.启动链路追踪springcloud-app-zipkin 访问端口9411
 - 9.启动服务治理监控springcloud-app-admin
@@ -120,26 +123,37 @@
 - generator 的del方法，尽量少用，生产表，都必须使用逻辑删除（如有不懂，找炮哥）
 
 ### 11.异常编码规范
-
-- 一共分为4组：eg.1000999---代表公共性的未知异常
-- 第一组，2位为系统编码
+#### 编写规范
+- 每个模块下面应该有自己的异常枚举
+#### 编码定义：
+ 一共分为4组：eg.1000999---代表公共性的未知异常
+##### 第一组，2位为系统编码
 - 10			common  所有业务服务的公共性异常
 - 11			system  基础服务
-- 12			file    文件服务
+- 12			fastDfs    文件服务
+- 13            news    消息中心
+- 14            wetChat-miniProgram     小程序
+- 15            wetChat     微信
+- 16            payment     支付平台
+- 17            hardware    硬件平台
+- 18            delayStream 消息延时
+- 30            user        用户服务
+- 40            park        园区服务
+- 50            enterprise  企业服务
 
-- 第二组，2位为模块编码
+##### 第二组，2位为模块编码
 - 00		common
 - eg.
 - 10		用户模块
 - 11		功能权限			
-- 第三组，1位为异常类型
+##### 第三组，1位为异常类型
 - 1-系统级错误
 - 2-应用级错误（前端参数错误）
 - 3-业务级错误（Service自身处出错）
 - 4-依赖级错误（Service内部调用第三方服务出错）
 - 5-交互级业务提醒（正常业务逻辑，非错误，需告知用户，如库存不足）
 - 9-未知错误
-- 第四组，2位为具体异常编码
+##### 第四组，2位为具体异常编码
 - 99 - 未知错误
 - 01 - XXXX
 

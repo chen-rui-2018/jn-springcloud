@@ -1,53 +1,54 @@
 <template>
-  <div class="flex-box-cloumn">
-    <div class="filter-container">
-      <el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="姓名">
-          <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 150px;" class="filter-item" maxlength="16" clearable @keyup.enter.native="handleFilter"/>
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 90px" class="filter-item" @change="selecteUserStatus">
-            <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="部门">
-          <el-popover placement="bottom" trigger="click" width="400">
-            <div>
-              <el-tree ref="departmentList" :data="departmentList" :default-expanded-keys="[2, 3]" :default-checked-keys="[5]" :props="defaultProps" show-checkbox node-key="id" @check-change="getDepartment()" />
-            </div>
-            <el-input slot="reference" v-model="checkedDepartment" placeholder="请选择部门" clearable @clear="resetCheckedDepartment" />
-          </el-popover>
-        </el-form-item>
-        <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-        <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
-        <el-button type="primary" class="filter-item">导出</el-button>
+  <div v-loading="listLoading" class="flex-box-cloumn">
+    <el-row>
+      <el-col :span="3"><el-button class="filter-item" @click="showDepartment()">{{ title?'显示部门':'全部用户' }}</el-button></el-col>
+      <el-col :span="21"><div class="filter-container">
+        <el-form :inline="true" :model="listQuery" class="filter-bar">
+          <el-form-item label="姓名">
+            <el-input v-model="listQuery.name" maxlength="20" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
+              <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="岗位">
+            <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位或岗位类型" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
+          </el-form-item>
+          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
+          <el-button type="primary" class="filter-item">导出</el-button>
 
-      </el-form>
-    </div>
+        </el-form>
+      </div></el-col>
+    </el-row>
+    <!-- 主体部分 -->
     <div class="userManagement-content">
-      <div class="userManagement-content-left">
-        <el-tree :data="departmentList" :props="defaultProps" @node-click="handleNodeClick"/>
+      <div v-if="isShow" class="userManagement-content-left">
+        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick"/>
       </div>
       <div class="userManagement-content-right">
-        <el-table v-loading="listLoading" :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
+        <el-table :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
           <el-table-column label="序列" type="index" align="center" width="60"/>
-          <el-table-column label="姓名" prop="name" align="center" min-width="100" />
-          <el-table-column label="账号" prop="account" align="center" min-width="100" />
-          <el-table-column label="邮箱" prop="email" align="center" min-width="150" />
-          <el-table-column label="手机" prop="phone" align="center" min-width="120" />
-          <el-table-column label="创建时间" prop="createTime" align="center" min-width="150">
+          <el-table-column label="账号" prop="account" align="center" width="100" />
+          <el-table-column label="姓名" prop="name" align="center" width="100" />
+          <el-table-column label="邮箱" prop="email" align="center" width="150" />
+          <el-table-column label="手机" prop="phone" align="center" width="120" />
+          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
+          <el-table-column label="创建时间" prop="createTime" align="center" width="100">
             <template slot-scope="scope">
               {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
             </template>
           </el-table-column>
-          <el-table-column label="部门" prop="departmentName" align="center" min-width="80" />
-          <el-table-column label="岗位" prop="postName" align="center" min-width="75" />
-          <el-table-column label="状态" prop="status" align="center" min-width="70">
+          <el-table-column label="部门" prop="departmentName" align="center" width="100" />
+          <el-table-column label="岗位" prop="postName" align="center" width="85" />
+          <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
+          <el-table-column label="状态" prop="status" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
             </template>
           </el-table-column>
-          <el-table-column fit label="操作" align="center" width="auto" min-width="560">
+          <el-table-column fit label="操作" align="center" width="560">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleSectorUpdata(scope.row)">部门岗位</el-button>
               <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
@@ -65,16 +66,16 @@
     </div>
 
     <!-- S 新增弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="400px">
-      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="left" label-width="60px" style="max-width:300px;margin-left:20px;">
+    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="450px" class="addUser">
+      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
         <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" :disabled="isAbled" maxlength="20" clearable/>
+          <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
         </el-form-item>
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="temp.name" maxlength="20" clearable />
+          <el-input v-model.trim="temp.name" maxlength="16" clearable />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
+          <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
             <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
           </el-select>
         </el-form-item>
@@ -83,6 +84,24 @@
         </el-form-item>
         <el-form-item label="手机" prop="phone">
           <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
+        </el-form-item>
+        <el-form-item label="微信" prop="wechatAccount">
+          <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
+        </el-form-item>
+        <el-form-item v-if="Visible" label="部门">
+          <el-cascader
+            :options="departmentList"
+            v-model="currentDepartmentIds"
+            change-on-select
+            placeholder="请选择"
+            clearable
+            @change="handleChangeDepartment"
+          />
+        </el-form-item>
+        <el-form-item v-if="Visible" label="岗位">
+          <el-select v-model="temp.postId" class="filter-item" placeholder="请选择" clearable>
+            <el-option v-for="(item,index) in positionOptions" :key="index" :label="item.label" :value="item.value" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -119,23 +138,25 @@
         </el-table-column>
       </el-table>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogSectorVisible = false">取消</el-button>
         <el-button type="primary" @click="saveDepartmentandPostOfUser()">提交</el-button>
+        <el-button @click="dialogSectorVisible = false">取消</el-button>
       </div>
     </el-dialog>
     <!-- E 部门岗位 -->
     <!-- 授权角色 -->
-    <el-dialog :visible.sync="roledialogVisible" title="授权角色" class="roleBox" width="800px">
-      <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="roledialogVisible">
+      <el-dialog :visible.sync="roledialogVisible" title="授权角色" class="roleBox" width="800px">
+        <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
     <!-- S 重置密码 -->
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
-      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="50px">
+      <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
           <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
           <span class="show-pwd" @click="showPwd">
@@ -150,14 +171,16 @@
     </el-dialog>
     <!-- E 重置密码 -->
     <!-- 弹出的授权用户组对话框 -->
-    <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
-      <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
-        <span slot="left-footer" size="small">
-          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
-        </span>
-        <span slot="right-footer" size="small" />
-      </el-transfer>
-    </el-dialog>
+    <template v-if="userGroup.userGroupdialogVisible">
+      <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+        <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
+          <span slot="left-footer" size="small">
+            <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
+          </span>
+          <span slot="right-footer" size="small" />
+        </el-transfer>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -165,7 +188,7 @@
 import {
   userList,
   userCreate,
-  findDepartmentAllByLevel,
+  getDepartment,
   deleteSysUser,
   checkUserName,
   findSysPostAll,
@@ -196,9 +219,9 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9]{4,16}$/
+      const reg = /[A-Za-z0-9]{6,16}$/
       if (!reg.test(value)) {
-        callback(new Error('账号只允许4-16位数字及字母'))
+        callback(new Error('请输入6到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
           checkUserName(this.temp.account).then(response => {
@@ -206,7 +229,7 @@ export default {
             if (result === 'success') {
               callback()
             } else {
-              callback(new Error('用户已经使用'))
+              callback(new Error('账号已使用'))
             }
           })
         } else {
@@ -215,17 +238,17 @@ export default {
       }
     }
     var checkName = (rule, value, callback) => {
-      if (value && value.length > 20) {
-        callback(new Error('名字的长度不能超过20个字符'))
+      const reg = /^[\u4e00-\u9fa5\w]{1,16}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         callback()
       }
     }
     var checkPhoneNumber = (rule, value, callback) => {
-      // const reg = /^1[34578]\d{9}$/
       const reg = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入正确手机号码'))
+        callback(new Error('请输入正确的手机号码'))
       } else {
         callback()
       }
@@ -238,7 +261,24 @@ export default {
         callback()
       }
     }
+    var checkWechatAccount = (rule, value, callback) => {
+      if (value !== '' && value !== null) {
+        const reg = /^[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$/
+        if (!reg.test(value)) {
+          callback(new Error('请输入6到20位字母或数字'))
+        } else {
+          callback()
+        }
+      } else {
+        callback()
+      }
+    }
     return {
+      currentDepartmentIds: undefined,
+      Visible: true,
+      isShow: false,
+      title: true,
+      departmentListLoading: false,
       userPage: 1,
       userRows: 10,
       userTotal: null,
@@ -271,12 +311,13 @@ export default {
         page: 1,
         rows: 10,
         status: undefined,
+        departmentId: undefined,
         position: undefined,
         departmentName: undefined,
-        departmentIds: undefined
+        departmentIds: undefined,
+        postOrTypeName: undefined
       },
       userStatusOptions: ['未生效', '生效'],
-      departmentOptions: [],
       positionOptions: [],
       temp: {
         name: undefined,
@@ -284,7 +325,10 @@ export default {
         status: '',
         email: undefined,
         phone: undefined,
-        id: undefined
+        id: undefined,
+        departmentId: undefined,
+        postId: undefined,
+        wechatAccount: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -292,7 +336,7 @@ export default {
       dialogResetPasswordVisible: false,
       addUserDialogRules: {
         name: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
+          { required: true, message: '姓名不能为空', trigger: 'blur' },
           { validator: checkName, trigger: 'blur' }
         ],
         account: [
@@ -302,7 +346,7 @@ export default {
         status: [
           {
             required: true,
-            message: '状态不能为空',
+            message: '请选择状态',
             trigger: 'change'
           }
         ],
@@ -313,6 +357,9 @@ export default {
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' },
           { validator: checkPhoneNumber, trigger: 'blur' }
+        ],
+        wechatAccount: [
+          { required: false, validator: checkWechatAccount, trigger: 'blur' }
         ]
       },
       passwordRule: {
@@ -335,11 +382,13 @@ export default {
   },
   computed: {
     userDepartmentPostList: function() {
+      // 部门和岗位的数据
       const userPositionData = this.userPositionData
       const sysDepartmentPostList = userPositionData.map(function(item) {
+        // 选中的部门数组
         const departmentArr = item.department
         item.departmentId = departmentArr[departmentArr.length - 1]
-        item.isDefault = item.status === 'default' ? 1 : 0
+        item.isDefault = item.status === 'default' ? '1' : '0'
         item.postId = item.position
         return item
       })
@@ -367,12 +416,33 @@ export default {
       deep: true
     }
   },
-  created() {
+  mounted() {
     this.getUserList()
-    this.findDepartmentAllByLevel()
+    this.getAllDepartment()
     this.findSysPostAll()
   },
   methods: {
+    // 选择部门（新增用户对话框）
+    handleChangeDepartment(value) {
+      // // 提交的时候拿到的部门id等于提取出来的最后一个id
+      this.temp.departmentId = this.currentDepartmentIds[this.currentDepartmentIds.length - 1]
+    },
+    // 切换部门树
+    showDepartment() {
+      this.title = !this.title
+      this.isShow = !this.isShow
+      if (!this.isShow) {
+        this.listQuery.page = 1
+        this.listQuery.departmentId = undefined
+        this.getUserList()
+      }
+    },
+    // 点击部门树的节点
+    handleNodeClick(data) {
+      this.listQuery.page = 1
+      this.listQuery.departmentId = data.value
+      this.getUserList()
+    },
     // 改变授权用户组穿梭框时获取选中的用户组
     handleUserGroupChange(value, direction, movedKeys) {
       this.userGroup.userGroupId = value
@@ -388,9 +458,8 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
-        // this.initList()
       })
     },
     // 授权用户组分页功能
@@ -459,7 +528,7 @@ export default {
             type: 'success'
           })
         } else {
-          this.$message.error('授权失败')
+          this.$message.error(res.data.result)
         }
       })
     },
@@ -477,7 +546,6 @@ export default {
         page: this.numberPage,
         rows: this.numberRows
       }).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           const roleData = []
           const checkRole = []
@@ -495,7 +563,7 @@ export default {
           this.roleIds = checkRole
           this.roleLoading = false
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
       })
     },
@@ -507,68 +575,83 @@ export default {
         this.passwordType = 'password'
       }
     },
+    // 改变状态
     selecteUserStatus(value) {
       this.listQuery.userStatus = value
     },
-    selecteDepartment(value) {
-      this.listQuery.department = value
-    },
     // 获取所有部门列表
-    findDepartmentAllByLevel() {
-      findDepartmentAllByLevel().then(response => {
-        const data = response.data.data
-        this.departmentList = data
+    getAllDepartment() {
+      this.departmentListLoading = true
+      getDepartment().then(res => {
+        if (res.data.code === '0000') {
+          this.departmentList = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.departmentListLoading = false
       })
     },
     // 获取所有岗位
     findSysPostAll() {
-      findSysPostAll().then(response => {
-        const data = response.data.data
-        this.positionOptions = data.map(function(item) {
-          return {
-            label: item.postName,
-            value: item.id
-          }
-        })
+      findSysPostAll().then(res => {
+        if (res.data.code === '0000') {
+          const data = res.data.data
+          this.positionOptions = data.map(function(item) {
+            return {
+              label: item.postName,
+              value: item.id
+            }
+          })
+        } else {
+          this.$message.error(res.data.result)
+        }
       })
     },
     getUserList() {
       // 获取用户列表
       this.listLoading = true
-      userList(this.listQuery).then(response => {
-        if (response.data.code === '0000') {
-          const data = response.data.data
-          this.userList = data.rows
-          this.total = data.total
+      userList(this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.userList = res.data.data.rows
+          this.total = res.data.data.total
+          if (this.userList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.getUserList()
+          }
         } else {
-          this.$message.error('获取数据失败')
+          this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
     },
-    // 编辑用户岗位
+    // 显示编辑用户部门和岗位
     handleSectorUpdata(row) {
       this.dialogSectorVisible = true
-      this.userPositionData = null
+      this.userPositionData = []
       this.sectorLoading = true
       this.userId = row.id
+      // 发请求获取用户具有的部门和岗位
       findDepartmentandPostByUserId(row.id).then(response => {
-        this.sectorLoading = false
-        const data = response.data.data
-        const sectorArr = []
-        data.map(function(item, index) {
-          const departmentIds = item.departmentId.split(',')
-          sectorArr.push({
-            department: departmentIds,
-            position: item.postId,
-            postId: item.postId,
-            status: index === 0 ? 'default' : ''
+        if (response.data.code === '0000') {
+          this.sectorLoading = false
+          const data = response.data.data
+          const sectorArr = []
+          data.map(function(item, index) {
+            const departmentIds = item.departmentId.split(',')
+            sectorArr.push({
+              department: departmentIds,
+              position: item.postId,
+              postId: item.postId,
+              status: item.isDefault === '1' ? 'default' : ''
+            })
           })
-        })
-
-        this.userPositionData = sectorArr
+          this.userPositionData = sectorArr
+        } else {
+          this.$message.error(response.data.result)
+        }
       })
     },
+    // 查询数据
     handleFilter() {
       this.listQuery.page = 1
       this.getUserList()
@@ -582,14 +665,17 @@ export default {
       this.listQuery.page = val
       this.getUserList()
     },
+    // 显示新增用户对话框
     handleCreate() {
       this.temp = {
         account: '',
         name: '',
         phone: '',
         email: '',
-        status: ''
+        status: '',
+        wechatAccount: undefined
       }
+      this.Visible = true
       this.isAbled = false
       this.dialogStatus = 'create'
       this.addDialogTitle = '新增'
@@ -600,29 +686,35 @@ export default {
     },
     // 新增用户
     createUserData() {
-      // 避免重复点击提交
       this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 5000)
-
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          userCreate(this.temp).then(response => {
-            this.dialogFormVisible = false
-            this.$message({
-              message: '新增用户成功',
-              type: 'success'
-            })
-            this.getUserList()
+          // this.isDisabled = true
+          userCreate(this.temp).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '新增用户成功',
+                type: 'success'
+              })
+              this.dialogFormVisible = false
+              // 重置表单元素的数据
+              this.$refs['dataForm'].resetFields()
+              this.currentDepartmentIds = []
+              this.getUserList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+            this.isDisabled = false
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
-    // 编辑用户
+    // 显示编辑用户对话框
     handleUpdate(row) {
       // 打开用户信息更新弹窗
-      console.log(row)
+      this.Visible = false
       this.isAbled = true
       this.dialogStatus = 'update'
       this.addDialogTitle = '编辑'
@@ -631,43 +723,39 @@ export default {
       this.temp.name = row.name
       this.temp.email = row.email
       this.temp.phone = row.phone
+      this.temp.wechatAccount = row.wechatAccount
       this.temp.status = parseInt(row.status)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    // 编辑用户
     updateData() {
-      // 避免重复点击提交
-      this.isDisabled = true
-      setTimeout(() => {
-        this.isDisabled = false
-      }, 500)
       // 更换用户信息
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          this.dialogFormVisible = false
+          this.isDisabled = true
           // // 调用接口发送请求
           editUser(this.temp).then(res => {
-            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
               })
+              // 刷新页面显示
+              this.getUserList()
+              this.dialogFormVisible = false
             } else {
-              this.$message.error('编辑失败')
+              this.$message.error(res.data.result)
             }
-            // 重置表单元素的数据
-            this.$refs['dataForm'].resetFields()
-            // 刷新页面显示
-            this.getUserList()
+            this.isDisabled = false
           })
         }
       })
     },
+    // 删除用户
     handleDelete(row) {
-      // 删除用户
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -685,19 +773,19 @@ export default {
               }
               this.getUserList()
             } else {
-              this.$message.error('删除失败')
+              this.$message.error(res.data.result)
             }
           })
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
         })
     },
+    // 设置默认部门和岗位
     setDefaultPosition(index, row) {
-      // 设置默认岗位
       var currentIndex = index
       this.userPositionData = this.userPositionData.map(function(item, index) {
         if (currentIndex === index) {
@@ -708,42 +796,52 @@ export default {
         return item
       })
     },
-    getDepartment() {
-      this.listQuery.departmentIds = this.$refs.departmentList.getCheckedKeys()
-      let checkedArr = []
-      checkedArr = this.$refs.departmentList
-        .getCheckedNodes()
-        .map(function(item) {
-          return item.label
-        })
-      this.checkedDepartment = checkedArr.join('、')
-    },
-    resetCheckedDepartment() {
-      // 清空所选部门
-      this.$refs.departmentList.setCheckedKeys([])
-    },
+    // 编辑用户部门和岗位
     saveDepartmentandPostOfUser() {
       const userDepartmentPostList = this.userDepartmentPostList
+      for (const it of userDepartmentPostList.sysDepartmentPostList) {
+        if (it.departmentId || it.postId) {
+          if (!it.departmentId) {
+            return this.$message.error('请选择部门')
+          }
+          if (!it.postId) {
+            return this.$message.error('请选择岗位')
+          }
+        }
+      }
       // 清除空的数据
       const filterList = userDepartmentPostList.sysDepartmentPostList.filter(
         function(item) {
-          return item.department !== '' && item.postId
+          return item.department && item.position
         }
       )
       userDepartmentPostList.sysDepartmentPostList = filterList
-      saveDepartmentandPostOfUser(userDepartmentPostList).then(response => {
-        this.dialogSectorVisible = false
-        this.$notify({
-          title: '成功',
-          message: '修改部门岗位成功',
-          type: 'success',
-          duration: 2000
+      if (userDepartmentPostList.sysDepartmentPostList.length > 0) {
+        var count = 0
+        userDepartmentPostList.sysDepartmentPostList.forEach((val, index) => {
+          if (val.isDefault === '1') {
+            count = count + 1
+          }
         })
+        if (count !== 1) {
+          userDepartmentPostList.sysDepartmentPostList[0].isDefault = '1'
+        }
+      }
+      saveDepartmentandPostOfUser(userDepartmentPostList).then(response => {
+        if (response.data.code === '0000') {
+          this.$message({
+            message: '修改部门和岗位成功',
+            type: 'success'
+          })
+        } else {
+          this.$message.error(response.data.result)
+        }
+        this.dialogSectorVisible = false
         this.getUserList()
       })
     },
+    // 删除用户部门和岗位
     handleUserSectorDelete(index, row) {
-      // 删除用户部门
       this.userPositionData.splice(index, 1, {
         department: [],
         position: '',
@@ -764,12 +862,16 @@ export default {
     handlerResetPassword() {
       this.$refs['resetPassword'].validate(valid => {
         if (valid) {
-          updateSysUser(this.resetPassword).then(response => {
-            this.dialogResetPasswordVisible = false
-            this.$message({
-              message: '重置密码成功',
-              type: 'success'
-            })
+          updateSysUser(this.resetPassword).then(res => {
+            if (res.data.code === '0000') {
+              this.dialogResetPasswordVisible = false
+              this.$message({
+                message: '重置密码成功',
+                type: 'success'
+              })
+            } else {
+              this.$message.error(res.data.result)
+            }
           })
         }
       })
@@ -778,6 +880,16 @@ export default {
 }
 </script>
 <style lang="scss">
+.userManagement-content{
+  display: flex;
+  .userManagement-content-left{
+    margin-top:15px;
+    margin-right:30px;
+    .el-button{
+      margin-bottom: 10px;
+    }
+  }
+}
 .roleBox,.groupBox{
    .el-dialog__body{
      height: 500px;
@@ -817,21 +929,27 @@ export default {
     display: inline-block;
     white-space: nowrap;
   }
-.el-dialog__body {
-  padding-top: 10px;
-  padding-bottom: 0;
-}
-.filter-bar .el-form-item {
-  margin-bottom: 0;
+  .el-dialog{
+    .el-dialog__footer{
+      text-align: center;
+    }
+  }
+.addUser {
+  .el-dialog{
+    margin-top: 5vh !important;
+    .el-cascader .el-input, .el-cascader .el-input__inner{
+      width: 240px;
+    }
+    .el-select>.el-input{
+      width: 240px;
+    }
+  }
+ .el-dialog__body{
+    padding-bottom: 0px;
+  }
 }
 .filter-container {
   padding-bottom: 0;
-}
-.el-dialog{
-
-.el-dialog__footer{
-  text-align: center ;
-}
 }
  .show-pwd {
     position: absolute;

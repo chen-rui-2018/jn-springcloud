@@ -51,7 +51,7 @@ public interface SysMenuService {
      *
      * @param sysMenuAdd
      */
-    void addMenuDir(SysMenuAdd sysMenuAdd, User user);
+    void addMenuDir(SysMenuDirAdd sysMenuAdd, User user);
 
     /**
      * 目录菜单下面添加子菜单
@@ -82,4 +82,11 @@ public interface SysMenuService {
      * @return
      */
     List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
+
+    /**
+     * 根据用户权限动态获取菜单信息
+     *
+     * @return
+     */
+    List<SysMenuTreeVO> getDynamicMenu(String userId);
 }

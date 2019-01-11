@@ -50,7 +50,6 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
         TbSysGroupRole tbSysGroupRole = new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);
         tbSysGroupRoleMapper.insert(tbSysGroupRole);
-
         logger.info("[用户组角色] 添加用户组角色成功！,userGroupRoleId: {},roleId: {}",
                 userGroupRole.getId(), userGroupRole.getRoleId());
     }

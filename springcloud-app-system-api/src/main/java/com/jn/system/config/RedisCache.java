@@ -55,7 +55,7 @@ class RedisCache<K, V> implements Cache<K, V> {
 	public V put(K key, V value) throws CacheException {
 		 try {
 			 	Object k=getKey(key);
-			 	redisTemplate.opsForValue().set(keyPrefix+k, value,expire, TimeUnit.MILLISECONDS);
+			 	redisTemplate.opsForValue().set(keyPrefix+k, value,expire, TimeUnit.SECONDS);
 	            return value;
 	        } catch (Throwable t) {
 	            throw new CacheException(t);

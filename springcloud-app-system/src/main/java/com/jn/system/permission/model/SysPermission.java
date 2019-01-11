@@ -21,7 +21,7 @@ public class SysPermission implements Serializable {
     @ApiModelProperty("权限id")
     private String id;
     @ApiModelProperty("权限名称")
-    @Size(max = 20,message = "权限名称字数不能超过20个字")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "权限名称校验失败")
     private String permissionName;
     @ApiModelProperty("创建时间")
     private Date createTime;

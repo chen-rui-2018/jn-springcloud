@@ -3,23 +3,25 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleUserAdd;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
-import com.jn.system.user.vo.SysUserRoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户管理
@@ -43,7 +45,8 @@ public class SysUserController extends BaseController {
     public Result addSysUser(@Validated @RequestBody SysUserAdd sysUser) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.addSysUser(sysUser,user);
+        sysUser.setId(UUID.randomUUID().toString());
+        sysUserService.addSysUser(sysUser, user);
         return new Result();
     }
 
@@ -79,7 +82,7 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "更新用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateSysUser")
     public Result updateSysUser(@Validated @RequestBody SysUser sysUser) {
-        Assert.notNull(sysUser.getId(),"用户id不能为空");
+        Assert.notNull(sysUser.getId(), "用户id不能为空");
         sysUserService.updateSysUser(sysUser);
         return new Result();
     }
@@ -99,10 +102,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "添加用户组到用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
     public Result saveSysGroupToSysUser(@Validated @RequestBody SysUserGroupAdd sysUserGroupAdd) {
-        Assert.notNull(sysUserGroupAdd.getUserId(),"用户id不能为空");
+        Assert.notNull(sysUserGroupAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId(),user);
+        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId(), user);
         return new Result();
     }
 
@@ -121,10 +124,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "为用户添加角色权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
     public Result saveSysRoleToSysUser(@Validated @RequestBody SysRoleUserAdd sysRoleUserAdd) {
-        Assert.notNull(sysRoleUserAdd.getUserId(),"用户id不能为空");
+        Assert.notNull(sysRoleUserAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId(),user);
+        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId(), user);
         return new Result();
     }
 
@@ -145,7 +148,7 @@ public class SysUserController extends BaseController {
         Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPostAdd,user);
+        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPostAdd, user);
         return new Result();
     }
 
@@ -153,9 +156,20 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/checkUserName")
     @ApiOperation(value = "校验用户账号是否存在,fail表示账号已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")
-    public Result checkAccount(String account){
+    public Result checkAccount(String account) {
         String result = sysUserService.checkUserName(account);
         return new Result(result);
+    }
+
+    @ControllerLog(doAction = "获取登录用户信息")
+    @RequiresPermissions("/system/sysUser/getUserInfo")
+    @ApiOperation(value = "获取登录用户信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getUserInfo")
+    public Result getUserInfo() {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        user.setPassword("");
+        return new Result(user);
     }
 
 }

@@ -1,48 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.permission.dao.SysRoleMapper">
-    <resultMap id="BaseResultMap" type="com.jn.system.permission.model.SysRole">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="role_name" jdbcType="VARCHAR" property="roleName" javaType="java.lang.String"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-    </resultMap>
-    <resultMap id="queryForListResultMap" type="com.jn.system.permission.vo.SysRoleVO">
-        <id column="r_roleId" jdbcType="VARCHAR" property="roleId"/>
-        <result column="r_roleName" jdbcType="VARCHAR" property="roleName" javaType="java.lang.String"/>
-        <result column="r_createTime" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="r_status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-        <collection property="sysRolePermissions" javaType="java.util.List"
-                    ofType="com.jn.system.permission.model.SysRolePermission">
-            <id column="rp_id" property="id" jdbcType="VARCHAR"/>
-            <result column="rp_roleId" property="roleId" jdbcType="VARCHAR"/>
-            <result column="rp_permissionId" property="permissionId" jdbcType="VARCHAR"/>
-            <result column="p_permissionName" property="permissionName" jdbcType="VARCHAR"/>
-            <result column="rp_createTime" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="rp_status" property="status" jdbcType="VARCHAR"/>
-        </collection>
-        <collection property="sysUserRoles" javaType="java.util.List" ofType="com.jn.system.user.model.SysUserRole">
-            <id column="ur_id" property="id" jdbcType="VARCHAR"/>
-            <result column="ur_roleId" property="roleId" jdbcType="VARCHAR"/>
-            <result column="ur_userId" property="userId" jdbcType="VARCHAR"/>
-            <result column="u_userName" property="userName" jdbcType="VARCHAR"/>
-            <result column="ur_createTime" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="ur_status" property="status" jdbcType="VARCHAR"/>
-        </collection>
-    </resultMap>
 
     <sql id="Base_Column_List">
         id,role_name as roleName ,creator,create_time as createTime,status
     </sql>
-
-
-    <select id="findSysRoleAll" resultType="com.jn.system.permission.model.SysRole">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_sys_role
-        where `status` = '1'
-    </select>
 
     <select id="findSysRoleByUserId" parameterType="java.lang.String"
             resultType="com.jn.system.permission.model.SysRole">
@@ -58,6 +20,7 @@
         where tsu.id = #{id,jdbcType=VARCHAR}
         and tsur.`status` = '1')
         and `status` = '1'
+        ORDER BY create_time ASC
     </select>
 
 
@@ -76,10 +39,6 @@
             and status=#{status,jdbcType=VARCHAR}
         </if>
         ORDER BY create_time desc,id desc
-    </select>
-    <select id="getRoleById" resultType="com.jn.system.permission.model.SysRole" parameterType="java.lang.String">
-        SELECT id,role_name as roleName,create_time as createTime,`status`
-        FROM tb_sys_role WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
     </select>
 
     <update id="deleteBy" parameterType="java.lang.String">

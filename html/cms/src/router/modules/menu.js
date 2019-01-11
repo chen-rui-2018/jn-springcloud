@@ -56,6 +56,12 @@ const menuRouter = {
       meta: { title: '岗位管理', noCache: true }
     },
     {
+      path: 'postTypeManagement',
+      component: () => import('@/views/menu/postTypeManagement'),
+      name: 'postTypeManagement',
+      meta: { title: '岗位类型管理', noCache: true }
+    },
+    {
       path: 'menuManagement',
       component: () => import('@/views/menu/menuManagement'),
       name: 'menuManagement',

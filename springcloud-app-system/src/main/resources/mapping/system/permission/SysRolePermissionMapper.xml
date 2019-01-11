@@ -81,14 +81,19 @@
         from tb_sys_role_permission t1,tb_sys_role t2
             where t1.role_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
             and t1.permission_id = #{id,jdbcType=VARCHAR}
+            ORDER BY t2.create_time ASC
     </select>
 
     <select id="findPermissionNameByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
-        select t1.permission_name from tb_sys_permission t1,
-         tb_sys_role_permission t2
-         where t1.id = t2.permission_id
-         and t1.`status` = '1' and
-         t2.`status` = '1' and role_id = #{id,jdbcType=VARCHAR}
+        select
+        t1.permission_name
+        from tb_sys_permission t1,
+        tb_sys_role_permission t2
+        where t1.id = t2.permission_id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
+        and role_id = #{id,jdbcType=VARCHAR}
+        order by t1.create_time asc
     </select>
 
     <select id="findPermissionByRoleId" parameterType="java.lang.String"
@@ -99,8 +104,11 @@
         t1.create_time as createTime,
         t1.`status`
         from tb_sys_permission t1,tb_sys_role_permission t2
-        where t1.id = t2.permission_id and t1.`status` = '1' and t2.`status` = '1'
+        where t1.id = t2.permission_id
+        and t1.`status` = '1'
+        and t2.`status` = '1'
         and t2.role_id = #{id,jdbcType=VARCHAR}
+        ORDER BY t1.create_time ASC
     </select>
 
     <select id="findOtherUserGroup" parameterType="com.jn.system.permission.model.SysRolePermissionPage"

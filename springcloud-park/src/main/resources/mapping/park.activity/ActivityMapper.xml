@@ -15,7 +15,7 @@
         date_format(a.update_time,'%Y-%m-%d %H:%i:%S') as "updateTime", a.update_account as "updateAccount",
         a.acti_views as "actiViews", a.acti_like as "actiLike", a.apply_num as "applyNum",
         a.partic_num as "particNum",a.is_apply as "isApply",a.park_id as "parkId",co.code_name as "parkName",
-        a.acti_order as "actiOrder",t.type_name as "typeName",a.show_apply_num as "showApplyNum"
+        a.acti_order as "actiOrder",t.type_name as "typeName",a.show_apply_num as "showApplyNum",a.apply_check as "applyCheck"
         from tb_activity a left join tb_activity_type t on a.acti_type = t.type_id left join tb_park_code co on co.id = a.park_id
         where 1=1  and a.status != '5'
         <if test="actiType != null and actiType != ''">

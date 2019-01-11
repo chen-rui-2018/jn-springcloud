@@ -51,6 +51,8 @@ public class ActivityContent extends Page implements Serializable {
     private String actiDetail;
     @ApiModelProperty(value = "是否展示报名人-0否1是")
     private String showApplyNum;
+    @ApiModelProperty(value = "报名是否需审核-0否1是")
+    private String applyCheck;
 
     public String getId() {
         return id;
@@ -194,5 +196,13 @@ public class ActivityContent extends Page implements Serializable {
 
     public void setParkId(String parkId) {
         this.parkId = parkId;
+    }
+
+    public String getApplyCheck() {
+        return applyCheck;
+    }
+
+    public void setApplyCheck(String applyCheck) {
+        this.applyCheck = applyCheck;
     }
 }

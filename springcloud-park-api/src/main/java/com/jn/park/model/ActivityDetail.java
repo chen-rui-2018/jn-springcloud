@@ -76,6 +76,8 @@ public class ActivityDetail implements Serializable {
     private String parkId;
     @ApiModelProperty(value = "活动园区名字")
     private String parkName;
+    @ApiModelProperty(value = "活动报名是否需要审核(0否1是)")
+    private String applyCheck;
     @ApiModelProperty(value = "园区列表")
     private List<?> parkCodes;
 
@@ -327,5 +329,13 @@ public class ActivityDetail implements Serializable {
 
     public void setParkName(String parkName) {
         this.parkName = parkName;
+    }
+
+    public String getApplyCheck() {
+        return applyCheck;
+    }
+
+    public void setApplyCheck(String applyCheck) {
+        this.applyCheck = applyCheck;
     }
 }

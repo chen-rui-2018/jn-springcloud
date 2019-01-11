@@ -1,5 +1,7 @@
 package com.jn.park.activity.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
@@ -16,11 +18,14 @@ import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.send.api.DelaySendMessageClient;
+import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.service.ParkCodeService;
@@ -46,6 +51,8 @@ public class ActivityServiceImpl implements ActivityService {
     private TbActivityDetailMapper tbActivityDetailMapper;
     @Autowired
     private ParkCodeService parkCodeService;
+    @Autowired
+    private DelaySendMessageClient delaySendMessageClient;
 
     /**
      * 活动可报名
@@ -60,9 +67,12 @@ public class ActivityServiceImpl implements ActivityService {
      */
     private static final String ACTIVITY_STATE_DRAFT = "1";
     /**
-     * 活动发布
+     * 活动发布 - 报名中
      */
     private static final String ACTIVITY_STATE_PUBLISH = "2";
+
+    @Value("${spring.application.name}")
+    private String applicationName;
 
     /**
      * 日志组件
@@ -80,7 +90,7 @@ public class ActivityServiceImpl implements ActivityService {
             String actiStartTime = at.getActiStartTime();
             Date date = DateUtils.parseDate(actiStartTime);
             Date nowDate = new Date();
-            if(DateUtils.addHours(nowDate,24).after(date)&&nowDate.before(date)){
+            if(DateUtils.addHours(nowDate,24).after(date)&&nowDate.before(date)&&StringUtils.equals(at.getStatus(),ACTIVITY_STATE_PUBLISH)){
                 at.setIsSendMessage("1");
             }else{
                 at.setIsSendMessage("0");
@@ -160,18 +170,12 @@ public class ActivityServiceImpl implements ActivityService {
             logger.info("新增活动时间转换失败。失败原因{}",e.getMessage(),e);
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR);
         }
-        if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getStatus())){
-            //发布时间
-            tbActivity.setIssueTime(new Date());
-            tbActivity.setApplyStartTime(new Date());
-            //TODO jiangyl 调用定时器发送消息
-            //TODO jiangyl 调用定时器修改活动状态
-            logger.info("添加/修改活动成果，待调用定时器发送消息以及定时修改活动状态---------------------------------------------------");
-        }
         TbActivityDetail tbActivityDetail = new TbActivityDetail();
         tbActivityDetail.setActiDetail(activity.getActiDetail());
         int num = 0 ;
+        Boolean isUpdate = true;
         if(StringUtils.isEmpty(activity.getId())){
+            isUpdate = false;
             //新增
             tbActivity.setCreateTime(new Date());
             tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -194,6 +198,48 @@ public class ActivityServiceImpl implements ActivityService {
             tbActivityDetail.setActivityId(tbActivity.getId());
             if(StringUtils.isNotEmpty(tbActivityDetail.getActiDetail())){
                 tbActivityDetailMapper.updateByPrimaryKeySelective(tbActivityDetail);
+            }
+        }
+        if(StringUtils.equals(ACTIVITY_STATE_PUBLISH,activity.getStatus())){
+            //发布时间
+            tbActivity.setIssueTime(new Date());
+            tbActivity.setApplyStartTime(new Date());
+            Delay delay = new Delay();
+            delay.setServiceId(applicationName);
+            delay.setDateString(activity.getActiStartTime());
+            ObjectMapper objectMapper = new ObjectMapper();
+            delay.setServiceUrl("/activity/activityEndByTimedTask");
+            Boolean getDelay = false;
+            if(isUpdate){
+                TbActivity activity1 = tbActivityMapper.selectByPrimaryKey(activity.getId());
+                if(!DateUtils.isSameDay(activity1.getApplyStartTime(),tbActivity.getApplyStartTime())){
+                    getDelay = true;
+                }
+            }else{
+                getDelay = true;
+            }
+            try{
+                String s = objectMapper.writeValueAsString(activity);
+                logger.info("调用定时器参数：===>{}",s);
+                delay.setDataString(s);
+            }catch (JsonProcessingException e){
+                logger.error("JsonProcessingException转换异常，停止定时任务调用。",e);
+                getDelay = false;
+            }
+            if(getDelay){
+                //调用定时器处理任务状态。
+                delaySendMessageClient.delaySend(delay);
+                Date actiStartTime = tbActivity.getActiStartTime();
+                Date date = DateUtils.addHours(actiStartTime, -24);
+                if(date.after(new Date())){
+                    delay.setDateString(DateUtils.formatDate(date,"yyyy-MM-dd HH:mm:ss"));
+                    delay.setServiceUrl("/activity/activitySendMessageByTimedTask");
+                    //调用定时器处理消息推送。
+                    delaySendMessageClient.delaySend(delay);
+                }else{
+                    //活动开始不足24小时，直接推送活动开始通知
+                    activitySendMessage(tbActivity.getId(),null);
+                }
             }
         }
         return num;
@@ -304,9 +350,60 @@ public class ActivityServiceImpl implements ActivityService {
         if(actiStartTime.after(date)||nowDate.after(actiStartTime)){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXCEPTION);
         }else{
-            //TODO jiangyl 调用消息接口推送消息。
+            return activitySendMessage(activityId,null);
+        }
+    }
 
+    @ServiceLog(doAction = "活动结束回调方法")
+    @Override
+    public int activityEndByTimedTask(ActivityContent activity){
+        String id = activity.getId();
+        if(StringUtils.isEmpty(id)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
+        }
+        TbActivity activity1 = tbActivityMapper.selectByPrimaryKey(id);
+        if(null == activity1){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
+        }
+        String actiStartTime = DateUtils.formatDate(activity1.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
+        if(StringUtils.equals(actiStartTime,activity.getActiStartTime())){
+            TbActivity tbActivity = new TbActivity();
+            tbActivity.setId(id );
+            tbActivity.setStatus("3");
+            return tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
+        }else{
+            logger.info("活动结束时间不匹配，不做业务处理。");
+            return 0;
+        }
+    }
+
+    @ServiceLog(doAction = "活动消息自动推送回调")
+    @Override
+    public int activitySendMessageByTimedTask(ActivityContent activity){
+        return activitySendMessage(activity.getId(),activity.getActiStartTime());
+    }
+
+    /**
+     * 活动消息发送接口
+     * @param activityId
+     * @param activityTime 定时器调用时需要传入，以校验是否为正确回调数据。其他情况传null
+     * @return
+     */
+    @ServiceLog(doAction = "活动消息发送接口")
+    public int activitySendMessage(String activityId,String activityTime){
+        if(StringUtils.isEmpty(activityId)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
+        }
+        TbActivity activity = tbActivityMapper.selectByPrimaryKey(activityId);
+        if(null == activity){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
+        }
+        String actiStartTime = DateUtils.formatDate(activity.getActiStartTime(), "yyyy-MM-dd HH:mm:ss");
+        if(StringUtils.isEmpty(activityTime)||StringUtils.equals(actiStartTime,activityTime)){
+            //TODO jiangyl 调用消息发送接口
+            return 1;
         }
         return 0;
     }
+
 }

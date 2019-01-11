@@ -34,6 +34,7 @@
         ,t1.park_id as "parkId"
         ,co.code_name as "parkName"
         ,t1.show_apply_num as "showApplyNum"                                                     <!--是否展示报名人(0否1是)-->
+        ,t1.apply_check as "applyCheck"                                                          <!--活动报名是否需要审核(0否1是)-->
         ,t2.acti_detail as "activityDetail"                                                      <!--活动内容-->
         from tb_activity t1 left join tb_park_code co on co.id = t1.park_id
         left join tb_activity_detail t2

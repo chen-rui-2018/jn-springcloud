@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.ActivityParment;
 import com.jn.park.model.ActivityQueryPaging;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -16,6 +17,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -93,5 +95,23 @@ public class ActivityApplyController extends BaseController {
        Assert.notNull(activityQueryPaging.getActivityId(),ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
        PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityQueryPaging,Boolean.TRUE);
        return new Result(activityApplyList);
+    }
+
+    @ControllerLog(doAction = "后台签到接口")
+    @ApiOperation(value = "后台签到接口", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/signInActivityBackend")
+    public Result signInActivityBackend(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){
+        Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
+        int i = activityApplyService.signInActivityBackend(applyId);
+        return new Result(i);
+    }
+
+    @ControllerLog(doAction = "报名审核接口")
+    @ApiOperation(value = "报名审核接口", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/signInActivityCheck")
+    public Result signInActivityCheck(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){
+        Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
+        int i = activityApplyService.signInActivityCheck(applyId);
+        return new Result(i);
     }
 }

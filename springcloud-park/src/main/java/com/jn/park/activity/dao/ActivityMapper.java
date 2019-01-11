@@ -16,7 +16,12 @@ import java.util.List;
  */
 public interface ActivityMapper {
 
-    public List<Activity> selectActivityList(ActivityContent activity);
+    /**
+     * 查询活动列表
+     * @param activity
+     * @return
+     */
+    List<Activity> selectActivityList(ActivityContent activity);
 
     /**
      * 活动类表展示接口

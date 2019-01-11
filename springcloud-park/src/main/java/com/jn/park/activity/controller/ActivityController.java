@@ -110,6 +110,7 @@ public class ActivityController extends BaseController {
             Assert.notNull(activityContent.getActiDetail(), ActivityExceptionEnum.ACTIVITY_DETAIL_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getParkId(), ActivityExceptionEnum.ACTIVITY_PARK_ID_NOT_NULL.getMessage());
+            Assert.notNull(activityContent.getApplyCheck(), ActivityExceptionEnum.ACTIVITY_APPLY_CHECK_NOT_NULL.getMessage());
         }
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.insertOrUpdateActivity(activityContent,user.getAccount());
@@ -198,6 +199,22 @@ public class ActivityController extends BaseController {
         PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment, false);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
         exportDataExcel.singleRowHeaderExport(codedFileName,activityApplyParment.getExportColName(),activityApplyParment.getExportTitle(),exportAs,activityApplyDetails,response);
+    }
+
+    @ControllerLog(doAction = "活动结束回调方法")
+    @ApiOperation(value = "活动结束回调方法", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/activityEndByTimedTask")
+    public Result activityEndByTimedTask(@RequestBody ActivityContent activity){
+        int i = activityService.activityEndByTimedTask(activity);
+        return new Result(i);
+    }
+
+    @ControllerLog(doAction = "活动消息自动推送回调方法")
+    @ApiOperation(value = "活动消息自动推送回调方法", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/activitySendMessageByTimedTask")
+    public Result activitySendMessageByTimedTask(@RequestBody ActivityContent activity){
+        int i = activityService.activitySendMessageByTimedTask(activity);
+        return new Result(i);
     }
 
 }

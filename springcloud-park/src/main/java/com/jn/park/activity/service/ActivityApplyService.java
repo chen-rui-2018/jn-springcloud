@@ -57,6 +57,20 @@ public interface ActivityApplyService {
     int signInActivity(String account,String activityId);
 
     /**
+     * 后台签到管理签到接口
+     * @param applyId
+     * @return
+     */
+    int signInActivityBackend(String applyId);
+
+    /**
+     * 后台管理报名审核接口
+     * @param applyId
+     * @return
+     */
+    int signInActivityCheck(String applyId);
+
+    /**
      * 报名人列表信息
      * @param activityQueryPaging
      * @param isPage  true：分页  false:不分页

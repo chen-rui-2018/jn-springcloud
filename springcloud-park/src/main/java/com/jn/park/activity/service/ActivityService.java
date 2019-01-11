@@ -80,4 +80,19 @@ public interface ActivityService {
      * @return
      */
     int sendMsgForActivate(String activityId);
+
+    /**
+     * 活动结束回调方法
+     * @param activity
+     * @return
+     */
+    int activityEndByTimedTask(ActivityContent activity);
+
+    /**
+     * 活动消息自动推送回调接口
+     * @param activity
+     * @return
+     */
+    int activitySendMessageByTimedTask(ActivityContent activity);
+
 }

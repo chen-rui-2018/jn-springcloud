@@ -81,6 +81,10 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      * 已报名
      */
     private static final String ACTIVITY_APPLYED_STATED="1";
+    /**
+     * 已报名
+     */
+    private static final String ACTIVITY_APPLYED_CHECKED="2";
 
     /**
      * 快速报名
@@ -443,6 +447,45 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     }
 
     /**
+     * 后台管理签到接口
+     * @param applyId
+     * @return
+     */
+    @ServiceLog(doAction = "后台管理签到")
+    @Override
+    public int signInActivityBackend(String applyId){
+        TbActivityApply tbActivityApply = tbActivityApplyMapper.selectByPrimaryKey(applyId);
+        if(null == tbActivityApply){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_IS_NULL);
+        }else if(!StringUtils.equals(tbActivityApply.getApplyStatus(),ACTIVITY_APPLYED_STATED)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXCEPTION);
+        }else if(StringUtils.equals(tbActivityApply.getSignStatus(),ACTIVITY_APPLYED_SIGN_CODE)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXCEPTION);
+        }
+        tbActivityApply.setSignStatus("1");
+        tbActivityApply.setSignType("1");
+        tbActivityApply.setSignTime(new Date());
+        return tbActivityApplyMapper.updateByPrimaryKeySelective(tbActivityApply);
+    }
+    /**
+     * 后台管理报名审核接口
+     * @param applyId
+     * @return
+     */
+    @ServiceLog(doAction = "后台管理报名审核")
+    @Override
+    public int signInActivityCheck(String applyId){
+        TbActivityApply tbActivityApply = tbActivityApplyMapper.selectByPrimaryKey(applyId);
+        if(null == tbActivityApply){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_IS_NULL);
+        }else if(!StringUtils.equals(tbActivityApply.getApplyStatus(),ACTIVITY_APPLYED_CHECKED)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_NOT_CHECKED);
+        }
+        tbActivityApply.setApplyStatus("1");
+        return tbActivityApplyMapper.updateByPrimaryKeySelective(tbActivityApply);
+    }
+
+    /**
      * 报名人列表信息
      * @param activityQueryPaging
      * @param isPage  true：分页  false:不分页
@@ -461,5 +504,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         List<ActivityApplyDetail> activityApplyList =  activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(),status);
         return new PaginationData(activityApplyList,objects.getTotal());
     }
+
+
 
 }

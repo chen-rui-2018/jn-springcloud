@@ -85,6 +85,8 @@ public class Activity implements Serializable {
     private String showApplyNum;
     @ApiModelProperty(value = "是否可以手动推送-0否1是")
     private String isSendMessage;
+    @ApiModelProperty(value = "报名是否需审核-0否1是")
+    private String applyCheck;
 
     public String getId() {
         return id;
@@ -348,5 +350,13 @@ public class Activity implements Serializable {
 
     public void setIsSendMessage(String isSendMessage) {
         this.isSendMessage = isSendMessage;
+    }
+
+    public String getApplyCheck() {
+        return applyCheck;
+    }
+
+    public void setApplyCheck(String applyCheck) {
+        this.applyCheck = applyCheck;
     }
 }

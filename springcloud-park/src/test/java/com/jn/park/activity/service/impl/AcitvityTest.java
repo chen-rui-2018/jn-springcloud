@@ -1,9 +1,11 @@
 package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +21,7 @@ import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
@@ -125,6 +128,24 @@ public class AcitvityTest {
 
     @Test
     public void sendMsgForActivate(){
+        try{
+            activityService.sendMsgForActivate(activityId);
+        }catch (JnSpringCloudException e){
+            logger.warn("活动未发布在或已被删除");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()));
+        }
+        try{
+            activityService.sendMsgForActivate(activityId);
+        }catch (JnSpringCloudException e){
+            logger.warn("活动状态不为报名中，不能推送消息");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXCEPTION.getCode()));
+        }
+        try{
+            activityService.sendMsgForActivate(activityId);
+        }catch (JnSpringCloudException e){
+            logger.warn("当前时间不处于活动开始前24小时，不能推送消息");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXCEPTION.getCode()));
+        }
         int i = activityService.sendMsgForActivate(activityId);
         assertThat(i,is(1));
     }

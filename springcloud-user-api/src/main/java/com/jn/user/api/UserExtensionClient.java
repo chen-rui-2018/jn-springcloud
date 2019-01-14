@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 /**
  * 用户信息客户端
  *
@@ -25,4 +27,12 @@ public interface UserExtensionClient {
      */
     @RequestMapping(value = "/api/user/getUserExtension", method = RequestMethod.POST)
     Result<UserExtension> getUserExtension(@RequestBody String account);
+
+    /**
+     * 批量获取用户的扩展信息
+     * @param accountList
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getMoreUserExtension", method = RequestMethod.POST)
+    Result<List<UserExtension>>getMoreUserExtension(@RequestBody List<String> accountList);
 }

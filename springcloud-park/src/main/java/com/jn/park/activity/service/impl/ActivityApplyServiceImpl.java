@@ -333,7 +333,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         //获取获取园区活动信息
          TbActivity activityInfo = activityDetailsService.getActivityInfo(id);
          if(activityInfo==null){
-            logger.info("活动未发布在或已被删除");
+            logger.info("活动未发布或已被删除");
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
         //只有当前时间未超过报名截止时间，是否可以报名的状态为"是"才可以报名

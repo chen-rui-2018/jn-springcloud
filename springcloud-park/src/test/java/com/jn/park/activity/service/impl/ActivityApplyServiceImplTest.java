@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsAnything.anything;
@@ -79,9 +78,21 @@ public class ActivityApplyServiceImplTest {
 
     @Test
     public void quickApply() {
-        activityApplyService.quickApply(activityId, account);
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
-        assertThat(anything(),anything());
+        try {
+            activityApplyService.quickApply(activityId, account);
+            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            logger.info("快速报名失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(ActivityExceptionEnum.INCOMPLETE_INFORMATION.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_CANNOT_EMPTY.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_CUTOFF.getCode())
+                    )
+            );
+        }
     }
 
     /**
@@ -89,8 +100,22 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void cancelApply() {
-        activityApplyService.cancelApply(activityId, account);
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+        try {
+            activityApplyService.cancelApply(activityId, account);
+            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            logger.info("取消报名失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(ActivityExceptionEnum.INCOMPLETE_INFORMATION.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_CANNOT_EMPTY.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_CUTOFF.getCode())
+                    )
+            );
+        }
+
     }
 
     /**

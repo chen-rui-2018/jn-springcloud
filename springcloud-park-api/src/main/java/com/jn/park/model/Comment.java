@@ -149,4 +149,23 @@ public class Comment extends Page implements Serializable {
     public void setChildNum(int childNum) {
         this.childNum = childNum;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "id='" + id + '\'' +
+                ", rootId='" + rootId + '\'' +
+                ", pId='" + pId + '\'' +
+                ", comAccount='" + comAccount + '\'' +
+                ", parentAccount='" + parentAccount + '\'' +
+                ", comTime='" + comTime + '\'' +
+                ", likeNum=" + likeNum +
+                ", status='" + status + '\'' +
+                ", comType='" + comType + '\'' +
+                ", comContent='" + comContent + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", childList=" + childList +
+                ", childNum=" + childNum +
+                '}';
+    }
 }

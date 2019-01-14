@@ -1,7 +1,9 @@
 package com.jn.park.activity.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
@@ -16,11 +18,14 @@ import com.jn.park.model.ActivityDetail;
 import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +54,9 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
 
     @Autowired
     private TbActivityApplyMapper tbActivityApplyMapper;
+    
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
 
     /**
@@ -146,7 +154,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
     public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage){
-        com.github.pagehelper.Page<Object> objects=null;
+        com.github.pagehelper.Page<Object> objects=new Page<>();
         if(isPage){
             //默认查询前15条
             objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
@@ -155,8 +163,45 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         List<String>parentIds=new ArrayList<>(16);
         parentIds.add(activityQueryPaging.getActivityId());
         List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+        //获取评论用户头像信息
+        getCommentUserAvatar(list);
         list= getCommentChildComment(list,activityQueryPaging.getActivityId());
         return new PaginationData(list,objects==null?0:objects.getTotal());
+    }
+
+    /**
+     * 获取评论用户头像信息
+     * @param list
+     */
+    @ServiceLog(doAction = "获取用户头像信息")
+    private void getCommentUserAvatar(List<Comment> list) {
+        List<String> accountList=new ArrayList<>(16);
+        for(Comment comment:list){
+            //获取所有用户账号
+            accountList.add(comment.getComAccount());
+        }
+        //批量获取用户扩展信息
+        Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension.getData()!=null &&  moreUserExtension.getData().size()>0){
+            List<UserExtension> data = moreUserExtension.getData();
+            for(Comment  comment:list){
+                for(UserExtension userExtension:data){
+                    //个人用户拓展信息
+                    if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getComAccount())){
+                        //设置头像信息
+                        comment.setAvatar(userExtension.getUserPersonInfo().getAvatar());
+                        break;
+                    }
+                    //企业用户拓展信息
+                    if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getComAccount())){
+                        //设置头像信息
+                        comment.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
+                        break;
+                    }
+                }
+            }
+
+        }
     }
 
     /**
@@ -173,6 +218,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         }
         //根据第一层评论id查询下一层的评论信息
         List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds);
+        //获取评论用户头像信息
+        getCommentUserAvatar(commentInfo);
         for(Comment comment:list){
             List<Comment>nextList=new ArrayList<>(16);
             for(Comment nextComment:commentInfo){
@@ -212,7 +259,40 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Override
     public List<ActivityApply> getActivityApplyInfo(String activityId,String account){
         List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(activityId, account);
+        //根据报名人账号得到报名人头像信息
+        getApplyUserAvatar(activityApplyInfo);
         return activityApplyInfo;
+    }
+
+    /**
+     * 获取报名用户的头像信息
+     * @param activityApplyInfo
+     */
+    @ServiceLog(doAction = "获取报名用户的头像信息")
+    private void getApplyUserAvatar(List<ActivityApply> activityApplyInfo) {
+        List<String> accountList=new ArrayList<>(32);
+        for(ActivityApply apply:activityApplyInfo){
+            accountList.add(apply.getAccount());
+        }
+        //批量获取用户扩展信息
+        Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension.getData()!=null && moreUserExtension.getData().size()>0){
+            List<UserExtension> data = moreUserExtension.getData();
+            for(ActivityApply apply:activityApplyInfo){
+                for(UserExtension userExtension:data){
+                    //个人用户扩展信息
+                    if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(apply.getAccount())){
+                        apply.setAvatar(userExtension.getUserPersonInfo().getAvatar());
+                        break;
+                    }
+                    //企业用户扩展信息
+                    if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(apply.getAccount())){
+                        apply.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**

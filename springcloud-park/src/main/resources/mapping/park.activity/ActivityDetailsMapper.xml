@@ -36,7 +36,9 @@
         ,t1.show_apply_num as "showApplyNum"                                                     <!--是否展示报名人(0否1是)-->
         ,t1.apply_check as "applyCheck"                                                          <!--活动报名是否需要审核(0否1是)-->
         ,t2.acti_detail as "activityDetail"                                                      <!--活动内容-->
-        from tb_activity t1 left join tb_park_code co on co.id = t1.park_id
+        from tb_activity t1
+        left join tb_park_code co
+        on co.id = t1.park_id
         left join tb_activity_detail t2
         on t1.id=t2.activity_id
         where 1=1
@@ -58,18 +60,7 @@
         ,t1.status as "status"                                            <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
-        ,case
-          when t2.avatar is not null and t3.avatar is null
-          then t2.avatar
-          when t2.avatar is null and t3.avatar is not null
-          then t3.avatar
-          else t2.avatar
-        end as "avatar"                                                  <!--点评人头像-->
         from tb_comment t1
-        left join tb_user_person t2
-        on t1.com_account =t2.account
-        left join tb_user_company t3
-        on t1.com_account=t3.account
         left join tb_comment t4
         on t1.id=t4.p_id
         where  1=1
@@ -93,18 +84,7 @@
         ,t1.sign_status as "signStatus"                                   <!--签到状态-->
         ,date_format(t1.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"     <!--签到时间-->
         ,t1.sign_type as "signType"                                       <!--签到方式-->
-        ,case
-        when t2.avatar is not null and t3.avatar is null
-        then t2.avatar
-        when t2.avatar is null and t3.avatar is not null
-        then t3.avatar
-        else t2.avatar
-        end as "avatar"                                                   <!--报名人头像-->
         from tb_activity_apply t1
-        left join tb_user_person t2
-        on t1.account=t2.account
-        left join tb_user_company t3
-        on t1.account=t3.account
         where  1=1
         and t1.activity_id=#{activityId}
         and t1.account=#{account}

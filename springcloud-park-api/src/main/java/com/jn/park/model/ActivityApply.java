@@ -107,4 +107,19 @@ public class ActivityApply implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+    @Override
+    public String toString() {
+        return "ActivityApply{" +
+                "id='" + id + '\'' +
+                ", activityId='" + activityId + '\'' +
+                ", account='" + account + '\'' +
+                ", applyTime='" + applyTime + '\'' +
+                ", applyStatus='" + applyStatus + '\'' +
+                ", signStatus='" + signStatus + '\'' +
+                ", signTime='" + signTime + '\'' +
+                ", signType='" + signType + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
+    }
 }

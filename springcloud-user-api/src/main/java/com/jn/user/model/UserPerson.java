@@ -197,4 +197,28 @@ public class UserPerson implements Serializable {
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
+
+    @Override
+    public String toString() {
+        return "UserPerson{" +
+                "account='" + account + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", sex='" + sex + '\'' +
+                ", age=" + age +
+                ", idCard='" + idCard + '\'' +
+                ", company='" + company + '\'' +
+                ", post='" + post + '\'' +
+                ", education='" + education + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", userType='" + userType + '\'' +
+                ", point=" + point +
+                ", birthday=" + birthday +
+                ", creater='" + creater + '\'' +
+                ", modifier='" + modifier + '\'' +
+                ", createTime=" + createTime +
+                ", modifyTime=" + modifyTime +
+                '}';
+    }
 }

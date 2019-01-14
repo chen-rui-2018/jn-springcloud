@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static org.hamcrest.Matchers.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -38,18 +41,35 @@ public class UserInfoServiceImplTest {
      */
     private String account;
 
+    private List<String>accountList=new ArrayList<>();
+
 
     @Before
     public void setUp() throws Exception {
         account="wangsong";
+        accountList.add("wangsong");
+        accountList.add("qianqi");
+        accountList.add("account01");
     }
 
     /**
      * 获取用户扩展信息
      */
     @Test
-    public void getUserInfo() {
-        UserExtension userInfo = userInfoService.getUserInfo(account);
+    public void getUserExtension() {
+        UserExtension userInfo = userInfoService.getUserExtension(account);
         assertThat(userInfo, notNullValue());
+    }
+
+    /**
+     * 批量获取用户的扩展信息
+     */
+    @Test
+    public void getMoreUserExtension() {
+        List<UserExtension> userInfoList = userInfoService.getMoreUserExtension(accountList);
+        for(UserExtension userExtension:userInfoList){
+            System.out.println(userExtension.getUserPersonInfo().toString());
+        }
+        assertThat(userInfoList, notNullValue());
     }
 }

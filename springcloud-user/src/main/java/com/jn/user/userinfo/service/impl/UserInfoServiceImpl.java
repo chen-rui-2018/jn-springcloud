@@ -1,6 +1,5 @@
 package com.jn.user.userinfo.service.impl;
 
-import com.jn.common.util.cache.RedisCache;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.system.log.annotation.ServiceLog;
@@ -19,9 +18,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,7 +61,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
     @Override
-    public UserExtension getUserInfo(String account) {
+    public UserExtension getUserExtension(String account) {
         //从redis中取出用户扩展信息
         Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
         UserExtension userExtension = (UserExtension)cache.get(account);
@@ -92,6 +91,150 @@ public class UserInfoServiceImpl implements UserInfoService {
             cache.put(account, userExtension);
         }
         return userExtension;
+    }
+
+    /**
+     * 批量获取用户的扩展信息
+     * @param accountList  用户账号集合
+     * @return
+     */
+    @Override
+    public List<UserExtension> getMoreUserExtension(List<String> accountList) {
+        if(accountList==null || accountList.size()==0){
+            return null;
+        }
+        //返回的结果集
+        List<UserExtension>userList=new ArrayList<>(16);
+        //需要从数据库查询的用户账号
+        List<String> needSelectAccoountList=new ArrayList<>(32);
+        //从缓存中获取用户信息，把缓存中没有的用户列出来从数据库中查询出来
+        //从redis中取出用户扩展信息
+        Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+        for(String account:accountList){
+            UserExtension userExtension = (UserExtension)cache.get(account);
+            if(userExtension!=null){
+                userList.add(userExtension);
+            }else{
+                needSelectAccoountList.add(account);
+            }
+        }
+        //没有需要查询的账号，直接把缓存中获得的用户信息返回
+        if(needSelectAccoountList.size()==0){
+            return userList;
+        }
+
+        //批量获取个人用户扩展信息
+        List<UserExtension> personUserExtensionList = getPersonUserInfoBatche(needSelectAccoountList);
+        for(UserExtension user:personUserExtensionList){
+            userList.add(user);
+            //把用户拓展信息写入redis中
+            cache.put(user.getUserPersonInfo().getAccount(), user);
+        }
+        //批量获取企业用户扩展信息
+        List<UserExtension> companyUserExtensionList= getCompanyUserInfoBatch(needSelectAccoountList);
+        for(UserExtension user:companyUserExtensionList){
+            userList.add(user);
+            //把用户拓展信息写入redis中
+            cache.put(user.getUserCompanyInfo().getAccount(), user);
+        }
+        return userList;
+    }
+
+    /**
+     * 批量获取企业用户扩展信息
+     * @param accountList
+     * @return
+     */
+    @ServiceLog(doAction = "批量获取企业用户扩展信息")
+    private List<UserExtension> getCompanyUserInfoBatch(List<String> accountList) {
+        List<UserExtension> userExtensionList=new ArrayList<>();
+        //一次允许查询的最大用户数
+        int maxLength=200;
+        if(accountList.size()<maxLength){
+            getCompanyInfoAndConvert(accountList, userExtensionList);
+        }else{
+            List<String> newAccountList=new ArrayList<>(256);
+            for(int i=0;i<accountList.size();i++){
+                newAccountList.add(accountList.get(i));
+                if(i%200==0){
+                    getCompanyInfoAndConvert(newAccountList,userExtensionList);
+                    newAccountList.clear();
+                }
+            }
+            //避免最后一次不足最大用户数的数据漏查
+            if(newAccountList.size()>0){
+                getCompanyInfoAndConvert(newAccountList,userExtensionList);
+            }
+        }
+        return userExtensionList;
+    }
+
+    /**
+     * 获取企业用户信息并转换为用户扩展信息bean
+     * @param accountList
+     * @param userExtensionList
+     */
+    @ServiceLog(doAction = "获取企业用户信息并转换为用户扩展信息bean")
+    private void getCompanyInfoAndConvert(List<String> accountList, List<UserExtension> userExtensionList) {
+        TbUserCompanyCriteria comExample = new TbUserCompanyCriteria();
+        comExample.createCriteria().andAccountIn(accountList);
+        List<TbUserCompany> tbUserCompanies = tbUserCompanyMapper.selectByExample(comExample);
+        for(TbUserCompany user:tbUserCompanies){
+            UserExtension userExtension=new UserExtension();
+            UserCompany userCompany=new UserCompany();
+            BeanUtils.copyProperties(user, userCompany);
+            userExtension.setUserCompanyInfo(userCompany);
+            userExtensionList.add(userExtension);
+        }
+    }
+
+    /**
+     * 批量获取个人用户扩展信息
+     * @param accountList
+     * @return
+     */
+    @ServiceLog(doAction = "批量获取个人用户扩展信息")
+    private List<UserExtension> getPersonUserInfoBatche(List<String> accountList) {
+        List<UserExtension> userExtensionList=new ArrayList<>();
+        //一次允许查询的最大用户数
+        int maxLength=200;
+        if(accountList.size()<maxLength){
+            getPersonUserInfoAndConvert(accountList, userExtensionList);
+        }else{
+            //查询用户数大于一次允许查询的最大用户数，分开查询
+            List<String> newAccountList=new ArrayList<>(256);
+            for(int i=0;i<accountList.size();i++){
+                newAccountList.add(accountList.get(i));
+                if(i%200==0){
+                    getPersonUserInfoAndConvert(newAccountList,userExtensionList);
+                    newAccountList.clear();
+                }
+            }
+            //避免最后一次不足最大用户数的数据漏查
+            if(newAccountList.size()>0){
+                getPersonUserInfoAndConvert(newAccountList,userExtensionList);
+            }
+        }
+        return userExtensionList;
+    }
+
+    /**
+     * 获取个人用户信息并转换为用户扩展信息bean
+     * @param accountList
+     * @param userExtensionList
+     */
+    @ServiceLog(doAction = "获取个人用户信息并转换为用户扩展信息bean")
+    private void getPersonUserInfoAndConvert(List<String> accountList, List<UserExtension> userExtensionList) {
+        TbUserPersonCriteria perExample = new TbUserPersonCriteria();
+        perExample.createCriteria().andAccountIn(accountList);
+        List<TbUserPerson> tbUserPeople = tbUserPersonMapper.selectByExample(perExample);
+        for(TbUserPerson user:tbUserPeople){
+            UserExtension userExtension=new UserExtension();
+            UserPerson userPerson=new UserPerson();
+            BeanUtils.copyProperties(user, userPerson);
+            userExtension.setUserPersonInfo(userPerson);
+            userExtensionList.add(userExtension);
+        }
     }
 
     /**

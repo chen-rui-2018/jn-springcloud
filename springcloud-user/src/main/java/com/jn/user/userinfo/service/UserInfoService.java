@@ -3,6 +3,8 @@ package com.jn.user.userinfo.service;
 
 import com.jn.user.model.UserExtension;
 
+import java.util.List;
+
 /**
  * 获取用户信息
  * @Author: yangph
@@ -16,5 +18,12 @@ public interface UserInfoService {
      * @param account 用户账号
      * @return
      */
-    UserExtension getUserInfo(String account);
+    UserExtension getUserExtension(String account);
+
+    /**
+     * 批量获取用户的扩展信息
+     * @param accountList  用户账号集合
+     * @return
+     */
+    List<UserExtension> getMoreUserExtension(List<String> accountList);
 }

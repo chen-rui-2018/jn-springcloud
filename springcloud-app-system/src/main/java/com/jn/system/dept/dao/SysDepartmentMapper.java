@@ -23,21 +23,6 @@ public interface SysDepartmentMapper {
     void deleteDepartmentBranch(List<String> ids);
 
     /**
-     * 获取一级部门信息
-     *
-     * @return
-     */
-    List<SysDepartmentVO> findSysDepartmentAll();
-
-    /**
-     * 根据父id查询所有子部门
-     *
-     * @param departmentId
-     * @return
-     */
-    List<SysDepartmentVO> findChildrenDepartment(String departmentId);
-
-    /**
      * 批量添加部门信息
      *
      * @param addeList
@@ -58,4 +43,17 @@ public interface SysDepartmentMapper {
      * @return
      */
     List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
+
+    /**
+     * 获取所有部门信息
+     * @return
+     */
+    List<SysDepartmentVO> getDepartmentAll();
+
+    /**
+     * 获取部门及子部门id
+     * @param id
+     * @return
+     */
+    String getDepartmentIds(String id);
 }

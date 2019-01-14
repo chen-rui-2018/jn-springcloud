@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,14 +20,14 @@ import java.util.List;
 public class SysMenuResourcesVO implements Serializable {
     private static final long serialVersionUID = 7154732583772161542L;
     @ApiModelProperty("菜单及功能id集合")
-    private List<String> menuAndResourcesIds;
+    private List<String> menuAndResourcesIds = new ArrayList<String>();
     @ApiModelProperty("菜单树信息")
-    private List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList;
+    private List<SysMenuTreeVO> sysMenuTreeVOList;
 
     public SysMenuResourcesVO() {
     }
 
-    public SysMenuResourcesVO(List<String> menuAndResourcesIds, List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList) {
+    public SysMenuResourcesVO(List<String> menuAndResourcesIds, List<SysMenuTreeVO> sysMenuTreeVOList) {
         this.menuAndResourcesIds = menuAndResourcesIds;
         this.sysMenuTreeVOList = sysMenuTreeVOList;
     }
@@ -39,11 +40,11 @@ public class SysMenuResourcesVO implements Serializable {
         this.menuAndResourcesIds = menuAndResourcesIds;
     }
 
-    public List<SysMenuTreeOfPermissionVO> getSysMenuTreeVOList() {
+    public List<SysMenuTreeVO> getSysMenuTreeVOList() {
         return sysMenuTreeVOList;
     }
 
-    public void setSysMenuTreeVOList(List<SysMenuTreeOfPermissionVO> sysMenuTreeVOList) {
+    public void setSysMenuTreeVOList(List<SysMenuTreeVO> sysMenuTreeVOList) {
         this.sysMenuTreeVOList = sysMenuTreeVOList;
     }
 

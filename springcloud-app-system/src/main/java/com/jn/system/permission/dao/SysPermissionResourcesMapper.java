@@ -28,7 +28,7 @@ public interface SysPermissionResourcesMapper {
      * @param id
      * @return
      */
-    List<SysResources> findResourcesOfPermission(String id);
+    List<String> findResourcesOfPermission(String id);
 
     /**
      * 逻辑删除原有权限页面功能数据

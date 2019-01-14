@@ -63,128 +63,6 @@
         SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} AND `status` = '1' LIMIT 1
     </select>
 
-    <select id="findMenuByLevelOne" resultMap="MenuResourcesMap">
-        select
-        t.id,
-        t.menu_name,
-        t.menu_url,
-        t.sort,
-        t.parent_id,
-        t.create_time,
-        t.is_dir,
-        tt.id as resourceId,
-        tt.resources_name,
-        tt.resources_url,
-        tt.menu_id,
-        tt.create_time as createTime,
-        tt.status
-        from tb_sys_menu t
-        LEFT JOIN
-        (select
-        id,
-        resources_name,
-        resources_url,
-        menu_id,
-        create_time,
-        `status`
-        from tb_sys_resources
-        where `status` = '1') tt
-        on t.id = tt.menu_id
-        where t.`level` = '1'
-        and t.`status` = '1'
-        ORDER BY t.`sort` ASC,tt.create_time DESC
-    </select>
-
-    <select id="findMenuByParentId" parameterType="java.lang.String" resultMap="MenuResourcesMap">
-        SELECT
-            t.parentName,
-            t.id,
-            t.menu_name,
-            t.menu_url,
-            t.sort,
-            t.parent_id,
-            t.create_time,
-            t.is_dir,
-            tt.id as resourceId,
-            tt.resources_name,
-            tt.resources_url,
-            tt.menu_id,
-            tt.create_time as createTime,
-            tt.status
-        FROM
-        (SELECT DISTINCT
-            t2.menu_name as parentName,
-            t1.id,
-            t1.menu_name,
-            t1.menu_url,
-            t1.sort,
-            t1.parent_id,
-            t1.create_time,
-            t1.is_dir
-        FROM
-        tb_sys_menu t1
-        INNER JOIN tb_sys_menu t2 on t1.parent_id = t2.id
-        where t1.`status` = '1'
-        and t2.`status` = '1'
-        and t1.parent_id = #{id,jdbcType=VARCHAR}
-        ) t
-        LEFT JOIN
-        (select
-        id,
-        resources_name,
-        resources_url,
-        menu_id,
-        create_time,
-        `status`
-        from tb_sys_resources
-        where `status` = '1') tt on
-        t.id = tt.menu_id
-        ORDER BY t.`sort` ASC , tt.create_time DESC
-    </select>
-
-    <select id="getMenuByLevelOne" resultType="com.jn.system.permission.vo.SysMenuTreeOfPermissionVO">
-        select
-        id,
-        menu_name as label,
-        menu_url as menuUrl,
-        sort,
-        parent_id as parentId,
-        create_time as createTime,
-        is_dir as isDir
-        from tb_sys_menu
-        where `level` = '1'
-        and `status` = '1'
-        ORDER BY sort ASC
-    </select>
-
-    <select id="findMenuOfPermissionByParentId" parameterType="java.lang.String"
-            resultType="com.jn.system.permission.vo.SysMenuTreeOfPermissionVO">
-        select
-        t.menu_name as parentName,
-        tt.id,
-        tt.menu_name as `label`,
-        tt.menu_url as menuUrl,
-        tt.sort,
-        tt.parent_id as parentId,
-        tt.create_time as createTime,
-        tt.is_dir as isDir
-        from tb_sys_menu t,
-        (select
-        id,
-        menu_name,
-        menu_url,
-        sort,
-        parent_id,
-        create_time,
-        is_dir
-        from tb_sys_menu
-        where parent_id = #{id,jdbcType=VARCHAR}
-        and `status` = '1') tt
-        where t.id = tt.parent_id
-        and `status` = '1'
-        ORDER BY tt.sort ASC
-    </select>
-
     <select id="getChildrenMenuByParentId" resultType="com.jn.system.menu.vo.SysMenuTreeVO" parameterType="java.lang.String">
         SELECT
         t.id,
@@ -237,6 +115,75 @@
         and spm.status = 1
         and su.id = #{id,jdbcType=VARCHAR}
         ORDER BY sm.`level` ASC , sm.sort ASC
+    </select>
+
+    <resultMap id="menu_resources_map" type="com.jn.system.menu.vo.SysMenuTreeVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
+        <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
+        <result column="sort" jdbcType="INTEGER" property="sort" javaType="java.lang.Integer"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.util.Date"/>
+        <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
+        <result column="parentName" jdbcType="VARCHAR" property="parentName" javaType="java.lang.String"/>
+        <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
+        <collection property="resourcesList" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
+            <id column="r_id" property="id" jdbcType="VARCHAR"/>
+            <result column="resources_name" property="resourcesName" jdbcType="VARCHAR"/>
+            <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
+            <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
+            <result column="r_create_time" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="r_status" property="status" jdbcType="VARCHAR"/>
+        </collection>
+        <collection property="children" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
+            <id column="r_id" property="id" jdbcType="VARCHAR"/>
+            <result column="resources_name" property="label" jdbcType="VARCHAR"/>
+            <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
+            <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
+            <result column="r_create_time" property="createTime" jdbcType="TIMESTAMP"/>
+            <result column="r_status" property="status" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="getMenuAndResources" resultMap="menu_resources_map">
+        SELECT
+        m.id,
+        m.menu_name,
+        m.menu_url,
+        m.parent_id,
+        m.is_dir,
+        m.sort,
+        m.creator,
+        m.create_time,
+        m.`status`,
+        m.`level`,
+        r.r_id,
+        r.resources_name,
+        r.resources_url,
+        r.menu_id,
+        r.r_creator,
+        r.r_create_time,
+        r.r_status
+        FROM tb_sys_menu m
+        LEFT JOIN
+        (SELECT
+        id as r_id,
+        resources_name,
+        resources_url,
+        menu_id,
+        creator as r_creator,
+        create_time as r_create_time,
+        `status` as r_status
+        FROM tb_sys_resources
+        WHERE `status` = '1') r
+        ON
+        m.id = r.menu_id
+        WHERE m.`status` = '1'
+        ORDER BY m.sort ASC,r.r_create_time DESC
+    </select>
+
+    <select id="getChildrenMenuIdS" resultType="java.lang.String">
+        SELECT queryChildrenSysMenuInfo(#{id,jdbcType=VARCHAR})      <!--queryChildrenSysMenuInfo菜单节点向下递归函数-->
     </select>
 
 </mapper>

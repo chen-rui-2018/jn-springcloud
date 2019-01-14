@@ -61,5 +61,5 @@ public interface SysResourcesMapper {
      * @param id
      * @return
      */
-    List<SysResources> getResourcesByMenuId(String id);
+    List<String> getResourcesByMenuId(String id);
 }

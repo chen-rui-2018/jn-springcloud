@@ -125,15 +125,10 @@
         on r.menu_id = m.id where r.id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="getResourcesByMenuId" resultType="com.jn.system.menu.model.SysResources"
+    <select id="getResourcesByMenuId" resultType="java.lang.String"
             parameterType="java.lang.String">
         SELECT
-        id,
-        resources_name as label,
-        resources_url as resourcesUrl,
-        menu_id as menuId,
-        create_time as createTime,
-        `status`
+        id
         FROM tb_sys_resources
         WHERE menu_id = #{id,jdbcType=VARCHAR}
         AND `status` = '1'

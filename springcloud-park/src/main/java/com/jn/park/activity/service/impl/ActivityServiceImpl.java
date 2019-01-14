@@ -177,9 +177,17 @@ public class ActivityServiceImpl implements ActivityService {
         if(StringUtils.isEmpty(activity.getId())){
             isUpdate = false;
             //新增
+            tbActivity.setActiLike(0);
+            tbActivity.setActiViews(0);
+            tbActivity.setApplyNum(0);
+            tbActivity.setApplyStartTime(new Date());
             tbActivity.setCreateTime(new Date());
             tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbActivity.setCreateAccount(account);
+            if(StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getStatus())){
+                tbActivity.setIssueAccount(account);
+                tbActivity.setIssueTime(new Date());
+            }
             num = tbActivityMapper.insert(tbActivity);
             tbActivityDetail.setActivityId(tbActivity.getId());
             tbActivityDetailMapper.insert(tbActivityDetail);
@@ -193,6 +201,10 @@ public class ActivityServiceImpl implements ActivityService {
             }
             if(StringUtils.equals(tbActivity1.getStatus(),ACTIVITY_STATE_DRAFT)){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT);
+            }
+            if(StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivity1.getStatus())&&StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getStatus())){
+                tbActivity.setIssueAccount(account);
+                tbActivity.setIssueTime(new Date());
             }
             num = tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
             tbActivityDetail.setActivityId(tbActivity.getId());

@@ -1,10 +1,13 @@
 package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityApplyService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParment;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +21,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsAnything.anything;
@@ -56,6 +60,8 @@ public class ActivityApplyServiceImplTest {
      */
     private String url;
 
+    private String applyId;
+
     @Before
     public void setUp() throws Exception {
         //活动id
@@ -63,6 +69,7 @@ public class ActivityApplyServiceImplTest {
         //用户账号
          account="qianqi";
         url =  "/activity/signInActivity?activityId=56ad4d018554586b1117f27391ae9bf8" ;
+        applyId = "7ee42b23c1a0484e885b262976d2fb87";
     }
 
 
@@ -131,8 +138,21 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void signInActivity() {
-        int i = activityApplyService.signInActivity(account, activityId);
-        assertThat(i,is(1));
+        try{
+            int i = activityApplyService.signInActivity(account, activityId);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("前台用户签到--活动数据状态异常，请先处理数据再运行Test");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_USER_LOGIN_EXCEPTION.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLY_INFO_IS_NULL.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_USER_NOT_APPLY.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXCEPTION.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXCEPTION.getCode())
+                )
+            );
+        }
     }
 
     /**
@@ -144,6 +164,35 @@ public class ActivityApplyServiceImplTest {
         PaginationData data =  activityApplyService.applyActivityList(activityApplyParment,true);
         assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
 
+    }
+
+    /**
+     * 后台管理报名审核接口
+     */
+    @Test
+    public void signInActivityCheck() {
+        int i =  activityApplyService.signInActivityCheck(applyId);
+        assertThat(i,is(1));
+    }
+
+    /**
+     * 后台管理签到接口
+     */
+    @Test
+    public void signInActivityBackend(){
+        try{
+            int i = activityApplyService.signInActivityBackend(applyId);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("后台管理签到接口--活动数据状态异常，请先处理数据再运行Test");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLY_IS_NULL.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLYED_CODE_EXCEPTION.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLYED_SIGN_CODE_EXCEPTION.getCode())
+                )
+            );
+        }
     }
 
 }

@@ -3,27 +3,32 @@ package com.jn.park.activity.service.impl;
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
+import com.jn.park.activity.dao.TbActivityMapper;
+import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.*;
+import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
@@ -41,6 +46,8 @@ public class AcitvityTest {
 
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private TbActivityMapper tbActivityMapper;
 
     private String activityId ;
     private String userAccount;
@@ -60,7 +67,6 @@ public class AcitvityTest {
         activitySlimQuery.setTypeId("");
         activitySlimQuery.setPage(1);
         activitySlimQuery.setRows(15);
-
     }
 
     @Test
@@ -73,8 +79,13 @@ public class AcitvityTest {
 
     @Test
     public void getActivityDetailsForManage(){
-        ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
-        assertThat(activityDetailsForManage,notNullValue());
+        try {
+            ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
+            assertThat(activityDetailsForManage,notNullValue());
+        }catch (JnSpringCloudException e){
+            logger.warn("活动不存在");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR.getCode()));
+        }
     }
 
     @Test
@@ -82,19 +93,28 @@ public class AcitvityTest {
         ActivitySataus activitySataus = new ActivitySataus();
         activitySataus.setActivityId(activityId);
         activitySataus.setStatus(status);
-        int i = activityService.updateActivityApply(activitySataus);
-        assertThat(i,is(1));
+        try{
+            int i = activityService.updateActivityApply(activitySataus);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("活动数据状态错误");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_STATE_ERROR.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_UPDATE_ERROR.getCode())
+                ));
+        }
     }
 
     @Test
     public void insertOrUpdateActivity(){
         ActivityContent activityContent = new ActivityContent();
-        activityContent.setActiName("活动名称");
+        activityContent.setActiName("元旦年后会多");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
-        activityContent.setActiStartTime("2018-12-30 18:00:00");
-        activityContent.setActiEndTime("2018-12-30 21:00:00");
-        activityContent.setApplyEndTime("2018-12-28 20:00:00");
-        activityContent.setMesSendTime("2018-12-28 12:00:00");
+        activityContent.setActiStartTime("201223412-30 18:00:00");
+        activityContent.setActiEndTime("2018--12-30 21:00:00");
+        activityContent.setApplyEndTime("2018--12-28 20:00:00");
+        activityContent.setMesSendTime("2018--12-28 12:00:00");
         activityContent.setParkId("0b8f5135-2157-42b0-8f58-0ef5a429322er3");
         activityContent.setActiAddress("中电软件园");
         activityContent.setActiCost(new BigDecimal(0.00));
@@ -103,51 +123,90 @@ public class AcitvityTest {
         activityContent.setActiNumber(1000);
         activityContent.setStatus("2");
         activityContent.setShowApplyNum("1");
-        int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
-        assertThat(i,is(1));
+        try{
+            int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
+            assertThat(i,is(1));
+            TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
+            tbActivityCriteria.createCriteria().andActiNameEqualTo(activityContent.getActiName()).andActiStartTimeEqualTo(DateUtils.parseDate(activityContent.getActiStartTime(),"yyyy-MM-dd HH:mm:ss"));
+            tbActivityMapper.deleteByExample(tbActivityCriteria);
+        }catch (ParseException e){
+            logger.warn("活动插入/修改--时间转换错误，如需测试请修改时间格式",e);
+            assertThat(e.getMessage(), anything());
+        }catch (JnSpringCloudException e){
+            logger.warn("活动插入/修改 -- 数据错误,请核实测试对象数据。");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_TIME_ERROR.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLY_TIME_ERROR.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT.getCode())
+                )
+            );
+        }
+
     }
 
     @Test
     public void deleteDraftActivity(){
-        int i = activityService.deleteDraftActivity(activityId);
-        assertThat(i,is(1));
+        try{
+            int i = activityService.deleteDraftActivity(activityId);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("删除活动接口[草稿数据]--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_STATE_ERROR.getCode()));
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_STATE_ERROR.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_DRAFT_DELETE_ERROR.getCode())
+                )
+            );
+        }
     }
 
     @Test
     public void deleteActivity(){
-        int i = activityService.deleteActivity(activityId);
-        assertThat(i,is(1));
+        try{
+            int i = activityService.deleteActivity(activityId);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("删除活动接口[管理员]--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_DELETE_ERROR.getCode()));
+        }
     }
 
     @Test
     public void cancelActivity(){
-        int i = activityService.cancelActivity(activityId);
-        assertThat(i,is(1));
+        try{
+            int i = activityService.cancelActivity(activityId);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("取消活动--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_CANCEL_EXPEPTION.getCode())
+                )
+            );
+        }
     }
 
 
     @Test
     public void sendMsgForActivate(){
         try{
-            activityService.sendMsgForActivate(activityId);
+            int i = activityService.sendMsgForActivate(activityId);
+            assertThat(i,is(1));
         }catch (JnSpringCloudException e){
-            logger.warn("活动未发布在或已被删除");
-            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()));
+            logger.warn("活动消息推送--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXCEPTION.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXCEPTION.getCode())
+                )
+            );
         }
-        try{
-            activityService.sendMsgForActivate(activityId);
-        }catch (JnSpringCloudException e){
-            logger.warn("活动状态不为报名中，不能推送消息");
-            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXCEPTION.getCode()));
-        }
-        try{
-            activityService.sendMsgForActivate(activityId);
-        }catch (JnSpringCloudException e){
-            logger.warn("当前时间不处于活动开始前24小时，不能推送消息");
-            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_SEND_MSG_TIME_EXCEPTION.getCode()));
-        }
-        int i = activityService.sendMsgForActivate(activityId);
-        assertThat(i,is(1));
     }
 
 
@@ -159,5 +218,50 @@ public class AcitvityTest {
         PaginationData  data= activityService.activityListSlim(activitySlimQuery);
         assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
     }
+
+    /**
+     * 活动结束回调方法
+     */
+    @Test
+    public void activityEndByTimedTask(){
+        ActivityContent activityContent = new ActivityContent();
+        activityContent.setId("56ad4d018554586b1117f27391ae9bf8");
+        activityContent.setActiStartTime("2019-1-11 16:08:00");
+        try{
+            int i = activityService.activityEndByTimedTask(activityContent);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("活动结束回调方法--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode())
+                )
+            );
+        }
+    }
+
+    /**
+     * 活动消息自动推送回调接口
+     */
+    @Test
+    public void activitySendMessageByTimedTask(){
+        ActivityContent activityContent = new ActivityContent();
+        activityContent.setId("56ad4d018554586b1117f27391ae9bf8");
+        activityContent.setActiStartTime("2019-1-11 16:08:00");
+        try{
+            int i = activityService.activitySendMessageByTimedTask(activityContent);
+            assertThat(i,is(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("活动消息自动推送回调接口--数据错误，请修改数据后再运行TEST");
+            assertThat(e.getCode(),
+                Matchers.anyOf(
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getCode()),
+                    Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode())
+                )
+            );
+        }
+    }
+
 
 }

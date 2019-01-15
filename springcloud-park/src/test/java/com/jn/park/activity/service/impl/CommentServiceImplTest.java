@@ -1,10 +1,17 @@
 package com.jn.park.activity.service.impl;
 
 import com.jn.SpringCloudParkApplication;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
+import com.jn.park.activity.dao.TbParkLikeMapper;
+import com.jn.park.activity.entity.TbParkLikeCriteria;
+import com.jn.park.comment.dao.TbCommentMapper;
+import com.jn.park.comment.entity.TbCommentCriteria;
 import com.jn.park.comment.model.CommentAdd;
 import com.jn.park.comment.service.CommentService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
+import org.apache.poi.ss.formula.functions.T;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,6 +42,10 @@ public class CommentServiceImplTest {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private TbParkLikeMapper tbParkLikeMapper;
+
 
     /**
      * 活动id
@@ -87,7 +98,10 @@ public class CommentServiceImplTest {
     public void commentActivity() {
         try {
             commentService.commentActivity(commentAdd, account);
+            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+            assertThat(anything(),anything());
         } catch (Exception e) {
+            logger.info("活动评论/回复失败");
             assertThat(e.getMessage(),equalTo(CommentExceptionEnum.SENSITIVE_WORDS_IN_COMMENT.getMessage()));
         }
     }
@@ -97,9 +111,15 @@ public class CommentServiceImplTest {
      */
     @Test
     public void commentActivityLike() {
-        commentService.commentActivityLike(id, account);
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
-        assertThat(anything(),anything());
+        try {
+            commentService.commentActivityLike(id, account);
+            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            logger.info("活动评论点赞失败");
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()));
+        }
+
     }
 
     /**
@@ -107,8 +127,13 @@ public class CommentServiceImplTest {
      */
     @Test
     public void commentActivityCancelLike() {
-        commentService.commentActivityCancelLike(id,account);
-        assertThat(anything(),anything());
+        try {
+            commentService.commentActivityCancelLike(id,account);
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()));
+        }
+
     }
 
     /**
@@ -127,5 +152,15 @@ public class CommentServiceImplTest {
     public void addActivityLike() {
         commentService.addActivityLike(activityId, account);
         assertThat(anything(),anything());
+    }
+
+    /**
+     * 删除点赞信息
+     */
+    @Test
+    public void delActivityLike(){
+        TbParkLikeCriteria example=new TbParkLikeCriteria();
+        example.createCriteria().andLikeParentIdEqualTo(activityId).andLikeAccountEqualTo(account);
+        tbParkLikeMapper.deleteByExample(example);
     }
 }

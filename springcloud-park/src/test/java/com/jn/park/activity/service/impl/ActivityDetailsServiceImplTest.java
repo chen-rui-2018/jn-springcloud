@@ -80,9 +80,6 @@ public class ActivityDetailsServiceImplTest {
     public void getCommentInfo() {
         PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging, true);
         List<Comment> list= (List<Comment>)commentInfo.getRows();
-        for(Comment comment:list){
-            System.out.println(comment.toString());
-        }
         assertThat(list.size(), greaterThan(0));
     }
 
@@ -101,9 +98,6 @@ public class ActivityDetailsServiceImplTest {
     @Test
     public void getActivityApplyInfo() {
         List<ActivityApply> activityApplyInfo = activityDetailsService.getActivityApplyInfo(activityId, account);
-        for(ActivityApply apply:activityApplyInfo){
-            System.out.println(apply.toString());
-        }
         assertThat(activityApplyInfo.size(), greaterThanOrEqualTo(0));
     }
 

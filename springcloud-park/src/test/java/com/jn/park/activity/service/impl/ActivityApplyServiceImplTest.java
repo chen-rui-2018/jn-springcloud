@@ -3,6 +3,9 @@ package com.jn.park.activity.service.impl;
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.park.activity.dao.TbActivityApplyMapper;
+import com.jn.park.activity.entity.TbActivityApply;
+import com.jn.park.activity.entity.TbActivityApplyCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
@@ -22,7 +25,6 @@ import java.io.OutputStream;
 import java.util.List;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.assertThat;
 
@@ -43,6 +45,9 @@ public class ActivityApplyServiceImplTest {
 
     @Autowired
     private ActivityApplyService activityApplyService;
+
+    @Autowired
+    private TbActivityApplyMapper tbActivityApplyMapper;
 
     /**
      * 活动id
@@ -125,7 +130,19 @@ public class ActivityApplyServiceImplTest {
     public void addApplyInfo() {
         activityApplyService.addApplyInfo(activityId, account,"1");
         //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
+        assertThat(anything(),anything());
     }
+
+    /**
+     * 删除活动报名信息
+     */
+    @Test
+    public void delApplyInfo(){
+        TbActivityApplyCriteria example =new TbActivityApplyCriteria();
+        example.createCriteria().andActivityIdEqualTo(activityId).andAccountEqualTo(account);
+        tbActivityApplyMapper.deleteByExample(example);
+    }
+
 
     /**
      * 查询表名信息列表（后台）

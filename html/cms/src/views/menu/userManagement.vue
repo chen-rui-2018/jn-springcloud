@@ -32,17 +32,17 @@
           <el-table-column label="序列" type="index" align="center" width="60"/>
           <el-table-column label="账号" prop="account" align="center" width="100" />
           <el-table-column label="姓名" prop="name" align="center" width="100" />
+          <el-table-column label="部门" prop="departmentName" align="center" width="100" />
+          <el-table-column label="岗位" prop="postName" align="center" width="85" />
+          <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
           <el-table-column label="邮箱" prop="email" align="center" width="150" />
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column label="创建时间" prop="createTime" align="center" width="100">
             <template slot-scope="scope">
-              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
             </template>
           </el-table-column>
-          <el-table-column label="部门" prop="departmentName" align="center" width="100" />
-          <el-table-column label="岗位" prop="postName" align="center" width="85" />
-          <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
           <el-table-column label="状态" prop="status" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>

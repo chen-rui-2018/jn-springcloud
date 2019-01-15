@@ -17,13 +17,13 @@
         </el-radio-group>
       </div></el-col>
       <el-col :span="14"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="类型">
-          <el-select v-model="listQuery.actiType" placeholder="请选择类型" clearable class="filter-item" @change="selecteType">
+        <el-form-item label="活动类型">
+          <el-select v-model="listQuery.actiType" placeholder="请选择活动类型" clearable class="filter-item" @change="selecteType">
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="名称">
-          <el-input v-model="listQuery.actiName" maxlength="20" placeholder="请输入名称" class="filter-item" clearable />
+        <el-form-item label="活动名称">
+          <el-input v-model="listQuery.actiName" maxlength="20" placeholder="请输入活动名称" class="filter-item" clearable />
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" icon="el-icon-plus" type="primary" @click="handleCreate">新增</el-button>
@@ -37,7 +37,7 @@
       />
       <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="名称" prop="actiName" align="center" min-width="100" />
-      <el-table-column label="类型" prop="typeName" align="center" min-width="100" />
+      <el-table-column label="活动类型" prop="typeName" align="center" min-width="100" />
       <el-table-column label="海报" prop="actiPosterUrl" align="center" min-width="150">
         <template slot-scope="scope">
           <img :src="scope.row.actiPosterUrl" alt="海报图片" style="width: 50px;height: 50px">
@@ -52,32 +52,32 @@
       <el-table-column label="地点" prop="actiAddress" align="center" min-width="120" />
       <el-table-column label="主办方" prop="actiOrganizer" align="center" min-width="100" />
       <el-table-column label="费用" prop="actiCost" align="center" min-width="85" />
-      <el-table-column label="排序" prop="actiOrder" align="center" min-width="85" />
+      <!-- <el-table-column label="排序" prop="actiOrder" align="center" min-width="85" /> -->
       <el-table-column label="是否展示报名人数" prop="showApplyNum" align="center" min-width="85">
         <template slot-scope="scope">
-          <span v-if="scope.row.showApplyNum==='0'">--</span>
+          <span v-if="scope.row.showApplyNum==='0'||scope.row.showApplyNum===null">--</span>
           <span v-if="scope.row.showApplyNum==='1'">是</span>
         </template>
       </el-table-column>
       <el-table-column label="首页展示" prop="isIndex" align="center" min-width="85">
         <template slot-scope="scope">
-          <span v-if="scope.row.isIndex==='0'">--</span>
+          <span v-if="scope.row.isIndex===null || scope.row.isIndex==='0'">--</span>
           <span v-if="scope.row.isIndex==='1'">是</span>
         </template>
       </el-table-column>
       <el-table-column label="感兴趣人数" prop="actiLike" align="center" min-width="85">
         <template slot-scope="scope">
-          <span>{{ scope.row.actiLike }}人</span>
+          <span>{{ scope.row.actiLike===null||scope.row.actiLike===0?0:scope.row.actiLike }}人</span>
         </template>
       </el-table-column>
       <el-table-column label="活动人数" prop="actiNumber" align="center" min-width="85">
         <template slot-scope="scope">
-          <span>{{ scope.row.actiNumber }}人</span>
+          <span>{{ scope.row.actiNumber===null||scope.row.actiNumber===0?0:scope.row.actiNumber }}人</span>
         </template>
       </el-table-column>
       <el-table-column label="报名人数" prop="applyNum" align="center" min-width="85">
         <template slot-scope="scope">
-          <span>{{ scope.row.applyNum }}人</span>
+          <span>{{ scope.row.applyNum===null||scope.row.applyNum===0?0: scope.row.applyNum }}人</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="state" align="center" min-width="85">
@@ -169,18 +169,18 @@ export default {
     this.getActivityType()
   },
   methods: {
-    // 推送消息
-    handlePushMessage(row) {
-      this.$confirm(`是否推送消息？`, '取消提示', {
+    // 二次确认的封装函数
+    secondaryConfirmation(tooltip, successTooltip, api, parameter) {
+      this.$confirm(tooltip, '取消提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          pushMessage(row.id).then(res => {
+          api(parameter).then(res => {
             if (res.data.code === '0000') {
               this.$message({
-                message: '推送消息成功',
+                message: successTooltip,
                 type: 'success'
               })
               this.initList()
@@ -191,77 +191,23 @@ export default {
         })
         .catch(() => {
         })
+    },
+    // 推送消息
+    handlePushMessage(row) {
+      this.secondaryConfirmation('是否推送消息？', '推送消息成功', pushMessage, row.id)
     },
     // 恢复报名
     recoverApply(row) {
-      this.$confirm(`是否恢复报名？`, '取消提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          cancelApply({ activityId: row.id, status: '1' }).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '恢复报名成功',
-                type: 'success'
-              })
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
-            }
-          })
-        })
-        .catch(() => {
-        })
+      this.secondaryConfirmation('是否恢复报名？', '恢复报名成功', cancelApply, { activityId: row.id, status: '1' })
     },
     // 停止报名
     cancelApply(row) {
-      console.log(row)
-      this.$confirm(`是否停止报名？`, '取消提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          cancelApply({ activityId: row.id, status: '0' }).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '停止报名成功',
-                type: 'success'
-              })
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
-            }
-          })
-        })
-        .catch(() => {
-        })
+      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, status: '0' })
     },
     // 批量删除
     handleBatchDeleteActivity() {
       if (this.checkActivity.length > 0) {
-        this.$confirm(`是否删除这些活动？`, '取消提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            deleteActivity(this.checkActivity).then(res => {
-              if (res.data.code === '0000') {
-                this.$message({
-                  message: '删除成功',
-                  type: 'success'
-                })
-                this.initList()
-              } else {
-                this.$message.error(res.data.result)
-              }
-            })
-          })
-          .catch(() => {
-          })
+        this.secondaryConfirmation('是否删除这些活动？', '删除成功', deleteActivity, this.checkActivity)
       } else {
         alert('请选择要删除的活动')
       }
@@ -276,51 +222,11 @@ export default {
     },
     // 删除活动
     handleDeleteActivity(row) {
-      console.log(row)
-      this.$confirm(`是否删除此活动？`, '取消提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          deleteActivity(row.id).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
-            }
-          })
-        })
-        .catch(() => {
-        })
+      this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteActivity, row.id)
     },
     // 取消活动
     handleCancelActivity(row) {
-      console.log(row)
-      this.$confirm(`是否取消此活动？`, '取消提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          cancelActivity(row.id).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '取消成功',
-                type: 'success'
-              })
-              this.initList()
-            } else {
-              this.$message.error(res.data.result)
-            }
-          })
-        })
-        .catch(() => {
-        })
+      this.secondaryConfirmation('是否取消此活动？', '取消成功', cancelActivity, row.id)
     },
     handleCreate() {
       this.$router.push({ name: 'activityAdd' })

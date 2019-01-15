@@ -76,7 +76,6 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     private TbActivityMapper tbActivityMapper;
 
 
-
     /**
      * 报名已签到
      */
@@ -342,8 +341,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "校验是否可以报名/取消报名")
     private void checkIsApply(String id) {
         //获取获取园区活动信息
-         TbActivity activityInfo = activityDetailsService.getActivityInfo(id);
-         if(activityInfo==null){
+        TbActivity activityInfo = activityDetailsService.getActivityInfo(id);
+        if (activityInfo == null) {
             logger.info("活动未发布或已被删除");
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
@@ -526,16 +525,18 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
         List<UserExtension> userList = userResult.getData();
-        for (UserExtension user : userList) {
+        if (userList != null && userList.size() > 0) {
+            for (UserExtension user : userList) {
 
-            for (ActivityApplyDetail detail : activityApplyList) {
-                if(user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
-                    BeanUtils.copyProperties(user.getUserPersonInfo(),detail);
-                }
-                if(user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())){
-                    BeanUtils.copyProperties(user.getUserCompanyInfo(),detail);
-                }
+                for (ActivityApplyDetail detail : activityApplyList) {
+                    if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
+                        BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
+                    }
+                    if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
+                        BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
+                    }
 
+                }
             }
         }
         return new PaginationData(activityApplyList, objects.getTotal());

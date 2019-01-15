@@ -56,13 +56,9 @@
             ,ta.acti_like as "actiLike"                                                                   <!--活动点赞人数-->
             ,ta.acti_number as "actiNumber"                                                               <!--活动人数-->
             ,ta.acti_poster_url as "actiPosterUrl"                                                        <!--活动海报路径-->
-            ,ta.show_apply_num as "showApplyNum"                                                          <!--是否展示报名人列表-->
-            ,group_concat(ifnull(tc.avatar,tp.avatar))as "avatar"                                         <!--报名人头像列表-->
+            ,ta.show_apply_num as "showApplyNum"
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
-            left join  tb_activity_apply ty on ty.activity_id = ta.id
-            left join tb_user_person tp on tp.account = ty.account
-            left join tb_user_company tc on tc.account = ty.account
             where 1=1
             and ta.status  not in ('1','5')                                                               <!--不展示活动状态为草稿(status=1),和已删除的的活动(status=5)-->
             <if test="typeId != null and typeId !=''">

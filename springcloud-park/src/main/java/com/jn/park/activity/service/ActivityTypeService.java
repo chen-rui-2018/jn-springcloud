@@ -23,8 +23,9 @@ public interface ActivityTypeService {
      *  新增活动类型
      * @param activityTypeAdd
      * @param user
+     * @return
      */
-    void  insertActivityType(ActivityTypeAdd activityTypeAdd, User user);
+    String  insertActivityType(ActivityTypeAdd activityTypeAdd, User user);
 
     /**
      *  查询活动类型列表

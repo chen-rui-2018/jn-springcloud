@@ -54,7 +54,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "新增活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void insertActivityType(ActivityTypeAdd activityTypeAdd, User user) {
+    public String insertActivityType(ActivityTypeAdd activityTypeAdd, User user) {
         String typeName = activityTypeAdd.getTypeName();
         String status = activityTypeAdd.getStatus();
         String templateList = activityTypeAdd.getTemplateList();
@@ -83,6 +83,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             list=Arrays.asList(templateList.split(","));
         }
         insertActivityTypeFile(list, typeId, user.getAccount());
+        return typeId;
 
     }
 

@@ -4,6 +4,7 @@ import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.service.ActivityTypeService;
+import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityType;
 import com.jn.park.model.ActivityTypeAdd;
 import com.jn.park.model.ActivityTypeQuery;
@@ -39,17 +40,17 @@ public class ActivityTypeServiceImplTest {
     @Autowired
     private ActivityTypeService activityTypeService;
 
-     private String typeId;
-     private String templateList;
-     private String status;
-     private String typeName;
-     private Integer page;
-     private Integer rows;
-     private User user;
-     private String typeIds;
-     private ActivityTypeAdd activityTypeAdd;
-     private ActivityTypeUpdate activityTypeUpdate;
-     private ActivityTypeQuery activityTypeQuery;
+    private String typeId;
+    private String templateList;
+    private String status;
+    private String typeName;
+    private Integer page;
+    private Integer rows;
+    private User user;
+    private String typeIds;
+    private ActivityTypeAdd activityTypeAdd;
+    private ActivityTypeUpdate activityTypeUpdate;
+    private ActivityTypeQuery activityTypeQuery;
     @Before
     public void setUp() throws Exception {
         typeId = "aeaa1a3bbd0141cb93e7a5dbd12973dd";
@@ -76,14 +77,14 @@ public class ActivityTypeServiceImplTest {
     public void insertActivityType() {
         activityTypeAdd = new ActivityTypeAdd();
         activityTypeAdd.setStatus(status);
-        activityTypeAdd.setTypeName(" ");
+        activityTypeAdd.setTypeName("测试活动类型20190114:1042");
         activityTypeAdd.setTemplateList(templateList);
         //活动名称重复
         try {
             activityTypeService.insertActivityType(activityTypeAdd, user);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
-            assertThat(e.getCode(),equalTo("1111201"));
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_TYPE_NAME_REPEAT.getCode()));
         }
     }
 
@@ -125,7 +126,7 @@ public class ActivityTypeServiceImplTest {
             activityTypeService.updateActivityType(activityTypeUpdate, user);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
-            assertThat(e.getCode(),equalTo("11110202"));
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED.getCode()));
         }
 
     }
@@ -140,8 +141,7 @@ public class ActivityTypeServiceImplTest {
             activityTypeService.deleteActivityTypeList(typeIds);
         }catch (JnSpringCloudException e){
             logger.info("info>>>>>>>>>>>code:"+e.getCode()+"- - - -message:"+e.getMsg());
-
-            assertThat(e.getCode(),equalTo("11110202"));
+            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED.getCode()));
         }
 
     }

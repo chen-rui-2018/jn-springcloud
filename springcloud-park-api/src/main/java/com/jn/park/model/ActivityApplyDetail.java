@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @modified By:jiangyl
  */
 public class ActivityApplyDetail implements Serializable {
-    @ApiModelProperty(value = "报名标识")
+    @ApiModelProperty(value = "报名信息标识")
     private String id;
     @ApiModelProperty(value = "活动ID")
     private String activityId;
@@ -24,7 +24,7 @@ public class ActivityApplyDetail implements Serializable {
     @ApiModelProperty(value = "用户性别")
     private String sex;
     @ApiModelProperty(value = "用户年龄")
-    private String age;
+    private Integer age;
     @ApiModelProperty(value = "公司名称")
     private String company;
     @ApiModelProperty(value = "岗位名称")
@@ -75,11 +75,11 @@ public class ActivityApplyDetail implements Serializable {
         this.sex = sex;
     }
 
-    public String getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 

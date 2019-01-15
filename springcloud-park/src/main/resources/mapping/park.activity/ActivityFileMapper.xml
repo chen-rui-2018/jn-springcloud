@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.activity.dao.ActivityFileMapper">
     <!--批量插入活动类型模板-->
     <insert id="insertActivityTypeTemp" parameterType="java.util.Map">
-        INSERT INTO TB_ACTIVITY_FILE (ID,TYPE_ID,FILE_SRC,CREATE_ACCOUNT,CREATE_TIME,STATUS)
+        insert into tb_activity_file (id,type_id,file_src,create_account,create_time,status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
             ( select #{item.id,jdbcType=VARCHAR}

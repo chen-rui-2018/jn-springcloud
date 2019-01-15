@@ -2,27 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.activity.dao.ActivityApplyMapper">
    <select id="findApplyActivityList" resultType="com.jn.park.model.ActivityApplyDetail">
-    select
-      ifnull(tp.account,tc.account) as "account" ,                      <!--报名人账号-->
-      ifnull(tp.avatar,tc.avatar)as "avatar",                           <!--报名人头像-->
-      ifnull(tp.name,tc.com_name)as "name",                             <!--报名人名称-->
-      ifnull(tp.phone,tc.phone) as "phone",                             <!--报名人电话-->
-      tp.sex as "sex",                                                  <!--性别-->
-      tp.age as "age",                                                  <!--年龄-->
-      tp.company as "company",                                          <!--公司-->
-      tp.post as "post",                                                <!--岗位-->
-      ta.sign_status as "signStatus",                                     <!--签到状态-->
-      ta.apply_status as "applyStatus",                                   <!--报名状态-->
-      ta.activity_Id as "activityId",                                   <!--活动ID-->
-      date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",   <!--报名时间-->
-       date_format(ta.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime",   <!--报名时间-->
-      ta.id as "id"                                                     <!--id-->
-    from tb_activity_apply ta
-    left join tb_user_person tp
-    on ta.account = tp.account
-    left join tb_user_company tc
-    on tc.account = ta.account
-    where
+        select
+        ta.id as "id",                                                      <!--签到信息id-->
+        ta.account as "account",										    <!--签到人账号-->
+        ta.sign_status as "signStatus",                                     <!--签到状态-->
+        ta.apply_status as "applyStatus",                                   <!--报名状态-->
+        ta.activity_Id as "activityId",                                     <!--活动ID-->
+        date_format(ta.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime",     <!--报名时间-->
+        date_format(ta.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"        <!--签到时间-->
+        from tb_activity_apply ta
+        where
         1=1
         <if test="activityId !=null and activityId !='' ">
             and ta.activity_id=#{activityId}
@@ -30,5 +19,6 @@
         <if test="applyStatus !=null and applyStatus !='' ">
             and ta.apply_status = #{applyStatus}
         </if>
-   </select>
+
+    </select>
 </mapper>

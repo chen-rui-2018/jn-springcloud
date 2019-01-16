@@ -335,7 +335,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         SysMenuResourcesVO sysMenuResourcesVO = new SysMenuResourcesVO();
         List<String> menuAndResourcesIds = sysMenuResourcesVO.getMenuAndResourcesIds();
         //获取菜单树信息
-//      List<SysMenuTreeOfPermissionVO> sysMenuTreeOfPermissionVOS = selectMenuList();
         List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuList(false);
         sysMenuResourcesVO.setSysMenuTreeVOList(menuTreeVOList);
         //获取权限已有的菜单id

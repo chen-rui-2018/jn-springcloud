@@ -169,6 +169,10 @@ public class SysMenuServiceImpl implements SysMenuService {
             if (SysLevelEnums.FIRST_LEVEL.getCode().equals(menuTreeVO.getLevel())) {
                 targetList.add(menuTreeVO);
             }
+            //如果菜单查询为空,则设置结果为null
+            if (menuTreeVO.getChildren() != null && menuTreeVO.getChildren().size() == 0){
+                menuTreeVO.setChildren(null);
+            }
             //设置图标
             if (SysMenuEnums.MENU_ISDIR.getCode().equals(menuTreeVO.getIsDir())) {
                 //如果菜单是菜单目录
@@ -187,6 +191,7 @@ public class SysMenuServiceImpl implements SysMenuService {
             List<SysMenuTreeVO> childList = new ArrayList<SysMenuTreeVO>(16);
             for (SysMenuTreeVO sysMenuTreeVO : sourcesList) {
                 if (menuTreeVO.getId().equals(sysMenuTreeVO.getParentId())) {
+                    sysMenuTreeVO.setParentName(menuTreeVO.getLabel());
                     childList.add(sysMenuTreeVO);
                 }
             }
@@ -418,7 +423,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         //根据用户id获取用户权限具有的菜单信息
         List<SysMenuTreeVO> menuList = sysMenuMapper.getDynamicMenu(userId);
         //遍历查询到菜单,根据层级关系,生成菜单树
-        createMenuTree(menuList, list, false);
+        createMenuTree(menuList, list, true);
         //返回查询结果
         return list;
     }

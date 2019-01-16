@@ -201,6 +201,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
             for (SysDepartmentVO departmentVO : departmentVOList) {
                 //判断部门id和部门父id关系
                 if (sysDepartmentVO.getValue().equals(departmentVO.getParentId())){
+                    departmentVO.setParentName(sysDepartmentVO.getLabel());
                     childrenList.add(departmentVO);
                 }
             }

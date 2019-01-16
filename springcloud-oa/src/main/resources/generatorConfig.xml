@@ -22,15 +22,15 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="dcsuser" password="dcs_u_123">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
         <!-- 生成模型的包名和位置 -->
-        <javaModelGenerator targetPackage="com.jn.park.demo.entity"
+        <javaModelGenerator targetPackage="com.jn.oa.demo.entity"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
@@ -44,7 +44,7 @@
 
         <!-- 生成Mapper 接口的包名和位置-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.park.demo.dao"
+                             targetPackage="com.jn.oa.demo.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>

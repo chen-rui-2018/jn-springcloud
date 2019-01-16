@@ -64,13 +64,23 @@
             <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>
+            <if test="startTime != null and startTime != ''">
+                and ta.acti_start_time &gt;= #{startTime,jdbcType=VARCHAR}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and ta.acti_start_time &lt;= #{endTime,jdbcType=VARCHAR}
+            </if>
+
             <if test="keyWord != null and keyWord !=''">
             and ta.acti_name LIKE concat('%',#{keyWord},'%')
             or ta.acti_address LIKE concat('%',#{keyWord},'%')
             or td.acti_detail LIKE concat('%',#{keyWord},'%')
             </if>
-        group by ta.id
-        order by ta.acti_order desc
+        order by
+        <if test = "orderBy != null and orderBy != ''">
+            ${orderBy} desc,
+        </if>
+        ta.acti_order desc
     </select>
 
 

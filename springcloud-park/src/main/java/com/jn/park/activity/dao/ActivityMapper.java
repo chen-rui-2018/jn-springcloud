@@ -29,5 +29,5 @@ public interface ActivityMapper {
      * @param keyWord
      * @return
      */
-   List<ActivitySlim> activityListSlim(@Param("typeId") String typeId, @Param("keyWord") String keyWord);
+   List<ActivitySlim> activityListSlim(@Param("typeId") String typeId, @Param("keyWord") String keyWord,@Param("startTime") String startTime,@Param("endTime") String endTime,@Param("orderBy") String orderBy);
 }

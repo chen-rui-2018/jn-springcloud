@@ -20,6 +20,13 @@ public class ActivitySlimQuery extends Page implements Serializable {
     private String typeId;
     @ApiModelProperty(value = "活动关键字:活动标题/活动地点/活动内容")
     private String keyWord;
+    @ApiModelProperty(value = "开始时间(活动开始时间大于此时间 格式:'yyyy-MM-dd HH:mm:ss')")
+    private String startTime;
+    @ApiModelProperty(value = "结束时间(活动开始时间小于此时间 格式:'yyyy-MM-dd HH:mm:ss')")
+    private String endTime;
+    @ApiModelProperty(value = "排序字段名称(若要按感兴趣人数排序则传入'acti_Like')")
+    private String orderBy;
+
 
     public String getTypeId() {
         return typeId;
@@ -35,5 +42,29 @@ public class ActivitySlimQuery extends Page implements Serializable {
 
     public void setKeyWord(String keyWord) {
         this.keyWord = keyWord;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }

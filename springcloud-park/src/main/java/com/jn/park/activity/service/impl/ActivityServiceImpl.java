@@ -331,13 +331,16 @@ public class ActivityServiceImpl implements ActivityService {
 
         String typeId = activitySlimQuery.getTypeId();
         String keyWord = activitySlimQuery.getKeyWord();
+        String startTime = activitySlimQuery.getStartTime();
+        String endTime = activitySlimQuery.getEndTime();
+        String orderBy = activitySlimQuery.getOrderBy();
 
         int pageSize = activitySlimQuery.getRows() == 0 ? 15 : activitySlimQuery.getRows();
         int pageNumber = activitySlimQuery.getPage();
         //是否展示报名人列表 0 否 1 是
         String invalid = "0";
         Page<Object> objects = PageHelper.startPage(pageNumber, pageSize, true);
-        List<ActivitySlim> activitySlimList = activityMapper.activityListSlim(typeId, keyWord);
+        List<ActivitySlim> activitySlimList = activityMapper.activityListSlim(typeId, keyWord,startTime,endTime,orderBy);
         ActivityQueryPaging queryPaging = new ActivityQueryPaging();
         for (ActivitySlim slim : activitySlimList) {
             List<String> avatars = new ArrayList<>();

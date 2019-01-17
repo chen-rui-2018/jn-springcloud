@@ -42,16 +42,16 @@ public class SysMenuTreeVO implements Serializable {
     @ApiModelProperty("创建时间")
     private Date createTime;
     @ApiModelProperty("子菜单的集合")
-    private List<SysMenuTreeVO> children;
+    private List children;
     @ApiModelProperty("菜单功能的集合")
     private List<SysResources> resourcesList;
 
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path,
-                         Integer sort, String isDir, String parentId, String level, String parentName,
-                         Date createTime, List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path, Integer sort,
+                         String isDir, String parentId, String level, String parentName, Date createTime,
+                         List children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
         this.icon = icon;
@@ -155,11 +155,11 @@ public class SysMenuTreeVO implements Serializable {
         this.createTime = createTime;
     }
 
-    public List<SysMenuTreeVO> getChildren() {
+    public List getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenuTreeVO> children) {
+    public void setChildren(List children) {
         this.children = children;
     }
 

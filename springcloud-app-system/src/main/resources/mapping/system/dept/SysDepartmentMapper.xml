@@ -50,56 +50,6 @@
         </foreach>
     </update>
 
-    <select id="findSysDepartmentAll" resultMap="departmentTreeMap">
-          SELECT
-            t.id,
-            t.department_name,
-            t.parent_id,
-            (SELECT department_name
-            from tb_sys_department
-            where id = t.parent_id) as parentName,
-            tt.id as childId,
-            tt.parent_id as childPartntId,
-            tt.department_name as childName
-            FROM
-            `tb_sys_department` t
-            LEFT JOIN
-            (SELECT
-            id,department_name,
-            parent_id,create_time
-            FROM tb_sys_department
-            WHERE `status` = '1') tt
-            ON t.id = tt.parent_id
-            WHERE t.`level` = '1'
-            AND t.`status` = '1'
-            ORDER BY t.create_time ASC,tt.create_time ASC;
-    </select>
-
-    <select id="findChildrenDepartment" parameterType="java.lang.String"
-            resultMap="departmentTreeMap">
-          SELECT
-            t.id,
-            t.department_name,
-            t.parent_id,
-            (SELECT department_name
-            from tb_sys_department
-            where id = t.parent_id) as parentName,
-            tt.id as childId,
-            tt.parent_id as childPartntId,
-            tt.department_name as childName
-            FROM tb_sys_department t
-            LEFT JOIN
-            (SELECT
-            id,department_name,
-            parent_id,create_time
-            FROM tb_sys_department
-            WHERE `status` = '1') tt
-            ON t.id = tt.parent_id
-            WHERE t.parent_id = #{id,jdbcType=VARCHAR}
-            AND t.`status` = '1'
-            ORDER BY t.create_time ASC,tt.create_time ASC;
-    </select>
-
     <select id="getChildDepartmentByParentId" resultType="com.jn.system.dept.vo.SysDepartmentVO"
             parameterType="java.lang.String">
             SELECT
@@ -115,5 +65,21 @@
             where parent_id = #{id,jdbcType=VARCHAR}
             and `status` = '1'
             ORDER BY create_time ASC;
+    </select>
+
+    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
+            SELECT
+            id as value,
+            department_name as label,
+            parent_id as parentId,
+            `level`
+            FROM
+            `tb_sys_department`
+            WHERE `status` = '1'
+            ORDER BY create_time ASC;
+    </select>
+
+    <select id="getDepartmentIds" resultType="java.lang.String">
+        SELECT queryChildrenSysDepartmentInfo(#{id,jdbcType=VARCHAR}) <!--queryChildrenSysDepartmentInfo部门节点向下递归函数-->
     </select>
 </mapper>

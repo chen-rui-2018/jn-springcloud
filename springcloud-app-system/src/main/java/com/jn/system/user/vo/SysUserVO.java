@@ -3,19 +3,18 @@ package com.jn.system.user.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- *用户实体类
+ * 用户实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value ="SysUserVO",description = "用户关联部门和岗位")
+@ApiModel(value = "SysUserVO", description = "用户关联部门和岗位")
 public class SysUserVO implements Serializable {
 
     private static final long serialVersionUID = 3235175375305639033L;
@@ -35,6 +34,8 @@ public class SysUserVO implements Serializable {
     private String status;
     @ApiModelProperty("微信账号")
     private String wechatAccount;
+    @ApiModelProperty(value = "备注")
+    private String remark;
     @ApiModelProperty("部门名称")
     private String departmentName;
     @ApiModelProperty("岗位名称")
@@ -46,7 +47,8 @@ public class SysUserVO implements Serializable {
     }
 
     public SysUserVO(String id, String account, String name, String phone, String email, Date createTime,
-                     String status, String wechatAccount, String departmentName, String postName, String postTypeName) {
+                     String status, String wechatAccount, String remark, String departmentName,
+                     String postName, String postTypeName) {
         this.id = id;
         this.account = account;
         this.name = name;
@@ -55,6 +57,7 @@ public class SysUserVO implements Serializable {
         this.createTime = createTime;
         this.status = status;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
         this.departmentName = departmentName;
         this.postName = postName;
         this.postTypeName = postTypeName;
@@ -124,6 +127,14 @@ public class SysUserVO implements Serializable {
         this.wechatAccount = wechatAccount;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getDepartmentName() {
         return departmentName;
     }
@@ -159,6 +170,7 @@ public class SysUserVO implements Serializable {
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", postName='" + postName + '\'' +
                 ", postTypeName='" + postTypeName + '\'' +

@@ -48,6 +48,10 @@ public class SysUserAdd implements Serializable {
     @Pattern(regexp = "^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$", message = "{weixinAccount:'微信号校验错误'}")
     private String wechatAccount;
 
+    @ApiModelProperty(value = "备注")
+    @Size(max = 200, message = "备注字符不能超过200字")
+    private String remark;
+
     @ApiModelProperty("部门id")
     private String departmentId;
 
@@ -57,8 +61,8 @@ public class SysUserAdd implements Serializable {
     public SysUserAdd() {
     }
 
-    public SysUserAdd(String id, String account, String name, String phone, String email,
-                      String status, String wechatAccount, String departmentId, String postId) {
+    public SysUserAdd(String id, String account, String name, String phone, String email, String status,
+                      String wechatAccount, String remark, String departmentId, String postId) {
         this.id = id;
         this.account = account;
         this.name = name;
@@ -66,6 +70,7 @@ public class SysUserAdd implements Serializable {
         this.email = email;
         this.status = status;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
         this.departmentId = departmentId;
         this.postId = postId;
     }
@@ -126,6 +131,14 @@ public class SysUserAdd implements Serializable {
         this.wechatAccount = wechatAccount;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getDepartmentId() {
         return departmentId;
     }
@@ -152,6 +165,7 @@ public class SysUserAdd implements Serializable {
                 ", email='" + email + '\'' +
                 ", status='" + status + '\'' +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", postId='" + postId + '\'' +
                 '}';

@@ -12,6 +12,7 @@
     <result column="user_create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="user_status" jdbcType="VARCHAR" property="status" />
     <result column="user_wechat_account" jdbcType="VARCHAR" property="wechatAccount" />
+    <result column="user_remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +75,8 @@
   <sql id="Base_Column_List">
     user.id as user_id, user.account as user_account, user.password as user_password, 
     user.name as user_name, user.phone as user_phone, user.email as user_email, user.creator as user_creator, 
-    user.create_time as user_create_time, user.status as user_status, user.wechat_account as user_wechat_account
+    user.create_time as user_create_time, user.status as user_status, user.wechat_account as user_wechat_account, 
+    user.remark as user_remark
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.user.entity.TbSysUserCriteria" resultMap="BaseResultMap">
     select
@@ -110,11 +112,11 @@
     insert into tb_sys_user (id, account, password, 
       name, phone, email, 
       creator, create_time, status, 
-      wechat_account)
+      wechat_account, remark)
     values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
-      #{wechatAccount,jdbcType=VARCHAR})
+      #{wechatAccount,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.user.entity.TbSysUser">
     insert into tb_sys_user
@@ -149,6 +151,9 @@
       <if test="wechatAccount != null">
         wechat_account,
       </if>
+      <if test="remark != null">
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -180,6 +185,9 @@
       </if>
       <if test="wechatAccount != null">
         #{wechatAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -222,6 +230,9 @@
       <if test="record.wechatAccount != null">
         user.wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.remark != null">
+        user.remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -238,7 +249,8 @@
       user.creator = #{record.creator,jdbcType=VARCHAR},
       user.create_time = #{record.createTime,jdbcType=TIMESTAMP},
       user.status = #{record.status,jdbcType=VARCHAR},
-      user.wechat_account = #{record.wechatAccount,jdbcType=VARCHAR}
+      user.wechat_account = #{record.wechatAccount,jdbcType=VARCHAR},
+      user.remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -273,6 +285,9 @@
       <if test="wechatAccount != null">
         wechat_account = #{wechatAccount,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -286,7 +301,8 @@
       creator = #{creator,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
-      wechat_account = #{wechatAccount,jdbcType=VARCHAR}
+      wechat_account = #{wechatAccount,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

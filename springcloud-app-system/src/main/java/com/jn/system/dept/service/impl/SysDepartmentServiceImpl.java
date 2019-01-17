@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -73,37 +74,17 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @ServiceLog(doAction = "逻辑删除部门信息")
     @Transactional(rollbackFor = Exception.class)
     public void delete(String id) {
-        List<String> ids = new ArrayList<String>();
-        //获取该部门下面的子部门
-        List<SysDepartmentVO> childrenDepartment = sysDepartmentMapper.findChildrenDepartment(id);
-        if (childrenDepartment != null && childrenDepartment.size() > 0) {
-            //递归获取子部门的子部门
-            findChildrenDepartment(childrenDepartment);
-            //获取子部门id
-            getChildDepartmentId(ids, childrenDepartment);
-        }
-        ids.add(id);
+        //获取删除部门及子部门id
+        String departStr = sysDepartmentMapper.getDepartmentIds(id);
+        //解析查询导数据
+        String[] departArr = departStr.substring(2).split(",");
+        List<String> ids = new ArrayList<String>(Arrays.asList(departArr));
         //逻辑删除部门子部门信息
         sysDepartmentMapper.deleteDepartmentBranch(ids);
         logger.info("[部门] 批量逻辑删除部门成功,departmentIds: {}", ids.toString());
         //逻辑删除部门及子部门对应的用户信息
         sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
         logger.info("[部门] 批量逻辑删除部门关联用户信息成功,departmentIds: {}", ids.toString());
-    }
-
-    /**
-     * 获取子部门id
-     *
-     * @param ids
-     * @param childrenDepartment
-     */
-    private void getChildDepartmentId(List<String> ids, List<SysDepartmentVO> childrenDepartment) {
-        for (SysDepartmentVO sysDepartmentVO : childrenDepartment) {
-            ids.add(sysDepartmentVO.getValue());
-            if (sysDepartmentVO.getChildren() != null) {
-                getChildDepartmentId(ids, sysDepartmentVO.getChildren());
-            }
-        }
     }
 
     /**
@@ -208,45 +189,28 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     @Override
     @ServiceLog(doAction = "查询所有部门信息,并根据层级关系返回")
     public List<SysDepartmentVO> findDepartmentAllByLevel() {
-        //查询所有部门
-        List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentMapper.findSysDepartmentAll();
-        //递归查找子部门
-        findChildrenDepartment(sysDepartmentVOList);
-        return sysDepartmentVOList;
-    }
-
-    /**
-     * 递归循环查找部门所有子部门
-     *
-     * @param sysDepartmentVOList
-     */
-    public void findChildrenDepartment(List<SysDepartmentVO> sysDepartmentVOList) {
-        for (SysDepartmentVO sysDepartmentVO : sysDepartmentVOList) {
-            List<SysDepartmentVO> children = sysDepartmentVO.getChildren();
-            //判断部门的子部门是否为空,为空,忽略,不为空,继续查找子部门的下一级部门
-            if (children != null && children.size() > 0) {
-                for (SysDepartmentVO child : children) {
-                    child.setParentName(sysDepartmentVO.getLabel());
-                    //根据父级部门id,查询子部门集合
-                    List<SysDepartmentVO> childrenDepartList =
-                            sysDepartmentMapper.findChildrenDepartment(child.getValue());
-                    child.setChildren(childrenDepartList);
-                    //如果为查到子部门,设置子集为null
-                    if (childrenDepartList == null || childrenDepartList.size() == 0) {
-                        child.setChildren(null);
-                        continue;
-                    } else {
-                        //继续查找子部门的下一级部门
-                        findChildrenDepartment(childrenDepartList);
-                    }
+        //查询所有部门信息
+        List<SysDepartmentVO> list = new ArrayList<SysDepartmentVO>(16);
+        List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getDepartmentAll();
+        //遍历集合,根据部门层级关系,生成菜单树
+        for (SysDepartmentVO sysDepartmentVO : departmentVOList) {
+            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysDepartmentVO.getLevel())){
+                list.add(sysDepartmentVO);
+            }
+            List<SysDepartmentVO> childrenList = new ArrayList<SysDepartmentVO>(16);
+            for (SysDepartmentVO departmentVO : departmentVOList) {
+                //判断部门id和部门父id关系
+                if (sysDepartmentVO.getValue().equals(departmentVO.getParentId())){
+                    departmentVO.setParentName(sysDepartmentVO.getLabel());
+                    childrenList.add(departmentVO);
                 }
-            } else {
-                //子集可能是长度为空,这里设置为null
-                sysDepartmentVO.setChildren(null);
+            }
+            if (childrenList.size() > 0){
+                sysDepartmentVO.setChildren(childrenList);
             }
         }
+        return list;
     }
-
 
     /**
      * 批量更新部门信息

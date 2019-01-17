@@ -33,10 +33,10 @@ public interface SysMenuService {
 
     /**
      * 查询所有菜单信息,返回树形结构
-     *
+     * @param flag 菜单树接口权限管理也有调用,用于标记是菜单还是权限调用接口
      * @return
      */
-    List<SysMenuTreeVO> selectMenuList();
+    List<SysMenuTreeVO> selectMenuList(Boolean flag);
 
     /**
      * 根据id获取菜单详情

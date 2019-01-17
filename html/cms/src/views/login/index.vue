@@ -114,9 +114,9 @@ export default {
           this.loading = true
           this.$store
             .dispatch('LoginByUsername', this.loginForm)
-            .then((res) => {
+            .then((response) => {
               _this.loading = false
-              if (res.code === '0000') {
+              if (response.code === '0000') {
                 _this.$router.push({ path: this.redirect || '/' })
               }
             })
@@ -260,6 +260,7 @@ $light_gray: #eee;
     .remeberpw{
       color:#404343 !important;
       font-weight: normal;
+      cursor: pointer;
     }
     .forgetpw {
       float: right;
@@ -273,6 +274,7 @@ $light_gray: #eee;
       vertical-align: top;
       line-height: 13.5px;
       position: relative;
+      cursor: pointer;
       }
     input[type="checkbox"]::before{
       content: "";

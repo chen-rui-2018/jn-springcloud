@@ -4,27 +4,27 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
-  <context id="demo">
-    <!-- 实现Serializable接口 -->
-    <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
-    <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
-    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
-    <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
-      <property name="searchString" value="Example$"/>
-      <property name="replaceString" value="Criteria"/>
-    </plugin>
-    <commentGenerator>
-      <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
-      <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
-      <property name="suppressDate" value="true"/>
-      <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
-      <property name="suppressAllComments" value="true"/>
-    </commentGenerator>
-    <!--数据库链接URL，用户名、密码 -->
-    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                    connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                    userId="ncdev" password="devnc321">
-    </jdbcConnection>
+    <context id="demo">
+        <!-- 实现Serializable接口 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Criteria"/>
+        </plugin>
+        <commentGenerator>
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库链接URL，用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dcs?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="dcsuser" password="dcs_u_123">
+        </jdbcConnection>
     <javaTypeResolver>
       <property name="forceBigDecimals" value="false"/>
     </javaTypeResolver>

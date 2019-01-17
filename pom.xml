@@ -12,7 +12,6 @@
 	<version>1.0.0-RELEASE</version>
 	<packaging>pom</packaging>
 	<modules>
-
 		<module>springcloud-app-eureka</module>
 		<module>springcloud-app-config</module>
 		<module>springcloud-app-config-manager</module>
@@ -27,7 +26,11 @@
 		<module>springcloud-app-admin</module>
 		<module>springcloud-app-system</module>
 		<module>springcloud-app-system-api</module>
+		<module>springcloud-app-delay-stream</module>
+		<module>springcloud-app-delay-stream-api</module>
 
+		<module>springcloud-oa</module>
+		<module>springcloud-oa-api</module>
         <module>springcloud-enterprise</module>
         <module>springcloud-enterprise-api</module>
         <module>springcloud-hardware</module>
@@ -44,8 +47,6 @@
         <module>springcloud-wechat-api</module>
         <module>springcloud-wechat-miniprogram</module>
         <module>springcloud-wechat-miniprogram-api</module>
-		<module>springcloud-app-delay-stream</module>
-		<module>springcloud-app-delay-stream-api</module>
 	</modules>
 
 	<properties>
@@ -125,6 +126,12 @@
 				<artifactId>springcloud-app-delay-stream-api</artifactId>
 				<version>1.0.0-RELEASE</version>
 			</dependency>
+			<dependency>
+				<groupId>com.jn</groupId>
+				<artifactId>springcloud-oa-api</artifactId>
+				<version>1.0.0-RELEASE</version>
+			</dependency>
+
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-lang3</artifactId>

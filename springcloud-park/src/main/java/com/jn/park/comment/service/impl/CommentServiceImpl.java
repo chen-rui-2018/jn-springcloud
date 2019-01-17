@@ -3,7 +3,6 @@ package com.jn.park.comment.service.impl;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.common.util.cache.RedisCache;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.park.activity.dao.TbParkLikeMapper;
@@ -22,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -49,6 +47,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
+    /**
+     * 时间格式
+     */
+    private static final String TIME_FORMAT="yyyy-MM-dd HH:mm:ss";
 
     /**
      * 点赞状态：1:点赞
@@ -155,7 +157,7 @@ public class CommentServiceImpl implements CommentService {
         String applyState="1";
         example.createCriteria().andIdEqualTo(id).andStatusEqualTo(applyState);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
-        if(commentList==null || commentList.size()==0){
+        if(commentList==null || commentList.isEmpty()){
             throw new JnSpringCloudException(ActivityExceptionEnum.APPLY_IS_NOT_EXIST);
         }
         //查询园区点赞表（tb_park_like），根据活动id/评论id,用户判断是否存在点赞信息
@@ -225,12 +227,12 @@ public class CommentServiceImpl implements CommentService {
         TbCommentCriteria example=new TbCommentCriteria();
         example.createCriteria().andIdEqualTo(commentAdd.getpId()).andStatusEqualTo(state);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
-        if(commentList!=null && commentList.size()>0){
+        if(commentList!=null && !commentList.isEmpty()){
             //把被点评信息的点评人设置为当前信息的被点评人
             tbComment.setParentAccount(commentList.get(0).getComAccount());
         }
         //点评时间
-        tbComment.setComTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
+        tbComment.setComTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         //点评获赞数 ,新增点评的获赞数为0
         int num=0;
         tbComment.setLikeNum(num);
@@ -261,7 +263,7 @@ public class CommentServiceImpl implements CommentService {
         //状态
         tbParkLike.setStatus(state);
         //点赞时间
-        tbParkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
+        tbParkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         tbParkLikeMapper.updateByExampleSelective(tbParkLike, example);
     }
 
@@ -281,7 +283,7 @@ public class CommentServiceImpl implements CommentService {
         //点赞人
         parkLike.setLikeAccount(account);
         //点赞时间
-        parkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
+        parkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         //状态 0：取消点赞  1：点赞
         String likeState="1";
         parkLike.setStatus(likeState);

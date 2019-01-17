@@ -1,14 +1,12 @@
 package com.jn.park.activity.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.util.DateUtils;
 
 import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 
-import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.entity.TbParkLikeCriteria;
 import com.jn.park.activity.service.ActivityLikeService;
 import com.jn.park.comment.service.CommentService;
@@ -19,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 
 /**
  * @Author: yangph

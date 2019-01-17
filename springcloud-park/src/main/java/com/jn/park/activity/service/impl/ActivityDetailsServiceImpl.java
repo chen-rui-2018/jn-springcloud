@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,38 +68,37 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Override
     public ActivityDetailVO findActivityDetails(String activityId,String account) {
         List<ActivityDetail> list=activityDetailsMapper.getActivityDetails(activityId);
-        if(list.size()>0){
-            ActivityDetail activityDetail=list.get(0);
-            ActivityDetailVO activityDetailVO=new ActivityDetailVO();
-            activityDetailVO.setActivityDetail(activityDetail);
-            //根据活动id查询点赞信息
-            List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
-            int minLikeNum=0;
-            if (activityLikeInfo.size()>minLikeNum) {
-                activityDetailVO.setActivityLikeList(activityLikeInfo);
-                activityDetailVO.setLikeNum(activityLikeInfo.size());
-            }
-            //是否展示报名人(0：否   1：是）若不展示报名人，不查询报名信息
-            String showApplyNum="1";
-            if(showApplyNum.equals(activityDetail.getShowApplyNum())){
-                //根据活动id和account查询活动报名信息
-                List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId,account);
-                int minApplyNum=0;
-                if (activityApplyInfo.size()>minApplyNum) {
-                    activityDetailVO.setActivityApplyList(activityApplyInfo);
-                    activityDetailVO.setRealapplyNum(activityApplyInfo.size());
-                }
-            }
-            //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
-            applyCountdown(activityId, account, activityDetailVO);
-            //更新园区活动的阅读人数
-            updateActivityViews(activityId, activityDetail.getActivityViews());
-            //把活动详情封装到result中返回前端
-            return  activityDetailVO;
-        }else {
+        if(list.isEmpty()){
             logger.info("活动详情没有数据");
+            return  new ActivityDetailVO();
         }
-        return null;
+        ActivityDetail activityDetail=list.get(0);
+        ActivityDetailVO activityDetailVO=new ActivityDetailVO();
+        activityDetailVO.setActivityDetail(activityDetail);
+        //根据活动id查询点赞信息
+        List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
+        int minLikeNum=0;
+        if (activityLikeInfo.size()>minLikeNum) {
+            activityDetailVO.setActivityLikeList(activityLikeInfo);
+            activityDetailVO.setLikeNum(activityLikeInfo.size());
+        }
+        //是否展示报名人(0：否   1：是）若不展示报名人，不查询报名信息
+        String showApplyNum="1";
+        if(showApplyNum.equals(activityDetail.getShowApplyNum())){
+            //根据活动id和account查询活动报名信息
+            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId,account);
+            int minApplyNum=0;
+            if (activityApplyInfo.size()>minApplyNum) {
+                activityDetailVO.setActivityApplyList(activityApplyInfo);
+                activityDetailVO.setRealapplyNum(activityApplyInfo.size());
+            }
+        }
+        //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
+        applyCountdown(activityId, account, activityDetailVO);
+        //更新园区活动的阅读人数
+        updateActivityViews(activityId, activityDetail.getActivityViews());
+        //把活动详情封装到result中返回前端
+        return  activityDetailVO;
     }
 
     /**
@@ -154,19 +152,25 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
     public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage){
-        com.github.pagehelper.Page<Object> objects=new Page<>();
-        if(isPage){
-            //默认查询前15条
-            objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
+        Page<Object> objects=null;
+        try {
+            if(isPage){
+                //默认查询前15条
+                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
+            }
+            //获取第一层级评论
+            List<String>parentIds=new ArrayList<>(16);
+            parentIds.add(activityQueryPaging.getActivityId());
+            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+            //获取评论用户头像信息
+            getCommentUserAvatar(list);
+            list= getCommentChildComment(list,activityQueryPaging.getActivityId());
+            return new PaginationData(list,objects==null?0:objects.getTotal());
+        } finally {
+            if(objects!=null){
+                objects.close();
+            }
         }
-        //获取第一层级评论
-        List<String>parentIds=new ArrayList<>(16);
-        parentIds.add(activityQueryPaging.getActivityId());
-        List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
-        //获取评论用户头像信息
-        getCommentUserAvatar(list);
-        list= getCommentChildComment(list,activityQueryPaging.getActivityId());
-        return new PaginationData(list,objects==null?0:objects.getTotal());
     }
 
     /**
@@ -182,26 +186,28 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         }
         //批量获取用户扩展信息
         Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
-        if(moreUserExtension.getData()!=null &&  moreUserExtension.getData().size()>0){
-            List<UserExtension> data = moreUserExtension.getData();
-            for(Comment  comment:list){
-                for(UserExtension userExtension:data){
-                    //个人用户拓展信息
-                    if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getComAccount())){
-                        //设置头像信息
-                        comment.setAvatar(userExtension.getUserPersonInfo().getAvatar());
-                        break;
-                    }
+        if(moreUserExtension.getData()==null || moreUserExtension.getData().isEmpty()){
+            //ignore
+            return ;
+        }
+        List<UserExtension> data = moreUserExtension.getData();
+        for(Comment  comment:list){
+            for(UserExtension userExtension:data){
+                //个人用户拓展信息
+                if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getComAccount())){
+                    //设置头像信息
+                    comment.setAvatar(userExtension.getUserPersonInfo().getAvatar());
+                    break;
+                }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getComAccount())){
                     //企业用户拓展信息
-                    if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getComAccount())){
-                        //设置头像信息
-                        comment.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
-                        break;
-                    }
+                    //设置头像信息
+                    comment.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
+                    break;
                 }
             }
-
         }
+
+
     }
 
     /**
@@ -245,8 +251,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         TbParkLikeCriteria example=new TbParkLikeCriteria();
         //根据活动id获取点赞状态为点赞（"1"）的数据
         example.createCriteria().andLikeParentIdEqualTo(activityId).andStatusEqualTo("1");
-        List<TbParkLike> tbActivityLikes = tbParkLikeMapper.selectByExample(example);
-        return tbActivityLikes;
+        return tbParkLikeMapper.selectByExample(example);
     }
 
     /**
@@ -276,7 +281,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         }
         //批量获取用户扩展信息
         Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
-        if(moreUserExtension.getData()!=null && moreUserExtension.getData().size()>0){
+        if(moreUserExtension.getData()!=null && !moreUserExtension.getData().isEmpty()){
             List<UserExtension> data = moreUserExtension.getData();
             for(ActivityApply apply:activityApplyInfo){
                 for(UserExtension userExtension:data){
@@ -284,9 +289,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
                     if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(apply.getAccount())){
                         apply.setAvatar(userExtension.getUserPersonInfo().getAvatar());
                         break;
-                    }
-                    //企业用户扩展信息
-                    if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(apply.getAccount())){
+                    }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(apply.getAccount())){
+                        //企业用户扩展信息
                         apply.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
                         break;
                     }
@@ -313,7 +317,6 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         stateList.add(delState);
         //草稿、已删除的活动不能被查询出来
         example.createCriteria().andIdEqualTo(activityId).andStatusNotIn(stateList);
-        TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
-        return tbActivity;
+        return tbActivityMapper.selectByPrimaryKey(activityId);
     }
 }

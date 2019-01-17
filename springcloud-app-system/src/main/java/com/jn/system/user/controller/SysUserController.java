@@ -4,6 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.excel.ExcelUtil;
 import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -18,8 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 
@@ -171,5 +174,22 @@ public class SysUserController extends BaseController {
         user.setPassword("");
         return new Result(user);
     }
+
+    @ControllerLog(doAction = "导出用户信息")
+    @RequiresPermissions("/system/sysUser/exportExcelUserInfo")
+    @ApiOperation(value = "导出用户信息", httpMethod = "GET", response = Result.class)
+    @RequestMapping(value = "/exportExcelUserInfo", method = RequestMethod.GET)
+    public void getUserInfo(HttpServletResponse response, SysUserPage userPage) {
+        String exportTitle = "帐号,姓名,部门,岗位,岗位类型,邮箱,手机,创建时间";
+        String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createTime";
+        userPage.setPage(1);
+        userPage.setRows(200000);
+        PaginationData data = sysUserService.findSysUserByPage(userPage);
+        List dataRows = (List) data.getRows();
+        String fileName = "用户信息";
+        String sheetName = "用户信息";
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
+    }
+
 
 }

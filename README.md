@@ -137,9 +137,11 @@
 - 16            payment     支付平台
 - 17            hardware    硬件平台
 - 18            delayStream 消息延时
+- 19            txManager   事务协调器
 - 30            user        用户服务
 - 40            park        园区服务
 - 50            enterprise  企业服务
+- 60            oa          OA服务
 
 ##### 第二组，2位为模块编码
 - 00		common

@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,7 +87,7 @@ public class ExcelUtil {
      * @param response  HttpServletResponse
      * @param list      数据 list，每个元素为一个 BaseRowModel
      * @param fileName  导出的文件名
-     * @param sheetName 导入文件的 sheet 名
+     * @param sheetName 导出文件的 sheet 名
      * @param object    映射实体类，Excel 模型
      */
     public static void writeExcel(HttpServletResponse response, List<? extends BaseRowModel> list,
@@ -94,6 +96,58 @@ public class ExcelUtil {
         Sheet sheet = new Sheet(1, 0, object.getClass());
         sheet.setSheetName(sheetName);
         writer.write(list, sheet);
+        writer.finish();
+    }
+
+
+    /**
+     * 导出 Excel ：支持选择列
+     *
+     * @param response      HttpServletResponse
+     * @param fileName      导出的文件名
+     * @param sheetName     导出文件的 sheet名
+     * @param exportTitle   导出文件的表头
+     * @param exportColName 导出文件的列
+     * @param dataList      导出文件的数据
+     */
+    public static void writeExcelWithCol(HttpServletResponse response, String fileName,
+                                         String sheetName, String exportTitle, String exportColName, List dataList) {
+        ExcelWriter writer = new ExcelWriter(getOutputStream(fileName, response), ExcelTypeEnum.XLSX);
+        //标题
+        List<List<String>> head = new ArrayList<List<String>>();
+        String titleFields[] = exportTitle.split(",");
+        for (String title : titleFields) {
+            List<String> headCoulumn = new ArrayList<String>();
+            headCoulumn.add(title);
+            head.add(headCoulumn);
+        }
+
+        //数据
+        List<List<Object>> data = new ArrayList<List<Object>>();
+        try {
+            String colFields[] = exportColName.split(",");
+            for (Object model : dataList) {
+                List<Object> da = new ArrayList<Object>();
+                for (String col : colFields) {
+                    for (Field field : model.getClass().getDeclaredFields()) {
+                        field.setAccessible(true);
+                        if (col.equals(field.getName())) {
+                            da.add(field.get(model));
+                            continue;
+                        }
+                    }
+                }
+                data.add(da);
+            }
+        } catch (IllegalAccessException e) {
+        }
+
+        //生成sheet,导出
+        Sheet sheet = new Sheet(1, 0);
+        sheet.setSheetName(sheetName);
+        sheet.setHead(head);
+        sheet.setAutoWidth(Boolean.TRUE);
+        writer.write1(data, sheet);
         writer.finish();
     }
 

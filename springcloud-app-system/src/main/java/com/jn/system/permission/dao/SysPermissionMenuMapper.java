@@ -29,7 +29,7 @@ public interface SysPermissionMenuMapper {
      * @param id
      * @return
      */
-    List<SysMenu> findMenuOfPermission(String id);
+    List<String> findMenuOfPermission(String id);
 
     /**
      * 逻辑删除原权限菜单数据

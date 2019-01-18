@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,17 +27,21 @@ public class SysDepartmentVO implements Serializable {
     private String parentId;
     @ApiModelProperty("父级名称")
     private String parentName;
+    @ApiModelProperty("等级")
+    private String level;
     @ApiModelProperty("子部门的集合")
     private List<SysDepartmentVO> children;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String value, String label, String parentId, String parentName, List<SysDepartmentVO> children) {
+    public SysDepartmentVO(String value, String label, String parentId, String parentName,
+                           String level, List<SysDepartmentVO> children) {
         this.value = value;
         this.label = label;
         this.parentId = parentId;
         this.parentName = parentName;
+        this.level = level;
         this.children = children;
     }
 
@@ -72,6 +77,14 @@ public class SysDepartmentVO implements Serializable {
         this.parentName = parentName;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
     public List<SysDepartmentVO> getChildren() {
         return children;
     }
@@ -80,7 +93,6 @@ public class SysDepartmentVO implements Serializable {
         this.children = children;
     }
 
-
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
@@ -88,6 +100,7 @@ public class SysDepartmentVO implements Serializable {
                 ", label='" + label + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
+                ", level='" + level + '\'' +
                 ", children=" + children +
                 '}';
     }

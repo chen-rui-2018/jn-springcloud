@@ -60,11 +60,15 @@ public class SysUser implements Serializable {
     @Pattern(regexp="^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$",message="{weixinAccount:'微信号校验错误'}")
     private String wechatAccount;
 
+    @ApiModelProperty(value = "备注")
+    @Size(max = 200, message = "备注字符不能超过200字")
+    private String remark;
+
     public SysUser() {
     }
 
-    public SysUser(String id, String account, String password, String name, String phone,
-                   String email, String creator, Date createTime, String status, String wechatAccount) {
+    public SysUser(String id, String account, String password, String name, String phone, String email,
+                   String creator, Date createTime, String status, String wechatAccount, String remark) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -75,6 +79,7 @@ public class SysUser implements Serializable {
         this.createTime = createTime;
         this.status = status;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
     }
 
     public String getId() {
@@ -157,6 +162,14 @@ public class SysUser implements Serializable {
         this.wechatAccount = wechatAccount;
     }
 
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     @Override
     public String toString() {
         return "SysUser{" +
@@ -170,6 +183,7 @@ public class SysUser implements Serializable {
                 ", createTime=" + createTime +
                 ", status='" + status + '\'' +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

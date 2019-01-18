@@ -10,15 +10,9 @@
     </update>
 
     <select id="findResourcesOfPermission" parameterType="java.lang.String"
-            resultType="com.jn.system.menu.model.SysResources">
+            resultType="java.lang.String">
         select distinct
-            t2.id,
-            t2.resources_name as resourcesName,
-            t2.resources_url as resourcesUrl,
-            t2.menu_id as menuId,
-            t2.creator,
-            t2.create_time as createTime,
-            t2.`status`
+            t2.id
         from tb_sys_permission_resources t1,tb_sys_resources t2
         where t1.resources_id = t2.id and t1.`status` = '1'
            and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR}

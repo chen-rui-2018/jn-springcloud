@@ -32,17 +32,18 @@
           <el-table-column label="序列" type="index" align="center" width="60"/>
           <el-table-column label="账号" prop="account" align="center" width="100" />
           <el-table-column label="姓名" prop="name" align="center" width="100" />
-          <el-table-column label="邮箱" prop="email" align="center" width="150" />
-          <el-table-column label="手机" prop="phone" align="center" width="120" />
-          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
-          <el-table-column label="创建时间" prop="createTime" align="center" width="100">
-            <template slot-scope="scope">
-              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-            </template>
-          </el-table-column>
           <el-table-column label="部门" prop="departmentName" align="center" width="100" />
           <el-table-column label="岗位" prop="postName" align="center" width="85" />
           <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
+          <el-table-column label="邮箱" prop="email" align="center" width="150" />
+          <el-table-column label="手机" prop="phone" align="center" width="120" />
+          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
+          <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
+          <el-table-column label="创建时间" prop="createTime" align="center" width="100">
+            <template slot-scope="scope">
+              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
+            </template>
+          </el-table-column>
           <el-table-column label="状态" prop="status" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
@@ -66,49 +67,54 @@
     </div>
 
     <!-- S 新增弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="450px" class="addUser">
-      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" maxlength="16" clearable />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
-            <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="temp.email" clearable />
-        </el-form-item>
-        <el-form-item label="手机" prop="phone">
-          <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
-        </el-form-item>
-        <el-form-item label="微信" prop="wechatAccount">
-          <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
-        </el-form-item>
-        <el-form-item v-if="Visible" label="部门">
-          <el-cascader
-            :options="departmentList"
-            v-model="currentDepartmentIds"
-            change-on-select
-            placeholder="请选择"
-            clearable
-            @change="handleChangeDepartment"
-          />
-        </el-form-item>
-        <el-form-item v-if="Visible" label="岗位">
-          <el-select v-model="temp.postId" class="filter-item" placeholder="请选择" clearable>
-            <el-option v-for="(item,index) in positionOptions" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
+    <template v-if="dialogFormVisible">
+      <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="450px" class="addUser">
+        <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
+          <el-form-item label="账号" prop="account">
+            <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
+          </el-form-item>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model.trim="temp.name" maxlength="16" clearable />
+          </el-form-item>
+          <el-form-item label="状态" prop="status">
+            <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
+              <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="temp.email" clearable />
+          </el-form-item>
+          <el-form-item label="手机" prop="phone">
+            <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
+          </el-form-item>
+          <el-form-item label="微信" prop="wechatAccount">
+            <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input :rows="2" v-model="temp.remark" type="textarea" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item v-if="Visible" label="部门">
+            <el-cascader
+              :options="departmentList"
+              v-model="currentDepartmentIds"
+              change-on-select
+              placeholder="请选择"
+              clearable
+              @change="handleChangeDepartment"
+            />
+          </el-form-item>
+          <el-form-item v-if="Visible" label="岗位">
+            <el-select v-model="temp.postId" class="filter-item" placeholder="请选择" clearable>
+              <el-option v-for="(item,index) in positionOptions" :key="index" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+        </div>
+      </el-dialog>
+    </template>
     <!-- E 新增弹窗 -->
     <!-- S 部门岗位 -->
     <el-dialog :visible.sync="dialogSectorVisible" title="部门岗位" class="sector-dialog">
@@ -171,16 +177,16 @@
     </el-dialog>
     <!-- E 重置密码 -->
     <!-- 弹出的授权用户组对话框 -->
-    <template v-if="userGroup.userGroupdialogVisible">
-      <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
-        <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
-          <span slot="left-footer" size="small">
-            <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
-          </span>
-          <span slot="right-footer" size="small" />
-        </el-transfer>
-      </el-dialog>
-    </template>
+    <!-- <template v-if="userGroup.userGroupdialogVisible"> -->
+    <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+      <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
+        <span slot="left-footer" size="small">
+          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
+        </span>
+        <span slot="right-footer" size="small" />
+      </el-transfer>
+    </el-dialog>
+    <!-- </template> -->
   </div>
 </template>
 
@@ -377,7 +383,8 @@ export default {
       resetPassword: {
         id: '',
         password: ''
-      }
+      },
+      remark: ''
     }
   },
   computed: {
@@ -724,6 +731,7 @@ export default {
       this.temp.email = row.email
       this.temp.phone = row.phone
       this.temp.wechatAccount = row.wechatAccount
+      this.temp.remark = row.remark
       this.temp.status = parseInt(row.status)
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -880,6 +888,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.el-tooltip__popper{
+    width: 260px;
+    height: 60px;
+    word-break: break-all;
+}
 .userManagement-content{
   display: flex;
   .userManagement-content-left{

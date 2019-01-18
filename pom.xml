@@ -29,8 +29,12 @@
 		<module>springcloud-app-delay-stream</module>
 		<module>springcloud-app-delay-stream-api</module>
 
+		<module>springcloud-app-tx-manager</module>
+
+
 		<module>springcloud-oa</module>
 		<module>springcloud-oa-api</module>
+
         <module>springcloud-enterprise</module>
         <module>springcloud-enterprise-api</module>
         <module>springcloud-hardware</module>
@@ -47,6 +51,7 @@
         <module>springcloud-wechat-api</module>
         <module>springcloud-wechat-miniprogram</module>
         <module>springcloud-wechat-miniprogram-api</module>
+
 	</modules>
 
 	<properties>

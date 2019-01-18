@@ -8,7 +8,7 @@
       <sidebar-item v-for="subItem in item.children" :key="subItem.id" :item="subItem"/>
     </el-submenu>
     <el-menu-item v-else :index="`/${item.path}`">
-      <i :class="item.icon"/>
+      <!-- <i :class="item.icon"/> -->
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
   </div>

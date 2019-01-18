@@ -502,48 +502,36 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging, Boolean isPage) {
         Page<Object> objects = null;
         List<ActivityApplyDetail> activityApplyList;
-        try {
-            List<String> accountList = new ArrayList<>();
-            if (isPage) {
-                //默认查询前15条
-                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
-            }else{
-                objects=new Page<>();
-            }
-            //前端查询有效报名状态数据
-            String status = "1";
-            activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
-            if(activityApplyList==null){
-                activityApplyList=new ArrayList<>();
-            }
-            // 遍历获取所有账号
+        List<String> accountList = new ArrayList<>();
+        if (isPage) {
+            //默认查询前15条
+            objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
+        }
+        //前端查询有效报名状态数据
+        String status = "1";
+        activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
+        if(activityApplyList==null){
+            activityApplyList=new ArrayList<>();
+        }
+        // 遍历获取所有账号
+        for (ActivityApplyDetail detail : activityApplyList) {
+            accountList.add(detail.getAccount());
+        }
+        Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
+        List<UserExtension> userList = userResult.getData();
+        if(userList==null || userList.isEmpty()){
+            return new PaginationData(activityApplyList, objects.getTotal());
+        }
+        for (UserExtension user : userList) {
             for (ActivityApplyDetail detail : activityApplyList) {
-                accountList.add(detail.getAccount());
-            }
-            Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
-            List<UserExtension> userList = userResult.getData();
-            if(userList==null || userList.isEmpty()){
-                return new PaginationData(activityApplyList, objects.getTotal());
-            }
-            for (UserExtension user : userList) {
-                for (ActivityApplyDetail detail : activityApplyList) {
-                    if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
-                        BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
-                    }
-                    if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
-                        BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
-                    }
+                if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
+                    BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
+                }
+                if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
+                    BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
                 }
             }
-
-            return new PaginationData(activityApplyList, objects.getTotal());
-        } finally {
-            if(objects!=null){
-                objects.close();
-            }
-
         }
+        return new PaginationData(activityApplyList,objects==null?0:objects.getTotal());
     }
-
-
 }

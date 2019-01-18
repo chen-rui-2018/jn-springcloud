@@ -6,11 +6,11 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.export.service.ExportExcelService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -55,9 +55,6 @@ public class ActivityController extends BaseController {
 
     @Autowired
     private ActivityService activityService;
-
-    @Autowired
-    private ExportExcelService exportDataExcel;
 
     @Autowired
     private ActivityApplyService activityApplyService;
@@ -187,18 +184,18 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "数据导出")
     @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
-    public void exportDataExcel(@RequestBody @Validated ActivityApplyParment activityApplyParment,
+    @RequestMapping(value = "/exportDataExcel")
+    public void exportDataExcel(@Validated ActivityApplyParment activityApplyParment,
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParment.getActivityId(), "活动id不能为空");
         Assert.notNull(activityApplyParment.getExportColName(), "excel导出的字段别名不能为空");
         Assert.notNull(activityApplyParment.getExportTitle(), "excel导出字段的标题不能为空");
         //下载文件名
-        String codedFileName="活动报名人";
-        //导出方式 1:xls    2:xlsx
-        int exportAs=2;
+        String fileName="活动报名人";
+        String sheetName = "活动报名人";
         PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment, false);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
-        exportDataExcel.singleRowHeaderExport(codedFileName,activityApplyParment.getExportColName(),activityApplyParment.getExportTitle(),exportAs,activityApplyDetails,response);
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, activityApplyParment.getExportTitle(), activityApplyParment.getExportColName(), activityApplyDetails);
     }
 
     @ControllerLog(doAction = "活动结束回调方法")

@@ -70,7 +70,7 @@ public class ActivityDetailsServiceImplTest {
     @Test
     public void findActivityDetails() {
         ActivityDetailVO activityDetails = activityDetailsService.findActivityDetails(activityId, account);
-        assertThat(anything(),anything());
+        assertThat(activityDetails,anything());
     }
 
     /**

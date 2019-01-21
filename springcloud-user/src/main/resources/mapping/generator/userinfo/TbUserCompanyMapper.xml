@@ -33,11 +33,13 @@
     <result column="addr_park" jdbcType="VARCHAR" property="addrPark" />
     <result column="credit_points" jdbcType="DOUBLE" property="creditPoints" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="checker" jdbcType="VARCHAR" property="checker" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="check_status" jdbcType="VARCHAR" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
-    <result column="checker" jdbcType="VARCHAR" property="checker" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -101,8 +103,8 @@
     id, account, phone, email, com_name, avatar, unify_code, owners, owner, owner_ID, 
     bank_name, bank_account, products, material, com_property, reg_capital, founding_time, 
     indu_type, industry, lic_starttime, lic_endtime, org_code, contact, con_phone, con_address, 
-    postcode, com_adress, com_tele, addr_park, credit_points, com_type, modifier, modify_time, 
-    check_status, check_time, checker
+    postcode, com_adress, com_tele, addr_park, credit_points, com_type, checker, created_time, 
+    check_status, check_time, creator_account, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserCompanyCriteria" resultMap="BaseResultMap">
     select
@@ -145,9 +147,9 @@
       org_code, contact, con_phone, 
       con_address, postcode, com_adress, 
       com_tele, addr_park, credit_points, 
-      com_type, modifier, modify_time, 
-      check_status, check_time, checker
-      )
+      com_type, checker, created_time, 
+      check_status, check_time, creator_account, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{unifyCode,jdbcType=VARCHAR}, #{owners,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, 
@@ -158,9 +160,9 @@
       #{orgCode,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{conPhone,jdbcType=VARCHAR}, 
       #{conAddress,jdbcType=VARCHAR}, #{postcode,jdbcType=VARCHAR}, #{comAdress,jdbcType=VARCHAR}, 
       #{comTele,jdbcType=VARCHAR}, #{addrPark,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DOUBLE}, 
-      #{comType,jdbcType=VARCHAR}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{checker,jdbcType=VARCHAR}
-      )
+      #{comType,jdbcType=VARCHAR}, #{checker,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserCompany">
     insert into tb_user_company
@@ -258,11 +260,11 @@
       <if test="comType != null">
         com_type,
       </if>
-      <if test="modifier != null">
-        modifier,
+      <if test="checker != null">
+        checker,
       </if>
-      <if test="modifyTime != null">
-        modify_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
       <if test="checkStatus != null">
         check_status,
@@ -270,8 +272,14 @@
       <if test="checkTime != null">
         check_time,
       </if>
-      <if test="checker != null">
-        checker,
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -368,11 +376,11 @@
       <if test="comType != null">
         #{comType,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
+      <if test="checker != null">
+        #{checker,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null">
-        #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="checkStatus != null">
         #{checkStatus,jdbcType=VARCHAR},
@@ -380,8 +388,14 @@
       <if test="checkTime != null">
         #{checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="checker != null">
-        #{checker,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -487,11 +501,11 @@
       <if test="record.comType != null">
         com_type = #{record.comType,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
+      <if test="record.checker != null">
+        checker = #{record.checker,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifyTime != null">
-        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.checkStatus != null">
         check_status = #{record.checkStatus,jdbcType=VARCHAR},
@@ -499,8 +513,14 @@
       <if test="record.checkTime != null">
         check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.checker != null">
-        checker = #{record.checker,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -540,11 +560,13 @@
       addr_park = #{record.addrPark,jdbcType=VARCHAR},
       credit_points = #{record.creditPoints,jdbcType=DOUBLE},
       com_type = #{record.comType,jdbcType=VARCHAR},
-      modifier = #{record.modifier,jdbcType=VARCHAR},
-      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      checker = #{record.checker,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       check_status = #{record.checkStatus,jdbcType=VARCHAR},
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
-      checker = #{record.checker,jdbcType=VARCHAR}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -642,11 +664,11 @@
       <if test="comType != null">
         com_type = #{comType,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="checker != null">
+        checker = #{checker,jdbcType=VARCHAR},
       </if>
-      <if test="modifyTime != null">
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="checkStatus != null">
         check_status = #{checkStatus,jdbcType=VARCHAR},
@@ -654,8 +676,14 @@
       <if test="checkTime != null">
         check_time = #{checkTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="checker != null">
-        checker = #{checker,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -692,11 +720,13 @@
       addr_park = #{addrPark,jdbcType=VARCHAR},
       credit_points = #{creditPoints,jdbcType=DOUBLE},
       com_type = #{comType,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      checker = #{checker,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       check_status = #{checkStatus,jdbcType=VARCHAR},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
-      checker = #{checker,jdbcType=VARCHAR}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

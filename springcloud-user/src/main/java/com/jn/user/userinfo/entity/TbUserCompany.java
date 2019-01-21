@@ -66,15 +66,19 @@ public class TbUserCompany implements Serializable {
 
     private String comType;
 
-    private String modifier;
+    private String checker;
 
-    private Date modifyTime;
+    private Date createdTime;
 
     private String checkStatus;
 
     private Date checkTime;
 
-    private String checker;
+    private String creatorAccount;
+
+    private String modifierAccount;
+
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -326,20 +330,20 @@ public class TbUserCompany implements Serializable {
         this.comType = comType == null ? null : comType.trim();
     }
 
-    public String getModifier() {
-        return modifier;
+    public String getChecker() {
+        return checker;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+    public void setChecker(String checker) {
+        this.checker = checker == null ? null : checker.trim();
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getCheckStatus() {
@@ -358,12 +362,28 @@ public class TbUserCompany implements Serializable {
         this.checkTime = checkTime;
     }
 
-    public String getChecker() {
-        return checker;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setChecker(String checker) {
-        this.checker = checker == null ? null : checker.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override
@@ -409,11 +429,13 @@ public class TbUserCompany implements Serializable {
             && (this.getAddrPark() == null ? other.getAddrPark() == null : this.getAddrPark().equals(other.getAddrPark()))
             && (this.getCreditPoints() == null ? other.getCreditPoints() == null : this.getCreditPoints().equals(other.getCreditPoints()))
             && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()))
-            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
-            && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()))
+            && (this.getChecker() == null ? other.getChecker() == null : this.getChecker().equals(other.getChecker()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
-            && (this.getChecker() == null ? other.getChecker() == null : this.getChecker().equals(other.getChecker()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -451,11 +473,13 @@ public class TbUserCompany implements Serializable {
         result = prime * result + ((getAddrPark() == null) ? 0 : getAddrPark().hashCode());
         result = prime * result + ((getCreditPoints() == null) ? 0 : getCreditPoints().hashCode());
         result = prime * result + ((getComType() == null) ? 0 : getComType().hashCode());
-        result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
-        result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
+        result = prime * result + ((getChecker() == null) ? 0 : getChecker().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
-        result = prime * result + ((getChecker() == null) ? 0 : getChecker().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         return result;
     }
 
@@ -496,11 +520,13 @@ public class TbUserCompany implements Serializable {
         sb.append(", addrPark=").append(addrPark);
         sb.append(", creditPoints=").append(creditPoints);
         sb.append(", comType=").append(comType);
-        sb.append(", modifier=").append(modifier);
-        sb.append(", modifyTime=").append(modifyTime);
+        sb.append(", checker=").append(checker);
+        sb.append(", createdTime=").append(createdTime);
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkTime=").append(checkTime);
-        sb.append(", checker=").append(checker);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

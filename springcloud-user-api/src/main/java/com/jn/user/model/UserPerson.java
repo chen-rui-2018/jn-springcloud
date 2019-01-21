@@ -44,13 +44,15 @@ public class UserPerson implements Serializable {
     @ApiModelProperty(value = "生日")
     private Date birthday;
     @ApiModelProperty(value = "创建人")
-    private String creater;
-    @ApiModelProperty(value = "修改人")
-    private String modifier;
+    private String creator_account;
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifyTime;
+    private Date created_time;
+    @ApiModelProperty(value = "最新更新者账号")
+    private String modifier_account;
+    @ApiModelProperty(value = "最新更新时间")
+    private Date modified_time;
+    @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
+    private Date record_status;
 
     private static final long serialVersionUID = 1L;
 
@@ -166,36 +168,44 @@ public class UserPerson implements Serializable {
         this.birthday = birthday;
     }
 
-    public String getCreater() {
-        return creater;
+    public String getCreator_account() {
+        return creator_account;
     }
 
-    public void setCreater(String creater) {
-        this.creater = creater;
+    public void setCreator_account(String creator_account) {
+        this.creator_account = creator_account;
     }
 
-    public String getModifier() {
-        return modifier;
+    public Date getCreated_time() {
+        return created_time;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
+    public void setCreated_time(Date created_time) {
+        this.created_time = created_time;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getModifier_account() {
+        return modifier_account;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setModifier_account(String modifier_account) {
+        this.modifier_account = modifier_account;
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
+    public Date getModified_time() {
+        return modified_time;
     }
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModified_time(Date modified_time) {
+        this.modified_time = modified_time;
+    }
+
+    public Date getRecord_status() {
+        return record_status;
+    }
+
+    public void setRecord_status(Date record_status) {
+        this.record_status = record_status;
     }
 
     @Override
@@ -215,10 +225,11 @@ public class UserPerson implements Serializable {
                 ", userType='" + userType + '\'' +
                 ", point=" + point +
                 ", birthday=" + birthday +
-                ", creater='" + creater + '\'' +
-                ", modifier='" + modifier + '\'' +
-                ", createTime=" + createTime +
-                ", modifyTime=" + modifyTime +
+                ", creator_account='" + creator_account + '\'' +
+                ", created_time=" + created_time +
+                ", modifier_account='" + modifier_account + '\'' +
+                ", modified_time=" + modified_time +
+                ", record_status=" + record_status +
                 '}';
     }
 }

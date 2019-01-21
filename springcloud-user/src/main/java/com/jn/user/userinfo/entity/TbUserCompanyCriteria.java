@@ -2225,133 +2225,133 @@ public class TbUserCompanyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andModifierIsNull() {
-            addCriterion("modifier is null");
+        public Criteria andCheckerIsNull() {
+            addCriterion("checker is null");
             return (Criteria) this;
         }
 
-        public Criteria andModifierIsNotNull() {
-            addCriterion("modifier is not null");
+        public Criteria andCheckerIsNotNull() {
+            addCriterion("checker is not null");
             return (Criteria) this;
         }
 
-        public Criteria andModifierEqualTo(String value) {
-            addCriterion("modifier =", value, "modifier");
+        public Criteria andCheckerEqualTo(String value) {
+            addCriterion("checker =", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierNotEqualTo(String value) {
-            addCriterion("modifier <>", value, "modifier");
+        public Criteria andCheckerNotEqualTo(String value) {
+            addCriterion("checker <>", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierGreaterThan(String value) {
-            addCriterion("modifier >", value, "modifier");
+        public Criteria andCheckerGreaterThan(String value) {
+            addCriterion("checker >", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierGreaterThanOrEqualTo(String value) {
-            addCriterion("modifier >=", value, "modifier");
+        public Criteria andCheckerGreaterThanOrEqualTo(String value) {
+            addCriterion("checker >=", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierLessThan(String value) {
-            addCriterion("modifier <", value, "modifier");
+        public Criteria andCheckerLessThan(String value) {
+            addCriterion("checker <", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierLessThanOrEqualTo(String value) {
-            addCriterion("modifier <=", value, "modifier");
+        public Criteria andCheckerLessThanOrEqualTo(String value) {
+            addCriterion("checker <=", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierLike(String value) {
-            addCriterion("modifier like", value, "modifier");
+        public Criteria andCheckerLike(String value) {
+            addCriterion("checker like", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierNotLike(String value) {
-            addCriterion("modifier not like", value, "modifier");
+        public Criteria andCheckerNotLike(String value) {
+            addCriterion("checker not like", value, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierIn(List<String> values) {
-            addCriterion("modifier in", values, "modifier");
+        public Criteria andCheckerIn(List<String> values) {
+            addCriterion("checker in", values, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierNotIn(List<String> values) {
-            addCriterion("modifier not in", values, "modifier");
+        public Criteria andCheckerNotIn(List<String> values) {
+            addCriterion("checker not in", values, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierBetween(String value1, String value2) {
-            addCriterion("modifier between", value1, value2, "modifier");
+        public Criteria andCheckerBetween(String value1, String value2) {
+            addCriterion("checker between", value1, value2, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifierNotBetween(String value1, String value2) {
-            addCriterion("modifier not between", value1, value2, "modifier");
+        public Criteria andCheckerNotBetween(String value1, String value2) {
+            addCriterion("checker not between", value1, value2, "checker");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeIsNull() {
-            addCriterion("modify_time is null");
+        public Criteria andCreatedTimeIsNull() {
+            addCriterion("created_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeIsNotNull() {
-            addCriterion("modify_time is not null");
+        public Criteria andCreatedTimeIsNotNull() {
+            addCriterion("created_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeEqualTo(Date value) {
-            addCriterion("modify_time =", value, "modifyTime");
+        public Criteria andCreatedTimeEqualTo(Date value) {
+            addCriterion("created_time =", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeNotEqualTo(Date value) {
-            addCriterion("modify_time <>", value, "modifyTime");
+        public Criteria andCreatedTimeNotEqualTo(Date value) {
+            addCriterion("created_time <>", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeGreaterThan(Date value) {
-            addCriterion("modify_time >", value, "modifyTime");
+        public Criteria andCreatedTimeGreaterThan(Date value) {
+            addCriterion("created_time >", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("modify_time >=", value, "modifyTime");
+        public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_time >=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeLessThan(Date value) {
-            addCriterion("modify_time <", value, "modifyTime");
+        public Criteria andCreatedTimeLessThan(Date value) {
+            addCriterion("created_time <", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeLessThanOrEqualTo(Date value) {
-            addCriterion("modify_time <=", value, "modifyTime");
+        public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("created_time <=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeIn(List<Date> values) {
-            addCriterion("modify_time in", values, "modifyTime");
+        public Criteria andCreatedTimeIn(List<Date> values) {
+            addCriterion("created_time in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeNotIn(List<Date> values) {
-            addCriterion("modify_time not in", values, "modifyTime");
+        public Criteria andCreatedTimeNotIn(List<Date> values) {
+            addCriterion("created_time not in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeBetween(Date value1, Date value2) {
-            addCriterion("modify_time between", value1, value2, "modifyTime");
+        public Criteria andCreatedTimeBetween(Date value1, Date value2) {
+            addCriterion("created_time between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifyTimeNotBetween(Date value1, Date value2) {
-            addCriterion("modify_time not between", value1, value2, "modifyTime");
+        public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
@@ -2485,73 +2485,203 @@ public class TbUserCompanyCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCheckerIsNull() {
-            addCriterion("checker is null");
+        public Criteria andCreatorAccountIsNull() {
+            addCriterion("creator_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerIsNotNull() {
-            addCriterion("checker is not null");
+        public Criteria andCreatorAccountIsNotNull() {
+            addCriterion("creator_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerEqualTo(String value) {
-            addCriterion("checker =", value, "checker");
+        public Criteria andCreatorAccountEqualTo(String value) {
+            addCriterion("creator_account =", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerNotEqualTo(String value) {
-            addCriterion("checker <>", value, "checker");
+        public Criteria andCreatorAccountNotEqualTo(String value) {
+            addCriterion("creator_account <>", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerGreaterThan(String value) {
-            addCriterion("checker >", value, "checker");
+        public Criteria andCreatorAccountGreaterThan(String value) {
+            addCriterion("creator_account >", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerGreaterThanOrEqualTo(String value) {
-            addCriterion("checker >=", value, "checker");
+        public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("creator_account >=", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerLessThan(String value) {
-            addCriterion("checker <", value, "checker");
+        public Criteria andCreatorAccountLessThan(String value) {
+            addCriterion("creator_account <", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerLessThanOrEqualTo(String value) {
-            addCriterion("checker <=", value, "checker");
+        public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
+            addCriterion("creator_account <=", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerLike(String value) {
-            addCriterion("checker like", value, "checker");
+        public Criteria andCreatorAccountLike(String value) {
+            addCriterion("creator_account like", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerNotLike(String value) {
-            addCriterion("checker not like", value, "checker");
+        public Criteria andCreatorAccountNotLike(String value) {
+            addCriterion("creator_account not like", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerIn(List<String> values) {
-            addCriterion("checker in", values, "checker");
+        public Criteria andCreatorAccountIn(List<String> values) {
+            addCriterion("creator_account in", values, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerNotIn(List<String> values) {
-            addCriterion("checker not in", values, "checker");
+        public Criteria andCreatorAccountNotIn(List<String> values) {
+            addCriterion("creator_account not in", values, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerBetween(String value1, String value2) {
-            addCriterion("checker between", value1, value2, "checker");
+        public Criteria andCreatorAccountBetween(String value1, String value2) {
+            addCriterion("creator_account between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andCheckerNotBetween(String value1, String value2) {
-            addCriterion("checker not between", value1, value2, "checker");
+        public Criteria andCreatorAccountNotBetween(String value1, String value2) {
+            addCriterion("creator_account not between", value1, value2, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountIsNull() {
+            addCriterion("modifier_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountIsNotNull() {
+            addCriterion("modifier_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountEqualTo(String value) {
+            addCriterion("modifier_account =", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountNotEqualTo(String value) {
+            addCriterion("modifier_account <>", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountGreaterThan(String value) {
+            addCriterion("modifier_account >", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("modifier_account >=", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountLessThan(String value) {
+            addCriterion("modifier_account <", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountLessThanOrEqualTo(String value) {
+            addCriterion("modifier_account <=", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountLike(String value) {
+            addCriterion("modifier_account like", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountNotLike(String value) {
+            addCriterion("modifier_account not like", value, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountIn(List<String> values) {
+            addCriterion("modifier_account in", values, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountNotIn(List<String> values) {
+            addCriterion("modifier_account not in", values, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountBetween(String value1, String value2) {
+            addCriterion("modifier_account between", value1, value2, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifierAccountNotBetween(String value1, String value2) {
+            addCriterion("modifier_account not between", value1, value2, "modifierAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIsNull() {
+            addCriterion("modified_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIsNotNull() {
+            addCriterion("modified_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeEqualTo(Date value) {
+            addCriterion("modified_time =", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotEqualTo(Date value) {
+            addCriterion("modified_time <>", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeGreaterThan(Date value) {
+            addCriterion("modified_time >", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("modified_time >=", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeLessThan(Date value) {
+            addCriterion("modified_time <", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("modified_time <=", value, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeIn(List<Date> values) {
+            addCriterion("modified_time in", values, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotIn(List<Date> values) {
+            addCriterion("modified_time not in", values, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeBetween(Date value1, Date value2) {
+            addCriterion("modified_time between", value1, value2, "modifiedTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
     }

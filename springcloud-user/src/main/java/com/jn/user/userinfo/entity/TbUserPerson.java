@@ -34,13 +34,15 @@ public class TbUserPerson implements Serializable {
 
     private Date birthday;
 
-    private String creater;
+    private String creatorAccount;
 
-    private String modifier;
+    private String modifierAccount;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private Date modifyTime;
+    private Date modifiedTime;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -164,36 +166,44 @@ public class TbUserPerson implements Serializable {
         this.birthday = birthday;
     }
 
-    public String getCreater() {
-        return creater;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreater(String creater) {
-        this.creater = creater == null ? null : creater.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public String getModifier() {
-        return modifier;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setModifier(String modifier) {
-        this.modifier = modifier == null ? null : modifier.trim();
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getModifyTime() {
-        return modifyTime;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -223,10 +233,11 @@ public class TbUserPerson implements Serializable {
             && (this.getUserType() == null ? other.getUserType() == null : this.getUserType().equals(other.getUserType()))
             && (this.getPoint() == null ? other.getPoint() == null : this.getPoint().equals(other.getPoint()))
             && (this.getBirthday() == null ? other.getBirthday() == null : this.getBirthday().equals(other.getBirthday()))
-            && (this.getCreater() == null ? other.getCreater() == null : this.getCreater().equals(other.getCreater()))
-            && (this.getModifier() == null ? other.getModifier() == null : this.getModifier().equals(other.getModifier()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -248,10 +259,11 @@ public class TbUserPerson implements Serializable {
         result = prime * result + ((getUserType() == null) ? 0 : getUserType().hashCode());
         result = prime * result + ((getPoint() == null) ? 0 : getPoint().hashCode());
         result = prime * result + ((getBirthday() == null) ? 0 : getBirthday().hashCode());
-        result = prime * result + ((getCreater() == null) ? 0 : getCreater().hashCode());
-        result = prime * result + ((getModifier() == null) ? 0 : getModifier().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -276,10 +288,11 @@ public class TbUserPerson implements Serializable {
         sb.append(", userType=").append(userType);
         sb.append(", point=").append(point);
         sb.append(", birthday=").append(birthday);
-        sb.append(", creater=").append(creater);
-        sb.append(", modifier=").append(modifier);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", modifyTime=").append(modifyTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

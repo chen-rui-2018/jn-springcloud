@@ -75,16 +75,23 @@ public class UserCompany implements Serializable {
     private Double creditPoints;
     @ApiModelProperty(value = "企业类型")
     private String comType;
-    @ApiModelProperty(value = "修改人")
-    private String modifier;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifyTime;
     @ApiModelProperty(value = "审核状态")
     private String checkStatus;
     @ApiModelProperty(value = "邮箱")
     private Date checkTime;
     @ApiModelProperty(value = "审核通过时间")
     private String checker;
+    @ApiModelProperty(value = "创建人")
+    private String creator_account;
+    @ApiModelProperty(value = "创建时间")
+    private Date created_time;
+    @ApiModelProperty(value = "最新更新者账号")
+    private String modifier_account;
+    @ApiModelProperty(value = "最新更新时间")
+    private Date modified_time;
+    @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
+    private Date record_status;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -328,22 +335,6 @@ public class UserCompany implements Serializable {
         this.comType = comType;
     }
 
-    public String getModifier() {
-        return modifier;
-    }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
-
     public String getCheckStatus() {
         return checkStatus;
     }
@@ -366,5 +357,89 @@ public class UserCompany implements Serializable {
 
     public void setChecker(String checker) {
         this.checker = checker;
+    }
+
+    public String getCreator_account() {
+        return creator_account;
+    }
+
+    public void setCreator_account(String creator_account) {
+        this.creator_account = creator_account;
+    }
+
+    public Date getCreated_time() {
+        return created_time;
+    }
+
+    public void setCreated_time(Date created_time) {
+        this.created_time = created_time;
+    }
+
+    public String getModifier_account() {
+        return modifier_account;
+    }
+
+    public void setModifier_account(String modifier_account) {
+        this.modifier_account = modifier_account;
+    }
+
+    public Date getModified_time() {
+        return modified_time;
+    }
+
+    public void setModified_time(Date modified_time) {
+        this.modified_time = modified_time;
+    }
+
+    public Date getRecord_status() {
+        return record_status;
+    }
+
+    public void setRecord_status(Date record_status) {
+        this.record_status = record_status;
+    }
+
+    @Override
+    public String toString() {
+        return "UserCompany{" +
+                "account='" + account + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", comName='" + comName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", unifyCode='" + unifyCode + '\'' +
+                ", owners='" + owners + '\'' +
+                ", owner='" + owner + '\'' +
+                ", ownerId='" + ownerId + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", bankAccount='" + bankAccount + '\'' +
+                ", products='" + products + '\'' +
+                ", material='" + material + '\'' +
+                ", comProperty='" + comProperty + '\'' +
+                ", regCapital=" + regCapital +
+                ", foundingTime=" + foundingTime +
+                ", induType='" + induType + '\'' +
+                ", industry='" + industry + '\'' +
+                ", licStarttime=" + licStarttime +
+                ", licEndtime=" + licEndtime +
+                ", orgCode='" + orgCode + '\'' +
+                ", contact='" + contact + '\'' +
+                ", conPhone='" + conPhone + '\'' +
+                ", conAddress='" + conAddress + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", comAdress='" + comAdress + '\'' +
+                ", comTele='" + comTele + '\'' +
+                ", addrPark='" + addrPark + '\'' +
+                ", creditPoints=" + creditPoints +
+                ", comType='" + comType + '\'' +
+                ", checkStatus='" + checkStatus + '\'' +
+                ", checkTime=" + checkTime +
+                ", checker='" + checker + '\'' +
+                ", creator_account='" + creator_account + '\'' +
+                ", created_time=" + created_time +
+                ", modifier_account='" + modifier_account + '\'' +
+                ", modified_time=" + modified_time +
+                ", record_status=" + record_status +
+                '}';
     }
 }

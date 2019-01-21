@@ -33,15 +33,15 @@ public class TbActivity implements Serializable {
 
     private String actiPosterUrl;
 
-    private String status;
+    private String actiStatus;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private String createAccount;
+    private String creatorAccount;
 
-    private Date updateTime;
+    private Date modifiedTime;
 
-    private String updateAccount;
+    private String modifierAccount;
 
     private Integer actiViews;
 
@@ -64,6 +64,8 @@ public class TbActivity implements Serializable {
     private String showApplyNum;
 
     private String applyCheck;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -179,44 +181,44 @@ public class TbActivity implements Serializable {
         this.actiPosterUrl = actiPosterUrl == null ? null : actiPosterUrl.trim();
     }
 
-    public String getStatus() {
-        return status;
+    public String getActiStatus() {
+        return actiStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus == null ? null : actiStatus.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount == null ? null : createAccount.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
-    public String getUpdateAccount() {
-        return updateAccount;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount == null ? null : updateAccount.trim();
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
     public Integer getActiViews() {
@@ -307,6 +309,14 @@ public class TbActivity implements Serializable {
         this.applyCheck = applyCheck == null ? null : applyCheck.trim();
     }
 
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -333,11 +343,11 @@ public class TbActivity implements Serializable {
             && (this.getActiOrganizer() == null ? other.getActiOrganizer() == null : this.getActiOrganizer().equals(other.getActiOrganizer()))
             && (this.getActiNumber() == null ? other.getActiNumber() == null : this.getActiNumber().equals(other.getActiNumber()))
             && (this.getActiPosterUrl() == null ? other.getActiPosterUrl() == null : this.getActiPosterUrl().equals(other.getActiPosterUrl()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
+            && (this.getActiStatus() == null ? other.getActiStatus() == null : this.getActiStatus().equals(other.getActiStatus()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getActiViews() == null ? other.getActiViews() == null : this.getActiViews().equals(other.getActiViews()))
             && (this.getActiLike() == null ? other.getActiLike() == null : this.getActiLike().equals(other.getActiLike()))
             && (this.getApplyNum() == null ? other.getApplyNum() == null : this.getApplyNum().equals(other.getApplyNum()))
@@ -348,7 +358,8 @@ public class TbActivity implements Serializable {
             && (this.getIssueTime() == null ? other.getIssueTime() == null : this.getIssueTime().equals(other.getIssueTime()))
             && (this.getIssueAccount() == null ? other.getIssueAccount() == null : this.getIssueAccount().equals(other.getIssueAccount()))
             && (this.getShowApplyNum() == null ? other.getShowApplyNum() == null : this.getShowApplyNum().equals(other.getShowApplyNum()))
-            && (this.getApplyCheck() == null ? other.getApplyCheck() == null : this.getApplyCheck().equals(other.getApplyCheck()));
+            && (this.getApplyCheck() == null ? other.getApplyCheck() == null : this.getApplyCheck().equals(other.getApplyCheck()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -369,11 +380,11 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getActiOrganizer() == null) ? 0 : getActiOrganizer().hashCode());
         result = prime * result + ((getActiNumber() == null) ? 0 : getActiNumber().hashCode());
         result = prime * result + ((getActiPosterUrl() == null) ? 0 : getActiPosterUrl().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
+        result = prime * result + ((getActiStatus() == null) ? 0 : getActiStatus().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getActiViews() == null) ? 0 : getActiViews().hashCode());
         result = prime * result + ((getActiLike() == null) ? 0 : getActiLike().hashCode());
         result = prime * result + ((getApplyNum() == null) ? 0 : getApplyNum().hashCode());
@@ -385,6 +396,7 @@ public class TbActivity implements Serializable {
         result = prime * result + ((getIssueAccount() == null) ? 0 : getIssueAccount().hashCode());
         result = prime * result + ((getShowApplyNum() == null) ? 0 : getShowApplyNum().hashCode());
         result = prime * result + ((getApplyCheck() == null) ? 0 : getApplyCheck().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -408,11 +420,11 @@ public class TbActivity implements Serializable {
         sb.append(", actiOrganizer=").append(actiOrganizer);
         sb.append(", actiNumber=").append(actiNumber);
         sb.append(", actiPosterUrl=").append(actiPosterUrl);
-        sb.append(", status=").append(status);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", createAccount=").append(createAccount);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", updateAccount=").append(updateAccount);
+        sb.append(", actiStatus=").append(actiStatus);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", actiViews=").append(actiViews);
         sb.append(", actiLike=").append(actiLike);
         sb.append(", applyNum=").append(applyNum);
@@ -424,6 +436,7 @@ public class TbActivity implements Serializable {
         sb.append(", issueAccount=").append(issueAccount);
         sb.append(", showApplyNum=").append(showApplyNum);
         sb.append(", applyCheck=").append(applyCheck);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -12,7 +12,9 @@ public class TbParkLike implements Serializable {
 
     private Date likeTime;
 
-    private String status;
+    private String likeStatus;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -48,12 +50,20 @@ public class TbParkLike implements Serializable {
         this.likeTime = likeTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getLikeStatus() {
+        return likeStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setLikeStatus(String likeStatus) {
+        this.likeStatus = likeStatus == null ? null : likeStatus.trim();
+    }
+
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -72,7 +82,8 @@ public class TbParkLike implements Serializable {
             && (this.getLikeParentId() == null ? other.getLikeParentId() == null : this.getLikeParentId().equals(other.getLikeParentId()))
             && (this.getLikeAccount() == null ? other.getLikeAccount() == null : this.getLikeAccount().equals(other.getLikeAccount()))
             && (this.getLikeTime() == null ? other.getLikeTime() == null : this.getLikeTime().equals(other.getLikeTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getLikeStatus() == null ? other.getLikeStatus() == null : this.getLikeStatus().equals(other.getLikeStatus()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -83,7 +94,8 @@ public class TbParkLike implements Serializable {
         result = prime * result + ((getLikeParentId() == null) ? 0 : getLikeParentId().hashCode());
         result = prime * result + ((getLikeAccount() == null) ? 0 : getLikeAccount().hashCode());
         result = prime * result + ((getLikeTime() == null) ? 0 : getLikeTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getLikeStatus() == null) ? 0 : getLikeStatus().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -97,7 +109,8 @@ public class TbParkLike implements Serializable {
         sb.append(", likeParentId=").append(likeParentId);
         sb.append(", likeAccount=").append(likeAccount);
         sb.append(", likeTime=").append(likeTime);
-        sb.append(", status=").append(status);
+        sb.append(", likeStatus=").append(likeStatus);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -8,15 +8,17 @@ public class TbActivityType implements Serializable {
 
     private String typeName;
 
-    private String createAccount;
+    private String creatorAccount;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private String updateAccount;
+    private String modifierAccount;
 
-    private Date updateTime;
+    private Date modifiedTime;
 
-    private String status;
+    private String typeStatus;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -36,44 +38,52 @@ public class TbActivityType implements Serializable {
         this.typeName = typeName == null ? null : typeName.trim();
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount == null ? null : createAccount.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getUpdateAccount() {
-        return updateAccount;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount == null ? null : updateAccount.trim();
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTypeStatus() {
+        return typeStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setTypeStatus(String typeStatus) {
+        this.typeStatus = typeStatus == null ? null : typeStatus.trim();
+    }
+
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -90,11 +100,12 @@ public class TbActivityType implements Serializable {
         TbActivityType other = (TbActivityType) that;
         return (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
             && (this.getTypeName() == null ? other.getTypeName() == null : this.getTypeName().equals(other.getTypeName()))
-            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getTypeStatus() == null ? other.getTypeStatus() == null : this.getTypeStatus().equals(other.getTypeStatus()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -103,11 +114,12 @@ public class TbActivityType implements Serializable {
         int result = 1;
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         result = prime * result + ((getTypeName() == null) ? 0 : getTypeName().hashCode());
-        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getTypeStatus() == null) ? 0 : getTypeStatus().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -119,11 +131,12 @@ public class TbActivityType implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", typeId=").append(typeId);
         sb.append(", typeName=").append(typeName);
-        sb.append(", createAccount=").append(createAccount);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateAccount=").append(updateAccount);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", status=").append(status);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", typeStatus=").append(typeStatus);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

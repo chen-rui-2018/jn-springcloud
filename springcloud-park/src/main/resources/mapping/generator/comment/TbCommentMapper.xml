@@ -6,12 +6,13 @@
     <result column="root_id" jdbcType="VARCHAR" property="rootId" />
     <result column="p_id" jdbcType="VARCHAR" property="pId" />
     <result column="parent_account" jdbcType="VARCHAR" property="parentAccount" />
-    <result column="com_account" jdbcType="VARCHAR" property="comAccount" />
-    <result column="com_time" jdbcType="TIMESTAMP" property="comTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="like_num" jdbcType="INTEGER" property="likeNum" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="com_status" jdbcType="VARCHAR" property="comStatus" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
     <result column="com_content" jdbcType="VARCHAR" property="comContent" />
+    <result column="record_status" jdbcType="BIT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +73,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, root_id, p_id, parent_account, com_account, com_time, like_num, status, com_type, 
-    com_content
+    id, root_id, p_id, parent_account, creator_account, created_time, like_num, com_status, 
+    com_type, com_content, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
@@ -107,13 +108,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment (id, root_id, p_id, 
-      parent_account, com_account, com_time, 
-      like_num, status, com_type, 
-      com_content)
+      parent_account, creator_account, created_time, 
+      like_num, com_status, com_type, 
+      com_content, record_status)
     values (#{id,jdbcType=VARCHAR}, #{rootId,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, 
-      #{parentAccount,jdbcType=VARCHAR}, #{comAccount,jdbcType=VARCHAR}, #{comTime,jdbcType=TIMESTAMP}, 
-      #{likeNum,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
-      #{comContent,jdbcType=VARCHAR})
+      #{parentAccount,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{likeNum,jdbcType=INTEGER}, #{comStatus,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
+      #{comContent,jdbcType=VARCHAR}, #{recordStatus,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment
@@ -130,23 +131,26 @@
       <if test="parentAccount != null">
         parent_account,
       </if>
-      <if test="comAccount != null">
-        com_account,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="comTime != null">
-        com_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
       <if test="likeNum != null">
         like_num,
       </if>
-      <if test="status != null">
-        status,
+      <if test="comStatus != null">
+        com_status,
       </if>
       <if test="comType != null">
         com_type,
       </if>
       <if test="comContent != null">
         com_content,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -162,23 +166,26 @@
       <if test="parentAccount != null">
         #{parentAccount,jdbcType=VARCHAR},
       </if>
-      <if test="comAccount != null">
-        #{comAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="comTime != null">
-        #{comTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="likeNum != null">
         #{likeNum,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="comStatus != null">
+        #{comStatus,jdbcType=VARCHAR},
       </if>
       <if test="comType != null">
         #{comType,jdbcType=VARCHAR},
       </if>
       <if test="comContent != null">
         #{comContent,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -203,23 +210,26 @@
       <if test="record.parentAccount != null">
         parent_account = #{record.parentAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.comAccount != null">
-        com_account = #{record.comAccount,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.comTime != null">
-        com_time = #{record.comTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.likeNum != null">
         like_num = #{record.likeNum,jdbcType=INTEGER},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.comStatus != null">
+        com_status = #{record.comStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.comType != null">
         com_type = #{record.comType,jdbcType=VARCHAR},
       </if>
       <if test="record.comContent != null">
         com_content = #{record.comContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -232,12 +242,13 @@
       root_id = #{record.rootId,jdbcType=VARCHAR},
       p_id = #{record.pId,jdbcType=VARCHAR},
       parent_account = #{record.parentAccount,jdbcType=VARCHAR},
-      com_account = #{record.comAccount,jdbcType=VARCHAR},
-      com_time = #{record.comTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       like_num = #{record.likeNum,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=VARCHAR},
+      com_status = #{record.comStatus,jdbcType=VARCHAR},
       com_type = #{record.comType,jdbcType=VARCHAR},
-      com_content = #{record.comContent,jdbcType=VARCHAR}
+      com_content = #{record.comContent,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -254,23 +265,26 @@
       <if test="parentAccount != null">
         parent_account = #{parentAccount,jdbcType=VARCHAR},
       </if>
-      <if test="comAccount != null">
-        com_account = #{comAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="comTime != null">
-        com_time = #{comTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="likeNum != null">
         like_num = #{likeNum,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="comStatus != null">
+        com_status = #{comStatus,jdbcType=VARCHAR},
       </if>
       <if test="comType != null">
         com_type = #{comType,jdbcType=VARCHAR},
       </if>
       <if test="comContent != null">
         com_content = #{comContent,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -280,12 +294,13 @@
     set root_id = #{rootId,jdbcType=VARCHAR},
       p_id = #{pId,jdbcType=VARCHAR},
       parent_account = #{parentAccount,jdbcType=VARCHAR},
-      com_account = #{comAccount,jdbcType=VARCHAR},
-      com_time = #{comTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       like_num = #{likeNum,jdbcType=INTEGER},
-      status = #{status,jdbcType=VARCHAR},
+      com_status = #{comStatus,jdbcType=VARCHAR},
       com_type = #{comType,jdbcType=VARCHAR},
-      com_content = #{comContent,jdbcType=VARCHAR}
+      com_content = #{comContent,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=BIT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

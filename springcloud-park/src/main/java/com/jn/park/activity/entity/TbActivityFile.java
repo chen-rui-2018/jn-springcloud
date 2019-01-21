@@ -10,15 +10,17 @@ public class TbActivityFile implements Serializable {
 
     private String fileSrc;
 
-    private String createAccount;
+    private String creatorAccount;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private String updateAccount;
+    private String modifierAccount;
 
-    private Date updateTime;
+    private Date modifiedTime;
 
-    private String status;
+    private String fileStatus;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -46,44 +48,52 @@ public class TbActivityFile implements Serializable {
         this.fileSrc = fileSrc == null ? null : fileSrc.trim();
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount == null ? null : createAccount.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getUpdateAccount() {
-        return updateAccount;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount == null ? null : updateAccount.trim();
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getFileStatus() {
+        return fileStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setFileStatus(String fileStatus) {
+        this.fileStatus = fileStatus == null ? null : fileStatus.trim();
+    }
+
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -101,11 +111,12 @@ public class TbActivityFile implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getTypeId() == null ? other.getTypeId() == null : this.getTypeId().equals(other.getTypeId()))
             && (this.getFileSrc() == null ? other.getFileSrc() == null : this.getFileSrc().equals(other.getFileSrc()))
-            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getFileStatus() == null ? other.getFileStatus() == null : this.getFileStatus().equals(other.getFileStatus()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -115,11 +126,12 @@ public class TbActivityFile implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getTypeId() == null) ? 0 : getTypeId().hashCode());
         result = prime * result + ((getFileSrc() == null) ? 0 : getFileSrc().hashCode());
-        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getFileStatus() == null) ? 0 : getFileStatus().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -132,11 +144,12 @@ public class TbActivityFile implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", typeId=").append(typeId);
         sb.append(", fileSrc=").append(fileSrc);
-        sb.append(", createAccount=").append(createAccount);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateAccount=").append(updateAccount);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", status=").append(status);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", fileStatus=").append(fileStatus);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -375,73 +375,133 @@ public class TbParkLikeCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andLikeStatusIsNull() {
+            addCriterion("like_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andLikeStatusIsNotNull() {
+            addCriterion("like_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(String value) {
-            addCriterion("status =", value, "status");
+        public Criteria andLikeStatusEqualTo(String value) {
+            addCriterion("like_status =", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andLikeStatusNotEqualTo(String value) {
+            addCriterion("like_status <>", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(String value) {
-            addCriterion("status >", value, "status");
+        public Criteria andLikeStatusGreaterThan(String value) {
+            addCriterion("like_status >", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andLikeStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("like_status >=", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(String value) {
-            addCriterion("status <", value, "status");
+        public Criteria andLikeStatusLessThan(String value) {
+            addCriterion("like_status <", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andLikeStatusLessThanOrEqualTo(String value) {
+            addCriterion("like_status <=", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLike(String value) {
-            addCriterion("status like", value, "status");
+        public Criteria andLikeStatusLike(String value) {
+            addCriterion("like_status like", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotLike(String value) {
-            addCriterion("status not like", value, "status");
+        public Criteria andLikeStatusNotLike(String value) {
+            addCriterion("like_status not like", value, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<String> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andLikeStatusIn(List<String> values) {
+            addCriterion("like_status in", values, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andLikeStatusNotIn(List<String> values) {
+            addCriterion("like_status not in", values, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andLikeStatusBetween(String value1, String value2) {
+            addCriterion("like_status between", value1, value2, "likeStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andLikeStatusNotBetween(String value1, String value2) {
+            addCriterion("like_status not between", value1, value2, "likeStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNull() {
+            addCriterion("record_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNotNull() {
+            addCriterion("record_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusEqualTo(Boolean value) {
+            addCriterion("record_status =", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotEqualTo(Boolean value) {
+            addCriterion("record_status <>", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThan(Boolean value) {
+            addCriterion("record_status >", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("record_status >=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThan(Boolean value) {
+            addCriterion("record_status <", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThanOrEqualTo(Boolean value) {
+            addCriterion("record_status <=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIn(List<Boolean> values) {
+            addCriterion("record_status in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotIn(List<Boolean> values) {
+            addCriterion("record_status not in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusBetween(Boolean value1, Boolean value2) {
+            addCriterion("record_status between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
     }

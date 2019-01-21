@@ -4,11 +4,12 @@
   <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivityType">
     <id column="type_id" jdbcType="VARCHAR" property="typeId" />
     <result column="type_name" jdbcType="VARCHAR" property="typeName" />
-    <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="type_status" jdbcType="VARCHAR" property="typeStatus" />
+    <result column="record_status" jdbcType="BIT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    type_id, type_name, create_account, create_time, update_account, update_time, status
+    type_id, type_name, creator_account, created_time, modifier_account, modified_time, 
+    type_status, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityTypeCriteria" resultMap="BaseResultMap">
     select
@@ -102,12 +104,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityType">
-    insert into tb_activity_type (type_id, type_name, create_account, 
-      create_time, update_account, update_time, 
-      status)
-    values (#{typeId,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{createAccount,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR})
+    insert into tb_activity_type (type_id, type_name, creator_account, 
+      created_time, modifier_account, modified_time, 
+      type_status, record_status)
+    values (#{typeId,jdbcType=VARCHAR}, #{typeName,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{typeStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityType">
     insert into tb_activity_type
@@ -118,20 +120,23 @@
       <if test="typeName != null">
         type_name,
       </if>
-      <if test="createAccount != null">
-        create_account,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
-      <if test="updateAccount != null">
-        update_account,
+      <if test="modifierAccount != null">
+        modifier_account,
       </if>
-      <if test="updateTime != null">
-        update_time,
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
-      <if test="status != null">
-        status,
+      <if test="typeStatus != null">
+        type_status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -141,20 +146,23 @@
       <if test="typeName != null">
         #{typeName,jdbcType=VARCHAR},
       </if>
-      <if test="createAccount != null">
-        #{createAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAccount != null">
-        #{updateAccount,jdbcType=VARCHAR},
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="typeStatus != null">
+        #{typeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -173,20 +181,23 @@
       <if test="record.typeName != null">
         type_name = #{record.typeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.createAccount != null">
-        create_account = #{record.createAccount,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateAccount != null">
-        update_account = #{record.updateAccount,jdbcType=VARCHAR},
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.typeStatus != null">
+        type_status = #{record.typeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -197,11 +208,12 @@
     update tb_activity_type
     set type_id = #{record.typeId,jdbcType=VARCHAR},
       type_name = #{record.typeName,jdbcType=VARCHAR},
-      create_account = #{record.createAccount,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_account = #{record.updateAccount,jdbcType=VARCHAR},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      type_status = #{record.typeStatus,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -212,20 +224,23 @@
       <if test="typeName != null">
         type_name = #{typeName,jdbcType=VARCHAR},
       </if>
-      <if test="createAccount != null">
-        create_account = #{createAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateAccount != null">
-        update_account = #{updateAccount,jdbcType=VARCHAR},
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="typeStatus != null">
+        type_status = #{typeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=BIT},
       </if>
     </set>
     where type_id = #{typeId,jdbcType=VARCHAR}
@@ -233,11 +248,12 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbActivityType">
     update tb_activity_type
     set type_name = #{typeName,jdbcType=VARCHAR},
-      create_account = #{createAccount,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_account = #{updateAccount,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      type_status = #{typeStatus,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=BIT}
     where type_id = #{typeId,jdbcType=VARCHAR}
   </update>
 </mapper>

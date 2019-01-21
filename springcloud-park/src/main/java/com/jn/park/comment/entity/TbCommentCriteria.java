@@ -385,133 +385,133 @@ public class TbCommentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andComAccountIsNull() {
-            addCriterion("com_account is null");
+        public Criteria andCreatorAccountIsNull() {
+            addCriterion("creator_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountIsNotNull() {
-            addCriterion("com_account is not null");
+        public Criteria andCreatorAccountIsNotNull() {
+            addCriterion("creator_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountEqualTo(String value) {
-            addCriterion("com_account =", value, "comAccount");
+        public Criteria andCreatorAccountEqualTo(String value) {
+            addCriterion("creator_account =", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountNotEqualTo(String value) {
-            addCriterion("com_account <>", value, "comAccount");
+        public Criteria andCreatorAccountNotEqualTo(String value) {
+            addCriterion("creator_account <>", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountGreaterThan(String value) {
-            addCriterion("com_account >", value, "comAccount");
+        public Criteria andCreatorAccountGreaterThan(String value) {
+            addCriterion("creator_account >", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("com_account >=", value, "comAccount");
+        public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("creator_account >=", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountLessThan(String value) {
-            addCriterion("com_account <", value, "comAccount");
+        public Criteria andCreatorAccountLessThan(String value) {
+            addCriterion("creator_account <", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountLessThanOrEqualTo(String value) {
-            addCriterion("com_account <=", value, "comAccount");
+        public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
+            addCriterion("creator_account <=", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountLike(String value) {
-            addCriterion("com_account like", value, "comAccount");
+        public Criteria andCreatorAccountLike(String value) {
+            addCriterion("creator_account like", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountNotLike(String value) {
-            addCriterion("com_account not like", value, "comAccount");
+        public Criteria andCreatorAccountNotLike(String value) {
+            addCriterion("creator_account not like", value, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountIn(List<String> values) {
-            addCriterion("com_account in", values, "comAccount");
+        public Criteria andCreatorAccountIn(List<String> values) {
+            addCriterion("creator_account in", values, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountNotIn(List<String> values) {
-            addCriterion("com_account not in", values, "comAccount");
+        public Criteria andCreatorAccountNotIn(List<String> values) {
+            addCriterion("creator_account not in", values, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountBetween(String value1, String value2) {
-            addCriterion("com_account between", value1, value2, "comAccount");
+        public Criteria andCreatorAccountBetween(String value1, String value2) {
+            addCriterion("creator_account between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComAccountNotBetween(String value1, String value2) {
-            addCriterion("com_account not between", value1, value2, "comAccount");
+        public Criteria andCreatorAccountNotBetween(String value1, String value2) {
+            addCriterion("creator_account not between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeIsNull() {
-            addCriterion("com_time is null");
+        public Criteria andCreatedTimeIsNull() {
+            addCriterion("created_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeIsNotNull() {
-            addCriterion("com_time is not null");
+        public Criteria andCreatedTimeIsNotNull() {
+            addCriterion("created_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeEqualTo(Date value) {
-            addCriterion("com_time =", value, "comTime");
+        public Criteria andCreatedTimeEqualTo(Date value) {
+            addCriterion("created_time =", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeNotEqualTo(Date value) {
-            addCriterion("com_time <>", value, "comTime");
+        public Criteria andCreatedTimeNotEqualTo(Date value) {
+            addCriterion("created_time <>", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeGreaterThan(Date value) {
-            addCriterion("com_time >", value, "comTime");
+        public Criteria andCreatedTimeGreaterThan(Date value) {
+            addCriterion("created_time >", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("com_time >=", value, "comTime");
+        public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_time >=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeLessThan(Date value) {
-            addCriterion("com_time <", value, "comTime");
+        public Criteria andCreatedTimeLessThan(Date value) {
+            addCriterion("created_time <", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeLessThanOrEqualTo(Date value) {
-            addCriterion("com_time <=", value, "comTime");
+        public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("created_time <=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeIn(List<Date> values) {
-            addCriterion("com_time in", values, "comTime");
+        public Criteria andCreatedTimeIn(List<Date> values) {
+            addCriterion("created_time in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeNotIn(List<Date> values) {
-            addCriterion("com_time not in", values, "comTime");
+        public Criteria andCreatedTimeNotIn(List<Date> values) {
+            addCriterion("created_time not in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeBetween(Date value1, Date value2) {
-            addCriterion("com_time between", value1, value2, "comTime");
+        public Criteria andCreatedTimeBetween(Date value1, Date value2) {
+            addCriterion("created_time between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andComTimeNotBetween(Date value1, Date value2) {
-            addCriterion("com_time not between", value1, value2, "comTime");
+        public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
@@ -575,73 +575,73 @@ public class TbCommentCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNull() {
-            addCriterion("status is null");
+        public Criteria andComStatusIsNull() {
+            addCriterion("com_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIsNotNull() {
-            addCriterion("status is not null");
+        public Criteria andComStatusIsNotNull() {
+            addCriterion("com_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStatusEqualTo(String value) {
-            addCriterion("status =", value, "status");
+        public Criteria andComStatusEqualTo(String value) {
+            addCriterion("com_status =", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotEqualTo(String value) {
-            addCriterion("status <>", value, "status");
+        public Criteria andComStatusNotEqualTo(String value) {
+            addCriterion("com_status <>", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThan(String value) {
-            addCriterion("status >", value, "status");
+        public Criteria andComStatusGreaterThan(String value) {
+            addCriterion("com_status >", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusGreaterThanOrEqualTo(String value) {
-            addCriterion("status >=", value, "status");
+        public Criteria andComStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("com_status >=", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThan(String value) {
-            addCriterion("status <", value, "status");
+        public Criteria andComStatusLessThan(String value) {
+            addCriterion("com_status <", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLessThanOrEqualTo(String value) {
-            addCriterion("status <=", value, "status");
+        public Criteria andComStatusLessThanOrEqualTo(String value) {
+            addCriterion("com_status <=", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusLike(String value) {
-            addCriterion("status like", value, "status");
+        public Criteria andComStatusLike(String value) {
+            addCriterion("com_status like", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotLike(String value) {
-            addCriterion("status not like", value, "status");
+        public Criteria andComStatusNotLike(String value) {
+            addCriterion("com_status not like", value, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusIn(List<String> values) {
-            addCriterion("status in", values, "status");
+        public Criteria andComStatusIn(List<String> values) {
+            addCriterion("com_status in", values, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotIn(List<String> values) {
-            addCriterion("status not in", values, "status");
+        public Criteria andComStatusNotIn(List<String> values) {
+            addCriterion("com_status not in", values, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusBetween(String value1, String value2) {
-            addCriterion("status between", value1, value2, "status");
+        public Criteria andComStatusBetween(String value1, String value2) {
+            addCriterion("com_status between", value1, value2, "comStatus");
             return (Criteria) this;
         }
 
-        public Criteria andStatusNotBetween(String value1, String value2) {
-            addCriterion("status not between", value1, value2, "status");
+        public Criteria andComStatusNotBetween(String value1, String value2) {
+            addCriterion("com_status not between", value1, value2, "comStatus");
             return (Criteria) this;
         }
 
@@ -782,6 +782,66 @@ public class TbCommentCriteria {
 
         public Criteria andComContentNotBetween(String value1, String value2) {
             addCriterion("com_content not between", value1, value2, "comContent");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNull() {
+            addCriterion("record_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIsNotNull() {
+            addCriterion("record_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusEqualTo(Boolean value) {
+            addCriterion("record_status =", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotEqualTo(Boolean value) {
+            addCriterion("record_status <>", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThan(Boolean value) {
+            addCriterion("record_status >", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("record_status >=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThan(Boolean value) {
+            addCriterion("record_status <", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusLessThanOrEqualTo(Boolean value) {
+            addCriterion("record_status <=", value, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusIn(List<Boolean> values) {
+            addCriterion("record_status in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotIn(List<Boolean> values) {
+            addCriterion("record_status not in", values, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusBetween(Boolean value1, Boolean value2) {
+            addCriterion("record_status between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecordStatusNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
     }

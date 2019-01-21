@@ -14,15 +14,15 @@ public class TbParkCode implements Serializable {
 
     private String codeName;
 
-    private String status;
+    private String creatorAccount;
 
-    private String createAccount;
+    private Date createdTime;
 
-    private Date createTime;
+    private String modifierAccount;
 
-    private String updateAccount;
+    private Date modifiedTime;
 
-    private Date updateTime;
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -66,44 +66,44 @@ public class TbParkCode implements Serializable {
         this.codeName = codeName == null ? null : codeName.trim();
     }
 
-    public String getStatus() {
-        return status;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount == null ? null : createAccount.trim();
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public String getUpdateAccount() {
-        return updateAccount;
+    public Date getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount == null ? null : updateAccount.trim();
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
+    public Boolean getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -123,11 +123,11 @@ public class TbParkCode implements Serializable {
             && (this.getGroupName() == null ? other.getGroupName() == null : this.getGroupName().equals(other.getGroupName()))
             && (this.getCodeValue() == null ? other.getCodeValue() == null : this.getCodeValue().equals(other.getCodeValue()))
             && (this.getCodeName() == null ? other.getCodeName() == null : this.getCodeName().equals(other.getCodeName()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getCreateAccount() == null ? other.getCreateAccount() == null : this.getCreateAccount().equals(other.getCreateAccount()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateAccount() == null ? other.getUpdateAccount() == null : this.getUpdateAccount().equals(other.getUpdateAccount()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -139,11 +139,11 @@ public class TbParkCode implements Serializable {
         result = prime * result + ((getGroupName() == null) ? 0 : getGroupName().hashCode());
         result = prime * result + ((getCodeValue() == null) ? 0 : getCodeValue().hashCode());
         result = prime * result + ((getCodeName() == null) ? 0 : getCodeName().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getCreateAccount() == null) ? 0 : getCreateAccount().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getUpdateAccount() == null) ? 0 : getUpdateAccount().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -158,11 +158,11 @@ public class TbParkCode implements Serializable {
         sb.append(", groupName=").append(groupName);
         sb.append(", codeValue=").append(codeValue);
         sb.append(", codeName=").append(codeName);
-        sb.append(", status=").append(status);
-        sb.append(", createAccount=").append(createAccount);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateAccount=").append(updateAccount);
-        sb.append(", updateTime=").append(updateTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -7,11 +7,11 @@
     <result column="group_name" jdbcType="VARCHAR" property="groupName" />
     <result column="code_value" jdbcType="VARCHAR" property="codeValue" />
     <result column="code_name" jdbcType="VARCHAR" property="codeName" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="create_account" jdbcType="VARCHAR" property="createAccount" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_account" jdbcType="VARCHAR" property="updateAccount" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="BIT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, group_id, group_name, code_value, code_name, status, create_account, create_time, 
-    update_account, update_time
+    id, group_id, group_name, code_value, code_name, creator_account, created_time, modifier_account, 
+    modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.parkcode.entity.TbParkCodeCriteria" resultMap="BaseResultMap">
     select
@@ -107,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.park.parkcode.entity.TbParkCode">
     insert into tb_park_code (id, group_id, group_name, 
-      code_value, code_name, status, 
-      create_account, create_time, update_account, 
-      update_time)
+      code_value, code_name, creator_account, 
+      created_time, modifier_account, modified_time, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
-      #{codeValue,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
-      #{createAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateAccount,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{codeValue,jdbcType=VARCHAR}, #{codeName,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.parkcode.entity.TbParkCode">
     insert into tb_park_code
@@ -133,20 +133,20 @@
       <if test="codeName != null">
         code_name,
       </if>
-      <if test="status != null">
-        status,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="createAccount != null">
-        create_account,
+      <if test="createdTime != null">
+        created_time,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="modifierAccount != null">
+        modifier_account,
       </if>
-      <if test="updateAccount != null">
-        update_account,
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
-      <if test="updateTime != null">
-        update_time,
+      <if test="recordStatus != null">
+        record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -165,20 +165,20 @@
       <if test="codeName != null">
         #{codeName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createAccount != null">
-        #{createAccount,jdbcType=VARCHAR},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="updateAccount != null">
-        #{updateAccount,jdbcType=VARCHAR},
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -206,20 +206,20 @@
       <if test="record.codeName != null">
         code_name = #{record.codeName,jdbcType=VARCHAR},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createAccount != null">
-        create_account = #{record.createAccount,jdbcType=VARCHAR},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.updateAccount != null">
-        update_account = #{record.updateAccount,jdbcType=VARCHAR},
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -233,11 +233,11 @@
       group_name = #{record.groupName,jdbcType=VARCHAR},
       code_value = #{record.codeValue,jdbcType=VARCHAR},
       code_name = #{record.codeName,jdbcType=VARCHAR},
-      status = #{record.status,jdbcType=VARCHAR},
-      create_account = #{record.createAccount,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_account = #{record.updateAccount,jdbcType=VARCHAR},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -257,20 +257,20 @@
       <if test="codeName != null">
         code_name = #{codeName,jdbcType=VARCHAR},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createAccount != null">
-        create_account = #{createAccount,jdbcType=VARCHAR},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="updateAccount != null">
-        update_account = #{updateAccount,jdbcType=VARCHAR},
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -281,11 +281,11 @@
       group_name = #{groupName,jdbcType=VARCHAR},
       code_value = #{codeValue,jdbcType=VARCHAR},
       code_name = #{codeName,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      create_account = #{createAccount,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_account = #{updateAccount,jdbcType=VARCHAR},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=BIT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

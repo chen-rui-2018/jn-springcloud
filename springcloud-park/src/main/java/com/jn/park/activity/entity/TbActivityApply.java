@@ -8,9 +8,9 @@ public class TbActivityApply implements Serializable {
 
     private String activityId;
 
-    private String account;
+    private String creatorAccount;
 
-    private Date applyTime;
+    private Date createdTime;
 
     private String applyStatus;
 
@@ -19,6 +19,8 @@ public class TbActivityApply implements Serializable {
     private Date signTime;
 
     private String signType;
+
+    private Boolean recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -38,20 +40,20 @@ public class TbActivityApply implements Serializable {
         this.activityId = activityId == null ? null : activityId.trim();
     }
 
-    public String getAccount() {
-        return account;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setAccount(String account) {
-        this.account = account == null ? null : account.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public Date getApplyTime() {
-        return applyTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setApplyTime(Date applyTime) {
-        this.applyTime = applyTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getApplyStatus() {
@@ -86,6 +88,14 @@ public class TbActivityApply implements Serializable {
         this.signType = signType == null ? null : signType.trim();
     }
 
+    public Boolean getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Boolean recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -100,12 +110,13 @@ public class TbActivityApply implements Serializable {
         TbActivityApply other = (TbActivityApply) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getActivityId() == null ? other.getActivityId() == null : this.getActivityId().equals(other.getActivityId()))
-            && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
-            && (this.getApplyTime() == null ? other.getApplyTime() == null : this.getApplyTime().equals(other.getApplyTime()))
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getApplyStatus() == null ? other.getApplyStatus() == null : this.getApplyStatus().equals(other.getApplyStatus()))
             && (this.getSignStatus() == null ? other.getSignStatus() == null : this.getSignStatus().equals(other.getSignStatus()))
             && (this.getSignTime() == null ? other.getSignTime() == null : this.getSignTime().equals(other.getSignTime()))
-            && (this.getSignType() == null ? other.getSignType() == null : this.getSignType().equals(other.getSignType()));
+            && (this.getSignType() == null ? other.getSignType() == null : this.getSignType().equals(other.getSignType()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -114,12 +125,13 @@ public class TbActivityApply implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getActivityId() == null) ? 0 : getActivityId().hashCode());
-        result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
-        result = prime * result + ((getApplyTime() == null) ? 0 : getApplyTime().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getApplyStatus() == null) ? 0 : getApplyStatus().hashCode());
         result = prime * result + ((getSignStatus() == null) ? 0 : getSignStatus().hashCode());
         result = prime * result + ((getSignTime() == null) ? 0 : getSignTime().hashCode());
         result = prime * result + ((getSignType() == null) ? 0 : getSignType().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -131,12 +143,13 @@ public class TbActivityApply implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", activityId=").append(activityId);
-        sb.append(", account=").append(account);
-        sb.append(", applyTime=").append(applyTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
         sb.append(", applyStatus=").append(applyStatus);
         sb.append(", signStatus=").append(signStatus);
         sb.append(", signTime=").append(signTime);
         sb.append(", signType=").append(signType);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

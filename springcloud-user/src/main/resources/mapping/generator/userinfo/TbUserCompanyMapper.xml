@@ -40,6 +40,7 @@
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -104,7 +105,7 @@
     bank_name, bank_account, products, material, com_property, reg_capital, founding_time, 
     indu_type, industry, lic_starttime, lic_endtime, org_code, contact, con_phone, con_address, 
     postcode, com_adress, com_tele, addr_park, credit_points, com_type, checker, created_time, 
-    check_status, check_time, creator_account, modifier_account, modified_time
+    check_status, check_time, creator_account, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserCompanyCriteria" resultMap="BaseResultMap">
     select
@@ -149,7 +150,8 @@
       com_tele, addr_park, credit_points, 
       com_type, checker, created_time, 
       check_status, check_time, creator_account, 
-      modifier_account, modified_time)
+      modifier_account, modified_time, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{unifyCode,jdbcType=VARCHAR}, #{owners,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, 
@@ -162,7 +164,8 @@
       #{comTele,jdbcType=VARCHAR}, #{addrPark,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DOUBLE}, 
       #{comType,jdbcType=VARCHAR}, #{checker,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserCompany">
     insert into tb_user_company
@@ -281,6 +284,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -396,6 +402,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -522,6 +531,9 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -566,7 +578,8 @@
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -685,6 +698,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -726,7 +742,8 @@
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

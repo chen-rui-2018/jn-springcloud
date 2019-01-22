@@ -80,6 +80,8 @@ public class TbUserCompany implements Serializable {
 
     private Date modifiedTime;
 
+    private Byte recordStatus;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -386,6 +388,14 @@ public class TbUserCompany implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -435,7 +445,8 @@ public class TbUserCompany implements Serializable {
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -480,6 +491,7 @@ public class TbUserCompany implements Serializable {
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -527,6 +539,7 @@ public class TbUserCompany implements Serializable {
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

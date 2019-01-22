@@ -5,19 +5,19 @@
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="role_id" jdbcType="VARCHAR" property="roleId" javaType="java.lang.String"/>
         <result column="permission_id" jdbcType="VARCHAR" property="permissionId" javaType="java.lang.String"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" javaType="java.sql.Timestamp"/>
+        <result column="record_status" jdbcType="VARCHAR" property="recordStatus" javaType="java.lang.String"/>
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, role_id,permission_id,creator,create_time,status
+        select id, role_id,permission_id,creator_account,created_time,record_status
         from tb_sys_role_permission
     </select>
 
 
     <update id="deleteBy" parameterType="java.lang.String">
-        update tb_sys_role_permission set status=-1
+        update tb_sys_role_permission set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -25,7 +25,7 @@
     </update>
 
     <update id="deleteByRoleIds" parameterType="java.lang.String">
-        update tb_sys_role_permission set status=-1
+        update tb_sys_role_permission set record_status = 0
         where role_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -35,19 +35,19 @@
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
 
-        insert into tb_sys_role_permission (id, role_id,permission_id,creator,create_time,status) values
+        insert into tb_sys_role_permission (id, role_id,permission_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id,jdbcType=BIGINT},
             #{item.roleId,jdbcType=VARCHAR},
             #{item.permissionId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 
     <update id="deletePermissionBranch" parameterType="java.lang.String">
-        update tb_sys_role_permission set status=-1
+        update tb_sys_role_permission set record_status = 0
         where permission_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -55,18 +55,18 @@
     </update>
 
     <update id="deleteByPermissionId" parameterType="java.lang.String">
-        UPDATE tb_sys_role_permission SET `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
+        UPDATE tb_sys_role_permission SET record_status = 0 where permission_id = #{id,jdbcType=VARCHAR}
     </update>
 
     <insert id="addRoleToPermissionBranch" parameterType="java.util.List">
-        insert into tb_sys_role_permission (id, role_id,permission_id,creator,create_time,status) values
+        insert into tb_sys_role_permission (id, role_id,permission_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id,jdbcType=BIGINT},
             #{item.roleId,jdbcType=VARCHAR},
             #{item.permissionId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 
@@ -75,13 +75,15 @@
         select
             t2.id,
             t2.role_name as roleName,
-            t2.creator,
-            t2.create_time as createTime,
-            t2.`status`
+            t2.creator_account as creatorAccount,
+            t2.created_time as createdTime,
+            t2.record_status as recordStatus
         from tb_sys_role_permission t1,tb_sys_role t2
-            where t1.role_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
+            where t1.role_id = t2.id
+            and t1.`record_status` = 1
+            and t2.`record_status` = 1
             and t1.permission_id = #{id,jdbcType=VARCHAR}
-            ORDER BY t2.create_time ASC
+            ORDER BY t2.created_time ASC
     </select>
 
     <select id="findPermissionNameByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -90,10 +92,10 @@
         from tb_sys_permission t1,
         tb_sys_role_permission t2
         where t1.id = t2.permission_id
-        and t1.`status` = '1'
-        and t2.`status` = '1'
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and role_id = #{id,jdbcType=VARCHAR}
-        order by t1.create_time asc
+        order by t1.created_time asc
     </select>
 
     <select id="findPermissionByRoleId" parameterType="java.lang.String"
@@ -101,14 +103,14 @@
         select distinct
         t1.id,
         t1.permission_name as permissionName,
-        t1.create_time as createTime,
-        t1.`status`
+        t1.created_time as createdTime,
+        t1.`record_status` as recordStatus
         from tb_sys_permission t1,tb_sys_role_permission t2
         where t1.id = t2.permission_id
-        and t1.`status` = '1'
-        and t2.`status` = '1'
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and t2.role_id = #{id,jdbcType=VARCHAR}
-        ORDER BY t1.create_time ASC
+        ORDER BY t1.created_time ASC
     </select>
 
     <select id="findOtherUserGroup" parameterType="com.jn.system.permission.model.SysRolePermissionPage"
@@ -116,24 +118,24 @@
         select DISTINCT
         t.id,
         t.permission_name as permissionName,
-        t.create_time as createTime,
-        t.`status`
+        t.created_time as createdTime,
+        t.record_status as recordStatus
         from tb_sys_permission t left join
         (select t1.id,
         t1.permission_name
         from tb_sys_permission t1,
         tb_sys_role_permission t2
         where t1.id = t2.permission_id
-        and t1.`status` = '1'
-        and t2.`status` = '1'
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
         on t.id = tt.id
-        where t.`status` = '1'
+        where t.`record_status` = 1
         and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(permissionName)">
             and t.permission_name like CONCAT('%', #{permissionName,jdbcType=VARCHAR}, '%')
         </if>
-        ORDER BY t.create_time DESC,t.id DESC
+        ORDER BY t.created_time DESC,t.id DESC
     </select>
 
     <select id="findRoleByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionRolePage"
@@ -141,17 +143,24 @@
         select DISTINCT
         t.id,
         t.role_name as roleName,
-        t.create_time as createTime,
-        t.creator,
-        t.`status`
-        from tb_sys_role t left join
-        (SELECT t1.id,t1.role_name FROM `tb_sys_role` t1 ,tb_sys_role_permission t2
-        where t1.id = t2.role_id and t1.`status` = '1' and t2.`status` = '1'
+        t.created_time as createdTime,
+        t.creator_account as creatorAccount,
+        t.record_status as recordStatus
+        from tb_sys_role t
+        left join
+        (SELECT t1.id,t1.role_name
+        FROM `tb_sys_role` t1 ,
+        tb_sys_role_permission t2
+        where t1.id = t2.role_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        on t.id = tt.id
+        where t.`record_status` = 1
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
-        order by t.create_time desc,t.id desc
+        order by t.created_time desc,t.id desc
     </select>
 </mapper>

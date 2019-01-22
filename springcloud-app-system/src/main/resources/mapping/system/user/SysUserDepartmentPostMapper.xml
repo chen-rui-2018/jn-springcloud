@@ -5,41 +5,55 @@
     <select id="fingUserOfDepartment" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">
         select u.id,u.`name`
-        from tb_sys_user_department_post d , tb_sys_user u
+        from tb_sys_user_department_post d,
+        tb_sys_user u
         where d.user_id = u.id
-        and d.`status` = '1' and u.`status` = '1'
+        and d.`record_status` = 1
+        and u.`record_status` = 1
         and d.department_id = #{id,jdbcType=VARCHAR}
     </select>
 
     <select id="fingOtherUserByPage" parameterType="com.jn.system.dept.model.SysDepartmentUserPage"
             resultType="com.jn.system.user.model.SysTUser">
         select t.id,t.`name`
-        from tb_sys_user t left join
+        from tb_sys_user t
+        left join
         (select t1.id,t1.`name`
-        from tb_sys_user t1,tb_sys_user_department_post t2
-        where t1.id = t2.user_id and t1.id = t2.user_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.department_id = #{departmentId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where tt.id is null and t.`status` = '1'
+        from tb_sys_user t1,
+        tb_sys_user_department_post t2
+        where t1.id = t2.user_id
+        and t1.id = t2.user_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t2.department_id = #{departmentId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id
+        where tt.id is null
+        and t.`record_status` = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
         </if>
     </select>
 
     <update id="deleteUserOfDepartment" parameterType="java.lang.String">
-        update tb_sys_user_department_post set `status` = '-1' where department_id = #{id,jdbcType=VARCHAR}
+        update tb_sys_user_department_post set `record_status` = 0 where department_id = #{id,jdbcType=VARCHAR}
     </update>
 
 
     <select id="findUserByPostId" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">
-        select t2.id, t2.`name`
-        from tb_sys_user_department_post t1 , tb_sys_user t2
-        where t1.user_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
-        and post_id =  #{post_id,jdbcType=VARCHAR}
+        select
+        t2.id,
+        t2.`name`
+        from tb_sys_user_department_post t1,
+        tb_sys_user t2
+        where t1.user_id = t2.id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and post_id = #{post_id,jdbcType=VARCHAR}
     </select>
 
     <update id="deletePostBranch" parameterType="java.lang.String">
-        update tb_sys_user_department_post set status=-1
+        update tb_sys_user_department_post set record_status = 0
         where post_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -47,7 +61,7 @@
     </update>
 
     <update id="deleteDepartmentBranch" parameterType="java.util.List">
-        update tb_sys_user_department_post set status=-1
+        update tb_sys_user_department_post set record_status = 0
         where department_id in
         <foreach collection="list" item="id"
                  open="(" close=")" index="index" separator=",">
@@ -56,7 +70,7 @@
     </update>
 
     <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user_department_post set status=-1
+        update tb_sys_user_department_post set record_status = 0
         where user_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -69,9 +83,9 @@
         T2.id,
         T2.department_name as departmentName,
         T2.parent_id as parentId,
-        T2.creator,
-        T2.create_time as createTime,
-        T2.status,
+        T2.creator_account as creatorAccount,
+        T2.created_time as createdTime,
+        T2.record_status as recordStatus,
         T2.level
         FROM (
         SELECT
@@ -85,7 +99,7 @@
         JOIN tb_sys_department T2
         ON T1._id = T2.id
         WHERE T1.level >=1
-        AND T2.`status` = '1'
+        AND T2.`record_status` = 1
         ORDER BY T1.level asc;
     </select>
 
@@ -105,9 +119,9 @@
             where
             t1.department_id = t2.id
             AND t1.post_id = t3.id
-            and t1.`status` = '1'
-            and t2.`status` = '1'
-            and t3.`status` = '1'
+            and t1.`record_status` = 1
+            and t2.`record_status` = 1
+            and t3.`record_status` = 1
             and t1.user_id = #{id,jdbcType=VARCHAR}
             ORDER BY t1.is_default DESC
     </select>

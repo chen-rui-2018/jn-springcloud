@@ -63,7 +63,8 @@ public class SysFileServiceImpl implements SysFileService {
         TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
         TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
         criteria.andFileNameEqualTo(sysFile.getFileName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
         if (tbSysFiles != null && tbSysFiles.size() > 0) {
             logger.warn("[文件] 添加文件失败，该文件名称已存在！,fileName: {}", sysFile.getFileName());
@@ -161,7 +162,8 @@ public class SysFileServiceImpl implements SysFileService {
             TbSysFileCriteria tbSysFileCriteria = new TbSysFileCriteria();
             TbSysFileCriteria.Criteria criteria = tbSysFileCriteria.createCriteria();
             criteria.andFileNameEqualTo(fileName);
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+            criteria.andRecordStatusNotEqualTo(recordStatus);
             List<TbSysFile> tbSysFiles = tbSysFileMapper.selectByExample(tbSysFileCriteria);
             if (tbSysFiles != null && tbSysFiles.size() > 0) {
                 return SysReturnMessageEnum.FAIL.getMessage();

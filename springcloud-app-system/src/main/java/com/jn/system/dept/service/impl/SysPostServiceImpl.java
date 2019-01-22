@@ -57,9 +57,10 @@ public class SysPostServiceImpl implements SysPostService {
     @ServiceLog(doAction = "查询所有岗位")
     public List<TbSysPost> findSysPostAll() {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
-        tbSysPostCriteria.setOrderByClause("create_time desc");
+        tbSysPostCriteria.setOrderByClause("created_time desc");
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         List<TbSysPost> sysPostList = tbSysPostMapper.selectByExample(tbSysPostCriteria);
         return sysPostList;
     }
@@ -93,7 +94,8 @@ public class SysPostServiceImpl implements SysPostService {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
         criteria.andPostNameEqualTo(postName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysPostMapper.selectByExample(tbSysPostCriteria);
     }
 
@@ -124,7 +126,7 @@ public class SysPostServiceImpl implements SysPostService {
         String postName = sysPost.getPostName();
         //判断被修改信息是否存在
         TbSysPost sysPost1 = tbSysPostMapper.selectByPrimaryKey(sysPost.getId());
-        if (sysPost1 == null || SysStatusEnums.DELETED.getCode().equals(sysPost1.getStatus())) {
+        if (sysPost1 == null || SysStatusEnums.DELETED.getCode().equals(sysPost1.getRecordStatus().toString())) {
             logger.warn("[部门] 岗位修改失败,修改信息不存在,postId: {}", sysPost.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else {

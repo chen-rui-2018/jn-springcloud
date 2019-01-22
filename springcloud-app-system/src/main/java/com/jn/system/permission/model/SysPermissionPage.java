@@ -20,14 +20,14 @@ public class SysPermissionPage extends Page implements Serializable {
     @ApiModelProperty("权限名称")
     private String permissionName;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
-    private String status;
+    private Byte recordStatus;
 
     public SysPermissionPage() {
     }
 
-    public SysPermissionPage(String permissionName, String status) {
+    public SysPermissionPage(String permissionName, Byte recordStatus) {
         this.permissionName = permissionName;
-        this.status = status;
+        this.recordStatus = recordStatus;
     }
 
     public String getPermissionName() {
@@ -38,19 +38,19 @@ public class SysPermissionPage extends Page implements Serializable {
         this.permissionName = permissionName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
     public String toString() {
         return "SysPermissionPage{" +
                 "permissionName='" + permissionName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

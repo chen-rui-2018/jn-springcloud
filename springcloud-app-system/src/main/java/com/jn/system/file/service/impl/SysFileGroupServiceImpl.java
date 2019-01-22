@@ -82,7 +82,8 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(fileGroupName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
     }
 
@@ -98,7 +99,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         String fileGroupName = sysFileGroup.getFileGroupName();
         //判断修改信息是否存在
         TbSysFileGroup tbSysFileGroup1 = tbSysFileGroupMapper.selectByPrimaryKey(sysFileGroup.getId());
-        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getStatus())) {
+        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getRecordStatus().toString())) {
             logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else {
@@ -168,7 +169,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
-        sysFileGroupCriteria.setOrderByClause("create_time desc,id desc");
+        sysFileGroupCriteria.setOrderByClause("created_time desc,id desc");
         TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字
@@ -178,13 +179,14 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             //根据id查询
             criteria.andIdEqualTo(sysFileGroupPage.getId());
         }
-        if (!StringUtils.isEmpty(sysFileGroupPage.getStatus())) {
+        if (sysFileGroupPage.getRecordStatus() != null) {
             //筛选条件：状态
-            criteria.andStatusEqualTo(sysFileGroupPage.getStatus());
+            criteria.andRecordStatusEqualTo(sysFileGroupPage.getRecordStatus());
         }
 
         //过滤已删除的数据
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }

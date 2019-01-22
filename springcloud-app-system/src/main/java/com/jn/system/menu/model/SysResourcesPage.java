@@ -47,31 +47,31 @@ public class SysResourcesPage extends Page implements Serializable {
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    private Date createdTime;
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysResourcesPage() {
     }
 
-    public SysResourcesPage(String id, String resourcesName, String resourcesUrl,
-                            String menuId, String creator, Date createTime, String status) {
+    public SysResourcesPage(String id, String resourcesName, String resourcesUrl, String menuId,
+                            String creatorAccount, Date createdTime, Byte recordStatus) {
         this.id = id;
         this.resourcesName = resourcesName;
         this.resourcesUrl = resourcesUrl;
         this.menuId = menuId;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -79,32 +79,7 @@ public class SysResourcesPage extends Page implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
-
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+        this.id = id;
     }
 
     public String getResourcesName() {
@@ -131,6 +106,30 @@ public class SysResourcesPage extends Page implements Serializable {
         this.menuId = menuId;
     }
 
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
     @Override
     public String toString() {
         return "SysResourcesPage{" +
@@ -138,9 +137,9 @@ public class SysResourcesPage extends Page implements Serializable {
                 ", resourcesName='" + resourcesName + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
                 ", menuId='" + menuId + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

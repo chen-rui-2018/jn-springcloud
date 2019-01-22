@@ -40,7 +40,7 @@ public class SysMenuTreeVO implements Serializable {
     @ApiModelProperty("父级id父级名称")
     private String parentName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("子菜单的集合")
     private List children;
     @ApiModelProperty("菜单功能的集合")
@@ -49,8 +49,8 @@ public class SysMenuTreeVO implements Serializable {
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path, Integer sort,
-                         String isDir, String parentId, String level, String parentName, Date createTime,
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path, Integer sort, String isDir,
+                         String parentId, String level, String parentName, Date createdTime,
                          List children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
@@ -62,7 +62,7 @@ public class SysMenuTreeVO implements Serializable {
         this.parentId = parentId;
         this.level = level;
         this.parentName = parentName;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.children = children;
         this.resourcesList = resourcesList;
     }
@@ -147,12 +147,12 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public List getChildren() {
@@ -184,7 +184,7 @@ public class SysMenuTreeVO implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", level='" + level + '\'' +
                 ", parentName='" + parentName + '\'' +
-                ", createTime=" + createTime +
+                ", createdTime=" + createdTime +
                 ", children=" + children +
                 ", resourcesList=" + resourcesList +
                 '}';

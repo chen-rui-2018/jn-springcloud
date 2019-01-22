@@ -181,7 +181,7 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/exportExcelUserInfo", method = RequestMethod.GET)
     public void getUserInfo(HttpServletResponse response, SysUserPage userPage) {
         String exportTitle = "帐号,姓名,部门,岗位,岗位类型,邮箱,手机,创建时间";
-        String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createTime";
+        String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createdTime";
         userPage.setPage(1);
         userPage.setRows(200000);
         PaginationData data = sysUserService.findSysUserByPage(userPage);

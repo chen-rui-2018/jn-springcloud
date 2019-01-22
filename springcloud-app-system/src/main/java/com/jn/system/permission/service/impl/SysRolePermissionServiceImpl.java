@@ -47,7 +47,7 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void insertTbRolePermission(SysRolePermission rolePermission, User user) {
         rolePermission.setId(UUID.randomUUID().toString());
-        rolePermission.setCreator(user.getId());
+        rolePermission.setCreatorAccount(user.getAccount());
         TbSysRolePermission tbSysRolePermission = new TbSysRolePermission();
         BeanUtils.copyProperties(rolePermission, tbSysRolePermission);
         tbSysRolePermissionMapper.insert(tbSysRolePermission);

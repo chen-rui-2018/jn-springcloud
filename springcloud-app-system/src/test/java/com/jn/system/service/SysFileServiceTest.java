@@ -51,7 +51,7 @@ public class SysFileServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化文件id及文件对象
         fileId = UUID.randomUUID().toString();
@@ -62,9 +62,10 @@ public class SysFileServiceTest {
         sysFile.setId(fileId);
         sysFile.setFileName(fileName);
         sysFile.setFileUrl("https://localhost:8080/picture.png");
-        sysFile.setCreateTime(new Date());
-        sysFile.setCreator(user.getId());
-        sysFile.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        sysFile.setCreatedTime(new Date());
+        sysFile.setCreatorAccount(user.getAccount());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        sysFile.setRecordStatus(recordStatus);
     }
 
     /**

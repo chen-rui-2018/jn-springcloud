@@ -100,7 +100,8 @@ public class SysRoleServiceImpl implements SysRoleService {
         TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
         TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
         criteria.andRoleNameEqualTo(roleName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
     }
 
@@ -117,7 +118,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         String roleName = role.getRoleName();
         //1.判断修改信息是否存在
         TbSysRole tbSysRole1 = tbSysRoleMapper.selectByPrimaryKey(roleId);
-        if (tbSysRole1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysRole1.getStatus())) {
+        if (tbSysRole1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysRole1.getRecordStatus().toString())) {
             logger.warn("[角色] 角色修改失败,修改信息不存在,roleId: {}", roleId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -203,8 +204,9 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysUserRole sysUserRole = new SysUserRole();
             sysUserRole.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            sysUserRole.setCreator(user.getId());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            sysUserRole.setRecordStatus(recordStatus);
+            sysUserRole.setCreatorAccount(user.getAccount());
             sysUserRole.setUserId(sysUserRoleAdd.getUserId()[i]);
             sysUserRole.setRoleId(sysUserRoleAdd.getRoleId());
             sysUserRoleList.add(sysUserRole);
@@ -238,8 +240,9 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysRolePermission sysRolePermission = new SysRolePermission();
             sysRolePermission.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            sysRolePermission.setCreator(user.getId());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            sysRolePermission.setRecordStatus(recordStatus);
+            sysRolePermission.setCreatorAccount(user.getAccount());
             sysRolePermission.setPermissionId(sysRolePermissionAdd.getPermissionId()[i]);
             sysRolePermission.setRoleId(sysRolePermissionAdd.getRoleId());
             sysRolePermissionList.add(sysRolePermission);
@@ -272,8 +275,9 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysUserGroupRole sysUserGroupRole = new SysUserGroupRole();
             sysUserGroupRole.setId(UUID.randomUUID().toString());
             //状态，默认有效
-            sysUserGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            sysUserGroupRole.setCreator(user.getId());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            sysUserGroupRole.setRecordStatus(recordStatus);;
+            sysUserGroupRole.setCreatorAccount(user.getAccount());
             sysUserGroupRole.setUserGroupId(sysUserGroupRoleAdd.getUserGroupId()[i]);
             sysUserGroupRole.setRoleId(sysUserGroupRoleAdd.getRoleId());
             sysUserGroupRoleList.add(sysUserGroupRole);

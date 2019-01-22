@@ -7,8 +7,8 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
 
         <collection property="sysDepartmentPostVOList" ofType="com.jn.system.dept.vo.SysDepartmentPostVO">
             <result property="departmentId" column="departmentId" jdbcType="VARCHAR"/>
@@ -21,63 +21,37 @@
         </collection>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,account,password,name,phone,email,creator,create_time as createTime,status
-    </sql>
-
     <sql id="Get_User_Page_Column">
         t.id,
         t.account,
         t.name,
         t.phone,
         t.email,
-        t.status,
+        t.record_status as recordStatus,
         t.remark,
-        t.create_time as createTime,
+        t.created_time as createdTime,
         t.wechat_account as wechatAccount,
         tt.department_name as departmentName,
         tt.post_name as postName,
         tt.postTypeName,
-        tt.department_id
+        tt.department_id,
+        tt.is_default
     </sql>
-
-    <sql id="Column_list">
-            tsu.id,
-            tsu.account,
-            tsu.`password`,
-            tsu.`name`,
-            tsu.phone,
-            tsu.email,
-            tsu.creator,
-            tsu.create_time,
-            tsu.`status`,
-
-            tsd.id as did,
-            tsd.department_name,
-            tsd.creator as departmentCreator,
-            tsd.create_time as departmentCreateTime,
-            tsd.`status` as departmentStatus ,
-
-            tsp.id as pid,
-            tsp.post_name,
-            tsp.creator as postCreator,
-            tsp.create_time as postCreateTime,
-            tsp.`status` as postStatus,
-
-            tsudp.is_default,
-            tsudp.id as dpid
+    <sql id="Get_User_Column">
+        t.id,
+        t.account,
+        t.name,
+        t.phone,
+        t.email,
+        t.recordStatus,
+        t.remark,
+        t.createdTime,
+        t.wechatAccount,
+        t.departmentName,
+        t.postName,
+        t.postTypeName,
+        t.department_id
     </sql>
-
-    <insert id="addSysUser" parameterType="com.jn.system.user.vo.SysUserVO">
-        insert into tb_sys_user (id, account, password,
-          name, phone, email,
-          creator, create_time, status
-          )
-        values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-          #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
-          #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
-          )
-    </insert>
 
     <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
         SELECT
@@ -86,8 +60,8 @@
         u.`name`,
         u.phone,
         u.email,
-        u.create_time,
-        u.`status`,
+        u.created_time,
+        u.`record_status`,
         tt.departmentId,
         tt.department_name,
         tt.postId,
@@ -109,9 +83,9 @@
         tb_sys_post t3
         where t1.department_id = t2.id
         and t1.post_id = t3.id
-        and t1.`status` = '1'
-        and t2.`status` = '1'
-        and t3.`status` = '1') tt
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t3.`record_status` = 1) tt
         on u.id = tt.user_id
         where u.id = #{id,jdbcType=VARCHAR}
     </select>
@@ -119,6 +93,9 @@
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
             parameterType="com.jn.system.user.model.SysUserPage">
         select
+        <include refid="Get_User_Column"></include>
+        from
+        (select
         <include refid="Get_User_Page_Column"/>
         from tb_sys_user t
         left join
@@ -136,42 +113,45 @@
         ,tb_sys_user_department_post t3
         where t1.id = t3.department_id
         and t2.id = t3.post_id
-        and t1.status = '1'
-        and t2.status = '1'
-        and t3.status = '1'
+        and t1.record_status = 1
+        and t2.record_status = 1
+        and t3.record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
             and t3.is_default = '1'
         </if>
         ) tt on t.id = tt.user_id
-        where t.status != '-1'
+        where t.record_status != 0
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and t.status = #{status,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+            and t.record_status = #{recordStatus,jdbcType=TINYINT}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
-        ORDER BY t.create_time desc, t.id desc
+        ) t
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)"> <!-- 对同一部门同一用户多个岗位信息去重 -->
+            LEFT JOIN
+            (SELECT t.id
+            FROM tb_sys_user t
+            INNER JOIN tb_sys_user_department_post tt
+            ON t.id = tt.user_id
+            where t.record_status != 0
+            AND tt.department_id = #{departmentId,jdbcType=VARCHAR}
+            AND tt.`record_status` = 1
+            GROUP BY t.id
+            HAVING COUNT(t.id) > 1) tt
+            ON t.id = tt.id AND t.is_default = '0'
+            WHERE tt.id IS NULL
+        </if>
+        ORDER BY t.createdTime desc, t.id desc
     </select>
 
     <select id="getSysUserByPageAndPost" resultType="com.jn.system.user.vo.SysUserVO"
             parameterType="com.jn.system.user.model.SysUserPage">
         SELECT
-        t.id,
-        t.account,
-        t.`name`,
-        t.phone,
-        t.email,
-        t.`status`,
-        t.createTime,
-        t.wechatAccount,
-        t.remark,
-        t.departmentName,
-        t.postName,
-        t.postTypeName,
-        t.department_id
+        <include refid="Get_User_Column"></include>
         from
         (select distinct
         <include refid="Get_User_Page_Column"/>
@@ -191,14 +171,11 @@
         ,tb_sys_user_department_post t3
         where t1.id = t3.department_id
         and t2.id = t3.post_id
-        and t1.status = '1'
-        and t2.status = '1'
-        and t3.status = '1'
-        <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
-            and t3.is_default = '1'
-        </if>
+        and t1.record_status = 1
+        and t2.record_status = 1
+        and t3.record_status = 1
         ) tt on t.id = tt.user_id
-        where t.status != '-1'
+        where t.record_status != 0
         and tt.`post_name` like CONCAT('%', #{postOrTypeName,jdbcType=VARCHAR}, '%')
         UNION
         select distinct
@@ -219,118 +196,76 @@
         ,tb_sys_user_department_post t3
         where t1.id = t3.department_id
         and t2.id = t3.post_id
-        and t1.status = '1'
-        and t2.status = '1'
-        and t3.status = '1'
-        <if test="@org.apache.commons.lang.StringUtils@isBlank(departmentId)">
-            and t3.is_default = '1'
-        </if>
+        and t1.record_status = 1
+        and t2.record_status = 1
+        and t3.record_status = 1
         ) tt on t.id = tt.user_id
-        where t.status != '-1'
+        where t.record_status != 0
         and tt.`postTypeName` like CONCAT('%', #{postOrTypeName,jdbcType=VARCHAR}, '%')) t
         <where>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
                 and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                and t.status = #{status,jdbcType=VARCHAR}
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+                and t.record_status = #{recordStatus,jdbcType=TINYINT}
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
                 and t.department_id = #{departmentId,jdbcType=VARCHAR}
             </if>
         </where>
+        GROUP BY t.id
         ORDER BY t.createTime DESC,t.id DESC
     </select>
 
     <update id="deleteSysUser" parameterType="java.lang.String">
         update tb_sys_user
-        set `status` = '-1'
+        set `record_status` = 0
         where id = #{id,jdbcType=VARCHAR}
-    </update>
-
-    <update id="updateSysUser" parameterType="com.jn.system.user.vo.SysUserVO">
-        update tb_sys_user
-        <set>
-            <if test="account != null">
-                account = #{account,jdbcType=VARCHAR},
-            </if>
-            <if test="password != null">
-                password = #{password,jdbcType=VARCHAR},
-            </if>
-            <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="phone != null">
-                phone = #{phone,jdbcType=VARCHAR},
-            </if>
-            <if test="email != null">
-                email = #{email,jdbcType=VARCHAR},
-            </if>
-            <if test="creator != null">
-                creator = #{creator,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="status != null">
-                status = #{status,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id}
     </update>
 
     <!--逻辑删除用户已经具有的用户组-->
     <update id="deleGroupOfUser" parameterType="java.lang.String">
         update tb_sys_user_group
-        set `status` = '-1'
+        set `record_status` = 0
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
 
     <!--逻辑删除用户已经具有的角色-->
     <update id="deleRoleOfUser" parameterType="java.lang.String">
         update tb_sys_user_role
-        set `status` = '-1'
+        set record_status = 0
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
 
     <insert id="addDepartmentAndPostToUserBatch" parameterType="java.util.List">
         insert into tb_sys_user_department_post
-        (id, user_id,department_id,post_id,is_default,creator,create_time,status) values
+        (id, user_id,department_id,post_id,is_default,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
+            (#{item.id,jdbcType=VARCHAR},
             #{item.userId,jdbcType=VARCHAR},
             #{item.departmentId,jdbcType=VARCHAR},
             #{item.postId,jdbcType=VARCHAR},
             #{item.isDefault,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 
     <!--清除用户原有部门岗位信息-->
     <update id="deleDepartmentandPost" parameterType="java.lang.String">
         update tb_sys_user_department_post
-        set `status` = '-1'
+        set `record_status` = 0
         where user_id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <!--根据用户id返回用户信息-->
-    <select id="findSysUserById" parameterType="java.lang.String"
-            resultType="com.jn.system.user.vo.SysUserVO">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_sys_user
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
-
     <select id="getUserById" resultType="com.jn.system.user.model.SysUser" parameterType="java.lang.String">
-        SELECT id,account,`name`,phone,email,create_time as createTime,`status`
-        FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
+        SELECT id,account,`name`,phone,email,created_time as createdTime,`record_status` as recordStatus
+        FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `record_status` != 1
     </select>
 
     <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user set status=-1
+        update tb_sys_user set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

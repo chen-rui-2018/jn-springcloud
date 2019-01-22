@@ -69,7 +69,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         String menuName = sysMenu.getMenuName();
         //判断修改信息是否存在
         TbSysMenu tbSysMenu1 = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getStatus())) {
+        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getRecordStatus().toString())) {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -102,7 +102,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         List<String> resourcesIds = new ArrayList<String>(32);
         //判断菜单是存在
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu.getStatus())) {
+        if (tbSysMenu == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu.getRecordStatus().toString())) {
             return;
         }
         //查询删除菜单所有子菜单id
@@ -241,7 +241,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private List<TbSysMenu> checkMenusName(String menuName, String parentId) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         criteria.andParentIdEqualTo(parentId);
         criteria.andMenuNameEqualTo(menuName);
         return tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
@@ -338,12 +339,13 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
         tbSysMenu.setId(sysMenuAdd.getId());
-        tbSysMenu.setCreateTime(new Date());
-        tbSysMenu.setCreator(user.getId());
+        tbSysMenu.setCreatedTime(new Date());
+        tbSysMenu.setCreatorAccount(user.getAccount());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(StringUtils.trim(sysMenuAdd.getMenuUrl()));
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysMenu.setRecordStatus(recordStatus);
         tbSysMenuMapper.insertSelective(tbSysMenu);
     }
 

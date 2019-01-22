@@ -51,7 +51,7 @@ public class SysUserServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化用户id
         userId = UUID.randomUUID().toString();
@@ -66,7 +66,8 @@ public class SysUserServiceTest {
         sysUser.setPhone("13312345678");
         sysUser.setEmail("123@qq.com.com");
         sysUser.setWechatAccount("weixinaccount");
-        sysUser.setStatus("1");
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        sysUser.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -92,7 +93,8 @@ public class SysUserServiceTest {
         SysUser sysUser = new SysUser();
         sysUser.setId(userId);
         sysUser.setName(userName);
-        sysUser.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        sysUser.setRecordStatus(recordStatus);
         try {
             sysUserService.updateSysUser(sysUser);
         } catch (JnSpringCloudException e) {

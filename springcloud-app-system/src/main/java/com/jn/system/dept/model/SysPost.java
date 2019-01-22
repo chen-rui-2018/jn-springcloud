@@ -25,10 +25,9 @@ public class SysPost implements Serializable {
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
-    @ApiModelProperty(value ="状态",required = true)
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    private Date createdTime;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
     @ApiModelProperty(value ="岗位类型id",required = true)
     @NotBlank(message = "岗位类型不能为空")
     private String postTypeId;
@@ -38,11 +37,12 @@ public class SysPost implements Serializable {
     public SysPost() {
     }
 
-    public SysPost(String id, String postName, Date createTime, String status, String postTypeId, String postTypeName) {
+    public SysPost(String id, String postName, Date createdTime, Byte recordStatus,
+                   String postTypeId, String postTypeName) {
         this.id = id;
         this.postName = postName;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.postTypeId = postTypeId;
         this.postTypeName = postTypeName;
     }
@@ -63,20 +63,20 @@ public class SysPost implements Serializable {
         this.postName = postName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getPostTypeId() {
@@ -100,8 +100,8 @@ public class SysPost implements Serializable {
         return "SysPost{" +
                 "id='" + id + '\'' +
                 ", postName='" + postName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", postTypeId='" + postTypeId + '\'' +
                 ", postTypeName='" + postTypeName + '\'' +
                 '}';

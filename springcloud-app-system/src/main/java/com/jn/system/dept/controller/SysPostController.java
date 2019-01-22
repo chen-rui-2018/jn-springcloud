@@ -62,8 +62,8 @@ public class SysPostController extends BaseController {
         TbSysPost tbSysPost = new TbSysPost();
         BeanUtils.copyProperties(sysPostAdd, tbSysPost);
         tbSysPost.setId(UUID.randomUUID().toString());
-        tbSysPost.setCreator(user.getId());
-        tbSysPost.setCreateTime(new Date());
+        tbSysPost.setCreatorAccount(user.getAccount());
+        tbSysPost.setCreatedTime(new Date());
         sysPostService.addPost(tbSysPost);
         return new Result();
     }

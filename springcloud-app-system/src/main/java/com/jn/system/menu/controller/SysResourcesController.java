@@ -50,11 +50,12 @@ public class SysResourcesController extends BaseController {
         //为功能其他属性赋值
         sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         sysResources.setId(UUID.randomUUID().toString());
-        sysResources.setCreator(user.getId());
-        sysResources.setCreateTime(new Date());
+        sysResources.setCreatorAccount(user.getAccount());
+        sysResources.setCreatedTime(new Date());
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
-        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysResources.setRecordStatus(recordStatus);
         //调用业务层
         sysResourcesService.insertResources(tbSysResources);
         return new Result();

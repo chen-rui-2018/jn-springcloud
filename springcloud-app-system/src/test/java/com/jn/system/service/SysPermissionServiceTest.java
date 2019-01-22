@@ -53,7 +53,7 @@ public class SysPermissionServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化你权限id及名称
         permissionId = UUID.randomUUID().toString();
@@ -63,9 +63,10 @@ public class SysPermissionServiceTest {
         tbSysPermission = new TbSysPermission();
         tbSysPermission.setId(permissionId);
         tbSysPermission.setPermissionName(permissionName);
-        tbSysPermission.setCreateTime(new Date());
-        tbSysPermission.setCreator(user.getId());
-        tbSysPermission.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermission.setCreatedTime(new Date());
+        tbSysPermission.setCreatorAccount(user.getId());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermission.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -82,7 +83,8 @@ public class SysPermissionServiceTest {
         SysPermission permission = new SysPermission();
         permission.setId(permissionId);
         permission.setPermissionName(permissionName);
-        permission.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        permission.setRecordStatus(recordStatus);
         try {
             sysPermissionService.updatePermission(permission);
         } catch (JnSpringCloudException e) {

@@ -56,7 +56,7 @@ public class SysRoleServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化角色id及名称
         roleId = UUID.randomUUID().toString();
@@ -65,10 +65,11 @@ public class SysRoleServiceTest {
         //初始化角色对象
         tbSysRole = new TbSysRole();
         tbSysRole.setId(roleId);
-        tbSysRole.setCreator(user.getId());
-        tbSysRole.setCreateTime(new Date());
+        tbSysRole.setCreatorAccount(user.getAccount());
+        tbSysRole.setCreatedTime(new Date());
         tbSysRole.setRoleName(roleName);
-        tbSysRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysRole.setRecordStatus(recordStatus);
     }
 
 
@@ -102,7 +103,8 @@ public class SysRoleServiceTest {
         SysRoleUpdate role = new SysRoleUpdate();
         role.setId(roleId);
         role.setRoleName(roleName);
-        role.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        role.setRecordStatus(recordStatus);
         try {
             sysRoleService.updateTbRole(role);
         } catch (JnSpringCloudException e) {

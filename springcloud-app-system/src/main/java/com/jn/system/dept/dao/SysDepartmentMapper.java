@@ -2,7 +2,6 @@ package com.jn.system.dept.dao;
 
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
-import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.vo.SysDepartmentVO;
 
 import java.util.List;
@@ -21,13 +20,6 @@ public interface SysDepartmentMapper {
      * @param ids
      */
     void deleteDepartmentBranch(List<String> ids);
-
-    /**
-     * 批量添加部门信息
-     *
-     * @param addeList
-     */
-    void addDepartmentBatch(List<TbSysDepartment> addeList);
 
     /**
      * 批量更新部门信息

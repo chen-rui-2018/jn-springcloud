@@ -5,9 +5,11 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="file_group_name" jdbcType="VARCHAR" property="fileGroupName" />
     <result column="file_group_describe" jdbcType="VARCHAR" property="fileGroupDescribe" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, file_group_name, file_group_describe, creator, create_time, status
+    id, file_group_name, file_group_describe, creator_account, created_time, record_status, 
+    modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.file.entity.TbSysFileGroupCriteria" resultMap="BaseResultMap">
     select
@@ -102,11 +105,11 @@
   </delete>
   <insert id="insert" parameterType="com.jn.system.file.entity.TbSysFileGroup">
     insert into tb_sys_file_group (id, file_group_name, file_group_describe, 
-      creator, create_time, status
-      )
+      creator_account, created_time, record_status, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{fileGroupName,jdbcType=VARCHAR}, #{fileGroupDescribe,jdbcType=VARCHAR}, 
-      #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}
-      )
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.file.entity.TbSysFileGroup">
     insert into tb_sys_file_group
@@ -120,14 +123,20 @@
       <if test="fileGroupDescribe != null">
         file_group_describe,
       </if>
-      <if test="creator != null">
-        creator,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
-      <if test="status != null">
-        status,
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -140,14 +149,20 @@
       <if test="fileGroupDescribe != null">
         #{fileGroupDescribe,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -169,14 +184,20 @@
       <if test="record.fileGroupDescribe != null">
         file_group_describe = #{record.fileGroupDescribe,jdbcType=VARCHAR},
       </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -188,9 +209,11 @@
     set id = #{record.id,jdbcType=VARCHAR},
       file_group_name = #{record.fileGroupName,jdbcType=VARCHAR},
       file_group_describe = #{record.fileGroupDescribe,jdbcType=VARCHAR},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -204,14 +227,20 @@
       <if test="fileGroupDescribe != null">
         file_group_describe = #{fileGroupDescribe,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -220,9 +249,11 @@
     update tb_sys_file_group
     set file_group_name = #{fileGroupName,jdbcType=VARCHAR},
       file_group_describe = #{fileGroupDescribe,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

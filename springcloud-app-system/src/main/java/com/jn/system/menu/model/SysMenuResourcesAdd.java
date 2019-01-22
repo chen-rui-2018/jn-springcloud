@@ -48,11 +48,10 @@ public class SysMenuResourcesAdd implements Serializable {
 
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     /**
      * 菜单层级
@@ -64,12 +63,12 @@ public class SysMenuResourcesAdd implements Serializable {
     }
 
     public SysMenuResourcesAdd(String menuId, String[] resourcesId, String resourcesName,
-                               String resourcesUrl, String status, String level) {
+                               String resourcesUrl, Byte recordStatus, String level) {
         this.menuId = menuId;
         this.resourcesId = resourcesId;
         this.resourcesName = resourcesName;
         this.resourcesUrl = resourcesUrl;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.level = level;
     }
 
@@ -105,13 +104,12 @@ public class SysMenuResourcesAdd implements Serializable {
         this.resourcesUrl = resourcesUrl;
     }
 
-
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -129,7 +127,7 @@ public class SysMenuResourcesAdd implements Serializable {
                 ", resourcesId=" + Arrays.toString(resourcesId) +
                 ", resourcesName='" + resourcesName + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", level='" + level + '\'' +
                 '}';
     }

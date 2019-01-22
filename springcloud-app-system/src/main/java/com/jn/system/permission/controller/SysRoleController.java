@@ -59,8 +59,8 @@ public class SysRoleController extends BaseController {
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRole.setId(UUID.randomUUID().toString());
-        tbSysRole.setCreator(user.getId());
-        tbSysRole.setCreateTime(new Date());
+        tbSysRole.setCreatorAccount(user.getAccount());
+        tbSysRole.setCreatedTime(new Date());
         tbRoleService.insertTbRole(tbSysRole);
         return new Result();
 

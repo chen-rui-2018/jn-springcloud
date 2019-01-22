@@ -67,7 +67,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
             throw new UnknownAccountException(ShiroExceptionEnum.UNKNOWN_ACCOUNT.getMessage());
         } else if (!GlobalConstants.SUCCESS_CODE.equals(result.getCode())) {
             throw new JnSpringCloudException(result);
-        } else if (!ShiroUserEnum.ACCOUNT_EFFECTIVE.getCode().equals(user.getStatus())) {
+        } else if (!ShiroUserEnum.ACCOUNT_EFFECTIVE.getCode().equals(user.getRecordStatus().toString())) {
             throw new DisabledAccountException(ShiroExceptionEnum.UNKNOWN_EFFECTIVE.getMessage());
         }
 

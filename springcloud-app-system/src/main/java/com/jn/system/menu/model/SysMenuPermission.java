@@ -37,18 +37,17 @@ public class SysMenuPermission implements Serializable {
      * 创建人
      */
     @ApiModelProperty(value = "创建人" )
-    private String creator;
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    private Date createdTime;
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     /**
      * 菜单层级
@@ -59,14 +58,14 @@ public class SysMenuPermission implements Serializable {
     public SysMenuPermission() {
     }
 
-    public SysMenuPermission(String id, String permissionId, String menuId, String creator,
-                             Date createTime, String status, String level) {
+    public SysMenuPermission(String id, String permissionId, String menuId, String creatorAccount,
+                             Date createdTime, Byte recordStatus, String level) {
         this.id = id;
         this.permissionId = permissionId;
         this.menuId = menuId;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.level = level;
     }
 
@@ -94,28 +93,28 @@ public class SysMenuPermission implements Serializable {
         this.menuId = menuId;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -132,9 +131,9 @@ public class SysMenuPermission implements Serializable {
                 "id='" + id + '\'' +
                 ", permissionId='" + permissionId + '\'' +
                 ", menuId='" + menuId + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", level='" + level + '\'' +
                 '}';
     }

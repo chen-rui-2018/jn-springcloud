@@ -60,8 +60,8 @@ public class SysGroupController extends BaseController {
         TbSysGroup tbSysGroup = new TbSysGroup();
         BeanUtils.copyProperties(sysGroup, tbSysGroup);
         tbSysGroup.setId(UUID.randomUUID().toString());
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
+        tbSysGroup.setCreatedTime(new Date());
+        tbSysGroup.setCreatorAccount(user.getAccount());
         //传参到业务层
         sysGroupService.addSysGroup(tbSysGroup);
         return new Result();

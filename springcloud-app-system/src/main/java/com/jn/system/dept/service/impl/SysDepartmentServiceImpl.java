@@ -99,7 +99,7 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         String departmentName = sysDepartment.getDepartmentName();
         //判断数据库中是否存在被修改数据
         TbSysDepartment tbSysDepartment1 = tbSysDepartmentMapper.selectByPrimaryKey(sysDepartment.getId());
-        if (tbSysDepartment1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysDepartment1.getStatus())) {
+        if (tbSysDepartment1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysDepartment1.getRecordStatus().toString())) {
             logger.warn("[部门] 部门修改失败,修改信息不存在,departmentId: {}", sysDepartment.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else {
@@ -173,7 +173,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andParentIdEqualTo(sysDepartmentCheckName.getParentId());
         criteria.andDepartmentNameEqualTo(sysDepartmentCheckName.getDepartmentName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysDepartment> tbSysDepartments = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
         if (tbSysDepartments != null && tbSysDepartments.size() > 0) {
             return SysReturnMessageEnum.FAIL.getMessage();

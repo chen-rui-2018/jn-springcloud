@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.system.permission.dao.SysRoleMapper">
 
     <sql id="Base_Column_List">
-        id,role_name as roleName ,creator,create_time as createTime,status
+        id,role_name as roleName ,creator_account as creatorAccount,created_time as createdTime,record_status as recordStatus
     </sql>
 
     <select id="findSysRoleByUserId" parameterType="java.lang.String"
@@ -18,9 +18,9 @@
         join tb_sys_user tsu
         on tsur.user_id = tsu.id
         where tsu.id = #{id,jdbcType=VARCHAR}
-        and tsur.`status` = '1')
-        and `status` = '1'
-        ORDER BY create_time ASC
+        and tsur.`record_status` = 1)
+        and `record_status` = 1
+        ORDER BY created_time ASC
     </select>
 
 
@@ -29,20 +29,21 @@
         SELECT
         id as roleId,
         role_name as roleName,
-        create_time as createTime,
-        `status`
-        FROM `tb_sys_role` where `status` != '-1'
+        created_time as createdTime,
+        record_status as recordStatus
+        FROM `tb_sys_role`
+        where `record_status` != 0
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
             and role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and status=#{status,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+            and record_status=#{recordStatus,jdbcType=VARCHAR}
         </if>
-        ORDER BY create_time desc,id desc
+        ORDER BY created_time desc,id desc
     </select>
 
     <update id="deleteBy" parameterType="java.lang.String">
-        update tb_sys_role set status=-1
+        update tb_sys_role set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}

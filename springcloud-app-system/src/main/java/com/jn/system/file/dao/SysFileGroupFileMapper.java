@@ -2,8 +2,6 @@ package com.jn.system.file.dao;
 
 
 import com.jn.system.file.entity.TbSysFileGroup;
-import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFile;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.vo.SysFileVO;
 

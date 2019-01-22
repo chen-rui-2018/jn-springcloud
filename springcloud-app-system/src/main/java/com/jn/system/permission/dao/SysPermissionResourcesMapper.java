@@ -1,8 +1,6 @@
 package com.jn.system.permission.dao;
 
-import com.jn.system.menu.model.SysResources;
 import com.jn.system.permission.entity.TbSysPermissionResources;
-import com.jn.system.permission.model.SysPermissionResourcePage;
 
 import java.util.List;
 

@@ -5,19 +5,25 @@
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="role_id" jdbcType="VARCHAR" property="roleId" javaType="java.lang.String"/>
         <result column="user_group_id" jdbcType="VARCHAR" property="userGroupId" javaType="java.lang.String"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" javaType="java.util.Date"/>
+        <result column="record_status" jdbcType="VARCHAR" property="recordStatus" javaType="java.lang.String"/>
     </resultMap>
 
     <select id="selectAll" resultMap="BaseResultMap">
-        select id, role_id,user_group_id,creator,create_time,status
+        select
+        id,
+        role_id,
+        user_group_id,
+        creator_account,
+        created_time,
+        record_status
         from tb_sys_group_role
     </select>
 
 
     <update id="deleteBy" parameterType="java.lang.String">
-        update tb_sys_group_role set status=-1
+        update tb_sys_group_role set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -25,7 +31,7 @@
     </update>
 
     <update id="deleteByRoleIds" parameterType="java.lang.String">
-        update tb_sys_group_role set status=-1
+        update tb_sys_group_role set record_status = 0
         where role_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -35,14 +41,14 @@
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
         insert into tb_sys_group_role
-        (id, role_id,user_group_id,creator,create_time,status) values
+        (id, role_id,user_group_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id,jdbcType=BIGINT},
             #{item.roleId,jdbcType=VARCHAR},
             #{item.userGroupId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 

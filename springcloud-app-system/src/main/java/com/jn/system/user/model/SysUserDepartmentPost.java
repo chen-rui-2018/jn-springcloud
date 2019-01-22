@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * 根据用户id查询用户部门岗位
@@ -14,7 +15,7 @@ import javax.validation.constraints.Pattern;
  * @modified By:
  **/
 @ApiModel(value = "SysUserPage",description = "根据用户id查询用户部门岗位")
-public class SysUserDepartmentPost extends Page {
+public class SysUserDepartmentPost extends Page implements Serializable {
 
     @ApiModelProperty("userId")
     private String userId;
@@ -30,23 +31,12 @@ public class SysUserDepartmentPost extends Page {
     private String name;
 
     @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    private Byte recordStatus;
 
     @ApiModelProperty("部门id")
     private String departmentId;
 
     public SysUserDepartmentPost() {
-    }
-
-    public SysUserDepartmentPost(String userId, String departmentPostStatus, String isDefault,
-                                 String name, String status, String departmentId) {
-        this.userId = userId;
-        this.departmentPostStatus = departmentPostStatus;
-        this.isDefault = isDefault;
-        this.name = name;
-        this.status = status;
-        this.departmentId = departmentId;
     }
 
     public String getUserId() {
@@ -55,6 +45,16 @@ public class SysUserDepartmentPost extends Page {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public SysUserDepartmentPost(String userId, String departmentPostStatus, String isDefault,
+                                 String name, Byte recordStatus, String departmentId) {
+        this.userId = userId;
+        this.departmentPostStatus = departmentPostStatus;
+        this.isDefault = isDefault;
+        this.name = name;
+        this.recordStatus = recordStatus;
+        this.departmentId = departmentId;
     }
 
     public String getDepartmentPostStatus() {
@@ -81,12 +81,12 @@ public class SysUserDepartmentPost extends Page {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getDepartmentId() {
@@ -98,13 +98,13 @@ public class SysUserDepartmentPost extends Page {
     }
 
     @Override
-    public String toString() {
+    public String  toString() {
         return "SysUserDepartmentPost{" +
                 "userId='" + userId + '\'' +
                 ", departmentPostStatus='" + departmentPostStatus + '\'' +
                 ", isDefault='" + isDefault + '\'' +
                 ", name='" + name + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", departmentId='" + departmentId + '\'' +
                 '}';
     }

@@ -25,22 +25,25 @@ public class SysPostType implements Serializable {
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位类型名称校验失败")
     private String postTypeName;
     @ApiModelProperty(value = "创建者")
-    private String creator;
+    private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
-    @ApiModelProperty(value = "状态: 1有效,0无效,-1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="状态值只允许为0,1,-1")
-    private String status;
+    private Date createdTime;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysPostType() {
     }
 
-    public SysPostType(String id, String postTypeName, String creator, Date createTime, String status) {
+    public SysPostType(String id, String postTypeName, String creatorAccount, Date createdTime, Byte recordStatus) {
         this.id = id;
         this.postTypeName = postTypeName;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getId() {
@@ -59,28 +62,28 @@ public class SysPostType implements Serializable {
         this.postTypeName = postTypeName;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -88,9 +91,9 @@ public class SysPostType implements Serializable {
         return "SysPostType{" +
                 "id='" + id + '\'' +
                 ", postTypeName='" + postTypeName + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

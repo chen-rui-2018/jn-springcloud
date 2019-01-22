@@ -64,19 +64,18 @@ public class SysMenu implements Serializable {
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    private Date createdTime;
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态 1:有效 02:无效 0:删除
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     /**
      * 菜单层级
@@ -87,17 +86,17 @@ public class SysMenu implements Serializable {
     public SysMenu() {
     }
 
-    public SysMenu(String id, String menuName, String menuUrl, String parentId, Integer sort,
-                   String isDir, String creator, Date createTime, String status, String level) {
+    public SysMenu(String id, String menuName, String menuUrl, String parentId, Integer sort, String isDir,
+                   String creatorAccount, Date createdTime, Byte recordStatus, String level) {
         this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;
         this.sort = sort;
         this.isDir = isDir;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.level = level;
     }
 
@@ -149,28 +148,28 @@ public class SysMenu implements Serializable {
         this.isDir = isDir;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -190,9 +189,9 @@ public class SysMenu implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", sort=" + sort +
                 ", isDir='" + isDir + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", level='" + level + '\'' +
                 '}';
     }

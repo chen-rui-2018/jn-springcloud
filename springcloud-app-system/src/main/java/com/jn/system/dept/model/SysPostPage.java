@@ -19,18 +19,17 @@ public class SysPostPage extends Page implements Serializable {
     private static final long serialVersionUID = 4641296367346454971L;
     @ApiModelProperty("岗位名称")
     private String postName;
-    @ApiModelProperty("状态")
-    @Pattern(regexp="^$|\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
     @ApiModelProperty("岗位类型id")
     private String postTypeId;
 
     public SysPostPage() {
     }
 
-    public SysPostPage(String postName, String status, String postTypeId) {
+    public SysPostPage(String postName, Byte recordStatus, String postTypeId) {
         this.postName = postName;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.postTypeId = postTypeId;
     }
 
@@ -42,12 +41,12 @@ public class SysPostPage extends Page implements Serializable {
         this.postName = postName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getPostTypeId() {
@@ -62,7 +61,7 @@ public class SysPostPage extends Page implements Serializable {
     public String toString() {
         return "SysPostPage{" +
                 "postName='" + postName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", postTypeId='" + postTypeId + '\'' +
                 '}';
     }

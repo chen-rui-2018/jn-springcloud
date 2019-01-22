@@ -56,8 +56,8 @@ public class SysFileGroupController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //为文件组其他属性赋值
         sysFileGroup.setId(UUID.randomUUID().toString());
-        sysFileGroup.setCreator(user.getId());
-        sysFileGroup.setCreateTime(new Date());
+        sysFileGroup.setCreatorAccount(user.getAccount());
+        sysFileGroup.setCreatedTime(new Date());
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         sysFileGroupService.insertSysFileGroup(tbSysFileGroup);

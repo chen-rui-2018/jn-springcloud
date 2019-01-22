@@ -97,8 +97,8 @@ public class SysUserServiceImpl implements SysUserService {
         //生成用户实体
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
-        tbSysUser.setCreateTime(new Date());
-        tbSysUser.setCreator(user.getId());
+        tbSysUser.setCreatedTime(new Date());
+        tbSysUser.setCreatorAccount(user.getAccount());
         tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
@@ -138,14 +138,15 @@ public class SysUserServiceImpl implements SysUserService {
      */
     private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
-        sysUserDepartmentPost.setCreator(user.getId());
+        sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
-        sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recodeStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        sysUserDepartmentPost.setRecordStatus(recodeStatus);
         sysUserDepartmentPost.setUserId(tbSysUser.getId());
         sysUserDepartmentPost.setDepartmentId(sysUser.getDepartmentId());
         sysUserDepartmentPost.setPostId(sysUser.getPostId());
         sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
-        sysUserDepartmentPost.setCreateTime(new Date());
+        sysUserDepartmentPost.setCreatedTime(new Date());
         tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
     }
 
@@ -159,7 +160,8 @@ public class SysUserServiceImpl implements SysUserService {
         TbSysUserCriteria tbSysUserCriteria = new TbSysUserCriteria();
         TbSysUserCriteria.Criteria criteria = tbSysUserCriteria.createCriteria();
         criteria.andAccountEqualTo(account);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysUserMapper.selectByExample(tbSysUserCriteria);
     }
 
@@ -216,7 +218,7 @@ public class SysUserServiceImpl implements SysUserService {
     public void updateSysUser(SysUser sysUser) {
         //判断修改信息是否存在
         TbSysUser tbSysUser1 = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
-        if (tbSysUser1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysUser1.getStatus())) {
+        if (tbSysUser1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysUser1.getRecordStatus().toString())) {
             logger.warn("[用户] 用户修改失败,修改信息不存在,userId: {}", sysUser.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else if (StringUtils.isNotBlank(sysUser.getAccount())) {
@@ -276,11 +278,12 @@ public class SysUserServiceImpl implements SysUserService {
             for (String groupId : groupIds) {
                 //设置用户用户组实体类
                 SysGroupUser sysGroupUser = new SysGroupUser();
-                sysGroupUser.setCreator(user.getId());
+                sysGroupUser.setCreatorAccount(user.getAccount());
                 sysGroupUser.setGroupId(groupId);
                 sysGroupUser.setUserId(userId);
                 sysGroupUser.setId(UUID.randomUUID().toString());
-                sysGroupUser.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+                Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+                sysGroupUser.setRecordStatus(recordStatus);
                 list.add(sysGroupUser);
             }
             sysGroupUserMapper.addGroupToUser(list);
@@ -327,12 +330,13 @@ public class SysUserServiceImpl implements SysUserService {
             //为用户添加新的角色
             for (String roleId : roleIds) {
                 SysUserRole sysUserRole = new SysUserRole();
-                sysUserRole.setCreateTime(new Timestamp(System.currentTimeMillis()));
-                sysUserRole.setCreator(user.getId());
+                sysUserRole.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+                sysUserRole.setCreatorAccount(user.getId());
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
-                sysUserRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+                Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+                sysUserRole.setRecordStatus(recordStatus);
                 list.add(sysUserRole);
             }
             sysUserRoleMapper.insertBatch(list);
@@ -434,9 +438,10 @@ public class SysUserServiceImpl implements SysUserService {
      */
     private TbSysUserDepartmentPost getTbSysUserDepartmentPost(User user, String userId, SysDepartmentPost sysDepartmentPost) {
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
-        sysUserDepartmentPost.setCreator(user.getId());
+        sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
-        sysUserDepartmentPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        sysUserDepartmentPost.setRecordStatus(recordStatus);
         sysUserDepartmentPost.setUserId(userId);
         sysUserDepartmentPost.setDepartmentId(sysDepartmentPost.getDepartmentId());
         sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
@@ -488,7 +493,8 @@ public class SysUserServiceImpl implements SysUserService {
         if (com.jn.common.util.StringUtils.isNotBlank(user.getAccount())) {
             criteria.andAccountEqualTo(user.getAccount());
         }
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysUser> tbSysUsers = tbSysUserMapper.selectByExample(tbSysUserCriteria);
         List<User> users = new ArrayList<>();
         for (TbSysUser tbSysUser1 : tbSysUsers) {

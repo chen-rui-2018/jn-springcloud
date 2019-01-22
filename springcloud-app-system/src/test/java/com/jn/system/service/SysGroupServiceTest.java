@@ -54,7 +54,7 @@ public class SysGroupServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化用户组id及名称
         groupId = UUID.randomUUID().toString();
@@ -63,10 +63,11 @@ public class SysGroupServiceTest {
         //封装用户组对象
         tbSysGroup = new TbSysGroup();
         tbSysGroup.setId(groupId);
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
+        tbSysGroup.setCreatedTime(new Date());
+        tbSysGroup.setCreatorAccount(user.getAccount());
         tbSysGroup.setGroupName(groupName);
-        tbSysGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysGroup.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -92,7 +93,8 @@ public class SysGroupServiceTest {
         SysGroupUpdate sysGroup = new SysGroupUpdate();
         sysGroup.setId(groupId);
         sysGroup.setGroupName(groupName);
-        sysGroup.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        sysGroup.setRecordStatus(recordStatus);
         try {
             sysGroupService.updateSysGroup(sysGroup);
         } catch (JnSpringCloudException e) {

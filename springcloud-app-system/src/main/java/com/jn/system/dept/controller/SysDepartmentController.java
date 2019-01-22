@@ -83,9 +83,10 @@ public class SysDepartmentController extends BaseController {
         TbSysDepartment tbSysDepartment = new TbSysDepartment();
         BeanUtils.copyProperties(sysDepartmentAdd, tbSysDepartment);
         tbSysDepartment.setId(UUID.randomUUID().toString());
-        tbSysDepartment.setCreator(user.getId());
-        tbSysDepartment.setCreateTime(new Date());
-        tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysDepartment.setCreatorAccount(user.getAccount());
+        tbSysDepartment.setCreatedTime(new Date());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysDepartment.setRecordStatus(recordStatus);
         sysDepartmentService.add(tbSysDepartment);
         return new Result();
     }

@@ -33,30 +33,30 @@ public class SysFileGroupPage extends Page implements Serializable {
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
 
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    @ApiModelProperty("创建时间")
+    private Date createdTime;
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysFileGroupPage() {
     }
 
-    public SysFileGroupPage(String id, String fileGroupName, String creator, Date createTime, String status) {
+    public SysFileGroupPage(String id, String fileGroupName, String creatorAccount, Date createdTime, Byte recordStatus) {
         this.id = id;
         this.fileGroupName = fileGroupName;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -64,7 +64,7 @@ public class SysFileGroupPage extends Page implements Serializable {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getFileGroupName() {
@@ -72,31 +72,31 @@ public class SysFileGroupPage extends Page implements Serializable {
     }
 
     public void setFileGroupName(String fileGroupName) {
-        this.fileGroupName = fileGroupName == null ? null : fileGroupName.trim();
+        this.fileGroupName = fileGroupName;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -104,9 +104,9 @@ public class SysFileGroupPage extends Page implements Serializable {
         return "SysFileGroupPage{" +
                 "id='" + id + '\'' +
                 ", fileGroupName='" + fileGroupName + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

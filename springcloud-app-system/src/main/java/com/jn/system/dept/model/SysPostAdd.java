@@ -24,9 +24,8 @@ public class SysPostAdd implements Serializable {
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
 
-    @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     @ApiModelProperty("岗位类型id")
     @NotBlank(message = "岗位类型不能为空")
@@ -35,9 +34,9 @@ public class SysPostAdd implements Serializable {
     public SysPostAdd() {
     }
 
-    public SysPostAdd(String postName, String status, String postTypeId) {
+    public SysPostAdd(String postName, Byte recordStatus, String postTypeId) {
         this.postName = postName;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.postTypeId = postTypeId;
     }
 
@@ -49,12 +48,12 @@ public class SysPostAdd implements Serializable {
         this.postName = postName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getPostTypeId() {
@@ -69,7 +68,7 @@ public class SysPostAdd implements Serializable {
     public String toString() {
         return "SysPostAdd{" +
                 "postName='" + postName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", postTypeId='" + postTypeId + '\'' +
                 '}';
     }

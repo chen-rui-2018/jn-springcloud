@@ -53,8 +53,8 @@ public class SysFileController extends BaseController {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         sysFile.setId(UUID.randomUUID().toString());
-        sysFile.setCreator(user.getId());
-        sysFile.setCreateTime(new Date());
+        sysFile.setCreatorAccount(user.getAccount());
+        sysFile.setCreatedTime(new Date());
         sysFileService.insertSysFile(sysFile);
         return new Result();
     }

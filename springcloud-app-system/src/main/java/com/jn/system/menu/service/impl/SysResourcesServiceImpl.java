@@ -80,7 +80,8 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(resourcesName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         criteria.andMenuIdEqualTo(menuId);
         return tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
     }
@@ -98,7 +99,7 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         String resourcesName = sysResources.getResourcesName();
         //1.判断修改信息是否存在
         TbSysResources tbSysResources1 = tbSysResourcesMapper.selectByPrimaryKey(resourcesId);
-        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getStatus())) {
+        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getRecordStatus().toString())) {
             logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", resourcesId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -200,10 +201,11 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "根据菜单id获取菜单所有页面功能")
     public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-        tbSysResourcesCriteria.setOrderByClause("create_time desc");
+        tbSysResourcesCriteria.setOrderByClause("created_time desc");
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         List<TbSysResources> tbSysResources = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         return tbSysResources;
     }

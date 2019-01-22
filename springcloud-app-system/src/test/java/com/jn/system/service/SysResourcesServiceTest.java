@@ -57,7 +57,7 @@ public class SysResourcesServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化功能id及功能名称
         resourcesId = UUID.randomUUID().toString();
@@ -68,9 +68,10 @@ public class SysResourcesServiceTest {
         tbSysResources = new TbSysResources();
         tbSysResources.setId(resourcesId);
         tbSysResources.setResourcesName(resourcesName);
-        tbSysResources.setCreateTime(new Date());
-        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-        tbSysResources.setCreator(user.getId());
+        tbSysResources.setCreatedTime(new Date());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysResources.setRecordStatus(recordStatus);
+        tbSysResources.setCreatorAccount(user.getId());
         tbSysResources.setMenuId(menuId);
         tbSysResources.setResourcesUrl("/xxx/xxx");
     }

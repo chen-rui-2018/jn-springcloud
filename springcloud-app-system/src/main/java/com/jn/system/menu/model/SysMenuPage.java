@@ -59,17 +59,17 @@ public class SysMenuPage extends Page implements Serializable {
      * 创建人
      */
     @ApiModelProperty(value = "创建人" )
-    private String creator;
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    private Date createdTime;
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态 1:有效 2:无效 0:删除
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    private String status;
+    @ApiModelProperty(value = "状态 1:有效 2:无效 0:删除" )
+    private Byte recordStatus;
 
     /**
      * 菜单层级
@@ -81,16 +81,16 @@ public class SysMenuPage extends Page implements Serializable {
     }
 
     public SysMenuPage(String id, String menuName, String menuUrl, String parentId, String isDir,
-                       Integer sort, String creator, Date createTime, String status, String level) {
+                       Integer sort, String creatorAccount, Date createdTime, Byte recordStatus, String level) {
         this.id = id;
         this.menuName = menuName;
         this.menuUrl = menuUrl;
         this.parentId = parentId;
         this.isDir = isDir;
         this.sort = sort;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.level = level;
     }
 
@@ -142,28 +142,28 @@ public class SysMenuPage extends Page implements Serializable {
         this.sort = sort;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -183,9 +183,9 @@ public class SysMenuPage extends Page implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", isDir='" + isDir + '\'' +
                 ", sort=" + sort +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", level='" + level + '\'' +
                 '}';
     }

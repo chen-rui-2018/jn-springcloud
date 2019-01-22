@@ -47,7 +47,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserRole(SysUserRole role, User user) {
         role.setId(UUID.randomUUID().toString());
-        role.setCreator(user.getId());
+        role.setCreatorAccount(user.getAccount());
         TbSysUserRole tbSysUserRole = new TbSysUserRole();
         BeanUtils.copyProperties(role, tbSysUserRole);
         tbSysUserRoleMapper.insert(tbSysUserRole);

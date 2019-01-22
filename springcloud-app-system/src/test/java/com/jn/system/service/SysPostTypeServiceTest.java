@@ -46,7 +46,7 @@ public class SysPostTypeServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始换岗位类型id及岗位类型名称
         postTypeId = UUID.randomUUID().toString();
@@ -55,10 +55,11 @@ public class SysPostTypeServiceTest {
         //初始化岗位类型对象
         tbSysPostType = new TbSysPostType();
         tbSysPostType.setId(postTypeId);
-        tbSysPostType.setCreateTime(new Date());
-        tbSysPostType.setCreator(user.getId());
+        tbSysPostType.setCreatedTime(new Date());
+        tbSysPostType.setCreatorAccount(user.getAccount());
         tbSysPostType.setPostTypeName(postTypeName);
-        tbSysPostType.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPostType.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -91,7 +92,8 @@ public class SysPostTypeServiceTest {
         SysPostType sysPostType = new SysPostType();
         sysPostType.setId(postTypeId);
         sysPostType.setPostTypeName(postTypeName);
-        sysPostType.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        sysPostType.setRecordStatus(recordStatus);
         try {
             sysPostTypeService.update(sysPostType);
         } catch (JnSpringCloudException e) {

@@ -14,8 +14,6 @@ import com.jn.system.menu.dao.SysMenuMapper;
 import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.entity.TbSysMenu;
-import com.jn.system.menu.enums.SysMenuEnums;
-import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
@@ -101,7 +99,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
         TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
         criteria.andPermissionNameEqualTo(permissionName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
     }
 
@@ -119,7 +118,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
 
         //1.判断修改信息是否存在
         TbSysPermission tbSysPermission = tbSysPermissionMapper.selectByPrimaryKey(permissionId);
-        if (tbSysPermission == null || SysStatusEnums.DELETED.getCode().equals(tbSysPermission.getStatus())) {
+        if (tbSysPermission == null || SysStatusEnums.DELETED.getCode().equals(tbSysPermission.getRecordStatus().toString())) {
             logger.warn("[权限] 权限信息修改失败,修改信息不存在,permissionId: {}", permissionId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -216,10 +215,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //创建权限角色实体类
             TbSysRolePermission tbSysRolePermission = new TbSysRolePermission();
             tbSysRolePermission.setId(UUID.randomUUID().toString());
-            tbSysRolePermission.setCreator(user.getId());
+            tbSysRolePermission.setCreatorAccount(user.getAccount());
             tbSysRolePermission.setPermissionId(sysPermissionRolesAdd.getPermissionId());
             tbSysRolePermission.setRoleId(roleId);
-            tbSysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            tbSysRolePermission.setRecordStatus(recordStatus);
             list.add(tbSysRolePermission);
         }
         //批量添加权限角色信息
@@ -294,10 +294,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //封装权限文件组实体
             TbSysPermissionFiles tbSysPermissionFiles = new TbSysPermissionFiles();
             tbSysPermissionFiles.setId(UUID.randomUUID().toString());
-            tbSysPermissionFiles.setCreator(user.getId());
+            tbSysPermissionFiles.setCreatorAccount(user.getAccount());
             tbSysPermissionFiles.setFileGroupId(fileGroupId);
             tbSysPermissionFiles.setPermissionId(sysPermissionFileGroupAdd.getPermissionId());
-            tbSysPermissionFiles.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            tbSysPermissionFiles.setRecordStatus(recordStatus);
             list.add(tbSysPermissionFiles);
         }
         //为权限添加新的文件组
@@ -408,10 +409,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
                                            String id, String permissionId) {
         TbSysPermissionResources tbSysPermissionResources = new TbSysPermissionResources();
         tbSysPermissionResources.setId(UUID.randomUUID().toString());
-        tbSysPermissionResources.setCreator(user.getId());
+        tbSysPermissionResources.setCreatorAccount(user.getAccount());
         tbSysPermissionResources.setPermissionId(permissionId);
         tbSysPermissionResources.setResourcesId(id);
-        tbSysPermissionResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermissionResources.setRecordStatus(recordStatus);
         tbSysPermissionResourcesList.add(tbSysPermissionResources);
     }
 
@@ -427,10 +429,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
                                       String id, String permissionId) {
         TbSysPermissionMenu tbSysPermissionMenu = new TbSysPermissionMenu();
         tbSysPermissionMenu.setId(UUID.randomUUID().toString());
-        tbSysPermissionMenu.setCreator(user.getId());
+        tbSysPermissionMenu.setCreatorAccount(user.getAccount());
         tbSysPermissionMenu.setMenuId(id);
         tbSysPermissionMenu.setPermissionId(permissionId);
-        tbSysPermissionMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermissionMenu.setRecordStatus(recordStatus);
         tbSysPermissionMenuList.add(tbSysPermissionMenu);
     }
 }

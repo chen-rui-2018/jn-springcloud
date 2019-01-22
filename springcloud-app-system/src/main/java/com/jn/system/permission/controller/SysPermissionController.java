@@ -51,8 +51,8 @@ public class SysPermissionController extends BaseController {
         TbSysPermission tbSysPermission = new TbSysPermission();
         BeanUtils.copyProperties(sysPermissionAdd, tbSysPermission);
         tbSysPermission.setId(UUID.randomUUID().toString());
-        tbSysPermission.setCreateTime(new Date());
-        tbSysPermission.setCreator(user.getId());
+        tbSysPermission.setCreatedTime(new Date());
+        tbSysPermission.setCreatorAccount(user.getAccount());
         sysPermissionService.addPermission(tbSysPermission);
         return new Result();
     }

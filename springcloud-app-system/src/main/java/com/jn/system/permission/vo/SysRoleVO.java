@@ -26,10 +26,10 @@ public class SysRoleVO implements Serializable{
 	private String roleName;
 
 	@ApiModelProperty("创建时间")
-	private Date createTime;
+	private Date createdTime;
 
 	@ApiModelProperty("状态")
-	private String status;
+	private Byte recordStatus;
 
 	@ApiModelProperty("角色状态描述")
 	private String statusDesc;
@@ -43,12 +43,12 @@ public class SysRoleVO implements Serializable{
 	public SysRoleVO() {
 	}
 
-	public SysRoleVO(String roleId, String roleName, Date createTime, String status, String statusDesc,
+	public SysRoleVO(String roleId, String roleName, Date createdTime, Byte recordStatus, String statusDesc,
 					 List<String> sysRolePermissions, List<String> sysUserRoles) {
 		this.roleId = roleId;
 		this.roleName = roleName;
-		this.createTime = createTime;
-		this.status = status;
+		this.createdTime = createdTime;
+		this.recordStatus = recordStatus;
 		this.statusDesc = statusDesc;
 		this.sysRolePermissions = sysRolePermissions;
 		this.sysUserRoles = sysUserRoles;
@@ -70,20 +70,20 @@ public class SysRoleVO implements Serializable{
 		this.roleName = roleName;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
+	public Date getCreatedTime() {
+		return createdTime;
 	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
+	public void setCreatedTime(Date createdTime) {
+		this.createdTime = createdTime;
 	}
 
-	public String getStatus() {
-		return status;
+	public Byte getRecordStatus() {
+		return recordStatus;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setRecordStatus(Byte recordStatus) {
+		this.recordStatus = recordStatus;
 	}
 
 	public String getStatusDesc() {
@@ -115,8 +115,8 @@ public class SysRoleVO implements Serializable{
 		return "SysRoleVO{" +
 				"roleId='" + roleId + '\'' +
 				", roleName='" + roleName + '\'' +
-				", createTime=" + createTime +
-				", status='" + status + '\'' +
+				", createdTime=" + createdTime +
+				", recordStatus=" + recordStatus +
 				", statusDesc='" + statusDesc + '\'' +
 				", sysRolePermissions=" + sysRolePermissions +
 				", sysUserRoles=" + sysUserRoles +

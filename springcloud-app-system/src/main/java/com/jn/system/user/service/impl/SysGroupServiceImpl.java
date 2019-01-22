@@ -112,7 +112,8 @@ public class SysGroupServiceImpl implements SysGroupService {
         TbSysGroupCriteria tbSysGroupCriteria = new TbSysGroupCriteria();
         TbSysGroupCriteria.Criteria criteria = tbSysGroupCriteria.createCriteria();
         criteria.andGroupNameEqualTo(groupName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysGroupMapper.selectByExample(tbSysGroupCriteria);
     }
 
@@ -148,7 +149,7 @@ public class SysGroupServiceImpl implements SysGroupService {
 
         //1.判断用户组信息是否存在
         TbSysGroup tbSysGroup1 = tbSysGroupMapper.selectByPrimaryKey(groupId);
-        if (tbSysGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysGroup1.getStatus())) {
+        if (tbSysGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysGroup1.getRecordStatus().toString())) {
             logger.warn("[用户组] 用户组修改失败,修改信息不存在,groupId: {}", sysGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -223,8 +224,9 @@ public class SysGroupServiceImpl implements SysGroupService {
         for (String roleId : sysRoleGroupAdd.getRoleIds()) {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
-            sysGroupRole.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-            sysGroupRole.setCreator(user.getId());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            sysGroupRole.setRecordStatus(recordStatus);;
+            sysGroupRole.setCreatorAccount(user.getAccount());
             sysGroupRole.setRoleId(roleId);
             sysGroupRole.setUserGroupId(sysRoleGroupAdd.getGroupId());
             sysGroupRoleList.add(sysGroupRole);
@@ -277,13 +279,14 @@ public class SysGroupServiceImpl implements SysGroupService {
         for (String userId : sysGroupUserAdd.getUserIds()) {
             SysGroupUser sysGroupUser = new SysGroupUser();
             sysGroupUser.setId(UUID.randomUUID().toString());
-            sysGroupUser.setCreator(user.getId());
-            sysGroupUser.setStatus(sysGroupUserAdd.getStatus());
+            sysGroupUser.setCreatorAccount(user.getAccount());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            sysGroupUser.setRecordStatus(recordStatus);
             sysGroupUser.setGroupId(sysGroupUserAdd.getGroupId());
             sysGroupUser.setUserId(userId);
             sysGroupUserList.add(sysGroupUser);
         }
-        //批量插入信息新的用户
+        //批量插入
         sysGroupUserMapper.insertSysGroupUserBatch(sysGroupUserList);
         logger.info("[用户组] 用户组授权用户成功，groupId:{}", sysGroupUserAdd.getGroupId());
     }

@@ -72,10 +72,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         TbActivityType activityType = new TbActivityType();
         String typeId = UUID.randomUUID().toString().replaceAll("-", "");
         activityType.setTypeId(typeId);
-        activityType.setCreateTime(new Date());
-        activityType.setCreateAccount(user.getAccount());
+        activityType.setCreatedTime(new Date());
+        activityType.setCreatorAccount(user.getAccount());
         activityType.setTypeName(typeName);
-        activityType.setStatus(status);
+        activityType.setTypeStatus(status);
         tbActivityTypeMapper.insertSelective(activityType);
 
         // 使用map封装,有多个模板时进行批量插入
@@ -126,10 +126,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         List<String> list= new ArrayList<>();
         TbActivityType activityType = new TbActivityType();
         activityType.setTypeId(typeId);
-        activityType.setUpdateTime(new Date());
-        activityType.setUpdateAccount(user.getAccount());
+        activityType.setModifiedTime(new Date());
+        activityType.setModifierAccount(user.getAccount());
         activityType.setTypeName(typeName);
-        activityType.setStatus(status);
+        activityType.setTypeStatus(status);
         TbActivityCriteria criteria = new TbActivityCriteria();
         criteria.createCriteria().andActiTypeEqualTo(typeId);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);
@@ -182,10 +182,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             List<TbActivityFile> activityFileList = new ArrayList<>();
             for (String tempUrl : templateList) {
                 TbActivityFile activityFile = new TbActivityFile();
-                activityFile.setCreateTime(new Date());
-                activityFile.setCreateAccount(account);
+                activityFile.setCreatedTime(new Date());
+                activityFile.setCreatorAccount(account);
                 activityFile.setTypeId(typeId);
-                activityFile.setStatus("1");
+                activityFile.setFileStatus("1");
 
                 activityFile.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 activityFile.setFileSrc(tempUrl);

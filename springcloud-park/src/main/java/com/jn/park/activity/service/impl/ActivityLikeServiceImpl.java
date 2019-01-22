@@ -51,13 +51,13 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
     public void activityLike(String activityId,String account) {
         //根据account和活动id查询活动点赞表（tb_activity_like）是否有该用户的数据
         TbParkLikeCriteria example=new TbParkLikeCriteria();
-        example.createCriteria().andLikeParentIdEqualTo(activityId).andLikeAccountEqualTo(account);
+        example.createCriteria().andLikeParentIdEqualTo(activityId).andCreatorAccountEqualTo(account);
         //点赞表存在的用户数  根据活动id和账号查询
         long accountNum = tbParkLikeMapper.countByExample(example);
         //已点赞用户数  根据活动id、账号以及状态为点赞（"1"）查询  防止重复操作，更新园区活动表感兴趣人数
         String likeState="1";
         TbParkLikeCriteria likeExample=new TbParkLikeCriteria();
-        likeExample.createCriteria().andLikeParentIdEqualTo(activityId).andLikeAccountEqualTo(account).andStatusEqualTo(likeState);
+        likeExample.createCriteria().andLikeParentIdEqualTo(activityId).andCreatorAccountEqualTo(account).andLikeStatusEqualTo(likeState);
         long likeAccountNum = tbParkLikeMapper.countByExample(likeExample);
         //数据库没有状态为已点赞的用户
          int noLikeNum=0;
@@ -98,8 +98,8 @@ public class ActivityLikeServiceImpl implements ActivityLikeService {
         String cancelState="0";
         //根据id和account查询是否有状态为取消点赞（"0"）的数据
         TbParkLikeCriteria cancelExample=new TbParkLikeCriteria();
-        cancelExample.createCriteria().andLikeParentIdEqualTo(activityId).andLikeAccountEqualTo(account)
-                .andStatusEqualTo(cancelState);
+        cancelExample.createCriteria().andLikeParentIdEqualTo(activityId).andCreatorAccountEqualTo(account)
+                .andLikeStatusEqualTo(cancelState);
         long cancelLikeNum = tbParkLikeMapper.countByExample(cancelExample);
         //获取完状态信息后再更新点赞状态
         commentService.updateParkLikeState(activityId,account,cancelState);

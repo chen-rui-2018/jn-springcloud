@@ -155,18 +155,20 @@ public class CommentServiceImpl implements CommentService {
         TbCommentCriteria example=new TbCommentCriteria();
         //有效点评状态
         String applyState="1";
-        example.createCriteria().andIdEqualTo(id).andStatusEqualTo(applyState);
+        //删除状态未被删除  0：删除  1:正常
+        byte recordStatus=1;
+        example.createCriteria().andIdEqualTo(id).andComStatusEqualTo(applyState).andRecordStatusEqualTo(recordStatus);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
         if(commentList==null || commentList.isEmpty()){
             throw new JnSpringCloudException(ActivityExceptionEnum.APPLY_IS_NOT_EXIST);
         }
         //查询园区点赞表（tb_park_like），根据活动id/评论id,用户判断是否存在点赞信息
         TbParkLikeCriteria existExample=new TbParkLikeCriteria();
-        existExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account);
+        existExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andRecordStatusEqualTo(recordStatus);
         long existLikeNum = tbParkLikeMapper.countByExample(existExample);
-        //查询园区点赞表（tb_park_like），根据活动id/评论id,用户以及状态为点赞来判断是否已点赞/取消点赞
+        //查询园区点赞表（tb_park_like），根据活动id/评论id,用户以及状态为点赞,删除状态为未删除来判断是否已点赞/取消点赞
         TbParkLikeCriteria optionLikeExample=new TbParkLikeCriteria();
-        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andLikeAccountEqualTo(account).andStatusEqualTo(state);
+        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andLikeStatusEqualTo(state).andRecordStatusEqualTo(recordStatus);
         long optionLikeNum = tbParkLikeMapper.countByExample(optionLikeExample);
         //已点赞/已取消点赞，不做操作
         if(optionLikeNum>0){
@@ -188,7 +190,7 @@ public class CommentServiceImpl implements CommentService {
     /**
      * 更新点评表点评获赞数
      * @param id            当前活动、评论、服务的id(非pid)
-     * @param applyState    有效点评装填  0：无效  1：有效
+     * @param applyState    有效点评状态  0：无效  1：有效
      * @param commentList   点评信息
      * @param state         点赞状态  0：取消点赞  1：点赞
      */
@@ -200,7 +202,7 @@ public class CommentServiceImpl implements CommentService {
         int likeNum=state.equals(addFlag)?1:-1;
         tbComment.setLikeNum(tbComment.getLikeNum()+likeNum);
         TbCommentCriteria example=new TbCommentCriteria();
-        example.createCriteria().andIdEqualTo(id).andStatusEqualTo(applyState);
+        example.createCriteria().andIdEqualTo(id).andComStatusEqualTo(applyState);
         tbCommentMapper.updateByExampleSelective(tbComment, example);
     }
 
@@ -219,20 +221,20 @@ public class CommentServiceImpl implements CommentService {
         //点评父标识（点评ID/活动id）
         tbComment.setpId(commentAdd.getpId());
         //点评人
-        tbComment.setComAccount(account);
+        tbComment.setCreatorAccount(account);
         //点评状态 0:无效  1：有效 新增点评的状态为有效
         String state="1";
-        tbComment.setStatus(state);
+        tbComment.setComStatus(state);
         //根据点评父id得到被点评人
         TbCommentCriteria example=new TbCommentCriteria();
-        example.createCriteria().andIdEqualTo(commentAdd.getpId()).andStatusEqualTo(state);
+        example.createCriteria().andIdEqualTo(commentAdd.getpId()).andComStatusEqualTo(state);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
         if(commentList!=null && !commentList.isEmpty()){
             //把被点评信息的点评人设置为当前信息的被点评人
-            tbComment.setParentAccount(commentList.get(0).getComAccount());
+            tbComment.setParentAccount(commentList.get(0).getCreatorAccount());
         }
         //点评时间
-        tbComment.setComTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
+        tbComment.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         //点评获赞数 ,新增点评的获赞数为0
         int num=0;
         tbComment.setLikeNum(num);
@@ -240,6 +242,9 @@ public class CommentServiceImpl implements CommentService {
         tbComment.setComType(commentAdd.getComType());
         //点评内容
         tbComment.setComContent(commentAdd.getComContent());
+        //是否删除  0:删除   1：正常
+        byte recordStatus=1;
+        tbComment.setRecordStatus(recordStatus);
 
         tbCommentMapper.insertSelective(tbComment);
     }
@@ -258,12 +263,12 @@ public class CommentServiceImpl implements CommentService {
             throw new JnSpringCloudException(ActivityExceptionEnum.LIKE_STATE_NOT_ALLOW);
         }
         TbParkLikeCriteria example=new TbParkLikeCriteria();
-        example.createCriteria().andLikeParentIdEqualTo(likeParentId).andLikeAccountEqualTo(account);
+        example.createCriteria().andLikeParentIdEqualTo(likeParentId).andCreatorAccountEqualTo(account);
         TbParkLike tbParkLike=new TbParkLike();
         //状态
-        tbParkLike.setStatus(state);
+        tbParkLike.setLikeStatus(state);
         //点赞时间
-        tbParkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
+        tbParkLike.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         tbParkLikeMapper.updateByExampleSelective(tbParkLike, example);
     }
 
@@ -281,12 +286,15 @@ public class CommentServiceImpl implements CommentService {
         //点赞父id
         parkLike.setLikeParentId(activityId);
         //点赞人
-        parkLike.setLikeAccount(account);
+        parkLike.setCreatorAccount(account);
         //点赞时间
-        parkLike.setLikeTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
+        parkLike.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(TIME_FORMAT)));
         //状态 0：取消点赞  1：点赞
         String likeState="1";
-        parkLike.setStatus(likeState);
+        parkLike.setLikeStatus(likeState);
+        //是否已删除  0:删除    1：正常
+        byte recordStatus=1;
+        parkLike.setRecordStatus(recordStatus);
         tbParkLikeMapper.insertSelective(parkLike);
     }
 }

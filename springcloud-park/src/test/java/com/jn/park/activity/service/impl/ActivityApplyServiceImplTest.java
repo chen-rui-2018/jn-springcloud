@@ -139,7 +139,7 @@ public class ActivityApplyServiceImplTest {
     @Test
     public void delApplyInfo(){
         TbActivityApplyCriteria example =new TbActivityApplyCriteria();
-        example.createCriteria().andActivityIdEqualTo(activityId).andAccountEqualTo(account);
+        example.createCriteria().andActivityIdEqualTo(activityId).andCreatorAccountEqualTo(account);
         tbActivityApplyMapper.deleteByExample(example);
     }
 

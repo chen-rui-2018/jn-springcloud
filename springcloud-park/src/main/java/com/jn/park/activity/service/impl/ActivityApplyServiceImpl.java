@@ -220,7 +220,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "更新报名状态")
     private void updateApplyState(String id, String account, String status) {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
-        example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id);
+        example.createCriteria().andCreatorAccountEqualTo(account).andActivityIdEqualTo(id);
         TbActivityApply tbActivityApply = new TbActivityApply();
         tbActivityApply.setApplyStatus(status);
         tbActivityApplyMapper.updateByExampleSelective(tbActivityApply, example);
@@ -236,7 +236,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "是否存在当前活动的用户信息")
     private boolean existApplyInfo(String id, String account) {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
-        example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id);
+        example.createCriteria().andCreatorAccountEqualTo(account).andActivityIdEqualTo(id);
         long applyInfoNum = tbActivityApplyMapper.countByExample(example);
         return applyInfoNum>0;
     }
@@ -252,7 +252,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "是否已存在报名或取消报名信息")
     private boolean existApplyOrCancelApply(String id, String account, String status) {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
-        example.createCriteria().andAccountEqualTo(account).andActivityIdEqualTo(id).andApplyStatusEqualTo(status);
+        example.createCriteria().andCreatorAccountEqualTo(account).andActivityIdEqualTo(id).andApplyStatusEqualTo(status);
         long applyInfoNum = tbActivityApplyMapper.countByExample(example);
         return applyInfoNum>0;
     }
@@ -274,14 +274,17 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         //活动id
         activityApply.setActivityId(activityId);
         //报名人
-        activityApply.setAccount(account);
+        activityApply.setCreatorAccount(account);
         //报名时间
-        activityApply.setApplyTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
+        activityApply.setCreatedTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //报名状态
         activityApply.setApplyStatus(status);
         //签到状态  0：未签到，1：已签到
         String notSignedIn = "0";
         activityApply.setSignStatus(notSignedIn);
+        //是否已删除 0:已删除   1：正常
+        byte recordStatrus=1;
+        activityApply.setRecordStatus(recordStatrus);
         tbActivityApplyMapper.insertSelective(activityApply);
     }
 
@@ -315,10 +318,11 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @ServiceLog(doAction = "逻辑删除用户报名信息")
     private void deleteApplyInfo(String id, String account) {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
-        example.createCriteria().andActivityIdEqualTo(id).andAccountEqualTo(account);
+        example.createCriteria().andActivityIdEqualTo(id).andCreatorAccountEqualTo(account);
         TbActivityApply activityApply = new TbActivityApply();
-        //报名状态设置为"0"，取消报名
-        activityApply.setApplyStatus("0");
+        //是否删除设置为0    0：删除    1：正常
+        byte recordStatus=0;
+        activityApply.setRecordStatus(recordStatus);
         tbActivityApplyMapper.updateByExampleSelective(activityApply, example);
     }
 
@@ -423,7 +427,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         }
         TbActivityApply activityApply = null;
         for (TbActivityApply apply : applies) {
-            if (StringUtils.equals(apply.getAccount(), account)) {
+            if (StringUtils.equals(apply.getCreatorAccount(), account)) {
                 activityApply = apply;
             }
         }

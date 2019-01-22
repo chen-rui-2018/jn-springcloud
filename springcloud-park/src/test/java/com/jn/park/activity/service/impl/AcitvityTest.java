@@ -92,7 +92,7 @@ public class AcitvityTest {
     public void updateActivityApply(){
         ActivitySataus activitySataus = new ActivitySataus();
         activitySataus.setActivityId(activityId);
-        activitySataus.setStatus(status);
+        activitySataus.setActiStatus(status);
         try{
             int i = activityService.updateActivityApply(activitySataus);
             assertThat(i,is(1));
@@ -121,7 +121,7 @@ public class AcitvityTest {
         activityContent.setActiPosterUrl("http://politics.people.com.cn/NMediaFile/2018/1219/MAIN201812191525000321021630650.jpg");
         activityContent.setActiOrganizer("管委会");
         activityContent.setActiNumber(1000);
-        activityContent.setStatus("2");
+        activityContent.setActiStatus("2");
         activityContent.setShowApplyNum("1");
         try{
             int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
@@ -150,7 +150,7 @@ public class AcitvityTest {
     @Test
     public void deleteDraftActivity(){
         try{
-            int i = activityService.deleteDraftActivity(activityId);
+            int i = activityService.deleteDraftActivity(activityId,userAccount);
             assertThat(i,anything());
         }catch (JnSpringCloudException e){
             logger.warn("删除活动接口[草稿数据]--数据错误，请修改数据后再运行TEST");
@@ -166,7 +166,7 @@ public class AcitvityTest {
     @Test
     public void deleteActivity(){
         try{
-            int i = activityService.deleteActivity(activityId);
+            int i = activityService.deleteActivity(activityId,userAccount);
             assertThat(i,anything());
         }catch (JnSpringCloudException e){
             logger.warn("删除活动接口[管理员]--数据错误，请修改数据后再运行TEST");
@@ -177,7 +177,7 @@ public class AcitvityTest {
     @Test
     public void cancelActivity(){
         try{
-            int i = activityService.cancelActivity(activityId);
+            int i = activityService.cancelActivity(activityId,userAccount);
             assertThat(i,anything());
         }catch (JnSpringCloudException e){
             logger.warn("取消活动--数据错误，请修改数据后再运行TEST");

@@ -157,7 +157,7 @@ public class CommentServiceImplTest {
     @Test
     public void delActivityLike(){
         TbParkLikeCriteria example=new TbParkLikeCriteria();
-        example.createCriteria().andLikeParentIdEqualTo(activityId).andLikeAccountEqualTo(account);
+        example.createCriteria().andLikeParentIdEqualTo(activityId).andCreatorAccountEqualTo(account);
         tbParkLikeMapper.deleteByExample(example);
     }
 }

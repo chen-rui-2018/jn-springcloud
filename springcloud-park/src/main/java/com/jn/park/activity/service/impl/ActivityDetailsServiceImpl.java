@@ -127,7 +127,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     private void applyCountdown(String activityId, String account, ActivityDetailVO activityDetailVO) {
         //根据用户账号和活动id查询当前登录用户是否已报名当前活动
         TbActivityApplyCriteria example=new TbActivityApplyCriteria();
-        example.createCriteria().andActivityIdEqualTo(activityId).andAccountEqualTo(account);
+        example.createCriteria().andActivityIdEqualTo(activityId).andCreatorAccountEqualTo(account);
         long applyNum = tbActivityApplyMapper.countByExample(example);
         //默认报名成功
         activityDetailVO.setApplySuccess(true);
@@ -250,7 +250,11 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     public List<TbParkLike> getActivityLikeInfo(String activityId){
         TbParkLikeCriteria example=new TbParkLikeCriteria();
         //根据活动id获取点赞状态为点赞（"1"）的数据
-        example.createCriteria().andLikeParentIdEqualTo(activityId).andStatusEqualTo("1");
+        String likeStatus="1";
+        //是否删除  0:已删除  1：正常
+        byte recordStatus=1;
+        example.createCriteria().andLikeParentIdEqualTo(activityId).andLikeStatusEqualTo(likeStatus)
+                .andRecordStatusEqualTo(recordStatus);
         return tbParkLikeMapper.selectByExample(example);
     }
 
@@ -308,15 +312,12 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Override
     public TbActivity getActivityInfo(String activityId){
         TbActivityCriteria example=new TbActivityCriteria();
-        List<String> stateList=new ArrayList<>(16);
         //草稿
         String draftState="1";
-        stateList.add(draftState);
         //已删除活动
-        String delState="5";
-        stateList.add(delState);
+        byte delState=0;
         //草稿、已删除的活动不能被查询出来
-        example.createCriteria().andIdEqualTo(activityId).andStatusNotIn(stateList);
+        example.createCriteria().andIdEqualTo(activityId).andActiStatusEqualTo(draftState).andRecordStatusEqualTo(delState);
         return tbActivityMapper.selectByPrimaryKey(activityId);
     }
 }

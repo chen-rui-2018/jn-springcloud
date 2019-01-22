@@ -4,10 +4,12 @@
   <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbParkLike">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="like_parent_id" jdbcType="VARCHAR" property="likeParentId" />
-    <result column="like_account" jdbcType="VARCHAR" property="likeAccount" />
-    <result column="like_time" jdbcType="TIMESTAMP" property="likeTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="like_status" jdbcType="VARCHAR" property="likeStatus" />
-    <result column="record_status" jdbcType="BIT" property="recordStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -68,7 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, like_parent_id, like_account, like_time, like_status, record_status
+    id, like_parent_id, creator_account, created_time, like_status, record_status, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbParkLikeCriteria" resultMap="BaseResultMap">
     select
@@ -101,12 +104,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbParkLike">
-    insert into tb_park_like (id, like_parent_id, like_account, 
-      like_time, like_status, record_status
-      )
-    values (#{id,jdbcType=VARCHAR}, #{likeParentId,jdbcType=VARCHAR}, #{likeAccount,jdbcType=VARCHAR}, 
-      #{likeTime,jdbcType=TIMESTAMP}, #{likeStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=BIT}
-      )
+    insert into tb_park_like (id, like_parent_id, creator_account, 
+      created_time, like_status, record_status, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{likeParentId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{likeStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbParkLike">
     insert into tb_park_like
@@ -117,17 +120,23 @@
       <if test="likeParentId != null">
         like_parent_id,
       </if>
-      <if test="likeAccount != null">
-        like_account,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="likeTime != null">
-        like_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
       <if test="likeStatus != null">
         like_status,
       </if>
       <if test="recordStatus != null">
         record_status,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -137,17 +146,23 @@
       <if test="likeParentId != null">
         #{likeParentId,jdbcType=VARCHAR},
       </if>
-      <if test="likeAccount != null">
-        #{likeAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="likeTime != null">
-        #{likeTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="likeStatus != null">
         #{likeStatus,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=BIT},
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -166,17 +181,23 @@
       <if test="record.likeParentId != null">
         like_parent_id = #{record.likeParentId,jdbcType=VARCHAR},
       </if>
-      <if test="record.likeAccount != null">
-        like_account = #{record.likeAccount,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.likeTime != null">
-        like_time = #{record.likeTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.likeStatus != null">
         like_status = #{record.likeStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=BIT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -187,10 +208,12 @@
     update tb_park_like
     set id = #{record.id,jdbcType=VARCHAR},
       like_parent_id = #{record.likeParentId,jdbcType=VARCHAR},
-      like_account = #{record.likeAccount,jdbcType=VARCHAR},
-      like_time = #{record.likeTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       like_status = #{record.likeStatus,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=BIT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -201,17 +224,23 @@
       <if test="likeParentId != null">
         like_parent_id = #{likeParentId,jdbcType=VARCHAR},
       </if>
-      <if test="likeAccount != null">
-        like_account = #{likeAccount,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="likeTime != null">
-        like_time = #{likeTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="likeStatus != null">
         like_status = #{likeStatus,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=BIT},
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -219,10 +248,12 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbParkLike">
     update tb_park_like
     set like_parent_id = #{likeParentId,jdbcType=VARCHAR},
-      like_account = #{likeAccount,jdbcType=VARCHAR},
-      like_time = #{likeTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       like_status = #{likeStatus,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=BIT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

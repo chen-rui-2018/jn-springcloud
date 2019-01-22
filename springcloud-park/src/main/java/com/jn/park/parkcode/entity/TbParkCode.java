@@ -22,7 +22,7 @@ public class TbParkCode implements Serializable {
 
     private Date modifiedTime;
 
-    private Boolean recordStatus;
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -98,11 +98,11 @@ public class TbParkCode implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public Boolean getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Boolean recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
 

@@ -12,7 +12,9 @@
     <result column="com_status" jdbcType="VARCHAR" property="comStatus" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
     <result column="com_content" jdbcType="VARCHAR" property="comContent" />
-    <result column="record_status" jdbcType="BIT" property="recordStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, root_id, p_id, parent_account, creator_account, created_time, like_num, com_status, 
-    com_type, com_content, record_status
+    com_type, com_content, record_status, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.comment.entity.TbCommentCriteria" resultMap="BaseResultMap">
     select
@@ -110,11 +112,13 @@
     insert into tb_comment (id, root_id, p_id, 
       parent_account, creator_account, created_time, 
       like_num, com_status, com_type, 
-      com_content, record_status)
+      com_content, record_status, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{rootId,jdbcType=VARCHAR}, #{pId,jdbcType=VARCHAR}, 
       #{parentAccount,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{likeNum,jdbcType=INTEGER}, #{comStatus,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
-      #{comContent,jdbcType=VARCHAR}, #{recordStatus,jdbcType=BIT})
+      #{comContent,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.comment.entity.TbComment">
     insert into tb_comment
@@ -152,6 +156,12 @@
       <if test="recordStatus != null">
         record_status,
       </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -185,7 +195,13 @@
         #{comContent,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=BIT},
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -229,7 +245,13 @@
         com_content = #{record.comContent,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=BIT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -248,7 +270,9 @@
       com_status = #{record.comStatus,jdbcType=VARCHAR},
       com_type = #{record.comType,jdbcType=VARCHAR},
       com_content = #{record.comContent,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=BIT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -284,7 +308,13 @@
         com_content = #{comContent,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=BIT},
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -300,7 +330,9 @@
       com_status = #{comStatus,jdbcType=VARCHAR},
       com_type = #{comType,jdbcType=VARCHAR},
       com_content = #{comContent,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=BIT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -585,52 +585,52 @@ public class TbActivityTypeCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusEqualTo(Boolean value) {
+        public Criteria andRecordStatusEqualTo(Byte value) {
             addCriterion("record_status =", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotEqualTo(Boolean value) {
+        public Criteria andRecordStatusNotEqualTo(Byte value) {
             addCriterion("record_status <>", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusGreaterThan(Boolean value) {
+        public Criteria andRecordStatusGreaterThan(Byte value) {
             addCriterion("record_status >", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
             addCriterion("record_status >=", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusLessThan(Boolean value) {
+        public Criteria andRecordStatusLessThan(Byte value) {
             addCriterion("record_status <", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusLessThanOrEqualTo(Boolean value) {
+        public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
             addCriterion("record_status <=", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusIn(List<Boolean> values) {
+        public Criteria andRecordStatusIn(List<Byte> values) {
             addCriterion("record_status in", values, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotIn(List<Boolean> values) {
+        public Criteria andRecordStatusNotIn(List<Byte> values) {
             addCriterion("record_status not in", values, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusBetween(Boolean value1, Boolean value2) {
+        public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
             addCriterion("record_status between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }

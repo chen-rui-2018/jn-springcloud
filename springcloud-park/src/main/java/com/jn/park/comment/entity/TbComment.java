@@ -24,7 +24,11 @@ public class TbComment implements Serializable {
 
     private String comContent;
 
-    private Boolean recordStatus;
+    private Byte recordStatus;
+
+    private String modifierAccount;
+
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,12 +112,28 @@ public class TbComment implements Serializable {
         this.comContent = comContent == null ? null : comContent.trim();
     }
 
-    public Boolean getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Boolean recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override
@@ -138,7 +158,9 @@ public class TbComment implements Serializable {
             && (this.getComStatus() == null ? other.getComStatus() == null : this.getComStatus().equals(other.getComStatus()))
             && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()))
             && (this.getComContent() == null ? other.getComContent() == null : this.getComContent().equals(other.getComContent()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -156,6 +178,8 @@ public class TbComment implements Serializable {
         result = prime * result + ((getComType() == null) ? 0 : getComType().hashCode());
         result = prime * result + ((getComContent() == null) ? 0 : getComContent().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         return result;
     }
 
@@ -176,6 +200,8 @@ public class TbComment implements Serializable {
         sb.append(", comType=").append(comType);
         sb.append(", comContent=").append(comContent);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

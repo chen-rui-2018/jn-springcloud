@@ -65,7 +65,7 @@ public class TbActivity implements Serializable {
 
     private String applyCheck;
 
-    private Boolean recordStatus;
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -309,11 +309,11 @@ public class TbActivity implements Serializable {
         this.applyCheck = applyCheck == null ? null : applyCheck.trim();
     }
 
-    public Boolean getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Boolean recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
 

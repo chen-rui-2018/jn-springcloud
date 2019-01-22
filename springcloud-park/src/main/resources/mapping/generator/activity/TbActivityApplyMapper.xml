@@ -10,7 +10,9 @@
     <result column="sign_status" jdbcType="VARCHAR" property="signStatus" />
     <result column="sign_time" jdbcType="TIMESTAMP" property="signTime" />
     <result column="sign_type" jdbcType="VARCHAR" property="signType" />
-    <result column="record_status" jdbcType="BIT" property="recordStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, activity_id, creator_account, created_time, apply_status, sign_status, sign_time, 
-    sign_type, record_status
+    sign_type, record_status, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityApplyCriteria" resultMap="BaseResultMap">
     select
@@ -107,12 +109,12 @@
   <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivityApply">
     insert into tb_activity_apply (id, activity_id, creator_account, 
       created_time, apply_status, sign_status, 
-      sign_time, sign_type, record_status
-      )
+      sign_time, sign_type, record_status, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{applyStatus,jdbcType=VARCHAR}, #{signStatus,jdbcType=VARCHAR}, 
-      #{signTime,jdbcType=TIMESTAMP}, #{signType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=BIT}
-      )
+      #{signTime,jdbcType=TIMESTAMP}, #{signType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityApply">
     insert into tb_activity_apply
@@ -144,6 +146,12 @@
       <if test="recordStatus != null">
         record_status,
       </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -171,7 +179,13 @@
         #{signType,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=BIT},
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -209,7 +223,13 @@
         sign_type = #{record.signType,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=BIT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -226,7 +246,9 @@
       sign_status = #{record.signStatus,jdbcType=VARCHAR},
       sign_time = #{record.signTime,jdbcType=TIMESTAMP},
       sign_type = #{record.signType,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=BIT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,7 +278,13 @@
         sign_type = #{signType,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=BIT},
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -270,7 +298,9 @@
       sign_status = #{signStatus,jdbcType=VARCHAR},
       sign_time = #{signTime,jdbcType=TIMESTAMP},
       sign_type = #{signType,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=BIT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

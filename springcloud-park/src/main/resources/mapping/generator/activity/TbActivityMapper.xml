@@ -32,7 +32,7 @@
     <result column="issue_account" jdbcType="VARCHAR" property="issueAccount" />
     <result column="show_apply_num" jdbcType="VARCHAR" property="showApplyNum" />
     <result column="apply_check" jdbcType="VARCHAR" property="applyCheck" />
-    <result column="record_status" jdbcType="BIT" property="recordStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -151,7 +151,7 @@
       #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
       #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
       #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}, #{applyCheck,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=BIT})
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
     insert into tb_activity
@@ -342,7 +342,7 @@
         #{applyCheck,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=BIT},
+        #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -446,7 +446,7 @@
         apply_check = #{record.applyCheck,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=BIT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -485,7 +485,7 @@
       issue_account = #{record.issueAccount,jdbcType=VARCHAR},
       show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
       apply_check = #{record.applyCheck,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=BIT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -581,7 +581,7 @@
         apply_check = #{applyCheck,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=BIT},
+        record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -617,7 +617,7 @@
       issue_account = #{issueAccount,jdbcType=VARCHAR},
       show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
       apply_check = #{applyCheck,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=BIT}
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

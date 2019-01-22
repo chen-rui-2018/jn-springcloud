@@ -20,7 +20,11 @@ public class TbActivityApply implements Serializable {
 
     private String signType;
 
-    private Boolean recordStatus;
+    private Byte recordStatus;
+
+    private String modifierAccount;
+
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -88,12 +92,28 @@ public class TbActivityApply implements Serializable {
         this.signType = signType == null ? null : signType.trim();
     }
 
-    public Boolean getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Boolean recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override
@@ -116,7 +136,9 @@ public class TbActivityApply implements Serializable {
             && (this.getSignStatus() == null ? other.getSignStatus() == null : this.getSignStatus().equals(other.getSignStatus()))
             && (this.getSignTime() == null ? other.getSignTime() == null : this.getSignTime().equals(other.getSignTime()))
             && (this.getSignType() == null ? other.getSignType() == null : this.getSignType().equals(other.getSignType()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -132,6 +154,8 @@ public class TbActivityApply implements Serializable {
         result = prime * result + ((getSignTime() == null) ? 0 : getSignTime().hashCode());
         result = prime * result + ((getSignType() == null) ? 0 : getSignType().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         return result;
     }
 
@@ -150,6 +174,8 @@ public class TbActivityApply implements Serializable {
         sb.append(", signTime=").append(signTime);
         sb.append(", signType=").append(signType);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

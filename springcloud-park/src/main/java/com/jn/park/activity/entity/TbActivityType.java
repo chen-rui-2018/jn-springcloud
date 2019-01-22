@@ -18,7 +18,7 @@ public class TbActivityType implements Serializable {
 
     private String typeStatus;
 
-    private Boolean recordStatus;
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -78,11 +78,11 @@ public class TbActivityType implements Serializable {
         this.typeStatus = typeStatus == null ? null : typeStatus.trim();
     }
 
-    public Boolean getRecordStatus() {
+    public Byte getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Boolean recordStatus) {
+    public void setRecordStatus(Byte recordStatus) {
         this.recordStatus = recordStatus;
     }
 

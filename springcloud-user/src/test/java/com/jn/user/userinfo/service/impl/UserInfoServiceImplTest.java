@@ -67,9 +67,6 @@ public class UserInfoServiceImplTest {
     @Test
     public void getMoreUserExtension() {
         List<UserExtension> userInfoList = userInfoService.getMoreUserExtension(accountList);
-        for(UserExtension userExtension:userInfoList){
-            System.out.println(userExtension.getUserPersonInfo().toString());
-        }
         assertThat(userInfoList, notNullValue());
     }
 }

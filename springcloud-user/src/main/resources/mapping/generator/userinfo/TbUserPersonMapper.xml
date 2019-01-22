@@ -17,10 +17,11 @@
     <result column="user_type" jdbcType="VARCHAR" property="userType" />
     <result column="point" jdbcType="DOUBLE" property="point" />
     <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
-    <result column="creater" jdbcType="VARCHAR" property="creater" />
-    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="record_status" jdbcType="BIT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,7 +83,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, account, phone, email, name, sex, age, ID_card, company, post, education, avatar, 
-    user_type, point, birthday, creater, modifier, create_time, modify_time
+    user_type, point, birthday, creator_account, modifier_account, created_time, modified_time, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
     select
@@ -119,16 +121,16 @@
       email, name, sex, age, 
       ID_card, company, post, 
       education, avatar, user_type, 
-      point, birthday, creater, 
-      modifier, create_time, modify_time
-      )
+      point, birthday, creator_account, 
+      modifier_account, created_time, modified_time, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{idCard,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, 
       #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
-      #{point,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, #{creater,jdbcType=VARCHAR}, 
-      #{modifier,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}
-      )
+      #{point,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person
@@ -178,17 +180,20 @@
       <if test="birthday != null">
         birthday,
       </if>
-      <if test="creater != null">
-        creater,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="modifier != null">
-        modifier,
+      <if test="modifierAccount != null">
+        modifier_account,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
-      <if test="modifyTime != null">
-        modify_time,
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -237,17 +242,20 @@
       <if test="birthday != null">
         #{birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="creater != null">
-        #{creater,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
-        #{modifier,jdbcType=VARCHAR},
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifyTime != null">
-        #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -305,17 +313,20 @@
       <if test="record.birthday != null">
         birthday = #{record.birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.creater != null">
-        creater = #{record.creater,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifier != null">
-        modifier = #{record.modifier,jdbcType=VARCHAR},
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.modifyTime != null">
-        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=BIT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -339,10 +350,11 @@
       user_type = #{record.userType,jdbcType=VARCHAR},
       point = #{record.point,jdbcType=DOUBLE},
       birthday = #{record.birthday,jdbcType=TIMESTAMP},
-      creater = #{record.creater,jdbcType=VARCHAR},
-      modifier = #{record.modifier,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -392,17 +404,20 @@
       <if test="birthday != null">
         birthday = #{birthday,jdbcType=TIMESTAMP},
       </if>
-      <if test="creater != null">
-        creater = #{creater,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="modifier != null">
-        modifier = #{modifier,jdbcType=VARCHAR},
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="modifyTime != null">
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=BIT},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -423,10 +438,11 @@
       user_type = #{userType,jdbcType=VARCHAR},
       point = #{point,jdbcType=DOUBLE},
       birthday = #{birthday,jdbcType=TIMESTAMP},
-      creater = #{creater,jdbcType=VARCHAR},
-      modifier = #{modifier,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=BIT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

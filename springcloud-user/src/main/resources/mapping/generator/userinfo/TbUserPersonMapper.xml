@@ -21,7 +21,7 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="record_status" jdbcType="BIT" property="recordStatus" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -130,7 +130,7 @@
       #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
       #{point,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{recordStatus,jdbcType=BIT})
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     insert into tb_user_person
@@ -255,7 +255,7 @@
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=BIT},
+        #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -326,7 +326,7 @@
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=BIT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -354,7 +354,7 @@
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      record_status = #{record.recordStatus,jdbcType=BIT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -417,7 +417,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=BIT},
+        record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -442,7 +442,7 @@
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      record_status = #{recordStatus,jdbcType=BIT}
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

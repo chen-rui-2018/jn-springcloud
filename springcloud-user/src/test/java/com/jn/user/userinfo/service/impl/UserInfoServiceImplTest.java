@@ -58,6 +58,14 @@ public class UserInfoServiceImplTest {
     @Test
     public void getUserExtension() {
         UserExtension userInfo = userInfoService.getUserExtension(account);
+        if(userInfo!=null){
+            if(userInfo.getUserPersonInfo()!=null){
+                logger.info(userInfo.getUserPersonInfo().toString());
+            }
+            if(userInfo.getUserCompanyInfo()!=null){
+                logger.info(userInfo.getUserCompanyInfo().toString());
+            }
+        }
         assertThat(userInfo, notNullValue());
     }
 
@@ -67,6 +75,14 @@ public class UserInfoServiceImplTest {
     @Test
     public void getMoreUserExtension() {
         List<UserExtension> userInfoList = userInfoService.getMoreUserExtension(accountList);
+        for(UserExtension userInfo:userInfoList){
+            if(userInfo.getUserPersonInfo()!=null){
+                logger.info(userInfo.getUserPersonInfo().toString());
+            }
+            if(userInfo.getUserCompanyInfo()!=null){
+                logger.info(userInfo.getUserCompanyInfo().toString());
+            }
+        }
         assertThat(userInfoList, notNullValue());
     }
 }

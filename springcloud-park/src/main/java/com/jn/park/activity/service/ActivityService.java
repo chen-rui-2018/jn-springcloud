@@ -24,7 +24,7 @@ public interface ActivityService {
     PaginationData selectActivityList(ActivityParment activityParment);
 
     /**
-     * 查询活动详情
+     * 查询活动详情[后台管理]
      * @param activityId
      * @return
      */

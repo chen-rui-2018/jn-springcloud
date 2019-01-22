@@ -25,14 +25,16 @@ public class ParkCodeServiceImpl implements ParkCodeService {
     private static Logger logger = LoggerFactory.getLogger(ParkCodeServiceImpl.class);
     @Autowired
     private TbParkCodeMapper tbParkCodeMapper;
+    /**
+     * 数据未删除状态
+     */
+    private static final String PARK_CODE_DELETE = "1";
 
     @Override
     @ServiceLog(doAction = "查询园区字典编码")
     public List<TbParkCode> getParkCodeByType(String codeType){
         TbParkCodeCriteria tbParkCodeCriteria = new TbParkCodeCriteria();
-        //是否删除  0：已删除  1：正常
-        byte recordStatus=1;
-        tbParkCodeCriteria.createCriteria().andGroupIdEqualTo(codeType).andRecordStatusEqualTo(recordStatus);
+        tbParkCodeCriteria.createCriteria().andGroupIdEqualTo(codeType).andRecordStatusEqualTo(new Byte(PARK_CODE_DELETE));
         return tbParkCodeMapper.selectByExample(tbParkCodeCriteria);
     }
 

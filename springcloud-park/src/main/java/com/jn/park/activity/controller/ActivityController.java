@@ -67,8 +67,8 @@ public class ActivityController extends BaseController {
         return new Result(paginationData);
     }
 
-    @ControllerLog(doAction = "获取活动详情")
-    @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class,
+    @ControllerLog(doAction = "获取活动详情[后台管理]")
+    @ApiOperation(value = "获取活动详情[后台管理]", httpMethod = "POST", response = Result.class,
             notes = "查询条件activityId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(

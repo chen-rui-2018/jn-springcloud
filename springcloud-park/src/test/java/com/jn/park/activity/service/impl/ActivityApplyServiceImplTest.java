@@ -220,7 +220,7 @@ public class ActivityApplyServiceImplTest {
     @Test
     public void signInActivityCheck() {
         try{
-            int i =  activityApplyService.signInActivityCheck(applyId);
+            int i =  activityApplyService.signInActivityCheck(applyId,account);
             assertThat(i, Matchers.anything());
         }catch (JnSpringCloudException e){
             logger.warn("后台管理报名审核接口--活动数据状态异常，请先处理数据再运行Test");
@@ -239,7 +239,7 @@ public class ActivityApplyServiceImplTest {
     @Test
     public void signInActivityBackend(){
         try{
-            int i = activityApplyService.signInActivityBackend(applyId);
+            int i = activityApplyService.signInActivityBackend(applyId,account);
             assertThat(i, Matchers.anything());
         }catch (JnSpringCloudException e){
             logger.warn("后台管理签到接口--活动数据状态异常，请先处理数据再运行Test");

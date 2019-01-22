@@ -94,24 +94,27 @@ public class ActivityServiceImpl implements ActivityService {
         List<Activity> activities = activityMapper.selectActivityList(activity);
         for (Activity at : activities) {
             String actiStartTime = at.getActiStartTime();
-            Date date = DateUtils.parseDate(actiStartTime);
-            Date nowDate = new Date();
-            if (DateUtils.addHours(nowDate, 24).after(date) && nowDate.before(date) && StringUtils.equals(at.getActiStatus(), ACTIVITY_STATE_PUBLISH)) {
-                at.setIsSendMessage("1");
+            if(StringUtils.isNotEmpty(actiStartTime)){
+                Date date = DateUtils.parseDate(actiStartTime);
+                Date nowDate = new Date();
+                if (DateUtils.addHours(nowDate, 24).after(date) && nowDate.before(date) && StringUtils.equals(at.getActiStatus(), ACTIVITY_STATE_PUBLISH)) {
+                    at.setIsSendMessage("1");
+                }
             } else {
                 at.setIsSendMessage("0");
             }
+
         }
         PaginationData data = new PaginationData(activities, objects.getTotal());
         return data;
     }
 
-    @ServiceLog(doAction = "查询活动详情")
+    @ServiceLog(doAction = "查询活动详情[后台管理]")
     @Override
     public ActivityDetail getActivityDetailsForManage(String activityId) {
         List<ActivityDetail> activityDetails = activityDetailsMapper.getActivityDetails(activityId);
         if (null == activityDetails || activityDetails.size() == 0) {
-            logger.warn("[活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId, activityDetails == null ? 0 : activityDetails.size());
+            logger.warn("[后台管理-活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId, activityDetails == null ? 0 : activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR);
         }
         List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
@@ -179,6 +182,7 @@ public class ActivityServiceImpl implements ActivityService {
         TbActivityDetail tbActivityDetail = new TbActivityDetail();
         tbActivityDetail.setActiDetail(activity.getActiDetail());
         int num = 0;
+        TbActivity tbActivityOld = null;
         Boolean isUpdate = true;
         if (StringUtils.isEmpty(activity.getId())) {
             isUpdate = false;
@@ -201,14 +205,14 @@ public class ActivityServiceImpl implements ActivityService {
             //修改
             tbActivity.setModifiedTime(new Date());
             tbActivity.setModifierAccount(account);
-            TbActivity tbActivity1 = tbActivityMapper.selectByPrimaryKey(activity.getId());
-            if (null == tbActivity1) {
+            tbActivityOld = tbActivityMapper.selectByPrimaryKey(activity.getId());
+            if (null == tbActivityOld) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
             }
-            if (StringUtils.equals(tbActivity1.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
+            if (StringUtils.equals(tbActivityOld.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT);
             }
-            if (StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivity1.getActiStatus()) && StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
+            if (StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivityOld.getActiStatus()) && StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
                 tbActivity.setIssueAccount(account);
                 tbActivity.setIssueTime(new Date());
             }
@@ -220,8 +224,6 @@ public class ActivityServiceImpl implements ActivityService {
         }
         if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getActiStatus())) {
             //发布时间
-            tbActivity.setIssueTime(new Date());
-            tbActivity.setApplyStartTime(new Date());
             Delay delay = new Delay();
             delay.setServiceId(applicationName);
             delay.setDateString(activity.getActiStartTime());
@@ -229,8 +231,7 @@ public class ActivityServiceImpl implements ActivityService {
             delay.setServiceUrl("/activity/activityEndByTimedTask");
             Boolean getDelay = false;
             if (isUpdate) {
-                TbActivity activity1 = tbActivityMapper.selectByPrimaryKey(activity.getId());
-                if (!DateUtils.isSameDay(activity1.getApplyStartTime(), tbActivity.getApplyStartTime())) {
+                if (!DateUtils.isSameDay(tbActivityOld.getApplyStartTime(), tbActivity.getApplyStartTime())) {
                     getDelay = true;
                 }
             } else {

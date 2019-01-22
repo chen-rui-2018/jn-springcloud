@@ -57,8 +57,15 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Autowired
     private UserExtensionClient userExtensionClient;
 
-
     /**
+     * 活动草稿
+     */
+    private static final String ACTIVITY_STATE_DRAFT = "1";
+    /**
+     * 活动状态删除
+     */
+    private static final String ACTIVITY_STATE_DELETE = "0";
+     /**
      * 根据活动id获取活动详情
      * @param activityId 活动id
      * @param account    当前登录用户账号
@@ -312,12 +319,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @Override
     public TbActivity getActivityInfo(String activityId){
         TbActivityCriteria example=new TbActivityCriteria();
-        //草稿
-        String draftState="1";
-        //已删除活动
-        byte delState=0;
         //草稿、已删除的活动不能被查询出来
-        example.createCriteria().andIdEqualTo(activityId).andActiStatusEqualTo(draftState).andRecordStatusEqualTo(delState);
+        example.createCriteria().andIdEqualTo(activityId).andActiStatusNotEqualTo(ACTIVITY_STATE_DRAFT).andRecordStatusNotEqualTo(new Byte(ACTIVITY_STATE_DELETE));
         return tbActivityMapper.selectByPrimaryKey(activityId);
     }
 }

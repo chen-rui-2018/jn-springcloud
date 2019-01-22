@@ -85,7 +85,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     private static final String ACTIVITY_APPLYED_STATED = "1";
     /**
-     * 已报名
+     * 报名待审核
      */
     private static final String ACTIVITY_APPLYED_CHECKED = "2";
 
@@ -460,7 +460,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "后台管理签到")
     @Override
-    public int signInActivityBackend(String applyId) {
+    public int signInActivityBackend(String applyId,String account) {
         TbActivityApply tbActivityApply = tbActivityApplyMapper.selectByPrimaryKey(applyId);
         if (null == tbActivityApply) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_IS_NULL);
@@ -472,6 +472,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         tbActivityApply.setSignStatus("1");
         tbActivityApply.setSignType("1");
         tbActivityApply.setSignTime(new Date());
+        tbActivityApply.setSignAccount(account);
         return tbActivityApplyMapper.updateByPrimaryKeySelective(tbActivityApply);
     }
 
@@ -483,7 +484,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "后台管理报名审核")
     @Override
-    public int signInActivityCheck(String applyId) {
+    public int signInActivityCheck(String applyId,String account) {
         TbActivityApply tbActivityApply = tbActivityApplyMapper.selectByPrimaryKey(applyId);
         if (null == tbActivityApply) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLY_IS_NULL);
@@ -491,6 +492,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_APPLYED_NOT_CHECKED);
         }
         tbActivityApply.setApplyStatus("1");
+        tbActivityApply.setCheckAccount(account);
+        tbActivityApply.setCheckTime(new Date());
         return tbActivityApplyMapper.updateByPrimaryKeySelective(tbActivityApply);
     }
 

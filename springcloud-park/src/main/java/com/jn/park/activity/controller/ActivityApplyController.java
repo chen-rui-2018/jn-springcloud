@@ -102,7 +102,8 @@ public class ActivityApplyController extends BaseController {
     @RequestMapping(value = "/signInActivityBackend")
     public Result signInActivityBackend(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){
         Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
-        int i = activityApplyService.signInActivityBackend(applyId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityApplyService.signInActivityBackend(applyId,user.getAccount());
         return new Result(i);
     }
 
@@ -111,7 +112,8 @@ public class ActivityApplyController extends BaseController {
     @RequestMapping(value = "/signInActivityCheck")
     public Result signInActivityCheck(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){
         Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
-        int i = activityApplyService.signInActivityCheck(applyId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityApplyService.signInActivityCheck(applyId,user.getAccount());
         return new Result(i);
     }
 }

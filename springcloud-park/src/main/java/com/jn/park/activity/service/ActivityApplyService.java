@@ -63,14 +63,14 @@ public interface ActivityApplyService {
      * @param applyId
      * @return
      */
-    int signInActivityBackend(String applyId);
+    int signInActivityBackend(String applyId,String account);
 
     /**
      * 后台管理报名审核接口
      * @param applyId
      * @return
      */
-    int signInActivityCheck(String applyId);
+    int signInActivityCheck(String applyId,String account);
 
     /**
      * 报名人列表信息

@@ -73,7 +73,7 @@ public class AcitvityTest {
     public void selectActivityList(){
         ActivityParment activityParment = new ActivityParment();
         PaginationData paginationData = activityService.selectActivityList(activityParment);
-        List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
+        List<Activity> a =  (List<Activity>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }
 

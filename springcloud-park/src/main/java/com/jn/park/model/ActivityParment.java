@@ -19,7 +19,7 @@ public class ActivityParment extends Page {
     private String actiType;
 
     @ApiModelProperty("活动状态")
-    private String status;
+    private String actiStatus;
 
     @ApiModelProperty("活动名称")
     private String actiName;
@@ -35,12 +35,12 @@ public class ActivityParment extends Page {
         this.actiType = actiType;
     }
 
-    public String getStatus() {
-        return status;
+    public String getActiStatus() {
+        return actiStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus;
     }
 
     public String getActiName() {

@@ -13,6 +13,9 @@
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="check_account" jdbcType="VARCHAR" property="checkAccount" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="sign_account" jdbcType="VARCHAR" property="signAccount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, activity_id, creator_account, created_time, apply_status, sign_status, sign_time, 
-    sign_type, record_status, modifier_account, modified_time
+    sign_type, record_status, modifier_account, modified_time, check_account, check_time, 
+    sign_account
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityApplyCriteria" resultMap="BaseResultMap">
     select
@@ -110,11 +114,13 @@
     insert into tb_activity_apply (id, activity_id, creator_account, 
       created_time, apply_status, sign_status, 
       sign_time, sign_type, record_status, 
-      modifier_account, modified_time)
+      modifier_account, modified_time, check_account, 
+      check_time, sign_account)
     values (#{id,jdbcType=VARCHAR}, #{activityId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{applyStatus,jdbcType=VARCHAR}, #{signStatus,jdbcType=VARCHAR}, 
       #{signTime,jdbcType=TIMESTAMP}, #{signType,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{checkAccount,jdbcType=VARCHAR}, 
+      #{checkTime,jdbcType=TIMESTAMP}, #{signAccount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivityApply">
     insert into tb_activity_apply
@@ -152,6 +158,15 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="checkAccount != null">
+        check_account,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="signAccount != null">
+        sign_account,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -186,6 +201,15 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkAccount != null">
+        #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signAccount != null">
+        #{signAccount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -231,6 +255,15 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.checkAccount != null">
+        check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkTime != null">
+        check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.signAccount != null">
+        sign_account = #{record.signAccount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +281,10 @@
       sign_type = #{record.signType,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+      sign_account = #{record.signAccount,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,6 +322,15 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="checkAccount != null">
+        check_account = #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="signAccount != null">
+        sign_account = #{signAccount,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -300,7 +345,10 @@
       sign_type = #{signType,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      check_account = #{checkAccount,jdbcType=VARCHAR},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      sign_account = #{signAccount,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

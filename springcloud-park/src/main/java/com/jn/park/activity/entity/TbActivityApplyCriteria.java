@@ -834,6 +834,206 @@ public class TbActivityApplyCriteria {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andCheckAccountIsNull() {
+            addCriterion("check_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountIsNotNull() {
+            addCriterion("check_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountEqualTo(String value) {
+            addCriterion("check_account =", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountNotEqualTo(String value) {
+            addCriterion("check_account <>", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountGreaterThan(String value) {
+            addCriterion("check_account >", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("check_account >=", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountLessThan(String value) {
+            addCriterion("check_account <", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountLessThanOrEqualTo(String value) {
+            addCriterion("check_account <=", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountLike(String value) {
+            addCriterion("check_account like", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountNotLike(String value) {
+            addCriterion("check_account not like", value, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountIn(List<String> values) {
+            addCriterion("check_account in", values, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountNotIn(List<String> values) {
+            addCriterion("check_account not in", values, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountBetween(String value1, String value2) {
+            addCriterion("check_account between", value1, value2, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckAccountNotBetween(String value1, String value2) {
+            addCriterion("check_account not between", value1, value2, "checkAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNull() {
+            addCriterion("check_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIsNotNull() {
+            addCriterion("check_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeEqualTo(Date value) {
+            addCriterion("check_time =", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotEqualTo(Date value) {
+            addCriterion("check_time <>", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThan(Date value) {
+            addCriterion("check_time >", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("check_time >=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThan(Date value) {
+            addCriterion("check_time <", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeLessThanOrEqualTo(Date value) {
+            addCriterion("check_time <=", value, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeIn(List<Date> values) {
+            addCriterion("check_time in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotIn(List<Date> values) {
+            addCriterion("check_time not in", values, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeBetween(Date value1, Date value2) {
+            addCriterion("check_time between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCheckTimeNotBetween(Date value1, Date value2) {
+            addCriterion("check_time not between", value1, value2, "checkTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountIsNull() {
+            addCriterion("sign_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountIsNotNull() {
+            addCriterion("sign_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountEqualTo(String value) {
+            addCriterion("sign_account =", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountNotEqualTo(String value) {
+            addCriterion("sign_account <>", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountGreaterThan(String value) {
+            addCriterion("sign_account >", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("sign_account >=", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountLessThan(String value) {
+            addCriterion("sign_account <", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountLessThanOrEqualTo(String value) {
+            addCriterion("sign_account <=", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountLike(String value) {
+            addCriterion("sign_account like", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountNotLike(String value) {
+            addCriterion("sign_account not like", value, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountIn(List<String> values) {
+            addCriterion("sign_account in", values, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountNotIn(List<String> values) {
+            addCriterion("sign_account not in", values, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountBetween(String value1, String value2) {
+            addCriterion("sign_account between", value1, value2, "signAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andSignAccountNotBetween(String value1, String value2) {
+            addCriterion("sign_account not between", value1, value2, "signAccount");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

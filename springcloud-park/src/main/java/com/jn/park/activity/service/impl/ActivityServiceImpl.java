@@ -93,7 +93,7 @@ public class ActivityServiceImpl implements ActivityService {
             String actiStartTime = at.getActiStartTime();
             Date date = DateUtils.parseDate(actiStartTime);
             Date nowDate = new Date();
-            if (DateUtils.addHours(nowDate, 24).after(date) && nowDate.before(date) && StringUtils.equals(at.getStatus(), ACTIVITY_STATE_PUBLISH)) {
+            if (DateUtils.addHours(nowDate, 24).after(date) && nowDate.before(date) && StringUtils.equals(at.getActiStatus(), ACTIVITY_STATE_PUBLISH)) {
                 at.setIsSendMessage("1");
             } else {
                 at.setIsSendMessage("0");
@@ -120,10 +120,10 @@ public class ActivityServiceImpl implements ActivityService {
     @ServiceLog(doAction = "修改活动报名状态")
     @Override
     public int updateActivityApply(ActivitySataus activitySataus) {
-        if (StringUtils.equals(activitySataus.getStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activitySataus.getStatus(), ACTIVITY_STATE_TRUE)) {
+        if (StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_TRUE)) {
             TbActivity activity = new TbActivity();
             activity.setId(activitySataus.getActivityId());
-            activity.setIsApply(activitySataus.getStatus());
+            activity.setIsApply(activitySataus.getActiStatus());
             int i = tbActivityMapper.updateByPrimaryKeySelective(activity);
             if (i == 1) {
                 return i;
@@ -184,10 +184,10 @@ public class ActivityServiceImpl implements ActivityService {
             tbActivity.setActiViews(0);
             tbActivity.setApplyNum(0);
             tbActivity.setApplyStartTime(new Date());
-            tbActivity.setCreateTime(new Date());
+            tbActivity.setCreatedTime(new Date());
             tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            tbActivity.setCreateAccount(account);
-            if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getStatus())) {
+            tbActivity.setCreatorAccount(account);
+            if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
                 tbActivity.setIssueAccount(account);
                 tbActivity.setIssueTime(new Date());
             }
@@ -196,16 +196,16 @@ public class ActivityServiceImpl implements ActivityService {
             tbActivityDetailMapper.insert(tbActivityDetail);
         } else {
             //修改
-            tbActivity.setUpdateTime(new Date());
-            tbActivity.setUpdateAccount(account);
+            tbActivity.setModifiedTime(new Date());
+            tbActivity.setModifierAccount(account);
             TbActivity tbActivity1 = tbActivityMapper.selectByPrimaryKey(activity.getId());
             if (null == tbActivity1) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
             }
-            if (StringUtils.equals(tbActivity1.getStatus(), ACTIVITY_STATE_DRAFT)) {
+            if (StringUtils.equals(tbActivity1.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT);
             }
-            if (StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivity1.getStatus()) && StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getStatus())) {
+            if (StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivity1.getActiStatus()) && StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
                 tbActivity.setIssueAccount(account);
                 tbActivity.setIssueTime(new Date());
             }
@@ -215,7 +215,7 @@ public class ActivityServiceImpl implements ActivityService {
                 tbActivityDetailMapper.updateByPrimaryKeySelective(tbActivityDetail);
             }
         }
-        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getStatus())) {
+        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getActiStatus())) {
             //发布时间
             tbActivity.setIssueTime(new Date());
             tbActivity.setApplyStartTime(new Date());
@@ -262,7 +262,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "删除活动草稿")
     @Override
-    public int deleteDraftActivity(String activityId) {
+    public int deleteDraftActivity(String activityId,String account) {
         String[] split = activityId.split(",");
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
@@ -270,15 +270,16 @@ public class ActivityServiceImpl implements ActivityService {
         if (null == tbActivities || tbActivities.size() == 0) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_IS_NOT_EXIST_ERROR);
         }
-        for (int a = 0; a < tbActivities.size(); a++) {
+        for (TbActivity tbActivity:tbActivities) {
             //校验是否有非草稿数据
-            if (!StringUtils.equals(tbActivities.get(a).getStatus(), ACTIVITY_STATE_DRAFT)) {
+            if (!StringUtils.equals(tbActivity.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_DRAFT_DELETE_ERROR);
             }
         }
         TbActivity tbActivity1 = new TbActivity();
-        tbActivity1.setUpdateTime(new Date());
-        tbActivity1.setStatus("5");
+        tbActivity1.setModifiedTime(new Date());
+        tbActivity1.setModifierAccount(account);
+        tbActivity1.setRecordStatus(new Byte("0"));
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity1, tbActivityCriteria);
         if (i1 > 0) {
             return i1;
@@ -289,13 +290,14 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "删除活动（管理员权限）")
     @Override
-    public int deleteActivity(String activityId) {
+    public int deleteActivity(String activityId,String account) {
         String[] split = activityId.split(",");
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
         TbActivity tbActivity = new TbActivity();
-        tbActivity.setStatus("5");
-        tbActivity.setUpdateTime(new Date());
+        tbActivity.setRecordStatus(new Byte("0"));
+        tbActivity.setModifiedTime(new Date());
+        tbActivity.setModifierAccount(account);
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity, tbActivityCriteria);
         if (i1 > 0) {
             return i1;
@@ -306,17 +308,19 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "取消活动")
     @Override
-    public int cancelActivity(String activityId) {
+    public int cancelActivity(String activityId,String account) {
         TbActivity activity = tbActivityMapper.selectByPrimaryKey(activityId);
         if (null == activity) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
-        if (StringUtils.equals(activity.getStatus(), ACTIVITY_STATE_DRAFT)) {
+        if (StringUtils.equals(activity.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_CANCEL_EXPEPTION);
         }
         TbActivity tbActivity = new TbActivity();
         tbActivity.setId(activityId);
-        tbActivity.setStatus("4");
+        tbActivity.setActiStatus("4");
+        tbActivity.setModifierAccount(account);
+        tbActivity.setModifiedTime(new Date());
         int i = tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
         if (i > 0) {
             return i;
@@ -372,7 +376,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (null == tbActivity) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
         }
-        if (!StringUtils.equals(tbActivity.getStatus(), ACTIVITY_STATE_PUBLISH)) {
+        if (!StringUtils.equals(tbActivity.getActiStatus(), ACTIVITY_STATE_PUBLISH)) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_SEND_MSG_EXCEPTION);
         }
         //判断是否为活动开始前24小时之内
@@ -401,7 +405,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (StringUtils.equals(actiStartTime, activity.getActiStartTime())) {
             TbActivity tbActivity = new TbActivity();
             tbActivity.setId(id);
-            tbActivity.setStatus("3");
+            tbActivity.setActiStatus("3");
             return tbActivityMapper.updateByPrimaryKeySelective(tbActivity);
         } else {
             logger.info("活动结束时间不匹配，不做业务处理。");

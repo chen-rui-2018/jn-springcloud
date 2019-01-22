@@ -51,19 +51,19 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "活动参加人数")
     private String particNum;
     @ApiModelProperty(value = "活动状态")
-    private String status;
+    private String actiStatus;
     @ApiModelProperty(value = "创建时间")
-    private String createTime;
+    private String createdTime;
     @ApiModelProperty(value = "创建人")
-    private String createAccount;
+    private String creatorAccount;
     @ApiModelProperty(value = "发布时间")
     private String issueTime;
     @ApiModelProperty(value = "发布人")
     private String issueAccount;
     @ApiModelProperty(value = "修改时间")
-    private String updateTime;
+    private String modifiedTime;
     @ApiModelProperty(value = "修改人")
-    private String updateAccount;
+    private String modifierAccount;
     @ApiModelProperty(value = "是否首页展示")
     private String isIndex;
     @ApiModelProperty(value = "是否可报名")
@@ -219,28 +219,44 @@ public class ActivityDetail implements Serializable {
         this.particNum = particNum;
     }
 
-    public String getStatus() {
-        return status;
+    public String getActiStatus() {
+        return actiStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
     }
 
     public String getIssueTime() {
@@ -257,22 +273,6 @@ public class ActivityDetail implements Serializable {
 
     public void setIssueAccount(String issueAccount) {
         this.issueAccount = issueAccount;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getUpdateAccount() {
-        return updateAccount;
-    }
-
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount;
     }
 
     public String getIsIndex() {

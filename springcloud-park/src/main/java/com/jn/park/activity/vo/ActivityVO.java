@@ -33,6 +33,8 @@ public class ActivityVO implements Serializable {
     private Date applyEndTime;
     @ApiModelProperty(value = "活动消息发送时间")
     private Date mesSendTime;
+    @ApiModelProperty(value = "活动园区标识")
+    private String parkId;
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
     @ApiModelProperty(value = "活动费用")
@@ -44,15 +46,15 @@ public class ActivityVO implements Serializable {
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
     @ApiModelProperty(value = "活动状态")
-    private String status;
-    @ApiModelProperty(value = "活动发布时间")
-    private Date createTime;
-    @ApiModelProperty(value = "活动创建人ID")
-    private String createUserId;
-    @ApiModelProperty(value = "修改时间")
-    private Date updateTime;
-    @ApiModelProperty(value = "修改人")
-    private String updateUserId;
+    private String actiStatus;
+    @ApiModelProperty(value = "创建时间")
+    private Date createdTime;
+    @ApiModelProperty(value = "创建者账号")
+    private String creatorAccount;
+    @ApiModelProperty(value = "最新更新时间")
+    private Date modifiedTime;
+    @ApiModelProperty(value = "最新更新者账号")
+    private String modifierAccount;
     @ApiModelProperty(value = "阅读人数")
     private Integer actiViews;
     @ApiModelProperty(value = "点赞人数")
@@ -65,10 +67,22 @@ public class ActivityVO implements Serializable {
     private String isTop;
     @ApiModelProperty(value = "置顶时间")
     private Date topTime;
+    @ApiModelProperty(value = "是否首页展示")
+    private String isIndex;
     @ApiModelProperty(value = "是否可报名")
     private String isApply;
     @ApiModelProperty(value = "排序")
     private Integer actiOrder;
+    @ApiModelProperty(value = "发布时间")
+    private Date issueTime;
+    @ApiModelProperty(value = "发布人")
+    private String issueAccount;
+    @ApiModelProperty(value = "展示报名人数")
+    private String showApplyNum;
+    @ApiModelProperty(value = "报名是否需审核")
+    private String applyCheck;
+    @ApiModelProperty(value = "删除标识（0标记删除，1正常）")
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -176,37 +190,6 @@ public class ActivityVO implements Serializable {
         this.actiPosterUrl = actiPosterUrl == null ? null : actiPosterUrl.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getCreateUserId() {
-        return createUserId;
-    }
-
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId == null ? null : createUserId.trim();
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getUpdateUserId() {
-        return updateUserId;
-    }
-
-    public void setUpdateUserId(String updateUserId) {
-        this.updateUserId = updateUserId == null ? null : updateUserId.trim();
-    }
 
     public Integer getActiViews() {
         return actiViews;
@@ -272,43 +255,141 @@ public class ActivityVO implements Serializable {
         this.actiOrder = actiOrder;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+    public String getParkId() {
+        return parkId;
+    }
+
+    public void setParkId(String parkId) {
+        this.parkId = parkId;
+    }
+
+    public String getActiStatus() {
+        return actiStatus;
+    }
+
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
+    }
+
+    public String getIsIndex() {
+        return isIndex;
+    }
+
+    public void setIsIndex(String isIndex) {
+        this.isIndex = isIndex;
+    }
+
+    public Date getIssueTime() {
+        return issueTime;
+    }
+
+    public void setIssueTime(Date issueTime) {
+        this.issueTime = issueTime;
+    }
+
+    public String getIssueAccount() {
+        return issueAccount;
+    }
+
+    public void setIssueAccount(String issueAccount) {
+        this.issueAccount = issueAccount;
+    }
+
+    public String getShowApplyNum() {
+        return showApplyNum;
+    }
+
+    public void setShowApplyNum(String showApplyNum) {
+        this.showApplyNum = showApplyNum;
+    }
+
+    public String getApplyCheck() {
+        return applyCheck;
+    }
+
+    public void setApplyCheck(String applyCheck) {
+        this.applyCheck = applyCheck;
     }
 
     @Override
     public String toString() {
-        return "ActivityVO{" +
-                "id='" + id + '\'' +
-                ", actiType='" + actiType + '\'' +
-                ", actiName='" + actiName + '\'' +
-                ", actiStartTime=" + actiStartTime +
-                ", actiEndTime=" + actiEndTime +
-                ", applyStartTime=" + applyStartTime +
-                ", applyEndTime=" + applyEndTime +
-                ", mesSendTime=" + mesSendTime +
-                ", actiAddress='" + actiAddress + '\'' +
-                ", actiCost=" + actiCost +
-                ", actiOrganizer='" + actiOrganizer + '\'' +
-                ", actiNumber=" + actiNumber +
-                ", actiPosterUrl='" + actiPosterUrl + '\'' +
-                ", status='" + status + '\'' +
-                ", createTime=" + createTime +
-                ", createUserId='" + createUserId + '\'' +
-                ", updateTime=" + updateTime +
-                ", updateUserId='" + updateUserId + '\'' +
-                ", actiViews=" + actiViews +
-                ", actiLike=" + actiLike +
-                ", applyNum=" + applyNum +
-                ", particNum=" + particNum +
-                ", isTop='" + isTop + '\'' +
-                ", topTime=" + topTime +
-                ", isApply='" + isApply + '\'' +
-                ", actiOrder=" + actiOrder +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", actiType=").append(actiType);
+        sb.append(", actiName=").append(actiName);
+        sb.append(", actiStartTime=").append(actiStartTime);
+        sb.append(", actiEndTime=").append(actiEndTime);
+        sb.append(", applyStartTime=").append(applyStartTime);
+        sb.append(", applyEndTime=").append(applyEndTime);
+        sb.append(", mesSendTime=").append(mesSendTime);
+        sb.append(", parkId=").append(parkId);
+        sb.append(", actiAddress=").append(actiAddress);
+        sb.append(", actiCost=").append(actiCost);
+        sb.append(", actiOrganizer=").append(actiOrganizer);
+        sb.append(", actiNumber=").append(actiNumber);
+        sb.append(", actiPosterUrl=").append(actiPosterUrl);
+        sb.append(", actiStatus=").append(actiStatus);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", actiViews=").append(actiViews);
+        sb.append(", actiLike=").append(actiLike);
+        sb.append(", applyNum=").append(applyNum);
+        sb.append(", particNum=").append(particNum);
+        sb.append(", isIndex=").append(isIndex);
+        sb.append(", isApply=").append(isApply);
+        sb.append(", actiOrder=").append(actiOrder);
+        sb.append(", issueTime=").append(issueTime);
+        sb.append(", issueAccount=").append(issueAccount);
+        sb.append(", showApplyNum=").append(showApplyNum);
+        sb.append(", applyCheck=").append(applyCheck);
+        sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", serialVersionUID=").append(serialVersionUID);
+        sb.append("]");
+        return sb.toString();
     }
 }

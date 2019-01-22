@@ -50,21 +50,21 @@ public interface ActivityService {
      * @param activityId . 多个id用,拼接
      * @return
      */
-    int deleteDraftActivity(String activityId);
+    int deleteDraftActivity(String activityId,String account);
 
     /**
      * 删除活动(已发布列表，需管理员才能删除)
      * @param activityId . 多个id用,拼接
      * @return
      */
-    int deleteActivity(String activityId);
+    int deleteActivity(String activityId,String account);
 
     /**
      * 取消活动
      * @param activityId
      * @return
      */
-    int cancelActivity(String activityId);
+    int cancelActivity(String activityId,String account);
 
     /**
      * 前台分页获取的活动列表

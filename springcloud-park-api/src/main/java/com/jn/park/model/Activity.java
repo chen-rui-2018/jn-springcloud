@@ -50,15 +50,15 @@ public class Activity implements Serializable {
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
     @ApiModelProperty(value = "活动状态")
-    private String status;
-    @ApiModelProperty(value = "活动发布时间")
-    private String createTime;
-    @ApiModelProperty(value = "活动创建人")
-    private String createAccount;
-    @ApiModelProperty(value = "修改时间")
-    private String updateTime;
-    @ApiModelProperty(value = "修改人")
-    private String updateAccount;
+    private String actiStatus;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;
+    @ApiModelProperty(value = "创建者账号")
+    private String creatorAccount;
+    @ApiModelProperty(value = "最新更新时间")
+    private String modifiedTime;
+    @ApiModelProperty(value = "最新更新者账号")
+    private String modifierAccount;
     @ApiModelProperty(value = "阅读人数")
     private Integer actiViews;
     @ApiModelProperty(value = "点赞人数")
@@ -87,6 +87,8 @@ public class Activity implements Serializable {
     private String isSendMessage;
     @ApiModelProperty(value = "报名是否需审核-0否1是")
     private String applyCheck;
+    @ApiModelProperty(value = "删除标识（0标记删除，1正常）")
+    private Byte recordStatus;
 
     public String getId() {
         return id;
@@ -192,44 +194,44 @@ public class Activity implements Serializable {
         this.actiPosterUrl = actiPosterUrl;
     }
 
-    public String getStatus() {
-        return status;
+    public String getActiStatus() {
+        return actiStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getCreateAccount() {
-        return createAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getModifiedTime() {
+        return modifiedTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
-    public String getUpdateAccount() {
-        return updateAccount;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount;
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
     }
 
     public Integer getActiViews() {
@@ -358,5 +360,13 @@ public class Activity implements Serializable {
 
     public void setApplyCheck(String applyCheck) {
         this.applyCheck = applyCheck;
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 }

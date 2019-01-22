@@ -83,7 +83,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/updateActivityApply")
     public Result updateActivityApply(@RequestBody @Validated ActivitySataus activitySataus) {
         Assert.notNull(activitySataus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        Assert.notNull(activitySataus.getStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
+        Assert.notNull(activitySataus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
         int i = activityService.updateActivityApply(activitySataus);
         return new Result(i);
     }
@@ -93,7 +93,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/insterOrUpdateActivity")
     public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContent activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
-        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getStatus())) {
+        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getActiStatus())) {
             Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
             Assert.notNull(activityContent.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());
@@ -121,7 +121,8 @@ public class ActivityController extends BaseController {
     public Result deleteDraftActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        int i = activityService.deleteDraftActivity(activityId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityService.deleteDraftActivity(activityId,user.getAccount());
         return new Result(i);
     }
 
@@ -131,7 +132,8 @@ public class ActivityController extends BaseController {
     public Result deleteActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        int i = activityService.deleteActivity(activityId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityService.deleteActivity(activityId,user.getAccount());
         return new Result(i);
     }
 
@@ -141,7 +143,8 @@ public class ActivityController extends BaseController {
     public Result cancelActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        int i = activityService.cancelActivity(activityId);
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityService.cancelActivity(activityId,user.getAccount());
         return new Result(i);
     }
 

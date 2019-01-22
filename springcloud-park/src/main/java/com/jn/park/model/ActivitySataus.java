@@ -21,8 +21,8 @@ public class ActivitySataus {
     private String activityId;
 
     @ApiModelProperty("活动状态。只能传(0,1) 0代表停止报名 1开始报名")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @Pattern(regexp="^\\-1|[01]$",message="{actiStatus:'状态值只允许为0,1,-1'}")
+    private String actiStatus;
 
     public String getActivityId() {
         return activityId;
@@ -32,11 +32,11 @@ public class ActivitySataus {
         this.activityId = activityId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getActiStatus() {
+        return actiStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActiStatus(String actiStatus) {
+        this.actiStatus = actiStatus;
     }
 }

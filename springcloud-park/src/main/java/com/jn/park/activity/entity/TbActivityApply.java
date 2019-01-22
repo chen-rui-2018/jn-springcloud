@@ -26,6 +26,12 @@ public class TbActivityApply implements Serializable {
 
     private Date modifiedTime;
 
+    private String checkAccount;
+
+    private Date checkTime;
+
+    private String signAccount;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -116,6 +122,30 @@ public class TbActivityApply implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public String getCheckAccount() {
+        return checkAccount;
+    }
+
+    public void setCheckAccount(String checkAccount) {
+        this.checkAccount = checkAccount == null ? null : checkAccount.trim();
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    public String getSignAccount() {
+        return signAccount;
+    }
+
+    public void setSignAccount(String signAccount) {
+        this.signAccount = signAccount == null ? null : signAccount.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -138,7 +168,10 @@ public class TbActivityApply implements Serializable {
             && (this.getSignType() == null ? other.getSignType() == null : this.getSignType().equals(other.getSignType()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getCheckAccount() == null ? other.getCheckAccount() == null : this.getCheckAccount().equals(other.getCheckAccount()))
+            && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
+            && (this.getSignAccount() == null ? other.getSignAccount() == null : this.getSignAccount().equals(other.getSignAccount()));
     }
 
     @Override
@@ -156,6 +189,9 @@ public class TbActivityApply implements Serializable {
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getCheckAccount() == null) ? 0 : getCheckAccount().hashCode());
+        result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
+        result = prime * result + ((getSignAccount() == null) ? 0 : getSignAccount().hashCode());
         return result;
     }
 
@@ -176,6 +212,9 @@ public class TbActivityApply implements Serializable {
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", checkAccount=").append(checkAccount);
+        sb.append(", checkTime=").append(checkTime);
+        sb.append(", signAccount=").append(signAccount);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

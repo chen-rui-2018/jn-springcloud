@@ -10,6 +10,7 @@ import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParment;
+import com.jn.park.model.ActivityQueryPaging;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -198,14 +199,19 @@ public class ActivityApplyServiceImplTest {
     }
 
     /**
-     * 报名人列表信息
+     * 报名人列表信息(前台)
      */
     @Test
     public void findApplyActivityList() {
-        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
-        PaginationData data =  activityApplyService.applyActivityList(activityApplyParment,true);
-        assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
-
+        ActivityQueryPaging activityQueryPaging = new ActivityQueryPaging();
+        try {
+            activityQueryPaging.setActivityId("4b761c29c00a49cdaa3c3d8d3bb0e440");
+            PaginationData data = activityApplyService.findApplyActivityList(activityQueryPaging, true);
+            assertThat((int) data.getTotal(), greaterThanOrEqualTo(0));
+        }catch(JnSpringCloudException e){
+            logger.info("活动报名人列表查询失败。失败原因{}", ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage(),e);
+            assertThat(e.getMsg(),anything());
+        }
     }
 
     /**

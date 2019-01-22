@@ -159,7 +159,8 @@ public class ActivityTypeServiceImplTest {
     @Test
     public void deleteActivityTypeList() {
         try {
-            typeIds = typeIds + ",956dc8ab83f84c0cbb6b6cea2547f449";
+//            typeIds = typeIds + ",956dc8ab83f84c0cbb6b6cea2547f449";
+            typeIds = typeId;
             activityTypeService.deleteActivityTypeList(typeIds);
         } catch (JnSpringCloudException e) {
             logger.info("info>>>>>>>>>>>code:" + e.getCode() + "- - - -message:" + e.getMsg());
@@ -177,6 +178,7 @@ public class ActivityTypeServiceImplTest {
             //根据id删除添加的测试数据
             typeMapper.deleteByPrimaryKey(typeId);
             TbActivityFileCriteria criteria = new TbActivityFileCriteria();
+
             criteria.createCriteria().andTypeIdEqualTo(typeId);
             fileMapper.deleteByExample(criteria);
         } catch (JnSpringCloudException e) {

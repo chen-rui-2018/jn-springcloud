@@ -1,6 +1,7 @@
 package com.jn.park.activity.dao;
 
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,6 +18,12 @@ public interface ActivityFileMapper {
      * @param map
      */
    void  insertActivityTypeTemp(Map<String, Object> map);
+
+    /**
+     * 删除活动类型时删除对应的模板内容
+     * @param activityIdList
+     */
+   void deleteActivityTypeTemp(List<String> activityIdList);
 
 
 }

@@ -40,8 +40,8 @@ public class ActivityListController extends BaseController {
     @Autowired
     private ActivityTypeService activityTypeService;
 
-    @ControllerLog(doAction = "前台获取简单活动列表")
-    @ApiOperation(value = "前台获取简单活动列表", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "获取前台活动列表")
+    @ApiOperation(value = "获取前台活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/activityListSlim")
     public Result activityListSlim(@RequestBody ActivitySlimQuery activitySlimQuery) {
         PaginationData paginationData = activityService.activityListSlim(activitySlimQuery);

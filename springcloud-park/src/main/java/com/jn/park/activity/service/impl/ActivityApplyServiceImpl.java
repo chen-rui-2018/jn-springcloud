@@ -172,7 +172,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         TbActivity tbActivity = tbActivityMapper.selectByPrimaryKey(activityId);
         //报名是否需要审核   0：不需要审核   1：需要审核
         String applyCheck = "1";
-        return  applyCheck.equals(tbActivity.getApplyCheck());
+        return applyCheck.equals(tbActivity.getApplyCheck());
     }
 
     /**
@@ -238,7 +238,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
         example.createCriteria().andCreatorAccountEqualTo(account).andActivityIdEqualTo(id);
         long applyInfoNum = tbActivityApplyMapper.countByExample(example);
-        return applyInfoNum>0;
+        return applyInfoNum > 0;
     }
 
     /**
@@ -254,7 +254,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         TbActivityApplyCriteria example = new TbActivityApplyCriteria();
         example.createCriteria().andCreatorAccountEqualTo(account).andActivityIdEqualTo(id).andApplyStatusEqualTo(status);
         long applyInfoNum = tbActivityApplyMapper.countByExample(example);
-        return applyInfoNum>0;
+        return applyInfoNum > 0;
     }
 
     /**
@@ -506,36 +506,60 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging, Boolean isPage) {
         Page<Object> objects = null;
         List<ActivityApplyDetail> activityApplyList;
+            if (isPage) {
+                //默认查询前15条
+                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
+            }
+            //前端查询有效报名状态数据
+            String status = "1";
+            if(!StringUtils.isNotEmpty(activityQueryPaging.getActivityId())){
+                throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
+            }
+            activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
+            activityApplyList = findUserExtension(activityApplyList);
+            return new PaginationData(activityApplyList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 活动列表的报名人账号信息
+     *
+     * @param activityIdList
+     * @return
+     */
+    @ServiceLog(doAction = "活动列表的报名人账号信息")
+    @Override
+    public List<ActivityApplyDetail> findApplyAccountList(List<String> activityIdList) {
+        List<ActivityApplyDetail> accountList = activityApplyMapper.findApplyAccountList(activityIdList);
+        accountList = findUserExtension(accountList);
+        return accountList;
+    }
+
+    /**
+     * 完善报名人详细信息
+     * @param activityApplyList
+     * @return
+     */
+    private List<ActivityApplyDetail> findUserExtension(List<ActivityApplyDetail> activityApplyList) {
         List<String> accountList = new ArrayList<>();
-        if (isPage) {
-            //默认查询前15条
-            objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
-        }
-        //前端查询有效报名状态数据
-        String status = "1";
-        activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
-        if(activityApplyList==null){
-            activityApplyList=new ArrayList<>();
-        }
-        // 遍历获取所有账号
-        for (ActivityApplyDetail detail : activityApplyList) {
-            accountList.add(detail.getAccount());
-        }
-        Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
-        List<UserExtension> userList = userResult.getData();
-        if(userList==null || userList.isEmpty()){
-            return new PaginationData(activityApplyList, objects.getTotal());
-        }
-        for (UserExtension user : userList) {
+        if (activityApplyList != null && activityApplyList.size()>0) {
             for (ActivityApplyDetail detail : activityApplyList) {
-                if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
-                    BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
-                }
-                if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
-                    BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
+                accountList.add(detail.getAccount());
+            }
+            Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
+            List<UserExtension> userList = userResult.getData();
+            if (userList != null && userList.size()>0) {
+                for (UserExtension user : userList) {
+                    for (ActivityApplyDetail detail : activityApplyList) {
+                        if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
+                            BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
+                        }
+                        if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
+                            BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
+                        }
+                    }
                 }
             }
         }
-        return new PaginationData(activityApplyList,objects==null?0:objects.getTotal());
+        return activityApplyList;
     }
 }

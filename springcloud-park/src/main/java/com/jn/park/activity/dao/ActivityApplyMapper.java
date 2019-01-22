@@ -19,4 +19,11 @@ public interface ActivityApplyMapper {
      * @return
      */
   List<ActivityApplyDetail> findApplyActivityList(@Param("activityId")String activityId,@Param("applyStatus")String applyStatus);
+
+    /**
+     * 活动列表的报名人账号信息
+     * @param activityIdList
+     * @return
+     */
+  List<ActivityApplyDetail> findApplyAccountList(List<String> activityIdList);
 }

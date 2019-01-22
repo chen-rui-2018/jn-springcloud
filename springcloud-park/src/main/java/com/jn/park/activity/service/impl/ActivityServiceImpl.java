@@ -6,6 +6,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
@@ -22,6 +23,8 @@ import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -329,7 +332,7 @@ public class ActivityServiceImpl implements ActivityService {
         }
     }
 
-    @ServiceLog(doAction = "前台简单活动列表")
+    @ServiceLog(doAction = "获取前台活动列表")
     @Override
     public PaginationData activityListSlim(ActivitySlimQuery activitySlimQuery) {
 
@@ -338,32 +341,63 @@ public class ActivityServiceImpl implements ActivityService {
         String startTime = activitySlimQuery.getStartTime();
         String endTime = activitySlimQuery.getEndTime();
         String orderBy = activitySlimQuery.getOrderBy();
-
+        try {
+            if (StringUtils.isNotEmpty(startTime)) {
+                DateUtils.parseDate(startTime, "yyyy-MM-dd");
+            }
+            if (StringUtils.isNotEmpty(endTime)) {
+                DateUtils.parseDate(endTime, "yyyy-MM-dd");
+            }
+        }catch(ParseException e){
+            logger.info("活动列表查询失败。失败原因{}", e.getMessage(), e);
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR2);
+        }
+        if(StringUtils.isNotEmpty(orderBy)){
+            String [] orders = {"acti_views","acti_like","apply_num","partic_num"};
+            Boolean flag = false;
+            for(String order : orders){
+                if(orderBy.equals(order)){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                orderBy = null;
+            }
+        }
         int pageSize = activitySlimQuery.getRows() == 0 ? 15 : activitySlimQuery.getRows();
         int pageNumber = activitySlimQuery.getPage();
+        List<String> activityIdList = new ArrayList<>();
+
         //是否展示报名人列表 0 否 1 是
         String invalid = "0";
         Page<Object> objects = PageHelper.startPage(pageNumber, pageSize, true);
-        List<ActivitySlim> activitySlimList = activityMapper.activityListSlim(typeId, keyWord,startTime,endTime,orderBy);
-        ActivityQueryPaging queryPaging = new ActivityQueryPaging();
-        for (ActivitySlim slim : activitySlimList) {
-            List<String> avatars = new ArrayList<>();
-            queryPaging.setActivityId(slim.getId());
-            PaginationData data = activityApplyService.findApplyActivityList(queryPaging, false);
-            List<ActivityApplyDetail> details = (ArrayList<ActivityApplyDetail>) data.getRows();
-            if (details != null && details.size() > 0) {
-                for (ActivityApplyDetail detail : details) {
-                    avatars.add(detail.getAvatar());
-                }
+        List<ActivitySlim> activitySlimList = activityMapper.activityListSlim(typeId, keyWord, startTime, endTime, orderBy);
+        if (activitySlimList != null && activitySlimList.size() > 0) {
+            for (ActivitySlim slim : activitySlimList) {
+                activityIdList.add(slim.getId());
             }
-            slim.setAvatarList(avatars);
         }
-        for (ActivitySlim slim : activitySlimList) {
-            if (invalid.equals(slim.getShowApplyNum())) {
-                slim.setAvatar(null);
+        List<ActivityApplyDetail> activityApplyList = activityApplyService.findApplyAccountList(activityIdList);
+        if (activitySlimList != null && activitySlimList.size() > 0) {
+            for (ActivitySlim slim : activitySlimList) {
+                List<String> avatars = new ArrayList<>();
+                if (activityApplyList != null && activityApplyList.size() > 0) {
+                    for (ActivityApplyDetail detail : activityApplyList) {
+                        if (detail.getActivityId().equals(slim.getId())) {
+                            avatars.add(detail.getAvatar());
+                        }
+                    }
+                }
+                slim.setAvatarList(avatars);
             }
-            if (StringUtils.isNotBlank(slim.getAvatar())) {
-                slim.setAvatarList(Arrays.asList(slim.getAvatar().split(",")));
+            for (ActivitySlim slim : activitySlimList) {
+                if (invalid.equals(slim.getShowApplyNum())) {
+                    slim.setAvatar(null);
+                }
+                if (StringUtils.isNotBlank(slim.getAvatar())) {
+                    slim.setAvatarList(Arrays.asList(slim.getAvatar().split(",")));
+                }
             }
         }
         return new PaginationData(activitySlimList, objects.getTotal());

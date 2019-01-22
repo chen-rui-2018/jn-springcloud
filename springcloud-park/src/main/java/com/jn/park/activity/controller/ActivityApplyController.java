@@ -92,7 +92,7 @@ public class ActivityApplyController extends BaseController {
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList")
     public Result activityApplyList(@RequestBody  ActivityQueryPaging activityQueryPaging){
-       Assert.notNull(activityQueryPaging.getActivityId(),ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+       Assert.notNull(activityQueryPaging,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
        PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityQueryPaging,Boolean.TRUE);
        return new Result(activityApplyList);
     }

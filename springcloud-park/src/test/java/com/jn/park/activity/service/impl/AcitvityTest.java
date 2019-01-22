@@ -214,8 +214,18 @@ public class AcitvityTest {
      */
     @Test
     public void activityListSlim(){
-        PaginationData  data= activityService.activityListSlim(activitySlimQuery);
-        assertThat((int)data.getTotal(),greaterThanOrEqualTo(0));
+        try {
+            activitySlimQuery.setStartTime("2018-12-01");
+            activitySlimQuery.setEndTime("2018-12-31");
+            activitySlimQuery.setTypeId("");
+            activitySlimQuery.setKeyWord("");
+            activitySlimQuery.setOrderBy("apply_num");
+            PaginationData data = activityService.activityListSlim(activitySlimQuery);
+            assertThat((int) data.getTotal(), greaterThanOrEqualTo(0));
+        }catch(Exception e) {
+            logger.info("活动列表查询失败。失败原因{}", e.getMessage(), e);
+            assertThat(e.getMessage(), anything());
+        }
     }
 
     /**

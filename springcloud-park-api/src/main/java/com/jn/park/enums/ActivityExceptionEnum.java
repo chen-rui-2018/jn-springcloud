@@ -49,6 +49,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_CANCEL_ERROR("4020234","数据取消异常"),
     ACTIVITY_UPDATE_ERROR("4020235","活动信息修改异常"),
     INCOMPLETE_INFORMATION("4020236","用户信息不完善，请完善用户信息"),
+    ACTIVITY_TIME_PARSE_ERROR2("4020237","筛选的时间范围,时间格式转换错误，请核实时间为：yyyy-MM-dd"),
     ACTIVITY_APPLY_CODE_DOWN_IO_EXCEPTION("4020502","签到二维码下载IO异常"),
     ACTIVITY_APPLY_CODE_DOWN_WRITER_EXCEPTION("4020503","签到二维码下载读取异常"),
     ACTIVITY_USER_LOGIN_EXCEPTION("4020501","请先进行登录操作"),

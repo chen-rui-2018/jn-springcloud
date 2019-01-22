@@ -27,6 +27,9 @@ public interface ActivityMapper {
      * 活动类表展示接口
      * @param typeId
      * @param keyWord
+     * @param startTime
+     * @param endTime
+     * @param orderBy
      * @return
      */
    List<ActivitySlim> activityListSlim(@Param("typeId") String typeId, @Param("keyWord") String keyWord,@Param("startTime") String startTime,@Param("endTime") String endTime,@Param("orderBy") String orderBy);

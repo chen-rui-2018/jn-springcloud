@@ -1,11 +1,13 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParment;
 import com.jn.park.model.ActivityQueryPaging;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * 活动报名
@@ -79,6 +81,13 @@ public interface ActivityApplyService {
     PaginationData findApplyActivityList( ActivityQueryPaging activityQueryPaging,Boolean isPage);
 
     /**
+     * 报名人账号信息
+     * @param activityIdList
+     * @return
+     */
+    List<ActivityApplyDetail> findApplyAccountList(List<String> activityIdList);
+
+    /**
      *
      * 新增活动报名信息
      * @param activityId 活动id
@@ -86,4 +95,5 @@ public interface ActivityApplyService {
      * @param status     报名状态 0:取消报名   1：报名成功   2：待审核
      */
     void addApplyInfo(String activityId, String account,String status);
+
 }

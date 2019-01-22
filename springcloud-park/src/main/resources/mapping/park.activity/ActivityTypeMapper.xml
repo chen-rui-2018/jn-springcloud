@@ -7,18 +7,18 @@
         select
         t.type_id as "typeId"                                                     <!--类型ID-->
         ,t.type_name as "typeName"                                                <!--类型名称-->
-        ,t.status as "status"                                                       <!--类型状态-->
-        ,t.create_account as "createAccount"                                      <!--创建人账号-->
-        ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"           <!--创建时间-->
-        ,t.update_account as "updateAccount"                                      <!--修改人账号-->
-        ,date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as "updateTime"           <!--修改时间-->
+        ,t.type_status as "status"                                                <!--类型状态-->
+        ,t.creator_account as "createAccount"                                     <!--创建人账号-->
+        ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createTime"          <!--创建时间-->
+        ,t.modifier_account as "updateAccount"                                    <!--修改人账号-->
+        ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "updateTime"         <!--修改时间-->
         ,count(f.type_id) as "fileTotal"                                          <!--模板数量-->
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
         where 1=1
-        and   t.status != '-1'
+        and   t.record_status != 0
         <if test="status != null and status!=''">
-            and t.status = #{status,jdbcType=VARCHAR}
+            and t.type_status = #{status,jdbcType=VARCHAR}
         </if>
         group by   t.type_id
     </select>
@@ -27,12 +27,12 @@
     <select id="findActivityTypeById" resultMap="ActivityMap">
         select t.type_id as "typeId"                                                                                    <!--类型ID-->
             ,t.type_name as "typeName"                                                                                   <!--类型名称-->
-            ,t.status as "status"                                                                                          <!--类型状态-->
+            ,t.type_status as "status"                                                                                          <!--类型状态-->
             ,f.file_src as "fileSrc"                                                                                     <!--模板列表-->
-            ,t.create_account as "createAccount"                                                                         <!--创建人账号-->
-            ,date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as "createTime"                                              <!--创建时间-->
-            ,t.update_account as "updateAccount"                                                                         <!--修改人账号-->
-            ,date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as "updateTime"                                              <!--修改时间-->
+            ,t.creator_account as "createAccount"                                                                         <!--创建人账号-->
+            ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createTime"                                              <!--创建时间-->
+            ,t.modifier_account as "updateAccount"                                                                         <!--修改人账号-->
+            ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "updateTime"                                              <!--修改时间-->
             ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as "fileTotal" <!--模板数量-->
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
@@ -56,7 +56,7 @@
     </resultMap>
     <!--删除活动类型-->
     <update id="deleteActivityTypeList" parameterType="java.util.List">
-        update tb_activity_type t set t.status = "-1",t.update_time = now() where t.type_Id in
+        update tb_activity_type t set t.record_status = 0,t.modified_time = now() where t.type_Id in
         <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>

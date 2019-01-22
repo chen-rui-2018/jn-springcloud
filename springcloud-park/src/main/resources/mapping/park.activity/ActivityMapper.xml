@@ -60,15 +60,16 @@
             from tb_activity ta
             left join tb_activity_detail td on td.activity_id = ta.id
             where 1=1
-            and ta.status  not in ('1','5')                                                               <!--不展示活动状态为草稿(status=1),和已删除的的活动(status=5)-->
+            and ta.acti_status  not in ('1','5')                                                        <!--不展示活动状态为草稿(status=1),和已删除的的活动(status=5)-->
+            and ta.record_status != 0
             <if test="typeId != null and typeId !=''">
                 and  ta.acti_type = #{typeId,jdbcType=VARCHAR}
             </if>
             <if test="startTime != null and startTime != ''">
-                and ta.acti_start_time &gt;= #{startTime,jdbcType=VARCHAR}
+                and ta.acti_start_time &gt;= concat(#{startTime,jdbcType=VARCHAR}," 00:00:00")
             </if>
             <if test="endTime != null and endTime != ''">
-                and ta.acti_start_time &lt;= #{endTime,jdbcType=VARCHAR}
+                and ta.acti_start_time &lt;=   concat(#{endTime,jdbcType=VARCHAR}," 23:59:59")
             </if>
 
             <if test="keyWord != null and keyWord !=''">

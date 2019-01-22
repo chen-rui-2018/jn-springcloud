@@ -69,6 +69,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             }
         }
         // 插入活动类型基本信息
+        Byte recordStatus = 1;
         TbActivityType activityType = new TbActivityType();
         String typeId = UUID.randomUUID().toString().replaceAll("-", "");
         activityType.setTypeId(typeId);
@@ -76,6 +77,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         activityType.setCreatorAccount(user.getAccount());
         activityType.setTypeName(typeName);
         activityType.setTypeStatus(status);
+        activityType.setRecordStatus(recordStatus);
         tbActivityTypeMapper.insertSelective(activityType);
 
         // 使用map封装,有多个模板时进行批量插入
@@ -153,10 +155,10 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteActivityTypeList(String typeId) {
-        List<String> list= new ArrayList<>();
-        if(StringUtils.isNotBlank(typeId)){
-            list = Arrays.asList(typeId.split(","));
+        if(StringUtils.isEmpty(typeId)){
+            throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
         }
+        List<String> list = Arrays.asList(typeId.split(","));
         TbActivityCriteria criteria = new TbActivityCriteria();
         criteria.createCriteria().andActiTypeIn(list);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);
@@ -169,6 +171,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
             }
         }
         activityTypeMapper.deleteActivityTypeList(list);
+        activityFileMapper.deleteActivityTypeTemp(list);
     }
 
     /**
@@ -180,13 +183,14 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     private void insertActivityTypeFile(List<String> templateList, String typeId, String account) {
         if (templateList != null && templateList.size() > 0) {
             List<TbActivityFile> activityFileList = new ArrayList<>();
+            Byte recordStatus = 1;
             for (String tempUrl : templateList) {
                 TbActivityFile activityFile = new TbActivityFile();
                 activityFile.setCreatedTime(new Date());
                 activityFile.setCreatorAccount(account);
                 activityFile.setTypeId(typeId);
                 activityFile.setFileStatus("1");
-
+                activityFile.setRecordStatus(recordStatus);
                 activityFile.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 activityFile.setFileSrc(tempUrl);
                 activityFileList.add(activityFile);

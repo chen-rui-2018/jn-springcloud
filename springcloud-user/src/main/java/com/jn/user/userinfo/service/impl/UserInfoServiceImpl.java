@@ -90,6 +90,10 @@ public class UserInfoServiceImpl implements UserInfoService {
             //把用户拓展信息写入redis中
             cache.put(account, userExtension);
         }
+        if(userExtension.getUserPersonInfo()==null && userExtension.getUserCompanyInfo()==null){
+            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
+            return null;
+        }
         return userExtension;
     }
 
@@ -106,7 +110,7 @@ public class UserInfoServiceImpl implements UserInfoService {
         //返回的结果集
         List<UserExtension>userList=new ArrayList<>(16);
         //需要从数据库查询的用户账号
-        List<String> needSelectAccoountList=new ArrayList<>(32);
+        List<String> needSelectAccountList=new ArrayList<>(32);
         //从缓存中获取用户信息，把缓存中没有的用户列出来从数据库中查询出来
         //从redis中取出用户扩展信息
         Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
@@ -115,27 +119,31 @@ public class UserInfoServiceImpl implements UserInfoService {
             if(userExtension!=null){
                 userList.add(userExtension);
             }else{
-                needSelectAccoountList.add(account);
+                needSelectAccountList.add(account);
             }
         }
         //没有需要查询的账号，直接把缓存中获得的用户信息返回
-        if(needSelectAccoountList.size()==0){
+        if(needSelectAccountList.size()==0){
             return userList;
         }
 
         //批量获取个人用户扩展信息
-        List<UserExtension> personUserExtensionList = getPersonUserInfoBatche(needSelectAccoountList);
+        List<UserExtension> personUserExtensionList = getPersonUserInfoBatche(needSelectAccountList);
         for(UserExtension user:personUserExtensionList){
             userList.add(user);
             //把用户拓展信息写入redis中
             cache.put(user.getUserPersonInfo().getAccount(), user);
         }
         //批量获取企业用户扩展信息
-        List<UserExtension> companyUserExtensionList= getCompanyUserInfoBatch(needSelectAccoountList);
+        List<UserExtension> companyUserExtensionList= getCompanyUserInfoBatch(needSelectAccountList);
         for(UserExtension user:companyUserExtensionList){
             userList.add(user);
             //把用户拓展信息写入redis中
             cache.put(user.getUserCompanyInfo().getAccount(), user);
+        }
+        if(userList.isEmpty()){
+            logger.warn("批量获取用户的扩展信息失败，所获取用户信息不存在或已被删除");
+            return null;
         }
         return userList;
     }
@@ -177,7 +185,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @ServiceLog(doAction = "获取企业用户信息并转换为用户扩展信息bean")
     private void getCompanyInfoAndConvert(List<String> accountList, List<UserExtension> userExtensionList) {
         TbUserCompanyCriteria comExample = new TbUserCompanyCriteria();
-        comExample.createCriteria().andAccountIn(accountList);
+        //是否删除 0：已删除   1：正常
+        byte recordStatus=1;
+        comExample.createCriteria().andAccountIn(accountList).andRecordStatusEqualTo(recordStatus);
         List<TbUserCompany> tbUserCompanies = tbUserCompanyMapper.selectByExample(comExample);
         for(TbUserCompany user:tbUserCompanies){
             UserExtension userExtension=new UserExtension();
@@ -226,7 +236,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @ServiceLog(doAction = "获取个人用户信息并转换为用户扩展信息bean")
     private void getPersonUserInfoAndConvert(List<String> accountList, List<UserExtension> userExtensionList) {
         TbUserPersonCriteria perExample = new TbUserPersonCriteria();
-        perExample.createCriteria().andAccountIn(accountList);
+        //是否删除 0：已删除   1：正常
+        byte recordStatus=1;
+        perExample.createCriteria().andAccountIn(accountList).andRecordStatusEqualTo(recordStatus);
         List<TbUserPerson> tbUserPeople = tbUserPersonMapper.selectByExample(perExample);
         for(TbUserPerson user:tbUserPeople){
             UserExtension userExtension=new UserExtension();
@@ -250,9 +262,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserPersonCriteria.Criteria criteriaPhone = perExample.createCriteria();
         //用户邮箱查询条件
         TbUserPersonCriteria.Criteria criteriaEmail = perExample.createCriteria();
-        criteriaAccount.andAccountEqualTo(account);
-        criteriaPhone.andPhoneEqualTo(account);
-        criteriaEmail.andEmailEqualTo(account);
+        //是否删除 0：已删除   1：正常
+        byte recordStatus=1;
+        criteriaAccount.andAccountEqualTo(account).andRecordStatusEqualTo(recordStatus);
+        criteriaPhone.andPhoneEqualTo(account).andRecordStatusEqualTo(recordStatus);
+        criteriaEmail.andEmailEqualTo(account).andRecordStatusEqualTo(recordStatus);
         perExample.or(criteriaAccount);
         perExample.or(criteriaPhone);
         perExample.or(criteriaEmail);
@@ -272,9 +286,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         TbUserCompanyCriteria.Criteria comCriteriaPhone = comExample.createCriteria();
         //用户邮箱查询条件
         TbUserCompanyCriteria.Criteria comCriteriaEmail = comExample.createCriteria();
-        comCriteriaAccount.andAccountEqualTo(account);
-        comCriteriaPhone.andPhoneEqualTo(account);
-        comCriteriaEmail.andEmailEqualTo(account);
+        //是否删除 0：已删除   1：正常
+        byte recordStatus=1;
+        comCriteriaAccount.andAccountEqualTo(account).andRecordStatusEqualTo(recordStatus);
+        comCriteriaPhone.andPhoneEqualTo(account).andRecordStatusEqualTo(recordStatus);
+        comCriteriaEmail.andEmailEqualTo(account).andRecordStatusEqualTo(recordStatus);
         comExample.or(comCriteriaAccount);
         comExample.or(comCriteriaPhone);
         comExample.or(comCriteriaEmail);

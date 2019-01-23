@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -61,12 +61,15 @@ public class UserInfoServiceImplTest {
         if(userInfo!=null){
             if(userInfo.getUserPersonInfo()!=null){
                 logger.info(userInfo.getUserPersonInfo().toString());
-            }
-            if(userInfo.getUserCompanyInfo()!=null){
+            }else if(userInfo.getUserCompanyInfo()!=null){
                 logger.info(userInfo.getUserCompanyInfo().toString());
+            }else {
+                logger.info("用户信息不存在或已被删除");
             }
+        }else{
+            logger.info("用户信息不存在或已被删除");
         }
-        assertThat(userInfo, notNullValue());
+        assertThat(userInfo, anything());
     }
 
     /**
@@ -75,14 +78,15 @@ public class UserInfoServiceImplTest {
     @Test
     public void getMoreUserExtension() {
         List<UserExtension> userInfoList = userInfoService.getMoreUserExtension(accountList);
-        for(UserExtension userInfo:userInfoList){
-            if(userInfo.getUserPersonInfo()!=null){
-                logger.info(userInfo.getUserPersonInfo().toString());
-            }
-            if(userInfo.getUserCompanyInfo()!=null){
-                logger.info(userInfo.getUserCompanyInfo().toString());
+        if(userInfoList!=null){
+            for(UserExtension userInfo:userInfoList){
+                if(userInfo.getUserPersonInfo()!=null){
+                    logger.info(userInfo.getUserPersonInfo().toString());
+                }else if(userInfo.getUserCompanyInfo()!=null){
+                    logger.info(userInfo.getUserCompanyInfo().toString());
+                }
             }
         }
-        assertThat(userInfoList, notNullValue());
+        assertThat(userInfoList, anything());
     }
 }

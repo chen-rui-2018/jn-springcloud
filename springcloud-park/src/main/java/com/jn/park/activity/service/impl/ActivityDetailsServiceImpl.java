@@ -189,7 +189,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         List<String> accountList=new ArrayList<>(16);
         for(Comment comment:list){
             //获取所有用户账号
-            accountList.add(comment.getComAccount());
+            accountList.add(comment.getCreatorAccount());
         }
         //批量获取用户扩展信息
         Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
@@ -201,11 +201,11 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         for(Comment  comment:list){
             for(UserExtension userExtension:data){
                 //个人用户拓展信息
-                if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getComAccount())){
+                if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getCreatorAccount())){
                     //设置头像信息
                     comment.setAvatar(userExtension.getUserPersonInfo().getAvatar());
                     break;
-                }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getComAccount())){
+                }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getCreatorAccount())){
                     //企业用户拓展信息
                     //设置头像信息
                     comment.setAvatar(userExtension.getUserCompanyInfo().getAvatar());

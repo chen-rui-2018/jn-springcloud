@@ -42,7 +42,7 @@
         left join tb_activity_detail t2
         on t1.id=t2.activity_id
         where t1.id=#{id}
-        and t1.acti_status != '1' and t1.record_status != '0'                                                     <!--草稿、已删除的活动不能被查询出来-->
+        and t1.acti_status != '1' and t1.record_status != '0'                                   <!--草稿、已删除的活动不能被查询出来-->
     </select>
 
     <!--获取点评信息-->
@@ -51,11 +51,11 @@
         t1.id as "id"                                                     <!--点评id-->
         ,t1.root_id as "rootId"                                           <!--根节点id(活动id/服务id)-->
         ,t1.p_id as "pId"                                                 <!--点评父ID(点评ID/活动ID)-->
-        ,t1.com_account as "comAccount"                                   <!--点评人-->
+        ,t1.creator_account as "creatorAccount"                           <!--点评人-->
         ,t1.parent_account as "parentAccount"                             <!--被点评人-->
-        ,date_format(t1.com_time, '%Y-%m-%d %H:%i:%s') as "comTime"       <!--点评时间-->
+        ,date_format(t1.created_time, '%Y-%m-%d %H:%i:%s') as "createdTime"<!--点评时间-->
         ,t1.like_num as "likeNum"                                         <!--点评点赞数-->
-        ,t1.status as "status"                                            <!--点评状态-->
+        ,t1.com_status as "comStatus"                                     <!--点评状态-->
         ,t1.com_type as "comType"                                         <!--类型-->
         ,t1.com_content as "comContent"                                   <!--点评内容-->
         from tb_comment t1
@@ -67,8 +67,8 @@
         <foreach collection="list" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
-        and t1.status='1'                                                 <!--有效点评-->
-        order by t1.com_time
+        and t1.com_status='1'                                                 <!--有效点评-->
+        order by t1.created_time
     </select>
 
     <!--获取活动报名信息-->
@@ -76,8 +76,8 @@
         select
         t1.id as "id"                                                     <!--活动报名id-->
         ,t1.activity_id as "activityId"                                   <!--活动ID-->
-        ,t1.account as "account"                                          <!--报名人-->
-        ,date_format(t1.apply_time, '%Y-%m-%d %H:%i:%s') as "applyTime"   <!--报名时间-->
+        ,t1.creator_account as "account"                                  <!--报名人-->
+        ,date_format(t1.created_time, '%Y-%m-%d %H:%i:%s') as "createdTime" <!--报名时间-->
         ,t1.apply_status as "applyStatus"                                 <!--报名状态-->
         ,t1.sign_status as "signStatus"                                   <!--签到状态-->
         ,date_format(t1.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"     <!--签到时间-->
@@ -85,7 +85,7 @@
         from tb_activity_apply t1
         where  1=1
         and t1.activity_id=#{activityId}
-        and t1.account=#{account}
+        and t1.creator_account=#{account}
         and t1.apply_status='1'
     </select>
 </mapper>

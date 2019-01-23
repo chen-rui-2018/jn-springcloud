@@ -28,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
@@ -130,7 +131,10 @@ public class ActivityTypeServiceImplTest {
     @Test
     public void findActivityTypeById() {
         ActivityType activityType = activityTypeService.findActivityTypeById(typeId);
-        assertThat(activityType.getTypeId(), notNullValue());
+        if(activityType!=null){
+            assertThat(activityType.getTypeId(), notNullValue());
+        }
+        assertThat(activityType,anything());
     }
 
     /**

@@ -24,15 +24,15 @@ public class Comment extends Page implements Serializable {
     @ApiModelProperty(value = "点评父ID(点评ID/活动ID)")
     private String pId;
     @ApiModelProperty(value = "点评人")
-    private String comAccount;
+    private String creatorAccount;
     @ApiModelProperty(value = "被点评人")
     private  String parentAccount;
     @ApiModelProperty(value = "点评时间")
-    private String comTime;
+    private String createdTime;
     @ApiModelProperty(value = "点评点赞数")
     private Integer likeNum;
     @ApiModelProperty(value = "点评状态")
-    private String status;
+    private String comStatus;
     @ApiModelProperty(value = "点评类型(0：活动点评，1：服务点评)")
     private String comType;
     @ApiModelProperty(value = "点评内容")
@@ -70,12 +70,12 @@ public class Comment extends Page implements Serializable {
         this.pId = pId;
     }
 
-    public String getComAccount() {
-        return comAccount;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setComAccount(String comAccount) {
-        this.comAccount = comAccount;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
     public String getParentAccount() {
@@ -86,12 +86,12 @@ public class Comment extends Page implements Serializable {
         this.parentAccount = parentAccount;
     }
 
-    public String getComTime() {
-        return comTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setComTime(String comTime) {
-        this.comTime = comTime;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public Integer getLikeNum() {
@@ -102,12 +102,12 @@ public class Comment extends Page implements Serializable {
         this.likeNum = likeNum;
     }
 
-    public String getStatus() {
-        return status;
+    public String getComStatus() {
+        return comStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setComStatus(String comStatus) {
+        this.comStatus = comStatus;
     }
 
     public String getComType() {
@@ -156,11 +156,11 @@ public class Comment extends Page implements Serializable {
                 "id='" + id + '\'' +
                 ", rootId='" + rootId + '\'' +
                 ", pId='" + pId + '\'' +
-                ", comAccount='" + comAccount + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
                 ", parentAccount='" + parentAccount + '\'' +
-                ", comTime='" + comTime + '\'' +
+                ", createdTime='" + createdTime + '\'' +
                 ", likeNum=" + likeNum +
-                ", status='" + status + '\'' +
+                ", comStatus='" + comStatus + '\'' +
                 ", comType='" + comType + '\'' +
                 ", comContent='" + comContent + '\'' +
                 ", avatar='" + avatar + '\'' +

@@ -33,6 +33,8 @@ public class ActivityApply implements Serializable {
     private String signType;
     @ApiModelProperty(value = "报名人头像")
     private String avatar;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -108,6 +110,14 @@ public class ActivityApply implements Serializable {
         this.avatar = avatar;
     }
 
+    public String getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
     @Override
     public String toString() {
         return "ActivityApply{" +
@@ -120,6 +130,7 @@ public class ActivityApply implements Serializable {
                 ", signTime='" + signTime + '\'' +
                 ", signType='" + signType + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }

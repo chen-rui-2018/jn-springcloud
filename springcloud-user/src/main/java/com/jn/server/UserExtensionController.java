@@ -45,7 +45,9 @@ public class UserExtensionController extends BaseController implements UserExten
         Assert.notNull(account,"用户账号不能为空");
         Result<UserExtension> result=new Result();
         UserExtension userExtension = userInfoService.getUserExtension(account);
-        result.setData(userExtension);
+        if(userExtension!=null){
+            result.setData(userExtension);
+        }
         return result;
     }
 
@@ -58,7 +60,9 @@ public class UserExtensionController extends BaseController implements UserExten
         Assert.notNull(accountList, "用户账号不能为空");
         Result<List<UserExtension>> result=new Result();
         List<UserExtension> userExtensionList=userInfoService.getMoreUserExtension(accountList);
-        result.setData(userExtensionList);
+        if(userExtensionList!=null) {
+            result.setData(userExtensionList);
+        }
         return result;
     }
 }

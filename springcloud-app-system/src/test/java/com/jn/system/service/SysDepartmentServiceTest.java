@@ -48,7 +48,7 @@ public class SysDepartmentServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化部门部门id及部门名称
         departmenId = UUID.randomUUID().toString();
@@ -59,9 +59,10 @@ public class SysDepartmentServiceTest {
         tbSysDepartment.setId(departmenId);
         tbSysDepartment.setDepartmentName(departmentName);
         tbSysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
-        tbSysDepartment.setCreator(user.getId());
-        tbSysDepartment.setCreateTime(new Date());
-        tbSysDepartment.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysDepartment.setCreatorAccount(user.getAccount());
+        tbSysDepartment.setCreatedTime(new Date());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysDepartment.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -83,11 +84,12 @@ public class SysDepartmentServiceTest {
     public void updateTest() {
         SysDepartment SysDepartment = new SysDepartment();
         SysDepartment.setId(departmenId);
-        SysDepartment.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        SysDepartment.setRecordStatus(recordStatus);
         SysDepartment.setDepartmentName(departmentName);
         SysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         try {
-            sysDepartmentService.update(SysDepartment);
+            sysDepartmentService.update(SysDepartment,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -119,7 +121,7 @@ public class SysDepartmentServiceTest {
         department.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         list.add(department);
         try {
-            sysDepartmentService.addDepartmentBatch(list);
+            sysDepartmentService.addDepartmentBatch(list,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -134,6 +136,6 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void zDeleteTest() {
-        sysDepartmentService.delete(departmenId);
+        sysDepartmentService.delete(departmenId,user);
     }
 }

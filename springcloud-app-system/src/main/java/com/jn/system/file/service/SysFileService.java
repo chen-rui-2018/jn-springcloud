@@ -1,7 +1,6 @@
 package com.jn.system.file.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.file.model.SysFile;
 import com.jn.system.file.model.SysFilePage;
 
 /**
@@ -13,34 +12,6 @@ import com.jn.system.file.model.SysFilePage;
  * @modified By:
  */
 public interface SysFileService {
-    /**
-     * 新增文件
-     *
-     * @param sysFile
-     */
-    void insertSysFile(SysFile sysFile);
-
-    /**
-     * 根据id更新文件
-     *
-     * @param sysFile
-     */
-    void updateSysFileById(SysFile sysFile);
-
-    /**
-     * 批量删除文件（逻辑删除）
-     *
-     * @param ids
-     */
-    void deleteSysFileByIds(String[] ids);
-
-    /**
-     * 根据id查询文件
-     *
-     * @param id
-     * @return
-     */
-    SysFile selectSysFileByIds(String id);
 
     /**
      * 根据关键字分页查询文件列表
@@ -50,11 +21,4 @@ public interface SysFileService {
      */
     PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage);
 
-    /**
-     * 校验文件名称
-     *
-     * @param fileName
-     * @return
-     */
-    String checkFileName(String fileName);
 }

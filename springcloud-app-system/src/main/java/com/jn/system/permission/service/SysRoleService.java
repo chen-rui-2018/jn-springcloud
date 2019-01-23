@@ -26,16 +26,17 @@ public interface SysRoleService {
      * 更新角色信息
      *
      * @param role
+     * @param user
      */
-    void updateTbRole(SysRoleUpdate role);
+    void updateTbRole(SysRoleUpdate role, User user);
 
     /**
-     * 批量删除角色（逻辑删除）
+     * 逻辑删除角色信息
      *
      * @param roleIds
-     * @return
+     * @param user    当前用户信息
      */
-    void deleteTbRoleById(String[] roleIds);
+    void deleteTbRoleById(String[] roleIds, User user);
 
     /**
      * 分页查询角色列表信息

@@ -40,7 +40,7 @@
 - 7.启动nginx 访问端口80/html
 ##### 后面可以不启动
 - 7.启动调度中心springcloud-app-schedule
-- 8.启动链路追踪springcloud-app-zipkin 访问端口9411
+- 8.启动链路追踪springcloud-app-zipkin 访问端口2001
 - 9.启动服务治理监控springcloud-app-admin
 - 10.启动配置中心配置项目springcloud-app-config-manager
 

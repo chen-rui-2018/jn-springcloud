@@ -5,6 +5,7 @@ import com.jn.system.permission.entity.TbSysPermissionFiles;
 import com.jn.system.permission.model.SysPermissionFileGroupPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 权限文件组Mapper
@@ -18,9 +19,9 @@ public interface SysPermissionFilesMapper {
     /**
      * 根据权限id批量删除对应信息
      *
-     * @param ids
+     * @param map
      */
-    void deletePermissionBranch(String[] ids);
+    void deletePermissionBranch(Map<String, Object> map);
 
     /**
      * 根据权限id获取除权限已经具有的文件组信息
@@ -29,14 +30,6 @@ public interface SysPermissionFilesMapper {
      * @return
      */
     List<SysFileGroup> findFileGroupOfPermission(String id);
-
-
-    /**
-     * 根据权限id逻辑删除原有权限对应文件组
-     *
-     * @param permissionId
-     */
-    void deleteByPermissionId(String permissionId);
 
     /**
      * 为权限添加新的文件组
@@ -56,7 +49,7 @@ public interface SysPermissionFilesMapper {
     /**
      * 根据文件组id批量权限文件组信息
      *
-     * @param ids
+     * @param map
      */
-    void deleteByFileGroupIds(String[] ids);
+    void deleteByFileGroupIds(Map<String, Object> map);
 }

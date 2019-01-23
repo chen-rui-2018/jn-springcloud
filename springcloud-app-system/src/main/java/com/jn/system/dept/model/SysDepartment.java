@@ -20,27 +20,27 @@ import java.util.Date;
 public class SysDepartment implements Serializable {
 
     private static final long serialVersionUID = 3850036433256084982L;
-    @ApiModelProperty(value = "id",required = true)
+    @ApiModelProperty(value = "id", required = true)
     private String id;
-    @ApiModelProperty(value = "部门名称",required = true)
+    @ApiModelProperty(value = "部门名称", required = true)
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "部门名称校验失败")
     private String departmentName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
-    private String status;
-    @ApiModelProperty(value = "父级id",required = true)
+    private Byte recordStatus;
+    @ApiModelProperty(value = "父级id", required = true)
     @NotBlank(message = "父级id不能为空")
     private String parentId;
 
     public SysDepartment() {
     }
 
-    public SysDepartment(String id, String departmentName, Date createTime, String status, String parentId) {
+    public SysDepartment(String id, String departmentName, Date createdTime, Byte recordStatus, String parentId) {
         this.id = id;
         this.departmentName = departmentName;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.parentId = parentId;
     }
 
@@ -60,20 +60,20 @@ public class SysDepartment implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getParentId() {
@@ -89,8 +89,8 @@ public class SysDepartment implements Serializable {
         return "SysDepartment{" +
                 "id='" + id + '\'' +
                 ", departmentName='" + departmentName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", parentId='" + parentId + '\'' +
                 '}';
     }

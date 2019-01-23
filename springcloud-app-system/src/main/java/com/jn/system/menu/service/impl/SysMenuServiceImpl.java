@@ -47,8 +47,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Resource
     private TbSysMenuMapper tbSysMenuMapper;
     @Resource
-    private TbSysResourcesMapper tbSysResourcesMapper;
-    @Resource
     private SysResourcesMapper sysResourcesMapper;
     @Resource
     private SysPermissionMenuMapper sysPermissionMenuMapper;
@@ -56,20 +54,21 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysResourcesService sysResourcesService;
 
     /**
-     * 更新菜单信息
+     * 更新用户信息
      *
      * @param sysMenu
+     * @param user    当前用户信息
      */
     @Override
     @ServiceLog(doAction = "更新菜单信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysMenuById(SysMenu sysMenu) {
+    public void updateSysMenuById(SysMenu sysMenu, User user) {
         String menuId = sysMenu.getId();
         String parentId = sysMenu.getParentId();
         String menuName = sysMenu.getMenuName();
         //判断修改信息是否存在
         TbSysMenu tbSysMenu1 = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getStatus())) {
+        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getRecordStatus().toString())) {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -85,24 +84,27 @@ public class SysMenuServiceImpl implements SysMenuService {
         sysMenu.setMenuUrl(StringUtils.trim(sysMenu.getMenuUrl()));
         TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
+        //设置最近更新人信息
+        tbSysMenu.setModifiedTime(new Date());
+        tbSysMenu.setModifierAccount(user.getAccount());
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
         logger.info("[菜单] 菜单更新成功，menuId:{}", menuId);
     }
 
     /**
-     * 逻辑删除菜单
+     * 删除菜单
      *
      * @param menuId
-     * @return
+     * @param user   当前用户信息
      */
     @Override
     @ServiceLog(doAction = "逻辑删除菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysMenuById(String menuId) {
+    public void deleteSysMenuById(String menuId, User user) {
         List<String> resourcesIds = new ArrayList<String>(32);
         //判断菜单是存在
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu.getStatus())) {
+        if (tbSysMenu == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu.getRecordStatus().toString())) {
             return;
         }
         //查询删除菜单所有子菜单id
@@ -114,16 +116,20 @@ public class SysMenuServiceImpl implements SysMenuService {
         for (String id : menuIds) {
             getResourcesIdByMenuId(id, resourcesIds);
         }
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", menuIds);
+        map.put("account", user.getAccount());
         //删除菜单
-        sysMenuMapper.deleteBy(menuIds);
+        sysMenuMapper.deleteBy(map);
         logger.info("[菜单] 删除菜单及子菜单信息成功，menuIds:{}", menuIds.toString());
         //删除菜单关联权限信息
-        sysPermissionMenuMapper.deleteBy(menuIds);
+        sysPermissionMenuMapper.deleteBy(map);
         logger.info("[菜单权限] 删除菜单及子菜单对应的权限信息成功，menuIds:{}", menuIds.toString());
         String[] ids = resourcesIds.toArray(new String[resourcesIds.size()]);
         if (ids.length > 0) {
             //删除菜单具有的功能信息
-            sysResourcesService.deleteResourcesById(ids);
+            sysResourcesService.deleteResourcesById(ids, user);
             logger.info("[菜单功能] 删除菜单及子菜单的功能信息，删除功能对应权限信息成功,menuIds:{}", resourcesIds.toString());
         }
     }
@@ -131,7 +137,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
      * 通过菜单id获取菜单具有的功能id
      *
-     * @param menuId 菜单id
+     * @param menuId       菜单id
      * @param resourcesIds 功能id数组
      */
     private void getResourcesIdByMenuId(String menuId, List<String> resourcesIds) {
@@ -161,7 +167,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      *
      * @param sourcesList 菜单集合
      * @param targetList  菜单树集合
-     * @param flag 标记是菜单调用接口还是权限调用接口
+     * @param flag        标记是菜单调用接口还是权限调用接口
      */
     private void createMenuTree(List<SysMenuTreeVO> sourcesList, List<SysMenuTreeVO> targetList, Boolean flag) {
         for (SysMenuTreeVO menuTreeVO : sourcesList) {
@@ -170,7 +176,7 @@ public class SysMenuServiceImpl implements SysMenuService {
                 targetList.add(menuTreeVO);
             }
             //如果菜单查询为空,则设置结果为null
-            if (menuTreeVO.getChildren() != null && menuTreeVO.getChildren().size() == 0){
+            if (menuTreeVO.getChildren() != null && menuTreeVO.getChildren().size() == 0) {
                 menuTreeVO.setChildren(null);
             }
             //设置图标
@@ -241,7 +247,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private List<TbSysMenu> checkMenusName(String menuName, String parentId) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         criteria.andParentIdEqualTo(parentId);
         criteria.andMenuNameEqualTo(menuName);
         return tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
@@ -338,12 +345,13 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
         tbSysMenu.setId(sysMenuAdd.getId());
-        tbSysMenu.setCreateTime(new Date());
-        tbSysMenu.setCreator(user.getId());
+        tbSysMenu.setCreatedTime(new Date());
+        tbSysMenu.setCreatorAccount(user.getAccount());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(StringUtils.trim(sysMenuAdd.getMenuUrl()));
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysMenu.setRecordStatus(recordStatus);
         tbSysMenuMapper.insertSelective(tbSysMenu);
     }
 
@@ -373,7 +381,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @ServiceLog(doAction = "批量更新菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void updateBatch(SysMenus sysMenus) {
+    public void updateBatch(SysMenus sysMenus, User user) {
         List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();
         HashSet<String> set = new HashSet<String>();
         //判断批量修改菜单中名称是否有重复的存在,使用set去重
@@ -386,7 +394,10 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         //如果集合长度大于0,进行批量更新
         if (sysMenuSortList != null && sysMenuSortList.size() > 0) {
-            sysMenuMapper.updateBatch(sysMenuSortList);
+            Map<String, Object> map = new HashMap<String, Object>(16);
+            map.put("list", sysMenuSortList);
+            map.put("account", user.getAccount());
+            sysMenuMapper.updateBatch(map);
             logger.info("[菜单] 菜单批量更新成功");
         }
     }

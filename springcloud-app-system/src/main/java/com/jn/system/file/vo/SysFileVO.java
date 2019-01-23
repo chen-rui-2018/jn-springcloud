@@ -42,19 +42,19 @@ public class SysFileVO implements Serializable {
      * 创建人
      */
     @ApiModelProperty("创建人")
-    private String creator;
+    private String creatorAccount;
 
     /**
      * 创建时间
      */
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty("状态 1:有效 0:无效 -1:删除")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     /**
      * 状态描述
@@ -72,14 +72,14 @@ public class SysFileVO implements Serializable {
     public SysFileVO() {
     }
 
-    public SysFileVO(String fileId, String fileName, String fileUrl, String creator, Date createTime,
-                     String status, String statusDesc, List<String> fileGroupNameList) {
+    public SysFileVO(String fileId, String fileName, String fileUrl, String creatorAccount, Date createdTime,
+                     Byte recordStatus, String statusDesc, List<String> fileGroupNameList) {
         this.fileId = fileId;
         this.fileName = fileName;
         this.fileUrl = fileUrl;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.statusDesc = statusDesc;
         this.fileGroupNameList = fileGroupNameList;
     }
@@ -108,28 +108,28 @@ public class SysFileVO implements Serializable {
         this.fileUrl = fileUrl;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getStatusDesc() {
@@ -154,9 +154,9 @@ public class SysFileVO implements Serializable {
                 "fileId='" + fileId + '\'' +
                 ", fileName='" + fileName + '\'' +
                 ", fileUrl='" + fileUrl + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", statusDesc='" + statusDesc + '\'' +
                 ", fileGroupNameList=" + fileGroupNameList +
                 '}';

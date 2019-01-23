@@ -1,8 +1,8 @@
 package com.jn.system.permission.service;
 
 
-import com.jn.system.user.model.SysUserGroupRole;
 import com.jn.system.model.User;
+import com.jn.system.user.model.SysUserGroupRole;
 
 import java.util.List;
 
@@ -19,18 +19,21 @@ public interface SysUserGroupRoleService {
 
     /**
      * 新增用户组角色
+     *
      * @param userGroupRole
      */
     void insertTbUserGroupRole(SysUserGroupRole userGroupRole, User user);
 
     /**
      * 更新用户组角色信息
+     *
      * @param userGroupRole
      */
     void updateTbUserGroupRole(SysUserGroupRole userGroupRole);
 
     /**
      * 根据角色id批量删除用户组角色（逻辑删除）
+     *
      * @param roleIds
      * @return
      */
@@ -38,6 +41,7 @@ public interface SysUserGroupRoleService {
 
     /**
      * 批量删除用户组角色（逻辑删除）
+     *
      * @param ids
      * @return
      */
@@ -45,6 +49,7 @@ public interface SysUserGroupRoleService {
 
     /**
      * 批量插入用户组角色
+     *
      * @param sysUserGroupRoles
      */
     void insertTbUserGroupRoleBatch(List<SysUserGroupRole> sysUserGroupRoles);

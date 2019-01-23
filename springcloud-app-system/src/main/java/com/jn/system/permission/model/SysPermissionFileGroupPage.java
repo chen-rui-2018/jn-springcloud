@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /**
  * 权限界面用于条件分页查询文件组信息
+ *
  * @author： shaobao
  * @date： Created on 2018/11/17 14:51
  * @version： v1.0

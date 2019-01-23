@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 /**
  * 为用户组分配角色实体类
+ *
  * @author： shaobao
  * @date： Created on 2018/11/5 21:38
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysRoleGroupAdd",description = "用户组添加角色实体")
+@ApiModel(value = "SysRoleGroupAdd", description = "用户组添加角色实体")
 public class SysRoleGroupAdd implements Serializable {
     private static final long serialVersionUID = -2260462623972187088L;
     @ApiModelProperty("角色id数组")

@@ -46,7 +46,7 @@ public class SysPostServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化岗位id及岗位名称
         postId = UUID.randomUUID().toString();
@@ -55,10 +55,11 @@ public class SysPostServiceTest {
         //初始化岗位对象
         tbSysPost = new TbSysPost();
         tbSysPost.setId(postId);
-        tbSysPost.setCreator(user.getId());
-        tbSysPost.setCreateTime(new Date());
+        tbSysPost.setCreatorAccount(user.getAccount());
+        tbSysPost.setCreatedTime(new Date());
         tbSysPost.setPostTypeId(UUID.randomUUID().toString());
-        tbSysPost.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPost.setRecordStatus(recordStatus);
         tbSysPost.setPostName(postName);
     }
 
@@ -83,9 +84,10 @@ public class SysPostServiceTest {
         SysPost post = new SysPost();
         post.setId(postId);
         post.setPostName(postName);
-        post.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        post.setRecordStatus(recordStatus);
         try {
-            sysPostService.updatePost(post);
+            sysPostService.updatePost(post,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -116,7 +118,7 @@ public class SysPostServiceTest {
     @Test
     public void zDeletePostBranch() {
         String[] postIds = {postId};
-        sysPostService.deletePostBranch(postIds);
+        sysPostService.deletePostBranch(postIds,user);
     }
 
 }

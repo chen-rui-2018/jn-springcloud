@@ -6,9 +6,11 @@
     <result column="resources_name" jdbcType="VARCHAR" property="resourcesName" />
     <result column="resources_url" jdbcType="VARCHAR" property="resourcesUrl" />
     <result column="menu_id" jdbcType="VARCHAR" property="menuId" />
-    <result column="creator" jdbcType="VARCHAR" property="creator" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -69,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, resources_name, resources_url, menu_id, creator, create_time, status
+    id, resources_name, resources_url, menu_id, creator_account, created_time, record_status, 
+    modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.system.menu.entity.TbSysResourcesCriteria" resultMap="BaseResultMap">
     select
@@ -103,11 +106,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.system.menu.entity.TbSysResources">
     insert into tb_sys_resources (id, resources_name, resources_url, 
-      menu_id, creator, create_time, 
-      status)
+      menu_id, creator_account, created_time, 
+      record_status, modifier_account, modified_time
+      )
     values (#{id,jdbcType=VARCHAR}, #{resourcesName,jdbcType=VARCHAR}, #{resourcesUrl,jdbcType=VARCHAR}, 
-      #{menuId,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR})
+      #{menuId,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.system.menu.entity.TbSysResources">
     insert into tb_sys_resources
@@ -124,14 +129,20 @@
       <if test="menuId != null">
         menu_id,
       </if>
-      <if test="creator != null">
-        creator,
+      <if test="creatorAccount != null">
+        creator_account,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="createdTime != null">
+        created_time,
       </if>
-      <if test="status != null">
-        status,
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -147,14 +158,20 @@
       <if test="menuId != null">
         #{menuId,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        #{creator,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -179,14 +196,20 @@
       <if test="record.menuId != null">
         menu_id = #{record.menuId,jdbcType=VARCHAR},
       </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=VARCHAR},
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -199,9 +222,11 @@
       resources_name = #{record.resourcesName,jdbcType=VARCHAR},
       resources_url = #{record.resourcesUrl,jdbcType=VARCHAR},
       menu_id = #{record.menuId,jdbcType=VARCHAR},
-      creator = #{record.creator,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=VARCHAR}
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -218,14 +243,20 @@
       <if test="menuId != null">
         menu_id = #{menuId,jdbcType=VARCHAR},
       </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=VARCHAR},
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -235,9 +266,11 @@
     set resources_name = #{resourcesName,jdbcType=VARCHAR},
       resources_url = #{resourcesUrl,jdbcType=VARCHAR},
       menu_id = #{menuId,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR}
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

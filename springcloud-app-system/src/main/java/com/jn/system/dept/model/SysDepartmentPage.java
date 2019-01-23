@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -22,14 +21,14 @@ public class SysDepartmentPage extends Page implements Serializable {
     @ApiModelProperty("部门名称")
     private String departmentName;
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
 
     public SysDepartmentPage() {
     }
 
-    public SysDepartmentPage(String departmentName, String status) {
+    public SysDepartmentPage(String departmentName, Byte recordStatus) {
         this.departmentName = departmentName;
-        this.status = status;
+        this.recordStatus = recordStatus;
     }
 
     public String getDepartmentName() {
@@ -40,19 +39,19 @@ public class SysDepartmentPage extends Page implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
     public String toString() {
         return "SysDepartmentPage{" +
                 "departmentName='" + departmentName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

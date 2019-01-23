@@ -28,25 +28,24 @@ public class SysUserDepartmentPostVO implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
     @ApiModelProperty("部门岗位集合")
     private List<SysDepartmentPostVO> sysDepartmentPostVOList;
 
     public SysUserDepartmentPostVO() {
     }
 
-    public SysUserDepartmentPostVO(String id, String account, String name, String phone,
-                                   String email, Date createTime, String status,
-                                   List<SysDepartmentPostVO> sysDepartmentPostVOList) {
+    public SysUserDepartmentPostVO(String id, String account, String name, String phone, String email,
+                                   Date createdTime, Byte recordStatus, List<SysDepartmentPostVO> sysDepartmentPostVOList) {
         this.id = id;
         this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.sysDepartmentPostVOList = sysDepartmentPostVOList;
     }
 
@@ -90,20 +89,20 @@ public class SysUserDepartmentPostVO implements Serializable {
         this.email = email;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public List<SysDepartmentPostVO> getSysDepartmentPostVOList() {
@@ -122,8 +121,8 @@ public class SysUserDepartmentPostVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", sysDepartmentPostVOList=" + sysDepartmentPostVOList +
                 '}';
     }

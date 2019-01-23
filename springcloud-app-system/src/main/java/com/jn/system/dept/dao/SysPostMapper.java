@@ -4,6 +4,7 @@ import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： shaobao
@@ -15,9 +16,9 @@ public interface SysPostMapper {
     /**
      * 批量删除岗位
      *
-     * @param ids
+     * @param map
      */
-    void deletePostBranch(String[] ids);
+    void deletePostBranch(Map<String, Object> map);
 
     /**
      * 条件分页获取岗位信息

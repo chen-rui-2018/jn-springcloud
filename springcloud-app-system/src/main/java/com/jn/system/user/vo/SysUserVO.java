@@ -29,9 +29,9 @@ public class SysUserVO implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
     @ApiModelProperty("微信账号")
     private String wechatAccount;
     @ApiModelProperty(value = "备注")
@@ -46,16 +46,16 @@ public class SysUserVO implements Serializable {
     public SysUserVO() {
     }
 
-    public SysUserVO(String id, String account, String name, String phone, String email, Date createTime,
-                     String status, String wechatAccount, String remark, String departmentName,
+    public SysUserVO(String id, String account, String name, String phone, String email, Date createdTime,
+                     Byte recordStatus, String wechatAccount, String remark, String departmentName,
                      String postName, String postTypeName) {
         this.id = id;
         this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.wechatAccount = wechatAccount;
         this.remark = remark;
         this.departmentName = departmentName;
@@ -103,20 +103,20 @@ public class SysUserVO implements Serializable {
         this.email = email;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getWechatAccount() {
@@ -167,8 +167,8 @@ public class SysUserVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
                 ", remark='" + remark + '\'' +
                 ", departmentName='" + departmentName + '\'' +

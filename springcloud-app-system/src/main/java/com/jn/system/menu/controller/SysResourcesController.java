@@ -50,11 +50,12 @@ public class SysResourcesController extends BaseController {
         //为功能其他属性赋值
         sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         sysResources.setId(UUID.randomUUID().toString());
-        sysResources.setCreator(user.getId());
-        sysResources.setCreateTime(new Date());
+        sysResources.setCreatorAccount(user.getAccount());
+        sysResources.setCreatedTime(new Date());
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
-        tbSysResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysResources.setRecordStatus(recordStatus);
         //调用业务层
         sysResourcesService.insertResources(tbSysResources);
         return new Result();
@@ -66,7 +67,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/update")
     public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
-        sysResourcesService.updateResourcesById(sysResources);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.updateResourcesById(sysResources, user);
         return new Result();
     }
 
@@ -76,7 +79,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
-        sysResourcesService.deleteResourcesById(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.deleteResourcesById(ids, user);
         return new Result();
     }
 

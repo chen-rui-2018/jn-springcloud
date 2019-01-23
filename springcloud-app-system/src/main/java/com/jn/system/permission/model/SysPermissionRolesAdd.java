@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 /**
  * 权限添加角色
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 11:41
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermissionRolesAdd" ,description = "权限添加角色")
+@ApiModel(value = "SysPermissionRolesAdd", description = "权限添加角色")
 public class SysPermissionRolesAdd implements Serializable {
     private static final long serialVersionUID = -1745882055362489572L;
     @ApiModelProperty("权限ID")

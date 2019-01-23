@@ -3,10 +3,10 @@ package com.jn.system.user.dao;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.SysGroup;
 import com.jn.system.user.model.SysGroupPage;
-import com.jn.system.user.model.SysGroupUpdate;
 import com.jn.system.user.vo.SysGroupUserRoleVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户组dao
@@ -34,13 +34,6 @@ public interface SysGroupMapper {
     List<SysGroup> findSysGroupByUserId(String id);
 
     /**
-     * 增加用户组
-     *
-     * @param sysGroup
-     */
-    void addSysGroup(TbSysGroup sysGroup);
-
-    /**
      * 逻辑删除用户组
      *
      * @param groupId
@@ -56,16 +49,9 @@ public interface SysGroupMapper {
     TbSysGroup findSysGroupById(String id);
 
     /**
-     * 获取所有用户组信息
-     *
-     * @return
-     */
-    List<TbSysGroup> findGroupAll();
-
-    /**
      * 批量删除用户组信息
      *
-     * @param groupIds
+     * @param map
      */
-    void deleteGroupBranch(String[] groupIds);
+    void deleteGroupBranch(Map<String,Object> map);
 }

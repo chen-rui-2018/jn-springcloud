@@ -1,36 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.menu.dao.SysMenuMapper">
-    <resultMap id="MenuResourcesMap" type="com.jn.system.menu.vo.SysMenuTreeVO">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="menu_name" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
-        <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
-        <result column="sort" jdbcType="INTEGER" property="sort" javaType="java.lang.Integer"/>
-        <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.util.Date"/>
-        <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
-        <result column="parentName" jdbcType="VARCHAR" property="parentName" javaType="java.lang.String"/>
-        <collection property="resourcesList" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
-            <id column="resourceId" property="id" jdbcType="VARCHAR"/>
-            <result column="resources_name" property="resourcesName" jdbcType="VARCHAR"/>
-            <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
-            <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
-            <result column="createTime" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="status" property="status" jdbcType="VARCHAR"/>
-        </collection>
-    </resultMap>
 
-
-
-    <update id="deleteBy" parameterType="java.util.List">
-        update tb_sys_menu set status=-1
+    <update id="deleteBy" parameterType="java.util.Map">
+        update tb_sys_menu
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="updateBatch" parameterType="java.util.List">
+    <update id="updateBatch" parameterType="java.util.Map">
             update tb_sys_menu
             <trim prefix="set" suffixOverrides=",">
                 <trim prefix="menu_name =case" suffix="end,">
@@ -48,6 +32,16 @@
                         when id=#{item.id} then #{item.sort}
                     </foreach>
                 </trim>
+                <trim prefix="modified_time =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then now()
+                    </foreach>
+                </trim>
+                <trim prefix="modifier_account =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then #{account}
+                    </foreach>
+                </trim>
             </trim>
             where id in
             <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
@@ -60,7 +54,7 @@
     </select>
 
     <select id="findSortByMenuId" parameterType="java.lang.String" resultType="java.lang.Integer">
-        SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} AND `status` = '1' LIMIT 1
+        SELECT max(sort) FROM `tb_sys_menu` where parent_id = #{id,jdbcType=VARCHAR} AND `record_status` = 1 LIMIT 1
     </select>
 
     <select id="getChildrenMenuByParentId" resultType="com.jn.system.menu.vo.SysMenuTreeVO" parameterType="java.lang.String">
@@ -71,14 +65,14 @@
         (select menu_name
         from tb_sys_menu
         where id = t.parent_id
-        and `status` = '1') as parentName,
+        and `record_status` = 1) as parentName,
         t.parent_id as parentId,
         t.is_dir as isDir,
-        t.create_time as createTime,
+        t.created_time as createdTime,
         t.sort
         FROM `tb_sys_menu` t
         where t.parent_id = #{id,jdbcType=VARCHAR}
-        and t.`status` = '1'
+        and t.`record_status` = 1
         ORDER BY t.`sort` ASC
     </select>
 
@@ -106,13 +100,13 @@
         and sp.id = srp.permission_id
         and sp.id = spm.permission_id
         and sm.id = spm.menu_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sm.status = 1
-        and spm.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sm.record_status = 1
+        and spm.record_status = 1
         and su.id = #{id,jdbcType=VARCHAR}
         ORDER BY sm.`level` ASC , sm.sort ASC
     </select>
@@ -123,7 +117,7 @@
         <result column="menu_url" jdbcType="VARCHAR" property="menuUrl" javaType="java.lang.String"/>
         <result column="sort" jdbcType="INTEGER" property="sort" javaType="java.lang.Integer"/>
         <result column="parent_id" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.util.Date"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" javaType="java.util.Date"/>
         <result column="is_dir" jdbcType="VARCHAR" property="isDir" javaType="java.lang.String"/>
         <result column="parentName" jdbcType="VARCHAR" property="parentName" javaType="java.lang.String"/>
         <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
@@ -132,16 +126,16 @@
             <result column="resources_name" property="resourcesName" jdbcType="VARCHAR"/>
             <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
             <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
-            <result column="r_create_time" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="r_status" property="status" jdbcType="VARCHAR"/>
+            <result column="r_create_time" property="createdTime" jdbcType="TIMESTAMP"/>
+            <result column="r_status" property="recordStatus" jdbcType="VARCHAR"/>
         </collection>
         <collection property="children" javaType="java.util.List" ofType="com.jn.system.menu.model.SysResources">
             <id column="r_id" property="id" jdbcType="VARCHAR"/>
             <result column="resources_name" property="label" jdbcType="VARCHAR"/>
             <result column="resources_url" property="resourcesUrl" jdbcType="VARCHAR"/>
             <result column="menu_id" property="menuId" jdbcType="VARCHAR"/>
-            <result column="r_create_time" property="createTime" jdbcType="TIMESTAMP"/>
-            <result column="r_status" property="status" jdbcType="VARCHAR"/>
+            <result column="r_create_time" property="createdTime" jdbcType="TIMESTAMP"/>
+            <result column="r_status" property="recordStatus" jdbcType="VARCHAR"/>
         </collection>
     </resultMap>
 
@@ -153,9 +147,9 @@
         m.parent_id,
         m.is_dir,
         m.sort,
-        m.creator,
-        m.create_time,
-        m.`status`,
+        m.creator_account,
+        m.created_time,
+        m.`record_status`,
         m.`level`,
         r.r_id,
         r.resources_name,
@@ -171,14 +165,14 @@
         resources_name,
         resources_url,
         menu_id,
-        creator as r_creator,
-        create_time as r_create_time,
-        `status` as r_status
+        creator_account as r_creator,
+        created_time as r_create_time,
+        `record_status` as r_status
         FROM tb_sys_resources
-        WHERE `status` = '1') r
+        WHERE `record_status` = 1) r
         ON
         m.id = r.menu_id
-        WHERE m.`status` = '1'
+        WHERE m.`record_status` = 1
         ORDER BY m.sort ASC,r.r_create_time DESC
     </select>
 

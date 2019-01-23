@@ -1,10 +1,10 @@
 package com.jn.system.menu.dao;
 
 
-import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单mapper
@@ -20,9 +20,9 @@ public interface SysMenuMapper {
     /**
      * 根据ids批量删除
      *
-     * @param ids
+     * @param map
      */
-    void deleteBy(List<String> ids);
+    void deleteBy(Map<String, Object> map);
 
     /**
      * 根据菜单id获取菜单的等级
@@ -34,6 +34,7 @@ public interface SysMenuMapper {
 
     /**
      * 获取全部菜单及菜单具有的功能信息
+     *
      * @return
      */
     List<SysMenuTreeVO> getMenuAndResources();
@@ -47,11 +48,11 @@ public interface SysMenuMapper {
     Integer findSortByMenuId(String parentId);
 
     /**
-     * 批量对菜单排序进行更新
+     * 批量更新菜单
      *
-     * @param sysMenuSortList
+     * @param map
      */
-    void updateBatch(List<SysMenuUpdate> sysMenuSortList);
+    void updateBatch(Map<String, Object> map);
 
     /**
      * 根据父菜单id获取子下一级所有菜单信息
@@ -71,6 +72,7 @@ public interface SysMenuMapper {
 
     /**
      * 获取菜单的所有子菜单id
+     *
      * @param menuId
      * @return
      */

@@ -1,7 +1,6 @@
 package com.jn.system.permission.model;
 
 import com.jn.common.model.Page;
-import com.rabbitmq.client.AMQP;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;

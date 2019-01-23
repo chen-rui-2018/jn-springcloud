@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermissionResourcePage",description = "权限界面用于条件分页获取功能信息")
+@ApiModel(value = "SysPermissionResourcePage", description = "权限界面用于条件分页获取功能信息")
 public class SysPermissionResourcePage extends Page implements Serializable {
     private static final long serialVersionUID = -4828984611676294996L;
 

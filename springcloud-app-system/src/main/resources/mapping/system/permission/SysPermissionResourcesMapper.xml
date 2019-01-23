@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.permission.dao.SysPermissionResourcesMapper">
-    <update id="deletePermissionBranch" parameterType="java.lang.String">
-        update tb_sys_permission_resources set record_status = 0
+    <update id="deletePermissionBranch" parameterType="java.util.Map">
+        update tb_sys_permission_resources
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where permission_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -21,10 +25,6 @@
         and t1.permission_id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <update id="deleteByPermissionId" parameterType="java.lang.String">
-        update tb_sys_permission_resources set `record_status` = 0 where permission_id = #{id,jdbcType=VARCHAR}
-    </update>
-
     <insert id="addResourceToPermission" parameterType="java.util.List">
         insert into tb_sys_permission_resources (id, permission_id,resources_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
@@ -37,10 +37,14 @@
         </foreach>
     </insert>
 
-    <update id="deleteByResourcesIds" parameterType="java.lang.String">
-        update tb_sys_permission_resources set record_status = 0
+    <update id="deleteByResourcesIds" parameterType="java.util.Map">
+        update tb_sys_permission_resources
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where resources_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>

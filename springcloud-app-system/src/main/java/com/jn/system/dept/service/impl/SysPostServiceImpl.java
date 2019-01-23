@@ -16,6 +16,7 @@ import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.dept.service.SysPostService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 岗位service实现
@@ -100,29 +100,38 @@ public class SysPostServiceImpl implements SysPostService {
     }
 
     /**
-     * 批量删除岗位
+     * 删除岗位信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
     @Override
     @ServiceLog(doAction = "批量删除岗位")
     @Transactional(rollbackFor = Exception.class)
-    public void deletePostBranch(String[] ids) {
-        sysPostMapper.deletePostBranch(ids);
+    public void deletePostBranch(String[] ids, User user) {
+        if (ids.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
+        sysPostMapper.deletePostBranch(map);
         logger.info("[岗位] 批量删除岗位成功！，sysPostIds:{}", Arrays.toString(ids));
-        sysUserDepartmentPostMapper.deletePostBranch(ids);
+        sysUserDepartmentPostMapper.deletePostBranch(map);
         logger.info("[岗位] 批量删除岗位关联用户信息成功！，sysPostIds:{}", Arrays.toString(ids));
     }
 
     /**
-     * 修改岗位信息
+     * 更新用户信息
      *
      * @param sysPost
+     * @param user    当前用户信息
      */
     @Override
     @ServiceLog(doAction = "修改岗位信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updatePost(SysPost sysPost) {
+    public void updatePost(SysPost sysPost, User user) {
         String postName = sysPost.getPostName();
         //判断被修改信息是否存在
         TbSysPost sysPost1 = tbSysPostMapper.selectByPrimaryKey(sysPost.getId());
@@ -144,6 +153,9 @@ public class SysPostServiceImpl implements SysPostService {
         //对信息进行修改操作
         TbSysPost tbSysPost = new TbSysPost();
         BeanUtils.copyProperties(sysPost, tbSysPost);
+        //设置最近更新人信息
+        tbSysPost.setModifiedTime(new Date());
+        tbSysPost.setModifierAccount(user.getAccount());
         tbSysPostMapper.updateByPrimaryKeySelective(tbSysPost);
         logger.info("[岗位] 修改岗位信息成功！，sysPostId:{}", sysPost.getId());
     }

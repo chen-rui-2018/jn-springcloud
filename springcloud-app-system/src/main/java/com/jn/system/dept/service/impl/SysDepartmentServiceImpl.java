@@ -16,6 +16,7 @@ import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -23,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * 部门service实现
@@ -66,36 +64,40 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     }
 
     /**
-     * 逻辑删除部门信息
-     *
      * @param id
+     * @param user 当前用户信息
      */
     @Override
     @ServiceLog(doAction = "逻辑删除部门信息")
     @Transactional(rollbackFor = Exception.class)
-    public void delete(String id) {
+    public void delete(String id, User user) {
         //获取删除部门及子部门id
         String departStr = sysDepartmentMapper.getDepartmentIds(id);
         //解析查询导数据
         String[] departArr = departStr.substring(2).split(",");
         List<String> ids = new ArrayList<String>(Arrays.asList(departArr));
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
         //逻辑删除部门子部门信息
-        sysDepartmentMapper.deleteDepartmentBranch(ids);
+        sysDepartmentMapper.deleteDepartmentBranch(map);
         logger.info("[部门] 批量逻辑删除部门成功,departmentIds: {}", ids.toString());
         //逻辑删除部门及子部门对应的用户信息
-        sysUserDepartmentPostMapper.deleteDepartmentBranch(ids);
+        sysUserDepartmentPostMapper.deleteDepartmentBranch(map);
         logger.info("[部门] 批量逻辑删除部门关联用户信息成功,departmentIds: {}", ids.toString());
     }
 
     /**
-     * 修改部门信息
+     * 修改用户信息
      *
      * @param sysDepartment
+     * @param user
      */
     @Override
     @ServiceLog(doAction = "修改部门信息")
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysDepartment sysDepartment) {
+    public void update(SysDepartment sysDepartment, User user) {
         String departmentName = sysDepartment.getDepartmentName();
         //判断数据库中是否存在被修改数据
         TbSysDepartment tbSysDepartment1 = tbSysDepartmentMapper.selectByPrimaryKey(sysDepartment.getId());
@@ -116,6 +118,9 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         }
         TbSysDepartment tbSysDepartment = new TbSysDepartment();
         BeanUtils.copyProperties(sysDepartment, tbSysDepartment);
+        //设置最近更信任信息
+        tbSysDepartment.setModifiedTime(new Date());
+        tbSysDepartment.setModifierAccount(user.getAccount());
         tbSysDepartmentMapper.updateByPrimaryKeySelective(tbSysDepartment);
         logger.info("[部门] 修改部门信息成功,departmentId: {}", tbSysDepartment.getId());
     }
@@ -173,8 +178,8 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
         criteria.andParentIdEqualTo(sysDepartmentCheckName.getParentId());
         criteria.andDepartmentNameEqualTo(sysDepartmentCheckName.getDepartmentName());
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         List<TbSysDepartment> tbSysDepartments = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
         if (tbSysDepartments != null && tbSysDepartments.size() > 0) {
             return SysReturnMessageEnum.FAIL.getMessage();
@@ -195,18 +200,18 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         List<SysDepartmentVO> departmentVOList = sysDepartmentMapper.getDepartmentAll();
         //遍历集合,根据部门层级关系,生成菜单树
         for (SysDepartmentVO sysDepartmentVO : departmentVOList) {
-            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysDepartmentVO.getLevel())){
+            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(sysDepartmentVO.getLevel())) {
                 list.add(sysDepartmentVO);
             }
             List<SysDepartmentVO> childrenList = new ArrayList<SysDepartmentVO>(16);
             for (SysDepartmentVO departmentVO : departmentVOList) {
                 //判断部门id和部门父id关系
-                if (sysDepartmentVO.getValue().equals(departmentVO.getParentId())){
+                if (sysDepartmentVO.getValue().equals(departmentVO.getParentId())) {
                     departmentVO.setParentName(sysDepartmentVO.getLabel());
                     childrenList.add(departmentVO);
                 }
             }
-            if (childrenList.size() > 0){
+            if (childrenList.size() > 0) {
                 sysDepartmentVO.setChildren(childrenList);
             }
         }
@@ -214,15 +219,16 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     }
 
     /**
-     * 批量更新部门信息
+     * 批量更新用户信息
      *
      * @param sysDepartmentList
+     * @param user              当前用户信息
      */
     @Override
-    public void addDepartmentBatch(List<SysDepartment> sysDepartmentList) {
+    public void addDepartmentBatch(List<SysDepartment> sysDepartmentList, User user) {
         String parentId = null;
         HashSet<String> set = new HashSet<String>();
-        //1.获取父级id,修改部门集合及添加部门集合
+        //1.将集合中所有部门名称添加进set集合进行去重
         for (SysDepartment sysDepartment : sysDepartmentList) {
             set.add(sysDepartment.getDepartmentName());
         }
@@ -235,7 +241,10 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
 
         //3.进行批量添加及批量更新
         if (sysDepartmentList.size() > 0) {
-            sysDepartmentMapper.updateDepartmentBatch(sysDepartmentList);
+            Map<String, Object> map = new HashMap<String, Object>(16);
+            map.put("list", sysDepartmentList);
+            map.put("account", user.getAccount());
+            sysDepartmentMapper.updateDepartmentBatch(map);
         }
         logger.info("[部门] 批量修改部门信息成功,部门父id为parentId: {}", parentId);
     }

@@ -95,7 +95,7 @@ public class SysPostTypeServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         sysPostType.setRecordStatus(recordStatus);
         try {
-            sysPostTypeService.update(sysPostType);
+            sysPostTypeService.update(sysPostType,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -109,6 +109,6 @@ public class SysPostTypeServiceTest {
 
     @Test
     public void zDelete() {
-        sysPostTypeService.delete(postTypeId);
+        sysPostTypeService.delete(postTypeId,user);
     }
 }

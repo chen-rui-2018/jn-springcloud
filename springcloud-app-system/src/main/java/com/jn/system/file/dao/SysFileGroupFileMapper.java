@@ -6,6 +6,7 @@ import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.vo.SysFileVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件文件组关联mapper
@@ -35,10 +36,10 @@ public interface SysFileGroupFileMapper {
     /**
      * 根据fileId批量删除
      *
-     * @param id
+     * @param map
      * @return
      */
-    int deleteByFileGroupIds(String[] id);
+    int deleteByFileGroupIds(Map<String, Object> map);
 
     /**
      * 根据用户获取文件组

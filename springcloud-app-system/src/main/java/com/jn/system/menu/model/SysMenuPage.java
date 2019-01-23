@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,65 +15,65 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysMenuPage" ,description = "菜单分页实体")
+@ApiModel(value = "SysMenuPage", description = "菜单分页实体")
 public class SysMenuPage extends Page implements Serializable {
 
 
     private static final long serialVersionUID = -514084002440259994L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 菜单名称
      */
-    @ApiModelProperty(value = "菜单名称" )
+    @ApiModelProperty(value = "菜单名称")
     private String menuName;
 
     /**
      * 菜单URL
      */
-    @ApiModelProperty(value = "菜单URL" )
+    @ApiModelProperty(value = "菜单URL")
     private String menuUrl;
 
     /**
      * 父级菜单ID
      */
-    @ApiModelProperty(value = "父级菜单ID" )
+    @ApiModelProperty(value = "父级菜单ID")
     private String parentId;
 
     /**
      * 是否目录 1:目录 0:文件
      */
-    @ApiModelProperty(value = "是否目录 1:目录 0:文件" )
+    @ApiModelProperty(value = "是否目录 1:目录 0:文件")
     private String isDir;
 
     /**
      * 排序
      */
-    @ApiModelProperty(value = "排序" )
+    @ApiModelProperty(value = "排序")
     private Integer sort;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
+    @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     /**
      * 状态 1:有效 2:无效 0:删除
      */
-    @ApiModelProperty(value = "状态 1:有效 2:无效 0:删除" )
+    @ApiModelProperty(value = "状态 1:有效 2:无效 0:删除")
     private Byte recordStatus;
 
     /**
      * 菜单层级
      */
-    @ApiModelProperty(value = "菜单层级" )
+    @ApiModelProperty(value = "菜单层级")
     private String level;
 
     public SysMenuPage() {

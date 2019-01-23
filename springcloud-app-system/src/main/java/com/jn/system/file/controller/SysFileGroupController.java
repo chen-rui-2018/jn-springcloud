@@ -70,7 +70,9 @@ public class SysFileGroupController extends BaseController {
     @RequiresPermissions("/system/sysFileGroup/update")
     public Result update(@Validated @RequestBody SysFileGroup sysFileGroup) {
         Assert.notNull(sysFileGroup.getId(), "文件组ID不能为空");
-        sysFileGroupService.updateSysFileGroupById(sysFileGroup);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysFileGroupService.updateSysFileGroupById(sysFileGroup, user);
         return new Result();
     }
 
@@ -80,7 +82,9 @@ public class SysFileGroupController extends BaseController {
     @RequiresPermissions("/system/sysFileGroup/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "文件组ID不能为空");
-        sysFileGroupService.deleteSysFileGroupByIds(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysFileGroupService.deleteSysFileGroupByIds(ids, user);
         return new Result();
     }
 

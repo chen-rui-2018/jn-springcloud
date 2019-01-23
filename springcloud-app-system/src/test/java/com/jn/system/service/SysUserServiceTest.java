@@ -96,7 +96,7 @@ public class SysUserServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         sysUser.setRecordStatus(recordStatus);
         try {
-            sysUserService.updateSysUser(sysUser);
+            sysUserService.updateSysUser(sysUser,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -175,7 +175,7 @@ public class SysUserServiceTest {
     //有数使用名称排序,所以在删除名称前加了一个z
     public void zDeleteSysUserTest() {
         String[] ids = {userId};
-        sysUserService.deleteSysUser(ids);
+        sysUserService.deleteSysUser(ids,user);
     }
 
 }

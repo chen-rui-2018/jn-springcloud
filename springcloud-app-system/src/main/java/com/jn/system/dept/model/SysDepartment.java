@@ -20,16 +20,16 @@ import java.util.Date;
 public class SysDepartment implements Serializable {
 
     private static final long serialVersionUID = 3850036433256084982L;
-    @ApiModelProperty(value = "id",required = true)
+    @ApiModelProperty(value = "id", required = true)
     private String id;
-    @ApiModelProperty(value = "部门名称",required = true)
+    @ApiModelProperty(value = "部门名称", required = true)
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "部门名称校验失败")
     private String departmentName;
     @ApiModelProperty("创建时间")
     private Date createdTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
     private Byte recordStatus;
-    @ApiModelProperty(value = "父级id",required = true)
+    @ApiModelProperty(value = "父级id", required = true)
     @NotBlank(message = "父级id不能为空")
     private String parentId;
 

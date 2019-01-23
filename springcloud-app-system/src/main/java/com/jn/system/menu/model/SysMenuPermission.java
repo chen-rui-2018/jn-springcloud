@@ -15,33 +15,33 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysMenuPermission" ,description = "菜单权限实体")
+@ApiModel(value = "SysMenuPermission", description = "菜单权限实体")
 public class SysMenuPermission implements Serializable {
     private static final long serialVersionUID = 8438573945382865137L;
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 权限id
      */
-    @ApiModelProperty(value = "权限id" )
+    @ApiModelProperty(value = "权限id")
     private String permissionId;
 
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     private String menuId;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
+    @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     /**
      * 状态，0删除，1有效，2无效
@@ -52,7 +52,7 @@ public class SysMenuPermission implements Serializable {
     /**
      * 菜单层级
      */
-    @ApiModelProperty(value = "菜单层级" )
+    @ApiModelProperty(value = "菜单层级")
     private String level;
 
     public SysMenuPermission() {

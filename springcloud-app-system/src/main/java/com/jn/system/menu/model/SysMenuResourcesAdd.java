@@ -3,10 +3,8 @@ package com.jn.system.menu.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * 菜单添加功能
@@ -16,7 +14,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysMenuResourcesAdd" ,description = "菜单添加功能实体")
+@ApiModel(value = "SysMenuResourcesAdd", description = "菜单添加功能实体")
 public class SysMenuResourcesAdd implements Serializable {
 
     private static final long serialVersionUID = -6923429557226417911L;
@@ -24,26 +22,26 @@ public class SysMenuResourcesAdd implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     private String menuId;
 
     /**
      * 功能id
      */
-    @ApiModelProperty(value = "功能id" )
+    @ApiModelProperty(value = "功能id")
     private String[] resourcesId;
 
     /**
      * 功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
 
     private String resourcesName;
 
     /**
      * 功能URL
      */
-    @ApiModelProperty(value = "功能路径" )
+    @ApiModelProperty(value = "功能路径")
     private String resourcesUrl;
 
 
@@ -56,7 +54,7 @@ public class SysMenuResourcesAdd implements Serializable {
     /**
      * 菜单层级
      */
-    @ApiModelProperty(value = "菜单层级" )
+    @ApiModelProperty(value = "菜单层级")
     private String level;
 
     public SysMenuResourcesAdd() {

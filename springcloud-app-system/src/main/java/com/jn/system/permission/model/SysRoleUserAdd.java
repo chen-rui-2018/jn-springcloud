@@ -1,22 +1,21 @@
 package com.jn.system.permission.model;
 
-import com.jn.common.util.StringUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
-import sun.java2d.pipe.SolidTextRenderer;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
 /**
  * 用户添加角色实体
+ *
  * @author： shaobao
  * @date： Created on 2018/11/13 11:08
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysRoleUserAdd",description = "用户添加角色实体")
+@ApiModel(value = "SysRoleUserAdd", description = "用户添加角色实体")
 public class SysRoleUserAdd implements Serializable {
     private static final long serialVersionUID = 7571554827328255079L;
     @ApiModelProperty("用户id")

@@ -71,7 +71,7 @@ public class SysResourcesServiceTest {
         tbSysResources.setCreatedTime(new Date());
         Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
         tbSysResources.setRecordStatus(recordStatus);
-        tbSysResources.setCreatorAccount(user.getId());
+        tbSysResources.setCreatorAccount(user.getAccount());
         tbSysResources.setMenuId(menuId);
         tbSysResources.setResourcesUrl("/xxx/xxx");
     }
@@ -98,7 +98,7 @@ public class SysResourcesServiceTest {
         resources.setResourcesName(resourcesName);
         resources.setMenuId(menuId);
         try {
-            sysResourcesService.updateResourcesById(resources);
+            sysResourcesService.updateResourcesById(resources,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -149,7 +149,7 @@ public class SysResourcesServiceTest {
     @Test
     public void zdeleteTest() {
         String[] ids = {resourcesId};
-        sysResourcesService.deleteResourcesById(ids);
+        sysResourcesService.deleteResourcesById(ids,user);
     }
 
 }

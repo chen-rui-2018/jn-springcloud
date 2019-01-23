@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -73,14 +74,15 @@ public class SysRolePermissionServiceImpl implements SysRolePermissionService {
     /**
      * 根据角色id批量删除角色权限（逻辑删除）
      *
-     * @param roleIds
+     * @param map
      * @return
      */
     @Override
     @ServiceLog(doAction = "根据角色id批量删除角色权限（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteTbRolePermissionByRoleIds(String[] roleIds) {
-        sysRolePermissionMapper.deleteByRoleIds(roleIds);
+    public void deleteTbRolePermissionByRoleIds(Map<String, Object> map) {
+        sysRolePermissionMapper.deleteByRoleIds(map);
+        String[] roleIds = (String[]) map.get("ids");
         logger.info("[角色权限] 根据角色id批量删除角色权限限（逻辑删除）成功！,roleIds：{}", Arrays.toString(roleIds));
     }
 

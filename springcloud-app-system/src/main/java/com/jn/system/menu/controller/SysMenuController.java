@@ -49,7 +49,9 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("/system/sysMenu/update")
     public Result update(@Validated @RequestBody SysMenu sysMenu) {
         Assert.notNull(sysMenu.getId(), "菜单ID不能为空");
-        sysMenuService.updateSysMenuById(sysMenu);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.updateSysMenuById(sysMenu, user);
         return new Result();
     }
 
@@ -58,7 +60,10 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysMenu/delete")
     public Result delete(String id) {
-        sysMenuService.deleteSysMenuById(id);
+        Assert.notNull(id, "菜单id不能为空");
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.deleteSysMenuById(id, user);
         return new Result();
     }
 
@@ -110,7 +115,9 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/updateBatch")
     @RequiresPermissions("/system/sysMenu/updateBatch")
     public Result updateBatch(@Validated @RequestBody SysMenus sysMenus) {
-        sysMenuService.updateBatch(sysMenus);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.updateBatch(sysMenus, user);
         return new Result();
     }
 

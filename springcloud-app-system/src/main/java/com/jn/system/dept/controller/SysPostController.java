@@ -74,7 +74,9 @@ public class SysPostController extends BaseController {
     @RequestMapping(value = "/delete")
     public Result delete(String[] postIds) {
         Assert.noNullElements(postIds, "岗位id不能为空");
-        sysPostService.deletePostBranch(postIds);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPostService.deletePostBranch(postIds, user);
         return new Result();
     }
 
@@ -84,7 +86,9 @@ public class SysPostController extends BaseController {
     @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysPost sysPost) {
         Assert.notNull(sysPost.getId(), "岗位id不能为空");
-        sysPostService.updatePost(sysPost);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPostService.updatePost(sysPost, user);
         return new Result();
     }
 

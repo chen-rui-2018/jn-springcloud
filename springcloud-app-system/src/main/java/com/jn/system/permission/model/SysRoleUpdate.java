@@ -5,18 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 角色更新实体
+ *
  * @author： shaobao
  * @date： Created on 2018/11/16 10:26
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysRoleUpdate",description = "角色更新实体")
+@ApiModel(value = "SysRoleUpdate", description = "角色更新实体")
 public class SysRoleUpdate implements Serializable {
     private static final long serialVersionUID = 6852019413530175809L;
 

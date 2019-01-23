@@ -19,6 +19,7 @@ import com.jn.system.dept.model.SysPostType;
 import com.jn.system.dept.model.SysPostTypePage;
 import com.jn.system.dept.service.SysPostTypeService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -127,14 +129,15 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     }
 
     /**
-     * 修改岗位类型
+     * 修改岗位类型信息
      *
-     * @param postType 岗位类型实体
+     * @param postType
+     * @param user     当前用户信息
      */
     @Override
     @ServiceLog(doAction = "修改岗位类型")
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysPostType postType) {
+    public void update(SysPostType postType, User user) {
         String postTypeName = postType.getPostTypeName();
         String postTypeId = postType.getId();
         TbSysPostType tbSysPostType1 = tbSysPostTypeMapper.selectByPrimaryKey(postTypeId);
@@ -169,6 +172,9 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
         //4.对岗位类型信息进行修改
         TbSysPostType tbSysPostType = new TbSysPostType();
         BeanUtils.copyProperties(postType, tbSysPostType);
+        //设置最近更新人信息
+        tbSysPostType.setModifiedTime(new Date());
+        tbSysPostType.setModifierAccount(user.getAccount());
         tbSysPostTypeMapper.updateByPrimaryKeySelective(tbSysPostType);
         logger.info("[岗位类型] 修改岗位类型成功,postTypeId:{}", tbSysPostType.getId());
     }
@@ -176,13 +182,14 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     /**
      * 删除岗位类型
      *
-     * @param postTypeId 岗位类型id
+     * @param postTypeId
+     * @param user       当前用户信息
      * @return
      */
     @Override
     @ServiceLog(doAction = "删除岗位类型")
     @Transactional(rollbackFor = Exception.class)
-    public Result delete(String postTypeId) {
+    public Result delete(String postTypeId, User user) {
         Result result = new Result();
         if (StringUtils.isNotBlank(postTypeId)) {
             //判断该岗位类型,是否正在被岗位使用
@@ -199,6 +206,8 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
                 if (tbSysPostType != null) {
                     Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
                     tbSysPostType.setRecordStatus(recordStatus);
+                    tbSysPostType.setModifiedTime(new Date());
+                    tbSysPostType.setModifierAccount(user.getAccount());
                     tbSysPostTypeMapper.updateByPrimaryKeySelective(tbSysPostType);
                 }
             }

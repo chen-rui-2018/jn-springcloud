@@ -52,27 +52,38 @@
         and post_id = #{post_id,jdbcType=VARCHAR}
     </select>
 
-    <update id="deletePostBranch" parameterType="java.lang.String">
-        update tb_sys_user_department_post set record_status = 0
+    <update id="deletePostBranch" parameterType="java.util.Map">
+        update tb_sys_user_department_post
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where post_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteDepartmentBranch" parameterType="java.util.List">
-        update tb_sys_user_department_post set record_status = 0
+    <update id="deleteDepartmentBranch" parameterType="java.util.Map">
+        update tb_sys_user_department_post
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where department_id in
-        <foreach collection="list" item="id"
-                 open="(" close=")" index="index" separator=",">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user_department_post set record_status = 0
+    <update id="deleteUserBranch" parameterType="java.util.Map">
+        update tb_sys_user_department_post
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where user_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>

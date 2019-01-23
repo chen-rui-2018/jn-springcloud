@@ -3,7 +3,6 @@ package com.jn.system.permission.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 

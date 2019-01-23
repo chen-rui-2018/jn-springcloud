@@ -87,7 +87,7 @@ public class SysPostServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         post.setRecordStatus(recordStatus);
         try {
-            sysPostService.updatePost(post);
+            sysPostService.updatePost(post,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -118,7 +118,7 @@ public class SysPostServiceTest {
     @Test
     public void zDeletePostBranch() {
         String[] postIds = {postId};
-        sysPostService.deletePostBranch(postIds);
+        sysPostService.deletePostBranch(postIds,user);
     }
 
 }

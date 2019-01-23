@@ -57,7 +57,10 @@ public class SysDepartmentController extends BaseController {
     @ApiOperation(value = "逻辑删除部门", httpMethod = "POST", response = Result.class)
     @RequestMapping("/delete")
     public Result delete(String departmentId) {
-        sysDepartmentService.delete(departmentId);
+        Assert.notNull(departmentId, "部门id不能为空");
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysDepartmentService.delete(departmentId, user);
         return new Result();
     }
 
@@ -67,7 +70,9 @@ public class SysDepartmentController extends BaseController {
     @RequestMapping("/update")
     public Result update(@Validated @RequestBody SysDepartment sysDepartment) {
         Assert.notNull(sysDepartment.getId(), "部门id不能为空");
-        sysDepartmentService.update(sysDepartment);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysDepartmentService.update(sysDepartment, user);
         return new Result();
     }
 
@@ -115,7 +120,9 @@ public class SysDepartmentController extends BaseController {
     @ApiOperation(value = "批量更新部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/addDepartmentBatch")
     public Result addDepartmentBatch(@Validated @RequestBody List<SysDepartment> sysDepartmentList) {
-        sysDepartmentService.addDepartmentBatch(sysDepartmentList);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysDepartmentService.addDepartmentBatch(sysDepartmentList, user);
         return new Result();
     }
 

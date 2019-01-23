@@ -8,12 +8,13 @@ import java.io.Serializable;
 
 /**
  * 用于菜单名称在同一父菜单下进行名称校验
+ *
  * @author： shaobao
  * @date： Created on 2018/11/20 16:51
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysMenuNameCheck",description = "用于菜单名称在同一父菜单下进行名称校验")
+@ApiModel(value = "SysMenuNameCheck", description = "用于菜单名称在同一父菜单下进行名称校验")
 public class SysMenuNameCheck implements Serializable {
     private static final long serialVersionUID = -5501884405982377542L;
     @ApiModelProperty("菜单名称")

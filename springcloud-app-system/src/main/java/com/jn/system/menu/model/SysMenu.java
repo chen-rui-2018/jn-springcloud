@@ -18,18 +18,18 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysMenu" ,description = "菜单信息")
+@ApiModel(value = "SysMenu", description = "菜单信息")
 public class SysMenu implements Serializable {
 
     private static final long serialVersionUID = 3668352539116946388L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 菜单名称
      */
-    @ApiModelProperty(value = "菜单名称" )
+    @ApiModelProperty(value = "菜单名称")
     @NotBlank(message = "菜单名称不能为空！")
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "菜单名称校验失败")
     private String menuName;
@@ -37,28 +37,28 @@ public class SysMenu implements Serializable {
     /**
      * 菜单URL
      */
-    @ApiModelProperty(value = "菜单URL" )
+    @ApiModelProperty(value = "菜单URL")
     @NotBlank(message = "菜单路径不能为空！")
-    @Size(max = 150,message = "菜单路径长度不能超度150字")
+    @Size(max = 150, message = "菜单路径长度不能超度150字")
     private String menuUrl;
 
     /**
      * 父级菜单ID
      */
-    @ApiModelProperty(value = "父级菜单ID" )
+    @ApiModelProperty(value = "父级菜单ID")
     @NotBlank(message = "父级菜单ID不能为空！")
     private String parentId;
 
     /**
      * 排序
      */
-    @ApiModelProperty(value = "排序" )
+    @ApiModelProperty(value = "排序")
     private Integer sort;
 
     /**
      * 是否目录 1:目录 0:文件
      */
-    @ApiModelProperty(value = "是否目录 1:目录 0:文件" )
+    @ApiModelProperty(value = "是否目录 1:目录 0:文件")
     private String isDir;
 
     /**
@@ -69,7 +69,7 @@ public class SysMenu implements Serializable {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     /**
      * 状态 1:有效 02:无效 0:删除
@@ -80,7 +80,7 @@ public class SysMenu implements Serializable {
     /**
      * 菜单层级
      */
-    @ApiModelProperty(value = "菜单层级" )
+    @ApiModelProperty(value = "菜单层级")
     private String level;
 
     public SysMenu() {

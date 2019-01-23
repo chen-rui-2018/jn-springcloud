@@ -63,7 +63,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysPermission sysPermission) {
         Assert.notNull(sysPermission.getId(), "权限id不能为空");
-        sysPermissionService.updatePermission(sysPermission);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.updatePermission(sysPermission, user);
         return new Result();
     }
 
@@ -91,7 +93,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/delete")
     public Result delete(String[] ids) {
         Assert.noNullElements(ids, "权限id不能为空");
-        sysPermissionService.deletePermissionBranch(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.deletePermissionBranch(ids, user);
         return new Result();
     }
 

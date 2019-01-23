@@ -196,14 +196,19 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @ServiceLog(doAction = "删除用户")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysUser(String[] ids) {
-        sysUserMapper.deleteUserBranch(ids);
+    public void deleteSysUser(String[] ids,User user) {
+        if (ids.length == 0){
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysUserMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户成功！，sysUserIds:{}", Arrays.toString(ids));
-        sysUserDepartmentPostMapper.deleteUserBranch(ids);
+        sysUserDepartmentPostMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserIds:{}", Arrays.toString(ids));
-        sysUserRoleMapper.deleteUserBranch(ids);
+        sysUserRoleMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联角色成功！，sysUserIds:{}", Arrays.toString(ids));
-        sysGroupUserMapper.deleteUserBranch(ids);
+        sysGroupUserMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联用户组成功！，sysUserIds:{}", Arrays.toString(ids));
     }
 
@@ -215,7 +220,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @ServiceLog(doAction = "更新用户")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysUser(SysUser sysUser) {
+    public void updateSysUser(SysUser sysUser,User user) {
         //判断修改信息是否存在
         TbSysUser tbSysUser1 = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
         if (tbSysUser1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysUser1.getRecordStatus().toString())) {
@@ -235,6 +240,9 @@ public class SysUserServiceImpl implements SysUserService {
         //修改用户信息
         TbSysUser tbSysUser = new TbSysUser();
         BeanUtils.copyProperties(sysUser, tbSysUser);
+        //设置最近一次修改时间及修改用户
+        tbSysUser.setModifiedTime(new Date());
+        tbSysUser.setModifierAccount(user.getAccount());
         tbSysUserMapper.updateByPrimaryKeySelective(tbSysUser);
         logger.info("[用户] 更新用户成功！，sysUserId:{}", sysUser.getId());
     }
@@ -270,7 +278,10 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional(rollbackFor = Exception.class)
     public void saveSysGroupToSysUser(String[] groupIds, String userId, User user) {
         //清除用户中已经存在的用户组
-        sysUserMapper.deleGroupOfUser(userId);
+        String[] ids = {userId};
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysGroupUserMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联用户组信息成功！，sysUserId:{}", userId);
         List<SysGroupUser> list = new ArrayList<SysGroupUser>(32);
         if (groupIds != null && groupIds.length > 0) {
@@ -290,6 +301,19 @@ public class SysUserServiceImpl implements SysUserService {
             logger.info("[用户] 用户添加用户组成功！，sysUserId:{}", userId);
         }
 
+    }
+
+    /**
+     * 封装删除信息
+     * @param user 当前用户信息
+     * @param ids 用户id数组
+     * @return
+     */
+    private Map<String, Object> getDeleteMap(User user, String[] ids) {
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
+        return map;
     }
 
     /**
@@ -323,15 +347,19 @@ public class SysUserServiceImpl implements SysUserService {
     @Transactional(rollbackFor = Exception.class)
     public void saveSysRoleToSysUser(String[] roleIds, String userId, User user) {
         //清除用户中已经存在的角色
-        sysUserMapper.deleRoleOfUser(userId);
+        String[] ids = {userId};
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysUserRoleMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联角色信息成功！，sysUserId:{}", userId);
+
+        //用户添加角色信息
         List<SysUserRole> list = new ArrayList<SysUserRole>(32);
         if (roleIds != null && roleIds.length > 0) {
             //为用户添加新的角色
             for (String roleId : roleIds) {
                 SysUserRole sysUserRole = new SysUserRole();
                 sysUserRole.setCreatedTime(new Timestamp(System.currentTimeMillis()));
-                sysUserRole.setCreatorAccount(user.getId());
+                sysUserRole.setCreatorAccount(user.getAccount());
                 sysUserRole.setRoleId(roleId);
                 sysUserRole.setUserId(userId);
                 sysUserRole.setId(UUID.randomUUID().toString());
@@ -419,7 +447,9 @@ public class SysUserServiceImpl implements SysUserService {
             }
         }
         //清除用户已有岗位部门列表
-        sysUserMapper.deleDepartmentandPost(sysUserDepartmentPostAdd.getUserId());
+        String[] ids = {userId};
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysUserDepartmentPostMapper.deleteUserBranch(map);
         logger.info("[用户] 删除用户关联部门岗位信息成功！，sysUserId:{}", userId);
         //用户批量添加部门岗位信息
         if (list.size() > 0) {

@@ -4,18 +4,18 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * 权限
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 9:24
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermission",description = "权限")
+@ApiModel(value = "SysPermission", description = "权限")
 public class SysPermission implements Serializable {
     private static final long serialVersionUID = 3723725627921993118L;
     @ApiModelProperty("权限id")

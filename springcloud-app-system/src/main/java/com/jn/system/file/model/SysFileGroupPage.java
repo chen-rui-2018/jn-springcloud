@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,18 +15,18 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFileGroupPage" ,description = "文件组分页实体")
+@ApiModel(value = "SysFileGroupPage", description = "文件组分页实体")
 public class SysFileGroupPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 1964622157773498642L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 文件组名称
      */
-    @ApiModelProperty(value = "文件组名称" )
+    @ApiModelProperty(value = "文件组名称")
     private String fileGroupName;
 
     /**

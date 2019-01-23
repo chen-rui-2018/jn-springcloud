@@ -106,7 +106,7 @@ public class SysRoleServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         role.setRecordStatus(recordStatus);
         try {
-            sysRoleService.updateTbRole(role);
+            sysRoleService.updateTbRole(role,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -183,7 +183,7 @@ public class SysRoleServiceTest {
     @Test
     public void zDeleteTbRoleById() {
         String[] roleIds = {roleId};
-        sysRoleService.deleteTbRoleById(roleIds);
+        sysRoleService.deleteTbRoleById(roleIds,user);
     }
 
 }

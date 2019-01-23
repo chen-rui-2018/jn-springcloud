@@ -89,7 +89,7 @@ public class SysDepartmentServiceTest {
         SysDepartment.setDepartmentName(departmentName);
         SysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         try {
-            sysDepartmentService.update(SysDepartment);
+            sysDepartmentService.update(SysDepartment,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -121,7 +121,7 @@ public class SysDepartmentServiceTest {
         department.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         list.add(department);
         try {
-            sysDepartmentService.addDepartmentBatch(list);
+            sysDepartmentService.addDepartmentBatch(list,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -136,6 +136,6 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void zDeleteTest() {
-        sysDepartmentService.delete(departmenId);
+        sysDepartmentService.delete(departmenId,user);
     }
 }

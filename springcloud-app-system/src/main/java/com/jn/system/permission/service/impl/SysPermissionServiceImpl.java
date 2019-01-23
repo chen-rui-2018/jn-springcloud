@@ -31,10 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 权限服务层
@@ -63,10 +60,6 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     private SysPermissionResourcesMapper sysPermissionResourcesMapper;
     @Autowired
     private TbSysMenuMapper tbSysMenuMapper;
-    @Autowired
-    private SysMenuMapper sysMenuMapper;
-    @Autowired
-    private SysResourcesMapper sysResourcesMapper;
     @Autowired
     private SysMenuService sysMenuService;
 
@@ -112,7 +105,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Override
     @ServiceLog(doAction = "修改权限")
     @Transactional(rollbackFor = Exception.class)
-    public void updatePermission(SysPermission sysPermission) {
+    public void updatePermission(SysPermission sysPermission, User user) {
         String permissionId = sysPermission.getId();
         String permissionName = sysPermission.getPermissionName();
 
@@ -136,6 +129,9 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //3.更新权限信息
         TbSysPermission tbSysPermission1 = new TbSysPermission();
         BeanUtils.copyProperties(sysPermission, tbSysPermission1);
+        //设置最近更新人信息
+        tbSysPermission1.setModifiedTime(new Date());
+        tbSysPermission1.setModifierAccount(user.getAccount());
         tbSysPermissionMapper.updateByPrimaryKeySelective(tbSysPermission1);
         logger.info("[权限] 修改权限信息成功！，sysPermissionId:{}", permissionId);
     }
@@ -173,23 +169,29 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 批量逻辑删除权限
+     * 逻辑删除用户信息
      *
      * @param ids
+     * @param user
      */
     @Override
     @ServiceLog(doAction = "批量逻辑删除权限")
     @Transactional(rollbackFor = Exception.class)
-    public void deletePermissionBranch(String[] ids) {
-        sysPermissionMapper.deletePermissionBranch(ids);
+    public void deletePermissionBranch(String[] ids, User user) {
+        if (ids.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysPermissionMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionFilesMapper.deletePermissionBranch(ids);
+        sysPermissionFilesMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联文件组信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionMenuMapper.deletePermissionBranch(ids);
+        sysPermissionMenuMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联菜单信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysRolePermissionMapper.deletePermissionBranch(ids);
+        sysRolePermissionMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联角色信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionResourcesMapper.deletePermissionBranch(ids);
+        sysPermissionResourcesMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联功能信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
     }
 
@@ -203,7 +205,10 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd, User user) {
         //清除权限已经具有的角色
-        sysRolePermissionMapper.deleteByPermissionId(sysPermissionRolesAdd.getPermissionId());
+        String[] ids = {sysPermissionRolesAdd.getPermissionId()};
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysRolePermissionMapper.deletePermissionBranch(map);
         logger.info("[权限授权角色] 删除该权限下角色信息成功！permissionId:{}", sysPermissionRolesAdd.getPermissionId());
         Boolean isDelete = sysPermissionRolesAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
@@ -227,6 +232,20 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         logger.info("[权限] 批量为权限添加角色信息成功！，sysPermissionId:{},roleIds:{}",
                 sysPermissionRolesAdd.getPermissionId()
                 , Arrays.toString(sysPermissionRolesAdd.getRoleIds()));
+    }
+
+    /**
+     * 疯转删除信息
+     *
+     * @param user 当前用户
+     * @param ids  权限ids数组
+     * @return
+     */
+    private Map<String, Object> getDeleteMap(User user, String[] ids) {
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
+        return map;
     }
 
     /**
@@ -281,14 +300,15 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd, User user) {
         //逻辑删除原有权限对应文件组
-        sysPermissionFilesMapper.deleteByPermissionId(sysPermissionFileGroupAdd.getPermissionId());
+        String[] ids = {sysPermissionFileGroupAdd.getPermissionId()};
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysPermissionFilesMapper.deletePermissionBranch(map);
         logger.info("[权限授权文件组] 删除该权限下文件组信息成功！permissionId:{}",
                 sysPermissionFileGroupAdd.getPermissionId());
         Boolean isDelete = sysPermissionFileGroupAdd.getFileGroupIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
-
         List<TbSysPermissionFiles> list = new ArrayList<TbSysPermissionFiles>();
         for (String fileGroupId : sysPermissionFileGroupAdd.getFileGroupIds()) {
             //封装权限文件组实体
@@ -359,12 +379,15 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addMenuAndResourcesToPermission(SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd, User user) {
         String permissionId = sysPermissionMenuResourcesAdd.getPermissionId();
+        String[] ids = {permissionId};
+        Map<String, Object> map = getDeleteMap(user, ids);
         //逻辑删除原权限菜单数据
-        sysPermissionMenuMapper.deleteByPermissionId(permissionId);
+        sysPermissionMenuMapper.deletePermissionBranch(map);
         logger.info("[权限] 删除该权限关联菜单信息成功！permissionId:{}", permissionId);
         //逻辑删除原有权限页面功能数据
-        sysPermissionResourcesMapper.deleteByPermissionId(permissionId);
+        sysPermissionResourcesMapper.deletePermissionBranch(map);
         logger.info("[权限] 删除该权限关联功能信息成功！permissionId:{}", permissionId);
+
         Boolean isDelete = sysPermissionMenuResourcesAdd.getMenuAndResourcesIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;

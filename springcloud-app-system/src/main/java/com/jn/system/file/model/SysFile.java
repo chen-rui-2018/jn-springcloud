@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,23 +15,23 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFile" ,description = "文件")
+@ApiModel(value = "SysFile", description = "文件")
 public class SysFile implements Serializable {
     private static final long serialVersionUID = 1596374127179651417L;
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 文件名称
      */
-    @ApiModelProperty(value = "文件名称" )
+    @ApiModelProperty(value = "文件名称")
     @NotBlank(message = "文件名称不能为空！")
     private String fileName;
 
     /**
      * 文件路径
      */
-    @ApiModelProperty(value = "文件路径" )
+    @ApiModelProperty(value = "文件路径")
     @NotBlank(message = "文件路径不能为空！")
     private String fileUrl;
 
@@ -45,7 +44,7 @@ public class SysFile implements Serializable {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
     /**

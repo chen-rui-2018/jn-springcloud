@@ -67,7 +67,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/update")
     public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
-        sysResourcesService.updateResourcesById(sysResources);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.updateResourcesById(sysResources, user);
         return new Result();
     }
 
@@ -77,7 +79,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
-        sysResourcesService.deleteResourcesById(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.deleteResourcesById(ids, user);
         return new Result();
     }
 

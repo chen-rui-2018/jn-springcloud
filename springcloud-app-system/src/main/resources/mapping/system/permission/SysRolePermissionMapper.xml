@@ -24,10 +24,14 @@
         </foreach>
     </update>
 
-    <update id="deleteByRoleIds" parameterType="java.lang.String">
-        update tb_sys_role_permission set record_status = 0
+    <update id="deleteByRoleIds" parameterType="java.util.Map">
+        update tb_sys_role_permission
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where role_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -46,16 +50,16 @@
         </foreach>
     </insert>
 
-    <update id="deletePermissionBranch" parameterType="java.lang.String">
-        update tb_sys_role_permission set record_status = 0
+    <update id="deletePermissionBranch" parameterType="java.util.Map">
+        update tb_sys_role_permission
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where permission_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
-    </update>
-
-    <update id="deleteByPermissionId" parameterType="java.lang.String">
-        UPDATE tb_sys_role_permission SET record_status = 0 where permission_id = #{id,jdbcType=VARCHAR}
     </update>
 
     <insert id="addRoleToPermissionBranch" parameterType="java.util.List">

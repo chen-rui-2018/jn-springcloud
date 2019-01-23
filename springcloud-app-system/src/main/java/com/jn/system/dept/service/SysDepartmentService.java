@@ -4,6 +4,7 @@ import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.vo.SysDepartmentVO;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -27,15 +28,17 @@ public interface SysDepartmentService {
      * 逻辑删除部门信息
      *
      * @param id
+     * @param user 当前用户信息
      */
-    void delete(String id);
+    void delete(String id, User user);
 
     /**
      * 修改部门信息
      *
      * @param sysDepartment
+     * @param user
      */
-    void update(SysDepartment sysDepartment);
+    void update(SysDepartment sysDepartment, User user);
 
     /**
      * 添加部门
@@ -64,8 +67,9 @@ public interface SysDepartmentService {
      * 批量更新部门信息
      *
      * @param sysDepartmentList
+     * @param user              当前用户信息
      */
-    void addDepartmentBatch(List<SysDepartment> sysDepartmentList);
+    void addDepartmentBatch(List<SysDepartment> sysDepartmentList, User user);
 
     /**
      * 根据父级id获取所有子部门信息

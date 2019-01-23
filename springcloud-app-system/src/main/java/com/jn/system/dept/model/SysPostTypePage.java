@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPostTypePage",description = "岗位类型条件分页实体")
+@ApiModel(value = "SysPostTypePage", description = "岗位类型条件分页实体")
 public class SysPostTypePage extends Page implements Serializable {
 
     private static final long serialVersionUID = 2236826545957217059L;

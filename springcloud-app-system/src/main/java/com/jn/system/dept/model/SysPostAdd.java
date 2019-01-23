@@ -4,19 +4,19 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 岗位添加
+ *
  * @author： shaobao
  * @date： Created on 2018/11/8 16:41
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPostAdd",description = "岗位添加")
+@ApiModel(value = "SysPostAdd", description = "岗位添加")
 public class SysPostAdd implements Serializable {
     private static final long serialVersionUID = 7770105271133774300L;
 
@@ -25,6 +25,7 @@ public class SysPostAdd implements Serializable {
     private String postName;
 
     @ApiModelProperty("状态，0删除，1有效，2无效")
+    @NotNull(message = "状态值不能为空")
     private Byte recordStatus;
 
     @ApiModelProperty("岗位类型id")

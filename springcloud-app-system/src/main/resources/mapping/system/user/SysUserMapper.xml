@@ -214,27 +214,13 @@
             </if>
         </where>
         GROUP BY t.id
-        ORDER BY t.createTime DESC,t.id DESC
+        ORDER BY t.createdTime DESC,t.id DESC
     </select>
 
     <update id="deleteSysUser" parameterType="java.lang.String">
         update tb_sys_user
         set `record_status` = 0
         where id = #{id,jdbcType=VARCHAR}
-    </update>
-
-    <!--逻辑删除用户已经具有的用户组-->
-    <update id="deleGroupOfUser" parameterType="java.lang.String">
-        update tb_sys_user_group
-        set `record_status` = 0
-        where user_id = #{id,jdbcType=VARCHAR}
-    </update>
-
-    <!--逻辑删除用户已经具有的角色-->
-    <update id="deleRoleOfUser" parameterType="java.lang.String">
-        update tb_sys_user_role
-        set record_status = 0
-        where user_id = #{id,jdbcType=VARCHAR}
     </update>
 
     <insert id="addDepartmentAndPostToUserBatch" parameterType="java.util.List">
@@ -252,22 +238,19 @@
         </foreach>
     </insert>
 
-    <!--清除用户原有部门岗位信息-->
-    <update id="deleDepartmentandPost" parameterType="java.lang.String">
-        update tb_sys_user_department_post
-        set `record_status` = 0
-        where user_id = #{id,jdbcType=VARCHAR}
-    </update>
-
     <select id="getUserById" resultType="com.jn.system.user.model.SysUser" parameterType="java.lang.String">
         SELECT id,account,`name`,phone,email,created_time as createdTime,`record_status` as recordStatus
         FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `record_status` != 1
     </select>
 
-    <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user set record_status = 0
+    <update id="deleteUserBranch" parameterType="java.util.Map">
+        update tb_sys_user
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>

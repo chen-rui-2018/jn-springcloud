@@ -96,7 +96,7 @@ public class SysGroupServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         sysGroup.setRecordStatus(recordStatus);
         try {
-            sysGroupService.updateSysGroup(sysGroup);
+            sysGroupService.updateSysGroup(sysGroup,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -150,6 +150,6 @@ public class SysGroupServiceTest {
     @Test
     public void zDeleSysGroupTest() {
         String[] groupIdS = {groupId};
-        sysGroupService.deleSysGroup(groupIdS);
+        sysGroupService.deleSysGroup(groupIdS,user);
     }
 }

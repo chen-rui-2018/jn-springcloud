@@ -84,7 +84,9 @@ public class SysPostTypeController extends BaseController {
     @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysPostType postType) {
         Assert.notNull(postType.getId(), "岗位类型id不能为空");
-        sysPostTypeService.update(postType);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPostTypeService.update(postType, user);
         return new Result();
     }
 
@@ -94,7 +96,9 @@ public class SysPostTypeController extends BaseController {
     @RequestMapping(value = "/delete")
     public Result delete(String postTypeId) {
         Assert.notNull(postTypeId, "岗位类型id不能为空");
-        Result result = sysPostTypeService.delete(postTypeId);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        Result result = sysPostTypeService.delete(postTypeId, user);
         return result;
     }
 

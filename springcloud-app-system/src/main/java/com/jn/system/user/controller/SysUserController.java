@@ -76,7 +76,9 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "逻辑删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
     public Result deleteSysUser(@Validated @RequestBody SysUserDelete sysUserDelete) {
-        sysUserService.deleteSysUser(sysUserDelete.getUserIds());
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.deleteSysUser(sysUserDelete.getUserIds(),user);
         return new Result();
     }
 
@@ -86,7 +88,9 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/updateSysUser")
     public Result updateSysUser(@Validated @RequestBody SysUser sysUser) {
         Assert.notNull(sysUser.getId(), "用户id不能为空");
-        sysUserService.updateSysUser(sysUser);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.updateSysUser(sysUser,user);
         return new Result();
     }
 

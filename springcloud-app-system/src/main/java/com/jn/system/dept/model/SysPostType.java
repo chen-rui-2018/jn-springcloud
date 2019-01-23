@@ -15,13 +15,13 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPostType",description = "岗位类型实体")
+@ApiModel(value = "SysPostType", description = "岗位类型实体")
 public class SysPostType implements Serializable {
     private static final long serialVersionUID = -7630665836148323509L;
 
-    @ApiModelProperty(value = "岗位类型id",required = true)
+    @ApiModelProperty(value = "岗位类型id", required = true)
     private String id;
-    @ApiModelProperty(value = "岗位类型名称",required = true)
+    @ApiModelProperty(value = "岗位类型名称", required = true)
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位类型名称校验失败")
     private String postTypeName;
     @ApiModelProperty(value = "创建者")

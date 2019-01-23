@@ -5,8 +5,10 @@ import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserPage;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户dao
@@ -34,32 +36,10 @@ public interface SysUserMapper {
     void deleteSysUser(String id);
 
     /**
-     * 清除用户组中已经存在的用户组
-     *
-     * @param userId
-     */
-    void deleGroupOfUser(String userId);
-
-    /**
-     * 清除用户中已经具有的角色
-     *
-     * @param userId
-     */
-    void deleRoleOfUser(String userId);
-
-    /**
-     * 清除用户原有部门岗位信息
-     *
-     * @param sysUserId
-     */
-    void deleDepartmentandPost(String sysUserId);
-
-    /**
      * 批量删除用户
-     *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String,Object> map);
 
 
     /**

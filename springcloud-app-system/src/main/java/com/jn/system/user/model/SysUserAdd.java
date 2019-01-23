@@ -3,6 +3,7 @@ package com.jn.system.user.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -41,6 +42,7 @@ public class SysUserAdd implements Serializable {
     private String email;
 
     @ApiModelProperty("状态")
+    @NotNull(message = "状态值不能为空")
     private Byte recordStatus;
 
     @ApiModelProperty("微信账号")

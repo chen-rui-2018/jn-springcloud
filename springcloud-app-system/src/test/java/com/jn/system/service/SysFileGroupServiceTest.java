@@ -106,7 +106,7 @@ public class SysFileGroupServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         sysFileGroup.setRecordStatus(recordStatus);
         try {
-            sysFileGroupService.updateSysFileGroupById(sysFileGroup);
+            sysFileGroupService.updateSysFileGroupById(sysFileGroup,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -134,7 +134,7 @@ public class SysFileGroupServiceTest {
     @Test
     public void zDeleteTest() {
         String[] ids = {fileGroupId};
-        sysFileGroupService.deleteSysFileGroupByIds(ids);
+        sysFileGroupService.deleteSysFileGroupByIds(ids,user);
     }
 
 }

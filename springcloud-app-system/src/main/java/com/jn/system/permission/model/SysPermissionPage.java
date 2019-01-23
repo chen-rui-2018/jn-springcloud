@@ -4,17 +4,17 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
  * 权限条件分页
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 10:55
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermissionPage",description = "权限条件分页")
+@ApiModel(value = "SysPermissionPage", description = "权限条件分页")
 public class SysPermissionPage extends Page implements Serializable {
     private static final long serialVersionUID = 5250362586633368476L;
     @ApiModelProperty("权限名称")

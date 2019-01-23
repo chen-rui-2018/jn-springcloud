@@ -2,15 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.menu.dao.SysMenuMapper">
 
-    <update id="deleteBy" parameterType="java.util.List">
-        update tb_sys_menu set record_status= 0
+    <update id="deleteBy" parameterType="java.util.Map">
+        update tb_sys_menu
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="updateBatch" parameterType="java.util.List">
+    <update id="updateBatch" parameterType="java.util.Map">
             update tb_sys_menu
             <trim prefix="set" suffixOverrides=",">
                 <trim prefix="menu_name =case" suffix="end,">
@@ -26,6 +30,16 @@
                 <trim prefix="sort =case" suffix="end,">
                     <foreach collection="list" item="item" index="index">
                         when id=#{item.id} then #{item.sort}
+                    </foreach>
+                </trim>
+                <trim prefix="modified_time =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then now()
+                    </foreach>
+                </trim>
+                <trim prefix="modifier_account =case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when id=#{item.id} then #{account}
                     </foreach>
                 </trim>
             </trim>

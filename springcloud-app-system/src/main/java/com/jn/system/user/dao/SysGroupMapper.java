@@ -6,6 +6,7 @@ import com.jn.system.user.model.SysGroupPage;
 import com.jn.system.user.vo.SysGroupUserRoleVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户组dao
@@ -50,7 +51,7 @@ public interface SysGroupMapper {
     /**
      * 批量删除用户组信息
      *
-     * @param groupIds
+     * @param map
      */
-    void deleteGroupBranch(String[] groupIds);
+    void deleteGroupBranch(Map<String,Object> map);
 }

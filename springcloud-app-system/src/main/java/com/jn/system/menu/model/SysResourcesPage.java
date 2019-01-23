@@ -4,7 +4,6 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,32 +15,32 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysResourcesPage" ,description = "功能分页实体")
+@ApiModel(value = "SysResourcesPage", description = "功能分页实体")
 public class SysResourcesPage extends Page implements Serializable {
 
 
     private static final long serialVersionUID = -514084002440259994L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
     private String resourcesName;
 
     /**
      * 功能URL
      */
-    @ApiModelProperty(value = "功能路径" )
+    @ApiModelProperty(value = "功能路径")
     private String resourcesUrl;
 
 
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     private String menuId;
 
     /**
@@ -52,7 +51,7 @@ public class SysResourcesPage extends Page implements Serializable {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     /**
      * 状态，0删除，1有效，2无效

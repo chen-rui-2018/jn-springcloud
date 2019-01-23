@@ -17,17 +17,17 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysResources" ,description = "功能信息")
+@ApiModel(value = "SysResources", description = "功能信息")
 public class SysResources implements Serializable {
     private static final long serialVersionUID = 3335508336524984508L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
     @NotBlank(message = "功能名称不能为空！")
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "功能名称校验失败")
     private String resourcesName;
@@ -35,22 +35,22 @@ public class SysResources implements Serializable {
     /**
      * 权限界面,返回功能名称是方面菜单树解析,使用lable返回功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
     private String label;
 
     /**
      * 功能URL
      */
-    @ApiModelProperty(value = "功能路径" )
+    @ApiModelProperty(value = "功能路径")
     @NotBlank(message = "功能路径不能为空！")
-    @Size(max = 150,message = "页面功能路径长度不能超度150字")
+    @Size(max = 150, message = "页面功能路径长度不能超度150字")
     private String resourcesUrl;
 
 
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     @NotBlank(message = "菜单id不能为空！")
     private String menuId;
 
@@ -62,7 +62,7 @@ public class SysResources implements Serializable {
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
+    @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     /**
      * 状态，0删除，1有效，2无效

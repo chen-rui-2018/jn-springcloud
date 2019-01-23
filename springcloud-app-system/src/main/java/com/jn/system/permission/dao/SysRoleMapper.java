@@ -5,6 +5,7 @@ import com.jn.system.permission.model.SysRolePage;
 import com.jn.system.permission.vo.SysRoleVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色dao
@@ -36,7 +37,7 @@ public interface SysRoleMapper {
     /**
      * 批量删除
      *
-     * @param id
+     * @param map
      */
-    void deleteBy(String[] id);
+    void deleteBy(Map<String, Object> map);
 }

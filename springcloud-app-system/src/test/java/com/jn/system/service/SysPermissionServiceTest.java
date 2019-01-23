@@ -64,7 +64,7 @@ public class SysPermissionServiceTest {
         tbSysPermission.setId(permissionId);
         tbSysPermission.setPermissionName(permissionName);
         tbSysPermission.setCreatedTime(new Date());
-        tbSysPermission.setCreatorAccount(user.getId());
+        tbSysPermission.setCreatorAccount(user.getAccount());
         Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
         tbSysPermission.setRecordStatus(recordStatus);
     }
@@ -86,7 +86,7 @@ public class SysPermissionServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         permission.setRecordStatus(recordStatus);
         try {
-            sysPermissionService.updatePermission(permission);
+            sysPermissionService.updatePermission(permission,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -169,7 +169,7 @@ public class SysPermissionServiceTest {
     @Test
     public void zDeletePermissionBranch() {
         String[] permissionIds = {permissionId};
-        sysPermissionService.deletePermissionBranch(permissionIds);
+        sysPermissionService.deletePermissionBranch(permissionIds,user);
     }
 
 }

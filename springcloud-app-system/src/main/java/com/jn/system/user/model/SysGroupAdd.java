@@ -3,6 +3,7 @@ package com.jn.system.user.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class SysGroupAdd implements Serializable {
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "用户组名校验失败")
     private String groupName;
     @ApiModelProperty("状态")
+    @NotNull(message = "状态值不能为空")
     private Byte recordStatus;
 
     public SysGroupAdd() {

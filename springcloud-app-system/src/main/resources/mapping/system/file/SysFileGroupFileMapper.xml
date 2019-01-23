@@ -26,10 +26,14 @@
         </foreach>
     </update>
 
-    <update id="deleteByFileGroupIds" parameterType="java.lang.String">
-        update tb_sys_file_group_file set record_status = 0
+    <update id="deleteByFileGroupIds" parameterType="java.util.Map">
+        update tb_sys_file_group_file
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where file_group_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -118,7 +122,7 @@
         <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
         <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
-        <result column="record_status" jdbcType="VARCHAR" property="recordStatus"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
         <collection property="fileGroupNameList" javaType="java.util.List"
                     ofType="java.lang.String">
             <result column="file_group_name"  jdbcType="VARCHAR"/>
@@ -150,8 +154,8 @@
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
                 and t3.file_name like CONCAT('%', #{fileName,jdbcType=VARCHAR}, '%')
             </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                and t3.`status`=#{status,jdbcType=VARCHAR}
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+                and t3.`record_status`=#{recordStatus,jdbcType=VARCHAR}
             </if>
         </where>
         ORDER BY t3.created_time DESC,t3.id DESC

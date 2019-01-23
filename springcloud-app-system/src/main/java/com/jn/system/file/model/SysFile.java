@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,51 +15,62 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFile" ,description = "文件")
+@ApiModel(value = "SysFile", description = "文件")
 public class SysFile implements Serializable {
     private static final long serialVersionUID = 1596374127179651417L;
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 文件名称
      */
-    @ApiModelProperty(value = "文件名称" )
+    @ApiModelProperty(value = "文件名称")
     @NotBlank(message = "文件名称不能为空！")
     private String fileName;
 
     /**
      * 文件路径
      */
-    @ApiModelProperty(value = "文件路径" )
+    @ApiModelProperty(value = "文件路径")
     @NotBlank(message = "文件路径不能为空！")
     private String fileUrl;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
 
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    @ApiModelProperty(value = "创建时间")
+    private Date createdTime;
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
+
+    public SysFile(String id, String fileName, String fileUrl, String creatorAccount, Date createdTime, Byte recordStatus) {
+        this.id = id;
+        this.fileName = fileName;
+        this.fileUrl = fileUrl;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+    }
+
+    public SysFile() {
+    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getFileName() {
@@ -68,7 +78,7 @@ public class SysFile implements Serializable {
     }
 
     public void setFileName(String fileName) {
-        this.fileName = fileName == null ? null : fileName.trim();
+        this.fileName = fileName;
     }
 
     public String getFileUrl() {
@@ -76,80 +86,82 @@ public class SysFile implements Serializable {
     }
 
     public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+        this.fileUrl = fileUrl;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (this == that) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (that == null) {
+        if (!(o instanceof SysFile)) {
             return false;
         }
-        if (getClass() != that.getClass()) {
+
+        SysFile sysFile = (SysFile) o;
+
+        if (id != null ? !id.equals(sysFile.id) : sysFile.id != null) {
             return false;
         }
-        SysFile other = (SysFile) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getFileName() == null ? other.getFileName() == null : this.getFileName().equals(other.getFileName()))
-            && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()))
-            && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+        if (fileName != null ? !fileName.equals(sysFile.fileName) : sysFile.fileName != null) {
+            return false;
+        }
+        if (fileUrl != null ? !fileUrl.equals(sysFile.fileUrl) : sysFile.fileUrl != null) {
+            return false;
+        }
+        if (creatorAccount != null ? !creatorAccount.equals(sysFile.creatorAccount) : sysFile.creatorAccount != null) {
+            return false;
+        }
+        if (createdTime != null ? !createdTime.equals(sysFile.createdTime) : sysFile.createdTime != null) {
+            return false;
+        }
+        return recordStatus != null ? recordStatus.equals(sysFile.recordStatus) : sysFile.recordStatus == null;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getFileName() == null) ? 0 : getFileName().hashCode());
-        result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (fileName != null ? fileName.hashCode() : 0);
+        result = 31 * result + (fileUrl != null ? fileUrl.hashCode() : 0);
+        result = 31 * result + (creatorAccount != null ? creatorAccount.hashCode() : 0);
+        result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
+        result = 31 * result + (recordStatus != null ? recordStatus.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", fileName=").append(fileName);
-        sb.append(", fileUrl=").append(fileUrl);
-        sb.append(", creator=").append(creator);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SysFile{" +
+                "id='" + id + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", fileUrl='" + fileUrl + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
+                '}';
     }
 }

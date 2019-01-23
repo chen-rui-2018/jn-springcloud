@@ -9,12 +9,13 @@ import java.io.Serializable;
 
 /**
  * 角色授权用户时,条件分页查询角色为拥有的用户信息
+ *
  * @author： shaobao
  * @date： Created on 2018/11/16 14:18
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysRoleUserPage",description = "角色授权用户时,条件分页查询角色为拥有的用户信息")
+@ApiModel(value = "SysRoleUserPage", description = "角色授权用户时,条件分页查询角色为拥有的用户信息")
 public class SysRoleUserPage extends Page implements Serializable {
     private static final long serialVersionUID = 5004784786615392695L;
     @ApiModelProperty("角色id")

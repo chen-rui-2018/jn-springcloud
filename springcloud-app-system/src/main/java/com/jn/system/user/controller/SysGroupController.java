@@ -60,8 +60,8 @@ public class SysGroupController extends BaseController {
         TbSysGroup tbSysGroup = new TbSysGroup();
         BeanUtils.copyProperties(sysGroup, tbSysGroup);
         tbSysGroup.setId(UUID.randomUUID().toString());
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
+        tbSysGroup.setCreatedTime(new Date());
+        tbSysGroup.setCreatorAccount(user.getAccount());
         //传参到业务层
         sysGroupService.addSysGroup(tbSysGroup);
         return new Result();
@@ -73,7 +73,9 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/delete")
     public Result delete(String[] groupIds) {
         Assert.noNullElements(groupIds, "用户组id数组不能为空");
-        sysGroupService.deleSysGroup(groupIds);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.deleSysGroup(groupIds,user);
         return new Result();
     }
 
@@ -83,7 +85,9 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/update")
     public Result update(@Validated @RequestBody SysGroupUpdate sysGroup) {
         Assert.notNull(sysGroup.getId(), "用户组id不能为空");
-        sysGroupService.updateSysGroup(sysGroup);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.updateSysGroup(sysGroup,user);
         return new Result();
     }
 

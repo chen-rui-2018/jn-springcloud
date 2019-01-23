@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.permission.dao.SysPermissionFilesMapper">
-    <update id="deletePermissionBranch" parameterType="java.lang.String">
-        update tb_sys_permission_files set status='-1'
+    <update id="deletePermissionBranch" parameterType="java.util.Map">
+        update tb_sys_permission_files
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where permission_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteByFileGroupIds" parameterType="java.lang.String">
-        update tb_sys_permission_files set status = '-1'
+    <update id="deleteByFileGroupIds" parameterType="java.util.Map">
+        update tb_sys_permission_files
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where file_group_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -20,31 +28,29 @@
     <select id="findFileGroupOfPermission" parameterType="java.lang.String"
             resultType="com.jn.system.file.model.SysFileGroup">
         select distinct
-            t2.id,
-            t2.file_group_name as fileGroupName,
-            t2.create_time as createTime,
-            t2.creator,
-            t2.`status`
-        from tb_sys_permission_files t1 , tb_sys_file_group t2
-        where t1.file_group_id = t2.id and t1.`status` = '1' and t2.`status` = '1'
+        t2.id,
+        t2.file_group_name as fileGroupName,
+        t2.created_time as createdTime,
+        t2.creator_account as creatorAccount,
+        t2.record_status as recordStatus
+        from tb_sys_permission_files t1,
+        tb_sys_file_group t2
+        where t1.file_group_id = t2.id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and t1.permission_id = #{id,jdbcType=VARCHAR}
-        ORDER BY t2.create_time ASC
+        ORDER BY t2.created_time ASC
     </select>
 
-
-    <update id="deleteByPermissionId" parameterType="java.lang.String">
-        update tb_sys_permission_files set `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
-    </update>
-
     <insert id="addFileGroupToPermission" parameterType="java.util.List">
-        insert into tb_sys_permission_files (id, permission_id,file_group_id,creator,create_time,status) values
+        insert into tb_sys_permission_files (id, permission_id,file_group_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
             (#{item.id,jdbcType=BIGINT},
             #{item.permissionId,jdbcType=VARCHAR},
             #{item.fileGroupId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=VARCHAR})
         </foreach>
     </insert>
 
@@ -54,19 +60,26 @@
         t.id,
         t.file_group_name as fileGroupName,
         t.file_group_describe as fileGroupDescribe,
-        t.create_time as createTime,
-        t.creator,
-        t.`status`
-        from tb_sys_file_group t left join
+        t.created_time as createdTime,
+        t.creator_account as creatorAccount,
+        t.record_status as recordStatus
+        from tb_sys_file_group t
+        left join
         (select DISTINCT
-        t1.id,t1.file_group_name
-        from tb_sys_file_group t1,tb_sys_permission_files t2
-        where t1.id = t2.file_group_id and t1.`status` = '1' and t2.`status` = '1'
+        t1.id,
+        t1.file_group_name
+        from tb_sys_file_group t1,
+        tb_sys_permission_files t2
+        where t1.id = t2.file_group_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
         and t2.permission_id = #{permissionId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        on t.id = tt.id
+        where t.`record_status` = 1
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileGroupName)">
             and t.file_group_name like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
         </if>
-        order by t.create_time desc, id desc
+        order by t.created_time desc, id desc
     </select>
 </mapper>

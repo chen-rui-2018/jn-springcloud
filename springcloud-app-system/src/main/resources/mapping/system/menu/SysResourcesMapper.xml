@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.menu.dao.SysResourcesMapper">
 
-    <sql id="Base_Column_List">
-        id,resources_name,resources_url,menu_id,creator,create_time,status
-    </sql>
-
-    <update id="deleteByIds" parameterType="java.lang.String">
-        update tb_sys_resources set status=-1
+    <update id="deleteByIds" parameterType="java.util.Map">
+        update tb_sys_resources
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
     <update id="deleteBy" parameterType="java.util.List">
-        update tb_sys_resources set status=-1
+        update tb_sys_resources set record_status= 0
         where menu_id in
         <foreach collection="list" item="id" open="(" close=")" index="index" separator=",">
             #{id}
@@ -40,13 +40,13 @@
         and sp.id = srp.permission_id
         and sp.id = spm.permission_id
         and sm.id = spm.menu_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sm.status = 1
-        and spm.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sm.record_status = 1
+        and spm.record_status = 1
         and su.id = #{id,jdbcType=VARCHAR}
         union all
         select distinct
@@ -65,13 +65,13 @@
         and sp.id = srp.permission_id
         and sp.id = spr.permission_id
         and tsr.id = spr.resources_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sr.status = 1
-        and spr.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sr.record_status = 1
+        and spr.record_status = 1
         and su.id = #{id,jdbcType=VARCHAR}
     </select>
 
@@ -99,14 +99,14 @@
         and sp.id = spr.permission_id
         and tsr.id = spr.resources_id
         and sm.id = tsr.menu_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sr.status = 1
-        and spr.status = 1
-        and sm.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sr.record_status = 1
+        and spr.record_status = 1
+        and sm.record_status = 1
         and su.id = #{id,jdbcType=VARCHAR}
         order by sm.menu_url asc
     </select>
@@ -115,13 +115,13 @@
         select distinct
         r.id,
         r.resources_name as resourcesName,
-        r.create_time as createTime,
-        r.creator,
+        r.created_time as createdTime,
+        r.creator_account as creatorAccount,
         r.resources_url as resourcesUrl,
-        r.`status`,
+        r.record_status as recordStatus,
         m.menu_name as menuId
         from tb_sys_resources r left join
-        (SELECT * FROM tb_sys_menu WHERE STATUS = '1') m
+        (SELECT * FROM tb_sys_menu WHERE record_status = 1) m
         on r.menu_id = m.id where r.id = #{id,jdbcType=VARCHAR}
     </select>
 
@@ -131,8 +131,8 @@
         id
         FROM tb_sys_resources
         WHERE menu_id = #{id,jdbcType=VARCHAR}
-        AND `status` = '1'
-        ORDER BY create_time DESC
+        AND `record_status` = 1
+        ORDER BY created_time DESC
     </select>
 
 </mapper>

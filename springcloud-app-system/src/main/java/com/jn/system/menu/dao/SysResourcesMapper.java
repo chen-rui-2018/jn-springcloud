@@ -5,6 +5,7 @@ import com.jn.system.menu.model.SysResources;
 import com.jn.system.model.MenuResources;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,9 +22,9 @@ public interface SysResourcesMapper {
     /**
      * 根据ids批量删除
      *
-     * @param id
+     * @param map
      */
-    void deleteByIds(String[] id);
+    void deleteByIds(Map<String, Object> map);
 
     /**
      * 根据id查找用户拥有权限列表
@@ -58,6 +59,7 @@ public interface SysResourcesMapper {
 
     /**
      * 根据菜单id获取页面功能信息
+     *
      * @param id
      * @return
      */

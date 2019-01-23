@@ -25,7 +25,7 @@ public class SysUserPage extends Page implements Serializable {
     private String name;
 
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
 
     @ApiModelProperty("部门id")
     private String departmentId;
@@ -36,9 +36,9 @@ public class SysUserPage extends Page implements Serializable {
     public SysUserPage() {
     }
 
-    public SysUserPage(String name, String status, String departmentId, String postOrTypeName) {
+    public SysUserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName) {
         this.name = name;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.departmentId = departmentId;
         this.postOrTypeName = postOrTypeName;
     }
@@ -51,12 +51,12 @@ public class SysUserPage extends Page implements Serializable {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getDepartmentId() {
@@ -79,7 +79,7 @@ public class SysUserPage extends Page implements Serializable {
     public String toString() {
         return "SysUserPage{" +
                 "name='" + name + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", departmentId='" + departmentId + '\'' +
                 ", postOrTypeName='" + postOrTypeName + '\'' +
                 '}';

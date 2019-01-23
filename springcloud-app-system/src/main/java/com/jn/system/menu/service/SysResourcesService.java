@@ -4,6 +4,7 @@ import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
 import com.jn.system.model.MenuResources;
+import com.jn.system.model.User;
 
 import java.util.List;
 import java.util.Set;
@@ -30,16 +31,17 @@ public interface SysResourcesService {
      * 更新功能信息
      *
      * @param sysResources
+     * @param user
      */
-    void updateResourcesById(SysResources sysResources);
+    void updateResourcesById(SysResources sysResources, User user);
 
     /**
-     * 批量删除功能（逻辑删除）
+     * 逻辑删除功能信息
      *
      * @param resourcesIds
-     * @return
+     * @param user         获取当前用户
      */
-    void deleteResourcesById(String[] resourcesIds);
+    void deleteResourcesById(String[] resourcesIds, User user);
 
     /**
      * 根据id查询功能详情

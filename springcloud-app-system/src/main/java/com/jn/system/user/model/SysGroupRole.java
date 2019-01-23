@@ -29,25 +29,25 @@ public class SysGroupRole implements Serializable {
     private String userGroupId;
 
     @ApiModelProperty("创建人")
-    private String creator;
+    private String creatorAccount;
 
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
 
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态")
+    private Byte recordStatus;
 
     public SysGroupRole() {
     }
 
-    public SysGroupRole(String id, String roleId, String userGroupId, String creator, Date createTime, String status) {
+    public SysGroupRole(String id, String roleId, String userGroupId, String creatorAccount,
+                        Date createdTime, Byte recordStatus) {
         this.id = id;
         this.roleId = roleId;
         this.userGroupId = userGroupId;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -74,28 +74,28 @@ public class SysGroupRole implements Serializable {
         this.userGroupId = userGroupId;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public String getStatus() {
-        return status;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getCreator() {
-        return creator;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -104,9 +104,9 @@ public class SysGroupRole implements Serializable {
                 "id='" + id + '\'' +
                 ", roleId='" + roleId + '\'' +
                 ", userGroupId='" + userGroupId + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

@@ -11,8 +11,8 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum SysStatusEnums implements CodeAndMsg {
     EFFECTIVE("1", "有效"),
-    INVALID("0", "失效"),
-    DELETED("-1","已删除");
+    INVALID("2", "失效"),
+    DELETED("0","已删除");
 
     private String code;
 

@@ -20,9 +20,9 @@ public class SysUserPageDepartmentOne implements Serializable {
     @ApiModelProperty("名称")
     private String name;
 
-    @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
+
 
     @ApiModelProperty("部门id")
     private String departmentId;
@@ -30,9 +30,9 @@ public class SysUserPageDepartmentOne implements Serializable {
     public SysUserPageDepartmentOne() {
     }
 
-    public SysUserPageDepartmentOne(String name, String status, String departmentId) {
+    public SysUserPageDepartmentOne(String name, Byte recordStatus, String departmentId) {
         this.name = name;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.departmentId = departmentId;
     }
 
@@ -44,12 +44,12 @@ public class SysUserPageDepartmentOne implements Serializable {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getDepartmentId() {
@@ -64,7 +64,7 @@ public class SysUserPageDepartmentOne implements Serializable {
     public String toString() {
         return "SysUserPageDepartmentOne{" +
                 "name='" + name + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", departmentId='" + departmentId + '\'' +
                 '}';
     }

@@ -26,11 +26,11 @@ public class SysGroupVO implements Serializable {
     @ApiModelProperty("用户组名称")
     private String groupName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
-    private String status;
+    private Byte recordStatus;
     @ApiModelProperty("创建人")
-    private String creator;
+    private String creatorAccount;
     @ApiModelProperty("关联角色")
     private List<SysRole> sysRoleList;
     @ApiModelProperty("关联用户")
@@ -39,13 +39,13 @@ public class SysGroupVO implements Serializable {
     public SysGroupVO() {
     }
 
-    public SysGroupVO(String id, String groupName, Date createTime, String status, String creator,
+    public SysGroupVO(String id, String groupName, Date createdTime, Byte recordStatus, String creatorAccount,
                       List<SysRole> sysRoleList, List<SysTUser> sysTUserList) {
         this.id = id;
         this.groupName = groupName;
-        this.createTime = createTime;
-        this.status = status;
-        this.creator = creator;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+        this.creatorAccount = creatorAccount;
         this.sysRoleList = sysRoleList;
         this.sysTUserList = sysTUserList;
     }
@@ -66,28 +66,28 @@ public class SysGroupVO implements Serializable {
         this.groupName = groupName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
     public List<SysRole> getSysRoleList() {
@@ -111,9 +111,9 @@ public class SysGroupVO implements Serializable {
         return "SysGroupVO{" +
                 "id='" + id + '\'' +
                 ", groupName='" + groupName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
-                ", creator='" + creator + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
+                ", creatorAccount='" + creatorAccount + '\'' +
                 ", sysRoleList=" + sysRoleList +
                 ", sysTUserList=" + sysTUserList +
                 '}';

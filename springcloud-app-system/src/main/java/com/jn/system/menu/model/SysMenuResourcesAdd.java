@@ -3,10 +3,8 @@ package com.jn.system.menu.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * 菜单添加功能
@@ -16,7 +14,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysMenuResourcesAdd" ,description = "菜单添加功能实体")
+@ApiModel(value = "SysMenuResourcesAdd", description = "菜单添加功能实体")
 public class SysMenuResourcesAdd implements Serializable {
 
     private static final long serialVersionUID = -6923429557226417911L;
@@ -24,52 +22,51 @@ public class SysMenuResourcesAdd implements Serializable {
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     private String menuId;
 
     /**
      * 功能id
      */
-    @ApiModelProperty(value = "功能id" )
+    @ApiModelProperty(value = "功能id")
     private String[] resourcesId;
 
     /**
      * 功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
 
     private String resourcesName;
 
     /**
      * 功能URL
      */
-    @ApiModelProperty(value = "功能路径" )
+    @ApiModelProperty(value = "功能路径")
     private String resourcesUrl;
 
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     /**
      * 菜单层级
      */
-    @ApiModelProperty(value = "菜单层级" )
+    @ApiModelProperty(value = "菜单层级")
     private String level;
 
     public SysMenuResourcesAdd() {
     }
 
     public SysMenuResourcesAdd(String menuId, String[] resourcesId, String resourcesName,
-                               String resourcesUrl, String status, String level) {
+                               String resourcesUrl, Byte recordStatus, String level) {
         this.menuId = menuId;
         this.resourcesId = resourcesId;
         this.resourcesName = resourcesName;
         this.resourcesUrl = resourcesUrl;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.level = level;
     }
 
@@ -105,13 +102,12 @@ public class SysMenuResourcesAdd implements Serializable {
         this.resourcesUrl = resourcesUrl;
     }
 
-
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -129,7 +125,7 @@ public class SysMenuResourcesAdd implements Serializable {
                 ", resourcesId=" + Arrays.toString(resourcesId) +
                 ", resourcesName='" + resourcesName + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", level='" + level + '\'' +
                 '}';
     }

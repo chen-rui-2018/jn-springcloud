@@ -19,6 +19,7 @@ import com.jn.system.dept.model.SysPostType;
 import com.jn.system.dept.model.SysPostTypePage;
 import com.jn.system.dept.service.SysPostTypeService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,22 +80,23 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     @ServiceLog(doAction = "列表查询岗位类型")
     public PaginationData getPostTypeByPage(SysPostTypePage postTypePage) {
         String postTypeName = postTypePage.getPostTypeName();
-        String status = postTypePage.getStatus();
+        Byte status = postTypePage.getRecordStatus();
 
         //条件分页查询
         Page<Object> objects = PageHelper.startPage(postTypePage.getPage(), postTypePage.getRows());
         TbSysPostTypeCriteria tbSysPostTypeCriteria = new TbSysPostTypeCriteria();
         //设置排序及查询条件
-        tbSysPostTypeCriteria.setOrderByClause("create_time desc,id desc");
+        tbSysPostTypeCriteria.setOrderByClause("created_time desc,id desc");
         TbSysPostTypeCriteria.Criteria criteria = tbSysPostTypeCriteria.createCriteria();
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         if (StringUtils.isNotBlank(postTypeName)) {
             //根据岗位类型名称,模糊查询
             criteria.andPostTypeNameLike("%" + postTypeName + "%");
         }
-        if (StringUtils.isNotBlank(status)) {
+        if (status != null) {
             //根据岗位类型状态查询
-            criteria.andStatusEqualTo(status);
+            criteria.andRecordStatusEqualTo(status);
         }
         List<TbSysPostType> tbSysPostTypes = tbSysPostTypeMapper.selectByExample(tbSysPostTypeCriteria);
         return new PaginationData(tbSysPostTypes, objects.getTotal());
@@ -112,7 +115,8 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
             //设置查询条件
             TbSysPostTypeCriteria tbSysPostTypeCriteria = new TbSysPostTypeCriteria();
             TbSysPostTypeCriteria.Criteria criteria = tbSysPostTypeCriteria.createCriteria();
-            criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+            criteria.andRecordStatusNotEqualTo(recordStatus);
             criteria.andPostTypeNameEqualTo(postTypeName);
             List<TbSysPostType> tbSysPostTypes = tbSysPostTypeMapper.selectByExample(tbSysPostTypeCriteria);
             //如果查询结果不为空,返回fail
@@ -125,26 +129,27 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     }
 
     /**
-     * 修改岗位类型
+     * 修改岗位类型信息
      *
-     * @param postType 岗位类型实体
+     * @param postType
+     * @param user     当前用户信息
      */
     @Override
     @ServiceLog(doAction = "修改岗位类型")
     @Transactional(rollbackFor = Exception.class)
-    public void update(SysPostType postType) {
+    public void update(SysPostType postType, User user) {
         String postTypeName = postType.getPostTypeName();
         String postTypeId = postType.getId();
         TbSysPostType tbSysPostType1 = tbSysPostTypeMapper.selectByPrimaryKey(postTypeId);
         //1.判断修改信息是否存在
-        if (tbSysPostType1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysPostType1.getStatus())) {
+        if (tbSysPostType1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysPostType1.getRecordStatus().toString())) {
             logger.warn("[岗位类型] 岗位类型修改失败,修改信息不存在,postTypeId: {}", postTypeId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
 
         //2.判断是否修改了岗位类型状态
-        if (SysStatusEnums.EFFECTIVE.getCode().equals(tbSysPostType1.getStatus()) &&
-                SysStatusEnums.INVALID.getCode().equals(postType.getStatus())) {
+        if (SysStatusEnums.EFFECTIVE.getCode().equals(tbSysPostType1.getRecordStatus()) &&
+                SysStatusEnums.INVALID.getCode().equals(postType.getRecordStatus().toString())) {
             //如果修改状态,判断当前岗位类型是否正在被使用,若正在被使用,不允许修改
             List<TbSysPost> tbSysPosts = getTbSysPosts(postTypeId);
             if (tbSysPosts != null && tbSysPosts.size() > 0) {
@@ -167,6 +172,9 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
         //4.对岗位类型信息进行修改
         TbSysPostType tbSysPostType = new TbSysPostType();
         BeanUtils.copyProperties(postType, tbSysPostType);
+        //设置最近更新人信息
+        tbSysPostType.setModifiedTime(new Date());
+        tbSysPostType.setModifierAccount(user.getAccount());
         tbSysPostTypeMapper.updateByPrimaryKeySelective(tbSysPostType);
         logger.info("[岗位类型] 修改岗位类型成功,postTypeId:{}", tbSysPostType.getId());
     }
@@ -174,13 +182,14 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     /**
      * 删除岗位类型
      *
-     * @param postTypeId 岗位类型id
+     * @param postTypeId
+     * @param user       当前用户信息
      * @return
      */
     @Override
     @ServiceLog(doAction = "删除岗位类型")
     @Transactional(rollbackFor = Exception.class)
-    public Result delete(String postTypeId) {
+    public Result delete(String postTypeId, User user) {
         Result result = new Result();
         if (StringUtils.isNotBlank(postTypeId)) {
             //判断该岗位类型,是否正在被岗位使用
@@ -195,7 +204,10 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
                 //没有被使用,进行删除操作
                 TbSysPostType tbSysPostType = tbSysPostTypeMapper.selectByPrimaryKey(postTypeId);
                 if (tbSysPostType != null) {
-                    tbSysPostType.setStatus(SysStatusEnums.DELETED.getCode());
+                    Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+                    tbSysPostType.setRecordStatus(recordStatus);
+                    tbSysPostType.setModifiedTime(new Date());
+                    tbSysPostType.setModifierAccount(user.getAccount());
                     tbSysPostTypeMapper.updateByPrimaryKeySelective(tbSysPostType);
                 }
             }
@@ -213,7 +225,8 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     private List<TbSysPost> getTbSysPosts(String postTypeId) {
         TbSysPostCriteria tbSysPostCriteria = new TbSysPostCriteria();
         TbSysPostCriteria.Criteria criteria = tbSysPostCriteria.createCriteria();
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         criteria.andPostTypeIdEqualTo(postTypeId);
         return tbSysPostMapper.selectByExample(tbSysPostCriteria);
     }
@@ -228,9 +241,10 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     public List<TbSysPostType> getPostTypeAll() {
         TbSysPostTypeCriteria tbSysPostTypeCriteria = new TbSysPostTypeCriteria();
         //设置排序及查询条件
-        tbSysPostTypeCriteria.setOrderByClause("create_time desc,id desc");
+        tbSysPostTypeCriteria.setOrderByClause("created_time desc,id desc");
         TbSysPostTypeCriteria.Criteria criteria = tbSysPostTypeCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         tbSysPostTypeCriteria.createCriteria();
         //进行查询
         List<TbSysPostType> tbSysPostTypes = tbSysPostTypeMapper.selectByExample(tbSysPostTypeCriteria);

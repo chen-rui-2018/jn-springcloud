@@ -17,6 +17,7 @@ import com.jn.system.file.model.SysFileGroup;
 import com.jn.system.file.model.SysFileGroupPage;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionFilesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * 文件组serviceImpl
@@ -82,7 +82,8 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(fileGroupName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
     }
 
@@ -94,11 +95,11 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
+    public void updateSysFileGroupById(SysFileGroup sysFileGroup, User user) {
         String fileGroupName = sysFileGroup.getFileGroupName();
         //判断修改信息是否存在
         TbSysFileGroup tbSysFileGroup1 = tbSysFileGroupMapper.selectByPrimaryKey(sysFileGroup.getId());
-        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getStatus())) {
+        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getRecordStatus().toString())) {
             logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         } else {
@@ -115,27 +116,38 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         //对文件组信息进行修改操作
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
+        //设置最近更新人信息
+        tbSysFileGroup.setModifiedTime(new Date());
+        tbSysFileGroup.setModifierAccount(user.getAccount());
         tbSysFileGroupMapper.updateByPrimaryKeySelective(tbSysFileGroup);
         logger.info("[文件组] 更新文件组成功！,fileGroupId: {}", sysFileGroup.getId());
     }
 
     /**
-     * 批量删除文件组（逻辑删除）
+     * 逻辑删除用户组信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
     @Override
     @ServiceLog(doAction = "批量删除文件组（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysFileGroupByIds(String[] ids) {
+    public void deleteSysFileGroupByIds(String[] ids, User user) {
+        if (ids.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
         //删除对应文件组
-        sysFileGroupMapper.deleteByIds(ids);
+        sysFileGroupMapper.deleteByIds(map);
         logger.info("[文件组] 批量删除文件组信息成功！,fileGroupIds: {}", Arrays.toString(ids));
         //删除对应文件组文件关联信息
-        sysFileGroupFileMapper.deleteByFileGroupIds(ids);
+        sysFileGroupFileMapper.deleteByFileGroupIds(map);
         logger.info("[文件组] 批量删除文件组关联文件信息成功！,fileGroupIds: {}", Arrays.toString(ids));
         //删除文件组对应权限信息
-        sysPermissionFilesMapper.deleteByFileGroupIds(ids);
+        sysPermissionFilesMapper.deleteByFileGroupIds(map);
         logger.info("[文件组] 批量删除文件组关联权限信息成功！,fileGroupIds: {}", Arrays.toString(ids));
     }
 
@@ -168,7 +180,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
-        sysFileGroupCriteria.setOrderByClause("create_time desc,id desc");
+        sysFileGroupCriteria.setOrderByClause("created_time desc,id desc");
         TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字
@@ -178,13 +190,14 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             //根据id查询
             criteria.andIdEqualTo(sysFileGroupPage.getId());
         }
-        if (!StringUtils.isEmpty(sysFileGroupPage.getStatus())) {
+        if (sysFileGroupPage.getRecordStatus() != null) {
             //筛选条件：状态
-            criteria.andStatusEqualTo(sysFileGroupPage.getStatus());
+            criteria.andRecordStatusEqualTo(sysFileGroupPage.getRecordStatus());
         }
 
         //过滤已删除的数据
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }

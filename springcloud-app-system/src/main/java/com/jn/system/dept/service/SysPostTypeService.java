@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.system.dept.entity.TbSysPostType;
 import com.jn.system.dept.model.SysPostType;
 import com.jn.system.dept.model.SysPostTypePage;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -42,19 +43,21 @@ public interface SysPostTypeService {
     String checkPostTypeName(String postTypeName);
 
     /**
-     * 修改岗位类型
+     * 修改岗位类型信息
      *
-     * @param postType 岗位类型实体
+     * @param postType
+     * @param user
      */
-    void update(SysPostType postType);
+    void update(SysPostType postType, User user);
 
     /**
      * 删除岗位类型
      *
-     * @param postTypeId 岗位类型id
+     * @param postTypeId
+     * @param user       当前用户信息
      * @return
      */
-    Result delete(String postTypeId);
+    Result delete(String postTypeId, User user);
 
     /**
      * 获取所有岗位类型

@@ -34,17 +34,17 @@ public interface SysUserService {
 
     /**
      * 逻辑删除用户
-     *
      * @param ids
+     * @param user 当前用户信息
      */
-    void deleteSysUser(String[] ids);
+    void deleteSysUser(String[] ids,User user);
 
     /**
      * 更新用户信息
-     *
      * @param sysUser
+     * @param user 当前用户信息
      */
-    void updateSysUser(SysUser sysUser);
+    void updateSysUser(SysUser sysUser,User user);
 
     /**
      * 查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息

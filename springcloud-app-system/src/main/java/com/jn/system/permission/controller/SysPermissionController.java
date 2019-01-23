@@ -51,8 +51,8 @@ public class SysPermissionController extends BaseController {
         TbSysPermission tbSysPermission = new TbSysPermission();
         BeanUtils.copyProperties(sysPermissionAdd, tbSysPermission);
         tbSysPermission.setId(UUID.randomUUID().toString());
-        tbSysPermission.setCreateTime(new Date());
-        tbSysPermission.setCreator(user.getId());
+        tbSysPermission.setCreatedTime(new Date());
+        tbSysPermission.setCreatorAccount(user.getAccount());
         sysPermissionService.addPermission(tbSysPermission);
         return new Result();
     }
@@ -63,7 +63,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysPermission sysPermission) {
         Assert.notNull(sysPermission.getId(), "权限id不能为空");
-        sysPermissionService.updatePermission(sysPermission);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.updatePermission(sysPermission, user);
         return new Result();
     }
 
@@ -91,7 +93,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/delete")
     public Result delete(String[] ids) {
         Assert.noNullElements(ids, "权限id不能为空");
-        sysPermissionService.deletePermissionBranch(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.deletePermissionBranch(ids, user);
         return new Result();
     }
 

@@ -26,17 +26,13 @@ public class SysGroupUserAdd implements Serializable {
     @NotBlank(message = "用户组id不能为空")
     @ApiModelProperty("用户组id")
     private String groupId;
-    @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status = SysStatusEnums.EFFECTIVE.getCode();
 
     public SysGroupUserAdd() {
     }
 
-    public SysGroupUserAdd(String[] userIds, String groupId, String status) {
+    public SysGroupUserAdd(String[] userIds, String groupId) {
         this.userIds = userIds;
         this.groupId = groupId;
-        this.status = status;
     }
 
     public String[] getUserIds() {
@@ -55,20 +51,11 @@ public class SysGroupUserAdd implements Serializable {
         this.groupId = groupId;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     @Override
     public String toString() {
         return "SysGroupUserAdd{" +
                 "userIds=" + Arrays.toString(userIds) +
                 ", groupId='" + groupId + '\'' +
-                ", status='" + status + '\'' +
                 '}';
     }
 }

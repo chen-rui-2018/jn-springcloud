@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 /**
  * 权限界面添加菜单信息
+ *
  * @author： shaobao
  * @date： Created on 2018/11/17 16:23
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermissionMenuAdd",description = "权限界面添加菜单信息")
+@ApiModel(value = "SysPermissionMenuAdd", description = "权限界面添加菜单信息")
 public class SysPermissionMenuAdd implements Serializable {
     private static final long serialVersionUID = 3378361800319026127L;
     @ApiModelProperty("权限id")

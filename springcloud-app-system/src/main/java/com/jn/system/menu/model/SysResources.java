@@ -17,17 +17,17 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysResources" ,description = "功能信息")
+@ApiModel(value = "SysResources", description = "功能信息")
 public class SysResources implements Serializable {
     private static final long serialVersionUID = 3335508336524984508L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
 
     /**
      * 功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
     @NotBlank(message = "功能名称不能为空！")
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "功能名称校验失败")
     private String resourcesName;
@@ -35,55 +35,54 @@ public class SysResources implements Serializable {
     /**
      * 权限界面,返回功能名称是方面菜单树解析,使用lable返回功能名称
      */
-    @ApiModelProperty(value = "功能名称" )
+    @ApiModelProperty(value = "功能名称")
     private String label;
 
     /**
      * 功能URL
      */
-    @ApiModelProperty(value = "功能路径" )
+    @ApiModelProperty(value = "功能路径")
     @NotBlank(message = "功能路径不能为空！")
-    @Size(max = 150,message = "页面功能路径长度不能超度150字")
+    @Size(max = 150, message = "页面功能路径长度不能超度150字")
     private String resourcesUrl;
 
 
     /**
      * 菜单id
      */
-    @ApiModelProperty(value = "菜单id" )
+    @ApiModelProperty(value = "菜单id")
     @NotBlank(message = "菜单id不能为空！")
     private String menuId;
 
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人" )
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
     /**
      * 创建时间
      */
-    @ApiModelProperty(value = "创建时间" )
-    private Date createTime;
+    @ApiModelProperty(value = "创建时间")
+    private Date createdTime;
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除" )
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysResources() {
     }
 
-    public SysResources(String id, String resourcesName, String label, String resourcesUrl,
-                        String menuId, String creator, Date createTime, String status) {
+    public SysResources(String id, String resourcesName, String label, String resourcesUrl, String menuId,
+                        String creatorAccount, Date createdTime, Byte recordStatus) {
         this.id = id;
         this.resourcesName = resourcesName;
         this.label = label;
         this.resourcesUrl = resourcesUrl;
         this.menuId = menuId;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -126,28 +125,28 @@ public class SysResources implements Serializable {
         this.menuId = menuId;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -158,9 +157,9 @@ public class SysResources implements Serializable {
                 ", label='" + label + '\'' +
                 ", resourcesUrl='" + resourcesUrl + '\'' +
                 ", menuId='" + menuId + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

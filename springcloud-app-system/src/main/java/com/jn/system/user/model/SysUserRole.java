@@ -40,32 +40,35 @@ public class SysUserRole implements Serializable {
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人")
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private Date createdTime;
     /**
      * 状态 1:有效 0:无效 -1:删除
      */
-    @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysUserRole() {
     }
 
-    public SysUserRole(String id, String roleId, String userId, String userName,
-                       String creator, Date createTime, String status) {
+    public SysUserRole(String id, String roleId, String userId, String userName, String creatorAccount,
+                       Date createdTime, Byte recordStatus) {
         this.id = id;
         this.roleId = roleId;
         this.userId = userId;
         this.userName = userName;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getId() {
@@ -92,36 +95,36 @@ public class SysUserRole implements Serializable {
         this.userId = userId;
     }
 
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -131,9 +134,9 @@ public class SysUserRole implements Serializable {
                 ", roleId='" + roleId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

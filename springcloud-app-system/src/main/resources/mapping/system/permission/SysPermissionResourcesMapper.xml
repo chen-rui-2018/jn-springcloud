@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.permission.dao.SysPermissionResourcesMapper">
-    <update id="deletePermissionBranch" parameterType="java.lang.String">
-        update tb_sys_permission_resources set status=-1
+    <update id="deletePermissionBranch" parameterType="java.util.Map">
+        update tb_sys_permission_resources
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where permission_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -12,32 +16,35 @@
     <select id="findResourcesOfPermission" parameterType="java.lang.String"
             resultType="java.lang.String">
         select distinct
-            t2.id
-        from tb_sys_permission_resources t1,tb_sys_resources t2
-        where t1.resources_id = t2.id and t1.`status` = '1'
-           and t2.`status` = '1' and t1.permission_id = #{id,jdbcType=VARCHAR}
+        t2.id
+        from tb_sys_permission_resources t1,
+        tb_sys_resources t2
+        where t1.resources_id = t2.id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t1.permission_id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <update id="deleteByPermissionId" parameterType="java.lang.String">
-        update tb_sys_permission_resources set `status` = '-1' where permission_id = #{id,jdbcType=VARCHAR}
-    </update>
-
     <insert id="addResourceToPermission" parameterType="java.util.List">
-        insert into tb_sys_permission_resources (id, permission_id,resources_id,creator,create_time,status) values
+        insert into tb_sys_permission_resources (id, permission_id,resources_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
+            (#{item.id,jdbcType=VARCHAR},
             #{item.permissionId,jdbcType=VARCHAR},
             #{item.resourcesId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 
-    <update id="deleteByResourcesIds" parameterType="java.lang.String">
-        update tb_sys_permission_resources set status=-1
+    <update id="deleteByResourcesIds" parameterType="java.util.Map">
+        update tb_sys_permission_resources
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where resources_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>

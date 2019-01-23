@@ -22,19 +22,18 @@ public class SysGroup implements Serializable {
     @ApiModelProperty("用户组名称")
     private String groupName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    private Byte recordStatus;
 
     public SysGroup() {
     }
 
-    public SysGroup(String groupId, String groupName, Date createTime, String status) {
+    public SysGroup(String groupId, String groupName, Date createdTime, Byte recordStatus) {
         this.groupId = groupId;
         this.groupName = groupName;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getGroupId() {
@@ -53,20 +52,20 @@ public class SysGroup implements Serializable {
         this.groupName = groupName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -74,8 +73,8 @@ public class SysGroup implements Serializable {
         return "SysGroup{" +
                 "groupId='" + groupId + '\'' +
                 ", groupName='" + groupName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

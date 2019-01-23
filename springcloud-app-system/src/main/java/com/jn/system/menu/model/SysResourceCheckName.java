@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysResourceCheckName",description = "用于菜单界面校验功能名称是否存在")
+@ApiModel(value = "SysResourceCheckName", description = "用于菜单界面校验功能名称是否存在")
 public class SysResourceCheckName implements Serializable {
     private static final long serialVersionUID = -8238684478373749160L;
     @ApiModelProperty("页面功能名称")

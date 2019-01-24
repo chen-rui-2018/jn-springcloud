@@ -6,8 +6,8 @@
           <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileGroupStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteFileGroupStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -21,13 +21,13 @@
       <el-table-column label="文件组名称" align="center" prop="fileGroupName" />
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
         <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
       <el-table-column label="描述" prop="fileGroupDescribe" align="center" />
-      <el-table-column label="状态" align="center" prop="status" >
+      <el-table-column label="状态" align="center" prop="recordStatus" >
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -55,9 +55,9 @@
         <el-form-item label="描述:" prop="fileGroupDescribe">
           <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" maxlength="150" clearable/>
         </el-form-item>
-        <el-form-item label="状态:" prop="status" >
-          <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+        <el-form-item label="状态:" prop="recordStatus" >
+          <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -107,15 +107,21 @@ export default {
         page: 1,
         rows: 10,
         fileGroupName: '',
-        status: ''
+        recordStatus: ''
       },
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       fileGroupdialogFormVisible: false,
       dialogStatus: '',
       temp: {
         id: undefined,
         fileGroupName: undefined,
-        status: undefined,
+        recordStatus: undefined,
         fileGroupDescribe: undefined
       },
       listLoading: false,
@@ -126,7 +132,7 @@ export default {
           { required: true, message: '文件组名称不能为空', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [
+        recordStatus: [
           { required: true, message: '请选择状态', trigger: 'change' }
         ],
         fileGroupDescribe: [{ validator: checkoutDescribe, trigger: 'blur' }]
@@ -144,7 +150,7 @@ export default {
     },
     // 选中时发生改变的值
     selecteFileGroupStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 清空信息
     // resetTemp() {
@@ -158,7 +164,7 @@ export default {
     handleCreate() {
       // this.resetTemp()
       this.temp.fileGroupName = undefined
-      this.temp.status = undefined
+      this.temp.recordStatus = undefined
       this.temp.fileGroupDescribe = undefined
       this.dialogStatus = '新增文件组'
       this.fileGroupdialogFormVisible = true
@@ -202,7 +208,7 @@ export default {
       this.temp.fileGroupDescribe = row.fileGroupDescribe
       this.fileGroupdialogFormVisible = true
       this.temp.fileGroupName = row.fileGroupName
-      this.temp.status = parseInt(row.status)
+      this.temp.recordStatus = row.recordStatus.toString()
       this.$nextTick(() => {
         this.$refs['temp'].clearValidate()
       })
@@ -296,5 +302,8 @@ export default {
   .el-textarea__inner{
     min-height: 100px !important;
   }
+  }
+  .el-pagination{
+    margin-top: 10px;
   }
 </style>

@@ -144,3 +144,12 @@ export function updataUserGroup(query) {
     data: query
   })
 }
+// 导出功能
+export function exportExcel() {
+  return request({
+    url: 'system/sysUser/exportExcelUserInfo',
+    method: 'get',
+    // data: query,
+    responseType: 'blob'
+  })
+}

@@ -6,8 +6,8 @@
           <el-input v-model="listQuery.roleName" placeholder="请输入名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="item" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -31,12 +31,12 @@
       </el-table-column>
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
         <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="400" class-name="small-padding fixed-width">
@@ -61,9 +61,9 @@
           <el-form-item label="名称:" prop="roleName">
             <el-input v-model="roleform.roleName" maxlength="20"/>
           </el-form-item>
-          <el-form-item label="状态:" prop="status" >
-            <el-select v-model="roleform.status" placeholder="请选择" class="filter-item">
-              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-form-item label="状态:" prop="recordStatus" >
+            <el-select v-model="roleform.recordStatus" placeholder="请选择" class="filter-item">
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -169,11 +169,17 @@ export default {
       rolelistLoading: false,
       listQuery: {
         roleName: undefined,
-        status: undefined,
+        recordStatus: undefined,
         rows: 10,
         page: 1
       },
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       total: 0,
       userId: [],
       roleList: [],
@@ -183,14 +189,14 @@ export default {
       roleform: {
         id: '',
         roleName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       rules: {
         roleName: [
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+        recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -399,13 +405,6 @@ export default {
       this.userdialogVisible = true
       this.getUser()
     },
-    // 清空信息
-    resetuserGroupform() {
-      this.roleform = {
-        roleName: undefined,
-        status: undefined
-      }
-    },
     // 弹出编辑角色对话框
     handleUpdate(row) {
       // 显示对话框
@@ -414,7 +413,7 @@ export default {
       //   添加默认数据
       this.oldRoleName = row.roleName
       this.roleform.roleName = row.roleName
-      this.roleform.status = parseInt(row.status)
+      this.roleform.recordStatus = row.recordStatus.toString()
       this.roleform.id = row.roleId
       this.$nextTick(() => {
         this.$refs['roleform'].clearValidate()
@@ -476,7 +475,8 @@ export default {
     },
     // 显示新增角色对话框
     handleCreate() {
-      this.resetuserGroupform()
+      this.roleform.roleName = ''
+      this.roleform.recordStatus = ''
       this.dialogStatus = '新增角色'
       this.roledialogFormVisible = true
       this.$nextTick(() => {
@@ -485,7 +485,7 @@ export default {
     },
     // 状态改变时触发
     selecteUserStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 搜素功能实现
     handleFilter() {

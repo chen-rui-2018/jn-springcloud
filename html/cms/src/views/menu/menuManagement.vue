@@ -23,7 +23,7 @@
     <div v-show="isRight" class="menu-right bgc">
       <div v-if="isData" class="noData">没有子菜单</div>
       <div v-show="isShowInfo" class="menuInfo">
-        <div class="menuInfo-title">下级菜单</div>
+        <div class="menuInfo-title" style="margin-bottom:20px;">下级菜单</div>
         <div class="menu-content">
           <span>{{ currentMenuName }}</span>
           <el-form v-if="isMove" ref="subForm" :rules="rules" :model="subForm" label-width="100px">
@@ -177,6 +177,7 @@ export default {
       }
     }
     return {
+      defaultData: undefined,
       currentData: undefined,
       currentId: undefined,
       isRight: true,
@@ -256,8 +257,11 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     this.initList()
+  },
+  mounted() {
+    this.defaultRightData()
   },
   methods: {
     // 失去焦点的时候判断子菜单的名字是否有重复
@@ -383,8 +387,9 @@ export default {
         this.$refs['resourcesForm'].clearValidate()
       })
     },
-    cencalEdit(formName) {
+    cencalEdit() {
       getOldData(this.parentId).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.subForm.menuData = res.data.data
           this.$refs['subForm'].clearValidate()
@@ -485,9 +490,11 @@ export default {
         this.resourcesForm.menuId = data.id
       }
       const arr = []
-      this.subForm.menuData.forEach(val => {
-        arr.push(val.label)
-      })
+      if (this.subForm.menuData) {
+        this.subForm.menuData.forEach(val => {
+          arr.push(val.label)
+        })
+      }
       if ((new Set(arr)).size === arr.length) {
         this.$refs['subForm'].clearValidate()
       }
@@ -506,6 +513,7 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
+
               this.initList()
               if (this.currentId === id) {
                 this.isRight = false
@@ -581,9 +589,9 @@ export default {
     // 实现新增菜单
     createData() {
       this.$refs['menuForm'].validate(valid => {
+        // 避免重复点击提交
+        this.isDisabled = true
         if (valid) {
-          // 避免重复点击提交
-          this.isDisabled = true
           // 判断用户选择的是目录还是页面
           if (this.radio === '1') {
             createMenuDir({ menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
@@ -620,6 +628,8 @@ export default {
           this.$refs['menuForm'].resetFields()
           // 将对话框隐藏
           this.menuDialogVisible = false
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -662,17 +672,30 @@ export default {
         this.$refs['menuForm'].clearValidate()
       })
     },
+    // defaultRightData() {
+    //   this.isShowInfo = true
+    //   this.subForm.menuData = this.defaultData
+    //   console.log(this.subForm.menuData)
+    // },
     // 初始化项目
     initList() {
       this.listLoading = true
       getMenuList().then(res => {
         if (res.data.code === '0000') {
           this.menuList = res.data.data
+          this.defaultData = res.data.data
+          console.log(this.defaultData)
         } else {
           this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
+    },
+    defaultRightData() {
+      this.isShowInfo = true
+      console.log(this.defaultData)
+      this.subForm.menuData = this.defaultData
+      console.log(this.subForm.menuData)
     }
   }
 }

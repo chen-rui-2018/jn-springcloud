@@ -9,7 +9,7 @@
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
-              <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="岗位">
@@ -78,7 +78,7 @@
           </el-form-item>
           <el-form-item label="状态" prop="recordStatus">
             <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择" style="max-width:280px;">
-              <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
@@ -205,7 +205,8 @@ import {
   getRoleInfo,
   updataRole,
   getUserGroupInfo,
-  updataUserGroup
+  updataUserGroup,
+  exportExcel
 } from '@/api/Permission-model/userManagement'
 import waves from '@/directive/waves' // 水波纹指令
 // import initList from './components/components'
@@ -323,7 +324,13 @@ export default {
         departmentIds: undefined,
         postOrTypeName: ''
       },
-      userStatusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       positionOptions: [],
       temp: {
         name: undefined,
@@ -431,8 +438,46 @@ export default {
   methods: {
     // 导出功能
     handleExcel() {
-      // window.location.href = 'http://112.94.22.222:8000/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      window.location.href = 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
+      exportExcel().then(res => {
+        console.log(res)
+        const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+        const downloadElement = document.createElement('a')
+        const href = window.URL.createObjectURL(blob)
+        downloadElement.href = href
+        downloadElement.download = 'rate.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement) // 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+      })
+      // exportExcel(this.listQuery).then((res) => {
+      //   console.log(res)
+      //   const link = document.createElement('a')
+      //   const blob = new Blob([res.data])
+      //   link.style.display = 'none'
+      //   link.href = URL.createObjectURL(blob)
+      //   const objectUrl = URL.createObjectURL(blob)
+      //   window.location.herf = objectUrl
+      //   let num = ''
+      //   for (let i = 0; i < 10; i++) {
+      //     num += Math.ceil(Math.random() * 10)
+      //   }
+      //   link.setAttribute('download', '用户_' + num + '.xlsx')
+      //   document.body.appendChild(link)
+      //   link.click()
+      //   document.body.removeChild(link)
+      // }).catch(error => {
+      //   this.$Notice.error({
+      //     title: '错误',
+      //     desc: '网络连接错误'
+      //   })
+      //   console.log(error)
+      // })
+      // exportExcel().then(res => {
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
+      // })
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
       //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
     },
     // 选择部门（新增用户对话框）
@@ -590,7 +635,8 @@ export default {
     },
     // 改变状态
     selecteUserStatus(value) {
-      this.listQuery.userStatus = value
+      console.log(value)
+      this.listQuery.recordStatus = value
     },
     // 获取所有部门列表
     getAllDepartment() {
@@ -738,7 +784,7 @@ export default {
       this.temp.phone = row.phone
       this.temp.wechatAccount = row.wechatAccount
       this.temp.remark = row.remark
-      this.temp.recordStatus = parseInt(row.recordStatus)
+      this.temp.recordStatus = row.recordStatus.toString()
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()

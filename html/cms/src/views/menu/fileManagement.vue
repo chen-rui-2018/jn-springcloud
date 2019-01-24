@@ -9,8 +9,8 @@
           <el-input v-model="listQuery.fileGroupName" placeholder="请输入文件组名称" class="filter-item" maxlength="20" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteFileStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -30,12 +30,12 @@
       <el-table-column label="文件路径" align="center" prop="fileUrl" min-width="100"/>
       <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
         <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -54,11 +54,17 @@ export default {
     return {
       fileList: [],
       total: 0,
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       listQuery: {
         fileName: undefined,
         fileGroupName: undefined,
-        status: undefined,
+        recordStatus: undefined,
         page: 1,
         rows: 10
       }
@@ -70,7 +76,7 @@ export default {
   methods: {
     // 状态改变时触发
     selecteFileStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 搜素功能实现
     handleFilter() {

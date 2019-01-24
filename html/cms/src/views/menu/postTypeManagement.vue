@@ -6,8 +6,8 @@
           <el-input v-model="listQuery.postTypeName" placeholder="请输入名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selectePostStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selectePostStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -20,12 +20,12 @@
       <el-table-column label="岗位类型名称" align="center" prop="postTypeName" />
       <el-table-column label="创建时间" align="center" prop="creationTime">
         <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -47,9 +47,9 @@
         <el-form-item label="岗位类型名称" prop="postTypeName">
           <el-input v-model.trim="postTypeForm.postTypeName" maxlength="20" clearable/>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="postTypeForm.status" placeholder="请选择" class="filter-item" >
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+        <el-form-item label="状态" prop="recordStatus">
+          <el-select v-model="postTypeForm.recordStatus" placeholder="请选择" class="filter-item" >
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -89,7 +89,7 @@ export default {
       postTypeForm: {
         id: undefined,
         postTypeName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       isDisabled: false,
       dialogStatus: undefined,
@@ -97,10 +97,16 @@ export default {
       total: 0,
       listLoading: false,
       postTypeList: [],
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       listQuery: {
         postTypeName: undefined,
-        status: undefined,
+        recordStatus: undefined,
         page: 1,
         rows: 10
       },
@@ -109,7 +115,7 @@ export default {
           { required: true, message: '请输入岗位类型名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+        recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
     }
   },
@@ -152,7 +158,7 @@ export default {
       this.dialogStatus = '编辑岗位类型'
       this.postTypeForm.id = row.id
       this.postTypeForm.postTypeName = row.postTypeName
-      this.postTypeForm.status = parseInt(row.status)
+      this.postTypeForm.recordStatus = row.recordStatus.toString()
       this.$nextTick(() => {
         this.$refs['postTypeForm'].clearValidate()
       })
@@ -212,7 +218,7 @@ export default {
     // 显示新增岗位类型对话框
     handleCreate() {
       this.postTypeForm.postTypeName = undefined
-      this.postTypeForm.status = undefined
+      this.postTypeForm.recordStatus = undefined
       this.postTypeForm.id = undefined
       this.dialogStatus = '新增岗位类型'
       this.postTypeDialogFormVisible = true
@@ -227,7 +233,7 @@ export default {
     },
     // 状态改变
     selectePostStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 表格分页功能
     handleSizeChange(val) {

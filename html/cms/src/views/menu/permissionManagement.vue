@@ -6,8 +6,8 @@
           <el-input v-model="listQuery.permissionName" placeholder="请输入权限名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -22,12 +22,12 @@
       <el-table-column label="权限名称" align="center" prop="permissionName" />
       <el-table-column label="创建时间" min-width="150" align="center" prop="creationTime">
         <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="280" class-name="small-padding fixed-width">
@@ -51,9 +51,9 @@
           <el-form-item label="权限名称" prop="permissionName">
             <el-input v-model="permissionform.permissionName" maxlength="20" clearable/>
           </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select v-model="permissionform.status" class="filter-item" placeholder="请选择" clearable >
-              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-form-item label="状态" prop="recordStatus">
+            <el-select v-model="permissionform.recordStatus" class="filter-item" placeholder="请选择" >
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -95,7 +95,7 @@
         :props="defaultProps"
         node-key="id"
         show-checkbox>
-        <span slot-scope="{ node, data }" class="custom-tree-node">
+        <span slot-scope="{ node }" class="custom-tree-node">
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>
@@ -173,7 +173,7 @@ export default {
       permissionform: {
         id: '',
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       dialogStatus: undefined,
       permissiondialogFormVisible: false,
@@ -183,15 +183,21 @@ export default {
         page: 1,
         rows: 10,
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       total: undefined,
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       rules: {
         permissionName: [{ required: true, message: '请输入权限名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        recordStatus: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
     }
   },
@@ -398,9 +404,9 @@ export default {
     },
     // 编辑权限
     updateData() {
+      this.isDisabled = true
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // // 调用接口发送请求
           editPermissionList(this.permissionform).then(res => {
             if (res.data.code === '0000') {
@@ -419,6 +425,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -430,7 +438,7 @@ export default {
       //   添加默认数据
       this.oldPermissionName = row.permissionName
       this.permissionform.permissionName = row.permissionName
-      this.permissionform.status = parseInt(row.status)
+      this.permissionform.recordStatus = row.recordStatus.toString()
       this.permissionform.id = row.id
       this.$nextTick(() => {
         this.$refs['permissionform'].clearValidate()
@@ -477,7 +485,7 @@ export default {
     resetPermissionform() {
       this.permissionform = {
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       }
     },
 
@@ -486,7 +494,7 @@ export default {
       this.initList()
     },
     selecteUserStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 项目初始化
     initList() {

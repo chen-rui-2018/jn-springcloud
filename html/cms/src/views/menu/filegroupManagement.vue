@@ -78,7 +78,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldName !== this.temp.fileGroupName) {
+        if (this.dialogStatus === '新增文件组') {
           checkFileGroupName(this.temp.fileGroupName).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
@@ -89,7 +89,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldName !== this.temp.fileGroupName) {
+            checkFileGroupName(this.temp.fileGroupName).then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('文件组名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }

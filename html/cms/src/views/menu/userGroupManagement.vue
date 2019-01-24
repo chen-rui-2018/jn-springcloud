@@ -145,7 +145,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldGroupName !== this.userGroupform.groupName) {
+        if (this.dialogStatus === '新增用户组') {
           checkGroupName(this.userGroupform.groupName).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
@@ -156,7 +156,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldGroupName !== this.userGroupform.groupName) {
+            checkGroupName(this.userGroupform.groupName).then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('用户组名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }

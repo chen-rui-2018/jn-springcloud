@@ -70,7 +70,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldPostTypeName !== this.postTypeForm.postTypeName) {
+        if (this.dialogStatus === '新增岗位类型') {
           checkPostTypeName(this.postTypeForm.postTypeName).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
@@ -81,7 +81,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldPostTypeName !== this.postTypeForm.postTypeName) {
+            checkPostTypeName(this.postTypeForm.postTypeName).then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('岗位类型名称已使用'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }

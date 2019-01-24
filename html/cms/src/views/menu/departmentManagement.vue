@@ -74,7 +74,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldDepartmentName !== this.departmentForm.departmentName) {
+        if (this.dialogStatus === '新增部门') {
           checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
@@ -85,7 +85,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldDepartmentName !== this.departmentForm.departmentName) {
+            checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('部门名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }

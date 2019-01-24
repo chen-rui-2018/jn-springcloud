@@ -117,7 +117,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldMenuName !== this.menuForm.menuName) {
+        if (this.dialogStatus === '新增') {
           checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
             if (response.data.data === 'fail') {
               callback(new Error('菜单名称已重复'))
@@ -126,7 +126,17 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldMenuName !== this.menuForm.menuName) {
+            checkMenuName({ menuName: value, parentId: this.menuForm.parentId }).then(response => {
+              if (response.data.data === 'fail') {
+                callback(new Error('菜单名称已重复'))
+              } else {
+                callback()
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }
@@ -135,7 +145,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
+        if (this.dialogStatus === '新增') {
           checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
@@ -146,7 +156,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
+            checkResourcesName({ resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('功能名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }
@@ -177,7 +199,6 @@ export default {
       }
     }
     return {
-      defaultData: undefined,
       currentData: undefined,
       currentId: undefined,
       isRight: true,
@@ -198,13 +219,12 @@ export default {
         menuName: undefined,
         menuUrl: undefined
       },
-      oldMenuData: [],
       isMove: true,
       isData: false,
       isShowInfo: false,
       isTrue: false,
       subForm: {
-        menuData: [{ label: '' }]
+        menuData: []
       },
       currentMenuName: undefined,
       location: '1',
@@ -261,7 +281,7 @@ export default {
     this.initList()
   },
   mounted() {
-    this.defaultRightData()
+    // this.defaultRightData()
   },
   methods: {
     // 失去焦点的时候判断子菜单的名字是否有重复
@@ -288,7 +308,7 @@ export default {
                 message: '删除成功',
                 type: 'success'
               })
-              this.initList()
+              this.defaultLeft()
               this.getResources()
             } else {
               this.$message.error(res.data.result)
@@ -296,10 +316,6 @@ export default {
           })
         })
         .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
     },
     // 实现编辑功能
@@ -323,7 +339,7 @@ export default {
             this.resourcesDialogVisible = false
             // 重置表单元素的数据
             this.$refs['resourcesForm'].resetFields()
-            this.initList()
+            this.defaultLeft()
             this.getResources()
           })
         }
@@ -358,7 +374,7 @@ export default {
             this.resourcesDialogVisible = false
             // 重置表单元素的数据
             this.$refs['resourcesForm'].resetFields()
-            this.initList()
+            this.defaultLeft()
             this.getResources()
           })
         } else {
@@ -388,6 +404,9 @@ export default {
       })
     },
     cencalEdit() {
+      if (this.parentId === undefined || null) {
+        this.parentId = '1'
+      }
       getOldData(this.parentId).then(res => {
         console.log(res)
         if (res.data.code === '0000') {
@@ -396,7 +415,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
-        this.initList()
+        this.defaultLeft()
+      // this.initList()
       })
     },
     // 点击向下移动的时候
@@ -446,8 +466,8 @@ export default {
         })
       })
       this.$refs['subForm'].validate(valid => {
+        this.isDisabled = true
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求 进行批量更新
           updateAllMenu({ sysMenuSortList: newData }).then(res => {
             if (res.data.code === '0000') {
@@ -458,8 +478,10 @@ export default {
             } else { this.$message.error(res.data.result) }
             this.isDisabled = false
             // 刷新页面显示
-            this.initList()
+            this.defaultLeft()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -514,7 +536,7 @@ export default {
                 type: 'success'
               })
 
-              this.initList()
+              this.defaultLeft()
               if (this.currentId === id) {
                 this.isRight = false
               } else {
@@ -555,7 +577,7 @@ export default {
             // 将对话框隐藏
             this.menuDialogVisible = false
             // 刷新页面显示
-            this.initList()
+            this.defaultLeft()
           })
         }
       })
@@ -601,7 +623,7 @@ export default {
                   type: 'success'
                 })
                 // 刷新页面显示
-                this.initList()
+                this.defaultLeft()
                 this.updataRight()
               } else {
                 this.$message.error(res.data.result)
@@ -616,7 +638,7 @@ export default {
                   type: 'success'
                 })
                 // 刷新页面显示
-                this.initList()
+                this.defaultLeft()
                 this.updataRight()
               } else {
                 this.$message.error(res.data.result)
@@ -672,30 +694,30 @@ export default {
         this.$refs['menuForm'].clearValidate()
       })
     },
-    // defaultRightData() {
-    //   this.isShowInfo = true
-    //   this.subForm.menuData = this.defaultData
-    //   console.log(this.subForm.menuData)
-    // },
-    // 初始化项目
-    initList() {
+    defaultLeft() {
       this.listLoading = true
       getMenuList().then(res => {
         if (res.data.code === '0000') {
           this.menuList = res.data.data
-          this.defaultData = res.data.data
-          console.log(this.defaultData)
         } else {
           this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
     },
-    defaultRightData() {
-      this.isShowInfo = true
-      console.log(this.defaultData)
-      this.subForm.menuData = this.defaultData
-      console.log(this.subForm.menuData)
+    // 初始化项目
+    initList() {
+      this.listLoading = true
+      getMenuList().then(res => {
+        if (res.data.code === '0000') {
+          this.menuList = res.data.data
+          this.isShowInfo = true
+          this.subForm.menuData = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+        this.listLoading = false
+      })
     }
   }
 }

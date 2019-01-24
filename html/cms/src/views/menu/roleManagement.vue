@@ -127,7 +127,7 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldRoleName !== this.roleform.roleName) {
+        if (this.dialogStatus === '新增角色') {
           checkRoleName(this.roleform.roleName).then(res => {
             // if (res.data.code === '0000') {
             if (res.data.data === 'success') {
@@ -138,7 +138,19 @@ export default {
             // }
           })
         } else {
-          callback()
+          if (this.oldRoleName !== this.roleform.roleName) {
+            checkRoleName(this.roleform.roleName).then(res => {
+              // if (res.data.code === '0000') {
+              if (res.data.data === 'success') {
+                callback()
+              } else {
+                callback(new Error('角色名称已重复'))
+              }
+              // }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }

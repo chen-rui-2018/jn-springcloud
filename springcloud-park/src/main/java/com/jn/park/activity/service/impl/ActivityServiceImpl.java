@@ -76,6 +76,14 @@ public class ActivityServiceImpl implements ActivityService {
      * 活动发布 - 报名中
      */
     private static final String ACTIVITY_STATE_PUBLISH = "2";
+    /**
+     * 正常数据（1：未删除状态）
+     */
+    private static final String ACTIVITY_STATE_NOT_DELETE = "1";
+    /**
+     * 删除数据（0：删除状态）
+     */
+    private static final String ACTIVITY_STATE_DELETE = "0";
 
     @Value("${spring.application.name}")
     private String applicationName;
@@ -194,6 +202,7 @@ public class ActivityServiceImpl implements ActivityService {
             tbActivity.setCreatedTime(new Date());
             tbActivity.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbActivity.setCreatorAccount(account);
+            tbActivity.setRecordStatus(new Byte(ACTIVITY_STATE_NOT_DELETE));
             if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
                 tbActivity.setIssueAccount(account);
                 tbActivity.setIssueTime(new Date());
@@ -283,7 +292,7 @@ public class ActivityServiceImpl implements ActivityService {
         TbActivity tbActivity1 = new TbActivity();
         tbActivity1.setModifiedTime(new Date());
         tbActivity1.setModifierAccount(account);
-        tbActivity1.setRecordStatus(new Byte("0"));
+        tbActivity1.setRecordStatus(new Byte(ACTIVITY_STATE_DELETE));
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity1, tbActivityCriteria);
         if (i1 > 0) {
             return i1;
@@ -299,7 +308,7 @@ public class ActivityServiceImpl implements ActivityService {
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
         tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
         TbActivity tbActivity = new TbActivity();
-        tbActivity.setRecordStatus(new Byte("0"));
+        tbActivity.setRecordStatus(new Byte(ACTIVITY_STATE_DELETE));
         tbActivity.setModifiedTime(new Date());
         tbActivity.setModifierAccount(account);
         int i1 = tbActivityMapper.updateByExampleSelective(tbActivity, tbActivityCriteria);

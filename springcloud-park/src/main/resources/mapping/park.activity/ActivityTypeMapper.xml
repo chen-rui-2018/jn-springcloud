@@ -7,11 +7,11 @@
         select
         t.type_id as "typeId"                                                     <!--类型ID-->
         ,t.type_name as "typeName"                                                <!--类型名称-->
-        ,t.type_status as "status"                                                <!--类型状态-->
-        ,t.creator_account as "createAccount"                                     <!--创建人账号-->
-        ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createTime"          <!--创建时间-->
-        ,t.modifier_account as "updateAccount"                                    <!--修改人账号-->
-        ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "updateTime"         <!--修改时间-->
+        ,t.type_status as "typeStatus"                                                <!--类型状态-->
+        ,t.creator_account as "creatorAccount"                                     <!--创建人账号-->
+        ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"          <!--创建时间-->
+        ,t.modifier_account as "modifierAccount"                                    <!--修改人账号-->
+        ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime"         <!--修改时间-->
         ,count(f.type_id) as "fileTotal"                                          <!--模板数量-->
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
@@ -27,12 +27,12 @@
     <select id="findActivityTypeById" resultMap="ActivityMap">
         select t.type_id as "typeId"                                                                                    <!--类型ID-->
             ,t.type_name as "typeName"                                                                                   <!--类型名称-->
-            ,t.type_status as "status"                                                                                          <!--类型状态-->
+            ,t.type_status as "typeStatus"                                                                               <!--类型状态-->
             ,f.file_src as "fileSrc"                                                                                     <!--模板列表-->
-            ,t.creator_account as "createAccount"                                                                         <!--创建人账号-->
-            ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createTime"                                              <!--创建时间-->
-            ,t.modifier_account as "updateAccount"                                                                         <!--修改人账号-->
-            ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "updateTime"                                              <!--修改时间-->
+            ,t.creator_account as "creatorAccount"                                                                       <!--创建人账号-->
+            ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"                                            <!--创建时间-->
+            ,t.modifier_account as "modifierAccount"                                                                     <!--修改人账号-->
+            ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime"                                          <!--修改时间-->
             ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as "fileTotal" <!--模板数量-->
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
@@ -42,12 +42,12 @@
     <resultMap id="ActivityMap" type="com.jn.park.model.ActivityType">
         <id column="typeId" property="typeId" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="typeName" property="typeName" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="status" property="status" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="typeStatus" property="typeStatus" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="fileTotal" property="fileTotal" javaType="java.lang.String"/>
-        <result column="createAccount" property="createAccount" javaType="java.lang.String"/>
-        <result column="createTime" property="createTime" javaType="java.lang.String"/>
-        <result column="updateAccount" property="updateAccount" javaType="java.lang.String"/>
-        <result column="updateTime" property="updateTime" javaType="java.lang.String"/>
+        <result column="creatorAccount" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="createdTime" property="createdTime" javaType="java.lang.String"/>
+        <result column="modifierAccount" property="modifierAccount" javaType="java.lang.String"/>
+        <result column="modifiedTime" property="modifiedTime" javaType="java.lang.String"/>
         <collection property="templateList"   ofType="java.lang.String">
             <constructor>
                 <arg column="fileSrc"/>
@@ -56,7 +56,7 @@
     </resultMap>
     <!--删除活动类型-->
     <update id="deleteActivityTypeList" parameterType="java.util.List">
-        update tb_activity_type t set t.record_status = 0,t.modified_time = now() where t.type_Id in
+        update tb_activity_type t set t.record_status = 0,t.type_status = '0',t.modified_time = now() where t.type_Id in
         <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
             #{item}
         </foreach>

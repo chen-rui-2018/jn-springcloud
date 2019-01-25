@@ -16,6 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/activity/activityType")
 public class ActivityTypeController extends BaseController {
-    //todo:待权限系统完成添加权限注解,由陈蕊添加
     /**
      * 日志组件
      */
@@ -50,6 +50,7 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "增加活动类型")
     @ApiOperation(value = "增加活动类型", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
+    @RequiresPermissions("/activity/activityType/add")
     public Result insertActivityType( @Valid @RequestBody  ActivityTypeAdd activityTypeAdd) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         activityTypeService.insertActivityType(activityTypeAdd, user);
@@ -59,6 +60,7 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "分页查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityTypeList")
+    @RequiresPermissions("/activity/activityType/findActivityTypeList")
     public Result findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
         PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
         return new Result(activityTypeList);
@@ -67,6 +69,7 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "展示当前活动类型")
     @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityType")
+    @RequiresPermissions("/activity/activityType/findActivityType")
     public Result findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         ActivityType vo = activityTypeService.findActivityTypeById(typeId);
@@ -76,6 +79,7 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "编辑当前活动类型")
     @ApiOperation(value = "编辑当前活动类型", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityType")
+    @RequiresPermissions("/activity/activityType/updateActivityType")
     public Result updateActivityType( @RequestBody ActivityTypeUpdate activityTypeUpdate) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         activityTypeService.updateActivityType(activityTypeUpdate, user);
@@ -85,6 +89,7 @@ public class ActivityTypeController extends BaseController {
     @ControllerLog(doAction = "删除活动类型")
     @ApiOperation(value = "删除活动类型", httpMethod = "POST", response = Result.class, notes = "可进行批量删除")
     @RequestMapping(value = "/deleteActivityTypeList")
+    @RequiresPermissions("/activity/activityType/deleteActivityTypeList")
     public Result deleteActivityTypeList(@ApiParam(name = "typeId", value = "活动类型ID(多个id时使用逗号','分隔)", required = true) @RequestParam String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         activityTypeService.deleteActivityTypeList(typeId);

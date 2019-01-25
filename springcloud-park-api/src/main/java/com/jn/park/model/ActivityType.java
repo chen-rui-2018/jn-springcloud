@@ -21,15 +21,15 @@ public class ActivityType implements Serializable {
     @ApiModelProperty(value = "类型名称")
     private String typeName;
     @ApiModelProperty(value = "创建人账号")
-    private String createAccount;
+    private String creatorAccount;
     @ApiModelProperty(value = "创建时间")
-    private String createTime;
+    private String createdTime;
     @ApiModelProperty(value = "更新人账号")
-    private String updateAccount;
+    private String modifierAccount;
     @ApiModelProperty(value = "更新时间")
-    private String  updateTime;
-    @ApiModelProperty(value = "状态(0：无效，1：有效，-1：删除)")
-    private String status;
+    private String  modifiedTime;
+    @ApiModelProperty(value = "状态(0：无效，1：有效)")
+    private String typeStatus;
     @ApiModelProperty(value = "活动类型模板列表")
     private List<String> templateList;
     @ApiModelProperty(value = "拥有模板数量")
@@ -37,28 +37,12 @@ public class ActivityType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getCreateAccount() {
-        return createAccount;
-    }
-
-    public void setCreateAccount(String createAccount) {
-        this.createAccount = createAccount;
-    }
-
-    public String getUpdateAccount() {
-        return updateAccount;
-    }
-
-    public void setUpdateAccount(String updateAccount) {
-        this.updateAccount = updateAccount;
-    }
-
     public String getTypeId() {
         return typeId;
     }
 
     public void setTypeId(String typeId) {
-        this.typeId = typeId == null ? null : typeId.trim();
+        this.typeId = typeId;
     }
 
     public String getTypeName() {
@@ -66,31 +50,47 @@ public class ActivityType implements Serializable {
     }
 
     public void setTypeName(String typeName) {
-        this.typeName = typeName == null ? null : typeName.trim();
+        this.typeName = typeName;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public String getUpdateTime() {
-        return updateTime;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public String getModifierAccount() {
+        return modifierAccount;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getTypeStatus() {
+        return typeStatus;
+    }
+
+    public void setTypeStatus(String typeStatus) {
+        this.typeStatus = typeStatus;
     }
 
     public List<String> getTemplateList() {

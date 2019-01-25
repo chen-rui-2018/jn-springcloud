@@ -36,8 +36,7 @@
             ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as "fileTotal" <!--模板数量-->
         from   tb_activity_type t
         left join  tb_activity_file f  on  t.type_id = f.type_id
-        where 1=1
-        and   t.type_id = #{typeId,jdbcType=VARCHAR};
+        where t.record_status != 0 and  t.type_id = #{typeId,jdbcType=VARCHAR}
     </select>
     <resultMap id="ActivityMap" type="com.jn.park.model.ActivityType">
         <id column="typeId" property="typeId" javaType="java.lang.String" jdbcType="VARCHAR"/>

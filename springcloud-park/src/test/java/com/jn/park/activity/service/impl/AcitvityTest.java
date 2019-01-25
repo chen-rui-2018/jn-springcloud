@@ -111,11 +111,11 @@ public class AcitvityTest {
         ActivityContent activityContent = new ActivityContent();
         activityContent.setActiName("元旦年后会多");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
-        activityContent.setActiStartTime("201223412-30 18:00:00");
+        activityContent.setActiStartTime("2018-12-29 08:00:00");
         activityContent.setActiEndTime("2018--12-30 21:00:00");
         activityContent.setApplyEndTime("2018--12-28 20:00:00");
         activityContent.setMesSendTime("2018--12-28 12:00:00");
-        activityContent.setParkId("0b8f5135-2157-42b0-8f58-0ef5a429322er3");
+        activityContent.setParkId("8f5135215742b08f580ef5a4298efe11");
         activityContent.setActiAddress("中电软件园");
         activityContent.setActiCost(new BigDecimal(0.00));
         activityContent.setActiPosterUrl("http://politics.people.com.cn/NMediaFile/2018/1219/MAIN201812191525000321021630650.jpg");

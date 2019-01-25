@@ -23,10 +23,10 @@ public class ActivityTypeAdd implements Serializable {
     @NotBlank(message = "活动类型名称不能为空")
     @Size(min = 1, max = 20, message = "活动类型名称不正确")
     private String typeName;
-    @ApiModelProperty(value = "状态(0：无效，1：有效，-1：删除)",required = true)
+    @ApiModelProperty(value = "状态(0：无效，1：有效)",required = true)
     @NotBlank(message = "活动类型状态不能为空")
     @Pattern(regexp = "^['0'|'1']$", message = "{status:'状态值错误'}")
-    private String status;
+    private String typeStatus;
     @ApiModelProperty(value = "模板列表,多个时使用逗号','分隔")
     private String templateList;
 
@@ -38,12 +38,11 @@ public class ActivityTypeAdd implements Serializable {
         this.typeName = typeName;
     }
 
-    public String getStatus() {
-        return status;
+    public String getTypeStatus() {
+        return typeStatus;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTypeStatus(String typeStatus) {
+        this.typeStatus = typeStatus;
     }
 
     public String getTemplateList() {

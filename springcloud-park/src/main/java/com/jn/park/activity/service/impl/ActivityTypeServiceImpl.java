@@ -56,7 +56,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @Override
     public String insertActivityType(ActivityTypeAdd activityTypeAdd, User user) {
         String typeName = activityTypeAdd.getTypeName();
-        String status = activityTypeAdd.getStatus();
+        String status = activityTypeAdd.getTypeStatus();
         String templateList = activityTypeAdd.getTemplateList();
         List<String> list= new ArrayList<>();
         TbActivityTypeCriteria criteria= new TbActivityTypeCriteria();
@@ -123,7 +123,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         String invalid="0";
         String typeId = activityTypeUpdate.getTypeId();
         String  typeName = activityTypeUpdate.getTypeName();
-        String status = activityTypeUpdate.getStatus();
+        String status = activityTypeUpdate.getTypeStatus();
         String templateList = activityTypeUpdate.getTemplateList();
         List<String> list= new ArrayList<>();
         TbActivityType activityType = new TbActivityType();

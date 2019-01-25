@@ -70,7 +70,7 @@ public class ActivityTypeServiceImplTest {
     public void setUp() throws Exception {
 
         typeId = "aeaa1a3bbd0141cb93e7a5dbd12973dd";
-        typeName = "junit活动类型测试";
+        typeName = "活动类型测试";
 
         status = "1";
         templateList = "http://192.168.10.20:2020/group2/M00/00/1F/wKgKFFwbRa6AJ_ucAAFG1sygtYE708.jpg," +
@@ -99,7 +99,7 @@ public class ActivityTypeServiceImplTest {
     @Test
     public void insertActivityType() {
         activityTypeAdd = new ActivityTypeAdd();
-        activityTypeAdd.setStatus(status);
+        activityTypeAdd.setTypeStatus(status);
         activityTypeAdd.setTypeName(typeName);
         activityTypeAdd.setTemplateList(templateList);
         //活动名称重复
@@ -144,7 +144,7 @@ public class ActivityTypeServiceImplTest {
     public void updateActivityType() {
         activityTypeUpdate = new ActivityTypeUpdate();
         activityTypeUpdate.setTypeId(typeId);
-        activityTypeUpdate.setStatus(status);
+        activityTypeUpdate.setTypeStatus(status);
         activityTypeUpdate.setTemplateList(templateList);
         activityTypeUpdate.setTypeName(typeName);
         try {
@@ -166,6 +166,7 @@ public class ActivityTypeServiceImplTest {
 //            typeIds = typeIds + ",956dc8ab83f84c0cbb6b6cea2547f449";
             typeIds = typeId;
             activityTypeService.deleteActivityTypeList(typeIds);
+            deleteActivity();
         } catch (JnSpringCloudException e) {
             logger.info("info>>>>>>>>>>>code:" + e.getCode() + "- - - -message:" + e.getMsg());
             assertThat(e.getCode(), equalTo(ActivityExceptionEnum.ACTIVITY_TYPE_ALREADY_ASSOCIATED.getCode()));

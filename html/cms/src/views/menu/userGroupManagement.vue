@@ -119,16 +119,17 @@
 
 <script>
 import {
-  groupList,
-  addgroupList,
-  editgroupList,
+  // allList,
+  // addgroupList,
+  // editgroupList,
   deleteUsergroupById,
-  checkGroupName,
-  updataUser,
-  getAllUserInfo,
-  getRoleInfo,
-  updataRole
+  checkGroupName
+  // updataUser,
+  // getAllUserInfo,
+  // getRoleInfo,
+  // updataRole
 } from '@/api/Permission-model/userGroup'
+import { api } from '@/api/Permission-model/userManagement'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -247,7 +248,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataRole({ groupId: this.groupId, roleIds: value }).then(res => {
+      api('system/sysGroup/roleGroupAuthorization', { groupId: this.groupId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -268,7 +269,7 @@ export default {
       this.getRole()
     },
     getRole() {
-      getRoleInfo({
+      api('system/sysGroup/selectGroupRoleAndOtherRole', {
         groupId: this.groupId,
         page: this.numberPage,
         rows: this.numberRows
@@ -305,7 +306,7 @@ export default {
 
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
+      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -341,7 +342,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUser({ groupId: this.userGroupId, userIds: value }).then(
+      api('system/sysGroup/userGroupAuthorization', { groupId: this.userGroupId, userIds: value }).then(
         res => {
           if (res.data.code === '0000') {
             this.$message({
@@ -385,7 +386,7 @@ export default {
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addgroupList(this.userGroupform).then(res => {
+          api('system/sysGroup/add', this.userGroupform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -429,7 +430,7 @@ export default {
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
-          editgroupList(this.userGroupform).then(res => {
+          api('system/sysGroup/update', this.userGroupform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -477,7 +478,7 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      groupList(this.listQuery).then(res => {
+      api('system/sysGroup/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total

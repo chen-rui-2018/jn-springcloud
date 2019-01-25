@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/activity/activityLike")
 public class ActivityLikeController extends BaseController {
-    //todo:待权限系统完成添加权限注解 yangph
     /**
      * 日志组件
      */
@@ -39,6 +39,7 @@ public class ActivityLikeController extends BaseController {
     private ActivityLikeService activityLikeService;
 
     @ControllerLog(doAction = "活动点赞")
+    @RequiresPermissions("/activity/activityLike/activityLike")
     @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityLike")
     public Result activityLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
@@ -53,6 +54,7 @@ public class ActivityLikeController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消点赞")
+    @RequiresPermissions("/activity/activityLike/cancelLike")
     @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelLike")
     public Result cancelLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){

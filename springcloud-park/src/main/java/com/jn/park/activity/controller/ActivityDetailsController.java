@@ -32,7 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "活动详情")
 @RestController
 public class ActivityDetailsController extends BaseController {
-    //todo:待权限系统完成添加权限注解  yangph
     /**
      * 日志组件
      */

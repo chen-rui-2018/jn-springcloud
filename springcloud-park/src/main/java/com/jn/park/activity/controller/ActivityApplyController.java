@@ -6,7 +6,6 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityParment;
 import com.jn.park.model.ActivityQueryPaging;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -14,10 +13,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,8 +33,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/activity/activityApply")
 public class ActivityApplyController extends BaseController {
-    //todo:待权限系统完成添加权限注解 yangph
-
     /**
      * 日志组件
      */
@@ -45,6 +42,7 @@ public class ActivityApplyController extends BaseController {
     private ActivityApplyService activityApplyService;
 
     @ControllerLog(doAction = "快速报名")
+    @RequiresPermissions("/activity/activityApply/quickApply")
     @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/quickApply")
     public Result quickApply(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
@@ -62,6 +60,7 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "取消报名")
+    @RequiresPermissions("/activity/activityApply/cancelApply")
     @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelApply")
     public Result cancelApply(@ApiParam(value = "活动id",required = true) @RequestParam String activityId){
@@ -78,6 +77,7 @@ public class ActivityApplyController extends BaseController {
         return result;
     }
     @ControllerLog(doAction = "在线签到")
+    @RequiresPermissions("/activity/activityApply/signInActivity")
     @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class )
     @RequestMapping(value = "/signInActivity")
     public Result signInActivity(@ApiParam(value = "活动id",required = true) @RequestParam String activityId){
@@ -88,6 +88,7 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "报名人列表查看")
+    @RequiresPermissions("/activity/activityApply/activityApplyList")
     @ApiOperation(value = "报名人列表查看", httpMethod = "POST", response = Result.class,
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList")
@@ -98,6 +99,7 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "后台签到接口")
+    @RequiresPermissions("/activity/activityApply/signInActivityBackend")
     @ApiOperation(value = "后台签到接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/signInActivityBackend")
     public Result signInActivityBackend(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){
@@ -108,6 +110,7 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "报名审核接口")
+    @RequiresPermissions("/activity/activityApply/signInActivityCheck")
     @ApiOperation(value = "报名审核接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/signInActivityCheck")
     public Result signInActivityCheck(@ApiParam(value = "报名id",required = true) @RequestParam String applyId){

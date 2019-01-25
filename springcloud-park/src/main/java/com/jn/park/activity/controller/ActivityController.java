@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/activity")
 public class ActivityController extends BaseController {
-    //todo:待权限系统完成添加权限注解 jangyl
     /**
      * 日志组件
      */
@@ -62,6 +62,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "获取活动列表")
     @ApiOperation(value = "获取活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectActivityList")
+    @RequiresPermissions("/activity/selectActivityList")
     public Result selectActivityList(@RequestBody @Validated ActivityParment activityParment) {
         PaginationData paginationData = activityService.selectActivityList(activityParment);
         return new Result(paginationData);
@@ -71,6 +72,7 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "获取活动详情[后台管理]", httpMethod = "POST", response = Result.class,
             notes = "查询条件activityId")
     @RequestMapping(value = "/getActivityDetailsForManage")
+    @RequiresPermissions("/activity/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(
             @ApiParam(name="activityId",value = "活动ID",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -81,6 +83,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "修改活动可报名状态")
     @ApiOperation(value = "修改活动可报名状态", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateActivityApply")
+    @RequiresPermissions("/activity/updateActivityApply")
     public Result updateActivityApply(@RequestBody @Validated ActivitySataus activitySataus) {
         Assert.notNull(activitySataus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         Assert.notNull(activitySataus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
@@ -91,6 +94,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "添加/修改活动")
     @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/insterOrUpdateActivity")
+    @RequiresPermissions("/activity/insterOrUpdateActivity")
     public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContent activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
         if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getActiStatus())) {
@@ -118,6 +122,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "删除草稿活动")
     @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteDraftActivity")
+    @RequiresPermissions("/activity/deleteDraftActivity")
     public Result deleteDraftActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -129,6 +134,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "删除非草稿活动(超级管理权限)")
     @ApiOperation(value = "删除非草稿活动(超级管理权限)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteActivity")
+    @RequiresPermissions("/activity/deleteActivity")
     public Result deleteActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -140,6 +146,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "取消活动")
     @ApiOperation(value = "取消活动(不能批量取消)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelActivity")
+    @RequiresPermissions("/activity/cancelActivity")
     public Result cancelActivity(
             @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -151,6 +158,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动报名列表")
     @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/applyActivityList")
+    @RequiresPermissions("/activity/applyActivityList")
     public Result applyActivityList(@RequestBody @Validated ActivityApplyParment activityApplyParment) {
         Assert.notNull(activityApplyParment.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
@@ -160,6 +168,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "下载签到二维码")
     @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/downloadSignCodeImg")
+    @RequiresPermissions("/activity/downloadSignCodeImg")
     public void downloadSignCodeImg(HttpServletResponse httpServletResponse,
             @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -178,6 +187,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "发送活动通知")
     @ApiOperation(value = "发送活动通知(只能在活动开始前24小时才能发送)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/sendMsgForActivate")
+    @RequiresPermissions("/activity/sendMsgForActivate")
     public Result sendMsgForActivate(
             @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
@@ -188,6 +198,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "数据导出")
     @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/exportDataExcel")
+    @RequiresPermissions("/activity/exportDataExcel")
     public void exportDataExcel(@Validated ActivityApplyParment activityApplyParment,
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParment.getActivityId(), "活动id不能为空");
@@ -204,6 +215,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动结束回调方法")
     @ApiOperation(value = "活动结束回调方法", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityEndByTimedTask")
+    @RequiresPermissions("/activity/activityEndByTimedTask")
     public Result activityEndByTimedTask(@RequestBody ActivityContent activity){
         int i = activityService.activityEndByTimedTask(activity);
         return new Result(i);
@@ -212,6 +224,7 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动消息自动推送回调方法")
     @ApiOperation(value = "活动消息自动推送回调方法", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activitySendMessageByTimedTask")
+    @RequiresPermissions("/activity/activitySendMessageByTimedTask")
     public Result activitySendMessageByTimedTask(@RequestBody ActivityContent activity){
         int i = activityService.activitySendMessageByTimedTask(activity);
         return new Result(i);

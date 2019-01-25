@@ -195,8 +195,8 @@ public class ActivityController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "数据导出")
-    @ApiOperation(value = "数据导出", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "活动报名人数据导出")
+    @ApiOperation(value = "活动报名人数据导出", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/exportDataExcel")
     @RequiresPermissions("/activity/exportDataExcel")
     public void exportDataExcel(@Validated ActivityApplyParment activityApplyParment,
@@ -215,7 +215,6 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动结束回调方法")
     @ApiOperation(value = "活动结束回调方法", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityEndByTimedTask")
-    @RequiresPermissions("/activity/activityEndByTimedTask")
     public Result activityEndByTimedTask(@RequestBody ActivityContent activity){
         int i = activityService.activityEndByTimedTask(activity);
         return new Result(i);
@@ -224,7 +223,6 @@ public class ActivityController extends BaseController {
     @ControllerLog(doAction = "活动消息自动推送回调方法")
     @ApiOperation(value = "活动消息自动推送回调方法", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activitySendMessageByTimedTask")
-    @RequiresPermissions("/activity/activitySendMessageByTimedTask")
     public Result activitySendMessageByTimedTask(@RequestBody ActivityContent activity){
         int i = activityService.activitySendMessageByTimedTask(activity);
         return new Result(i);

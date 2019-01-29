@@ -91,33 +91,41 @@ public class ActivityController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "添加/修改活动")
-    @ApiOperation(value = "添加/修改活动", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/insterOrUpdateActivity")
-    @RequiresPermissions("/activity/insterOrUpdateActivity")
-    public Result insertOrUpdateActivity(@RequestBody @Validated ActivityContent activityContent) {
+    @ControllerLog(doAction = "保存活动草稿")
+    @ApiOperation(value = "保存活动草稿", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/saveActivityDraft")
+    @RequiresPermissions("/activity/saveActivityDraft")
+    public Result saveActivityDraft(@RequestBody @Validated ActivityContent activityContent) {
         Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
-        if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activityContent.getActiStatus())) {
-            Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getApplyEndTime(), ActivityExceptionEnum.ACTIVITY_APPLY_END_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getMesSendTime(), ActivityExceptionEnum.ACTIVITY_MES_SEND_TIME_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiAddress(), ActivityExceptionEnum.ACTIVITY_ADDRESS_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiCost(), ActivityExceptionEnum.ACTIVITY_COST_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiOrganizer(), ActivityExceptionEnum.ACTIVITY_ORGANIZER_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiPosterUrl(), ActivityExceptionEnum.ACTIVITY_POSTER_URL_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiDetail(), ActivityExceptionEnum.ACTIVITY_DETAIL_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getParkId(), ActivityExceptionEnum.ACTIVITY_PARK_ID_NOT_NULL.getMessage());
-            Assert.notNull(activityContent.getApplyCheck(), ActivityExceptionEnum.ACTIVITY_APPLY_CHECK_NOT_NULL.getMessage());
-        }
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.insertOrUpdateActivity(activityContent,user.getAccount());
         return new Result(i);
     }
 
+    @ControllerLog(doAction = "发布活动")
+    @ApiOperation(value = "发布活动", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/publishActivity")
+    @RequiresPermissions("/activity/publishActivity")
+    public Result publishActivity(@RequestBody @Validated ActivityContent activityContent) {
+        Assert.notNull(activityContent.getActiName(), ActivityExceptionEnum.ACTIVITY_TITLE_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiType(), ActivityExceptionEnum.ACTIVITY_TYPE_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiStartTime(), ActivityExceptionEnum.ACTIVITY_STATE_TIME_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiEndTime(), ActivityExceptionEnum.ACTIVITY_END_TIME_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getApplyEndTime(), ActivityExceptionEnum.ACTIVITY_APPLY_END_TIME_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getMesSendTime(), ActivityExceptionEnum.ACTIVITY_MES_SEND_TIME_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiAddress(), ActivityExceptionEnum.ACTIVITY_ADDRESS_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiCost(), ActivityExceptionEnum.ACTIVITY_COST_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiOrganizer(), ActivityExceptionEnum.ACTIVITY_ORGANIZER_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiPosterUrl(), ActivityExceptionEnum.ACTIVITY_POSTER_URL_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiDetail(), ActivityExceptionEnum.ACTIVITY_DETAIL_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getActiNumber(), ActivityExceptionEnum.ACTIVITY_NUMBER_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getParkId(), ActivityExceptionEnum.ACTIVITY_PARK_ID_NOT_NULL.getMessage());
+        Assert.notNull(activityContent.getApplyCheck(), ActivityExceptionEnum.ACTIVITY_APPLY_CHECK_NOT_NULL.getMessage());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = activityService.insertOrUpdateActivity(activityContent,user.getAccount());
+        return new Result(i);
+    }
 
     @ControllerLog(doAction = "删除草稿活动")
     @ApiOperation(value = "删除草稿活动", httpMethod = "POST", response = Result.class)

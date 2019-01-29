@@ -85,6 +85,11 @@ public class ActivityServiceImpl implements ActivityService {
      */
     private static final String ACTIVITY_STATE_DELETE = "0";
 
+    /**
+     * 活动可报名
+     */
+    private static final String ACTIVITY_STATE_IS_APPLY = "1";
+
     @Value("${spring.application.name}")
     private String applicationName;
 
@@ -204,6 +209,7 @@ public class ActivityServiceImpl implements ActivityService {
             tbActivity.setCreatorAccount(account);
             tbActivity.setRecordStatus(new Byte(ACTIVITY_STATE_NOT_DELETE));
             if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
+                tbActivity.setIsApply(ACTIVITY_STATE_IS_APPLY);
                 tbActivity.setIssueAccount(account);
                 tbActivity.setIssueTime(new Date());
             }
@@ -218,7 +224,7 @@ public class ActivityServiceImpl implements ActivityService {
             if (null == tbActivityOld) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_NOT_EXIST);
             }
-            if (StringUtils.equals(tbActivityOld.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
+            if (!StringUtils.equals(tbActivityOld.getActiStatus(), ACTIVITY_STATE_DRAFT)) {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT);
             }
             if (StringUtils.equals(ACTIVITY_STATE_DRAFT, tbActivityOld.getActiStatus()) && StringUtils.equals(ACTIVITY_STATE_PUBLISH, tbActivity.getActiStatus())) {
@@ -231,6 +237,7 @@ public class ActivityServiceImpl implements ActivityService {
                 tbActivityDetailMapper.updateByPrimaryKeySelective(tbActivityDetail);
             }
         }
+        // 开始处理活动定时任务
         if (StringUtils.equals(ACTIVITY_STATE_PUBLISH, activity.getActiStatus())) {
             //发布时间
             Delay delay = new Delay();
@@ -240,7 +247,7 @@ public class ActivityServiceImpl implements ActivityService {
             delay.setServiceUrl("/activity/activityEndByTimedTask");
             Boolean getDelay = false;
             if (isUpdate) {
-                if (!DateUtils.isSameDay(tbActivityOld.getApplyStartTime(), tbActivity.getApplyStartTime())) {
+                if (tbActivityOld.getActiStartTime()==null || !DateUtils.isSameDay(tbActivityOld.getActiStartTime(), tbActivity.getActiStartTime())) {
                     getDelay = true;
                 }
             } else {

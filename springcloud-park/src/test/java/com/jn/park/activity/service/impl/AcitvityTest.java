@@ -107,14 +107,50 @@ public class AcitvityTest {
     }
 
     @Test
-    public void insertOrUpdateActivity(){
+    public void saveActivityDraft(){
+        ActivityContent activityContent = new ActivityContent();
+        activityContent.setActiName("测试活动草稿");
+        activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
+        activityContent.setActiStartTime("2018-12-29 08:00:00");
+        activityContent.setActiEndTime("2018-12-30 21:00:00");
+        activityContent.setApplyEndTime("2018-12-28 20:00:00");
+        activityContent.setMesSendTime("2018-12-28 12:00:00");
+        activityContent.setParkId("8f5135215742b08f580ef5a4298efe11");
+        activityContent.setActiAddress("麓谷企业广场");
+        activityContent.setActiCost(new BigDecimal(0.00));
+        activityContent.setActiPosterUrl("http://politics.people.com.cn/NMediaFile/2018/1219/MAIN201812191525000321021630650.jpg");
+        activityContent.setActiOrganizer("管委会");
+        activityContent.setActiNumber(1000);
+        activityContent.setActiStatus("1");
+        activityContent.setShowApplyNum("1");
+        try{
+            insertOrUpdateActivity(activityContent);
+        }catch (ParseException e){
+            logger.warn("活动草稿--时间转换错误，如需测试请修改时间格式",e);
+            assertThat(e.getMessage(), anything());
+        }catch (JnSpringCloudException e){
+            logger.warn("活动草稿 -- 数据错误,请核实测试对象数据。");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_TIME_ERROR.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_APPLY_TIME_ERROR.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_NOT_EXIST.getCode()),
+                            Matchers.containsString(ActivityExceptionEnum.ACTIVITY_STATE_NOT_DRAFT.getCode())
+                    )
+            );
+        }
+    }
+
+    @Test
+    public void publishActivity(){
         ActivityContent activityContent = new ActivityContent();
         activityContent.setActiName("元旦年后会多");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
         activityContent.setActiStartTime("2018-12-29 08:00:00");
-        activityContent.setActiEndTime("2018--12-30 21:00:00");
-        activityContent.setApplyEndTime("2018--12-28 20:00:00");
-        activityContent.setMesSendTime("2018--12-28 12:00:00");
+        activityContent.setActiEndTime("2018-12-30 21:00:00");
+        activityContent.setApplyEndTime("2018-12-28 20:00:00");
+        activityContent.setMesSendTime("2018-12-28 12:00:00");
         activityContent.setParkId("8f5135215742b08f580ef5a4298efe11");
         activityContent.setActiAddress("中电软件园");
         activityContent.setActiCost(new BigDecimal(0.00));
@@ -124,16 +160,12 @@ public class AcitvityTest {
         activityContent.setActiStatus("2");
         activityContent.setShowApplyNum("1");
         try{
-            int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
-            assertThat(i,is(1));
-            TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
-            tbActivityCriteria.createCriteria().andActiNameEqualTo(activityContent.getActiName()).andActiStartTimeEqualTo(DateUtils.parseDate(activityContent.getActiStartTime(),"yyyy-MM-dd HH:mm:ss"));
-            tbActivityMapper.deleteByExample(tbActivityCriteria);
+            insertOrUpdateActivity(activityContent);
         }catch (ParseException e){
-            logger.warn("活动插入/修改--时间转换错误，如需测试请修改时间格式",e);
+            logger.warn("发布活动--时间转换错误，如需测试请修改时间格式",e);
             assertThat(e.getMessage(), anything());
         }catch (JnSpringCloudException e){
-            logger.warn("活动插入/修改 -- 数据错误,请核实测试对象数据。");
+            logger.warn("发布活动 -- 数据错误,请核实测试对象数据。");
             assertThat(e.getCode(),
                 Matchers.anyOf(
                     Matchers.containsString(ActivityExceptionEnum.ACTIVITY_TIME_ERROR.getCode()),
@@ -144,7 +176,14 @@ public class AcitvityTest {
                 )
             );
         }
+    }
 
+    public void insertOrUpdateActivity(ActivityContent activityContent) throws ParseException,JnSpringCloudException{
+        int i = activityService.insertOrUpdateActivity(activityContent,userAccount);
+        assertThat(i,is(1));
+        TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
+        tbActivityCriteria.createCriteria().andActiNameEqualTo(activityContent.getActiName()).andActiStartTimeEqualTo(DateUtils.parseDate(activityContent.getActiStartTime(),"yyyy-MM-dd HH:mm:ss"));
+        tbActivityMapper.deleteByExample(tbActivityCriteria);
     }
 
     @Test

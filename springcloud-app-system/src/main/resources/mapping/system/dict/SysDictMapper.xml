@@ -48,7 +48,7 @@
         t1.sort,
         t1.created_time as createdTime
         FROM tb_sys_dict t1
-        LEFT JOIN tb_sys_module t2
+        LEFT JOIN tb_sys_dict_module t2
         on t1.module_code = t2.module_code
         WHERE t1.record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(moduleCode)">

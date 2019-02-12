@@ -939,8 +939,8 @@ export default {
 </script>
 <style lang="scss">
 .el-tooltip__popper{
-    width: 260px;
-    height: 60px;
+   text-align: center;
+    max-width: 260px;
     word-break: break-all;
 }
 .userManagement-content{

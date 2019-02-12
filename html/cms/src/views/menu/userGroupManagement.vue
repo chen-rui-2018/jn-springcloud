@@ -72,7 +72,7 @@
             <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
           </el-form-item>
           <el-form-item label="状态:" prop="recordStatus">
-            <el-select v-model="userGroupform.recordStatus" placeholder="请选择" class="filter-item" clearable>
+            <el-select v-model="userGroupform.recordStatus" placeholder="请选择" class="filter-item" clearable style="width:100%">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -118,18 +118,7 @@
 </template>
 
 <script>
-import {
-  // allList,
-  // addgroupList,
-  // editgroupList,
-  deleteUsergroupById,
-  checkGroupName
-  // updataUser,
-  // getAllUserInfo,
-  // getRoleInfo,
-  // updataRole
-} from '@/api/Permission-model/userGroup'
-import { api } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -147,7 +136,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增用户组') {
-          checkGroupName(this.userGroupform.groupName).then(res => {
+          paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -158,7 +147,7 @@ export default {
           })
         } else {
           if (this.oldGroupName !== this.userGroupform.groupName) {
-            checkGroupName(this.userGroupform.groupName).then(res => {
+            paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()
@@ -456,7 +445,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteUsergroupById(row.id).then(res => {
+          paramApi('system/sysGroup/delete', row.id, 'groupIds').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -508,10 +497,6 @@ export default {
 </script>
 
 <style lang="scss">
-.el-tooltip__popper{
-   text-align: center;
-    width:260px;
-}
 .tablePagination{
   margin-top:15px;
 }

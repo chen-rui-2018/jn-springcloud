@@ -45,10 +45,11 @@
 </template>
 
 <script>
-import {
-  getFileList
+import { api } from '@/api/Permission-model/userManagement'
+// import {
+//   getFileList
 
-} from '@/api/Permission-model/fileManagement'
+// } from '@/api/Permission-model/fileManagement'
 export default {
   data() {
     return {
@@ -86,7 +87,7 @@ export default {
     // 项目初始化
     initList() {
       this.fileListLoading = true
-      getFileList(this.listQuery).then(res => {
+      api('system/sysFile/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total

@@ -17,7 +17,7 @@
           <el-input v-model="dictionaryForm.dictValue" placeholder="请输入数据字典值" maxlength="20" clearable style="width: 130px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-button type="primary" class="searchDd" @click="handleFilter">搜索</el-button>
-        <el-button type="primary" @click="handleCreate">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
         <el-button type="primary" @click="handleSort">分组排序</el-button>
         <el-button type="primary" @click="handleModule">模块管理</el-button>
       </el-form>
@@ -116,7 +116,8 @@
   </div>
 </template>
 <script>
-import { getList, getAllModule, addDictionary, editDictionary, deleteDictionary, sortSearch, groupSort } from '@/api/Permission-model/dataDictionary'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import { getList, getAllModule, addDictionary, editDictionary, deleteDictionary, sortSearch, groupSort } from '@/api/Permission-model/dataDictionary'
 // import '../../utils/index.js'
 export default {
   data() {
@@ -216,7 +217,7 @@ export default {
         moduleCode: this.groupformInline.moduleCode,
         parentGroupCode: this.groupformInline.parentGroupCode
       }
-      sortSearch(data).then(res => {
+      api('system/sysDict/sortSearch', data).then(res => {
         if (res.data.code === '0000') {
           this.dataItem = res.data.data
           if (this.dataItem.length === 0) {
@@ -228,10 +229,10 @@ export default {
       })
     },
     handleSave() {
+      this.isDisabled = true
       this.$refs['groupform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
-          editDictionary().then(res => {
+          api('system/sysDict/update').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -244,6 +245,8 @@ export default {
             this.groupDialogFormVisible = false
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -295,7 +298,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteDictionary(id).then(res => {
+          paramApi('system/sysDict/delete', id, 'dictId').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -317,7 +320,7 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      getList(this.dictionaryForm).then(res => {
+      api('system/sysDict/list', this.dictionaryForm).then(res => {
         if (res.data.code === '0000') {
           this.dictionaryData = res.data.data.rows
           this.total = res.data.data.total
@@ -329,7 +332,7 @@ export default {
     },
     // 获取全部模块
     getAllModule() {
-      getAllModule().then(res => {
+      api('system/sysModule/getAll').then(res => {
         if (res.data.code === '0000') {
           res.data.data.forEach(val => {
             this.dictionaryOptions.push({
@@ -349,7 +352,7 @@ export default {
       this.$refs['dictionaryform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addDictionary(this.dictionaryform).then(res => {
+          api('system/sysDict/add', this.dictionaryform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -369,10 +372,10 @@ export default {
     },
     // 编辑
     updateData() {
+      this.isDisabled = true
       this.$refs['dictionaryform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
-          editDictionary(this.dictionaryform).then(res => {
+          api('system/sysDict/update', this.dictionaryform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -385,6 +388,8 @@ export default {
             this.dictionaryDialogFormVisible = false
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -423,7 +428,7 @@ export default {
         dictData.push(dictObj)
         index = index + 1
       }
-      groupSort(dictData).then(res => {
+      api('system/sysDict/sortByGroup', dictData).then(res => {
         if (res.data.code === '0000') {
           this.groupDialogFormVisible = false
           this.initList()

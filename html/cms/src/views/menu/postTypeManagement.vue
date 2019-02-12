@@ -62,7 +62,8 @@
 </template>
 
 <script>
-import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById, checkPostTypeName } from '@/api/Permission-model/postTypeManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById, checkPostTypeName } from '@/api/Permission-model/postTypeManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -71,7 +72,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增岗位类型') {
-          checkPostTypeName(this.postTypeForm.postTypeName).then(res => {
+          paramApi(this.postTypeForm.postTypeName).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -82,7 +83,7 @@ export default {
           })
         } else {
           if (this.oldPostTypeName !== this.postTypeForm.postTypeName) {
-            checkPostTypeName(this.postTypeForm.postTypeName).then(res => {
+            paramApi('system/sysPostType/checkPostTypeName', this.postTypeForm.postTypeName, 'postTypeName').then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()
@@ -143,7 +144,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deletePostTypeById(id).then(res => {
+          paramApi('system/sysPostType/delete', id, 'postTypeId').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -181,7 +182,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          editPostTypeList(this.postTypeForm).then(res => {
+          api('system/sysPostType/update', this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -205,7 +206,7 @@ export default {
       this.$refs['postTypeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addPostTypeList(this.postTypeForm).then(res => {
+          api('system/sysPostType/add', this.postTypeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -259,7 +260,7 @@ export default {
     },
     initList() {
       this.listLoading = true
-      getPostTypeList(this.listQuery).then(res => {
+      api('system/sysPostType/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.postTypeList = res.data.data.rows
           this.total = res.data.data.total

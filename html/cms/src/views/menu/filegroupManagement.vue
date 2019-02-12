@@ -56,7 +56,7 @@
           <el-input v-model.trim="temp.fileGroupDescribe" type="textarea" maxlength="150" clearable/>
         </el-form-item>
         <el-form-item label="状态:" prop="recordStatus" >
-          <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择">
+          <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择" style="width:100%">
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
@@ -70,7 +70,8 @@
 </template>
 
 <script>
-import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName, deleteFileGroupById } from '@/api/Permission-model/filegroup'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName, deleteFileGroupById } from '@/api/Permission-model/filegroup'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -79,7 +80,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增文件组') {
-          checkFileGroupName(this.temp.fileGroupName).then(res => {
+          paramApi('system/sysFileGroup/checkFileGroupName', this.temp.fileGroupName, 'fileGroupName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -90,7 +91,7 @@ export default {
           })
         } else {
           if (this.oldName !== this.temp.fileGroupName) {
-            checkFileGroupName(this.temp.fileGroupName).then(res => {
+            paramApi('system/sysFileGroup/checkFileGroupName', this.temp.fileGroupName, 'fileGroupName').then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()
@@ -190,7 +191,7 @@ export default {
       this.$refs['temp'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addFileGroupList(this.temp).then(res => {
+          api('system/sysFileGroup/add', this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -227,11 +228,11 @@ export default {
     },
     // 编辑文件组信息
     updateData() {
+      this.isDisabled = true
       this.$refs['temp'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 通过验证
-          updataFileGroup(this.temp).then(res => {
+          api('system/sysFileGroup/update', this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -244,6 +245,8 @@ export default {
             this.fileGroupdialogFormVisible = false
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -255,7 +258,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteFileGroupById(id).then(res => {
+          paramApi('system/sysFileGroup/delete', id, 'ids').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -276,7 +279,7 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      allFileGroupList(this.listQuery).then(res => {
+      api('system/sysFileGroup/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.fileGroupList = res.data.data.rows
           this.total = res.data.data.total

@@ -12,7 +12,7 @@
           </el-select> -->
         </el-form-item>
         <el-button type="primary" @click="handleFilter">搜索</el-button>
-        <el-button type="primary" @click="handleCreate">添加</el-button>
+        <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
         <el-button type="primary" @click="handleBack">返回</el-button>
       </el-form>
     </div>
@@ -55,8 +55,9 @@
   </div>
 </template>
 <script>
+import { api, paramApi } from '@/api/Permission-model/userManagement'
 // import { getAllModule } from '@/api/Permission-model/dataDictionary'
-import { getModuleList, addModule, editModule, deleteModule } from '@/api/Permission-model/moduleManagement'
+// import { getModuleList, addModule, editModule, deleteModule } from '@/api/Permission-model/moduleManagement'
 export default {
   data() {
     var check = (rule, value, callback) => {
@@ -154,7 +155,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteModule(id).then(res => {
+          paramApi('system/sysModule/delete', id, 'moduleId').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -190,7 +191,7 @@ export default {
     //   })
     // },
     initList() {
-      getModuleList(this.moduleForm).then(res => {
+      api('system/sysModule/list', this.moduleForm).then(res => {
         if (res.data.code === '0000') {
           this.moduleData = res.data.data.rows
           this.total = res.data.data.total
@@ -209,7 +210,7 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addModule(this.moduleform).then(res => {
+          api('system/sysModule/add', this.moduleform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -231,7 +232,7 @@ export default {
       this.$refs['moduleform'].validate(valid => {
         this.isDisabled = true
         if (valid) {
-          editModule(this.moduleform).then(res => {
+          api('system/sysModule/update', this.moduleform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',

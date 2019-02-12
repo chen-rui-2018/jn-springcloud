@@ -52,7 +52,7 @@
             <el-input v-model="permissionform.permissionName" maxlength="20" clearable/>
           </el-form-item>
           <el-form-item label="状态" prop="recordStatus">
-            <el-select v-model="permissionform.recordStatus" class="filter-item" placeholder="请选择" >
+            <el-select v-model="permissionform.recordStatus" class="filter-item" placeholder="请选择" style="width:100%" >
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -110,19 +110,20 @@
 </template>
 
 <script>
-import {
-  getPermissionList,
-  addPermissionList,
-  editPermissionList,
-  checkPermissionName,
-  getRoleInfo,
-  updataRole,
-  deletePermissionById,
-  getAllList,
-  updataAllData,
-  getFileGroupInfo,
-  updataFileGroup
-} from '@/api/Permission-model/permissionManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import {
+//   getPermissionList,
+//   addPermissionList,
+//   editPermissionList,
+//   checkPermissionName,
+//   getRoleInfo,
+//   updataRole,
+//   deletePermissionById,
+//   getAllList,
+//   updataAllData,
+//   getFileGroupInfo,
+//   updataFileGroup
+// } from '@/api/Permission-model/permissionManagement'
 export default {
 
   data() {
@@ -132,7 +133,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增权限') {
-          checkPermissionName(this.permissionform.permissionName).then(res => {
+          paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -143,7 +144,7 @@ export default {
           })
         } else {
           if (this.oldPermissionName !== this.permissionform.permissionName) {
-            checkPermissionName(this.permissionform.permissionName).then(res => {
+            paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()
@@ -232,7 +233,7 @@ export default {
     },
     getCheckedKeys() {
       const checkData = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
-      updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+      api('system/sysPermission/addMenuAndResourcesToPermission', { menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -250,7 +251,7 @@ export default {
       this.menuDialogVisible = true
       this.menuLoading = true
       // 获取权限具有的菜单和功能
-      getAllList(id).then(res => {
+      paramApi('system/sysPermission/getMenuAndResources', id, 'permissionId').then(res => {
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           var rules = res.data.data.menuAndResourcesIds
@@ -284,7 +285,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataFileGroup({ permissionId: this.permissionId, fileGroupIds: value }).then(res => {
+      api('system/sysPermission/addFileGroupToPermission', { permissionId: this.permissionId, fileGroupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -305,7 +306,7 @@ export default {
       this.getFileGroup()
     },
     getFileGroup() {
-      getFileGroupInfo({
+      api('system/sysPermission/findFileGroupOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
         rows: this.numberRows
@@ -345,7 +346,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataRole({ permissionId: this.permissionId, roleIds: value }).then(res => {
+      api('system/sysPermission/addRoleToPermission', { permissionId: this.permissionId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -366,7 +367,7 @@ export default {
       this.getRole()
     },
     getRole() {
-      getRoleInfo({
+      api('system/sysPermission/findRoleOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
         rows: this.numberRows
@@ -396,7 +397,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deletePermissionById(id).then(res => {
+          paramApi('system/sysPermission/delete', id, 'ids').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -420,7 +421,7 @@ export default {
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // // 调用接口发送请求
-          editPermissionList(this.permissionform).then(res => {
+          api('system/sysPermission/update', this.permissionform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -462,7 +463,7 @@ export default {
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addPermissionList(this.permissionform).then(res => {
+          api('system/sysPermission/add', this.permissionform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -511,7 +512,7 @@ export default {
     // 项目初始化
     initList() {
       this.permissionLoading = true
-      getPermissionList(this.listQuery).then(res => {
+      api('system/sysPermission/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.permissionList = res.data.data.rows
           this.total = res.data.data.total

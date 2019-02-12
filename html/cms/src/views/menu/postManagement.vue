@@ -76,9 +76,10 @@
 </template>
 
 <script>
-import {
-  getAllList, addPostList, checkPostName, editPostList, deletePostById, getAllPostType
-} from '@/api/Permission-model/postManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import {
+//   getAllList, addPostList, checkPostName, editPostList, deletePostById, getAllPostType
+// } from '@/api/Permission-model/postManagement'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -96,7 +97,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增岗位') {
-          checkPostName(this.postform.postName).then(res => {
+          paramApi('system/sysPost/checkPostName', this.postform.postName, 'postName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -107,7 +108,7 @@ export default {
           })
         } else {
           if (this.oldPostName !== this.postform.postName) {
-            checkPostName(this.postform.postName).then(res => {
+            paramApi('system/sysPost/checkPostName', this.postform.postName, 'postName').then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()
@@ -168,7 +169,7 @@ export default {
   methods: {
     // 获取岗位类型
     getPostType() {
-      getAllPostType().then(res => {
+      api('system/sysPostType/getPostTypeAll').then(res => {
         if (res.data.code === '0000') {
           res.data.data.forEach(val => {
             this.postTypeNameOptions.push({
@@ -189,7 +190,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deletePostById(id).then(res => {
+          paramApi('system/sysPost/delete', id, 'postIds').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -229,7 +230,7 @@ export default {
           // 避免重复点击提交
           this.isDisabled = true
           // // 调用接口发送请求
-          editPostList(this.postform).then(res => {
+          api('system/sysPost/update', this.postform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -261,7 +262,7 @@ export default {
       this.$refs['postform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addPostList(this.postform).then(res => {
+          api('system/sysPost/add', this.postform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -305,7 +306,7 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      getAllList(this.listQuery).then(response => {
+      api('system/sysPost/list', this.listQuery).then(response => {
         if (response.data.code === '0000') {
           this.postList = response.data.data.rows
           this.total = response.data.data.total

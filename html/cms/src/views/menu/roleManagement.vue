@@ -62,7 +62,7 @@
             <el-input v-model="roleform.roleName" maxlength="20"/>
           </el-form-item>
           <el-form-item label="状态:" prop="recordStatus" >
-            <el-select v-model="roleform.recordStatus" placeholder="请选择" class="filter-item">
+            <el-select v-model="roleform.recordStatus" placeholder="请选择" class="filter-item" style="width:100%">
               <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
@@ -110,16 +110,17 @@
 </template>
 
 <script>
-import {
-  roleList,
-  addRoleList,
-  checkRoleName,
-  editRoleList,
-  deleteRoleById,
-  getAllUserInfo,
-  updataUser,
-  getUserGroupInfo, updataUserGroup, getAuthorityInfo, updataAuthority
-} from '@/api/Permission-model/roleManagement'
+// import {
+//   roleList,
+//   addRoleList,
+//   checkRoleName,
+//   editRoleList,
+//   deleteRoleById,
+//   getAllUserInfo,
+//   updataUser,
+//   getUserGroupInfo, updataUserGroup, getAuthorityInfo, updataAuthority
+// } from '@/api/Permission-model/roleManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -128,7 +129,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增角色') {
-          checkRoleName(this.roleform.roleName).then(res => {
+          paramApi('system/sysRole/checkRoleName', this.roleform.roleName, 'roleName').then(res => {
             // if (res.data.code === '0000') {
             if (res.data.data === 'success') {
               callback()
@@ -139,7 +140,7 @@ export default {
           })
         } else {
           if (this.oldRoleName !== this.roleform.roleName) {
-            checkRoleName(this.roleform.roleName).then(res => {
+            paramApi('system/sysRole/checkRoleName', this.roleform.roleName, 'roleName').then(res => {
               // if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -234,7 +235,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataAuthority({ roleId: this.roleId, permissionId: value }).then(res => {
+      api('system/sysRole/rolePermissionAuthorization', { roleId: this.roleId, permissionId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -255,7 +256,7 @@ export default {
       this.getAuthority()
     },
     getAuthority() {
-      getAuthorityInfo({
+      api('system/sysRole/findPermissionOrRoleAndOtherPermission', {
         roleId: this.roleId,
         page: this.authorityPage,
         rows: this.authorityRows
@@ -291,7 +292,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUserGroup({ roleId: this.roleId, userGroupId: value }).then(res => {
+      api('/system/sysRole/userGroupRoleAuthorization', { roleId: this.roleId, userGroupId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -321,7 +322,7 @@ export default {
       this.getUserGroup()
     },
     getUserGroup() {
-      getUserGroupInfo({
+      api('system/sysRole/findUserGroupOfRoleAndOtherGroup', {
         roleId: this.roleId,
         page: this.userPage,
         rows: this.userRows
@@ -349,7 +350,7 @@ export default {
       })
     },
     getUser() {
-      getAllUserInfo({
+      api('system/sysRole/findUserOfRoleAndOtherUser', {
         roleId: this.roleId,
         page: this.userPage,
         rows: this.userRows
@@ -397,7 +398,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUser({ roleId: this.roleId, userId: value }).then(res => {
+      api('system/sysRole/userRoleAuthorization', { roleId: this.roleId, userId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -437,7 +438,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          editRoleList(this.roleform).then(res => {
+          api('system/sysRole/update', this.roleform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -463,7 +464,7 @@ export default {
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addRoleList(this.roleform).then(res => {
+          api('system/sysRole/add', this.roleform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -512,7 +513,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteRoleById(id).then(res => {
+          paramApi('system/sysRole/delete', id, 'ids').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -533,7 +534,7 @@ export default {
     // 项目初始化
     initList() {
       this.rolelistLoading = true
-      roleList(this.listQuery).then(res => {
+      api('system/sysRole/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.roleList = res.data.data.rows
           this.total = res.data.data.total
@@ -571,10 +572,6 @@ export default {
   .fixed-width .el-button--mini {
     width: auto;
   }
-}
-.el-tooltip__popper{
-   text-align: center;
-    width:260px;
 }
 .box {
    .el-transfer-panel {

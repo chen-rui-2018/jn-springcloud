@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.servicemarket.advisor.dao.TbServiceRatingMapper">
+  <resultMap id="BaseResultMap" type="com.jn.servicemarket.advisor.entity.TbServiceRating">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="comment_obj_id" jdbcType="VARCHAR" property="commentObjId" />
+    <result column="comment_obj_name" jdbcType="VARCHAR" property="commentObjName" />
+    <result column="attitude_score" jdbcType="VARCHAR" property="attitudeScore" />
+    <result column="profession_score" jdbcType="VARCHAR" property="professionScore" />
+    <result column="response_score" jdbcType="VARCHAR" property="responseScore" />
+    <result column="price_score" jdbcType="VARCHAR" property="priceScore" />
+    <result column="evaluation_desc" jdbcType="VARCHAR" property="evaluationDesc" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, comment_obj_id, comment_obj_name, attitude_score, profession_score, response_score, 
+    price_score, evaluation_desc, status, created_time, creator_account, modified_time, 
+    modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRatingCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_service_rating
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_service_rating
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_service_rating
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRatingCriteria">
+    delete from tb_service_rating
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRating">
+    insert into tb_service_rating (id, comment_obj_id, comment_obj_name, 
+      attitude_score, profession_score, response_score, 
+      price_score, evaluation_desc, status, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{id,jdbcType=VARCHAR}, #{commentObjId,jdbcType=VARCHAR}, #{commentObjName,jdbcType=VARCHAR}, 
+      #{attitudeScore,jdbcType=VARCHAR}, #{professionScore,jdbcType=VARCHAR}, #{responseScore,jdbcType=VARCHAR}, 
+      #{priceScore,jdbcType=VARCHAR}, #{evaluationDesc,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRating">
+    insert into tb_service_rating
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="commentObjId != null">
+        comment_obj_id,
+      </if>
+      <if test="commentObjName != null">
+        comment_obj_name,
+      </if>
+      <if test="attitudeScore != null">
+        attitude_score,
+      </if>
+      <if test="professionScore != null">
+        profession_score,
+      </if>
+      <if test="responseScore != null">
+        response_score,
+      </if>
+      <if test="priceScore != null">
+        price_score,
+      </if>
+      <if test="evaluationDesc != null">
+        evaluation_desc,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="commentObjId != null">
+        #{commentObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentObjName != null">
+        #{commentObjName,jdbcType=VARCHAR},
+      </if>
+      <if test="attitudeScore != null">
+        #{attitudeScore,jdbcType=VARCHAR},
+      </if>
+      <if test="professionScore != null">
+        #{professionScore,jdbcType=VARCHAR},
+      </if>
+      <if test="responseScore != null">
+        #{responseScore,jdbcType=VARCHAR},
+      </if>
+      <if test="priceScore != null">
+        #{priceScore,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationDesc != null">
+        #{evaluationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRatingCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_rating
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_service_rating
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentObjId != null">
+        comment_obj_id = #{record.commentObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentObjName != null">
+        comment_obj_name = #{record.commentObjName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.attitudeScore != null">
+        attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.professionScore != null">
+        profession_score = #{record.professionScore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.responseScore != null">
+        response_score = #{record.responseScore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.priceScore != null">
+        price_score = #{record.priceScore,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluationDesc != null">
+        evaluation_desc = #{record.evaluationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_service_rating
+    set id = #{record.id,jdbcType=VARCHAR},
+      comment_obj_id = #{record.commentObjId,jdbcType=VARCHAR},
+      comment_obj_name = #{record.commentObjName,jdbcType=VARCHAR},
+      attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
+      profession_score = #{record.professionScore,jdbcType=VARCHAR},
+      response_score = #{record.responseScore,jdbcType=VARCHAR},
+      price_score = #{record.priceScore,jdbcType=VARCHAR},
+      evaluation_desc = #{record.evaluationDesc,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRating">
+    update tb_service_rating
+    <set>
+      <if test="commentObjId != null">
+        comment_obj_id = #{commentObjId,jdbcType=VARCHAR},
+      </if>
+      <if test="commentObjName != null">
+        comment_obj_name = #{commentObjName,jdbcType=VARCHAR},
+      </if>
+      <if test="attitudeScore != null">
+        attitude_score = #{attitudeScore,jdbcType=VARCHAR},
+      </if>
+      <if test="professionScore != null">
+        profession_score = #{professionScore,jdbcType=VARCHAR},
+      </if>
+      <if test="responseScore != null">
+        response_score = #{responseScore,jdbcType=VARCHAR},
+      </if>
+      <if test="priceScore != null">
+        price_score = #{priceScore,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationDesc != null">
+        evaluation_desc = #{evaluationDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.servicemarket.advisor.entity.TbServiceRating">
+    update tb_service_rating
+    set comment_obj_id = #{commentObjId,jdbcType=VARCHAR},
+      comment_obj_name = #{commentObjName,jdbcType=VARCHAR},
+      attitude_score = #{attitudeScore,jdbcType=VARCHAR},
+      profession_score = #{professionScore,jdbcType=VARCHAR},
+      response_score = #{responseScore,jdbcType=VARCHAR},
+      price_score = #{priceScore,jdbcType=VARCHAR},
+      evaluation_desc = #{evaluationDesc,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

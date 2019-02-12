@@ -49,10 +49,14 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        advisor
                     </contexts>
                     <tableNames>
-
+                        tb_service_advisor,
+                        tb_service_rating,
+                        tb_service_honor,
+                        tb_service_pro_exper,
+                        tb_service_experience
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

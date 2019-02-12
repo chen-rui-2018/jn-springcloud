@@ -39,7 +39,6 @@ export function api(url, query) {
 //     data: query
 //   })
 // }
-// 校验用户账号是否存在,success表示用户名可用,false不可用
 export function paramApi(url, query, parameter) {
   const param = new URLSearchParams()
   // param.append('account', query)

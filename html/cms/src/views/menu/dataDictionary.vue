@@ -3,18 +3,18 @@
     <div class="filter-container">
       <el-form :inline="true" :model="dictionaryForm" class="demo-form-inline">
         <el-form-item label="分组编码">
-          <el-input v-model="dictionaryForm.groupCode" placeholder="请输入分组编码" maxlength="20" style="width: 130px;" @keyup.enter.native="handleFilter"/>
+          <el-input v-model="dictionaryForm.groupCode" placeholder="请输入分组编码" clearable maxlength="20" style="width: 130px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="归属模块">
-          <el-select v-model="dictionaryForm.moduleCode" placeholder="请选择" style="width: 130px;">
+          <el-select v-model="dictionaryForm.moduleCode" placeholder="请选择" clearable style="width: 130px;">
             <el-option v-for="(item,index) in dictionaryOptions" :key="index" :label="item.moduleValue" :value="item.moduleCode"/>
           </el-select>
         </el-form-item>
         <el-form-item label="数据字典键">
-          <el-input v-model="dictionaryForm.dictKey" placeholder="请输入数据字典键" maxlength="20" style="width: 130px;" @keyup.enter.native="handleFilter"/>
+          <el-input v-model="dictionaryForm.dictKey" placeholder="请输入数据字典键" maxlength="20" clearable style="width: 130px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="数据字典值">
-          <el-input v-model="dictionaryForm.dictValue" placeholder="请输入数据字典值" maxlength="20" style="width: 130px;" @keyup.enter.native="handleFilter"/>
+          <el-input v-model="dictionaryForm.dictValue" placeholder="请输入数据字典值" maxlength="20" clearable style="width: 130px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-button type="primary" class="searchDd" @click="handleFilter">搜索</el-button>
         <el-button type="primary" @click="handleCreate">添加</el-button>
@@ -46,7 +46,7 @@
       <el-dialog :visible.sync="dictionaryDialogFormVisible" :title="dialogStatus" width="450px">
         <el-form ref="dictionaryform" :rules="rules" :model="dictionaryform" label-position="right" label-width="100px" style="max-width:350px;margin-left:20px">
           <el-form-item label="归属模块" prop="moduleCode">
-            <el-select v-model="dictionaryform.moduleCode" placeholder="请选择">
+            <el-select v-model="dictionaryform.moduleCode" placeholder="请选择" style="width:100%">
               <el-option v-for="(item,index) in dictionaryOptions" :key="index" :label="item.moduleValue" :value="item.moduleCode"/>
             </el-select>
           </el-form-item>
@@ -146,7 +146,7 @@ export default {
       dialogStatus: undefined,
       isDisabled: false,
       dictionaryform: {
-        dictId: '',
+        id: '',
         moduleCode: '',
         parentGroupCode: '',
         groupCode: '',
@@ -188,10 +188,14 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.dictionaryForm.rows = val
+      this.initList()
+      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.dictionaryForm.page = val
+      this.initList()
+      // console.log(`当前页: ${val}`)
     },
     handleSearch() {
       if (!this.groupformInline.moduleCode) {
@@ -250,7 +254,7 @@ export default {
       this.dictionaryform.dictKey = ''
       this.dictionaryform.dictValue = ''
       this.dictionaryform.dictDescribe = ''
-      this.dictionaryform.dictId = ''
+      this.dictionaryform.id = ''
       this.dialogStatus = '新增数据字典'
       this.dictionaryDialogFormVisible = true
       this.$nextTick(() => {
@@ -278,7 +282,7 @@ export default {
       this.dictionaryform.dictKey = row.dictKey
       this.dictionaryform.dictValue = row.dictValue
       this.dictionaryform.dictDescribe = row.dictDescribe
-      this.dictionaryform.dicyId = row.id
+      this.dictionaryform.id = row.id
       this.dictionaryform.sort = row.sort
       this.$nextTick(() => {
         this.$refs['dictionaryform'].clearValidate()

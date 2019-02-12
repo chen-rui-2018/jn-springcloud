@@ -3,12 +3,13 @@
     <div class="filter-container">
       <el-form :inline="true" :model="moduleForm" class="demo-form-inline">
         <el-form-item label="模块编码">
-          <el-input v-model="moduleForm.moduleCode" placeholder="请输入内容" style="width: 200px;" @keyup.enter.native="handleFilter"/>
+          <el-input v-model="moduleForm.moduleCode" placeholder="请输入内容" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="模块名称">
-          <el-select v-model="moduleForm.moduleValue" placeholder="请选择" style="width: 200px;">
+          <el-input v-model="moduleForm.moduleValue" placeholder="请输入内容" clearable style="width: 200px;" @keyup.enter.native="handleFilter"/>
+          <!-- <el-select v-model="moduleForm.moduleValue" placeholder="请选择" style="width: 200px;">
             <el-option v-for="(item,index) in moduleOptions" :key="index" :label="item.moduleValue" :value="item.moduleValue"/>
-          </el-select>
+          </el-select> -->
         </el-form-item>
         <el-button type="primary" @click="handleFilter">搜索</el-button>
         <el-button type="primary" @click="handleCreate">添加</el-button>
@@ -54,7 +55,7 @@
   </div>
 </template>
 <script>
-import { getAllModule } from '@/api/Permission-model/dataDictionary'
+// import { getAllModule } from '@/api/Permission-model/dataDictionary'
 import { getModuleList, addModule, editModule, deleteModule } from '@/api/Permission-model/moduleManagement'
 export default {
   data() {
@@ -83,13 +84,13 @@ export default {
         page: 1,
         rows: 10
       },
-      moduleOptions: [],
+      // moduleOptions: [],
       moduleData: [],
       moduleDialogFormVisible: false,
       dialogStatus: '',
       isDisabled: false,
       moduleform: {
-        moduleId: '',
+        id: '',
         moduleCode: '',
         moduleValue: ''
       },
@@ -106,14 +107,18 @@ export default {
   },
   mounted() {
     this.initList()
-    this.getAllModule()
+    // this.getAllModule()
   },
   methods: {
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`)
+      this.moduleForm.rows = val
+      this.initList()
+      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`)
+      this.moduleForm.page = val
+      this.initList()
+      // console.log(`当前页: ${val}`)
     },
     handleFilter() {
       this.moduleForm.page = 1
@@ -122,7 +127,7 @@ export default {
     handleCreate() {
       this.moduleform.moduleCode = ''
       this.moduleform.moduleValue = ''
-      this.moduleform.moduleId = ''
+      this.moduleform.id = ''
       this.dialogStatus = '新增模块'
       this.moduleDialogFormVisible = true
       this.$nextTick(() => {
@@ -137,7 +142,7 @@ export default {
       this.dialogStatus = '修改模块'
       this.moduleform.moduleCode = row.moduleCode
       this.moduleform.moduleValue = row.moduleValue
-      this.moduleform.moduleId = row.id
+      this.moduleform.id = row.id
       this.$nextTick(() => {
         this.$refs['moduleform'].clearValidate()
       })
@@ -169,25 +174,34 @@ export default {
         })
     },
     // 获取全部模块
-    getAllModule() {
-      getAllModule().then(res => {
+    // getAllModule() {
+    //   getAllModule().then(res => {
+    //     if (res.data.code === '0000') {
+    //       res.data.data.forEach(val => {
+    //         this.moduleOptions.push({
+    //           value: val.moduleCode,
+    //           label: val.moduleValue
+    //         })
+    //       })
+    //     } else {
+    //       this.$message.error(res.data.result)
+    //     }
+    //     this.moduleOptions = res.data.data
+    //   })
+    // },
+    initList() {
+      getModuleList(this.moduleForm).then(res => {
         if (res.data.code === '0000') {
-          res.data.data.forEach(val => {
-            this.moduleOptions.push({
-              value: val.moduleCode,
-              label: val.moduleValue
-            })
-          })
+          this.moduleData = res.data.data.rows
+          this.total = res.data.data.total
+          if (this.moduleData.length === 0 && this.total > 0) {
+            this.moduleForm.page = 1
+            this.initList()
+          }
         } else {
           this.$message.error(res.data.result)
         }
-        this.moduleOptions = res.data.data
-      })
-    },
-    initList() {
-      getModuleList(this.moduleForm).then(res => {
-        this.total = res.data.data.total
-        this.moduleData = res.data.data.rows
+        this.listLoading = false
       })
     },
     createModuleData() {
@@ -215,8 +229,8 @@ export default {
     },
     updateData() {
       this.$refs['moduleform'].validate(valid => {
+        this.isDisabled = true
         if (valid) {
-          this.isDisabled = true
           editModule(this.moduleform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -230,6 +244,8 @@ export default {
             this.moduleDialogFormVisible = false
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     }

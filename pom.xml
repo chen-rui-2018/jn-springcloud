@@ -59,6 +59,8 @@
 		<janino.version>2.7.8</janino.version>
 		<scca.version>1.1.1-RELEASE</scca.version>
 		<spring-boot-admin>1.5.7</spring-boot-admin>
+		<com-google-zxing-core>3.3.0</com-google-zxing-core>
+		<com-google-zxing-javase>3.2.1</com-google-zxing-javase>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -268,7 +270,18 @@
 				<artifactId>spring-boot-admin-server-ui-turbine</artifactId>
 				<version>${spring-boot-admin}</version>
 			</dependency>
+			<!-- google 二维码生成 -->
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>core</artifactId>
+				<version>${com-google-zxing-core}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.zxing</groupId>
+				<artifactId>javase</artifactId>
+				<version>${com-google-zxing-javase}</version>
 
+			</dependency>
 			<!--  引入文件feign文件上传依赖 -->
 			<dependency>
 				<groupId>io.github.openfeign.form</groupId>

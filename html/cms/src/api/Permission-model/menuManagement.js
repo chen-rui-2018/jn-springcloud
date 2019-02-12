@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-// 获取部门所有数据
+// 获取菜单所有数据
 export function getMenuList() {
   return request({
     url: 'system/sysMenu/list',

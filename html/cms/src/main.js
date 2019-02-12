@@ -1,10 +1,15 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
+import 'babel-polyfill'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
+import VueQuillEditor from 'vue-quill-editor'
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+Vue.use(VueQuillEditor)
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 

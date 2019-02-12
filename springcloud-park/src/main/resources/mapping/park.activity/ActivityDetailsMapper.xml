@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.activity.dao.ActivityDetailsMapper">
+    <!--获取活动详情-->
+    <select id="getActivityDetails" resultType="com.jn.park.model.ActivityDetail">
+        select
+        t1.id as "activityId"                                                                    <!--活动id-->
+        ,t1.acti_type  as "activityType"                                                         <!--活动类型-->
+        ,t1.acti_name as "activityName"                                                          <!--活动名称-->
+        ,date_format(t1.acti_start_time,'%Y-%m-%d %H:%i:%s') as "activityStartTime"              <!--活动开始时间-->
+        ,date_format(t1.acti_end_time,'%Y-%m-%d %H:%i:%s') as "activityEndTime"                  <!--活动结束时间-->
+        ,date_format(t1.apply_start_time,'%Y-%m-%d %H:%i:%s') as "applyStartTime"                <!--报名开始时间-->
+        ,date_format(t1.apply_end_time,'%Y-%m-%d %H:%i:%s') as "applyEndTime"                    <!--报名结束时间-->
+        ,date_format(t1.mes_send_time,'%Y-%m-%d %H:%i:%s') as "mesSenTime"                       <!--活动推送时间-->
+        ,t1.acti_address as "activityAdress"                                                     <!--活动地址-->
+        ,t1.acti_cost as "actiCost"                                                              <!--活动费用-->
+        ,t1.acti_organizer as "activityOrganizer"                                                <!--活动主办方-->
+        ,t1.acti_number as "activityNumber"                                                      <!--活动人数-->
+        ,t1.acti_poster_url as "activityPosterUrl"                                               <!--活动主海报-->
+        ,t1.acti_views as "activityViews"                                                        <!--阅读人数-->
+        ,t1.acti_like as "activityLike"                                                          <!--感兴趣人数-->
+        ,t1.apply_num as "applyNum"                                                              <!--报名人数-->
+        ,t1.partic_num as "particNum"                                                            <!--活动参加人数-->
+        ,t1.acti_status as "actiStatus"                                                                   <!--活动状态-->
+        ,date_format(t1.created_time , '%Y-%m-%d %H:%i:%s') as "createdTime"                       <!--创建时间-->
+        ,t1.creator_account as "creatorAccount"                                                    <!--创建人-->
+        ,date_format(t1.issue_time ,'%Y-%m-%d %H:%i:%s') as "issueTime"                          <!--发布时间-->
+        ,t1.issue_account as "issueAccount"                                                      <!--发布人-->
+        ,date_format(t1.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime"                         <!--修改时间-->
+        ,t1.modifier_account as "modifierAccount"                                                    <!--修改人-->
+        ,t1.is_index as "isIndex"                                                                <!--是否首页展示-->
+        ,t1.is_apply as "isApply"                                                                <!--是否可报名-->
+        ,t1.park_id as "parkId"
+        ,co.code_name as "parkName"
+        ,t1.show_apply_num as "showApplyNum"                                                     <!--是否展示报名人(0否1是)-->
+        ,t1.apply_check as "applyCheck"                                                          <!--活动报名是否需要审核(0否1是)-->
+        ,t2.acti_detail as "activityDetail"                                                      <!--活动内容-->
+        from tb_activity t1
+        left join tb_park_code co
+        on co.id = t1.park_id
+        left join tb_activity_detail t2
+        on t1.id=t2.activity_id
+        where t1.id=#{id}
+        and t1.acti_status != '1' and t1.record_status != '0'                                   <!--草稿、已删除的活动不能被查询出来-->
+    </select>
+
+    <!--获取点评信息-->
+    <select id="getCommentInfo" resultType="com.jn.park.model.Comment">
+        select
+        t1.id as "id"                                                     <!--点评id-->
+        ,t1.root_id as "rootId"                                           <!--根节点id(活动id/服务id)-->
+        ,t1.p_id as "pId"                                                 <!--点评父ID(点评ID/活动ID)-->
+        ,t1.creator_account as "creatorAccount"                           <!--点评人-->
+        ,t1.parent_account as "parentAccount"                             <!--被点评人-->
+        ,date_format(t1.created_time, '%Y-%m-%d %H:%i:%s') as "createdTime"<!--点评时间-->
+        ,t1.like_num as "likeNum"                                         <!--点评点赞数-->
+        ,t1.com_status as "comStatus"                                     <!--点评状态-->
+        ,t1.com_type as "comType"                                         <!--类型-->
+        ,t1.com_content as "comContent"                                   <!--点评内容-->
+        from tb_comment t1
+        left join tb_comment t4
+        on t1.id=t4.p_id
+        where  1=1
+        and t1.root_id=#{activityId}
+        and t1.p_id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+        and t1.com_status='1'                                                 <!--有效点评-->
+        order by t1.created_time
+    </select>
+
+    <!--获取活动报名信息-->
+    <select id="getActivityApplyInfo" resultType="com.jn.park.model.ActivityApply">
+        select
+        t1.id as "id"                                                     <!--活动报名id-->
+        ,t1.activity_id as "activityId"                                   <!--活动ID-->
+        ,t1.creator_account as "account"                                  <!--报名人-->
+        ,date_format(t1.created_time, '%Y-%m-%d %H:%i:%s') as "createdTime" <!--报名时间-->
+        ,t1.apply_status as "applyStatus"                                 <!--报名状态-->
+        ,t1.sign_status as "signStatus"                                   <!--签到状态-->
+        ,date_format(t1.sign_time, '%Y-%m-%d %H:%i:%s') as "signTime"     <!--签到时间-->
+        ,t1.sign_type as "signType"                                       <!--签到方式-->
+        from tb_activity_apply t1
+        where  1=1
+        and t1.activity_id=#{activityId}
+        and t1.creator_account=#{account}
+        and t1.apply_status='1'
+    </select>
+</mapper>

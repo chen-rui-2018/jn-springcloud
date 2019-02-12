@@ -72,6 +72,18 @@ const menuRouter = {
       component: () => import('@/views/menu/fileManagement'),
       name: 'fileManagement',
       meta: { title: '文件管理', noCache: true }
+    },
+    {
+      path: 'dataDictionary',
+      component: () => import('@/views/menu/dataDictionary'),
+      name: 'dataDictionary',
+      meta: { title: '数据字典', noCache: true }
+    },
+    {
+      path: 'moduleManagement',
+      component: () => import('@/views/menu/moduleManagement'),
+      name: 'moduleManagement',
+      meta: { title: '模块管理', noCache: true }
     }
   ]
 }

@@ -1,12 +1,12 @@
 import request from '@/utils/request'
 // 获取用户列表
-// export function api(url, query) {
-//   return request({
-//     url: url,
-//     method: 'post',
-//     data: query
-//   })
-// }
+export function api(url, query) {
+  return request({
+    url: url,
+    method: 'post',
+    data: query
+  })
+}
 // 新增用户
 // export function userCreate(query) {
 //   return request({

@@ -64,4 +64,12 @@ public interface SysDictService {
      * @return
      */
     List<SysDictKeyValue> getDict(SysDictInvoke sysDictInvoke);
+
+    /**
+     * 分组排序搜索功能
+     *
+     * @param sysDictInvoke
+     * @return
+     */
+    List<TbSysDict> sortSearch(SysDictInvoke sysDictInvoke);
 }

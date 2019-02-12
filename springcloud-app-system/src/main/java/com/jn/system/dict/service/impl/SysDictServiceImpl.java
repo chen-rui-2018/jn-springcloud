@@ -19,13 +19,10 @@ import com.jn.system.dict.model.*;
 import com.jn.system.dict.service.SysDictService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.netflix.discovery.converters.Auto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,7 +54,6 @@ public class SysDictServiceImpl implements SysDictService {
      * 数据字典缓存名称
      */
     private static final String SYSTEM_DICT_INFO = "system_dict_info";
-
 
 
     /**
@@ -139,7 +135,7 @@ public class SysDictServiceImpl implements SysDictService {
         String code = buffer.append(tbSysDict.getModuleCode())
                 .append(tbSysDict.getParentGroupCode())
                 .append(tbSysDict.getGroupCode()).toString();
-        Cache<Object> cache = redisCacheFactory.getCache(SYSTEM_DICT_INFO,dictProperties.getExpire());
+        Cache<Object> cache = redisCacheFactory.getCache(SYSTEM_DICT_INFO, dictProperties.getExpire());
         cache.remove(code);
     }
 
@@ -251,6 +247,18 @@ public class SysDictServiceImpl implements SysDictService {
         //5.将数据存入缓存,返回数据
         cache.put(code, list);
         return list;
+    }
+
+    /**
+     * 分组排序搜索功能
+     *
+     * @param sysDictInvoke
+     * @return
+     */
+    @Override
+    public List<TbSysDict> sortSearch(SysDictInvoke sysDictInvoke) {
+        List<TbSysDict> tbSysDicts = getTbSysDicts(sysDictInvoke);
+        return tbSysDicts;
     }
 
     /**

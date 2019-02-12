@@ -37,13 +37,13 @@ public class SysDict implements Serializable {
     @ApiModelProperty(value = "排序")
     private Integer sort;
     @ApiModelProperty(value = "创建时间")
-    private Date createdTime;
+    private String createdTime;
 
     public SysDict() {
     }
 
     public SysDict(String id, String moduleCode, String moduleValue, String parentGroupCode, String groupCode,
-                   String dictKey, String dictValue, String dictDescribe, Integer sort, Date createdTime) {
+                   String dictKey, String dictValue, String dictDescribe, Integer sort, String createdTime) {
         this.id = id;
         this.moduleCode = moduleCode;
         this.moduleValue = moduleValue;
@@ -128,11 +128,11 @@ public class SysDict implements Serializable {
         this.sort = sort;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -148,7 +148,7 @@ public class SysDict implements Serializable {
                 ", dictValue='" + dictValue + '\'' +
                 ", dictDescribe='" + dictDescribe + '\'' +
                 ", sort=" + sort +
-                ", createdTime=" + createdTime +
+                ", createdTime='" + createdTime + '\'' +
                 '}';
     }
 }

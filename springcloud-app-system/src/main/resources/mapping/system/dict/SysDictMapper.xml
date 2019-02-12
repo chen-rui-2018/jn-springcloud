@@ -46,7 +46,7 @@
         t1.dict_value as dictValue,
         t1.dict_describe as dictDescribe,
         t1.sort,
-        t1.created_time as createdTime
+        date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as createdTime
         FROM tb_sys_dict t1
         LEFT JOIN tb_sys_dict_module t2
         on t1.module_code = t2.module_code

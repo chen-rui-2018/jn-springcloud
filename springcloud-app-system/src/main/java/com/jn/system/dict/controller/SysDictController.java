@@ -104,6 +104,15 @@ public class SysDictController extends BaseController {
         return new Result();
     }
 
+    @ControllerLog(doAction = "分组排序搜索功能")
+    @ApiOperation(value = "分组排序搜索功能", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/sortSearch")
+    @RequiresPermissions("/system/sysDict/sortSearch")
+    public Result sortSearch(@Validated @RequestBody SysDictInvoke sysDictInvoke) {
+        List<TbSysDict> dictList = sysDictService.sortSearch(sysDictInvoke);
+        return new Result(dictList);
+    }
+
     @ControllerLog(doAction = "数据字典列表")
     @ApiOperation(value = "数据字典列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")

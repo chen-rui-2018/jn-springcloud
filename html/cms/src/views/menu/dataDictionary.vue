@@ -24,14 +24,14 @@
     </div>
     <el-table ref="dictionaryTable" :key="tableKey" :data="dictionaryData" highlight-current-row border fit style="width: 100%">
       <el-table-column label="序列" type="index" align="center" width="60"/>
-      <el-table-column label="父分组编码" prop="parentGroupCode" align="center" width="150" />
-      <el-table-column label="分组编码" prop="groupCode" align="center" width="150" />
-      <el-table-column label="数据字典键" prop="dictKey" align="center" width="150" />
-      <el-table-column label="数据字典值" prop="dictValue" align="center" width="150" />
-      <el-table-column label="归属模块" prop="moduleValue" align="center" width="150" />
-      <el-table-column label="创建时间" prop="createdTime" align="center"/>
-      <el-table-column label="描述" prop="dictDescribe" align="center" width="150" />
-      <el-table-column label="操作" prop="operate" align="center">
+      <el-table-column label="父分组编码" prop="parentGroupCode" align="center" />
+      <el-table-column label="分组编码" prop="groupCode" align="center" />
+      <el-table-column label="数据字典键" prop="dictKey" align="center"/>
+      <el-table-column label="数据字典值" prop="dictValue" align="center" />
+      <el-table-column label="归属模块" prop="moduleValue" align="center" />
+      <el-table-column label="创建时间" prop="createdTime" align="center" width="200"/>
+      <el-table-column label="描述" prop="dictDescribe" align="center" />
+      <el-table-column label="操作" prop="operate" align="center" width="180">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">修改</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>

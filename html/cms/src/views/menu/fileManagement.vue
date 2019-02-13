@@ -121,4 +121,7 @@ export default {
       margin-bottom: 0;
     }
   }
+  .el-pagination{
+    margin-top: 15px;
+  }
 </style>

@@ -33,7 +33,7 @@ service.interceptors.response.use(response => {
   return response
 }, error => {
   deleteCookie('Admin-Token')
-  alert('您已超时,请重新登录')
+  alert('请重新登录')
   location.href = '/'
   return Promise.reject(error)
 })

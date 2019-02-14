@@ -47,8 +47,6 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Resource
     private TbSysMenuMapper tbSysMenuMapper;
     @Resource
-    private TbSysResourcesMapper tbSysResourcesMapper;
-    @Resource
     private SysResourcesMapper sysResourcesMapper;
     @Resource
     private SysPermissionMenuMapper sysPermissionMenuMapper;
@@ -56,20 +54,21 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysResourcesService sysResourcesService;
 
     /**
-     * 更新菜单信息
+     * 更新用户信息
      *
      * @param sysMenu
+     * @param user    当前用户信息
      */
     @Override
     @ServiceLog(doAction = "更新菜单信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysMenuById(SysMenu sysMenu) {
+    public void updateSysMenuById(SysMenu sysMenu, User user) {
         String menuId = sysMenu.getId();
         String parentId = sysMenu.getParentId();
         String menuName = sysMenu.getMenuName();
         //判断修改信息是否存在
         TbSysMenu tbSysMenu1 = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getStatus())) {
+        if (tbSysMenu1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu1.getRecordStatus().toString())) {
             logger.warn("[菜单] 菜单修改失败,修改信息不存在,menuId: {}", menuId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -85,49 +84,52 @@ public class SysMenuServiceImpl implements SysMenuService {
         sysMenu.setMenuUrl(StringUtils.trim(sysMenu.getMenuUrl()));
         TbSysMenu tbSysMenu = new TbSysMenu();
         BeanUtils.copyProperties(sysMenu, tbSysMenu);
+        //设置最近更新人信息
+        tbSysMenu.setModifiedTime(new Date());
+        tbSysMenu.setModifierAccount(user.getAccount());
         tbSysMenuMapper.updateByPrimaryKeySelective(tbSysMenu);
         logger.info("[菜单] 菜单更新成功，menuId:{}", menuId);
     }
 
     /**
-     * 逻辑删除菜单
+     * 删除菜单
      *
      * @param menuId
-     * @return
+     * @param user   当前用户信息
      */
     @Override
     @ServiceLog(doAction = "逻辑删除菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysMenuById(String menuId) {
-        List<String> menuIds = new ArrayList<String>();
-        List<String> resourcesIds = new ArrayList<String>();
-        //判断菜单是否是目录菜单
+    public void deleteSysMenuById(String menuId, User user) {
+        List<String> resourcesIds = new ArrayList<String>(32);
+        //判断菜单是存在
         TbSysMenu tbSysMenu = tbSysMenuMapper.selectByPrimaryKey(menuId);
-        if (tbSysMenu == null) {
+        if (tbSysMenu == null || SysStatusEnums.DELETED.getCode().equals(tbSysMenu.getRecordStatus().toString())) {
             return;
         }
-        Boolean flag = SysMenuEnums.MENU_ISDIR.getCode().equals(tbSysMenu.getIsDir()) ? Boolean.TRUE : Boolean.FALSE;
-        if (flag) {
-            //查询菜单子菜单
-            List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(menuId);
-            if (childrenMenuList != null && childrenMenuList.size() > 0) {
-                //递归获取子菜单下面的菜单信息
-                findChildMenuList(resourcesIds, childrenMenuList);
-                //获取子菜单id
-                getChildMenuId(menuIds, childrenMenuList);
-            }
-        } else {
-            //获取菜单具有的resourcesid
-            getResourcesIdByMenuId(menuId, resourcesIds);
+        //查询删除菜单所有子菜单id
+        String menuIdStr = sysMenuMapper.getChildrenMenuIdS(menuId);
+        //对查询到的数据进行解析
+        String[] menuIdsArr = menuIdStr.substring(2).split(",");
+        List<String> menuIds = new ArrayList<String>(Arrays.asList(menuIdsArr));
+        //获取菜单对应功能id信息
+        for (String id : menuIds) {
+            getResourcesIdByMenuId(id, resourcesIds);
         }
-        menuIds.add(menuId);
-        sysMenuMapper.deleteBy(menuIds);
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", menuIds);
+        map.put("account", user.getAccount());
+        //删除菜单
+        sysMenuMapper.deleteBy(map);
         logger.info("[菜单] 删除菜单及子菜单信息成功，menuIds:{}", menuIds.toString());
-        sysPermissionMenuMapper.deleteBy(menuIds);
+        //删除菜单关联权限信息
+        sysPermissionMenuMapper.deleteBy(map);
         logger.info("[菜单权限] 删除菜单及子菜单对应的权限信息成功，menuIds:{}", menuIds.toString());
         String[] ids = resourcesIds.toArray(new String[resourcesIds.size()]);
         if (ids.length > 0) {
-            sysResourcesService.deleteResourcesById(ids);
+            //删除菜单具有的功能信息
+            sysResourcesService.deleteResourcesById(ids, user);
             logger.info("[菜单功能] 删除菜单及子菜单的功能信息，删除功能对应权限信息成功,menuIds:{}", resourcesIds.toString());
         }
     }
@@ -135,54 +137,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     /**
      * 通过菜单id获取菜单具有的功能id
      *
-     * @param menuId
-     * @param resourcesIds
+     * @param menuId       菜单id
+     * @param resourcesIds 功能id数组
      */
     private void getResourcesIdByMenuId(String menuId, List<String> resourcesIds) {
-        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(menuId);
-        for (SysResources sysResourcesOfPermission : resourcesList) {
-            resourcesIds.add(sysResourcesOfPermission.getId());
-        }
-    }
-
-    /**
-     * 递归获取子部门id
-     *
-     * @param menuIds
-     * @param childrenMenuList
-     */
-    private void getChildMenuId(List<String> menuIds, List<SysMenuTreeVO> childrenMenuList) {
-        for (SysMenuTreeVO sysMenuTreeVO : childrenMenuList) {
-            menuIds.add(sysMenuTreeVO.getId());
-            if (sysMenuTreeVO.getChildren() != null) {
-                getChildMenuId(menuIds, sysMenuTreeVO.getChildren());
-            }
-        }
-    }
-
-    /**
-     * 递归查询菜单子菜单
-     *
-     * @param menuTreeVOList
-     */
-    public void findChildMenuList(List<String> resourcesIds, List<SysMenuTreeVO> menuTreeVOList) {
-        for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
-            //判断菜单项是否是目录菜单,是再递归获取数据
-            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
-                //以菜单id作为父id,去获取菜单子集
-                List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getId());
-                sysMenuTreeVO.setChildren(childrenMenuList);
-                if (childrenMenuList.size() == 0) {
-                    sysMenuTreeVO.setChildren(null);
-                    continue;
-                } else {
-                    findChildMenuList(resourcesIds, childrenMenuList);
-                }
-            } else {
-                //不是目录菜单,采取菜单功能id
-                getResourcesIdByMenuId(sysMenuTreeVO.getId(), resourcesIds);
-            }
-        }
+        List<String> resourcesIdList = sysResourcesMapper.getResourcesByMenuId(menuId);
+        resourcesIds.addAll(resourcesIdList);
     }
 
     /**
@@ -192,41 +152,60 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     @ServiceLog(doAction = "查询所有菜单,返回树形结构")
-    public List<SysMenuTreeVO> selectMenuList() {
-        //先查询等级为1的菜单信息
-        List<SysMenuTreeVO> menuTreeVOList = sysMenuMapper.findMenuByLevelOne();
-        getChildMenuAndResourcesList(menuTreeVOList);
-        return menuTreeVOList;
+    public List<SysMenuTreeVO> selectMenuList(Boolean flag) {
+        //查询所有菜单及菜单具有的功能信息
+        List<SysMenuTreeVO> menuAndResources = sysMenuMapper.getMenuAndResources();
+        List<SysMenuTreeVO> list = new ArrayList<SysMenuTreeVO>();
+        //根据菜单层级关系生成菜单树
+        createMenuTree(menuAndResources, list, flag);
+        return list;
 
     }
 
     /**
-     * 递归查询菜单子菜单及菜单页面功能信息
+     * 根据菜单层级关系,遍历生成菜单树
      *
-     * @param menuTreeVOList
+     * @param sourcesList 菜单集合
+     * @param targetList  菜单树集合
+     * @param flag        标记是菜单调用接口还是权限调用接口
      */
-    public void getChildMenuAndResourcesList(List<SysMenuTreeVO> menuTreeVOList) {
-        for (SysMenuTreeVO sysMenuTreeVO : menuTreeVOList) {
-            //判断菜单项是否是目录菜单,是递归获取子菜单信息
-            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
-                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
-                //以菜单id作为父id,去获取菜单子集
-                List<SysMenuTreeVO> childrenMenuList = sysMenuMapper.findMenuByParentId(sysMenuTreeVO.getId());
-                sysMenuTreeVO.setChildren(childrenMenuList);
-                if (childrenMenuList.size() == 0) {
-                    //设置子菜单为空
-                    sysMenuTreeVO.setChildren(null);
-                    continue;
-                } else {
-                    getChildMenuAndResourcesList(childrenMenuList);
-                }
+    private void createMenuTree(List<SysMenuTreeVO> sourcesList, List<SysMenuTreeVO> targetList, Boolean flag) {
+        for (SysMenuTreeVO menuTreeVO : sourcesList) {
+            //判断如果是一级菜单,添加进list
+            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(menuTreeVO.getLevel())) {
+                targetList.add(menuTreeVO);
+            }
+            //如果菜单查询为空,则设置结果为null
+            if (menuTreeVO.getChildren() != null && menuTreeVO.getChildren().size() == 0) {
+                menuTreeVO.setChildren(null);
+            }
+            //设置图标
+            if (SysMenuEnums.MENU_ISDIR.getCode().equals(menuTreeVO.getIsDir())) {
+                //如果菜单是菜单目录
+                menuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
             } else {
-                //不是目录菜单,查询菜单的页面功能信息
-                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+                //如果是页面菜单,设置图标,并且跳过循环
+                menuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
+                if (flag) {
+                    menuTreeVO.setChildren(null);
+                } else {
+                    menuTreeVO.setResourcesList(null);
+                }
+                continue;
+            }
+            //根据父级id层级关系,将子级菜单封装建父级的children中
+            List<SysMenuTreeVO> childList = new ArrayList<SysMenuTreeVO>(16);
+            for (SysMenuTreeVO sysMenuTreeVO : sourcesList) {
+                if (menuTreeVO.getId().equals(sysMenuTreeVO.getParentId())) {
+                    sysMenuTreeVO.setParentName(menuTreeVO.getLabel());
+                    childList.add(sysMenuTreeVO);
+                }
+            }
+            if (childList.size() > 0) {
+                menuTreeVO.setChildren(childList);
             }
         }
     }
-
 
     /**
      * 根据id获取菜单详情
@@ -268,7 +247,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private List<TbSysMenu> checkMenusName(String menuName, String parentId) {
         TbSysMenuCriteria tbSysMenuCriteria = new TbSysMenuCriteria();
         TbSysMenuCriteria.Criteria criteria = tbSysMenuCriteria.createCriteria();
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         criteria.andParentIdEqualTo(parentId);
         criteria.andMenuNameEqualTo(menuName);
         return tbSysMenuMapper.selectByExample(tbSysMenuCriteria);
@@ -365,12 +345,13 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     private void createTbSysMenu(SysMenuAdd sysMenuAdd, User user, TbSysMenu tbSysMenu) {
         tbSysMenu.setId(sysMenuAdd.getId());
-        tbSysMenu.setCreateTime(new Date());
-        tbSysMenu.setCreator(user.getId());
+        tbSysMenu.setCreatedTime(new Date());
+        tbSysMenu.setCreatorAccount(user.getAccount());
         tbSysMenu.setMenuName(sysMenuAdd.getMenuName());
         tbSysMenu.setMenuUrl(StringUtils.trim(sysMenuAdd.getMenuUrl()));
         tbSysMenu.setParentId(sysMenuAdd.getParentId());
-        tbSysMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysMenu.setRecordStatus(recordStatus);
         tbSysMenuMapper.insertSelective(tbSysMenu);
     }
 
@@ -400,7 +381,7 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     @ServiceLog(doAction = "批量更新菜单")
     @Transactional(rollbackFor = Exception.class)
-    public void updateBatch(SysMenus sysMenus) {
+    public void updateBatch(SysMenus sysMenus, User user) {
         List<SysMenuUpdate> sysMenuSortList = sysMenus.getSysMenuSortList();
         HashSet<String> set = new HashSet<String>();
         //判断批量修改菜单中名称是否有重复的存在,使用set去重
@@ -413,7 +394,10 @@ public class SysMenuServiceImpl implements SysMenuService {
         }
         //如果集合长度大于0,进行批量更新
         if (sysMenuSortList != null && sysMenuSortList.size() > 0) {
-            sysMenuMapper.updateBatch(sysMenuSortList);
+            Map<String, Object> map = new HashMap<String, Object>(16);
+            map.put("list", sysMenuSortList);
+            map.put("account", user.getAccount());
+            sysMenuMapper.updateBatch(map);
             logger.info("[菜单] 菜单批量更新成功");
         }
     }
@@ -449,22 +433,9 @@ public class SysMenuServiceImpl implements SysMenuService {
         List<SysMenuTreeVO> list = new ArrayList<SysMenuTreeVO>(16);
         //根据用户id获取用户权限具有的菜单信息
         List<SysMenuTreeVO> menuList = sysMenuMapper.getDynamicMenu(userId);
-        for (SysMenuTreeVO menuTreeVO : menuList) {
-            //判断如果是一级菜单,添加进list
-            if (SysLevelEnums.FIRST_LEVEL.getCode().equals(menuTreeVO.getLevel())) {
-                list.add(menuTreeVO);
-            }
-            //根据父级id层级关系,将子级菜单封装建父级的children中
-            List<SysMenuTreeVO> childList = new ArrayList<SysMenuTreeVO>(16);
-            for (SysMenuTreeVO sysMenuTreeVO : menuList) {
-                if (menuTreeVO.getId().equals(sysMenuTreeVO.getParentId())) {
-                    childList.add(sysMenuTreeVO);
-                }
-            }
-            if (childList.size() > 0) {
-                menuTreeVO.setChildren(childList);
-            }
-        }
+        //遍历查询到菜单,根据层级关系,生成菜单树
+        createMenuTree(menuList, list, true);
+        //返回查询结果
         return list;
     }
 }

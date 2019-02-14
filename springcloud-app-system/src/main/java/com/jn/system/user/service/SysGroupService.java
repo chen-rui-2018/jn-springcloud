@@ -32,18 +32,17 @@ public interface SysGroupService {
 
     /**
      * 逻辑删除用户组
-     *
-     * @param groupIds 用户组数组id
+     * @param groupIds
+     * @param user
      */
-    void deleSysGroup(String[] groupIds);
+    void deleSysGroup(String[] groupIds,User user);
 
     /**
      * 修改用户组信息
-     *
-     * @param sysGroup 用户组对象
-     * @return
+     * @param sysGroup
+     * @param user 当时用户信息
      */
-    void updateSysGroup(SysGroupUpdate sysGroup);
+    void updateSysGroup(SysGroupUpdate sysGroup,User user);
 
     /**
      * 根据用户组id获取用户组信息

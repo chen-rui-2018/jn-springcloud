@@ -4,6 +4,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.model.SysPost;
 import com.jn.system.dept.model.SysPostPage;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -31,18 +32,20 @@ public interface SysPostService {
     void addPost(TbSysPost tbSysPost);
 
     /**
-     * 批量删除岗位
+     * 删除岗位信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
-    void deletePostBranch(String[] ids);
+    void deletePostBranch(String[] ids, User user);
 
     /**
      * 修改岗位信息
      *
      * @param sysPost
+     * @param user    当前用户信息
      */
-    void updatePost(SysPost sysPost);
+    void updatePost(SysPost sysPost, User user);
 
     /**
      * 根据岗位id获取岗位信息

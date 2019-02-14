@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.user.dao.SysGroupUserMapper">
-    <sql id="Base_Column_list">
-			tsu.id,
-			tsu.account,
-			tsu.`password`,
-			tsu.`name`,
-			tsu.phone,
-			tsu.email,
-			tsu.creator,
-			tsu.create_time as createTime,
-			tsu.`status`
-	</sql>
 
     <select id="findUserByGroupId" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">
 	   select
-			tsu.id,tsu.`name`,tsu.create_time
-		from tb_sys_user_group tsug join tb_sys_user tsu
-			on tsug.user_id = tsu.id
+			tsu.id,tsu.`name`,tsu.created_time
+		from tb_sys_user_group tsug
+		join tb_sys_user tsu
+		on tsug.user_id = tsu.id
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
-			and tsug.`status` = '1'
-			and tsu.`status` = '1'
-			ORDER BY tsu.create_time ASC
+			and tsug.`record_status` = 1
+			and tsu.`record_status` = 1
+			ORDER BY tsu.created_time ASC
     </select>
 
     <select id="findUsersByGroupId" parameterType="java.lang.String" resultType="java.lang.String">
@@ -31,9 +21,9 @@
 		from tb_sys_user_group tsug join tb_sys_user tsu
 			on tsug.user_id = tsu.id
 		where tsug.group_id = #{id,jdbcType=VARCHAR}
-			and tsug.`status` = '1'
-			and tsu.`status` = '1'
-			ORDER BY tsu.create_time ASC
+			and tsug.`record_status` = 1
+			and tsu.`record_status` = 1
+			ORDER BY tsu.created_time ASC
     </select>
 
     <select id="findOtherUserByPage" parameterType="com.jn.system.user.model.SysGroupUserPage"
@@ -48,58 +38,66 @@
         t1.name
         from tb_sys_user t1,
         tb_sys_user_group t2
-        where t2.`status` = '1'
-        and t1.`status` = '1'
+        where t2.`record_status` = 1
+        and t1.`record_status` = 1
         and t1.id = t2.user_id
         and t2.group_id = #{groupId,jdbcType=VARCHAR}) tt
         on t.id = tt.id
         where tt.id is null
-        and t.`status` = '1'
+        and t.`record_status` = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR},'%')
         </if>
-        ORDER BY t.create_time DESC, t.id DESC
+        ORDER BY t.created_time DESC, t.id DESC
     </select>
 
     <update id="deleteUserOfGroup" parameterType="java.lang.String">
-		UPDATE tb_sys_user_group set `status` = '-1' where group_id = #{groupId,jdbcType=VARCHAR}
+		UPDATE tb_sys_user_group set `record_status` = 0 where group_id = #{groupId,jdbcType=VARCHAR}
 	</update>
 
     <insert id="insertSysGroupUserBatch" parameterType="java.util.List">
-        insert into tb_sys_user_group(id,group_id,user_id,creator,create_time,status) values
+        insert into tb_sys_user_group(id,group_id,user_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
+            (#{item.id,jdbcType=VARCHAR},
             #{item.groupId,jdbcType=VARCHAR},
             #{item.userId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
     <insert id="addGroupToUser" parameterType="java.util.List">
-        insert into tb_sys_user_group (id, group_id,creator, user_id,create_time, status) values
+        insert into tb_sys_user_group (id, group_id,creator_account, user_id,created_time, record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
+            (#{item.id,jdbcType=VARCHAR},
             #{item.groupId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             #{item.userId,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=TINYINT})
         </foreach>
     </insert>
 
-    <update id="deleteGroupBranch" parameterType="java.lang.String">
-        update tb_sys_user_group set status=-1
+    <update id="deleteGroupBranch" parameterType="java.util.Map">
+        update tb_sys_user_group
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where group_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user_group set status=-1
+    <update id="deleteUserBranch" parameterType="java.util.Map">
+        update tb_sys_user_group
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where user_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -109,17 +107,21 @@
         select DISTINCT
         t.id as groupId,
         t.group_name as groupName,
-        t.create_time as createTime,
-        t.`status`
+        t.created_time as createdTime,
+        t.`record_status` as recordStatus
         from tb_sys_group t left join
-        (SELECT t1.id,t1.group_name FROM tb_sys_group t1 , tb_sys_user_group t2
-        where t1.id = t2.group_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.user_id = #{userId,jdbcType=VARCHAR}) tt
+        (SELECT t1.id,t1.group_name
+        FROM tb_sys_group t1 , tb_sys_user_group t2
+        where t1.id = t2.group_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t2.user_id = #{userId,jdbcType=VARCHAR}) tt
         on t.id = tt.id
-        where tt.id is null and t.`status` = '1'
+        where tt.id is null
+        and t.`record_status` = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupName)">
             and t.group_name like CONCAT('%', #{userGroupName,jdbcType=VARCHAR},'%')
         </if>
-        ORDER BY t.create_time DESC,t.id DESC
+        ORDER BY t.created_time DESC,t.id DESC
     </select>
 </mapper>

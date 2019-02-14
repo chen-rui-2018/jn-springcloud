@@ -87,8 +87,9 @@ public class SysMenuServiceTest {
         SysMenu menu = new SysMenu();
         menu.setId(menuId);
         menu.setMenuName(menuName);
+        menu.setParentId(parentId);
         try {
-            sysMenuService.updateSysMenuById(menu);
+            sysMenuService.updateSysMenuById(menu,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -132,7 +133,7 @@ public class SysMenuServiceTest {
         list.add(menu);
         sysMenus.setSysMenuSortList(list);
         try {
-            sysMenuService.updateBatch(sysMenus);
+            sysMenuService.updateBatch(sysMenus,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -149,6 +150,6 @@ public class SysMenuServiceTest {
      */
     @Test
     public void zDeleteTest() {
-        sysMenuService.deleteSysMenuById(menuId);
+        sysMenuService.deleteSysMenuById(menuId,user);
     }
 }

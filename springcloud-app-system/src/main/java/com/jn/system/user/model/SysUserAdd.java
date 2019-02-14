@@ -3,6 +3,7 @@ package com.jn.system.user.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -40,13 +41,17 @@ public class SysUserAdd implements Serializable {
             message = "{email:'邮箱验证出错'}")
     private String email;
 
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp = "^\\-1|[01]$", message = "{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态")
+    @NotNull(message = "状态值不能为空")
+    private Byte recordStatus;
 
     @ApiModelProperty("微信账号")
     @Pattern(regexp = "^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$", message = "{weixinAccount:'微信号校验错误'}")
     private String wechatAccount;
+
+    @ApiModelProperty(value = "备注")
+    @Size(max = 200, message = "备注字符不能超过200字")
+    private String remark;
 
     @ApiModelProperty("部门id")
     private String departmentId;
@@ -57,15 +62,16 @@ public class SysUserAdd implements Serializable {
     public SysUserAdd() {
     }
 
-    public SysUserAdd(String id, String account, String name, String phone, String email,
-                      String status, String wechatAccount, String departmentId, String postId) {
+    public SysUserAdd(String id, String account, String name, String phone, String email, Byte recordStatus,
+                      String wechatAccount, String remark, String departmentId, String postId) {
         this.id = id;
         this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
         this.departmentId = departmentId;
         this.postId = postId;
     }
@@ -110,12 +116,12 @@ public class SysUserAdd implements Serializable {
         this.email = email;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getWechatAccount() {
@@ -124,6 +130,14 @@ public class SysUserAdd implements Serializable {
 
     public void setWechatAccount(String wechatAccount) {
         this.wechatAccount = wechatAccount;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getDepartmentId() {
@@ -150,8 +164,9 @@ public class SysUserAdd implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 ", departmentId='" + departmentId + '\'' +
                 ", postId='" + postId + '\'' +
                 '}';

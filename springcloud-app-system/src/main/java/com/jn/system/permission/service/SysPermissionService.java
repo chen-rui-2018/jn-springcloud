@@ -24,8 +24,9 @@ public interface SysPermissionService {
      * 修改权限
      *
      * @param sysPermission
+     * @param user
      */
-    void updatePermission(SysPermission sysPermission);
+    void updatePermission(SysPermission sysPermission, User user);
 
     /**
      * 根据主键获取权限信息
@@ -44,9 +45,12 @@ public interface SysPermissionService {
     PaginationData findByPage(SysPermissionPage sysPermissionPage);
 
     /**
+     * 逻辑删除权限信息
+     *
      * @param ids
+     * @param user
      */
-    void deletePermissionBranch(String[] ids);
+    void deletePermissionBranch(String[] ids, User user);
 
     /**
      * 为权限添加角色

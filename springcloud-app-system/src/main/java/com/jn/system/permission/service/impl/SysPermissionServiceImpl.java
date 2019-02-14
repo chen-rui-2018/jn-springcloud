@@ -14,16 +14,14 @@ import com.jn.system.menu.dao.SysMenuMapper;
 import com.jn.system.menu.dao.SysResourcesMapper;
 import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.entity.TbSysMenu;
-import com.jn.system.menu.enums.SysMenuEnums;
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysResources;
+import com.jn.system.menu.service.SysMenuService;
+import com.jn.system.menu.vo.SysMenuTreeVO;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.*;
 import com.jn.system.permission.entity.*;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysPermissionService;
 import com.jn.system.permission.vo.SysMenuResourcesVO;
-import com.jn.system.permission.vo.SysMenuTreeOfPermissionVO;
 import com.jn.system.permission.vo.SysPermissionFileGroupVO;
 import com.jn.system.permission.vo.SysPermissionRoleVO;
 import org.slf4j.Logger;
@@ -33,10 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 权限服务层
@@ -66,9 +61,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Autowired
     private TbSysMenuMapper tbSysMenuMapper;
     @Autowired
-    private SysMenuMapper sysMenuMapper;
-    @Autowired
-    private SysResourcesMapper sysResourcesMapper;
+    private SysMenuService sysMenuService;
 
     /**
      * 添加权限
@@ -99,7 +92,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         TbSysPermissionCriteria tbSysPermissionCriteria = new TbSysPermissionCriteria();
         TbSysPermissionCriteria.Criteria criteria = tbSysPermissionCriteria.createCriteria();
         criteria.andPermissionNameEqualTo(permissionName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysPermissionMapper.selectByExample(tbSysPermissionCriteria);
     }
 
@@ -111,13 +105,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Override
     @ServiceLog(doAction = "修改权限")
     @Transactional(rollbackFor = Exception.class)
-    public void updatePermission(SysPermission sysPermission) {
+    public void updatePermission(SysPermission sysPermission, User user) {
         String permissionId = sysPermission.getId();
         String permissionName = sysPermission.getPermissionName();
 
         //1.判断修改信息是否存在
         TbSysPermission tbSysPermission = tbSysPermissionMapper.selectByPrimaryKey(permissionId);
-        if (tbSysPermission == null || SysStatusEnums.DELETED.getCode().equals(tbSysPermission.getStatus())) {
+        if (tbSysPermission == null || SysStatusEnums.DELETED.getCode().equals(tbSysPermission.getRecordStatus().toString())) {
             logger.warn("[权限] 权限信息修改失败,修改信息不存在,permissionId: {}", permissionId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -135,6 +129,9 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         //3.更新权限信息
         TbSysPermission tbSysPermission1 = new TbSysPermission();
         BeanUtils.copyProperties(sysPermission, tbSysPermission1);
+        //设置最近更新人信息
+        tbSysPermission1.setModifiedTime(new Date());
+        tbSysPermission1.setModifierAccount(user.getAccount());
         tbSysPermissionMapper.updateByPrimaryKeySelective(tbSysPermission1);
         logger.info("[权限] 修改权限信息成功！，sysPermissionId:{}", permissionId);
     }
@@ -172,23 +169,29 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     /**
-     * 批量逻辑删除权限
+     * 逻辑删除用户信息
      *
      * @param ids
+     * @param user
      */
     @Override
     @ServiceLog(doAction = "批量逻辑删除权限")
     @Transactional(rollbackFor = Exception.class)
-    public void deletePermissionBranch(String[] ids) {
-        sysPermissionMapper.deletePermissionBranch(ids);
+    public void deletePermissionBranch(String[] ids, User user) {
+        if (ids.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysPermissionMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionFilesMapper.deletePermissionBranch(ids);
+        sysPermissionFilesMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联文件组信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionMenuMapper.deletePermissionBranch(ids);
+        sysPermissionMenuMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联菜单信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysRolePermissionMapper.deletePermissionBranch(ids);
+        sysRolePermissionMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联角色信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
-        sysPermissionResourcesMapper.deletePermissionBranch(ids);
+        sysPermissionResourcesMapper.deletePermissionBranch(map);
         logger.info("[权限] 批量逻辑删除权限关联功能信息成功！，sysPermissionIds:{}", Arrays.toString(ids));
     }
 
@@ -202,7 +205,10 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addRoleToPermission(SysPermissionRolesAdd sysPermissionRolesAdd, User user) {
         //清除权限已经具有的角色
-        sysRolePermissionMapper.deleteByPermissionId(sysPermissionRolesAdd.getPermissionId());
+        String[] ids = {sysPermissionRolesAdd.getPermissionId()};
+        //封装删除id及更新人信息
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysRolePermissionMapper.deletePermissionBranch(map);
         logger.info("[权限授权角色] 删除该权限下角色信息成功！permissionId:{}", sysPermissionRolesAdd.getPermissionId());
         Boolean isDelete = sysPermissionRolesAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
@@ -214,10 +220,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             //创建权限角色实体类
             TbSysRolePermission tbSysRolePermission = new TbSysRolePermission();
             tbSysRolePermission.setId(UUID.randomUUID().toString());
-            tbSysRolePermission.setCreator(user.getId());
+            tbSysRolePermission.setCreatorAccount(user.getAccount());
             tbSysRolePermission.setPermissionId(sysPermissionRolesAdd.getPermissionId());
             tbSysRolePermission.setRoleId(roleId);
-            tbSysRolePermission.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            tbSysRolePermission.setRecordStatus(recordStatus);
             list.add(tbSysRolePermission);
         }
         //批量添加权限角色信息
@@ -225,6 +232,20 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         logger.info("[权限] 批量为权限添加角色信息成功！，sysPermissionId:{},roleIds:{}",
                 sysPermissionRolesAdd.getPermissionId()
                 , Arrays.toString(sysPermissionRolesAdd.getRoleIds()));
+    }
+
+    /**
+     * 疯转删除信息
+     *
+     * @param user 当前用户
+     * @param ids  权限ids数组
+     * @return
+     */
+    private Map<String, Object> getDeleteMap(User user, String[] ids) {
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
+        return map;
     }
 
     /**
@@ -279,23 +300,25 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addFileGroupToPermission(SysPermissionFileGroupAdd sysPermissionFileGroupAdd, User user) {
         //逻辑删除原有权限对应文件组
-        sysPermissionFilesMapper.deleteByPermissionId(sysPermissionFileGroupAdd.getPermissionId());
+        String[] ids = {sysPermissionFileGroupAdd.getPermissionId()};
+        Map<String, Object> map = getDeleteMap(user, ids);
+        sysPermissionFilesMapper.deletePermissionBranch(map);
         logger.info("[权限授权文件组] 删除该权限下文件组信息成功！permissionId:{}",
                 sysPermissionFileGroupAdd.getPermissionId());
         Boolean isDelete = sysPermissionFileGroupAdd.getFileGroupIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
-
         List<TbSysPermissionFiles> list = new ArrayList<TbSysPermissionFiles>();
         for (String fileGroupId : sysPermissionFileGroupAdd.getFileGroupIds()) {
             //封装权限文件组实体
             TbSysPermissionFiles tbSysPermissionFiles = new TbSysPermissionFiles();
             tbSysPermissionFiles.setId(UUID.randomUUID().toString());
-            tbSysPermissionFiles.setCreator(user.getId());
+            tbSysPermissionFiles.setCreatorAccount(user.getAccount());
             tbSysPermissionFiles.setFileGroupId(fileGroupId);
             tbSysPermissionFiles.setPermissionId(sysPermissionFileGroupAdd.getPermissionId());
-            tbSysPermissionFiles.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+            Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+            tbSysPermissionFiles.setRecordStatus(recordStatus);
             list.add(tbSysPermissionFiles);
         }
         //为权限添加新的文件组
@@ -331,83 +354,18 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @ServiceLog(doAction = "权限授权功能,获取菜单及功能信息")
     public SysMenuResourcesVO getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = new SysMenuResourcesVO();
+        List<String> menuAndResourcesIds = sysMenuResourcesVO.getMenuAndResourcesIds();
         //获取菜单树信息
-        List<SysMenuTreeOfPermissionVO> sysMenuTreeOfPermissionVOS = selectMenuList();
-        sysMenuResourcesVO.setSysMenuTreeVOList(sysMenuTreeOfPermissionVOS);
-        //获取权限已有的菜单信息
-        List<SysMenu> sysMenuOfPermissionList =
-                sysPermissionMenuMapper.findMenuOfPermission(permissionId);
-        //获取权限已有功能信息
-        List<SysResources> sysResourcesOfPermissionList =
-                sysPermissionResourcesMapper.findResourcesOfPermission(permissionId);
-
-        List<String> menuAndResourcesIds = new ArrayList<String>();
-        //遍历获取菜单及功能信息id
-        for (SysMenu sysMenu : sysMenuOfPermissionList) {
-            menuAndResourcesIds.add(sysMenu.getId());
-        }
-        for (SysResources sysResources : sysResourcesOfPermissionList) {
-            menuAndResourcesIds.add(sysResources.getId());
-        }
-        sysMenuResourcesVO.setMenuAndResourcesIds(menuAndResourcesIds);
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuList(false);
+        sysMenuResourcesVO.setSysMenuTreeVOList(menuTreeVOList);
+        //获取权限已有的菜单id
+        List<String> menuIds = sysPermissionMenuMapper.findMenuOfPermission(permissionId);
+        menuAndResourcesIds.addAll(menuIds);
+        //获取权限已有功能id
+        List<String> resourcesIdS = sysPermissionResourcesMapper.findResourcesOfPermission(permissionId);
+        menuAndResourcesIds.addAll(resourcesIdS);
         //返回信息
         return sysMenuResourcesVO;
-    }
-
-    /**
-     * 获取菜单及权限信息
-     *
-     * @return
-     */
-    public List<SysMenuTreeOfPermissionVO> selectMenuList() {
-        //先查询等级为1的菜单信息
-        List<SysMenuTreeOfPermissionVO> menuTreeVOList = sysMenuMapper.getMenuByLevelOne();
-        getChildMenuAndResourcesList(menuTreeVOList);
-        return menuTreeVOList;
-
-    }
-
-    /**
-     * 递归查询菜单子菜单及菜单页面功能信息
-     *
-     * @param menuTreeVOList
-     */
-    public void getChildMenuAndResourcesList(List<SysMenuTreeOfPermissionVO> menuTreeVOList) {
-        for (SysMenuTreeOfPermissionVO sysMenuTreeVO : menuTreeVOList) {
-            //判断菜单项是否是目录菜单,是递归获取子菜单信息
-            if (SysMenuEnums.MENU_ISDIR.getCode().equals(sysMenuTreeVO.getIsDir())) {
-                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_DIR_ICON.getCode());
-                //以菜单id作为父id,去获取菜单子集
-                List<SysMenuTreeOfPermissionVO> childrenMenuList =
-                        sysMenuMapper.findMenuOfPermissionByParentId(sysMenuTreeVO.getId());
-                sysMenuTreeVO.setChildren(childrenMenuList);
-                //未查询到数据,设置为空
-                if (childrenMenuList == null || childrenMenuList.size() == 0) {
-                    sysMenuTreeVO.setChildren(null);
-                    continue;
-                } else {
-                    //子集不为空,继续查询子集菜单具有的子集菜单
-                    getChildMenuAndResourcesList(childrenMenuList);
-                }
-            } else {
-                //不是目录菜单,查询菜单的页面功能信息
-                sysMenuTreeVO.setIcon(SysMenuEnums.MENU_NOTDIR_ICON.getCode());
-                getResourcesByMenuId(sysMenuTreeVO);
-            }
-        }
-    }
-
-    /**
-     * 根据菜单id获取菜单功能信息
-     *
-     * @param sysMenuTreeVO
-     */
-    private void getResourcesByMenuId(SysMenuTreeOfPermissionVO sysMenuTreeVO) {
-        List<SysResources> resourcesList = sysResourcesMapper.getResourcesByMenuId(sysMenuTreeVO.getId());
-        sysMenuTreeVO.setChildren(resourcesList);
-        if (resourcesList == null || resourcesList.size() == 0) {
-            sysMenuTreeVO.setChildren(null);
-        }
     }
 
     /**
@@ -421,12 +379,15 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     @Transactional(rollbackFor = Exception.class)
     public void addMenuAndResourcesToPermission(SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd, User user) {
         String permissionId = sysPermissionMenuResourcesAdd.getPermissionId();
+        String[] ids = {permissionId};
+        Map<String, Object> map = getDeleteMap(user, ids);
         //逻辑删除原权限菜单数据
-        sysPermissionMenuMapper.deleteByPermissionId(permissionId);
+        sysPermissionMenuMapper.deletePermissionBranch(map);
         logger.info("[权限] 删除该权限关联菜单信息成功！permissionId:{}", permissionId);
         //逻辑删除原有权限页面功能数据
-        sysPermissionResourcesMapper.deleteByPermissionId(permissionId);
+        sysPermissionResourcesMapper.deletePermissionBranch(map);
         logger.info("[权限] 删除该权限关联功能信息成功！permissionId:{}", permissionId);
+
         Boolean isDelete = sysPermissionMenuResourcesAdd.getMenuAndResourcesIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
@@ -471,10 +432,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
                                            String id, String permissionId) {
         TbSysPermissionResources tbSysPermissionResources = new TbSysPermissionResources();
         tbSysPermissionResources.setId(UUID.randomUUID().toString());
-        tbSysPermissionResources.setCreator(user.getId());
+        tbSysPermissionResources.setCreatorAccount(user.getAccount());
         tbSysPermissionResources.setPermissionId(permissionId);
         tbSysPermissionResources.setResourcesId(id);
-        tbSysPermissionResources.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermissionResources.setRecordStatus(recordStatus);
         tbSysPermissionResourcesList.add(tbSysPermissionResources);
     }
 
@@ -490,10 +452,11 @@ public class SysPermissionServiceImpl implements SysPermissionService {
                                       String id, String permissionId) {
         TbSysPermissionMenu tbSysPermissionMenu = new TbSysPermissionMenu();
         tbSysPermissionMenu.setId(UUID.randomUUID().toString());
-        tbSysPermissionMenu.setCreator(user.getId());
+        tbSysPermissionMenu.setCreatorAccount(user.getAccount());
         tbSysPermissionMenu.setMenuId(id);
         tbSysPermissionMenu.setPermissionId(permissionId);
-        tbSysPermissionMenu.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysPermissionMenu.setRecordStatus(recordStatus);
         tbSysPermissionMenuList.add(tbSysPermissionMenu);
     }
 }

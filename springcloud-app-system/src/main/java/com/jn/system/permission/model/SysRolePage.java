@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 角色分页实体
@@ -28,14 +27,14 @@ public class SysRolePage extends Page implements Serializable {
      * 状态 1：有效，0：无效，-1：删除
      */
     @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")
-    private String status;
+    private Byte recordStatus;
 
     public SysRolePage() {
     }
 
-    public SysRolePage(String roleName, String status) {
+    public SysRolePage(String roleName, Byte recordStatus) {
         this.roleName = roleName;
-        this.status = status;
+        this.recordStatus = recordStatus;
     }
 
     public String getRoleName() {
@@ -46,19 +45,19 @@ public class SysRolePage extends Page implements Serializable {
         this.roleName = roleName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
     public String toString() {
         return "SysRolePage{" +
                 "roleName='" + roleName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

@@ -1,10 +1,9 @@
 package com.jn.system.permission.dao;
 
-import com.jn.system.menu.model.SysResources;
 import com.jn.system.permission.entity.TbSysPermissionResources;
-import com.jn.system.permission.model.SysPermissionResourcePage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 权限功能Mapper
@@ -18,9 +17,9 @@ public interface SysPermissionResourcesMapper {
     /**
      * 根据权限id批量删除对应信息
      *
-     * @param ids
+     * @param map
      */
-    void deletePermissionBranch(String[] ids);
+    void deletePermissionBranch(Map<String,Object> map);
 
     /**
      * 根据权限id获取权限已经具有的功能信息
@@ -28,14 +27,7 @@ public interface SysPermissionResourcesMapper {
      * @param id
      * @return
      */
-    List<SysResources> findResourcesOfPermission(String id);
-
-    /**
-     * 逻辑删除原有权限页面功能数据
-     *
-     * @param permissionId
-     */
-    void deleteByPermissionId(String permissionId);
+    List<String> findResourcesOfPermission(String id);
 
     /**
      * 添加新权限页面功能数据
@@ -46,7 +38,7 @@ public interface SysPermissionResourcesMapper {
 
     /**
      * 根据功能id批量删除表信息
-     * @param resourcesIds
+     * @param map
      */
-    void deleteByResourcesIds(String[] resourcesIds);
+    void deleteByResourcesIds(Map<String,Object> map);
 }

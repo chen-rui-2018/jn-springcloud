@@ -45,7 +45,7 @@ public class SysUserGroupRoleServiceImpl implements SysUserGroupRoleService {
     @ServiceLog(doAction = "新增用户组角色")
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserGroupRole(SysUserGroupRole userGroupRole, User user) {
-        userGroupRole.setCreator(user.getId());
+        userGroupRole.setCreatorAccount(user.getAccount());
         userGroupRole.setId(UUID.randomUUID().toString());
         TbSysGroupRole tbSysGroupRole = new TbSysGroupRole();
         BeanUtils.copyProperties(userGroupRole, tbSysGroupRole);

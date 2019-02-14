@@ -40,7 +40,7 @@
 - 7.启动nginx 访问端口80/html
 ##### 后面可以不启动
 - 7.启动调度中心springcloud-app-schedule
-- 8.启动链路追踪springcloud-app-zipkin 访问端口9411
+- 8.启动链路追踪springcloud-app-zipkin 访问端口2001
 - 9.启动服务治理监控springcloud-app-admin
 - 10.启动配置中心配置项目springcloud-app-config-manager
 
@@ -137,9 +137,11 @@
 - 16            payment     支付平台
 - 17            hardware    硬件平台
 - 18            delayStream 消息延时
+- 19            txManager   事务协调器
 - 30            user        用户服务
 - 40            park        园区服务
 - 50            enterprise  企业服务
+- 60            oa          OA服务
 
 ##### 第二组，2位为模块编码
 - 00		common

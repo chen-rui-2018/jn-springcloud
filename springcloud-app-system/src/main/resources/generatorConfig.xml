@@ -23,8 +23,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="ncdev" password="devnc321">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -83,8 +83,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="ncdev" password="devnc321">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -135,8 +135,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="ncdev" password="devnc321">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -190,8 +190,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="ncdev" password="devnc321">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
@@ -251,8 +251,8 @@
         </commentGenerator>
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://192.168.10.23:3306/new-cloud?useUnicode=true&amp;characterEncoding=utf-8"
-                        userId="ncdev" password="devnc321">
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/dbasic?useUnicode=true&amp;characterEncoding=utf-8&amp;tinyInt1isBit=false"
+                        userId="dbasicuser" password="dbasic_u_123">
         </jdbcConnection>
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>

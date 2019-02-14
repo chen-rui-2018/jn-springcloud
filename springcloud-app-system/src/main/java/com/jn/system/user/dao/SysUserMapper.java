@@ -1,14 +1,14 @@
 package com.jn.system.user.dao;
 
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
-import com.jn.system.user.model.SysGroupUser;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserPage;
-import com.jn.system.user.model.SysUserRole;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户dao
@@ -19,13 +19,6 @@ import java.util.List;
  * @modified By:
  */
 public interface SysUserMapper {
-
-    /**
-     * 添加用户
-     *
-     * @param sysUser
-     */
-    void addSysUser(SysUser sysUser);
 
     /**
      * 当查询岗位或岗位类型为空时的查询方法
@@ -43,47 +36,10 @@ public interface SysUserMapper {
     void deleteSysUser(String id);
 
     /**
-     * 更新用户
-     *
-     * @param sysUserVO
-     */
-    void updateSysUser(SysUserVO sysUserVO);
-
-    /**
-     * 清除用户组中已经存在的用户组
-     *
-     * @param userId
-     */
-    void deleGroupOfUser(String userId);
-
-    /**
-     * 清除用户中已经具有的角色
-     *
-     * @param userId
-     */
-    void deleRoleOfUser(String userId);
-
-    /**
-     * 清除用户原有部门岗位信息
-     *
-     * @param sysUserId
-     */
-    void deleDepartmentandPost(String sysUserId);
-
-    /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    SysUserVO findSysUserById(String id);
-
-    /**
      * 批量删除用户
-     *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String,Object> map);
 
 
     /**

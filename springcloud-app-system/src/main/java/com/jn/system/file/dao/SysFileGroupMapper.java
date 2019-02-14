@@ -1,7 +1,7 @@
 package com.jn.system.file.dao;
 
 
-import com.jn.system.file.model.SysFileGroup;
+import java.util.Map;
 
 /**
  * 文件组mapper
@@ -15,8 +15,9 @@ public interface SysFileGroupMapper {
 
     /**
      * 批量删除
-     * @param id
+     *
+     * @param map
      * @return
      */
-    int deleteByIds(String[] id);
+    int deleteByIds(Map<String, Object> map);
 }

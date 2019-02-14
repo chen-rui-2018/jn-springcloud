@@ -6,6 +6,7 @@ import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.user.model.SysTUser;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： shaobao
@@ -49,23 +50,23 @@ public interface SysUserDepartmentPostMapper {
     /**
      * 批量删除岗位id
      *
-     * @param ids
+     * @param map
      */
-    void deletePostBranch(String[] ids);
+    void deletePostBranch(Map<String, Object> map);
 
     /**
      * 根据部门id批量删除部门信息
      *
-     * @param ids
+     * @param map
      */
-    void deleteDepartmentBranch(List<String> ids);
+    void deleteDepartmentBranch(Map<String, Object> map);
 
     /**
      * 批量删除用户对应的信息
      *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String, Object> map);
 
     /**
      * 根据部门id递归获取部门及上级部门信息

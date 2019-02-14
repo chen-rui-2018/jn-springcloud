@@ -13,6 +13,7 @@ import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.MenuResources;
+import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysPermissionResourcesMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -23,9 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 功能serviceImpl
@@ -80,7 +79,8 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andResourcesNameEqualTo(resourcesName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         criteria.andMenuIdEqualTo(menuId);
         return tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
     }
@@ -93,12 +93,12 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @Override
     @ServiceLog(doAction = "更新功能信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updateResourcesById(SysResources sysResources) {
+    public void updateResourcesById(SysResources sysResources, User user) {
         String resourcesId = sysResources.getId();
         String resourcesName = sysResources.getResourcesName();
         //1.判断修改信息是否存在
         TbSysResources tbSysResources1 = tbSysResourcesMapper.selectByPrimaryKey(resourcesId);
-        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getStatus())) {
+        if (tbSysResources1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysResources1.getRecordStatus().toString())) {
             logger.warn("[功能] 功能信息修改失败,修改信息不存在,resourcesId: {}", resourcesId);
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
@@ -115,23 +115,33 @@ public class SysResourcesServiceImpl implements SysResourcesService {
         sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
         TbSysResources tbSysResources = new TbSysResources();
         BeanUtils.copyProperties(sysResources, tbSysResources);
+        //设置最近更信任信息
+        tbSysResources.setModifiedTime(new Date());
+        tbSysResources.setModifierAccount(user.getAccount());
         tbSysResourcesMapper.updateByPrimaryKeySelective(tbSysResources);
         logger.info("[功能] 更新功能信息成功！,resourcesId:{}", resourcesId);
     }
 
     /**
-     * 批量删除功能（逻辑删除）
+     * 逻辑删除功能信息
      *
      * @param resourcesIds
-     * @return
+     * @param user         获取当前用户
      */
     @Override
     @ServiceLog(doAction = "批量删除功能（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteResourcesById(String[] resourcesIds) {
-        sysResourcesMapper.deleteByIds(resourcesIds);
+    public void deleteResourcesById(String[] resourcesIds, User user) {
+        if (resourcesIds.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", resourcesIds);
+        map.put("account", user.getAccount());
+        sysResourcesMapper.deleteByIds(map);
         logger.info("[功能] 批量删除功能成功！,resourcesIds:{}", Arrays.toString(resourcesIds));
-        sysPermissionResourcesMapper.deleteByResourcesIds(resourcesIds);
+        sysPermissionResourcesMapper.deleteByResourcesIds(map);
         logger.info("[功能] 批量删除功能关联权限信息成功！,resourcesIds:{}", Arrays.toString(resourcesIds));
     }
 
@@ -200,10 +210,11 @@ public class SysResourcesServiceImpl implements SysResourcesService {
     @ServiceLog(doAction = "根据菜单id获取菜单所有页面功能")
     public List<TbSysResources> findResourcesByMenuId(String menuId) {
         TbSysResourcesCriteria tbSysResourcesCriteria = new TbSysResourcesCriteria();
-        tbSysResourcesCriteria.setOrderByClause("create_time desc");
+        tbSysResourcesCriteria.setOrderByClause("created_time desc");
         TbSysResourcesCriteria.Criteria criteria = tbSysResourcesCriteria.createCriteria();
         criteria.andMenuIdEqualTo(menuId);
-        criteria.andStatusEqualTo(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        criteria.andRecordStatusEqualTo(recordStatus);
         List<TbSysResources> tbSysResources = tbSysResourcesMapper.selectByExample(tbSysResourcesCriteria);
         return tbSysResources;
     }

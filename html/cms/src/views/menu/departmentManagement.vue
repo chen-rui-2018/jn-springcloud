@@ -290,8 +290,6 @@ export default {
               this.$message.error(res.data.result)
             }
             this.isDisabled = false
-            // 重置表单元素的数据
-            this.$refs['departmentForm'].resetFields()
             // 刷新页面显示
             this.initList()
             this.updataRight()

@@ -54,7 +54,7 @@ public class SysGroupServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化用户组id及名称
         groupId = UUID.randomUUID().toString();
@@ -63,10 +63,11 @@ public class SysGroupServiceTest {
         //封装用户组对象
         tbSysGroup = new TbSysGroup();
         tbSysGroup.setId(groupId);
-        tbSysGroup.setCreateTime(new Date());
-        tbSysGroup.setCreator(user.getId());
+        tbSysGroup.setCreatedTime(new Date());
+        tbSysGroup.setCreatorAccount(user.getAccount());
         tbSysGroup.setGroupName(groupName);
-        tbSysGroup.setStatus(SysStatusEnums.EFFECTIVE.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysGroup.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -92,9 +93,10 @@ public class SysGroupServiceTest {
         SysGroupUpdate sysGroup = new SysGroupUpdate();
         sysGroup.setId(groupId);
         sysGroup.setGroupName(groupName);
-        sysGroup.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        sysGroup.setRecordStatus(recordStatus);
         try {
-            sysGroupService.updateSysGroup(sysGroup);
+            sysGroupService.updateSysGroup(sysGroup,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -115,7 +117,8 @@ public class SysGroupServiceTest {
         page.setRows(10);
         page.setGroupId(groupId);
         PaginationData data = sysGroupService.selectGroupRoleAndOtherRole(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -133,7 +136,8 @@ public class SysGroupServiceTest {
         page.setPage(1);
         page.setRows(10);
         PaginationData data = sysGroupService.findOtherUserByPage(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -146,6 +150,6 @@ public class SysGroupServiceTest {
     @Test
     public void zDeleSysGroupTest() {
         String[] groupIdS = {groupId};
-        sysGroupService.deleSysGroup(groupIdS);
+        sysGroupService.deleSysGroup(groupIdS,user);
     }
 }

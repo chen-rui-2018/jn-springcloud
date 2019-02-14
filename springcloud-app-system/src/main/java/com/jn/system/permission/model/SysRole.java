@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -31,26 +30,36 @@ public class SysRole implements Serializable {
     /**
      * 创建人
      */
-    @ApiModelProperty(value = "创建人")
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
     /**
      * 创建时间
      */
     @ApiModelProperty(value = "创建时间")
-    private Date createTime;
+    private Date createdTime;
     /**
      * 状态 1：有效，0：无效，-1：删除
      */
-    @ApiModelProperty(value = "状态 1：有效，0：无效，-1：删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
+
+    public SysRole() {
+    }
+
+    public SysRole(String id, String roleName, String creatorAccount, Date createdTime, Byte recordStatus) {
+        this.id = id;
+        this.roleName = roleName;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getRoleName() {
@@ -58,31 +67,31 @@ public class SysRole implements Serializable {
     }
 
     public void setRoleName(String roleName) {
-        this.roleName = roleName == null ? null : roleName.trim();
+        this.roleName = roleName;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -102,22 +111,22 @@ public class SysRole implements Serializable {
         if (roleName != null ? !roleName.equals(sysRole.roleName) : sysRole.roleName != null) {
             return false;
         }
-        if (creator != null ? !creator.equals(sysRole.creator) : sysRole.creator != null) {
+        if (creatorAccount != null ? !creatorAccount.equals(sysRole.creatorAccount) : sysRole.creatorAccount != null) {
             return false;
         }
-        if (createTime != null ? !createTime.equals(sysRole.createTime) : sysRole.createTime != null) {
+        if (createdTime != null ? !createdTime.equals(sysRole.createdTime) : sysRole.createdTime != null) {
             return false;
         }
-        return status != null ? status.equals(sysRole.status) : sysRole.status == null;
+        return recordStatus != null ? recordStatus.equals(sysRole.recordStatus) : sysRole.recordStatus == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (roleName != null ? roleName.hashCode() : 0);
-        result = 31 * result + (creator != null ? creator.hashCode() : 0);
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (creatorAccount != null ? creatorAccount.hashCode() : 0);
+        result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
+        result = 31 * result + (recordStatus != null ? recordStatus.hashCode() : 0);
         return result;
     }
 
@@ -126,9 +135,9 @@ public class SysRole implements Serializable {
         return "SysRole{" +
                 "id='" + id + '\'' +
                 ", roleName='" + roleName + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

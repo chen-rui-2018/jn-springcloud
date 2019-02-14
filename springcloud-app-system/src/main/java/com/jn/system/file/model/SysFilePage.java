@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 文件分页实体
@@ -26,7 +25,7 @@ public class SysFilePage extends Page implements Serializable {
     private String fileUrl;
 
     @ApiModelProperty(value = "状态 1:有效 0:无效 -1:删除")
-    private String status;
+    private String recordStatus;
 
     @ApiModelProperty(value = "文件组名称")
     private String fileGroupName;
@@ -34,10 +33,10 @@ public class SysFilePage extends Page implements Serializable {
     public SysFilePage() {
     }
 
-    public SysFilePage(String fileName, String fileUrl, String status, String fileGroupName) {
+    public SysFilePage(String fileName, String fileUrl, String recordStatus, String fileGroupName) {
         this.fileName = fileName;
         this.fileUrl = fileUrl;
-        this.status = status;
+        this.recordStatus = recordStatus;
         this.fileGroupName = fileGroupName;
     }
 
@@ -57,12 +56,12 @@ public class SysFilePage extends Page implements Serializable {
         this.fileUrl = fileUrl;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getFileGroupName() {
@@ -78,7 +77,7 @@ public class SysFilePage extends Page implements Serializable {
         return "SysFilePage{" +
                 "fileName='" + fileName + '\'' +
                 ", fileUrl='" + fileUrl + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus='" + recordStatus + '\'' +
                 ", fileGroupName='" + fileGroupName + '\'' +
                 '}';
     }

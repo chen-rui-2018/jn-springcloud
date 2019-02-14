@@ -59,8 +59,8 @@ public class SysRoleController extends BaseController {
         TbSysRole tbSysRole = new TbSysRole();
         BeanUtils.copyProperties(role, tbSysRole);
         tbSysRole.setId(UUID.randomUUID().toString());
-        tbSysRole.setCreator(user.getId());
-        tbSysRole.setCreateTime(new Date());
+        tbSysRole.setCreatorAccount(user.getAccount());
+        tbSysRole.setCreatedTime(new Date());
         tbRoleService.insertTbRole(tbSysRole);
         return new Result();
 
@@ -72,7 +72,9 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "角色ID不能为空");
-        tbRoleService.deleteTbRoleById(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.deleteTbRoleById(ids, user);
         return new Result();
     }
 
@@ -82,7 +84,9 @@ public class SysRoleController extends BaseController {
     @RequiresPermissions("/system/sysRole/update")
     public Result update(@Validated @RequestBody SysRoleUpdate role) {
         Assert.notNull(role.getId(), "角色ID不能为空");
-        tbRoleService.updateTbRole(role);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        tbRoleService.updateTbRole(role, user);
         return new Result();
     }
 

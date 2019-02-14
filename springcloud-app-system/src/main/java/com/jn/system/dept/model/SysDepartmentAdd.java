@@ -5,18 +5,17 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * 部门添加实体
+ *
  * @author： shaobao
  * @date： Created on 2018/11/7 14:16
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentAdd",description = "部门添加实体")
+@ApiModel(value = "SysDepartmentAdd", description = "部门添加实体")
 public class SysDepartmentAdd implements Serializable {
 
     private static final long serialVersionUID = -5667858257333477069L;

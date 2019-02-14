@@ -8,7 +8,7 @@
             <el-input v-model="listQuery.name" maxlength="20" placeholder="请输入姓名" style="width: 150px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
           </el-form-item>
           <el-form-item label="状态">
-            <el-select v-model="listQuery.status" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
+            <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
               <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
             </el-select>
           </el-form-item>
@@ -17,7 +17,7 @@
           </el-form-item>
           <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
           <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
-          <el-button type="primary" class="filter-item">导出</el-button>
+          <el-button type="primary" class="filter-item" @click="handleExcel">导出</el-button>
 
         </el-form>
       </div></el-col>
@@ -32,20 +32,21 @@
           <el-table-column label="序列" type="index" align="center" width="60"/>
           <el-table-column label="账号" prop="account" align="center" width="100" />
           <el-table-column label="姓名" prop="name" align="center" width="100" />
-          <el-table-column label="邮箱" prop="email" align="center" width="150" />
-          <el-table-column label="手机" prop="phone" align="center" width="120" />
-          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
-          <el-table-column label="创建时间" prop="createTime" align="center" width="100">
-            <template slot-scope="scope">
-              {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-            </template>
-          </el-table-column>
           <el-table-column label="部门" prop="departmentName" align="center" width="100" />
           <el-table-column label="岗位" prop="postName" align="center" width="85" />
           <el-table-column label="岗位类型" prop="postTypeName" align="center" width="85" />
-          <el-table-column label="状态" prop="status" align="center" width="70">
+          <el-table-column label="邮箱" prop="email" align="center" width="150" />
+          <el-table-column label="手机" prop="phone" align="center" width="120" />
+          <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
+          <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="100">
             <template slot-scope="scope">
-              <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
+              {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
+            </template>
+          </el-table-column>
+          <el-table-column label="状态" prop="recordStatus" align="center" width="70">
+            <template slot-scope="scope">
+              <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
             </template>
           </el-table-column>
           <el-table-column fit label="操作" align="center" width="560">
@@ -54,8 +55,8 @@
               <el-button type="primary" size="mini" @click="showRoleDialog(scope.row.id)">授权角色</el-button>
               <el-button type="primary" size="mini" @click="showUserGroupDialog(scope.row.id)">授权用户组</el-button>
               <el-button type="primary" size="mini" @click="handleResetPasswordDialog(scope.row)">重置密码</el-button>
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)" />
-              <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)" />
+              <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+              <el-button type="danger" size="mini" @click="handleDelete(scope.row)" >删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -66,49 +67,54 @@
     </div>
 
     <!-- S 新增弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="450px" class="addUser">
-      <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
-        <el-form-item label="账号" prop="account">
-          <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model.trim="temp.name" maxlength="16" clearable />
-        </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="请选择" style="max-width:280px;">
-            <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="temp.email" clearable />
-        </el-form-item>
-        <el-form-item label="手机" prop="phone">
-          <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
-        </el-form-item>
-        <el-form-item label="微信" prop="wechatAccount">
-          <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
-        </el-form-item>
-        <el-form-item v-if="Visible" label="部门">
-          <el-cascader
-            :options="departmentList"
-            v-model="currentDepartmentIds"
-            change-on-select
-            placeholder="请选择"
-            clearable
-            @change="handleChangeDepartment"
-          />
-        </el-form-item>
-        <el-form-item v-if="Visible" label="岗位">
-          <el-select v-model="temp.postId" class="filter-item" placeholder="请选择" clearable>
-            <el-option v-for="(item,index) in positionOptions" :key="index" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-      </div>
-    </el-dialog>
+    <template v-if="dialogFormVisible">
+      <el-dialog :visible.sync="dialogFormVisible" :title="addDialogTitle" width="450px" class="addUser">
+        <el-form ref="dataForm" :rules="addUserDialogRules" :model="temp" label-position="right" label-width="80px" style="max-width:320px;margin-left:20px;">
+          <el-form-item label="账号" prop="account">
+            <el-input v-model="temp.account" :disabled="isAbled" maxlength="16" clearable/>
+          </el-form-item>
+          <el-form-item label="姓名" prop="name">
+            <el-input v-model.trim="temp.name" maxlength="16" clearable />
+          </el-form-item>
+          <el-form-item label="状态" prop="recordStatus">
+            <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择" style="max-width:280px;">
+              <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="temp.email" clearable />
+          </el-form-item>
+          <el-form-item label="手机" prop="phone">
+            <el-input v-model="temp.phone" maxlength="11" minlenght="11" clearable />
+          </el-form-item>
+          <el-form-item label="微信" prop="wechatAccount">
+            <el-input v-model="temp.wechatAccount" maxlength="20" clearable />
+          </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input :rows="2" v-model="temp.remark" type="textarea" maxlength="100" clearable/>
+          </el-form-item>
+          <el-form-item v-if="Visible" label="部门">
+            <el-cascader
+              :options="departmentList"
+              v-model="currentDepartmentIds"
+              change-on-select
+              placeholder="请选择"
+              clearable
+              @change="handleChangeDepartment"
+            />
+          </el-form-item>
+          <el-form-item v-if="Visible" label="岗位">
+            <el-select v-model="temp.postId" class="filter-item" placeholder="请选择" clearable>
+              <el-option v-for="(item,index) in positionOptions" :key="index" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='create'?createUserData():updateData()">确认</el-button>
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+        </div>
+      </el-dialog>
+    </template>
     <!-- E 新增弹窗 -->
     <!-- S 部门岗位 -->
     <el-dialog :visible.sync="dialogSectorVisible" title="部门岗位" class="sector-dialog">
@@ -171,16 +177,16 @@
     </el-dialog>
     <!-- E 重置密码 -->
     <!-- 弹出的授权用户组对话框 -->
-    <template v-if="userGroup.userGroupdialogVisible">
-      <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
-        <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
-          <span slot="left-footer" size="small">
-            <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
-          </span>
-          <span slot="right-footer" size="small" />
-        </el-transfer>
-      </el-dialog>
-    </template>
+    <!-- <template v-if="userGroup.userGroupdialogVisible"> -->
+    <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+      <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
+        <span slot="left-footer" size="small">
+          <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
+        </span>
+        <span slot="right-footer" size="small" />
+      </el-transfer>
+    </el-dialog>
+    <!-- </template> -->
   </div>
 </template>
 
@@ -202,19 +208,19 @@ import {
   updataUserGroup
 } from '@/api/Permission-model/userManagement'
 import waves from '@/directive/waves' // 水波纹指令
-
+// import initList from './components/components'
 export default {
   name: 'UserManagement',
   directives: {
     waves
   },
   filters: {
-    statusFilter(status) {
+    statusFilter(recordStatus) {
       const statusMap = {
-        0: '未生效',
+        2: '未生效',
         1: '生效'
       }
-      return statusMap[status]
+      return statusMap[recordStatus]
     }
   },
   data() {
@@ -310,19 +316,19 @@ export default {
       listQuery: {
         page: 1,
         rows: 10,
-        status: undefined,
-        departmentId: undefined,
-        position: undefined,
-        departmentName: undefined,
+        recordStatus: '',
+        departmentId: '',
+        position: '',
+        name: '',
         departmentIds: undefined,
-        postOrTypeName: undefined
+        postOrTypeName: ''
       },
       userStatusOptions: ['未生效', '生效'],
       positionOptions: [],
       temp: {
         name: undefined,
         account: undefined,
-        status: '',
+        recordStatus: '',
         email: undefined,
         phone: undefined,
         id: undefined,
@@ -343,7 +349,7 @@ export default {
           { required: true, message: '账号不能为空', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [
+        recordStatus: [
           {
             required: true,
             message: '请选择状态',
@@ -377,7 +383,8 @@ export default {
       resetPassword: {
         id: '',
         password: ''
-      }
+      },
+      remark: ''
     }
   },
   computed: {
@@ -417,11 +424,17 @@ export default {
     }
   },
   mounted() {
-    this.getUserList()
+    this.initList()
     this.getAllDepartment()
     this.findSysPostAll()
   },
   methods: {
+    // 导出功能
+    handleExcel() {
+      // window.location.href = 'http://112.94.22.222:8000/springcloud-app-system/system/sysUser/exportExcelUserInfo'
+      window.location.href = 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
+      //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
+    },
     // 选择部门（新增用户对话框）
     handleChangeDepartment(value) {
       // // 提交的时候拿到的部门id等于提取出来的最后一个id
@@ -434,14 +447,14 @@ export default {
       if (!this.isShow) {
         this.listQuery.page = 1
         this.listQuery.departmentId = undefined
-        this.getUserList()
+        this.initList()
       }
     },
     // 点击部门树的节点
     handleNodeClick(data) {
       this.listQuery.page = 1
       this.listQuery.departmentId = data.value
-      this.getUserList()
+      this.initList()
     },
     // 改变授权用户组穿梭框时获取选中的用户组
     handleUserGroupChange(value, direction, movedKeys) {
@@ -607,8 +620,8 @@ export default {
         }
       })
     },
-    getUserList() {
-      // 获取用户列表
+    // 获取用户列表
+    initList() {
       this.listLoading = true
       userList(this.listQuery).then(res => {
         if (res.data.code === '0000') {
@@ -616,7 +629,7 @@ export default {
           this.total = res.data.data.total
           if (this.userList.length === 0 && this.total > 0) {
             this.listQuery.page = 1
-            this.getUserList()
+            this.initList()
           }
         } else {
           this.$message.error(res.data.result)
@@ -654,16 +667,16 @@ export default {
     // 查询数据
     handleFilter() {
       this.listQuery.page = 1
-      this.getUserList()
+      this.initList()
     },
     // 分页数更改
     handleSizeChange(val) {
       this.listQuery.rows = val
-      this.getUserList()
+      this.initList()
     },
     handleCurrentChange(val) {
       this.listQuery.page = val
-      this.getUserList()
+      this.initList()
     },
     // 显示新增用户对话框
     handleCreate() {
@@ -672,7 +685,7 @@ export default {
         name: '',
         phone: '',
         email: '',
-        status: '',
+        recordStatus: '',
         wechatAccount: undefined
       }
       this.Visible = true
@@ -700,7 +713,7 @@ export default {
               // 重置表单元素的数据
               this.$refs['dataForm'].resetFields()
               this.currentDepartmentIds = []
-              this.getUserList()
+              this.initList()
             } else {
               this.$message.error(res.data.result)
             }
@@ -724,7 +737,8 @@ export default {
       this.temp.email = row.email
       this.temp.phone = row.phone
       this.temp.wechatAccount = row.wechatAccount
-      this.temp.status = parseInt(row.status)
+      this.temp.remark = row.remark
+      this.temp.recordStatus = parseInt(row.recordStatus)
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -744,7 +758,7 @@ export default {
                 type: 'success'
               })
               // 刷新页面显示
-              this.getUserList()
+              this.initList()
               this.dialogFormVisible = false
             } else {
               this.$message.error(res.data.result)
@@ -771,7 +785,7 @@ export default {
               if (this.total % this.listQuery.rows === 1) {
                 this.listQuery.page = this.listQuery.page - 1
               }
-              this.getUserList()
+              this.initList()
             } else {
               this.$message.error(res.data.result)
             }
@@ -837,7 +851,7 @@ export default {
           this.$message.error(response.data.result)
         }
         this.dialogSectorVisible = false
-        this.getUserList()
+        this.initList()
       })
     },
     // 删除用户部门和岗位
@@ -880,6 +894,11 @@ export default {
 }
 </script>
 <style lang="scss">
+.el-tooltip__popper{
+    width: 260px;
+    height: 60px;
+    word-break: break-all;
+}
 .userManagement-content{
   display: flex;
   .userManagement-content-left{

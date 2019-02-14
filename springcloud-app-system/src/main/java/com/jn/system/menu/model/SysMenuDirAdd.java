@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -16,19 +15,19 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysMenuDirAdd",description = "用于菜单目录添加")
+@ApiModel(value = "SysMenuDirAdd", description = "用于菜单目录添加")
 public class SysMenuDirAdd implements Serializable {
     private static final long serialVersionUID = -5712604602274725873L;
 
-    @ApiModelProperty(value = "菜单名称",required = false)
+    @ApiModelProperty(value = "菜单名称", required = false)
     private String id;
 
-    @ApiModelProperty(value = "菜单名称" )
+    @ApiModelProperty(value = "菜单名称")
     @NotBlank(message = "菜单名称不能为空！")
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "菜单名称校验失败")
     private String menuName;
 
-    @ApiModelProperty(value = "父级菜单ID" )
+    @ApiModelProperty(value = "父级菜单ID")
     @NotBlank(message = "父级菜单ID不能为空！")
     private String parentId;
 

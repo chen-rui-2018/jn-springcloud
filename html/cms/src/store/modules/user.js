@@ -67,13 +67,13 @@ const user = {
           if (data.code === '0000') {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
-            getUsername().then(res => {
-              console.log(res)
-              if (res.data.code === '0000') {
-                if (res.data.data.name) {
-                  localStorage.setItem('userName', res.data.data.name)
+            getUsername().then(response => {
+              console.log(response)
+              if (response.data.code === '0000') {
+                if (response.data.data.name) {
+                  localStorage.setItem('userName', response.data.data.name)
                 } else {
-                  localStorage.setItem('account', res.data.data.account)
+                  localStorage.setItem('account', response.data.data.account)
                 }
               }
             })

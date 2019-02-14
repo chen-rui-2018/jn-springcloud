@@ -1,13 +1,10 @@
 package com.jn.system.menu.dao;
 
 
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
-import com.jn.system.permission.vo.SysMenuTreeOfPermissionVO;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * 菜单mapper
@@ -23,9 +20,9 @@ public interface SysMenuMapper {
     /**
      * 根据ids批量删除
      *
-     * @param ids
+     * @param map
      */
-    void deleteBy(List<String> ids);
+    void deleteBy(Map<String, Object> map);
 
     /**
      * 根据菜单id获取菜单的等级
@@ -36,6 +33,13 @@ public interface SysMenuMapper {
     String findLevelByMenuId(String parentId);
 
     /**
+     * 获取全部菜单及菜单具有的功能信息
+     *
+     * @return
+     */
+    List<SysMenuTreeVO> getMenuAndResources();
+
+    /**
      * 根据父菜单id,获取子菜单中等级最大的值
      *
      * @param parentId
@@ -44,41 +48,11 @@ public interface SysMenuMapper {
     Integer findSortByMenuId(String parentId);
 
     /**
-     * 等级为1的菜单信息
+     * 批量更新菜单
      *
-     * @return
+     * @param map
      */
-    List<SysMenuTreeVO> findMenuByLevelOne();
-
-    /**
-     * 以菜单id作为父id,去获取菜单子集
-     *
-     * @param value
-     * @return
-     */
-    List<SysMenuTreeVO> findMenuByParentId(String value);
-
-    /**
-     * 批量对菜单排序进行更新
-     *
-     * @param sysMenuSortList
-     */
-    void updateBatch(List<SysMenuUpdate> sysMenuSortList);
-
-    /**
-     * 查询一级菜单信息
-     *
-     * @return
-     */
-    List<SysMenuTreeOfPermissionVO> getMenuByLevelOne();
-
-    /**
-     * 根据菜单父级菜单id获取子菜单
-     *
-     * @param id
-     * @return
-     */
-    List<SysMenuTreeOfPermissionVO> findMenuOfPermissionByParentId(String id);
+    void updateBatch(Map<String, Object> map);
 
     /**
      * 根据父菜单id获取子下一级所有菜单信息
@@ -95,4 +69,12 @@ public interface SysMenuMapper {
      * @return
      */
     List<SysMenuTreeVO> getDynamicMenu(String userId);
+
+    /**
+     * 获取菜单的所有子菜单id
+     *
+     * @param menuId
+     * @return
+     */
+    String getChildrenMenuIdS(String menuId);
 }

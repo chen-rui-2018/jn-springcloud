@@ -3,19 +3,18 @@ package com.jn.system.user.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- *用户实体类
+ * 用户实体类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value ="SysUserVO",description = "用户关联部门和岗位")
+@ApiModel(value = "SysUserVO", description = "用户关联部门和岗位")
 public class SysUserVO implements Serializable {
 
     private static final long serialVersionUID = 3235175375305639033L;
@@ -30,11 +29,13 @@ public class SysUserVO implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
     @ApiModelProperty("微信账号")
     private String wechatAccount;
+    @ApiModelProperty(value = "备注")
+    private String remark;
     @ApiModelProperty("部门名称")
     private String departmentName;
     @ApiModelProperty("岗位名称")
@@ -45,16 +46,18 @@ public class SysUserVO implements Serializable {
     public SysUserVO() {
     }
 
-    public SysUserVO(String id, String account, String name, String phone, String email, Date createTime,
-                     String status, String wechatAccount, String departmentName, String postName, String postTypeName) {
+    public SysUserVO(String id, String account, String name, String phone, String email, Date createdTime,
+                     Byte recordStatus, String wechatAccount, String remark, String departmentName,
+                     String postName, String postTypeName) {
         this.id = id;
         this.account = account;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
         this.departmentName = departmentName;
         this.postName = postName;
         this.postTypeName = postTypeName;
@@ -100,20 +103,20 @@ public class SysUserVO implements Serializable {
         this.email = email;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getWechatAccount() {
@@ -122,6 +125,14 @@ public class SysUserVO implements Serializable {
 
     public void setWechatAccount(String wechatAccount) {
         this.wechatAccount = wechatAccount;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getDepartmentName() {
@@ -156,9 +167,10 @@ public class SysUserVO implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 ", departmentName='" + departmentName + '\'' +
                 ", postName='" + postName + '\'' +
                 ", postTypeName='" + postTypeName + '\'' +

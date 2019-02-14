@@ -20,23 +20,25 @@ public interface SysMenuService {
      * 更新菜单信息
      *
      * @param sysMenu
+     * @param user    当前用户信息
      */
-    void updateSysMenuById(SysMenu sysMenu);
+    void updateSysMenuById(SysMenu sysMenu, User user);
 
     /**
-     * 逻辑删除菜单
+     * 删除菜单
      *
      * @param menuIds
-     * @return
+     * @param user    当前用户信息
      */
-    void deleteSysMenuById(String menuIds);
+    void deleteSysMenuById(String menuIds, User user);
 
     /**
      * 查询所有菜单信息,返回树形结构
      *
+     * @param flag 菜单树接口权限管理也有调用,用于标记是菜单还是权限调用接口
      * @return
      */
-    List<SysMenuTreeVO> selectMenuList();
+    List<SysMenuTreeVO> selectMenuList(Boolean flag);
 
     /**
      * 根据id获取菜单详情
@@ -72,8 +74,9 @@ public interface SysMenuService {
      * 批量更新菜单
      *
      * @param sysMenus
+     * @param user     当前用户信息
      */
-    void updateBatch(SysMenus sysMenus);
+    void updateBatch(SysMenus sysMenus, User user);
 
     /**
      * 根据父菜单id获取子下一级所有菜单信息

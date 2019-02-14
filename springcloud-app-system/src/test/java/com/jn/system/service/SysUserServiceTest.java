@@ -51,7 +51,7 @@ public class SysUserServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化用户id
         userId = UUID.randomUUID().toString();
@@ -66,7 +66,8 @@ public class SysUserServiceTest {
         sysUser.setPhone("13312345678");
         sysUser.setEmail("123@qq.com.com");
         sysUser.setWechatAccount("weixinaccount");
-        sysUser.setStatus("1");
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        sysUser.setRecordStatus(recordStatus);
     }
 
     @Test
@@ -92,9 +93,10 @@ public class SysUserServiceTest {
         SysUser sysUser = new SysUser();
         sysUser.setId(userId);
         sysUser.setName(userName);
-        sysUser.setStatus(SysStatusEnums.INVALID.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
+        sysUser.setRecordStatus(recordStatus);
         try {
-            sysUserService.updateSysUser(sysUser);
+            sysUserService.updateSysUser(sysUser,user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -112,7 +114,8 @@ public class SysUserServiceTest {
         page.setRows(10);
         page.setUserId(userId);
         PaginationData data = sysUserService.findSysGroupByUserId(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -127,7 +130,8 @@ public class SysUserServiceTest {
         page.setRows(10);
         page.setUserId(userId);
         PaginationData data = sysUserService.findSysRoleByUserId(page);
-        Assert.assertThat(Long.valueOf(data.getTotal()).doubleValue(), Matchers.greaterThanOrEqualTo(1.0));
+        int total = Long.valueOf(data.getTotal()).intValue();
+        Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
     }
 
     @Test
@@ -171,7 +175,7 @@ public class SysUserServiceTest {
     //有数使用名称排序,所以在删除名称前加了一个z
     public void zDeleteSysUserTest() {
         String[] ids = {userId};
-        sysUserService.deleteSysUser(ids);
+        sysUserService.deleteSysUser(ids,user);
     }
 
 }

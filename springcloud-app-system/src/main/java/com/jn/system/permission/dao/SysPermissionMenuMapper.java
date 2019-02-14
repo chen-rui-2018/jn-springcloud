@@ -1,10 +1,9 @@
 package com.jn.system.permission.dao;
 
-import com.jn.system.menu.model.SysMenu;
 import com.jn.system.permission.entity.TbSysPermissionMenu;
-import com.jn.system.permission.model.SysPermissionMenuPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 权限菜单Mapper
@@ -19,9 +18,9 @@ public interface SysPermissionMenuMapper {
     /**
      * 根据权限id批量删除对应信息
      *
-     * @param ids
+     * @param map
      */
-    void deletePermissionBranch(String[] ids);
+    void deletePermissionBranch(Map<String, Object> map);
 
     /**
      * 根据权限id获取权限具有的菜单信息
@@ -29,14 +28,7 @@ public interface SysPermissionMenuMapper {
      * @param id
      * @return
      */
-    List<SysMenu> findMenuOfPermission(String id);
-
-    /**
-     * 逻辑删除原权限菜单数据
-     *
-     * @param permissionId
-     */
-    void deleteByPermissionId(String permissionId);
+    List<String> findMenuOfPermission(String id);
 
     /**
      * 添加新权限菜单数据
@@ -48,7 +40,7 @@ public interface SysPermissionMenuMapper {
     /**
      * 删除菜单及子菜单对应的权限信息
      *
-     * @param menuIds
+     * @param map
      */
-    void deleteBy(List<String> menuIds);
+    void deleteBy(Map<String, Object> map);
 }

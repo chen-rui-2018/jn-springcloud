@@ -5,13 +5,13 @@
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="file_group_id" jdbcType="VARCHAR" property="fileGroupId"/>
         <result column="file_id" jdbcType="VARCHAR" property="fileId"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="creatorAccount" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="createdTime" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="recordStatus" jdbcType="VARCHAR" property="recordStatus"/>
     </resultMap>
 
     <update id="deleteByIds" parameterType="java.lang.String">
-        update tb_sys_file_group_file set status=-1
+        update tb_sys_file_group_file set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
@@ -19,17 +19,21 @@
     </update>
 
     <update id="deleteByFileIds" parameterType="java.lang.String">
-        update tb_sys_file_group_file set status=-1
+        update tb_sys_file_group_file set record_status = 0
         where file_id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteByFileGroupIds" parameterType="java.lang.String">
-        update tb_sys_file_group_file set status=-1
+    <update id="deleteByFileGroupIds" parameterType="java.util.Map">
+        update tb_sys_file_group_file
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where file_group_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
@@ -41,9 +45,9 @@
         sfg.id "id"
         ,sfg.file_group_name "fileGroupName"
         ,sfg.file_group_describe "fileGroupDescribe"
-        ,sfg.creator "creator"
-        ,sfg.create_time "createTime"
-        ,sfg.status "status"
+        ,sfg.creator_account as creatorAccount
+        ,sfg.created_time "createdTime"
+        ,sfg.record_status as recordStatus
         from
         tb_sys_user su
         ,tb_sys_user_role sur
@@ -58,13 +62,13 @@
         and sp.id = srp.permission_id
         and sp.id = spf.permission_id
         and sfg.id = spf.file_group_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sfg.status = 1
-        and spf.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sfg.record_status = 1
+        and spf.record_status = 1
         and su.id = #{userId,jdbcType=VARCHAR})
     </select>
 
@@ -91,15 +95,15 @@
         and sfg.id = spf.file_group_id
         and sf.id = sfgf.file_id
         and sfg.id = sfgf.file_group_id
-        and su.status =1
-        and sur.status =1
-        and sr.status = 1
-        and sp.status = 1
-        and srp.status = 1
-        and sfg.status = 1
-        and spf.status = 1
-        and sf.status = 1
-        and sfgf.status = 1
+        and su.record_status =1
+        and sur.record_status =1
+        and sr.record_status = 1
+        and sp.record_status = 1
+        and srp.record_status = 1
+        and sfg.record_status = 1
+        and spf.record_status = 1
+        and sf.record_status = 1
+        and sfgf.record_status = 1
         and su.id = #{0}
         and sf.file_url = #{1}
     </select>
@@ -109,16 +113,16 @@
         select
         t.file_group_name as fileGroupName
         from tb_sys_file_group t,tb_sys_file_group_file tt
-        where t.id = tt.file_group_id and t.`status` = '1'
-        and tt.`status` = '1' and tt.file_id = #{id,jdbcType=VARCHAR}
+        where t.id = tt.file_group_id and t.`record_status` = 1
+        and tt.`record_status` = 1 and tt.file_id = #{id,jdbcType=VARCHAR}
     </select>
 
     <resultMap id="QueryResultMap" type="com.jn.system.file.vo.SysFileVO">
         <id column="id" jdbcType="VARCHAR" property="fileId"/>
         <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
         <result column="file_url" jdbcType="VARCHAR" property="fileUrl"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
         <collection property="fileGroupNameList" javaType="java.util.List"
                     ofType="java.lang.String">
             <result column="file_group_name"  jdbcType="VARCHAR"/>
@@ -131,24 +135,29 @@
         t3.id,
         t3.file_name,
         t3.file_url,
-        t3.create_time,
-        t3.`status`,
+        t3.created_time,
+        t3.record_status ,
         t2.file_group_name
         from tb_sys_file_group_file t1
-        inner join (select id as file_group_id,file_group_name from tb_sys_file_group
+        inner join
+        (select id as file_group_id,file_group_name
+        from tb_sys_file_group
         where file_group_name like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
-        and `status` = '1') t2
+        and `record_status` = 1) t2
         on t1.file_group_id = t2.file_group_id
-        inner join (select id ,file_name,file_url,create_time,`status`
-        from tb_sys_file where `status` != '-1') t3 on t1.file_id = t3.id
+        inner join
+        (select id ,file_name,file_url,created_time,`record_status`
+        from tb_sys_file
+        where `record_status` != 0) t3
+        on t1.file_id = t3.id
         <where>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
                 and t3.file_name like CONCAT('%', #{fileName,jdbcType=VARCHAR}, '%')
             </if>
-            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-                and t3.`status`=#{status,jdbcType=VARCHAR}
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+                and t3.`record_status`=#{recordStatus,jdbcType=VARCHAR}
             </if>
         </where>
-        ORDER BY t3.create_time DESC,t3.id DESC
+        ORDER BY t3.created_time DESC,t3.id DESC
     </select>
 </mapper>

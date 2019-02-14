@@ -3,6 +3,7 @@ package com.jn.system.user.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -22,15 +23,15 @@ public class SysGroupAdd implements Serializable {
     @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "用户组名校验失败")
     private String groupName;
     @ApiModelProperty("状态")
-    @Pattern(regexp = "^\\-1|[01]$", message = "{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @NotNull(message = "状态值不能为空")
+    private Byte recordStatus;
 
     public SysGroupAdd() {
     }
 
-    public SysGroupAdd(String groupName, String status) {
+    public SysGroupAdd(String groupName, Byte recordStatus) {
         this.groupName = groupName;
-        this.status = status;
+        this.recordStatus = recordStatus;
     }
 
     public String getGroupName() {
@@ -41,20 +42,19 @@ public class SysGroupAdd implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
-
 
     @Override
     public String toString() {
         return "SysGroupAdd{" +
                 "groupName='" + groupName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

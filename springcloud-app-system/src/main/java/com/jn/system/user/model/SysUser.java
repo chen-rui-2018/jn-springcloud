@@ -47,34 +47,38 @@ public class SysUser implements Serializable {
     private String email;
 
     @ApiModelProperty("创建人")
-    private String creator;
+    private String creatorAccount;
 
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
 
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    @ApiModelProperty("状态")
+    private Byte recordStatus;
 
     @ApiModelProperty("微信账号")
     @Pattern(regexp="^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$",message="{weixinAccount:'微信号校验错误'}")
     private String wechatAccount;
 
+    @ApiModelProperty(value = "备注")
+    @Size(max = 200, message = "备注字符不能超过200字")
+    private String remark;
+
     public SysUser() {
     }
 
-    public SysUser(String id, String account, String password, String name, String phone,
-                   String email, String creator, Date createTime, String status, String wechatAccount) {
+    public SysUser(String id, String account, String password, String name, String phone, String email,
+                   String creatorAccount, Date createdTime, Byte recordStatus, String wechatAccount, String remark) {
         this.id = id;
         this.account = account;
         this.password = password;
         this.name = name;
         this.phone = phone;
         this.email = email;
-        this.creator = creator;
-        this.createTime = createTime;
-        this.status = status;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
         this.wechatAccount = wechatAccount;
+        this.remark = remark;
     }
 
     public String getId() {
@@ -125,28 +129,28 @@ public class SysUser implements Serializable {
         this.email = email;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getWechatAccount() {
@@ -155,6 +159,14 @@ public class SysUser implements Serializable {
 
     public void setWechatAccount(String wechatAccount) {
         this.wechatAccount = wechatAccount;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override
@@ -166,10 +178,11 @@ public class SysUser implements Serializable {
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", remark='" + remark + '\'' +
                 '}';
     }
 }

@@ -40,18 +40,18 @@ public class SysMenuTreeVO implements Serializable {
     @ApiModelProperty("父级id父级名称")
     private String parentName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
     @ApiModelProperty("子菜单的集合")
-    private List<SysMenuTreeVO> children;
+    private List children;
     @ApiModelProperty("菜单功能的集合")
     private List<SysResources> resourcesList;
 
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path,
-                         Integer sort, String isDir, String parentId, String level, String parentName,
-                         Date createTime, List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path, Integer sort, String isDir,
+                         String parentId, String level, String parentName, Date createdTime,
+                         List children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
         this.icon = icon;
@@ -62,7 +62,7 @@ public class SysMenuTreeVO implements Serializable {
         this.parentId = parentId;
         this.level = level;
         this.parentName = parentName;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.children = children;
         this.resourcesList = resourcesList;
     }
@@ -147,19 +147,19 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public List<SysMenuTreeVO> getChildren() {
+    public List getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenuTreeVO> children) {
+    public void setChildren(List children) {
         this.children = children;
     }
 
@@ -184,7 +184,7 @@ public class SysMenuTreeVO implements Serializable {
                 ", parentId='" + parentId + '\'' +
                 ", level='" + level + '\'' +
                 ", parentName='" + parentName + '\'' +
-                ", createTime=" + createTime +
+                ", createdTime=" + createdTime +
                 ", children=" + children +
                 ", resourcesList=" + resourcesList +
                 '}';

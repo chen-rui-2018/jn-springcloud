@@ -9,12 +9,13 @@ import java.io.Serializable;
 
 /**
  * 角色界面用于授权用户组时条件查询用户组信息
+ *
  * @author： shaobao
  * @date： Created on 2018/11/16 15:01
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysRoleUserGroupPage",description = "角色界面用于授权用户组时条件查询用户组信息")
+@ApiModel(value = "SysRoleUserGroupPage", description = "角色界面用于授权用户组时条件查询用户组信息")
 public class SysRoleUserGroupPage extends Page implements Serializable {
     private static final long serialVersionUID = -8328513289055722693L;
     @ApiModelProperty("角色id")

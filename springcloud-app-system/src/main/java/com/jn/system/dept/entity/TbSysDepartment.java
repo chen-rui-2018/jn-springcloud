@@ -10,13 +10,17 @@ public class TbSysDepartment implements Serializable {
 
     private String parentId;
 
-    private String creator;
+    private String creatorAccount;
 
-    private Date createTime;
+    private Date createdTime;
 
-    private String status;
+    private Byte recordStatus;
 
     private String level;
+
+    private String modifierAccount;
+
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -44,28 +48,28 @@ public class TbSysDepartment implements Serializable {
         this.parentId = parentId == null ? null : parentId.trim();
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getLevel() {
@@ -74,6 +78,22 @@ public class TbSysDepartment implements Serializable {
 
     public void setLevel(String level) {
         this.level = level == null ? null : level.trim();
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override
@@ -91,10 +111,12 @@ public class TbSysDepartment implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
             && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
-            && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()));
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -104,10 +126,12 @@ public class TbSysDepartment implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
         result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getLevel() == null) ? 0 : getLevel().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         return result;
     }
 
@@ -120,10 +144,12 @@ public class TbSysDepartment implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", departmentName=").append(departmentName);
         sb.append(", parentId=").append(parentId);
-        sb.append(", creator=").append(creator);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", level=").append(level);
+        sb.append(", modifierAccount=").append(modifierAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

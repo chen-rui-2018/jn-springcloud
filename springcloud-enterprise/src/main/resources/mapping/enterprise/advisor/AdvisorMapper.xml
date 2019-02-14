@@ -58,19 +58,19 @@
        </if>
        <if test="sortTypes =='integrate'">
            ORDER BY <!-- 综合排序-->
-           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} )  <!--综合排序结果值-->
+           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
        </if>
        <if test="sortTypes =='popularity'">
            ORDER BY <!-- 人气排序-->
-           tt.pageviews    <!-- 浏览量-->
+           tt.pageviews DESC   <!-- 浏览量-->
        </if>
        <if test="sortTypes =='praise'">
            ORDER BY  <!-- 好评排序-->
-           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)   <!--评价等级-->
+           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4) DESC   <!--评价等级-->
        </if>
        <if test="sortTypes =='serviceNum'">
            ORDER BY <!-- 服务量排序-->
-           tt.transactionNum  <!-- 累计交易数-->
+           tt.transactionNum DESC <!-- 累计交易数-->
        </if>
    </select>
 

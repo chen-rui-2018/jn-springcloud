@@ -30,8 +30,6 @@ public class AdvisorListInfo extends Page implements Serializable {
     private String isCertification;
     @ApiModelProperty(value = "业务擅长")
     private String goodAtBusiness;
-    @ApiModelProperty(value = "累计交易数")
-    private Integer transactionNum;
     @ApiModelProperty(value = "服务态度评分")
     private String attitudeScore;
     @ApiModelProperty(value = "服务专业评分")
@@ -40,10 +38,18 @@ public class AdvisorListInfo extends Page implements Serializable {
     private String responseScore;
     @ApiModelProperty(value = "服务价格评分")
     private String priceScore;
-    @ApiModelProperty(value = "评价等级")
+    @ApiModelProperty(value = "综合得分")
+    private Integer integratedSort;
+    @ApiModelProperty(value = "评价等级（好评）")
     private String evaluationLevel;
+    @ApiModelProperty(value = "浏览量（人气）")
+    private Integer pageviews;
+    @ApiModelProperty(value = "累计交易次数（服务量）")
+    private Integer transactionNum;
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
+
+
 
     private static final long serialVersionUID = 1L;
 
@@ -103,36 +109,12 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.isCertification = isCertification;
     }
 
-    public String getEvaluationLevel() {
-        return evaluationLevel;
-    }
-
-    public void setEvaluationLevel(String evaluationLevel) {
-        this.evaluationLevel = evaluationLevel;
-    }
-
-    public Integer getEvaluationNum() {
-        return evaluationNum;
-    }
-
-    public void setEvaluationNum(Integer evaluationNum) {
-        this.evaluationNum = evaluationNum;
-    }
-
     public String getGoodAtBusiness() {
         return goodAtBusiness;
     }
 
     public void setGoodAtBusiness(String goodAtBusiness) {
         this.goodAtBusiness = goodAtBusiness;
-    }
-
-    public Integer getTransactionNum() {
-        return transactionNum;
-    }
-
-    public void setTransactionNum(Integer transactionNum) {
-        this.transactionNum = transactionNum;
     }
 
     public String getAttitudeScore() {
@@ -167,6 +149,46 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.priceScore = priceScore;
     }
 
+    public Integer getIntegratedSort() {
+        return integratedSort;
+    }
+
+    public void setIntegratedSort(Integer integratedSort) {
+        this.integratedSort = integratedSort;
+    }
+
+    public String getEvaluationLevel() {
+        return evaluationLevel;
+    }
+
+    public void setEvaluationLevel(String evaluationLevel) {
+        this.evaluationLevel = evaluationLevel;
+    }
+
+    public Integer getPageviews() {
+        return pageviews;
+    }
+
+    public void setPageviews(Integer pageviews) {
+        this.pageviews = pageviews;
+    }
+
+    public Integer getTransactionNum() {
+        return transactionNum;
+    }
+
+    public void setTransactionNum(Integer transactionNum) {
+        this.transactionNum = transactionNum;
+    }
+
+    public Integer getEvaluationNum() {
+        return evaluationNum;
+    }
+
+    public void setEvaluationNum(Integer evaluationNum) {
+        this.evaluationNum = evaluationNum;
+    }
+
     @Override
     public String toString() {
         return "AdvisorListInfo{" +
@@ -178,12 +200,14 @@ public class AdvisorListInfo extends Page implements Serializable {
                 ", orgName='" + orgName + '\'' +
                 ", isCertification='" + isCertification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +
-                ", transactionNum=" + transactionNum +
                 ", attitudeScore='" + attitudeScore + '\'' +
                 ", professionScore='" + professionScore + '\'' +
                 ", responseScore='" + responseScore + '\'' +
                 ", priceScore='" + priceScore + '\'' +
+                ", integratedSort=" + integratedSort +
                 ", evaluationLevel='" + evaluationLevel + '\'' +
+                ", pageviews=" + pageviews +
+                ", transactionNum=" + transactionNum +
                 ", evaluationNum=" + evaluationNum +
                 '}';
     }

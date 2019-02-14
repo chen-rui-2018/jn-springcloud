@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.servicemarket.advisor.dao.TbServiceAdvisorMapper">
-  <resultMap id="BaseResultMap" type="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="org_id" jdbcType="VARCHAR" property="orgId" />
-    <result column="tb__ID" jdbcType="VARCHAR" property="tbId" />
-    <result column="asvisor_account" jdbcType="VARCHAR" property="asvisorAccount" />
+    <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
+    <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
     <result column="business_area" jdbcType="VARCHAR" property="businessArea" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="position" jdbcType="VARCHAR" property="position" />
@@ -16,8 +16,6 @@
     <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="graduated_school" jdbcType="VARCHAR" property="graduatedSchool" />
-    <result column="evalluation_level" jdbcType="VARCHAR" property="evalluationLevel" />
-    <result column="evaluation_num" jdbcType="INTEGER" property="evaluationNum" />
     <result column="practice_qualification" jdbcType="VARCHAR" property="practiceQualification" />
     <result column="good_at_business" jdbcType="VARCHAR" property="goodAtBusiness" />
     <result column="transaction_num" jdbcType="INTEGER" property="transactionNum" />
@@ -30,7 +28,7 @@
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     <result column="personal_profile" jdbcType="LONGVARBINARY" property="personalProfile" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -92,16 +90,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, tb__ID, asvisor_account, business_area, avatar, position, org_name, is_certification, 
-    contact_email, card_type, card_number, education, graduated_school, evalluation_level, 
-    evaluation_num, practice_qualification, good_at_business, transaction_num, pageviews, 
-    is_have_subsidy, approval_status, created_time, creator_account, modified_time, modifier_account, 
+    id, org_id, advisor_account, advisor_name, business_area, avatar, position, org_name, 
+    is_certification, contact_email, card_type, card_number, education, graduated_school, 
+    practice_qualification, good_at_business, transaction_num, pageviews, is_have_subsidy, 
+    approval_status, created_time, creator_account, modified_time, modifier_account, 
     record_status
   </sql>
   <sql id="Blob_Column_List">
     personal_profile
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -117,7 +115,7 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -143,35 +141,33 @@
     delete from tb_service_advisor
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisorCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria">
     delete from tb_service_advisor
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
-    insert into tb_service_advisor (id, org_id, tb__ID, 
-      asvisor_account, business_area, avatar, 
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
+    insert into tb_service_advisor (id, org_id, advisor_account, 
+      advisor_name, business_area, avatar, 
       position, org_name, is_certification, 
       contact_email, card_type, card_number, 
-      education, graduated_school, evalluation_level, 
-      evaluation_num, practice_qualification, good_at_business, 
-      transaction_num, pageviews, is_have_subsidy, 
-      approval_status, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      personal_profile)
-    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{tbId,jdbcType=VARCHAR}, 
-      #{asvisorAccount,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
+      education, graduated_school, practice_qualification, 
+      good_at_business, transaction_num, pageviews, 
+      is_have_subsidy, approval_status, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status, personal_profile)
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
+      #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
       #{contactEmail,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
-      #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{evalluationLevel,jdbcType=VARCHAR}, 
-      #{evaluationNum,jdbcType=INTEGER}, #{practiceQualification,jdbcType=VARCHAR}, #{goodAtBusiness,jdbcType=VARCHAR}, 
-      #{transactionNum,jdbcType=INTEGER}, #{pageviews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{personalProfile,jdbcType=LONGVARBINARY})
+      #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{practiceQualification,jdbcType=VARCHAR}, 
+      #{goodAtBusiness,jdbcType=VARCHAR}, #{transactionNum,jdbcType=INTEGER}, #{pageviews,jdbcType=INTEGER}, 
+      #{isHaveSubsidy,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{personalProfile,jdbcType=LONGVARBINARY})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     insert into tb_service_advisor
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -180,11 +176,11 @@
       <if test="orgId != null">
         org_id,
       </if>
-      <if test="tbId != null">
-        tb__ID,
+      <if test="advisorAccount != null">
+        advisor_account,
       </if>
-      <if test="asvisorAccount != null">
-        asvisor_account,
+      <if test="advisorName != null">
+        advisor_name,
       </if>
       <if test="businessArea != null">
         business_area,
@@ -215,12 +211,6 @@
       </if>
       <if test="graduatedSchool != null">
         graduated_school,
-      </if>
-      <if test="evalluationLevel != null">
-        evalluation_level,
-      </if>
-      <if test="evaluationNum != null">
-        evaluation_num,
       </if>
       <if test="practiceQualification != null">
         practice_qualification,
@@ -266,11 +256,11 @@
       <if test="orgId != null">
         #{orgId,jdbcType=VARCHAR},
       </if>
-      <if test="tbId != null">
-        #{tbId,jdbcType=VARCHAR},
+      <if test="advisorAccount != null">
+        #{advisorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="asvisorAccount != null">
-        #{asvisorAccount,jdbcType=VARCHAR},
+      <if test="advisorName != null">
+        #{advisorName,jdbcType=VARCHAR},
       </if>
       <if test="businessArea != null">
         #{businessArea,jdbcType=VARCHAR},
@@ -301,12 +291,6 @@
       </if>
       <if test="graduatedSchool != null">
         #{graduatedSchool,jdbcType=VARCHAR},
-      </if>
-      <if test="evalluationLevel != null">
-        #{evalluationLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluationNum != null">
-        #{evaluationNum,jdbcType=INTEGER},
       </if>
       <if test="practiceQualification != null">
         #{practiceQualification,jdbcType=VARCHAR},
@@ -346,7 +330,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria" resultType="java.lang.Long">
     select count(*) from tb_service_advisor
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -361,11 +345,11 @@
       <if test="record.orgId != null">
         org_id = #{record.orgId,jdbcType=VARCHAR},
       </if>
-      <if test="record.tbId != null">
-        tb__ID = #{record.tbId,jdbcType=VARCHAR},
+      <if test="record.advisorAccount != null">
+        advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.asvisorAccount != null">
-        asvisor_account = #{record.asvisorAccount,jdbcType=VARCHAR},
+      <if test="record.advisorName != null">
+        advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       </if>
       <if test="record.businessArea != null">
         business_area = #{record.businessArea,jdbcType=VARCHAR},
@@ -396,12 +380,6 @@
       </if>
       <if test="record.graduatedSchool != null">
         graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
-      </if>
-      <if test="record.evalluationLevel != null">
-        evalluation_level = #{record.evalluationLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="record.evaluationNum != null">
-        evaluation_num = #{record.evaluationNum,jdbcType=INTEGER},
       </if>
       <if test="record.practiceQualification != null">
         practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
@@ -448,8 +426,8 @@
     update tb_service_advisor
     set id = #{record.id,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
-      tb__ID = #{record.tbId,jdbcType=VARCHAR},
-      asvisor_account = #{record.asvisorAccount,jdbcType=VARCHAR},
+      advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       business_area = #{record.businessArea,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
@@ -460,8 +438,6 @@
       card_number = #{record.cardNumber,jdbcType=VARCHAR},
       education = #{record.education,jdbcType=VARCHAR},
       graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
-      evalluation_level = #{record.evalluationLevel,jdbcType=VARCHAR},
-      evaluation_num = #{record.evaluationNum,jdbcType=INTEGER},
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
@@ -482,8 +458,8 @@
     update tb_service_advisor
     set id = #{record.id,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
-      tb__ID = #{record.tbId,jdbcType=VARCHAR},
-      asvisor_account = #{record.asvisorAccount,jdbcType=VARCHAR},
+      advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       business_area = #{record.businessArea,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
@@ -494,8 +470,6 @@
       card_number = #{record.cardNumber,jdbcType=VARCHAR},
       education = #{record.education,jdbcType=VARCHAR},
       graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
-      evalluation_level = #{record.evalluationLevel,jdbcType=VARCHAR},
-      evaluation_num = #{record.evaluationNum,jdbcType=INTEGER},
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
@@ -511,17 +485,17 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
     <set>
       <if test="orgId != null">
         org_id = #{orgId,jdbcType=VARCHAR},
       </if>
-      <if test="tbId != null">
-        tb__ID = #{tbId,jdbcType=VARCHAR},
+      <if test="advisorAccount != null">
+        advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="asvisorAccount != null">
-        asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
+      <if test="advisorName != null">
+        advisor_name = #{advisorName,jdbcType=VARCHAR},
       </if>
       <if test="businessArea != null">
         business_area = #{businessArea,jdbcType=VARCHAR},
@@ -552,12 +526,6 @@
       </if>
       <if test="graduatedSchool != null">
         graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
-      </if>
-      <if test="evalluationLevel != null">
-        evalluation_level = #{evalluationLevel,jdbcType=VARCHAR},
-      </if>
-      <if test="evaluationNum != null">
-        evaluation_num = #{evaluationNum,jdbcType=INTEGER},
       </if>
       <if test="practiceQualification != null">
         practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
@@ -598,11 +566,11 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
     set org_id = #{orgId,jdbcType=VARCHAR},
-      tb__ID = #{tbId,jdbcType=VARCHAR},
-      asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
+      advisor_account = #{advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{advisorName,jdbcType=VARCHAR},
       business_area = #{businessArea,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
@@ -613,8 +581,6 @@
       card_number = #{cardNumber,jdbcType=VARCHAR},
       education = #{education,jdbcType=VARCHAR},
       graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
-      evalluation_level = #{evalluationLevel,jdbcType=VARCHAR},
-      evaluation_num = #{evaluationNum,jdbcType=INTEGER},
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},
@@ -629,11 +595,11 @@
       personal_profile = #{personalProfile,jdbcType=LONGVARBINARY}
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.servicemarket.advisor.entity.TbServiceAdvisor">
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
     set org_id = #{orgId,jdbcType=VARCHAR},
-      tb__ID = #{tbId,jdbcType=VARCHAR},
-      asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
+      advisor_account = #{advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{advisorName,jdbcType=VARCHAR},
       business_area = #{businessArea,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
@@ -644,8 +610,6 @@
       card_number = #{cardNumber,jdbcType=VARCHAR},
       education = #{education,jdbcType=VARCHAR},
       graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
-      evalluation_level = #{evalluationLevel,jdbcType=VARCHAR},
-      evaluation_num = #{evaluationNum,jdbcType=INTEGER},
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},

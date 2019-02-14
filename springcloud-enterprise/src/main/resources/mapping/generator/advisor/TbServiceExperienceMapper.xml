@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.servicemarket.advisor.dao.TbServiceExperienceMapper">
-  <resultMap id="BaseResultMap" type="com.jn.servicemarket.advisor.entity.TbServiceExperience">
+<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="asvisor_account" jdbcType="VARCHAR" property="asvisorAccount" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
@@ -75,7 +75,7 @@
     id, asvisor_account, company_name, position, work_time, created_time, creator_account, 
     modified_time, modifier_account, record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -99,13 +99,13 @@
     delete from tb_service_experience
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperienceCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria">
     delete from tb_service_experience
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperience">
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     insert into tb_service_experience (id, asvisor_account, company_name, 
       position, work_time, created_time, 
       creator_account, modified_time, modifier_account, 
@@ -115,7 +115,7 @@
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperience">
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     insert into tb_service_experience
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -182,7 +182,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultType="java.lang.Long">
     select count(*) from tb_service_experience
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -242,7 +242,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperience">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     update tb_service_experience
     <set>
       <if test="asvisorAccount != null">
@@ -275,7 +275,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.servicemarket.advisor.entity.TbServiceExperience">
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     update tb_service_experience
     set asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},

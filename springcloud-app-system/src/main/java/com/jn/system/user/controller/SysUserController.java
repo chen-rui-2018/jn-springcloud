@@ -3,23 +3,28 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.common.util.excel.ExcelUtil;
+import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleUserAdd;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
-import com.jn.system.user.vo.SysUserRoleVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户管理
@@ -40,10 +45,11 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/addSysUser")
     @ApiOperation(value = "添加用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addSysUser")
-    public Result addSysUser(@Validated @RequestBody SysUser sysUser) {
+    public Result addSysUser(@Validated @RequestBody SysUserAdd sysUser) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.addSysUser(sysUser,user);
+        sysUser.setId(UUID.randomUUID().toString());
+        sysUserService.addSysUser(sysUser, user);
         return new Result();
     }
 
@@ -51,8 +57,8 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "条件分页查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userSysUserPage) {
-        PaginationData data = sysUserService.findSysUserByPage(userSysUserPage);
+    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userPage) {
+        PaginationData data = sysUserService.findSysUserByPage(userPage);
         return new Result(data);
     }
 
@@ -70,7 +76,9 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "逻辑删除用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/deleteSysUser")
     public Result deleteSysUser(@Validated @RequestBody SysUserDelete sysUserDelete) {
-        sysUserService.deleteSysUser(sysUserDelete.getUserIds());
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.deleteSysUser(sysUserDelete.getUserIds(),user);
         return new Result();
     }
 
@@ -79,8 +87,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "更新用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateSysUser")
     public Result updateSysUser(@Validated @RequestBody SysUser sysUser) {
-        Assert.notNull(sysUser.getId(),"用户id不能为空");
-        sysUserService.updateSysUser(sysUser);
+        Assert.notNull(sysUser.getId(), "用户id不能为空");
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysUserService.updateSysUser(sysUser,user);
         return new Result();
     }
 
@@ -99,10 +109,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "添加用户组到用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysGroupToSysUser")
     public Result saveSysGroupToSysUser(@Validated @RequestBody SysUserGroupAdd sysUserGroupAdd) {
-        Assert.notNull(sysUserGroupAdd.getUserId(),"用户id不能为空");
+        Assert.notNull(sysUserGroupAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId(),user);
+        sysUserService.saveSysGroupToSysUser(sysUserGroupAdd.getGroupIds(), sysUserGroupAdd.getUserId(), user);
         return new Result();
     }
 
@@ -112,8 +122,8 @@ public class SysUserController extends BaseController {
             httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysRoleByUserId")
     public Result findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {
-        SysUserRoleVO sysUserRoleVO = sysUserService.findSysRoleByUserId(sysUserRolePage);
-        return new Result(sysUserRoleVO);
+        PaginationData data = sysUserService.findSysRoleByUserId(sysUserRolePage);
+        return new Result(data);
     }
 
     @ControllerLog(doAction = "为用户添加角色权限")
@@ -121,10 +131,10 @@ public class SysUserController extends BaseController {
     @ApiOperation(value = "为用户添加角色权限", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveSysRoleToSysUser")
     public Result saveSysRoleToSysUser(@Validated @RequestBody SysRoleUserAdd sysRoleUserAdd) {
-        Assert.notNull(sysRoleUserAdd.getUserId(),"用户id不能为空");
+        Assert.notNull(sysRoleUserAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId(),user);
+        sysUserService.saveSysRoleToSysUser(sysRoleUserAdd.getRoleIds(), sysRoleUserAdd.getUserId(), user);
         return new Result();
     }
 
@@ -145,7 +155,7 @@ public class SysUserController extends BaseController {
         Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPostAdd,user);
+        sysUserService.saveDepartmentAndPostOfUser(sysUserDepartmentPostAdd, user);
         return new Result();
     }
 
@@ -153,9 +163,37 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/checkUserName")
     @ApiOperation(value = "校验用户账号是否存在,fail表示账号已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkUserName")
-    public Result checkAccount(String account){
+    public Result checkAccount(String account) {
         String result = sysUserService.checkUserName(account);
         return new Result(result);
     }
+
+    @ControllerLog(doAction = "获取登录用户信息")
+    @RequiresPermissions("/system/sysUser/getUserInfo")
+    @ApiOperation(value = "获取登录用户信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getUserInfo")
+    public Result getUserInfo() {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        user.setPassword("");
+        return new Result(user);
+    }
+
+    @ControllerLog(doAction = "导出用户信息")
+    @RequiresPermissions("/system/sysUser/exportExcelUserInfo")
+    @ApiOperation(value = "导出用户信息", httpMethod = "GET", response = Result.class)
+    @RequestMapping(value = "/exportExcelUserInfo", method = RequestMethod.GET)
+    public void getUserInfo(HttpServletResponse response, SysUserPage userPage) {
+        String exportTitle = "帐号,姓名,部门,岗位,岗位类型,邮箱,手机,创建时间";
+        String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createdTime";
+        userPage.setPage(1);
+        userPage.setRows(200000);
+        PaginationData data = sysUserService.findSysUserByPage(userPage);
+        List dataRows = (List) data.getRows();
+        String fileName = "用户信息";
+        String sheetName = "用户信息";
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
+    }
+
 
 }

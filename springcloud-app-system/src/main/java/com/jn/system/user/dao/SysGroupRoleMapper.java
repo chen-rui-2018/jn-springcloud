@@ -7,6 +7,7 @@ import com.jn.system.user.model.SysGroupRole;
 import com.jn.system.user.model.SysGroupRolePage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： shaobao
@@ -32,13 +33,6 @@ public interface SysGroupRoleMapper {
     List<String> findRolesByGroupId(String id);
 
     /**
-     * 根据用户组id清除用户组下面的角色信息
-     *
-     * @param groupId
-     */
-    void deteSysGroupRoleByGroupId(String groupId);
-
-    /**
      * 为用户组添加角色信息
      *
      * @param sysGroupRoleList
@@ -48,9 +42,9 @@ public interface SysGroupRoleMapper {
     /**
      * 根据用户组id批量删除多用信息
      *
-     * @param groupIds
+     * @param map
      */
-    void deleteGroupBranch(String[] groupIds);
+    void deleteGroupBranch(Map<String,Object> map);
 
     /**
      * 获取角色已经拥有的用户组信息
@@ -75,4 +69,10 @@ public interface SysGroupRoleMapper {
      * @return
      */
     List<SysRole> findRoleByGroupPage(SysGroupRolePage sysGroupRolePage);
+
+    /**
+     * 根据角色id批量删除角色用户组信息
+     * @param map
+     */
+    void deleteTbSysGroupRoleByRoleIds(Map<String,Object> map);
 }

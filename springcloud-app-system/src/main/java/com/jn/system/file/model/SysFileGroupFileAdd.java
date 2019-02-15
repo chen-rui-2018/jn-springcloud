@@ -14,7 +14,7 @@ import java.util.Arrays;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFileGroupFileAdd" ,description = "文件组添加文件")
+@ApiModel(value = "SysFileGroupFileAdd", description = "文件组添加文件")
 public class SysFileGroupFileAdd implements Serializable {
 
     private static final long serialVersionUID = -6923429557226417911L;
@@ -22,13 +22,13 @@ public class SysFileGroupFileAdd implements Serializable {
     /**
      * 文件组id
      */
-    @ApiModelProperty(value = "文件组id" )
+    @ApiModelProperty(value = "文件组id")
     private String fileGroupId;
 
     /**
      * 文件id
      */
-    @ApiModelProperty(value = "文件id" )
+    @ApiModelProperty(value = "文件id")
     private String[] fileId;
 
     public SysFileGroupFileAdd() {

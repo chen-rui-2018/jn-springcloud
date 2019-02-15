@@ -12,7 +12,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum SysExceptionEnums implements CodeAndMsg {
 
     ADDERR_NAME_EXIST("1100501","添加失败,名称已存在"),
-    UPDATEERR_NAME_EXIST("1100502", "修改信息失败,名称已存在"),
+    UPDATEERR_NAME_EXIST("1100502", "修改失败,名称已存在"),
     UPDATEDATA_NOT_EXIST("1100503","修改失败,修改信息不存在");
 
     private String code;

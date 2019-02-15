@@ -20,10 +20,10 @@ public class SysRolePermissionAdd implements Serializable {
 
     private static final long serialVersionUID = -5110778698071514990L;
 
-    @ApiModelProperty(value = "权限id数组" )
+    @ApiModelProperty(value = "权限id数组")
     private String[] permissionId;
 
-    @ApiModelProperty(value = "角色id" )
+    @ApiModelProperty(value = "角色id")
     @NotBlank(message = "角色id不能为空")
     private String roleId;
 

@@ -3,7 +3,6 @@ package com.jn.system.file.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
 import com.jn.system.model.User;
 
@@ -21,23 +20,25 @@ public interface SysFileGroupService {
     /**
      * 新增文件组
      *
-     * @param sysFileGroup
+     * @param tbSysFileGroup
      */
-    void insertSysFileGroup(SysFileGroup sysFileGroup,User user);
+    void insertSysFileGroup(TbSysFileGroup tbSysFileGroup);
 
     /**
-     * 根据id更新文件组
+     * 更新文件组信息
      *
      * @param sysFileGroup
+     * @param user         当前用户信息
      */
-    void updateSysFileGroupById(SysFileGroup sysFileGroup);
+    void updateSysFileGroupById(SysFileGroup sysFileGroup, User user);
 
     /**
-     * 批量删除文件组（逻辑删除）
+     * 逻辑删除文件组信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
-    void deleteSysFileGroupByIds(String[] ids);
+    void deleteSysFileGroupByIds(String[] ids, User user);
 
     /**
      * 根据id查询文件组
@@ -54,14 +55,6 @@ public interface SysFileGroupService {
      * @return
      */
     PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage);
-
-
-    /**
-     * 文件组添加文件
-     *
-     * @param sysFileGroupFileAdd
-     */
-    void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd,User user);
 
     /**
      * 根据用户获取文件组

@@ -1,14 +1,10 @@
 package com.jn.system.menu.dao;
 
 
-import com.jn.system.menu.model.SysMenu;
-import com.jn.system.menu.model.SysMenuPage;
-import com.jn.system.menu.model.SysMenuUpdate;
 import com.jn.system.menu.vo.SysMenuTreeVO;
-import com.jn.system.menu.vo.SysMenuVO;
-import io.swagger.models.auth.In;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 菜单mapper
@@ -24,17 +20,9 @@ public interface SysMenuMapper {
     /**
      * 根据ids批量删除
      *
-     * @param ids
+     * @param map
      */
-    void deleteBy(List<String> ids);
-
-    /**
-     * 根据主键查询菜单功能列表
-     *
-     * @param sysMenuPage
-     * @return
-     */
-    List<SysMenuVO> selectMenuListBySearchKey(SysMenuPage sysMenuPage);
+    void deleteBy(Map<String, Object> map);
 
     /**
      * 根据菜单id获取菜单的等级
@@ -45,6 +33,13 @@ public interface SysMenuMapper {
     String findLevelByMenuId(String parentId);
 
     /**
+     * 获取全部菜单及菜单具有的功能信息
+     *
+     * @return
+     */
+    List<SysMenuTreeVO> getMenuAndResources();
+
+    /**
      * 根据父菜单id,获取子菜单中等级最大的值
      *
      * @param parentId
@@ -53,32 +48,33 @@ public interface SysMenuMapper {
     Integer findSortByMenuId(String parentId);
 
     /**
-     * 等级为1的菜单信息
+     * 批量更新菜单
      *
-     * @return
+     * @param map
      */
-    List<SysMenuTreeVO> findMenuByLevelOne();
+    void updateBatch(Map<String, Object> map);
 
     /**
-     * 以菜单id作为父id,去获取菜单子集
+     * 根据父菜单id获取子下一级所有菜单信息
      *
-     * @param value
+     * @param parentId
      * @return
      */
-    List<SysMenuTreeVO> findMenuByParentId(String value);
+    List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
 
     /**
-     * 根据菜单id获取菜单信息
+     * 根据用户权限动态获取菜单信息
      *
-     * @param id
+     * @param userId
      * @return
      */
-    SysMenu getMenuById(String id);
+    List<SysMenuTreeVO> getDynamicMenu(String userId);
 
     /**
-     * 批量对菜单排序进行更新
+     * 获取菜单的所有子菜单id
      *
-     * @param sysMenuSortList
+     * @param menuId
+     * @return
      */
-    void updateBatch(List<SysMenuUpdate> sysMenuSortList);
+    String getChildrenMenuIdS(String menuId);
 }

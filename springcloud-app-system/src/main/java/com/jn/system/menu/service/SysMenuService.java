@@ -20,23 +20,25 @@ public interface SysMenuService {
      * 更新菜单信息
      *
      * @param sysMenu
+     * @param user    当前用户信息
      */
-    void updateSysMenuById(SysMenu sysMenu);
+    void updateSysMenuById(SysMenu sysMenu, User user);
 
     /**
-     * 逻辑删除菜单
+     * 删除菜单
      *
      * @param menuIds
-     * @return
+     * @param user    当前用户信息
      */
-    void deleteSysMenuById(String menuIds);
+    void deleteSysMenuById(String menuIds, User user);
 
     /**
      * 查询所有菜单信息,返回树形结构
      *
+     * @param flag 菜单树接口权限管理也有调用,用于标记是菜单还是权限调用接口
      * @return
      */
-    List<SysMenuTreeVO> selectMenuList();
+    List<SysMenuTreeVO> selectMenuList(Boolean flag);
 
     /**
      * 根据id获取菜单详情
@@ -47,18 +49,11 @@ public interface SysMenuService {
     SysMenu selectMenuById(String id);
 
     /**
-     * 菜单分配功能
-     *
-     * @param sysMenuResourcesAdd
-     */
-    void insertMenuResources(SysMenuResourcesAdd sysMenuResourcesAdd, User user);
-
-    /**
      * 菜单添加目录菜单
      *
      * @param sysMenuAdd
      */
-    void addMenuDir(SysMenuAdd sysMenuAdd, User user);
+    void addMenuDir(SysMenuDirAdd sysMenuAdd, User user);
 
     /**
      * 目录菜单下面添加子菜单
@@ -76,9 +71,25 @@ public interface SysMenuService {
     String checkMenuName(SysMenuNameCheck sysMenuNameCheck);
 
     /**
-     * 批量对菜单排序进行更新
+     * 批量更新菜单
      *
      * @param sysMenus
+     * @param user     当前用户信息
      */
-    void updateBatch(SysMenus sysMenus);
+    void updateBatch(SysMenus sysMenus, User user);
+
+    /**
+     * 根据父菜单id获取子下一级所有菜单信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysMenuTreeVO> getChildrenMenuByParentId(String parentId);
+
+    /**
+     * 根据用户权限动态获取菜单信息
+     *
+     * @return
+     */
+    List<SysMenuTreeVO> getDynamicMenu(String userId);
 }

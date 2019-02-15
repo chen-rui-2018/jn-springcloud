@@ -1,79 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.user.dao.SysUserRoleMapper">
-    <resultMap id="BaseUserRoleResultMap" type="com.jn.system.user.model.SysUserRole">
-        <id column="id" jdbcType="VARCHAR" property="id"/>
-        <result column="role_id" jdbcType="VARCHAR" property="roleId" javaType="java.lang.String"/>
-        <result column="user_id" jdbcType="VARCHAR" property="userId" javaType="java.lang.String"/>
-        <result column="creator" jdbcType="VARCHAR" property="creator" javaType="java.lang.String"/>
-        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" javaType="java.sql.Timestamp"/>
-        <result column="status" jdbcType="VARCHAR" property="status" javaType="java.lang.String"/>
-    </resultMap>
-
 
     <update id="deleteByIds" parameterType="java.lang.String">
-        update tb_sys_user_role set status=-1
+        update tb_sys_user_role set record_status = 0
         where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteByRoleIds" parameterType="java.lang.String">
-        update tb_sys_user_role set status=-1
+    <update id="deleteByRoleIds" parameterType="java.util.Map">
+        update tb_sys_user_role
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where role_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <update id="deleteUserBranch" parameterType="java.lang.String">
-        update tb_sys_user_role set status=-1
+    <update id="deleteUserBranch" parameterType="java.util.Map">
+        update tb_sys_user_role
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where user_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into tb_sys_user_role (id, role_id,user_id,creator,create_time,status) values
+        insert into tb_sys_user_role (id, role_id,user_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id,jdbcType=BIGINT},
+            (#{item.id,jdbcType=VARCHAR},
             #{item.roleId,jdbcType=VARCHAR},
             #{item.userId,jdbcType=VARCHAR},
-            #{item.creator,jdbcType=VARCHAR},
+            #{item.creatorAccount,jdbcType=VARCHAR},
             now(),
-            #{item.status,jdbcType=VARCHAR})
+            #{item.recordStatus,jdbcType=VARCHAR})
         </foreach>
     </insert>
 
     <select id="findUserNameByRoleId" parameterType="java.lang.String" resultType="java.lang.String">
-        select t1.`name` from tb_sys_user t1,
-         tb_sys_user_role t2
-            where t1.id = t2.user_id
-            and t1.`status` = '1' and
-             t2.`status` = '1'  and role_id =  #{id,jdbcType=VARCHAR}
+        select
+        t1.`name`
+        from
+        tb_sys_user t1,
+        tb_sys_user_role t2
+        where t1.id = t2.user_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and role_id =  #{id,jdbcType=VARCHAR}
+        order by t1.created_time asc
     </select>
 
     <select id="findUserByRoleId" parameterType="java.lang.String"
             resultType="com.jn.system.user.model.SysTUser">
-      SELECT t1.id,t1.`name`
-      FROM tb_sys_user t1, tb_sys_user_role t2
-        where t1.id = t2.user_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.role_id = #{id,jdbcType=VARCHAR}
+      SELECT
+      t1.id,
+      t1.`name`,
+      t1.created_time
+      FROM tb_sys_user t1,
+      tb_sys_user_role t2
+      where t1.id = t2.user_id
+      and t1.`record_status` = 1
+      and t2.`record_status` = 1
+      and t2.role_id = #{id,jdbcType=VARCHAR}
+      ORDER BY t1.created_time ASC
     </select>
 
     <select id="findOtherUser" parameterType="com.jn.system.permission.model.SysRoleUserPage"
             resultType="com.jn.system.user.model.SysTUser">
-        SELECT DISTINCT t.id,t.`name` from tb_sys_user t left join
-        (SELECT t1.id,t1.`name` FROM tb_sys_user t1, tb_sys_user_role t2
-        where t1.id = t2.user_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
-        on t.id = tt.id where t.`status` = '1' and tt.id is null
+        SELECT DISTINCT
+        t.id,
+        t.`name`
+        from tb_sys_user t
+        left join
+        (SELECT
+        t1.id,
+        t1.`name`
+        FROM tb_sys_user t1,
+        tb_sys_user_role t2
+        where t1.id = t2.user_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t2.role_id = #{roleId,jdbcType=VARCHAR}) tt
+        on t.id = tt.id
+        where t.`record_status` = 1
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userName)">
             and t.`name` like CONCAT('%', #{userName,jdbcType=VARCHAR}, '%')
         </if>
+        ORDER BY t.created_time DESC,t.id DESC
     </select>
 
     <select id="findRoleByUserPage" parameterType="com.jn.system.user.model.SysUserRolePage"
@@ -81,17 +105,23 @@
         select DISTINCT
         t.id,
         t.role_name as roleName,
-        t.create_time as createTime,
-        t.creator,
-        t.`status`
-        from tb_sys_role t left join
-        (select t1.id,t1.role_name from tb_sys_role t1 , tb_sys_user_role t2
-        where t1.id = t2.role_id and t1.`status` = '1'
-        and t2.`status` = '1' and t2.user_id = #{userId,jdbcType=VARCHAR} ) tt
+        t.created_time as createdTime,
+        creator_account as creatorAccount,
+        record_status as recordStatus
+        from tb_sys_role t
+        left join
+        (select t1.id,t1.role_name
+        from tb_sys_role t1 , tb_sys_user_role t2
+        where t1.id = t2.role_id
+        and t1.`record_status` = 1
+        and t2.`record_status` = 1
+        and t2.user_id = #{userId,jdbcType=VARCHAR} ) tt
         on t.id = tt.id
-        where t.`status` = '1' and tt.id is null
+        where t.`record_status` = 1
+        and tt.id is null
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roleName)">
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
+        ORDER BY t.created_time DESC ,t.id DESC
     </select>
 </mapper>

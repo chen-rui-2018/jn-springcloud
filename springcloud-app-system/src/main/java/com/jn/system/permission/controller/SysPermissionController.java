@@ -3,8 +3,10 @@ package com.jn.system.permission.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
+import com.jn.system.permission.entity.TbSysPermission;
 import com.jn.system.permission.model.*;
 import com.jn.system.permission.service.SysPermissionService;
 import com.jn.system.permission.vo.SysMenuResourcesVO;
@@ -12,12 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 权限管理
@@ -42,7 +47,13 @@ public class SysPermissionController extends BaseController {
     public Result add(@Validated @RequestBody SysPermissionAdd sysPermissionAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addPermission(sysPermissionAdd,user);
+        //封装权限对象
+        TbSysPermission tbSysPermission = new TbSysPermission();
+        BeanUtils.copyProperties(sysPermissionAdd, tbSysPermission);
+        tbSysPermission.setId(UUID.randomUUID().toString());
+        tbSysPermission.setCreatedTime(new Date());
+        tbSysPermission.setCreatorAccount(user.getAccount());
+        sysPermissionService.addPermission(tbSysPermission);
         return new Result();
     }
 
@@ -52,7 +63,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/update")
     public Result update(@Validated @RequestBody SysPermission sysPermission) {
         Assert.notNull(sysPermission.getId(), "权限id不能为空");
-        sysPermissionService.updatePermission(sysPermission);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.updatePermission(sysPermission, user);
         return new Result();
     }
 
@@ -80,7 +93,9 @@ public class SysPermissionController extends BaseController {
     @RequestMapping(value = "/delete")
     public Result delete(String[] ids) {
         Assert.noNullElements(ids, "权限id不能为空");
-        sysPermissionService.deletePermissionBranch(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysPermissionService.deletePermissionBranch(ids, user);
         return new Result();
     }
 
@@ -92,7 +107,7 @@ public class SysPermissionController extends BaseController {
         Assert.notNull(sysPermissionRolesAdd.getPermissionId(), "权限id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd,user);
+        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd, user);
         return new Result();
     }
 
@@ -122,55 +137,14 @@ public class SysPermissionController extends BaseController {
         Assert.notNull(sysPermissionFileGroupAdd.getPermissionId(), "权限id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd,user);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息")
-    @RequiresPermissions("/system/sysPermission/findMenuOfPermission")
-    @ApiOperation(value = "获取权限已经具有的菜单信息,且条件分页查询获取权限未拥有的菜单信息",
-            httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findMenuOfPermission")
-    public Result findMenuOfPermission(@Validated @RequestBody SysPermissionMenuPage sysPermissionMenuPage) {
-        PaginationData data = sysPermissionService.findMenuOfPermission(sysPermissionMenuPage);
-        return new Result(data);
-    }
-
-    @ControllerLog(doAction = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息")
-    @RequiresPermissions("/system/sysPermission/findResourcesOfPermission")
-    @ApiOperation(value = "获取权限已经具有的功能信息,且条件分页获取权限未拥有的功能信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findResourcesOfPermission")
-    public Result findResourcesOfPermission(@Validated @RequestBody SysPermissionResourcePage sysPermissionResourcePage) {
-        PaginationData data = sysPermissionService.findResourcesOfPermission(sysPermissionResourcePage);
-        return new Result(data);
-    }
-
-    @ControllerLog(doAction = "为权限添加菜单")
-    @RequiresPermissions("/system/sysPermission/addMenuToPermission")
-    @ApiOperation(value = "为权限添加菜单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/addMenuToPermission")
-    public Result addMenuToPermission(@Validated @RequestBody SysPermissionMenuAdd sysPermissionMenuAdd) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addMenuToPermission(sysPermissionMenuAdd,user);
-        return new Result();
-    }
-
-    @ControllerLog(doAction = "为权限添加页面功能")
-    @RequiresPermissions("/system/sysPermission/addResounceToPermission")
-    @ApiOperation(value = "为权限添加页面功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/addResounceToPermission")
-    public Result addResounceToPermission(@Validated @RequestBody SysPermissionResourceAdd sysPermissionMenuAdd) {
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addResourceToPermission(sysPermissionMenuAdd,user);
+        sysPermissionService.addFileGroupToPermission(sysPermissionFileGroupAdd, user);
         return new Result();
     }
 
     @ControllerLog(doAction = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用")
-    @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @ApiOperation(value = "校验权限名称是否已经存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/system/sysPermission/checkPermissionName")
     @RequestMapping(value = "/checkPerssionName")
     public Result checkPermissionName(String permissionName) {
         String result = sysPermissionService.checkPermissionName(permissionName);
@@ -181,7 +155,7 @@ public class SysPermissionController extends BaseController {
     @RequiresPermissions("/system/sysPermission/getMenuAndResources")
     @ApiOperation(value = "权限授权功能,获取菜单及功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getMenuAndResources")
-    public Result getMenuAndResources(String permissionId){
+    public Result getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = sysPermissionService.getMenuAndResources(permissionId);
         return new Result(sysMenuResourcesVO);
     }
@@ -191,10 +165,10 @@ public class SysPermissionController extends BaseController {
     @ApiOperation(value = "权限授权菜单及功能信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/addMenuAndResourcesToPermission")
     public Result addMenuAndResourcesToPermission(
-            @Validated @RequestBody SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd){
+            @Validated @RequestBody SysPermissionMenuResourcesAdd sysPermissionMenuResourcesAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysPermissionService.addMenuAndResourcesToPermission(sysPermissionMenuResourcesAdd,user);
+        sysPermissionService.addMenuAndResourcesToPermission(sysPermissionMenuResourcesAdd, user);
         return new Result();
     }
 

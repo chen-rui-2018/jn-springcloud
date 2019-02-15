@@ -2,6 +2,7 @@ package com.jn.system.dept.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -17,24 +18,32 @@ import java.util.Date;
 @ApiModel(value = "SysPost",description = "岗位")
 public class SysPost implements Serializable {
     private static final long serialVersionUID = -983797756680764097L;
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id",required = true)
     private String id;
-    @ApiModelProperty("岗位名称")
+    @ApiModelProperty(value ="岗位名称",required = true)
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "岗位名称校验失败")
     private String postName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
-    @ApiModelProperty("状态")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    private Date createdTime;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
+    @ApiModelProperty(value ="岗位类型id",required = true)
+    @NotBlank(message = "岗位类型不能为空")
+    private String postTypeId;
+    @ApiModelProperty("岗位类型名称")
+    private String postTypeName;
 
     public SysPost() {
     }
 
-    public SysPost(String id, String postName, Date createTime, String status) {
+    public SysPost(String id, String postName, Date createdTime, Byte recordStatus,
+                   String postTypeId, String postTypeName) {
         this.id = id;
         this.postName = postName;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+        this.postTypeId = postTypeId;
+        this.postTypeName = postTypeName;
     }
 
     public String getId() {
@@ -53,20 +62,36 @@ public class SysPost implements Serializable {
         this.postName = postName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId;
+    }
+
+    public String getPostTypeName() {
+        return postTypeName;
+    }
+
+    public void setPostTypeName(String postTypeName) {
+        this.postTypeName = postTypeName;
     }
 
     @Override
@@ -74,8 +99,10 @@ public class SysPost implements Serializable {
         return "SysPost{" +
                 "id='" + id + '\'' +
                 ", postName='" + postName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
+                ", postTypeId='" + postTypeId + '\'' +
+                ", postTypeName='" + postTypeName + '\'' +
                 '}';
     }
 }

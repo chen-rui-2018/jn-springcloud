@@ -1,9 +1,8 @@
 package com.jn.system.file.model;
 
-import com.jn.system.common.enums.SysStatusEnums;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +14,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "SysFileGroupFile" ,description = "文件组文件关联")
+@ApiModel(value = "SysFileGroupFile", description = "文件组文件关联")
 public class SysFileGroupFile implements Serializable {
 
     private static final long serialVersionUID = 8698342402955891194L;
@@ -24,37 +23,57 @@ public class SysFileGroupFile implements Serializable {
     /**
      * 文件组id
      */
-
+    @ApiModelProperty(value = "文件组id")
     private String fileGroupId;
 
     /**
      * 文件id
      */
+    @ApiModelProperty(value = "文件id")
     private String fileId;
 
     /**
      * 创建人
      */
-    private String creator;
+    @ApiModelProperty("创建人")
+    private String creatorAccount;
 
     /**
      * 创建时间
      */
-    private Date createTime;
+    @ApiModelProperty("创建时间")
+    private Date createdTime;
 
     /**
-     * 状态 1:有效 0:无效 -1:删除
+     * 状态，0删除，1有效，2无效
      */
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status=SysStatusEnums.EFFECTIVE.getCode();
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
+
+    public SysFileGroupFile(String id, String fileGroupId, String fileId, String creatorAccount,
+                            Date createdTime, Byte recordStatus) {
+        this.id = id;
+        this.fileGroupId = fileGroupId;
+        this.fileId = fileId;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+    }
+
+    public SysFileGroupFile() {
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getFileGroupId() {
@@ -62,7 +81,7 @@ public class SysFileGroupFile implements Serializable {
     }
 
     public void setFileGroupId(String fileGroupId) {
-        this.fileGroupId = fileGroupId == null ? null : fileGroupId.trim();
+        this.fileGroupId = fileGroupId;
     }
 
     public String getFileId() {
@@ -70,80 +89,82 @@ public class SysFileGroupFile implements Serializable {
     }
 
     public void setFileId(String fileId) {
-        this.fileId = fileId == null ? null : fileId.trim();
+        this.fileId = fileId;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
-    public boolean equals(Object that) {
-        if (this == that) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (that == null) {
+        if (!(o instanceof SysFileGroupFile)) {
             return false;
         }
-        if (getClass() != that.getClass()) {
+
+        SysFileGroupFile that = (SysFileGroupFile) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) {
             return false;
         }
-        SysFileGroupFile other = (SysFileGroupFile) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getFileGroupId() == null ? other.getFileGroupId() == null : this.getFileGroupId().equals(other.getFileGroupId()))
-                && (this.getFileId() == null ? other.getFileId() == null : this.getFileId().equals(other.getFileId()))
-                && (this.getCreator() == null ? other.getCreator() == null : this.getCreator().equals(other.getCreator()))
-                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()));
+        if (fileGroupId != null ? !fileGroupId.equals(that.fileGroupId) : that.fileGroupId != null) {
+            return false;
+        }
+        if (fileId != null ? !fileId.equals(that.fileId) : that.fileId != null) {
+            return false;
+        }
+        if (creatorAccount != null ? !creatorAccount.equals(that.creatorAccount) : that.creatorAccount != null) {
+            return false;
+        }
+        if (createdTime != null ? !createdTime.equals(that.createdTime) : that.createdTime != null) {
+            return false;
+        }
+        return recordStatus != null ? recordStatus.equals(that.recordStatus) : that.recordStatus == null;
     }
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getFileGroupId() == null) ? 0 : getFileGroupId().hashCode());
-        result = prime * result + ((getFileId() == null) ? 0 : getFileId().hashCode());
-        result = prime * result + ((getCreator() == null) ? 0 : getCreator().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (fileGroupId != null ? fileGroupId.hashCode() : 0);
+        result = 31 * result + (fileId != null ? fileId.hashCode() : 0);
+        result = 31 * result + (creatorAccount != null ? creatorAccount.hashCode() : 0);
+        result = 31 * result + (createdTime != null ? createdTime.hashCode() : 0);
+        result = 31 * result + (recordStatus != null ? recordStatus.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", fileGroupId=").append(fileGroupId);
-        sb.append(", fileId=").append(fileId);
-        sb.append(", creator=").append(creator);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", status=").append(status);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+        return "SysFileGroupFile{" +
+                "id='" + id + '\'' +
+                ", fileGroupId='" + fileGroupId + '\'' +
+                ", fileId='" + fileId + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
+                '}';
     }
 }

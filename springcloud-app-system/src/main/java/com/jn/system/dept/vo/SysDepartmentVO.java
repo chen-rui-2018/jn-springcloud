@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,33 +20,37 @@ public class SysDepartmentVO implements Serializable {
     private static final long serialVersionUID = 8857934360566700442L;
 
     @ApiModelProperty("部门id")
-    private String id;
+    private String value;
     @ApiModelProperty("部门名称")
     private String label;
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("父级名称")
     private String parentName;
+    @ApiModelProperty("等级")
+    private String level;
     @ApiModelProperty("子部门的集合")
     private List<SysDepartmentVO> children;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String id, String label, String parentId, String parentName, List<SysDepartmentVO> children) {
-        this.id = id;
+    public SysDepartmentVO(String value, String label, String parentId, String parentName,
+                           String level, List<SysDepartmentVO> children) {
+        this.value = value;
         this.label = label;
         this.parentId = parentId;
         this.parentName = parentName;
+        this.level = level;
         this.children = children;
     }
 
-    public String getId() {
-        return id;
+    public String getValue() {
+        return value;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getLabel() {
@@ -72,6 +77,14 @@ public class SysDepartmentVO implements Serializable {
         this.parentName = parentName;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
     public List<SysDepartmentVO> getChildren() {
         return children;
     }
@@ -83,10 +96,11 @@ public class SysDepartmentVO implements Serializable {
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
-                "id='" + id + '\'' +
+                "value='" + value + '\'' +
                 ", label='" + label + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
+                ", level='" + level + '\'' +
                 ", children=" + children +
                 '}';
     }

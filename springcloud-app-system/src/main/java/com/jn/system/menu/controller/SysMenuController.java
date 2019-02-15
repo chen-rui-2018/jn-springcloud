@@ -2,21 +2,22 @@ package com.jn.system.menu.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.model.*;
-import com.jn.system.model.*;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 菜单controller
@@ -38,7 +39,7 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/list")
     @RequiresPermissions("/system/sysMenu/list")
     public Result list() {
-        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuList();
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.selectMenuList(true);
         return new Result(menuTreeVOList);
     }
 
@@ -48,7 +49,9 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("/system/sysMenu/update")
     public Result update(@Validated @RequestBody SysMenu sysMenu) {
         Assert.notNull(sysMenu.getId(), "菜单ID不能为空");
-        sysMenuService.updateSysMenuById(sysMenu);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.updateSysMenuById(sysMenu, user);
         return new Result();
     }
 
@@ -57,7 +60,10 @@ public class SysMenuController extends BaseController {
     @PostMapping(value = "/delete")
     @RequiresPermissions("/system/sysMenu/delete")
     public Result delete(String id) {
-        sysMenuService.deleteSysMenuById(id);
+        Assert.notNull(id, "菜单id不能为空");
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.deleteSysMenuById(id, user);
         return new Result();
     }
 
@@ -71,31 +77,15 @@ public class SysMenuController extends BaseController {
         return new Result(sysMenu);
     }
 
-    @ControllerLog(doAction = "菜单添加功能")
-    @ApiOperation(value = "菜单添加功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/insertMenuResources")
-    @RequiresPermissions("/system/sysMenu/insertMenuResources")
-    public Result insertMenuResources(@Validated @RequestBody SysMenuResourcesAdd sysMenuResourcesAdd) {
-        Assert.notNull(sysMenuResourcesAdd.getMenuId(), "菜单ID不能为空");
-        if (sysMenuResourcesAdd.getResourcesId().length == 0) {
-            Assert.notNull(sysMenuResourcesAdd.getResourcesName(), "功能名称不能为空");
-            Assert.notNull(sysMenuResourcesAdd.getResourcesUrl(), "功能路径不能为空");
-            Assert.notNull(sysMenuResourcesAdd.getStatus(), "功能状态不能为空");
-        }
-        //获取当前登录用户信息
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysMenuService.insertMenuResources(sysMenuResourcesAdd,user);
-        return new Result();
-    }
-
     @ControllerLog(doAction = "菜单添加目录菜单")
     @ApiOperation(value = "菜单添加目录菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenuDir")
     @RequiresPermissions("/system/sysMenu/addMenuDir")
-    public Result addMenuDir(@Validated @RequestBody SysMenuAdd sysMenuAdd){
+    public Result addMenuDir(@Validated @RequestBody SysMenuDirAdd sysMenuAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysMenuService.addMenuDir(sysMenuAdd,user);
+        sysMenuAdd.setId(UUID.randomUUID().toString());
+        sysMenuService.addMenuDir(sysMenuAdd, user);
         return new Result();
     }
 
@@ -103,28 +93,51 @@ public class SysMenuController extends BaseController {
     @ApiOperation(value = "目录菜单下面添加子菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/addMenu")
     @RequiresPermissions("/system/sysMenu/addMenu")
-    public Result addMenu(@Validated @RequestBody SysMenuAdd sysMenuAdd){
+    public Result addMenu(@Validated @RequestBody SysMenuAdd sysMenuAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysMenuService.addMenu(sysMenuAdd,user);
+        sysMenuAdd.setId(UUID.randomUUID().toString());
+        sysMenuService.addMenu(sysMenuAdd, user);
         return new Result();
     }
 
     @ControllerLog(doAction = "校验菜单名称,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验菜单名称,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/checkMenuName")
     @RequiresPermissions("/system/sysMenu/checkMenuName")
-    public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck){
+    @PostMapping(value = "/checkMenuName")
+    public Result checkMenuName(@Validated @RequestBody SysMenuNameCheck sysMenuNameCheck) {
         String result = sysMenuService.checkMenuName(sysMenuNameCheck);
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "批量对菜单排序进行更新")
-    @ApiOperation(value = "批量对菜单排序进行更新", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "批量更新菜单")
+    @ApiOperation(value = "批量更新菜单", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/updateBatch")
     @RequiresPermissions("/system/sysMenu/updateBatch")
-    public Result updateBatch(@Validated @RequestBody SysMenus sysMenus){
-        sysMenuService.updateBatch(sysMenus);
+    public Result updateBatch(@Validated @RequestBody SysMenus sysMenus) {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysMenuService.updateBatch(sysMenus, user);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "根据父菜单id获取子下一级所有菜单信息")
+    @ApiOperation(value = "根据父菜单id获取子下一级所有菜单信息", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/getChildrenMenuByParentId")
+    @RequiresPermissions("/system/sysMenu/getChildrenMenuByParentId")
+    public Result getChildrenMenuByParentId(String parentId) {
+        List<SysMenuTreeVO> list = sysMenuService.getChildrenMenuByParentId(parentId);
+        return new Result(list);
+    }
+
+    @ControllerLog(doAction = "根据用户权限动态获取菜单信息")
+    @ApiOperation(value = "根据用户权限动态获取菜单信息", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/getDynamicMenu")
+    @RequiresPermissions("/system/sysMenu/getDynamicMenu")
+    public Result getDynamicMenu() {
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        List<SysMenuTreeVO> menuTreeVOList = sysMenuService.getDynamicMenu(user.getId());
+        return new Result(menuTreeVOList);
     }
 }

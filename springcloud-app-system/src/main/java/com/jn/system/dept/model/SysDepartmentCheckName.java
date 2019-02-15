@@ -8,12 +8,13 @@ import java.io.Serializable;
 
 /**
  * 部门校验名称实体
+ *
  * @author： shaobao
  * @date： Created on 2018/11/23 15:55
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDepartmentCheckName",description = "部门校验名称实体")
+@ApiModel(value = "SysDepartmentCheckName", description = "部门校验名称实体")
 public class SysDepartmentCheckName implements Serializable {
 
     private static final long serialVersionUID = -1675079560991801814L;
@@ -22,6 +23,7 @@ public class SysDepartmentCheckName implements Serializable {
     @ApiModelProperty("父级id")
     private String parentId;
     @ApiModelProperty("部门名称")
+    @NotBlank(message = "部门名称不能为空")
     private String departmentName;
 
     public SysDepartmentCheckName() {

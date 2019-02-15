@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,36 +27,42 @@ public class SysMenuTreeVO implements Serializable {
     private String icon;
     @ApiModelProperty("菜单路径")
     private String menuUrl;
+    @ApiModelProperty("菜单路径")
+    private String path;
     @ApiModelProperty("排序,菜单目录,默认排序为0,子菜单排序从1,往后开始递增")
-    private String sort;
+    private Integer sort;
     @ApiModelProperty("是否是文件夹,1是,0不是")
     private String isDir;
     @ApiModelProperty("父级id")
     private String parentId;
+    @ApiModelProperty(value = "菜单层级" )
+    private String level;
     @ApiModelProperty("父级id父级名称")
     private String parentName;
     @ApiModelProperty("创建时间")
-    private String createTime;
+    private Date createdTime;
     @ApiModelProperty("子菜单的集合")
-    private List<SysMenuTreeVO> children;
+    private List children;
     @ApiModelProperty("菜单功能的集合")
     private List<SysResources> resourcesList;
 
     public SysMenuTreeVO() {
     }
 
-    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String sort,
-                         String isDir, String parentId, String parentName, String createTime,
-                         List<SysMenuTreeVO> children, List<SysResources> resourcesList) {
+    public SysMenuTreeVO(String id, String label, String icon, String menuUrl, String path, Integer sort, String isDir,
+                         String parentId, String level, String parentName, Date createdTime,
+                         List children, List<SysResources> resourcesList) {
         this.id = id;
         this.label = label;
         this.icon = icon;
         this.menuUrl = menuUrl;
+        this.path = path;
         this.sort = sort;
         this.isDir = isDir;
         this.parentId = parentId;
+        this.level = level;
         this.parentName = parentName;
-        this.createTime = createTime;
+        this.createdTime = createdTime;
         this.children = children;
         this.resourcesList = resourcesList;
     }
@@ -92,11 +99,19 @@ public class SysMenuTreeVO implements Serializable {
         this.menuUrl = menuUrl;
     }
 
-    public String getSort() {
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public Integer getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    public void setSort(Integer sort) {
         this.sort = sort;
     }
 
@@ -116,6 +131,14 @@ public class SysMenuTreeVO implements Serializable {
         this.parentId = parentId;
     }
 
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
     public String getParentName() {
         return parentName;
     }
@@ -124,19 +147,19 @@ public class SysMenuTreeVO implements Serializable {
         this.parentName = parentName;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public List<SysMenuTreeVO> getChildren() {
+    public List getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenuTreeVO> children) {
+    public void setChildren(List children) {
         this.children = children;
     }
 
@@ -155,11 +178,13 @@ public class SysMenuTreeVO implements Serializable {
                 ", label='" + label + '\'' +
                 ", icon='" + icon + '\'' +
                 ", menuUrl='" + menuUrl + '\'' +
-                ", sort='" + sort + '\'' +
+                ", path='" + path + '\'' +
+                ", sort=" + sort +
                 ", isDir='" + isDir + '\'' +
                 ", parentId='" + parentId + '\'' +
+                ", level='" + level + '\'' +
                 ", parentName='" + parentName + '\'' +
-                ", createTime='" + createTime + '\'' +
+                ", createdTime=" + createdTime +
                 ", children=" + children +
                 ", resourcesList=" + resourcesList +
                 '}';

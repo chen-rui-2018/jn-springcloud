@@ -3,7 +3,7 @@ package com.jn.system.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -11,12 +11,12 @@ import java.util.Date;
 /**
  * 用户信息
  */
-@ApiModel(value = "User" ,description = "用户信息")
-public class User implements Serializable{
+@ApiModel(value = "User", description = "用户信息")
+public class User implements Serializable {
 
-	private static final long serialVersionUID = -7484136779753770396L;
+    private static final long serialVersionUID = -7484136779753770396L;
 
-    @ApiModelProperty(value = "id" )
+    @ApiModelProperty(value = "id")
     private String id;
     @ApiModelProperty(value = "账户名")
     private String account;
@@ -34,13 +34,17 @@ public class User implements Serializable{
     private String email;
 
     @ApiModelProperty("创建人")
-    private String creator;
+    private String creatorAccount;
 
     @ApiModelProperty("创建时间")
-    private Date createTime;
+    private Date createdTime;
 
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
+
+    @ApiModelProperty("微信账号")
+    @Pattern(regexp = "^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$", message = "{weixinAccount:'微信号校验错误'}")
+    private String wechatAccount;
 
 
     public User(String account) {
@@ -48,6 +52,20 @@ public class User implements Serializable{
     }
 
     public User() {
+    }
+
+    public User(String id, String account, String password, String name, String phone, String email,
+                String creatorAccount, Date createdTime, Byte recordStatus, String wechatAccount) {
+        this.id = id;
+        this.account = account;
+        this.password = password;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.creatorAccount = creatorAccount;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
+        this.wechatAccount = wechatAccount;
     }
 
     public String getId() {
@@ -98,30 +116,37 @@ public class User implements Serializable{
         this.email = email;
     }
 
-    public String getCreator() {
-        return creator;
+    public String getCreatorAccount() {
+        return creatorAccount;
     }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
+    public String getWechatAccount() {
+        return wechatAccount;
+    }
+
+    public void setWechatAccount(String wechatAccount) {
+        this.wechatAccount = wechatAccount;
+    }
 
     @Override
     public String toString() {
@@ -132,9 +157,10 @@ public class User implements Serializable{
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", creator='" + creator + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
+                ", wechatAccount='" + wechatAccount + '\'' +
                 '}';
     }
 }

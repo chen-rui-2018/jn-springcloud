@@ -1,12 +1,10 @@
 package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.*;
-
-import java.util.List;
 
 /**
  * 用户组
@@ -19,7 +17,7 @@ import java.util.List;
 public interface SysGroupService {
 
     /**
-     * 查询所有用户组信息
+     * 查询用户组信息列表
      *
      * @return
      */
@@ -28,24 +26,23 @@ public interface SysGroupService {
     /**
      * 增加用户组
      *
-     * @param sysGroup 用户组
+     * @param tbSysGroup 用户组
      */
-    void addSysGroup(TbSysGroup sysGroup, User user);
+    void addSysGroup(TbSysGroup tbSysGroup);
 
     /**
      * 逻辑删除用户组
-     *
-     * @param groupIds 用户组数组id
+     * @param groupIds
+     * @param user
      */
-    void deleSysGroup(String[] groupIds);
+    void deleSysGroup(String[] groupIds,User user);
 
     /**
      * 修改用户组信息
-     *
-     * @param sysGroup 用户组对象
-     * @return
+     * @param sysGroup
+     * @param user 当时用户信息
      */
-    void updateSysGroup(SysGroupUpdate sysGroup);
+    void updateSysGroup(SysGroupUpdate sysGroup,User user);
 
     /**
      * 根据用户组id获取用户组信息
@@ -69,14 +66,6 @@ public interface SysGroupService {
      * @param sysRoleGroupAdd
      */
     void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd, User user);
-
-    /**
-     * 根据用户组id获取用户组下面所有用户
-     *
-     * @param groupId 用户组id
-     * @return
-     */
-    List<SysTUser> findUserOfGroup(String groupId);
 
     /**
      * 查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息

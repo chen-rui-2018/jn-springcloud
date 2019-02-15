@@ -2,59 +2,73 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.system.dept.dao.SysDepartmentMapper">
 
-    <update id="deleteDepartmentBranch" parameterType="java.util.List">
-        update tb_sys_department set status=-1
+    <update id="deleteDepartmentBranch" parameterType="java.util.Map">
+        update tb_sys_department
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach collection="list" item="id"
-                 open="(" close=")" index="index" separator=",">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
 
-    <select id="findSysDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
-        select
-        id,
-        parent_id as parentId,
-        department_name as label
-        from tb_sys_department
-        where parent_id = '1'
-        and `status` = '1'
-        ORDER BY create_time ASC
-    </select>
+    <update id="updateDepartmentBatch" parameterType="java.util.Map" >
+        update tb_sys_department
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="department_name =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{item.departmentName}
+                </foreach>
+            </trim>
+            <trim prefix="modifier_account =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then #{account}
+                </foreach>
+            </trim>
+            <trim prefix="modified_time =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when id=#{item.id} then now()
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=VARCHAR}
+        </foreach>
+    </update>
 
-    <select id="findChildrenDepartment" parameterType="java.lang.String"
-            resultType="com.jn.system.dept.vo.SysDepartmentVO">
-         select
-            t.department_name as parentName,
-            tt.id,
-            tt.department_name as label,
-            tt.parent_id as parentId
-            from tb_sys_department t,
-            (select
-            id,
-            parent_id,
+    <select id="getChildDepartmentByParentId" resultType="com.jn.system.dept.vo.SysDepartmentVO"
+            parameterType="java.lang.String">
+            SELECT
+            id as `value`,
+            department_name as label,
+            parent_id as parentId,
+            (SELECT
             department_name
-            from tb_sys_department
-            where parent_id = #{parentId,jdbcType=VARCHAR}
-            and `status` = '1'
-            ORDER BY create_time ASC) tt
-            where
-            t.id = tt.parent_id
-            and `status` = '1'
+            FROM tb_sys_department
+            where id = t.parent_id) as parentName
+            FROM
+            `tb_sys_department` t
+            where parent_id = #{id,jdbcType=VARCHAR}
+            and `record_status` = 1
+            ORDER BY created_time ASC;
     </select>
 
-    <select id="checkDepartmentName" parameterType="com.jn.system.dept.model.SysDepartmentCheckName"
-            resultType="com.jn.system.dept.model.SysDepartment">
-          SELECT
-            id,department_name
-            from tb_sys_department
-            where parent_id = #{parentId,jdbcType=VARCHAR}
-            and department_name = #{departmentName,jdbcType=VARCHAR}
-            and `status` = '1' LIMIT 1
+    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
+            SELECT
+            id as value,
+            department_name as label,
+            parent_id as parentId,
+            `level`
+            FROM
+            `tb_sys_department`
+            WHERE `record_status` = 1
+            ORDER BY created_time ASC;
     </select>
 
-    <select id="getDepartmentById" resultType="com.jn.system.dept.model.SysDepartment" parameterType="java.lang.String">
-          SELECT id,department_name as departmentName,parent_id as parentId,`status`
-          FROM `tb_sys_department` where id = #{id,jdbcType=VARCHAR} and `status` != '-1';
+    <select id="getDepartmentIds" resultType="java.lang.String">
+        SELECT queryChildrenSysDepartmentInfo(#{id,jdbcType=VARCHAR}) <!--queryChildrenSysDepartmentInfo部门节点向下递归函数-->
     </select>
 </mapper>

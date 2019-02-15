@@ -24,15 +24,15 @@ public class SysGroupPage extends Page implements Serializable {
     private String groupName;
 
     @ApiModelProperty("创建状态")
-    private String status;
+    private Byte recordStatus;
 
 
     public SysGroupPage() {
     }
 
-    public SysGroupPage(String groupName, String status) {
+    public SysGroupPage(String groupName, Byte recordStatus) {
         this.groupName = groupName;
-        this.status = status;
+        this.recordStatus = recordStatus;
     }
 
     public String getGroupName() {
@@ -43,19 +43,19 @@ public class SysGroupPage extends Page implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
     public String toString() {
         return "SysGroupPage{" +
                 "groupName='" + groupName + '\'' +
-                ", status='" + status + '\'' +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

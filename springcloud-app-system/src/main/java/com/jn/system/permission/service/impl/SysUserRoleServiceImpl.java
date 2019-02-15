@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -47,7 +48,7 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     @Transactional(rollbackFor = Exception.class)
     public void insertTbUserRole(SysUserRole role, User user) {
         role.setId(UUID.randomUUID().toString());
-        role.setCreator(user.getId());
+        role.setCreatorAccount(user.getAccount());
         TbSysUserRole tbSysUserRole = new TbSysUserRole();
         BeanUtils.copyProperties(role, tbSysUserRole);
         tbSysUserRoleMapper.insert(tbSysUserRole);
@@ -74,14 +75,15 @@ public class SysUserRoleServiceImpl implements SysUserRoleService {
     /**
      * 根据角色id批量删除用户角色（逻辑删除）
      *
-     * @param roleIds
+     * @param map
      * @return
      */
     @Override
     @ServiceLog(doAction = "根据角色id批量删除用户角色（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteTbUserRoleByRoleIds(String[] roleIds) {
-        sysUserRoleMapper.deleteByRoleIds(roleIds);
+    public void deleteTbUserRoleByRoleIds(Map<String, Object> map) {
+        sysUserRoleMapper.deleteByRoleIds(map);
+        String[] roleIds = (String[]) map.get("ids");
         logger.info("[用户角色] 根据角色id批量删除用户角色（逻辑删除）成功！,roleIds: {}", Arrays.toString(roleIds));
     }
 

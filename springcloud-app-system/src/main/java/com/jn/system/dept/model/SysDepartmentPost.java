@@ -23,7 +23,7 @@ public class SysDepartmentPost implements Serializable {
     @ApiModelProperty("岗位id")
     private String postId;
     @ApiModelProperty("部门岗位是否默认")
-    @Pattern(regexp="^[01]$",message="{isDefault:'默认值只允许为0,1'}")
+    @Pattern(regexp = "^[01]$", message = "{isDefault:'默认值只允许为0,1'}")
     private String isDefault;
 
     public SysDepartmentPost() {
@@ -57,6 +57,34 @@ public class SysDepartmentPost implements Serializable {
 
     public void setIsDefault(String isDefault) {
         this.isDefault = isDefault;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SysDepartmentPost)) {
+            return false;
+        }
+
+        SysDepartmentPost that = (SysDepartmentPost) o;
+
+        if (departmentId != null ? !departmentId.equals(that.departmentId) : that.departmentId != null) {
+            return false;
+        }
+        if (postId != null ? !postId.equals(that.postId) : that.postId != null) {
+            return false;
+        }
+        return isDefault != null ? isDefault.equals(that.isDefault) : that.isDefault == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = departmentId != null ? departmentId.hashCode() : 0;
+        result = 31 * result + (postId != null ? postId.hashCode() : 0);
+        result = 31 * result + (isDefault != null ? isDefault.hashCode() : 0);
+        return result;
     }
 
     @Override

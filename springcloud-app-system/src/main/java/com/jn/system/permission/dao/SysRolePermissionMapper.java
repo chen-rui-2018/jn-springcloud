@@ -4,6 +4,7 @@ import com.jn.system.permission.entity.TbSysRolePermission;
 import com.jn.system.permission.model.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色权限关系mapper
@@ -34,9 +35,9 @@ public interface SysRolePermissionMapper {
     /**
      * 根据角色id删除角色权限
      *
-     * @param id
+     * @param map
      */
-    void deleteByRoleIds(String[] id);
+    void deleteByRoleIds(Map<String, Object> map);
 
     /**
      * 批量插入角色权限
@@ -48,16 +49,9 @@ public interface SysRolePermissionMapper {
     /**
      * 根据权限id批量删除对应信息
      *
-     * @param ids
+     * @param map
      */
-    void deletePermissionBranch(String[] ids);
-
-    /**
-     * 清除权限已经具有的角色
-     *
-     * @param permissionId
-     */
-    void deleteByPermissionId(String permissionId);
+    void deletePermissionBranch(Map<String, Object> map);
 
     /**
      * 批量为权限添加角色信息

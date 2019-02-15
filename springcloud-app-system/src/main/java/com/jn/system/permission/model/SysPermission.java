@@ -9,32 +9,33 @@ import java.util.Date;
 
 /**
  * 权限
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 9:24
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermission",description = "权限")
+@ApiModel(value = "SysPermission", description = "权限")
 public class SysPermission implements Serializable {
     private static final long serialVersionUID = 3723725627921993118L;
     @ApiModelProperty("权限id")
     private String id;
     @ApiModelProperty("权限名称")
+    @Pattern(regexp = "^[\\u4e00-\\u9fa5\\w]{1,20}$", message = "权限名称校验失败")
     private String permissionName;
     @ApiModelProperty("创建时间")
-    private Date createTime;
-    @ApiModelProperty("状态 1有效 0无效 -1删除")
-    @Pattern(regexp="^\\-1|[01]$",message="{status:'状态值只允许为0,1,-1'}")
-    private String status;
+    private Date createdTime;
+    @ApiModelProperty("状态，0删除，1有效，2无效")
+    private Byte recordStatus;
 
     public SysPermission() {
     }
 
-    public SysPermission(String id, String permissionName, Date createTime, String status) {
+    public SysPermission(String id, String permissionName, Date createdTime, Byte recordStatus) {
         this.id = id;
         this.permissionName = permissionName;
-        this.createTime = createTime;
-        this.status = status;
+        this.createdTime = createdTime;
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -53,20 +54,20 @@ public class SysPermission implements Serializable {
         this.permissionName = permissionName;
     }
 
-    public Date getCreateTime() {
-        return createTime;
+    public Date getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -74,8 +75,8 @@ public class SysPermission implements Serializable {
         return "SysPermission{" +
                 "id='" + id + '\'' +
                 ", permissionName='" + permissionName + '\'' +
-                ", createTime=" + createTime +
-                ", status='" + status + '\'' +
+                ", createdTime=" + createdTime +
+                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

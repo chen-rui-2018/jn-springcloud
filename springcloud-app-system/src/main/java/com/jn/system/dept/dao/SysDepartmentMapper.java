@@ -1,10 +1,9 @@
 package com.jn.system.dept.dao;
 
-import com.jn.system.dept.model.SysDepartment;
-import com.jn.system.dept.model.SysDepartmentCheckName;
 import com.jn.system.dept.vo.SysDepartmentVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author： shaobao
@@ -17,37 +16,35 @@ public interface SysDepartmentMapper {
     /**
      * 批量删除部门
      *
-     * @param ids
+     * @param map
      */
-    void deleteDepartmentBranch(List<String> ids);
+    void deleteDepartmentBranch(Map<String, Object> map);
 
     /**
-     * 获取一级部门信息
+     * 批量更新部门信息
+     */
+    void updateDepartmentBatch(Map<String, Object> map);
+
+    /**
+     * 根据父级id获取所有子部门信息
+     *
+     * @param parentId
+     * @return
+     */
+    List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
+
+    /**
+     * 获取所有部门信息
      *
      * @return
      */
-    List<SysDepartmentVO> findSysDepartmentAll();
+    List<SysDepartmentVO> getDepartmentAll();
 
     /**
-     * 根据父id查询所有子部门
-     *
-     * @param departmentId
-     * @return
-     */
-    List<SysDepartmentVO> findChildrenDepartment(String departmentId);
-
-    /**
-     * 校验同级部门中部门名称是否存在
-     *
-     * @param sysDepartmentCheckName
-     * @return
-     */
-    SysDepartment checkDepartmentName(SysDepartmentCheckName sysDepartmentCheckName);
-
-    /**
+     * 获取部门及子部门id
      *
      * @param id
      * @return
      */
-    SysDepartment getDepartmentById(String id);
+    String getDepartmentIds(String id);
 }

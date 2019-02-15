@@ -3,6 +3,7 @@ package com.jn.system.user.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleGroupAdd;
@@ -13,14 +14,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * 用户组管理
@@ -51,10 +53,17 @@ public class SysGroupController extends BaseController {
     @ApiOperation(value = "用户组添加", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/add")
     @RequiresPermissions("/system/sysGroup/add")
-    public Result add(@Validated @RequestBody TbSysGroup sysGroup) {
+    public Result add(@Validated @RequestBody SysGroupAdd sysGroup) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysGroupService.addSysGroup(sysGroup, user);
+        //为用户组其他属性进行复值
+        TbSysGroup tbSysGroup = new TbSysGroup();
+        BeanUtils.copyProperties(sysGroup, tbSysGroup);
+        tbSysGroup.setId(UUID.randomUUID().toString());
+        tbSysGroup.setCreatedTime(new Date());
+        tbSysGroup.setCreatorAccount(user.getAccount());
+        //传参到业务层
+        sysGroupService.addSysGroup(tbSysGroup);
         return new Result();
     }
 
@@ -64,7 +73,9 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/delete")
     public Result delete(String[] groupIds) {
         Assert.noNullElements(groupIds, "用户组id数组不能为空");
-        sysGroupService.deleSysGroup(groupIds);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.deleSysGroup(groupIds,user);
         return new Result();
     }
 
@@ -74,7 +85,9 @@ public class SysGroupController extends BaseController {
     @RequiresPermissions("/system/sysGroup/update")
     public Result update(@Validated @RequestBody SysGroupUpdate sysGroup) {
         Assert.notNull(sysGroup.getId(), "用户组id不能为空");
-        sysGroupService.updateSysGroup(sysGroup);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysGroupService.updateSysGroup(sysGroup,user);
         return new Result();
     }
 
@@ -109,16 +122,6 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取用户组下面所有用户")
-    @ApiOperation(value = "获取用户组下面所有用户",
-            httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findUserOfGroup")
-    @RequiresPermissions("/system/sysGroup/findUserOfGroup")
-    public Result findUserOfGroup(String groupId) {
-        List<SysTUser> userOfGroup = sysGroupService.findUserOfGroup(groupId);
-        return new Result(userOfGroup);
-    }
-
     @ControllerLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
     @ApiOperation(value = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息",
             httpMethod = "POST", response = Result.class)
@@ -146,8 +149,8 @@ public class SysGroupController extends BaseController {
     @ControllerLog(doAction = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验用户组名是否存在,fail表示名称已存在,success表示可以使用",
             httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkGroupName")
     @RequiresPermissions("/system/sysGroup/checkGroupName")
+    @RequestMapping(value = "/checkGroupName")
     public Result checkGroupName(String groupName) {
         String result = sysGroupService.checkGroupName(groupName);
         return new Result(result);

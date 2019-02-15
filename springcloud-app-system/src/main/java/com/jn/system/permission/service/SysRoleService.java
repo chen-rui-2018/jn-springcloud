@@ -1,12 +1,11 @@
 package com.jn.system.permission.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.model.*;
+import com.jn.system.model.User;
+import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
 import com.jn.system.user.model.SysUserGroupRoleAdd;
 import com.jn.system.user.model.SysUserRoleAdd;
-
-import java.util.List;
 
 /**
  * @author： shaobao
@@ -15,37 +14,32 @@ import java.util.List;
  * @modified By:yuanyy
  **/
 public interface SysRoleService {
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    List<SysRole> findSysRoleAll();
 
     /**
      * 新增角色
      *
-     * @param role
+     * @param tbSysRole
      */
-    void insertTbRole(SysRoleAdd role, User user);
+    void insertTbRole(TbSysRole tbSysRole);
 
     /**
      * 更新角色信息
      *
      * @param role
+     * @param user
      */
-    void updateTbRole(SysRoleUpdate role);
+    void updateTbRole(SysRoleUpdate role, User user);
 
     /**
-     * 批量删除角色（逻辑删除）
+     * 逻辑删除角色信息
      *
      * @param roleIds
-     * @return
+     * @param user    当前用户信息
      */
-    void deleteTbRoleById(String[] roleIds);
+    void deleteTbRoleById(String[] roleIds, User user);
 
     /**
-     * 分页查询角色授权列表信息
+     * 分页查询角色列表信息
      *
      * @param rolePage
      * @return
@@ -72,7 +66,7 @@ public interface SysRoleService {
      *
      * @param sysUserGroupRoleAdd
      */
-    void UserGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
+    void userGroupRoleAuthorization(SysUserGroupRoleAdd sysUserGroupRoleAdd, User user);
 
     /**
      * 校验角色名称是否已经存在

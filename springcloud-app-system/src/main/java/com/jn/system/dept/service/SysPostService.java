@@ -3,7 +3,6 @@ package com.jn.system.dept.service;
 import com.jn.common.model.PaginationData;
 import com.jn.system.dept.entity.TbSysPost;
 import com.jn.system.dept.model.SysPost;
-import com.jn.system.dept.model.SysPostAdd;
 import com.jn.system.dept.model.SysPostPage;
 import com.jn.system.model.User;
 
@@ -28,23 +27,25 @@ public interface SysPostService {
     /**
      * 添加岗位
      *
-     * @param sysPostAdd
+     * @param tbSysPost
      */
-    void addPost(SysPostAdd sysPostAdd, User user);
+    void addPost(TbSysPost tbSysPost);
 
     /**
-     * 批量删除岗位
+     * 删除岗位信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
-    void deletePostBranch(String[] ids);
+    void deletePostBranch(String[] ids, User user);
 
     /**
      * 修改岗位信息
      *
      * @param sysPost
+     * @param user    当前用户信息
      */
-    void updatePost(SysPost sysPost);
+    void updatePost(SysPost sysPost, User user);
 
     /**
      * 根据岗位id获取岗位信息
@@ -55,7 +56,7 @@ public interface SysPostService {
     SysPost selectByPrimaryKey(String id);
 
     /**
-     * 分页获取岗位信息及对应的用户
+     * 条件分页获取岗位信息列表
      *
      * @param sysPostPage
      * @return
@@ -63,7 +64,8 @@ public interface SysPostService {
     PaginationData findByPage(SysPostPage sysPostPage);
 
     /**
-     *  校验岗位名称是否已存在
+     * 校验岗位名称是否已存在
+     *
      * @param postName
      * @return
      */

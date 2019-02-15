@@ -8,6 +8,7 @@ import com.jn.system.user.model.SysUserRole;
 import com.jn.system.user.model.SysUserRolePage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户角色关系mapper
@@ -30,9 +31,9 @@ public interface SysUserRoleMapper {
     /**
      * 根据角色id删除用户角色
      *
-     * @param id
+     * @param map
      */
-    void deleteByRoleIds(String[] id);
+    void deleteByRoleIds(Map<String,Object> map);
 
     /**
      * 批量插入用户角色
@@ -44,9 +45,9 @@ public interface SysUserRoleMapper {
     /**
      * 批量删除用户对应的信息
      *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String,Object> map);
 
     /**
      * 根据角色id获取角色对应用户名称

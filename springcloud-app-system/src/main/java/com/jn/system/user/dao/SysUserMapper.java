@@ -1,14 +1,14 @@
 package com.jn.system.user.dao;
 
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
-import com.jn.system.user.model.SysGroupUser;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserPage;
-import com.jn.system.user.model.SysUserRole;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户dao
@@ -21,14 +21,7 @@ import java.util.List;
 public interface SysUserMapper {
 
     /**
-     * 添加用户
-     *
-     * @param sysUser
-     */
-    void addSysUser(SysUser sysUser);
-
-    /**
-     * 当查询部门的条件为空时的查询方法
+     * 当查询岗位或岗位类型为空时的查询方法
      *
      * @param userSysUserPage
      * @return
@@ -43,61 +36,10 @@ public interface SysUserMapper {
     void deleteSysUser(String id);
 
     /**
-     * 更新用户
-     *
-     * @param sysUserVO
-     */
-    void updateSysUser(SysUserVO sysUserVO);
-
-    /**
-     * 往用户中添加用户组
-     *
-     * @param sysGroupUser
-     */
-    void saveSysGroupToSysUser(SysGroupUser sysGroupUser);
-
-    /**
-     * 清除用户组中已经存在的用户组
-     *
-     * @param userId
-     */
-    void deleGroupOfUser(String userId);
-
-    /**
-     * 清除用户中已经具有的角色
-     *
-     * @param userId
-     */
-    void deleRoleOfUser(String userId);
-
-    /**
-     * 为用户添加权限
-     *
-     * @param sysUserRole
-     */
-    void saveSysRoleToSysUser(SysUserRole sysUserRole);
-
-    /**
-     * 清除用户原有部门岗位信息
-     *
-     * @param sysUserId
-     */
-    void deleDepartmentandPost(String sysUserId);
-
-    /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    SysUserVO findSysUserById(String id);
-
-    /**
      * 批量删除用户
-     *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String,Object> map);
 
 
     /**
@@ -109,17 +51,24 @@ public interface SysUserMapper {
     SysUserDepartmentPostVO findDepartmentAndPostByUserId(String userId);
 
     /**
-     * 为用户添加岗位信息
-     *
-     * @param sysUserDepartmentPost
-     */
-    void saveDepartmentandPostOfUser(TbSysUserDepartmentPost sysUserDepartmentPost);
-
-    /**
      * 根据id获取用户信息
      *
      * @param id
      * @return
      */
     SysUser getUserById(String id);
+
+    /**
+     * 用户批量添加部门岗位信息
+     *
+     * @param list
+     */
+    void addDepartmentAndPostToUserBatch(List<TbSysUserDepartmentPost> list);
+
+    /**
+     * 当查询条件中,岗位后岗位类型名称不为空时查询方法
+     * @param sysUserPage
+     * @return
+     */
+    List<SysUserVO> getSysUserByPageAndPost(SysUserPage sysUserPage);
 }

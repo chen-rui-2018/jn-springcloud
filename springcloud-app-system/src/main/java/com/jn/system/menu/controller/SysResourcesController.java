@@ -1,25 +1,28 @@
 package com.jn.system.menu.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.entity.TbSysResources;
 import com.jn.system.menu.model.SysResourceCheckName;
 import com.jn.system.menu.model.SysResources;
-import com.jn.system.menu.model.SysResourcesPage;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.jn.common.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 功能controller
@@ -37,15 +40,6 @@ public class SysResourcesController extends BaseController {
     @Autowired
     private SysResourcesService sysResourcesService;
 
-    @ControllerLog(doAction = "查询功能列表")
-    @ApiOperation(value = "查询功能列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
-    @RequiresPermissions("/system/sysResources/list")
-    public Result list(@RequestBody SysResourcesPage sysMenuPage) {
-        PaginationData data = sysResourcesService.selectResourcesListBySearchKey(sysMenuPage);
-        return new Result(data);
-    }
-
     @ControllerLog(doAction = "新增功能")
     @ApiOperation(value = "新增功能", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
@@ -53,7 +47,17 @@ public class SysResourcesController extends BaseController {
     public Result add(@Validated @RequestBody SysResources sysResources) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysResourcesService.insertResources(sysResources, user);
+        //为功能其他属性赋值
+        sysResources.setResourcesUrl(StringUtils.trim(sysResources.getResourcesUrl()));
+        sysResources.setId(UUID.randomUUID().toString());
+        sysResources.setCreatorAccount(user.getAccount());
+        sysResources.setCreatedTime(new Date());
+        TbSysResources tbSysResources = new TbSysResources();
+        BeanUtils.copyProperties(sysResources, tbSysResources);
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
+        tbSysResources.setRecordStatus(recordStatus);
+        //调用业务层
+        sysResourcesService.insertResources(tbSysResources);
         return new Result();
     }
 
@@ -63,7 +67,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/update")
     public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
-        sysResourcesService.updateResourcesById(sysResources);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.updateResourcesById(sysResources, user);
         return new Result();
     }
 
@@ -73,7 +79,9 @@ public class SysResourcesController extends BaseController {
     @RequiresPermissions("/system/sysResources/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
-        sysResourcesService.deleteResourcesById(ids);
+        //获取当前登录用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        sysResourcesService.deleteResourcesById(ids, user);
         return new Result();
     }
 

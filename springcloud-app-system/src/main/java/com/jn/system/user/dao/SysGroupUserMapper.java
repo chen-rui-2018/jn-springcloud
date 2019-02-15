@@ -7,6 +7,7 @@ import com.jn.system.user.model.SysTUser;
 import com.jn.system.user.model.SysUserGroupPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户组关联用户mapper
@@ -59,16 +60,16 @@ public interface SysGroupUserMapper {
     /**
      * 根据用户组id批量删除对应信息
      *
-     * @param groupIds
+     * @param map
      */
-    void deleteGroupBranch(String[] groupIds);
+    void deleteGroupBranch(Map<String,Object> map);
 
     /**
      * 根据用户id批量删除用户对应的信息
      *
-     * @param ids
+     * @param map
      */
-    void deleteUserBranch(String[] ids);
+    void deleteUserBranch(Map<String,Object> map);
 
     /**
      * 条件分页获取用户为拥有的用户组信息
@@ -77,4 +78,10 @@ public interface SysGroupUserMapper {
      * @return
      */
     List<SysGroup> findGroupByPage(SysUserGroupPage sysUserGroupPage);
+
+    /**
+     * 批量添加用户用户组信息
+     * @param list
+     */
+    void addGroupToUser(List<SysGroupUser> list);
 }

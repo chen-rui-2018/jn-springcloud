@@ -9,12 +9,13 @@ import java.util.Arrays;
 
 /**
  * 权限添加文件组
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 15:32
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysPermissionFileGroupAdd",description = "权限添加文件组")
+@ApiModel(value = "SysPermissionFileGroupAdd", description = "权限添加文件组")
 public class SysPermissionFileGroupAdd implements Serializable {
     private static final long serialVersionUID = 4485524436556246969L;
     @ApiModelProperty("权限id")

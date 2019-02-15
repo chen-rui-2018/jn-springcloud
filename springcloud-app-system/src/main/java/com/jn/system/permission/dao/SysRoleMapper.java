@@ -5,6 +5,7 @@ import com.jn.system.permission.model.SysRolePage;
 import com.jn.system.permission.vo.SysRoleVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 角色dao
@@ -15,14 +16,6 @@ import java.util.List;
  * @modified By:yuanyy
  */
 public interface SysRoleMapper {
-
-
-    /**
-     * 查询所有角色
-     *
-     * @return
-     */
-    List<SysRole> findSysRoleAll();
 
     /**
      * 根据用户id获取用户已经具有的角色
@@ -44,15 +37,7 @@ public interface SysRoleMapper {
     /**
      * 批量删除
      *
-     * @param id
+     * @param map
      */
-    void deleteBy(String[] id);
-
-    /**
-     * 根据id获取角色信息
-     *
-     * @param id
-     * @return
-     */
-    SysRole getRoleById(String id);
+    void deleteBy(Map<String, Object> map);
 }

@@ -4,23 +4,21 @@ import com.jn.system.permission.model.SysPermission;
 import com.jn.system.permission.model.SysPermissionPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 权限持久层
+ *
  * @author： shaobao
  * @date： Created on 2018/11/9 9:19
  * @version： v1.0
  * @modified By:
  **/
 public interface SysPermissionMapper {
-    /**
-     * 根据权限id修改权限信息
-     * @param sysPermission
-     */
-    void updatePermission(SysPermission sysPermission);
 
     /**
      * 分页条件查询
+     *
      * @param sysPermissionPage
      * @return
      */
@@ -28,14 +26,8 @@ public interface SysPermissionMapper {
 
     /**
      * 批量删除权限
-     * @param ids
+     *
+     * @param map
      */
-    void deletePermissionBranch(String[] ids);
-
-    /**
-     * 根据id获取权限信息
-     * @param id
-     * @return
-     */
-    SysPermission getPermissionById(String id);
+    void deletePermissionBranch(Map<String, Object> map);
 }

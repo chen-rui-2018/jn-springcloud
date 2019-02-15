@@ -3,7 +3,8 @@
 <mapper namespace="com.jn.system.user.dao.SysGroupMapper">
 
     <sql id="Base_Column_List">
-            id, group_name as groupName,creator, create_time as createTime, status
+            id, group_name as groupName,creator_account as creatorAccount, created_time as createdTime,
+            record_status as recordStatus
     </sql>
 
     <!--查询所有用户组-->
@@ -12,27 +13,23 @@
         select
         <include refid="Base_Column_List"/>
         from tb_sys_group
-        where `status` != '-1'
+        where `record_status` != 0
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(groupName)">
             and group_name like CONCAT('%', #{groupName,jdbcType=VARCHAR},'%')
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(status)">
-            and status = #{status,jdbcType=VARCHAR}
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+            and record_status = #{recordStatus,jdbcType=TINYINT}
         </if>
-        order by create_time desc
-    </select>
-
-    <select id="findGroupAll" resultType="com.jn.system.user.entity.TbSysGroup">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_sys_group where status = '1'
-        ORDER BY create_time desc
+        order by created_time desc,id desc
     </select>
 
     <!--通过用户id获取用户组-->
     <select id="findSysGroupByUserId" parameterType="java.lang.String" resultType="com.jn.system.user.model.SysGroup">
         select
-        <include refid="Base_Column_List"/>
+        id as groupId,
+        group_name as groupName,
+        created_time as createdTime,
+        `record_status` as recordStatus
         from tb_sys_group
         where id in
         (select tsug.group_id
@@ -41,30 +38,16 @@
         join tb_sys_user tsu
         on tsug.user_id = tsu.id
         where tsu.id = #{id}
-        and tsug.`status` = '1')
-        and status = '1'
+        and tsug.`record_status` = 1)
+        and record_status = 1
+        ORDER BY created_time ASC
     </select>
-    <!--添加用户组-->
-    <insert id="addSysGroup" parameterType="com.jn.system.user.entity.TbSysGroup">
-                insert into tb_sys_group (id, group_name, create_time,creator,
-                  status)
-                values (#{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},
-                #{creator,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR})
-     </insert>
 
     <!--逻辑删除用户组-->
     <update id="deleSysGroup" parameterType="java.lang.String">
             update tb_sys_group
-            set `status` = '-1'
+            set `record_status` = 0
             where id = #{id,jdbcType=VARCHAR}
-    </update>
-
-    <!--更新用户组信息-->
-    <update id="updateSysGroup" parameterType="com.jn.system.user.model.SysGroupUpdate">
-        update tb_sys_group
-        set group_name = #{groupName,jdbcType=VARCHAR},
-            status = #{status,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=VARCHAR}
     </update>
 
     <!--根据用户组id获取用户组信息-->
@@ -74,15 +57,15 @@
         from tb_sys_group
         where id = #{id,jdbcType=VARCHAR}
     </select>
-    <select id="getUserGroupById" resultType="com.jn.system.user.model.SysGroup" parameterType="java.lang.String">
-        SELECT id,group_name as groupName,create_time as createTime,`status`
-        FROM tb_sys_group WHERE id = #{id,jdbcType=VARCHAR} and `status` != '-1'
-    </select>
 
-    <update id="deleteGroupBranch" parameterType="java.lang.String">
-        update tb_sys_group set status=-1
+    <update id="deleteGroupBranch" parameterType="java.util.Map">
+        update tb_sys_group
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
         where id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>

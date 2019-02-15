@@ -1,6 +1,4 @@
 import request from '@/utils/request'
-// 'http://192.168.2.139:1101/springcloud-app-system/system/sysUser/findSysUserByPage
-// url: '/permission/user'
 
 // 获取文件组所有数据
 export function allFileGroupList(query) {

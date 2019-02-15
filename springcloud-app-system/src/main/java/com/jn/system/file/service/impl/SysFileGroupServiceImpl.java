@@ -5,24 +5,24 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
-import com.jn.system.file.dao.SysFileGroupFileMapper;
-import com.jn.system.file.dao.SysFileGroupMapper;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.file.dao.SysFileGroupFileMapper;
+import com.jn.system.file.dao.SysFileGroupMapper;
 import com.jn.system.file.dao.TbSysFileGroupMapper;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.entity.TbSysFileGroupCriteria;
 import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFile;
-import com.jn.system.file.model.SysFileGroupFileAdd;
 import com.jn.system.file.model.SysFileGroupPage;
-import com.jn.system.log.annotation.ServiceLog;
-import com.jn.system.model.*;
 import com.jn.system.file.service.SysFileGroupService;
+import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
+import com.jn.system.permission.dao.SysPermissionFilesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,28 +50,26 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Resource
     private SysFileGroupFileMapper sysFileGroupFileMapper;
 
+    @Autowired
+    private SysPermissionFilesMapper sysPermissionFilesMapper;
+
     /**
      * 新增文件组
      *
-     * @param sysFileGroup
+     * @param tbSysFileGroup
      */
     @Override
     @ServiceLog(doAction = "新增文件组")
     @Transactional(rollbackFor = Exception.class)
-    public void insertSysFileGroup(SysFileGroup sysFileGroup, User user) {
+    public void insertSysFileGroup(TbSysFileGroup tbSysFileGroup) {
         //名称校验
-        List<TbSysFileGroup> tbSysFileGroups = checkName(sysFileGroup.getFileGroupName());
+        List<TbSysFileGroup> tbSysFileGroups = checkName(tbSysFileGroup.getFileGroupName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.warn("[文件组] 添加文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
+            logger.warn("[文件组] 添加文件组失败，该用户组名称已存在！,fileGroupName: {}", tbSysFileGroup.getFileGroupName());
             throw new JnSpringCloudException(SysExceptionEnums.ADDERR_NAME_EXIST);
         }
-        sysFileGroup.setId(UUID.randomUUID().toString());
-        sysFileGroup.setCreator(user.getId());
-        sysFileGroup.setCreateTime(new Date());
-        TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
-        BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
         tbSysFileGroupMapper.insert(tbSysFileGroup);
-        logger.info("[文件组] 添加文件组成功！,fileGroupId: {}", sysFileGroup.getId());
+        logger.info("[文件组] 添加文件组成功！,fileGroupId: {}", tbSysFileGroup.getId());
     }
 
     /**
@@ -84,7 +82,8 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
         TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
         TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
         criteria.andFileGroupNameEqualTo(fileGroupName);
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
     }
 
@@ -96,40 +95,60 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @Override
     @ServiceLog(doAction = "根据id更新文件组")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysFileGroupById(SysFileGroup sysFileGroup) {
+    public void updateSysFileGroupById(SysFileGroup sysFileGroup, User user) {
+        String fileGroupName = sysFileGroup.getFileGroupName();
         //判断修改信息是否存在
-        SysFileGroup sysFileGroup1 = sysFileGroupMapper.getFileGroupById(sysFileGroup.getId());
-        if (sysFileGroup1 == null){
+        TbSysFileGroup tbSysFileGroup1 = tbSysFileGroupMapper.selectByPrimaryKey(sysFileGroup.getId());
+        if (tbSysFileGroup1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysFileGroup1.getRecordStatus().toString())) {
             logger.warn("[文件组] 文件组修改失败,修改信息不存在,fileGroupId: {}", sysFileGroup.getId());
             throw new JnSpringCloudException(SysExceptionEnums.UPDATEDATA_NOT_EXIST);
+        } else {
+            //判断名称是否修改
+            if (!tbSysFileGroup1.getFileGroupName().equals(fileGroupName)) {
+                //校验名称是否已经在数据库中存在
+                List<TbSysFileGroup> tbSysFileGroups = checkName(fileGroupName);
+                if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+                    logger.warn("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}", sysFileGroup.getFileGroupName());
+                    throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
+                }
+            }
         }
-        TbSysFileGroupCriteria tbSysFileGroupCriteria = new TbSysFileGroupCriteria();
-        TbSysFileGroupCriteria.Criteria criteria = tbSysFileGroupCriteria.createCriteria();
-        criteria.andFileGroupNameEqualTo(sysFileGroup.getFileGroupName());
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        criteria.andIdNotEqualTo(sysFileGroup.getId());
-        List<TbSysFileGroup> tbSysFileGroups = tbSysFileGroupMapper.selectByExample(tbSysFileGroupCriteria);
-        if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.warn("[文件组] 更新文件组失败，该用户组名称已存在！,fileGroupName: {}",sysFileGroup.getFileGroupName());
-            throw new JnSpringCloudException(SysExceptionEnums.UPDATEERR_NAME_EXIST);
-        }
+        //对文件组信息进行修改操作
         TbSysFileGroup tbSysFileGroup = new TbSysFileGroup();
         BeanUtils.copyProperties(sysFileGroup, tbSysFileGroup);
+        //设置最近更新人信息
+        tbSysFileGroup.setModifiedTime(new Date());
+        tbSysFileGroup.setModifierAccount(user.getAccount());
         tbSysFileGroupMapper.updateByPrimaryKeySelective(tbSysFileGroup);
         logger.info("[文件组] 更新文件组成功！,fileGroupId: {}", sysFileGroup.getId());
     }
 
     /**
-     * 批量删除文件组（逻辑删除）
+     * 逻辑删除用户组信息
      *
      * @param ids
+     * @param user 当前用户信息
      */
     @Override
     @ServiceLog(doAction = "批量删除文件组（逻辑删除）")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysFileGroupByIds(String[] ids) {
-        sysFileGroupMapper.deleteByIds(ids);
-        logger.info("[文件组] 批量删除文件组成功！,fileGroupIds: {}", Arrays.toString(ids));
+    public void deleteSysFileGroupByIds(String[] ids, User user) {
+        if (ids.length == 0) {
+            return;
+        }
+        //封装删除id及更新人信息
+        Map<String, Object> map = new HashMap<>(16);
+        map.put("ids", ids);
+        map.put("account", user.getAccount());
+        //删除对应文件组
+        sysFileGroupMapper.deleteByIds(map);
+        logger.info("[文件组] 批量删除文件组信息成功！,fileGroupIds: {}", Arrays.toString(ids));
+        //删除对应文件组文件关联信息
+        sysFileGroupFileMapper.deleteByFileGroupIds(map);
+        logger.info("[文件组] 批量删除文件组关联文件信息成功！,fileGroupIds: {}", Arrays.toString(ids));
+        //删除文件组对应权限信息
+        sysPermissionFilesMapper.deleteByFileGroupIds(map);
+        logger.info("[文件组] 批量删除文件组关联权限信息成功！,fileGroupIds: {}", Arrays.toString(ids));
     }
 
     /**
@@ -143,7 +162,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public SysFileGroup selectSysFileGroupByIds(String id) {
         TbSysFileGroup tbSysFileGroup = tbSysFileGroupMapper.selectByPrimaryKey(id);
         SysFileGroup sysFileGroup = new SysFileGroup();
-        if (tbSysFileGroup != null){
+        if (tbSysFileGroup != null) {
             BeanUtils.copyProperties(tbSysFileGroup, sysFileGroup);
         }
         logger.info("[文件组] 根据Id查询文件组成功！,fileGroupId: {}", id);
@@ -161,6 +180,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
+        sysFileGroupCriteria.setOrderByClause("created_time desc,id desc");
         TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
         if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
             //模糊查询搜索关键字
@@ -170,62 +190,21 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
             //根据id查询
             criteria.andIdEqualTo(sysFileGroupPage.getId());
         }
-        if (!StringUtils.isEmpty(sysFileGroupPage.getStatus())) {
+        if (sysFileGroupPage.getRecordStatus() != null) {
             //筛选条件：状态
-            criteria.andStatusEqualTo(sysFileGroupPage.getStatus());
+            criteria.andRecordStatusEqualTo(sysFileGroupPage.getRecordStatus());
         }
 
         //过滤已删除的数据
-        criteria.andStatusNotEqualTo(SysStatusEnums.DELETED.getCode());
-        logger.info("[文件组] 根据关键字分页查询文件组列表成功！,searchKey: {}，status：{}",
-                sysFileGroupPage.getFileGroupName(), sysFileGroupPage.getStatus());
+        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(recordStatus);
         return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
                 , objects.getTotal());
     }
 
     /**
-     * 文件组添加文件
-     *
-     * @param sysFileGroupFileAdd
-     */
-    @Override
-    @ServiceLog(doAction = "文件组添加文件")
-    @Transactional(rollbackFor = Exception.class)
-    public void sysFileGroupFileAdd(SysFileGroupFileAdd sysFileGroupFileAdd, User user) {
-
-        //文件组
-        String fileGroupId = sysFileGroupFileAdd.getFileGroupId();
-        //文件
-        String[] fileId = sysFileGroupFileAdd.getFileId();
-        List<SysFileGroupFile> sysFileGroupFiles = new ArrayList<>();
-        for (int i = 0; i < fileId.length; i++) {
-            SysFileGroupFile sysFileGroupFile = new SysFileGroupFile();
-            sysFileGroupFile.setId(UUID.randomUUID().toString());
-            //创建人
-            sysFileGroupFile.setCreator(user.getId());
-            //文件
-            sysFileGroupFile.setFileId(fileId[i]);
-            //文件组
-            sysFileGroupFile.setFileGroupId(fileGroupId);
-            //状态，默认有效
-            sysFileGroupFile.setStatus(SysStatusEnums.EFFECTIVE.getCode());
-
-            sysFileGroupFiles.add(sysFileGroupFile);
-            logger.info("[文件组] 文件组添加文件,fileGroupId: {}，fileId：{}", fileGroupId, Arrays.toString(fileId));
-
-        }
-        logger.info("[文件组] 文件组添加文件,新增前删除该的所有该文件组的文件数据,fileId：{}", fileGroupId, Arrays.toString(fileId));
-
-        //新增前删除该的所有该文件组的文件数据
-        String[] fileGroupIds = {fileGroupId};
-        sysFileGroupFileMapper.deleteByFileGroupIds(fileGroupIds);
-
-        //批量新增文件组文件信息
-        sysFileGroupFileMapper.insertBatch(sysFileGroupFiles);
-    }
-
-    /**
      * 根据用户获取文件组
+     *
      * @param userId 用户ID
      * @return
      */
@@ -237,6 +216,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
 
     /**
      * 获取用户是否拥有该文件的下载权限
+     *
      * @param userId
      * @param fileUrl
      * @return

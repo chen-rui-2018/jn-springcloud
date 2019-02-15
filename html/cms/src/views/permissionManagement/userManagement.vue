@@ -615,45 +615,45 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.flex-box-column {
-  display: flex;
-  flex-direction: column;
-}
-.el-dialog {
-  width: 90%;
-  max-width: 400px;
-}
-.pagination-container {
-  margin-top: 10px;
-}
-.sector-dialog {
-  .el-dialog {
-    max-width: 800px;
-  }
-  .item-box {
-    padding: 5px;
-    border: 1px solid #d7d7d7;
-  }
-}
-.role-dialog {
-  .el-dialog {
-    max-width: 540px;
-  }
-  .el-transfer {
-    display: inline-block;
-    white-space: nowrap;
-  }
-}
-.el-dialog__body {
-  padding-top: 10px;
-  padding-bottom: 0;
-}
-.filter-bar .el-form-item {
-  margin-bottom: 0;
-}
-.filter-container {
-  padding-bottom: 0;
-}
+<style lang="scss" scoped>
+// .flex-box-column {
+//   display: flex;
+//   flex-direction: column;
+// }
+// .el-dialog {
+//   width: 90%;
+//   max-width: 400px;
+// }
+// .pagination-container {
+//   margin-top: 10px;
+// }
+// .sector-dialog {
+//   .el-dialog {
+//     max-width: 800px;
+//   }
+//   .item-box {
+//     padding: 5px;
+//     border: 1px solid #d7d7d7;
+//   }
+// }
+// .role-dialog {
+//   .el-dialog {
+//     max-width: 540px;
+//   }
+//   .el-transfer {
+//     display: inline-block;
+//     white-space: nowrap;
+//   }
+// }
+// .el-dialog__body {
+//   padding-top: 10px;
+//   padding-bottom: 0;
+// }
+// .filter-bar .el-form-item {
+//   margin-bottom: 0;
+// }
+// .filter-container {
+//   padding-bottom: 0;
+// }
 </style>
 

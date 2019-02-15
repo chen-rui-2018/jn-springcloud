@@ -25,18 +25,22 @@ public class SysUserPage extends Page implements Serializable {
     private String name;
 
     @ApiModelProperty("状态")
-    private String status;
+    private Byte recordStatus;
 
     @ApiModelProperty("部门id")
-    private String[] departmentIds;
+    private String departmentId;
+
+    @ApiModelProperty("岗位或岗位类型名称")
+    private String postOrTypeName;
 
     public SysUserPage() {
     }
 
-    public SysUserPage(String name, String status, String[] departmentIds) {
+    public SysUserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName) {
         this.name = name;
-        this.status = status;
-        this.departmentIds = departmentIds;
+        this.recordStatus = recordStatus;
+        this.departmentId = departmentId;
+        this.postOrTypeName = postOrTypeName;
     }
 
     public String getName() {
@@ -47,28 +51,37 @@ public class SysUserPage extends Page implements Serializable {
         this.name = name;
     }
 
-    public String getStatus() {
-        return status;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
-    public String[] getDepartmentIds() {
-        return departmentIds;
+    public String getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartmentIds(String[] departmentIds) {
-        this.departmentIds = departmentIds;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getPostOrTypeName() {
+        return postOrTypeName;
+    }
+
+    public void setPostOrTypeName(String postOrTypeName) {
+        this.postOrTypeName = postOrTypeName;
     }
 
     @Override
     public String toString() {
         return "SysUserPage{" +
                 "name='" + name + '\'' +
-                ", status='" + status + '\'' +
-                ", departmentIds=" + Arrays.toString(departmentIds) +
+                ", recordStatus=" + recordStatus +
+                ", departmentId='" + departmentId + '\'' +
+                ", postOrTypeName='" + postOrTypeName + '\'' +
                 '}';
     }
 }

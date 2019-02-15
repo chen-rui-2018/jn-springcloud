@@ -2,12 +2,11 @@ package com.jn.system.file.dao;
 
 
 import com.jn.system.file.entity.TbSysFileGroup;
-import com.jn.system.file.model.SysFileGroup;
-import com.jn.system.file.model.SysFileGroupFile;
 import com.jn.system.file.model.SysFilePage;
 import com.jn.system.file.vo.SysFileVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件文件组关联mapper
@@ -37,18 +36,10 @@ public interface SysFileGroupFileMapper {
     /**
      * 根据fileId批量删除
      *
-     * @param id
+     * @param map
      * @return
      */
-    int deleteByFileGroupIds(String[] id);
-
-    /**
-     * 批量插入文件组文件
-     *
-     * @param sysFileGroupFiles
-     * @return
-     */
-    int insertBatch(List<SysFileGroupFile> sysFileGroupFiles);
+    int deleteByFileGroupIds(Map<String, Object> map);
 
     /**
      * 根据用户获取文件组

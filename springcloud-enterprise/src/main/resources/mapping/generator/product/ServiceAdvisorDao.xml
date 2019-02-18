@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao">
+    <insert id="addServiceAdvisor" parameterType="java.util.List">
+        insert into tb_service_and_advisor (product_id, advisor_account) values
+        <foreach collection="list" index="index" open="" close="" separator="," item="item">
+            (#{item.productId,jdbcType=VARCHAR},
+            #{item.advisorAccount,jdbcType=VARCHAR})
+        </foreach>
+
+    </insert>
+
+</mapper>

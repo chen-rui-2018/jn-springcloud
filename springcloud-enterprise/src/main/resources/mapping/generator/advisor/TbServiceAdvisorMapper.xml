@@ -16,6 +16,7 @@
     <result column="card_number" jdbcType="VARCHAR" property="cardNumber" />
     <result column="education" jdbcType="VARCHAR" property="education" />
     <result column="graduated_school" jdbcType="VARCHAR" property="graduatedSchool" />
+    <result column="working_years" jdbcType="REAL" property="workingYears" />
     <result column="practice_qualification" jdbcType="VARCHAR" property="practiceQualification" />
     <result column="good_at_business" jdbcType="VARCHAR" property="goodAtBusiness" />
     <result column="transaction_num" jdbcType="INTEGER" property="transactionNum" />
@@ -92,8 +93,8 @@
   <sql id="Base_Column_List">
     id, org_id, advisor_account, advisor_name, business_area, avatar, position, org_name, 
     is_certification, contact_email, card_type, card_number, education, graduated_school, 
-    practice_qualification, good_at_business, transaction_num, pageviews, is_have_subsidy, 
-    approval_status, created_time, creator_account, modified_time, modifier_account, 
+    working_years, practice_qualification, good_at_business, transaction_num, pageviews, 
+    is_have_subsidy, approval_status, created_time, creator_account, modified_time, modifier_account, 
     record_status
   </sql>
   <sql id="Blob_Column_List">
@@ -152,20 +153,22 @@
       advisor_name, business_area, avatar, 
       position, org_name, is_certification, 
       contact_email, card_type, card_number, 
-      education, graduated_school, practice_qualification, 
-      good_at_business, transaction_num, pageviews, 
-      is_have_subsidy, approval_status, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status, personal_profile)
+      education, graduated_school, working_years, 
+      practice_qualification, good_at_business, 
+      transaction_num, pageviews, is_have_subsidy, 
+      approval_status, created_time, creator_account, 
+      modified_time, modifier_account, record_status, 
+      personal_profile)
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
       #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
       #{contactEmail,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
-      #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{practiceQualification,jdbcType=VARCHAR}, 
-      #{goodAtBusiness,jdbcType=VARCHAR}, #{transactionNum,jdbcType=INTEGER}, #{pageviews,jdbcType=INTEGER}, 
-      #{isHaveSubsidy,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{personalProfile,jdbcType=LONGVARBINARY})
+      #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{workingYears,jdbcType=REAL}, 
+      #{practiceQualification,jdbcType=VARCHAR}, #{goodAtBusiness,jdbcType=VARCHAR}, 
+      #{transactionNum,jdbcType=INTEGER}, #{pageviews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
+      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{personalProfile,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     insert into tb_service_advisor
@@ -211,6 +214,9 @@
       </if>
       <if test="graduatedSchool != null">
         graduated_school,
+      </if>
+      <if test="workingYears != null">
+        working_years,
       </if>
       <if test="practiceQualification != null">
         practice_qualification,
@@ -291,6 +297,9 @@
       </if>
       <if test="graduatedSchool != null">
         #{graduatedSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="workingYears != null">
+        #{workingYears,jdbcType=REAL},
       </if>
       <if test="practiceQualification != null">
         #{practiceQualification,jdbcType=VARCHAR},
@@ -381,6 +390,9 @@
       <if test="record.graduatedSchool != null">
         graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
       </if>
+      <if test="record.workingYears != null">
+        working_years = #{record.workingYears,jdbcType=REAL},
+      </if>
       <if test="record.practiceQualification != null">
         practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       </if>
@@ -438,6 +450,7 @@
       card_number = #{record.cardNumber,jdbcType=VARCHAR},
       education = #{record.education,jdbcType=VARCHAR},
       graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
+      working_years = #{record.workingYears,jdbcType=REAL},
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
@@ -470,6 +483,7 @@
       card_number = #{record.cardNumber,jdbcType=VARCHAR},
       education = #{record.education,jdbcType=VARCHAR},
       graduated_school = #{record.graduatedSchool,jdbcType=VARCHAR},
+      working_years = #{record.workingYears,jdbcType=REAL},
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
@@ -527,6 +541,9 @@
       <if test="graduatedSchool != null">
         graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
       </if>
+      <if test="workingYears != null">
+        working_years = #{workingYears,jdbcType=REAL},
+      </if>
       <if test="practiceQualification != null">
         practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       </if>
@@ -581,6 +598,7 @@
       card_number = #{cardNumber,jdbcType=VARCHAR},
       education = #{education,jdbcType=VARCHAR},
       graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
+      working_years = #{workingYears,jdbcType=REAL},
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},
@@ -610,6 +628,7 @@
       card_number = #{cardNumber,jdbcType=VARCHAR},
       education = #{education,jdbcType=VARCHAR},
       graduated_school = #{graduatedSchool,jdbcType=VARCHAR},
+      working_years = #{workingYears,jdbcType=REAL},
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},

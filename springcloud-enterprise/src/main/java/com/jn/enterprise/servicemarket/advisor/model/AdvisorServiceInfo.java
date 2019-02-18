@@ -14,8 +14,8 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问详情")
-public class AdvisorDetails extends Page implements Serializable {
+@ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问信息")
+public class AdvisorServiceInfo extends Page implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
     @ApiModelProperty(value = "顾问账号")
@@ -42,10 +42,12 @@ public class AdvisorDetails extends Page implements Serializable {
     private String education;
     @ApiModelProperty(value = "毕业院校")
     private String graduatedSchool;
-    @ApiModelProperty(value = "评价等级")
+    @ApiModelProperty(value = "评价分数")
     private String evalluationLevel;
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
+    @ApiModelProperty(value = "从业年限")
+    private Float workingYears;
     @ApiModelProperty(value = "执业资质")
     private String practiceQualification;
     @ApiModelProperty(value = "业务擅长")
@@ -193,6 +195,14 @@ public class AdvisorDetails extends Page implements Serializable {
         this.evaluationNum = evaluationNum;
     }
 
+    public Float getWorkingYears() {
+        return workingYears;
+    }
+
+    public void setWorkingYears(Float workingYears) {
+        this.workingYears = workingYears;
+    }
+
     public String getPracticeQualification() {
         return practiceQualification;
     }
@@ -291,7 +301,7 @@ public class AdvisorDetails extends Page implements Serializable {
 
     @Override
     public String toString() {
-        return "AdvisorDetails{" +
+        return "AdvisorServiceInfo{" +
                 "orgId='" + orgId + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
@@ -307,6 +317,7 @@ public class AdvisorDetails extends Page implements Serializable {
                 ", graduatedSchool='" + graduatedSchool + '\'' +
                 ", evalluationLevel='" + evalluationLevel + '\'' +
                 ", evaluationNum=" + evaluationNum +
+                ", workingYears=" + workingYears +
                 ", practiceQualification='" + practiceQualification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +
                 ", transactionNum=" + transactionNum +

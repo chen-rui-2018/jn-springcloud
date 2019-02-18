@@ -40,8 +40,8 @@ public class AdvisorListInfo extends Page implements Serializable {
     private String priceScore;
     @ApiModelProperty(value = "综合得分")
     private Integer integratedSort;
-    @ApiModelProperty(value = "评价等级（好评）")
-    private String evaluationLevel;
+    @ApiModelProperty(value = "评价分数（好评）")
+    private String evaluationScore;
     @ApiModelProperty(value = "浏览量（人气）")
     private Integer pageviews;
     @ApiModelProperty(value = "累计交易次数（服务量）")
@@ -157,12 +157,12 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.integratedSort = integratedSort;
     }
 
-    public String getEvaluationLevel() {
-        return evaluationLevel;
+    public String getEvaluationScore() {
+        return evaluationScore;
     }
 
-    public void setEvaluationLevel(String evaluationLevel) {
-        this.evaluationLevel = evaluationLevel;
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
     }
 
     public Integer getPageviews() {
@@ -205,7 +205,7 @@ public class AdvisorListInfo extends Page implements Serializable {
                 ", responseScore='" + responseScore + '\'' +
                 ", priceScore='" + priceScore + '\'' +
                 ", integratedSort=" + integratedSort +
-                ", evaluationLevel='" + evaluationLevel + '\'' +
+                ", evaluationScore='" + evaluationScore + '\'' +
                 ", pageviews=" + pageviews +
                 ", transactionNum=" + transactionNum +
                 ", evaluationNum=" + evaluationNum +

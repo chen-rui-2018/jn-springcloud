@@ -3,17 +3,18 @@ package com.jn.enterprise.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 服务顾问异常枚举
+ * 服务评价类型
  * @Author: yangph
- * @Date: 2019/02/14 10:02
+ * @Date: 2019/2/15 17:33
  * @Version v1.0
  * @modified By:
  */
-public enum AdvisorExceptionEnum implements CodeAndMsg {
-    NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
-    ADVISOR_INFO_NOT_EXIST("5020501","顾问信息不存在"),
-    ADVISOR_ACCOUNT_NOT_NULL("5020502","顾问账号不能为空"),
+public enum  ServiceRatingTypeEnum implements CodeAndMsg {
+    PRAISE("praise","好评"),
+    AVERAGE("average","中评"),
+    BAD_REVIEW("badReview","差评"),
     ;
+
 
     /**
      * 编码
@@ -24,7 +25,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
      */
     private String message;
 
-    AdvisorExceptionEnum(String code, String message) {
+    ServiceRatingTypeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

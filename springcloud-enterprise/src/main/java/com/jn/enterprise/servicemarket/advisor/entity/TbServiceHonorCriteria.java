@@ -175,73 +175,73 @@ public class TbServiceHonorCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountIsNull() {
-            addCriterion("asvisor_account is null");
+        public Criteria andAdvisorAccountIsNull() {
+            addCriterion("advisor_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountIsNotNull() {
-            addCriterion("asvisor_account is not null");
+        public Criteria andAdvisorAccountIsNotNull() {
+            addCriterion("advisor_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountEqualTo(String value) {
-            addCriterion("asvisor_account =", value, "asvisorAccount");
+        public Criteria andAdvisorAccountEqualTo(String value) {
+            addCriterion("advisor_account =", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountNotEqualTo(String value) {
-            addCriterion("asvisor_account <>", value, "asvisorAccount");
+        public Criteria andAdvisorAccountNotEqualTo(String value) {
+            addCriterion("advisor_account <>", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountGreaterThan(String value) {
-            addCriterion("asvisor_account >", value, "asvisorAccount");
+        public Criteria andAdvisorAccountGreaterThan(String value) {
+            addCriterion("advisor_account >", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("asvisor_account >=", value, "asvisorAccount");
+        public Criteria andAdvisorAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("advisor_account >=", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountLessThan(String value) {
-            addCriterion("asvisor_account <", value, "asvisorAccount");
+        public Criteria andAdvisorAccountLessThan(String value) {
+            addCriterion("advisor_account <", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountLessThanOrEqualTo(String value) {
-            addCriterion("asvisor_account <=", value, "asvisorAccount");
+        public Criteria andAdvisorAccountLessThanOrEqualTo(String value) {
+            addCriterion("advisor_account <=", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountLike(String value) {
-            addCriterion("asvisor_account like", value, "asvisorAccount");
+        public Criteria andAdvisorAccountLike(String value) {
+            addCriterion("advisor_account like", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountNotLike(String value) {
-            addCriterion("asvisor_account not like", value, "asvisorAccount");
+        public Criteria andAdvisorAccountNotLike(String value) {
+            addCriterion("advisor_account not like", value, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountIn(List<String> values) {
-            addCriterion("asvisor_account in", values, "asvisorAccount");
+        public Criteria andAdvisorAccountIn(List<String> values) {
+            addCriterion("advisor_account in", values, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountNotIn(List<String> values) {
-            addCriterion("asvisor_account not in", values, "asvisorAccount");
+        public Criteria andAdvisorAccountNotIn(List<String> values) {
+            addCriterion("advisor_account not in", values, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountBetween(String value1, String value2) {
-            addCriterion("asvisor_account between", value1, value2, "asvisorAccount");
+        public Criteria andAdvisorAccountBetween(String value1, String value2) {
+            addCriterion("advisor_account between", value1, value2, "advisorAccount");
             return (Criteria) this;
         }
 
-        public Criteria andAsvisorAccountNotBetween(String value1, String value2) {
-            addCriterion("asvisor_account not between", value1, value2, "asvisorAccount");
+        public Criteria andAdvisorAccountNotBetween(String value1, String value2) {
+            addCriterion("advisor_account not between", value1, value2, "advisorAccount");
             return (Criteria) this;
         }
 

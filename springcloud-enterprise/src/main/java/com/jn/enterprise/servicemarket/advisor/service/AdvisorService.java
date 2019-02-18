@@ -2,6 +2,8 @@ package com.jn.enterprise.servicemarket.advisor.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationQuery;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 
 /**
  * 服务顾问
@@ -18,4 +20,18 @@ public interface AdvisorService {
      * @return
      */
     PaginationData getServiceConsultantList(AdvisorInquiryInfo advisorInquiryInfo ,Boolean needPage);
+
+    /**
+     * 根据顾问账号获取顾问详情
+     * @param advisorAccount 顾问账号
+     * @return
+     */
+    AdvisorDetailsVo getServiceAdvisorInfo(String advisorAccount);
+
+    /**
+     * 根据查询条件获取服务评价信息
+     * @param serviceEvaluationQuery   服务评价信息查询入参
+     * @return
+     */
+    PaginationData getServcieRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery);
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="asvisor_account" jdbcType="VARCHAR" property="asvisorAccount" />
+    <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="position" jdbcType="VARCHAR" property="position" />
     <result column="work_time" jdbcType="TIMESTAMP" property="workTime" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, asvisor_account, company_name, position, work_time, created_time, creator_account, 
+    id, advisor_account, company_name, position, work_time, created_time, creator_account, 
     modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultMap="BaseResultMap">
@@ -106,11 +106,11 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    insert into tb_service_experience (id, asvisor_account, company_name, 
+    insert into tb_service_experience (id, advisor_account, company_name, 
       position, work_time, created_time, 
       creator_account, modified_time, modifier_account, 
       record_status)
-    values (#{id,jdbcType=VARCHAR}, #{asvisorAccount,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{workTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT})
@@ -121,8 +121,8 @@
       <if test="id != null">
         id,
       </if>
-      <if test="asvisorAccount != null">
-        asvisor_account,
+      <if test="advisorAccount != null">
+        advisor_account,
       </if>
       <if test="companyName != null">
         company_name,
@@ -153,8 +153,8 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="asvisorAccount != null">
-        #{asvisorAccount,jdbcType=VARCHAR},
+      <if test="advisorAccount != null">
+        #{advisorAccount,jdbcType=VARCHAR},
       </if>
       <if test="companyName != null">
         #{companyName,jdbcType=VARCHAR},
@@ -194,8 +194,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.asvisorAccount != null">
-        asvisor_account = #{record.asvisorAccount,jdbcType=VARCHAR},
+      <if test="record.advisorAccount != null">
+        advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.companyName != null">
         company_name = #{record.companyName,jdbcType=VARCHAR},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_experience
     set id = #{record.id,jdbcType=VARCHAR},
-      asvisor_account = #{record.asvisorAccount,jdbcType=VARCHAR},
+      advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       company_name = #{record.companyName,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
       work_time = #{record.workTime,jdbcType=TIMESTAMP},
@@ -245,8 +245,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     update tb_service_experience
     <set>
-      <if test="asvisorAccount != null">
-        asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
+      <if test="advisorAccount != null">
+        advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       </if>
       <if test="companyName != null">
         company_name = #{companyName,jdbcType=VARCHAR},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
     update tb_service_experience
-    set asvisor_account = #{asvisorAccount,jdbcType=VARCHAR},
+    set advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       company_name = #{companyName,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
       work_time = #{workTime,jdbcType=TIMESTAMP},

@@ -1085,6 +1085,66 @@ public class TbServiceAdvisorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andWorkingYearsIsNull() {
+            addCriterion("working_years is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsIsNotNull() {
+            addCriterion("working_years is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsEqualTo(Float value) {
+            addCriterion("working_years =", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsNotEqualTo(Float value) {
+            addCriterion("working_years <>", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsGreaterThan(Float value) {
+            addCriterion("working_years >", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsGreaterThanOrEqualTo(Float value) {
+            addCriterion("working_years >=", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsLessThan(Float value) {
+            addCriterion("working_years <", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsLessThanOrEqualTo(Float value) {
+            addCriterion("working_years <=", value, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsIn(List<Float> values) {
+            addCriterion("working_years in", values, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsNotIn(List<Float> values) {
+            addCriterion("working_years not in", values, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsBetween(Float value1, Float value2) {
+            addCriterion("working_years between", value1, value2, "workingYears");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkingYearsNotBetween(Float value1, Float value2) {
+            addCriterion("working_years not between", value1, value2, "workingYears");
+            return (Criteria) this;
+        }
+
         public Criteria andPracticeQualificationIsNull() {
             addCriterion("practice_qualification is null");
             return (Criteria) this;

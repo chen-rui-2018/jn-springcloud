@@ -3,16 +3,23 @@ package com.jn.enterprise.servicemarket.advisor.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationQuery;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
+import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -41,6 +48,24 @@ public class AdvisorController extends BaseController {
     public Result getServiceConsultantList(@RequestBody AdvisorInquiryInfo advisorInquiryInfo){
         PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
         return  new Result(serviceConsultantList);
+    }
+
+    @ControllerLog(doAction = "服务顾问详情")
+    @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/guest/advisor/getServiceAdvisorInfo")
+    public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true) @RequestParam String advisorAccount){
+        logger.warn("顾问详情查询{}",AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
+        Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
+        AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
+        return  new Result(advisorDetailsVo);
+    }
+
+    @ControllerLog(doAction = "服务评价")
+    @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/guest/advisor/getServcieRatingInfo")
+    public Result getServcieRatingInfo(@RequestBody @Validated ServiceEvaluationQuery serviceEvaluationQuery){
+        PaginationData servcieRatingInfo = advisorService.getServcieRatingInfo(serviceEvaluationQuery);
+        return  new Result(servcieRatingInfo);
     }
 
 }

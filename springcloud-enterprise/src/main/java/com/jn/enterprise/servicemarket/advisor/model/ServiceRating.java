@@ -13,12 +13,24 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceRating",description = "服务评分")
+@ApiModel(value = "ServiceRating",description = "服务评价")
 public class ServiceRating extends Page implements Serializable {
-    @ApiModelProperty(value = "评论对象id")
-    private String commentObjId;
-    @ApiModelProperty(value = "评论对象名称")
-    private String commentObjName;
+    @ApiModelProperty(value = "机构id")
+    private String orgId;
+    @ApiModelProperty(value = "机构名称")
+    private String orgName;
+    @ApiModelProperty(value = "服务产品id")
+    private String productId;
+    @ApiModelProperty(value = "服务产品名称")
+    private String productName;
+    @ApiModelProperty(value = "服务顾问账号")
+    private String advisorAccount;
+    @ApiModelProperty(value = "服务顾问名称")
+    private String advisorName;
+    @ApiModelProperty(value = "服务产品图片")
+    private String pictureUrl;
+    @ApiModelProperty(value = "评价人账号")
+    private String evaluationAccount;
     @ApiModelProperty(value = "服务态度评分")
     private String attitudeScore;
     @ApiModelProperty(value = "服务专业评分")
@@ -27,6 +39,8 @@ public class ServiceRating extends Page implements Serializable {
     private String responseScore;
     @ApiModelProperty(value = "服务价格评分")
     private String priceScore;
+    @ApiModelProperty(value = "服务评分")
+    private String evaluationScore;
     @ApiModelProperty(value = "服务评价描述")
     private String evaluationDesc;
     @ApiModelProperty(value = "创建时间")
@@ -42,20 +56,68 @@ public class ServiceRating extends Page implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getCommentObjId() {
-        return commentObjId;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setCommentObjId(String commentObjId) {
-        this.commentObjId = commentObjId;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
-    public String getCommentObjName() {
-        return commentObjName;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setCommentObjName(String commentObjName) {
-        this.commentObjName = commentObjName;
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public String getAdvisorAccount() {
+        return advisorAccount;
+    }
+
+    public void setAdvisorAccount(String advisorAccount) {
+        this.advisorAccount = advisorAccount;
+    }
+
+    public String getAdvisorName() {
+        return advisorName;
+    }
+
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
+    }
+
+    public String getEvaluationAccount() {
+        return evaluationAccount;
+    }
+
+    public void setEvaluationAccount(String evaluationAccount) {
+        this.evaluationAccount = evaluationAccount;
     }
 
     public String getAttitudeScore() {
@@ -88,6 +150,14 @@ public class ServiceRating extends Page implements Serializable {
 
     public void setPriceScore(String priceScore) {
         this.priceScore = priceScore;
+    }
+
+    public String getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
     }
 
     public String getEvaluationDesc() {
@@ -141,12 +211,19 @@ public class ServiceRating extends Page implements Serializable {
     @Override
     public String toString() {
         return "ServiceRating{" +
-                "commentObjId='" + commentObjId + '\'' +
-                ", commentObjName='" + commentObjName + '\'' +
+                "orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", pictureUrl='" + pictureUrl + '\'' +
+                ", evaluationAccount='" + evaluationAccount + '\'' +
                 ", attitudeScore='" + attitudeScore + '\'' +
                 ", professionScore='" + professionScore + '\'' +
                 ", responseScore='" + responseScore + '\'' +
                 ", priceScore='" + priceScore + '\'' +
+                ", evaluationScore='" + evaluationScore + '\'' +
                 ", evaluationDesc='" + evaluationDesc + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +

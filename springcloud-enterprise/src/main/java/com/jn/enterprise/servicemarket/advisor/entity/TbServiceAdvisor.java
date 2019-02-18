@@ -33,6 +33,8 @@ public class TbServiceAdvisor implements Serializable {
 
     private String graduatedSchool;
 
+    private Float workingYears;
+
     private String practiceQualification;
 
     private String goodAtBusiness;
@@ -171,6 +173,14 @@ public class TbServiceAdvisor implements Serializable {
         this.graduatedSchool = graduatedSchool == null ? null : graduatedSchool.trim();
     }
 
+    public Float getWorkingYears() {
+        return workingYears;
+    }
+
+    public void setWorkingYears(Float workingYears) {
+        this.workingYears = workingYears;
+    }
+
     public String getPracticeQualification() {
         return practiceQualification;
     }
@@ -293,6 +303,7 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getCardNumber() == null ? other.getCardNumber() == null : this.getCardNumber().equals(other.getCardNumber()))
             && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
             && (this.getGraduatedSchool() == null ? other.getGraduatedSchool() == null : this.getGraduatedSchool().equals(other.getGraduatedSchool()))
+            && (this.getWorkingYears() == null ? other.getWorkingYears() == null : this.getWorkingYears().equals(other.getWorkingYears()))
             && (this.getPracticeQualification() == null ? other.getPracticeQualification() == null : this.getPracticeQualification().equals(other.getPracticeQualification()))
             && (this.getGoodAtBusiness() == null ? other.getGoodAtBusiness() == null : this.getGoodAtBusiness().equals(other.getGoodAtBusiness()))
             && (this.getTransactionNum() == null ? other.getTransactionNum() == null : this.getTransactionNum().equals(other.getTransactionNum()))
@@ -325,6 +336,7 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getCardNumber() == null) ? 0 : getCardNumber().hashCode());
         result = prime * result + ((getEducation() == null) ? 0 : getEducation().hashCode());
         result = prime * result + ((getGraduatedSchool() == null) ? 0 : getGraduatedSchool().hashCode());
+        result = prime * result + ((getWorkingYears() == null) ? 0 : getWorkingYears().hashCode());
         result = prime * result + ((getPracticeQualification() == null) ? 0 : getPracticeQualification().hashCode());
         result = prime * result + ((getGoodAtBusiness() == null) ? 0 : getGoodAtBusiness().hashCode());
         result = prime * result + ((getTransactionNum() == null) ? 0 : getTransactionNum().hashCode());
@@ -360,6 +372,7 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", cardNumber=").append(cardNumber);
         sb.append(", education=").append(education);
         sb.append(", graduatedSchool=").append(graduatedSchool);
+        sb.append(", workingYears=").append(workingYears);
         sb.append(", practiceQualification=").append(practiceQualification);
         sb.append(", goodAtBusiness=").append(goodAtBusiness);
         sb.append(", transactionNum=").append(transactionNum);

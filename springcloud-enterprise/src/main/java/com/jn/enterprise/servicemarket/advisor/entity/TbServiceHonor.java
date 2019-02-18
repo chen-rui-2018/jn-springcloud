@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbServiceHonor implements Serializable {
     private String id;
 
-    private String asvisorAccount;
+    private String advisorAccount;
 
     private String certificateName;
 
@@ -36,12 +36,12 @@ public class TbServiceHonor implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getAsvisorAccount() {
-        return asvisorAccount;
+    public String getAdvisorAccount() {
+        return advisorAccount;
     }
 
-    public void setAsvisorAccount(String asvisorAccount) {
-        this.asvisorAccount = asvisorAccount == null ? null : asvisorAccount.trim();
+    public void setAdvisorAccount(String advisorAccount) {
+        this.advisorAccount = advisorAccount == null ? null : advisorAccount.trim();
     }
 
     public String getCertificateName() {
@@ -129,7 +129,7 @@ public class TbServiceHonor implements Serializable {
         }
         TbServiceHonor other = (TbServiceHonor) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAsvisorAccount() == null ? other.getAsvisorAccount() == null : this.getAsvisorAccount().equals(other.getAsvisorAccount()))
+            && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getCertificateName() == null ? other.getCertificateName() == null : this.getCertificateName().equals(other.getCertificateName()))
             && (this.getCertificateType() == null ? other.getCertificateType() == null : this.getCertificateType().equals(other.getCertificateType()))
             && (this.getGetTime() == null ? other.getGetTime() == null : this.getGetTime().equals(other.getGetTime()))
@@ -146,7 +146,7 @@ public class TbServiceHonor implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAsvisorAccount() == null) ? 0 : getAsvisorAccount().hashCode());
+        result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getCertificateName() == null) ? 0 : getCertificateName().hashCode());
         result = prime * result + ((getCertificateType() == null) ? 0 : getCertificateType().hashCode());
         result = prime * result + ((getGetTime() == null) ? 0 : getGetTime().hashCode());
@@ -166,7 +166,7 @@ public class TbServiceHonor implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", asvisorAccount=").append(asvisorAccount);
+        sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", certificateName=").append(certificateName);
         sb.append(", certificateType=").append(certificateType);
         sb.append(", getTime=").append(getTime);

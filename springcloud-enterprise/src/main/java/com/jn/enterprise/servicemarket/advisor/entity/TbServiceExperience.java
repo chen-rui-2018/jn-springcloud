@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbServiceExperience implements Serializable {
     private String id;
 
-    private String asvisorAccount;
+    private String advisorAccount;
 
     private String companyName;
 
@@ -34,12 +34,12 @@ public class TbServiceExperience implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getAsvisorAccount() {
-        return asvisorAccount;
+    public String getAdvisorAccount() {
+        return advisorAccount;
     }
 
-    public void setAsvisorAccount(String asvisorAccount) {
-        this.asvisorAccount = asvisorAccount == null ? null : asvisorAccount.trim();
+    public void setAdvisorAccount(String advisorAccount) {
+        this.advisorAccount = advisorAccount == null ? null : advisorAccount.trim();
     }
 
     public String getCompanyName() {
@@ -119,7 +119,7 @@ public class TbServiceExperience implements Serializable {
         }
         TbServiceExperience other = (TbServiceExperience) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAsvisorAccount() == null ? other.getAsvisorAccount() == null : this.getAsvisorAccount().equals(other.getAsvisorAccount()))
+            && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getWorkTime() == null ? other.getWorkTime() == null : this.getWorkTime().equals(other.getWorkTime()))
@@ -135,7 +135,7 @@ public class TbServiceExperience implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAsvisorAccount() == null) ? 0 : getAsvisorAccount().hashCode());
+        result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getWorkTime() == null) ? 0 : getWorkTime().hashCode());
@@ -154,7 +154,7 @@ public class TbServiceExperience implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", asvisorAccount=").append(asvisorAccount);
+        sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", companyName=").append(companyName);
         sb.append(", position=").append(position);
         sb.append(", workTime=").append(workTime);

@@ -6,9 +6,19 @@ import java.util.Date;
 public class TbServiceRating implements Serializable {
     private String id;
 
-    private String commentObjId;
+    private String orgId;
 
-    private String commentObjName;
+    private String orgName;
+
+    private String productName;
+
+    private String productId;
+
+    private String advisorAccount;
+
+    private String advisorName;
+
+    private String evaluatorAccount;
 
     private String attitudeScore;
 
@@ -40,20 +50,60 @@ public class TbServiceRating implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getCommentObjId() {
-        return commentObjId;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setCommentObjId(String commentObjId) {
-        this.commentObjId = commentObjId == null ? null : commentObjId.trim();
+    public void setOrgId(String orgId) {
+        this.orgId = orgId == null ? null : orgId.trim();
     }
 
-    public String getCommentObjName() {
-        return commentObjName;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setCommentObjName(String commentObjName) {
-        this.commentObjName = commentObjName == null ? null : commentObjName.trim();
+    public void setOrgName(String orgName) {
+        this.orgName = orgName == null ? null : orgName.trim();
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId == null ? null : productId.trim();
+    }
+
+    public String getAdvisorAccount() {
+        return advisorAccount;
+    }
+
+    public void setAdvisorAccount(String advisorAccount) {
+        this.advisorAccount = advisorAccount == null ? null : advisorAccount.trim();
+    }
+
+    public String getAdvisorName() {
+        return advisorName;
+    }
+
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName == null ? null : advisorName.trim();
+    }
+
+    public String getEvaluatorAccount() {
+        return evaluatorAccount;
+    }
+
+    public void setEvaluatorAccount(String evaluatorAccount) {
+        this.evaluatorAccount = evaluatorAccount == null ? null : evaluatorAccount.trim();
     }
 
     public String getAttitudeScore() {
@@ -149,8 +199,13 @@ public class TbServiceRating implements Serializable {
         }
         TbServiceRating other = (TbServiceRating) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getCommentObjId() == null ? other.getCommentObjId() == null : this.getCommentObjId().equals(other.getCommentObjId()))
-            && (this.getCommentObjName() == null ? other.getCommentObjName() == null : this.getCommentObjName().equals(other.getCommentObjName()))
+            && (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
+            && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
+            && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
+            && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
+            && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
+            && (this.getAdvisorName() == null ? other.getAdvisorName() == null : this.getAdvisorName().equals(other.getAdvisorName()))
+            && (this.getEvaluatorAccount() == null ? other.getEvaluatorAccount() == null : this.getEvaluatorAccount().equals(other.getEvaluatorAccount()))
             && (this.getAttitudeScore() == null ? other.getAttitudeScore() == null : this.getAttitudeScore().equals(other.getAttitudeScore()))
             && (this.getProfessionScore() == null ? other.getProfessionScore() == null : this.getProfessionScore().equals(other.getProfessionScore()))
             && (this.getResponseScore() == null ? other.getResponseScore() == null : this.getResponseScore().equals(other.getResponseScore()))
@@ -168,8 +223,13 @@ public class TbServiceRating implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getCommentObjId() == null) ? 0 : getCommentObjId().hashCode());
-        result = prime * result + ((getCommentObjName() == null) ? 0 : getCommentObjName().hashCode());
+        result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
+        result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
+        result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
+        result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
+        result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
+        result = prime * result + ((getAdvisorName() == null) ? 0 : getAdvisorName().hashCode());
+        result = prime * result + ((getEvaluatorAccount() == null) ? 0 : getEvaluatorAccount().hashCode());
         result = prime * result + ((getAttitudeScore() == null) ? 0 : getAttitudeScore().hashCode());
         result = prime * result + ((getProfessionScore() == null) ? 0 : getProfessionScore().hashCode());
         result = prime * result + ((getResponseScore() == null) ? 0 : getResponseScore().hashCode());
@@ -190,8 +250,13 @@ public class TbServiceRating implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", commentObjId=").append(commentObjId);
-        sb.append(", commentObjName=").append(commentObjName);
+        sb.append(", orgId=").append(orgId);
+        sb.append(", orgName=").append(orgName);
+        sb.append(", productName=").append(productName);
+        sb.append(", productId=").append(productId);
+        sb.append(", advisorAccount=").append(advisorAccount);
+        sb.append(", advisorName=").append(advisorName);
+        sb.append(", evaluatorAccount=").append(evaluatorAccount);
         sb.append(", attitudeScore=").append(attitudeScore);
         sb.append(", professionScore=").append(professionScore);
         sb.append(", responseScore=").append(responseScore);

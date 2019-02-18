@@ -49,15 +49,14 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        service_org
+                        advisor
                     </contexts>
                     <tableNames>
-                        tb_service_org_team,
-                        tb_service_org_element,
-                        tb_service_org_info,
-                        tb_service_org_trait,
-                        tb_service_org_license,
-                        tb_service_org
+                        tb_service_advisor,
+                        tb_service_rating,
+                        tb_service_honor,
+                        tb_service_pro_exper,
+                        tb_service_experience
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

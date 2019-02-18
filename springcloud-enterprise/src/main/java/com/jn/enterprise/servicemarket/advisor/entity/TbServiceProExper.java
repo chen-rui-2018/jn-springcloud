@@ -6,7 +6,7 @@ import java.util.Date;
 public class TbServiceProExper implements Serializable {
     private String id;
 
-    private String asvisorAccount;
+    private String advisorAccount;
 
     private String companyName;
 
@@ -36,12 +36,12 @@ public class TbServiceProExper implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getAsvisorAccount() {
-        return asvisorAccount;
+    public String getAdvisorAccount() {
+        return advisorAccount;
     }
 
-    public void setAsvisorAccount(String asvisorAccount) {
-        this.asvisorAccount = asvisorAccount == null ? null : asvisorAccount.trim();
+    public void setAdvisorAccount(String advisorAccount) {
+        this.advisorAccount = advisorAccount == null ? null : advisorAccount.trim();
     }
 
     public String getCompanyName() {
@@ -129,7 +129,7 @@ public class TbServiceProExper implements Serializable {
         }
         TbServiceProExper other = (TbServiceProExper) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getAsvisorAccount() == null ? other.getAsvisorAccount() == null : this.getAsvisorAccount().equals(other.getAsvisorAccount()))
+            && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getProjectName() == null ? other.getProjectName() == null : this.getProjectName().equals(other.getProjectName()))
             && (this.getProjectTime() == null ? other.getProjectTime() == null : this.getProjectTime().equals(other.getProjectTime()))
@@ -146,7 +146,7 @@ public class TbServiceProExper implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getAsvisorAccount() == null) ? 0 : getAsvisorAccount().hashCode());
+        result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getProjectName() == null) ? 0 : getProjectName().hashCode());
         result = prime * result + ((getProjectTime() == null) ? 0 : getProjectTime().hashCode());
@@ -166,7 +166,7 @@ public class TbServiceProExper implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", asvisorAccount=").append(asvisorAccount);
+        sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", companyName=").append(companyName);
         sb.append(", projectName=").append(projectName);
         sb.append(", projectTime=").append(projectTime);

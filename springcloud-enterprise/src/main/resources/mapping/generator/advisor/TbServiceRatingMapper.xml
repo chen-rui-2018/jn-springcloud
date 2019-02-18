@@ -3,8 +3,13 @@
 <mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceRatingMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="comment_obj_id" jdbcType="VARCHAR" property="commentObjId" />
-    <result column="comment_obj_name" jdbcType="VARCHAR" property="commentObjName" />
+    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
+    <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
+    <result column="evaluator_account" jdbcType="VARCHAR" property="evaluatorAccount" />
     <result column="attitude_score" jdbcType="VARCHAR" property="attitudeScore" />
     <result column="profession_score" jdbcType="VARCHAR" property="professionScore" />
     <result column="response_score" jdbcType="VARCHAR" property="responseScore" />
@@ -75,9 +80,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, comment_obj_id, comment_obj_name, attitude_score, profession_score, response_score, 
-    price_score, evaluation_desc, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    id, org_id, org_name, product_name, product_id, advisor_account, advisor_name, evaluator_account, 
+    attitude_score, profession_score, response_score, price_score, evaluation_desc, created_time, 
+    creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRatingCriteria" resultMap="BaseResultMap">
     select
@@ -110,16 +115,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
-    insert into tb_service_rating (id, comment_obj_id, comment_obj_name, 
-      attitude_score, profession_score, response_score, 
-      price_score, evaluation_desc, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
-    values (#{id,jdbcType=VARCHAR}, #{commentObjId,jdbcType=VARCHAR}, #{commentObjName,jdbcType=VARCHAR}, 
-      #{attitudeScore,jdbcType=VARCHAR}, #{professionScore,jdbcType=VARCHAR}, #{responseScore,jdbcType=VARCHAR}, 
-      #{priceScore,jdbcType=VARCHAR}, #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+    insert into tb_service_rating (id, org_id, org_name, 
+      product_name, product_id, advisor_account, 
+      advisor_name, evaluator_account, attitude_score, 
+      profession_score, response_score, price_score, 
+      evaluation_desc, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
+      #{advisorName,jdbcType=VARCHAR}, #{evaluatorAccount,jdbcType=VARCHAR}, #{attitudeScore,jdbcType=VARCHAR}, 
+      #{professionScore,jdbcType=VARCHAR}, #{responseScore,jdbcType=VARCHAR}, #{priceScore,jdbcType=VARCHAR}, 
+      #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
     insert into tb_service_rating
@@ -127,11 +136,26 @@
       <if test="id != null">
         id,
       </if>
-      <if test="commentObjId != null">
-        comment_obj_id,
+      <if test="orgId != null">
+        org_id,
       </if>
-      <if test="commentObjName != null">
-        comment_obj_name,
+      <if test="orgName != null">
+        org_name,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="advisorAccount != null">
+        advisor_account,
+      </if>
+      <if test="advisorName != null">
+        advisor_name,
+      </if>
+      <if test="evaluatorAccount != null">
+        evaluator_account,
       </if>
       <if test="attitudeScore != null">
         attitude_score,
@@ -168,11 +192,26 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="commentObjId != null">
-        #{commentObjId,jdbcType=VARCHAR},
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
       </if>
-      <if test="commentObjName != null">
-        #{commentObjName,jdbcType=VARCHAR},
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="advisorAccount != null">
+        #{advisorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="advisorName != null">
+        #{advisorName,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluatorAccount != null">
+        #{evaluatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="attitudeScore != null">
         #{attitudeScore,jdbcType=VARCHAR},
@@ -218,11 +257,26 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.commentObjId != null">
-        comment_obj_id = #{record.commentObjId,jdbcType=VARCHAR},
+      <if test="record.orgId != null">
+        org_id = #{record.orgId,jdbcType=VARCHAR},
       </if>
-      <if test="record.commentObjName != null">
-        comment_obj_name = #{record.commentObjName,jdbcType=VARCHAR},
+      <if test="record.orgName != null">
+        org_name = #{record.orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advisorAccount != null">
+        advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advisorName != null">
+        advisor_name = #{record.advisorName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.evaluatorAccount != null">
+        evaluator_account = #{record.evaluatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.attitudeScore != null">
         attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
@@ -262,8 +316,13 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_rating
     set id = #{record.id,jdbcType=VARCHAR},
-      comment_obj_id = #{record.commentObjId,jdbcType=VARCHAR},
-      comment_obj_name = #{record.commentObjName,jdbcType=VARCHAR},
+      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_name = #{record.orgName,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      product_id = #{record.productId,jdbcType=VARCHAR},
+      advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{record.advisorName,jdbcType=VARCHAR},
+      evaluator_account = #{record.evaluatorAccount,jdbcType=VARCHAR},
       attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
       profession_score = #{record.professionScore,jdbcType=VARCHAR},
       response_score = #{record.responseScore,jdbcType=VARCHAR},
@@ -281,11 +340,26 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
     update tb_service_rating
     <set>
-      <if test="commentObjId != null">
-        comment_obj_id = #{commentObjId,jdbcType=VARCHAR},
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=VARCHAR},
       </if>
-      <if test="commentObjName != null">
-        comment_obj_name = #{commentObjName,jdbcType=VARCHAR},
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="advisorAccount != null">
+        advisor_account = #{advisorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="advisorName != null">
+        advisor_name = #{advisorName,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluatorAccount != null">
+        evaluator_account = #{evaluatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="attitudeScore != null">
         attitude_score = #{attitudeScore,jdbcType=VARCHAR},
@@ -322,8 +396,13 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
     update tb_service_rating
-    set comment_obj_id = #{commentObjId,jdbcType=VARCHAR},
-      comment_obj_name = #{commentObjName,jdbcType=VARCHAR},
+    set org_id = #{orgId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=VARCHAR},
+      advisor_account = #{advisorAccount,jdbcType=VARCHAR},
+      advisor_name = #{advisorName,jdbcType=VARCHAR},
+      evaluator_account = #{evaluatorAccount,jdbcType=VARCHAR},
       attitude_score = #{attitudeScore,jdbcType=VARCHAR},
       profession_score = #{professionScore,jdbcType=VARCHAR},
       response_score = #{responseScore,jdbcType=VARCHAR},

@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -53,7 +52,7 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务顾问详情")
     @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/advisor/getServiceAdvisorInfo")
-    public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true) @RequestParam String advisorAccount){
+    public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true) String advisorAccount){
         logger.warn("顾问详情查询{}",AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);

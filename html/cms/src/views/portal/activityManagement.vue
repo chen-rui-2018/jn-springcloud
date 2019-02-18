@@ -2,22 +2,22 @@
   <div v-loading="listLoading" class="activity">
     <el-row>
       <el-col :span="5"><div class="grid-content bg-purple">
-        <el-radio-group v-model="listQuery.status">
+        <el-radio-group v-model="listQuery.actiStatus">
           <el-radio-button label="">全部</el-radio-button>
           <el-radio-button label= "1">待发布</el-radio-button>
           <el-radio-button label="2">报名中</el-radio-button>
           <el-radio-button label="3">已结束</el-radio-button>
         </el-radio-group>
       </div></el-col>
-      <el-col :span="5"><div class="grid-content bg-purple-light">
+      <el-col :span="4"><div class="grid-content bg-purple-light">
         <el-radio-group v-model="listQuery.isIndex">
           <el-radio-button label="">全部</el-radio-button>
           <el-radio-button label="1">首页展示</el-radio-button>
           <el-radio-button label="0">首页不展示</el-radio-button>
         </el-radio-group>
       </div></el-col>
-      <el-col :span="14"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="活动类型">
+      <el-col :span="15"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
+        <el-form-item label="活动类型" style="margin-left:10px">
           <el-select v-model="listQuery.actiType" placeholder="请选择活动类型" clearable class="filter-item" @change="selecteType">
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
@@ -37,7 +37,7 @@
       />
       <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="名称" prop="actiName" align="center" min-width="100" />
-      <el-table-column label="活动类型" prop="typeName" align="center" min-width="100" />
+      <el-table-column label="活动类型" prop="actiType" align="center" min-width="100" />
       <el-table-column label="海报" prop="actiPosterUrl" align="center" min-width="150">
         <template slot-scope="scope">
           <img :src="scope.row.actiPosterUrl" alt="海报图片" style="width: 50px;height: 50px">
@@ -45,14 +45,15 @@
       </el-table-column>
       <el-table-column label="活动时间" align="center" min-width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.actiStartTime }}</span>-<span>{{ scope.row.actiEndTime.substr(-8) }}</span>
+          <!-- <span>{{ scope.row.actiStartTime }}</span>-<span>{{ scope.row.actiEndTime.substr(0,8) }}</span> -->
+          <span>{{ scope.row.actiStartTime }}</span>-<span>{{ scope.row.actiEndTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="活动园区" prop="parkName" align="center" min-width="120" />
+      <el-table-column label="活动园区" prop="parkId" align="center" min-width="120" />
       <el-table-column label="地点" prop="actiAddress" align="center" min-width="120" />
       <el-table-column label="主办方" prop="actiOrganizer" align="center" min-width="100" />
       <el-table-column label="费用" prop="actiCost" align="center" min-width="85" />
-      <!-- <el-table-column label="排序" prop="actiOrder" align="center" min-width="85" /> -->
+      <el-table-column label="排序" prop="actiOrder" align="center" min-width="85" />
       <el-table-column label="是否展示报名人数" prop="showApplyNum" align="center" min-width="85">
         <template slot-scope="scope">
           <span v-if="scope.row.showApplyNum==='0'||scope.row.showApplyNum===null">--</span>
@@ -77,50 +78,51 @@
       </el-table-column>
       <el-table-column label="报名人数" prop="applyNum" align="center" min-width="85">
         <template slot-scope="scope">
-          <span>{{ scope.row.applyNum===null||scope.row.applyNum===0?0: scope.row.applyNum }}人</span>
+          <span class="appNum" @click="handleApplyNum(scope.row)">{{ scope.row.applyNum===null||scope.row.applyNum===0?0: scope.row.applyNum }}人</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" prop="state" align="center" min-width="85">
+      <el-table-column label="状态" prop="actiStatus" align="center" min-width="85">
         <template slot-scope="scope">
-          <span v-if="scope.row.status==='1'">待发布</span>
-          <span v-if="scope.row.status==='2'">报名中</span>
-          <span v-if="scope.row.status==='3'|| scope.row.status==='4'|| scope.row.status==='5'">已结束</span>
+          <span v-if="scope.row.actiStatus==='1'">待发布</span>
+          <span v-if="scope.row.actiStatus==='2'">报名中</span>
+          <span v-if="scope.row.actiStatus==='3'">已结束</span>
+          <span v-if="scope.row.actiStatus==='4'">已取消</span>
         </template>
       </el-table-column>
       <el-table-column fit label="操作" align="center" width="auto" min-width="200">
         <template slot-scope="scope">
           <el-button
-            v-if="scope.row.status==='1'|| scope.row.status==='2'"
+            v-if="scope.row.actiStatus==='1'"
             type="text"
             class="operation"
             @click="editDo(scope.row)">编辑
           </el-button>
           <el-button
-            v-if="scope.row.status==='2'&& scope.row.isApply==='1'"
+            v-if="scope.row.actiStatus==='2'&& scope.row.isApply==='1'"
             type="text"
             class="operation"
             @click="cancelApply(scope.row)">停止报名
           </el-button>
-          <el-button
-            v-if="scope.row.status==='2'&& scope.row.isApply==='0'"
+          <!-- <el-button
+            v-if="scope.row.actiStatus==='2'&& scope.row.isApply==='0'"
             type="text"
             class="operation"
             @click="recoverApply(scope.row)">恢复报名
-          </el-button>
+          </el-button> -->
           <el-button
-            v-if="scope.row.status==='2'"
+            v-if="scope.row.actiStatus==='2'"
             type="text"
             class="operation"
             @click="handleCancelActivity(scope.row)">取消活动
           </el-button>
           <el-button
-            v-if="scope.row.status==='3'|| scope.row.status==='4'|| scope.row.status==='5'"
+            v-if="scope.row.actiStatus==='3'||scope.row.actiStatus==='4'"
             type="text"
             class="operation"
-            @click="editDo(scope.row)">查看
+            @click="checkDo(scope.row)">查看
           </el-button>
           <el-button
-            v-if="scope.row.status==='1'||scope.row.status==='3'|| scope.row.status==='4'|| scope.row.status==='5'"
+            v-if="scope.row.actiStatus==='1'||scope.row.actiStatus==='3'||scope.row.actiStatus==='4'"
             type="text"
             class="operation"
             @click="handleDeleteActivity(scope.row)">删除
@@ -159,7 +161,7 @@ export default {
         actiType: undefined,
         page: 1,
         rows: 10,
-        status: undefined,
+        actiStatus: undefined,
         isIndex: undefined
       }
     }
@@ -198,11 +200,11 @@ export default {
     },
     // 恢复报名
     recoverApply(row) {
-      this.secondaryConfirmation('是否恢复报名？', '恢复报名成功', cancelApply, { activityId: row.id, status: '1' })
+      this.secondaryConfirmation('是否恢复报名？', '恢复报名成功', cancelApply, { activityId: row.id, actiStatus: '1' })
     },
     // 停止报名
     cancelApply(row) {
-      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, status: '0' })
+      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, staactiStatus: '0' })
     },
     // 批量删除
     handleBatchDeleteActivity() {
@@ -251,10 +253,25 @@ export default {
         this.listLoading = false
       })
     },
+    // 点击跳转活动列表页面
+    handleApplyNum(row) {
+      // this.$emit('changerouter', row.id)
+      // window.open(`${location.origin}/#/portal/applyActivityList/${row.id}`)
+      this.$router.push({ path: `applyActivityList/${row.id}` })
+    },
+    // 编辑
+    editDo(row) {
+      this.$router.push({ path: `activityEdit`, query: { row: row }})
+    },
+    // 查看
+    checkDo(row) {
+      this.$router.push({ path: `activityCheck`, query: { row: row }})
+    },
     // 项目初始化
     initList() {
       this.listLoading = true
       getActivityList(this.listQuery).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.activityList = res.data.data.rows
           this.total = res.data.data.total
@@ -263,7 +280,7 @@ export default {
             this.initList()
           }
         } else {
-          this.$message.error(res.data.result)
+          // this.$message.error(res.data.result)
         }
         this.listLoading = false
       })
@@ -288,17 +305,21 @@ export default {
 
 <style lang="scss">
  .el-button+.el-button{
-       margin-left: 0px;
+    margin-left: 0px;
 }
 .el-button--medium{
-         padding:10px;
+  padding:10px;
 }
 .operation{
-         padding:0px;
+  padding:0px;
 }
 .el-radio-group{
   .el-radio-button--medium .el-radio-button__inner{
     padding: 10px;
   }
+}
+.appNum{
+  cursor: pointer;
+  text-decoration:underline
 }
 </style>

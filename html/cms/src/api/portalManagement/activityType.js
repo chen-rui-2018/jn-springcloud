@@ -2,7 +2,7 @@ import request from '@/utils/request'
 // 获取活动管理页面所有数据
 export function getTypeList(query) {
   return request({
-    url: 'http://localhost/springcloud-park/activity/activityType/findActivityTypeList',
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/activityType/findActivityTypeList',
     method: 'post',
     data: query
   })

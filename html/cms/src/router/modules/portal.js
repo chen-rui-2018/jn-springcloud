@@ -28,6 +28,34 @@ const portalRouter = {
       name: 'activityAdd',
       meta: { title: '新增活动', noCache: false },
       hidden: true
+    },
+    {
+      path: 'activityEdit',
+      component: () => import('@/views/portal/activityAdd'),
+      name: 'activityEdit',
+      meta: { title: '编辑活动', noCache: false },
+      hidden: true
+    },
+    {
+      path: 'activityCheck',
+      component: () => import('@/views/portal/activityAdd'),
+      name: 'activityCheck',
+      meta: { title: '查看活动', noCache: false },
+      hidden: true
+    },
+    {
+      path: 'applyActivityList/:id',
+      component: () => import('@/views/portal/applyActivityList'),
+      name: 'applyActivityList',
+      meta: { title: '活动报名列表', noCache: false },
+      hidden: true
+    },
+    {
+      path: 'activityTypeList',
+      component: () => import('@/views/portal/activityTypeList'),
+      name: 'activityTypeList',
+      meta: { title: '活动类型列表', noCache: false },
+      hidden: true
     }
   ]
 }

@@ -102,7 +102,7 @@
         </el-transfer>
       </el-dialog>
     </template>
-    <!-- 弹出的授權用户对话框 @input.native="text($event)"  -->
+    <!-- 弹出的授權用户对话框   -->
     <template v-if="userdialogVisible">
       <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
         <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">

@@ -38,6 +38,7 @@ export default {
   created() {
     var token = localStorage.getItem(token)
     getUserInfo(token).then(res => {
+      console.log(res)
       this.menuItems = res.data.data
     })
   },

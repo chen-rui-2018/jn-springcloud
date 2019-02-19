@@ -4,7 +4,8 @@ import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
+import VueQuillEditor from 'vue-quill-editor'
+Vue.use(VueQuillEditor)
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 

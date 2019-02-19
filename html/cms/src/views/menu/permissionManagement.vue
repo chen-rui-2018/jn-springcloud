@@ -95,7 +95,7 @@
         :props="defaultProps"
         node-key="id"
         show-checkbox>
-        <span slot-scope="{ node, data }" class="custom-tree-node">
+        <span slot-scope="{ node}" class="custom-tree-node">
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>

@@ -219,7 +219,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         }
         TbServiceAdvisor advisorInfo=new TbServiceAdvisor();
         //浏览量加1
-        advisorInfo.setPageviews(tbServiceAdvisors.get(0).getPageviews()+1);
+        advisorInfo.setPageViews(tbServiceAdvisors.get(0).getPageViews()+1);
         tbServiceAdvisorMapper.updateByExampleSelective(advisorInfo,example);
     }
 

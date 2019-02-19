@@ -13,6 +13,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     ADVISOR_INFO_NOT_EXIST("5020501","顾问信息不存在"),
     ADVISOR_ACCOUNT_NOT_NULL("5020502","顾问账号不能为空"),
+    REGISTER_ACCOUNT("5020503","注册账号不能为空"),
     ;
 
     /**

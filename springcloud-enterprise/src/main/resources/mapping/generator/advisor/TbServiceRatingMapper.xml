@@ -5,8 +5,8 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="org_id" jdbcType="VARCHAR" property="orgId" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
-    <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
     <result column="evaluator_account" jdbcType="VARCHAR" property="evaluatorAccount" />
@@ -80,7 +80,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, org_name, product_name, product_id, advisor_account, advisor_name, evaluator_account, 
+    id, org_id, org_name, product_id, product_name, advisor_account, advisor_name, evaluator_account, 
     attitude_score, profession_score, response_score, price_score, evaluation_desc, created_time, 
     creator_account, modified_time, modifier_account, record_status
   </sql>
@@ -116,14 +116,14 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceRating">
     insert into tb_service_rating (id, org_id, org_name, 
-      product_name, product_id, advisor_account, 
+      product_id, product_name, advisor_account, 
       advisor_name, evaluator_account, attitude_score, 
       profession_score, response_score, price_score, 
       evaluation_desc, created_time, creator_account, 
       modified_time, modifier_account, record_status
       )
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
+      #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
       #{advisorName,jdbcType=VARCHAR}, #{evaluatorAccount,jdbcType=VARCHAR}, #{attitudeScore,jdbcType=VARCHAR}, 
       #{professionScore,jdbcType=VARCHAR}, #{responseScore,jdbcType=VARCHAR}, #{priceScore,jdbcType=VARCHAR}, 
       #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
@@ -142,11 +142,11 @@
       <if test="orgName != null">
         org_name,
       </if>
-      <if test="productName != null">
-        product_name,
-      </if>
       <if test="productId != null">
         product_id,
+      </if>
+      <if test="productName != null">
+        product_name,
       </if>
       <if test="advisorAccount != null">
         advisor_account,
@@ -198,11 +198,11 @@
       <if test="orgName != null">
         #{orgName,jdbcType=VARCHAR},
       </if>
-      <if test="productName != null">
-        #{productName,jdbcType=VARCHAR},
-      </if>
       <if test="productId != null">
         #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
       </if>
       <if test="advisorAccount != null">
         #{advisorAccount,jdbcType=VARCHAR},
@@ -263,11 +263,11 @@
       <if test="record.orgName != null">
         org_name = #{record.orgName,jdbcType=VARCHAR},
       </if>
-      <if test="record.productName != null">
-        product_name = #{record.productName,jdbcType=VARCHAR},
-      </if>
       <if test="record.productId != null">
         product_id = #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
       <if test="record.advisorAccount != null">
         advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
@@ -318,8 +318,8 @@
     set id = #{record.id,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
-      product_name = #{record.productName,jdbcType=VARCHAR},
       product_id = #{record.productId,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       evaluator_account = #{record.evaluatorAccount,jdbcType=VARCHAR},
@@ -346,11 +346,11 @@
       <if test="orgName != null">
         org_name = #{orgName,jdbcType=VARCHAR},
       </if>
-      <if test="productName != null">
-        product_name = #{productName,jdbcType=VARCHAR},
-      </if>
       <if test="productId != null">
         product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
       </if>
       <if test="advisorAccount != null">
         advisor_account = #{advisorAccount,jdbcType=VARCHAR},
@@ -398,8 +398,8 @@
     update tb_service_rating
     set org_id = #{orgId,jdbcType=VARCHAR},
       org_name = #{orgName,jdbcType=VARCHAR},
-      product_name = #{productName,jdbcType=VARCHAR},
       product_id = #{productId,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},
       evaluator_account = #{evaluatorAccount,jdbcType=VARCHAR},

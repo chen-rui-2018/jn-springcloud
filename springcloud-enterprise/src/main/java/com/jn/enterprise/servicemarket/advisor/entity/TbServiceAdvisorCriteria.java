@@ -1345,63 +1345,63 @@ public class TbServiceAdvisorCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsIsNull() {
-            addCriterion("pageviews is null");
+        public Criteria andPageViewsIsNull() {
+            addCriterion("page_views is null");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsIsNotNull() {
-            addCriterion("pageviews is not null");
+        public Criteria andPageViewsIsNotNull() {
+            addCriterion("page_views is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsEqualTo(Integer value) {
-            addCriterion("pageviews =", value, "pageviews");
+        public Criteria andPageViewsEqualTo(Integer value) {
+            addCriterion("page_views =", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsNotEqualTo(Integer value) {
-            addCriterion("pageviews <>", value, "pageviews");
+        public Criteria andPageViewsNotEqualTo(Integer value) {
+            addCriterion("page_views <>", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsGreaterThan(Integer value) {
-            addCriterion("pageviews >", value, "pageviews");
+        public Criteria andPageViewsGreaterThan(Integer value) {
+            addCriterion("page_views >", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsGreaterThanOrEqualTo(Integer value) {
-            addCriterion("pageviews >=", value, "pageviews");
+        public Criteria andPageViewsGreaterThanOrEqualTo(Integer value) {
+            addCriterion("page_views >=", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsLessThan(Integer value) {
-            addCriterion("pageviews <", value, "pageviews");
+        public Criteria andPageViewsLessThan(Integer value) {
+            addCriterion("page_views <", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsLessThanOrEqualTo(Integer value) {
-            addCriterion("pageviews <=", value, "pageviews");
+        public Criteria andPageViewsLessThanOrEqualTo(Integer value) {
+            addCriterion("page_views <=", value, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsIn(List<Integer> values) {
-            addCriterion("pageviews in", values, "pageviews");
+        public Criteria andPageViewsIn(List<Integer> values) {
+            addCriterion("page_views in", values, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsNotIn(List<Integer> values) {
-            addCriterion("pageviews not in", values, "pageviews");
+        public Criteria andPageViewsNotIn(List<Integer> values) {
+            addCriterion("page_views not in", values, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsBetween(Integer value1, Integer value2) {
-            addCriterion("pageviews between", value1, value2, "pageviews");
+        public Criteria andPageViewsBetween(Integer value1, Integer value2) {
+            addCriterion("page_views between", value1, value2, "pageViews");
             return (Criteria) this;
         }
 
-        public Criteria andPageviewsNotBetween(Integer value1, Integer value2) {
-            addCriterion("pageviews not between", value1, value2, "pageviews");
+        public Criteria andPageViewsNotBetween(Integer value1, Integer value2) {
+            addCriterion("page_views not between", value1, value2, "pageViews");
             return (Criteria) this;
         }
 
@@ -1542,6 +1542,76 @@ public class TbServiceAdvisorCriteria {
 
         public Criteria andApprovalStatusNotBetween(String value1, String value2) {
             addCriterion("approval_status not between", value1, value2, "approvalStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeIsNull() {
+            addCriterion("identity_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeIsNotNull() {
+            addCriterion("identity_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeEqualTo(String value) {
+            addCriterion("identity_type =", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeNotEqualTo(String value) {
+            addCriterion("identity_type <>", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeGreaterThan(String value) {
+            addCriterion("identity_type >", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("identity_type >=", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeLessThan(String value) {
+            addCriterion("identity_type <", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeLessThanOrEqualTo(String value) {
+            addCriterion("identity_type <=", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeLike(String value) {
+            addCriterion("identity_type like", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeNotLike(String value) {
+            addCriterion("identity_type not like", value, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeIn(List<String> values) {
+            addCriterion("identity_type in", values, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeNotIn(List<String> values) {
+            addCriterion("identity_type not in", values, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeBetween(String value1, String value2) {
+            addCriterion("identity_type between", value1, value2, "identityType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdentityTypeNotBetween(String value1, String value2) {
+            addCriterion("identity_type not between", value1, value2, "identityType");
             return (Criteria) this;
         }
 

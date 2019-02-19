@@ -20,9 +20,10 @@
     <result column="practice_qualification" jdbcType="VARCHAR" property="practiceQualification" />
     <result column="good_at_business" jdbcType="VARCHAR" property="goodAtBusiness" />
     <result column="transaction_num" jdbcType="INTEGER" property="transactionNum" />
-    <result column="pageviews" jdbcType="INTEGER" property="pageviews" />
+    <result column="page_views" jdbcType="INTEGER" property="pageViews" />
     <result column="is_have_subsidy" jdbcType="VARCHAR" property="isHaveSubsidy" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="identity_type" jdbcType="VARCHAR" property="identityType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -93,9 +94,9 @@
   <sql id="Base_Column_List">
     id, org_id, advisor_account, advisor_name, business_area, avatar, position, org_name, 
     is_certification, contact_email, card_type, card_number, education, graduated_school, 
-    working_years, practice_qualification, good_at_business, transaction_num, pageviews, 
-    is_have_subsidy, approval_status, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    working_years, practice_qualification, good_at_business, transaction_num, page_views, 
+    is_have_subsidy, approval_status, identity_type, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <sql id="Blob_Column_List">
     personal_profile
@@ -155,20 +156,20 @@
       contact_email, card_type, card_number, 
       education, graduated_school, working_years, 
       practice_qualification, good_at_business, 
-      transaction_num, pageviews, is_have_subsidy, 
-      approval_status, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      personal_profile)
+      transaction_num, page_views, is_have_subsidy, 
+      approval_status, identity_type, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status, personal_profile)
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
       #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
       #{contactEmail,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{workingYears,jdbcType=REAL}, 
       #{practiceQualification,jdbcType=VARCHAR}, #{goodAtBusiness,jdbcType=VARCHAR}, 
-      #{transactionNum,jdbcType=INTEGER}, #{pageviews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{personalProfile,jdbcType=LONGVARBINARY})
+      #{transactionNum,jdbcType=INTEGER}, #{pageViews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
+      #{approvalStatus,jdbcType=VARCHAR}, #{identityType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{personalProfile,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     insert into tb_service_advisor
@@ -227,14 +228,17 @@
       <if test="transactionNum != null">
         transaction_num,
       </if>
-      <if test="pageviews != null">
-        pageviews,
+      <if test="pageViews != null">
+        page_views,
       </if>
       <if test="isHaveSubsidy != null">
         is_have_subsidy,
       </if>
       <if test="approvalStatus != null">
         approval_status,
+      </if>
+      <if test="identityType != null">
+        identity_type,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -310,14 +314,17 @@
       <if test="transactionNum != null">
         #{transactionNum,jdbcType=INTEGER},
       </if>
-      <if test="pageviews != null">
-        #{pageviews,jdbcType=INTEGER},
+      <if test="pageViews != null">
+        #{pageViews,jdbcType=INTEGER},
       </if>
       <if test="isHaveSubsidy != null">
         #{isHaveSubsidy,jdbcType=VARCHAR},
       </if>
       <if test="approvalStatus != null">
         #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="identityType != null">
+        #{identityType,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -402,14 +409,17 @@
       <if test="record.transactionNum != null">
         transaction_num = #{record.transactionNum,jdbcType=INTEGER},
       </if>
-      <if test="record.pageviews != null">
-        pageviews = #{record.pageviews,jdbcType=INTEGER},
+      <if test="record.pageViews != null">
+        page_views = #{record.pageViews,jdbcType=INTEGER},
       </if>
       <if test="record.isHaveSubsidy != null">
         is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       </if>
       <if test="record.approvalStatus != null">
         approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identityType != null">
+        identity_type = #{record.identityType,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -454,9 +464,10 @@
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
-      pageviews = #{record.pageviews,jdbcType=INTEGER},
+      page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      identity_type = #{record.identityType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -487,9 +498,10 @@
       practice_qualification = #{record.practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{record.goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{record.transactionNum,jdbcType=INTEGER},
-      pageviews = #{record.pageviews,jdbcType=INTEGER},
+      page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      identity_type = #{record.identityType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -553,14 +565,17 @@
       <if test="transactionNum != null">
         transaction_num = #{transactionNum,jdbcType=INTEGER},
       </if>
-      <if test="pageviews != null">
-        pageviews = #{pageviews,jdbcType=INTEGER},
+      <if test="pageViews != null">
+        page_views = #{pageViews,jdbcType=INTEGER},
       </if>
       <if test="isHaveSubsidy != null">
         is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       </if>
       <if test="approvalStatus != null">
         approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="identityType != null">
+        identity_type = #{identityType,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -602,9 +617,10 @@
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},
-      pageviews = #{pageviews,jdbcType=INTEGER},
+      page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      identity_type = #{identityType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
@@ -632,9 +648,10 @@
       practice_qualification = #{practiceQualification,jdbcType=VARCHAR},
       good_at_business = #{goodAtBusiness,jdbcType=VARCHAR},
       transaction_num = #{transactionNum,jdbcType=INTEGER},
-      pageviews = #{pageviews,jdbcType=INTEGER},
+      page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      identity_type = #{identityType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

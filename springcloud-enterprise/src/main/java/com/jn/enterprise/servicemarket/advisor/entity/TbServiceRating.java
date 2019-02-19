@@ -10,9 +10,9 @@ public class TbServiceRating implements Serializable {
 
     private String orgName;
 
-    private String productName;
-
     private String productId;
+
+    private String productName;
 
     private String advisorAccount;
 
@@ -66,20 +66,20 @@ public class TbServiceRating implements Serializable {
         this.orgName = orgName == null ? null : orgName.trim();
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName == null ? null : productName.trim();
-    }
-
     public String getProductId() {
         return productId;
     }
 
     public void setProductId(String productId) {
         this.productId = productId == null ? null : productId.trim();
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName == null ? null : productName.trim();
     }
 
     public String getAdvisorAccount() {
@@ -201,8 +201,8 @@ public class TbServiceRating implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
-            && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
+            && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
             && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getAdvisorName() == null ? other.getAdvisorName() == null : this.getAdvisorName().equals(other.getAdvisorName()))
             && (this.getEvaluatorAccount() == null ? other.getEvaluatorAccount() == null : this.getEvaluatorAccount().equals(other.getEvaluatorAccount()))
@@ -225,8 +225,8 @@ public class TbServiceRating implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
-        result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
+        result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
         result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getAdvisorName() == null) ? 0 : getAdvisorName().hashCode());
         result = prime * result + ((getEvaluatorAccount() == null) ? 0 : getEvaluatorAccount().hashCode());
@@ -252,8 +252,8 @@ public class TbServiceRating implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", orgId=").append(orgId);
         sb.append(", orgName=").append(orgName);
-        sb.append(", productName=").append(productName);
         sb.append(", productId=").append(productId);
+        sb.append(", productName=").append(productName);
         sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", advisorName=").append(advisorName);
         sb.append(", evaluatorAccount=").append(evaluatorAccount);

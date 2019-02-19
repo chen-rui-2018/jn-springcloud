@@ -35,7 +35,7 @@
        ,sa.`is_certification` AS "isCertification"			              <!-- 是否认证-->
        ,sa.`good_at_business` AS "goodAtBusiness"			              <!-- 业务擅长-->
        ,IFNULL(sa.`transaction_num`,0) AS "transactionNum"			      <!-- 累计交易数-->
-       ,IFNULL(sa.`pageviews`,0) AS "pageviews"					          <!-- 浏览量-->
+       ,IFNULL(sa.page_views,0) AS "pageviews"					          <!-- 浏览量-->
        ,IFNULL(AVG(sr.`attitude_score`),0) AS "attitudeScore"		      <!-- 服务态度评分-->
        ,IFNULL(AVG(sr.`profession_score`),0) AS "professionScore"         <!-- 服务专业评分-->
        ,IFNULL(AVG(sr.`response_score`),0) AS "responseScore"		      <!-- 服务响应评分-->
@@ -44,10 +44,13 @@
        FROM tb_service_advisor  sa
        LEFT JOIN tb_service_rating sr
        ON sa.`advisor_account` = sr.`advisor_account`
+       where 1=1
+       and sa.approval_status='2'            <!--审批通过-->
+       and sa.identity_type='3'              <!--身份类型是顾问-->
        GROUP BY
        sa.`org_id`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
        sa.`avatar`,sa.`position`,sa.`org_name`,sa.`is_certification`,
-       sa.`good_at_business`,sa.`transaction_num`,sa.`pageviews`
+       sa.`good_at_business`,sa.`transaction_num`,sa.page_views
        )tt
        where 1=1
        <if test="domain !=null  and domain !=''">
@@ -115,6 +118,9 @@
             ON sa.`advisor_account` = sr.`advisor_account`
             LEFT JOIN tb_service_product sp
             ON sr.`product_id`=sp.`product_id`
+            where 1=1
+            and sa.approval_status='2'            <!--审批通过-->
+            and sa.identity_type='3'              <!--身份类型是顾问-->
             GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
                  sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
                  sr.`created_time`,sr.`evaluation_desc`

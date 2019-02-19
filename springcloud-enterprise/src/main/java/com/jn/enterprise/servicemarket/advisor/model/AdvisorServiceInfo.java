@@ -16,6 +16,8 @@ import java.util.Date;
  */
 @ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问信息")
 public class AdvisorServiceInfo extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id")
+    private String id;
     @ApiModelProperty(value = "机构ID")
     private String orgId;
     @ApiModelProperty(value = "顾问账号")
@@ -42,10 +44,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     private String education;
     @ApiModelProperty(value = "毕业院校")
     private String graduatedSchool;
-    @ApiModelProperty(value = "评价分数")
-    private String evalluationLevel;
-    @ApiModelProperty(value = "评价次数")
-    private Integer evaluationNum;
     @ApiModelProperty(value = "从业年限")
     private Float workingYears;
     @ApiModelProperty(value = "执业资质")
@@ -55,11 +53,13 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     @ApiModelProperty(value = "累计交易数")
     private Integer transactionNum;
     @ApiModelProperty(value = "浏览量")
-    private Integer pageviews;
+    private Integer pageViews;
     @ApiModelProperty(value = "是否有补贴")
     private String isHaveSubsidy;
     @ApiModelProperty(value = "审核状态")
     private String approvalStatus;
+    @ApiModelProperty(value = "身份类型")
+    private String identityType;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     @ApiModelProperty(value = "创建人")
@@ -74,6 +74,14 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     private byte[] personalProfile;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getOrgId() {
         return orgId;
@@ -179,22 +187,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
         this.graduatedSchool = graduatedSchool;
     }
 
-    public String getEvalluationLevel() {
-        return evalluationLevel;
-    }
-
-    public void setEvalluationLevel(String evalluationLevel) {
-        this.evalluationLevel = evalluationLevel;
-    }
-
-    public Integer getEvaluationNum() {
-        return evaluationNum;
-    }
-
-    public void setEvaluationNum(Integer evaluationNum) {
-        this.evaluationNum = evaluationNum;
-    }
-
     public Float getWorkingYears() {
         return workingYears;
     }
@@ -227,12 +219,12 @@ public class AdvisorServiceInfo extends Page implements Serializable {
         this.transactionNum = transactionNum;
     }
 
-    public Integer getPageviews() {
-        return pageviews;
+    public Integer getPageViews() {
+        return pageViews;
     }
 
-    public void setPageviews(Integer pageviews) {
-        this.pageviews = pageviews;
+    public void setPageViews(Integer pageViews) {
+        this.pageViews = pageViews;
     }
 
     public String getIsHaveSubsidy() {
@@ -249,6 +241,14 @@ public class AdvisorServiceInfo extends Page implements Serializable {
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus;
+    }
+
+    public String getIdentityType() {
+        return identityType;
+    }
+
+    public void setIdentityType(String identityType) {
+        this.identityType = identityType;
     }
 
     public Date getCreatedTime() {
@@ -302,7 +302,8 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     @Override
     public String toString() {
         return "AdvisorServiceInfo{" +
-                "orgId='" + orgId + '\'' +
+                "id='" + id + '\'' +
+                ", orgId='" + orgId + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
                 ", businessArea='" + businessArea + '\'' +
@@ -315,15 +316,14 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", cardNumber='" + cardNumber + '\'' +
                 ", education='" + education + '\'' +
                 ", graduatedSchool='" + graduatedSchool + '\'' +
-                ", evalluationLevel='" + evalluationLevel + '\'' +
-                ", evaluationNum=" + evaluationNum +
                 ", workingYears=" + workingYears +
                 ", practiceQualification='" + practiceQualification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +
                 ", transactionNum=" + transactionNum +
-                ", pageviews=" + pageviews +
+                ", pageViews=" + pageViews +
                 ", isHaveSubsidy='" + isHaveSubsidy + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
+                ", identityType='" + identityType + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifiedTime=" + modifiedTime +

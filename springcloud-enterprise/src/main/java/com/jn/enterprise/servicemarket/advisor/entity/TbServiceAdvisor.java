@@ -41,11 +41,13 @@ public class TbServiceAdvisor implements Serializable {
 
     private Integer transactionNum;
 
-    private Integer pageviews;
+    private Integer pageViews;
 
     private String isHaveSubsidy;
 
     private String approvalStatus;
+
+    private String identityType;
 
     private Date createdTime;
 
@@ -205,12 +207,12 @@ public class TbServiceAdvisor implements Serializable {
         this.transactionNum = transactionNum;
     }
 
-    public Integer getPageviews() {
-        return pageviews;
+    public Integer getPageViews() {
+        return pageViews;
     }
 
-    public void setPageviews(Integer pageviews) {
-        this.pageviews = pageviews;
+    public void setPageViews(Integer pageViews) {
+        this.pageViews = pageViews;
     }
 
     public String getIsHaveSubsidy() {
@@ -227,6 +229,14 @@ public class TbServiceAdvisor implements Serializable {
 
     public void setApprovalStatus(String approvalStatus) {
         this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
+    }
+
+    public String getIdentityType() {
+        return identityType;
+    }
+
+    public void setIdentityType(String identityType) {
+        this.identityType = identityType == null ? null : identityType.trim();
     }
 
     public Date getCreatedTime() {
@@ -307,9 +317,10 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getPracticeQualification() == null ? other.getPracticeQualification() == null : this.getPracticeQualification().equals(other.getPracticeQualification()))
             && (this.getGoodAtBusiness() == null ? other.getGoodAtBusiness() == null : this.getGoodAtBusiness().equals(other.getGoodAtBusiness()))
             && (this.getTransactionNum() == null ? other.getTransactionNum() == null : this.getTransactionNum().equals(other.getTransactionNum()))
-            && (this.getPageviews() == null ? other.getPageviews() == null : this.getPageviews().equals(other.getPageviews()))
+            && (this.getPageViews() == null ? other.getPageViews() == null : this.getPageViews().equals(other.getPageViews()))
             && (this.getIsHaveSubsidy() == null ? other.getIsHaveSubsidy() == null : this.getIsHaveSubsidy().equals(other.getIsHaveSubsidy()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
+            && (this.getIdentityType() == null ? other.getIdentityType() == null : this.getIdentityType().equals(other.getIdentityType()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -340,9 +351,10 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getPracticeQualification() == null) ? 0 : getPracticeQualification().hashCode());
         result = prime * result + ((getGoodAtBusiness() == null) ? 0 : getGoodAtBusiness().hashCode());
         result = prime * result + ((getTransactionNum() == null) ? 0 : getTransactionNum().hashCode());
-        result = prime * result + ((getPageviews() == null) ? 0 : getPageviews().hashCode());
+        result = prime * result + ((getPageViews() == null) ? 0 : getPageViews().hashCode());
         result = prime * result + ((getIsHaveSubsidy() == null) ? 0 : getIsHaveSubsidy().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getIdentityType() == null) ? 0 : getIdentityType().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -376,9 +388,10 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", practiceQualification=").append(practiceQualification);
         sb.append(", goodAtBusiness=").append(goodAtBusiness);
         sb.append(", transactionNum=").append(transactionNum);
-        sb.append(", pageviews=").append(pageviews);
+        sb.append(", pageViews=").append(pageViews);
         sb.append(", isHaveSubsidy=").append(isHaveSubsidy);
         sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", identityType=").append(identityType);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

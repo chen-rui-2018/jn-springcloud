@@ -124,6 +124,10 @@ public class SysPermissionServiceTest {
         PaginationData data = sysPermissionService.findRoleOfPermission(page);
         int total = Long.valueOf(data.getTotal()).intValue();
         Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
+
+        //清除添加角色
+        sysPermissionRolesAdd.setRoleIds(null);
+        sysPermissionService.addRoleToPermission(sysPermissionRolesAdd, user);
     }
 
     @Test
@@ -168,8 +172,12 @@ public class SysPermissionServiceTest {
 
     @Test
     public void zDeletePermissionBranch() {
-        String[] permissionIds = {permissionId};
-        sysPermissionService.deletePermissionBranch(permissionIds,user);
+        try {
+            String[] permissionIds = {permissionId};
+            sysPermissionService.deletePermissionBranch(permissionIds,user);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
 }

@@ -61,10 +61,10 @@ public class AdvisorController extends BaseController {
 
     @ControllerLog(doAction = "服务评价")
     @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/guest/advisor/getServcieRatingInfo")
-    public Result getServcieRatingInfo(@RequestBody @Validated ServiceEvaluationQuery serviceEvaluationQuery){
-        PaginationData servcieRatingInfo = advisorService.getServcieRatingInfo(serviceEvaluationQuery);
-        return  new Result(servcieRatingInfo);
+    @RequestMapping(value = "/guest/advisor/getServiceRatingInfo")
+    public Result getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationQuery serviceEvaluationQuery){
+        PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
+        return  new Result(serviceRatingInfo);
     }
 
 }

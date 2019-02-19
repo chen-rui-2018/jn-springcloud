@@ -117,7 +117,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         serviceEvaluationQuery.setAdvisorAccount(advisorAccount);
         serviceEvaluationQuery.setRatingType(ratingType);
         serviceEvaluationQuery.setNeedPage(Boolean.FALSE);
-        PaginationData pageData = getServcieRatingInfo(serviceEvaluationQuery);
+        PaginationData pageData = getServiceRatingInfo(serviceEvaluationQuery);
         List<ServiceRating> servcieRatingInfoList =(List<ServiceRating>) pageData.getRows();
         if(!servcieRatingInfoList.isEmpty()){
             setRatingNum(advisorDetailsVo, advisorIntroduction, servcieRatingInfoList);
@@ -180,7 +180,7 @@ public class AdvisorServiceImpl implements AdvisorService {
      */
     @ServiceLog(doAction = "根据查询条件获取服务评价信息")
     @Override
-    public PaginationData getServcieRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery) {
+    public PaginationData getServiceRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery) {
         com.github.pagehelper.Page<Object> objects = null;
         if(serviceEvaluationQuery.getNeedPage()){
             objects = PageHelper.startPage(serviceEvaluationQuery.getPage(),

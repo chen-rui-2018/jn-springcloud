@@ -33,5 +33,5 @@ public interface AdvisorService {
      * @param serviceEvaluationQuery   服务评价信息查询入参
      * @return
      */
-    PaginationData getServcieRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery);
+    PaginationData getServiceRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery);
 }

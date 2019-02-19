@@ -1,34 +1,30 @@
-package com.jn.message;
+package com.jn.nodify.send;
 
 import com.google.gson.Gson;
-import com.jn.SpringCloudAppStreamDemoApplication;
 import com.jn.common.channel.MessageSource;
 import com.jn.news.vo.EmailVo;
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.messaging.support.MessageBuilder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 
-/**
- * 发送测试
- *
- * @author： chenm
- * @date： Created on 2018/11/16 15:38
- * @version： v1.0
- * @modified By:
- */
-@RunWith(SpringJUnit4ClassRunner.class)
+import static org.junit.Assert.*;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @EnableBinding(value = {MessageSource.class})
-@SpringBootTest(classes={SpringCloudAppStreamDemoApplication.class})
-public class EmailSinkTest {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class EmailSendTest {
 
     @Autowired
     private MessageSource messageSource;
@@ -42,7 +38,7 @@ public class EmailSinkTest {
     }
 
     @Test
-    public void sinkSenderEmailTester() {
+    public void sendMessage() {
         EmailVo emailVo = new EmailVo();
         emailVo.setEmail("381981766@qq.com,chenmiao@op-mobile.com.cn,cmddlj2016@163.com");
         emailVo.setEmailSubject("主题：简单邮件");
@@ -55,5 +51,4 @@ public class EmailSinkTest {
 
 
     }
-
 }

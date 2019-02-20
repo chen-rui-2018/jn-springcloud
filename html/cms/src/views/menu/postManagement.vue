@@ -15,7 +15,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
         <el-button type="primary" class="filter-item">导出</el-button>
       </el-form>
@@ -27,10 +27,10 @@
       <!-- 表格第二列  姓名 -->
       <el-table-column label="岗位名称" align="center" prop="postName" />
       <el-table-column label="岗位类型" align="center" prop="postTypeName" />
-      <el-table-column label="创建时间" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" align="center" min-width="200" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">

@@ -11,7 +11,7 @@
             <el-option v-for="(item,index) in moduleOptions" :key="index" :label="item.moduleValue" :value="item.moduleValue"/>
           </el-select> -->
         </el-form-item>
-        <el-button type="primary" @click="handleFilter">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
         <el-button type="primary" @click="handleBack">返回</el-button>
       </el-form>
@@ -21,13 +21,13 @@
       <el-table-column label="模块编码" prop="moduleCode" align="center" />
       <el-table-column label="模块名称" prop="moduleValue" align="center" />
       <el-table-column label="创建时间" prop="createdTime" align="center" >
-        <template slot-scope="scope">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="操作" prop="operate" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">修改</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>

@@ -10,7 +10,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -19,10 +19,10 @@
       <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="文件组名称" align="center" prop="fileGroupName" />
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="描述" prop="fileGroupDescribe" align="center" />
       <el-table-column label="状态" align="center" prop="recordStatus" >
@@ -165,14 +165,6 @@ export default {
     selecteFileGroupStatus(value) {
       this.listQuery.recordStatus = value
     },
-    // 清空信息
-    // resetTemp() {
-    //   this.temp = {
-    //     filegroupName: undefined,
-    //     filegroupstatus: undefined,
-    //     fileGroupDescribe: undefined
-    //   }
-    // },
     // 显示新增文件组对话框
     handleCreate() {
       // this.resetTemp()

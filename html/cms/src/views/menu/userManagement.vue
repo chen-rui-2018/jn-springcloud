@@ -15,8 +15,8 @@
           <el-form-item label="岗位">
             <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位或岗位类型" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
           </el-form-item>
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
           <el-button type="primary" class="filter-item" @click="handleExcel">导出</el-button>
 
         </el-form>
@@ -39,10 +39,10 @@
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
-          <el-table-column label="创建时间" prop="createdTime" align="center" width="100">
-            <template slot-scope="scope">
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="200">
+            <!-- <template slot-scope="scope">
               {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="状态" prop="recordStatus" align="center" width="70">
             <template slot-scope="scope">
@@ -152,6 +152,7 @@
     <!-- 授权角色 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" class="roleBox" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
         <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
@@ -179,6 +180,7 @@
     <!-- 弹出的授权用户组对话框 -->
     <!-- <template v-if="userGroup.userGroupdialogVisible"> -->
     <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+      <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="userGroupName" type="text" autocomplete="off" placeholder="请输入用户组名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
       <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
         <span slot="left-footer" size="small">
           <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
@@ -209,13 +211,9 @@ import {
   // updataUserGroup,
   exportExcel
 } from '@/api/Permission-model/userManagement'
-import waves from '@/directive/waves' // 水波纹指令
 // import initList from './components/components'
 export default {
   name: 'UserManagement',
-  directives: {
-    waves
-  },
   filters: {
     statusFilter(recordStatus) {
       const statusMap = {
@@ -282,6 +280,8 @@ export default {
       }
     }
     return {
+      userGroupName: '',
+      roleName: '',
       currentDepartmentIds: undefined,
       Visible: true,
       isShow: false,
@@ -429,6 +429,14 @@ export default {
         }
       },
       deep: true
+    },
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    userGroupName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getUserGroup()
     }
   },
   mounted() {
@@ -537,6 +545,7 @@ export default {
       this.userPage = 1
       this.userGroup.userGroupLoading = true
       this.userId = id
+      this.userGroupName = ''
       this.userGroup.userGroupdialogVisible = true
       this.getUserGroup()
     },
@@ -544,7 +553,8 @@ export default {
       api('system/sysUser/findSysGroupByUserId', {
         userId: this.userId,
         page: this.userPage,
-        rows: this.userRows
+        rows: this.userRows,
+        userGroupName: this.userGroupName
       }).then(res => {
         const userGroupData = []
         const checkUserGroup = []
@@ -598,13 +608,15 @@ export default {
       this.roleLoading = true
       this.userId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
       api('system/sysUser/findSysRoleByUserId', {
         userId: this.userId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         if (res.data.code === '0000') {
           const roleData = []
@@ -673,6 +685,7 @@ export default {
       this.listLoading = true
       api('system/sysUser/findSysUserByPage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
+          console.log(res)
           this.userList = res.data.data.rows
           this.total = res.data.data.total
           if (this.userList.length === 0 && this.total > 0) {

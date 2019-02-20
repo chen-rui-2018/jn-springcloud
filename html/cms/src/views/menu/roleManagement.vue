@@ -10,7 +10,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -29,10 +29,10 @@
           {{ scope.row.sysRolePermissions.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
@@ -59,7 +59,7 @@
       <el-dialog :visible.sync="roledialogFormVisible" :title="dialogStatus" width="400px">
         <el-form ref="roleform" :rules="rules" :model="roleform" label-position="right" label-width="80px" style="max-width:300px;margin-left:20px">
           <el-form-item label="名称:" prop="roleName">
-            <el-input v-model="roleform.roleName" maxlength="20"/>
+            <el-input v-model="roleform.roleName" maxlength="20" clearable/>
           </el-form-item>
           <el-form-item label="状态:" prop="recordStatus" >
             <el-select v-model="roleform.recordStatus" placeholder="请选择" class="filter-item" style="width:100%">
@@ -76,6 +76,7 @@
     <!-- 弹出的授权用户对话框 -->
     <template v-if="userdialogVisible">
       <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="userName" type="text" autocomplete="off" placeholder="请输入用户名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
         <el-transfer v-loading="userLoading" v-model="userId" :data="userData" :titles="['其他用户', '角色拥有用户']" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
@@ -87,6 +88,7 @@
     <!-- 弹出的授权用户组对话框 -->
     <template v-if="userGroup.userGroupdialogVisible">
       <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="userGroupName" type="text" autocomplete="off" placeholder="请输入用户组名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
         <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '角色拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
@@ -98,6 +100,12 @@
     <!-- 弹出的授权权限对话框 -->
     <template v-if="authoritydialogVisible">
       <el-dialog :visible.sync="authoritydialogVisible" title="授权权限" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="permissionName" type="text" autocomplete="off" placeholder="请输入权限名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="authorityLoading" v-model="authorityIds" :data="authorityData" :titles="['其他权限', '角色拥有权限']" filterable filter-placeholder="请输入权限名称" class="box" @change="handleAuthorityChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="authorityPage" :pager-count="5" :total="authorityTotal" background layout="prev, pager, next" @current-change="handleAuthorityCurrentChange" />
@@ -156,6 +164,9 @@ export default {
       }
     }
     return {
+      permissionName: '',
+      userGroupName: '',
+      userName: '',
       isDisabled: false,
       authorityPage: 1,
       authorityRows: 10,
@@ -213,6 +224,20 @@ export default {
       }
     }
   },
+  watch: {
+    userName: function(newVal, oldVal) {
+      this.userPage = 1
+      this.getUser()
+    },
+    userGroupName: function(newVal, oldVal) {
+      this.userPage = 1
+      this.getUserGroup()
+    },
+    permissionName: function(newVal, oldVal) {
+      this.authorityPage = 1
+      this.getAuthority()
+    }
+  },
   created() {
     this.initList()
   },
@@ -252,6 +277,7 @@ export default {
       this.authorityPage = 1
       this.authorityLoading = true
       this.roleId = id
+      this.permissionName = ''
       this.authoritydialogVisible = true
       this.getAuthority()
     },
@@ -259,7 +285,8 @@ export default {
       api('system/sysRole/findPermissionOrRoleAndOtherPermission', {
         roleId: this.roleId,
         page: this.authorityPage,
-        rows: this.authorityRows
+        rows: this.authorityRows,
+        permissionName: this.permissionName
       }).then(res => {
         if (res.data.code === '0000') {
           const authorityData = []
@@ -318,6 +345,7 @@ export default {
       this.userPage = 1
       this.userGroup.userGroupLoading = true
       this.roleId = id
+      this.userGroupName = ''
       this.userGroup.userGroupdialogVisible = true
       this.getUserGroup()
     },
@@ -325,7 +353,8 @@ export default {
       api('system/sysRole/findUserGroupOfRoleAndOtherGroup', {
         roleId: this.roleId,
         page: this.userPage,
-        rows: this.userRows
+        rows: this.userRows,
+        userGroupName: this.userGroupName
       }).then(res => {
         if (res.data.code === '0000') {
           const userGroupData = []
@@ -353,7 +382,8 @@ export default {
       api('system/sysRole/findUserOfRoleAndOtherUser', {
         roleId: this.roleId,
         page: this.userPage,
-        rows: this.userRows
+        rows: this.userRows,
+        userName: this.userName
       }).then(res => {
         if (res.data.code === '0000') {
           res.data.data.rows.userOfRoleList.forEach(val => {
@@ -415,6 +445,7 @@ export default {
       this.userPage = 1
       this.userLoading = true
       this.roleId = id
+      this.userName = ''
       this.userdialogVisible = true
       this.getUser()
     },
@@ -564,6 +595,9 @@ export default {
 
 <style lang="scss" >
 .rolemanagement {
+   >.el-pagination{
+    margin-top:15px;
+  }
   .filter-container {
     .el-form-item {
       margin-bottom: 0;
@@ -587,5 +621,6 @@ export default {
   .el-transfer-panel__list.is-filterable{
     height: 310px;
   }
+
 }
 </style>

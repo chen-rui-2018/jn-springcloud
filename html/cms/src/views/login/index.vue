@@ -27,8 +27,8 @@
       <!-- <el-button :loading="loading" style="width:100%;margin-bottom:20px;" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button> -->
       <el-button :loading="loading" style="width:100%;margin-bottom:20px;" @click.native.prevent="handleLogin">登&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
       <div class="formFooter">
-        <input id="checkBox" type="checkbox" checked><label for="checkBox"><span class="remeberpw">&nbsp;&nbsp;记住密码</span></label>
-        <a href="javascript:void(0)" class="forgetpw">忘记密码</a>
+        <input id="checkBox" v-model="checked" type="checkbox" ><label for="checkBox"><span class="remeberpw">&nbsp;&nbsp;记住密码</span></label>
+        <!-- <a href="javascript:void(0)" class="forgetpw">忘记密码</a> -->
       </div>
     </el-form>
     <!-- <footer class="footer">
@@ -62,9 +62,10 @@ export default {
       }
     }
     return {
+      checked: true,
       loginForm: {
-        username: 'wangsong',
-        password: 'wangsong'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [
@@ -91,12 +92,19 @@ export default {
   //   }
   // },
   created() {
+    this.initlist()
     // window.addEventListener('hashchange', this.afterQRScan)
   },
   destroyed() {
     // window.removeEventListener('hashchange', this.afterQRScan)
   },
   methods: {
+    initlist() {
+      if (localStorage.getItem('username')) {
+        this.loginForm.username = localStorage.getItem('username')
+        this.loginForm.password = localStorage.getItem('password')
+      }
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -118,6 +126,13 @@ export default {
               _this.loading = false
               if (response.code === '0000') {
                 _this.$router.push({ path: this.redirect || '/' })
+              }
+              if (this.checked) {
+                localStorage.setItem('username', this.loginForm.username)
+                localStorage.setItem('password', this.loginForm.password)
+              } else {
+                localStorage.removeItem('username')
+                localStorage.removeItem('password')
               }
             })
             .catch(() => {

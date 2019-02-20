@@ -741,16 +741,17 @@ export default {
     height: 100%;
   .el-tree{
     height: 100%;
-  padding: 20px;
-  overflow: auto;
+    width: 270px;
+  // padding: 20px;
+  // overflow: auto;
   }
 }
 .menu-right{
   height: 100%;
-  overflow: auto;
+  // overflow: auto;
   margin-left:20px;
   flex:1;
-  padding :20px;
+  // padding :20px;
   .menu-content{
     display: flex;
     align-items: center;

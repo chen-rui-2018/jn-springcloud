@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
+import 'babel-polyfill'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -15,7 +15,7 @@ import '@/assets/icon/css/font-awesome.min.css'
 import App from './App'
 import router from './router'
 import store from './store'
-
+import 'url-search-params-polyfill'
 import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog' // error log

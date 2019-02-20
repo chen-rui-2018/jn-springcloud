@@ -10,7 +10,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -20,10 +20,10 @@
       <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="权限名称" align="center" prop="permissionName" />
-      <el-table-column label="创建时间" min-width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
@@ -66,6 +66,12 @@
     <!-- 弹出授权角色对话框 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '权限拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
@@ -77,6 +83,12 @@
     <!-- 弹出授权文件组对话框 -->
     <template v-if="fileGroupdialogVisible">
       <el-dialog :visible.sync="fileGroupdialogVisible" title="授权文件组" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="fileGroupName" type="text" autocomplete="off" placeholder="请输入文件组名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="fileGroupLoading" v-model="fileGroupIds" :data="fileGroupData" :titles="['其他文件组', '权限拥有文件组']" filterable filter-placeholder="请输入文件组名称" class="box" @change="handleFileGroupChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleFileGroupCurrentChange" />
@@ -160,6 +172,8 @@ export default {
       }
     }
     return {
+      fileGroupName: '',
+      roleName: '',
       isDisabled: false,
       data3: [],
       data2: [],
@@ -212,6 +226,16 @@ export default {
         ],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
+    }
+  },
+  watch: {
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    fileGroupName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getFileGroup()
     }
   },
   created() {
@@ -303,13 +327,15 @@ export default {
       this.fileGroupLoading = true
       this.permissionId = id
       this.fileGroupdialogVisible = true
+      this.fileGroupName = ''
       this.getFileGroup()
     },
     getFileGroup() {
       api('system/sysPermission/findFileGroupOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        fileGroupName: this.fileGroupName
       }).then(res => {
         const fileGroupData = []
         const checkFileGroup = []
@@ -364,13 +390,15 @@ export default {
       this.roleLoading = true
       this.permissionId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
       api('system/sysPermission/findRoleOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         const roleData = []
         const checkRole = []
@@ -541,6 +569,9 @@ export default {
 
 <style lang="scss" >
 .permissionManagement {
+  >.el-pagination{
+    margin-top:15px;
+  }
    .filter-container {
     .el-form-item {
       margin-bottom: 0;

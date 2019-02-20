@@ -13,7 +13,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
       </el-form>
     </div>
     <!-- 表格 -->
@@ -28,10 +28,10 @@
         </template>
       </el-table-column>
       <el-table-column label="文件路径" align="center" prop="fileUrl" min-width="100"/>
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">

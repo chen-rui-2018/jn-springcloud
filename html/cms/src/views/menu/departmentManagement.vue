@@ -393,10 +393,11 @@ export default {
   display: flex;
 .department-left{
   height: 100%;
+  width:270px;
   .el-tree{
     height: 100%;
-    overflow: auto;
-  padding: 20px;
+    // overflow: auto;
+  // padding: 20px;
   }
 }
  .custom-tree-node {
@@ -411,10 +412,12 @@ export default {
 </style>
 <style lang="scss">
  .department-right{
+   flex:1;
    height: 100%;
    width: 100%;
    overflow:auto;
-    padding: 20px;
+   margin-left:30px;
+    // padding: 20px;
     .department-content{
       display: flex;
       align-items: center;

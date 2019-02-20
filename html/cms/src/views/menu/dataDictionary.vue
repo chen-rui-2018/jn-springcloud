@@ -16,7 +16,7 @@
         <el-form-item label="数据字典值">
           <el-input v-model="dictionaryForm.dictValue" placeholder="请输入数据字典值" maxlength="20" clearable style="width: 130px;" @keyup.enter.native="handleFilter"/>
         </el-form-item>
-        <el-button type="primary" class="searchDd" @click="handleFilter">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
         <el-button type="primary" @click="handleSort">分组排序</el-button>
         <el-button type="primary" @click="handleModule">模块管理</el-button>
@@ -33,7 +33,7 @@
       <el-table-column label="描述" prop="dictDescribe" align="center" />
       <el-table-column label="操作" prop="operate" align="center" width="180">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">修改</el-button>
+          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
@@ -321,6 +321,7 @@ export default {
     initList() {
       this.listLoading = true
       api('system/sysDict/list', this.dictionaryForm).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.dictionaryData = res.data.data.rows
           this.total = res.data.data.total

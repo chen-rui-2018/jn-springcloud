@@ -10,7 +10,7 @@
             <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -30,10 +30,10 @@
           {{ scope.row.sysRoleList.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
           {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
@@ -86,6 +86,12 @@
     <!-- 弹出授权角色对话框 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer
           v-loading="roleLoading"
           v-model="roleIds"
@@ -102,9 +108,15 @@
         </el-transfer>
       </el-dialog>
     </template>
-    <!-- 弹出的授權用户对话框 @input.native="text($event)"  -->
+    <!-- 弹出的授權用户对话框   -->
     <template v-if="userdialogVisible">
       <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="name" type="text" autocomplete="off" placeholder="请输入用户名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
           <span slot="left-footer" size="small">
             <el-pagination :page-size="userRows" :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
@@ -163,6 +175,8 @@ export default {
       }
     }
     return {
+      name: '',
+      roleName: '',
       isDisabled: false,
       numberTotal: 0,
       numberRows: 10,
@@ -215,6 +229,16 @@ export default {
       }
     }
   },
+  watch: {
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    name: function(newVal, oldVal) {
+      this.userPage = 1
+      this.getUser()
+    }
+  },
   created() {
     this.initList()
   },
@@ -255,13 +279,15 @@ export default {
       this.roleLoading = true
       this.groupId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
       api('system/sysGroup/selectGroupRoleAndOtherRole', {
         groupId: this.groupId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         if (res.data.code === '0000') {
           const roleData = []
@@ -290,12 +316,13 @@ export default {
       this.userLoading = true
       this.userGroupId = row.id
       this.userdialogVisible = true
+      this.name = ''
       this.getUser()
     },
 
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
+      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }).then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -468,6 +495,7 @@ export default {
     initList() {
       this.listLoading = true
       api('system/sysGroup/list', this.listQuery).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total

@@ -43,7 +43,7 @@ public class ActivityDetailsController extends BaseController {
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/getActivityDetails")
-    public Result getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestParam String activityId){
+    public Result getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestBody String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();

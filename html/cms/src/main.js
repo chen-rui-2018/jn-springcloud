@@ -6,9 +6,10 @@ import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
-import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+import '../static/UE/ueditor.config.js'
+import '../static/UE/ueditor.all.min.js'
+import '../static/UE/lang/zh-cn/zh-cn.js'
+import '../static/UE/ueditor.parse.min.js'
 Vue.use(VueQuillEditor)
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'

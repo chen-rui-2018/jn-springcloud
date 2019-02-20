@@ -1,4 +1,4 @@
-package com.jn.common.util;
+package com.jn.wechat.base.utils.httpclient;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;

@@ -1,5 +1,6 @@
 package com.jn.system.permission.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -26,6 +27,7 @@ public class SysRoleVO implements Serializable{
 	private String roleName;
 
 	@ApiModelProperty("创建时间")
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createdTime;
 
 	@ApiModelProperty("状态")

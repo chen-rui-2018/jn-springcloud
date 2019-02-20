@@ -7,6 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.dict.dao.SysDictModuleMapper;
 import com.jn.system.dict.dao.TbSysDictMapper;
 import com.jn.system.dict.dao.TbSysDictModuleMapper;
 import com.jn.system.dict.entity.TbSysDict;
@@ -46,6 +47,8 @@ public class SysDictModuleServiceImpl implements SysDictModuleService {
     private TbSysDictModuleMapper tbSysModuleMapper;
     @Autowired
     private TbSysDictMapper tbSysDictMapper;
+    @Autowired
+    private SysDictModuleMapper sysDictModuleMapper;
 
     /**
      * 添加模块
@@ -171,24 +174,8 @@ public class SysDictModuleServiceImpl implements SysDictModuleService {
     @ServiceLog(doAction = "条件分页查询模块列表")
     public PaginationData getModuleByPage(SysDictModulePage sysDictModulePage) {
         Page<Object> objects = PageHelper.startPage(sysDictModulePage.getPage(), sysDictModulePage.getRows());
-        TbSysDictModuleCriteria tbSysModuleCriteria = new TbSysDictModuleCriteria();
-        //设置排序
-        tbSysModuleCriteria.setOrderByClause("created_time asc");
-        //设置查询条件
-        TbSysDictModuleCriteria.Criteria criteria = tbSysModuleCriteria.createCriteria();
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
-        criteria.andRecordStatusEqualTo(recordStatus);
-        //如果模块编码不为空
-        if (StringUtils.isNotBlank(sysDictModulePage.getModuleCode())) {
-            criteria.andModuleCodeLike("%" + sysDictModulePage.getModuleCode() + "%");
-        }
-        //如果模块名称不为空
-        if (StringUtils.isNotBlank(sysDictModulePage.getModuleValue())) {
-            criteria.andModuleValueLike("%" + sysDictModulePage.getModuleValue() + "%");
-        }
-
-        List<TbSysDictModule> tbSysModules = tbSysModuleMapper.selectByExample(tbSysModuleCriteria);
-        PaginationData data = new PaginationData(tbSysModules, objects.getTotal());
+        List<SysDictModule> sysDictModuleList = sysDictModuleMapper.getModuleByPage(sysDictModulePage);
+        PaginationData data = new PaginationData(sysDictModuleList, objects.getTotal());
         return data;
     }
 }

@@ -8,6 +8,7 @@ import com.jn.common.model.Result;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.dept.dao.SysPostTypeMapper;
 import com.jn.system.dept.dao.TbSysPostMapper;
 import com.jn.system.dept.dao.TbSysPostTypeMapper;
 import com.jn.system.dept.entity.TbSysPost;
@@ -48,6 +49,8 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     private TbSysPostTypeMapper tbSysPostTypeMapper;
     @Autowired
     private TbSysPostMapper tbSysPostMapper;
+    @Autowired
+    private SysPostTypeMapper sysPostTypeMapper;
 
     /**
      * 增加岗位类型
@@ -79,27 +82,10 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
     @Override
     @ServiceLog(doAction = "列表查询岗位类型")
     public PaginationData getPostTypeByPage(SysPostTypePage postTypePage) {
-        String postTypeName = postTypePage.getPostTypeName();
-        Byte status = postTypePage.getRecordStatus();
-
         //条件分页查询
         Page<Object> objects = PageHelper.startPage(postTypePage.getPage(), postTypePage.getRows());
-        TbSysPostTypeCriteria tbSysPostTypeCriteria = new TbSysPostTypeCriteria();
-        //设置排序及查询条件
-        tbSysPostTypeCriteria.setOrderByClause("created_time desc,id desc");
-        TbSysPostTypeCriteria.Criteria criteria = tbSysPostTypeCriteria.createCriteria();
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
-        if (StringUtils.isNotBlank(postTypeName)) {
-            //根据岗位类型名称,模糊查询
-            criteria.andPostTypeNameLike("%" + postTypeName + "%");
-        }
-        if (status != null) {
-            //根据岗位类型状态查询
-            criteria.andRecordStatusEqualTo(status);
-        }
-        List<TbSysPostType> tbSysPostTypes = tbSysPostTypeMapper.selectByExample(tbSysPostTypeCriteria);
-        return new PaginationData(tbSysPostTypes, objects.getTotal());
+        List<SysPostType> sysPostTypeList = sysPostTypeMapper.getPostTypeByPage(postTypePage);
+        return new PaginationData(sysPostTypeList, objects.getTotal());
     }
 
     /**

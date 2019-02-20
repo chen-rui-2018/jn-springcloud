@@ -1,5 +1,6 @@
 package com.jn.system.dict.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -37,13 +38,14 @@ public class SysDict implements Serializable {
     @ApiModelProperty(value = "排序")
     private Integer sort;
     @ApiModelProperty(value = "创建时间")
-    private String createdTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdTime;
 
     public SysDict() {
     }
 
     public SysDict(String id, String moduleCode, String moduleValue, String parentGroupCode, String groupCode,
-                   String dictKey, String dictValue, String dictDescribe, Integer sort, String createdTime) {
+                   String dictKey, String dictValue, String dictDescribe, Integer sort, Date createdTime) {
         this.id = id;
         this.moduleCode = moduleCode;
         this.moduleValue = moduleValue;
@@ -128,11 +130,11 @@ public class SysDict implements Serializable {
         this.sort = sort;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -148,7 +150,7 @@ public class SysDict implements Serializable {
                 ", dictValue='" + dictValue + '\'' +
                 ", dictDescribe='" + dictDescribe + '\'' +
                 ", sort=" + sort +
-                ", createdTime='" + createdTime + '\'' +
+                ", createdTime=" + createdTime +
                 '}';
     }
 }

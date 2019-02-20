@@ -1,5 +1,6 @@
 package com.jn.system.dict.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysDictModule", description = "模块实体")
+@ApiModel(value = "SysDictModuleMapper", description = "模块实体")
 public class SysDictModule implements Serializable {
 
     @ApiModelProperty(value = "模块id")
@@ -24,6 +25,7 @@ public class SysDictModule implements Serializable {
     @ApiModelProperty(value = "模块名称")
     private String moduleValue;
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
     public SysDictModule() {
@@ -70,7 +72,7 @@ public class SysDictModule implements Serializable {
 
     @Override
     public String toString() {
-        return "SysDictModule{" +
+        return "SysDictModuleMapper{" +
                 "id='" + id + '\'' +
                 ", moduleCode='" + moduleCode + '\'' +
                 ", moduleValue='" + moduleValue + '\'' +

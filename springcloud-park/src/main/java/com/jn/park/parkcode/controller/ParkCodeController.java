@@ -9,7 +9,9 @@ import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import com.jn.park.parkcode.entity.TbParkCode;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,7 +37,7 @@ public class ParkCodeController  {
     @ApiOperation(value = "查询园区字典", httpMethod = "POST", response = Result.class,
             notes = "codeType：查询的字典类型（例如查询园区列表,codeType=parkName）")
     @RequestMapping(value = "/getParkCodeByType")
-    public Result getParkCodeByType(String codeType){
+    public Result getParkCodeByType(@ApiParam(name="codeType",value = "字典类型",required = true)@RequestBody String codeType){
         Assert.notNull(codeType, ParkCodeExceptionEnum.CODE_TYPE_NOT_NULL.getMessage());
         List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType(codeType);
         return new Result(parkCodeByType);

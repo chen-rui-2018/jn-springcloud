@@ -15,6 +15,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,7 @@ public class ActivityLikeController extends BaseController {
     @RequiresPermissions("/activity/activityLike/activityLike")
     @ApiOperation(value = "活动点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityLike")
-    public Result activityLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
+    public Result activityLike(@ApiParam(value = "活动id" ,required = true) @RequestBody String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
@@ -57,7 +58,7 @@ public class ActivityLikeController extends BaseController {
     @RequiresPermissions("/activity/activityLike/cancelLike")
     @ApiOperation(value = "取消点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/cancelLike")
-    public Result cancelLike(@ApiParam(value = "活动id" ,required = true) @RequestParam String activityId){
+    public Result cancelLike(@ApiParam(value = "活动id" ,required = true) @RequestBody String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";

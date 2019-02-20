@@ -74,7 +74,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/activity/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(
-            @ApiParam(name="activityId",value = "活动ID",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "活动ID",required = true)@RequestBody String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
         return new Result(activityDetailsForManage);
@@ -132,7 +132,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteDraftActivity")
     @RequiresPermissions("/activity/deleteDraftActivity")
     public Result deleteDraftActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)@RequestBody String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteDraftActivity(activityId,user.getAccount());
@@ -144,7 +144,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteActivity")
     @RequiresPermissions("/activity/deleteActivity")
     public Result deleteActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)@RequestBody String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteActivity(activityId,user.getAccount());
@@ -156,7 +156,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/cancelActivity")
     @RequiresPermissions("/activity/cancelActivity")
     public Result cancelActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestBody String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.cancelActivity(activityId,user.getAccount());
@@ -174,7 +174,7 @@ public class ActivityController extends BaseController {
     }
 
     @ControllerLog(doAction = "下载签到二维码")
-    @ApiOperation(value = "下载签到二维码", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "下载签到二维码", httpMethod = "GET", response = Result.class)
     @RequestMapping(value = "/downloadSignCodeImg")
     @RequiresPermissions("/activity/downloadSignCodeImg")
     public void downloadSignCodeImg(HttpServletResponse httpServletResponse,
@@ -197,7 +197,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/sendMsgForActivate")
     @RequiresPermissions("/activity/sendMsgForActivate")
     public Result sendMsgForActivate(
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestBody String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.sendMsgForActivate(activityId);
         return new Result(i);

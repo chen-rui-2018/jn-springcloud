@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.product.dao;
 
+import com.jn.enterprise.servicemarket.product.model.HotProducts;
 import com.jn.enterprise.servicemarket.product.model.ServiceProductDetail;
 import com.jn.enterprise.servicemarket.product.model.ServiceProductManage;
 import org.apache.ibatis.annotations.Param;
@@ -54,4 +55,10 @@ public interface ServiceProductDao {
      * @param account
      */
    void  productShelf(@Param("productId") String productId,@Param("status") String status,@Param("account")String account);
+
+    /**
+     * 服务超市首页,热门产品列表
+     * @return
+     */
+    List<HotProducts> findHotProducts();
 }

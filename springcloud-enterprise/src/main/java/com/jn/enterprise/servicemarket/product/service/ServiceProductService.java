@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.product.service;
 
+import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.product.model.*;
 import org.springframework.validation.annotation.Validated;
@@ -61,4 +62,19 @@ public interface ServiceProductService {
      * @return
      */
     PaginationData featuredProductRelease(ServiceSelectConstraint constraint);
+
+    /**
+     * 编辑常规服务产品
+     * @param content
+     * @param account
+     */
+    void modifyCommonService(ServiceContent content,String account);
+
+    /**
+     * 获得热门产品列表
+     * @param page
+     * @return
+     */
+    PaginationData  findHotProducts(Page page);
+
 }

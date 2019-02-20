@@ -11,17 +11,16 @@ import com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao;
 import com.jn.enterprise.servicemarket.product.dao.ServiceProductDao;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceDetailsMapper;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceDetails;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
+import com.jn.enterprise.servicemarket.product.entity.*;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
+import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -54,6 +53,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param account
      * @return
      */
+    @ServiceLog(doAction = "添加服务产品")
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String addServiceProduct(ServiceContent content, String account) {
 
@@ -63,31 +64,14 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         String  productType = "1";
         Byte recordStatus = 1;
         if(productType.equals(content.getProductType())){
+
              if(StringUtils.isBlank(content.getOrgId())){
                 logger.warn("[服务产品新增]，特色服务产品机构id{}不能为空：orgId: {},特色服务产品的机构id不能为空!");
                 throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY);
             }
         }
         if (content.getReferPrice() != null) {
-            int max = 0;
-            int min = 0;
-            String reg = "^[0-9]+-?[0-9]+$";
-            String referPrice = content.getReferPrice();
-            if (!referPrice.matches(reg)) {
-                logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + referPrice + "{},格式错误,只能为纯数字或数字范围'min-max'");
-                throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_WRONG_FORMAT);
-            }
-            String[] prices = referPrice.split("-");
-            int length = 2;
-            if (prices.length == length) {
-                min = Integer.parseInt(referPrice.substring(0, referPrice.indexOf("-")));
-                max = Integer.parseInt(referPrice.substring(referPrice.indexOf("-") + 1));
-                if (max < min) {
-                    logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + content.getReferPrice() + "{},格式错误,'-'后面的价格值应大于前面的价格值");
-                    throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_NUMBER_EXCEPTION);
-                }
-            }
-
+              checkReferPrice(content.getReferPrice());
         }
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         tbServiceProduct.setTemplateId(content.getProductId());
@@ -98,8 +82,9 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         tbServiceProduct.setCreatorAccount(account);
         tbServiceProduct.setStatus(status);
         tbServiceProduct.setRecordStatus(recordStatus);
+        //保存服务产品的基本信息
         tbServiceProductMapper.insertSelective(tbServiceProduct);
-        //详情不为空则 插入详情;
+        //服务产品描述不为空则 插入详情;
         if (StringUtils.isNotBlank(content.getServiceDetails())) {
             TbServiceDetails details = new TbServiceDetails();
             details.setProductId(productId);
@@ -126,6 +111,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param constraint
      * @return
      */
+    @ServiceLog(doAction = "后台服务产品管理-服务产品列表")
     @Override
     public PaginationData findServiceList(ServiceSelectConstraint constraint) {
         Map<String,String>  map = new HashMap<>(10);
@@ -144,6 +130,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param commonService
      * @param account
      */
+    @ServiceLog(doAction = "上架常规产品")
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void  upShelfCommonService(CommonServiceShelf commonService,String account) {
         if(StringUtils.isBlank(commonService.getProductId())){
@@ -168,6 +156,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param productId
      * @return
      */
+    @ServiceLog(doAction = "查询服务产品详情")
     @Override
     public ServiceProductDetail findServiceDetail(String productId) {
         ServiceProductDetail detail =  productDao.findServiceDetail(productId);
@@ -178,6 +167,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * 服务产品审核
      * @param approval
      */
+    @ServiceLog(doAction = "服务产品审核")
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void productApproval(ServiceProductApproval approval,String account) {
         //审批不通过时,必须要填写审批意见;
@@ -196,6 +187,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param approval
      * @param account
      */
+    @ServiceLog(doAction = "服务产品上下架")
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void productShelf(ServiceProductApproval approval, String account) {
         productDao.productShelf(approval.getProductId(),approval.getStatus(),account);
@@ -206,6 +199,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
      * @param constraint
      * @return
      */
+    @ServiceLog(doAction = "特色服务产品发布,产品列表")
     @Override
     public PaginationData featuredProductRelease(ServiceSelectConstraint constraint) {
 
@@ -220,7 +214,65 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         return new PaginationData(productList,object==null?0:object.getTotal());
 
     }
-   private Map<String,String> constraintToMap(ServiceSelectConstraint constraint){
+
+    /**
+     * 编辑常规服务产品
+     * @param content
+     * @param account
+     */
+    @ServiceLog(doAction = "编辑常规产品")
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void modifyCommonService(ServiceContent content, String account) {
+        if (content.getReferPrice() != null) {
+            checkReferPrice(content.getReferPrice());
+        }
+        TbServiceProduct product = new TbServiceProduct();
+        BeanUtils.copyProperties(content,product);
+        product.setModifierAccount(account);
+        product.setModifiedTime(new Date());
+        tbServiceProductMapper.updateByPrimaryKeySelective(product);
+        if (StringUtils.isNotBlank(content.getServiceDetails())){
+            TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
+            criteria.createCriteria().andProductIdEqualTo(content.getProductId());
+            TbServiceDetails details = new TbServiceDetails();
+            details.setServiceDetails(content.getServiceDetails().getBytes());
+            tbServiceDetailsMapper.updateByExample(details,criteria);
+        }
+    }
+    @ServiceLog(doAction = "服务超市首页,热门服务产品列表")
+    @Override
+    public PaginationData findHotProducts(com.jn.common.model.Page page) {
+        //首次查询,返回5条
+        if(page.getRows()==0){
+            page.setRows(5);
+        }
+        Page<Object> object = PageHelper.startPage(page.getPage(),page.getRows());
+       List<HotProducts> products =  productDao.findHotProducts();
+        return new PaginationData(products,object==null?0:object.getTotal());
+    }
+
+
+    private void checkReferPrice(String referPrice){
+        int max = 0;
+        int min = 0;
+        String reg = "^[0-9]+-?[0-9]+$";
+        if (!referPrice.matches(reg)) {
+            logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + referPrice + "{},格式错误,只能为纯数字或数字范围'min-max'");
+            throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_WRONG_FORMAT);
+        }
+        String[] prices = referPrice.split("-");
+        int length = 2;
+        if (prices.length == length) {
+            min = Integer.parseInt(referPrice.substring(0, referPrice.indexOf("-")));
+            max = Integer.parseInt(referPrice.substring(referPrice.indexOf("-") + 1));
+            if (max < min) {
+                logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + referPrice + "{},格式错误,'-'后面的价格值应大于前面的价格值");
+                throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_NUMBER_EXCEPTION);
+            }
+        }
+    }
+    private Map<String,String> constraintToMap(ServiceSelectConstraint constraint){
        Map<String,String>  map = new HashMap<>(10);
        if(constraint != null){
            map.put("productName",constraint.getProductName());
@@ -234,5 +286,4 @@ public class ServiceProductServiceImpl implements ServiceProductService {
        }
        return map;
     }
-
 }

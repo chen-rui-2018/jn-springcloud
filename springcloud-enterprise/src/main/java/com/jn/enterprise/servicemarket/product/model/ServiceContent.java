@@ -43,7 +43,7 @@ public class ServiceContent  implements Serializable {
     private String productType;
     @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔")
     private String advisorAccount;
-    @ApiModelProperty(value = "服务产品详情")
+    @ApiModelProperty(value = "服务产品描述")
     private String serviceDetails;
 
     private static final long serialVersionUID = 1L;

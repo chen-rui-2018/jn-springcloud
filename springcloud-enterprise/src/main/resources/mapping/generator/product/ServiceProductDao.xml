@@ -8,7 +8,7 @@
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
            t1.signory_name as "signoryName",  <!--领域名称-->
-           t1.release_time as "releaseTime",  <!--发布时间-->
+           date_format(t1.release_time,"%Y-%M-%D %H:%i:%s") as "releaseTime", <!--发布时间-->
            t1.status as "status",             <!--状态-->
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
@@ -45,7 +45,7 @@
         t1.product_id as "productId",      <!--产品Id-->
         t1.product_name as "productName",  <!--产品名称-->
         t1.signory_name as "signoryName",  <!--领域名称-->
-        t1.release_time as "releaseTime",  <!--发布时间-->
+        date_format(t1.release_time,"%Y-%M-%D %H:%i:%s") as "releaseTime",  <!--发布时间-->
         t1.status as "status",             <!--状态-->
         t2.org_name as "orgName",          <!--机构名称-->
         t3.con_phone as "conPhone",        <!--联系电话-->
@@ -138,4 +138,19 @@
         t1.modified_time = now()
         where t1.product_id = #{productId}
     </update>
+
+    <!--服务超市首页,热门产品-->
+    <select id = "findHotProducts" resultType = "com.jn.enterprise.servicemarket.product.model.HotProducts">
+        select
+          t1.product_name as "productName",
+          t1.picture_url as "pictureUrl",
+          (select count(tp.org_id) from tb_service_product tp where tp.org_id is not null  and  tp.product_name = t1.product_name group by tp.product_name) as "orgCount",
+          count(t2.advisor_account) as "advisorCount",
+          count(t3.product_id) as "ratingCount"
+          from tb_service_product t1
+          left join tb_service_and_advisor t2 on t1.product_id = t2.product_id
+          left join tb_service_rating t3 on  t1.product_id = t3.product_id
+          where t1.org_id  is not null
+          group by t1.product_name order by 'orgCount','advisorCount','ratingCount'
+    </select>
 </mapper>

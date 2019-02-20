@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.product.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
@@ -109,5 +110,23 @@ public class ServiceProductController extends BaseController {
         PaginationData data =   productService.featuredProductRelease(constraint);
         return new Result(data);
 
+    }
+    @ControllerLog(doAction = "编辑修改常规服务产品")
+    @ApiOperation(value ="修改常规服务产品",httpMethod = "POST",response = Result.class,notes = "编辑常规产品时,1、产品类型、业务领域、相关机构和相关顾问是不可编辑项")
+//    @RequiresPermissions("/servicemarket/product/modifyCommonService")
+    @RequestMapping(value = "/modifyCommonService")
+    public Result modifyCommonService(@RequestBody @Validated ServiceContent content){
+        Assert.notNull(content.getProductId(), ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        User user =  (User) SecurityUtils.getSubject().getPrincipal();
+        productService.modifyCommonService(content,user.getAccount());
+        return new Result();
+    }
+    @ControllerLog(doAction = "服务超市首页,热门产品")
+    @ApiOperation(value ="服务超市首页,热门产品",httpMethod = "POST",response = Result.class)
+//    @RequiresPermissions("/servicemarket/product/findHotProducts")
+    @RequestMapping(value = "/findHotProducts")
+    public Result findHotProducts(@RequestBody  Page page){
+       PaginationData data = productService.findHotProducts(page);
+        return new Result(data);
     }
 }

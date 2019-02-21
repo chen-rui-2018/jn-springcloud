@@ -1,4 +1,4 @@
-package com.jn.message;
+package com.jn.news.message;
 
 import com.jn.common.channel.MessageSink;
 import org.slf4j.Logger;
@@ -16,13 +16,13 @@ import org.springframework.cloud.stream.annotation.StreamListener;
  * @modified By:
  */
 @EnableBinding({MessageSink.class })
-public class AppSink {
+public class WetChatSink {
 
-    private static Logger log = LoggerFactory.getLogger(AppSink.class);
+    private static Logger log = LoggerFactory.getLogger(WetChatSink.class);
 
-    @StreamListener(MessageSink.APP)
-    public void listenApp(String appBody) {
-        log.info("收到App的信息:{}",appBody) ;
+    @StreamListener(MessageSink.WET_CHAT)
+    public void listenWetChat(String wetChatBody) {
+        log.info("收到WET_CHAT的信息:{}",wetChatBody) ;
        // throw new JnSpringCloudException(CommonExceptionEnum.UN_KNOW);
         // TODO: 2018/11/8 请陈苗按这个模式来完成异步的功能
 

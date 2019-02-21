@@ -7,14 +7,22 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 个人用户扩展信息
+ * 用户扩展信息
  * @Author: yangph
  * @Date: 2018/12/10 15:41
  * @Version v1.0
  * @modified By:
  */
 @ApiModel(value = "UserExtension", description = "个人用户扩展信息")
-public class UserPerson implements Serializable {
+public class UserExtensionInfo implements Serializable {
+    @ApiModelProperty(value = "所属机构编码")
+    private String affiliateCode;
+    @ApiModelProperty(value = "所属机构名称")
+    private String affiliateName;
+    @ApiModelProperty(value = "所属企业编码")
+    private String companyCode;
+    @ApiModelProperty(value = "所属企业名称")
+    private String companyName;
     @ApiModelProperty(value = "账号")
     private String account;
     @ApiModelProperty(value = "手机号")
@@ -23,6 +31,8 @@ public class UserPerson implements Serializable {
     private String email;
     @ApiModelProperty(value = "姓名")
     private String name;
+    @ApiModelProperty(value = "呢称")
+    private String nickName;
     @ApiModelProperty(value = "性别")
     private String sex;
     @ApiModelProperty(value = "年龄")
@@ -57,6 +67,39 @@ public class UserPerson implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
+    public String getAffiliateCode() {
+        return affiliateCode;
+    }
+
+    public void setAffiliateCode(String affiliateCode) {
+        this.affiliateCode = affiliateCode;
+    }
+
+    public String getAffiliateName() {
+        return affiliateName;
+    }
+
+    public void setAffiliateName(String affiliateName) {
+        this.affiliateName = affiliateName;
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
     public String getAccount() {
         return account;
     }
@@ -87,6 +130,14 @@ public class UserPerson implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getSex() {
@@ -211,11 +262,16 @@ public class UserPerson implements Serializable {
 
     @Override
     public String toString() {
-        return "UserPerson{" +
-                "account='" + account + '\'' +
+        return "UserExtensionInfo{" +
+                "affiliateCode='" + affiliateCode + '\'' +
+                ", affiliateName='" + affiliateName + '\'' +
+                ", companyCode='" + companyCode + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", account='" + account + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", name='" + name + '\'' +
+                ", nickName='" + nickName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", age=" + age +
                 ", idCard='" + idCard + '\'' +

@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.product.dao;
 import com.jn.enterprise.servicemarket.product.model.HotProducts;
 import com.jn.enterprise.servicemarket.product.model.ServiceProductDetail;
 import com.jn.enterprise.servicemarket.product.model.ServiceProductManage;
+import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -61,4 +62,11 @@ public interface ServiceProductDao {
      * @return
      */
     List<HotProducts> findHotProducts();
+
+    /**
+     * web前台服务产品详情
+     * @param productId
+     * @return
+     */
+    WebServiceProductDetails findWebProductDetails(String productId);
 }

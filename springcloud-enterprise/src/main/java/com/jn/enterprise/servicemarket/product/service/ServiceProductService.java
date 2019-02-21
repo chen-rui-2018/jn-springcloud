@@ -71,10 +71,23 @@ public interface ServiceProductService {
     void modifyCommonService(ServiceContent content,String account);
 
     /**
-     * 获得热门产品列表
+     * 前台热门产品列表
      * @param page
      * @return
      */
     PaginationData  findHotProducts(Page page);
 
+    /**
+     * 前台服务产品详情
+     * @param productId
+     * @return
+     */
+    WebServiceProductDetails findWebProductDetails(String productId);
+
+    /**
+     * 前台服务产品列表
+     * @param constraint
+     * @return
+     */
+    PaginationData findWebProductList(ServiceSelectConstraint constraint);
 }

@@ -98,7 +98,7 @@
            t3.con_name as "conName",          <!--联系人名称-->
            t4.service_details as "serviceDetails" <!--服务详情-->
         from tb_service_product t1
-        left join tb_service_org t2 on t1.org_id = t2.ID
+        left join tb_service_org t2 on t1.org_id = t2.org_id
         left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
         left join tb_service_details t4 on t1.product_id = t4.product_id
         where t1.product_id = #{productId,jdbcType=VARCHAR}
@@ -141,16 +141,59 @@
 
     <!--服务超市首页,热门产品-->
     <select id = "findHotProducts" resultType = "com.jn.enterprise.servicemarket.product.model.HotProducts">
-        select
-          t1.product_name as "productName",
-          t1.picture_url as "pictureUrl",
-          (select count(tp.org_id) from tb_service_product tp where tp.org_id is not null  and  tp.product_name = t1.product_name group by tp.product_name) as "orgCount",
-          count(t2.advisor_account) as "advisorCount",
-          count(t3.product_id) as "ratingCount"
+         select
+          t1.product_name as "productName", <!--产品名称-->
+          t1.picture_url as "pictureUrl",   <!--产品图片-->
+          (select count(tp.org_id) from tb_service_product tp where tp.org_id is not null  and  tp.template_id = t1.template_id group by tp.template_id) as "orgCount", <!--机构数-->
+          count(t2.advisor_account) as "advisorCount", <!--顾问数-->
+          count(t3.product_id) as "ratingCount"        <!--评论数-->
           from tb_service_product t1
           left join tb_service_and_advisor t2 on t1.product_id = t2.product_id
           left join tb_service_rating t3 on  t1.product_id = t3.product_id
           where t1.org_id  is not null
-          group by t1.product_name order by 'orgCount','advisorCount','ratingCount'
+          group by t1.template_id order by 'orgCount','advisorCount','ratingCount'
+    </select>
+
+    <!--web前台服务产品详情-->
+    <select id="findWebProductDetails" resultType = "com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails">
+     select
+           tt.productId,        <!--产品id-->
+           tt.serialNumber,     <!--产品编号-->
+           tt.advisorName,      <!--符文名称-->
+           tt.orgName,          <!--机构名称-->
+           tt.productName,      <!--产品名称-->
+           tt.referPrice,       <!--参考价格-->
+           tt.serviceCycle,     <!--服务周期-->
+           tt.pictureUrl,       <!--产品图片-->
+           tt.serviceDetails,   <!--服务详情-->
+           tt.viewCount,        <!--浏览次数-->
+           tt.transactionsNumber, <!--交易次数-->
+           round((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4,1 )AS "evaluationScore" <!--综合评分-->
+        from (
+            select
+                t1.product_id as "productId",
+                t1.product_name as "productName",
+                t1.serial_number as "serialNumber",
+                t1.refer_price as "referPrice",
+                t1.service_cycle as "serviceCycle",
+                t1.view_count as "viewCount",
+        t1.picture_url as "pictureUrl",
+                t2.org_name as "orgName",
+                (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
+                select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = #{productId}
+                )) as "advisorName",
+                t3.service_details as "serviceDetails",
+                count(t4.product_id) as "transactionsNumber",
+                IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore",
+                IFNULL(AVG(t5.`profession_score`),0) AS "professionScore",
+                IFNULL(AVG(t5.`response_score`),0) AS "responseScore",
+                IFNULL(AVG(t5.`price_score`),0)AS "priceScore"
+                from tb_service_product t1
+                left join  tb_service_org t2 on  t2.org_id= t1.org_id
+                left join  tb_service_details t3 on t1.product_id = t3.product_id
+                left join  tb_service_transaction t4 on t1.product_id = t4.product_id
+                left join  tb_service_rating t5 on t5.product_id = t1.product_id
+                where t1.product_id = #{productId} group by t4.product_id,t5.product_id
+        )tt;
     </select>
 </mapper>

@@ -47,12 +47,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Autowired
     private ServiceAdvisorDao advisorDao;
 
-    /**
-     * 添加服务产品
-     * @param content
-     * @param account
-     * @return
-     */
+
     @ServiceLog(doAction = "添加服务产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -106,11 +101,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         return productId;
     }
 
-    /**
-     * 后台服务产品管理-服务产品列表
-     * @param constraint
-     * @return
-     */
+
     @ServiceLog(doAction = "后台服务产品管理-服务产品列表")
     @Override
     public PaginationData findServiceList(ServiceSelectConstraint constraint) {
@@ -125,11 +116,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         return new PaginationData(productList,object==null?0:object.getTotal());
     }
 
-    /**
-     * 上架常规产品
-     * @param commonService
-     * @param account
-     */
+
     @ServiceLog(doAction = "上架常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -151,11 +138,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         addServiceProduct(content,account);
     }
 
-    /**
-     * 查询服务产品详情
-     * @param productId
-     * @return
-     */
+
     @ServiceLog(doAction = "查询服务产品详情")
     @Override
     public ServiceProductDetail findServiceDetail(String productId) {
@@ -163,10 +146,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         return detail;
     }
 
-    /**
-     * 服务产品审核
-     * @param approval
-     */
+
     @ServiceLog(doAction = "服务产品审核")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -182,11 +162,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         productDao.productApproval(approval.getProductId(),approval.getStatus(),approval.getApprovalComments(),account);
     }
 
-    /**
-     * 服务产品上下架
-     * @param approval
-     * @param account
-     */
+
     @ServiceLog(doAction = "服务产品上下架")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -194,11 +170,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         productDao.productShelf(approval.getProductId(),approval.getStatus(),account);
     }
 
-    /**
-     * 特色服务产品发布,产品列表
-     * @param constraint
-     * @return
-     */
+
     @ServiceLog(doAction = "特色服务产品发布,产品列表")
     @Override
     public PaginationData featuredProductRelease(ServiceSelectConstraint constraint) {
@@ -215,11 +187,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
     }
 
-    /**
-     * 编辑常规服务产品
-     * @param content
-     * @param account
-     */
+
     @ServiceLog(doAction = "编辑常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -250,6 +218,18 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         Page<Object> object = PageHelper.startPage(page.getPage(),page.getRows());
        List<HotProducts> products =  productDao.findHotProducts();
         return new PaginationData(products,object==null?0:object.getTotal());
+    }
+    @ServiceLog(doAction = "web前台服务产品详情")
+    @Override
+    public WebServiceProductDetails findWebProductDetails(String productId) {
+        WebServiceProductDetails details= productDao.findWebProductDetails(productId);
+        return details;
+    }
+
+    @Override
+    public PaginationData findWebProductList(ServiceSelectConstraint constraint) {
+//        productDao.findWebProductList();
+        return null;
     }
 
 

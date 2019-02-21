@@ -12,12 +12,14 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "服务产品管理")
 @RestController
-@RequestMapping(value = "/servicemarket/product")
-public class ServiceProductController extends BaseController {
+@RequestMapping(value = "/servicemarket/product/manage/")
+public class ServiceProductManageController extends BaseController {
     @Autowired
    private  ServiceProductService productService;
 
@@ -77,7 +79,7 @@ public class ServiceProductController extends BaseController {
     @ApiOperation(value = "服务产品详情查看", httpMethod = "POST", response = Result.class)
 //    @RequiresPermissions("/servicemarket/product/findServiceDetail")
     @RequestMapping(value = "/findServiceDetail")
-    public Result findServiceDetail(String productId){
+    public Result findServiceDetail(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
         Assert.notNull(productId, ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         ServiceProductDetail detail =  productService.findServiceDetail(productId);
         return new Result(detail);
@@ -121,12 +123,5 @@ public class ServiceProductController extends BaseController {
         productService.modifyCommonService(content,user.getAccount());
         return new Result();
     }
-    @ControllerLog(doAction = "服务超市首页,热门产品")
-    @ApiOperation(value ="服务超市首页,热门产品",httpMethod = "POST",response = Result.class)
-//    @RequiresPermissions("/servicemarket/product/findHotProducts")
-    @RequestMapping(value = "/findHotProducts")
-    public Result findHotProducts(@RequestBody  Page page){
-       PaginationData data = productService.findHotProducts(page);
-        return new Result(data);
-    }
+
 }

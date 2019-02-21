@@ -18,6 +18,8 @@ public class HotProducts  implements Serializable {
     private String  productName;
     @ApiModelProperty(value = "产品图片路径")
     private String  pictureUrl;
+    @ApiModelProperty(value = "服务产品参考价格范围")
+    private String referPrice;
     @ApiModelProperty(value = "机构个数")
     private Integer orgCount;
     @ApiModelProperty(value = "顾问人数")
@@ -63,5 +65,13 @@ public class HotProducts  implements Serializable {
 
     public void setRatingCount(Integer ratingCount) {
         this.ratingCount = ratingCount;
+    }
+
+    public String getReferPrice() {
+        return referPrice;
+    }
+
+    public void setReferPrice(String referPrice) {
+        this.referPrice = referPrice;
     }
 }

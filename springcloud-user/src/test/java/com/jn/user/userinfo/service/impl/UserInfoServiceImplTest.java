@@ -1,7 +1,9 @@
 package com.jn.user.userinfo.service.impl;
 
 import com.jn.SpringCloudUserApplication;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserAffiliateInfo;
+import com.jn.user.model.UserCompanyInfo;
+import com.jn.user.model.UserExtensionInfo;
 import com.jn.user.userinfo.service.UserInfoService;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,13 +45,31 @@ public class UserInfoServiceImplTest {
 
     private List<String>accountList=new ArrayList<>();
 
+    private UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
+
+    private UserCompanyInfo userCompanyInfo=new UserCompanyInfo();
+
 
     @Before
     public void setUp() throws Exception {
+        //获取用户扩展信息
         account="wangsong";
-        accountList.add("wangsong");
+
+        //批量获取用户扩展信息
+        accountList.add(account);
         accountList.add("qianqi");
         accountList.add("account01");
+
+        //更新用户所属机构信息
+        userAffiliateInfo.setAccount(account);
+        userAffiliateInfo.setAffiliateCode("011111");
+        userAffiliateInfo.setAffiliateName("江苏工业园");
+
+        //更新用户所属企业信息
+        userCompanyInfo.setAccount(account);
+        userCompanyInfo.setCompanyCode("032222");
+        userCompanyInfo.setCompanyName("江苏工业园企业");
+
     }
 
     /**
@@ -57,15 +77,9 @@ public class UserInfoServiceImplTest {
      */
     @Test
     public void getUserExtension() {
-        UserExtension userInfo = userInfoService.getUserExtension(account);
+        UserExtensionInfo userInfo = userInfoService.getUserExtension(account);
         if(userInfo!=null){
-            if(userInfo.getUserPersonInfo()!=null){
-                logger.info(userInfo.getUserPersonInfo().toString());
-            }else if(userInfo.getUserCompanyInfo()!=null){
-                logger.info(userInfo.getUserCompanyInfo().toString());
-            }else {
-                logger.info("用户信息不存在或已被删除");
-            }
+            logger.info(userInfo.toString());
         }else{
             logger.info("用户信息不存在或已被删除");
         }
@@ -77,16 +91,34 @@ public class UserInfoServiceImplTest {
      */
     @Test
     public void getMoreUserExtension() {
-        List<UserExtension> userInfoList = userInfoService.getMoreUserExtension(accountList);
-        if(userInfoList!=null){
-            for(UserExtension userInfo:userInfoList){
-                if(userInfo.getUserPersonInfo()!=null){
-                    logger.info(userInfo.getUserPersonInfo().toString());
-                }else if(userInfo.getUserCompanyInfo()!=null){
-                    logger.info(userInfo.getUserCompanyInfo().toString());
+        List<UserExtensionInfo> userInfoList = userInfoService.getMoreUserExtension(accountList);
+        if (userInfoList != null) {
+            for (UserExtensionInfo userInfo : userInfoList) {
+                if (userInfo != null) {
+                    logger.info(userInfo.toString());
                 }
             }
+            assertThat(userInfoList, anything());
         }
-        assertThat(userInfoList, anything());
+    }
+
+    /**
+     * 更新用户所属机构信息
+     */
+    @Test
+    public void updateAffiliateInfo(){
+        boolean b = userInfoService.updateAffiliateInfo(userAffiliateInfo);
+        logger.info("更新用户所属机构信息是否成功：{}",b);
+        assertThat(b, anything());
+    }
+
+    /**
+     * 更新用户所属企业信息
+     */
+    @Test
+    public void updateCompanyInfo(){
+        boolean b = userInfoService.updateCompanyInfo(userCompanyInfo);
+        logger.info("更新用户所属企业信息是否成功：{}",b);
+        assertThat(b, anything());
     }
 }

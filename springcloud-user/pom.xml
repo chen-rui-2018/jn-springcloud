@@ -58,8 +58,7 @@
                         userExtension
                     </contexts>
                     <tableNames>
-                        tb_user_person,
-                        tb_user_company
+                        tb_user_person
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

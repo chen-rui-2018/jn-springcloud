@@ -6,6 +6,14 @@ import java.util.Date;
 public class TbUserPerson implements Serializable {
     private String id;
 
+    private String affiliateCode;
+
+    private String affiliateName;
+
+    private String companyCode;
+
+    private String companyName;
+
     private String account;
 
     private String phone;
@@ -13,6 +21,8 @@ public class TbUserPerson implements Serializable {
     private String email;
 
     private String name;
+
+    private String nickName;
 
     private String sex;
 
@@ -54,6 +64,38 @@ public class TbUserPerson implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
+    public String getAffiliateCode() {
+        return affiliateCode;
+    }
+
+    public void setAffiliateCode(String affiliateCode) {
+        this.affiliateCode = affiliateCode == null ? null : affiliateCode.trim();
+    }
+
+    public String getAffiliateName() {
+        return affiliateName;
+    }
+
+    public void setAffiliateName(String affiliateName) {
+        this.affiliateName = affiliateName == null ? null : affiliateName.trim();
+    }
+
+    public String getCompanyCode() {
+        return companyCode;
+    }
+
+    public void setCompanyCode(String companyCode) {
+        this.companyCode = companyCode == null ? null : companyCode.trim();
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName == null ? null : companyName.trim();
+    }
+
     public String getAccount() {
         return account;
     }
@@ -84,6 +126,14 @@ public class TbUserPerson implements Serializable {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName == null ? null : nickName.trim();
     }
 
     public String getSex() {
@@ -219,10 +269,15 @@ public class TbUserPerson implements Serializable {
         }
         TbUserPerson other = (TbUserPerson) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getAffiliateCode() == null ? other.getAffiliateCode() == null : this.getAffiliateCode().equals(other.getAffiliateCode()))
+            && (this.getAffiliateName() == null ? other.getAffiliateName() == null : this.getAffiliateName().equals(other.getAffiliateName()))
+            && (this.getCompanyCode() == null ? other.getCompanyCode() == null : this.getCompanyCode().equals(other.getCompanyCode()))
+            && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getAccount() == null ? other.getAccount() == null : this.getAccount().equals(other.getAccount()))
             && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getEmail() == null ? other.getEmail() == null : this.getEmail().equals(other.getEmail()))
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+            && (this.getNickName() == null ? other.getNickName() == null : this.getNickName().equals(other.getNickName()))
             && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
             && (this.getAge() == null ? other.getAge() == null : this.getAge().equals(other.getAge()))
             && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
@@ -245,10 +300,15 @@ public class TbUserPerson implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getAffiliateCode() == null) ? 0 : getAffiliateCode().hashCode());
+        result = prime * result + ((getAffiliateName() == null) ? 0 : getAffiliateName().hashCode());
+        result = prime * result + ((getCompanyCode() == null) ? 0 : getCompanyCode().hashCode());
+        result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getAccount() == null) ? 0 : getAccount().hashCode());
         result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getEmail() == null) ? 0 : getEmail().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
+        result = prime * result + ((getNickName() == null) ? 0 : getNickName().hashCode());
         result = prime * result + ((getSex() == null) ? 0 : getSex().hashCode());
         result = prime * result + ((getAge() == null) ? 0 : getAge().hashCode());
         result = prime * result + ((getIdCard() == null) ? 0 : getIdCard().hashCode());
@@ -274,10 +334,15 @@ public class TbUserPerson implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", affiliateCode=").append(affiliateCode);
+        sb.append(", affiliateName=").append(affiliateName);
+        sb.append(", companyCode=").append(companyCode);
+        sb.append(", companyName=").append(companyName);
         sb.append(", account=").append(account);
         sb.append(", phone=").append(phone);
         sb.append(", email=").append(email);
         sb.append(", name=").append(name);
+        sb.append(", nickName=").append(nickName);
         sb.append(", sex=").append(sex);
         sb.append(", age=").append(age);
         sb.append(", idCard=").append(idCard);

@@ -112,7 +112,7 @@ public class AdvisorServiceImplTest {
      */
     @Test
     public void getServcieRatingInfo(){
-        PaginationData pageData = advisorService.getServcieRatingInfo(serviceEvaluationQuery);
+        PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
         if(pageData.getRows()!=null){
             List<ServiceRating> serviceRatingList=(List<ServiceRating> )pageData.getRows();
             for(ServiceRating serviceRating:serviceRatingList){

@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.servicemarket.org.dao.ServiceOrgMapper">
-    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.model.ServiceOrgParment"
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
+    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.model.OrgParameter"
             resultType="com.jn.enterprise.servicemarket.model.ServiceOrg">
-        select
+        select tt.id,tt.orgName,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,
+        tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.professionScore,
+        tt.responseScore,tt.priceScore,tt.evaluationNum from
+        (select
         a.id as "id",a.org_name as "orgName",
         date_format(a.org_register_time,'%Y-%m-%d %H:%i:%s') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
         CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
-        (select count(1) from tb_service_transaction t where t.org_id = a.id ) as "transactionCount"
+        (select count(1) from tb_service_transaction t where t.org_id = a.id ) as "transactionNum"<!-- 累计交易数-->
+        ,IFNULL(AVG(ra.`attitude_score`),0) AS "attitudeScore"		      <!-- 服务态度评分-->
+        ,IFNULL(AVG(ra.`profession_score`),0) AS "professionScore"         <!-- 服务专业评分-->
+        ,IFNULL(AVG(ra.`response_score`),0) AS "responseScore"		      <!-- 服务响应评分-->
+        ,IFNULL(AVG(ra.`price_score`),0)AS "priceScore"			          <!-- 服务价格评分-->
+        ,COUNT(ra.`attitude_score`) AS "evaluationNum"<!-- 评价次数-->
         from tb_service_org a left join tb_service_org_info i on a.id = i.org_id
+        left join tb_service_rating ra on ra.org_id = a.id
         where 1=1 and a.record_status != '0'
         <if test="businessType != null and businessType != ''">
             and a.business_type = #{businessType}
@@ -23,9 +32,27 @@
         <if test="orgBusiness != null and orgBusiness != ''">
             and a.org_business = #{orgBusiness}
         </if>
+        <if test="sortTypes =='popularity'">
+            ORDER BY <!-- 人气排序-->
+            a.org_show DESC   <!-- 浏览量-->
+        </if>
+        )tt
+        <if test="sortTypes =='integrate' or sortTypes ==null or sortTypes == ''">
+            ORDER BY <!-- 综合排序-->
+            ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
+        </if>
+
+        <if test="sortTypes =='praise'">
+            ORDER BY  <!-- 好评排序-->
+            ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4) DESC   <!--评价等级-->
+        </if>
+        <if test="sortTypes =='serviceNum'">
+            ORDER BY <!-- 服务量排序-->
+            tt.transactionNum DESC <!-- 累计交易数-->
+        </if>
     </select>
 
-    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.model.ServiceOrgDetail">
+    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.model.OrgDetail">
         <id column="s_id" jdbcType="VARCHAR" property="id"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
@@ -50,12 +77,12 @@
         <result column="s_orgAddress" jdbcType="VARCHAR" property="orgAddress" javaType="java.lang.String"/>
         <result column="s_conName" jdbcType="VARCHAR" property="conName" javaType="java.lang.String"/>
         <result column="s_conPhone" jdbcType="VARCHAR" property="conPhone" javaType="java.lang.String"/>
-        <result column="s_s_conEmail" jdbcType="VARCHAR" property="s_conEmail" javaType="java.lang.String"/>
+        <result column="s_conEmail" jdbcType="VARCHAR" property="conEmail" javaType="java.lang.String"/>
         <result column="s_orgRegisterTime" jdbcType="VARCHAR" property="orgRegisterTime" javaType="java.lang.String"/>
         <result column="s_orgLogo" jdbcType="VARCHAR" property="orgLogo" javaType="java.lang.String"/>
         <!-- 执业标签 -->
         <collection property="orgLicenses" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.ServiceOrgLicense">
+                    ofType="com.jn.enterprise.servicemarket.model.OrgLicense">
             <id column="st_id" property="id" jdbcType="VARCHAR"/>
             <result column="st_certName" property="certName" jdbcType="VARCHAR"/>
             <result column="st_fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
@@ -63,9 +90,9 @@
             <result column="st_awardTime" property="awardTime" jdbcType="VARCHAR"/>
             <result column="st_certType" property="certType" jdbcType="VARCHAR"/>
         </collection>
-        <!-- 荣誉资质 -->
+        <!-- 执业资质 -->
         <collection property="honorLicense" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.ServiceOrgLicense">
+                    ofType="com.jn.enterprise.servicemarket.model.OrgLicense">
             <id column="st_id" property="id" jdbcType="VARCHAR"/>
             <result column="sh_certName" property="certName" jdbcType="VARCHAR"/>
             <result column="sh_fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
@@ -73,70 +100,68 @@
             <result column="sh_awardTime" property="awardTime" jdbcType="VARCHAR"/>
             <result column="sh_certType" property="certType" jdbcType="VARCHAR"/>
         </collection>
-        <!-- 荣誉资质 -->
+        <!-- 团队信息 -->
         <collection property="orgTeams" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.ServiceOrgTeam">
+                    ofType="com.jn.enterprise.servicemarket.model.OrgTeam">
             <id column="te_id" property="id" jdbcType="VARCHAR"/>
-            <id column="te_orgId" property="orgId" jdbcType="VARCHAR"/>
+            <result column="te_orgId" property="orgId" jdbcType="VARCHAR"/>
             <result column="te_conName" property="conName" jdbcType="VARCHAR"/>
             <result column="te_conPosition" property="conPosition" jdbcType="VARCHAR"/>
             <result column="te_conQuali" property="conQuali" jdbcType="VARCHAR"/>
             <result column="te_conTime" property="conTime" jdbcType="VARCHAR"/>
             <result column="te_conSpeciality" property="conSpeciality" jdbcType="VARCHAR"/>
         </collection>
-
-
-
     </resultMap>
 
     <!--查看服务商详情-->
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap">
         SELECT
-          o.id AS s_id,
-          o.business_type AS s_businessType,
-          o.business_s_type AS s_businessSType,
-          o.org_name AS s_orgName,
-          o.org_business AS s_orgBusiness,
-          o.org_synopsis AS s_orgSynopsis,
-          o.org_show AS s_orgShow,
-          (SELECT COUNT(1) FROM tb_service_transaction tr WHERE tr.org_id = o.id) AS s_transactionCount,
+          o.id AS "s_id",
+          o.business_type AS "s_businessType",
+          o.business_s_type AS "s_businessSType",
+          o.org_name AS "s_orgName",
+          o.org_business AS "s_orgBusiness",
+          o.org_synopsis AS "s_orgSynopsis",
+          o.org_show AS "s_orgShow",
+          (SELECT COUNT(1) FROM tb_service_transaction tr WHERE tr.org_id = o.id) AS "s_transactionCount",
           (SELECT((SUM(attitude_score) + SUM(profession_score) + SUM(response_score) + SUM(price_score)) / 4) / COUNT(1)
-          FROM tb_service_rating ra WHERE ra.comment_obj_id = o.id) AS s_orgServiceScore,
-          o.org_hobby AS s_orgHobby,
-          o.org_speciality AS s_orgSpeciality,
-          o.operate_status AS s_operateStatus,
-          o.org_principal AS s_orgPrincipal,
-          o.org_code AS s_orgCode,
-          el.staff_count AS s_staffCount,
-          el.profession_num AS s_professionNum,
-          el.bachelor_num AS s_bachelorNum,
-          el.master_num AS s_masterNum,
-          el.doctor_num AS s_doctorNum,
-          el.returnee_num AS s_returneeNum,
-          i.org_phone AS s_orgPhone,
+          FROM tb_service_rating ra WHERE ra.org_id = o.id) AS "s_orgServiceScore",
+          o.org_hobby AS "s_orgHobby",
+          o.org_speciality AS "s_orgSpeciality",
+          o.operate_status AS "s_operateStatus",
+          o.org_principal AS "s_orgPrincipal",
+          o.org_code AS "s_orgCode",
+          el.staff_count AS "s_staffCount",
+          el.profession_num AS "s_professionNum",
+          el.bachelor_num AS "s_bachelorNum",
+          el.master_num AS "s_masterNum",
+          el.doctor_num AS "s_doctorNum",
+          el.returnee_num AS "s_returneeNum",
+          i.org_phone AS "s_orgPhone",
           CONCAT(
             i.org_province,
             i.org_city,
             i.org_area,
             i.org_address
-          ) AS s_orgAddress,
-          i.con_name AS s_conName,
-          i.con_phone AS s_conPhone,
-          i.con_email AS s_conEmail,
-          date_format(o.org_register_time,'%Y-%m-%d')  AS s_s_orgRegisterTime,
-          o.org_logo AS s_orgLogo,
-          li.id AS st_id,
-          li.cert_name AS sh_certName,
-          li.file_url AS sh_fileUrl,
-          li.is_features AS sh_isFeatures,
-          date_format(li.award_time,'%Y-%m-%d') AS sh_awardTime,
-          li.cert_type AS sh_certType,
-          te.id as te_id,
-          te.con_name as te_conName,
-          te.con_position as te_conPosition,
-          te.con_quali as te_conQuali,
-          date_format(te.con_time,'%Y-%m-%d') as te_conTime,
-          te.con_speciality as te_conSpeciality
+          ) AS "s_orgAddress",
+          i.con_name AS "s_conName",
+          i.con_phone AS "s_conPhone",
+          i.con_email AS "s_conEmail",
+          date_format(o.org_register_time,'%Y-%m-%d')  AS "s_orgRegisterTime",
+          o.org_logo AS "s_orgLogo",
+          li.id AS "st_id",
+          li.cert_name AS "sh_certName",
+          li.file_url AS "sh_fileUrl",
+          li.is_features "AS sh_isFeatures",
+          date_format(li.award_time,'%Y-%m-%d') AS "sh_awardTime",
+          li.cert_type AS "sh_certType",
+          te.id as "te_id",
+          te.org_id as "te_orgId",
+          te.con_name as "te_conName",
+          te.con_position as "te_conPosition",
+          te.con_quali as "te_conQuali",
+          date_format(te.con_time,'%Y-%m-%d') as "te_conTime",
+          te.con_speciality as "te_conSpeciality"
         FROM
           tb_service_org o
           LEFT JOIN tb_service_org_license lic
@@ -148,7 +173,7 @@
           LEFT JOIN tb_service_org_info i
             ON i.org_id = o.id and i.record_status = 1
           left join tb_service_org_team te on te.org_id = o.id and te.record_status = 1
-        where o.record_status = 1 and o.id={orgId}
+        where o.record_status = 1
     </select>
 
 

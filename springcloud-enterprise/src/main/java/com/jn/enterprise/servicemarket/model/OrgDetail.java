@@ -12,8 +12,8 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceOrgDetail",description = "服务机构详情")
-public class ServiceOrgDetail {
+@ApiModel(value = "OrgDetail",description = "服务机构详情")
+public class OrgDetail {
     @ApiModelProperty(value = "服务机构id")
     private String id;
 
@@ -42,7 +42,7 @@ public class ServiceOrgDetail {
     private String orgServiceScore;
 
     @ApiModelProperty(value = "机构服务资质标签")
-    private List<ServiceOrgLicense> orgLicenses;
+    private List<OrgLicense> orgLicenses;
 
     @ApiModelProperty("客户偏好")
     private String orgHobby;
@@ -100,10 +100,10 @@ public class ServiceOrgDetail {
     private Integer returneeNum;
 
     @ApiModelProperty(value = "荣誉证书列表")
-    private List<ServiceOrgLicense> honorLicense;
+    private List<OrgLicense> honorLicense;
 
     @ApiModelProperty(value = "机构人员列表")
-    private List<ServiceOrgTeam> orgTeams;
+    private List<OrgTeam> orgTeams;
 
     public String getId() {
         return id;
@@ -321,27 +321,27 @@ public class ServiceOrgDetail {
         this.returneeNum = returneeNum;
     }
 
-    public List<ServiceOrgLicense> getOrgLicenses() {
+    public List<OrgLicense> getOrgLicenses() {
         return orgLicenses;
     }
 
-    public void setOrgLicenses(List<ServiceOrgLicense> orgLicenses) {
+    public void setOrgLicenses(List<OrgLicense> orgLicenses) {
         this.orgLicenses = orgLicenses;
     }
 
-    public List<ServiceOrgLicense> getHonorLicense() {
+    public List<OrgLicense> getHonorLicense() {
         return honorLicense;
     }
 
-    public void setHonorLicense(List<ServiceOrgLicense> honorLicense) {
+    public void setHonorLicense(List<OrgLicense> honorLicense) {
         this.honorLicense = honorLicense;
     }
 
-    public List<ServiceOrgTeam> getOrgTeams() {
+    public List<OrgTeam> getOrgTeams() {
         return orgTeams;
     }
 
-    public void setOrgTeams(List<ServiceOrgTeam> orgTeams) {
+    public void setOrgTeams(List<OrgTeam> orgTeams) {
         this.orgTeams = orgTeams;
     }
 }

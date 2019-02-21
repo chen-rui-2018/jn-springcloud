@@ -1,31 +1,32 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
+import com.jn.enterprise.servicemarket.model.OrgDetail;
+import com.jn.enterprise.servicemarket.model.OrgParameter;
 import com.jn.enterprise.servicemarket.model.ServiceOrg;
-import com.jn.enterprise.servicemarket.model.ServiceOrgDetail;
-import com.jn.enterprise.servicemarket.model.ServiceOrgParment;
 
 import java.util.List;
 
 /**
+ * 服务机构Mapper
  * @author： jiangyl
  * @date： Created on 2019/2/13 14:58
  * @version： v1.0
  * @modified By:
  */
-public interface ServiceOrgMapper {
+public interface OrgMapper {
 
     /**
      * 查询服务机构列表
-     * @param parment
+     * @param parameter
      * @return
      */
-    List<ServiceOrg> selectServiceOrgList(ServiceOrgParment parment);
+    List<ServiceOrg> selectServiceOrgList(OrgParameter parameter);
 
     /**
      * 根据机构ID查询机构详情
      * @param orgId
      * @return
      */
-    ServiceOrgDetail getServiceOrgDetail(String orgId);
+    OrgDetail getServiceOrgDetail(String orgId);
 
 }

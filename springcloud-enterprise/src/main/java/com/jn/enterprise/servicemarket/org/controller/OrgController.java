@@ -3,8 +3,8 @@ package com.jn.enterprise.servicemarket.org.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.enterprise.servicemarket.model.ServiceOrgParment;
-import com.jn.enterprise.servicemarket.org.service.ServiceOrgService;
+import com.jn.enterprise.servicemarket.model.OrgParameter;
+import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,23 +28,23 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "服务机构(前台用户)")
 @RestController
-@RequestMapping(value = "/serviceMarket/org")
-public class ServiceOrgController extends BaseController {
+@RequestMapping(value = "/guest/serviceMarket/org")
+public class OrgController extends BaseController {
     /**
      * 日志组件
      */
-    private static Logger logger = LoggerFactory.getLogger(ServiceOrgController.class);
+    private static Logger logger = LoggerFactory.getLogger(OrgController.class);
 
     @Autowired
-    private ServiceOrgService orgService;
+    private OrgService orgService;
 
 
     @ControllerLog(doAction = "获取服务机构列表")
     @ApiOperation(value = "获取服务机构列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectServiceOrgList")
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
-    public Result selectServiceOrgList(@RequestBody @Validated ServiceOrgParment orgParment){
-        PaginationData paginationData = orgService.selectServiceOrgList(orgParment);
+    public Result selectServiceOrgList(@RequestBody @Validated OrgParameter orgParameter){
+        PaginationData paginationData = orgService.selectServiceOrgList(orgParameter);
         return new Result(paginationData);
     }
 
@@ -53,7 +53,8 @@ public class ServiceOrgController extends BaseController {
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
-    public Result getServiceOrgDetail(@ApiParam(name="activityId",value = "服务机构ID",required = true)@RequestParam String orgId){
+    public Result getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam String orgId){
+
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
 

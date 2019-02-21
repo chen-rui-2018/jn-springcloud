@@ -10,8 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceOrgTeam",description = "服务机构标签")
-public class ServiceOrgTeam {
+@ApiModel(value = "OrgTeam",description = "机构服务团队")
+public class OrgTeam {
 
     @ApiModelProperty(value = "人员ID")
     private String id;

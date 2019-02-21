@@ -10,8 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceOrgLicense",description = "服务机构标签")
-public class ServiceOrgLicense {
+@ApiModel(value = "OrgLicense",description = "服务机构标签")
+public class OrgLicense {
 
     @ApiModelProperty(value = "证书ID")
     private String id;
@@ -28,11 +28,15 @@ public class ServiceOrgLicense {
     @ApiModelProperty(value = "是否是特色标签 0否1是")
     private String isFeatures;
 
-    @ApiModelProperty(value = "颁发时间")
+    @ApiModelProperty(value = "颁发时间 yyyy-MM-dd")
     private String awardTime;
+
+    @ApiModelProperty(value = "颁发部门")
+    private String awardDepart;
 
     @ApiModelProperty(value = "证书类型：1营业执照2执业资质3其他")
     private String certType;
+
 
     public String getId() {
         return id;
@@ -80,6 +84,14 @@ public class ServiceOrgLicense {
 
     public void setAwardTime(String awardTime) {
         this.awardTime = awardTime;
+    }
+
+    public String getAwardDepart() {
+        return awardDepart;
+    }
+
+    public void setAwardDepart(String awardDepart) {
+        this.awardDepart = awardDepart;
     }
 
     public String getCertType() {

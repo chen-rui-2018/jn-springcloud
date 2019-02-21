@@ -36,9 +36,25 @@ public class ServiceOrg implements Serializable {
     @ApiModelProperty(value = "机构地址")
     private String orgAddress;
 
-    @ApiModelProperty(value = "交易次数")
-    private String transactionCount;
-
     @ApiModelProperty(value = "机构LOGO")
     private String orgLogo;
+
+    @ApiModelProperty(value = "服务态度评分")
+    private String attitudeScore;
+    @ApiModelProperty(value = "服务专业评分")
+    private String professionScore;
+    @ApiModelProperty(value = "服务响应评分")
+    private String responseScore;
+    @ApiModelProperty(value = "服务价格评分")
+    private String priceScore;
+    @ApiModelProperty(value = "综合得分")
+    private Integer integratedSort;
+    @ApiModelProperty(value = "评价等级（好评）")
+    private String evaluationLevel;
+    @ApiModelProperty(value = "浏览量（人气）")
+    private Integer pageviews;
+    @ApiModelProperty(value = "累计交易次数（服务量）")
+    private Integer transactionNum;
+    @ApiModelProperty(value = "评价次数")
+    private Integer evaluationNum;
 }

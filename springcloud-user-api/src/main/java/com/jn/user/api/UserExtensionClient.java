@@ -44,6 +44,7 @@ public interface UserExtensionClient {
      * @param userAffiliateInfo
      * @return
      */
+    @RequestMapping(value = "/api/user/updateAffiliateInfo", method = RequestMethod.POST)
     Result updateAffiliateInfo(@RequestBody @Validated UserAffiliateInfo userAffiliateInfo);
 
     /**
@@ -51,5 +52,6 @@ public interface UserExtensionClient {
      * @param userCompanyInfo
      * @return
      */
+    @RequestMapping(value = "/api/user/updateCompanyInfo", method = RequestMethod.POST)
     Result updateCompanyInfo(@RequestBody @Validated UserCompanyInfo userCompanyInfo);
 }

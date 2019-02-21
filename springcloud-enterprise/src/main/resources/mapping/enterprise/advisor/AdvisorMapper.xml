@@ -46,7 +46,6 @@
        ON sa.`advisor_account` = sr.`advisor_account`
        where 1=1
        and sa.approval_status='2'            <!--审批通过-->
-       and sa.identity_type='3'              <!--身份类型是顾问-->
        GROUP BY
        sa.`org_id`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
        sa.`avatar`,sa.`position`,sa.`org_name`,sa.`is_certification`,
@@ -120,7 +119,6 @@
             ON sr.`product_id`=sp.`product_id`
             where 1=1
             and sa.approval_status='2'            <!--审批通过-->
-            and sa.identity_type='3'              <!--身份类型是顾问-->
             GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
                  sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
                  sr.`created_time`,sr.`evaluation_desc`

@@ -245,6 +245,76 @@ public class TbServiceAdvisorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOrgNameIsNull() {
+            addCriterion("org_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIsNotNull() {
+            addCriterion("org_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameEqualTo(String value) {
+            addCriterion("org_name =", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotEqualTo(String value) {
+            addCriterion("org_name <>", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThan(String value) {
+            addCriterion("org_name >", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThanOrEqualTo(String value) {
+            addCriterion("org_name >=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThan(String value) {
+            addCriterion("org_name <", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThanOrEqualTo(String value) {
+            addCriterion("org_name <=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLike(String value) {
+            addCriterion("org_name like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotLike(String value) {
+            addCriterion("org_name not like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIn(List<String> values) {
+            addCriterion("org_name in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotIn(List<String> values) {
+            addCriterion("org_name not in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameBetween(String value1, String value2) {
+            addCriterion("org_name between", value1, value2, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotBetween(String value1, String value2) {
+            addCriterion("org_name not between", value1, value2, "orgName");
+            return (Criteria) this;
+        }
+
         public Criteria andAdvisorAccountIsNull() {
             addCriterion("advisor_account is null");
             return (Criteria) this;
@@ -592,76 +662,6 @@ public class TbServiceAdvisorCriteria {
 
         public Criteria andPositionNotBetween(String value1, String value2) {
             addCriterion("position not between", value1, value2, "position");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameIsNull() {
-            addCriterion("org_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameIsNotNull() {
-            addCriterion("org_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameEqualTo(String value) {
-            addCriterion("org_name =", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameNotEqualTo(String value) {
-            addCriterion("org_name <>", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameGreaterThan(String value) {
-            addCriterion("org_name >", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameGreaterThanOrEqualTo(String value) {
-            addCriterion("org_name >=", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameLessThan(String value) {
-            addCriterion("org_name <", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameLessThanOrEqualTo(String value) {
-            addCriterion("org_name <=", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameLike(String value) {
-            addCriterion("org_name like", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameNotLike(String value) {
-            addCriterion("org_name not like", value, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameIn(List<String> values) {
-            addCriterion("org_name in", values, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameNotIn(List<String> values) {
-            addCriterion("org_name not in", values, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameBetween(String value1, String value2) {
-            addCriterion("org_name between", value1, value2, "orgName");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrgNameNotBetween(String value1, String value2) {
-            addCriterion("org_name not between", value1, value2, "orgName");
             return (Criteria) this;
         }
 
@@ -1542,76 +1542,6 @@ public class TbServiceAdvisorCriteria {
 
         public Criteria andApprovalStatusNotBetween(String value1, String value2) {
             addCriterion("approval_status not between", value1, value2, "approvalStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeIsNull() {
-            addCriterion("identity_type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeIsNotNull() {
-            addCriterion("identity_type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeEqualTo(String value) {
-            addCriterion("identity_type =", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeNotEqualTo(String value) {
-            addCriterion("identity_type <>", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeGreaterThan(String value) {
-            addCriterion("identity_type >", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("identity_type >=", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeLessThan(String value) {
-            addCriterion("identity_type <", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeLessThanOrEqualTo(String value) {
-            addCriterion("identity_type <=", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeLike(String value) {
-            addCriterion("identity_type like", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeNotLike(String value) {
-            addCriterion("identity_type not like", value, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeIn(List<String> values) {
-            addCriterion("identity_type in", values, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeNotIn(List<String> values) {
-            addCriterion("identity_type not in", values, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeBetween(String value1, String value2) {
-            addCriterion("identity_type between", value1, value2, "identityType");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdentityTypeNotBetween(String value1, String value2) {
-            addCriterion("identity_type not between", value1, value2, "identityType");
             return (Criteria) this;
         }
 

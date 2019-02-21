@@ -9,6 +9,8 @@ public class TbServiceAdvisor implements Serializable {
 
     private String orgId;
 
+    private String orgName;
+
     private String advisorAccount;
 
     private String advisorName;
@@ -18,8 +20,6 @@ public class TbServiceAdvisor implements Serializable {
     private String avatar;
 
     private String position;
-
-    private String orgName;
 
     private String isCertification;
 
@@ -46,8 +46,6 @@ public class TbServiceAdvisor implements Serializable {
     private String isHaveSubsidy;
 
     private String approvalStatus;
-
-    private String identityType;
 
     private Date createdTime;
 
@@ -77,6 +75,14 @@ public class TbServiceAdvisor implements Serializable {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId == null ? null : orgId.trim();
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName == null ? null : orgName.trim();
     }
 
     public String getAdvisorAccount() {
@@ -117,14 +123,6 @@ public class TbServiceAdvisor implements Serializable {
 
     public void setPosition(String position) {
         this.position = position == null ? null : position.trim();
-    }
-
-    public String getOrgName() {
-        return orgName;
-    }
-
-    public void setOrgName(String orgName) {
-        this.orgName = orgName == null ? null : orgName.trim();
     }
 
     public String getIsCertification() {
@@ -231,14 +229,6 @@ public class TbServiceAdvisor implements Serializable {
         this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
     }
 
-    public String getIdentityType() {
-        return identityType;
-    }
-
-    public void setIdentityType(String identityType) {
-        this.identityType = identityType == null ? null : identityType.trim();
-    }
-
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -301,12 +291,12 @@ public class TbServiceAdvisor implements Serializable {
         TbServiceAdvisor other = (TbServiceAdvisor) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
+            && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getAdvisorName() == null ? other.getAdvisorName() == null : this.getAdvisorName().equals(other.getAdvisorName()))
             && (this.getBusinessArea() == null ? other.getBusinessArea() == null : this.getBusinessArea().equals(other.getBusinessArea()))
             && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
-            && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getIsCertification() == null ? other.getIsCertification() == null : this.getIsCertification().equals(other.getIsCertification()))
             && (this.getContactEmail() == null ? other.getContactEmail() == null : this.getContactEmail().equals(other.getContactEmail()))
             && (this.getCardType() == null ? other.getCardType() == null : this.getCardType().equals(other.getCardType()))
@@ -320,7 +310,6 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getPageViews() == null ? other.getPageViews() == null : this.getPageViews().equals(other.getPageViews()))
             && (this.getIsHaveSubsidy() == null ? other.getIsHaveSubsidy() == null : this.getIsHaveSubsidy().equals(other.getIsHaveSubsidy()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
-            && (this.getIdentityType() == null ? other.getIdentityType() == null : this.getIdentityType().equals(other.getIdentityType()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -335,12 +324,12 @@ public class TbServiceAdvisor implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
+        result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getAdvisorName() == null) ? 0 : getAdvisorName().hashCode());
         result = prime * result + ((getBusinessArea() == null) ? 0 : getBusinessArea().hashCode());
         result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
-        result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getIsCertification() == null) ? 0 : getIsCertification().hashCode());
         result = prime * result + ((getContactEmail() == null) ? 0 : getContactEmail().hashCode());
         result = prime * result + ((getCardType() == null) ? 0 : getCardType().hashCode());
@@ -354,7 +343,6 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getPageViews() == null) ? 0 : getPageViews().hashCode());
         result = prime * result + ((getIsHaveSubsidy() == null) ? 0 : getIsHaveSubsidy().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
-        result = prime * result + ((getIdentityType() == null) ? 0 : getIdentityType().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -372,12 +360,12 @@ public class TbServiceAdvisor implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orgId=").append(orgId);
+        sb.append(", orgName=").append(orgName);
         sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", advisorName=").append(advisorName);
         sb.append(", businessArea=").append(businessArea);
         sb.append(", avatar=").append(avatar);
         sb.append(", position=").append(position);
-        sb.append(", orgName=").append(orgName);
         sb.append(", isCertification=").append(isCertification);
         sb.append(", contactEmail=").append(contactEmail);
         sb.append(", cardType=").append(cardType);
@@ -391,7 +379,6 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", pageViews=").append(pageViews);
         sb.append(", isHaveSubsidy=").append(isHaveSubsidy);
         sb.append(", approvalStatus=").append(approvalStatus);
-        sb.append(", identityType=").append(identityType);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

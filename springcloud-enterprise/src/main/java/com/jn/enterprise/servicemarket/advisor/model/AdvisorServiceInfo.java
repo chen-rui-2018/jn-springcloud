@@ -16,8 +16,6 @@ import java.util.Date;
  */
 @ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问信息")
 public class AdvisorServiceInfo extends Page implements Serializable {
-    @ApiModelProperty(value = "主键id")
-    private String id;
     @ApiModelProperty(value = "机构ID")
     private String orgId;
     @ApiModelProperty(value = "顾问账号")
@@ -58,8 +56,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     private String isHaveSubsidy;
     @ApiModelProperty(value = "审核状态")
     private String approvalStatus;
-    @ApiModelProperty(value = "身份类型")
-    private String identityType;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     @ApiModelProperty(value = "创建人")
@@ -75,13 +71,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getOrgId() {
         return orgId;
@@ -243,14 +232,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
         this.approvalStatus = approvalStatus;
     }
 
-    public String getIdentityType() {
-        return identityType;
-    }
-
-    public void setIdentityType(String identityType) {
-        this.identityType = identityType;
-    }
-
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -302,7 +283,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     @Override
     public String toString() {
         return "AdvisorServiceInfo{" +
-                "id='" + id + '\'' +
                 ", orgId='" + orgId + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
@@ -323,7 +303,6 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", pageViews=" + pageViews +
                 ", isHaveSubsidy='" + isHaveSubsidy + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
-                ", identityType='" + identityType + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifiedTime=" + modifiedTime +

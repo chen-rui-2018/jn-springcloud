@@ -1,12 +1,14 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceInfo;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * 顾问管理
@@ -30,9 +32,14 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @ServiceLog(doAction = "邀请顾问")
     public void inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo) {
         //1.往顾问信息表添加一条机构和顾问的信息
-        AdvisorServiceInfo advisorServiceInfo=new AdvisorServiceInfo();
+        TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        //主键id
+        tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        //机构id
+        //
 
-        advisorServiceInfo.setAdvisorAccount(inviteAdvisorInfo.getRegisterAccount());
+        //顾问账号
+        tbServiceAdvisor.setAdvisorAccount(inviteAdvisorInfo.getRegisterAccount());
         //2.调用消息接口，向被邀顾问发送短信或邮件（顾问可通过信息中的链接直接跳转到接收机构邀请页面）
     }
 }

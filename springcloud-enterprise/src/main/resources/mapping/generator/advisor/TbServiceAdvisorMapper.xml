@@ -4,12 +4,12 @@
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
     <result column="business_area" jdbcType="VARCHAR" property="businessArea" />
     <result column="avatar" jdbcType="VARCHAR" property="avatar" />
     <result column="position" jdbcType="VARCHAR" property="position" />
-    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="is_certification" jdbcType="VARCHAR" property="isCertification" />
     <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
     <result column="card_type" jdbcType="VARCHAR" property="cardType" />
@@ -23,7 +23,6 @@
     <result column="page_views" jdbcType="INTEGER" property="pageViews" />
     <result column="is_have_subsidy" jdbcType="VARCHAR" property="isHaveSubsidy" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
-    <result column="identity_type" jdbcType="VARCHAR" property="identityType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -92,11 +91,11 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, org_id, advisor_account, advisor_name, business_area, avatar, position, org_name, 
+    id, org_id, org_name, advisor_account, advisor_name, business_area, avatar, position, 
     is_certification, contact_email, card_type, card_number, education, graduated_school, 
     working_years, practice_qualification, good_at_business, transaction_num, page_views, 
-    is_have_subsidy, approval_status, identity_type, created_time, creator_account, modified_time, 
-    modifier_account, record_status
+    is_have_subsidy, approval_status, created_time, creator_account, modified_time, modifier_account, 
+    record_status
   </sql>
   <sql id="Blob_Column_List">
     personal_profile
@@ -150,26 +149,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
-    insert into tb_service_advisor (id, org_id, advisor_account, 
-      advisor_name, business_area, avatar, 
-      position, org_name, is_certification, 
+    insert into tb_service_advisor (id, org_id, org_name, 
+      advisor_account, advisor_name, business_area, 
+      avatar, position, is_certification, 
       contact_email, card_type, card_number, 
       education, graduated_school, working_years, 
       practice_qualification, good_at_business, 
       transaction_num, page_views, is_have_subsidy, 
-      approval_status, identity_type, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status, personal_profile)
-    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
-      #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, 
-      #{position,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
+      approval_status, created_time, creator_account, 
+      modified_time, modifier_account, record_status, 
+      personal_profile)
+    values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{advisorAccount,jdbcType=VARCHAR}, #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, 
+      #{avatar,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
       #{contactEmail,jdbcType=VARCHAR}, #{cardType,jdbcType=VARCHAR}, #{cardNumber,jdbcType=VARCHAR}, 
       #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{workingYears,jdbcType=REAL}, 
       #{practiceQualification,jdbcType=VARCHAR}, #{goodAtBusiness,jdbcType=VARCHAR}, 
       #{transactionNum,jdbcType=INTEGER}, #{pageViews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{identityType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{personalProfile,jdbcType=LONGVARBINARY})
+      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{personalProfile,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     insert into tb_service_advisor
@@ -179,6 +178,9 @@
       </if>
       <if test="orgId != null">
         org_id,
+      </if>
+      <if test="orgName != null">
+        org_name,
       </if>
       <if test="advisorAccount != null">
         advisor_account,
@@ -194,9 +196,6 @@
       </if>
       <if test="position != null">
         position,
-      </if>
-      <if test="orgName != null">
-        org_name,
       </if>
       <if test="isCertification != null">
         is_certification,
@@ -237,9 +236,6 @@
       <if test="approvalStatus != null">
         approval_status,
       </if>
-      <if test="identityType != null">
-        identity_type,
-      </if>
       <if test="createdTime != null">
         created_time,
       </if>
@@ -266,6 +262,9 @@
       <if test="orgId != null">
         #{orgId,jdbcType=VARCHAR},
       </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
       <if test="advisorAccount != null">
         #{advisorAccount,jdbcType=VARCHAR},
       </if>
@@ -280,9 +279,6 @@
       </if>
       <if test="position != null">
         #{position,jdbcType=VARCHAR},
-      </if>
-      <if test="orgName != null">
-        #{orgName,jdbcType=VARCHAR},
       </if>
       <if test="isCertification != null">
         #{isCertification,jdbcType=VARCHAR},
@@ -323,9 +319,6 @@
       <if test="approvalStatus != null">
         #{approvalStatus,jdbcType=VARCHAR},
       </if>
-      <if test="identityType != null">
-        #{identityType,jdbcType=VARCHAR},
-      </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -361,6 +354,9 @@
       <if test="record.orgId != null">
         org_id = #{record.orgId,jdbcType=VARCHAR},
       </if>
+      <if test="record.orgName != null">
+        org_name = #{record.orgName,jdbcType=VARCHAR},
+      </if>
       <if test="record.advisorAccount != null">
         advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       </if>
@@ -375,9 +371,6 @@
       </if>
       <if test="record.position != null">
         position = #{record.position,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orgName != null">
-        org_name = #{record.orgName,jdbcType=VARCHAR},
       </if>
       <if test="record.isCertification != null">
         is_certification = #{record.isCertification,jdbcType=VARCHAR},
@@ -418,9 +411,6 @@
       <if test="record.approvalStatus != null">
         approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.identityType != null">
-        identity_type = #{record.identityType,jdbcType=VARCHAR},
-      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -448,12 +438,12 @@
     update tb_service_advisor
     set id = #{record.id,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_name = #{record.orgName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       business_area = #{record.businessArea,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
-      org_name = #{record.orgName,jdbcType=VARCHAR},
       is_certification = #{record.isCertification,jdbcType=VARCHAR},
       contact_email = #{record.contactEmail,jdbcType=VARCHAR},
       card_type = #{record.cardType,jdbcType=VARCHAR},
@@ -467,7 +457,6 @@
       page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
-      identity_type = #{record.identityType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -482,12 +471,12 @@
     update tb_service_advisor
     set id = #{record.id,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_name = #{record.orgName,jdbcType=VARCHAR},
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       business_area = #{record.businessArea,jdbcType=VARCHAR},
       avatar = #{record.avatar,jdbcType=VARCHAR},
       position = #{record.position,jdbcType=VARCHAR},
-      org_name = #{record.orgName,jdbcType=VARCHAR},
       is_certification = #{record.isCertification,jdbcType=VARCHAR},
       contact_email = #{record.contactEmail,jdbcType=VARCHAR},
       card_type = #{record.cardType,jdbcType=VARCHAR},
@@ -501,7 +490,6 @@
       page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
-      identity_type = #{record.identityType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -517,6 +505,9 @@
       <if test="orgId != null">
         org_id = #{orgId,jdbcType=VARCHAR},
       </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
       <if test="advisorAccount != null">
         advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       </if>
@@ -531,9 +522,6 @@
       </if>
       <if test="position != null">
         position = #{position,jdbcType=VARCHAR},
-      </if>
-      <if test="orgName != null">
-        org_name = #{orgName,jdbcType=VARCHAR},
       </if>
       <if test="isCertification != null">
         is_certification = #{isCertification,jdbcType=VARCHAR},
@@ -574,9 +562,6 @@
       <if test="approvalStatus != null">
         approval_status = #{approvalStatus,jdbcType=VARCHAR},
       </if>
-      <if test="identityType != null">
-        identity_type = #{identityType,jdbcType=VARCHAR},
-      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -601,12 +586,12 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
     set org_id = #{orgId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},
       business_area = #{businessArea,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
-      org_name = #{orgName,jdbcType=VARCHAR},
       is_certification = #{isCertification,jdbcType=VARCHAR},
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       card_type = #{cardType,jdbcType=VARCHAR},
@@ -620,7 +605,6 @@
       page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
-      identity_type = #{identityType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
@@ -632,12 +616,12 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     update tb_service_advisor
     set org_id = #{orgId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
       advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       advisor_name = #{advisorName,jdbcType=VARCHAR},
       business_area = #{businessArea,jdbcType=VARCHAR},
       avatar = #{avatar,jdbcType=VARCHAR},
       position = #{position,jdbcType=VARCHAR},
-      org_name = #{orgName,jdbcType=VARCHAR},
       is_certification = #{isCertification,jdbcType=VARCHAR},
       contact_email = #{contactEmail,jdbcType=VARCHAR},
       card_type = #{cardType,jdbcType=VARCHAR},
@@ -651,7 +635,6 @@
       page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
-      identity_type = #{identityType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

@@ -80,3 +80,19 @@
     display: block
   }
 }
+.el-transfer :first-child div input{
+  border: none;
+}
+   .el-dialog{
+.el-dialog__body{
+  position: relative;
+}
+
+   }
+   .transfer-search{
+        position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 100;
+    width: 36%;
+  }

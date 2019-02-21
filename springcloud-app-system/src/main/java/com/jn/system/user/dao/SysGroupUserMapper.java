@@ -44,13 +44,6 @@ public interface SysGroupUserMapper {
     List<SysTUser> findOtherUserByPage(SysGroupUserPage sysGroupUserPage);
 
     /**
-     * 逻辑删除用户组下面已经具有的用户
-     *
-     * @param groupId
-     */
-    void deleteUserOfGroup(String groupId);
-
-    /**
      * 用户组下面添加新的用户
      *
      * @param sysGroupUserList

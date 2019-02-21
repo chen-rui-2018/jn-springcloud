@@ -26,7 +26,7 @@ import java.util.UUID;
 /**
  * 权限模块菜单service单元测试
  *
- * @author： yuanyy
+ * @author： shaobao
  * @date： Created on 2018/11/6 14:36
  * @version： v1.0
  * @modified By:
@@ -55,7 +55,7 @@ public class SysMenuServiceTest {
     public static void init() {
         //初始化添加用户
         user = new User();
-        user.setId("10000");
+        user.setAccount("10000");
 
         //初始化菜单id,菜单名称及菜单父id
         menuId = UUID.randomUUID().toString();

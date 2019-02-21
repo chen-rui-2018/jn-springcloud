@@ -24,38 +24,6 @@
         </foreach>
     </update>
 
-    <select id="selectFileListBySearchKey" parameterType="com.jn.system.file.model.SysFilePage"
-            resultMap="queryForListResultMap">
-        SELECT
-        f.id AS f_id,
-        f.STATUS AS f_status,
-        f.file_url AS f_fileUrl,
-        f.file_name AS f_fileName,
-        f.created_time AS f_createTime,
-        fg.id AS fg_id,
-        fg.file_group_name AS fg_fileGroupName,
-        fg.created_time AS fg_createTime,
-        fg.STATUS AS fg_status
-        FROM
-        tb_sys_file f
-        LEFT JOIN ( SELECT file_group_id, file_id FROM tb_sys_file_group_file WHERE record_status != 0 ) fgf ON fgf.file_id =
-        f.id
-        LEFT JOIN ( SELECT * FROM tb_sys_file_group WHERE record_status != 0 ) fg ON fgf.file_group_id = fg.id
-
-        where 1=1
-        and f.record_status != 0
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileName)">
-            and f.file_name=#{fileName,jdbcType=VARCHAR},
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
-            and f.record_status=#{status,jdbcType=VARCHAR},
-        </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
-            and f.id=#{id,jdbcType=VARCHAR}
-        </if>
-        ORDER BY f.created_time desc
-    </select>
-
     <select id="findFileByPage" parameterType="com.jn.system.file.model.SysFilePage"
             resultType="com.jn.system.file.vo.SysFileVO">
         SELECT

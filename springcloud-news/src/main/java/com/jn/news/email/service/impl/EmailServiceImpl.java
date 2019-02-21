@@ -2,7 +2,9 @@ package com.jn.news.email.service.impl;
 
 import com.jn.common.enums.CommonExceptionEnum;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.news.email.enums.EmailExceptionEnum;
 import com.jn.news.email.service.EmailService;
+import com.jn.news.email.utils.EmailComposeMessageHeaderUtil;
 import com.jn.news.email.utils.TemplatesUtil;
 import com.jn.news.vo.EmailInlayImageVo;
 import com.jn.news.vo.EmailVo;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -44,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
     private TemplateEngine templateEngine;
 
     /**
-     *
+     * 是否HTML邮件
      */
     private boolean IS_HTML = true;
     /**
@@ -60,13 +63,14 @@ public class EmailServiceImpl implements EmailService {
      * @param emailVo
      */
     @Override
-    public void sendEmail(EmailVo emailVo) throws JnSpringCloudException{
+    public void sendEmail(EmailVo emailVo) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
+        //消息处理助手对象
+        MimeMessageHelper helper = null;
         try {
-            //消息处理助手对象
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, IS_MULTIPART);
+            helper = new MimeMessageHelper(mimeMessage, IS_MULTIPART);
             //设置发件人、收件人、附件信息
-            composeMessageHeader(emailVo.getEmail().split(","),emailVo.getEmailSubject(),emailVo.getFiles(),helper);
+            EmailComposeMessageHeaderUtil.composeMessageHeader(sender,emailVo.getEmail().split(","),emailVo.getEmailSubject(),emailVo.getFiles(),helper);
             //设置邮件正文内容
             helper.setText(emailVo.getEmailContent(), IS_HTML);
             //内嵌图片
@@ -75,10 +79,15 @@ public class EmailServiceImpl implements EmailService {
                 emailInlayImageMessage(emailInlayImageVoList,helper);
             }
         } catch (MessagingException e) {
-            logger.error("邮件发送失败",e);
+            logger.error("邮件信息构建失败：",e);
+            throw new JnSpringCloudException(EmailExceptionEnum.EMAIL_INFO_CREATE_FAIL);
+        }
+        try {
+            mailSender.send(mimeMessage);
+        } catch (MailException e) {
+            logger.error("邮件发送异常：",e);
             throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
         }
-        mailSender.send(mimeMessage);
     }
 
     /**
@@ -96,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
             //消息处理助手对象
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, IS_MULTIPART);
             //设置发件人、收件人、附件信息
-            composeMessageHeader(emailVo.getEmail().split(","),emailVo.getEmailSubject(),emailVo.getFiles(),helper);
+            EmailComposeMessageHeaderUtil.composeMessageHeader(sender,emailVo.getEmail().split(","),emailVo.getEmailSubject(),emailVo.getFiles(),helper);
             //内嵌图片
             List<EmailInlayImageVo> emailInlayImageVoList = emailVo.getEmailInlayImageVoList();
             if(null != emailInlayImageVoList && emailInlayImageVoList.size()>0) {
@@ -114,33 +123,16 @@ public class EmailServiceImpl implements EmailService {
                 //图片内嵌,必须先setText邮件内容
                 emailInlayImageMessage(emailInlayImageVoList,helper);
             }
-
         } catch (MessagingException e) {
-            logger.error("邮件发送失败",e);
-            throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
+            logger.error("模板邮件信息构建失败",e);
+            throw new JnSpringCloudException(EmailExceptionEnum.EMAIL_INFO_CREATE_FAIL);
         }
         //发送邮件
-        mailSender.send(mimeMessage);
-    }
-
-    /**
-     * 邮件头部信息
-     * @param recipients 接受邮箱地址
-     * @param subject 邮件主题
-     * @param attachments 附件,附件为绝对路径
-     * @param messageHelper
-     * @throws MessagingException
-     */
-    private void composeMessageHeader(String[] recipients, String subject, String[] attachments,
-                                      MimeMessageHelper messageHelper) throws MessagingException {
-        messageHelper.setFrom(sender);
-        messageHelper.setTo(recipients);
-        messageHelper.setSubject(subject);
-        if (attachments != null) {
-            for (String filename : attachments) {
-                FileSystemResource file = new FileSystemResource(filename);
-                messageHelper.addAttachment(file.getFilename(), file);
-            }
+        try {
+            mailSender.send(mimeMessage);
+        } catch (MailException e) {
+            logger.error("模板邮件发送异常：",e);
+            throw new JnSpringCloudException(CommonExceptionEnum.EMAIL_ERROR);
         }
     }
 

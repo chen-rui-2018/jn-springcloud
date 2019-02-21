@@ -3,29 +3,29 @@ import request from '@/utils/request'
 // url: '/permission/user'
 
 // 获取用户组所有数据
-export function groupList(query) {
-  return request({
-    url: 'system/sysGroup/list',
-    method: 'post',
-    data: query
-  })
-}
+// export function groupList(query) {
+//   return request({
+//     url: 'system/sysGroup/list',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 新增用户组
-export function addgroupList(query) {
-  return request({
-    url: 'system/sysGroup/add',
-    method: 'post',
-    data: query
-  })
-}
+// export function addgroupList(query) {
+//   return request({
+//     url: 'system/sysGroup/add',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 编辑用户组
-export function editgroupList(query) {
-  return request({
-    url: 'system/sysGroup/update',
-    method: 'post',
-    data: query
-  })
-}
+// export function editgroupList(query) {
+//   return request({
+//     url: 'system/sysGroup/update',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 删除用户组
 
 export function deleteUsergroupById(query) {
@@ -48,34 +48,34 @@ export function checkGroupName(query) {
   })
 }
 // 根据用户组id获取用户组具有的用户信息和其他用户
-export function getAllUserInfo(query) {
-  return request({
-    url: 'system/sysGroup/findOtherUserByPage',
-    method: 'post',
-    data: query
-  })
-}
+// export function getAllUserInfo(query) {
+//   return request({
+//     url: 'system/sysGroup/findOtherUserByPage',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 用户组授权用户
-export function updataUser(query) {
-  return request({
-    url: 'system/sysGroup/userGroupAuthorization',
-    method: 'post',
-    data: query
-  })
-}
+// export function updataUser(query) {
+//   return request({
+//     url: 'system/sysGroup/userGroupAuthorization',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 根据用户组id获取权限具有的角色信息和其他角色
-export function getRoleInfo(query) {
-  return request({
-    url: 'system/sysGroup/selectGroupRoleAndOtherRole',
-    method: 'post',
-    data: query
-  })
-}
+// export function getRoleInfo(query) {
+//   return request({
+//     url: 'system/sysGroup/selectGroupRoleAndOtherRole',
+//     method: 'post',
+//     data: query
+//   })
+// }
 // 用户组授权角色(更新数据)
-export function updataRole(query) {
-  return request({
-    url: 'system/sysGroup/roleGroupAuthorization',
-    method: 'post',
-    data: query
-  })
-}
+// export function updataRole(query) {
+//   return request({
+//     url: 'system/sysGroup/roleGroupAuthorization',
+//     method: 'post',
+//     data: query
+//   })
+// }

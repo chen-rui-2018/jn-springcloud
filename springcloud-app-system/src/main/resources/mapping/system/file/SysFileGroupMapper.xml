@@ -12,4 +12,22 @@
             #{id}
         </foreach>
     </update>
+    <select id="getFileGroupByPage" resultType="com.jn.system.file.model.SysFileGroup"
+            parameterType="com.jn.system.file.model.SysFileGroupPage">
+        SELECT
+        id,
+        file_group_name as fileGroupName,
+        file_group_describe as fileGroupDescribe,
+        created_time as createdTime,
+        record_status as recordStatus
+        FROM `tb_sys_file_group`
+        WHERE record_status != 0
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(fileGroupName)">
+            and `file_group_name` like CONCAT('%', #{fileGroupName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+            and record_status=#{recordStatus,jdbcType=VARCHAR}
+        </if>
+        ORDER BY created_time desc,id desc
+    </select>
 </mapper>

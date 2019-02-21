@@ -46,7 +46,7 @@
 					<configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
 					<overwrite>true</overwrite>
 					<contexts>
-						user,menu,file,permission,dept
+						user,menu,file,permission,dept,dict
 					</contexts>
 					<tableNames>
 

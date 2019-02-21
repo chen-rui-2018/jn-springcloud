@@ -51,10 +51,6 @@
         ORDER BY t.created_time DESC, t.id DESC
     </select>
 
-    <update id="deleteUserOfGroup" parameterType="java.lang.String">
-		UPDATE tb_sys_user_group set `record_status` = 0 where group_id = #{groupId,jdbcType=VARCHAR}
-	</update>
-
     <insert id="insertSysGroupUserBatch" parameterType="java.util.List">
         insert into tb_sys_user_group(id,group_id,user_id,creator_account,created_time,record_status) values
         <foreach collection="list" item="item" index="index" separator=",">

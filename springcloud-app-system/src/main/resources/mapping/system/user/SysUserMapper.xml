@@ -207,7 +207,7 @@
                 and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
-                and t.record_status = #{recordStatus,jdbcType=TINYINT}
+                and t.recordStatus = #{recordStatus,jdbcType=TINYINT}
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
                 and t.department_id = #{departmentId,jdbcType=VARCHAR}

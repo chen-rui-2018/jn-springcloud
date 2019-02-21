@@ -45,9 +45,7 @@ public class EmailSendTest {
         emailVo.setEmailContent("测试邮件内容");
         String[] fileList = {filePath} ;
         emailVo.setFiles(fileList);
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(emailVo));
-        messageSource.outputEmail().send(MessageBuilder.withPayload(gson.toJson(emailVo)).build());
+        messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
 
 
     }

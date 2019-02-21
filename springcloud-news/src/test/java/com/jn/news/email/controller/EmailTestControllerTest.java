@@ -37,9 +37,6 @@ public class EmailTestControllerTest {
         filePath = file.getPath() + File.separator + "test.png";
     }
 
-    /**
-     *
-     */
     @Test
     public void emailSenderTester() {
         EmailVo emailVo = new EmailVo();

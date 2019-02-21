@@ -1,7 +1,6 @@
 package com.jn.wechat.base.service.impl;
 
 import com.jn.config.WxProperties;
-import com.jn.wechat.base.service.WxHttpClientService;
 import com.jn.wechat.base.service.WxService;
 import com.jn.wechat.base.utils.httpclient.HttpConnectionUtils;
 import org.junit.Ignore;

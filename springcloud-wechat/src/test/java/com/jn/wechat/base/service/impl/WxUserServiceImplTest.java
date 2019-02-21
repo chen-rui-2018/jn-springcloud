@@ -2,10 +2,9 @@ package com.jn.wechat.base.service.impl;
 
 import com.jn.config.WxProperties;
 import com.jn.wechat.base.service.WxUserService;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.*;
 
 public class WxUserServiceImplTest {
 
@@ -16,6 +15,7 @@ public class WxUserServiceImplTest {
     WxProperties wxProperties;
 
     @Test
+    @Ignore
     public void userInfo() {
         wxUserService.userInfo(wxProperties.getAppId());
     }

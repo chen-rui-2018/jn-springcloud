@@ -1,9 +1,7 @@
 package com.jn.wechat.api;
 
-import com.jn.common.model.Result;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * 强制刷新微信access_token的api

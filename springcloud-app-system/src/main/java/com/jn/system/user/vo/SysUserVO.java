@@ -1,5 +1,6 @@
 package com.jn.system.user.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -29,6 +30,7 @@ public class SysUserVO implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
     @ApiModelProperty("创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     @ApiModelProperty("状态")
     private Byte recordStatus;

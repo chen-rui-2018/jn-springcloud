@@ -35,9 +35,6 @@ public class SysFileServiceImpl implements SysFileService {
     private SysFileMapper sysFileMapper;
 
     @Resource
-    private TbSysFileMapper tbSysFileMapper;
-
-    @Resource
     private SysFileGroupFileMapper sysFileGroupFileMapper;
 
     /**

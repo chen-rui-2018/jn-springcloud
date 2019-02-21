@@ -9,14 +9,14 @@
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
-              <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="岗位">
             <el-input v-model="listQuery.postOrTypeName" maxlength="20" placeholder="请输入岗位或岗位类型" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
           </el-form-item>
-          <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
-          <el-button class="filter-item" style="margin-left: 10px;" type="primary" @click="handleCreate">新增用户</el-button>
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+          <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
           <el-button type="primary" class="filter-item" @click="handleExcel">导出</el-button>
 
         </el-form>
@@ -39,10 +39,10 @@
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
-          <el-table-column label="创建时间" prop="createdTime" align="center" width="100">
-            <template slot-scope="scope">
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="200">
+            <!-- <template slot-scope="scope">
               {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="状态" prop="recordStatus" align="center" width="70">
             <template slot-scope="scope">
@@ -78,7 +78,7 @@
           </el-form-item>
           <el-form-item label="状态" prop="recordStatus">
             <el-select v-model="temp.recordStatus" class="filter-item" placeholder="请选择" style="max-width:280px;">
-              <el-option v-for="(item,index) in userStatusOptions" :key="index" :label="item" :value="index" />
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
@@ -152,6 +152,7 @@
     <!-- 授权角色 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" class="roleBox" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
         <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '用户拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
@@ -179,6 +180,7 @@
     <!-- 弹出的授权用户组对话框 -->
     <!-- <template v-if="userGroup.userGroupdialogVisible"> -->
     <el-dialog :visible.sync="userGroup.userGroupdialogVisible" title="授权用户组" class="groupBox" width="800px">
+      <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix"><!----><input v-model="userGroupName" type="text" autocomplete="off" placeholder="请输入用户组名称" class="el-input__inner" clearable><span class="el-input__prefix"><i class="el-input__icon el-icon-search"/><!----></span><!----><!----></div>
       <el-transfer v-loading="userGroup.userGroupLoading" v-model="userGroup.userGroupId" :data="userGroup.userGroupData" :titles="['其他用户组', '用户拥有用户组']" filterable filter-placeholder="请输入用户组名称" class="box" @change="handleUserGroupChange">
         <span slot="left-footer" size="small">
           <el-pagination :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserGroupCurrentChange" />
@@ -192,28 +194,26 @@
 
 <script>
 import {
-  userList,
-  userCreate,
-  getDepartment,
-  deleteSysUser,
-  checkUserName,
-  findSysPostAll,
-  findDepartmentandPostByUserId,
-  saveDepartmentandPostOfUser,
-  updateSysUser,
-  editUser,
-  getRoleInfo,
-  updataRole,
-  getUserGroupInfo,
-  updataUserGroup
+  api,
+  paramApi,
+  // userCreate,
+  // getDepartment,
+  // deleteSysUser,
+  // checkUserName,
+  // findSysPostAll,
+  // findDepartmentandPostByUserId,
+  // saveDepartmentandPostOfUser,
+  // updateSysUser,
+  // editUser,
+  // getRoleInfo,
+  // updataRole,
+  // getUserGroupInfo,
+  // updataUserGroup,
+  exportExcel
 } from '@/api/Permission-model/userManagement'
-import waves from '@/directive/waves' // 水波纹指令
 // import initList from './components/components'
 export default {
   name: 'UserManagement',
-  directives: {
-    waves
-  },
   filters: {
     statusFilter(recordStatus) {
       const statusMap = {
@@ -230,7 +230,7 @@ export default {
         callback(new Error('请输入6到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
-          checkUserName(this.temp.account).then(response => {
+          paramApi('system/sysUser/checkUserName', this.temp.account, 'account').then(response => {
             const result = response.data.data
             if (result === 'success') {
               callback()
@@ -280,6 +280,8 @@ export default {
       }
     }
     return {
+      userGroupName: '',
+      roleName: '',
       currentDepartmentIds: undefined,
       Visible: true,
       isShow: false,
@@ -323,7 +325,13 @@ export default {
         departmentIds: undefined,
         postOrTypeName: ''
       },
-      userStatusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       positionOptions: [],
       temp: {
         name: undefined,
@@ -421,6 +429,14 @@ export default {
         }
       },
       deep: true
+    },
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    userGroupName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getUserGroup()
     }
   },
   mounted() {
@@ -431,8 +447,47 @@ export default {
   methods: {
     // 导出功能
     handleExcel() {
-      // window.location.href = 'http://112.94.22.222:8000/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      window.location.href = 'http://192.168.10.31:1101/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
+      exportExcel(this.listQuery).then(res => {
+        // console.log(res.request.responseURL)
+        // window.location.href = res.request.responseURL
+        const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
+        const downloadElement = document.createElement('a')
+        const href = window.URL.createObjectURL(blob)
+        downloadElement.href = href
+        downloadElement.download = 'rate.xlsx'
+        document.body.appendChild(downloadElement)
+        downloadElement.click()
+        document.body.removeChild(downloadElement) // 下载完成移除元素
+        window.URL.revokeObjectURL(href) // 释放掉blob对象
+      })
+      // exportExcel(this.listQuery).then((res) => {
+      //   console.log(res)
+      //   const link = document.createElement('a')
+      //   const blob = new Blob([res.data])
+      //   link.style.display = 'none'
+      //   link.href = URL.createObjectURL(blob)
+      //   const objectUrl = URL.createObjectURL(blob)
+      //   window.location.herf = objectUrl
+      //   let num = ''
+      //   for (let i = 0; i < 10; i++) {
+      //     num += Math.ceil(Math.random() * 10)
+      //   }
+      //   link.setAttribute('download', '用户_' + num + '.xlsx')
+      //   document.body.appendChild(link)
+      //   link.click()
+      //   document.body.removeChild(link)
+      // }).catch(error => {
+      //   this.$Notice.error({
+      //     title: '错误',
+      //     desc: '网络连接错误'
+      //   })
+      //   console.log(error)
+      // })
+      // exportExcel().then(res => {
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
+      // })
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
+      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
       //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
     },
     // 选择部门（新增用户对话框）
@@ -464,7 +519,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUserGroup({ userId: this.userId, groupIds: value }).then(res => {
+      api('system/sysUser/saveSysGroupToSysUser', { userId: this.userId, groupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -490,14 +545,16 @@ export default {
       this.userPage = 1
       this.userGroup.userGroupLoading = true
       this.userId = id
+      this.userGroupName = ''
       this.userGroup.userGroupdialogVisible = true
       this.getUserGroup()
     },
     getUserGroup() {
-      getUserGroupInfo({
+      api('system/sysUser/findSysGroupByUserId', {
         userId: this.userId,
         page: this.userPage,
-        rows: this.userRows
+        rows: this.userRows,
+        userGroupName: this.userGroupName
       }).then(res => {
         const userGroupData = []
         const checkUserGroup = []
@@ -534,7 +591,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataRole({ userId: this.userId, roleIds: value }).then(res => {
+      api('system/sysUser/saveSysRoleToSysUser', { userId: this.userId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -551,13 +608,15 @@ export default {
       this.roleLoading = true
       this.userId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
-      getRoleInfo({
+      api('system/sysUser/findSysRoleByUserId', {
         userId: this.userId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         if (res.data.code === '0000') {
           const roleData = []
@@ -590,12 +649,13 @@ export default {
     },
     // 改变状态
     selecteUserStatus(value) {
-      this.listQuery.userStatus = value
+      console.log(value)
+      this.listQuery.recordStatus = value
     },
     // 获取所有部门列表
     getAllDepartment() {
       this.departmentListLoading = true
-      getDepartment().then(res => {
+      api('system/sysDepartment/findDepartmentAllByLevel').then(res => {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
         } else {
@@ -606,7 +666,7 @@ export default {
     },
     // 获取所有岗位
     findSysPostAll() {
-      findSysPostAll().then(res => {
+      api('system/sysPost/findSysPostAll').then(res => {
         if (res.data.code === '0000') {
           const data = res.data.data
           this.positionOptions = data.map(function(item) {
@@ -623,8 +683,9 @@ export default {
     // 获取用户列表
     initList() {
       this.listLoading = true
-      userList(this.listQuery).then(res => {
+      api('system/sysUser/findSysUserByPage', this.listQuery).then(res => {
         if (res.data.code === '0000') {
+          console.log(res)
           this.userList = res.data.data.rows
           this.total = res.data.data.total
           if (this.userList.length === 0 && this.total > 0) {
@@ -644,7 +705,7 @@ export default {
       this.sectorLoading = true
       this.userId = row.id
       // 发请求获取用户具有的部门和岗位
-      findDepartmentandPostByUserId(row.id).then(response => {
+      paramApi('system/sysUser/findDepartmentandPostByUserId', row.id, 'userId').then(response => {
         if (response.data.code === '0000') {
           this.sectorLoading = false
           const data = response.data.data
@@ -703,7 +764,7 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           // this.isDisabled = true
-          userCreate(this.temp).then(res => {
+          api('system/sysUser/addSysUser', this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '新增用户成功',
@@ -738,7 +799,7 @@ export default {
       this.temp.phone = row.phone
       this.temp.wechatAccount = row.wechatAccount
       this.temp.remark = row.remark
-      this.temp.recordStatus = parseInt(row.recordStatus)
+      this.temp.recordStatus = row.recordStatus.toString()
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -751,7 +812,7 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          editUser(this.temp).then(res => {
+          api('system/sysUser/updateSysUser', this.temp).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -776,7 +837,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteSysUser({ userIds: [row.id] }).then(res => {
+          api('system/sysUser/deleteSysUser', { userIds: [row.id] }).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -792,10 +853,6 @@ export default {
           })
         })
         .catch(() => {
-          // this.$message({
-          //   type: 'info',
-          //   message: '已取消删除'
-          // })
         })
     },
     // 设置默认部门和岗位
@@ -841,7 +898,7 @@ export default {
           userDepartmentPostList.sysDepartmentPostList[0].isDefault = '1'
         }
       }
-      saveDepartmentandPostOfUser(userDepartmentPostList).then(response => {
+      api('system/sysUser/saveDepartmentandPostOfUser', userDepartmentPostList).then(response => {
         if (response.data.code === '0000') {
           this.$message({
             message: '修改部门和岗位成功',
@@ -876,7 +933,7 @@ export default {
     handlerResetPassword() {
       this.$refs['resetPassword'].validate(valid => {
         if (valid) {
-          updateSysUser(this.resetPassword).then(res => {
+          api('system/sysUser/updateSysUser', this.resetPassword).then(res => {
             if (res.data.code === '0000') {
               this.dialogResetPasswordVisible = false
               this.$message({
@@ -895,8 +952,8 @@ export default {
 </script>
 <style lang="scss">
 .el-tooltip__popper{
-    width: 260px;
-    height: 60px;
+   text-align: center;
+    max-width: 260px;
     word-break: break-all;
 }
 .userManagement-content{

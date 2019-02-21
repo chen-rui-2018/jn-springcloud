@@ -179,27 +179,9 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
     @ServiceLog(doAction = "根据关键字分页查询文件组列表")
     public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
-        TbSysFileGroupCriteria sysFileGroupCriteria = new TbSysFileGroupCriteria();
-        sysFileGroupCriteria.setOrderByClause("created_time desc,id desc");
-        TbSysFileGroupCriteria.Criteria criteria = sysFileGroupCriteria.createCriteria();
-        if (!StringUtils.isEmpty(sysFileGroupPage.getFileGroupName())) {
-            //模糊查询搜索关键字
-            criteria.andFileGroupNameLike("%" + sysFileGroupPage.getFileGroupName() + "%");
-        }
-        if (!StringUtils.isEmpty(sysFileGroupPage.getId())) {
-            //根据id查询
-            criteria.andIdEqualTo(sysFileGroupPage.getId());
-        }
-        if (sysFileGroupPage.getRecordStatus() != null) {
-            //筛选条件：状态
-            criteria.andRecordStatusEqualTo(sysFileGroupPage.getRecordStatus());
-        }
-
-        //过滤已删除的数据
-        Byte recordStatus = Byte.parseByte(SysStatusEnums.DELETED.getCode());
-        criteria.andRecordStatusNotEqualTo(recordStatus);
-        return new PaginationData(tbSysFileGroupMapper.selectByExample(sysFileGroupCriteria)
-                , objects.getTotal());
+        List<SysFileGroup> sysFileGroups = sysFileGroupMapper.getFileGroupByPage(sysFileGroupPage);
+        PaginationData data = new PaginationData(sysFileGroups,objects.getTotal());
+        return data;
     }
 
     /**

@@ -6,11 +6,11 @@
           <el-input v-model="listQuery.permissionName" placeholder="请输入权限名称" maxlength="20" class="filter-item" clearable @keyup.enter.native="handleFilter"/>
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -20,14 +20,14 @@
       <el-table-column type="index" align="center" label="序号" width="60" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="权限名称" align="center" prop="permissionName" />
-      <el-table-column label="创建时间" min-width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+        </template> -->
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status==0?'未生效':'生效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="280" class-name="small-padding fixed-width">
@@ -51,9 +51,9 @@
           <el-form-item label="权限名称" prop="permissionName">
             <el-input v-model="permissionform.permissionName" maxlength="20" clearable/>
           </el-form-item>
-          <el-form-item label="状态" prop="status">
-            <el-select v-model="permissionform.status" class="filter-item" placeholder="请选择" clearable >
-              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-form-item label="状态" prop="recordStatus">
+            <el-select v-model="permissionform.recordStatus" class="filter-item" placeholder="请选择" style="width:100%" >
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -66,6 +66,12 @@
     <!-- 弹出授权角色对话框 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="roleLoading" v-model="roleIds" :data="roleData" :titles="['其他角色', '权限拥有角色']" filterable filter-placeholder="请输入角色名称" class="box" @change="handleRoleChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleRoleCurrentChange" />
@@ -77,6 +83,12 @@
     <!-- 弹出授权文件组对话框 -->
     <template v-if="fileGroupdialogVisible">
       <el-dialog :visible.sync="fileGroupdialogVisible" title="授权文件组" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="fileGroupName" type="text" autocomplete="off" placeholder="请输入文件组名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="fileGroupLoading" v-model="fileGroupIds" :data="fileGroupData" :titles="['其他文件组', '权限拥有文件组']" filterable filter-placeholder="请输入文件组名称" class="box" @change="handleFileGroupChange">
           <span slot="left-footer" size="small">
             <el-pagination :current-page="numberPage" :pager-count="5" :total="numberTotal" background layout="prev, pager, next" @current-change="handleFileGroupCurrentChange" />
@@ -95,7 +107,7 @@
         :props="defaultProps"
         node-key="id"
         show-checkbox>
-        <span slot-scope="{ node}" class="custom-tree-node">
+        <span slot-scope="{ node }" class="custom-tree-node">
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
           </span>
@@ -110,19 +122,20 @@
 </template>
 
 <script>
-import {
-  getPermissionList,
-  addPermissionList,
-  editPermissionList,
-  checkPermissionName,
-  getRoleInfo,
-  updataRole,
-  deletePermissionById,
-  getAllList,
-  updataAllData,
-  getFileGroupInfo,
-  updataFileGroup
-} from '@/api/Permission-model/permissionManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import {
+//   getPermissionList,
+//   addPermissionList,
+//   editPermissionList,
+//   checkPermissionName,
+//   getRoleInfo,
+//   updataRole,
+//   deletePermissionById,
+//   getAllList,
+//   updataAllData,
+//   getFileGroupInfo,
+//   updataFileGroup
+// } from '@/api/Permission-model/permissionManagement'
 export default {
 
   data() {
@@ -131,8 +144,8 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldPermissionName !== this.permissionform.permissionName) {
-          checkPermissionName(this.permissionform.permissionName).then(res => {
+        if (this.dialogStatus === '新增权限') {
+          paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -142,11 +155,25 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldPermissionName !== this.permissionform.permissionName) {
+            paramApi('system/sysPermission/checkPerssionName', this.permissionform.permissionName, 'permissionName').then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('权限名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }
     return {
+      fileGroupName: '',
+      roleName: '',
       isDisabled: false,
       data3: [],
       data2: [],
@@ -173,7 +200,7 @@ export default {
       permissionform: {
         id: '',
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       dialogStatus: undefined,
       permissiondialogFormVisible: false,
@@ -183,16 +210,32 @@ export default {
         page: 1,
         rows: 10,
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       },
       total: undefined,
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       rules: {
         permissionName: [{ required: true, message: '请输入权限名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'blur' }]
+        recordStatus: [{ required: true, message: '请选择状态', trigger: 'blur' }]
       }
+    }
+  },
+  watch: {
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    fileGroupName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getFileGroup()
     }
   },
   created() {
@@ -214,7 +257,7 @@ export default {
     },
     getCheckedKeys() {
       const checkData = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
-      updataAllData({ menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
+      api('system/sysPermission/addMenuAndResourcesToPermission', { menuAndResourcesIds: checkData, permissionId: this.permissionId }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -232,7 +275,7 @@ export default {
       this.menuDialogVisible = true
       this.menuLoading = true
       // 获取权限具有的菜单和功能
-      getAllList(id).then(res => {
+      paramApi('system/sysPermission/getMenuAndResources', id, 'permissionId').then(res => {
         if (res.data.code === '0000') {
           this.data2 = res.data.data.sysMenuTreeVOList
           var rules = res.data.data.menuAndResourcesIds
@@ -266,7 +309,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataFileGroup({ permissionId: this.permissionId, fileGroupIds: value }).then(res => {
+      api('system/sysPermission/addFileGroupToPermission', { permissionId: this.permissionId, fileGroupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -284,13 +327,15 @@ export default {
       this.fileGroupLoading = true
       this.permissionId = id
       this.fileGroupdialogVisible = true
+      this.fileGroupName = ''
       this.getFileGroup()
     },
     getFileGroup() {
-      getFileGroupInfo({
+      api('system/sysPermission/findFileGroupOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        fileGroupName: this.fileGroupName
       }).then(res => {
         const fileGroupData = []
         const checkFileGroup = []
@@ -327,7 +372,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataRole({ permissionId: this.permissionId, roleIds: value }).then(res => {
+      api('system/sysPermission/addRoleToPermission', { permissionId: this.permissionId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -345,13 +390,15 @@ export default {
       this.roleLoading = true
       this.permissionId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
-      getRoleInfo({
+      api('system/sysPermission/findRoleOfPermission', {
         permissionId: this.permissionId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         const roleData = []
         const checkRole = []
@@ -378,7 +425,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deletePermissionById(id).then(res => {
+          paramApi('system/sysPermission/delete', id, 'ids').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -398,11 +445,11 @@ export default {
     },
     // 编辑权限
     updateData() {
+      this.isDisabled = true
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // // 调用接口发送请求
-          editPermissionList(this.permissionform).then(res => {
+          api('system/sysPermission/update', this.permissionform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -419,6 +466,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -430,7 +479,7 @@ export default {
       //   添加默认数据
       this.oldPermissionName = row.permissionName
       this.permissionform.permissionName = row.permissionName
-      this.permissionform.status = parseInt(row.status)
+      this.permissionform.recordStatus = row.recordStatus.toString()
       this.permissionform.id = row.id
       this.$nextTick(() => {
         this.$refs['permissionform'].clearValidate()
@@ -442,7 +491,7 @@ export default {
       this.$refs['permissionform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addPermissionList(this.permissionform).then(res => {
+          api('system/sysPermission/add', this.permissionform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -477,7 +526,7 @@ export default {
     resetPermissionform() {
       this.permissionform = {
         permissionName: undefined,
-        status: undefined
+        recordStatus: undefined
       }
     },
 
@@ -486,12 +535,12 @@ export default {
       this.initList()
     },
     selecteUserStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     // 项目初始化
     initList() {
       this.permissionLoading = true
-      getPermissionList(this.listQuery).then(res => {
+      api('system/sysPermission/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.permissionList = res.data.data.rows
           this.total = res.data.data.total
@@ -520,6 +569,9 @@ export default {
 
 <style lang="scss" >
 .permissionManagement {
+  >.el-pagination{
+    margin-top:15px;
+  }
    .filter-container {
     .el-form-item {
       margin-bottom: 0;

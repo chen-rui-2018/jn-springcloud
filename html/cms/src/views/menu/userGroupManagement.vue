@@ -6,11 +6,11 @@
           <el-input v-model="listQuery.groupName" maxlength="20" placeholder="请输入名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="状态:">
-          <el-select v-model="listQuery.status" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
-            <el-option v-for="(item,index) in statusOptions" :key="item" :label="item" :value="index" />
+          <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable class="filter-item" @change="selecteUserStatus">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
         <el-button class="filter-item" style="margin-left: 10px" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button>
       </el-form>
     </div>
@@ -30,14 +30,14 @@
           {{ scope.row.sysRoleList.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="150" align="center" prop="creationTime">
-        <template slot-scope="scope">
-          {{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template>
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
+        <!-- <template slot-scope="scope">
+          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
+        </template> -->
       </el-table-column>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
-          <span :class="scope.row.status==1 ? 'text-green' : 'text-red'">{{ scope.row.status | statusFilter }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="300" class-name="small-padding fixed-width">
@@ -71,9 +71,9 @@
           <el-form-item label="用户组:" prop="groupName">
             <el-input v-model.trim="userGroupform.groupName" maxlength="20" clearable/>
           </el-form-item>
-          <el-form-item label="状态:" prop="status">
-            <el-select v-model="userGroupform.status" placeholder="请选择" class="filter-item" clearable>
-              <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
+          <el-form-item label="状态:" prop="recordStatus">
+            <el-select v-model="userGroupform.recordStatus" placeholder="请选择" class="filter-item" clearable style="width:100%">
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
         </el-form>
@@ -86,6 +86,12 @@
     <!-- 弹出授权角色对话框 -->
     <template v-if="roledialogVisible">
       <el-dialog :visible.sync="roledialogVisible" title="授权角色" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="roleName" type="text" autocomplete="off" placeholder="请输入角色名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer
           v-loading="roleLoading"
           v-model="roleIds"
@@ -105,6 +111,12 @@
     <!-- 弹出的授權用户对话框   -->
     <template v-if="userdialogVisible">
       <el-dialog :visible.sync="userdialogVisible" title="授权用户" width="800px">
+        <div class=" transfer-search el-transfer-panel__filter el-input el-input--small el-input--prefix">
+          <input v-model="name" type="text" autocomplete="off" placeholder="请输入用户名称" class="el-input__inner" clearable>
+          <span class="el-input__prefix">
+            <i class="el-input__icon el-icon-search"/>
+          </span>
+        </div>
         <el-transfer v-loading="userLoading" v-model="userIds" :data="userData" :titles="['其他用户', '用户组拥有用户']" target-order="unshift" filterable filter-placeholder="请输入用户名称" class="box" @change="handleUserChange">
           <span slot="left-footer" size="small">
             <el-pagination :page-size="userRows" :current-page="userPage" :pager-count="5" :total="userTotal" background layout="prev, pager, next" @current-change="handleUserCurrentChange" />
@@ -118,25 +130,15 @@
 </template>
 
 <script>
-import {
-  groupList,
-  addgroupList,
-  editgroupList,
-  deleteUsergroupById,
-  checkGroupName,
-  updataUser,
-  getAllUserInfo,
-  getRoleInfo,
-  updataRole
-} from '@/api/Permission-model/userGroup'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
 export default {
   filters: {
-    statusFilter(status) {
+    statusFilter(recordStatus) {
       const statusMap = {
-        0: '未生效',
+        2: '未生效',
         1: '生效'
       }
-      return statusMap[status]
+      return statusMap[recordStatus]
     }
   },
   data() {
@@ -145,8 +147,8 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldGroupName !== this.userGroupform.groupName) {
-          checkGroupName(this.userGroupform.groupName).then(res => {
+        if (this.dialogStatus === '新增用户组') {
+          paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -156,11 +158,25 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldGroupName !== this.userGroupform.groupName) {
+            paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('用户组名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }
     return {
+      name: '',
+      roleName: '',
       isDisabled: false,
       numberTotal: 0,
       numberRows: 10,
@@ -185,26 +201,42 @@ export default {
       usergroupList: [],
       listQuery: {
         groupName: undefined,
-        status: undefined,
+        recordStatus: undefined,
         rows: 10,
         page: 1
       },
       userGroupdialogFormVisible: false,
       userdialogVisible: false,
       roledialogVisible: false,
-      statusOptions: ['未生效', '生效'],
+      statusOptions: [{
+        value: '1',
+        label: '生效'
+      }, {
+        value: '2',
+        label: '未生效'
+      }],
       userGroupform: {
         id: '',
         groupName: undefined,
-        status: '生效'
+        recordStatus: '生效'
       },
       rules: {
         groupName: [
           { required: true, message: '请输入用户组名称', trigger: 'blur' },
           { validator: checkAccount, trigger: 'blur' }
         ],
-        status: [{ required: true, message: '请选择状态', trigger: 'change' }]
+        recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }]
       }
+    }
+  },
+  watch: {
+    roleName: function(newVal, oldVal) {
+      this.numberPage = 1
+      this.getRole()
+    },
+    name: function(newVal, oldVal) {
+      this.userPage = 1
+      this.getUser()
     }
   },
   created() {
@@ -229,7 +261,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataRole({ groupId: this.groupId, roleIds: value }).then(res => {
+      api('system/sysGroup/roleGroupAuthorization', { groupId: this.groupId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
             message: '授权成功',
@@ -247,13 +279,15 @@ export default {
       this.roleLoading = true
       this.groupId = id
       this.roledialogVisible = true
+      this.roleName = ''
       this.getRole()
     },
     getRole() {
-      getRoleInfo({
+      api('system/sysGroup/selectGroupRoleAndOtherRole', {
         groupId: this.groupId,
         page: this.numberPage,
-        rows: this.numberRows
+        rows: this.numberRows,
+        roleName: this.roleName
       }).then(res => {
         if (res.data.code === '0000') {
           const roleData = []
@@ -282,12 +316,13 @@ export default {
       this.userLoading = true
       this.userGroupId = row.id
       this.userdialogVisible = true
+      this.name = ''
       this.getUser()
     },
 
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      getAllUserInfo({ groupId: this.userGroupId, page: this.userPage, rows: this.userRows }).then(res => {
+      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }).then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -323,7 +358,7 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
-      updataUser({ groupId: this.userGroupId, userIds: value }).then(
+      api('system/sysGroup/userGroupAuthorization', { groupId: this.userGroupId, userIds: value }).then(
         res => {
           if (res.data.code === '0000') {
             this.$message({
@@ -338,7 +373,7 @@ export default {
       )
     },
     selecteUserStatus(value) {
-      this.listQuery.status = value
+      this.listQuery.recordStatus = value
     },
     //   搜素功能的实现
     handleFilter() {
@@ -349,7 +384,7 @@ export default {
     resetuserGroupform() {
       this.userGroupform = {
         groupName: undefined,
-        status: undefined
+        recordStatus: undefined
       }
     },
     // 显示新增用户组对话框
@@ -367,7 +402,7 @@ export default {
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          addgroupList(this.userGroupform).then(res => {
+          api('system/sysGroup/add', this.userGroupform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -397,7 +432,7 @@ export default {
       //   添加默认数据
       this.dialogStatus = '编辑用户组'
       this.userGroupform.groupName = row.groupName
-      this.userGroupform.status = parseInt(row.status)
+      this.userGroupform.recordStatus = row.recordStatus.toString()
       this.userGroupform.id = row.id
       this.$nextTick(() => {
         this.$refs['userGroupform'].clearValidate()
@@ -411,7 +446,7 @@ export default {
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
-          editgroupList(this.userGroupform).then(res => {
+          api('system/sysGroup/update', this.userGroupform).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -437,7 +472,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteUsergroupById(row.id).then(res => {
+          paramApi('system/sysGroup/delete', row.id, 'groupIds').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -459,7 +494,8 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      groupList(this.listQuery).then(res => {
+      api('system/sysGroup/list', this.listQuery).then(res => {
+        console.log(res)
         if (res.data.code === '0000') {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total
@@ -489,10 +525,6 @@ export default {
 </script>
 
 <style lang="scss">
-.el-tooltip__popper{
-   text-align: center;
-    width:260px;
-}
 .tablePagination{
   margin-top:15px;
 }

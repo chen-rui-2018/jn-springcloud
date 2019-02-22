@@ -80,8 +80,8 @@ public class OrgServiceImpl implements OrgService {
         //修改、新增，设置状态为待审核
         tbServiceOrg.setOrgStatus("0");
         tbServiceOrg.setRecordStatus(new Byte("1"));
-        if(StringUtils.isEmpty(orgBasicData.getId())){
-            tbServiceOrg.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        if(StringUtils.isEmpty(orgBasicData.getOrgId())){
+            tbServiceOrg.setOrgId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbServiceOrg.setCreatedTime(new Date());
             tbServiceOrg.setCreatorAccount(account);
             insert = tbServiceOrgMapper.insert(tbServiceOrg);
@@ -93,14 +93,14 @@ public class OrgServiceImpl implements OrgService {
 
         //处理机构特性列表
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
-        traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getId());
+        traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
         tbServiceOrgTraitMapper.deleteByExample(traitCriteria);
         List<TbServiceOrgTrait> traits = new ArrayList<>();
         //trait_type : 特性类型(1业务擅长2行业领域3发展阶段4企业性质)
-        traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getIndustrySector(),"2",tbServiceOrg.getId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getId(),account));
-        traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getId(),account));
+        traits.addAll(setTraitBean(orgBasicData.getOrgSpeciality(),"1",tbServiceOrg.getOrgId(),account));
+        traits.addAll(setTraitBean(orgBasicData.getIndustrySector(),"2",tbServiceOrg.getOrgId(),account));
+        traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
+        traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
         Map<String,Object> map = new HashMap<>();
         map.put("list",traits);
         orgTraitMapper.insertTraitList(map);
@@ -138,7 +138,6 @@ public class OrgServiceImpl implements OrgService {
     public int saveOrgLicenseData(OrgLicenseData orgLicenseData,String account){
         TbServiceOrg org = new TbServiceOrg();
         BeanUtils.copyProperties(orgLicenseData,org);
-        org.setId(orgLicenseData.getOrgId());
         TbServiceOrgLicenseCriteria licenseCriteria = new TbServiceOrgLicenseCriteria();
         licenseCriteria.createCriteria().andOrgIdEqualTo(orgLicenseData.getOrgId());
         tbServiceOrgLicenseMapper.deleteByExample(licenseCriteria);

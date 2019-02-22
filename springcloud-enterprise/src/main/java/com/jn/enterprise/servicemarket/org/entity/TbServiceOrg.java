@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbServiceOrg implements Serializable {
-    private String id;
+    private String orgId;
 
     private String orgAccount;
 
@@ -54,12 +54,12 @@ public class TbServiceOrg implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
-        return id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setOrgId(String orgId) {
+        this.orgId = orgId == null ? null : orgId.trim();
     }
 
     public String getOrgAccount() {
@@ -258,7 +258,7 @@ public class TbServiceOrg implements Serializable {
             return false;
         }
         TbServiceOrg other = (TbServiceOrg) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+        return (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
             && (this.getOrgAccount() == null ? other.getOrgAccount() == null : this.getOrgAccount().equals(other.getOrgAccount()))
             && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getOrgRegisterTime() == null ? other.getOrgRegisterTime() == null : this.getOrgRegisterTime().equals(other.getOrgRegisterTime()))
@@ -288,7 +288,7 @@ public class TbServiceOrg implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
         result = prime * result + ((getOrgAccount() == null) ? 0 : getOrgAccount().hashCode());
         result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getOrgRegisterTime() == null) ? 0 : getOrgRegisterTime().hashCode());
@@ -321,7 +321,7 @@ public class TbServiceOrg implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", orgId=").append(orgId);
         sb.append(", orgAccount=").append(orgAccount);
         sb.append(", orgName=").append(orgName);
         sb.append(", orgRegisterTime=").append(orgRegisterTime);

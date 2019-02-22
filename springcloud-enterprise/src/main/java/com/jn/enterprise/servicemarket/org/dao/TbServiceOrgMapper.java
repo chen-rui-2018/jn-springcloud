@@ -10,7 +10,7 @@ public interface TbServiceOrgMapper {
 
     int deleteByExample(TbServiceOrgCriteria example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(String orgId);
 
     int insert(TbServiceOrg record);
 
@@ -18,7 +18,7 @@ public interface TbServiceOrgMapper {
 
     List<TbServiceOrg> selectByExample(TbServiceOrgCriteria example);
 
-    TbServiceOrg selectByPrimaryKey(String id);
+    TbServiceOrg selectByPrimaryKey(String orgId);
 
     int updateByExampleSelective(@Param("record") TbServiceOrg record, @Param("example") TbServiceOrgCriteria example);
 

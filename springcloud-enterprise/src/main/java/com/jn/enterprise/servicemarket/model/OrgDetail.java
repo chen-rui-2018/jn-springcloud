@@ -15,7 +15,7 @@ import java.util.List;
 @ApiModel(value = "OrgDetail",description = "服务机构详情")
 public class OrgDetail {
     @ApiModelProperty(value = "服务机构id")
-    private String id;
+    private String orgId;
 
     @ApiModelProperty("一级业务领域")
     private String businessType;
@@ -105,12 +105,12 @@ public class OrgDetail {
     @ApiModelProperty(value = "机构人员列表")
     private List<OrgTeam> orgTeams;
 
-    public String getId() {
-        return id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getBusinessType() {

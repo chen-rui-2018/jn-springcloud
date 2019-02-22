@@ -15,7 +15,7 @@ import org.checkerframework.checker.units.qual.A;
 public class OrgBasicData {
 
     @ApiModelProperty(value = "机构ID")
-    private String id;
+    private String orgId;
 
     @ApiModelProperty(value = "服务商名称")
     private String orgName;
@@ -47,12 +47,12 @@ public class OrgBasicData {
     @ApiModelProperty(value = "企业性质(多个用,分隔)")
     private String companyNature;
 
-    public String getId() {
-        return id;
+    public String getOrgId() {
+        return orgId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getOrgName() {

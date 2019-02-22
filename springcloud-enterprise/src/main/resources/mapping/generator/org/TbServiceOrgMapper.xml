@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.org.entity.TbServiceOrg">
-    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <id column="org_id" jdbcType="VARCHAR" property="orgId" />
     <result column="org_account" jdbcType="VARCHAR" property="orgAccount" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="org_register_time" jdbcType="DATE" property="orgRegisterTime" />
@@ -86,7 +86,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ID, org_account, org_name, org_register_time, is_approve, org_synopsis, org_business, 
+    org_id, org_account, org_name, org_register_time, is_approve, org_synopsis, org_business, 
     org_speciality, org_logo, org_show, org_type, org_hobby, org_status, check_time, 
     business_type, business_s_type, created_time, creator_account, modified_time, modifier_account, 
     record_status, org_code, operate_status, org_principal
@@ -109,11 +109,11 @@
     select 
     <include refid="Base_Column_List" />
     from tb_service_org
-    where ID = #{id,jdbcType=VARCHAR}
+    where org_id = #{orgId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_service_org
-    where ID = #{id,jdbcType=VARCHAR}
+    where org_id = #{orgId,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria">
     delete from tb_service_org
@@ -122,7 +122,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrg">
-    insert into tb_service_org (ID, org_account, org_name, 
+    insert into tb_service_org (org_id, org_account, org_name, 
       org_register_time, is_approve, org_synopsis, 
       org_business, org_speciality, org_logo, 
       org_show, org_type, org_hobby, 
@@ -131,7 +131,7 @@
       modified_time, modifier_account, record_status, 
       org_code, operate_status, org_principal
       )
-    values (#{id,jdbcType=VARCHAR}, #{orgAccount,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+    values (#{orgId,jdbcType=VARCHAR}, #{orgAccount,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
       #{orgRegisterTime,jdbcType=DATE}, #{isApprove,jdbcType=VARCHAR}, #{orgSynopsis,jdbcType=VARCHAR}, 
       #{orgBusiness,jdbcType=VARCHAR}, #{orgSpeciality,jdbcType=VARCHAR}, #{orgLogo,jdbcType=VARCHAR}, 
       #{orgShow,jdbcType=INTEGER}, #{orgType,jdbcType=VARCHAR}, #{orgHobby,jdbcType=VARCHAR}, 
@@ -144,8 +144,8 @@
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrg">
     insert into tb_service_org
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        ID,
+      <if test="orgId != null">
+        org_id,
       </if>
       <if test="orgAccount != null">
         org_account,
@@ -218,8 +218,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
       </if>
       <if test="orgAccount != null">
         #{orgAccount,jdbcType=VARCHAR},
@@ -301,8 +301,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_service_org
     <set>
-      <if test="record.id != null">
-        ID = #{record.id,jdbcType=VARCHAR},
+      <if test="record.orgId != null">
+        org_id = #{record.orgId,jdbcType=VARCHAR},
       </if>
       <if test="record.orgAccount != null">
         org_account = #{record.orgAccount,jdbcType=VARCHAR},
@@ -380,7 +380,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_service_org
-    set ID = #{record.id,jdbcType=VARCHAR},
+    set org_id = #{record.orgId,jdbcType=VARCHAR},
       org_account = #{record.orgAccount,jdbcType=VARCHAR},
       org_name = #{record.orgName,jdbcType=VARCHAR},
       org_register_time = #{record.orgRegisterTime,jdbcType=DATE},
@@ -481,7 +481,7 @@
         org_principal = #{orgPrincipal,jdbcType=VARCHAR},
       </if>
     </set>
-    where ID = #{id,jdbcType=VARCHAR}
+    where org_id = #{orgId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.org.entity.TbServiceOrg">
     update tb_service_org
@@ -508,6 +508,6 @@
       org_code = #{orgCode,jdbcType=VARCHAR},
       operate_status = #{operateStatus,jdbcType=VARCHAR},
       org_principal = #{orgPrincipal,jdbcType=VARCHAR}
-    where ID = #{id,jdbcType=VARCHAR}
+    where org_id = #{orgId,jdbcType=VARCHAR}
   </update>
 </mapper>

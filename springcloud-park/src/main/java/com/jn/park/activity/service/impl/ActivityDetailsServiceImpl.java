@@ -19,7 +19,7 @@ import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -192,23 +192,18 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             accountList.add(comment.getCreatorAccount());
         }
         //批量获取用户扩展信息
-        Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
         if(moreUserExtension.getData()==null || moreUserExtension.getData().isEmpty()){
             //ignore
             return ;
         }
-        List<UserExtension> data = moreUserExtension.getData();
+        List<UserExtensionInfo> data = moreUserExtension.getData();
         for(Comment  comment:list){
-            for(UserExtension userExtension:data){
-                //个人用户拓展信息
-                if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(comment.getCreatorAccount())){
+            for(UserExtensionInfo userExtension:data){
+                //用户拓展信息
+                if(userExtension!=null && userExtension.getAccount().equals(comment.getCreatorAccount())){
                     //设置头像信息
-                    comment.setAvatar(userExtension.getUserPersonInfo().getAvatar());
-                    break;
-                }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(comment.getCreatorAccount())){
-                    //企业用户拓展信息
-                    //设置头像信息
-                    comment.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
+                    comment.setAvatar(userExtension.getAvatar());
                     break;
                 }
             }
@@ -291,18 +286,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             accountList.add(apply.getAccount());
         }
         //批量获取用户扩展信息
-        Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
         if(moreUserExtension.getData()!=null && !moreUserExtension.getData().isEmpty()){
-            List<UserExtension> data = moreUserExtension.getData();
+            List<UserExtensionInfo> data = moreUserExtension.getData();
             for(ActivityApply apply:activityApplyInfo){
-                for(UserExtension userExtension:data){
-                    //个人用户扩展信息
-                    if(userExtension.getUserPersonInfo()!=null && userExtension.getUserPersonInfo().getAccount().equals(apply.getAccount())){
-                        apply.setAvatar(userExtension.getUserPersonInfo().getAvatar());
-                        break;
-                    }else if(userExtension.getUserCompanyInfo()!=null && userExtension.getUserCompanyInfo().getAccount().equals(apply.getAccount())){
-                        //企业用户扩展信息
-                        apply.setAvatar(userExtension.getUserCompanyInfo().getAvatar());
+                for(UserExtensionInfo userExtension:data){
+                    //用户扩展信息
+                    if(userExtension!=null && userExtension.getAccount().equals(apply.getAccount())){
+                        apply.setAvatar(userExtension.getAvatar());
                         break;
                     }
                 }

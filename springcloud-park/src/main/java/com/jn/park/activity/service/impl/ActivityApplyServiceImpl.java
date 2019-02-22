@@ -28,8 +28,7 @@ import com.jn.park.model.ActivityQueryPaging;
 import com.jn.park.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserCompany;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -103,32 +102,18 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         //校验是否可以报名/取消报名
         checkIsApply(activityId);
         //获取用户拓展信息，判断信息是否完整，若不完整，需要完善信息
-        Result<UserExtension> list = userExtensionClient.getUserExtension(account);
+        Result<UserExtensionInfo> list = userExtensionClient.getUserExtension(account);
         //判断人员头像、名称、性别、公司名称、岗位名称是否都有
-        UserExtension userExtension = list.getData();
+        UserExtensionInfo userExtension = list.getData();
         if (userExtension == null) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }
-        //个人用户
-        if (userExtension.getUserPersonInfo() != null) {
-            ApplyUserInfo applyUserInfo = new ApplyUserInfo();
-            BeanUtils.copyProperties(userExtension.getUserPersonInfo(), applyUserInfo);
-            if (StringUtils.isBlank(applyUserInfo.getAvatar()) || StringUtils.isBlank(applyUserInfo.getCompany())
-                    || StringUtils.isBlank(applyUserInfo.getName()) || StringUtils.isBlank(applyUserInfo.getPost())
-                    || StringUtils.isBlank(applyUserInfo.getSex())) {
-                //用户信息不完善，跳转到信息完善页
-                throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
-            }
-        } else if (userExtension.getUserCompanyInfo() != null) {
-            //企业用户
-            UserCompany userCompanyInfo = userExtension.getUserCompanyInfo();
-            //判断手机号和企业名称不为空
-            if (StringUtils.isBlank(userCompanyInfo.getPhone()) || StringUtils.isBlank(userCompanyInfo.getComName())) {
-                //用户信息不完善，跳转到信息完善页
-                throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
-            }
-        } else {
+        ApplyUserInfo applyUserInfo = new ApplyUserInfo();
+        BeanUtils.copyProperties(userExtension, applyUserInfo);
+        if (StringUtils.isBlank(applyUserInfo.getAvatar()) || StringUtils.isBlank(applyUserInfo.getCompany())
+                || StringUtils.isBlank(applyUserInfo.getName()) || StringUtils.isBlank(applyUserInfo.getPost())
+                || StringUtils.isBlank(applyUserInfo.getSex())) {
             //用户信息不完善，跳转到信息完善页
             throw new JnSpringCloudException(ActivityExceptionEnum.INCOMPLETE_INFORMATION);
         }
@@ -519,8 +504,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
             }
             activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
-            activityApplyList = findUserExtension(activityApplyList);
-            return new PaginationData(activityApplyList, objects == null ? 0 : objects.getTotal());
+            return new PaginationData(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -533,8 +517,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @Override
     public List<ActivityApplyDetail> findApplyAccountList(List<String> activityIdList) {
         List<ActivityApplyDetail> accountList = activityApplyMapper.findApplyAccountList(activityIdList);
-        accountList = findUserExtension(accountList);
-        return accountList;
+        return findUserExtension(accountList);
     }
 
     /**
@@ -544,20 +527,17 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     private List<ActivityApplyDetail> findUserExtension(List<ActivityApplyDetail> activityApplyList) {
         List<String> accountList = new ArrayList<>();
-        if (activityApplyList != null && activityApplyList.size()>0) {
+        if (!activityApplyList.isEmpty()) {
             for (ActivityApplyDetail detail : activityApplyList) {
                 accountList.add(detail.getAccount());
             }
-            Result<List<UserExtension>> userResult = userExtensionClient.getMoreUserExtension(accountList);
-            List<UserExtension> userList = userResult.getData();
-            if (userList != null && userList.size()>0) {
-                for (UserExtension user : userList) {
+            Result<List<UserExtensionInfo>> userResult = userExtensionClient.getMoreUserExtension(accountList);
+            List<UserExtensionInfo> userList = userResult.getData();
+            if (!userList.isEmpty()) {
+                for (UserExtensionInfo user : userList) {
                     for (ActivityApplyDetail detail : activityApplyList) {
-                        if (user.getUserPersonInfo() != null && user.getUserPersonInfo().getAccount().equals(detail.getAccount())) {
-                            BeanUtils.copyProperties(user.getUserPersonInfo(), detail);
-                        }
-                        if (user.getUserCompanyInfo() != null && user.getUserCompanyInfo().getAccount().equals(detail.getAccount())) {
-                            BeanUtils.copyProperties(user.getUserCompanyInfo(), detail);
+                        if (user!= null) {
+                            BeanUtils.copyProperties(user, detail);
                         }
                     }
                 }

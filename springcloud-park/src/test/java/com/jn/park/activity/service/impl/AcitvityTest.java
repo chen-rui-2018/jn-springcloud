@@ -6,24 +6,19 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivityCriteria;
-import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.List;
@@ -111,10 +106,10 @@ public class AcitvityTest {
         ActivityContent activityContent = new ActivityContent();
         activityContent.setActiName("测试活动草稿");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
-        activityContent.setActiStartTime("2018-12-29 08:00:00");
-        activityContent.setActiEndTime("2018-12-30 21:00:00");
-        activityContent.setApplyEndTime("2018-12-28 20:00:00");
-        activityContent.setMesSendTime("2018-12-28 12:00:00");
+        activityContent.setActiStartTime("2019-03-29 08:00:00");
+        activityContent.setActiEndTime("2019-03-30 21:00:00");
+        activityContent.setApplyEndTime("2019-04-28 20:00:00");
+        activityContent.setMesSendTime("2019-02-28 12:00:00");
         activityContent.setParkId("8f5135215742b08f580ef5a4298efe11");
         activityContent.setActiAddress("麓谷企业广场");
         activityContent.setActiCost(new BigDecimal(0.00));
@@ -147,10 +142,10 @@ public class AcitvityTest {
         ActivityContent activityContent = new ActivityContent();
         activityContent.setActiName("元旦年后会多");
         activityContent.setActiType("956dc8ab83f84c0cbb6b6cea2547f449");
-        activityContent.setActiStartTime("2018-12-29 08:00:00");
-        activityContent.setActiEndTime("2018-12-30 21:00:00");
-        activityContent.setApplyEndTime("2018-12-28 20:00:00");
-        activityContent.setMesSendTime("2018-12-28 12:00:00");
+        activityContent.setActiStartTime("2019-03-29 08:00:00");
+        activityContent.setActiEndTime("2019-03-30 21:00:00");
+        activityContent.setApplyEndTime("2019-04-28 20:00:00");
+        activityContent.setMesSendTime("2019-04-28 12:00:00");
         activityContent.setParkId("8f5135215742b08f580ef5a4298efe11");
         activityContent.setActiAddress("中电软件园");
         activityContent.setActiCost(new BigDecimal(0.00));
@@ -254,8 +249,8 @@ public class AcitvityTest {
     @Test
     public void activityListSlim(){
         try {
-            activitySlimQuery.setStartTime("2018-12-01");
-            activitySlimQuery.setEndTime("2018-12-31");
+            activitySlimQuery.setStartTime("2018-02-21");
+            activitySlimQuery.setEndTime("2018-03-31");
             activitySlimQuery.setTypeId("");
             activitySlimQuery.setKeyWord("");
             activitySlimQuery.setOrderBy("apply_num");
@@ -274,7 +269,7 @@ public class AcitvityTest {
     public void activityEndByTimedTask(){
         ActivityContent activityContent = new ActivityContent();
         activityContent.setId("56ad4d018554586b1117f27391ae9bf8");
-        activityContent.setActiStartTime("2019-1-11 16:08:00");
+        activityContent.setActiStartTime("2019-3-11 16:08:00");
         try{
             int i = activityService.activityEndByTimedTask(activityContent);
             assertThat(i,anything());
@@ -296,7 +291,7 @@ public class AcitvityTest {
     public void activitySendMessageByTimedTask(){
         ActivityContent activityContent = new ActivityContent();
         activityContent.setId("56ad4d018554586b1117f27391ae9bf8");
-        activityContent.setActiStartTime("2019-1-11 16:08:00");
+        activityContent.setActiStartTime("2019-03-11 16:08:00");
         try{
             int i = activityService.activitySendMessageByTimedTask(activityContent);
             assertThat(i,anything());

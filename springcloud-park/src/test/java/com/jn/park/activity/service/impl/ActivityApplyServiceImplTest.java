@@ -86,7 +86,6 @@ public class ActivityApplyServiceImplTest {
     public void quickApply() {
         try {
             activityApplyService.quickApply(activityId, account);
-            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("快速报名失败");
@@ -108,7 +107,6 @@ public class ActivityApplyServiceImplTest {
     public void cancelApply() {
         try {
             activityApplyService.cancelApply(activityId, account);
-            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("取消报名失败");
@@ -130,7 +128,6 @@ public class ActivityApplyServiceImplTest {
     @Test
     public void addApplyInfo() {
         activityApplyService.addApplyInfo(activityId, account,"1");
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
         assertThat(anything(),anything());
     }
 

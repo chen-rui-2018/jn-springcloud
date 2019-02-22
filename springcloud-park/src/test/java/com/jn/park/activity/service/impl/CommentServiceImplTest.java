@@ -95,7 +95,6 @@ public class CommentServiceImplTest {
     public void commentActivity() {
         try {
             commentService.commentActivity(commentAdd, account);
-            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
             assertThat(anything(),anything());
         } catch (Exception e) {
             logger.info("活动评论/回复失败");
@@ -110,7 +109,6 @@ public class CommentServiceImplTest {
     public void commentActivityLike() {
         try {
             commentService.commentActivityLike(id, account);
-            //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("活动评论点赞失败");

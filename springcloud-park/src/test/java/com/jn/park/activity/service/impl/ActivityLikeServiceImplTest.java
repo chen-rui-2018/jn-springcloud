@@ -56,7 +56,6 @@ public class ActivityLikeServiceImplTest {
     @Test
     public void activityLike() {
         activityLikeService.activityLike(activityId, account);
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
         assertThat(anything(),anything());
     }
 
@@ -66,7 +65,6 @@ public class ActivityLikeServiceImplTest {
     @Test
     public void cancelLike() {
         activityLikeService.cancelLike(activityId, account);
-        //todo:返回为空的断言未确定怎么写，待确认后完善 yangph
         assertThat(anything(),anything());
     }
 }

@@ -5,7 +5,9 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserAffiliateInfo;
+import com.jn.user.model.UserCompanyInfo;
+import com.jn.user.model.UserExtensionInfo;
 import com.jn.user.userinfo.service.UserInfoService;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -41,10 +43,10 @@ public class UserExtensionController extends BaseController implements UserExten
     @ApiOperation(value = "获取登录用户扩展信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getUserExtension")
     @Override
-    public Result<UserExtension> getUserExtension(@RequestBody String account) {
+    public Result<UserExtensionInfo> getUserExtension(@RequestBody String account) {
         Assert.notNull(account,"用户账号不能为空");
-        Result<UserExtension> result=new Result();
-        UserExtension userExtension = userInfoService.getUserExtension(account);
+        Result<UserExtensionInfo> result=new Result();
+        UserExtensionInfo userExtension = userInfoService.getUserExtension(account);
         if(userExtension!=null){
             result.setData(userExtension);
         }
@@ -56,13 +58,31 @@ public class UserExtensionController extends BaseController implements UserExten
     @ApiOperation(value = "批量获取用户的扩展信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getMoreUserExtension")
     @Override
-    public Result<List<UserExtension>>getMoreUserExtension(@RequestBody List<String> accountList){
+    public Result<List<UserExtensionInfo>>getMoreUserExtension(@RequestBody List<String> accountList){
         Assert.notNull(accountList, "用户账号不能为空");
-        Result<List<UserExtension>> result=new Result();
-        List<UserExtension> userExtensionList=userInfoService.getMoreUserExtension(accountList);
+        Result<List<UserExtensionInfo>> result=new Result();
+        List<UserExtensionInfo> userExtensionList=userInfoService.getMoreUserExtension(accountList);
         if(userExtensionList!=null) {
             result.setData(userExtensionList);
         }
         return result;
+    }
+
+    @ControllerLog(doAction = "更新用户所属机构信息")
+    @ApiOperation(value = "更新用户所属机构信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/updateAffiliateInfo")
+    @Override
+    public Result updateAffiliateInfo(UserAffiliateInfo userAffiliateInfo) {
+        boolean updateSuccess = userInfoService.updateAffiliateInfo(userAffiliateInfo);
+        return new Result(updateSuccess);
+    }
+
+    @ControllerLog(doAction = "更新用户所属企业信息")
+    @ApiOperation(value = "更新用户所属企业信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/updateCompanyInfo")
+    @Override
+    public Result updateCompanyInfo(UserCompanyInfo userCompanyInfo) {
+        boolean updateSuccess = userInfoService.updateCompanyInfo(userCompanyInfo);
+        return new Result(updateSuccess);
     }
 }

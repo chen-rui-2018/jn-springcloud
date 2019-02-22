@@ -3,10 +3,15 @@
 <mapper namespace="com.jn.user.userinfo.dao.TbUserPersonMapper">
   <resultMap id="BaseResultMap" type="com.jn.user.userinfo.entity.TbUserPerson">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="affiliate_code" jdbcType="VARCHAR" property="affiliateCode" />
+    <result column="affiliate_name" jdbcType="VARCHAR" property="affiliateName" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
     <result column="sex" jdbcType="VARCHAR" property="sex" />
     <result column="age" jdbcType="INTEGER" property="age" />
     <result column="ID_card" jdbcType="VARCHAR" property="idCard" />
@@ -82,8 +87,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, account, phone, email, name, sex, age, ID_card, company, post, education, avatar, 
-    user_type, point, birthday, creator_account, modifier_account, created_time, modified_time, 
+    id, affiliate_code, affiliate_name, company_code, company_name, account, phone, email, 
+    name, nick_name, sex, age, ID_card, company, post, education, avatar, user_type, 
+    point, birthday, creator_account, modifier_account, created_time, modified_time, 
     record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.userinfo.entity.TbUserPersonCriteria" resultMap="BaseResultMap">
@@ -117,15 +123,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
-    insert into tb_user_person (id, account, phone, 
-      email, name, sex, age, 
+    insert into tb_user_person (id, affiliate_code, affiliate_name, 
+      company_code, company_name, account, 
+      phone, email, name, 
+      nick_name, sex, age, 
       ID_card, company, post, 
       education, avatar, user_type, 
       point, birthday, creator_account, 
       modifier_account, created_time, modified_time, 
       record_status)
-    values (#{id,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=VARCHAR}, #{affiliateCode,jdbcType=VARCHAR}, #{affiliateName,jdbcType=VARCHAR}, 
+      #{companyCode,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{nickName,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{idCard,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, 
       #{education,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, 
       #{point,jdbcType=DOUBLE}, #{birthday,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
@@ -138,6 +148,18 @@
       <if test="id != null">
         id,
       </if>
+      <if test="affiliateCode != null">
+        affiliate_code,
+      </if>
+      <if test="affiliateName != null">
+        affiliate_name,
+      </if>
+      <if test="companyCode != null">
+        company_code,
+      </if>
+      <if test="companyName != null">
+        company_name,
+      </if>
       <if test="account != null">
         account,
       </if>
@@ -149,6 +171,9 @@
       </if>
       <if test="name != null">
         name,
+      </if>
+      <if test="nickName != null">
+        nick_name,
       </if>
       <if test="sex != null">
         sex,
@@ -200,6 +225,18 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
+      <if test="affiliateCode != null">
+        #{affiliateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="affiliateName != null">
+        #{affiliateName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null">
+        #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        #{companyName,jdbcType=VARCHAR},
+      </if>
       <if test="account != null">
         #{account,jdbcType=VARCHAR},
       </if>
@@ -211,6 +248,9 @@
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
       </if>
       <if test="sex != null">
         #{sex,jdbcType=VARCHAR},
@@ -271,6 +311,18 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.affiliateCode != null">
+        affiliate_code = #{record.affiliateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.affiliateName != null">
+        affiliate_name = #{record.affiliateName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyCode != null">
+        company_code = #{record.companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyName != null">
+        company_name = #{record.companyName,jdbcType=VARCHAR},
+      </if>
       <if test="record.account != null">
         account = #{record.account,jdbcType=VARCHAR},
       </if>
@@ -282,6 +334,9 @@
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickName != null">
+        nick_name = #{record.nickName,jdbcType=VARCHAR},
       </if>
       <if test="record.sex != null">
         sex = #{record.sex,jdbcType=VARCHAR},
@@ -336,10 +391,15 @@
   <update id="updateByExample" parameterType="map">
     update tb_user_person
     set id = #{record.id,jdbcType=VARCHAR},
+      affiliate_code = #{record.affiliateCode,jdbcType=VARCHAR},
+      affiliate_name = #{record.affiliateName,jdbcType=VARCHAR},
+      company_code = #{record.companyCode,jdbcType=VARCHAR},
+      company_name = #{record.companyName,jdbcType=VARCHAR},
       account = #{record.account,jdbcType=VARCHAR},
       phone = #{record.phone,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
+      nick_name = #{record.nickName,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=VARCHAR},
       age = #{record.age,jdbcType=INTEGER},
       ID_card = #{record.idCard,jdbcType=VARCHAR},
@@ -362,6 +422,18 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     update tb_user_person
     <set>
+      <if test="affiliateCode != null">
+        affiliate_code = #{affiliateCode,jdbcType=VARCHAR},
+      </if>
+      <if test="affiliateName != null">
+        affiliate_name = #{affiliateName,jdbcType=VARCHAR},
+      </if>
+      <if test="companyCode != null">
+        company_code = #{companyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="companyName != null">
+        company_name = #{companyName,jdbcType=VARCHAR},
+      </if>
       <if test="account != null">
         account = #{account,jdbcType=VARCHAR},
       </if>
@@ -373,6 +445,9 @@
       </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
       </if>
       <if test="sex != null">
         sex = #{sex,jdbcType=VARCHAR},
@@ -424,10 +499,15 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.user.userinfo.entity.TbUserPerson">
     update tb_user_person
-    set account = #{account,jdbcType=VARCHAR},
+    set affiliate_code = #{affiliateCode,jdbcType=VARCHAR},
+      affiliate_name = #{affiliateName,jdbcType=VARCHAR},
+      company_code = #{companyCode,jdbcType=VARCHAR},
+      company_name = #{companyName,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=VARCHAR},
       age = #{age,jdbcType=INTEGER},
       ID_card = #{idCard,jdbcType=VARCHAR},

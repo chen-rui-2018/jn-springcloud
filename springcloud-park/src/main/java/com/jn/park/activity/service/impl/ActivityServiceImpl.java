@@ -23,8 +23,6 @@ import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

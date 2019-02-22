@@ -111,7 +111,7 @@ public class AdvisorServiceImplTest {
      * 根据查询条件获取服务评价信息
      */
     @Test
-    public void getServcieRatingInfo(){
+    public void getServiceRatingInfo(){
         PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
         if(pageData.getRows()!=null){
             List<ServiceRating> serviceRatingList=(List<ServiceRating> )pageData.getRows();

@@ -113,7 +113,7 @@
     </context>
 
 
-    <!--服务顾问-->
+    <!--服务机构-->
     <context id="service_org">
         <!-- 实现Serializable接口 -->
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>

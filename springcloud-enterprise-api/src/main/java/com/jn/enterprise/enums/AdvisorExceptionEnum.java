@@ -14,6 +14,11 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     ADVISOR_INFO_NOT_EXIST("5020501","顾问信息不存在"),
     ADVISOR_ACCOUNT_NOT_NULL("5020502","顾问账号不能为空"),
     REGISTER_ACCOUNT("5020503","注册账号不能为空"),
+    SERVICE_ORG_NOT_EXIST("5020504","当前账号信息在系统中不存在"),
+    GET_ADVISOR_INFO_FAIL("5020505","获取顾问信息失败"),
+    APPROVAL_STATUS_NOT_EXIST("5020506","顾问管理审批状态在系统中不存在"),
+    APPROVAL_STATUS_NOT_NULL("5020507","顾问管理审批状态不能为空"),
+    ADVISOR_IS_EXIT("5020508","顾问已经被邀请，请不要重复邀请!!!"),
     ;
 
     /**

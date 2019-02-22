@@ -1,14 +1,16 @@
 package com.jn.enterprise.servicemarket.advisor.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserExtensionInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -47,7 +49,7 @@ public class AdvisorManagementController extends BaseController {
     @RequestMapping(value = "/echoUserInfo")
     public Result echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true) String registerAccount){
         Assert.notNull(registerAccount, AdvisorExceptionEnum.REGISTER_ACCOUNT.getMessage());
-        Result<UserExtension> userExtension = userExtensionClient.getUserExtension(registerAccount);
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(registerAccount);
         return  userExtension;
     }
 
@@ -58,6 +60,15 @@ public class AdvisorManagementController extends BaseController {
     public Result inviteAdvisor(@RequestBody @Validated InviteAdvisorInfo inviteAdvisorInfo){
         advisorManagementService.inviteAdvisor(inviteAdvisorInfo);
         return  new Result();
+    }
+
+    @ControllerLog(doAction = "顾问管理")
+    @ApiOperation(value = "顾问管理", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getAdvisorManagementInfo")
+    public Result getAdvisorManagementInfo(@RequestBody @Validated AdvisorManagementQuery advisorManagementQuery){
+        Assert.notNull(advisorManagementQuery.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
+        PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementQuery);
+        return  new Result(advisorManagementInfo);
     }
 }
 

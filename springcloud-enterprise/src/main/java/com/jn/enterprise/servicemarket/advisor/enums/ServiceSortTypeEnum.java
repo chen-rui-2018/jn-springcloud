@@ -1,4 +1,4 @@
-package com.jn.enterprise.enums;
+package com.jn.enterprise.servicemarket.advisor.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

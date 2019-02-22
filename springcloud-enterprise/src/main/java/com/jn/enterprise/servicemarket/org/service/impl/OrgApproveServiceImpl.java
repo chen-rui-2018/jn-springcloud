@@ -2,12 +2,9 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.model.OrgApply;
 import com.jn.enterprise.servicemarket.model.OrgApplyCount;
 import com.jn.enterprise.servicemarket.model.OrgApplyDetail;
@@ -18,7 +15,7 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
-import com.jn.user.model.UserExtension;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -63,12 +60,12 @@ public class OrgApproveServiceImpl implements OrgApproveService {
             orgApplyList.add(orgApply);
             accountList.add(serviceOrg.getOrgAccount());
         }
-        Result<List<UserExtension>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
-        List<UserExtension> userExtensions = moreUserExtension.getData();
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        List<UserExtensionInfo> userExtensions = moreUserExtension.getData();
         for (OrgApply orgApply:orgApplyList) {
-            for (UserExtension userExtesion:userExtensions) {
-                if(StringUtils.equals(orgApply.getOrgAccount(),userExtesion.getUserPersonInfo().getAccount())){
-                    BeanUtils.copyProperties(userExtesion.getUserPersonInfo(),orgApply);
+            for (UserExtensionInfo userExtesion:userExtensions) {
+                if(StringUtils.equals(orgApply.getOrgAccount(),userExtesion.getAccount())){
+                    BeanUtils.copyProperties(userExtesion,orgApply);
                 }
             }
         }

@@ -5,13 +5,9 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.servicemarket.model.OrgApply;
-import com.jn.enterprise.servicemarket.model.OrgApplyCount;
-import com.jn.enterprise.servicemarket.model.OrgApplyDetail;
-import com.jn.enterprise.servicemarket.model.OrgApplyParameter;
-import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
+import com.jn.enterprise.servicemarket.model.*;
+import com.jn.enterprise.servicemarket.org.dao.*;
+import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -23,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,6 +39,14 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     private TbServiceOrgMapper tbServiceOrgMapper;
     @Autowired
     private UserExtensionClient userExtensionClient;
+    @Autowired
+    private OrgApproveMapper orgApproveMapper;
+    @Autowired
+    private TbServiceOrgTeamMapper tbServiceOrgTeamMapper;
+    @Autowired
+    private TbServiceOrgTraitMapper tbServiceOrgTraitMapper;
+    @Autowired
+    private TbServiceOrgLicenseMapper tbServiceOrgLicenseMapper;
 
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
@@ -129,11 +132,42 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     @Override
     @ServiceLog(doAction = "查询机构申请详细信息")
     public OrgApplyDetail getOrgApplyDetail(String orgId){
+        OrgApplyDetail orgApplyDetail = orgApproveMapper.getOrgApplyDetailById(orgId);
 
+        TbServiceOrgLicenseCriteria licenseCriteria = new TbServiceOrgLicenseCriteria();
+        licenseCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        List<TbServiceOrgLicense> orgLicenses = tbServiceOrgLicenseMapper.selectByExample(licenseCriteria);
 
-        return null;
+        List<OrgLicense> licenses = new ArrayList<>(8);
+        for (TbServiceOrgLicense tbServiceOrgLicense:orgLicenses) {
+            OrgLicense orgLicense = new OrgLicense();
+            BeanUtils.copyProperties(tbServiceOrgLicense,orgLicense);
+            licenses.add(orgLicense);
+        }
+        orgApplyDetail.setOrgLicenses(licenses);
+        TbServiceOrgTeamCriteria teamCriteria = new TbServiceOrgTeamCriteria();
+        teamCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        List<TbServiceOrgTeam> orgTeamList = tbServiceOrgTeamMapper.selectByExample(teamCriteria);
+        List<OrgTeam> teams = new ArrayList<>(8);
+        for (TbServiceOrgTeam tbServiceOrgTeam:orgTeamList ) {
+            OrgTeam orgTeam = new OrgTeam();
+            BeanUtils.copyProperties(tbServiceOrgTeam,orgTeam);
+            teams.add(orgTeam);
+        }
+        orgApplyDetail.setOrgTeams(teams);
+        TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
+        traitCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        List<TbServiceOrgTrait> orgTraits = tbServiceOrgTraitMapper.selectByExample(traitCriteria);
+        List<OrgTrait> traits1 = new ArrayList<>(8);
+        for (TbServiceOrgTrait tbServiceOrgTrait:orgTraits) {
+            OrgTrait trait = new OrgTrait();
+            BeanUtils.copyProperties(tbServiceOrgTrait,trait);
+            traits1.add(trait);
+        }
+        orgApplyDetail.setOrgTraits(traits1);
+        //TODO 对接审核流接口信息  jiangyl
+        return orgApplyDetail;
     }
-
 
 
 }

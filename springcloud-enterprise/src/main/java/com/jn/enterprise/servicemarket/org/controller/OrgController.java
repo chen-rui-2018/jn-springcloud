@@ -3,6 +3,8 @@ package com.jn.enterprise.servicemarket.org.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -54,7 +56,7 @@ public class OrgController extends BaseController {
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam String orgId){
-
+        Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
 

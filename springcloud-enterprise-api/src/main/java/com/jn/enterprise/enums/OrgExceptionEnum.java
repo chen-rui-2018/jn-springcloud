@@ -11,6 +11,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum OrgExceptionEnum  implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     ORG_TIME_PARSE_ERROR("5020902", "时间转换错误，请核实时间为：yyyy-MM-dd。"),
+    ORG_ID_IS_NOT_NULL("5020903", "机构ID不能为空"),
     ;
 
     /**

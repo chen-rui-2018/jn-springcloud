@@ -6,6 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -69,6 +70,14 @@ public class AdvisorManagementController extends BaseController {
         Assert.notNull(advisorManagementQuery.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
         PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementQuery);
         return  new Result(advisorManagementInfo);
+    }
+
+    @ControllerLog(doAction = "审批顾问填写信息")
+    @ApiOperation(value = "审批顾问填写信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/approvalAdvisorInfo")
+    public Result approvalAdvisorInfo(@RequestBody @Validated ApprovalQuery approvalQuery){
+        advisorManagementService.approvalAdvisorInfo(approvalQuery);
+        return  new Result();
     }
 }
 

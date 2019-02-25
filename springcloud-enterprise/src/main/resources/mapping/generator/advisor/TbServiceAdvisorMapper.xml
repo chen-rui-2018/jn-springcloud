@@ -23,6 +23,7 @@
     <result column="page_views" jdbcType="INTEGER" property="pageViews" />
     <result column="is_have_subsidy" jdbcType="VARCHAR" property="isHaveSubsidy" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+    <result column="approval_desc" jdbcType="VARCHAR" property="approvalDesc" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -94,8 +95,8 @@
     id, org_id, org_name, advisor_account, advisor_name, business_area, avatar, position, 
     is_certification, contact_email, card_type, card_number, education, graduated_school, 
     working_years, practice_qualification, good_at_business, transaction_num, page_views, 
-    is_have_subsidy, approval_status, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    is_have_subsidy, approval_status, approval_desc, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <sql id="Blob_Column_List">
     personal_profile
@@ -156,9 +157,9 @@
       education, graduated_school, working_years, 
       practice_qualification, good_at_business, 
       transaction_num, page_views, is_have_subsidy, 
-      approval_status, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      personal_profile)
+      approval_status, approval_desc, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status, personal_profile)
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
       #{advisorAccount,jdbcType=VARCHAR}, #{advisorName,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, 
       #{avatar,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{isCertification,jdbcType=VARCHAR}, 
@@ -166,9 +167,9 @@
       #{education,jdbcType=VARCHAR}, #{graduatedSchool,jdbcType=VARCHAR}, #{workingYears,jdbcType=REAL}, 
       #{practiceQualification,jdbcType=VARCHAR}, #{goodAtBusiness,jdbcType=VARCHAR}, 
       #{transactionNum,jdbcType=INTEGER}, #{pageViews,jdbcType=INTEGER}, #{isHaveSubsidy,jdbcType=VARCHAR}, 
-      #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{personalProfile,jdbcType=LONGVARBINARY})
+      #{approvalStatus,jdbcType=VARCHAR}, #{approvalDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{personalProfile,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor">
     insert into tb_service_advisor
@@ -235,6 +236,9 @@
       </if>
       <if test="approvalStatus != null">
         approval_status,
+      </if>
+      <if test="approvalDesc != null">
+        approval_desc,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -318,6 +322,9 @@
       </if>
       <if test="approvalStatus != null">
         #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalDesc != null">
+        #{approvalDesc,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -411,6 +418,9 @@
       <if test="record.approvalStatus != null">
         approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       </if>
+      <if test="record.approvalDesc != null">
+        approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -457,6 +467,7 @@
       page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -490,6 +501,7 @@
       page_views = #{record.pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{record.isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      approval_desc = #{record.approvalDesc,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -562,6 +574,9 @@
       <if test="approvalStatus != null">
         approval_status = #{approvalStatus,jdbcType=VARCHAR},
       </if>
+      <if test="approvalDesc != null">
+        approval_desc = #{approvalDesc,jdbcType=VARCHAR},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -605,6 +620,7 @@
       page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
@@ -635,6 +651,7 @@
       page_views = #{pageViews,jdbcType=INTEGER},
       is_have_subsidy = #{isHaveSubsidy,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      approval_desc = #{approvalDesc,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

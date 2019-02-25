@@ -12,6 +12,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
+import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,6 +51,9 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     @Autowired
     private TbServiceExperienceMapper tbServiceExperienceMapper;
+
+    @Autowired
+    private ServiceProductService serviceProductService;
 
     /**
      * 服务顾问列表查询
@@ -109,7 +113,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         List<ServiceExperience> serviceExperienceList = getServiceExperienceInfo(advisorAccount);
         //设置顾问服务经历
         advisorDetailsVo.setServiceExperienceList(serviceExperienceList);
-        //5.todo:获取服务产品  yangph
+        //5.todo:获取服务产品,待陈蕊完成后再调用  yangph
 
         //6.获取服务评价  //默认查全部
         String ratingType="全部";

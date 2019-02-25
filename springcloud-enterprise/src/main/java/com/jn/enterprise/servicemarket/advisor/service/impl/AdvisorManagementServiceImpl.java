@@ -12,6 +12,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.advisor.enums.ApprovalTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
@@ -20,6 +21,7 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -168,6 +170,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         return new PaginationData(tbServiceAdvisorList, objects == null ? 0 : objects.getTotal());
     }
 
+
     /**
      * 根据查询条件获取顾问信息
      * @param advisorManagementQuery
@@ -217,6 +220,80 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }
         }
         return tbServiceAdvisorList;
+    }
+
+    /**
+     * 审批顾问填写信息
+     * @param approvalQuery  审批顾问信息入参(顾问账号，审批结果，审批说明)
+     */
+    @ServiceLog(doAction = "审批顾问填写信息")
+    @Override
+    public void approvalAdvisorInfo(ApprovalQuery approvalQuery) {
+        //根据顾问账号判断待审批状态的顾问在系统中是否存在
+        //待审批状态值“1”
+        String approvalStatus="1";
+        long result = countAdvisorByApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus);
+        //待审批用户信息存在判断标识
+        int size=1;
+        if(result!=size){
+            logger.warn("当前顾问[{}]在系统中不存在或状态非“待审批”",approvalQuery.getAdvisorAccount());
+            throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
+        }
+        //根据审批结果更新顾问信息审批状态
+        if(ApprovalTypeEnum.APPROVED.getCode().equals(approvalQuery.getApprovalResults())){
+            //审批结果为“审批通过”，根据顾问账号更新审批状态信息
+            //审批状态  "2":审批通过  "3"：审批不通过
+            approvalStatus="2";
+            updateApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus,approvalQuery.getApprovalDesc());
+        }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(approvalQuery.getApprovalResults())){
+            //审批结果为“审批不通过”，根据顾问账号更新审批状态信息
+            //审批不通过
+            if(StringUtils.isBlank(approvalQuery.getApprovalDesc())){
+                logger.warn("审批结果为“审批不通过”时，审批说明不能为空");
+                throw new JnSpringCloudException(AdvisorExceptionEnum.APPROVAL_DESC_NOT_NULL);
+            }
+            //审批状态  "2":审批通过  "3"：审批不通过
+            approvalStatus="3";
+            updateApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus,approvalQuery.getApprovalDesc());
+        }else{
+            logger.warn("审批顾问[{}]填写资料的审批状态值与系统不符",approvalQuery.getAdvisorAccount());
+            throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
+        }
+    }
+
+    /**
+     * 修改顾问审批状态
+     * @param advisorAccount  顾问账号
+     * @param approvalStatus  审批状态
+     * @param approvalDesc    审批说明
+     */
+     @ServiceLog(doAction = "修改顾问审批状态")
+    private void updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
+        TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        tbServiceAdvisor.setApprovalStatus(approvalStatus);
+        if(StringUtils.isNotBlank(approvalDesc)){
+            tbServiceAdvisor.setApprovalDesc(approvalDesc);
+        }else{
+            //审批通过，没有审批说明，需清空审批不通过的审批说明
+            tbServiceAdvisor.setApprovalDesc("");
+        }
+        tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
+    }
+
+    /**
+     * 根据审批状态统计顾问信息条数
+     * @param advisorAccount  顾问账号
+     * @param approvalStatus  审批状态
+     * @return
+     */
+    @ServiceLog(doAction = "根据审批状态统计顾问信息条数")
+    private long countAdvisorByApprovalStatus(String advisorAccount,String approvalStatus) {
+        TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
+        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
+                .andApprovalStatusEqualTo(approvalStatus);
+        return tbServiceAdvisorMapper.countByExample(example);
     }
 
 

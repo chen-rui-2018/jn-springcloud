@@ -56,6 +56,8 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     private String isHaveSubsidy;
     @ApiModelProperty(value = "审核状态")
     private String approvalStatus;
+    @ApiModelProperty(value = "审批说明")
+    private String approvalDesc;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     @ApiModelProperty(value = "创建人")
@@ -232,6 +234,14 @@ public class AdvisorServiceInfo extends Page implements Serializable {
         this.approvalStatus = approvalStatus;
     }
 
+    public String getApprovalDesc() {
+        return approvalDesc;
+    }
+
+    public void setApprovalDesc(String approvalDesc) {
+        this.approvalDesc = approvalDesc;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -283,7 +293,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     @Override
     public String toString() {
         return "AdvisorServiceInfo{" +
-                ", orgId='" + orgId + '\'' +
+                "orgId='" + orgId + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", advisorName='" + advisorName + '\'' +
                 ", businessArea='" + businessArea + '\'' +
@@ -303,6 +313,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", pageViews=" + pageViews +
                 ", isHaveSubsidy='" + isHaveSubsidy + '\'' +
                 ", approvalStatus='" + approvalStatus + '\'' +
+                ", approvalDesc='" + approvalDesc + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +
                 ", modifiedTime=" + modifiedTime +

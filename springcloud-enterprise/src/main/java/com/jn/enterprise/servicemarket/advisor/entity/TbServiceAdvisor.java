@@ -47,6 +47,8 @@ public class TbServiceAdvisor implements Serializable {
 
     private String approvalStatus;
 
+    private String approvalDesc;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -229,6 +231,14 @@ public class TbServiceAdvisor implements Serializable {
         this.approvalStatus = approvalStatus == null ? null : approvalStatus.trim();
     }
 
+    public String getApprovalDesc() {
+        return approvalDesc;
+    }
+
+    public void setApprovalDesc(String approvalDesc) {
+        this.approvalDesc = approvalDesc == null ? null : approvalDesc.trim();
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -310,6 +320,7 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getPageViews() == null ? other.getPageViews() == null : this.getPageViews().equals(other.getPageViews()))
             && (this.getIsHaveSubsidy() == null ? other.getIsHaveSubsidy() == null : this.getIsHaveSubsidy().equals(other.getIsHaveSubsidy()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
+            && (this.getApprovalDesc() == null ? other.getApprovalDesc() == null : this.getApprovalDesc().equals(other.getApprovalDesc()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -343,6 +354,7 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getPageViews() == null) ? 0 : getPageViews().hashCode());
         result = prime * result + ((getIsHaveSubsidy() == null) ? 0 : getIsHaveSubsidy().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
+        result = prime * result + ((getApprovalDesc() == null) ? 0 : getApprovalDesc().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -379,6 +391,7 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", pageViews=").append(pageViews);
         sb.append(", isHaveSubsidy=").append(isHaveSubsidy);
         sb.append(", approvalStatus=").append(approvalStatus);
+        sb.append(", approvalDesc=").append(approvalDesc);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

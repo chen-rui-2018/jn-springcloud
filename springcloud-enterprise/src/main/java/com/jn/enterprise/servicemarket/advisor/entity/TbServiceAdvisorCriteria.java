@@ -1545,6 +1545,76 @@ public class TbServiceAdvisorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andApprovalDescIsNull() {
+            addCriterion("approval_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescIsNotNull() {
+            addCriterion("approval_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescEqualTo(String value) {
+            addCriterion("approval_desc =", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescNotEqualTo(String value) {
+            addCriterion("approval_desc <>", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescGreaterThan(String value) {
+            addCriterion("approval_desc >", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescGreaterThanOrEqualTo(String value) {
+            addCriterion("approval_desc >=", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescLessThan(String value) {
+            addCriterion("approval_desc <", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescLessThanOrEqualTo(String value) {
+            addCriterion("approval_desc <=", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescLike(String value) {
+            addCriterion("approval_desc like", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescNotLike(String value) {
+            addCriterion("approval_desc not like", value, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescIn(List<String> values) {
+            addCriterion("approval_desc in", values, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescNotIn(List<String> values) {
+            addCriterion("approval_desc not in", values, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescBetween(String value1, String value2) {
+            addCriterion("approval_desc between", value1, value2, "approvalDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalDescNotBetween(String value1, String value2) {
+            addCriterion("approval_desc not between", value1, value2, "approvalDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

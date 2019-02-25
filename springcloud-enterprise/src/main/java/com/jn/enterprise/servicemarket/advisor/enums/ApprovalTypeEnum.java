@@ -14,6 +14,7 @@ public enum ApprovalTypeEnum implements CodeAndMsg {
     APPROVAL_NOT_PASSED("approvalNotPassed","审批不通过"),
     NO_FEEDBACK("noFeedBack","未反馈"),
     REJECTED("rejected","已拒绝"),
+    APPROVED("approved","审批通过"),
     ;
 
     /**

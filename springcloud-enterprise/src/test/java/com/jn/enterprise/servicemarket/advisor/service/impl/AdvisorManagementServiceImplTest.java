@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import org.hamcrest.Matchers;
@@ -42,6 +43,8 @@ public class AdvisorManagementServiceImplTest {
 
     private AdvisorManagementQuery advisorManagementQuery=new AdvisorManagementQuery();
 
+    private ApprovalQuery approvalQuery=new ApprovalQuery();
+
     @Before
     public void setUp() throws Exception {
         //顾问邀请
@@ -52,6 +55,14 @@ public class AdvisorManagementServiceImplTest {
         advisorManagementQuery.setApprovalStatus("pending");
         //不要分页
         advisorManagementQuery.setNeedPage("0");
+
+        //顾问审批
+        approvalQuery.setAdvisorAccount("wangsong");
+        //审批结果(approved:审批通过   approvalNotPassed:审批不通过)
+        approvalQuery.setApprovalResults("approvalNotPassed");
+        //审批说明
+        approvalQuery.setApprovalDesc("审批通过");
+
     }
 
 
@@ -99,6 +110,27 @@ public class AdvisorManagementServiceImplTest {
                     )
             );
         }
+    }
+
+    /**
+     * 顾问审批
+     */
+    @Test
+    public void approvalAdvisorInfo(){
+        try {
+            advisorManagementService.approvalAdvisorInfo(approvalQuery);
+            assertThat(anything(),anything());
+        } catch (JnSpringCloudException e) {
+            logger.warn("顾问审批失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.APPROVAL_DESC_NOT_NULL.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT.getCode())
+                    )
+            );
+        }
+
     }
 
 }

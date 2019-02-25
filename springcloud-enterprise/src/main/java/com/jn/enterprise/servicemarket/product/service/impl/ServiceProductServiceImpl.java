@@ -6,6 +6,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.enums.ServiceProductException;
 import com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao;
 import com.jn.enterprise.servicemarket.product.dao.ServiceProductDao;
@@ -225,11 +226,24 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         WebServiceProductDetails details= productDao.findWebProductDetails(productId);
         return details;
     }
-
+    @ServiceLog(doAction = "web前台服务产品列表")
     @Override
-    public PaginationData findWebProductList(ServiceSelectConstraint constraint) {
-//        productDao.findWebProductList();
-        return null;
+    public PaginationData findWebProductList(ProductInquiryInfo  info,Boolean needPage) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(info.getPage(), info.getRows() == 0 ? 15 : info.getRows(), true);
+        }
+        ProductQueryConditions conditions = new ProductQueryConditions();
+        BeanUtils.copyProperties(info,conditions);
+        if(StringUtils.isBlank(info.getSortTypes()) ){
+            //默认综合排序
+            conditions.setSortTypes(ServiceSortTypeEnum.INTEGRATE.getCode());
+        }
+        if(ServiceSortTypeEnum.INTEGRATE.getCode().equals(conditions.getSortTypes())) {
+            //todo：从数据字典表获取综合排序各个因素的权重并给相应元素赋值  chenr
+        }
+         List<WebServiceProductDetails> data= productDao.findWebProductList(conditions);
+        return new PaginationData(data,objects==null?0:objects.getTotal());
     }
 
 

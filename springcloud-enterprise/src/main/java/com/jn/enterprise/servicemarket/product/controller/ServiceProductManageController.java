@@ -55,16 +55,7 @@ public class ServiceProductManageController extends BaseController {
         PaginationData data =  productService.findServiceList(constraint);
         return new Result(data);
     }
-    @ControllerLog(doAction = "添加特色服务产品")
-    @ApiOperation(value = "添加特色服务产品", httpMethod = "POST", response = Result.class)
-//    @RequiresPermissions("/servicemarket/product/addFeatureService")
-    @RequestMapping(value = "/addFeatureService")
-    public Result addFeatureService(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content, ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        productService.addServiceProduct(content,user != null?user.getAccount():"");
-        return new Result();
-    }
+
     @ControllerLog(doAction = "上架常规服务产品")
     @ApiOperation(value = "上架常规服务产品", httpMethod = "POST", response = Result.class)
 //    @RequiresPermissions("/servicemarket/product/upShelfCommonService")

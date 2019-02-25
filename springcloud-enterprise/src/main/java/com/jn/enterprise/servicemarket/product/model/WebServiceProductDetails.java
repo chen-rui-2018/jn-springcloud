@@ -38,6 +38,8 @@ public class WebServiceProductDetails implements Serializable {
     private Integer viewCount;
     @ApiModelProperty(value = "评价分数")
     private String evaluationScore;
+    @ApiModelProperty(value = "评价数")
+    private String evaluationNumber;
 
     public String getProductId() {
         return productId;
@@ -133,5 +135,13 @@ public class WebServiceProductDetails implements Serializable {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public String getEvaluationNumber() {
+        return evaluationNumber;
+    }
+
+    public void setEvaluationNumber(String evaluationNumber) {
+        this.evaluationNumber = evaluationNumber;
     }
 }

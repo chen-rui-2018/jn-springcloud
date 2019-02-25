@@ -1,9 +1,6 @@
 package com.jn.enterprise.servicemarket.product.dao;
 
-import com.jn.enterprise.servicemarket.product.model.HotProducts;
-import com.jn.enterprise.servicemarket.product.model.ServiceProductDetail;
-import com.jn.enterprise.servicemarket.product.model.ServiceProductManage;
-import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
+import com.jn.enterprise.servicemarket.product.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -69,4 +66,11 @@ public interface ServiceProductDao {
      * @return
      */
     WebServiceProductDetails findWebProductDetails(String productId);
+
+    /**
+     * web前台服务产品列表
+     * @param conditions
+     * @return
+     */
+    List<WebServiceProductDetails> findWebProductList  (ProductQueryConditions conditions);
 }

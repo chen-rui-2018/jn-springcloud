@@ -86,8 +86,8 @@ public interface ServiceProductService {
 
     /**
      * 前台服务产品列表
-     * @param constraint
+     * @param info
      * @return
      */
-    PaginationData findWebProductList(ServiceSelectConstraint constraint);
+    PaginationData findWebProductList(ProductInquiryInfo  info, Boolean needPage);
 }

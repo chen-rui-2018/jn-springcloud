@@ -274,4 +274,25 @@
         </if>
 
     </select>
+
+    <select id="findOrgProductList" resultType="com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
+
+select
+       t1.product_id as "productId",       <!--产品Id-->
+       t1.product_name as "productName",   <!--产品名称-->
+       t1.signory_name as "signoryName",   <!--领域名称-->
+       t1.product_type as "productType",   <!--产品类型-->
+       t2.org_name as "orgName",           <!--机构名称-->
+       (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
+         select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
+           )) as "advisorName",            <!--顾问名称-->
+       t1.status as "status",              <!--状态-->
+       t1.release_time as "releaseTime"    <!--发布时间-->
+from tb_service_product t1
+       left join  tb_service_org t2 on  t2.org_id= t1.org_id
+       where  1=1
+       and t1.org_id = #{orgId}
+       and  t1.product_type = #{productType}
+       and  t1.product_name like concat('%',#{productName},'%')
+    </select>
 </mapper>

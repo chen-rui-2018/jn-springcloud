@@ -73,4 +73,13 @@ public interface ServiceProductDao {
      * @return
      */
     List<WebServiceProductDetails> findWebProductList  (ProductQueryConditions conditions);
+
+    /**
+     *
+     * @param productName
+     * @param orgId
+     * @param productType
+     * @return
+     */
+    List<ServiceProductManage> findOrgProductList(@Param("productName") String productName, @Param("orgId") String orgId,@Param("productType")String productType);
 }

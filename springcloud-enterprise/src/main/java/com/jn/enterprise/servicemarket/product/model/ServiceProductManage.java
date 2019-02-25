@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceProductManage", description = "后台服务管理列表展示bean信息")
+@ApiModel(value = "ServiceProductManage", description = "服务管理列表展示bean信息")
 public class ServiceProductManage implements Serializable {
     @ApiModelProperty(value = "服务产品ID")
     private String productId;
@@ -32,6 +32,8 @@ public class ServiceProductManage implements Serializable {
     private String conPhone;
     @ApiModelProperty(value = "服务产品状态,(-1无效0待审核1有效2审核不通过)")
     private String status;
+    @ApiModelProperty(value = "顾问名称")
+    private String advisorName;
 
     public String getProductId() {
         return productId;
@@ -105,5 +107,11 @@ public class ServiceProductManage implements Serializable {
         this.status = status;
     }
 
+    public String getAdvisorName() {
+        return advisorName;
+    }
 
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
+    }
 }

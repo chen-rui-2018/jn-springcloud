@@ -6,10 +6,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.servicemarket.enums.ServiceProductException;
-import com.jn.enterprise.servicemarket.product.dao.ServiceProductDao;
 import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
 import com.jn.enterprise.servicemarket.product.model.ServiceContent;
-import com.jn.enterprise.servicemarket.product.model.ServiceSelectConstraint;
 import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -34,10 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "前台服务产品接口")
 @RestController
-@RequestMapping(value = "/servicemarket/product/web/")
+@RequestMapping(value = "/servicemarket/product/web")
 public class ServiceProductWebController  extends BaseController {
     @Autowired
     private ServiceProductService productService;
+
     @ControllerLog(doAction = "添加特色服务产品")
     @ApiOperation(value = "添加特色服务产品", httpMethod = "POST", response = Result.class)
 //    @RequiresPermissions("/servicemarket/product/web/addFeatureService")
@@ -74,6 +73,15 @@ public class ServiceProductWebController  extends BaseController {
         WebServiceProductDetails details = productService.findWebProductDetails(productId);
         return new Result(details);
     }
-
+    @ControllerLog(doAction = "机构-服务产品列表")
+    @ApiOperation(value ="机构-服务产品列表",httpMethod = "POST",response = Result.class)
+//    @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
+    @RequestMapping(value = "/findOrgProductList")
+    public Result findOrgProductList(@RequestBody  ProductInquiryInfo info){
+        Assert.notNull(info.getOrgId(), ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+        Assert.notNull(info.getProductType(), ServiceProductException.SERVICE_PRODUCT_PRODUCT_TYPE_EMPTY.getMessage());
+        PaginationData data =    productService.findOrgProductList(info,true);
+                return  new Result(data);
+    }
 
 }

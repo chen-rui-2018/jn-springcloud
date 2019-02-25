@@ -245,6 +245,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
          List<WebServiceProductDetails> data= productDao.findWebProductList(conditions);
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
+    @ServiceLog(doAction = "机构-前台服务产品列表")
+    @Override
+    public PaginationData findOrgProductList(ProductInquiryInfo info, Boolean needPage) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(info.getPage(), info.getRows() == 0 ? 15 : info.getRows(), true);
+        }
+         List<ServiceProductManage>  data = productDao.findOrgProductList(info.getKeyWords(), info.getOrgId(), info.getProductType());
+        return new PaginationData(data,objects==null?0:objects.getTotal());
+    }
 
 
     private void checkReferPrice(String referPrice){

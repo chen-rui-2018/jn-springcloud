@@ -90,4 +90,12 @@ public interface ServiceProductService {
      * @return
      */
     PaginationData findWebProductList(ProductInquiryInfo  info, Boolean needPage);
+
+ /**
+  * 机构-服务产品列表
+  * @param info
+  * @param needPage
+  * @return
+  */
+    PaginationData findOrgProductList(ProductInquiryInfo  info, Boolean needPage);
 }

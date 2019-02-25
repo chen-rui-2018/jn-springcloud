@@ -14,14 +14,25 @@ import java.io.Serializable;
  */
 @ApiModel(value = "AdvisorInquiryInfo",description = "前台服务产品列表查询入参")
 public class ProductInquiryInfo extends Page implements Serializable {
-    @ApiModelProperty(value = "领域Id")
+    @ApiModelProperty(value = "领域Id,用户中心查询产品时不传值")
     private String signoryId;
-    @ApiModelProperty(value = "排序类型,(人气-popularity,好评-praise,服务量-serviceNum,综合-integrate)")
+    @ApiModelProperty(value = "机构id")
+    private String orgId;
+    @ApiModelProperty(value = "排序类型,(人气-popularity,好评-praise,服务量-serviceNum,综合-integrate),用户中心查询产品时不传值")
     private String sortTypes;
-    @ApiModelProperty(value = "关键词")
+    @ApiModelProperty(value = "关键词-(包含-名称,内容详情)用户中心查询产品时,传入名称")
     private String keyWords;
     @ApiModelProperty(value = "产品类型 0-常规产品,1-特色产品")
     private String productType;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
     public String getSignoryId() {
         return signoryId;
     }

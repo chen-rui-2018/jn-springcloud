@@ -18,4 +18,23 @@ public interface OrgColleagueService {
      * @return
      */
     PaginationData getOrgColleagueList(String account, OrgColleagueQuery orgColleagueQuery);
+
+    /**
+     * 设置为联系人
+     * @param account 设置为联系人的账号
+     */
+    void setAsContact(String account);
+
+    /**
+     * 取消联系人
+     * @param account 取消联系人的账号
+     */
+    void cancelAsContact(String account);
+
+    /**
+     * 删除联系人或顾问
+     * @param loginAccount 登录用户账号
+     * @param account 删除联系人或顾问的账号
+     */
+    void deleteContactOrAdvisor(String loginAccount,String account);
 }

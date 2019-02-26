@@ -1,9 +1,7 @@
 package com.jn.user.api;
 
 import com.jn.common.model.Result;
-import com.jn.user.model.UserAffiliateInfo;
-import com.jn.user.model.UserCompanyInfo;
-import com.jn.user.model.UserExtensionInfo;
+import com.jn.user.model.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,4 +52,20 @@ public interface UserExtensionClient {
      */
     @RequestMapping(value = "/api/user/updateCompanyInfo", method = RequestMethod.POST)
     Result updateCompanyInfo(@RequestBody @Validated UserCompanyInfo userCompanyInfo);
+
+    /**
+     * 根据所属机构编码批量获取用户信息
+     * @param affiliateParam
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getUserExtensionByAffiliateCode", method = RequestMethod.POST)
+    Result getUserExtensionByAffiliateCode(@RequestBody @Validated AffiliateParam affiliateParam);
+
+    /**
+     * 根据所属机构编码批量获取用户信息
+     * @param companyParam
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getUserExtensionByCompanyCode", method = RequestMethod.POST)
+    Result getUserExtensionByCompanyCode(@RequestBody @Validated CompanyParam companyParam);
 }

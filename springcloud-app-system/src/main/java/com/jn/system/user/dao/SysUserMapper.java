@@ -1,11 +1,11 @@
 package com.jn.system.user.dao;
 
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
+import com.jn.system.model.User;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserPage;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -37,9 +37,10 @@ public interface SysUserMapper {
 
     /**
      * 批量删除用户
+     *
      * @param map
      */
-    void deleteUserBranch(Map<String,Object> map);
+    void deleteUserBranch(Map<String, Object> map);
 
 
     /**
@@ -67,8 +68,16 @@ public interface SysUserMapper {
 
     /**
      * 当查询条件中,岗位后岗位类型名称不为空时查询方法
+     *
      * @param sysUserPage
      * @return
      */
     List<SysUserVO> getSysUserByPageAndPost(SysUserPage sysUserPage);
+
+    /**
+     * 获取所有有效用户
+     *
+     * @return
+     */
+    List<User> getUserAll();
 }

@@ -107,4 +107,13 @@ public class SystemController extends BaseController implements SystemClient {
         Boolean isUserFilePermission = sysFileGroupService.getUserFilePermission(userId, fileUrl);
         return new Result(isUserFilePermission);
     }
+
+
+    @Override
+    @ControllerLog(doAction = "获取所有有效用户信息")
+    public Result getUserAll() {
+        List<User> userList = sysUserService.getUserAll();
+        return new Result(userList);
+    }
+
 }

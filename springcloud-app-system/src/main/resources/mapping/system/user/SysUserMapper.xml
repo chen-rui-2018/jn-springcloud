@@ -243,6 +243,65 @@
         FROM tb_sys_user WHERE id = #{id,jdbcType=VARCHAR} and `record_status` != 1
     </select>
 
+    <resultMap id="resultUserMap" type="com.jn.system.model.User">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="account" jdbcType="VARCHAR" property="account"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount"/>
+        <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
+        <result column="wechat_account" jdbcType="VARCHAR" property="wechatAccount"/>
+
+        <collection property="sysDepartmentPostVO" ofType="com.jn.system.vo.SysDepartmentPostVO">
+            <result property="departmentId" column="department_id" jdbcType="VARCHAR"/>
+            <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
+            <result property="postId" column="post_id" jdbcType="VARCHAR"/>
+            <result property="postName" column="post_name" jdbcType="VARCHAR"/>
+            <result property="isDefault" column="is_default" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+    <select id="getUserAll" resultMap="resultUserMap">
+        SELECT
+        t.id,
+        t.account,
+        t.`name`,
+        t.phone,
+        t.email,
+        t.creator_account,
+        t.created_time,
+        t.record_status,
+        t.wechat_account,
+        tt.department_id,
+        tt.department_name,
+        tt.is_default,
+        tt.post_id,
+        tt.post_name
+        FROM
+        `tb_sys_user` t
+        LEFT JOIN
+        (SELECT
+        t1.user_id,
+        t1.department_id,
+        t1.post_id,
+        t1.is_default,
+        t2.department_name,
+        t3.post_name
+        FROM
+        tb_sys_user_department_post t1,
+        tb_sys_department t2,
+        tb_sys_post t3
+        WHERE t1.department_id = t2.id
+        AND t1.post_id = t3.id
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        AND t3.record_status = 1) tt
+        ON t.id = tt.user_id
+        WHERE t.record_status = 1
+        ORDER BY t.created_time DESC
+    </select>
+
     <update id="deleteUserBranch" parameterType="java.util.Map">
         update tb_sys_user
         set

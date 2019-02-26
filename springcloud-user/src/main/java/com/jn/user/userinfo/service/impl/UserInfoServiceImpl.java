@@ -1,11 +1,14 @@
 package com.jn.user.userinfo.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.system.log.annotation.ServiceLog;
-import com.jn.user.model.UserAffiliateInfo;
-import com.jn.user.model.UserCompanyInfo;
-import com.jn.user.model.UserExtensionInfo;
+import com.jn.user.enums.UserExtensionExceptionEnum;
+import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
@@ -234,4 +237,90 @@ public class UserInfoServiceImpl implements UserInfoService {
         perExample.or(criteriaEmail);
         return tbUserPersonMapper.selectByExample(perExample);
     }
+
+
+    /**
+     * 根据所属机构编码批量获取用户信息
+     * @param affiliateParam  所属机构编码入参
+     * @return
+     */
+    @ServiceLog(doAction = "根据所属机构编码批量获取用户信息")
+    @Override
+    public PaginationData getUserExtensionByAffiliateCode(AffiliateParam affiliateParam) {
+        if(affiliateParam==null){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.AFFILIATE_PARAM_NOT_NULL);
+        }
+        com.github.pagehelper.Page<Object> objects = null;
+        //是否分页标识
+        boolean needPage=false;
+        if(affiliateParam.getNeedPage()!=null && Boolean.TRUE.toString().equalsIgnoreCase(affiliateParam.getNeedPage())){
+            needPage=true;
+        }
+        if(needPage){
+            objects = PageHelper.startPage(affiliateParam.getPage(),
+                    affiliateParam.getRows() == 0 ? 15 : affiliateParam.getRows(), true);
+        }
+        //数据状态正常  0:删除  1：正常
+        byte recordStatus=1;
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        example.createCriteria().andAffiliateCodeEqualTo(affiliateParam.getAffiliateCode())
+                .andRecordStatusEqualTo(recordStatus);
+        List<TbUserPerson> userPersonList = tbUserPersonMapper.selectByExample(example);
+        return getPaginationData(objects, userPersonList);
+
+
+    }
+
+
+    /**
+     * 根据所属企业编码批量获取用户信息
+     * @param companyParam  所属企业编码
+     * @return
+     */
+    @Override
+    public PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam) {
+        if(companyParam==null){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.COMPANY_PARAM_NOT_NULL);
+        }
+        com.github.pagehelper.Page<Object> objects = null;
+        //是否分页标识
+        boolean needPage=false;
+        if(companyParam.getNeedPage()!=null && Boolean.TRUE.toString().equalsIgnoreCase(companyParam.getNeedPage())){
+            needPage=true;
+        }
+        if(needPage){
+            objects = PageHelper.startPage(companyParam.getPage(),
+                    companyParam.getRows() == 0 ? 15 : companyParam.getRows(), true);
+        }
+        //数据状态正常  0:删除  1：正常
+        byte recordStatus=1;
+        TbUserPersonCriteria example=new TbUserPersonCriteria();
+        example.createCriteria().andCompanyCodeEqualTo(companyParam.getCompanyCode())
+                .andRecordStatusEqualTo(recordStatus);
+        List<TbUserPerson> companyList = tbUserPersonMapper.selectByExample(example);
+        return getPaginationData(objects, companyList);
+    }
+
+    /**
+     * 处理用户分页数据
+     * @param objects
+     * @param userPersonList
+     * @return
+     */
+    @ServiceLog(doAction = "处理用户分页数据")
+    private PaginationData getPaginationData(Page<Object> objects, List<TbUserPerson> userPersonList) {
+        if (userPersonList.isEmpty()) {
+            return new PaginationData(userPersonList, objects == null ? 0 : objects.getTotal());
+        } else {
+            List<UserExtensionInfo> resultList = new ArrayList<>(16);
+            for (TbUserPerson userPerson : userPersonList) {
+                UserExtensionInfo userExtensionInfo = new UserExtensionInfo();
+                BeanUtils.copyProperties(userPerson, userExtensionInfo);
+                resultList.add(userExtensionInfo);
+            }
+            return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+        }
+    }
+
+
 }

@@ -6,6 +6,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.servicemarket.enums.ServiceProductException;
+import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
 import com.jn.enterprise.servicemarket.product.model.ServiceContent;
 import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * 前台服务产品接口
  * @author： chenr
@@ -32,10 +35,21 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "前台服务产品接口")
 @RestController
-@RequestMapping(value = "/servicemarket/product/web")
+@RequestMapping(value = "/servicemarket/product/web/")
 public class ServiceProductWebController  extends BaseController {
     @Autowired
     private ServiceProductService productService;
+
+    @ControllerLog(doAction = "上架常规服务产品")
+    @ApiOperation(value = "上架常规服务产品", httpMethod = "POST", response = Result.class)
+//    @RequiresPermissions("/servicemarket/product/web/upShelfCommonService")
+    @RequestMapping(value = "/upShelfCommonService")
+    public Result upShelfCommonService(@RequestBody @Validated CommonServiceShelf commonService){
+        Assert.notNull(commonService.getProductId(), ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        productService.upShelfCommonService(commonService,user != null?user.getAccount():"");
+        return new Result();
+    }
 
     @ControllerLog(doAction = "添加特色服务产品")
     @ApiOperation(value = "添加特色服务产品", httpMethod = "POST", response = Result.class)
@@ -47,6 +61,7 @@ public class ServiceProductWebController  extends BaseController {
         productService.addServiceProduct(content,user != null?user.getAccount():"");
         return new Result();
     }
+
 
     @ControllerLog(doAction = "服务超市首页,热门产品")
     @ApiOperation(value ="服务超市首页,热门产品",httpMethod = "POST",response = Result.class)
@@ -82,6 +97,14 @@ public class ServiceProductWebController  extends BaseController {
         Assert.notNull(info.getProductType(), ServiceProductException.SERVICE_PRODUCT_PRODUCT_TYPE_EMPTY.getMessage());
         PaginationData data =    productService.findOrgProductList(info,true);
                 return  new Result(data);
+    }
+    @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品")
+    @ApiOperation(value="服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品",httpMethod = "POST",response = Result.class)
+    @RequestMapping()
+    public Result findShelfProductList(@ApiParam(name = "orgId", value = "机构Id", required = true) @RequestParam String  orgId){
+        Assert.notNull(orgId, ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+        List<CommonServiceShelf> data =    productService.findShelfProductList(orgId);
+        return new Result(data);
     }
 
 }

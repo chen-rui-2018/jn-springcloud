@@ -55,9 +55,10 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     public String addServiceProduct(ServiceContent content, String account) {
 
         String productId = UUID.randomUUID().toString().replaceAll("-", "");
-        // 如果有机构id则表示为机构上架常规产品或者添加特色产品 需要进行审批;
-        String status = content.getOrgId() == null ? "1":"0";
         String  productType = "1";
+        // 如果有机构id则表示为机构上架常规产品或者添加特色产品 需要进行审批;
+        String status = content.getProductType().equals(productType) ? "0":"1";
+
         Byte recordStatus = 1;
         if(productType.equals(content.getProductType())){
 
@@ -252,8 +253,17 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(needPage){
             objects = PageHelper.startPage(info.getPage(), info.getRows() == 0 ? 15 : info.getRows(), true);
         }
-         List<ServiceProductManage>  data = productDao.findOrgProductList(info.getKeyWords(), info.getOrgId(), info.getProductType());
+         List<ServiceProductManage>  data = productDao.findOrgProductList(info.getKeyWords(), info.getOrgId(), info.getProductType(),info.getProductStatus());
         return new PaginationData(data,objects==null?0:objects.getTotal());
+    }
+    @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品")
+    @Override
+    public List<CommonServiceShelf> findShelfProductList(String orgId){
+        List<CommonServiceShelf> data = null;
+        if(StringUtils.isNotBlank(orgId)){
+            data=productDao.findShelfProductList(orgId);
+        }
+        return data;
     }
 
 

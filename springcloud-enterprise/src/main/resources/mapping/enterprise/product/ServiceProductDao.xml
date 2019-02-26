@@ -14,7 +14,7 @@
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName"           <!--联系人名称-->
         from tb_service_product t1
-        left join tb_service_org t2 on t1.org_id = t2.ID
+        left join tb_service_org t2 on t1.org_id = t2.org_id
         left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
         where  t1.record_status = '1'
         <if test = "productName != null and productName!=''">
@@ -274,7 +274,7 @@
         </if>
 
     </select>
-
+<!--机构产品信息列表-->
     <select id="findOrgProductList" resultType="com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
 
 select
@@ -293,6 +293,26 @@ from tb_service_product t1
        where  1=1
        and t1.org_id = #{orgId}
        and  t1.product_type = #{productType}
-       and  t1.product_name like concat('%',#{productName},'%')
+      <if test = "status != null and status != ''">
+        and  t1.status = #{status}
+      </if>
+        <if test = "productName != null and productName != ''">
+            and  t1.product_name like concat('%',#{productName},'%')
+        </if>
+       </select>
+    <!--常规产品发布时,选择框的产品列表-->
+    <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">
+         select
+       t1.product_id as "productId"
+       ,t1.product_name as "productName"
+       from tb_service_product t1
+       where
+       t1.product_id not  in(
+           select t2.template_id from tb_service_product t2 where  t2.signory_id =
+              ( select t3.business_type from tb_service_org t3 where t3.org_id=#{orgId}) and t2.template_id is not null
+           )
+         and t1.template_id is null
+         and t1.status='1' and t1.record_status='1'and t1.signory_id =
+              ( select t3.business_type from tb_service_org t3 where t3.org_id=#{orgId})
     </select>
 </mapper>

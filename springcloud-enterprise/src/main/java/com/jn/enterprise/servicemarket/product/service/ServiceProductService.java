@@ -6,6 +6,8 @@ import com.jn.enterprise.servicemarket.product.model.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * 服务产品
  * @Author: chenr
@@ -98,4 +100,11 @@ public interface ServiceProductService {
   * @return
   */
     PaginationData findOrgProductList(ProductInquiryInfo  info, Boolean needPage);
+
+    /**
+     * 机构上架常规产品时,常规产品列表
+     * @param orgId
+     * @return
+     */
+    List<CommonServiceShelf> findShelfProductList(String orgId);
 }

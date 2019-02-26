@@ -56,16 +56,7 @@ public class ServiceProductManageController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "上架常规服务产品")
-    @ApiOperation(value = "上架常规服务产品", httpMethod = "POST", response = Result.class)
-//    @RequiresPermissions("/servicemarket/product/upShelfCommonService")
-    @RequestMapping(value = "/upShelfCommonService")
-    public Result upShelfCommonService(@RequestBody @Validated CommonServiceShelf commonService){
-        Assert.notNull(commonService.getProductId(), ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
-        User user = (User) SecurityUtils.getSubject().getPrincipal();
-        productService.upShelfCommonService(commonService,user != null?user.getAccount():"");
-        return new Result();
-    }
+
     @ControllerLog(doAction = "服务产品详情查看")
     @ApiOperation(value = "服务产品详情查看", httpMethod = "POST", response = Result.class)
 //    @RequiresPermissions("/servicemarket/product/findServiceDetail")

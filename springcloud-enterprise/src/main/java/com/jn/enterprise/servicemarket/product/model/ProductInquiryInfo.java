@@ -24,6 +24,16 @@ public class ProductInquiryInfo extends Page implements Serializable {
     private String keyWords;
     @ApiModelProperty(value = "产品类型 0-常规产品,1-特色产品")
     private String productType;
+    @ApiModelProperty(value ="状态( -1无效(下架) 0-待审核 1-有效(上架/审核通过) 2-审核不通过)")
+    private String productStatus;
+
+    public String getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(String productStatus) {
+        this.productStatus = productStatus;
+    }
 
     public String getOrgId() {
         return orgId;

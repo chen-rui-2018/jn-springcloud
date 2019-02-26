@@ -41,10 +41,8 @@ public interface ServiceProductDao {
      * @param approvalComments
      * @param account
      */
+     void productApproval(@Param("productId") String productId, @Param("status") String status, @Param("approvalComments") String approvalComments, @Param("account") String account);
 
-    default void productApproval(@Param("productId") String productId, @Param("status") String status, @Param("approvalComments") String approvalComments, @Param("account") String account) {
-
-    }
 
     /**
      * 上架/下架产品
@@ -75,11 +73,19 @@ public interface ServiceProductDao {
     List<WebServiceProductDetails> findWebProductList  (ProductQueryConditions conditions);
 
     /**
-     *
+     * 查询机构的服务产品列表
      * @param productName
      * @param orgId
      * @param productType
+     * @param status
      * @return
      */
-    List<ServiceProductManage> findOrgProductList(@Param("productName") String productName, @Param("orgId") String orgId,@Param("productType")String productType);
+    List<ServiceProductManage> findOrgProductList(@Param("productName") String productName, @Param("orgId") String orgId,@Param("productType")String productType, @Param("status") String status);
+
+    /**
+     * 机构 上架服务产品页面,服务产品列表
+     * @param orgId
+     * @return
+     */
+    List<CommonServiceShelf>  findShelfProductList(@Param("orgId") String orgId);
 }

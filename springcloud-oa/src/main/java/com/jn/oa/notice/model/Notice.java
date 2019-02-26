@@ -1,9 +1,12 @@
 package com.jn.oa.notice.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.common.util.DateUtils;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 公告实体
@@ -25,9 +28,11 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "平台类型")
     private String platformType;
     @ApiModelProperty(value = "生效时间")
-    private String effectiveTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date effectiveTime;
     @ApiModelProperty(value = "失效时间")
-    private String failureTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date failureTime;
     @ApiModelProperty(value = "起止时间时间")
     private String startAndEndTime;
     @ApiModelProperty(value = "状态")
@@ -35,16 +40,17 @@ public class Notice implements Serializable {
     @ApiModelProperty(value = "创建人")
     private String creator;
     @ApiModelProperty(value = "创建时间")
-    private String createdTime;
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdTime;
     @ApiModelProperty(value = "公告内容")
     private String noticeContent;
 
     public Notice() {
     }
 
-    public Notice(String id, String workOrderNum, String noticeTitle, String platformType, String effectiveTime,
-                  String failureTime, String startAndEndTime, Byte recordStatus, String creator,
-                  String createdTime, String noticeContent) {
+    public Notice(String id, String workOrderNum, String noticeTitle, String platformType, Date effectiveTime,
+                  Date failureTime, String startAndEndTime, Byte recordStatus, String creator, Date createdTime,
+                  String noticeContent) {
         this.id = id;
         this.workOrderNum = workOrderNum;
         this.noticeTitle = noticeTitle;
@@ -90,25 +96,27 @@ public class Notice implements Serializable {
         this.platformType = platformType;
     }
 
-    public String getEffectiveTime() {
+    public Date getEffectiveTime() {
         return effectiveTime;
     }
 
-    public void setEffectiveTime(String effectiveTime) {
+    public void setEffectiveTime(Date effectiveTime) {
         this.effectiveTime = effectiveTime;
     }
 
-    public String getFailureTime() {
+    public Date getFailureTime() {
         return failureTime;
     }
 
-    public void setFailureTime(String failureTime) {
+    public void setFailureTime(Date failureTime) {
         this.failureTime = failureTime;
     }
 
     public String getStartAndEndTime() {
-        if (getEffectiveTime() != null && getFailureTime() != null) {
-            return getEffectiveTime() + "--" + getFailureTime();
+        if (getFailureTime() != null && getEffectiveTime() != null){
+            String fileTime = DateUtils.formatDate(getFailureTime(), "yyyy/MM/dd");
+            String effectiveTime = DateUtils.formatDate(getEffectiveTime(), "yyyy/MM/dd");
+            return effectiveTime + "--" + fileTime;
         }
         return startAndEndTime;
     }
@@ -129,11 +137,11 @@ public class Notice implements Serializable {
         this.creator = creator;
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -152,12 +160,12 @@ public class Notice implements Serializable {
                 ", workOrderNum='" + workOrderNum + '\'' +
                 ", noticeTitle='" + noticeTitle + '\'' +
                 ", platformType='" + platformType + '\'' +
-                ", effectiveTime='" + effectiveTime + '\'' +
-                ", failureTime='" + failureTime + '\'' +
+                ", effectiveTime=" + effectiveTime +
+                ", failureTime=" + failureTime +
                 ", startAndEndTime='" + startAndEndTime + '\'' +
                 ", recordStatus=" + recordStatus +
                 ", creator='" + creator + '\'' +
-                ", createdTime='" + createdTime + '\'' +
+                ", createdTime=" + createdTime +
                 ", noticeContent='" + noticeContent + '\'' +
                 '}';
     }

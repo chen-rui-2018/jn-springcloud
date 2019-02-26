@@ -49,7 +49,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        notice
+                        notice,item,meeting
                     </contexts>
                     <tableNames>
 

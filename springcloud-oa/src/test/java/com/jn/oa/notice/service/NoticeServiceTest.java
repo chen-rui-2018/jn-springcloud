@@ -2,7 +2,7 @@ package com.jn.oa.notice.service;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.oa.notice.enmus.RecoreStatusEnums;
+import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.notice.model.Notice;
 import com.jn.oa.notice.model.NoticeAdd;
 import com.jn.oa.notice.model.NoticePage;
@@ -54,7 +54,7 @@ public class NoticeServiceTest {
         noticeAdd.setNoticeTitle("测试公告");
         noticeAdd.setNoticeContent("公告测试");
         noticeAdd.setPlatformType(platformType);
-        noticeAdd.setRecordStatus(new Byte(RecoreStatusEnums.EFFECTIVE.getCode()));
+        noticeAdd.setRecordStatus(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
         noticeAdd.setEffectiveTime("2019-02-01 10:10:10");
         noticeAdd.setFailureTime("2019-02-02 10:10:10");
     }

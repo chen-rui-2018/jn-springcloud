@@ -6,10 +6,10 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.notice.dao.NoticeMapper;
 import com.jn.oa.notice.dao.TbOaNoticeMapper;
 import com.jn.oa.notice.enmus.NoticeExceptionEnmus;
-import com.jn.oa.notice.enmus.RecoreStatusEnums;
 import com.jn.oa.notice.entity.TbOaNotice;
 import com.jn.oa.notice.entity.TbOaNoticeCriteria;
 import com.jn.oa.notice.model.Notice;
@@ -96,7 +96,7 @@ public class NoticeServiceImpl implements NoticeService {
             //修改操作
             TbOaNotice tbOaNotice1 = tbOaNoticeMapper.selectByPrimaryKey(tbOaNotice.getId());
             if (tbOaNotice1 == null ||
-                    StringUtils.equals(tbOaNotice1.getRecordStatus().toString(), RecoreStatusEnums.DELETED.getCode())) {
+                    StringUtils.equals(tbOaNotice1.getRecordStatus().toString(), OaStatusEnums.DELETED.getCode())) {
                 logger.warn("[公告管理] 修改公告失败,修改信息不存在,noticeId:{}", noticeId);
                 throw new JnSpringCloudException(NoticeExceptionEnmus.NOTICE_NOT_EXIST);
             }
@@ -136,7 +136,7 @@ public class NoticeServiceImpl implements NoticeService {
     public Notice getNoticeById(String noticeId) {
         TbOaNotice tbOaNotice = tbOaNoticeMapper.selectByPrimaryKey(noticeId);
         //判断公告存在,且为删除时,返回公告内容
-        if (tbOaNotice != null && new Byte(RecoreStatusEnums.EFFECTIVE.getCode()).equals(tbOaNotice.getRecordStatus())) {
+        if (tbOaNotice != null && new Byte(OaStatusEnums.EFFECTIVE.getCode()).equals(tbOaNotice.getRecordStatus())) {
             Notice notice = new Notice();
             BeanUtils.copyProperties(tbOaNotice, notice);
             return notice;
@@ -162,7 +162,7 @@ public class NoticeServiceImpl implements NoticeService {
 
         TbOaNoticeCriteria.Criteria criteria = tbOaNoticeCriteria.createCriteria();
         //查询状态有效的公告
-        criteria.andRecordStatusEqualTo(new Byte(RecoreStatusEnums.EFFECTIVE.getCode()));
+        criteria.andRecordStatusEqualTo(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
         //查询对应发布平台公告
         criteria.andPlatformTypeLike("%\"key\":\"" + platformType + "\"%");
         //查询复合当前发布日期的公告
@@ -194,7 +194,7 @@ public class NoticeServiceImpl implements NoticeService {
         TbOaNotice tbOaNotice = tbOaNoticeMapper.selectByPrimaryKey(noticeId);
         if (tbOaNotice != null) {
             //设置状态为删除状态
-            tbOaNotice.setRecordStatus(new Byte(RecoreStatusEnums.DELETED.getCode()));
+            tbOaNotice.setRecordStatus(new Byte(OaStatusEnums.DELETED.getCode()));
             //设置最新更新人及更新时间
             tbOaNotice.setModifiedTime(new Date());
             tbOaNotice.setModifierAccount(user.getAccount());

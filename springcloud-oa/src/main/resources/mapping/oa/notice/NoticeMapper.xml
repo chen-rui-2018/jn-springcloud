@@ -9,10 +9,10 @@
     t1.notice_title AS noticeTitle,
     t1.notice_content AS noticeContent,
     t1.platform_type AS platformType,
-    date_format(t1.effective_time,'%Y/%m/%d') as "effectiveTime",
-    date_format(t1.failure_time,'%Y/%m/%d') as "failureTime",
+    t1.effective_time as effectiveTime,
+    t1.failure_time as failureTime,
     t1.record_status AS recordStatus,
-    date_format(t1.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime",
+    t1.created_time as createdTime,
     t2.`name` AS creator
     FROM
     `tb_oa_notice` t1

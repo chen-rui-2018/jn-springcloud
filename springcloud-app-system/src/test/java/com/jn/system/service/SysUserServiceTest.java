@@ -5,10 +5,10 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.model.SysDepartmentPost;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.model.User;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
+import com.jn.system.vo.SysDepartmentPostVO;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
@@ -96,7 +96,7 @@ public class SysUserServiceTest {
         Byte recordStatus = Byte.parseByte(SysStatusEnums.INVALID.getCode());
         sysUser.setRecordStatus(recordStatus);
         try {
-            sysUserService.updateSysUser(sysUser,user);
+            sysUserService.updateSysUser(sysUser, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -175,7 +175,7 @@ public class SysUserServiceTest {
     //有数使用名称排序,所以在删除名称前加了一个z
     public void zDeleteSysUserTest() {
         String[] ids = {userId};
-        sysUserService.deleteSysUser(ids,user);
+        sysUserService.deleteSysUser(ids, user);
     }
 
 }

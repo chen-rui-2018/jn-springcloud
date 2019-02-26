@@ -1,11 +1,13 @@
 package com.jn.system.model;
 
+import com.jn.system.vo.SysDepartmentPostVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -46,6 +48,9 @@ public class User implements Serializable {
     @Pattern(regexp = "^$|[a-zA-Z0-9][-_a-zA-Z0-9]{5,19}$", message = "{weixinAccount:'微信号校验错误'}")
     private String wechatAccount;
 
+    private List<SysRole> sysRole;
+
+    private List<SysDepartmentPostVO> sysDepartmentPostVO;
 
     public User(String account) {
         this.account = account;
@@ -54,8 +59,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String id, String account, String password, String name, String phone, String email,
-                String creatorAccount, Date createdTime, Byte recordStatus, String wechatAccount) {
+    public User(String id, String account, String password, String name, String phone, String email, String creatorAccount, Date createdTime, Byte recordStatus, String wechatAccount, List<SysRole> sysRole, List<SysDepartmentPostVO> sysDepartmentPostVO) {
         this.id = id;
         this.account = account;
         this.password = password;
@@ -66,6 +70,8 @@ public class User implements Serializable {
         this.createdTime = createdTime;
         this.recordStatus = recordStatus;
         this.wechatAccount = wechatAccount;
+        this.sysRole = sysRole;
+        this.sysDepartmentPostVO = sysDepartmentPostVO;
     }
 
     public String getId() {
@@ -148,6 +154,22 @@ public class User implements Serializable {
         this.wechatAccount = wechatAccount;
     }
 
+    public List<SysDepartmentPostVO> getSysDepartmentPostVO() {
+        return sysDepartmentPostVO;
+    }
+
+    public void setSysDepartmentPostVO(List<SysDepartmentPostVO> sysDepartmentPostVO) {
+        this.sysDepartmentPostVO = sysDepartmentPostVO;
+    }
+
+    public List<SysRole> getSysRole() {
+        return sysRole;
+    }
+
+    public void setSysRole(List<SysRole> sysRole) {
+        this.sysRole = sysRole;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -161,6 +183,8 @@ public class User implements Serializable {
                 ", createdTime=" + createdTime +
                 ", recordStatus=" + recordStatus +
                 ", wechatAccount='" + wechatAccount + '\'' +
+                ", sysRole=" + sysRole +
+                ", sysDepartmentPostVO=" + sysDepartmentPostVO +
                 '}';
     }
 }

@@ -75,7 +75,7 @@
     </insert>
 
     <select id="findRoleOfPermission" parameterType="java.lang.String"
-            resultType="com.jn.system.permission.model.SysRole">
+            resultType="com.jn.system.model.SysRole">
         select
             t2.id,
             t2.role_name as roleName,
@@ -143,7 +143,7 @@
     </select>
 
     <select id="findRoleByPermissionPage" parameterType="com.jn.system.permission.model.SysPermissionRolePage"
-            resultType="com.jn.system.permission.model.SysRole">
+            resultType="com.jn.system.model.SysRole">
         select DISTINCT
         t.id,
         t.role_name as roleName,

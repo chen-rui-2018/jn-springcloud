@@ -14,6 +14,7 @@ import com.jn.system.menu.dao.TbSysMenuMapper;
 import com.jn.system.menu.entity.TbSysMenu;
 import com.jn.system.menu.service.SysMenuService;
 import com.jn.system.menu.vo.SysMenuTreeVO;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.*;
 import com.jn.system.permission.entity.*;

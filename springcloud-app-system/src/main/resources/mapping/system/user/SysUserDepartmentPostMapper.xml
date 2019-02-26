@@ -115,7 +115,7 @@
     </select>
 
     <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String"
-            resultType="com.jn.system.dept.vo.SysDepartmentPostVO">
+            resultType="com.jn.system.vo.SysDepartmentPostVO">
         select
             t2.id as departmentId,
             t2.department_name as departmentName,

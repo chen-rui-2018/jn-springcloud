@@ -101,7 +101,7 @@
     </select>
 
     <select id="findRoleByUserPage" parameterType="com.jn.system.user.model.SysUserRolePage"
-            resultType="com.jn.system.permission.model.SysRole">
+            resultType="com.jn.system.model.SysRole">
         select DISTINCT
         t.id,
         t.role_name as roleName,

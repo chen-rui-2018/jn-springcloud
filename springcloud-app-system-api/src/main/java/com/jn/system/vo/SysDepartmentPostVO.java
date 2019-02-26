@@ -1,11 +1,9 @@
-package com.jn.system.dept.vo;
+package com.jn.system.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.LinkedList;
 
 /**
  *部门岗位实体类

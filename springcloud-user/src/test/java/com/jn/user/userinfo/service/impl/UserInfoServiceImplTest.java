@@ -1,9 +1,10 @@
 package com.jn.user.userinfo.service.impl;
 
 import com.jn.SpringCloudUserApplication;
-import com.jn.user.model.UserAffiliateInfo;
-import com.jn.user.model.UserCompanyInfo;
-import com.jn.user.model.UserExtensionInfo;
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
+import com.jn.user.enums.UserExtensionExceptionEnum;
+import com.jn.user.model.*;
 import com.jn.user.userinfo.service.UserInfoService;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertThat;
 
@@ -49,6 +51,10 @@ public class UserInfoServiceImplTest {
 
     private UserCompanyInfo userCompanyInfo=new UserCompanyInfo();
 
+    private AffiliateParam affiliateParam=new AffiliateParam();
+
+    private CompanyParam companyParam=new CompanyParam();
+
 
     @Before
     public void setUp() throws Exception {
@@ -69,6 +75,12 @@ public class UserInfoServiceImplTest {
         userCompanyInfo.setAccount(account);
         userCompanyInfo.setCompanyCode("032222");
         userCompanyInfo.setCompanyName("江苏工业园企业");
+
+        //根据所属机构编码批量获取用户信息
+        affiliateParam.setAffiliateCode("011111");
+
+        //根据所属企业编码批量获取用户信息
+        companyParam.setCompanyCode("032222");
 
     }
 
@@ -120,5 +132,43 @@ public class UserInfoServiceImplTest {
         boolean b = userInfoService.updateCompanyInfo(userCompanyInfo);
         logger.info("更新用户所属企业信息是否成功：{}",b);
         assertThat(b, anything());
+    }
+
+    /**
+     * 根据所属机构编码批量获取用户信息
+     */
+    @Test
+    public void getUserExtensionByAffiliateCode(){
+        try {
+            PaginationData pageData = userInfoService.getUserExtensionByAffiliateCode(affiliateParam);
+            List<UserExtensionInfo> userExtensionInfos =(List<UserExtensionInfo>) pageData.getRows();
+            if(!userExtensionInfos.isEmpty()){
+                for(UserExtensionInfo userExtensionInfo:userExtensionInfos){
+                    logger.info(userExtensionInfo.toString());
+                }
+            }
+        } catch (JnSpringCloudException e) {
+            logger.info("根据所属机构编码批量获取用户信息失败");
+            assertThat(e.getCode(),equalTo(UserExtensionExceptionEnum.AFFILIATE_PARAM_NOT_NULL.getCode()));
+        }
+    }
+
+    /**
+     * 根据所属企业编码批量获取用户信息
+     */
+    @Test
+    public void getUserExtensionByCompanyCode(){
+        try {
+            PaginationData pageData = userInfoService.getUserExtensionByCompanyCode(companyParam);
+            List<UserExtensionInfo> userExtensionInfos =(List<UserExtensionInfo>) pageData.getRows();
+            if(!userExtensionInfos.isEmpty()){
+                for(UserExtensionInfo userExtensionInfo:userExtensionInfos){
+                    logger.info(userExtensionInfo.toString());
+                }
+            }
+        } catch (JnSpringCloudException e) {
+            logger.info("根据所属企业编码批量获取用户信息失败");
+            assertThat(e.getCode(),equalTo(UserExtensionExceptionEnum.COMPANY_PARAM_NOT_NULL.getCode()));
+        }
     }
 }

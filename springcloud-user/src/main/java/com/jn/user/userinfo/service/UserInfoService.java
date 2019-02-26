@@ -1,9 +1,8 @@
 package com.jn.user.userinfo.service;
 
 
-import com.jn.user.model.UserAffiliateInfo;
-import com.jn.user.model.UserCompanyInfo;
-import com.jn.user.model.UserExtensionInfo;
+import com.jn.common.model.PaginationData;
+import com.jn.user.model.*;
 
 import java.util.List;
 
@@ -42,4 +41,18 @@ public interface UserInfoService {
      * @return true:更新成功    false:更新失败
      */
     boolean updateCompanyInfo(UserCompanyInfo userCompanyInfo);
+
+    /**
+     * 根据所属机构编码批量获取用户信息
+     * @param affiliateParam  所属机构编码入参
+     * @return
+     */
+    PaginationData getUserExtensionByAffiliateCode(AffiliateParam affiliateParam);
+
+    /**
+     * 根据所属企业编码批量获取用户信息
+     * @param companyParam  所属企业编码入参
+     * @return
+     */
+    PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam);
 }

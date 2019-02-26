@@ -7,7 +7,7 @@
     </sql>
 
     <select id="findSysRoleByUserId" parameterType="java.lang.String"
-            resultType="com.jn.system.permission.model.SysRole">
+            resultType="com.jn.system.model.SysRole">
         select
         <include refid="Base_Column_List"/>
         from tb_sys_role

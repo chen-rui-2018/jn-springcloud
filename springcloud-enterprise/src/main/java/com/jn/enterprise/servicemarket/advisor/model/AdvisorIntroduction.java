@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorListInfo", description = "服务顾问详情简介")
+@ApiModel(value = "AdvisorIntroduction", description = "服务顾问详情简介")
 public class AdvisorIntroduction extends Page implements Serializable {
     @ApiModelProperty(value = "顾问姓名")
     private String advisorName;
@@ -33,7 +33,7 @@ public class AdvisorIntroduction extends Page implements Serializable {
     @ApiModelProperty(value = "累计交易数")
     private Integer transactionNum;
     @ApiModelProperty(value = "浏览量")
-    private Integer pageviews;
+    private Integer pageViews;
     @ApiModelProperty(value = "评价分数")
     private String evaluationScore;
 
@@ -111,12 +111,12 @@ public class AdvisorIntroduction extends Page implements Serializable {
         this.transactionNum = transactionNum;
     }
 
-    public Integer getPageviews() {
-        return pageviews;
+    public Integer getPageViews() {
+        return pageViews;
     }
 
-    public void setPageviews(Integer pageviews) {
-        this.pageviews = pageviews;
+    public void setPageViews(Integer pageViews) {
+        this.pageViews = pageViews;
     }
 
     public String getEvaluationScore() {

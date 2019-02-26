@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorListInfo", description = "服务顾问列表查询条件")
+@ApiModel(value = "AdvisorQueryConditions", description = "服务顾问列表查询条件")
 public class AdvisorQueryConditions implements Serializable {
     @ApiModelProperty(value = "人气权重")
     private Float popularityWeight=0.01f;

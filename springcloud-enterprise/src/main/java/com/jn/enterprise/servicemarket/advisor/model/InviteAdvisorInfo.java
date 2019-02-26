@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "顾问邀请入参")
+@ApiModel(value = "InviteAdvisorInfo",description = "顾问邀请入参")
 public class InviteAdvisorInfo extends Page implements Serializable {
     @ApiModelProperty(value = "注册手机/邮箱")
     @NotNull(message = "注册手机/邮箱不能为空")

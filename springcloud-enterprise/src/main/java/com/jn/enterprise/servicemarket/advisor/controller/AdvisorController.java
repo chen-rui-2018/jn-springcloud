@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "服务顾问")
 @RestController
+@RequestMapping(value = "/guest/serviceMarket/advisorController")
 public class AdvisorController extends BaseController {
     /**
      * 日志组件
@@ -43,7 +44,7 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务顾问列表")
     @ApiOperation(value = "服务顾问列表", httpMethod = "POST", response = Result.class
                 ,notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
-    @RequestMapping(value = "/guest/advisor/getServiceConsultantList")
+    @RequestMapping(value = "/getServiceConsultantList")
     public Result getServiceConsultantList(@RequestBody AdvisorInquiryInfo advisorInquiryInfo){
         PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
         return  new Result(serviceConsultantList);
@@ -51,9 +52,8 @@ public class AdvisorController extends BaseController {
 
     @ControllerLog(doAction = "服务顾问详情")
     @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/guest/advisor/getServiceAdvisorInfo")
+    @RequestMapping(value = "/getServiceAdvisorInfo")
     public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true) String advisorAccount){
-        logger.warn("顾问详情查询{}",AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);
@@ -61,7 +61,7 @@ public class AdvisorController extends BaseController {
 
     @ControllerLog(doAction = "服务评价")
     @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/guest/advisor/getServiceRatingInfo")
+    @RequestMapping(value = "/getServiceRatingInfo")
     public Result getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationQuery serviceEvaluationQuery){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
         return  new Result(serviceRatingInfo);

@@ -303,7 +303,13 @@ public class AdvisorServiceImpl implements AdvisorService {
     @ServiceLog(doAction = "根据顾问账号获取顾问基本信息")
     private TbServiceAdvisor getAdvisorInfoByAccount(String advisorAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
+        //审批状态  “2”：审批通过
+        String approvalStatus="2";
+        //数据删除状态  0；删除   1：有效
+        byte recordStatus=1;
+        example.createCriteria().andAdvisorAccountEqualTo(advisorAccount)
+                .andApprovalStatusEqualTo(approvalStatus)
+                .andRecordStatusEqualTo(recordStatus);
         List<TbServiceAdvisor> tbServiceAdvisors = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisors.isEmpty()){
             logger.warn("当前顾问[{}]信息不存在",advisorAccount);

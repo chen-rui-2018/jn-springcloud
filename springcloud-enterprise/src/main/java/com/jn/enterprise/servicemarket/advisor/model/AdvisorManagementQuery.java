@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "顾问管理入参")
+@ApiModel(value = "AdvisorManagementQuery",description = "顾问管理入参")
 public class AdvisorManagementQuery  extends Page implements Serializable {
     @ApiModelProperty(value = "顾问姓名")
     private String advisorName;

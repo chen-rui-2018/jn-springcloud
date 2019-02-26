@@ -43,7 +43,7 @@ public class AdvisorListInfo extends Page implements Serializable {
     @ApiModelProperty(value = "评价分数（好评）")
     private String evaluationScore;
     @ApiModelProperty(value = "浏览量（人气）")
-    private Integer pageviews;
+    private Integer pageViews;
     @ApiModelProperty(value = "累计交易次数（服务量）")
     private Integer transactionNum;
     @ApiModelProperty(value = "评价次数")
@@ -165,12 +165,12 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.evaluationScore = evaluationScore;
     }
 
-    public Integer getPageviews() {
-        return pageviews;
+    public Integer getPageViews() {
+        return pageViews;
     }
 
-    public void setPageviews(Integer pageviews) {
-        this.pageviews = pageviews;
+    public void setPageViews(Integer pageViews) {
+        this.pageViews = pageViews;
     }
 
     public Integer getTransactionNum() {
@@ -206,7 +206,7 @@ public class AdvisorListInfo extends Page implements Serializable {
                 ", priceScore='" + priceScore + '\'' +
                 ", integratedSort=" + integratedSort +
                 ", evaluationScore='" + evaluationScore + '\'' +
-                ", pageviews=" + pageviews +
+                ", pageViews=" + pageViews +
                 ", transactionNum=" + transactionNum +
                 ", evaluationNum=" + evaluationNum +
                 '}';

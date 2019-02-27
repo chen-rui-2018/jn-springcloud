@@ -97,4 +97,22 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getUserAll", method = RequestMethod.POST)
     Result getUserAll();
 
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/addSysUser", method = RequestMethod.POST)
+    Result addSysUser(@RequestBody User user);
+
+    /**
+     * 根据用户ID，更新用户信息
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/updateSysUser", method = RequestMethod.POST)
+    Result updateSysUser(@RequestBody User user);
+
+
+
 }

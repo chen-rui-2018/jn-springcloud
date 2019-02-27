@@ -537,4 +537,15 @@ public class SysUserServiceImpl implements SysUserService {
         }
         return users;
     }
+
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    @Override
+    public List<User> getUserAll() {
+        List<User> userList = sysUserMapper.getUserAll();
+        return userList;
+    }
 }

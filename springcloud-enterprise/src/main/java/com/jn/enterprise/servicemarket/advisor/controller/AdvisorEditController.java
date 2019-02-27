@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceExperience;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
@@ -18,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -72,6 +75,17 @@ public class AdvisorEditController extends BaseController {
     public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperience serviceProjectExperience){
         advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperience);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "获取指定证件类型")
+    @ApiOperation(value = "获取指定证件类型", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getCertificateTypeList")
+    @RequiresPermissions("/serviceMarket/advisorEditController/getCertificateTypeList")
+    public Result getCertificateTypeList(){
+        //证件类型分类 荣誉资质：honor
+        String certificateType="honor";
+        List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
+        return new Result(certificateTypeList);
     }
 
 }

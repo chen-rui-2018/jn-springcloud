@@ -53,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        comment
+                        advisor
                     </contexts>
                     <tableNames>
-                        tb_service_rating
+                        tb_service_certificate_type
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

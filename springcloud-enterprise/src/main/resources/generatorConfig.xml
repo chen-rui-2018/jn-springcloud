@@ -108,6 +108,8 @@
         </table>
         <table tableName="tb_service_experience">
         </table>
+        <table tableName="tb_service_certificate_type">
+        </table>
     </context>
 
 

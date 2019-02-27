@@ -4,10 +4,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
-import com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper;
-import com.jn.enterprise.servicemarket.advisor.dao.TbServiceHonorMapper;
-import com.jn.enterprise.servicemarket.advisor.dao.TbServiceProExperMapper;
+import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.enums.CredentialsTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
@@ -51,6 +48,9 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Autowired
     private TbServiceProExperMapper tbServiceProExperMapper;
 
+    @Autowired
+    private TbServiceCertificateTypeMapper tbServiceCertificateTypeMapper;
+
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
 
     /**
@@ -91,8 +91,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     public void saveOrUpdateAdvisorHonor(ServiceHonor serviceHonor) {
         //判断证书类型是否在系统中
         boolean isExist=false;
-        for(CredentialsTypeEnum credentialsTypeEnum:CredentialsTypeEnum.values()){
-            if(serviceHonor.getCertificateType().equalsIgnoreCase(credentialsTypeEnum.getCode())){
+        //证件类型分类 荣誉资质：honor
+        String certificateType="honor";
+        List<TbServiceCertificateType> certificateTypeList = getCertificateTypeList(certificateType);
+        for(TbServiceCertificateType tbServiceCertificateType:certificateTypeList){
+            if(serviceHonor.getCertificateType().equalsIgnoreCase(tbServiceCertificateType.getCertificateCode())){
                 isExist=true;
             }
         }
@@ -138,6 +141,20 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             tbServiceHonor.setCreatorAccount(serviceHonor.getAdvisorAccount());
             tbServiceHonorMapper.insertSelective(tbServiceHonor);
         }
+    }
+
+    /**
+     * 获取指定证件类型
+     * @param certificateType 证件类型分类
+     * @return
+     */
+    @ServiceLog(doAction = "获取指定证件类型")
+    @Override
+    public List<TbServiceCertificateType> getCertificateTypeList(String certificateType) {
+        byte recordStatus=1;
+        TbServiceCertificateTypeCriteria example=new TbServiceCertificateTypeCriteria();
+        example.createCriteria().andCertificateTypeEqualTo(certificateType).andRecordStatusEqualTo(recordStatus);
+        return tbServiceCertificateTypeMapper.selectByExample(example);
     }
 
     /**

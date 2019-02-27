@@ -31,15 +31,27 @@ const oaRouter = {
           meta: { title: '会议预约', noCache: false }
         },
         {
+          path: 'lookmeetingApplication',
+          component: () => import('@/views/oa/meetingManagement/meetingApplication'),
+          name: 'lookmeetingApplication',
+          meta: { title: '查看会议', noCache: false }
+        },
+        {
+          path: 'editmeetingApplication',
+          component: () => import('@/views/oa/meetingManagement/meetingApplication'),
+          name: 'editmeetingApplication',
+          meta: { title: '编辑会议', noCache: false }
+        },
+        {
           path: 'meetingApplication',
           component: () => import('@/views/oa/meetingManagement/meetingApplication'),
           name: 'meetingApplication',
           meta: { title: '会议申请', noCache: false }
         },
         {
-          path: 'meetingManagement',
-          component: () => import('@/views/oa/meetingManagement/meetingManagement'),
-          name: 'meetingManagement',
+          path: 'meetingListManagement',
+          component: () => import('@/views/oa/meetingManagement/meetingListManagement'),
+          name: 'meetingListManagement',
           meta: { title: '会议列表', noCache: true, icon: 'list' }
         },
         {
@@ -47,6 +59,18 @@ const oaRouter = {
           component: () => import('@/views/oa/meetingManagement/addMeetingroom'),
           name: 'addMeetingroom',
           meta: { title: '新增会议室', noCache: false }
+        },
+        {
+          path: 'lookMeetingroom',
+          component: () => import('@/views/oa/meetingManagement/addMeetingroom'),
+          name: 'lookMeetingroom',
+          meta: { title: '查看会议室', noCache: false }
+        },
+        {
+          path: 'editMeetingroom',
+          component: () => import('@/views/oa/meetingManagement/addMeetingroom'),
+          name: 'editMeetingroom',
+          meta: { title: '编辑会议室', noCache: false }
         },
         {
           path: 'meetingAttendance',

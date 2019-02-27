@@ -12,10 +12,14 @@ import com.jn.system.model.MenuResources;
 import com.jn.system.model.User;
 import com.jn.system.model.UserLogin;
 import com.jn.system.model.UserNoPasswordLogin;
+import com.jn.system.user.model.SysUser;
+import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * 提供内部使用的API接口
@@ -51,12 +56,11 @@ public class SystemController extends BaseController implements SystemClient {
     private SysFileGroupService sysFileGroupService;
 
     @Override
-    @ControllerLog(doAction = "免密登录")
+    @ControllerLog(doAction = "用户登录")
     public Result<String> login(@RequestBody @Validated UserLogin userLogin) {
         loginService.login(userLogin, Boolean.FALSE);
         return new Result(SecurityUtils.getSubject().getSession().getId());
     }
-
 
     @Override
     @ControllerLog(doAction = "免密登录")
@@ -67,7 +71,6 @@ public class SystemController extends BaseController implements SystemClient {
         loginService.login(userLogin, Boolean.TRUE);
         return new Result(SecurityUtils.getSubject().getSession().getId());
     }
-
 
     @Override
     @ControllerLog(doAction = "获取用户")
@@ -107,4 +110,34 @@ public class SystemController extends BaseController implements SystemClient {
         Boolean isUserFilePermission = sysFileGroupService.getUserFilePermission(userId, fileUrl);
         return new Result(isUserFilePermission);
     }
+
+    @Override
+    @ControllerLog(doAction = "获取所有有效用户信息")
+    public Result getUserAll() {
+        List<User> userList = sysUserService.getUserAll();
+        return new Result(userList);
+    }
+
+    @Override
+    @ControllerLog(doAction = "添加用户")
+    public Result addSysUser(@Validated @RequestBody User user) {
+        user.setId(UUID.randomUUID().toString());
+        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+        user.setRecordStatus((byte) 1);
+        SysUserAdd SysUserAdd = new SysUserAdd();
+        BeanUtils.copyProperties(user, SysUserAdd);
+        sysUserService.addSysUser(SysUserAdd, new User());
+        return new Result();
+    }
+
+    @Override
+    @ControllerLog(doAction = "更新用户")
+    public Result updateSysUser(@Validated @RequestBody User user) {
+        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(user, sysUser);
+        sysUserService.updateSysUser(sysUser, new User());
+        return new Result();
+    }
+
 }

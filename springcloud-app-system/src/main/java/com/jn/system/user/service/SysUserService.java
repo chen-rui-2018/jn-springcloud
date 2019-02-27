@@ -113,4 +113,11 @@ public interface SysUserService {
     String checkUserName(String account);
 
     List<User> findTByT(User user);
+
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    List<User> getUserAll();
 }

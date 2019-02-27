@@ -195,5 +195,14 @@ public class SysUserController extends BaseController {
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
     }
 
+    @ControllerLog(doAction = "获取全部有效用户信息")
+    @RequiresPermissions("/system/sysUser/getUserAll")
+    @ApiOperation(value = "获取全部有效用户信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getUserAll")
+    public Result getUserAll(){
+        List<User> userAll = sysUserService.getUserAll();
+        return new Result(userAll);
+    }
+
 
 }

@@ -85,7 +85,6 @@ public class OrgColleagueController extends BaseController {
             logger.warn("机构同事查询获取当前登录用户信息失败");
             return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-
         orgColleagueService.deleteContactOrAdvisor(user.getAccount(),account);
         return new Result();
     }

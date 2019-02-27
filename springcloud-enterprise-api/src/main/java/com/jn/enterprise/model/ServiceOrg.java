@@ -1,4 +1,4 @@
-package com.jn.enterprise.servicemarket.org.model;
+package com.jn.enterprise.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

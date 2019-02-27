@@ -15,13 +15,9 @@
        ,tt.goodAtBusiness
        ,tt.transactionNum
        ,tt.pageviews
-       ,tt.attitudeScore
-       ,tt.professionScore
-       ,tt.responseScore
-       ,tt.priceScore
-       ,((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)AS "evaluationScore"  <!--评价分数-->
-       ,tt.evaluationNum									      <!--评价次数-->
-       ,((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} )AS "integratedSort"  <!--综合排序结果值-->
+       ,tt.evaluationScore       <!--评价分数-->
+       ,tt.evaluationNum		 <!--评价次数-->
+       ,(tt.evaluationScore* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} )AS "integratedSort"  <!--综合排序结果值-->
        FROM
        (
        SELECT
@@ -36,10 +32,7 @@
        ,sa.`good_at_business` AS "goodAtBusiness"			              <!-- 业务擅长-->
        ,IFNULL(sa.`transaction_num`,0) AS "transactionNum"			      <!-- 累计交易数-->
        ,IFNULL(sa.page_views,0) AS "pageviews"					          <!-- 浏览量-->
-       ,IFNULL(AVG(sr.`attitude_score`),0) AS "attitudeScore"		      <!-- 服务态度评分-->
-       ,IFNULL(AVG(sr.`profession_score`),0) AS "professionScore"         <!-- 服务专业评分-->
-       ,IFNULL(AVG(sr.`response_score`),0) AS "responseScore"		      <!-- 服务响应评分-->
-       ,IFNULL(AVG(sr.`price_score`),0)AS "priceScore"			          <!-- 服务价格评分-->
+       ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		      <!-- 评价分数-->
        ,COUNT(sr.`attitude_score`) AS "evaluationNum"			          <!-- 评价次数-->
        FROM tb_service_advisor  sa
        LEFT JOIN tb_service_rating sr
@@ -62,7 +55,7 @@
        </if>
        <if test="sortTypes =='integrate'">
            ORDER BY <!-- 综合排序-->
-           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
+           (tt.evaluationScore * #{praiseWeight}+tt.pageviews* #{popularityWeight} +tt.transactionNum* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
        </if>
        <if test="sortTypes =='popularity'">
            ORDER BY <!-- 人气排序-->
@@ -70,7 +63,7 @@
        </if>
        <if test="sortTypes =='praise'">
            ORDER BY  <!-- 好评排序-->
-           ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4) DESC   <!--评价分数-->
+           tt.evaluationScore DESC   <!--评价分数-->
        </if>
        <if test="sortTypes =='serviceNum'">
            ORDER BY <!-- 服务量排序-->
@@ -91,11 +84,7 @@
 		,tt.evaluationAccount
 		,tt.createdTime
 		,tt.evaluationDesc
-		,tt.attitudeScore
-		,tt.professionScore
-		,tt.responseScore
-		,tt.priceScore
-		,(tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4 AS "evaluationScore"  <!--评价分数-->
+		,tt.evaluationScore
 	    FROM
 	      (
             SELECT
@@ -109,10 +98,7 @@
                 ,sr.`evaluator_account` AS "evaluationAccount"			    <!-- 评价人账号-->
                 ,sr.`created_time` AS "createdTime"				            <!-- 评价时间-->
                 ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
-                ,IFNULL(AVG(sr.`attitude_score`),0) AS "attitudeScore"		<!-- 服务态度评分-->
-                ,IFNULL(AVG(sr.`profession_score`),0) AS "professionScore"	<!-- 服务专业评分-->
-                ,IFNULL(AVG(sr.`response_score`),0) AS "responseScore"		<!-- 服务响应评分-->
-                ,IFNULL(AVG(sr.`price_score`),0)AS "priceScore"			    <!-- 服务价格评分-->
+                ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
             FROM tb_service_advisor  sa
             LEFT JOIN tb_service_rating sr
             ON sa.`advisor_account` = sr.`advisor_account`
@@ -128,17 +114,17 @@
         WHERE 1=1
         AND tt.advisorAccount=#{advisorAccount}
         <if test="ratingType=='praise'">    <!--好评  5星-->
-            and ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)=5
+            and tt.evaluationScore=5
         </if>
         <if test="ratingType=='average'">   <!--中评 大于等于3星小于5星-->
-            and ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)&gt;=3
-            and ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)&lt;5
+            and tt.evaluationScore&gt;=3
+            and tt.evaluationScore&lt;5
         </if>
         <if test="ratingType=='badReview'"> <!--差评 大于等于1星小于3星-->
-            and ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)&gt;=1
-            and ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)&lt;3
+            and tt.evaluationScore&gt;=1
+            and tt.evaluationScore&lt;3
         </if>
-        ORDER BY  tt.advisorAccount, ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4)DESC
+        ORDER BY  tt.advisorAccount, tt.evaluationScore DESC
 
     </select>
 

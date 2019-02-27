@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +17,21 @@ import java.util.Date;
  */
 @ApiModel(value = "ServiceExperience",description = "顾问服务经历")
 public class ServiceExperience extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id")
+    private String id;
     @ApiModelProperty(value = "顾问账号")
+    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称")
+    @NotNull(message="公司名称不能为空")
     private String companyName;
     @ApiModelProperty(value = "职务")
+    @NotNull(message="职务不能为空")
     private String position;
     @ApiModelProperty(value = "工作时间")
-    private Date workTime;
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))-((0?[1-9])|(1[0-2]))",
+            message = "{workTime:'工作时间格式错误'}")
+    private String workTime;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
     @ApiModelProperty(value = "创建人")
@@ -35,6 +44,14 @@ public class ServiceExperience extends Page implements Serializable {
     private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAdvisorAccount() {
         return advisorAccount;
@@ -60,11 +77,11 @@ public class ServiceExperience extends Page implements Serializable {
         this.position = position;
     }
 
-    public Date getWorkTime() {
+    public String getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(Date workTime) {
+    public void setWorkTime(String workTime) {
         this.workTime = workTime;
     }
 
@@ -111,7 +128,8 @@ public class ServiceExperience extends Page implements Serializable {
     @Override
     public String toString() {
         return "ServiceExperience{" +
-                "advisorAccount='" + advisorAccount + '\'' +
+                "id='" + id + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", position='" + position + '\'' +
                 ", workTime=" + workTime +

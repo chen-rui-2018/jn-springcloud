@@ -735,6 +735,76 @@ public class TbServiceAdvisorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPhoneIsNull() {
+            addCriterion("phone is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIsNotNull() {
+            addCriterion("phone is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneEqualTo(String value) {
+            addCriterion("phone =", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotEqualTo(String value) {
+            addCriterion("phone <>", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThan(String value) {
+            addCriterion("phone >", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneGreaterThanOrEqualTo(String value) {
+            addCriterion("phone >=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThan(String value) {
+            addCriterion("phone <", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLessThanOrEqualTo(String value) {
+            addCriterion("phone <=", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneLike(String value) {
+            addCriterion("phone like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotLike(String value) {
+            addCriterion("phone not like", value, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneIn(List<String> values) {
+            addCriterion("phone in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotIn(List<String> values) {
+            addCriterion("phone not in", values, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneBetween(String value1, String value2) {
+            addCriterion("phone between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
+        public Criteria andPhoneNotBetween(String value1, String value2) {
+            addCriterion("phone not between", value1, value2, "phone");
+            return (Criteria) this;
+        }
+
         public Criteria andContactEmailIsNull() {
             addCriterion("contact_email is null");
             return (Criteria) this;
@@ -1082,6 +1152,76 @@ public class TbServiceAdvisorCriteria {
 
         public Criteria andGraduatedSchoolNotBetween(String value1, String value2) {
             addCriterion("graduated_school not between", value1, value2, "graduatedSchool");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIsNull() {
+            addCriterion("personal_profile is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIsNotNull() {
+            addCriterion("personal_profile is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileEqualTo(String value) {
+            addCriterion("personal_profile =", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotEqualTo(String value) {
+            addCriterion("personal_profile <>", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileGreaterThan(String value) {
+            addCriterion("personal_profile >", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileGreaterThanOrEqualTo(String value) {
+            addCriterion("personal_profile >=", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLessThan(String value) {
+            addCriterion("personal_profile <", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLessThanOrEqualTo(String value) {
+            addCriterion("personal_profile <=", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileLike(String value) {
+            addCriterion("personal_profile like", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotLike(String value) {
+            addCriterion("personal_profile not like", value, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileIn(List<String> values) {
+            addCriterion("personal_profile in", values, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotIn(List<String> values) {
+            addCriterion("personal_profile not in", values, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileBetween(String value1, String value2) {
+            addCriterion("personal_profile between", value1, value2, "personalProfile");
+            return (Criteria) this;
+        }
+
+        public Criteria andPersonalProfileNotBetween(String value1, String value2) {
+            addCriterion("personal_profile not between", value1, value2, "personalProfile");
             return (Criteria) this;
         }
 

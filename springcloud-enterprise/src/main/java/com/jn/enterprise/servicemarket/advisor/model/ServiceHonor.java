@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,14 +17,21 @@ import java.util.Date;
  */
 @ApiModel(value = "ServiceHonor",description = "顾问荣誉资质")
 public class ServiceHonor extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id")
+    private String id;
     @ApiModelProperty(value = "顾问账号")
+    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "证书名称")
+    @NotNull(message="证书名称不能为空")
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
+    @NotNull(message="证书类型不能为空")
     private String certificateType;
-    @ApiModelProperty(value = "获得时间")
-    private Date getTime;
+    @ApiModelProperty(value = "获得时间(比如2018-01)")
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))-((0?[1-9])|(1[0-2]))",
+            message = "{getTime:'获得时间格式错误'}")
+    private String getTime;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;
     @ApiModelProperty(value = "创建时间")
@@ -37,6 +46,14 @@ public class ServiceHonor extends Page implements Serializable {
     private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAdvisorAccount() {
         return advisorAccount;
@@ -62,11 +79,11 @@ public class ServiceHonor extends Page implements Serializable {
         this.certificateType = certificateType;
     }
 
-    public Date getGetTime() {
+    public String getGetTime() {
         return getTime;
     }
 
-    public void setGetTime(Date getTime) {
+    public void setGetTime(String getTime) {
         this.getTime = getTime;
     }
 
@@ -121,10 +138,11 @@ public class ServiceHonor extends Page implements Serializable {
     @Override
     public String toString() {
         return "ServiceHonor{" +
-                "advisorAccount='" + advisorAccount + '\'' +
+                "id='" + id + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
                 ", certificateName='" + certificateName + '\'' +
                 ", certificateType='" + certificateType + '\'' +
-                ", getTime=" + getTime +
+                ", getTime='" + getTime + '\'' +
                 ", certificatePhoto='" + certificatePhoto + '\'' +
                 ", createdTime=" + createdTime +
                 ", creatorAccount='" + creatorAccount + '\'' +

@@ -116,6 +116,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         advisorDetailsVo.setServiceExperienceList(serviceExperienceList);
         //5.todo:获取服务产品,待陈蕊完成后再调用  yangph
 
+
         //6.获取服务评价  //默认查全部
         String ratingType="全部";
         ServiceEvaluationQuery serviceEvaluationQuery=new ServiceEvaluationQuery();

@@ -13,8 +13,6 @@ import com.jn.enterprise.servicemarket.comment.entity.TbServiceRating;
 import com.jn.enterprise.servicemarket.comment.model.*;
 import com.jn.enterprise.servicemarket.comment.service.CommentService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
-import com.jn.enterprise.servicemarket.org.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria;

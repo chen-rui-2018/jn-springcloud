@@ -57,7 +57,7 @@ public class AdvisorServiceImplTest {
         advisorInquiryInfo.setDomain(domain);
         advisorInquiryInfo.setKeyWords(keyWords);
         advisorInquiryInfo.setSortTypes(sortTypes);
-        advisorAccount="wangsong1";
+        advisorAccount="wangsong";
 
         serviceEvaluationQuery.setAdvisorAccount(advisorAccount);
         serviceEvaluationQuery.setRatingType("差评");

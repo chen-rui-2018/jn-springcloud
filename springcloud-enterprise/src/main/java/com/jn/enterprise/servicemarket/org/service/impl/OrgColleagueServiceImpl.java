@@ -115,9 +115,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
                     //担任职务
                     orgColleagueInfo.setPosition(tbServiceAdvisor.getPosition());
                     //入驻日期
-                    if(tbServiceAdvisor.getModifiedTime()!=null){
-                        orgColleagueInfo.setEntryDate(DateUtils.formatDate(tbServiceAdvisor.getModifiedTime(), "yyyy-MM-dd HH:mm:ss"));
-                    }else if(tbServiceAdvisor.getCreatedTime()!=null){
+                    if(tbServiceAdvisor.getCreatedTime()!=null){
                         orgColleagueInfo.setEntryDate(DateUtils.formatDate(tbServiceAdvisor.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));
                     }else{
                         orgColleagueInfo.setEntryDate(DateUtils.formatDate(extensionInfo.getCreatedTime(), "yyyy-MM-dd HH:mm:ss"));

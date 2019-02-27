@@ -7,7 +7,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
-import com.jn.enterprise.servicemarket.enums.ServiceProductException;
+import com.jn.enterprise.enums.ServiceProductException;
 import com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao;
 import com.jn.enterprise.servicemarket.product.dao.ServiceProductDao;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceDetailsMapper;

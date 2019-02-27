@@ -31,14 +31,6 @@ public class ServiceRating extends Page implements Serializable {
     private String pictureUrl;
     @ApiModelProperty(value = "评价人账号")
     private String evaluationAccount;
-    @ApiModelProperty(value = "服务态度评分")
-    private String attitudeScore;
-    @ApiModelProperty(value = "服务专业评分")
-    private String professionScore;
-    @ApiModelProperty(value = "服务响应评分")
-    private String responseScore;
-    @ApiModelProperty(value = "服务价格评分")
-    private String priceScore;
     @ApiModelProperty(value = "服务评分")
     private String evaluationScore;
     @ApiModelProperty(value = "服务评价描述")
@@ -120,38 +112,6 @@ public class ServiceRating extends Page implements Serializable {
         this.evaluationAccount = evaluationAccount;
     }
 
-    public String getAttitudeScore() {
-        return attitudeScore;
-    }
-
-    public void setAttitudeScore(String attitudeScore) {
-        this.attitudeScore = attitudeScore;
-    }
-
-    public String getProfessionScore() {
-        return professionScore;
-    }
-
-    public void setProfessionScore(String professionScore) {
-        this.professionScore = professionScore;
-    }
-
-    public String getResponseScore() {
-        return responseScore;
-    }
-
-    public void setResponseScore(String responseScore) {
-        this.responseScore = responseScore;
-    }
-
-    public String getPriceScore() {
-        return priceScore;
-    }
-
-    public void setPriceScore(String priceScore) {
-        this.priceScore = priceScore;
-    }
-
     public String getEvaluationScore() {
         return evaluationScore;
     }
@@ -219,10 +179,6 @@ public class ServiceRating extends Page implements Serializable {
                 ", advisorName='" + advisorName + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", evaluationAccount='" + evaluationAccount + '\'' +
-                ", attitudeScore='" + attitudeScore + '\'' +
-                ", professionScore='" + professionScore + '\'' +
-                ", responseScore='" + responseScore + '\'' +
-                ", priceScore='" + priceScore + '\'' +
                 ", evaluationScore='" + evaluationScore + '\'' +
                 ", evaluationDesc='" + evaluationDesc + '\'' +
                 ", createdTime=" + createdTime +

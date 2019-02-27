@@ -1,7 +1,6 @@
 package com.jn.enterprise.servicemarket.advisor.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 public class TbServiceAdvisor implements Serializable {
@@ -23,6 +22,8 @@ public class TbServiceAdvisor implements Serializable {
 
     private String isCertification;
 
+    private String phone;
+
     private String contactEmail;
 
     private String cardType;
@@ -32,6 +33,8 @@ public class TbServiceAdvisor implements Serializable {
     private String education;
 
     private String graduatedSchool;
+
+    private String personalProfile;
 
     private Float workingYears;
 
@@ -58,8 +61,6 @@ public class TbServiceAdvisor implements Serializable {
     private String modifierAccount;
 
     private Byte recordStatus;
-
-    private byte[] personalProfile;
 
     private static final long serialVersionUID = 1L;
 
@@ -135,6 +136,14 @@ public class TbServiceAdvisor implements Serializable {
         this.isCertification = isCertification == null ? null : isCertification.trim();
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
     public String getContactEmail() {
         return contactEmail;
     }
@@ -173,6 +182,14 @@ public class TbServiceAdvisor implements Serializable {
 
     public void setGraduatedSchool(String graduatedSchool) {
         this.graduatedSchool = graduatedSchool == null ? null : graduatedSchool.trim();
+    }
+
+    public String getPersonalProfile() {
+        return personalProfile;
+    }
+
+    public void setPersonalProfile(String personalProfile) {
+        this.personalProfile = personalProfile == null ? null : personalProfile.trim();
     }
 
     public Float getWorkingYears() {
@@ -279,14 +296,6 @@ public class TbServiceAdvisor implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public byte[] getPersonalProfile() {
-        return personalProfile;
-    }
-
-    public void setPersonalProfile(byte[] personalProfile) {
-        this.personalProfile = personalProfile;
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -308,11 +317,13 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getIsCertification() == null ? other.getIsCertification() == null : this.getIsCertification().equals(other.getIsCertification()))
+            && (this.getPhone() == null ? other.getPhone() == null : this.getPhone().equals(other.getPhone()))
             && (this.getContactEmail() == null ? other.getContactEmail() == null : this.getContactEmail().equals(other.getContactEmail()))
             && (this.getCardType() == null ? other.getCardType() == null : this.getCardType().equals(other.getCardType()))
             && (this.getCardNumber() == null ? other.getCardNumber() == null : this.getCardNumber().equals(other.getCardNumber()))
             && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
             && (this.getGraduatedSchool() == null ? other.getGraduatedSchool() == null : this.getGraduatedSchool().equals(other.getGraduatedSchool()))
+            && (this.getPersonalProfile() == null ? other.getPersonalProfile() == null : this.getPersonalProfile().equals(other.getPersonalProfile()))
             && (this.getWorkingYears() == null ? other.getWorkingYears() == null : this.getWorkingYears().equals(other.getWorkingYears()))
             && (this.getPracticeQualification() == null ? other.getPracticeQualification() == null : this.getPracticeQualification().equals(other.getPracticeQualification()))
             && (this.getGoodAtBusiness() == null ? other.getGoodAtBusiness() == null : this.getGoodAtBusiness().equals(other.getGoodAtBusiness()))
@@ -325,8 +336,7 @@ public class TbServiceAdvisor implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
-            && (Arrays.equals(this.getPersonalProfile(), other.getPersonalProfile()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -342,11 +352,13 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getIsCertification() == null) ? 0 : getIsCertification().hashCode());
+        result = prime * result + ((getPhone() == null) ? 0 : getPhone().hashCode());
         result = prime * result + ((getContactEmail() == null) ? 0 : getContactEmail().hashCode());
         result = prime * result + ((getCardType() == null) ? 0 : getCardType().hashCode());
         result = prime * result + ((getCardNumber() == null) ? 0 : getCardNumber().hashCode());
         result = prime * result + ((getEducation() == null) ? 0 : getEducation().hashCode());
         result = prime * result + ((getGraduatedSchool() == null) ? 0 : getGraduatedSchool().hashCode());
+        result = prime * result + ((getPersonalProfile() == null) ? 0 : getPersonalProfile().hashCode());
         result = prime * result + ((getWorkingYears() == null) ? 0 : getWorkingYears().hashCode());
         result = prime * result + ((getPracticeQualification() == null) ? 0 : getPracticeQualification().hashCode());
         result = prime * result + ((getGoodAtBusiness() == null) ? 0 : getGoodAtBusiness().hashCode());
@@ -360,7 +372,6 @@ public class TbServiceAdvisor implements Serializable {
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
-        result = prime * result + (Arrays.hashCode(getPersonalProfile()));
         return result;
     }
 
@@ -379,11 +390,13 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", avatar=").append(avatar);
         sb.append(", position=").append(position);
         sb.append(", isCertification=").append(isCertification);
+        sb.append(", phone=").append(phone);
         sb.append(", contactEmail=").append(contactEmail);
         sb.append(", cardType=").append(cardType);
         sb.append(", cardNumber=").append(cardNumber);
         sb.append(", education=").append(education);
         sb.append(", graduatedSchool=").append(graduatedSchool);
+        sb.append(", personalProfile=").append(personalProfile);
         sb.append(", workingYears=").append(workingYears);
         sb.append(", practiceQualification=").append(practiceQualification);
         sb.append(", goodAtBusiness=").append(goodAtBusiness);
@@ -397,7 +410,6 @@ public class TbServiceAdvisor implements Serializable {
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
-        sb.append(", personalProfile=").append(personalProfile);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

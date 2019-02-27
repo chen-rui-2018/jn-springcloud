@@ -53,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        require
+                        comment
                     </contexts>
                     <tableNames>
-                        tb_service_require
+                        tb_service_rating
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

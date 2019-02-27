@@ -22,6 +22,10 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     PENDING_ADVISOR_NOT_EXIT("5020509","当前顾问在系统中不存在或状态非“待审批”"),
     APPROVAL_DESC_NOT_NULL("5020510","审批不通过，审批说明不能为空"),
     APPROVAL_STATUS_NOT_MATCH_SYSTEM("5020511","审批状态值与系统不符"),
+    CREDENTIALS_TYPE_ENUM_NOT_EXIST("5020512","证件类型在系统中不存在"),
+    HONOR_INFO_NOT_EXIST("5020513","当前荣誉资质信息在系统中已失效或已删除"),
+    EXPERIENCE_INFO_NOT_EXIST("5020514","当前服务经历在系统中已失效或已删除"),
+    PROJECT_EXPERIENCE_INFO_NOT_EXIST("5020515","当前项目经验在系统中已失效或已删除"),
     ;
 
     /**

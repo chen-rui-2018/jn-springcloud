@@ -30,14 +30,6 @@ public class AdvisorListInfo extends Page implements Serializable {
     private String isCertification;
     @ApiModelProperty(value = "业务擅长")
     private String goodAtBusiness;
-    @ApiModelProperty(value = "服务态度评分")
-    private String attitudeScore;
-    @ApiModelProperty(value = "服务专业评分")
-    private String professionScore;
-    @ApiModelProperty(value = "服务响应评分")
-    private String responseScore;
-    @ApiModelProperty(value = "服务价格评分")
-    private String priceScore;
     @ApiModelProperty(value = "综合得分")
     private Integer integratedSort;
     @ApiModelProperty(value = "评价分数（好评）")
@@ -117,38 +109,6 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.goodAtBusiness = goodAtBusiness;
     }
 
-    public String getAttitudeScore() {
-        return attitudeScore;
-    }
-
-    public void setAttitudeScore(String attitudeScore) {
-        this.attitudeScore = attitudeScore;
-    }
-
-    public String getProfessionScore() {
-        return professionScore;
-    }
-
-    public void setProfessionScore(String professionScore) {
-        this.professionScore = professionScore;
-    }
-
-    public String getResponseScore() {
-        return responseScore;
-    }
-
-    public void setResponseScore(String responseScore) {
-        this.responseScore = responseScore;
-    }
-
-    public String getPriceScore() {
-        return priceScore;
-    }
-
-    public void setPriceScore(String priceScore) {
-        this.priceScore = priceScore;
-    }
-
     public Integer getIntegratedSort() {
         return integratedSort;
     }
@@ -200,10 +160,6 @@ public class AdvisorListInfo extends Page implements Serializable {
                 ", orgName='" + orgName + '\'' +
                 ", isCertification='" + isCertification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +
-                ", attitudeScore='" + attitudeScore + '\'' +
-                ", professionScore='" + professionScore + '\'' +
-                ", responseScore='" + responseScore + '\'' +
-                ", priceScore='" + priceScore + '\'' +
                 ", integratedSort=" + integratedSort +
                 ", evaluationScore='" + evaluationScore + '\'' +
                 ", pageViews=" + pageViews +

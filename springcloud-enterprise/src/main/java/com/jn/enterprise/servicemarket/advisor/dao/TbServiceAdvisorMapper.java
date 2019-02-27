@@ -16,21 +16,15 @@ public interface TbServiceAdvisorMapper {
 
     int insertSelective(TbServiceAdvisor record);
 
-    List<TbServiceAdvisor> selectByExampleWithBLOBs(TbServiceAdvisorCriteria example);
-
     List<TbServiceAdvisor> selectByExample(TbServiceAdvisorCriteria example);
 
     TbServiceAdvisor selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbServiceAdvisor record, @Param("example") TbServiceAdvisorCriteria example);
 
-    int updateByExampleWithBLOBs(@Param("record") TbServiceAdvisor record, @Param("example") TbServiceAdvisorCriteria example);
-
     int updateByExample(@Param("record") TbServiceAdvisor record, @Param("example") TbServiceAdvisorCriteria example);
 
     int updateByPrimaryKeySelective(TbServiceAdvisor record);
-
-    int updateByPrimaryKeyWithBLOBs(TbServiceAdvisor record);
 
     int updateByPrimaryKey(TbServiceAdvisor record);
 }

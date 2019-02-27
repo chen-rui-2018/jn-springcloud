@@ -5,7 +5,7 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.enterprise.servicemarket.enums.ServiceProductException;
+import com.jn.enterprise.enums.ServiceProductException;
 import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
 import com.jn.enterprise.servicemarket.product.model.ServiceContent;

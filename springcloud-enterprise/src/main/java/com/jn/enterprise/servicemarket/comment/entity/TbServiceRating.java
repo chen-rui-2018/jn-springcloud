@@ -22,12 +22,6 @@ public class TbServiceRating implements Serializable {
 
     private String attitudeScore;
 
-    private String professionScore;
-
-    private String responseScore;
-
-    private String priceScore;
-
     private String evaluationDesc;
 
     private Date createdTime;
@@ -39,6 +33,8 @@ public class TbServiceRating implements Serializable {
     private String modifierAccount;
 
     private Byte recordStatus;
+
+    private String requireId;
 
     private static final long serialVersionUID = 1L;
 
@@ -114,30 +110,6 @@ public class TbServiceRating implements Serializable {
         this.attitudeScore = attitudeScore == null ? null : attitudeScore.trim();
     }
 
-    public String getProfessionScore() {
-        return professionScore;
-    }
-
-    public void setProfessionScore(String professionScore) {
-        this.professionScore = professionScore == null ? null : professionScore.trim();
-    }
-
-    public String getResponseScore() {
-        return responseScore;
-    }
-
-    public void setResponseScore(String responseScore) {
-        this.responseScore = responseScore == null ? null : responseScore.trim();
-    }
-
-    public String getPriceScore() {
-        return priceScore;
-    }
-
-    public void setPriceScore(String priceScore) {
-        this.priceScore = priceScore == null ? null : priceScore.trim();
-    }
-
     public String getEvaluationDesc() {
         return evaluationDesc;
     }
@@ -186,6 +158,14 @@ public class TbServiceRating implements Serializable {
         this.recordStatus = recordStatus;
     }
 
+    public String getRequireId() {
+        return requireId;
+    }
+
+    public void setRequireId(String requireId) {
+        this.requireId = requireId == null ? null : requireId.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -207,15 +187,13 @@ public class TbServiceRating implements Serializable {
             && (this.getAdvisorName() == null ? other.getAdvisorName() == null : this.getAdvisorName().equals(other.getAdvisorName()))
             && (this.getEvaluatorAccount() == null ? other.getEvaluatorAccount() == null : this.getEvaluatorAccount().equals(other.getEvaluatorAccount()))
             && (this.getAttitudeScore() == null ? other.getAttitudeScore() == null : this.getAttitudeScore().equals(other.getAttitudeScore()))
-            && (this.getProfessionScore() == null ? other.getProfessionScore() == null : this.getProfessionScore().equals(other.getProfessionScore()))
-            && (this.getResponseScore() == null ? other.getResponseScore() == null : this.getResponseScore().equals(other.getResponseScore()))
-            && (this.getPriceScore() == null ? other.getPriceScore() == null : this.getPriceScore().equals(other.getPriceScore()))
             && (this.getEvaluationDesc() == null ? other.getEvaluationDesc() == null : this.getEvaluationDesc().equals(other.getEvaluationDesc()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getRequireId() == null ? other.getRequireId() == null : this.getRequireId().equals(other.getRequireId()));
     }
 
     @Override
@@ -231,15 +209,13 @@ public class TbServiceRating implements Serializable {
         result = prime * result + ((getAdvisorName() == null) ? 0 : getAdvisorName().hashCode());
         result = prime * result + ((getEvaluatorAccount() == null) ? 0 : getEvaluatorAccount().hashCode());
         result = prime * result + ((getAttitudeScore() == null) ? 0 : getAttitudeScore().hashCode());
-        result = prime * result + ((getProfessionScore() == null) ? 0 : getProfessionScore().hashCode());
-        result = prime * result + ((getResponseScore() == null) ? 0 : getResponseScore().hashCode());
-        result = prime * result + ((getPriceScore() == null) ? 0 : getPriceScore().hashCode());
         result = prime * result + ((getEvaluationDesc() == null) ? 0 : getEvaluationDesc().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getRequireId() == null) ? 0 : getRequireId().hashCode());
         return result;
     }
 
@@ -258,15 +234,13 @@ public class TbServiceRating implements Serializable {
         sb.append(", advisorName=").append(advisorName);
         sb.append(", evaluatorAccount=").append(evaluatorAccount);
         sb.append(", attitudeScore=").append(attitudeScore);
-        sb.append(", professionScore=").append(professionScore);
-        sb.append(", responseScore=").append(responseScore);
-        sb.append(", priceScore=").append(priceScore);
         sb.append(", evaluationDesc=").append(evaluationDesc);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", requireId=").append(requireId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

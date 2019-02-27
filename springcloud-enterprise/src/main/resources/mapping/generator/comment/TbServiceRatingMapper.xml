@@ -11,15 +11,13 @@
     <result column="advisor_name" jdbcType="VARCHAR" property="advisorName" />
     <result column="evaluator_account" jdbcType="VARCHAR" property="evaluatorAccount" />
     <result column="attitude_score" jdbcType="VARCHAR" property="attitudeScore" />
-    <result column="profession_score" jdbcType="VARCHAR" property="professionScore" />
-    <result column="response_score" jdbcType="VARCHAR" property="responseScore" />
-    <result column="price_score" jdbcType="VARCHAR" property="priceScore" />
     <result column="evaluation_desc" jdbcType="VARCHAR" property="evaluationDesc" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="require_id" jdbcType="VARCHAR" property="requireId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,8 +79,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, org_id, org_name, product_id, product_name, advisor_account, advisor_name, evaluator_account, 
-    attitude_score, profession_score, response_score, price_score, evaluation_desc, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    attitude_score, evaluation_desc, created_time, creator_account, modified_time, modifier_account, 
+    record_status, require_id
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRatingCriteria" resultMap="BaseResultMap">
     select
@@ -118,17 +116,15 @@
     insert into tb_service_rating (id, org_id, org_name, 
       product_id, product_name, advisor_account, 
       advisor_name, evaluator_account, attitude_score, 
-      profession_score, response_score, price_score, 
       evaluation_desc, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      modified_time, modifier_account, record_status, 
+      require_id)
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
       #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
       #{advisorName,jdbcType=VARCHAR}, #{evaluatorAccount,jdbcType=VARCHAR}, #{attitudeScore,jdbcType=VARCHAR}, 
-      #{professionScore,jdbcType=VARCHAR}, #{responseScore,jdbcType=VARCHAR}, #{priceScore,jdbcType=VARCHAR}, 
       #{evaluationDesc,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{requireId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.comment.entity.TbServiceRating">
     insert into tb_service_rating
@@ -160,15 +156,6 @@
       <if test="attitudeScore != null">
         attitude_score,
       </if>
-      <if test="professionScore != null">
-        profession_score,
-      </if>
-      <if test="responseScore != null">
-        response_score,
-      </if>
-      <if test="priceScore != null">
-        price_score,
-      </if>
       <if test="evaluationDesc != null">
         evaluation_desc,
       </if>
@@ -186,6 +173,9 @@
       </if>
       <if test="recordStatus != null">
         record_status,
+      </if>
+      <if test="requireId != null">
+        require_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -216,15 +206,6 @@
       <if test="attitudeScore != null">
         #{attitudeScore,jdbcType=VARCHAR},
       </if>
-      <if test="professionScore != null">
-        #{professionScore,jdbcType=VARCHAR},
-      </if>
-      <if test="responseScore != null">
-        #{responseScore,jdbcType=VARCHAR},
-      </if>
-      <if test="priceScore != null">
-        #{priceScore,jdbcType=VARCHAR},
-      </if>
       <if test="evaluationDesc != null">
         #{evaluationDesc,jdbcType=VARCHAR},
       </if>
@@ -242,6 +223,9 @@
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="requireId != null">
+        #{requireId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -281,15 +265,6 @@
       <if test="record.attitudeScore != null">
         attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
       </if>
-      <if test="record.professionScore != null">
-        profession_score = #{record.professionScore,jdbcType=VARCHAR},
-      </if>
-      <if test="record.responseScore != null">
-        response_score = #{record.responseScore,jdbcType=VARCHAR},
-      </if>
-      <if test="record.priceScore != null">
-        price_score = #{record.priceScore,jdbcType=VARCHAR},
-      </if>
       <if test="record.evaluationDesc != null">
         evaluation_desc = #{record.evaluationDesc,jdbcType=VARCHAR},
       </if>
@@ -308,6 +283,9 @@
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="record.requireId != null">
+        require_id = #{record.requireId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -324,15 +302,13 @@
       advisor_name = #{record.advisorName,jdbcType=VARCHAR},
       evaluator_account = #{record.evaluatorAccount,jdbcType=VARCHAR},
       attitude_score = #{record.attitudeScore,jdbcType=VARCHAR},
-      profession_score = #{record.professionScore,jdbcType=VARCHAR},
-      response_score = #{record.responseScore,jdbcType=VARCHAR},
-      price_score = #{record.priceScore,jdbcType=VARCHAR},
       evaluation_desc = #{record.evaluationDesc,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT}
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      require_id = #{record.requireId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -364,15 +340,6 @@
       <if test="attitudeScore != null">
         attitude_score = #{attitudeScore,jdbcType=VARCHAR},
       </if>
-      <if test="professionScore != null">
-        profession_score = #{professionScore,jdbcType=VARCHAR},
-      </if>
-      <if test="responseScore != null">
-        response_score = #{responseScore,jdbcType=VARCHAR},
-      </if>
-      <if test="priceScore != null">
-        price_score = #{priceScore,jdbcType=VARCHAR},
-      </if>
       <if test="evaluationDesc != null">
         evaluation_desc = #{evaluationDesc,jdbcType=VARCHAR},
       </if>
@@ -391,6 +358,9 @@
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
+      <if test="requireId != null">
+        require_id = #{requireId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -404,15 +374,13 @@
       advisor_name = #{advisorName,jdbcType=VARCHAR},
       evaluator_account = #{evaluatorAccount,jdbcType=VARCHAR},
       attitude_score = #{attitudeScore,jdbcType=VARCHAR},
-      profession_score = #{professionScore,jdbcType=VARCHAR},
-      response_score = #{responseScore,jdbcType=VARCHAR},
-      price_score = #{priceScore,jdbcType=VARCHAR},
       evaluation_desc = #{evaluationDesc,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT}
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      require_id = #{requireId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

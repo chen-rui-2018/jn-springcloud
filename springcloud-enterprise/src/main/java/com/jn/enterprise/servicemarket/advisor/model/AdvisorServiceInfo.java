@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -34,6 +33,8 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     private String orgName;
     @ApiModelProperty(value = "是否认证")
     private String isCertification;
+    @ApiModelProperty(value = "联系手机")
+    private String phone;
     @ApiModelProperty(value = "联系邮箱")
     private String contactEmail;
     @ApiModelProperty(value = "证件类型")
@@ -71,7 +72,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
     @ApiModelProperty(value = "记录状态")
     private Byte recordStatus;
     @ApiModelProperty(value = "个人简介")
-    private byte[] personalProfile;
+    private String personalProfile;
 
     private static final long serialVersionUID = 1L;
 
@@ -138,6 +139,14 @@ public class AdvisorServiceInfo extends Page implements Serializable {
 
     public void setIsCertification(String isCertification) {
         this.isCertification = isCertification;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getContactEmail() {
@@ -284,11 +293,11 @@ public class AdvisorServiceInfo extends Page implements Serializable {
         this.recordStatus = recordStatus;
     }
 
-    public byte[] getPersonalProfile() {
+    public String getPersonalProfile() {
         return personalProfile;
     }
 
-    public void setPersonalProfile(byte[] personalProfile) {
+    public void setPersonalProfile(String personalProfile) {
         this.personalProfile = personalProfile;
     }
 
@@ -303,6 +312,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", position='" + position + '\'' +
                 ", orgName='" + orgName + '\'' +
                 ", isCertification='" + isCertification + '\'' +
+                ", phone='" + phone + '\'' +
                 ", contactEmail='" + contactEmail + '\'' +
                 ", cardType='" + cardType + '\'' +
                 ", cardNumber='" + cardNumber + '\'' +
@@ -321,7 +331,7 @@ public class AdvisorServiceInfo extends Page implements Serializable {
                 ", modifiedTime=" + modifiedTime +
                 ", modifierAccount='" + modifierAccount + '\'' +
                 ", recordStatus=" + recordStatus +
-                ", personalProfile=" + Arrays.toString(personalProfile) +
+                ", personalProfile=" + personalProfile +
                 '}';
     }
 }

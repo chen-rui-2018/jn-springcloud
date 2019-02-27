@@ -9,7 +9,7 @@ import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.system.permission.model.SysRole;
+import com.jn.system.model.SysRole;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.permission.service.impl.SysRoleServiceImpl;
 import com.jn.system.user.dao.SysGroupMapper;
@@ -218,17 +218,19 @@ public class SysGroupServiceImpl implements SysGroupService {
     public void roleGroupAuthorization(SysRoleGroupAdd sysRoleGroupAdd, User user) {
         //插入之前,清除该用户组下面的角色信息
         String[] ids = {sysRoleGroupAdd.getGroupId()};
+        String[] roleIds = sysRoleGroupAdd.getRoleIds();
+
         //封装删除id及更新人信息
         Map<String, Object> map = getDeleteMap(user, ids);
         sysGroupRoleMapper.deleteGroupBranch(map);
         logger.info("[用户组授权角色] 删除该用户组下角色信息成功！groupId:{}", sysRoleGroupAdd.getGroupId());
-        Boolean isDelete = sysRoleGroupAdd.getRoleIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
+        Boolean isDelete = (roleIds == null || roleIds.length == 0) ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
         String[] groupIds = {sysRoleGroupAdd.getGroupId()};
         List<SysGroupRole> sysGroupRoleList = new ArrayList<SysGroupRole>();
-        for (String roleId : sysRoleGroupAdd.getRoleIds()) {
+        for (String roleId : roleIds) {
             SysGroupRole sysGroupRole = new SysGroupRole();
             sysGroupRole.setId(UUID.randomUUID().toString());
             Byte recordStatus = Byte.parseByte(SysStatusEnums.EFFECTIVE.getCode());
@@ -289,17 +291,18 @@ public class SysGroupServiceImpl implements SysGroupService {
     @Transactional(rollbackFor = Exception.class)
     public void userGroupAuthorization(SysGroupUserAdd sysGroupUserAdd, User user) {
         //用户组添加用户之前清除用户组以前用户
-        //sysGroupUserMapper.deleteUserOfGroup(sysGroupUserAdd.getGroupId());
         String[] ids = {sysGroupUserAdd.getGroupId()};
+        String[] userIds = sysGroupUserAdd.getUserIds();
+
         Map<String, Object> map = getDeleteMap(user, ids);
         sysGroupUserMapper.deleteGroupBranch(map);
         logger.info("[用户组授权用户] 删除该用户组下用户信息成功！groupId:{}", sysGroupUserAdd.getGroupId());
-        Boolean isDelete = sysGroupUserAdd.getUserIds().length == 0 ? Boolean.TRUE : Boolean.FALSE;
+        Boolean isDelete = (userIds == null || userIds.length == 0) ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
         List<SysGroupUser> sysGroupUserList = new ArrayList<SysGroupUser>();
-        for (String userId : sysGroupUserAdd.getUserIds()) {
+        for (String userId : userIds) {
             SysGroupUser sysGroupUser = new SysGroupUser();
             sysGroupUser.setId(UUID.randomUUID().toString());
             sysGroupUser.setCreatorAccount(user.getAccount());

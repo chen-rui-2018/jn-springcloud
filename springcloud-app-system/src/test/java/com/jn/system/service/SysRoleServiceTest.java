@@ -129,6 +129,10 @@ public class SysRoleServiceTest {
         PaginationData data = sysRoleService.findUserOfRoleAndOtherUser(page);
         int total = Long.valueOf(data.getTotal()).intValue();
         Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
+
+        //清除角色添加的用户
+        sysUserRoleAdd.setUserId(null);
+        sysRoleService.userRoleAuthorization(sysUserRoleAdd, user);
     }
 
     @Test
@@ -148,6 +152,10 @@ public class SysRoleServiceTest {
         PaginationData data = sysRoleService.findUserGroupOfRoleAndOtherGroup(page);
         int total = Long.valueOf(data.getTotal()).intValue();
         Assert.assertThat(total, Matchers.greaterThanOrEqualTo(0));
+
+        //清除添加的用户组信息
+        sysUserGroupRoleAdd.setUserGroupId(null);
+        sysRoleService.userGroupRoleAuthorization(sysUserGroupRoleAdd, user);
     }
 
     @Test
@@ -182,8 +190,12 @@ public class SysRoleServiceTest {
      */
     @Test
     public void zDeleteTbRoleById() {
-        String[] roleIds = {roleId};
-        sysRoleService.deleteTbRoleById(roleIds,user);
+        try {
+            String[] roleIds = {roleId};
+            sysRoleService.deleteTbRoleById(roleIds,user);
+        } catch (JnSpringCloudException e) {
+            Assert.assertThat(e, Matchers.anything());
+        }
     }
 
 }

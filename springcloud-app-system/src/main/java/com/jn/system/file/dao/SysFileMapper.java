@@ -24,14 +24,6 @@ public interface SysFileMapper {
     int deleteByIds(String[] id);
 
     /**
-     * 根据关键字分页查询文件列表
-     *
-     * @param sysFilePage
-     * @return
-     */
-    List<SysFileVO> selectFileListBySearchKey(SysFilePage sysFilePage);
-
-    /**
      * 分页查询文件信息
      *
      * @param sysFilePage

@@ -10,7 +10,7 @@
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="record_status" jdbcType="TINYINT" property="recordStatus"/>
 
-        <collection property="sysDepartmentPostVOList" ofType="com.jn.system.dept.vo.SysDepartmentPostVO">
+        <collection property="sysDepartmentPostVOList" ofType="com.jn.system.vo.SysDepartmentPostVO">
             <result property="departmentId" column="departmentId" jdbcType="VARCHAR"/>
             <result property="departmentName" column="department_name" jdbcType="VARCHAR"/>
             <result property="postId" column="postId" jdbcType="VARCHAR"/>
@@ -207,7 +207,7 @@
                 and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
-                and t.record_status = #{recordStatus,jdbcType=TINYINT}
+                and t.recordStatus = #{recordStatus,jdbcType=TINYINT}
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
                 and t.department_id = #{departmentId,jdbcType=VARCHAR}

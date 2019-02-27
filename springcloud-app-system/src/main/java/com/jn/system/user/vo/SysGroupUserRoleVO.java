@@ -1,5 +1,6 @@
 package com.jn.system.user.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -23,6 +24,7 @@ public class SysGroupUserRoleVO implements Serializable {
     @ApiModelProperty("用户组名称")
     private String groupName;
     @ApiModelProperty("创建时间")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
     @ApiModelProperty("状态 1有效 0无效 -1删除")
     private Byte recordStatus;

@@ -1,6 +1,10 @@
 package com.jn.system.file.dao;
 
 
+import com.jn.system.file.model.SysFileGroup;
+import com.jn.system.file.model.SysFileGroupPage;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,4 +24,11 @@ public interface SysFileGroupMapper {
      * @return
      */
     int deleteByIds(Map<String, Object> map);
+
+    /**
+     * 条件分页获取文件组列表
+     * @param sysFileGroupPage
+     * @return
+     */
+    List<SysFileGroup> getFileGroupByPage(SysFileGroupPage sysFileGroupPage);
 }

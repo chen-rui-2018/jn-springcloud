@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.system.dict.dao.SysDictModuleMapper">
+
+    <select id="getModuleByPage" resultType="com.jn.system.dict.model.SysDictModule"
+            parameterType="com.jn.system.dict.model.SysDictModulePage">
+        SELECT
+        id,
+        module_code as moduleCode,
+        module_value as moduleValue,
+        created_time as createdTime,
+        record_status
+        FROM tb_sys_dict_module
+        WHERE record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(moduleCode)">
+            and module_code like CONCAT('%', #{moduleCode,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(moduleValue)">
+            and module_value like CONCAT('%', #{moduleValue,jdbcType=VARCHAR}, '%')
+        </if>
+        ORDER BY created_time asc,id asc
+    </select>
+</mapper>

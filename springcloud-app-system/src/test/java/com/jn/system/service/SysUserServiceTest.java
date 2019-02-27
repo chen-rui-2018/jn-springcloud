@@ -158,6 +158,16 @@ public class SysUserServiceTest {
     }
 
     @Test
+    public void getUserAll(){
+        List<User> data = sysUserService.getUserAll();
+        System.out.println(data.size());
+        for (User user : data) {
+            System.out.println(user);
+        }
+        Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
     public void findSysUserByIdTest() {
         SysUser data = sysUserService.findSysUserById(userId);
         Assert.assertThat(data, Matchers.anything());

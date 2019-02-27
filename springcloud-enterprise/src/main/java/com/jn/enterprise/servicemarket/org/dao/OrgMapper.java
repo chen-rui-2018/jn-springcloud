@@ -1,8 +1,9 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
-import com.jn.enterprise.servicemarket.model.OrgDetail;
-import com.jn.enterprise.servicemarket.model.OrgParameter;
-import com.jn.enterprise.servicemarket.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.org.model.OrgDetail;
+import com.jn.enterprise.servicemarket.org.model.OrgParameter;
+import com.jn.enterprise.servicemarket.org.model.ServiceOrg;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,6 +28,6 @@ public interface OrgMapper {
      * @param orgId
      * @return
      */
-    OrgDetail getServiceOrgDetail(String orgId);
+    OrgDetail getServiceOrgDetail(@Param("orgId")String orgId);
 
 }

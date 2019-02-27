@@ -15,6 +15,10 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     USER_EXTENSION_IS_NULL("5020503","系统异常，用户信息无法获取"),
     NON_OGR_USER("5020504","用户为非机构用户"),
     ACCOUNT_NOT_NULL("5020505","账号不能为空"),
+    ORG_DATA_IS_ERROR("5020506", "机构状态为非审核中状态，请核实机构数据"),
+    ORG_DATA_STATUS_IS_NOT_CHECKING("5020507", "机构状态非审核中，请核实数据"),
+    COMMENT_ID_IS_NOT_NULL("5020508", "点评ID不能为空"),
+    REQUIRE_IS_NOT_EXIT("5020509", "需求不存在，请核实数据"),
     ;
 
     /**

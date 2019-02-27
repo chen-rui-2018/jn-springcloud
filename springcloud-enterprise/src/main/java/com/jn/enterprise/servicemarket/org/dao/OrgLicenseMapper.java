@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
-import com.jn.enterprise.servicemarket.model.OrgLicense;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgLicense;
 
 import java.util.List;

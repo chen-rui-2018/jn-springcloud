@@ -1,6 +1,6 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
-import com.jn.enterprise.servicemarket.model.OrgApplyDetail;
+import com.jn.enterprise.servicemarket.org.model.OrgApplyDetail;
 import org.apache.ibatis.annotations.Param;
 
 /**

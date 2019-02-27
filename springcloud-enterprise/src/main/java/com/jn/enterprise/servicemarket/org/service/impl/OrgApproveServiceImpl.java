@@ -2,10 +2,12 @@ package com.jn.enterprise.servicemarket.org.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.servicemarket.model.*;
+import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
@@ -48,6 +50,15 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     @Autowired
     private TbServiceOrgLicenseMapper tbServiceOrgLicenseMapper;
 
+    /**
+     * 数据状态 1:有效
+     */
+    private final static String RECORD_STATUS_VALID = "1";
+    /**
+     * 机构状态 1:审核中
+     */
+    private final static String ORG_APPLY_IS_CHECKING = "1";
+
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
     public PaginationData getOrgApplyList(OrgApplyParameter orgApplyParameter){
@@ -82,12 +93,12 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         OrgApplyCount orgApplyCount = new OrgApplyCount();
         // 入驻机构总数（已审核通过数）
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
-        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte("1"));
+        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         long orgCount = tbServiceOrgMapper.countByExample(orgCriteria);
         orgApplyCount.setOrgCount(orgCount+"");
         logger.info("入驻机构总数（已审核通过数）{}",orgCount);
         // 待审核机构数
-        orgCriteria.createCriteria().andOrgStatusEqualTo("0").andRecordStatusEqualTo(new Byte("1"));
+        orgCriteria.createCriteria().andOrgStatusEqualTo("0").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         long waitApplyCount = tbServiceOrgMapper.countByExample(orgCriteria);
         orgApplyCount.setWaitApplyCount(waitApplyCount+"");
         logger.info("待审核机构数{}",waitApplyCount);
@@ -99,7 +110,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         cale.set(Calendar.MINUTE, 0);
         cale.set(Calendar.SECOND, 0);
         cale.set(Calendar.MILLISECOND, 0);
-        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte("1")).andCheckTimeBetween(cale.getTime(),new Date());
+        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(cale.getTime(),new Date());
         long monthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria);
         orgApplyCount.setMonthJoinOrgCount(monthJoinOrgCount+"");
         logger.info("本月入驻机构数{}",monthJoinOrgCount);
@@ -118,7 +129,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         endCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
         endCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
         endCalendar.set(Calendar.MILLISECOND, endCalendar.getActualMaximum(Calendar.MILLISECOND));
-        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte("1")).andCheckTimeBetween(startCalendar.getTime(),endCalendar.getTime());
+        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(startCalendar.getTime(),endCalendar.getTime());
         long lastMonthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria);
         orgApplyCount.setLastMonthJoinOrgCount(lastMonthJoinOrgCount+"");
         logger.info("上月入驻机构数{}",lastMonthJoinOrgCount);
@@ -135,7 +146,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         OrgApplyDetail orgApplyDetail = orgApproveMapper.getOrgApplyDetailById(orgId);
 
         TbServiceOrgLicenseCriteria licenseCriteria = new TbServiceOrgLicenseCriteria();
-        licenseCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        licenseCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceOrgLicense> orgLicenses = tbServiceOrgLicenseMapper.selectByExample(licenseCriteria);
 
         List<OrgLicense> licenses = new ArrayList<>(8);
@@ -146,7 +157,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         }
         orgApplyDetail.setOrgLicenses(licenses);
         TbServiceOrgTeamCriteria teamCriteria = new TbServiceOrgTeamCriteria();
-        teamCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        teamCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceOrgTeam> orgTeamList = tbServiceOrgTeamMapper.selectByExample(teamCriteria);
         List<OrgTeam> teams = new ArrayList<>(8);
         for (TbServiceOrgTeam tbServiceOrgTeam:orgTeamList ) {
@@ -156,7 +167,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         }
         orgApplyDetail.setOrgTeams(teams);
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
-        traitCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte("1"));
+        traitCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceOrgTrait> orgTraits = tbServiceOrgTraitMapper.selectByExample(traitCriteria);
         List<OrgTrait> traits1 = new ArrayList<>(8);
         for (TbServiceOrgTrait tbServiceOrgTrait:orgTraits) {
@@ -169,5 +180,23 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         return orgApplyDetail;
     }
 
+
+    @Override
+    @ServiceLog(doAction = "机构申请审核")
+    public Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData){
+        String orgId = orgApplyCheckData.getOrgId();
+        TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
+        orgCriteria.createCriteria().andOrgIdEqualTo(orgId);
+        List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
+        if(null==tbServiceOrgs||tbServiceOrgs.size()!=1){
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_IS_ERROR);
+        }
+        if(!StringUtils.equals(tbServiceOrgs.get(0).getOrgStatus(),ORG_APPLY_IS_CHECKING)){
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_DATA_STATUS_IS_NOT_CHECKING);
+        }
+        //TODO 对接工作流返回状态，校验审核完修改机构状态。jiangyl
+
+        return false;
+    }
 
 }

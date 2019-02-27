@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.advisor.vo;
 
 import com.jn.enterprise.servicemarket.advisor.model.*;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

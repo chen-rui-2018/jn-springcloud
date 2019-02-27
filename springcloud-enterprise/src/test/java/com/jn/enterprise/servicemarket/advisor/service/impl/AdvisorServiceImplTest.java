@@ -7,7 +7,7 @@ import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationQuery;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceRating;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import org.hamcrest.Matchers;

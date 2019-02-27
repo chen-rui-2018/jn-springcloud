@@ -4,7 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;

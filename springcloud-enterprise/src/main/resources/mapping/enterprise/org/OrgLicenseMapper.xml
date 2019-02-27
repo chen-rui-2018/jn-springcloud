@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgTraitMapper">
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgLicenseMapper">
     <!--批量插入资质数据-->
     <insert id="insertLicenseList" parameterType="java.util.List">
         insert into tb_service_org_license (id,org_id,cert_name,award_time,award_depart,is_features,file_url,

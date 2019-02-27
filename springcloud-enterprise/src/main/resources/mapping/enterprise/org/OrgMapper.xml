@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
-    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.model.OrgParameter"
-            resultType="com.jn.enterprise.servicemarket.model.ServiceOrg">
+    <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgParameter"
+            resultType="com.jn.enterprise.servicemarket.org.model.ServiceOrg">
         select tt.id,tt.orgName,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,
         tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.professionScore,
         tt.responseScore,tt.priceScore,tt.evaluationNum from
@@ -52,7 +52,7 @@
         </if>
     </select>
 
-    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.model.OrgDetail">
+    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.model.OrgDetail">
         <id column="s_id" jdbcType="VARCHAR" property="id"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
@@ -82,7 +82,7 @@
         <result column="s_orgLogo" jdbcType="VARCHAR" property="orgLogo" javaType="java.lang.String"/>
         <!-- 执业标签 -->
         <collection property="orgLicenses" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.OrgLicense">
+                    ofType="com.jn.enterprise.servicemarket.org.model.OrgLicense">
             <id column="st_id" property="id" jdbcType="VARCHAR"/>
             <result column="st_certName" property="certName" jdbcType="VARCHAR"/>
             <result column="st_fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
@@ -92,7 +92,7 @@
         </collection>
         <!-- 执业资质 -->
         <collection property="honorLicense" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.OrgLicense">
+                    ofType="com.jn.enterprise.servicemarket.org.model.OrgLicense">
             <id column="st_id" property="id" jdbcType="VARCHAR"/>
             <result column="sh_certName" property="certName" jdbcType="VARCHAR"/>
             <result column="sh_fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
@@ -102,7 +102,7 @@
         </collection>
         <!-- 团队信息 -->
         <collection property="orgTeams" javaType="java.util.List"
-                    ofType="com.jn.enterprise.servicemarket.model.OrgTeam">
+                    ofType="com.jn.enterprise.servicemarket.org.model.OrgTeam">
             <id column="te_id" property="id" jdbcType="VARCHAR"/>
             <result column="te_orgId" property="orgId" jdbcType="VARCHAR"/>
             <result column="te_conName" property="conName" jdbcType="VARCHAR"/>
@@ -114,9 +114,9 @@
     </resultMap>
 
     <!--查看服务商详情-->
-    <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap">
+    <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
-          o.id AS "s_id",
+          o.org_id AS "s_id",
           o.business_type AS "s_businessType",
           o.business_s_type AS "s_businessSType",
           o.org_name AS "s_orgName",
@@ -173,7 +173,7 @@
           LEFT JOIN tb_service_org_info i
             ON i.org_id = o.id and i.record_status = 1
           left join tb_service_org_team te on te.org_id = o.id and te.record_status = 1
-        where o.record_status = 1
+        where o.record_status = 1 and o.org_id = #{orgId}
     </select>
 
 

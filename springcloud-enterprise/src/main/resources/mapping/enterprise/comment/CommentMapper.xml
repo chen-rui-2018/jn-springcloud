@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.comment.dao.CommentMapper">
+    <select id="getGiveMeCommentList" parameterType="com.jn.enterprise.servicemarket.comment.model.ReceiveRatingParameter"
+            resultType="com.jn.enterprise.servicemarket.comment.model.Rating">
+        select r.id as "id",r.org_id as "willOrg",r.advisor_name as "willAdvisor",
+               r.product_name as "willProduct",re.issue_time as "issueTime",re.handle_time as "handleTime",r.created_time as "commentTime"
+        from tb_service_rating r left join tb_service_org o on r.org_id = o.org_id left join tb_service_require re on r.require_id = re.id
+        where r.record_status = '1'
+        <if test="issueAccount != null and issueAccount != ''">
+            and re.issue_account =  #{issueAccount}
+        </if>
+        <if test="productId != null and productId != ''">
+            and r.product_id =  #{productId}
+        </if>
+        <if test="advisorId != null and advisorId != ''">
+            and re.advisor_account =  #{advisorId}
+        </if>
+    </select>
+
+    <select id="getRatingCommentDetail" parameterType="java.lang.String"
+            resultType="com.jn.enterprise.servicemarket.comment.model.RatingDetail">
+              select re.id as "id",
+                   re.req_num as "reqNum",
+                   date_format(re.issue_time,'%Y-%m-%d %H:%i:%S') as "issueTime",
+                  re.contract_amount as "contractAmount",
+                   re.req_name as "reqName",re.req_phone as "reqPhone",
+                   re.req_email as "reqEmail",re.req_detail as "reqDetail",
+                   re.contract_amount as "financingAmount",
+                   re.actual_loan_amount as "actualLoanAmount",
+                   re.financing_period as "financingPeriod",
+                   re.expected_date as "expectedDate",
+                   re.result_detail as "resultDetail",
+                   re.is_comment as "isComment",
+                   info.con_name as "conName",info.con_phone as "conPhone",
+                   info.con_email as "conEmail",re.org_name as "orgName",
+                   re.advisor_name as "advisorName", re.product_name as "productName",
+                   ra.attitude_score as "attitudeScore", ra.evaluation_desc as "evaluationDesc"
+                from tb_service_require re
+                left join tb_service_org_info info on re.org_id = info.org_id
+                left join tb_service_rating ra on ra.id = re.id
+                where re.record_status = '1' and re.id = #{id};
+    </select>
+
+</mapper>

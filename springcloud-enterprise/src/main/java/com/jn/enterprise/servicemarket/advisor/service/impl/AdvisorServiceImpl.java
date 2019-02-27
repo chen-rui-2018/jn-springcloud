@@ -12,6 +12,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;

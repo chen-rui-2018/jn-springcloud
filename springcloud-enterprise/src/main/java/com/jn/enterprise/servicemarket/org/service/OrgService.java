@@ -1,7 +1,7 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.model.*;
+import com.jn.enterprise.servicemarket.org.model.*;
 
 /**
  * 服务机构service

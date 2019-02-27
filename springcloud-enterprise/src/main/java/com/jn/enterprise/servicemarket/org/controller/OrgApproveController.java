@@ -5,14 +5,12 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.model.*;
+import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
 import com.jn.system.log.annotation.ControllerLog;
-import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +19,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 服务机构认证(后台管理审核)
@@ -70,6 +66,15 @@ public class OrgApproveController extends BaseController{
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         OrgApplyDetail orgApplyDetail = orgApproveService.getOrgApplyDetail(orgId);
         return new Result(orgApplyDetail);
+    }
+
+    @ControllerLog(doAction = "服务机构申请审核")
+    @ApiOperation(value = "服务机构申请审核", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/checkOrgApply")
+    @RequiresPermissions("/serviceMarket/OrgApproveController/checkOrgApply")
+    public Result checkOrgApply(@RequestBody OrgApplyCheckData orgApplyCheckData){
+        Boolean aBoolean = orgApproveService.checkOrgApply(orgApplyCheckData);
+        return new Result(aBoolean);
     }
 
 }

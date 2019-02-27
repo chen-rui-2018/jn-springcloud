@@ -79,7 +79,7 @@
    </select>
 
     <!--2.根据查询条件获取服务评价信息-->
-    <select id="getServcieRatingInfo" resultType="com.jn.enterprise.servicemarket.advisor.model.ServiceRating">
+    <select id="getServcieRatingInfo" resultType="com.jn.enterprise.servicemarket.comment.model.ServiceRating">
         SELECT
 		tt.orgId
 		,tt.orgName

@@ -10,8 +10,8 @@ import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
-import com.jn.enterprise.servicemarket.model.OrgColleagueInfo;
-import com.jn.enterprise.servicemarket.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueInfo;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -25,7 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.websocket.ClientEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 

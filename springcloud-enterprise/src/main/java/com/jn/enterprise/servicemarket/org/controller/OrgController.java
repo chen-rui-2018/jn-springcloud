@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.model.OrgParameter;
+import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;

@@ -2,7 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.dao;
 
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceRating;
+import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

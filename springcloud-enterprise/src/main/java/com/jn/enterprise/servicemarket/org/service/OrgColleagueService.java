@@ -1,7 +1,7 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
 
 /**
  * 机构同事

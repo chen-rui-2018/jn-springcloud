@@ -7,7 +7,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.model.*;
+import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
@@ -18,7 +18,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.*;
 

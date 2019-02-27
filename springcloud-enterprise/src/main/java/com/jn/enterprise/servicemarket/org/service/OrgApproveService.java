@@ -1,12 +1,7 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.model.OrgApply;
-import com.jn.enterprise.servicemarket.model.OrgApplyCount;
-import com.jn.enterprise.servicemarket.model.OrgApplyDetail;
-import com.jn.enterprise.servicemarket.model.OrgApplyParameter;
-
-import java.util.List;
+import com.jn.enterprise.servicemarket.org.model.*;
 
 /**
  * 服务机构认证审核接口
@@ -37,6 +32,11 @@ public interface OrgApproveService {
      */
     OrgApplyDetail getOrgApplyDetail(String orgId);
 
-
+    /**
+     * 机构申请审核
+     * @param orgApplyCheckData
+     * @return
+     */
+    Boolean checkOrgApply(OrgApplyCheckData orgApplyCheckData);
 
 }

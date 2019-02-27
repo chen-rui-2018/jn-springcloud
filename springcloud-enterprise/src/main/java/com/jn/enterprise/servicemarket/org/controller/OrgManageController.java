@@ -2,10 +2,10 @@ package com.jn.enterprise.servicemarket.org.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.enterprise.servicemarket.model.OrgBasicData;
-import com.jn.enterprise.servicemarket.model.OrgContactData;
-import com.jn.enterprise.servicemarket.model.OrgLicenseData;
-import com.jn.enterprise.servicemarket.model.OrgTeamData;
+import com.jn.enterprise.servicemarket.org.model.OrgBasicData;
+import com.jn.enterprise.servicemarket.org.model.OrgContactData;
+import com.jn.enterprise.servicemarket.org.model.OrgLicenseData;
+import com.jn.enterprise.servicemarket.org.model.OrgTeamData;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;

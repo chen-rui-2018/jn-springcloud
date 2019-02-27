@@ -20,11 +20,9 @@ public class UserAffiliateInfo implements Serializable {
     @NotNull(message = "用户账号不能为空")
     private String account;
     @ApiModelProperty("所属机构编码")
-    @NotNull(message = "所属机构编码不能为空")
     @Size(max = 32, message = "所属机构编码长度不能超过32个字")
     private String affiliateCode;
     @ApiModelProperty("所属机构名称")
-    @NotNull(message = "所属机构名称不能为空")
     @Size(max =100, message = "所属机构名称长度不能超过100个字")
     private String affiliateName;
 

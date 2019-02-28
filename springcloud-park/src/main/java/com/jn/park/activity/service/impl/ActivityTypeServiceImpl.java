@@ -154,11 +154,11 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "删除活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteActivityTypeList(String typeId) {
-        if(StringUtils.isEmpty(typeId)){
+    public void deleteActivityTypeList(String[] typeId) {
+        if(null == typeId || typeId.length ==0){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
         }
-        List<String> list = Arrays.asList(typeId.split(","));
+        List<String> list = Arrays.asList(typeId);
         TbActivityCriteria criteria = new TbActivityCriteria();
         criteria.createCriteria().andActiTypeIn(list);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);

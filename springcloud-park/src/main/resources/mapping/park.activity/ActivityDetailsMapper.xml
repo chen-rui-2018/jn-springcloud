@@ -42,7 +42,7 @@
         left join tb_activity_detail t2
         on t1.id=t2.activity_id
         where t1.id=#{id}
-        and t1.acti_status != '1' and t1.record_status != '0'                                   <!--草稿、已删除的活动不能被查询出来-->
+        and t1.record_status != '0'                                   <!--草稿、已删除的活动不能被查询出来-->
     </select>
 
     <!--获取点评信息-->

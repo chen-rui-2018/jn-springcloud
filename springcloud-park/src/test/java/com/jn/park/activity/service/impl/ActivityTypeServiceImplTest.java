@@ -61,7 +61,7 @@ public class ActivityTypeServiceImplTest {
     private Integer page;
     private Integer rows;
     private User user;
-    private String typeIds;
+    private String[] typeIds = {"f0396c4fd4d1462b8a4142f395d1e914","aeaa1a3bbd0141cb93e7a5dbd12973dd"};
     private ActivityTypeAdd activityTypeAdd;
     private ActivityTypeUpdate activityTypeUpdate;
     private ActivityTypeQuery activityTypeQuery;
@@ -78,7 +78,7 @@ public class ActivityTypeServiceImplTest {
                 "http://192.168.10.20:2020/group2/M00/00/1F/wKgKFFwbR2iAIJ7HAACAPkYqwSw461.jpg";
         user = new User();
         user.setAccount("wangsong");
-        typeIds = "f0396c4fd4d1462b8a4142f395d1e914,aeaa1a3bbd0141cb93e7a5dbd12973dd";
+
         page = 1;
         rows = 15;
         TbActivityTypeCriteria criteria = new TbActivityTypeCriteria();
@@ -164,7 +164,6 @@ public class ActivityTypeServiceImplTest {
     public void deleteActivityTypeList() {
         try {
 //            typeIds = typeIds + ",956dc8ab83f84c0cbb6b6cea2547f449";
-            typeIds = typeId;
             activityTypeService.deleteActivityTypeList(typeIds);
             deleteActivity();
         } catch (JnSpringCloudException e) {

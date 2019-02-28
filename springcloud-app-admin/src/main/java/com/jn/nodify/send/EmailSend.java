@@ -26,9 +26,7 @@ public class EmailSend implements SendService {
         emailVo.setEmail(String.join(",",notifierProperties.getNotifier().getReceivedMail()));
         emailVo.setEmailSubject(notifierProperties.getNotifier().getTitle());
         emailVo.setEmailContent(message);
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(emailVo);
-        messageSource.outputEmail().send(MessageBuilder.withPayload(json).build());
+        messageSource.outputEmail().send(MessageBuilder.withPayload(emailVo).build());
 
     }
 }

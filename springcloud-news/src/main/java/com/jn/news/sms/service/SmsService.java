@@ -1,5 +1,10 @@
 package com.jn.news.sms.service;
 
+import com.jn.news.sms.model.SmsBaseResult;
+import com.jn.news.sms.vo.SmsAnswersResult;
+import com.jn.news.sms.vo.SmsReportsResult;
+import com.jn.news.vo.SmsTemplateVo;
+
 /**
  * 发送短信接口
  *
@@ -35,25 +40,22 @@ public interface SmsService {
     String SMS_ANSWER_INFO_URL = "http://47.100.243.159:27504/smsgwhttp/sms/report?spid=%s&password=%s";
 
     /**
-     * 下发短息
-     * @param mobile
-     * @param content
+     * 下发短信
+     * @param smsTemplateVo
      * @return
      */
-    String sendMsgByTemplate(String mobile,String content);
+    SmsBaseResult sendMsgByTemplate(SmsTemplateVo smsTemplateVo);
 
     /**
-     * 主动获取短信状态报告
-     * todo 目前看接口文档是获取全量的，没有分时间，联调是再确认
+     * 主动获取短信状态报告（已获取的短信状态不会再拿到）
      * @return
      */
-    String getSmsStateReport();
+    SmsReportsResult getSmsReportInfo();
 
     /**
-     * 主动获取回复信息
-     * todo 目前看接口文档是获取全量的，没有分时间，联调是再确认
+     * 主动获取回复信息（已获取的回复信息不会再拿到）
      * @return
      */
-    String getSmsAnswerInfo();
+    SmsAnswersResult getSmsAnswerInfo();
 
 }

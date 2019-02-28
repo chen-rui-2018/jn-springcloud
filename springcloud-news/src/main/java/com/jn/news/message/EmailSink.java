@@ -20,18 +20,16 @@ import org.springframework.cloud.stream.annotation.StreamListener;
  */
 @EnableBinding({MessageSink.class })
 public class EmailSink {
-
-    Logger logger = LoggerFactory.getLogger(EmailSink.class);
+    private static Logger log = LoggerFactory.getLogger(EmailSink.class);
 
     @Autowired
     private EmailService emailService;
 
-    private static Logger log = LoggerFactory.getLogger(EmailSink.class);
-
     @StreamListener(MessageSink.EMAIL)
     public void listenEmail(EmailVo emailVo) {
-        log.info("收到Email的信息:{}",emailVo) ;
+        log.info("收到Email的信息:{}",emailVo.toString()) ;
         emailService.sendEmail(emailVo);
+        log.info("邮件发送成功,邮件信息:{}",emailVo.toString());
     }
 
 

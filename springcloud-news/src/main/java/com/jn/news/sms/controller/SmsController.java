@@ -1,17 +1,22 @@
 package com.jn.news.sms.controller;
 
-import org.dom4j.Document;
+import com.jn.common.util.xml.XmlUtils;
+import com.jn.news.sms.model.SmsAnswerResult;
+import com.jn.news.sms.vo.SmsAnswersResult;
+import com.jn.news.sms.vo.SmsReportsResult;
+import com.jn.news.utils.xml.XStreamTransformer;
 import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,51 +31,40 @@ import java.util.Map;
 @RequestMapping("/guest/news/sms")
 public class SmsController {
 
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     /**
      * 获取短信平台推送的短信回复信息
      */
     @RequestMapping("/receive/answer")
-    public String receiveAnswer(HttpServletRequest request) throws IOException, DocumentException {
-        System.out.println(getRemoteIpAddr(request));
-        Map m = parseXml(request);
-        return "";
+    public void receiveAnswer(HttpServletRequest request) throws IOException, DocumentException {
+        String result = parseXmlToString(request);
+        SmsAnswersResult smsAnswersResult = XStreamTransformer.fromXml(SmsAnswersResult.class, result);
+        logger.info("被动接受短信平台发送的回复消息内容{}",smsAnswersResult.toString());
     }
 
     /**
      * 获取短信平台推送的短信状态报告
      */
     @RequestMapping("/receive/report")
-    public void receiveReport(HttpServletRequest request) throws IOException, DocumentException {
-        System.out.println(getRemoteIpAddr(request));
-        Map m = parseXml(request);
-        String str = "";
+    public void receiveReport(HttpServletRequest request) throws IOException {
+        String result = parseXmlToString(request);
+        SmsReportsResult smsReportsResult = XStreamTransformer.fromXml(SmsReportsResult.class, result);
+        logger.info("被动接受短信平台发送的回复消息内容{}",smsReportsResult.toString());
     }
 
     @SuppressWarnings("unchecked")
-    public static Map<String, String> parseXml(HttpServletRequest request) throws IOException, DocumentException {
+    public static Map<String, Object> parseXml(HttpServletRequest request) throws IOException, DocumentException {
         // 将解析结果存储在HashMap中
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, Object> map = new HashMap<String, Object>();
         // 从request中取得输入流
         InputStream inputStream = null;
         try {
             inputStream = request.getInputStream();
             if(null != inputStream){
-                // 读取输入流
-                SAXReader reader = new SAXReader();
-                Document document = reader.read(inputStream);
-                // 得到xml根元素
-                Element root = document.getRootElement();
-                // 得到根元素的所有子节点
-                List<Element> elementList = root.elements();
-                // 遍历所有子节点
-                for (Element e : elementList){
-                    map.put(e.getName(), e.getText());
-                }
-                map.put("xml", document.asXML());
+                map = XmlUtils.xml2Map(inputStream);
             }
         } catch (IOException e) {
-            throw e;
-        } catch (DocumentException e) {
             throw e;
         }finally{
             if(null != inputStream){
@@ -85,6 +79,22 @@ public class SmsController {
             }
         }
         return map;
+    }
+
+    public static String parseXmlToString(HttpServletRequest request) throws IOException {
+        // 从request中取得输入流
+        InputStream inputStream = request.getInputStream();
+        if(null != inputStream) {
+            ByteArrayOutputStream result = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = inputStream.read(buffer)) != -1) {
+                result.write(buffer, 0, length);
+            }
+            return result.toString(StandardCharsets.UTF_8.name());
+        }
+
+        return "";
     }
 
     public static String getRemoteIpAddr(HttpServletRequest request) {

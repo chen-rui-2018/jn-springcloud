@@ -29,7 +29,8 @@ public class SysUser implements Serializable {
     private String account;
 
     @ApiModelProperty("用户密码")
-    @Pattern(regexp="^[a-zA-Z0-9]{6,16}$",message="{password:'密码只允许6-16位数字及字母'}")
+    @Pattern(regexp="^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$",
+            message="{password:'密码至少为字母、数字、符号两种组成，不包含空格,不能输入中文'}")
     private String password;
 
     @ApiModelProperty("用户名称")

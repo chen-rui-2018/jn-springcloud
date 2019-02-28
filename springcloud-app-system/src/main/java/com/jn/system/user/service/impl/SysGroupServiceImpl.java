@@ -9,7 +9,7 @@ import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.system.permission.model.SysRole;
+import com.jn.system.model.SysRole;
 import com.jn.system.permission.model.SysRoleGroupAdd;
 import com.jn.system.permission.service.impl.SysRoleServiceImpl;
 import com.jn.system.user.dao.SysGroupMapper;

@@ -6,6 +6,8 @@ import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingAdd;
 import com.jn.oa.meeting.model.OaMeetingApprove;
 import com.jn.oa.meeting.model.OaMeetingPage;
+import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
+import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.model.User;
 
 /**
@@ -37,7 +39,7 @@ public interface MeetingService {
      * @param oaMeeting
      * @param user         当前用户信息
      */
-    void updateOaMeetingById(OaMeeting oaMeeting, User user);
+    void updateOaMeetingById(OaMeetingAdd oaMeeting, User user);
 
     /**
      * 逻辑删除会议信息
@@ -59,14 +61,14 @@ public interface MeetingService {
      * @param id
      * @return
      */
-    OaMeeting selectOaMeetingByIds(String id);
+    OaMeetingParticipantVo selectOaMeetingById(String id);
 
     /**
      * 审核会议
      * @param oaMeetingApprove
      * @param approveUser
      */
-    void  approveOaMeeting(OaMeetingApprove oaMeetingApprove, User approveUser);
+    void  approveOaMeeting(OaMeetingApprove oaMeetingApprove, User approveUser) ;
 
     /**
      * 结束会议
@@ -74,6 +76,13 @@ public interface MeetingService {
      * @param approveUser
      */
     void finishOaMeeting(String meetingId,User approveUser);
+
+    /**
+     * 取消会议
+     * @param meetingId
+     * @param user
+     */
+    void cancelOaMeeting(String meetingId,User user);
 
 
 }

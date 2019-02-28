@@ -3,7 +3,10 @@ package com.jn.oa.meeting.service;
 import com.jn.common.model.PaginationData;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.model.OaMeetingRoom;
+import com.jn.oa.meeting.model.OaMeetingRoomAdd;
+import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
+import com.jn.oa.meeting.vo.OaMeetingRoomVo;
 import com.jn.system.model.User;
 
 /**
@@ -27,15 +30,15 @@ public interface MeetingRoomService {
      *
      * @param tbOaMeetingRoom
      */
-    void insertOaMeetingRoom(TbOaMeetingRoom tbOaMeetingRoom);
+    void insertOaMeetingRoom(TbOaMeetingRoom tbOaMeetingRoom,String[] attachmentPaths);
 
     /**
      * 更新会议室信息
      *
-     * @param oaMeetingRoom
+     * @param oaMeetingRoomAdd
      * @param user         当前用户信息
      */
-    void updateOaMeetingRoomById(OaMeetingRoom oaMeetingRoom, User user);
+    void updateOaMeetingRoomById(OaMeetingRoomAdd oaMeetingRoomAdd, User user, String[] attachmentPaths);
 
     /**
      * 逻辑删除会议室信息
@@ -57,7 +60,23 @@ public interface MeetingRoomService {
      * @param id
      * @return
      */
-    OaMeetingRoom selectOaMeetingRoomByIds(String id);
+    OaMeetingRoomVo selectOaMeetingRoomByIds(String id);
+
+    /**
+     * 分页查询会议室预约列表
+     * @param oaMeetingRoomOrderPage
+     * @return
+     */
+    PaginationData selectMeetingRoomAndMeetingOrder(OaMeetingRoomOrderPage oaMeetingRoomOrderPage);
+
+    /**
+     * 分页查询会议室可选列表
+     * @param oaMeetingRoomPage
+     * @return
+     */
+    PaginationData selectAvailableMeetingRoomList(OaMeetingRoomPage oaMeetingRoomPage);
+
+
 
 
 }

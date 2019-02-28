@@ -1,21 +1,25 @@
-package com.jn.oa.meeting.model;
+package com.jn.oa.meeting.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jn.oa.meeting.entity.TbOaMeeting;
+import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
- * 会议室实体
+ * 会议室预约实体
  *
  * @author： yuanyy
  * @date： Created on 2019/1/13 10:18
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OaMeetingRoom", description = "会议室分页实体")
-public class OaMeetingRoom implements Serializable {
+@ApiModel(value = "OaMeetingRoomOrderVo", description = "会议室预约vo")
+public class OaMeetingRoomOrderVo implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
     @ApiModelProperty(value = "会议室id")
@@ -52,15 +56,18 @@ public class OaMeetingRoom implements Serializable {
     private String creatorAccount;
 
     @ApiModelProperty(value = "创建时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     private Date createdTime;
 
     @ApiModelProperty(value = "修改者")
     private String modifierAccount;
 
     @ApiModelProperty(value = "修改时间")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     private Date modifiedTime;
 
-
+    @ApiModelProperty(value = "会议列表")
+    private List<TbOaMeeting> meetingList;
 
     public String getId() {
         return id;
@@ -174,4 +181,11 @@ public class OaMeetingRoom implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public List<TbOaMeeting> getMeetingList() {
+        return meetingList;
+    }
+
+    public void setMeetingList(List<TbOaMeeting> meetingList) {
+        this.meetingList = meetingList;
+    }
 }

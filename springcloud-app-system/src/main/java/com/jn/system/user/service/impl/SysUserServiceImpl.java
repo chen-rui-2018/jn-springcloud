@@ -137,6 +137,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param tbSysUser
      */
     private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
+
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
         sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
@@ -147,7 +148,9 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPost.setPostId(sysUser.getPostId());
         sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
         sysUserDepartmentPost.setCreatedTime(new Date());
+
         tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
+
     }
 
     /**

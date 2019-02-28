@@ -1,5 +1,6 @@
 package com.jn.oa.meeting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -18,7 +19,7 @@ import java.util.Date;
 public class OaMeeting implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
-    @ApiModelProperty(value = "会议室id")
+    @ApiModelProperty(value = "会议申请id")
     private String id;
 
     @ApiModelProperty(value = "会议主题（工单名称）")
@@ -45,12 +46,14 @@ public class OaMeeting implements Serializable {
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
     @ApiModelProperty(value = "修改人")
     private String modifierAccount;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     @ApiModelProperty(value = "修改时间")
     private Date modifiedTime;
 
@@ -80,6 +83,17 @@ public class OaMeeting implements Serializable {
 
     @ApiModelProperty(value = "是否提醒（0:否、1:是）")
     private String isRemind;
+
+    @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
+    private String meetingStatus;
+
+    public String getMeetingStatus() {
+        return meetingStatus;
+    }
+
+    public void setMeetingStatus(String meetingStatus) {
+        this.meetingStatus = meetingStatus;
+    }
 
     public String getTitle() {
         return title;

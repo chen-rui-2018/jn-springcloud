@@ -1,5 +1,12 @@
 package com.jn.oa.meeting.dao;
 
+
+import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
+import com.jn.oa.meeting.model.OaMeetingRoomPage;
+import com.jn.oa.meeting.vo.OaMeetingRoomOrderVo;
+import com.jn.oa.meeting.vo.OaMeetingRoomVo;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,4 +20,14 @@ public interface OaMeetingRoomMapper {
 
 
     void deleteBranchByIds(Map<String,Object> map);
+
+    List<OaMeetingRoomVo> selectListByCondition(OaMeetingRoomPage oaMeetingRoomPage);
+
+    OaMeetingRoomVo selectMeetingRoomById(String id);
+
+    List<OaMeetingRoomOrderVo> selectMeetingRoomAndMeetingOrder(OaMeetingRoomOrderPage oaMeetingRoomOrderPage );
+
+    List<OaMeetingRoomOrderVo> selectAvailableMeetingRoomList(OaMeetingRoomPage oaMeetingRoomPage );
+
+
 }

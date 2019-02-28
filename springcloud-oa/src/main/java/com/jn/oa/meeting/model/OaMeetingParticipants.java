@@ -50,6 +50,8 @@ public class OaMeetingParticipants implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private Date modifiedTime;
 
+
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {

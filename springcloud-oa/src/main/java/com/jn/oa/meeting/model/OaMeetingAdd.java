@@ -1,7 +1,9 @@
 package com.jn.oa.meeting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,7 +20,7 @@ import java.util.Date;
 public class OaMeetingAdd implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
-    @ApiModelProperty(value = "会议室id")
+    @ApiModelProperty(value = "会议申请id")
     private String id;
 
     @ApiModelProperty(value = "会议主题（工单名称）")
@@ -28,9 +30,15 @@ public class OaMeetingAdd implements Serializable {
     private String workOrderNum;
 
     @ApiModelProperty(value = "开始时间")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     @ApiModelProperty(value = "结束时间")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     @ApiModelProperty(value = "会议室id")
@@ -48,44 +56,18 @@ public class OaMeetingAdd implements Serializable {
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;
 
-    @ApiModelProperty(value = "修改人")
-    private String modifierAccount;
-
-    @ApiModelProperty(value = "修改时间")
-    private Date modifiedTime;
-
-    @ApiModelProperty(value = "参会人员")
-    private String userIdStr;
-
     @ApiModelProperty(value = "申请人")
     private String applicant;
 
     @ApiModelProperty(value = "申请时间")
     private Date applicationTime;
 
-    @ApiModelProperty(value = "签到二维码")
-    private String signInQr;
-
-    @ApiModelProperty(value = "微信提醒（0:不提醒、1:提醒）")
-    private String wechatRemind;
-
-    @ApiModelProperty(value = "短信提醒（0:不提醒、1:提醒）")
-    private String messageRemind;
-
-    @ApiModelProperty(value = "pc提醒（0:不提醒、1:提醒）")
-    private String pcRemind;
-
-    @ApiModelProperty(value = "app提醒（0:不提醒、1:提醒）")
-    private String appRemind;
-
-    @ApiModelProperty(value = "是否提醒（0:否、1:是）")
-    private String isRemind;
-
     @ApiModelProperty(value = "参会人员id")
     private String[] participantsId;
 
     @ApiModelProperty(value = "会议内容")
     private String oaMeetingContent;
+
 
     public String getOaMeetingContent() {
         return oaMeetingContent;
@@ -184,29 +166,7 @@ public class OaMeetingAdd implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
 
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getUserIdStr() {
-        return userIdStr;
-    }
-
-    public void setUserIdStr(String userIdStr) {
-        this.userIdStr = userIdStr;
-    }
 
     public String getApplicant() {
         return applicant;
@@ -224,51 +184,5 @@ public class OaMeetingAdd implements Serializable {
         this.applicationTime = applicationTime;
     }
 
-    public String getSignInQr() {
-        return signInQr;
-    }
 
-    public void setSignInQr(String signInQr) {
-        this.signInQr = signInQr;
-    }
-
-    public String getWechatRemind() {
-        return wechatRemind;
-    }
-
-    public void setWechatRemind(String wechatRemind) {
-        this.wechatRemind = wechatRemind;
-    }
-
-    public String getMessageRemind() {
-        return messageRemind;
-    }
-
-    public void setMessageRemind(String messageRemind) {
-        this.messageRemind = messageRemind;
-    }
-
-    public String getPcRemind() {
-        return pcRemind;
-    }
-
-    public void setPcRemind(String pcRemind) {
-        this.pcRemind = pcRemind;
-    }
-
-    public String getAppRemind() {
-        return appRemind;
-    }
-
-    public void setAppRemind(String appRemind) {
-        this.appRemind = appRemind;
-    }
-
-    public String getIsRemind() {
-        return isRemind;
-    }
-
-    public void setIsRemind(String isRemind) {
-        this.isRemind = isRemind;
-    }
 }

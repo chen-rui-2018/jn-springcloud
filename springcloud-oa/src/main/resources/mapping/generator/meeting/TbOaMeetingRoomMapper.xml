@@ -16,7 +16,6 @@
     <result column="meetingroom_created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="meetingroom_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="meetingroom_meeting_id" jdbcType="VARCHAR" property="meetingId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -83,7 +82,7 @@
     meetingroom.record_status as meetingroom_record_status, meetingroom.capacity as meetingroom_capacity, 
     meetingroom.remark as meetingroom_remark, meetingroom.creator_account as meetingroom_creator_account, 
     meetingroom.created_time as meetingroom_created_time, meetingroom.modifier_account as meetingroom_modifier_account, 
-    meetingroom.modified_time as meetingroom_modified_time, meetingroom.meeting_id as meetingroom_meeting_id
+    meetingroom.modified_time as meetingroom_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria" resultMap="BaseResultMap">
     select
@@ -120,14 +119,12 @@
       floor, room_number, position, 
       explains, record_status, capacity, 
       remark, creator_account, created_time, 
-      modifier_account, modified_time, meeting_id
-      )
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{building,jdbcType=VARCHAR}, 
       #{floor,jdbcType=VARCHAR}, #{roomNumber,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{explains,jdbcType=VARCHAR}, #{recordStatus,jdbcType=VARCHAR}, #{capacity,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{meetingId,jdbcType=VARCHAR}
-      )
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoom">
     insert into tb_oa_meeting_room
@@ -174,9 +171,6 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
-      <if test="meetingId != null">
-        meeting_id,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -220,9 +214,6 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="meetingId != null">
-        #{meetingId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -277,9 +268,6 @@
       <if test="record.modifiedTime != null">
         meetingroom.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.meetingId != null">
-        meetingroom.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -300,8 +288,7 @@
       meetingroom.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       meetingroom.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       meetingroom.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingroom.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      meetingroom.meeting_id = #{record.meetingId,jdbcType=VARCHAR}
+      meetingroom.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -348,9 +335,6 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="meetingId != null">
-        meeting_id = #{meetingId,jdbcType=VARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -368,8 +352,7 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      meeting_id = #{meetingId,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

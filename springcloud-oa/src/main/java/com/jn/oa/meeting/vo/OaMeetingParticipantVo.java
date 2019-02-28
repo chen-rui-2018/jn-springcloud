@@ -3,7 +3,6 @@ package com.jn.oa.meeting.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipants;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
-import com.jn.system.model.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -19,8 +18,8 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OaMeeting", description = "会议纪录分页实体")
-public class OaMeetingVo implements Serializable {
+@ApiModel(value = "OaMeetingParticipantVo", description = "会议纪录分页实体")
+public class OaMeetingParticipantVo implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
     @ApiModelProperty(value = "会议id")
@@ -37,11 +36,11 @@ public class OaMeetingVo implements Serializable {
     private Date startDate;
 
     @ApiModelProperty(value = "开始时间")
-    @JsonFormat(pattern="HH:mm",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     private Date startTime;
 
     @ApiModelProperty(value = "结束时间")
-    @JsonFormat(pattern="HH:mm",timezone="GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm",timezone="GMT+8")
     private Date endTime;
 
     @ApiModelProperty(value = "会议室id")
@@ -108,7 +107,7 @@ public class OaMeetingVo implements Serializable {
     private String departmentName;
 
     @ApiModelProperty(value = "参会人员列表")
-    private List<TbOaMeetingParticipants> participantList;
+    private List<OaParticipantVo> participantList;
 
     @ApiModelProperty(value = "审批人员角色")
     private String approvalRole;
@@ -121,6 +120,14 @@ public class OaMeetingVo implements Serializable {
 
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
+
+    public List<OaParticipantVo> getParticipantList() {
+        return participantList;
+    }
+
+    public void setParticipantList(List<OaParticipantVo> participantList) {
+        this.participantList = participantList;
+    }
 
     public String getApprovalRole() {
         return approvalRole;
@@ -185,15 +192,6 @@ public class OaMeetingVo implements Serializable {
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
     }
-
-    public List<TbOaMeetingParticipants> getParticipantList() {
-        return participantList;
-    }
-
-    public void setParticipantList(List<TbOaMeetingParticipants> participantList) {
-        this.participantList = participantList;
-    }
-
 
 
     public String getMeetingStatus() {

@@ -5,32 +5,34 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.util.StringUtils;
 import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaReturnMessageEnum;
 import com.jn.oa.common.enums.OaStatusEnums;
 
+import com.jn.oa.meeting.dao.OaMeetingRoomPhotoMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomMapper;
 import com.jn.oa.meeting.dao.OaMeetingRoomMapper;
+import com.jn.oa.meeting.dao.TbOaMeetingRoomPhotoMapper;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria;
+import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
 import com.jn.oa.meeting.enums.OaMeetingRoomStatusEnums;
 import com.jn.oa.meeting.model.OaMeetingRoom;
+import com.jn.oa.meeting.model.OaMeetingRoomAdd;
+import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
 import com.jn.oa.meeting.service.MeetingRoomService;
+import com.jn.oa.meeting.vo.OaMeetingRoomVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * 会议室service
@@ -43,11 +45,17 @@ import java.util.Map;
 public class MeetingRoomServiceImpl implements MeetingRoomService {
     private static Logger logger = LoggerFactory.getLogger(MeetingRoomServiceImpl.class);
 
-    @Autowired
+    @Resource
     private TbOaMeetingRoomMapper tbOaMeetingRoomMapper;
 
-    @Autowired
+    @Resource
     private OaMeetingRoomMapper oaMeetingRoomMapper;
+
+    @Resource
+    private TbOaMeetingRoomPhotoMapper tbOaMeetingRoomPhotoMapper;
+
+    @Resource
+    private OaMeetingRoomPhotoMapper oaMeetingRoomPhotoMapper;
 
 
     /**
@@ -60,28 +68,19 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @ServiceLog(doAction = "关键字分页查询会议室列表")
     public PaginationData selectOaMeetingRoomListBySearchKey(OaMeetingRoomPage oaMeetingRoomPage) {
         Page<Object> objects = PageHelper.startPage(oaMeetingRoomPage.getPage(), oaMeetingRoomPage.getRows());
-        TbOaMeetingRoomCriteria oaMeetingRoomCriteria = new TbOaMeetingRoomCriteria();
-        oaMeetingRoomCriteria.setOrderByClause("created_time desc,id desc");
-        TbOaMeetingRoomCriteria.Criteria criteria = oaMeetingRoomCriteria.createCriteria();
-        if (!StringUtils.isEmpty(oaMeetingRoomPage.getName())) {
-            //模糊查询搜索关键字
-            criteria.andNameLike("%" + oaMeetingRoomPage.getName() + "%");
-        }
-        if (!StringUtils.isEmpty(oaMeetingRoomPage.getId())) {
-            //根据id查询
-            criteria.andIdEqualTo(oaMeetingRoomPage.getId());
-        }
-        if (oaMeetingRoomPage.getRecordStatus() != null) {
-            //筛选条件：状态
-            criteria.andRecordStatusEqualTo( oaMeetingRoomPage.getRecordStatus());
-        }
-
-        //过滤已删除的数据
-        criteria.andRecordStatusNotEqualTo(OaMeetingRoomStatusEnums.DELETED.getCode());
-        return new PaginationData(tbOaMeetingRoomMapper.selectByExample(oaMeetingRoomCriteria)
+        return new PaginationData(oaMeetingRoomMapper.selectListByCondition(oaMeetingRoomPage)
                 , objects.getTotal());
 
     }
+    @Override
+    @ServiceLog(doAction = "关键字分页查询会议室可用列表")
+    public PaginationData selectAvailableMeetingRoomList(OaMeetingRoomPage oaMeetingRoomPage) {
+        Page<Object> objects = PageHelper.startPage(oaMeetingRoomPage.getPage(), oaMeetingRoomPage.getRows());
+        return new PaginationData(oaMeetingRoomMapper.selectAvailableMeetingRoomList(oaMeetingRoomPage)
+                , objects.getTotal());
+
+    }
+
 
     /**
      * 新增会议室
@@ -91,16 +90,27 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Override
     @ServiceLog(doAction = "新增会议室")
     @Transactional(rollbackFor = Exception.class)
-    public void insertOaMeetingRoom(TbOaMeetingRoom tbOaMeetingRoom) {
+    public void insertOaMeetingRoom(TbOaMeetingRoom tbOaMeetingRoom,String[] attachmentPaths) {
         //名称校验
         List<TbOaMeetingRoom> tbSysFileGroups = checkName(tbOaMeetingRoom.getName());
         if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
             logger.warn("[会议室] 添加会议室失败，该会议室名称已存在！,tbOaMeetingRoomName: {}", tbOaMeetingRoom.getName());
             throw new JnSpringCloudException(OaExceptionEnums.ADDERR_NAME_EXIST);
         }
+
+        if(attachmentPaths!=null&&attachmentPaths.length>0){
+            //批量保存附件信息
+            saveOaMeetingRoomPhoto(attachmentPaths,tbOaMeetingRoom.getCreatorAccount(),tbOaMeetingRoom.getId());
+        }
+
+        tbOaMeetingRoom.setRecordStatus(OaStatusEnums.EFFECTIVE.getCode());
+        //设置会议室位置信息
+        tbOaMeetingRoom.setPosition(tbOaMeetingRoom.getBuilding()+tbOaMeetingRoom.getFloor()+tbOaMeetingRoom.getRoomNumber());
         tbOaMeetingRoomMapper.insert(tbOaMeetingRoom);
         logger.info("[会议室] 添加会议室成功！,tbOaMeetingRoomId: {}", tbOaMeetingRoom.getId());
     }
+
+
 
     /**
      * 更新会议室信息
@@ -111,7 +121,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Override
     @ServiceLog(doAction = "更新会议室信息")
     @Transactional(rollbackFor = Exception.class)
-    public void updateOaMeetingRoomById(OaMeetingRoom oaMeetingRoom, User user) {
+    public void updateOaMeetingRoomById(OaMeetingRoomAdd oaMeetingRoom, User user, String[] attachmentPaths) {
         String tbOaMeetingRoomName = oaMeetingRoom.getName();
         //判断修改信息是否存在
         TbOaMeetingRoom oaMeetingRoomSelect = tbOaMeetingRoomMapper.selectByPrimaryKey(oaMeetingRoom.getId());
@@ -129,14 +139,42 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                 }
             }
         }
+        //封装用户组id及最近更新人信息
+        String[] ids={oaMeetingRoom.getId()};
+        Map<String, Object> map = getDeleteMap(user, ids);
+        //删除对应附件信息
+        oaMeetingRoomPhotoMapper.deleteBranchByIds(map);
+        if(attachmentPaths!=null&&attachmentPaths.length>0){
+
+            //批量保存附件信息
+            saveOaMeetingRoomPhoto(oaMeetingRoom.getAttachmentPaths(),user.getId(),oaMeetingRoom.getId());
+        }
         //对文件组信息进行修改操作
         TbOaMeetingRoom tbOaMeetingRoom = new TbOaMeetingRoom();
         BeanUtils.copyProperties(oaMeetingRoom, tbOaMeetingRoom);
         //设置最近更新人信息
         tbOaMeetingRoom.setModifiedTime(new Date());
-        tbOaMeetingRoom.setModifierAccount(user.getAccount());
+        tbOaMeetingRoom.setModifierAccount(user.getId());
         tbOaMeetingRoomMapper.updateByPrimaryKeySelective(tbOaMeetingRoom);
         logger.info("[会议室] 更新会议室成功！,tbOaMeetingRoomId: {}", tbOaMeetingRoom.getId());
+    }
+
+    /**
+     * 保存附件信息
+     * @param attachmentPaths
+     */
+    private void saveOaMeetingRoomPhoto(String[] attachmentPaths ,String userId,String meetingRoomId){
+        for(String attachmentPath:attachmentPaths){
+            TbOaMeetingRoomPhoto attachment=new TbOaMeetingRoomPhoto();
+            attachment.setId(UUID.randomUUID().toString());
+            attachment.setCreatedTime(new Date());
+            attachment.setCreatorAccount(userId);
+            attachment.setPhotoUrl(attachmentPath);
+            attachment.setMeetingRoomId(meetingRoomId);
+            Byte recordStatus = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
+            attachment.setRecordStatus(recordStatus);
+            tbOaMeetingRoomPhotoMapper.insert(attachment);
+        }
     }
 
     /**
@@ -147,14 +185,17 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
      */
     @Override
     @ServiceLog(doAction = "根据id查询会议室")
-    public OaMeetingRoom selectOaMeetingRoomByIds(String id) {
-        TbOaMeetingRoom tbOaMeetingRoom = tbOaMeetingRoomMapper.selectByPrimaryKey(id);
-        OaMeetingRoom oaMeetingRoom = new OaMeetingRoom();
-        if (tbOaMeetingRoom != null) {
-            BeanUtils.copyProperties(tbOaMeetingRoom, oaMeetingRoom);
-        }
+    public OaMeetingRoomVo selectOaMeetingRoomByIds(String id) {
+        OaMeetingRoomVo oaMeetingRoomVo = oaMeetingRoomMapper.selectMeetingRoomById(id);
         logger.info("[会议室] 根据Id查询会议室成功！,tbOaMeetingRoomId: {}", id);
-        return oaMeetingRoom;
+        return oaMeetingRoomVo;
+    }
+
+    @Override
+    public PaginationData selectMeetingRoomAndMeetingOrder(OaMeetingRoomOrderPage oaMeetingRoomOrderPage) {
+        Page<Object> objects = PageHelper.startPage(oaMeetingRoomOrderPage.getPage(), oaMeetingRoomOrderPage.getRows());
+        return new PaginationData(oaMeetingRoomMapper.selectMeetingRoomAndMeetingOrder(oaMeetingRoomOrderPage)
+                , objects.getTotal());
     }
 
 
@@ -173,6 +214,10 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         }
         //封装用户组id及最近更新人信息
         Map<String, Object> map = getDeleteMap(user, ids);
+
+        //删除对应附件信息
+        oaMeetingRoomPhotoMapper.deleteBranchByIds(map);
+        //删除会议室
         oaMeetingRoomMapper.deleteBranchByIds(map);
     }
     /**
@@ -184,7 +229,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     private Map<String, Object> getDeleteMap(User user, String[] ids) {
         Map<String, Object> map = new HashMap<>(16);
         map.put("ids", ids);
-        map.put("account", user.getAccount());
+        map.put("account", user.getId());
         return map;
     }
 
@@ -200,22 +245,22 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         TbOaMeetingRoomCriteria.Criteria criteria = tbOaMeetingRoomCriteria.createCriteria();
         criteria.andNameEqualTo(tbOaMeetingRoomName);
         //筛选已经删除的数据
-        criteria.andRecordStatusEqualTo(OaMeetingRoomStatusEnums.DELETED.getCode());
+        criteria.andRecordStatusNotEqualTo(OaMeetingRoomStatusEnums.DELETED.getCode());
         return tbOaMeetingRoomMapper.selectByExample(tbOaMeetingRoomCriteria);
     }
 
     /**
      * 校验文件组是否存在
      *
-     * @param fileGroupName
+     * @param tbOaMeetingRoomName
      * @return
      */
     @Override
     @ServiceLog(doAction = "校验文件组是否存在")
-    public String checkMeetingRoomName(String fileGroupName) {
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(fileGroupName)) {
-            List<TbOaMeetingRoom> tbSysFileGroups = checkName(fileGroupName);
-            if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+    public String checkMeetingRoomName(String tbOaMeetingRoomName) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(tbOaMeetingRoomName)) {
+            List<TbOaMeetingRoom> tbOaMeetingRoom = checkName(tbOaMeetingRoomName);
+            if (tbOaMeetingRoom != null && tbOaMeetingRoom.size() > 0) {
                 return OaReturnMessageEnum.FAIL.getMessage();
             }
         }

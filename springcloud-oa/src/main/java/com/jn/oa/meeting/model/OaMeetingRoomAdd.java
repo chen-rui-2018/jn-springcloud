@@ -14,8 +14,8 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OaMeetingRoom", description = "会议室分页实体")
-public class OaMeetingRoom implements Serializable {
+@ApiModel(value = "OaMeetingRoomAdd", description = "会议室分页实体")
+public class OaMeetingRoomAdd implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
     @ApiModelProperty(value = "会议室id")
@@ -60,7 +60,16 @@ public class OaMeetingRoom implements Serializable {
     @ApiModelProperty(value = "修改时间")
     private Date modifiedTime;
 
+    @ApiModelProperty(value = "上传附件路径数组")
+    private String[] attachmentPaths;
 
+    public String[] getAttachmentPaths() {
+        return attachmentPaths;
+    }
+
+    public void setAttachmentPaths(String[] attachmentPaths) {
+        this.attachmentPaths = attachmentPaths;
+    }
 
     public String getId() {
         return id;

@@ -9,6 +9,8 @@ import com.jn.oa.meeting.model.OaMeetingAdd;
 import com.jn.oa.meeting.model.OaMeetingApprove;
 import com.jn.oa.meeting.model.OaMeetingPage;
 import com.jn.oa.meeting.service.MeetingService;
+import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
+import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -40,7 +42,7 @@ public class MeetingController extends BaseController {
 
 
     @ControllerLog(doAction = "查询会议申请列表")
-    @ApiOperation(value = "查询文件列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询会议申请列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
     @RequiresPermissions("/oa/meeting/list")
     public Result list(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
@@ -57,8 +59,8 @@ public class MeetingController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //为会议室实体其他属性赋值
         oaMeetingAdd.setId(UUID.randomUUID().toString());
-        oaMeetingAdd.setApplicant(user.getAccount());
-        oaMeetingAdd.setCreatorAccount(user.getAccount());
+        oaMeetingAdd.setApplicant(user.getId());
+        oaMeetingAdd.setCreatorAccount(user.getId());
         oaMeetingAdd.setApplicationTime(new Date());
         oaMeetingAdd.setCreatedTime(new Date());
         meetingService.insertOaMeeting(oaMeetingAdd);
@@ -69,7 +71,7 @@ public class MeetingController extends BaseController {
     @ApiOperation(value = "修改会议室", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
     @RequiresPermissions("/oa/meeting/update")
-    public Result update(@Validated @RequestBody OaMeeting oaMeeting) {
+    public Result update(@Validated @RequestBody OaMeetingAdd oaMeeting) {
         Assert.notNull(oaMeeting.getId(), "会议申请ID不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -77,11 +79,12 @@ public class MeetingController extends BaseController {
         return new Result();
     }
 
+
     @ControllerLog(doAction = "审核会议申请")
     @ApiOperation(value = "审核会议申请（0:已取消、1:审批中、2:审批通过、3:审批不通过、4:已作废）", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/approve")
     @RequiresPermissions("/oa/meeting/approve")
-    public Result approve(@Validated @RequestBody OaMeetingApprove oaMeetingApprove) {
+    public Result approve(@Validated @RequestBody OaMeetingApprove oaMeetingApprove){
         Assert.notNull(oaMeetingApprove.getId(), "会议申请ID不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -108,8 +111,8 @@ public class MeetingController extends BaseController {
     @RequiresPermissions("/oa/meeting/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
-        OaMeeting oaMeetingRoom = meetingService.selectOaMeetingByIds(id);
-        return new Result(oaMeetingRoom);
+        OaMeetingParticipantVo oaMeeting = meetingService.selectOaMeetingById(id);
+        return new Result(oaMeeting);
     }
 
 
@@ -121,6 +124,17 @@ public class MeetingController extends BaseController {
         Assert.notNull(id, "会议申请ID不能为空");
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         meetingService. finishOaMeeting(id,user);
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "根据ID取消会议申请")
+    @ApiOperation(value = "根据ID取消会议申请", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/cancelOaMeeting")
+    @RequiresPermissions("/oa/meeting/cancelOaMeeting")
+    public Result cancelOaMeeting(@RequestParam(value = "id") String id) {
+        Assert.notNull(id, "会议申请ID不能为空");
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        meetingService.cancelOaMeeting(id,user);
         return new Result();
     }
 

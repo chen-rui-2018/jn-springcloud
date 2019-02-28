@@ -32,8 +32,6 @@ public class TbOaMeetingRoom implements Serializable {
 
     private Date modifiedTime;
 
-    private String meetingId;
-
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -148,14 +146,6 @@ public class TbOaMeetingRoom implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public String getMeetingId() {
-        return meetingId;
-    }
-
-    public void setMeetingId(String meetingId) {
-        this.meetingId = meetingId == null ? null : meetingId.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -181,8 +171,7 @@ public class TbOaMeetingRoom implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getMeetingId() == null ? other.getMeetingId() == null : this.getMeetingId().equals(other.getMeetingId()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -203,7 +192,6 @@ public class TbOaMeetingRoom implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getMeetingId() == null) ? 0 : getMeetingId().hashCode());
         return result;
     }
 
@@ -227,7 +215,6 @@ public class TbOaMeetingRoom implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", meetingId=").append(meetingId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

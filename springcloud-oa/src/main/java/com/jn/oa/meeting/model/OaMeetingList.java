@@ -20,7 +20,7 @@ import java.util.List;
 public class OaMeetingList implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
-    @ApiModelProperty(value = "会议室id")
+    @ApiModelProperty(value = "会议申请id")
     private String id;
 
     @ApiModelProperty(value = "会议主题（工单名称）")

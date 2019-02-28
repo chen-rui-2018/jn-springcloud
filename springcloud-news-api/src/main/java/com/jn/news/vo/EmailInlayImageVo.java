@@ -1,5 +1,7 @@
 package com.jn.news.vo;
 
+import java.io.Serializable;
+
 /**
  * 邮件内嵌图片VO
  *
@@ -8,8 +10,9 @@ package com.jn.news.vo;
  * @Version： v1.0
  * @Modified By:
  */
-public class EmailInlayImageVo {
+public class EmailInlayImageVo implements Serializable {
 
+    private static final long serialVersionUID = 4041484914701974071L;
     /**
      * 指非模板邮件内嵌图片cid名称
      * 如非模板邮件中的cid名称weixin：<img src="cid:weixin" ></body></html>

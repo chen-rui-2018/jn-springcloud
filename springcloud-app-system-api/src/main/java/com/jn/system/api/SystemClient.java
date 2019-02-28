@@ -106,7 +106,7 @@ public interface SystemClient {
     Result addSysUser(@RequestBody User user);
 
     /**
-     * 根据用户ID，更新用户信息
+     * 根据用户ID或者账号，更新用户信息
      * @param user
      * @return
      */

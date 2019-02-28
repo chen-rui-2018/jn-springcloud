@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -62,7 +63,7 @@ public class OrgApproveController extends BaseController{
     @ApiOperation(value = "查询机构审核详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getOrgApplyDetail")
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgApplyDetail")
-    public Result getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true)@RequestBody String orgId){
+    public Result getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true)@RequestParam(value = "orgId") String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         OrgApplyDetail orgApplyDetail = orgApproveService.getOrgApplyDetail(orgId);
         return new Result(orgApplyDetail);

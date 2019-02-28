@@ -55,7 +55,7 @@ public class OrgController extends BaseController {
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
-    public Result getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam String orgId){
+    public Result getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         return new Result(orgService.getServiceOrgDetail(orgId));
     }

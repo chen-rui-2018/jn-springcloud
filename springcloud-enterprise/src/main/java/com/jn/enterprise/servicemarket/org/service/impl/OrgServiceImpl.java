@@ -67,7 +67,11 @@ public class OrgServiceImpl implements OrgService {
     @ServiceLog(doAction = "根据机构ID查询机构详情")
     @Override
     public OrgDetail getServiceOrgDetail(String orgId){
-        return orgMapper.getServiceOrgDetail(orgId);
+        OrgDetail serviceOrgDetail = orgMapper.getServiceOrgDetail(orgId);
+        if(null == serviceOrgDetail){
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
+        }
+        return serviceOrgDetail;
     }
 
     @ServiceLog(doAction = "保存服务机构基本信息(id为空时为新增)")
@@ -115,20 +119,21 @@ public class OrgServiceImpl implements OrgService {
      * @param account
      * @return
      */
-    public List<TbServiceOrgTrait> setTraitBean(String sectorList,String traitType,String serviceOrgId,String account){
-        String[] sectors = sectorList.split(",");
+    public List<TbServiceOrgTrait> setTraitBean(String[] sectorList,String traitType,String serviceOrgId,String account){
         List<TbServiceOrgTrait> traitsList = new ArrayList<>();
-        for (String sector:sectors) {
-            TbServiceOrgTrait serviceOrgTrait = new TbServiceOrgTrait();
-            serviceOrgTrait.setOrgId(serviceOrgId);
-            serviceOrgTrait.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            serviceOrgTrait.setCreatedTime(new Date());
-            serviceOrgTrait.setCreatorAccount(account);
-            serviceOrgTrait.setStatus("1");
-            serviceOrgTrait.setTraitValue(sector);
-            serviceOrgTrait.setRecordStatus(new Byte("1"));
-            serviceOrgTrait.setTraitType(traitType);
-            traitsList.add(serviceOrgTrait);
+        if(null != sectorList){
+            for (String sector:sectorList) {
+                TbServiceOrgTrait serviceOrgTrait = new TbServiceOrgTrait();
+                serviceOrgTrait.setOrgId(serviceOrgId);
+                serviceOrgTrait.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+                serviceOrgTrait.setCreatedTime(new Date());
+                serviceOrgTrait.setCreatorAccount(account);
+                serviceOrgTrait.setStatus("1");
+                serviceOrgTrait.setTraitValue(sector);
+                serviceOrgTrait.setRecordStatus(new Byte("1"));
+                serviceOrgTrait.setTraitType(traitType);
+                traitsList.add(serviceOrgTrait);
+            }
         }
         return traitsList;
     }

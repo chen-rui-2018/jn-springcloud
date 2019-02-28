@@ -15,11 +15,11 @@ public class Rating {
     @ApiModelProperty(value = "评价编号")
     private String id;
     @ApiModelProperty(value = "服务机构")
-    private String willOrg;
+    private String orgName;
     @ApiModelProperty(value = "服务顾问")
-    private String willAdvisor;
+    private String advisorName;
     @ApiModelProperty(value = "服务产品")
-    private String willProduct;
+    private String productName;
     @ApiModelProperty(value = "机构电话")
     private String orgTelephone;
     @ApiModelProperty(value = "需求提出时间")
@@ -39,28 +39,28 @@ public class Rating {
         this.id = id;
     }
 
-    public String getWillOrg() {
-        return willOrg;
+    public String getOrgName() {
+        return orgName;
     }
 
-    public void setWillOrg(String willOrg) {
-        this.willOrg = willOrg;
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 
-    public String getWillAdvisor() {
-        return willAdvisor;
+    public String getAdvisorName() {
+        return advisorName;
     }
 
-    public void setWillAdvisor(String willAdvisor) {
-        this.willAdvisor = willAdvisor;
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
     }
 
-    public String getWillProduct() {
-        return willProduct;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setWillProduct(String willProduct) {
-        this.willProduct = willProduct;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getOrgTelephone() {

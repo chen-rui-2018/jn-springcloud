@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
+ * 服务机构申请查询入参
  * @author： jiangyl
  * @date： Created on 2019/2/21 15:52
  * @version： v1.0

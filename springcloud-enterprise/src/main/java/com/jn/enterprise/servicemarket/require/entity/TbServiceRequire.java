@@ -60,6 +60,8 @@ public class TbServiceRequire implements Serializable {
 
     private String isComment;
 
+    private Date commentTime;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -296,6 +298,14 @@ public class TbServiceRequire implements Serializable {
         this.isComment = isComment == null ? null : isComment.trim();
     }
 
+    public Date getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(Date commentTime) {
+        this.commentTime = commentTime;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -376,6 +386,7 @@ public class TbServiceRequire implements Serializable {
             && (this.getHandleResult() == null ? other.getHandleResult() == null : this.getHandleResult().equals(other.getHandleResult()))
             && (this.getResultDetail() == null ? other.getResultDetail() == null : this.getResultDetail().equals(other.getResultDetail()))
             && (this.getIsComment() == null ? other.getIsComment() == null : this.getIsComment().equals(other.getIsComment()))
+            && (this.getCommentTime() == null ? other.getCommentTime() == null : this.getCommentTime().equals(other.getCommentTime()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -415,6 +426,7 @@ public class TbServiceRequire implements Serializable {
         result = prime * result + ((getHandleResult() == null) ? 0 : getHandleResult().hashCode());
         result = prime * result + ((getResultDetail() == null) ? 0 : getResultDetail().hashCode());
         result = prime * result + ((getIsComment() == null) ? 0 : getIsComment().hashCode());
+        result = prime * result + ((getCommentTime() == null) ? 0 : getCommentTime().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -457,6 +469,7 @@ public class TbServiceRequire implements Serializable {
         sb.append(", handleResult=").append(handleResult);
         sb.append(", resultDetail=").append(resultDetail);
         sb.append(", isComment=").append(isComment);
+        sb.append(", commentTime=").append(commentTime);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

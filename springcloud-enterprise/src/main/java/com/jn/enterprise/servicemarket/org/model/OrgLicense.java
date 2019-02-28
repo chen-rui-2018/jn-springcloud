@@ -13,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "OrgLicense",description = "服务机构标签")
 public class OrgLicense {
 
-    @ApiModelProperty(value = "证书ID")
+    @ApiModelProperty(value = "证书ID[作为入参时，前台无需传值]")
     private String id;
 
     @ApiModelProperty(value = "机构ID")

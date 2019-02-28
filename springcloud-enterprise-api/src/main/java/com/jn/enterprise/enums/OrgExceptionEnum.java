@@ -19,6 +19,10 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     ORG_DATA_STATUS_IS_NOT_CHECKING("5020507", "机构状态非审核中，请核实数据"),
     COMMENT_ID_IS_NOT_NULL("5020508", "点评ID不能为空"),
     REQUIRE_IS_NOT_EXIT("5020509", "需求不存在，请核实数据"),
+    PRE_VALUE_IS_NOT_NULL("5020510", "行业领域值不能为空"),
+    PRE_ID_IS_NOT_NULL("5020511", "行业ID不能为空"),
+    ORG_IS_NOT_EXIT("5020512", "机构不存在"),
+    COMMENT_IS_EXIST("5020513", "该需求已评论，无需再次提交"),
     ;
 
     /**

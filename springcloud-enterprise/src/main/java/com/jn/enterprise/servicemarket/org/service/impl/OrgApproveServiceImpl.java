@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
@@ -65,12 +66,24 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         List<OrgApply> orgApplyList = new ArrayList<>(8);
         Page<Object> objects = PageHelper.startPage(orgApplyParameter.getPage(), orgApplyParameter.getRows() == 0 ? 15 : orgApplyParameter.getRows());
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
-        orgCriteria.createCriteria().andOrgNameLike("%"+orgApplyParameter.getOrgName()+"%").andOrgStatusEqualTo(orgApplyParameter.getOrgStatus());
+        TbServiceOrgCriteria.Criteria criteria = orgCriteria.createCriteria();
+        if(StringUtils.isNotEmpty(orgApplyParameter.getOrgName())){
+            criteria.andOrgNameLike("%"+orgApplyParameter.getOrgName()+"%");
+        }
+        if(StringUtils.isNotEmpty(orgApplyParameter.getOrgStatus())){
+            criteria.andOrgStatusEqualTo(orgApplyParameter.getOrgStatus());
+        }
         List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
         List<String> accountList = new ArrayList<>();
         for (TbServiceOrg serviceOrg:tbServiceOrgs) {
             OrgApply orgApply = new OrgApply();
             BeanUtils.copyProperties(serviceOrg,orgApply);
+            if(null != serviceOrg.getCreatedTime()){
+                orgApply.setCreatedTime(DateUtils.formatDate(serviceOrg.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            if(null != serviceOrg.getOrgRegisterTime()){
+                orgApply.setOrgRegisterTime(DateUtils.formatDate(serviceOrg.getOrgRegisterTime(),"yyyy-MM-dd"));
+            }
             orgApplyList.add(orgApply);
             accountList.add(serviceOrg.getOrgAccount());
         }

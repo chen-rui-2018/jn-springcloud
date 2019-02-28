@@ -30,6 +30,7 @@
     <result column="handle_result" jdbcType="VARCHAR" property="handleResult" />
     <result column="result_detail" jdbcType="VARCHAR" property="resultDetail" />
     <result column="is_comment" jdbcType="VARCHAR" property="isComment" />
+    <result column="comment_time" jdbcType="TIMESTAMP" property="commentTime" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -99,7 +100,8 @@
     advisor_name, org_telephone, org_email, req_detail, req_name, req_post, req_phone, 
     req_email, issue_time, issue_account, contract_amount, financing_amount, actual_loan_amount, 
     financing_period, expected_date, status, handle_time, handle_result, result_detail, 
-    is_comment, created_time, creator_account, modified_time, modifier_account, record_status
+    is_comment, comment_time, created_time, creator_account, modified_time, modifier_account, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria" resultMap="BaseResultMap">
     select
@@ -141,9 +143,9 @@
       contract_amount, financing_amount, actual_loan_amount, 
       financing_period, expected_date, status, 
       handle_time, handle_result, result_detail, 
-      is_comment, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      is_comment, comment_time, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{reqNum,jdbcType=VARCHAR}, #{businessArea,jdbcType=VARCHAR}, 
       #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, 
       #{orgName,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, #{advisorName,jdbcType=VARCHAR}, 
@@ -153,9 +155,9 @@
       #{contractAmount,jdbcType=VARCHAR}, #{financingAmount,jdbcType=VARCHAR}, #{actualLoanAmount,jdbcType=VARCHAR}, 
       #{financingPeriod,jdbcType=VARCHAR}, #{expectedDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, 
       #{handleTime,jdbcType=TIMESTAMP}, #{handleResult,jdbcType=VARCHAR}, #{resultDetail,jdbcType=VARCHAR}, 
-      #{isComment,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{isComment,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.require.entity.TbServiceRequire">
     insert into tb_service_require
@@ -243,6 +245,9 @@
       </if>
       <if test="isComment != null">
         is_comment,
+      </if>
+      <if test="commentTime != null">
+        comment_time,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -344,6 +349,9 @@
       </if>
       <if test="isComment != null">
         #{isComment,jdbcType=VARCHAR},
+      </if>
+      <if test="commentTime != null">
+        #{commentTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -455,6 +463,9 @@
       <if test="record.isComment != null">
         is_comment = #{record.isComment,jdbcType=VARCHAR},
       </if>
+      <if test="record.commentTime != null">
+        comment_time = #{record.commentTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -505,6 +516,7 @@
       handle_result = #{record.handleResult,jdbcType=VARCHAR},
       result_detail = #{record.resultDetail,jdbcType=VARCHAR},
       is_comment = #{record.isComment,jdbcType=VARCHAR},
+      comment_time = #{record.commentTime,jdbcType=TIMESTAMP},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -598,6 +610,9 @@
       <if test="isComment != null">
         is_comment = #{isComment,jdbcType=VARCHAR},
       </if>
+      <if test="commentTime != null">
+        comment_time = #{commentTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
@@ -645,6 +660,7 @@
       handle_result = #{handleResult,jdbcType=VARCHAR},
       result_detail = #{resultDetail,jdbcType=VARCHAR},
       is_comment = #{isComment,jdbcType=VARCHAR},
+      comment_time = #{commentTime,jdbcType=TIMESTAMP},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

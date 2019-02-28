@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class ServiceOrg implements Serializable {
     private static final long serialVersionUID = 1L;
     @ApiModelProperty(value = "机构ID")
-    private String id;
+    private String orgId;
 
     @ApiModelProperty(value = "机构名称")
     private String orgName;
@@ -39,16 +39,9 @@ public class ServiceOrg implements Serializable {
     @ApiModelProperty(value = "机构LOGO")
     private String orgLogo;
 
-    @ApiModelProperty(value = "服务态度评分")
+    @ApiModelProperty(value = "服务评分")
     private String attitudeScore;
-    @ApiModelProperty(value = "服务专业评分")
-    private String professionScore;
-    @ApiModelProperty(value = "服务响应评分")
-    private String responseScore;
-    @ApiModelProperty(value = "服务价格评分")
-    private String priceScore;
-    @ApiModelProperty(value = "综合得分")
-    private Integer integratedSort;
+
     @ApiModelProperty(value = "评价等级（好评）")
     private String evaluationLevel;
     @ApiModelProperty(value = "浏览量（人气）")
@@ -57,4 +50,108 @@ public class ServiceOrg implements Serializable {
     private Integer transactionNum;
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getOrgRegisterTime() {
+        return orgRegisterTime;
+    }
+
+    public void setOrgRegisterTime(String orgRegisterTime) {
+        this.orgRegisterTime = orgRegisterTime;
+    }
+
+    public String getIsApprove() {
+        return isApprove;
+    }
+
+    public void setIsApprove(String isApprove) {
+        this.isApprove = isApprove;
+    }
+
+    public String getOrgType() {
+        return orgType;
+    }
+
+    public void setOrgType(String orgType) {
+        this.orgType = orgType;
+    }
+
+    public String getOrgPhone() {
+        return orgPhone;
+    }
+
+    public void setOrgPhone(String orgPhone) {
+        this.orgPhone = orgPhone;
+    }
+
+    public String getOrgAddress() {
+        return orgAddress;
+    }
+
+    public void setOrgAddress(String orgAddress) {
+        this.orgAddress = orgAddress;
+    }
+
+    public String getOrgLogo() {
+        return orgLogo;
+    }
+
+    public void setOrgLogo(String orgLogo) {
+        this.orgLogo = orgLogo;
+    }
+
+    public String getAttitudeScore() {
+        return attitudeScore;
+    }
+
+    public void setAttitudeScore(String attitudeScore) {
+        this.attitudeScore = attitudeScore;
+    }
+
+    public String getEvaluationLevel() {
+        return evaluationLevel;
+    }
+
+    public void setEvaluationLevel(String evaluationLevel) {
+        this.evaluationLevel = evaluationLevel;
+    }
+
+    public Integer getPageviews() {
+        return pageviews;
+    }
+
+    public void setPageviews(Integer pageviews) {
+        this.pageviews = pageviews;
+    }
+
+    public Integer getTransactionNum() {
+        return transactionNum;
+    }
+
+    public void setTransactionNum(Integer transactionNum) {
+        this.transactionNum = transactionNum;
+    }
+
+    public Integer getEvaluationNum() {
+        return evaluationNum;
+    }
+
+    public void setEvaluationNum(Integer evaluationNum) {
+        this.evaluationNum = evaluationNum;
+    }
 }

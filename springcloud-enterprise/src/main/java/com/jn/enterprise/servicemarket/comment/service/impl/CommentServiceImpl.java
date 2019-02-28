@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.comment.dao.CommentMapper;
@@ -74,6 +75,9 @@ public class CommentServiceImpl implements CommentService {
         for (TbServiceRequire serviceRequire: tbServiceRequires) {
             Rating rating = new Rating();
             BeanUtils.copyProperties(serviceRequire,rating);
+            rating.setIssueTime(DateUtils.formatDate(serviceRequire.getIssueTime(),"yyyy-MM-dd HH:mm:ss"));
+            rating.setCommentTime(DateUtils.formatDate(serviceRequire.getCommentTime(),"yyyy-MM-dd HH:mm:ss"));
+            rating.setHandleTime(DateUtils.formatDate(serviceRequire.getHandleTime(),"yyyy-MM-dd HH:mm:ss"));
             ratings.add(rating);
         }
         PaginationData data = new PaginationData(ratings, objects.getTotal());
@@ -110,10 +114,15 @@ public class CommentServiceImpl implements CommentService {
         if(null == serviceRequire){
             throw new JnSpringCloudException(OrgExceptionEnum.REQUIRE_IS_NOT_EXIT);
         }
+        TbServiceRating ratingOld = tbServiceRatingMapper.selectByPrimaryKey(commentParameter.getId());
+        if(null != ratingOld){
+            throw new JnSpringCloudException(OrgExceptionEnum.COMMENT_IS_EXIST);
+        }
         BeanUtils.copyProperties(serviceRequire,tbServiceRating);
         tbServiceRating.setEvaluatorAccount(account);
         tbServiceRating.setCreatedTime(new Date());
         tbServiceRating.setCreatorAccount(account);
+        tbServiceRating.setRequireId(commentParameter.getId());
         BeanUtils.copyProperties(commentParameter,tbServiceRating);
         int insert = tbServiceRatingMapper.insert(tbServiceRating);
         return insert==1?true:false;

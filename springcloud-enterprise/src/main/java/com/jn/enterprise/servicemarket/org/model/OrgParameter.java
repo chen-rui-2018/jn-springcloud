@@ -29,17 +29,7 @@ public class OrgParameter extends Page {
     @ApiModelProperty("排序字段")
     private String sortTypes;
 
-    @ApiModelProperty(value = "人气权重")
-    private Float popularityWeight=0.01f;
 
-    @ApiModelProperty(value = "好评权重")
-    private Float praiseWeight=1.0f;
-
-    @ApiModelProperty(value = "服务量权重")
-    private Float serviceWeight=0.1f;
-
-    @ApiModelProperty(value = "其他因素分值")
-    private Float otherFactorScore=0.0f;
 
     public String getBusinessType() {
         return businessType;
@@ -81,35 +71,4 @@ public class OrgParameter extends Page {
         this.sortTypes = sortTypes;
     }
 
-    public Float getPopularityWeight() {
-        return popularityWeight;
-    }
-
-    public void setPopularityWeight(Float popularityWeight) {
-        this.popularityWeight = popularityWeight;
-    }
-
-    public Float getPraiseWeight() {
-        return praiseWeight;
-    }
-
-    public void setPraiseWeight(Float praiseWeight) {
-        this.praiseWeight = praiseWeight;
-    }
-
-    public Float getServiceWeight() {
-        return serviceWeight;
-    }
-
-    public void setServiceWeight(Float serviceWeight) {
-        this.serviceWeight = serviceWeight;
-    }
-
-    public Float getOtherFactorScore() {
-        return otherFactorScore;
-    }
-
-    public void setOtherFactorScore(Float otherFactorScore) {
-        this.otherFactorScore = otherFactorScore;
-    }
 }

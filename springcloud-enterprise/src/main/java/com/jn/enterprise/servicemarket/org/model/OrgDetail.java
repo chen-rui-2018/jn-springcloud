@@ -69,7 +69,7 @@ public class OrgDetail {
     @ApiModelProperty(value = "机构LOGO")
     private String orgLogo;
 
-    @ApiModelProperty(value = "机构成立时间")
+    @ApiModelProperty(value = "机构成立时间yyyy-MM-dd")
     private String orgRegisterTime;
 
     @ApiModelProperty(value = "联系人姓名")

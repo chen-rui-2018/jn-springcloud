@@ -38,22 +38,22 @@ public class OrgBasicData {
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "业务擅长(多个用,分隔)")
+    @ApiModelProperty(value = "业务擅长[数组]")
     @NotNull(message = "业务擅长不能为空")
-    private String orgSpeciality;
+    private String[] orgSpeciality;
 
     @ApiModelProperty(value = "机构LOGO")
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 
-    @ApiModelProperty(value = "行业领域(多个用,分隔)")
-    private String industrySector;
+    @ApiModelProperty(value = "行业领域[数组]")
+    private String[] industrySector;
 
-    @ApiModelProperty(value = "发展阶段(多个用,分隔)")
-    private String developmentStage;
+    @ApiModelProperty(value = "发展阶段[数组]")
+    private String[] developmentStage;
 
-    @ApiModelProperty(value = "企业性质(多个用,分隔)")
-    private String companyNature;
+    @ApiModelProperty(value = "企业性质[数组]")
+    private String[] companyNature;
 
     public String getOrgId() {
         return orgId;
@@ -103,11 +103,11 @@ public class OrgBasicData {
         this.orgBusiness = orgBusiness;
     }
 
-    public String getOrgSpeciality() {
+    public String[] getOrgSpeciality() {
         return orgSpeciality;
     }
 
-    public void setOrgSpeciality(String orgSpeciality) {
+    public void setOrgSpeciality(String[] orgSpeciality) {
         this.orgSpeciality = orgSpeciality;
     }
 
@@ -119,27 +119,27 @@ public class OrgBasicData {
         this.orgLogo = orgLogo;
     }
 
-    public String getIndustrySector() {
+    public String[] getIndustrySector() {
         return industrySector;
     }
 
-    public void setIndustrySector(String industrySector) {
+    public void setIndustrySector(String[] industrySector) {
         this.industrySector = industrySector;
     }
 
-    public String getDevelopmentStage() {
+    public String[] getDevelopmentStage() {
         return developmentStage;
     }
 
-    public void setDevelopmentStage(String developmentStage) {
+    public void setDevelopmentStage(String[] developmentStage) {
         this.developmentStage = developmentStage;
     }
 
-    public String getCompanyNature() {
+    public String[] getCompanyNature() {
         return companyNature;
     }
 
-    public void setCompanyNature(String companyNature) {
+    public void setCompanyNature(String[] companyNature) {
         this.companyNature = companyNature;
     }
 }

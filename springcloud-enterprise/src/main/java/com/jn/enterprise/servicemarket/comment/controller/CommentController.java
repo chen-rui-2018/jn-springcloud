@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "获取评价页详情(已评价和未评价都从这接口获取)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getRatingCommentDetail")
     @RequiresPermissions("/guest/serviceMarket/comment/getRatingCommentDetail")
-    public Result getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true)@RequestBody String id){
+    public Result getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true)@RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
         return new Result(ratingCommentDetail);
@@ -79,7 +80,7 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "提交评价信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveRatingComment")
     @RequiresPermissions("/guest/serviceMarket/comment/saveRatingComment")
-    public Result saveRatingComment(CommentParameter commentParameter){
+    public Result saveRatingComment(@RequestBody @Validated CommentParameter commentParameter){
         Assert.notNull(commentParameter.getId(), OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Boolean aBoolean = commentService.saveRatingComment(commentParameter,user.getAccount());

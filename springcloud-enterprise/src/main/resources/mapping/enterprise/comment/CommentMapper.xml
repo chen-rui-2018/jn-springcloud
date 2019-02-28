@@ -3,12 +3,16 @@
 <mapper namespace="com.jn.enterprise.servicemarket.comment.dao.CommentMapper">
     <select id="getGiveMeCommentList" parameterType="com.jn.enterprise.servicemarket.comment.model.ReceiveRatingParameter"
             resultType="com.jn.enterprise.servicemarket.comment.model.Rating">
-        select r.id as "id",r.org_id as "willOrg",r.advisor_name as "willAdvisor",
-               r.product_name as "willProduct",re.issue_time as "issueTime",re.handle_time as "handleTime",r.created_time as "commentTime"
-        from tb_service_rating r left join tb_service_org o on r.org_id = o.org_id left join tb_service_require re on r.require_id = re.id
+        SELECT r.id AS "id",r.org_name AS "orgName",r.advisor_name AS "advisorName",
+        r.product_name AS "productName",date_format(re.issue_time,'%Y-%m-%d %H:%i:%S')  AS "issueTime",date_format(re.handle_time,'%Y-%m-%d %H:%i:%S') AS "handleTime",
+        date_format(r.created_time,'%Y-%m-%d %H:%i:%S') AS "commentTime",re.is_comment AS "isComment",re.org_telephone as "orgTelephone"
+        FROM tb_service_rating r LEFT JOIN tb_service_require re ON r.require_id = re.id left join tb_service_org o on r.org_id = o.org_id
         where r.record_status = '1'
         <if test="issueAccount != null and issueAccount != ''">
             and re.issue_account =  #{issueAccount}
+        </if>
+        <if test="account != null and account != ''">
+            and ( r.advisor_account = #{account} or o.org_account = #{account} )
         </if>
         <if test="productId != null and productId != ''">
             and r.product_id =  #{productId}
@@ -36,9 +40,9 @@
                    info.con_email as "conEmail",re.org_name as "orgName",
                    re.advisor_name as "advisorName", re.product_name as "productName",
                    ra.attitude_score as "attitudeScore", ra.evaluation_desc as "evaluationDesc"
-                from tb_service_require re
+                from tb_service_require re <!-- 需求表 -->
                 left join tb_service_org_info info on re.org_id = info.org_id
-                left join tb_service_rating ra on ra.id = re.id
+                left join tb_service_rating ra <!-- 评价表 --> on ra.require_id   = re.id
                 where re.record_status = '1' and re.id = #{id};
     </select>
 

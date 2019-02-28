@@ -28,7 +28,7 @@ public class OrgTeam {
     @ApiModelProperty(value = "资质")
     private String conQuali;
 
-    @ApiModelProperty(value = "从业起始时间")
+    @ApiModelProperty(value = "从业起始时间yyyy-MM-dd")
     private String conTime;
 
     @ApiModelProperty(value = "业务特长")

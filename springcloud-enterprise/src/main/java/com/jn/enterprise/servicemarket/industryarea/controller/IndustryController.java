@@ -1,0 +1,82 @@
+package com.jn.enterprise.servicemarket.industryarea.controller;
+
+import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.servicemarket.industryarea.model.Industry;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryData;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter;
+import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
+import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * 行业领域管理
+ * @author： jiangyl
+ * @date： Created on 2019/2/27 11:01
+ * @version： v1.0
+ * @modified By:
+ */
+@Api(tags = "行业领域管理")
+@RestController
+@RequestMapping(value = "/serviceMarket/industryManage")
+public class IndustryController extends BaseController {
+
+    @Autowired
+    private IndustryService industryService;
+
+    @ControllerLog(doAction = "行业领域列表")
+    @ApiOperation(value = "行业领域列表", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/selectIndustryList")
+    @RequiresPermissions("/serviceMarket/industryManage/selectIndustryList")
+    public Result selectIndustryList(@RequestBody @Validated IndustryParameter industryParameter){
+        PaginationData paginationData = industryService.selectIndustryList(industryParameter);
+        return new Result(paginationData);
+    }
+
+
+    @ControllerLog(doAction = "新增行业领域")
+    @ApiOperation(value = "新增行业领域", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/saveIndustry")
+    @RequiresPermissions("/serviceMarket/industryManage/saveIndustry")
+    public Result saveIndustry(@RequestBody @Validated IndustryData industryData){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Boolean b = industryService.saveOrUpdateIndustry(industryData,user.getAccount());
+        return new Result(b);
+    }
+
+    @ControllerLog(doAction = "修改行业领域")
+    @ApiOperation(value = "修改行业领域", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/updateIndustry")
+    @RequiresPermissions("/serviceMarket/industryManage/updateIndustry")
+    public Result updateIndustry(@RequestBody @Validated IndustryData industryData){
+        Assert.notNull(industryData.getId(), OrgExceptionEnum.PRE_ID_IS_NOT_NULL.getMessage());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        Boolean b = industryService.saveOrUpdateIndustry(industryData,user.getAccount());
+        return new Result(b);
+    }
+
+    @ControllerLog(doAction = "行业领域详情")
+    @ApiOperation(value = "行业领域详情", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getIndustryDetail")
+    @RequiresPermissions("/serviceMarket/industryManage/getIndustryDetail")
+    public Result getIndustryDetail(@ApiParam(value = "领域id" ,required = true) @RequestParam(value = "id") String id){
+        Assert.notNull(id, OrgExceptionEnum.PRE_ID_IS_NOT_NULL.getMessage());
+        Industry industryDetail = industryService.getIndustryDetail(id);
+        return new Result(industryDetail);
+    }
+
+}

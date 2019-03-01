@@ -70,7 +70,7 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityType")
     @RequiresPermissions("/activity/activityType/findActivityType")
-    public Result findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "activityId") String typeId) {
+    public Result findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "typeId") String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         ActivityType vo = activityTypeService.findActivityTypeById(typeId);
         return new Result(vo);

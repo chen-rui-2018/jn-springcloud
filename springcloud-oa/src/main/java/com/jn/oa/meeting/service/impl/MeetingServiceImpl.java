@@ -7,6 +7,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
+import com.jn.common.util.file.MultipartFileUtil;
 import com.jn.common.util.zxing.QRCodeUtils;
 import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaReturnMessageEnum;
@@ -119,7 +120,7 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeetingContent.setRecordStatus(status);
         tbOaMeetingContentMapper.insert(tbOaMeetingContent);
         //保存参会人员信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount());
+        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount(),oaMeetingAdd.getId());
 
         //默认提交为审批状态为“审批中”，会议状态是“待开始”
         tbOaMeeting.setApprovalStatus(OaMeetingApproveStatusEnums.APPROVAL.getCode());
@@ -132,7 +133,7 @@ public class MeetingServiceImpl implements MeetingService {
      * 保存用户参会人员信息
      * @param participantsIds
      */
-    private  void saveOaMeetingParticipant(String[] participantsIds,String creatorAccount){
+    private  void saveOaMeetingParticipant(String[] participantsIds,String creatorAccount,String meetingId){
         if(participantsIds!=null&&participantsIds.length>0) {
             //保存参会人员信息
             for (String participantsId : participantsIds) {
@@ -143,6 +144,7 @@ public class MeetingServiceImpl implements MeetingService {
                 tbOaMeetingParticipants.setCreatorAccount(creatorAccount);
                 Byte status = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
                 tbOaMeetingParticipants.setRecordStatus(status);
+                tbOaMeetingParticipants.setMeetingId(meetingId);
                 tbOaMeetingParticipantsMapper.insert(tbOaMeetingParticipants);
 
             }
@@ -179,7 +181,7 @@ public class MeetingServiceImpl implements MeetingService {
         //根据会议id删除参会人员
         oaMeetingParticipantMapper.deleteBranchByMeetingIds( getDeleteMap( user, null, oaMeetingAdd.getId()));
         //保存参会人员的信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount());
+        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount(),oaMeetingAdd.getId());
 
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
@@ -228,14 +230,15 @@ public class MeetingServiceImpl implements MeetingService {
                 //1、生成二维码
                 File file = ResourceUtils.getFile("classpath:zxing");
                 String contents = "http://www.baidu.com";
-                String outFilePath = file.getPath() + File.separator + "QRCode.png";
+                String fileName= "QRCode.png";
+                String outFilePath = file.getPath() + File.separator +fileName;
                 String logoFilePath = file.getPath() + File.separator + "logo.png";
                 QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, logoFilePath);
 
                 //2、上传至fastdfs
                 // File QRCodeFile = ResourceUtils.getFile("classpath:zxing/QRCode.png");
                 // FileInputStream fileInputStream = new FileInputStream(QRCodeFile);
-                MultipartFile multipartFile = new CommonsMultipartFile(QRCodeUtils.createFileItem(outFilePath));
+                MultipartFile multipartFile =  MultipartFileUtil.from(file,fileName);
 
                 Result<String> result = uploadClient.uploadFile(multipartFile, false);
                 tbOaMeeting.setSignInQr(result.getData());
@@ -245,6 +248,10 @@ public class MeetingServiceImpl implements MeetingService {
                 throw new JnSpringCloudException(OaExceptionEnums.CTEATE_QRCODE_FAIL);
             }
 
+        }
+        //作废的会议状态，设置为已取消
+        if(OaMeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())){
+            tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
         }
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
     }

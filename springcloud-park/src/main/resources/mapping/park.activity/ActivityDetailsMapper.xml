@@ -12,14 +12,15 @@
         ,date_format(t1.acti_end_time,'%Y-%m-%d %H:%i:%s') as "activityEndTime"                  <!--活动结束时间-->
         ,date_format(t1.apply_start_time,'%Y-%m-%d %H:%i:%s') as "applyStartTime"                <!--报名开始时间-->
         ,date_format(t1.apply_end_time,'%Y-%m-%d %H:%i:%s') as "applyEndTime"                    <!--报名结束时间-->
-        ,date_format(t1.mes_send_time,'%Y-%m-%d %H:%i:%s') as "mesSenTime"                       <!--活动推送时间-->
-        ,t1.acti_address as "activityAdress"                                                     <!--活动地址-->
+        ,date_format(t1.mes_send_time,'%Y-%m-%d %H:%i:%s') as "mesSendTime"                      <!--活动推送时间-->
+        ,t1.acti_address as "activityAddress"                                                     <!--活动地址-->
         ,t1.acti_cost as "actiCost"                                                              <!--活动费用-->
         ,t1.acti_organizer as "activityOrganizer"                                                <!--活动主办方-->
         ,t1.acti_number as "activityNumber"                                                      <!--活动人数-->
         ,t1.acti_poster_url as "activityPosterUrl"                                               <!--活动主海报-->
         ,t1.acti_views as "activityViews"                                                        <!--阅读人数-->
         ,t1.acti_like as "activityLike"                                                          <!--感兴趣人数-->
+        ,t1.acti_order as "actiOrder"                                                            <!--活动排序-->
         ,t1.apply_num as "applyNum"                                                              <!--报名人数-->
         ,t1.partic_num as "particNum"                                                            <!--活动参加人数-->
         ,t1.acti_status as "actiStatus"                                                                   <!--活动状态-->

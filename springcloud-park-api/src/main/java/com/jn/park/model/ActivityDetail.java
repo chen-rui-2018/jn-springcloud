@@ -31,9 +31,9 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "报名结束时间")
     private String applyEndTime;
     @ApiModelProperty(value = "活动推送时间")
-    private String mesSenTime;
+    private String mesSendTime;
     @ApiModelProperty(value = "活动地址")
-    private String activityAdress;
+    private String activityAddress;
     @ApiModelProperty(value = "活动费用")
     private String actiCost;
     @ApiModelProperty(value = "活动主办方")
@@ -78,6 +78,8 @@ public class ActivityDetail implements Serializable {
     private String parkName;
     @ApiModelProperty(value = "活动报名是否需要审核(0否1是)")
     private String applyCheck;
+    @ApiModelProperty(value = "活动排序")
+    private String actiOrder;
     @ApiModelProperty(value = "园区列表")
     private List<?> parkCodes;
 
@@ -139,20 +141,20 @@ public class ActivityDetail implements Serializable {
         this.applyEndTime = applyEndTime;
     }
 
-    public String getMesSenTime() {
-        return mesSenTime;
+    public String getMesSendTime() {
+        return mesSendTime;
     }
 
-    public void setMesSenTime(String mesSenTime) {
-        this.mesSenTime = mesSenTime;
+    public void setMesSendTime(String mesSendTime) {
+        this.mesSendTime = mesSendTime;
     }
 
-    public String getActivityAdress() {
-        return activityAdress;
+    public String getActivityAddress() {
+        return activityAddress;
     }
 
-    public void setActivityAdress(String activityAdress) {
-        this.activityAdress = activityAdress;
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
     }
 
     public String getActiCost() {
@@ -337,5 +339,14 @@ public class ActivityDetail implements Serializable {
 
     public void setApplyCheck(String applyCheck) {
         this.applyCheck = applyCheck;
+    }
+
+    public String getActiOrder() {
+
+        return actiOrder;
+    }
+
+    public void setActiOrder(String actiOrder) {
+        this.actiOrder = actiOrder;
     }
 }

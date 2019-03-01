@@ -130,10 +130,10 @@ public class AdvisorServiceImpl implements AdvisorService {
         serviceEvaluationParam.setRatingType(ratingType);
         serviceEvaluationParam.setNeedPage(Boolean.FALSE);
         PaginationData pageData = getServiceRatingInfo(serviceEvaluationParam);
-        List<ServiceRating> servcieRatingInfoList =(List<ServiceRating>) pageData.getRows();
-        if(!servcieRatingInfoList.isEmpty()){
-            setRatingNum(advisorDetailsVo, advisorIntroduction, servcieRatingInfoList);
-            advisorDetailsVo.setServiceRatingList(servcieRatingInfoList);
+        List<ServiceRating> serviceRatingInfoList =(List<ServiceRating>) pageData.getRows();
+        if(!serviceRatingInfoList.isEmpty()){
+            setRatingNum(advisorDetailsVo, advisorIntroduction, serviceRatingInfoList);
+            advisorDetailsVo.setServiceRatingList(serviceRatingInfoList);
         }
 
         //7.更新顾问信息浏览量

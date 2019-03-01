@@ -6,7 +6,6 @@ import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
-import com.jn.enterprise.servicemarket.advisor.enums.CredentialsTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceExperience;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;

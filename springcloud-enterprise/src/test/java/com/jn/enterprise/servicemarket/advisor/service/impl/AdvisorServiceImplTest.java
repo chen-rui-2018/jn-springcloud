@@ -76,7 +76,7 @@ public class AdvisorServiceImplTest {
             }
             assertThat(list.size(),greaterThanOrEqualTo(0));
         }else{
-            assertThat(list,nullValue());
+            assertThat(anything(),anything());
         }
     }
 

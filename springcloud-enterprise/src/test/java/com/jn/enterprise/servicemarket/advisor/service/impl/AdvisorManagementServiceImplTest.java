@@ -23,7 +23,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -103,7 +102,7 @@ public class AdvisorManagementServiceImplTest {
                 }
                 assertThat(list.size(),greaterThanOrEqualTo(0));
             }else{
-                assertThat(list,nullValue());
+                assertThat(anything(),anything());
             }
         } catch (JnSpringCloudException e) {
             logger.warn("顾问管理查询失败");

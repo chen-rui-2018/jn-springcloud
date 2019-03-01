@@ -48,33 +48,30 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
     @Override
     public PaginationData getAdvisorManagementInfoList(AdvisorManagementPortalParam advisorManagementParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        //是否分页
-        boolean needPage=false;
-        //需要分页标识
-        String isPage="1";
         if(advisorManagementParam==null){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
             objects = PageHelper.startPage(pageNum,pageSize, true);
-        }else{
-            if(StringUtils.isNotBlank(advisorManagementParam.getSubmitStartTime())
-                    && StringUtils.isNotBlank(advisorManagementParam.getSubmitEndTime())){
-                int startTime = Integer.parseInt(advisorManagementParam.getSubmitStartTime());
-                int endTime=Integer.parseInt(advisorManagementParam.getSubmitEndTime());
-                if(startTime>endTime){
-                    logger.warn("服务顾问管理提交开始时间：[{}]晚于提交结束时间：[{}]",advisorManagementParam.getSubmitStartTime(),advisorManagementParam.getSubmitEndTime());
-                    throw new JnSpringCloudException(AdvisorExceptionEnum.START_MORE_THEN_END);
-                }
-            }
-            if(isPage.equals(advisorManagementParam.getNeedPage())){
-                needPage=true;
-            }
-            if(needPage){
-                objects = PageHelper.startPage(advisorManagementParam.getPage(),
-                        advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
+            List<AdvisorServiceManagementInfo> advisorManagementInfoList = advisorManagementPortalMapper.getAdvisorManagementInfoList(advisorManagementParam);
+            return new PaginationData(advisorManagementInfoList, objects == null ? 0 : objects.getTotal());
+        }
+        if(StringUtils.isNotBlank(advisorManagementParam.getSubmitStartTime())
+                && StringUtils.isNotBlank(advisorManagementParam.getSubmitEndTime())){
+            int startTime = Integer.parseInt(advisorManagementParam.getSubmitStartTime());
+            int endTime=Integer.parseInt(advisorManagementParam.getSubmitEndTime());
+            if(startTime>endTime){
+                logger.warn("服务顾问管理提交开始时间：[{}]晚于提交结束时间：[{}]",advisorManagementParam.getSubmitStartTime(),advisorManagementParam.getSubmitEndTime());
+                throw new JnSpringCloudException(AdvisorExceptionEnum.START_MORE_THEN_END);
             }
         }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(advisorManagementParam.getNeedPage())){
+            objects = PageHelper.startPage(advisorManagementParam.getPage(),
+                    advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
+        }
+
         List<AdvisorServiceManagementInfo> advisorManagementInfoList = advisorManagementPortalMapper.getAdvisorManagementInfoList(advisorManagementParam);
         return new PaginationData(advisorManagementInfoList, objects == null ? 0 : objects.getTotal());
     }

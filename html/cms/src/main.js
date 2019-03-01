@@ -1,16 +1,10 @@
 import Vue from 'vue'
 
 import Cookies from 'js-cookie'
-import 'babel-polyfill'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-import VueQuillEditor from 'vue-quill-editor'
-import '../static/UE/ueditor.config.js'
-import '../static/UE/ueditor.all.min.js'
-import '../static/UE/lang/zh-cn/zh-cn.js'
-import '../static/UE/ueditor.parse.min.js'
-Vue.use(VueQuillEditor)
+import 'babel-polyfill'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -21,7 +15,7 @@ import '@/assets/icon/css/font-awesome.min.css'
 import App from './App'
 import router from './router'
 import store from './store'
-
+import 'url-search-params-polyfill'
 import i18n from './lang' // Internationalization
 import './icons' // icon
 import './errorLog' // error log

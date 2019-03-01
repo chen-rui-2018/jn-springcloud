@@ -2,8 +2,8 @@ package com.jn.system.dept.dao;
 
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartmentUserPage;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.user.model.SysTUser;
+import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
 import java.util.Map;

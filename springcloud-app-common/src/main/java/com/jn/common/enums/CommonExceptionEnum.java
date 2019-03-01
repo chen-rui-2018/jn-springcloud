@@ -21,11 +21,11 @@ public enum CommonExceptionEnum implements CodeAndMsg {
     /**
      * 编码
      */
-   private String code;
+    private String code;
     /**
      * 信息
      */
-   private String message;
+    private String message;
     @Override
     public String getCode() {
         return code;

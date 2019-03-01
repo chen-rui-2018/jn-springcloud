@@ -5,12 +5,12 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.excel.ExcelUtil;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.system.permission.model.SysRoleUserAdd;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
+import com.jn.system.vo.SysDepartmentPostVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -78,7 +78,7 @@ public class SysUserController extends BaseController {
     public Result deleteSysUser(@Validated @RequestBody SysUserDelete sysUserDelete) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.deleteSysUser(sysUserDelete.getUserIds(),user);
+        sysUserService.deleteSysUser(sysUserDelete.getUserIds(), user);
         return new Result();
     }
 
@@ -90,7 +90,7 @@ public class SysUserController extends BaseController {
         Assert.notNull(sysUser.getId(), "用户id不能为空");
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        sysUserService.updateSysUser(sysUser,user);
+        sysUserService.updateSysUser(sysUser, user);
         return new Result();
     }
 
@@ -183,7 +183,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/exportExcelUserInfo")
     @ApiOperation(value = "导出用户信息", httpMethod = "GET", response = Result.class)
     @RequestMapping(value = "/exportExcelUserInfo", method = RequestMethod.GET)
-    public void getUserInfo(HttpServletResponse response, SysUserPage userPage) {
+    public void exportExcelUserInfo(SysUserPage userPage, HttpServletResponse response) {
         String exportTitle = "帐号,姓名,部门,岗位,岗位类型,邮箱,手机,创建时间";
         String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createdTime";
         userPage.setPage(1);
@@ -193,6 +193,15 @@ public class SysUserController extends BaseController {
         String fileName = "用户信息";
         String sheetName = "用户信息";
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
+    }
+
+    @ControllerLog(doAction = "获取全部有效用户信息")
+    @RequiresPermissions("/system/sysUser/getUserAll")
+    @ApiOperation(value = "获取全部有效用户信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getUserAll")
+    public Result getUserAll(){
+        List<User> userAll = sysUserService.getUserAll();
+        return new Result(userAll);
     }
 
 

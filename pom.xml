@@ -21,8 +21,6 @@
 		<module>springcloud-app-zipkin</module>
         <module>springcloud-app-fastdfs</module>
         <module>springcloud-app-fastdfs-api</module>
-		<module>springcloud-app-stream</module>
-		<module>springcloud-app-stream-demo</module>
 		<module>springcloud-app-admin</module>
 		<module>springcloud-app-system</module>
 		<module>springcloud-app-system-api</module>

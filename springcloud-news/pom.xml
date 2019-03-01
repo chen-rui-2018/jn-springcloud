@@ -14,8 +14,6 @@
     <description>消息(邮件、短信)业务实现</description>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.jn</groupId>
             <artifactId>springcloud-news-api</artifactId>
@@ -41,12 +39,35 @@
 
     </dependencies>
 
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Generate MyBatis Artifacts</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <contexts>
+                        demo
+                    </contexts>
+                    <tableNames>
+
+                    </tableNames>
+                    <verbose>true</verbose>
+                </configuration>
             </plugin>
         </plugins>
     </build>

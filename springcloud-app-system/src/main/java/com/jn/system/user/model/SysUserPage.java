@@ -24,7 +24,7 @@ public class SysUserPage extends Page implements Serializable {
     @ApiModelProperty("名称")
     private String name;
 
-    @ApiModelProperty("状态")
+    @ApiModelProperty(value = "状态",example = "0")
     private Byte recordStatus;
 
     @ApiModelProperty("部门id")

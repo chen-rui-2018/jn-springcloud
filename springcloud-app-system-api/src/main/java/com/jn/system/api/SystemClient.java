@@ -89,4 +89,30 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getUserFilePermission", method = RequestMethod.POST)
     Result<Boolean> getUserFilePermission(@RequestBody String userId, @RequestParam("fileUrl") String fileUrl);
 
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserAll", method = RequestMethod.POST)
+    Result getUserAll();
+
+    /**
+     * 添加用户
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/addSysUser", method = RequestMethod.POST)
+    Result addSysUser(@RequestBody User user);
+
+    /**
+     * 根据用户ID或者账号，更新用户信息
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/updateSysUser", method = RequestMethod.POST)
+    Result updateSysUser(@RequestBody User user);
+
+
+
 }

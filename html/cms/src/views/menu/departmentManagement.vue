@@ -64,9 +64,10 @@
 </template>
 
 <script>
-import {
-  getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById, updateAllMenu, getOldData
-} from '@/api/Permission-model/departmentManagement'
+import { api, paramApi } from '@/api/Permission-model/userManagement'
+// import {
+//   getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById, updateAllMenu, getOldData
+// } from '@/api/Permission-model/departmentManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -74,8 +75,8 @@ export default {
       if (!reg.test(value)) {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
-        if (this.oldDepartmentName !== this.departmentForm.departmentName) {
-          checkDepartmentName({ departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
+        if (this.dialogStatus === '新增部门') {
+          paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -85,7 +86,19 @@ export default {
             }
           })
         } else {
-          callback()
+          if (this.oldDepartmentName !== this.departmentForm.departmentName) {
+            paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
+              if (res.data.code === '0000') {
+                if (res.data.data === 'success') {
+                  callback()
+                } else {
+                  callback(new Error('部门名称已重复'))
+                }
+              }
+            })
+          } else {
+            callback()
+          }
         }
       }
     }
@@ -168,7 +181,7 @@ export default {
       }
     },
     cencalEdit(formName) {
-      getOldData(this.currentId).then(res => {
+      paramApi('system/sysDepartment/getChildDepartmentByParentId', this.currentId, 'parentId').then(res => {
         if (res.data.code === '0000') {
           this.subForm.departmentData = res.data.data
           this.$refs['subForm'].clearValidate()
@@ -189,11 +202,11 @@ export default {
           parentId: this.currentId
         })
       })
+      this.isDisabled = true
       this.$refs['subForm'].validate(valid => {
         if (valid) {
-          this.isDisabled = true
           // 调用接口发送请求 进行批量更新
-          updateAllMenu(newData).then(res => {
+          api('system/sysDepartment/addDepartmentBatch', newData).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '保存成功',
@@ -204,6 +217,8 @@ export default {
             // 刷新页面显示
             this.initList()
           })
+        } else {
+          this.isDisabled = false
         }
       })
     },
@@ -235,7 +250,7 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          deleteDepartmentById(id).then(res => {
+          paramApi('system/sysDepartment/delete', id, 'departmentId').then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '删除成功',
@@ -280,7 +295,7 @@ export default {
           // 将对话框隐藏
           this.departmentDialogVisible = false
           // // 调用接口发送请求
-          updateDepartment(this.departmentForm).then(res => {
+          api('system/sysDepartment/update', this.departmentForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '编辑成功',
@@ -303,7 +318,7 @@ export default {
       this.$refs['departmentForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          createDepartment(this.departmentForm).then(res => {
+          api('system/sysDepartment/add', this.departmentForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
@@ -347,7 +362,7 @@ export default {
     // 更新右侧页面
     updataRight() {
       if (this.location === '0') {
-        getOldData(this.checkoutId).then(res => {
+        paramApi('system/sysDepartment/getChildDepartmentByParentId', this.checkoutId, 'parentId').then(res => {
           if (res.data.code === '0000') {
             this.subForm.departmentData = res.data.data
           } else {
@@ -359,7 +374,7 @@ export default {
     // 初始化项目
     initList() {
       this.listLoading = true
-      getDepartment().then(res => {
+      api('system/sysDepartment/findDepartmentAllByLevel').then(res => {
         if (res.data.code === '0000') {
           this.departmentList = res.data.data
         } else {
@@ -378,10 +393,11 @@ export default {
   display: flex;
 .department-left{
   height: 100%;
+  width:270px;
   .el-tree{
     height: 100%;
-    overflow: auto;
-  padding: 20px;
+    // overflow: auto;
+  // padding: 20px;
   }
 }
  .custom-tree-node {
@@ -396,10 +412,12 @@ export default {
 </style>
 <style lang="scss">
  .department-right{
+   flex:1;
    height: 100%;
    width: 100%;
    overflow:auto;
-    padding: 20px;
+   margin-left:30px;
+    // padding: 20px;
     .department-content{
       display: flex;
       align-items: center;

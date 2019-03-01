@@ -1,7 +1,7 @@
 package com.jn.system.user.dao;
 
 
-import com.jn.system.permission.model.SysRole;
+import com.jn.system.model.SysRole;
 import com.jn.system.permission.model.SysRoleUserPage;
 import com.jn.system.user.model.SysTUser;
 import com.jn.system.user.model.SysUserRole;

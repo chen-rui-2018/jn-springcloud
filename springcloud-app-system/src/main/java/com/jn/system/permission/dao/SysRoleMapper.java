@@ -1,6 +1,6 @@
 package com.jn.system.permission.dao;
 
-import com.jn.system.permission.model.SysRole;
+import com.jn.system.model.SysRole;
 import com.jn.system.permission.model.SysRolePage;
 import com.jn.system.permission.vo.SysRoleVO;
 

@@ -1,5 +1,6 @@
 package com.jn.system.permission.dao;
 
+import com.jn.system.model.SysRole;
 import com.jn.system.permission.entity.TbSysRolePermission;
 import com.jn.system.permission.model.*;
 

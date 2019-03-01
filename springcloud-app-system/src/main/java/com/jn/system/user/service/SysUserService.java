@@ -1,9 +1,9 @@
 package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.model.User;
 import com.jn.system.user.model.*;
+import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
 
@@ -34,17 +34,19 @@ public interface SysUserService {
 
     /**
      * 逻辑删除用户
+     *
      * @param ids
      * @param user 当前用户信息
      */
-    void deleteSysUser(String[] ids,User user);
+    void deleteSysUser(String[] ids, User user);
 
     /**
      * 更新用户信息
+     *
      * @param sysUser
-     * @param user 当前用户信息
+     * @param user    当前用户信息
      */
-    void updateSysUser(SysUser sysUser,User user);
+    void updateSysUser(SysUser sysUser, User user);
 
     /**
      * 查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息
@@ -111,4 +113,11 @@ public interface SysUserService {
     String checkUserName(String account);
 
     List<User> findTByT(User user);
+
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    List<User> getUserAll();
 }

@@ -117,7 +117,7 @@ public class ActivityTypeServiceImplTest {
     @Test
     public void findActivityTypeListByState() {
         activityTypeQuery = new ActivityTypeQuery();
-        activityTypeQuery.setStatus(status);
+        activityTypeQuery.setTypeStatus(status);
         activityTypeQuery.setPage(page);
         activityTypeQuery.setRows(rows);
         PaginationData data = activityTypeService.findActivityTypeListByState(activityTypeQuery, true);

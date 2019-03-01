@@ -97,6 +97,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         for(TbServiceCertificateType tbServiceCertificateType:certificateTypeList){
             if(serviceHonor.getCertificateType().equalsIgnoreCase(tbServiceCertificateType.getCertificateCode())){
                 isExist=true;
+                break;
             }
         }
         //证书类型存在
@@ -112,33 +113,34 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
                     .andAdvisorAccountEqualTo(serviceHonor.getAdvisorAccount())
                     .andRecordStatusEqualTo(recordStatus);
             List<TbServiceHonor> tbServiceHonorList = tbServiceHonorMapper.selectByExample(example);
-            if(tbServiceHonorList.isEmpty()){
+             if(tbServiceHonorList.isEmpty()){
                 logger.warn("当前荣誉资质信息[id:{},account:{}]在系统中已失效或已删除",serviceHonor.getId(),serviceHonor.getAdvisorAccount());
                 throw new JnSpringCloudException(AdvisorExceptionEnum.HONOR_INFO_NOT_EXIST);
             }
             TbServiceHonor tbServiceHonor=tbServiceHonorList.get(0);
+             //把创建时间，创建人，数据状态取出赋值给前端传递对象
+            serviceHonor.setCreatedTime(tbServiceHonor.getCreatedTime());
+            serviceHonor.setCreatorAccount(tbServiceHonor.getCreatorAccount());
+            serviceHonor.setRecordStatus(tbServiceHonor.getRecordStatus());
             BeanUtils.copyProperties(serviceHonor, tbServiceHonor);
-            if(serviceHonor.getGetTime()!=null){
-                tbServiceHonor.setGetTime(DateUtils.parseDate(serviceHonor.getGetTime()));
-            }
             //修改时间
             tbServiceHonor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
-            tbServiceHonor.setModifierAccount(serviceHonor.getModifierAccount());
+            tbServiceHonor.setModifierAccount(serviceHonor.getAdvisorAccount());
             tbServiceHonorMapper.updateByExample(tbServiceHonor, example);
         }else{
             //没有主键id，新增
             TbServiceHonor tbServiceHonor=new TbServiceHonor();
+            BeanUtils.copyProperties(serviceHonor, tbServiceHonor);
             //主键id
             tbServiceHonor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            BeanUtils.copyProperties(serviceHonor, tbServiceHonor);
-            if(serviceHonor.getGetTime()!=null){
-                tbServiceHonor.setGetTime(DateUtils.parseDate(serviceHonor.getGetTime()));
-            }
             //创建时间
             tbServiceHonor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //创建人
             tbServiceHonor.setCreatorAccount(serviceHonor.getAdvisorAccount());
+            //数据状态
+            byte recordStatus=1;
+            tbServiceHonor.setRecordStatus(recordStatus);
             tbServiceHonorMapper.insertSelective(tbServiceHonor);
         }
     }
@@ -153,7 +155,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     public List<TbServiceCertificateType> getCertificateTypeList(String certificateType) {
         byte recordStatus=1;
         TbServiceCertificateTypeCriteria example=new TbServiceCertificateTypeCriteria();
-        example.createCriteria().andCertificateTypeEqualTo(certificateType).andRecordStatusEqualTo(recordStatus);
+        if(StringUtils.isBlank(certificateType)){
+            example.createCriteria().andRecordStatusEqualTo(recordStatus);
+        }else{
+            example.createCriteria().andCertificateTypeEqualTo(certificateType).andRecordStatusEqualTo(recordStatus);
+        }
         return tbServiceCertificateTypeMapper.selectByExample(example);
     }
 
@@ -174,13 +180,14 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
                 List<TbServiceExperience> tbServiceExperienceList = tbServiceExperienceMapper.selectByExample(example);
             if(tbServiceExperienceList.isEmpty()){
                 logger.warn("当前服务经历信息[id:{},account:{}]在系统中已失效或已删除",serviceExperience.getId(),serviceExperience.getAdvisorAccount());
-                throw new JnSpringCloudException(AdvisorExceptionEnum.HONOR_INFO_NOT_EXIST);
+                throw new JnSpringCloudException(AdvisorExceptionEnum.EXPERIENCE_INFO_NOT_EXIST);
             }
             TbServiceExperience tbServiceExperience = tbServiceExperienceList.get(0);
+            //把创建时间，创建人，数据状态取出赋值给前端传递对象
+            serviceExperience.setCreatedTime(tbServiceExperience.getCreatedTime());
+            serviceExperience.setCreatorAccount(tbServiceExperience.getCreatorAccount());
+            serviceExperience.setRecordStatus(tbServiceExperience.getRecordStatus());
             BeanUtils.copyProperties(serviceExperience, tbServiceExperience);
-            if(serviceExperience.getWorkTime()!=null){
-                tbServiceExperience.setWorkTime(DateUtils.parseDate(serviceExperience.getWorkTime()));
-            }
             //修改时间
             tbServiceExperience.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
@@ -189,16 +196,16 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         }else{
             //没有主键id,新增
             TbServiceExperience tbServiceExperience=new TbServiceExperience();
+            BeanUtils.copyProperties(serviceExperience, tbServiceExperience);
             //主键id
             tbServiceExperience.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            BeanUtils.copyProperties(serviceExperience, tbServiceExperience);
-            if(serviceExperience.getWorkTime()!=null){
-                tbServiceExperience.setWorkTime(DateUtils.parseDate(serviceExperience.getWorkTime()));
-            }
             //创建时间
             tbServiceExperience.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //创建人
             tbServiceExperience.setCreatorAccount(serviceExperience.getAdvisorAccount());
+            //数据状态
+            byte recordStatus=1;
+            tbServiceExperience.setRecordStatus(recordStatus);
             tbServiceExperienceMapper.insertSelective(tbServiceExperience);
         }
     }
@@ -223,28 +230,31 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
                 throw new JnSpringCloudException(AdvisorExceptionEnum.PROJECT_EXPERIENCE_INFO_NOT_EXIST);
             }
             TbServiceProExper tbServiceProExper = tbServiceProExperList.get(0);
+            //把创建时间，创建人，数据状态取出赋值给前端传递对象
+            serviceProjectExperience.setCreatedTime(tbServiceProExper.getCreatedTime());
+            serviceProjectExperience.setCreatorAccount(tbServiceProExper.getCreatorAccount());
+            serviceProjectExperience.setRecordStatus(tbServiceProExper.getRecordStatus());
             BeanUtils.copyProperties(serviceProjectExperience, tbServiceProExper);
-            if(serviceProjectExperience.getProjectTime()!=null){
-                tbServiceProExper.setProjectTime(DateUtils.parseDate(serviceProjectExperience.getProjectTime()));
-            }
             //修改时间
             tbServiceProExper.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
             tbServiceProExper.setModifierAccount(tbServiceProExper.getAdvisorAccount());
+            //数据状态
+            tbServiceProExper.setRecordStatus(recordStatus);
             tbServiceProExperMapper.updateByExample(tbServiceProExper, example);
         }else{
             //没有主键id,新增
             TbServiceProExper tbServiceProExper=new TbServiceProExper();
+            BeanUtils.copyProperties(serviceProjectExperience, tbServiceProExper);
             //主键id
             tbServiceProExper.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-            BeanUtils.copyProperties(serviceProjectExperience, tbServiceProExper);
-            if(serviceProjectExperience.getProjectTime()!=null){
-                tbServiceProExper.setProjectTime(DateUtils.parseDate(serviceProjectExperience.getProjectTime()));
-            }
             //创建时间
             tbServiceProExper.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //创建人
             tbServiceProExper.setCreatorAccount(serviceProjectExperience.getAdvisorAccount());
+            //数据状态
+            byte recordStatus=1;
+            tbServiceProExper.setRecordStatus(recordStatus);
             tbServiceProExperMapper.insertSelective(tbServiceProExper);
         }
     }

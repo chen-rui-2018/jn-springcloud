@@ -12,7 +12,7 @@ public class TbServiceExperience implements Serializable {
 
     private String position;
 
-    private Date workTime;
+    private String workTime;
 
     private Date createdTime;
 
@@ -58,12 +58,12 @@ public class TbServiceExperience implements Serializable {
         this.position = position == null ? null : position.trim();
     }
 
-    public Date getWorkTime() {
+    public String getWorkTime() {
         return workTime;
     }
 
-    public void setWorkTime(Date workTime) {
-        this.workTime = workTime;
+    public void setWorkTime(String workTime) {
+        this.workTime = workTime == null ? null : workTime.trim();
     }
 
     public Date getCreatedTime() {

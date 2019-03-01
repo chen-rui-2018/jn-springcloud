@@ -27,7 +27,7 @@ public class OrgColleagueInfo extends Page implements Serializable {
     @ApiModelProperty(value = "担任职务")
     private String position;
     @ApiModelProperty(value = "机构身份")
-    private String orgIndentity;
+    private String orgIdentity;
     @ApiModelProperty(value = "入驻日期")
     private String entryDate;
 
@@ -79,12 +79,12 @@ public class OrgColleagueInfo extends Page implements Serializable {
         this.position = position;
     }
 
-    public String getOrgIndentity() {
-        return orgIndentity;
+    public String getOrgIdentity() {
+        return orgIdentity;
     }
 
-    public void setOrgIndentity(String orgIndentity) {
-        this.orgIndentity = orgIndentity;
+    public void setOrgIdentity(String orgIdentity) {
+        this.orgIdentity = orgIdentity;
     }
 
     public String getEntryDate() {

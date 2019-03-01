@@ -13,8 +13,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ApprovalQuery",description = "审批顾问信息入参")
-public class ApprovalQuery extends Page implements Serializable {
+@ApiModel(value = "ApprovalParam",description = "审批顾问信息入参")
+public class ApprovalParam extends Page implements Serializable {
     @ApiModelProperty(value = "顾问账号")
     @NotNull(message = "顾问账号不能为空")
     private String advisorAccount;

@@ -2,7 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.vo;
 
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
-import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
+import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -30,7 +30,7 @@ public class AdvisorDetailsVo implements Serializable {
     private List<ServiceProjectExperience> serviceProjectExperienceList;
     @ApiModelProperty(value = "服务评价)")
     private List<ServiceRating> serviceRatingList;
-    private List<WebServiceProductDetails> webServiceProductDetailsList;
+    private List<AdvisorProductInfo> advisorProductInfoList;
     @ApiModelProperty(value = "好评数")
     private int praiseNum;
     @ApiModelProperty(value = "中评数")
@@ -91,12 +91,12 @@ public class AdvisorDetailsVo implements Serializable {
         this.serviceRatingList = serviceRatingList;
     }
 
-    public List<WebServiceProductDetails> getWebServiceProductDetailsList() {
-        return webServiceProductDetailsList;
+    public List<AdvisorProductInfo> getAdvisorProductInfoList() {
+        return advisorProductInfoList;
     }
 
-    public void setWebServiceProductDetailsList(List<WebServiceProductDetails> webServiceProductDetailsList) {
-        this.webServiceProductDetailsList = webServiceProductDetailsList;
+    public void setAdvisorProductInfoList(List<AdvisorProductInfo> advisorProductInfoList) {
+        this.advisorProductInfoList = advisorProductInfoList;
     }
 
     public int getPraiseNum() {

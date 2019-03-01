@@ -4,7 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueParam;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -42,14 +42,14 @@ public class OrgColleagueController extends BaseController {
     @ApiOperation(value = "机构同事列表查询", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getOrgColleagueList")
     @RequiresPermissions("/serviceMarket/orgColleagueController/getOrgColleagueList")
-    public Result getOrgColleagueList(@RequestBody OrgColleagueQuery orgColleagueQuery){
+    public Result getOrgColleagueList(@RequestBody OrgColleagueParam orgColleagueParam){
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null){
             logger.warn("机构同事查询获取当前登录用户信息失败");
             return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        orgColleagueService.getOrgColleagueList(user.getAccount(),orgColleagueQuery);
+        orgColleagueService.getOrgColleagueList(user.getAccount(), orgColleagueParam);
         return new Result();
     }
 

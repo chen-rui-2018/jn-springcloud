@@ -28,8 +28,8 @@ public class ServiceHonor extends Page implements Serializable {
     @ApiModelProperty(value = "证书类型")
     @NotNull(message="证书类型不能为空")
     private String certificateType;
-    @ApiModelProperty(value = "获得时间(比如2018-01)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))-((0?[1-9])|(1[0-2]))",
+    @ApiModelProperty(value = "获得时间(格式：201903)")
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
             message = "{getTime:'获得时间格式错误'}")
     private String getTime;
     @ApiModelProperty(value = "证书证件")

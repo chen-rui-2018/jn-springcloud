@@ -11,8 +11,8 @@ import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.advisor.enums.ApprovalTypeEnum;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
-import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
@@ -149,57 +149,57 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
 
     /**
      * 顾问管理
-     * @param advisorManagementQuery  顾问管理查询页面入参（顾问姓名，审批状态）
+     * @param advisorManagementParam  顾问管理查询页面入参（顾问姓名，审批状态）
      * @return
      */
     @ServiceLog(doAction = "顾问管理")
     @Override
-    public PaginationData getAdvisorManagementInfo(AdvisorManagementQuery advisorManagementQuery) {
+    public PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam) {
         com.github.pagehelper.Page<Object> objects = null;
         boolean needPage=false;
         //需要分页标识
         String pageValue="1";
-        if(pageValue.equals(advisorManagementQuery.getNeedPage())){
+        if(pageValue.equals(advisorManagementParam.getNeedPage())){
             needPage=true;
         }
         if(needPage){
-            objects = PageHelper.startPage(advisorManagementQuery.getPage(),
-                    advisorManagementQuery.getRows() == 0 ? 15 : advisorManagementQuery.getRows(), true);
+            objects = PageHelper.startPage(advisorManagementParam.getPage(),
+                    advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
         }
-        List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisors(advisorManagementQuery);
+        List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisors(advisorManagementParam);
         return new PaginationData(tbServiceAdvisorList, objects == null ? 0 : objects.getTotal());
     }
 
 
     /**
      * 根据查询条件获取顾问信息
-     * @param advisorManagementQuery
+     * @param advisorManagementParam
      * @return
      */
     @ServiceLog(doAction ="根据查询条件获取顾问信息")
-    private List<TbServiceAdvisor> getTbServiceAdvisors(AdvisorManagementQuery advisorManagementQuery) {
+    private List<TbServiceAdvisor> getTbServiceAdvisors(AdvisorManagementParam advisorManagementParam) {
         //审批状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)
         //默认值为 1：待审批
         String approvalStatus="1";
-        if(ApprovalTypeEnum.PENDING.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+        if(ApprovalTypeEnum.PENDING.getCode().equals(advisorManagementParam.getApprovalStatus())){
             //审批状态为空或审批状态为"待审批"   ignore
-        }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+        }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(advisorManagementParam.getApprovalStatus())){
             //审批状态为"审批不通过"
             approvalStatus="3";
-        }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+        }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementParam.getApprovalStatus())){
             //审批状态为"未反馈"
             approvalStatus="0";
-        }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+        }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementParam.getApprovalStatus())){
             //审批状态为"已拒绝"
             approvalStatus="-1";
         }else{
-            logger.warn("顾问管理审批状态{}在系统中不存在",advisorManagementQuery.getApprovalStatus());
+            logger.warn("顾问管理审批状态{}在系统中不存在", advisorManagementParam.getApprovalStatus());
             throw new JnSpringCloudException(AdvisorExceptionEnum.APPROVAL_STATUS_NOT_EXIST);
         }
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         //顾问姓名不为空，模糊查询顾问名称
-        if(StringUtils.isNotBlank(advisorManagementQuery.getAdvisorName())){
-            example.createCriteria().andApprovalStatusEqualTo(approvalStatus).andAdvisorNameLike(advisorManagementQuery.getAdvisorName());
+        if(StringUtils.isNotBlank(advisorManagementParam.getAdvisorName())){
+            example.createCriteria().andApprovalStatusEqualTo(approvalStatus).andAdvisorNameLike(advisorManagementParam.getAdvisorName());
         }else{
             example.createCriteria().andApprovalStatusEqualTo(approvalStatus);
         }
@@ -211,10 +211,10 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(advisor.getApprovalStatus())){
                 //审批状态为"审批不通过"
                 advisor.setApprovalStatus(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getMessage());
-            }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+            }else if(ApprovalTypeEnum.NO_FEEDBACK.getCode().equals(advisorManagementParam.getApprovalStatus())){
                 //审批状态为"未反馈"
                 advisor.setApprovalStatus(ApprovalTypeEnum.NO_FEEDBACK.getMessage());
-            }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementQuery.getApprovalStatus())){
+            }else if(ApprovalTypeEnum.REJECTED.getCode().equals(advisorManagementParam.getApprovalStatus())){
                 //审批状态为"已拒绝"
                 advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getMessage());
             }
@@ -224,39 +224,39 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
 
     /**
      * 审批顾问填写信息
-     * @param approvalQuery  审批顾问信息入参(顾问账号，审批结果，审批说明)
+     * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
     @ServiceLog(doAction = "审批顾问填写信息")
     @Override
-    public void approvalAdvisorInfo(ApprovalQuery approvalQuery) {
+    public void approvalAdvisorInfo(ApprovalParam approvalParam) {
         //根据顾问账号判断待审批状态的顾问在系统中是否存在
         //待审批状态值“1”
         String approvalStatus="1";
-        long result = countAdvisorByApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus);
+        long result = countAdvisorByApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus);
         //待审批用户信息存在判断标识
         int size=1;
         if(result!=size){
-            logger.warn("当前顾问[{}]在系统中不存在或状态非“待审批”",approvalQuery.getAdvisorAccount());
+            logger.warn("当前顾问[{}]在系统中不存在或状态非“待审批”", approvalParam.getAdvisorAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
         }
         //根据审批结果更新顾问信息审批状态
-        if(ApprovalTypeEnum.APPROVED.getCode().equals(approvalQuery.getApprovalResults())){
+        if(ApprovalTypeEnum.APPROVED.getCode().equals(approvalParam.getApprovalResults())){
             //审批结果为“审批通过”，根据顾问账号更新审批状态信息
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="2";
-            updateApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus,approvalQuery.getApprovalDesc());
-        }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(approvalQuery.getApprovalResults())){
+            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
+        }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(approvalParam.getApprovalResults())){
             //审批结果为“审批不通过”，根据顾问账号更新审批状态信息
             //审批不通过
-            if(StringUtils.isBlank(approvalQuery.getApprovalDesc())){
+            if(StringUtils.isBlank(approvalParam.getApprovalDesc())){
                 logger.warn("审批结果为“审批不通过”时，审批说明不能为空");
                 throw new JnSpringCloudException(AdvisorExceptionEnum.APPROVAL_DESC_NOT_NULL);
             }
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="3";
-            updateApprovalStatus(approvalQuery.getAdvisorAccount(),approvalStatus,approvalQuery.getApprovalDesc());
+            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
         }else{
-            logger.warn("审批顾问[{}]填写资料的审批状态值与系统不符",approvalQuery.getAdvisorAccount());
+            logger.warn("审批顾问[{}]填写资料的审批状态值与系统不符", approvalParam.getAdvisorAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
         }
     }

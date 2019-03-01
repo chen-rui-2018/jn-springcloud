@@ -395,52 +395,62 @@ public class TbServiceProExperCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeEqualTo(Date value) {
+        public Criteria andProjectTimeEqualTo(String value) {
             addCriterion("project_time =", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeNotEqualTo(Date value) {
+        public Criteria andProjectTimeNotEqualTo(String value) {
             addCriterion("project_time <>", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeGreaterThan(Date value) {
+        public Criteria andProjectTimeGreaterThan(String value) {
             addCriterion("project_time >", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andProjectTimeGreaterThanOrEqualTo(String value) {
             addCriterion("project_time >=", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeLessThan(Date value) {
+        public Criteria andProjectTimeLessThan(String value) {
             addCriterion("project_time <", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeLessThanOrEqualTo(Date value) {
+        public Criteria andProjectTimeLessThanOrEqualTo(String value) {
             addCriterion("project_time <=", value, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeIn(List<Date> values) {
+        public Criteria andProjectTimeLike(String value) {
+            addCriterion("project_time like", value, "projectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTimeNotLike(String value) {
+            addCriterion("project_time not like", value, "projectTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTimeIn(List<String> values) {
             addCriterion("project_time in", values, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeNotIn(List<Date> values) {
+        public Criteria andProjectTimeNotIn(List<String> values) {
             addCriterion("project_time not in", values, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeBetween(Date value1, Date value2) {
+        public Criteria andProjectTimeBetween(String value1, String value2) {
             addCriterion("project_time between", value1, value2, "projectTime");
             return (Criteria) this;
         }
 
-        public Criteria andProjectTimeNotBetween(Date value1, Date value2) {
+        public Criteria andProjectTimeNotBetween(String value1, String value2) {
             addCriterion("project_time not between", value1, value2, "projectTime");
             return (Criteria) this;
         }

@@ -1,7 +1,7 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueParam;
 
 /**
  * 机构同事
@@ -14,10 +14,10 @@ public interface OrgColleagueService {
     /**
      * 机构同事列表查询
      * @param account  当前登录用户账号
-     * @param orgColleagueQuery 机构同事列表查询入参（是否分页）
+     * @param orgColleagueParam 机构同事列表查询入参（是否分页）
      * @return
      */
-    PaginationData getOrgColleagueList(String account, OrgColleagueQuery orgColleagueQuery);
+    PaginationData getOrgColleagueList(String account, OrgColleagueParam orgColleagueParam);
 
     /**
      * 设置为联系人

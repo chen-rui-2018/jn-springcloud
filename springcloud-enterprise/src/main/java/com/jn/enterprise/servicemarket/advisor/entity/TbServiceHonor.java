@@ -12,7 +12,7 @@ public class TbServiceHonor implements Serializable {
 
     private String certificateType;
 
-    private Date getTime;
+    private String getTime;
 
     private String certificatePhoto;
 
@@ -60,12 +60,12 @@ public class TbServiceHonor implements Serializable {
         this.certificateType = certificateType == null ? null : certificateType.trim();
     }
 
-    public Date getGetTime() {
+    public String getGetTime() {
         return getTime;
     }
 
-    public void setGetTime(Date getTime) {
-        this.getTime = getTime;
+    public void setGetTime(String getTime) {
+        this.getTime = getTime == null ? null : getTime.trim();
     }
 
     public String getCertificatePhoto() {

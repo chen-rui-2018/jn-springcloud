@@ -29,8 +29,8 @@ public class ServiceProjectExperience extends Page implements Serializable {
     @ApiModelProperty(value = "项目名称")
     @NotNull(message="项目名称不能为空")
     private String projectName;
-    @ApiModelProperty(value = "项目时间")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))-((0?[1-9])|(1[0-2]))",
+    @ApiModelProperty(value = "项目时间(格式：201903)")
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
             message = "{projectTime:'项目时间格式错误'}")
     private String projectTime;
     @ApiModelProperty(value = "个人职责")

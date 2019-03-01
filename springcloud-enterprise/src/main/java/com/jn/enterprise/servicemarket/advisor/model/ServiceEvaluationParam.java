@@ -13,8 +13,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceEvaluationQuery",description = "服务评价信息查询入参")
-public class ServiceEvaluationQuery  extends Page implements Serializable {
+@ApiModel(value = "ServiceEvaluationParam",description = "服务评价信息查询入参")
+public class ServiceEvaluationParam extends Page implements Serializable {
     @ApiModelProperty(value = "服务顾问账号")
     @NotBlank(message = "服务顾问账号不能为空！")
     private String advisorAccount;

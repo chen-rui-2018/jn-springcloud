@@ -6,7 +6,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationQuery;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -53,7 +54,7 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务顾问详情")
     @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getServiceAdvisorInfo")
-    public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true) String advisorAccount){
+    public Result getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true)@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);
@@ -62,8 +63,8 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务评价")
     @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getServiceRatingInfo")
-    public Result getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationQuery serviceEvaluationQuery){
-        PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
+    public Result getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationParam serviceEvaluationParam){
+        PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);
         return  new Result(serviceRatingInfo);
     }
 

@@ -53,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        require
+                        advisor
                     </contexts>
                     <tableNames>
-                        tb_service_require
+                        tb_service_pro_exper
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

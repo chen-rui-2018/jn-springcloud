@@ -395,52 +395,62 @@ public class TbServiceExperienceCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeEqualTo(Date value) {
+        public Criteria andWorkTimeEqualTo(String value) {
             addCriterion("work_time =", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeNotEqualTo(Date value) {
+        public Criteria andWorkTimeNotEqualTo(String value) {
             addCriterion("work_time <>", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeGreaterThan(Date value) {
+        public Criteria andWorkTimeGreaterThan(String value) {
             addCriterion("work_time >", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andWorkTimeGreaterThanOrEqualTo(String value) {
             addCriterion("work_time >=", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeLessThan(Date value) {
+        public Criteria andWorkTimeLessThan(String value) {
             addCriterion("work_time <", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeLessThanOrEqualTo(Date value) {
+        public Criteria andWorkTimeLessThanOrEqualTo(String value) {
             addCriterion("work_time <=", value, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeIn(List<Date> values) {
+        public Criteria andWorkTimeLike(String value) {
+            addCriterion("work_time like", value, "workTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkTimeNotLike(String value) {
+            addCriterion("work_time not like", value, "workTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkTimeIn(List<String> values) {
             addCriterion("work_time in", values, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeNotIn(List<Date> values) {
+        public Criteria andWorkTimeNotIn(List<String> values) {
             addCriterion("work_time not in", values, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeBetween(Date value1, Date value2) {
+        public Criteria andWorkTimeBetween(String value1, String value2) {
             addCriterion("work_time between", value1, value2, "workTime");
             return (Criteria) this;
         }
 
-        public Criteria andWorkTimeNotBetween(Date value1, Date value2) {
+        public Criteria andWorkTimeNotBetween(String value1, String value2) {
             addCriterion("work_time not between", value1, value2, "workTime");
             return (Criteria) this;
         }

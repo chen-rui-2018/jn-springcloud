@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
-    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="position" jdbcType="VARCHAR" property="position" />
-    <result column="work_time" jdbcType="VARCHAR" property="workTime" />
+<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.TbServiceCertificateTypeMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType">
+    <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="certificate_code" jdbcType="VARCHAR" property="certificateCode" />
+    <result column="certificate_name" jdbcType="VARCHAR" property="certificateName" />
+    <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -72,16 +71,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, advisor_account, company_name, position, work_time, created_time, creator_account, 
+    id, certificate_code, certificate_name, certificate_type, created_time, creator_account, 
     modified_time, modifier_account, record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateTypeCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_service_experience
+    from tb_service_certificate_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,49 +88,36 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_service_experience
-    where id = #{id,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_service_experience
-    where id = #{id,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria">
-    delete from tb_service_experience
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateTypeCriteria">
+    delete from tb_service_certificate_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    insert into tb_service_experience (id, advisor_account, company_name, 
-      position, work_time, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
-    values (#{id,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{position,jdbcType=VARCHAR}, #{workTime,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType">
+    insert into tb_service_certificate_type (id, certificate_code, certificate_name, 
+      certificate_type, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{certificateCode,jdbcType=VARCHAR}, #{certificateName,jdbcType=VARCHAR}, 
+      #{certificateType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    insert into tb_service_experience
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType">
+    insert into tb_service_certificate_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="advisorAccount != null">
-        advisor_account,
+      <if test="certificateCode != null">
+        certificate_code,
       </if>
-      <if test="companyName != null">
-        company_name,
+      <if test="certificateName != null">
+        certificate_name,
       </if>
-      <if test="position != null">
-        position,
-      </if>
-      <if test="workTime != null">
-        work_time,
+      <if test="certificateType != null">
+        certificate_type,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -153,17 +139,14 @@
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="advisorAccount != null">
-        #{advisorAccount,jdbcType=VARCHAR},
+      <if test="certificateCode != null">
+        #{certificateCode,jdbcType=VARCHAR},
       </if>
-      <if test="companyName != null">
-        #{companyName,jdbcType=VARCHAR},
+      <if test="certificateName != null">
+        #{certificateName,jdbcType=VARCHAR},
       </if>
-      <if test="position != null">
-        #{position,jdbcType=VARCHAR},
-      </if>
-      <if test="workTime != null">
-        #{workTime,jdbcType=VARCHAR},
+      <if test="certificateType != null">
+        #{certificateType,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -182,29 +165,26 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria" resultType="java.lang.Long">
-    select count(*) from tb_service_experience
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateTypeCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_certificate_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_service_experience
+    update tb_service_certificate_type
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
-      <if test="record.advisorAccount != null">
-        advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
+      <if test="record.certificateCode != null">
+        certificate_code = #{record.certificateCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.companyName != null">
-        company_name = #{record.companyName,jdbcType=VARCHAR},
+      <if test="record.certificateName != null">
+        certificate_name = #{record.certificateName,jdbcType=VARCHAR},
       </if>
-      <if test="record.position != null">
-        position = #{record.position,jdbcType=VARCHAR},
-      </if>
-      <if test="record.workTime != null">
-        work_time = #{record.workTime,jdbcType=VARCHAR},
+      <if test="record.certificateType != null">
+        certificate_type = #{record.certificateType,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -227,12 +207,11 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_service_experience
+    update tb_service_certificate_type
     set id = #{record.id,jdbcType=VARCHAR},
-      advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
-      company_name = #{record.companyName,jdbcType=VARCHAR},
-      position = #{record.position,jdbcType=VARCHAR},
-      work_time = #{record.workTime,jdbcType=VARCHAR},
+      certificate_code = #{record.certificateCode,jdbcType=VARCHAR},
+      certificate_name = #{record.certificateName,jdbcType=VARCHAR},
+      certificate_type = #{record.certificateType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -241,51 +220,5 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    update tb_service_experience
-    <set>
-      <if test="advisorAccount != null">
-        advisor_account = #{advisorAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="companyName != null">
-        company_name = #{companyName,jdbcType=VARCHAR},
-      </if>
-      <if test="position != null">
-        position = #{position,jdbcType=VARCHAR},
-      </if>
-      <if test="workTime != null">
-        work_time = #{workTime,jdbcType=VARCHAR},
-      </if>
-      <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="creatorAccount != null">
-        creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifierAccount != null">
-        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience">
-    update tb_service_experience
-    set advisor_account = #{advisorAccount,jdbcType=VARCHAR},
-      company_name = #{companyName,jdbcType=VARCHAR},
-      position = #{position,jdbcType=VARCHAR},
-      work_time = #{workTime,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT}
-    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

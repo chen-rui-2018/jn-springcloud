@@ -395,52 +395,62 @@ public class TbServiceHonorCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeEqualTo(Date value) {
+        public Criteria andGetTimeEqualTo(String value) {
             addCriterion("get_time =", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeNotEqualTo(Date value) {
+        public Criteria andGetTimeNotEqualTo(String value) {
             addCriterion("get_time <>", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeGreaterThan(Date value) {
+        public Criteria andGetTimeGreaterThan(String value) {
             addCriterion("get_time >", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andGetTimeGreaterThanOrEqualTo(String value) {
             addCriterion("get_time >=", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeLessThan(Date value) {
+        public Criteria andGetTimeLessThan(String value) {
             addCriterion("get_time <", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeLessThanOrEqualTo(Date value) {
+        public Criteria andGetTimeLessThanOrEqualTo(String value) {
             addCriterion("get_time <=", value, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeIn(List<Date> values) {
+        public Criteria andGetTimeLike(String value) {
+            addCriterion("get_time like", value, "getTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTimeNotLike(String value) {
+            addCriterion("get_time not like", value, "getTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTimeIn(List<String> values) {
             addCriterion("get_time in", values, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeNotIn(List<Date> values) {
+        public Criteria andGetTimeNotIn(List<String> values) {
             addCriterion("get_time not in", values, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeBetween(Date value1, Date value2) {
+        public Criteria andGetTimeBetween(String value1, String value2) {
             addCriterion("get_time between", value1, value2, "getTime");
             return (Criteria) this;
         }
 
-        public Criteria andGetTimeNotBetween(Date value1, Date value2) {
+        public Criteria andGetTimeNotBetween(String value1, String value2) {
             addCriterion("get_time not between", value1, value2, "getTime");
             return (Criteria) this;
         }

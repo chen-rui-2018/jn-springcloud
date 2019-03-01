@@ -11,7 +11,7 @@ import com.jn.enterprise.servicemarket.advisor.dao.TbServiceAdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.org.model.OrgColleagueInfo;
-import com.jn.enterprise.servicemarket.org.model.OrgColleagueQuery;
+import com.jn.enterprise.servicemarket.org.model.OrgColleagueParam;
 import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -51,17 +51,19 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     /**
      * 机构同事列表查询
      * @param account  当前登录用户账号
-     * @param orgColleagueQuery 机构同事列表查询入参（是否分页）
+     * @param orgColleagueParam 机构同事列表查询入参（是否分页）
      * @return
      */
     @ServiceLog(doAction = "机构同事列表查询")
     @Override
-    public PaginationData getOrgColleagueList(String account, OrgColleagueQuery orgColleagueQuery) {
+    public PaginationData getOrgColleagueList(String account, OrgColleagueParam orgColleagueParam) {
         com.github.pagehelper.Page<Object> objects = null;
+        //分页标识
+        String isPage="1";
         //是否分页标识
         boolean needPage=false;
-        if(orgColleagueQuery!= null && orgColleagueQuery.getNeedPage()!=null
-                && Boolean.TRUE.toString().equals(orgColleagueQuery.getNeedPage().toLowerCase())){
+        if(orgColleagueParam != null && orgColleagueParam.getNeedPage()!=null
+                && isPage.equals(orgColleagueParam.getNeedPage())){
             needPage=true;
         }
         //根据用户账号获取用户所属机构编码
@@ -77,11 +79,11 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         AffiliateParam affiliateParam=new AffiliateParam();
         affiliateParam.setAffiliateCode(affiliateCode);
         if(needPage) {
-            objects = PageHelper.startPage(orgColleagueQuery.getPage(),
-                    orgColleagueQuery.getRows() == 0 ? 15 : orgColleagueQuery.getRows(), true);
-            affiliateParam.setPage(orgColleagueQuery.getPage());
-            affiliateParam.setRows(orgColleagueQuery.getRows() == 0 ? 15 : orgColleagueQuery.getRows());
-            affiliateParam.setNeedPage(orgColleagueQuery.getNeedPage());
+            objects = PageHelper.startPage(orgColleagueParam.getPage(),
+                    orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows(), true);
+            affiliateParam.setPage(orgColleagueParam.getPage());
+            affiliateParam.setRows(orgColleagueParam.getRows() == 0 ? 15 : orgColleagueParam.getRows());
+            affiliateParam.setNeedPage(orgColleagueParam.getNeedPage());
         }
         Result userExtensionByAffiliateCode = userExtensionClient.getUserExtensionByAffiliateCode(affiliateParam);
         if(userExtensionByAffiliateCode==null || userExtensionByAffiliateCode.getData()==null){

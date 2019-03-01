@@ -5,14 +5,16 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
-import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
+import com.jn.enterprise.servicemarket.advisor.enums.ServiceRatingTypeEnum;
+import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
+import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
+import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
@@ -107,23 +109,27 @@ public class AdvisorServiceImpl implements AdvisorService {
         //设置顾问荣誉资质信息
         advisorDetailsVo.setServiceHonorList(advisorHonorInfoList);
         //3.获取顾问项目经验
-        List<ServiceProjectExperience> serviceProjectExperienceList = getProductExperienceInfo(advisorAccount);
+        List<ServiceProjectExperience> serviceProjectExperienceList = getProjectExperienceInfo(advisorAccount);
         //设置顾问项目经验
         advisorDetailsVo.setServiceProjectExperienceList(serviceProjectExperienceList);
         //4.获取顾问服务经历
         List<ServiceExperience> serviceExperienceList = getServiceExperienceInfo(advisorAccount);
         //设置顾问服务经历
         advisorDetailsVo.setServiceExperienceList(serviceExperienceList);
-        //5.todo:获取服务产品,待陈蕊完成后再调用  yangph
-
-
+        //5.获取服务产品
+        AdvisorProductQuery advisorProductQuery=new AdvisorProductQuery();
+        advisorProductQuery.setAdvisorAccount(advisorAccount);
+        PaginationData paginationData = serviceProductService.advisorProductList(advisorProductQuery, Boolean.FALSE);
+        List<AdvisorProductInfo> advisorProductInfoList =(List<AdvisorProductInfo> )paginationData.getRows();
+        //设置服务产品
+        advisorDetailsVo.setAdvisorProductInfoList(advisorProductInfoList);
         //6.获取服务评价  //默认查全部
         String ratingType="全部";
-        ServiceEvaluationQuery serviceEvaluationQuery=new ServiceEvaluationQuery();
-        serviceEvaluationQuery.setAdvisorAccount(advisorAccount);
-        serviceEvaluationQuery.setRatingType(ratingType);
-        serviceEvaluationQuery.setNeedPage(Boolean.FALSE);
-        PaginationData pageData = getServiceRatingInfo(serviceEvaluationQuery);
+        ServiceEvaluationParam serviceEvaluationParam =new ServiceEvaluationParam();
+        serviceEvaluationParam.setAdvisorAccount(advisorAccount);
+        serviceEvaluationParam.setRatingType(ratingType);
+        serviceEvaluationParam.setNeedPage(Boolean.FALSE);
+        PaginationData pageData = getServiceRatingInfo(serviceEvaluationParam);
         List<ServiceRating> servcieRatingInfoList =(List<ServiceRating>) pageData.getRows();
         if(!servcieRatingInfoList.isEmpty()){
             setRatingNum(advisorDetailsVo, advisorIntroduction, servcieRatingInfoList);
@@ -181,18 +187,18 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     /**
      * 根据查询条件获取服务评价信息
-     * @param serviceEvaluationQuery   服务评价信息查询入参
+     * @param serviceEvaluationParam   服务评价信息查询入参
      * @return
      */
     @ServiceLog(doAction = "根据查询条件获取服务评价信息")
     @Override
-    public PaginationData getServiceRatingInfo(ServiceEvaluationQuery serviceEvaluationQuery) {
+    public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(serviceEvaluationQuery.getNeedPage()){
-            objects = PageHelper.startPage(serviceEvaluationQuery.getPage(),
-                    serviceEvaluationQuery.getRows() == 0 ? 15 : serviceEvaluationQuery.getRows(), true);
+        if(serviceEvaluationParam.getNeedPage()){
+            objects = PageHelper.startPage(serviceEvaluationParam.getPage(),
+                    serviceEvaluationParam.getRows() == 0 ? 15 : serviceEvaluationParam.getRows(), true);
         }
-        String ratingType=serviceEvaluationQuery.getRatingType();
+        String ratingType= serviceEvaluationParam.getRatingType();
         if(ServiceRatingTypeEnum.PRAISE.getMessage().equals(ratingType)){
             //好评
             ratingType=ServiceRatingTypeEnum.PRAISE.getCode();
@@ -206,7 +212,7 @@ public class AdvisorServiceImpl implements AdvisorService {
             //全部
             ratingType="";
         }
-        List<ServiceRating> servcieRatingInfo = advisorMapper.getServcieRatingInfo(serviceEvaluationQuery.getAdvisorAccount(), ratingType);
+        List<ServiceRating> servcieRatingInfo = advisorMapper.getServcieRatingInfo(serviceEvaluationParam.getAdvisorAccount(), ratingType);
         return new PaginationData(servcieRatingInfo, objects == null ? 0 : objects.getTotal());
     }
 
@@ -235,7 +241,8 @@ public class AdvisorServiceImpl implements AdvisorService {
      * @return
      */
     @ServiceLog(doAction = "获取顾问服务经验")
-    private List<ServiceExperience> getServiceExperienceInfo(String advisorAccount) {
+    @Override
+    public List<ServiceExperience> getServiceExperienceInfo(String advisorAccount) {
         List<ServiceExperience>serviceExperienceList=new ArrayList<>(16);
         TbServiceExperienceCriteria example=new TbServiceExperienceCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
@@ -255,11 +262,12 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     /**
      * 获取顾问项目经验
-     * @param advisorAccount
+     * @param advisorAccount 顾问账号
      * @return
      */
     @ServiceLog(doAction = "获取顾问项目经验")
-    private List<ServiceProjectExperience> getProductExperienceInfo(String advisorAccount) {
+    @Override
+    public List<ServiceProjectExperience> getProjectExperienceInfo(String advisorAccount) {
         List<ServiceProjectExperience> serviceProjectExperienceList=new ArrayList<>(16);
         TbServiceProExperCriteria example=new TbServiceProExperCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
@@ -279,10 +287,11 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     /**
      * 获取顾问荣誉资质信息
-     * @param advisorAccount
+     * @param advisorAccount 顾问账号
      */
     @ServiceLog(doAction = "获取顾问荣誉资质信息")
-    private List<ServiceHonor> getAdvisorHonorInfo(String advisorAccount) {
+    @Override
+    public List<ServiceHonor> getAdvisorHonorInfo(String advisorAccount) {
         List<ServiceHonor>serviceHonorList=new ArrayList<>(16);
         TbServiceHonorCriteria example=new TbServiceHonorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
@@ -300,10 +309,11 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     /**
      * 根据顾问账号获取顾问基本信息
-     * @param advisorAccount
+     * @param advisorAccount 顾问账号
      */
     @ServiceLog(doAction = "根据顾问账号获取顾问基本信息")
-    private TbServiceAdvisor getAdvisorInfoByAccount(String advisorAccount) {
+    @Override
+    public TbServiceAdvisor getAdvisorInfoByAccount(String advisorAccount) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         //审批状态  “2”：审批通过
         String approvalStatus="2";

@@ -28,8 +28,8 @@ public class ServiceExperience extends Page implements Serializable {
     @ApiModelProperty(value = "职务")
     @NotNull(message="职务不能为空")
     private String position;
-    @ApiModelProperty(value = "工作时间")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))-((0?[1-9])|(1[0-2]))",
+    @ApiModelProperty(value = "工作时间(格式：201903)")
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
             message = "{workTime:'工作时间格式错误'}")
     private String workTime;
     @ApiModelProperty(value = "创建时间")

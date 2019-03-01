@@ -5,8 +5,8 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
-import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import org.hamcrest.Matchers;
@@ -23,6 +23,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -41,9 +42,9 @@ public class AdvisorManagementServiceImplTest {
 
     private InviteAdvisorInfo inviteAdvisorInfo=new InviteAdvisorInfo();
 
-    private AdvisorManagementQuery advisorManagementQuery=new AdvisorManagementQuery();
+    private AdvisorManagementParam advisorManagementParam =new AdvisorManagementParam();
 
-    private ApprovalQuery approvalQuery=new ApprovalQuery();
+    private ApprovalParam approvalParam =new ApprovalParam();
 
     @Before
     public void setUp() throws Exception {
@@ -52,16 +53,16 @@ public class AdvisorManagementServiceImplTest {
         inviteAdvisorInfo.setRegisterAccount("wangsong11");
 
         //顾问管理  审批状态(rejected：已拒绝    noFeedBack：未反馈   pending：待审批   approvalNotPassed：审批不通过)
-        advisorManagementQuery.setApprovalStatus("pending");
+        advisorManagementParam.setApprovalStatus("pending");
         //不要分页
-        advisorManagementQuery.setNeedPage("0");
+        advisorManagementParam.setNeedPage("0");
 
         //顾问审批
-        approvalQuery.setAdvisorAccount("wangsong");
+        approvalParam.setAdvisorAccount("wangsong");
         //审批结果(approved:审批通过   approvalNotPassed:审批不通过)
-        approvalQuery.setApprovalResults("approvalNotPassed");
+        approvalParam.setApprovalResults("approvalNotPassed");
         //审批说明
-        approvalQuery.setApprovalDesc("审批通过");
+        approvalParam.setApprovalDesc("审批通过");
 
     }
 
@@ -94,14 +95,16 @@ public class AdvisorManagementServiceImplTest {
     @Test
     public void getAdvisorManagementInfo() {
         try {
-            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementQuery);
+            PaginationData paginationData = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
             List<TbServiceAdvisor> list= (List<TbServiceAdvisor>)paginationData.getRows();
             if(list!=null){
                 for(TbServiceAdvisor advisor:list){
                     logger.info(advisor.toString());
                 }
+                assertThat(list.size(),greaterThanOrEqualTo(0));
+            }else{
+                assertThat(list,nullValue());
             }
-            assertThat(list.size(),greaterThanOrEqualTo(0));
         } catch (JnSpringCloudException e) {
             logger.warn("顾问管理查询失败");
             assertThat(e.getCode(),
@@ -118,7 +121,7 @@ public class AdvisorManagementServiceImplTest {
     @Test
     public void approvalAdvisorInfo(){
         try {
-            advisorManagementService.approvalAdvisorInfo(approvalQuery);
+            advisorManagementService.approvalAdvisorInfo(approvalParam);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.warn("顾问审批失败");

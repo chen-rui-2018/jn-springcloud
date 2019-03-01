@@ -1,8 +1,8 @@
 package com.jn.enterprise.servicemarket.advisor.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementQuery;
-import com.jn.enterprise.servicemarket.advisor.model.ApprovalQuery;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
+import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 
 /**
@@ -21,14 +21,14 @@ public interface AdvisorManagementService {
 
     /**
      * 顾问管理
-     * @param advisorManagementQuery  顾问管理查询页面入参（顾问姓名，审批状态）
+     * @param advisorManagementParam  顾问管理查询页面入参（顾问姓名，审批状态）
      * @return
      */
-    PaginationData getAdvisorManagementInfo(AdvisorManagementQuery advisorManagementQuery);
+    PaginationData getAdvisorManagementInfo(AdvisorManagementParam advisorManagementParam);
 
     /**
      * 审批顾问填写信息
-     * @param approvalQuery  审批顾问信息入参(顾问账号，审批结果，审批说明)
+     * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
-    void approvalAdvisorInfo(ApprovalQuery approvalQuery);
+    void approvalAdvisorInfo(ApprovalParam approvalParam);
 }

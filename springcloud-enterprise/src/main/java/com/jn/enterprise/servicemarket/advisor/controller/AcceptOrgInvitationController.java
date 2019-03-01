@@ -12,8 +12,8 @@ import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,7 +37,7 @@ public class AcceptOrgInvitationController extends BaseController {
     @ControllerLog(doAction = "接受机构邀请")
     @ApiOperation(value = "接受机构邀请", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/acceptOrgInvitation")
-    public Result acceptOrgInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestBody  String advisorAccount){
+    public Result acceptOrgInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         acceptOrgInvitationService.acceptOrgInvitation(advisorAccount);
         return  new Result();
@@ -46,7 +46,7 @@ public class AcceptOrgInvitationController extends BaseController {
     @ControllerLog(doAction = "拒绝邀请")
     @ApiOperation(value = "拒绝邀请", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/refuseInvitation")
-    public Result refuseInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestBody  String advisorAccount){
+    public Result refuseInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount")  String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         acceptOrgInvitationService.refuseInvitation(advisorAccount);
         return  new Result();

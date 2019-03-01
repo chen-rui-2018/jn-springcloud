@@ -4,9 +4,8 @@ import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationQuery;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
@@ -47,7 +46,7 @@ public class AdvisorServiceImplTest {
 
     private AdvisorInquiryInfo advisorInquiryInfo=new AdvisorInquiryInfo();
 
-    private ServiceEvaluationQuery serviceEvaluationQuery=new ServiceEvaluationQuery();
+    private ServiceEvaluationParam serviceEvaluationParam =new ServiceEvaluationParam();
 
     @Before
     public void setUp() throws Exception {
@@ -59,9 +58,9 @@ public class AdvisorServiceImplTest {
         advisorInquiryInfo.setSortTypes(sortTypes);
         advisorAccount="wangsong";
 
-        serviceEvaluationQuery.setAdvisorAccount(advisorAccount);
-        serviceEvaluationQuery.setRatingType("差评");
-        serviceEvaluationQuery.setNeedPage(Boolean.FALSE);
+        serviceEvaluationParam.setAdvisorAccount(advisorAccount);
+        serviceEvaluationParam.setRatingType("差评");
+        serviceEvaluationParam.setNeedPage(Boolean.FALSE);
     }
 
     /**
@@ -75,9 +74,10 @@ public class AdvisorServiceImplTest {
             for(AdvisorListInfo advisorListInfo:list){
                 logger.info(advisorListInfo.toString());
             }
+            assertThat(list.size(),greaterThanOrEqualTo(0));
+        }else{
+            assertThat(list,nullValue());
         }
-        assertThat(list.size(),greaterThanOrEqualTo(0));
-
     }
 
     /**
@@ -112,7 +112,7 @@ public class AdvisorServiceImplTest {
      */
     @Test
     public void getServiceRatingInfo(){
-        PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationQuery);
+        PaginationData pageData = advisorService.getServiceRatingInfo(serviceEvaluationParam);
         if(pageData.getRows()!=null){
             List<ServiceRating> serviceRatingList=(List<ServiceRating> )pageData.getRows();
             for(ServiceRating serviceRating:serviceRatingList){
@@ -123,5 +123,71 @@ public class AdvisorServiceImplTest {
             assertThat(pageData,anything());
         }
 
+    }
+
+    /**
+     * 获取顾问服务经验
+     */
+    @Test
+    public void getServiceExperienceInfo(){
+        List<ServiceExperience> serviceExperienceInfo = advisorService.getServiceExperienceInfo(advisorAccount);
+        if(serviceExperienceInfo.isEmpty()){
+            assertThat(serviceExperienceInfo, nullValue());
+        }else{
+            for(ServiceExperience serviceExperience:serviceExperienceInfo){
+                logger.info(serviceExperience.toString());
+            }
+            assertThat(serviceExperienceInfo, notNullValue());
+        }
+    }
+
+    /**
+     * 获取顾问项目经验
+     */
+    @Test
+    public void getProjectExperienceInfo(){
+        List<ServiceProjectExperience> projectExperienceInfo = advisorService.getProjectExperienceInfo(advisorAccount);
+        if(projectExperienceInfo.isEmpty()){
+            assertThat(projectExperienceInfo, nullValue());
+        }else{
+            for(ServiceProjectExperience serviceProjectExperience:projectExperienceInfo){
+                logger.info(serviceProjectExperience.toString());
+            }
+            assertThat(projectExperienceInfo, notNullValue());
+        }
+    }
+
+    /**
+     * 获取顾问荣誉资质信息
+     */
+    @Test
+    public void getAdvisorHonorInfo(){
+        List<ServiceHonor> advisorHonorInfo = advisorService.getAdvisorHonorInfo(advisorAccount);
+        if(advisorHonorInfo.isEmpty()){
+            assertThat(advisorHonorInfo, nullValue());
+        }else{
+            for(ServiceHonor serviceHonor:advisorHonorInfo){
+                logger.info(serviceHonor.toString());
+            }
+            assertThat(advisorHonorInfo, notNullValue());
+        }
+    }
+
+    /**
+     * 根据顾问账号获取顾问基本信息
+     */
+    @Test
+    public void getAdvisorInfoByAccount(){
+        try {
+            TbServiceAdvisor advisorInfoByAccount = advisorService.getAdvisorInfoByAccount(advisorAccount);
+            assertThat(advisorInfoByAccount, notNullValue());
+        } catch (JnSpringCloudException e) {
+            logger.info("根据顾问账号获取顾问基本信息失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST.getCode())
+                    )
+            );
+        }
     }
 }

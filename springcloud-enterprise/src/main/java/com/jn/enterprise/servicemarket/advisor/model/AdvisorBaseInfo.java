@@ -39,6 +39,8 @@ public class AdvisorBaseInfo extends Page implements Serializable {
     private String practiceQualification;
     @ApiModelProperty(value = "业务擅长")
     private String goodAtBusiness;
+    @ApiModelProperty(value = "业务领域")
+    private String businessArea;
     @ApiModelProperty(value = "个人简介")
     private String personalProfile;
 
@@ -106,11 +108,35 @@ public class AdvisorBaseInfo extends Page implements Serializable {
         this.goodAtBusiness = goodAtBusiness;
     }
 
+    public String getBusinessArea() {
+        return businessArea;
+    }
+
+    public void setBusinessArea(String businessArea) {
+        this.businessArea = businessArea;
+    }
+
     public String getPersonalProfile() {
         return personalProfile;
     }
 
     public void setPersonalProfile(String personalProfile) {
         this.personalProfile = personalProfile;
+    }
+
+    @Override
+    public String toString() {
+        return "AdvisorBaseInfo{" +
+                "advisorAccount='" + advisorAccount + '\'' +
+                ", workingYears=" + workingYears +
+                ", graduatedSchool='" + graduatedSchool + '\'' +
+                ", education='" + education + '\'' +
+                ", phone='" + phone + '\'' +
+                ", contactEmail='" + contactEmail + '\'' +
+                ", practiceQualification='" + practiceQualification + '\'' +
+                ", goodAtBusiness='" + goodAtBusiness + '\'' +
+                ", businessArea='" + businessArea + '\'' +
+                ", personalProfile='" + personalProfile + '\'' +
+                '}';
     }
 }

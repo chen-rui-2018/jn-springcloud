@@ -105,7 +105,7 @@
         left join tb_service_org t2 on t1.org_id = t2.org_id
         left join  tb_service_org_info  t3 on t1.org_id = t3.org_id
         left join tb_service_details t4 on t1.product_id = t4.product_id
-        where t1.product_id = #{productId,jdbcType=VARCHAR}
+        where t1.record_status = '1' and  t1.product_id = #{productId,jdbcType=VARCHAR}
     </select>
     <resultMap id="serviceDetial" type="com.jn.enterprise.servicemarket.product.model.ServiceProductDetail">
         <result column="orgName" property="orgName"/>
@@ -173,7 +173,7 @@
            tt.serviceDetails,   <!--服务详情-->
            tt.viewCount,        <!--浏览次数-->
            tt.transactionsNumber, <!--交易次数-->
-           round((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4,1 )AS "evaluationScore" <!--综合评分-->
+           round(tt.attitudeScore,1 )AS "evaluationScore" <!--综合评分-->
         from (
             select
                 t1.product_id as "productId",
@@ -190,34 +190,31 @@
                 t3.service_details as "serviceDetails",
                 count(t4.product_id) as "transactionsNumber",
                 IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore",
-                IFNULL(AVG(t5.`profession_score`),0) AS "professionScore",
-                IFNULL(AVG(t5.`response_score`),0) AS "responseScore",
-                IFNULL(AVG(t5.`price_score`),0)AS "priceScore"
                 from tb_service_product t1
                 left join  tb_service_org t2 on  t2.org_id= t1.org_id
                 left join  tb_service_details t3 on t1.product_id = t3.product_id
-                left join  tb_service_transaction t4 on t1.product_id = t4.product_id
+                left join  tb_service_require t4 on t1.product_id = t4.product_id
                 left join  tb_service_rating t5 on t5.product_id = t1.product_id
-                where t1.product_id = #{productId} group by t1.product_id,t4.product_id,t5.product_id
+                where t1.record_status = '1' and  t1.product_id = #{productId} group by t1.product_id,t4.product_id,t5.product_id
         )tt;
     </select>
 
     <!--web 服务产品列表-->
     <select id = "findWebProductList"  parameterType= "com.jn.enterprise.servicemarket.product.model.ProductQueryConditions" resultType = "com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails">
                 select
-               tt.productId,
-               tt.productName,
-               tt.productType,
-               tt.pictureUrl,
-               tt.advisorName,
-               tt.referPrice,
-               tt.serviceCycle,
-               tt.viewCount,
-               tt.orgName,
-               tt.serviceDetails,
-               tt.transactionsNumber,
-               round((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4,1)AS "evaluationScore",
-               tt.evaluationNumber
+               tt.productId,     <!--产品Id-->
+               tt.productName,   <!--产品名称-->
+               tt.productType,   <!--产品类型-->
+               tt.pictureUrl,    <!--图片路径-->
+               tt.advisorName,   <!--顾问名称-->
+               tt.referPrice,    <!--参考价格-->
+               tt.serviceCycle,  <!--服务周期-->
+               tt.viewCount,     <!--访问数量-->
+               tt.orgName,       <!--机构名称-->
+               tt.serviceDetails,  <!--服务详情-->
+               tt.transactionsNumber,  <!--交易数量-->
+               tt.evaluationNumber,    <!--评价数量-->
+               round(tt.evaluationScore* #{praiseWeight}+tt.viewCount* #{popularityWeight} +tt.transactionsNumber* #{serviceWeight} + #{otherFactorScore},1)AS "evaluationScore" <!--综合排序结果值-->
         from (
         select
                t1.product_id as "productId",
@@ -235,14 +232,11 @@
                t3.service_details as "serviceDetails",
                count(t4.product_id) as "transactionsNumber",
                count(t5.product_id) as "evaluationNumber",
-               IFNULL(AVG(t5.`attitude_score`),0) AS "attitudeScore",
-               IFNULL(AVG(t5.`profession_score`),0) AS "professionScore",
-               IFNULL(AVG(t5.`response_score`),0) AS "responseScore",
-               IFNULL(AVG(t5.`price_score`),0)AS "priceScore"
+               IFNULL(AVG(t5.`attitude_score`),0) AS "evaluationScore",
         from tb_service_product t1
                left join  tb_service_org t2 on  t2.org_id= t1.org_id
                left join  tb_service_details t3 on t1.product_id = t3.product_id
-               left join  tb_service_transaction t4 on t1.product_id = t4.product_id
+               left join  tb_service_require t4 on t1.product_id = t4.product_id
                left join  tb_service_rating t5 on t5.product_id = t1.product_id
                where  t1.record_status = '1' and t1.status = '1'
                <if test="productType != null and  productType !=''">
@@ -258,7 +252,7 @@
         )tt
         <if test="sortTypes =='integrate'">
         ORDER BY <!-- 综合排序-->
-        ((tt.attitudeScore+tt.professionScore+tt.responseScore+tt.priceScore)/4* #{praiseWeight}+tt.viewCount* #{popularityWeight} +tt.transactionsNumber* #{serviceWeight} + #{otherFactorScore} ) DESC <!--综合排序结果值-->
+            'evaluationScore' DESC <!--综合排序结果值-->
         </if>
         <if test="sortTypes =='popularity'">
             ORDER BY <!-- 人气排序-->
@@ -272,7 +266,6 @@
             ORDER BY <!-- 服务量排序-->
             tt.transactionsNumber DESC <!-- 累计交易数-->
         </if>
-
     </select>
 <!--机构产品信息列表-->
     <select id="findOrgProductList" resultType="com.jn.enterprise.servicemarket.product.model.ServiceProductManage">
@@ -314,5 +307,16 @@ from tb_service_product t1
          and t1.template_id is null
          and t1.status='1' and t1.record_status='1'and t1.signory_id =
               ( select t3.business_type from tb_service_org t3 where t3.org_id=#{orgId})
+    </select>
+    <!--服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件-->
+    <select  id="productQueryList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">
+        select
+        t1.product_id as "productId"
+        ,t1.product_name as "productName"
+        from tb_service_product t1
+        where 1=1
+        <if test ="productName !=null and productName != ''">
+            and t1.product_name like concat("%",#{productName},"%")
+        </if>
     </select>
 </mapper>

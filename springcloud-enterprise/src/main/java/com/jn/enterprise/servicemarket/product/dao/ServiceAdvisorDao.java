@@ -1,6 +1,8 @@
 package com.jn.enterprise.servicemarket.product.dao;
 
 import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisor;
+import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,4 +19,13 @@ public interface ServiceAdvisorDao {
      * @param advisorList
      */
     void addServiceAdvisor(List<TbServiceAndAdvisor> advisorList);
+
+    /**
+     * 顾问-服务产品列表
+     * @param advisorAccount
+     * @param productType
+     * @param praise
+     * @return
+     */
+    List<AdvisorProductInfo> advisorProductList(@Param("advisorAccount") String advisorAccount, @Param("productType") String productType, @Param("praise") String praise);
 }

@@ -88,4 +88,11 @@ public interface ServiceProductDao {
      * @return
      */
     List<CommonServiceShelf>  findShelfProductList(@Param("orgId") String orgId);
+
+    /**
+     * 服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件
+     * @param productName
+     * @return
+     */
+    List<CommonServiceShelf>  productQueryList(@Param("productName") String productName);
 }

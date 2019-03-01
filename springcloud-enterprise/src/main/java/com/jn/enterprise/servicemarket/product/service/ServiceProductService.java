@@ -3,8 +3,6 @@ package com.jn.enterprise.servicemarket.product.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.product.model.*;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -107,4 +105,32 @@ public interface ServiceProductService {
      * @return
      */
     List<CommonServiceShelf> findShelfProductList(String orgId);
+
+    /**
+     * 服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件
+     * @param productName
+     * @return
+     */
+    List<CommonServiceShelf> productQueryList(String productName);
+
+    /**
+     * 机构-编辑常规产品
+     * @param product
+     * @param account
+     */
+    void updateCommonProduct(CommonServiceShelf product,String account);
+
+    /**
+     * 机构-编辑特色产品
+     * @param content
+     * @param account
+     */
+    void updateFeatureProduct( ServiceContent content,String account);
+
+    /**
+     * 顾问-服务产品列表
+     * @param query
+     * @return
+     */
+    PaginationData advisorProductList(AdvisorProductQuery query,Boolean needPage);
 }

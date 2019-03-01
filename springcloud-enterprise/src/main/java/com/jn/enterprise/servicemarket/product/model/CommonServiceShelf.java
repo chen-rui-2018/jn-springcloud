@@ -14,7 +14,9 @@ import java.io.Serializable;
  */
 @ApiModel(value = "CommonServiceShelf", description = "上架常规产品信息")
 public class CommonServiceShelf implements Serializable {
-    @ApiModelProperty(value = "服务产品ID",required = true)
+    @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true)
+    private String templateId;
+    @ApiModelProperty(value = "服务产品Id",required = true)
     private String productId;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;
@@ -22,6 +24,12 @@ public class CommonServiceShelf implements Serializable {
     private String advisorAccount;
     @ApiModelProperty(value = "机构id" ,required = true)
     private String orgId;
+    public String getTemplateId() {
+        return templateId;
+    }
+    public void setTemplateId(String templateId) {
+        this.templateId = templateId;
+    }
 
     public String getProductId() {
         return productId;

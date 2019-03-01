@@ -4,8 +4,11 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.enterprise.enums.ServiceProductException;
-import com.jn.enterprise.servicemarket.product.model.*;
+import com.jn.enterprise.enums.ServiceProductExceptionEnum;
+import com.jn.enterprise.servicemarket.product.model.ServiceContent;
+import com.jn.enterprise.servicemarket.product.model.ServiceProductApproval;
+import com.jn.enterprise.servicemarket.product.model.ServiceProductDetail;
+import com.jn.enterprise.servicemarket.product.model.ServiceSelectConstraint;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -32,7 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/servicemarket/product/manage/")
 public class ServiceProductManageController extends BaseController {
     @Autowired
-   private  ServiceProductService productService;
+    private  ServiceProductService productService;
 
 
     @ControllerLog(doAction = "添加常规服务产品")
@@ -40,7 +43,7 @@ public class ServiceProductManageController extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/addCommonService")
     @RequestMapping(value = "/addCommonService")
     public Result addCommonService(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content, ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+        Assert.notNull(content, ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.addServiceProduct(content,user != null?user.getAccount():"");
         return new Result();
@@ -60,7 +63,7 @@ public class ServiceProductManageController extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/findServiceDetail")
     @RequestMapping(value = "/findServiceDetail")
     public Result findServiceDetail(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
-        Assert.notNull(productId, ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        Assert.notNull(productId, ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         ServiceProductDetail detail =  productService.findServiceDetail(productId);
         return new Result(detail);
     }
@@ -69,7 +72,7 @@ public class ServiceProductManageController extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/productApproval")
     @RequestMapping(value = "/productApproval")
     public Result productApproval(@RequestBody @Validated  ServiceProductApproval approval){
-        Assert.notNull(approval.getProductId(), ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        Assert.notNull(approval.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.productApproval(approval,user.getAccount());
     return new Result();
@@ -79,7 +82,7 @@ public class ServiceProductManageController extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/productShelf")
     @RequestMapping(value = "/productShelf")
     public Result productShelf(@RequestBody @Validated  ServiceProductApproval approval){
-        Assert.notNull(approval.getProductId(), ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        Assert.notNull(approval.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.productShelf(approval,user.getAccount());
         return new Result();
@@ -98,7 +101,7 @@ public class ServiceProductManageController extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/modifyCommonService")
     @RequestMapping(value = "/modifyCommonService")
     public Result modifyCommonService(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content.getProductId(), ServiceProductException.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        Assert.notNull(content.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         User user =  (User) SecurityUtils.getSubject().getPrincipal();
         productService.modifyCommonService(content,user.getAccount());
         return new Result();

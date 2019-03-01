@@ -5,11 +5,8 @@ import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.enterprise.enums.ServiceProductException;
-import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
-import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
-import com.jn.enterprise.servicemarket.product.model.ServiceContent;
-import com.jn.enterprise.servicemarket.product.model.WebServiceProductDetails;
+import com.jn.enterprise.enums.ServiceProductExceptionEnum;
+import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -45,7 +42,7 @@ public class ServiceProductWebController  extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/web/upShelfCommonService")
     @RequestMapping(value = "/upShelfCommonService")
     public Result upShelfCommonService(@RequestBody @Validated CommonServiceShelf commonService){
-        Assert.notNull(commonService.getProductId(), ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+        Assert.notNull(commonService.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.upShelfCommonService(commonService,user != null?user.getAccount():"");
         return new Result();
@@ -56,7 +53,7 @@ public class ServiceProductWebController  extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/web/addFeatureService")
     @RequestMapping(value = "/addFeatureService")
     public Result addFeatureService(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content, ServiceProductException.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+        Assert.notNull(content, ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.addServiceProduct(content,user != null?user.getAccount():"");
         return new Result();
@@ -93,17 +90,65 @@ public class ServiceProductWebController  extends BaseController {
 //    @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
     @RequestMapping(value = "/findOrgProductList")
     public Result findOrgProductList(@RequestBody  ProductInquiryInfo info){
-        Assert.notNull(info.getOrgId(), ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
-        Assert.notNull(info.getProductType(), ServiceProductException.SERVICE_PRODUCT_PRODUCT_TYPE_EMPTY.getMessage());
+        Assert.notNull(info.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+        Assert.notNull(info.getProductType(), ServiceProductExceptionEnum.SERVICE_PRODUCT_PRODUCT_TYPE_EMPTY.getMessage());
         PaginationData data =    productService.findOrgProductList(info,true);
                 return  new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品")
     @ApiOperation(value="服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品",httpMethod = "POST",response = Result.class)
-    @RequestMapping()
+    //    @RequiresPermissions("/servicemarket/product/web/findShelfProductList")
+    @RequestMapping(value = "/findShelfProductList")
     public Result findShelfProductList(@ApiParam(name = "orgId", value = "机构Id", required = true) @RequestParam String  orgId){
-        Assert.notNull(orgId, ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
+        Assert.notNull(orgId, ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
         List<CommonServiceShelf> data =    productService.findShelfProductList(orgId);
+        return new Result(data);
+    }
+    @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
+    @ApiOperation(value="服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件",httpMethod = "POST",response = Result.class)
+    //    @RequiresPermissions("/servicemarket/product/web/productQueryList")
+    @RequestMapping(value = "/productQueryList")
+    public Result productQueryList(String productName){
+        List<CommonServiceShelf> data =    productService.productQueryList(productName);
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "机构-编辑常规产品")
+    @ApiOperation(value="机构-编辑常规产品",httpMethod = "POST",response = Result.class)
+    //    @RequiresPermissions("/servicemarket/product/web/updateCommonProduct")
+    @RequestMapping(value = "/updateCommonProduct")
+    public Result updateCommonProduct(@RequestBody  CommonServiceShelf product){
+        Assert.notNull(product.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        productService.updateCommonProduct(product,user.getAccount());
+        return new Result();
+    }
+    @ControllerLog(doAction = "机构-编辑特色产品")
+    @ApiOperation(value="机构-编辑特色产品",httpMethod = "POST",response = Result.class)
+    //    @RequiresPermissions("/servicemarket/product/web/updateFeatureProduct")
+    @RequestMapping(value = "/updateFeatureProduct")
+    public Result updateFeatureProduct(@RequestBody @Validated ServiceContent content){
+        Assert.notNull(content.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        productService.updateFeatureProduct(content,user.getAccount());
+        return new Result();
+    }
+    @ControllerLog(doAction = "顾问-服务产品列表")
+    @ApiOperation(value="顾问-服务产品列表",httpMethod = "POST",response = Result.class)
+    //    @RequiresPermissions("/servicemarket/product/web/advisorProductList")
+    @RequestMapping(value = "/advisorProductList")
+    public Result advisorProductList(@RequestBody @Validated AdvisorProductQuery query){
+        Assert.notNull(query.getAdvisorAccount(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ADVISOR_ACCOUNT_EMPTY.getMessage());
+        PaginationData data =   productService.advisorProductList(query,true);
+        return new Result(data);
+    }
+    @ControllerLog(doAction = "同类型服务产品列表")
+    @ApiOperation(value ="同类型服务产品列表",httpMethod = "POST",response = Result.class)
+//    @RequiresPermissions("/servicemarket/product/web/sameTypeProductList")
+    @RequestMapping(value = "/sameTypeProductList")
+    public Result sameTypeProductList(@RequestBody ProductInquiryInfo info){
+        Assert.notNull(info.getSignoryId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());
+        PaginationData data = productService.findWebProductList(info,true);
         return new Result(data);
     }
 

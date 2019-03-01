@@ -6,12 +6,9 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
-import com.jn.enterprise.enums.ServiceProductException;
-import com.jn.enterprise.servicemarket.product.dao.ServiceAdvisorDao;
-import com.jn.enterprise.servicemarket.product.dao.ServiceProductDao;
-import com.jn.enterprise.servicemarket.product.dao.TbServiceDetailsMapper;
-import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
+import com.jn.enterprise.servicemarket.product.dao.*;
 import com.jn.enterprise.servicemarket.product.entity.*;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
@@ -44,6 +41,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Autowired
     private TbServiceDetailsMapper tbServiceDetailsMapper;
     @Autowired
+    private TbServiceAndAdvisorMapper tbServiceAndAdvisorMapper;
+    @Autowired
     private ServiceProductDao productDao;
     @Autowired
     private ServiceAdvisorDao advisorDao;
@@ -56,16 +55,21 @@ public class ServiceProductServiceImpl implements ServiceProductService {
 
         String productId = UUID.randomUUID().toString().replaceAll("-", "");
         String  productType = "1";
-        // 如果有机构id则表示为机构上架常规产品或者添加特色产品 需要进行审批;
+        // 如果为特色产品则需要进行审批,
         String status = content.getProductType().equals(productType) ? "0":"1";
-
         Byte recordStatus = 1;
         if(productType.equals(content.getProductType())){
-
              if(StringUtils.isBlank(content.getOrgId())){
                 logger.warn("[服务产品新增]，特色服务产品机构id{}不能为空：orgId: {},特色服务产品的机构id不能为空!");
-                throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY);
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY);
             }
+            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+             criteria.createCriteria().andProductNameEqualTo(content.getProductName());
+             List<TbServiceProduct> products= tbServiceProductMapper.selectByExample(criteria);
+             if(products!=null && products.size()>0){
+                 logger.warn("[服务产品新增]，特色服务产品名称{}不能重复：productName: {},特色服务产品名称{}不能重复!");
+                 throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_DUPLICATE);
+             }
         }
         if (content.getReferPrice() != null) {
               checkReferPrice(content.getReferPrice());
@@ -90,15 +94,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         //保存顾问和服务间关系
         if(StringUtils.isNotBlank(content.getAdvisorAccount())){
-            String [] accounts = content.getAdvisorAccount().split(",");
-            List<TbServiceAndAdvisor> advisorList = new ArrayList<>();
-            for(String advisorAccount : accounts){
-                TbServiceAndAdvisor advisor = new TbServiceAndAdvisor();
-                advisor.setProductId(productId);
-                advisor.setAdvisorAccount(advisorAccount);
-                advisorList.add(advisor);
-            }
-            advisorDao.addServiceAdvisor(advisorList);
+            addAdvisor(content.getAdvisorAccount(),productId);
         }
         return productId;
     }
@@ -125,11 +121,11 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     public void  upShelfCommonService(CommonServiceShelf commonService,String account) {
         if(StringUtils.isBlank(commonService.getProductId())){
             logger.warn("[上架常规服务产品]，服务产品ID{}不能为空：productId: {}上架常规服务产品时,服务产品Id不能为空!");
-            throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_ID_EMPTY);
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
         if(StringUtils.isBlank(commonService.getOrgId())){
             logger.warn("[上架常规服务产品]，机构Id{}不能为空：orgId: {}上架常规服务产品时,机构Id不能为空!");
-            throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_ORG_ID_EMPTY);
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY);
         }
         TbServiceProductCriteria criteria = new TbServiceProductCriteria();
         TbServiceProduct product =  tbServiceProductMapper.selectByPrimaryKey(commonService.getProductId());
@@ -158,7 +154,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(status.equals(approval.getStatus())){
             if(StringUtils.isBlank(approval.getApprovalComments())){
                 logger.warn("[审批特色服务产品]，审批意见{}不能为空：approvalComments: {}!审批不通过时,审批意见不能为空");
-                throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_APPROVALCOMMENTS_EMPTY);
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_APPROVALCOMMENTS_EMPTY);
             }
         }
         productDao.productApproval(approval.getProductId(),approval.getStatus(),approval.getApprovalComments(),account);
@@ -265,15 +261,67 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         return data;
     }
+    @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
+    @Override
+    public List<CommonServiceShelf> productQueryList(String productName) {
+        List<CommonServiceShelf> data=productDao.productQueryList(productName);
+        return data;
+    }
+    @ServiceLog(doAction = "机构-编辑常规产品")
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateCommonProduct(CommonServiceShelf product,String account) {
+        //更新产品表中信息
+        TbServiceProduct tbServiceProduct = new TbServiceProduct();
+        tbServiceProduct.setProductId(product.getProductId());
+        tbServiceProduct.setModifiedTime(new Date());
+        tbServiceProduct.setModifierAccount(account);
+        tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
+        //更新顾问信息
+        if(StringUtils.isNotBlank(product.getAdvisorAccount())){
+            addAdvisor(product.getAdvisorAccount(),product.getProductId());
+        }
+    }
+    @ServiceLog(doAction = "机构编辑特色服务产品")
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateFeatureProduct(ServiceContent content, String account) {
+       //修改后需要进行审核
+        String status = "0";
+        TbServiceProduct tbServiceProduct = new TbServiceProduct();
+        BeanUtils.copyProperties(content,tbServiceProduct);
+        tbServiceProduct.setModifierAccount(account);
+        tbServiceProduct.setModifiedTime(new Date());
+        tbServiceProduct.setStatus(status);
+        tbServiceProductMapper.updateByPrimaryKeySelective(tbServiceProduct);
+        // 更新顾问信息
+        if(StringUtils.isNotBlank(content.getAdvisorAccount())){
+            addAdvisor(content.getAdvisorAccount(),content.getProductId());
+        }
+    }
+    @ServiceLog(doAction = "顾问-服务产品列表")
+    @Override
+    public PaginationData advisorProductList(AdvisorProductQuery query,Boolean needPage) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
+        }
+          List<AdvisorProductInfo> data =  advisorDao.advisorProductList(query.getAdvisorAccount(),query.getProductType(),query.getPraise());
 
+        return new PaginationData(data,objects==null?0:objects.getTotal());
+    }
 
+    /**
+     * 校验新增产品时传入的价格字段
+     * @param referPrice
+     */
     private void checkReferPrice(String referPrice){
         int max = 0;
         int min = 0;
         String reg = "^[0-9]+-?[0-9]+$";
         if (!referPrice.matches(reg)) {
             logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + referPrice + "{},格式错误,只能为纯数字或数字范围'min-max'");
-            throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_WRONG_FORMAT);
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_REFER_PRICE_WRONG_FORMAT);
         }
         String[] prices = referPrice.split("-");
         int length = 2;
@@ -282,10 +330,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             max = Integer.parseInt(referPrice.substring(referPrice.indexOf("-") + 1));
             if (max < min) {
                 logger.warn("[服务产品新增]，参考价格{}格式错误：referPrice: " + referPrice + "{},格式错误,'-'后面的价格值应大于前面的价格值");
-                throw new JnSpringCloudException(ServiceProductException.SERVICE_PRODUCT_REFER_PRICE_NUMBER_EXCEPTION);
+                throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_REFER_PRICE_NUMBER_EXCEPTION);
             }
         }
     }
+
+    /**
+     * 参数转map
+     * @param constraint
+     * @return
+     */
     private Map<String,String> constraintToMap(ServiceSelectConstraint constraint){
        Map<String,String>  map = new HashMap<>(10);
        if(constraint != null){
@@ -299,5 +353,25 @@ public class ServiceProductServiceImpl implements ServiceProductService {
            map.put("orgType",constraint.getOrgType());
        }
        return map;
+    }
+
+    /**
+     * 添加顾问信息
+     * @param account
+     * @param productId
+     */
+    private void  addAdvisor(String account,String productId){
+        TbServiceAndAdvisorCriteria criteria = new TbServiceAndAdvisorCriteria();
+        criteria.createCriteria().andProductIdEqualTo(productId);
+        tbServiceAndAdvisorMapper.deleteByExample(criteria);
+        String [] accounts = account.split(",");
+        List<TbServiceAndAdvisor> advisorList = new ArrayList<>();
+        for(String advisorAccount : accounts){
+            TbServiceAndAdvisor advisor = new TbServiceAndAdvisor();
+            advisor.setProductId(productId);
+            advisor.setAdvisorAccount(advisorAccount);
+            advisorList.add(advisor);
+        }
+        advisorDao.addServiceAdvisor(advisorList);
     }
 }

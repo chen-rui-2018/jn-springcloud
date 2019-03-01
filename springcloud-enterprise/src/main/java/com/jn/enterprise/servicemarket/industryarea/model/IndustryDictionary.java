@@ -6,19 +6,22 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 
 /**
+ * 机构数据字典
  * @author： jiangyl
- * @date： Created on 2019/2/27 14:41
+ * @date： Created on 2019/3/1 15:31
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "IndustryData",description = "业务领域参数")
-public class IndustryData {
-    @ApiModelProperty(value = "领域ID[新增时传空，修改时ID必传]")
+@ApiModel(value = "IndustryDictionary",description = "机构数据字典")
+public class IndustryDictionary {
+    @ApiModelProperty(value = "领域ID")
     private String id;
 
     @ApiModelProperty(value = "领域值")
-    @NotNull(message = "领域值不能为空")
     private String preValue;
+
+    @ApiModelProperty(value = "领域类型")
+    private String preType;
 
     public String getId() {
         return id;
@@ -34,5 +37,13 @@ public class IndustryData {
 
     public void setPreValue(String preValue) {
         this.preValue = preValue;
+    }
+
+    public String getPreType() {
+        return preType;
+    }
+
+    public void setPreType(String preType) {
+        this.preType = preType;
     }
 }

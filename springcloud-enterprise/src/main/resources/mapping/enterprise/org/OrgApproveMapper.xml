@@ -30,6 +30,7 @@
               LEFT JOIN tb_service_org_info info
                 ON org.org_id = info.org_id
             where org.org_id = #{orgId}
+            LIMIT 1
     </select>
 
 </mapper>

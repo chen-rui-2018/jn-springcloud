@@ -84,9 +84,13 @@ public class OrgServiceImplTest {
         orgBasicData.setOrgLogo("机构LOGO机构LOGO---URL");
         orgBasicData.setDevelopmentStage(new String[]{"发展阶段2","发展阶段3","发展阶段4"});
         orgBasicData.setCompanyNature(new String[]{"企业性质1","企业性质2"});
-        int i = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
-        assertThat(i,equalTo(1));
-
+        try{
+            int i = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
+            assertThat(i,equalTo(1));
+        }catch (JnSpringCloudException e){
+            logger.warn("时间转换错误");
+            assertThat(e.getCode(),equalTo(OrgExceptionEnum.ORG_TIME_PARSE_ERROR.getCode()));
+        }
     }
 
     @Test

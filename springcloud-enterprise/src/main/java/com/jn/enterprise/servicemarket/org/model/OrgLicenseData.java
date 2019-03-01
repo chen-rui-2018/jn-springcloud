@@ -23,9 +23,6 @@ public class OrgLicenseData {
     @NotNull(message = "一级业务领域不能为空")
     private String businessType;
 
-    @ApiModelProperty(value = "二级业务领域")
-    private String businessSType;
-
     @ApiModelProperty(value = "机构资质集合")
     private List<OrgLicense> licenses;
 
@@ -43,14 +40,6 @@ public class OrgLicenseData {
 
     public void setBusinessType(String businessType) {
         this.businessType = businessType;
-    }
-
-    public String getBusinessSType() {
-        return businessSType;
-    }
-
-    public void setBusinessSType(String businessSType) {
-        this.businessSType = businessSType;
     }
 
     public List<OrgLicense> getLicenses() {

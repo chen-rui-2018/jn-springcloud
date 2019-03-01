@@ -56,9 +56,9 @@ public class OrgApproveServiceImpl implements OrgApproveService {
      */
     private final static String RECORD_STATUS_VALID = "1";
     /**
-     * 机构状态 1:审核中
+     * 机构状态 0:审核中
      */
-    private final static String ORG_APPLY_IS_CHECKING = "1";
+    private final static String ORG_APPLY_IS_CHECKING = "0";
 
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
@@ -111,8 +111,9 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         orgApplyCount.setOrgCount(orgCount+"");
         logger.info("入驻机构总数（已审核通过数）{}",orgCount);
         // 待审核机构数
-        orgCriteria.createCriteria().andOrgStatusEqualTo("0").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
-        long waitApplyCount = tbServiceOrgMapper.countByExample(orgCriteria);
+        TbServiceOrgCriteria orgCriteria1 = new TbServiceOrgCriteria();
+        orgCriteria1.createCriteria().andOrgStatusEqualTo("0").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        long waitApplyCount = tbServiceOrgMapper.countByExample(orgCriteria1);
         orgApplyCount.setWaitApplyCount(waitApplyCount+"");
         logger.info("待审核机构数{}",waitApplyCount);
         // 本月入驻机构数
@@ -123,8 +124,9 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         cale.set(Calendar.MINUTE, 0);
         cale.set(Calendar.SECOND, 0);
         cale.set(Calendar.MILLISECOND, 0);
-        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(cale.getTime(),new Date());
-        long monthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria);
+        TbServiceOrgCriteria orgCriteria2 = new TbServiceOrgCriteria();
+        orgCriteria2.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(cale.getTime(),new Date());
+        long monthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria2);
         orgApplyCount.setMonthJoinOrgCount(monthJoinOrgCount+"");
         logger.info("本月入驻机构数{}",monthJoinOrgCount);
         //上月入驻机构数
@@ -142,8 +144,9 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         endCalendar.set(Calendar.MINUTE, endCalendar.getActualMaximum(Calendar.MINUTE));
         endCalendar.set(Calendar.SECOND, endCalendar.getActualMaximum(Calendar.SECOND));
         endCalendar.set(Calendar.MILLISECOND, endCalendar.getActualMaximum(Calendar.MILLISECOND));
-        orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(startCalendar.getTime(),endCalendar.getTime());
-        long lastMonthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria);
+        TbServiceOrgCriteria orgCriteria3 = new TbServiceOrgCriteria();
+        orgCriteria3.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(startCalendar.getTime(),endCalendar.getTime());
+        long lastMonthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria3);
         orgApplyCount.setLastMonthJoinOrgCount(lastMonthJoinOrgCount+"");
         logger.info("上月入驻机构数{}",lastMonthJoinOrgCount);
         //本月入驻环比

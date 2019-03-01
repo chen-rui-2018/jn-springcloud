@@ -12,11 +12,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "OrgTeam",description = "机构服务团队")
 public class OrgTeam {
-
-    @ApiModelProperty(value = "人员ID")
-    private String id;
-
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构ID[入参前端不需要传ID]")
     private String orgId;
 
     @ApiModelProperty(value = "人员姓名")
@@ -33,14 +29,6 @@ public class OrgTeam {
 
     @ApiModelProperty(value = "业务特长")
     private String conSpeciality;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getOrgId() {
         return orgId;

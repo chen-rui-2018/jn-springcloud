@@ -3,18 +3,19 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
     <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgParameter"
             resultType="com.jn.enterprise.model.ServiceOrg">
-        select tt.orgId,tt.orgName,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,
+        select tt.orgId,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,
         tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.evaluationNum from
         (select
         a.org_id as "orgId",a.org_name as "orgName",
+        a.org_logo as "orgLogo",a.org_show as "pageviews",
         date_format(a.org_register_time,'%Y-%m-%d %H:%i:%s') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
         CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
         (select count(1) from tb_service_transaction t where t.org_id = a.org_id ) as "transactionNum" <!-- 累计交易笔数 -->
-        ,IFNULL(AVG(ra.`attitude_score`),0) AS "attitudeScore" <!-- 评价得分 -->
-        ,COUNT(ra.`attitude_score`) AS "evaluationNum" <!-- 评价次数 -->
+        ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
+              WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
+        ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id = a.org_id)  AS "evaluationNum"  <!-- 评价次数 -->
         from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id
-        left join tb_service_rating ra on ra.org_id = a.org_id
         where 1=1 and a.record_status != '0'
 
         <if test="businessType != null and businessType != ''">
@@ -58,12 +59,12 @@
         <result column="s_operateStatus" jdbcType="VARCHAR" property="operateStatus" javaType="java.lang.String"/>
         <result column="s_orgPrincipal" jdbcType="VARCHAR" property="orgPrincipal" javaType="java.lang.String"/>
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
-        <result column="s_professionNum" jdbcType="VARCHAR" property="professionNum" javaType="java.lang.String"/>
-        <result column="s_staffCount" jdbcType="VARCHAR" property="staffCount" javaType="java.lang.String"/>
-        <result column="s_bachelorNum" jdbcType="VARCHAR" property="bachelorNum" javaType="java.lang.String"/>
-        <result column="s_masterNum" jdbcType="VARCHAR" property="masterNum" javaType="java.lang.String"/>
-        <result column="s_doctorNum" jdbcType="VARCHAR" property="doctorNum" javaType="java.lang.String"/>
-        <result column="s_returneeNum" jdbcType="VARCHAR" property="returneeNum" javaType="java.lang.String"/>
+        <result column="s_professionNum" jdbcType="VARCHAR" property="professionNum" javaType="java.lang.Integer"/>
+        <result column="s_staffCount" jdbcType="VARCHAR" property="staffCount" javaType="java.lang.Integer"/>
+        <result column="s_bachelorNum" jdbcType="VARCHAR" property="bachelorNum" javaType="java.lang.Integer"/>
+        <result column="s_masterNum" jdbcType="VARCHAR" property="masterNum" javaType="java.lang.Integer"/>
+        <result column="s_doctorNum" jdbcType="VARCHAR" property="doctorNum" javaType="java.lang.Integer"/>
+        <result column="s_returneeNum" jdbcType="VARCHAR" property="returneeNum" javaType="java.lang.Integer"/>
         <result column="s_orgPhone" jdbcType="VARCHAR" property="orgPhone" javaType="java.lang.String"/>
         <result column="s_orgAddress" jdbcType="VARCHAR" property="orgAddress" javaType="java.lang.String"/>
         <result column="s_conName" jdbcType="VARCHAR" property="conName" javaType="java.lang.String"/>

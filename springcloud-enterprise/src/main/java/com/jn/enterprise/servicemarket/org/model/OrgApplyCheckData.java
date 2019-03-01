@@ -18,8 +18,8 @@ public class OrgApplyCheckData {
     @ApiModelProperty(value = "机构ID")
     @NotNull(message = "机构ID不能为空")
     private String orgId;
-    @ApiModelProperty(value = "审核状态")
-    @Pattern(regexp = "^[01]$", message = "{checkStatus:'审核状态只允许为0,1'}")
+    @ApiModelProperty(value = "审核状态2不通过1通过")
+    @Pattern(regexp = "^[21]$", message = "{checkStatus:'审核状态只允许为2,1'}")
     private String checkStatus;
     @ApiModelProperty(value = "审批意见")
     @NotNull(message = "审批意见不能为空")

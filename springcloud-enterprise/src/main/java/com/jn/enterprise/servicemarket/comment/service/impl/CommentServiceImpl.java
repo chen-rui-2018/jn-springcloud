@@ -75,9 +75,9 @@ public class CommentServiceImpl implements CommentService {
         for (TbServiceRequire serviceRequire: tbServiceRequires) {
             Rating rating = new Rating();
             BeanUtils.copyProperties(serviceRequire,rating);
-            rating.setIssueTime(DateUtils.formatDate(serviceRequire.getIssueTime(),"yyyy-MM-dd HH:mm:ss"));
-            rating.setCommentTime(DateUtils.formatDate(serviceRequire.getCommentTime(),"yyyy-MM-dd HH:mm:ss"));
-            rating.setHandleTime(DateUtils.formatDate(serviceRequire.getHandleTime(),"yyyy-MM-dd HH:mm:ss"));
+            rating.setIssueTime(serviceRequire.getIssueTime()==null?"":(DateUtils.formatDate(serviceRequire.getIssueTime(),"yyyy-MM-dd HH:mm:ss")));
+            rating.setCommentTime(serviceRequire.getCommentTime()==null?"":(DateUtils.formatDate(serviceRequire.getCommentTime(),"yyyy-MM-dd HH:mm:ss")));
+            rating.setHandleTime(serviceRequire.getHandleTime()==null?"":(DateUtils.formatDate(serviceRequire.getHandleTime(),"yyyy-MM-dd HH:mm:ss")));
             ratings.add(rating);
         }
         PaginationData data = new PaginationData(ratings, objects.getTotal());

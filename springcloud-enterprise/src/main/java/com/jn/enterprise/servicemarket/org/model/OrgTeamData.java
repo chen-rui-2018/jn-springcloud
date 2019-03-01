@@ -15,7 +15,7 @@ import java.util.List;
  */
 @ApiModel(value = "OrgTeamData",description = "机构团队信息")
 public class OrgTeamData {
-    @ApiModelProperty(value = "人员结构ID")
+    @ApiModelProperty(value = "人员结构ID[新增时ID传空,修改需传ID]")
     private String id;
 
     @ApiModelProperty(value = "机构ID")

@@ -42,8 +42,6 @@ public class ServiceOrg implements Serializable {
     @ApiModelProperty(value = "服务评分")
     private String attitudeScore;
 
-    @ApiModelProperty(value = "评价等级（好评）")
-    private String evaluationLevel;
     @ApiModelProperty(value = "浏览量（人气）")
     private Integer pageviews;
     @ApiModelProperty(value = "累计交易次数（服务量）")
@@ -121,14 +119,6 @@ public class ServiceOrg implements Serializable {
 
     public void setAttitudeScore(String attitudeScore) {
         this.attitudeScore = attitudeScore;
-    }
-
-    public String getEvaluationLevel() {
-        return evaluationLevel;
-    }
-
-    public void setEvaluationLevel(String evaluationLevel) {
-        this.evaluationLevel = evaluationLevel;
     }
 
     public Integer getPageviews() {

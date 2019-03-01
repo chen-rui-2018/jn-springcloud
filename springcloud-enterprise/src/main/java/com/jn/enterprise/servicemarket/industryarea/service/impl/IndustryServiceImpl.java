@@ -7,9 +7,8 @@ import com.jn.common.util.StringUtils;
 import com.jn.enterprise.servicemarket.industryarea.dao.IndustryMapper;
 import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
 import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
-import com.jn.enterprise.servicemarket.industryarea.model.Industry;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryData;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter;
+import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
+import com.jn.enterprise.servicemarket.industryarea.model.*;
 import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.org.service.impl.OrgApproveServiceImpl;
 import com.jn.system.log.annotation.ServiceLog;
@@ -19,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +42,10 @@ public class IndustryServiceImpl implements IndustryService {
      * 字典数据类型 0业务领域
      */
     private final static String PRE_VALUE_BUSINESS_AREA  = "0";
+    /**
+     * 数据状态 1:有效
+     */
+    private final static String RECORD_STATUS_VALID = "1";
 
     @Override
     @ServiceLog(doAction = "查询行业类型数据")
@@ -69,7 +73,7 @@ public class IndustryServiceImpl implements IndustryService {
             tbServicePrefer.setId(UUID.randomUUID().toString().replaceAll("-",""));
             tbServicePrefer.setCreatedTime(new Date());
             tbServicePrefer.setCreatorAccount(account);
-            tbServicePrefer.setRecordStatus(new Byte(""));
+            tbServicePrefer.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             i = tbServicePreferMapper.insert(tbServicePrefer);
             logger.info("插入行业数据成功，响应条数{}",i);
         }
@@ -81,6 +85,31 @@ public class IndustryServiceImpl implements IndustryService {
     public Industry getIndustryDetail(String id){
         Industry industryDetail = industryMapper.getIndustryDetail(id);
         return industryDetail;
+    }
+
+    @Override
+    @ServiceLog(doAction = "机构字典列表")
+    public List<IndustryDictionary> getIndustryDictionary(IndustryDictParameter industryDictParameter){
+        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+        TbServicePreferCriteria.Criteria criteria = preferCriteria.createCriteria();
+        if(StringUtils.isNotEmpty(industryDictParameter.getId())){
+            criteria.andIdEqualTo(industryDictParameter.getId());
+        }
+        if(StringUtils.isNotEmpty(industryDictParameter.getPreValue())){
+            criteria.andPreValueEqualTo(industryDictParameter.getPreValue());
+        }
+        if(StringUtils.isNotEmpty(industryDictParameter.getPreType())){
+            criteria.andPreTypeEqualTo(industryDictParameter.getPreType());
+        }
+        criteria.andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+        List<IndustryDictionary> dictionaries = new ArrayList<>(8);
+        for (TbServicePrefer pre:tbServicePrefers) {
+            IndustryDictionary industryDictionary = new IndustryDictionary();
+            BeanUtils.copyProperties(pre,industryDictionary);
+            dictionaries.add(industryDictionary);
+        }
+        return dictionaries;
     }
 
 }

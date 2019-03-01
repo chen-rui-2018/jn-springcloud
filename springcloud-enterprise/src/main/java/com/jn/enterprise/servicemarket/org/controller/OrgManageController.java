@@ -2,6 +2,8 @@ package com.jn.enterprise.servicemarket.org.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
+import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.OrgBasicData;
 import com.jn.enterprise.servicemarket.org.model.OrgContactData;
 import com.jn.enterprise.servicemarket.org.model.OrgLicenseData;
@@ -52,8 +54,20 @@ public class OrgManageController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "保存服务机构资质信息")
-    @ApiOperation(value = "保存服务机构资质信息", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "修改服务机构基本信息")
+    @ApiOperation(value = "修改服务机构基本信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/updateOrgBasicData")
+    @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
+    public Result updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
+        Assert.notNull(orgBasicData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        int i = orgService.saveOrUpdateOrgBasicData(orgBasicData,user.getAccount());
+        logger.info("保存服务机构基本信息成功，响应条数："+i);
+        return new Result(i);
+    }
+
+    @ControllerLog(doAction = "保存/修改服务机构资质信息")
+    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同]", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgLicenseData")
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
     public Result saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
@@ -64,8 +78,8 @@ public class OrgManageController extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "保存服务机构团队信息")
-    @ApiOperation(value = "保存服务机构团队信息", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "保存/修改服务机构团队信息")
+    @ApiOperation(value = "保存/修改服务机构团队信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgTeamData")
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
     public Result saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
@@ -75,8 +89,8 @@ public class OrgManageController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "保存服务机构联系方式")
-    @ApiOperation(value = "保存服务机构联系方式", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "保存/修改服务机构联系方式")
+    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同]", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){

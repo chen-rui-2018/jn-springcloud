@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "OrgBasicData",description = "服务机构认证基本信息")
 public class OrgBasicData {
 
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构ID[新增id传空，修改不能为空]")
     private String orgId;
 
     @ApiModelProperty(value = "服务商名称")
@@ -26,7 +26,7 @@ public class OrgBasicData {
     @NotNull(message = "统一社会信用代码/组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "注册时间")
+    @ApiModelProperty(value = "注册时间 yyyy-MM-dd")
     @NotNull(message = "注册时间不能为空")
     private String orgRegisterTime;
 

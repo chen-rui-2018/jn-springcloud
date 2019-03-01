@@ -2,9 +2,7 @@ package com.jn.enterprise.servicemarket.industryarea.service.impl;
 
 import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.industryarea.model.Industry;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryData;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.*;
 import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -69,5 +67,11 @@ public class IndustryServiceImplTest {
         assertThat(industryDetail,notNullValue());
     }
 
+    @Test
+    public void getIndustryDictionary() {
+        IndustryDictParameter industryDictParameter = new IndustryDictParameter();
+        List<IndustryDictionary> industryDictionary = industryService.getIndustryDictionary(industryDictParameter);
+        assertThat(industryDictionary.size(),greaterThanOrEqualTo(0));
+    }
 
 }

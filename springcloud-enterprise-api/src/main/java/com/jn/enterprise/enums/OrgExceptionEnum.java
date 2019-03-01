@@ -23,6 +23,7 @@ public enum OrgExceptionEnum  implements CodeAndMsg {
     PRE_ID_IS_NOT_NULL("5020511", "行业ID不能为空"),
     ORG_IS_NOT_EXIT("5020512", "机构不存在"),
     COMMENT_IS_EXIST("5020513", "该需求已评论，无需再次提交"),
+    TEAM_ELEMENTS_IS_EXIST("5020514", "机构团队信息已存在，无需再次添加"),
     ;
 
     /**

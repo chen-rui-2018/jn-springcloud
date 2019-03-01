@@ -1,9 +1,9 @@
 package com.jn.enterprise.servicemarket.industryarea.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.industryarea.model.Industry;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryData;
-import com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.*;
+
+import java.util.List;
 
 /**
  * 行业领域管理
@@ -36,5 +36,12 @@ public interface IndustryService {
      * @return
      */
     Industry getIndustryDetail(String id);
+
+    /**
+     * 机构字典列表
+     * @param industryDictParameter
+     * @return
+     */
+    List<IndustryDictionary> getIndustryDictionary(IndustryDictParameter industryDictParameter);
 
 }

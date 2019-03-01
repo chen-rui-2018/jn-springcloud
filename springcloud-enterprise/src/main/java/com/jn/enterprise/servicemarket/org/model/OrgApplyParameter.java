@@ -14,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "OrgApplyParameter",description = "服务机构申请查询入参")
 public class OrgApplyParameter extends Page{
 
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态[0未审核1审核通过2审核不通过]")
     private String orgStatus;
 
     @ApiModelProperty(value = "机构名称")

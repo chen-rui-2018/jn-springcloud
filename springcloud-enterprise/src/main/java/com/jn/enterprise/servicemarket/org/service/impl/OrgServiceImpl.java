@@ -81,13 +81,21 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrg tbServiceOrg = new TbServiceOrg();
         BeanUtils.copyProperties(orgBasicData,tbServiceOrg);
 
-        //修改、新增，设置状态为待审核
-        tbServiceOrg.setOrgStatus("0");
         tbServiceOrg.setRecordStatus(new Byte("1"));
+        tbServiceOrg.setOrgSpeciality(StringUtils.join(orgBasicData.getOrgSpeciality(), ","));
+        try {
+            tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(orgBasicData.getOrgRegisterTime(),"yyyy-MM-dd"));
+        } catch (ParseException e) {
+            logger.info("保存服务机构基本信息。失败原因{}", e.getMessage(), e);
+            throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
+        }
         if(StringUtils.isEmpty(orgBasicData.getOrgId())){
+            //新增，设置状态为待审核
+            tbServiceOrg.setOrgStatus("0");
             tbServiceOrg.setOrgId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbServiceOrg.setCreatedTime(new Date());
             tbServiceOrg.setCreatorAccount(account);
+            tbServiceOrg.setOrgAccount(account);
             insert = tbServiceOrgMapper.insert(tbServiceOrg);
         }else{
             tbServiceOrg.setModifiedTime(new Date());
@@ -105,7 +113,7 @@ public class OrgServiceImpl implements OrgService {
         traits.addAll(setTraitBean(orgBasicData.getIndustrySector(),"2",tbServiceOrg.getOrgId(),account));
         traits.addAll(setTraitBean(orgBasicData.getDevelopmentStage(),"3",tbServiceOrg.getOrgId(),account));
         traits.addAll(setTraitBean(orgBasicData.getCompanyNature(),"4",tbServiceOrg.getOrgId(),account));
-        Map<String,Object> map = new HashMap<>();
+        Map<String,Object> map = new HashMap<>(4);
         map.put("list",traits);
         orgTraitMapper.insertTraitList(map);
         return insert;
@@ -180,6 +188,7 @@ public class OrgServiceImpl implements OrgService {
         List<TbServiceOrgTeam> orgTeamList = new ArrayList<>(8);
         for (OrgTeam team: orgTeams) {
             TbServiceOrgTeam serviceOrgTeam = new TbServiceOrgTeam();
+            BeanUtils.copyProperties(team,serviceOrgTeam);
             serviceOrgTeam.setId(UUID.randomUUID().toString().replaceAll("-",""));
             try {
                 serviceOrgTeam.setConTime(DateUtils.parseDate(team.getConTime(),"yyyy-MM-dd"));
@@ -199,7 +208,15 @@ public class OrgServiceImpl implements OrgService {
         int i1 = orgTeamMapper.insertTeamList(orgTeamList);
         logger.info("保存机构核心服务团队信息，添加数据{}条",i1);
 
+        TbServiceOrgElementCriteria elementCriteria = new TbServiceOrgElementCriteria();
+        elementCriteria.createCriteria().andOrgIdEqualTo(orgTeamData.getOrgId());
+        List<TbServiceOrgElement> tbServiceOrgElements = tbServiceOrgElementMapper.selectByExample(elementCriteria);
+
         if(StringUtils.isEmpty(orgTeamData.getId())){
+            if(null!=tbServiceOrgElements && tbServiceOrgElements.size()>0){
+                logger.info("团队信息已存在，无法再次新增团队信息。");
+                throw new JnSpringCloudException(OrgExceptionEnum.TEAM_ELEMENTS_IS_EXIST);
+            }
             serviceOrgElement.setId(UUID.randomUUID().toString().replaceAll("-",""));
             serviceOrgElement.setCreatedTime(new Date());
             serviceOrgElement.setCreatorAccount(account);

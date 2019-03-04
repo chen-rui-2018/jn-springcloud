@@ -220,6 +220,7 @@
 
         <table tableName="tb_service_and_advisor">
         </table>
+
         <table tableName="tb_service_product">
         </table>
     </context>

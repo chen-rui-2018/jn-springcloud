@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
@@ -12,6 +13,8 @@ import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperience;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -50,6 +53,9 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Autowired
     private TbServiceCertificateTypeMapper tbServiceCertificateTypeMapper;
 
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
 
     /**
@@ -59,6 +65,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "基本信息保存并更新")
     @Override
     public void saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo) {
+        //根据账号查询是否存在顾问信息
         //数据状态  0：删除  1：正常
         byte recordStatus=1;
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
@@ -66,19 +73,60 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
-            logger.warn("基本信息保存并更新失败，顾问[{}]信息在系统中不存在",advisorBaseInfo.getAdvisorAccount());
-            throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
+            insertServiceAdvisorInfo(advisorBaseInfo);
+        }else{
+            TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
+            //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
+            BeanUtils.copyProperties(advisorBaseInfo, tbServiceAdvisor);
+            //修改人
+            tbServiceAdvisor.setModifierAccount(advisorBaseInfo.getAdvisorAccount());
+            //修改时间
+            tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            //更新全部字段
+            tbServiceAdvisorMapper.updateByExample(tbServiceAdvisor, example);
         }
-        TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
-        //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
-        BeanUtils.copyProperties(advisorBaseInfo, tbServiceAdvisor);
-        //修改人
-        tbServiceAdvisor.setModifierAccount(advisorBaseInfo.getAdvisorAccount());
-        //修改时间
-        tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-        //更新全部字段
-        tbServiceAdvisorMapper.updateByExample(tbServiceAdvisor, example);
+    }
 
+    /**
+     * 新增顾问信息
+     * @param advisorBaseInfo
+     */
+    @ServiceLog(doAction = "新增顾问信息")
+    private void insertServiceAdvisorInfo(AdvisorBaseInfo advisorBaseInfo) {
+        if(StringUtils.isBlank(advisorBaseInfo.getOrgId()) || StringUtils.isBlank(advisorBaseInfo.getOrgName())){
+            logger.warn("基本信息保存并更新，机构id或机构名称不能为空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_INFO_NOT_NULL);
+        }
+        //没有顾问信息，添加顾问
+        TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        //主键id
+        tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
+        //机构id、机构名称
+        tbServiceAdvisor.setOrgId(advisorBaseInfo.getOrgId());
+        tbServiceAdvisor.setOrgName(advisorBaseInfo.getOrgName());
+        //根据顾问账号获取顾问信息
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfo.getAdvisorAccount());
+        if(userExtension==null ||userExtension.getData()==null){
+            logger.warn("基本信息保存并更新顾问：[{}]的信息失败",advisorBaseInfo.getAdvisorAccount());
+            throw new JnSpringCloudException(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL);
+        }
+        //顾问账号
+        tbServiceAdvisor.setAdvisorAccount(userExtension.getData().getAccount());
+        //顾问姓名
+        tbServiceAdvisor.setAdvisorName(userExtension.getData().getName());
+        //头像
+        tbServiceAdvisor.setAvatar(userExtension.getData().getAvatar());
+        //是否认证 0：未认证     1：已认证
+        tbServiceAdvisor.setIsCertification("0");
+        //审核状态  - 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除
+        tbServiceAdvisor.setApprovalStatus("0");
+        //创建时间
+        tbServiceAdvisor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        //创建人
+        tbServiceAdvisor.setCreatorAccount(advisorBaseInfo.getAdvisorAccount());
+        //记录状态 0标记删除，1正常
+        tbServiceAdvisor.setRecordStatus((byte)1);
+        tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 
     /**

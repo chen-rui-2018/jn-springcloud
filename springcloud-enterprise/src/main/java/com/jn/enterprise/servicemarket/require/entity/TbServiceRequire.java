@@ -8,6 +8,8 @@ public class TbServiceRequire implements Serializable {
 
     private String reqNum;
 
+    private String businessId;
+
     private String businessArea;
 
     private String productId;
@@ -60,6 +62,10 @@ public class TbServiceRequire implements Serializable {
 
     private String isComment;
 
+    private String contractHomePage;
+
+    private String contractEndPage;
+
     private Date commentTime;
 
     private Date createdTime;
@@ -88,6 +94,14 @@ public class TbServiceRequire implements Serializable {
 
     public void setReqNum(String reqNum) {
         this.reqNum = reqNum == null ? null : reqNum.trim();
+    }
+
+    public String getBusinessId() {
+        return businessId;
+    }
+
+    public void setBusinessId(String businessId) {
+        this.businessId = businessId == null ? null : businessId.trim();
     }
 
     public String getBusinessArea() {
@@ -298,6 +312,22 @@ public class TbServiceRequire implements Serializable {
         this.isComment = isComment == null ? null : isComment.trim();
     }
 
+    public String getContractHomePage() {
+        return contractHomePage;
+    }
+
+    public void setContractHomePage(String contractHomePage) {
+        this.contractHomePage = contractHomePage == null ? null : contractHomePage.trim();
+    }
+
+    public String getContractEndPage() {
+        return contractEndPage;
+    }
+
+    public void setContractEndPage(String contractEndPage) {
+        this.contractEndPage = contractEndPage == null ? null : contractEndPage.trim();
+    }
+
     public Date getCommentTime() {
         return commentTime;
     }
@@ -360,6 +390,7 @@ public class TbServiceRequire implements Serializable {
         TbServiceRequire other = (TbServiceRequire) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getReqNum() == null ? other.getReqNum() == null : this.getReqNum().equals(other.getReqNum()))
+            && (this.getBusinessId() == null ? other.getBusinessId() == null : this.getBusinessId().equals(other.getBusinessId()))
             && (this.getBusinessArea() == null ? other.getBusinessArea() == null : this.getBusinessArea().equals(other.getBusinessArea()))
             && (this.getProductId() == null ? other.getProductId() == null : this.getProductId().equals(other.getProductId()))
             && (this.getProductName() == null ? other.getProductName() == null : this.getProductName().equals(other.getProductName()))
@@ -386,6 +417,8 @@ public class TbServiceRequire implements Serializable {
             && (this.getHandleResult() == null ? other.getHandleResult() == null : this.getHandleResult().equals(other.getHandleResult()))
             && (this.getResultDetail() == null ? other.getResultDetail() == null : this.getResultDetail().equals(other.getResultDetail()))
             && (this.getIsComment() == null ? other.getIsComment() == null : this.getIsComment().equals(other.getIsComment()))
+            && (this.getContractHomePage() == null ? other.getContractHomePage() == null : this.getContractHomePage().equals(other.getContractHomePage()))
+            && (this.getContractEndPage() == null ? other.getContractEndPage() == null : this.getContractEndPage().equals(other.getContractEndPage()))
             && (this.getCommentTime() == null ? other.getCommentTime() == null : this.getCommentTime().equals(other.getCommentTime()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -400,6 +433,7 @@ public class TbServiceRequire implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getReqNum() == null) ? 0 : getReqNum().hashCode());
+        result = prime * result + ((getBusinessId() == null) ? 0 : getBusinessId().hashCode());
         result = prime * result + ((getBusinessArea() == null) ? 0 : getBusinessArea().hashCode());
         result = prime * result + ((getProductId() == null) ? 0 : getProductId().hashCode());
         result = prime * result + ((getProductName() == null) ? 0 : getProductName().hashCode());
@@ -426,6 +460,8 @@ public class TbServiceRequire implements Serializable {
         result = prime * result + ((getHandleResult() == null) ? 0 : getHandleResult().hashCode());
         result = prime * result + ((getResultDetail() == null) ? 0 : getResultDetail().hashCode());
         result = prime * result + ((getIsComment() == null) ? 0 : getIsComment().hashCode());
+        result = prime * result + ((getContractHomePage() == null) ? 0 : getContractHomePage().hashCode());
+        result = prime * result + ((getContractEndPage() == null) ? 0 : getContractEndPage().hashCode());
         result = prime * result + ((getCommentTime() == null) ? 0 : getCommentTime().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -443,6 +479,7 @@ public class TbServiceRequire implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", reqNum=").append(reqNum);
+        sb.append(", businessId=").append(businessId);
         sb.append(", businessArea=").append(businessArea);
         sb.append(", productId=").append(productId);
         sb.append(", productName=").append(productName);
@@ -469,6 +506,8 @@ public class TbServiceRequire implements Serializable {
         sb.append(", handleResult=").append(handleResult);
         sb.append(", resultDetail=").append(resultDetail);
         sb.append(", isComment=").append(isComment);
+        sb.append(", contractHomePage=").append(contractHomePage);
+        sb.append(", contractEndPage=").append(contractEndPage);
         sb.append(", commentTime=").append(commentTime);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

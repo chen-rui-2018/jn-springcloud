@@ -153,7 +153,9 @@ public class AdvisorEditServiceImplTest {
             logger.warn("基本信息保存并更新失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ORG_INFO_NOT_NULL.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode())
                     )
             );
         }

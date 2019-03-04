@@ -1,7 +1,9 @@
-package com.jn.enterprise.servicemarket.org.model;
+package com.jn.enterprise.servicemarket.org.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 /**
  * 服务机构审核统计
@@ -10,8 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OrgApplyCount",description = "服务机构审核统计")
-public class OrgApplyCount {
+@ApiModel(value = "OrgApplyCountVo",description = "服务机构审核统计")
+public class OrgApplyCountVo implements Serializable {
     @ApiModelProperty(value = "待审核机构数")
     private String waitApplyCount;
     @ApiModelProperty(value = "已入住机构数")

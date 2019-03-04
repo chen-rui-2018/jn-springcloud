@@ -1,7 +1,9 @@
-package com.jn.enterprise.servicemarket.org.model;
+package com.jn.enterprise.servicemarket.org.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
 
 /**
  * 服务机构申请基本信息
@@ -10,8 +12,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OrgApply",description = "服务机构申请基本信息")
-public class OrgApply {
+@ApiModel(value = "OrgApplyVo",description = "服务机构申请基本信息")
+public class OrgApplyVo implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
     @ApiModelProperty(value = "机构名称")

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "OrgLicenseData",description = "服务机构认证资质信息")
-public class OrgLicenseData {
+public class OrgLicenseData implements Serializable {
 
     @ApiModelProperty(value = "机构ID")
     private String orgId;

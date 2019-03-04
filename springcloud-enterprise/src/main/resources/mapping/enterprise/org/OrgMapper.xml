@@ -44,7 +44,7 @@
         </if>
     </select>
 
-    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.model.OrgDetail">
+    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.vo.OrgDetailVo">
         <id column="s_id" jdbcType="VARCHAR" property="orgId" javaType="java.lang.String"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
@@ -58,6 +58,7 @@
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_operateStatus" jdbcType="VARCHAR" property="operateStatus" javaType="java.lang.String"/>
         <result column="s_orgPrincipal" jdbcType="VARCHAR" property="orgPrincipal" javaType="java.lang.String"/>
+        <result column="s_orgWeb" jdbcType="VARCHAR" property="orgWeb" javaType="java.lang.String"/>
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_professionNum" jdbcType="VARCHAR" property="professionNum" javaType="java.lang.Integer"/>
         <result column="s_staffCount" jdbcType="VARCHAR" property="staffCount" javaType="java.lang.Integer"/>
@@ -138,6 +139,7 @@
           i.con_name AS "s_conName",
           i.con_phone AS "s_conPhone",
           i.con_email AS "s_conEmail",
+          i.org_web as "s_orgWeb",
           date_format(o.org_register_time,'%Y-%m-%d')  AS "s_orgRegisterTime",
           o.org_logo AS "s_orgLogo",
           li.id AS "st_id",

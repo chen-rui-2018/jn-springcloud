@@ -6,7 +6,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
-import com.netflix.discovery.converters.Auto;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,20 +53,20 @@ public class OrgApproveServiceImplTest {
     public void getOrgApplyList() {
         OrgApplyParameter parameter = new OrgApplyParameter();
         PaginationData orgApplyList = orgApproveService.getOrgApplyList(parameter);
-        List<OrgApply> orgApplies = (List<OrgApply>)orgApplyList.getRows();
+        List<OrgApplyVo> orgApplies = (List<OrgApplyVo>)orgApplyList.getRows();
         assertThat(orgApplies.size(),greaterThanOrEqualTo(0));
     }
 
     @Test
     public void getOrgCount() {
-        OrgApplyCount orgCount = orgApproveService.getOrgCount();
+        OrgApplyCountVo orgCount = orgApproveService.getOrgCount();
         assertThat(orgCount,notNullValue());
     }
 
     @Test
     public void getOrgApplyDetail() {
-        OrgApplyDetail orgApplyDetail = orgApproveService.getOrgApplyDetail(orgId);
-        assertThat(orgApplyDetail,notNullValue());
+        OrgApplyDetailVo orgApplyDetailVo = orgApproveService.getOrgApplyDetail(orgId);
+        assertThat(orgApplyDetailVo,notNullValue());
     }
 
     @Test

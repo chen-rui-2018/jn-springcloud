@@ -1,8 +1,11 @@
-package com.jn.enterprise.servicemarket.org.model;
+package com.jn.enterprise.servicemarket.org.vo;
 
+import com.jn.enterprise.servicemarket.org.model.OrgLicense;
+import com.jn.enterprise.servicemarket.org.model.OrgTeam;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,8 +15,8 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "OrgDetail",description = "服务机构详情")
-public class OrgDetail {
+@ApiModel(value = "OrgDetailVo",description = "服务机构详情")
+public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "服务机构id")
     private String orgId;
 
@@ -68,6 +71,9 @@ public class OrgDetail {
 
     @ApiModelProperty(value = "机构LOGO")
     private String orgLogo;
+
+    @ApiModelProperty(value = "公司网网址")
+    private String orgWeb;
 
     @ApiModelProperty(value = "机构成立时间yyyy-MM-dd")
     private String orgRegisterTime;
@@ -343,5 +349,13 @@ public class OrgDetail {
 
     public void setOrgTeams(List<OrgTeam> orgTeams) {
         this.orgTeams = orgTeams;
+    }
+
+    public String getOrgWeb() {
+        return orgWeb;
+    }
+
+    public void setOrgWeb(String orgWeb) {
+        this.orgWeb = orgWeb;
     }
 }

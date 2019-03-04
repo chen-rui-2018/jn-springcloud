@@ -1,6 +1,6 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
-import com.jn.enterprise.servicemarket.org.model.OrgApplyDetail;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -17,6 +17,6 @@ public interface OrgApproveMapper {
      * @param orgId
      * @return
      */
-    OrgApplyDetail getOrgApplyDetailById(@Param("orgId") String orgId);
+    OrgApplyDetailVo getOrgApplyDetailById(@Param("orgId") String orgId);
 
 }

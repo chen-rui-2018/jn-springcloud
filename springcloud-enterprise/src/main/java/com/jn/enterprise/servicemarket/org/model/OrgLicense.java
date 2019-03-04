@@ -3,6 +3,8 @@ package com.jn.enterprise.servicemarket.org.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * 服务机构标签
  * @author： jiangyl
@@ -11,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @modified By:
  */
 @ApiModel(value = "OrgLicense",description = "服务机构标签")
-public class OrgLicense {
+public class OrgLicense implements Serializable {
 
     @ApiModelProperty(value = "证书ID[作为入参时，前台无需传值]")
     private String id;

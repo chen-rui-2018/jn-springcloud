@@ -12,6 +12,7 @@ import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,12 +67,12 @@ public class OrgServiceImpl implements OrgService {
 
     @ServiceLog(doAction = "根据机构ID查询机构详情")
     @Override
-    public OrgDetail getServiceOrgDetail(String orgId){
-        OrgDetail serviceOrgDetail = orgMapper.getServiceOrgDetail(orgId);
-        if(null == serviceOrgDetail){
+    public OrgDetailVo getServiceOrgDetail(String orgId){
+        OrgDetailVo serviceOrgDetailVo = orgMapper.getServiceOrgDetail(orgId);
+        if(null == serviceOrgDetailVo){
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_IS_NOT_EXIT);
         }
-        return serviceOrgDetail;
+        return serviceOrgDetailVo;
     }
 
     @ServiceLog(doAction = "保存服务机构基本信息(id为空时为新增)")
@@ -178,7 +179,7 @@ public class OrgServiceImpl implements OrgService {
         return tbServiceOrgMapper.updateByPrimaryKeySelective(org);
     }
 
-    @ServiceLog(doAction = "保存服务机构团队信息(传入Id为修改，否则为新增)")
+    @ServiceLog(doAction = "保存服务机构团队信息")
     @Override
     public int saveOrUpdateOrgTeamData(OrgTeamData orgTeamData,String account){
         TbServiceOrgElement serviceOrgElement = new TbServiceOrgElement();
@@ -212,20 +213,16 @@ public class OrgServiceImpl implements OrgService {
         elementCriteria.createCriteria().andOrgIdEqualTo(orgTeamData.getOrgId());
         List<TbServiceOrgElement> tbServiceOrgElements = tbServiceOrgElementMapper.selectByExample(elementCriteria);
 
-        if(StringUtils.isEmpty(orgTeamData.getId())){
-            if(null!=tbServiceOrgElements && tbServiceOrgElements.size()>0){
-                logger.info("团队信息已存在，无法再次新增团队信息。");
-                throw new JnSpringCloudException(OrgExceptionEnum.TEAM_ELEMENTS_IS_EXIST);
-            }
+        if(null !=tbServiceOrgElements && tbServiceOrgElements.size()>0){
+            serviceOrgElement.setModifiedTime(new Date());
+            serviceOrgElement.setModifierAccount(account);
+            return tbServiceOrgElementMapper.updateByPrimaryKeySelective(serviceOrgElement);
+        }else{
             serviceOrgElement.setId(UUID.randomUUID().toString().replaceAll("-",""));
             serviceOrgElement.setCreatedTime(new Date());
             serviceOrgElement.setCreatorAccount(account);
             serviceOrgElement.setRecordStatus(new Byte("1"));
             return tbServiceOrgElementMapper.insert(serviceOrgElement);
-        }else{
-            serviceOrgElement.setModifiedTime(new Date());
-            serviceOrgElement.setModifierAccount(account);
-            return tbServiceOrgElementMapper.updateByPrimaryKeySelective(serviceOrgElement);
         }
     }
 

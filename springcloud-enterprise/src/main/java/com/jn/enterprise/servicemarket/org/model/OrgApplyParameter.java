@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * 服务机构申请查询入参
  * @author： jiangyl
@@ -12,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @modified By:
  */
 @ApiModel(value = "OrgApplyParameter",description = "服务机构申请查询入参")
-public class OrgApplyParameter extends Page{
+public class OrgApplyParameter extends Page implements Serializable {
 
     @ApiModelProperty(value = "审核状态[0未审核1审核通过2审核不通过]")
     private String orgStatus;

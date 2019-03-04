@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.require.dao.RequireManagementMapper">
+    <!--对他人的需求列表查询-->
+    <select id="getRequireOtherList" parameterType="com.jn.enterprise.servicemarket.require.model.RequireOtherParam"
+            resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
+        SELECT
+            sr.`req_num` AS "reqNum"			                <!--需求单号-->
+            ,sr.`org_id` AS "orgId"				                <!--机构id-->
+            ,sr.`org_name`AS "orgName"			                <!--机构名称-->
+            ,sr.`business_id` AS "businessId"		            <!--领域id-->
+            ,sr.`business_area` AS "businessArea"		        <!--领域名称-->
+            ,sr.`product_id` AS "productId" 		            <!--产品id-->
+            ,sr.`product_name` AS "productName"		            <!--产品名称-->
+            ,sr.`advisor_account` AS "advisorAccount"	        <!--顾问账号-->
+            ,sr.`advisor_name` AS "advisorName"		            <!--顾问姓名-->
+            ,DATE_FORMAT(sr.`created_time`,"%Y/%m/%d")AS requireTime	<!--提需求日期-->
+            ,CASE sr.`status`
+            WHEN '1' THEN "待处理"
+            WHEN '2' THEN "已处理"
+            ELSE '--'
+            END AS  "status"				      <!--需求状态-->
+            ,CASE sr.handle_result
+            WHEN '1' THEN "对接成功"
+            WHEN '2' THEN "对接失败"
+            WHEN '3' THEN "企业需求撤销"
+            WHEN '4' THEN "未对接"
+            ELSE '--'
+            END AS "handleResult"				  <!--对接结果-->
+        FROM tb_service_require sr
+        WHERE 1=1
+        AND sr.issue_account=#{account}           <!--发布人  对他人的需求-->
+        <if test="intentProduct!=null and intentProduct!=''">
+            and (sr.product_id like CONCAT('%', #{intentProduct}, '%') or sr.product_name like CONCAT('%', #{intentProduct}, '%'))
+        </if>
+        <if test="intentOrg!=null and intentOrg!=''">
+            and (sr.org_id like CONCAT('%', #{intentOrg}, '%') or sr.product_name like CONCAT('%', #{intentOrg}, '%'))
+        </if>
+        <if test="handleResult!=null and handleResult!=''">
+            and sr.handle_result=#{handleResult} 
+        </if>
+    </select>
+
+</mapper>

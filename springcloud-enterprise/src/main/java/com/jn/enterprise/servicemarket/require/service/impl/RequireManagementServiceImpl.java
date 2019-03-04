@@ -1,9 +1,11 @@
 package com.jn.enterprise.servicemarket.require.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.RequireExceptionEnum;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgInfoMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfo;
@@ -11,8 +13,10 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgInfoCriteria;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
 import com.jn.enterprise.servicemarket.product.entity.TbServiceProduct;
 import com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria;
+import com.jn.enterprise.servicemarket.require.dao.RequireManagementMapper;
 import com.jn.enterprise.servicemarket.require.dao.TbServiceRequireMapper;
 import com.jn.enterprise.servicemarket.require.entity.TbServiceRequire;
+import com.jn.enterprise.servicemarket.require.model.RequireInfoList;
 import com.jn.enterprise.servicemarket.require.model.RequireOtherParam;
 import com.jn.enterprise.servicemarket.require.model.RequireParam;
 import com.jn.enterprise.servicemarket.require.model.RequireTechnologyParam;
@@ -21,11 +25,9 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.apache.commons.lang.math.RandomUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.UsesJava8;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +54,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
 
     @Autowired
     private TbServiceRequireMapper tbServiceRequireMapper;
+
+    @Autowired
+    private RequireManagementMapper requireManagementMapper;
 
     @Autowired
     private UserExtensionClient userExtensionClient;
@@ -192,10 +197,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //发布日期，发布人
         tbServiceRequire.setIssueTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         tbServiceRequire.setIssueAccount(user.getAccount());
-        //需求状态 默认设置为待处理  1：待处理
+        //需求状态 默认设置为待处理  1：待处理  2:已处理
         tbServiceRequire.setStatus("1");
         //点评装填  默认设置为未点评   0：未点评   1：已点评
         tbServiceRequire.setIsComment("0");
+        //对接结果 (1对接成功2对接失败3企业需求撤销 4.未对接)    未对接：4
+        tbServiceRequire.setHandleResult("4");
         //创建时间
         tbServiceRequire.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //创建人
@@ -245,7 +252,22 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "对他人的需求列表查询")
     @Override
     public PaginationData getRequireOtherList(RequireOtherParam requireOtherParam, String account) {
-
-        return null;
+        com.github.pagehelper.Page<Object> objects = null;
+        if(requireOtherParam==null || StringUtils.isBlank(requireOtherParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+            List<RequireInfoList> requireOtherList = requireManagementMapper.getRequireOtherList(requireOtherParam, account);
+            return new PaginationData(requireOtherList, objects == null ? 0 : objects.getTotal());
+        }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(requireOtherParam.getNeedPage())){
+            objects = PageHelper.startPage(requireOtherParam.getPage(),
+                    requireOtherParam.getRows() == 0 ? 15 : requireOtherParam.getRows(), true);
+        }
+        List<RequireInfoList> requireOtherList = requireManagementMapper.getRequireOtherList(requireOtherParam, account);
+        return new PaginationData(requireOtherList, objects == null ? 0 : objects.getTotal());
     }
 }

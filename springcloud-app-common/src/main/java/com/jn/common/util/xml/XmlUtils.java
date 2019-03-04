@@ -10,6 +10,7 @@ import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultText;
 
+import java.io.InputStream;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,23 @@ public class XmlUtils {
         try {
             SAXReader saxReader = new SAXReader();
             Document doc = saxReader.read(new StringReader(xmlString));
+            Element root = doc.getRootElement();
+            List<Element> elements = root.elements();
+            for (Element element : elements) {
+                map.put(element.getName(), element2MapOrString(element));
+            }
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
+        }
+
+        return map;
+    }
+
+    public static Map<String, Object> xml2Map(InputStream inputStream) {
+        Map<String, Object> map = new HashMap<>(16);
+        try {
+            SAXReader saxReader = new SAXReader();
+            Document doc = saxReader.read(inputStream);
             Element root = doc.getRootElement();
             List<Element> elements = root.elements();
             for (Element element : elements) {

@@ -2,8 +2,10 @@ package com.jn.nodify.send;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jn.common.channel.MessageSource;
+import com.jn.news.vo.SmsTemplateVo;
 import com.jn.nodify.SendService;
 import com.jn.nodify.domain.NotifierProperties;
+import org.springframework.messaging.support.MessageBuilder;
 
 /**
  * 邮件发送
@@ -18,7 +20,12 @@ public class SmsSend implements SendService {
 
     @Override
     public void sendMessage(MessageSource messageSource,String message,NotifierProperties notifierProperties) throws JsonProcessingException {
-        // TODO: 2018/12/5 fengxh，等待短信的通信完成，再补充(陈苗)
-
+        SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
+        smsTemplateVo.setMobiles(notifierProperties.getNotifier().getReceivedPhone());
+        //系统监控短信模板ID:999
+        smsTemplateVo.setTemplateId("999");
+        String[] smsContents = {message};
+        smsTemplateVo.setContents(smsContents);
+        messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
     }
 }

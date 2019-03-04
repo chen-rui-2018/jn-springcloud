@@ -53,7 +53,7 @@ public interface ActivityTypeService {
      *根据类型Id删除活动类型
      * @param typeId
      */
-    void deleteActivityTypeList(String typeId);
+    void deleteActivityTypeList(String[] typeId);
 
 
 }

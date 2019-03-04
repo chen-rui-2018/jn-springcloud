@@ -4,12 +4,11 @@ import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.activity.dao.TbActivityApplyMapper;
-import com.jn.park.activity.entity.TbActivityApply;
 import com.jn.park.activity.entity.TbActivityApplyCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParment;
+import com.jn.park.model.ActivityApplyParam;
 import com.jn.park.model.ActivityQueryPaging;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -147,8 +146,8 @@ public class ActivityApplyServiceImplTest {
      */
     @Test
     public void applyActivityList() {
-        ActivityApplyParment activityApplyParment = new ActivityApplyParment();
-        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
+        ActivityApplyParam activityApplyParam = new ActivityApplyParam();
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParam,true);
         List<ActivityApplyDetail> a =  (List<ActivityApplyDetail>)paginationData.getRows();
         assertThat(a.size(),greaterThanOrEqualTo(0));
     }

@@ -1,5 +1,6 @@
 package com.jn.news.vo;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,8 @@ import java.util.Map;
  * @Version： v1.0
  * @Modified By:
  */
-public class EmailVo {
+public class EmailVo implements Serializable {
+    private static final long serialVersionUID = 6112087263463382255L;
 
     /*****************邮件基础信息开始*************/
 

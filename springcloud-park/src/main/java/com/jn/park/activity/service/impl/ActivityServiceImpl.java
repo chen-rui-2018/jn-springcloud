@@ -280,10 +280,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "删除活动草稿")
     @Override
-    public int deleteDraftActivity(String activityId,String account) {
-        String[] split = activityId.split(",");
+    public int deleteDraftActivity(String[] activityId,String account) {
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
-        tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
+        tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(activityId));
         List<TbActivity> tbActivities = tbActivityMapper.selectByExample(tbActivityCriteria);
         if (null == tbActivities || tbActivities.size() == 0) {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_IS_NOT_EXIST_ERROR);
@@ -308,10 +307,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "删除活动（管理员权限）")
     @Override
-    public int deleteActivity(String activityId,String account) {
-        String[] split = activityId.split(",");
+    public int deleteActivity(String[] activityId,String account) {
         TbActivityCriteria tbActivityCriteria = new TbActivityCriteria();
-        tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(split));
+        tbActivityCriteria.createCriteria().andIdIn(Arrays.asList(activityId));
         TbActivity tbActivity = new TbActivity();
         tbActivity.setRecordStatus(new Byte(ACTIVITY_STATE_DELETE));
         tbActivity.setModifiedTime(new Date());

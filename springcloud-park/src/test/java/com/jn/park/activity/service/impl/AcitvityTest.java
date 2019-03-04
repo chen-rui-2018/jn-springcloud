@@ -45,6 +45,7 @@ public class AcitvityTest {
     private TbActivityMapper tbActivityMapper;
 
     private String activityId ;
+    private String[] activityIds = {"56ad4d018554586b1117f27391ae9bf8"};
     private String userAccount;
     private String status;
     private ActivitySlimQuery activitySlimQuery;
@@ -184,7 +185,7 @@ public class AcitvityTest {
     @Test
     public void deleteDraftActivity(){
         try{
-            int i = activityService.deleteDraftActivity(activityId,userAccount);
+            int i = activityService.deleteDraftActivity(activityIds,userAccount);
             assertThat(i,anything());
         }catch (JnSpringCloudException e){
             logger.warn("删除活动接口[草稿数据]--数据错误，请修改数据后再运行TEST");
@@ -200,7 +201,7 @@ public class AcitvityTest {
     @Test
     public void deleteActivity(){
         try{
-            int i = activityService.deleteActivity(activityId,userAccount);
+            int i = activityService.deleteActivity(activityIds,userAccount);
             assertThat(i,anything());
         }catch (JnSpringCloudException e){
             logger.warn("删除活动接口[管理员]--数据错误，请修改数据后再运行TEST");

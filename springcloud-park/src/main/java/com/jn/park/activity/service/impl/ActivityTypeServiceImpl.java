@@ -101,9 +101,9 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
         }
         //不分页,则表示前端获取列表作为活动的查询条件或添加时的活动类型,只返回有效的活动类型
         if(!isPage){
-            activityTypeQuery.setStatus(valid);
+            activityTypeQuery.setTypeStatus(valid);
         }
-            String status = activityTypeQuery.getStatus();
+            String status = activityTypeQuery.getTypeStatus();
             List<ActivityType> activityTypeList = activityTypeMapper.findActivityTypeListByState(status);
             return new PaginationData(activityTypeList,objects==null?0:objects.getTotal());
     }
@@ -154,11 +154,11 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
     @ServiceLog(doAction = "删除活动类型")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void deleteActivityTypeList(String typeId) {
-        if(StringUtils.isEmpty(typeId)){
+    public void deleteActivityTypeList(String[] typeId) {
+        if(null == typeId || typeId.length ==0){
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
         }
-        List<String> list = Arrays.asList(typeId.split(","));
+        List<String> list = Arrays.asList(typeId);
         TbActivityCriteria criteria = new TbActivityCriteria();
         criteria.createCriteria().andActiTypeIn(list);
         List<TbActivity> activities = tbActivityMapper.selectByExample(criteria);

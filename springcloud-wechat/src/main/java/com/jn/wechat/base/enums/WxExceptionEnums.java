@@ -12,10 +12,11 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum WxExceptionEnums implements CodeAndMsg {
 
-    GET_WX_USER_FAIL("150041000","获取微信用户信息失败"),
-    NOT_ALLOW_ACCESS_TOKEN("150031301","微信接口url参数中不允许有access_token"),
-    JSON_PROCESS_FAL("150031300","post接口请求，对象参数转换json字符串失败"),
-    NOT_FINDE_WX_MSG_HANDLE("150031201","无法找到微信消息的处理类")
+    GET_WX_USER_FAIL("1500401","获取微信用户信息失败"),
+    NOT_ALLOW_ACCESS_TOKEN("1500302","微信接口url参数中不允许有access_token"),
+    JSON_PROCESS_FAL("1500303","对象参数转换json字符串失败"),
+    NOT_FINDE_WX_MSG_HANDLE("1500304","无法找到微信消息的处理类"),
+    SEND_TEMPLATE_MSG_FAIL("1500305","发送模板信息异常")
     ;
 
     private String code;

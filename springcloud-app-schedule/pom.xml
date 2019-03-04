@@ -15,6 +15,10 @@
 			<artifactId>springcloud-app-system-api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.jn</groupId>
+			<artifactId>springcloud-wechat-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>

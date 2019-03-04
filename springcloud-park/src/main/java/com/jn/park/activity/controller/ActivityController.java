@@ -7,10 +7,10 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
-import com.jn.park.model.*;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -74,7 +74,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/activity/getActivityDetailsForManage")
     public Result getActivityDetailsForManage(
-            @ApiParam(name="activityId",value = "活动ID",required = true)@RequestBody String activityId) {
+            @ApiParam(name="activityId",value = "活动ID",required = true)@RequestParam(value = "activityId") String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         ActivityDetail activityDetailsForManage = activityService.getActivityDetailsForManage(activityId);
         return new Result(activityDetailsForManage);
@@ -132,7 +132,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteDraftActivity")
     @RequiresPermissions("/activity/deleteDraftActivity")
     public Result deleteDraftActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 只能删除草稿数据，多个Id用,拼接",required = true)@RequestBody String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true)@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteDraftActivity(activityId,user.getAccount());
@@ -144,7 +144,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteActivity")
     @RequiresPermissions("/activity/deleteActivity")
     public Result deleteActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 该接口能删除任何活动数据，多个Id用,拼接",required = true)@RequestBody String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true)@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteActivity(activityId,user.getAccount());
@@ -156,7 +156,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/cancelActivity")
     @RequiresPermissions("/activity/cancelActivity")
     public Result cancelActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestBody String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam(value = "activityId") String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.cancelActivity(activityId,user.getAccount());
@@ -167,9 +167,9 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/applyActivityList")
     @RequiresPermissions("/activity/applyActivityList")
-    public Result applyActivityList(@RequestBody @Validated ActivityApplyParment activityApplyParment) {
-        Assert.notNull(activityApplyParment.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment,true);
+    public Result applyActivityList(@RequestBody @Validated ActivityApplyParam activityApplyParam) {
+        Assert.notNull(activityApplyParam.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParam,true);
         return new Result(paginationData);
     }
 
@@ -178,7 +178,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/downloadSignCodeImg")
     @RequiresPermissions("/activity/downloadSignCodeImg")
     public void downloadSignCodeImg(HttpServletResponse httpServletResponse,
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam String activityId){
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         httpServletResponse.reset();//清空输出流
         try {
@@ -197,7 +197,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/sendMsgForActivate")
     @RequiresPermissions("/activity/sendMsgForActivate")
     public Result sendMsgForActivate(
-            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestBody String activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID",required = true)@RequestParam(value = "activityId") String activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         int i = activityService.sendMsgForActivate(activityId);
         return new Result(i);
@@ -207,17 +207,19 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "活动报名人数据导出", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/exportDataExcel")
     @RequiresPermissions("/activity/exportDataExcel")
-    public void exportDataExcel(@Validated ActivityApplyParment activityApplyParment,
+    public void exportDataExcel(@RequestBody  @Validated ActivityApplyParam activityApplyParam,
                                 HttpServletResponse response){
-        Assert.notNull(activityApplyParment.getActivityId(), "活动id不能为空");
-        Assert.notNull(activityApplyParment.getExportColName(), "excel导出的字段别名不能为空");
-        Assert.notNull(activityApplyParment.getExportTitle(), "excel导出字段的标题不能为空");
+        Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
+        Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
         //下载文件名
         String fileName="活动报名人";
         String sheetName = "活动报名人";
-        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParment, false);
+        PaginationData paginationData = activityApplyService.applyActivityList(activityApplyParam, false);
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
-        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, activityApplyParment.getExportTitle(), activityApplyParment.getExportColName(), activityApplyDetails);
+        //把数组转换为字符串，并以逗号（“,”）分隔
+        String exportTitle =  StringUtils.join(activityApplyParam.getExportTitle(),",");
+        String exportColName = StringUtils.join(activityApplyParam.getExportColName());
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, activityApplyDetails);
     }
 
     @ControllerLog(doAction = "活动结束回调方法")

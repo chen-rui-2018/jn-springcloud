@@ -3,8 +3,8 @@ package com.jn.news.email.enums;
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 后台权限管理异常枚举
- * @author： shaobao
+ * 邮件异常枚举
+ * @author： cm
  * @date： Created on 2018/11/21 16:56
  * @version： v1.0
  * @modified By:

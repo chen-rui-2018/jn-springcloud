@@ -14,16 +14,15 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityTypeQuery", description = "活动列表查询条件")
+@ApiModel(value = "ActivityTypeQuery", description = "活动类型列表查询条件")
 public class ActivityTypeQuery extends Page implements Serializable {
     @ApiModelProperty(value = "状态(0：无效，1：有效,不传则返回全部)")
-    private String status;
+    private String typeStatus;
 
-    public String getStatus() {
-        return status;
+    public String getTypeStatus() {
+        return typeStatus;
     }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setTypeStatus(String typeStatus) {
+        this.typeStatus = typeStatus;
     }
 }

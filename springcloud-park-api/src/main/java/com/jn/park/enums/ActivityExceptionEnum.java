@@ -22,7 +22,7 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     ACTIVITY_TYPE_ID_EMPTY("4020208","活动类型ID不能为空"),
     ACTIVITY_TYPE_ALREADY_ASSOCIATED("4020209","活动类型已关联活动"),
     ACTIVITY_LIKE_ACCOUNT_REPEAT("4020210","当前活动存在多个相同点赞用户，无法点赞"),
-    ACTIVITY_RESULT_ERROR("4020211","活动信息查询异常"),
+    ACTIVITY_RESULT_ERROR("4020211","活动信息查询异常[未查询到数据]"),
     ACTIVITY_STATE_ERROR("4020212","活动状态异常"),
     ACTIVITY_TITLE_NOT_NULL("4020213","活动标题不能为空"),
     ACTIVITY_TYPE_NOT_NULL("4020214","活动类型不能为空"),
@@ -70,6 +70,8 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     EXPORT_CANNOT_EMPTY("4020510","没有数据，不能导出"),
     LIKE_STATE_NOT_ALLOW("4020511","点状状态只能是点赞(1)和取消点赞(0)"),
     APPLY_IS_NOT_EXIST("4020512","点赞评论或服务不存在"),
+    EXPORT_COL_NAME_NOT_NULL("4020513","excel导出的字段别名不能为空"),
+    EXPORT__TITLE_NOT_NULL("4020514","excel导出字段的标题不能为空"),
     ;
 
     /**

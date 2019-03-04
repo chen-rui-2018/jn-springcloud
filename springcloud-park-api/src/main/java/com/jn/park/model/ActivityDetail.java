@@ -17,15 +17,15 @@ import java.util.List;
 @ApiModel(value = "ActivityDetail", description = "活动详情信息")
 public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "活动ID")
-    private String activityId;
+    private String id;
     @ApiModelProperty(value = "活动类型")
-    private String activityType;
+    private String actiType;
     @ApiModelProperty(value = "活动名称")
-    private String activityName;
+    private String actiName;
     @ApiModelProperty(value = "活动开始时间")
-    private String activityStartTime;
+    private String actiStartTime;
     @ApiModelProperty(value = "活动结束时间")
-    private String activityEndTime;
+    private String actiEndTime;
     @ApiModelProperty(value = "报名开始时间")
     private String applyStartTime;
     @ApiModelProperty(value = "报名结束时间")
@@ -33,19 +33,19 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "活动推送时间")
     private String mesSendTime;
     @ApiModelProperty(value = "活动地址")
-    private String activityAddress;
+    private String actiAddress;
     @ApiModelProperty(value = "活动费用")
     private String actiCost;
     @ApiModelProperty(value = "活动主办方")
-    private String activityOrganizer;
+    private String actiOrganizer;
     @ApiModelProperty(value = "活动人数")
-    private String activityNumber;
+    private String actiNumber;
     @ApiModelProperty(value = "活动主海报")
-    private String activityPosterUrl;
+    private String actiPosterUrl;
     @ApiModelProperty(value = "阅读人数")
-    private String activityViews;
+    private String actiViews;
     @ApiModelProperty(value = "感兴趣人数")
-    private String activityLike;
+    private String actiLike;
     @ApiModelProperty(value = "报名人数")
     private String applyNum;
     @ApiModelProperty(value = "活动参加人数")
@@ -69,7 +69,7 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "是否可报名")
     private String isApply;
     @ApiModelProperty(value = "活动内容")
-    private String activityDetail;
+    private String actiDetail;
     @ApiModelProperty(value = "是否展示报名人(0否1是)")
     private String showApplyNum;
     @ApiModelProperty(value = "活动园区")
@@ -85,44 +85,44 @@ public class ActivityDetail implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getActivityId() {
-        return activityId;
+    public String getId() {
+        return id;
     }
 
-    public void setActivityId(String activityId) {
-        this.activityId = activityId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getActivityType() {
-        return activityType;
+    public String getActiType() {
+        return actiType;
     }
 
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
+    public void setActiType(String actiType) {
+        this.actiType = actiType;
     }
 
-    public String getActivityName() {
-        return activityName;
+    public String getActiName() {
+        return actiName;
     }
 
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
+    public void setActiName(String actiName) {
+        this.actiName = actiName;
     }
 
-    public String getActivityStartTime() {
-        return activityStartTime;
+    public String getActiStartTime() {
+        return actiStartTime;
     }
 
-    public void setActivityStartTime(String activityStartTime) {
-        this.activityStartTime = activityStartTime;
+    public void setActiStartTime(String actiStartTime) {
+        this.actiStartTime = actiStartTime;
     }
 
-    public String getActivityEndTime() {
-        return activityEndTime;
+    public String getActiEndTime() {
+        return actiEndTime;
     }
 
-    public void setActivityEndTime(String activityEndTime) {
-        this.activityEndTime = activityEndTime;
+    public void setActiEndTime(String actiEndTime) {
+        this.actiEndTime = actiEndTime;
     }
 
     public String getApplyStartTime() {
@@ -149,12 +149,12 @@ public class ActivityDetail implements Serializable {
         this.mesSendTime = mesSendTime;
     }
 
-    public String getActivityAddress() {
-        return activityAddress;
+    public String getActiAddress() {
+        return actiAddress;
     }
 
-    public void setActivityAddress(String activityAddress) {
-        this.activityAddress = activityAddress;
+    public void setActiAddress(String actiAddress) {
+        this.actiAddress = actiAddress;
     }
 
     public String getActiCost() {
@@ -165,44 +165,44 @@ public class ActivityDetail implements Serializable {
         this.actiCost = actiCost;
     }
 
-    public String getActivityOrganizer() {
-        return activityOrganizer;
+    public String getActiOrganizer() {
+        return actiOrganizer;
     }
 
-    public void setActivityOrganizer(String activityOrganizer) {
-        this.activityOrganizer = activityOrganizer;
+    public void setActiOrganizer(String actiOrganizer) {
+        this.actiOrganizer = actiOrganizer;
     }
 
-    public String getActivityNumber() {
-        return activityNumber;
+    public String getActiNumber() {
+        return actiNumber;
     }
 
-    public void setActivityNumber(String activityNumber) {
-        this.activityNumber = activityNumber;
+    public void setActiNumber(String actiNumber) {
+        this.actiNumber = actiNumber;
     }
 
-    public String getActivityPosterUrl() {
-        return activityPosterUrl;
+    public String getActiPosterUrl() {
+        return actiPosterUrl;
     }
 
-    public void setActivityPosterUrl(String activityPosterUrl) {
-        this.activityPosterUrl = activityPosterUrl;
+    public void setActiPosterUrl(String actiPosterUrl) {
+        this.actiPosterUrl = actiPosterUrl;
     }
 
-    public String getActivityViews() {
-        return activityViews;
+    public String getActiViews() {
+        return actiViews;
     }
 
-    public void setActivityViews(String activityViews) {
-        this.activityViews = activityViews;
+    public void setActiViews(String actiViews) {
+        this.actiViews = actiViews;
     }
 
-    public String getActivityLike() {
-        return activityLike;
+    public String getActiLike() {
+        return actiLike;
     }
 
-    public void setActivityLike(String activityLike) {
-        this.activityLike = activityLike;
+    public void setActiLike(String actiLike) {
+        this.actiLike = actiLike;
     }
 
     public String getApplyNum() {
@@ -245,22 +245,6 @@ public class ActivityDetail implements Serializable {
         this.creatorAccount = creatorAccount;
     }
 
-    public String getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(String modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
     public String getIssueTime() {
         return issueTime;
     }
@@ -275,6 +259,22 @@ public class ActivityDetail implements Serializable {
 
     public void setIssueAccount(String issueAccount) {
         this.issueAccount = issueAccount;
+    }
+
+    public String getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(String modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount;
     }
 
     public String getIsIndex() {
@@ -293,12 +293,12 @@ public class ActivityDetail implements Serializable {
         this.isApply = isApply;
     }
 
-    public String getActivityDetail() {
-        return activityDetail;
+    public String getActiDetail() {
+        return actiDetail;
     }
 
-    public void setActivityDetail(String activityDetail) {
-        this.activityDetail = activityDetail;
+    public void setActiDetail(String actiDetail) {
+        this.actiDetail = actiDetail;
     }
 
     public String getShowApplyNum() {
@@ -307,14 +307,6 @@ public class ActivityDetail implements Serializable {
 
     public void setShowApplyNum(String showApplyNum) {
         this.showApplyNum = showApplyNum;
-    }
-
-    public List<?> getParkCodes() {
-        return parkCodes;
-    }
-
-    public void setParkCodes(List<?> parkCodes) {
-        this.parkCodes = parkCodes;
     }
 
     public String getParkId() {
@@ -342,11 +334,18 @@ public class ActivityDetail implements Serializable {
     }
 
     public String getActiOrder() {
-
         return actiOrder;
     }
 
     public void setActiOrder(String actiOrder) {
         this.actiOrder = actiOrder;
+    }
+
+    public List<?> getParkCodes() {
+        return parkCodes;
+    }
+
+    public void setParkCodes(List<?> parkCodes) {
+        this.parkCodes = parkCodes;
     }
 }

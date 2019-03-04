@@ -103,7 +103,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
         applyCountdown(activityId, account, activityDetailVO);
         //更新园区活动的阅读人数
-        updateActivityViews(activityId, activityDetail.getActivityViews());
+        updateActivityViews(activityId, activityDetail.getActiViews());
         //把活动详情封装到result中返回前端
         return  activityDetailVO;
     }

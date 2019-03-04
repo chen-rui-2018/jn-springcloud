@@ -3,7 +3,6 @@ package com.jn.enterprise.servicemarket.product.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
-import sun.awt.SunHints;
 
 import java.io.Serializable;
 
@@ -16,10 +15,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceProductApproval", description = "服务产品审批,上下架")
 public class ServiceProductApproval implements Serializable {
-    @ApiModelProperty(value = "服务产品ID")
+    @ApiModelProperty(value = "服务产品ID",required = true)
     @NotBlank(message = "产品Id 不能为空")
     private String productId;
-    @ApiModelProperty(value = "状态(审批结果1-审批通过,2审批不通过),(上架 1,下架-1)")
+    @ApiModelProperty(value = "状态(审批结果1-审批通过,2审批不通过),(上架 1,下架-1)",required = true)
     @NotBlank(message = "审批结果不能为空")
     private String status;
     @ApiModelProperty(value = "审批意见,在产品上下架接口中不需要给值")

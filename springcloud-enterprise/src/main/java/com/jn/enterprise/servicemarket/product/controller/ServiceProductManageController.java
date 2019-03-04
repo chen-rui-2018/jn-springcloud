@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 /**
  * 服务产品管理
  * @author： chenr
@@ -45,7 +47,10 @@ public class ServiceProductManageController extends BaseController {
     public Result addCommonService(@RequestBody @Validated ServiceContent content){
         Assert.notNull(content, ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        productService.addServiceProduct(content,user != null?user.getAccount():"");
+        //服务产品主键Id
+        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        content.setProductId(productId);
+        productService.addServiceProduct(content,user != null?user.getAccount():"",null);
         return new Result();
     }
     @ControllerLog(doAction = "按条件查找后台服务产品列表")

@@ -665,6 +665,76 @@ public class TbServiceProductCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOrgNameIsNull() {
+            addCriterion("org_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIsNotNull() {
+            addCriterion("org_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameEqualTo(String value) {
+            addCriterion("org_name =", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotEqualTo(String value) {
+            addCriterion("org_name <>", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThan(String value) {
+            addCriterion("org_name >", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameGreaterThanOrEqualTo(String value) {
+            addCriterion("org_name >=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThan(String value) {
+            addCriterion("org_name <", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLessThanOrEqualTo(String value) {
+            addCriterion("org_name <=", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameLike(String value) {
+            addCriterion("org_name like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotLike(String value) {
+            addCriterion("org_name not like", value, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameIn(List<String> values) {
+            addCriterion("org_name in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotIn(List<String> values) {
+            addCriterion("org_name not in", values, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameBetween(String value1, String value2) {
+            addCriterion("org_name between", value1, value2, "orgName");
+            return (Criteria) this;
+        }
+
+        public Criteria andOrgNameNotBetween(String value1, String value2) {
+            addCriterion("org_name not between", value1, value2, "orgName");
+            return (Criteria) this;
+        }
+
         public Criteria andServiceCycleIsNull() {
             addCriterion("service_cycle is null");
             return (Criteria) this;
@@ -1265,63 +1335,73 @@ public class TbServiceProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusIsNull() {
-            addCriterion("record_status is null");
+        public Criteria andApprovalAccountIsNull() {
+            addCriterion("approval_account is null");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusIsNotNull() {
-            addCriterion("record_status is not null");
+        public Criteria andApprovalAccountIsNotNull() {
+            addCriterion("approval_account is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusEqualTo(Byte value) {
-            addCriterion("record_status =", value, "recordStatus");
+        public Criteria andApprovalAccountEqualTo(String value) {
+            addCriterion("approval_account =", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotEqualTo(Byte value) {
-            addCriterion("record_status <>", value, "recordStatus");
+        public Criteria andApprovalAccountNotEqualTo(String value) {
+            addCriterion("approval_account <>", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusGreaterThan(Byte value) {
-            addCriterion("record_status >", value, "recordStatus");
+        public Criteria andApprovalAccountGreaterThan(String value) {
+            addCriterion("approval_account >", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("record_status >=", value, "recordStatus");
+        public Criteria andApprovalAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("approval_account >=", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusLessThan(Byte value) {
-            addCriterion("record_status <", value, "recordStatus");
+        public Criteria andApprovalAccountLessThan(String value) {
+            addCriterion("approval_account <", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("record_status <=", value, "recordStatus");
+        public Criteria andApprovalAccountLessThanOrEqualTo(String value) {
+            addCriterion("approval_account <=", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusIn(List<Byte> values) {
-            addCriterion("record_status in", values, "recordStatus");
+        public Criteria andApprovalAccountLike(String value) {
+            addCriterion("approval_account like", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotIn(List<Byte> values) {
-            addCriterion("record_status not in", values, "recordStatus");
+        public Criteria andApprovalAccountNotLike(String value) {
+            addCriterion("approval_account not like", value, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
-            addCriterion("record_status between", value1, value2, "recordStatus");
+        public Criteria andApprovalAccountIn(List<String> values) {
+            addCriterion("approval_account in", values, "approvalAccount");
             return (Criteria) this;
         }
 
-        public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("record_status not between", value1, value2, "recordStatus");
+        public Criteria andApprovalAccountNotIn(List<String> values) {
+            addCriterion("approval_account not in", values, "approvalAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalAccountBetween(String value1, String value2) {
+            addCriterion("approval_account between", value1, value2, "approvalAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andApprovalAccountNotBetween(String value1, String value2) {
+            addCriterion("approval_account not between", value1, value2, "approvalAccount");
             return (Criteria) this;
         }
 
@@ -1515,73 +1595,63 @@ public class TbServiceProductCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountIsNull() {
-            addCriterion("approval_account is null");
+        public Criteria andRecordStatusIsNull() {
+            addCriterion("record_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountIsNotNull() {
-            addCriterion("approval_account is not null");
+        public Criteria andRecordStatusIsNotNull() {
+            addCriterion("record_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountEqualTo(String value) {
-            addCriterion("approval_account =", value, "approvalAccount");
+        public Criteria andRecordStatusEqualTo(Byte value) {
+            addCriterion("record_status =", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountNotEqualTo(String value) {
-            addCriterion("approval_account <>", value, "approvalAccount");
+        public Criteria andRecordStatusNotEqualTo(Byte value) {
+            addCriterion("record_status <>", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountGreaterThan(String value) {
-            addCriterion("approval_account >", value, "approvalAccount");
+        public Criteria andRecordStatusGreaterThan(Byte value) {
+            addCriterion("record_status >", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("approval_account >=", value, "approvalAccount");
+        public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
+            addCriterion("record_status >=", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountLessThan(String value) {
-            addCriterion("approval_account <", value, "approvalAccount");
+        public Criteria andRecordStatusLessThan(Byte value) {
+            addCriterion("record_status <", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountLessThanOrEqualTo(String value) {
-            addCriterion("approval_account <=", value, "approvalAccount");
+        public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
+            addCriterion("record_status <=", value, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountLike(String value) {
-            addCriterion("approval_account like", value, "approvalAccount");
+        public Criteria andRecordStatusIn(List<Byte> values) {
+            addCriterion("record_status in", values, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountNotLike(String value) {
-            addCriterion("approval_account not like", value, "approvalAccount");
+        public Criteria andRecordStatusNotIn(List<Byte> values) {
+            addCriterion("record_status not in", values, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountIn(List<String> values) {
-            addCriterion("approval_account in", values, "approvalAccount");
+        public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
+            addCriterion("record_status between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
-        public Criteria andApprovalAccountNotIn(List<String> values) {
-            addCriterion("approval_account not in", values, "approvalAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andApprovalAccountBetween(String value1, String value2) {
-            addCriterion("approval_account between", value1, value2, "approvalAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andApprovalAccountNotBetween(String value1, String value2) {
-            addCriterion("approval_account not between", value1, value2, "approvalAccount");
+        public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
+            addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
     }

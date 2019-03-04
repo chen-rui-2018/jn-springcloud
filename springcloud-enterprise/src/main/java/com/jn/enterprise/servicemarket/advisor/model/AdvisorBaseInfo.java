@@ -17,6 +17,12 @@ import java.io.Serializable;
  */
 @ApiModel(value = "AdvisorBaseInfo", description = "顾问资料基本信息")
 public class AdvisorBaseInfo extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id")
+    private String id;
+    @ApiModelProperty(value = "机构Id")
+    private String orgId;
+    @ApiModelProperty(value = "机构名称")
+    private String orgName;
     @ApiModelProperty(value = "顾问账号")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
@@ -43,6 +49,30 @@ public class AdvisorBaseInfo extends Page implements Serializable {
     private String businessArea;
     @ApiModelProperty(value = "个人简介")
     private String personalProfile;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
 
     public String getAdvisorAccount() {
         return advisorAccount;

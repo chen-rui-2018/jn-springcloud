@@ -13,17 +13,17 @@ import org.hibernate.validator.constraints.NotBlank;
  * @modified By:
  */
 
-@ApiModel(value = "ActivityApplyParment",description = "活动申请人查询入参")
-public class ActivityApplyParment extends Page {
+@ApiModel(value = "ActivityApplyParam",description = "活动申请人查询入参")
+public class ActivityApplyParam extends Page {
     @ApiModelProperty(value = "活动ID")
     @NotBlank(message = "活动id不能为空！")
     private String activityId;
 
-    @ApiModelProperty(value = "[查询时传空]导出excel导出的字段别名 比如：name,phone,sex ...多个字段以逗号(,)分隔")
-    private String exportColName;
+    @ApiModelProperty(value = "[查询时传空]导出excel导出的字段别名 比如：name,phone,sex ...多个字段以数组传递")
+    private String[] exportColName;
 
-    @ApiModelProperty(value = "[查询时传空]excel导出字段的标题 比如：姓名,手机,性别...多个字段以逗号(,)分隔")
-    private String exportTitle;
+    @ApiModelProperty(value = "[查询时传空]excel导出字段的标题 比如：姓名,手机,性别...多个字段以数组传递")
+    private String[] exportTitle;
 
     public String getActivityId() {
         return activityId;
@@ -33,19 +33,19 @@ public class ActivityApplyParment extends Page {
         this.activityId = activityId;
     }
 
-    public String getExportColName() {
+    public String[] getExportColName() {
         return exportColName;
     }
 
-    public void setExportColName(String exportColName) {
+    public void setExportColName(String[] exportColName) {
         this.exportColName = exportColName;
     }
 
-    public String getExportTitle() {
+    public String[] getExportTitle() {
         return exportTitle;
     }
 
-    public void setExportTitle(String exportTitle) {
+    public void setExportTitle(String[] exportTitle) {
         this.exportTitle = exportTitle;
     }
 }

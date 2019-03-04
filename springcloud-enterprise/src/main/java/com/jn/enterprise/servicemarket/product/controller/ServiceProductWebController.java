@@ -8,6 +8,7 @@ import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
+import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 前台服务产品接口
@@ -44,6 +46,9 @@ public class ServiceProductWebController  extends BaseController {
     public Result upShelfCommonService(@RequestBody @Validated CommonServiceShelf commonService){
         Assert.notNull(commonService.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        //服务产品主键Id
+        String productId = UUID.randomUUID().toString().replaceAll("-", "");
+        commonService.setProductId(productId);
         productService.upShelfCommonService(commonService,user != null?user.getAccount():"");
         return new Result();
     }
@@ -55,7 +60,8 @@ public class ServiceProductWebController  extends BaseController {
     public Result addFeatureService(@RequestBody @Validated ServiceContent content){
         Assert.notNull(content, ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        productService.addServiceProduct(content,user != null?user.getAccount():"");
+        String productId = UUID.randomUUID().toString().replaceAll("-","");
+        productService.addServiceProduct(content,user != null?user.getAccount():"",productId);
         return new Result();
     }
 
@@ -110,7 +116,7 @@ public class ServiceProductWebController  extends BaseController {
     @RequestMapping(value = "/productQueryList")
     public Result productQueryList(String productName){
         List<CommonServiceShelf> data =    productService.productQueryList(productName);
-        return new Result();
+        return new Result(data);
     }
 
     @ControllerLog(doAction = "机构-编辑常规产品")

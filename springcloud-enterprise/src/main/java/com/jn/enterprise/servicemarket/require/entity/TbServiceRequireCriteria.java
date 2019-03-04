@@ -245,6 +245,76 @@ public class TbServiceRequireCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andBusinessIdIsNull() {
+            addCriterion("business_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdIsNotNull() {
+            addCriterion("business_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdEqualTo(String value) {
+            addCriterion("business_id =", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdNotEqualTo(String value) {
+            addCriterion("business_id <>", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdGreaterThan(String value) {
+            addCriterion("business_id >", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdGreaterThanOrEqualTo(String value) {
+            addCriterion("business_id >=", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdLessThan(String value) {
+            addCriterion("business_id <", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdLessThanOrEqualTo(String value) {
+            addCriterion("business_id <=", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdLike(String value) {
+            addCriterion("business_id like", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdNotLike(String value) {
+            addCriterion("business_id not like", value, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdIn(List<String> values) {
+            addCriterion("business_id in", values, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdNotIn(List<String> values) {
+            addCriterion("business_id not in", values, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdBetween(String value1, String value2) {
+            addCriterion("business_id between", value1, value2, "businessId");
+            return (Criteria) this;
+        }
+
+        public Criteria andBusinessIdNotBetween(String value1, String value2) {
+            addCriterion("business_id not between", value1, value2, "businessId");
+            return (Criteria) this;
+        }
+
         public Criteria andBusinessAreaIsNull() {
             addCriterion("business_area is null");
             return (Criteria) this;
@@ -2032,6 +2102,146 @@ public class TbServiceRequireCriteria {
 
         public Criteria andIsCommentNotBetween(String value1, String value2) {
             addCriterion("is_comment not between", value1, value2, "isComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageIsNull() {
+            addCriterion("contract_home_page is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageIsNotNull() {
+            addCriterion("contract_home_page is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageEqualTo(String value) {
+            addCriterion("contract_home_page =", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageNotEqualTo(String value) {
+            addCriterion("contract_home_page <>", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageGreaterThan(String value) {
+            addCriterion("contract_home_page >", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_home_page >=", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageLessThan(String value) {
+            addCriterion("contract_home_page <", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageLessThanOrEqualTo(String value) {
+            addCriterion("contract_home_page <=", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageLike(String value) {
+            addCriterion("contract_home_page like", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageNotLike(String value) {
+            addCriterion("contract_home_page not like", value, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageIn(List<String> values) {
+            addCriterion("contract_home_page in", values, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageNotIn(List<String> values) {
+            addCriterion("contract_home_page not in", values, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageBetween(String value1, String value2) {
+            addCriterion("contract_home_page between", value1, value2, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractHomePageNotBetween(String value1, String value2) {
+            addCriterion("contract_home_page not between", value1, value2, "contractHomePage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageIsNull() {
+            addCriterion("contract_end_page is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageIsNotNull() {
+            addCriterion("contract_end_page is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageEqualTo(String value) {
+            addCriterion("contract_end_page =", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageNotEqualTo(String value) {
+            addCriterion("contract_end_page <>", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageGreaterThan(String value) {
+            addCriterion("contract_end_page >", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageGreaterThanOrEqualTo(String value) {
+            addCriterion("contract_end_page >=", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageLessThan(String value) {
+            addCriterion("contract_end_page <", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageLessThanOrEqualTo(String value) {
+            addCriterion("contract_end_page <=", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageLike(String value) {
+            addCriterion("contract_end_page like", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageNotLike(String value) {
+            addCriterion("contract_end_page not like", value, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageIn(List<String> values) {
+            addCriterion("contract_end_page in", values, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageNotIn(List<String> values) {
+            addCriterion("contract_end_page not in", values, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageBetween(String value1, String value2) {
+            addCriterion("contract_end_page between", value1, value2, "contractEndPage");
+            return (Criteria) this;
+        }
+
+        public Criteria andContractEndPageNotBetween(String value1, String value2) {
+            addCriterion("contract_end_page not between", value1, value2, "contractEndPage");
             return (Criteria) this;
         }
 

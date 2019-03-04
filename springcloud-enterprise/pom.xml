@@ -22,6 +22,10 @@
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-user-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -49,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        advisor
                     </contexts>
                     <tableNames>
-
+                        tb_service_pro_exper
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.AdvisorManagementPortalMapper">
+    <!--服务顾问管理列表查询-->
+    <select id="getAdvisorManagementInfoList" parameterType="com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementPortalParam"
+            resultType="com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceManagementInfo">
+        SELECT
+            sa.`avatar`  AS "avatar"        						                <!--顾问头像-->
+            ,CONCAT_WS('/',sa.`advisor_name`,sa.`position`) AS "advisorName"		<!--顾问名称-->
+            ,sa.`personal_profile` AS "personalProfile"					            <!--描述-->
+            ,sa.`org_name` AS "orgName"							                    <!--所属机构-->
+            ,GROUP_CONCAT(DISTINCT sp.`product_name`) AS "productName"  				        <!--服务产品-->
+            ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		        <!--评价分数-->
+            ,CASE
+            WHEN IFNULL(sa.`is_certification`,0)=0
+            THEN '未认证'
+            WHEN IFNULL(sa.`is_certification`,0)=1
+            THEN '通过'
+            END  AS "isCertification"							                   <!--是否认证-->
+            ,sa.`working_years` AS "workingYears"						           <!--从业年限-->
+            ,sa.`good_at_business` AS "goodAtBusiness"					           <!--业务擅长-->
+        FROM  tb_service_advisor sa
+        LEFT JOIN tb_service_and_advisor sd
+        ON sa.`advisor_account`=sd.`advisor_account`
+        LEFT JOIN tb_service_product sp
+        ON sd.`product_id`=sp.`product_id`
+        LEFT JOIN tb_service_rating sr
+        ON sa.`advisor_account`=sr.`advisor_account`
+        WHERE 1=1
+        <if test="advisorName!=null and advisorName!=''"><!--顾问名称模糊搜索-->
+            and sa.advisor_name  like CONCAT('%', #{advisorName}, '%')
+        </if>
+        <if test="isCertification!=null and isCertification!=''"><!--是否认证精确搜索-->
+            and sa.is_certification =#{isCertification}
+        </if>
+        <if test="submitStartTime!=null and submitStartTime!=''"><!--提交开始时间精确搜索-->
+            and date_format(sa.created_time,'%Y%m')&gt;=#{submitStartTime}
+        </if>
+        <if test="submitEndTime!=null and submitEndTime!=''"><!--提交开始时间精确搜索-->
+            and date_format(sa.created_time,'%Y%m')&lt;=#{submitEndTime}
+        </if>
+        <if test="affiliation!=null and affiliation!=''"><!--提交开始时间精确搜索-->
+            and (sa.org_id like CONCAT('%', #{affiliation}, '%') or sa.org_name like CONCAT('%', #{affiliation}, '%'))
+        </if>
+        GROUP BY  sa.`avatar` ,sa.`personal_profile`,sa.`org_name`
+              ,sa.`is_certification`,sa.`working_years`,sa.`good_at_business`
+    </select>
+
+    <!--根据顾问账号获取顾问简介信息-->
+    <select id="getAdvisorIntroduction" resultType="com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceManagementInfo">
+        SELECT
+        sa.`avatar`  AS "avatar"        						                <!--顾问头像-->
+        ,CONCAT_WS('/',sa.`advisor_name`,sa.`position`) AS "advisorName"		<!--顾问名称-->
+        ,sa.`personal_profile` AS "personalProfile"					            <!--描述-->
+        ,sa.`org_name` AS "orgName"							                    <!--所属机构-->
+        ,GROUP_CONCAT(DISTINCT sp.`product_name`) AS "productName"  				        <!--服务产品-->
+        ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		        <!--评价分数-->
+        ,CASE
+        WHEN IFNULL(sa.`is_certification`,0)=0
+        THEN '未认证'
+        WHEN IFNULL(sa.`is_certification`,0)=1
+        THEN '通过'
+        END  AS "isCertification"							                   <!--是否认证-->
+        ,sa.`working_years` AS "workingYears"						           <!--从业年限-->
+        ,sa.`good_at_business` AS "goodAtBusiness"					           <!--业务擅长-->
+        FROM  tb_service_advisor sa
+        LEFT JOIN tb_service_and_advisor sd
+        ON sa.`advisor_account`=sd.`advisor_account`
+        LEFT JOIN tb_service_product sp
+        ON sd.`product_id`=sp.`product_id`
+        LEFT JOIN tb_service_rating sr
+        ON sa.`advisor_account`=sr.`advisor_account`
+        WHERE  sa.advisor_account=#{advisorAccount}
+        GROUP BY  sa.`avatar` ,sa.`personal_profile`,sa.`org_name`
+        ,sa.`is_certification`,sa.`working_years`,sa.`good_at_business`
+    </select>
+
+</mapper>

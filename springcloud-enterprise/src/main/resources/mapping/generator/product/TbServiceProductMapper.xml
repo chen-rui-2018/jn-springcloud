@@ -10,6 +10,7 @@
     <result column="signory_name" jdbcType="VARCHAR" property="signoryName" />
     <result column="template_id" jdbcType="VARCHAR" property="templateId" />
     <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
     <result column="service_cycle" jdbcType="VARCHAR" property="serviceCycle" />
     <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
     <result column="product_type" jdbcType="VARCHAR" property="productType" />
@@ -19,11 +20,11 @@
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="approval_account" jdbcType="VARCHAR" property="approvalAccount" />
     <result column="approval_comments" jdbcType="VARCHAR" property="approvalComments" />
     <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
     <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
-    <result column="approval_account" jdbcType="VARCHAR" property="approvalAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,9 +86,9 @@
   </sql>
   <sql id="Base_Column_List">
     product_id, serial_number, product_name, refer_price, signory_id, signory_name, template_id, 
-    org_id, service_cycle, picture_url, product_type, view_count, status, created_time, 
-    creator_account, modified_time, modifier_account, record_status, approval_comments, 
-    approval_time, release_time, approval_account
+    org_id, org_name, service_cycle, picture_url, product_type, view_count, status, created_time, 
+    creator_account, modified_time, modifier_account, approval_account, approval_comments, 
+    approval_time, release_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria" resultMap="BaseResultMap">
     select
@@ -122,20 +123,20 @@
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
     insert into tb_service_product (product_id, serial_number, product_name, 
       refer_price, signory_id, signory_name, 
-      template_id, org_id, service_cycle, 
-      picture_url, product_type, view_count, 
-      status, created_time, creator_account, 
-      modified_time, modifier_account, record_status, 
-      approval_comments, approval_time, release_time, 
-      approval_account)
+      template_id, org_id, org_name, 
+      service_cycle, picture_url, product_type, 
+      view_count, status, created_time, 
+      creator_account, modified_time, modifier_account, 
+      approval_account, approval_comments, approval_time, 
+      release_time, record_status)
     values (#{productId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
       #{referPrice,jdbcType=VARCHAR}, #{signoryId,jdbcType=VARCHAR}, #{signoryName,jdbcType=VARCHAR}, 
-      #{templateId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{serviceCycle,jdbcType=VARCHAR}, 
-      #{pictureUrl,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, #{viewCount,jdbcType=INTEGER}, 
-      #{status,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{approvalComments,jdbcType=VARCHAR}, #{approvalTime,jdbcType=TIMESTAMP}, #{releaseTime,jdbcType=TIMESTAMP}, 
-      #{approvalAccount,jdbcType=VARCHAR})
+      #{templateId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{serviceCycle,jdbcType=VARCHAR}, #{pictureUrl,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
+      #{viewCount,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{approvalAccount,jdbcType=VARCHAR}, #{approvalComments,jdbcType=VARCHAR}, #{approvalTime,jdbcType=TIMESTAMP}, 
+      #{releaseTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
     insert into tb_service_product
@@ -164,6 +165,9 @@
       <if test="orgId != null">
         org_id,
       </if>
+      <if test="orgName != null">
+        org_name,
+      </if>
       <if test="serviceCycle != null">
         service_cycle,
       </if>
@@ -191,8 +195,8 @@
       <if test="modifierAccount != null">
         modifier_account,
       </if>
-      <if test="recordStatus != null">
-        record_status,
+      <if test="approvalAccount != null">
+        approval_account,
       </if>
       <if test="approvalComments != null">
         approval_comments,
@@ -203,8 +207,8 @@
       <if test="releaseTime != null">
         release_time,
       </if>
-      <if test="approvalAccount != null">
-        approval_account,
+      <if test="recordStatus != null">
+        record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -231,6 +235,9 @@
       </if>
       <if test="orgId != null">
         #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
       </if>
       <if test="serviceCycle != null">
         #{serviceCycle,jdbcType=VARCHAR},
@@ -259,8 +266,8 @@
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="recordStatus != null">
-        #{recordStatus,jdbcType=TINYINT},
+      <if test="approvalAccount != null">
+        #{approvalAccount,jdbcType=VARCHAR},
       </if>
       <if test="approvalComments != null">
         #{approvalComments,jdbcType=VARCHAR},
@@ -271,8 +278,8 @@
       <if test="releaseTime != null">
         #{releaseTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalAccount != null">
-        #{approvalAccount,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
@@ -309,6 +316,9 @@
       <if test="record.orgId != null">
         org_id = #{record.orgId,jdbcType=VARCHAR},
       </if>
+      <if test="record.orgName != null">
+        org_name = #{record.orgName,jdbcType=VARCHAR},
+      </if>
       <if test="record.serviceCycle != null">
         service_cycle = #{record.serviceCycle,jdbcType=VARCHAR},
       </if>
@@ -336,8 +346,8 @@
       <if test="record.modifierAccount != null">
         modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      <if test="record.approvalAccount != null">
+        approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.approvalComments != null">
         approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
@@ -348,8 +358,8 @@
       <if test="record.releaseTime != null">
         release_time = #{record.releaseTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.approvalAccount != null">
-        approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     <if test="_parameter != null">
@@ -366,6 +376,7 @@
       signory_name = #{record.signoryName,jdbcType=VARCHAR},
       template_id = #{record.templateId,jdbcType=VARCHAR},
       org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_name = #{record.orgName,jdbcType=VARCHAR},
       service_cycle = #{record.serviceCycle,jdbcType=VARCHAR},
       picture_url = #{record.pictureUrl,jdbcType=VARCHAR},
       product_type = #{record.productType,jdbcType=VARCHAR},
@@ -375,11 +386,11 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
       approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
       approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
       release_time = #{record.releaseTime,jdbcType=TIMESTAMP},
-      approval_account = #{record.approvalAccount,jdbcType=VARCHAR}
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -408,6 +419,9 @@
       <if test="orgId != null">
         org_id = #{orgId,jdbcType=VARCHAR},
       </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
       <if test="serviceCycle != null">
         service_cycle = #{serviceCycle,jdbcType=VARCHAR},
       </if>
@@ -435,8 +449,8 @@
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
+      <if test="approvalAccount != null">
+        approval_account = #{approvalAccount,jdbcType=VARCHAR},
       </if>
       <if test="approvalComments != null">
         approval_comments = #{approvalComments,jdbcType=VARCHAR},
@@ -447,8 +461,8 @@
       <if test="releaseTime != null">
         release_time = #{releaseTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="approvalAccount != null">
-        approval_account = #{approvalAccount,jdbcType=VARCHAR},
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
     where product_id = #{productId,jdbcType=VARCHAR}
@@ -462,6 +476,7 @@
       signory_name = #{signoryName,jdbcType=VARCHAR},
       template_id = #{templateId,jdbcType=VARCHAR},
       org_id = #{orgId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
       service_cycle = #{serviceCycle,jdbcType=VARCHAR},
       picture_url = #{pictureUrl,jdbcType=VARCHAR},
       product_type = #{productType,jdbcType=VARCHAR},
@@ -471,11 +486,11 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
+      approval_account = #{approvalAccount,jdbcType=VARCHAR},
       approval_comments = #{approvalComments,jdbcType=VARCHAR},
       approval_time = #{approvalTime,jdbcType=TIMESTAMP},
       release_time = #{releaseTime,jdbcType=TIMESTAMP},
-      approval_account = #{approvalAccount,jdbcType=VARCHAR}
+      record_status = #{recordStatus,jdbcType=TINYINT}
     where product_id = #{productId,jdbcType=VARCHAR}
   </update>
 </mapper>

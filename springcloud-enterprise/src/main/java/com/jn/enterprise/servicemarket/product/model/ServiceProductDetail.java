@@ -27,6 +27,16 @@ public class ServiceProductDetail implements Serializable {
     private String status;
     @ApiModelProperty(value = "顾问名称")
     private String advisorName;
+    @ApiModelProperty(value = "服务产品发布日期")
+    private String releaseTime;
+
+    public String getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(String releaseTime) {
+        this.releaseTime = releaseTime;
+    }
 
     public ServiceContent getContent() {
         return content;

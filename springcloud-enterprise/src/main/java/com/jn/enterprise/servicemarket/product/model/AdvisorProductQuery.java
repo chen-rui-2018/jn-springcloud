@@ -19,9 +19,9 @@ public class AdvisorProductQuery extends Page implements Serializable {
     @ApiModelProperty(value ="顾问账号",required = true)
     @NotBlank(message = "顾问账号不能为空!")
     private String advisorAccount;
-    @ApiModelProperty(value ="产品类型")
+    @ApiModelProperty(value ="产品类型,0-常规服务产品,1-特色服务产品,不给值则返回全部")
     private String productType;
-    @ApiModelProperty(value ="五星好评")
+    @ApiModelProperty(value ="五星好评,输入'5'则表示只返回五分服务产品")
     private String praise;
 
     public String getAdvisorAccount() {

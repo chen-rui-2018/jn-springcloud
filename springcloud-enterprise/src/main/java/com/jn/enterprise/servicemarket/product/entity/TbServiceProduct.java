@@ -20,6 +20,8 @@ public class TbServiceProduct implements Serializable {
 
     private String orgId;
 
+    private String orgName;
+
     private String serviceCycle;
 
     private String pictureUrl;
@@ -38,7 +40,7 @@ public class TbServiceProduct implements Serializable {
 
     private String modifierAccount;
 
-    private Byte recordStatus;
+    private String approvalAccount;
 
     private String approvalComments;
 
@@ -46,7 +48,7 @@ public class TbServiceProduct implements Serializable {
 
     private Date releaseTime;
 
-    private String approvalAccount;
+    private Byte recordStatus;
 
     private static final long serialVersionUID = 1L;
 
@@ -112,6 +114,14 @@ public class TbServiceProduct implements Serializable {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId == null ? null : orgId.trim();
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName == null ? null : orgName.trim();
     }
 
     public String getServiceCycle() {
@@ -186,12 +196,12 @@ public class TbServiceProduct implements Serializable {
         this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public Byte getRecordStatus() {
-        return recordStatus;
+    public String getApprovalAccount() {
+        return approvalAccount;
     }
 
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setApprovalAccount(String approvalAccount) {
+        this.approvalAccount = approvalAccount == null ? null : approvalAccount.trim();
     }
 
     public String getApprovalComments() {
@@ -218,12 +228,12 @@ public class TbServiceProduct implements Serializable {
         this.releaseTime = releaseTime;
     }
 
-    public String getApprovalAccount() {
-        return approvalAccount;
+    public Byte getRecordStatus() {
+        return recordStatus;
     }
 
-    public void setApprovalAccount(String approvalAccount) {
-        this.approvalAccount = approvalAccount == null ? null : approvalAccount.trim();
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     @Override
@@ -246,6 +256,7 @@ public class TbServiceProduct implements Serializable {
             && (this.getSignoryName() == null ? other.getSignoryName() == null : this.getSignoryName().equals(other.getSignoryName()))
             && (this.getTemplateId() == null ? other.getTemplateId() == null : this.getTemplateId().equals(other.getTemplateId()))
             && (this.getOrgId() == null ? other.getOrgId() == null : this.getOrgId().equals(other.getOrgId()))
+            && (this.getOrgName() == null ? other.getOrgName() == null : this.getOrgName().equals(other.getOrgName()))
             && (this.getServiceCycle() == null ? other.getServiceCycle() == null : this.getServiceCycle().equals(other.getServiceCycle()))
             && (this.getPictureUrl() == null ? other.getPictureUrl() == null : this.getPictureUrl().equals(other.getPictureUrl()))
             && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
@@ -255,11 +266,11 @@ public class TbServiceProduct implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
+            && (this.getApprovalAccount() == null ? other.getApprovalAccount() == null : this.getApprovalAccount().equals(other.getApprovalAccount()))
             && (this.getApprovalComments() == null ? other.getApprovalComments() == null : this.getApprovalComments().equals(other.getApprovalComments()))
             && (this.getApprovalTime() == null ? other.getApprovalTime() == null : this.getApprovalTime().equals(other.getApprovalTime()))
             && (this.getReleaseTime() == null ? other.getReleaseTime() == null : this.getReleaseTime().equals(other.getReleaseTime()))
-            && (this.getApprovalAccount() == null ? other.getApprovalAccount() == null : this.getApprovalAccount().equals(other.getApprovalAccount()));
+            && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
     @Override
@@ -274,6 +285,7 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getSignoryName() == null) ? 0 : getSignoryName().hashCode());
         result = prime * result + ((getTemplateId() == null) ? 0 : getTemplateId().hashCode());
         result = prime * result + ((getOrgId() == null) ? 0 : getOrgId().hashCode());
+        result = prime * result + ((getOrgName() == null) ? 0 : getOrgName().hashCode());
         result = prime * result + ((getServiceCycle() == null) ? 0 : getServiceCycle().hashCode());
         result = prime * result + ((getPictureUrl() == null) ? 0 : getPictureUrl().hashCode());
         result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
@@ -283,11 +295,11 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
-        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
+        result = prime * result + ((getApprovalAccount() == null) ? 0 : getApprovalAccount().hashCode());
         result = prime * result + ((getApprovalComments() == null) ? 0 : getApprovalComments().hashCode());
         result = prime * result + ((getApprovalTime() == null) ? 0 : getApprovalTime().hashCode());
         result = prime * result + ((getReleaseTime() == null) ? 0 : getReleaseTime().hashCode());
-        result = prime * result + ((getApprovalAccount() == null) ? 0 : getApprovalAccount().hashCode());
+        result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
 
@@ -305,6 +317,7 @@ public class TbServiceProduct implements Serializable {
         sb.append(", signoryName=").append(signoryName);
         sb.append(", templateId=").append(templateId);
         sb.append(", orgId=").append(orgId);
+        sb.append(", orgName=").append(orgName);
         sb.append(", serviceCycle=").append(serviceCycle);
         sb.append(", pictureUrl=").append(pictureUrl);
         sb.append(", productType=").append(productType);
@@ -314,11 +327,11 @@ public class TbServiceProduct implements Serializable {
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
-        sb.append(", recordStatus=").append(recordStatus);
+        sb.append(", approvalAccount=").append(approvalAccount);
         sb.append(", approvalComments=").append(approvalComments);
         sb.append(", approvalTime=").append(approvalTime);
         sb.append(", releaseTime=").append(releaseTime);
-        sb.append(", approvalAccount=").append(approvalAccount);
+        sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

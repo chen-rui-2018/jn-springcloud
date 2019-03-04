@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.product.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
@@ -12,12 +13,14 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value ="WebServiceProductDetails", description = "前台 web 服务产品信息")
-public class WebServiceProductDetails implements Serializable {
+@ApiModel(value ="WebServiceProductInfo", description = "前台 web 服务产品信息")
+public class WebServiceProductInfo implements Serializable {
     @ApiModelProperty(value = "产品Id")
     private String productId;
     @ApiModelProperty(value ="产品编号")
     private String serialNumber;
+    @ApiModelProperty(value = "服务产品领域ID")
+    private String signoryId;
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value ="机构名称")
@@ -40,6 +43,14 @@ public class WebServiceProductDetails implements Serializable {
     private String evaluationScore;
     @ApiModelProperty(value = "评价数")
     private String evaluationNumber;
+
+    public String getSignoryId() {
+        return signoryId;
+    }
+
+    public void setSignoryId(String signoryId) {
+        this.signoryId = signoryId;
+    }
 
     public String getProductId() {
         return productId;

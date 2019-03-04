@@ -16,7 +16,7 @@ import java.io.Serializable;
 public class CommonServiceShelf implements Serializable {
     @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true)
     private String templateId;
-    @ApiModelProperty(value = "服务产品Id",required = true)
+    @ApiModelProperty(value = "服务产品Id")
     private String productId;
     @ApiModelProperty(value = "服务产品名称")
     private String productName;

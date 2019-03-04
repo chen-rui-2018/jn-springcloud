@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.product.service;
 import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.product.model.*;
+import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
 
 import java.util.List;
 
@@ -18,9 +19,10 @@ public interface ServiceProductService {
      * 新增服务
      * @param content
      * @param account
+     * @param templateId
      * @return
      */
-   String  addServiceProduct(ServiceContent content, String account);
+   String  addServiceProduct(ServiceContent content, String account,String templateId);
 
     /**
      * 根据条件返回后台服务管理页面的服务列表
@@ -87,6 +89,7 @@ public interface ServiceProductService {
     /**
      * 前台服务产品列表
      * @param info
+     * @param needPage
      * @return
      */
     PaginationData findWebProductList(ProductInquiryInfo  info, Boolean needPage);

@@ -2,7 +2,7 @@ package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParment;
+import com.jn.park.model.ActivityApplyParam;
 import com.jn.park.model.ActivityQueryPaging;
 
 import java.io.IOException;
@@ -36,11 +36,11 @@ public interface ActivityApplyService {
 
     /**
      * 后台管理-查询活动报名信息列表
-     * @param activityApplyParment
+     * @param activityApplyParam
      * @param needPage 是否需要分页
      * @return
      */
-    PaginationData applyActivityList(ActivityApplyParment activityApplyParment, Boolean needPage);
+    PaginationData applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
 
     /**
      * 生成二维码

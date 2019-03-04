@@ -70,6 +70,8 @@ public enum ActivityExceptionEnum implements CodeAndMsg {
     EXPORT_CANNOT_EMPTY("4020510","没有数据，不能导出"),
     LIKE_STATE_NOT_ALLOW("4020511","点状状态只能是点赞(1)和取消点赞(0)"),
     APPLY_IS_NOT_EXIST("4020512","点赞评论或服务不存在"),
+    EXPORT_COL_NAME_NOT_NULL("4020513","excel导出的字段别名不能为空"),
+    EXPORT__TITLE_NOT_NULL("4020514","excel导出字段的标题不能为空"),
     ;
 
     /**

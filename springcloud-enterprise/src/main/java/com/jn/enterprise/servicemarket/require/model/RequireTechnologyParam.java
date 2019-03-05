@@ -43,6 +43,8 @@ public class RequireTechnologyParam extends Page implements Serializable {
             "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
             message = "{projectTime:'资金需求日期格式错误'}")
     private String expectedDate;
+    @ApiModelProperty(value = "资金需求说明")
+    private String fundsReqDesc;
 
     public String getProductId() {
         return productId;
@@ -98,5 +100,13 @@ public class RequireTechnologyParam extends Page implements Serializable {
 
     public void setExpectedDate(String expectedDate) {
         this.expectedDate = expectedDate;
+    }
+
+    public String getFundsReqDesc() {
+        return fundsReqDesc;
+    }
+
+    public void setFundsReqDesc(String fundsReqDesc) {
+        this.fundsReqDesc = fundsReqDesc;
     }
 }

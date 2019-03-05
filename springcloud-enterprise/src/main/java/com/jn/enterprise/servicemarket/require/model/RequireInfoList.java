@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.require.model;
 
 import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
+@ApiModel(value = "RequireInfoList", description = "需求列表信息")
 public class RequireInfoList extends Page implements Serializable {
     @ApiModelProperty(value = "需求单号")
     private String reqNum;
@@ -36,6 +38,7 @@ public class RequireInfoList extends Page implements Serializable {
     private String status;
     @ApiModelProperty(value = "对接结果")
     private String handleResult;
+
 
     public String getReqNum() {
         return reqNum;

@@ -1,9 +1,7 @@
 package com.jn.enterprise.servicemarket.require.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.servicemarket.require.model.RequireOtherParam;
-import com.jn.enterprise.servicemarket.require.model.RequireParam;
-import com.jn.enterprise.servicemarket.require.model.RequireTechnologyParam;
+import com.jn.enterprise.servicemarket.require.model.*;
 
 /**
  * @Author: yangph
@@ -39,4 +37,49 @@ public interface RequireManagementService {
      * @return
      */
      PaginationData getRequireOtherList(RequireOtherParam requireOtherParam,String account);
+
+    /**
+     * 撤销对他人的需求
+     * @param reqNum 需求单号
+     * @return
+     */
+     int cancelRequire(String reqNum);
+
+    /**
+     * 需求详情（对他人需求）
+     * @param reqNum 需求单号
+     * @return
+     */
+    RequireOtherDetails getOtherRequireDetails(String reqNum);
+
+    /**
+     * 我收到的需求列表查询
+     * @param requireReceivedParam  我收到的需求查询条件
+     * @param account               用户账号
+     * @return
+     */
+    PaginationData getRequireReceivedList(RequireReceivedParam requireReceivedParam,String account);
+
+    /**
+     * 对接需求操作
+     * @param reqNum        需求单号
+     * @param account       用户账号
+     * @param advisorName   用户姓名
+     * @return
+     */
+    int handleOperating(String reqNum,String account,String advisorName);
+
+    /**
+     * 需求详情（我收到的需求）
+     * @param reqNum 需求单号
+     * @return
+     */
+    RequireReceivedDetails getReceivedRequireDetails(String reqNum);
+
+    /**
+     * 对接需求（我收到的需求）
+     * @param handleRequireParam   对接需求入参
+     * @return
+     */
+    int handleRequire(HandleRequireParam handleRequireParam);
 }

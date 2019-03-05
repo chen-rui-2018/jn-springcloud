@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.TbFinanceTotalBudgetMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceTotalBudget">
+    <id column="tb_id" jdbcType="INTEGER" property="id" />
+    <result column="tb_cost_type_id" jdbcType="INTEGER" property="costTypeId" />
+    <result column="tb_cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
+    <result column="tb_department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="tb_department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="tb_budget_month" jdbcType="DATE" property="budgetMonth" />
+    <result column="tb_budget_number" jdbcType="DECIMAL" property="budgetNumber" />
+    <result column="tb_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="tb_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="tb_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="tb_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="tb_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    tb.id as tb_id, tb.cost_type_id as tb_cost_type_id, tb.cost_type_name as tb_cost_type_name, 
+    tb.department_id as tb_department_id, tb.department_name as tb_department_name, tb.budget_month as tb_budget_month, 
+    tb.budget_number as tb_budget_number, tb.record_status as tb_record_status, tb.modifier_account as tb_modifier_account, 
+    tb.creator_account as tb_creator_account, tb.modified_time as tb_modified_time, tb.created_time as tb_created_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_finance_total_budget tb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_finance_total_budget tb
+    where tb.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_finance_total_budget
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample">
+    delete from tb_finance_total_budget tb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_total_budget (cost_type_id, cost_type_name, department_id, 
+      department_name, budget_month, budget_number, 
+      record_status, modifier_account, creator_account, 
+      modified_time, created_time)
+    values (#{costTypeId,jdbcType=INTEGER}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=DATE}, #{budgetNumber,jdbcType=DECIMAL}, 
+      #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_total_budget
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="costTypeId != null">
+        cost_type_id,
+      </if>
+      <if test="costTypeName != null">
+        cost_type_name,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="budgetMonth != null">
+        budget_month,
+      </if>
+      <if test="budgetNumber != null">
+        budget_number,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="costTypeId != null">
+        #{costTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="costTypeName != null">
+        #{costTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="budgetMonth != null">
+        #{budgetMonth,jdbcType=DATE},
+      </if>
+      <if test="budgetNumber != null">
+        #{budgetNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample" resultType="java.lang.Long">
+    select count(*) from tb_finance_total_budget tb
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_finance_total_budget tb
+    <set>
+      <if test="record.id != null">
+        tb.id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.costTypeId != null">
+        tb.cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.costTypeName != null">
+        tb.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        tb.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentName != null">
+        tb.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.budgetMonth != null">
+        tb.budget_month = #{record.budgetMonth,jdbcType=DATE},
+      </if>
+      <if test="record.budgetNumber != null">
+        tb.budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="record.recordStatus != null">
+        tb.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.modifierAccount != null">
+        tb.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creatorAccount != null">
+        tb.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        tb.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdTime != null">
+        tb.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_finance_total_budget tb
+    set tb.id = #{record.id,jdbcType=INTEGER},
+      tb.cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
+      tb.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
+      tb.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      tb.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      tb.budget_month = #{record.budgetMonth,jdbcType=DATE},
+      tb.budget_number = #{record.budgetNumber,jdbcType=DECIMAL},
+      tb.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      tb.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      tb.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      tb.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      tb.created_time = #{record.createdTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
+    update tb_finance_total_budget
+    <set>
+      <if test="costTypeId != null">
+        cost_type_id = #{costTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="costTypeName != null">
+        cost_type_name = #{costTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="budgetMonth != null">
+        budget_month = #{budgetMonth,jdbcType=DATE},
+      </if>
+      <if test="budgetNumber != null">
+        budget_number = #{budgetNumber,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
+    update tb_finance_total_budget
+    set cost_type_id = #{costTypeId,jdbcType=INTEGER},
+      cost_type_name = #{costTypeName,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      budget_month = #{budgetMonth,jdbcType=DATE},
+      budget_number = #{budgetNumber,jdbcType=DECIMAL},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

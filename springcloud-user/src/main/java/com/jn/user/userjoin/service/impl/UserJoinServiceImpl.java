@@ -50,6 +50,9 @@ public class UserJoinServiceImpl implements UserJoinService {
 
     @Override
     public void getCode(String phone){
+        if(StringUtils.isEmpty(phone)){
+            throw new JnSpringCloudException(UserJoinExceptionEnum.USER_PHONE_IS_NOT_EXIST);
+        }
         String messageCode = String.valueOf(new Random().nextInt(899999) + 100000);
         Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
         cache.put(phone,messageCode);

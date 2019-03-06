@@ -18,7 +18,10 @@ import java.util.List;
  */
 @ApiModel(value = "AdvisorDetailParam", description = "顾问认证资料信息")
 public class AdvisorDetailParam implements Serializable {
-
+    @ApiModelProperty(value = "机构Id")
+    private String orgId;
+    @ApiModelProperty(value = "机构名称")
+    private String orgName;
     @ApiModelProperty(value = "业务领域")
     private String businessArea;
     @ApiModelProperty(value = "从业年限")
@@ -47,6 +50,22 @@ public class AdvisorDetailParam implements Serializable {
 
     @ApiModelProperty(value = "服务经验")
     private List<ServiceExperience> serviceExperiences;
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
 
     public String getBusinessArea() {
         return businessArea;

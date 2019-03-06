@@ -8,14 +8,18 @@ import com.jn.enterprise.servicemarket.advisor.dao.TbServiceProExperMapper;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonorCriteria;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExperCriteria;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorDetailParam;
+import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * 顾问认证
  * @author： jiangyl
  * @date： Created on 2019/3/4 16:33
  * @version： v1.0
@@ -33,6 +37,8 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
     private TbServiceProExperMapper tbServiceProExperMapper;
     @Autowired
     private TbServiceHonorMapper tbServiceHonorMapper;
+    @Autowired
+    private AdvisorEditService advisorEditService;
 
 
     /**
@@ -64,9 +70,10 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         logger.info("顾问服务经验数据删除成功，响应条数---{}",deleteServiceExperienceCount);
         int i2 = advisorMapper.insertServiceExperienceList(advisorDetailParam.getServiceExperiences());
         logger.info("批量插入顾问服务经验成功，响应条数{}",i2);
-
-        
-
+        AdvisorBaseInfo advisorBaseInfo = new AdvisorBaseInfo();
+        BeanUtils.copyProperties(advisorDetailParam,advisorBaseInfo);
+        advisorBaseInfo.setAdvisorAccount(account);
+        advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
         return 1;
     }
 

@@ -5,8 +5,6 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.model.ServiceOrg;
-import com.jn.enterprise.servicemarket.advisor.dao.AdvisorMapper;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
@@ -20,9 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
@@ -42,8 +38,6 @@ public class OrgServiceImplTest {
 
     @Autowired
     private OrgService orgService;
-    @Autowired
-    private AdvisorMapper advisorMapper;
 
     private String orgId;
     private String account;
@@ -90,8 +84,8 @@ public class OrgServiceImplTest {
         orgBasicData.setDevelopmentStage(new String[]{"发展阶段2","发展阶段3","发展阶段4"});
         orgBasicData.setCompanyNature(new String[]{"企业性质1","企业性质2"});
         try{
-            int i = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
-            assertThat(i,equalTo(1));
+            String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, account);
+            assertThat(s,notNullValue());
         }catch (JnSpringCloudException e){
             logger.warn("时间转换错误");
             assertThat(e.getCode(),equalTo(OrgExceptionEnum.ORG_TIME_PARSE_ERROR.getCode()));
@@ -169,30 +163,5 @@ public class OrgServiceImplTest {
         assertThat(i,equalTo(1));
     }
 
-    @Test
-    public void testInster(){
-        List<ServiceHonor> list = new ArrayList<>(8);
-        ServiceHonor s = new ServiceHonor();
-        s.setId(UUID.randomUUID().toString().replaceAll("-",""));
-        s.setAdvisorAccount("张三");
-        s.setCertificateType("1");
-        s.setCertificateName("证书1");
-        s.setGetTime("201801");
-        s.setCertificatePhoto("iiwowwww.png");
-        s.setCreatedTime(new Date());
-        s.setCreatorAccount("wangsong");
-        ServiceHonor s1 = new ServiceHonor();
-        s1.setId(UUID.randomUUID().toString().replaceAll("-",""));
-        s1.setAdvisorAccount("张三1");
-        s1.setCertificateName("证书4");
-        s1.setCertificateType("12");
-        s1.setGetTime("201804");
-        s1.setCertificatePhoto("iiwowww333w.png");
-        s1.setCreatedTime(new Date());
-        s1.setCreatorAccount("wangsong");
-        list.add(s1);
-        list.add(s);
-        int i = advisorMapper.insertServiceHonorList(list);
-        logger.info("响应条数:  =====>{}",i);
-    }
+
 }

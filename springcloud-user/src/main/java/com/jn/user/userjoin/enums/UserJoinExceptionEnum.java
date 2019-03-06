@@ -15,7 +15,8 @@ public enum UserJoinExceptionEnum implements CodeAndMsg {
     MESSAGE_CODE_IS_WRONG("3020510","短信验证码错误"),
     PHONE_NUMBER_CANNOT_EMPTY("3020511","手机号不能为空"),
     MESSAGE_CODE_CANNOT_EMPTY("3020512","短信验证码不能为空"),
-    PASSWORD_CANNOT_EMPTY("3020513","密码不能为空")
+    PASSWORD_CANNOT_EMPTY("3020513","密码不能为空"),
+    USER_PHONE_IS_NOT_EXIST("3020513","用户手机号不存在"),
     ;
     private String code;
     private String message;

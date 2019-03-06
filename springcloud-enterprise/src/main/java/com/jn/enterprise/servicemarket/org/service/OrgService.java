@@ -33,7 +33,7 @@ public interface OrgService {
      * @param account
      * @return
      */
-    int saveOrUpdateOrgBasicData(OrgBasicData orgBasicData,String account);
+    String saveOrUpdateOrgBasicData(OrgBasicData orgBasicData,String account);
 
     /**
      * 保存服务机构资质信息

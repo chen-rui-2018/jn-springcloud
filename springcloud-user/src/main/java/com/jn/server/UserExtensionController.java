@@ -104,4 +104,6 @@ public class UserExtensionController extends BaseController implements UserExten
         PaginationData paginationData=userInfoService.getUserExtensionByCompanyCode(companyParam);
         return new Result(paginationData);
     }
+
+
 }

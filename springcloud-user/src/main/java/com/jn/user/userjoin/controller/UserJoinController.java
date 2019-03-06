@@ -1,15 +1,19 @@
 package com.jn.user.userjoin.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.StringUtils;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
 import com.jn.user.userjoin.service.UserJoinService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +73,16 @@ public class UserJoinController extends BaseController {
         Assert.notNull(userRegister.getMessageCode(),UserJoinExceptionEnum.MESSAGE_CODE_CANNOT_EMPTY.getMessage());
         userJoinService.updateUser(userRegister);
         return new Result();
+    }
+
+    @ControllerLog(doAction = "获取短信验证码[当前用户]")
+    @ApiOperation(value = "获取短信验证码[当前用户]",httpMethod = "POST",response = Result.class)
+    @RequestMapping(value = "/getUserCode")
+    public Result getUserCode(){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        String phone = user.getPhone();
+        userJoinService.getCode(phone);
+        return new Result("*****{}，验证码发送成功。",phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()-1));
     }
 
 }

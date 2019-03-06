@@ -77,8 +77,8 @@ public class OrgServiceImpl implements OrgService {
 
     @ServiceLog(doAction = "保存服务机构基本信息(id为空时为新增)")
     @Override
-    public int saveOrUpdateOrgBasicData(OrgBasicData orgBasicData, String account){
-        int insert = 0;
+    public String saveOrUpdateOrgBasicData(OrgBasicData orgBasicData, String account){
+        String r = "";
         TbServiceOrg tbServiceOrg = new TbServiceOrg();
         BeanUtils.copyProperties(orgBasicData,tbServiceOrg);
 
@@ -97,13 +97,13 @@ public class OrgServiceImpl implements OrgService {
             tbServiceOrg.setCreatedTime(new Date());
             tbServiceOrg.setCreatorAccount(account);
             tbServiceOrg.setOrgAccount(account);
-            insert = tbServiceOrgMapper.insert(tbServiceOrg);
+            tbServiceOrgMapper.insert(tbServiceOrg);
         }else{
             tbServiceOrg.setModifiedTime(new Date());
             tbServiceOrg.setModifierAccount(account);
-            insert = tbServiceOrgMapper.updateByPrimaryKeySelective(tbServiceOrg);
+            tbServiceOrgMapper.updateByPrimaryKeySelective(tbServiceOrg);
         }
-
+        r = tbServiceOrg.getOrgId();
         //处理机构特性列表
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
         traitCriteria.createCriteria().andOrgIdEqualTo(tbServiceOrg.getOrgId());
@@ -117,7 +117,7 @@ public class OrgServiceImpl implements OrgService {
         Map<String,Object> map = new HashMap<>(4);
         map.put("list",traits);
         orgTraitMapper.insertTraitList(map);
-        return insert;
+        return r;
     }
 
     /**

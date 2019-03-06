@@ -6,7 +6,6 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.StringUtils;
 import com.jn.common.util.file.MultipartFileUtil;
 import com.jn.common.util.zxing.QRCodeUtils;
 import com.jn.oa.common.enums.OaExceptionEnums;
@@ -19,31 +18,27 @@ import com.jn.oa.meeting.entity.TbOaMeetingCriteria;
 import com.jn.oa.meeting.entity.TbOaMeetingParticipants;
 import com.jn.oa.meeting.enums.OaMeetingApproveStatusEnums;
 import com.jn.oa.meeting.enums.OaMeetingStatusEnums;
-import com.jn.oa.meeting.model.OaMeeting;
 import com.jn.oa.meeting.model.OaMeetingAdd;
 import com.jn.oa.meeting.model.OaMeetingApprove;
 import com.jn.oa.meeting.model.OaMeetingPage;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
-import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.upload.api.UploadClient;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.*;
 
 /**
@@ -73,10 +68,16 @@ public class MeetingServiceImpl implements MeetingService {
     @Resource
     private OaMeetingParticipantMapper oaMeetingParticipantMapper;
 
-
     @Autowired
     private UploadClient uploadClient;
 
+
+    private ResourceLoader resourceLoader;
+
+    @Autowired
+    public MeetingServiceImpl(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
 
     /**
      * 根据关键字分页查询会议申请列表
@@ -138,7 +139,7 @@ public class MeetingServiceImpl implements MeetingService {
         //默认会议状态是“待开始”
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.TO_BEGIN.getCode());
         //重新生成二维码
-        //saveQRCode(tbOaMeeting);
+        saveQRCode(tbOaMeeting);
         tbOaMeetingMapper.insert(tbOaMeeting);
         logger.info("[会议申请] 添加会议申请成功！,tbOaMeetingId: {}", tbOaMeeting.getId());
     }
@@ -216,11 +217,10 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     private void saveQRCode(TbOaMeeting tbOaMeeting) {
-
         try {
             //1、二维码logo
-            File logoFile = ResourceUtils.getFile("classpath:zxing");
-            String logoFilePath = logoFile.getPath() + File.separator + "logo.png";
+            org.springframework.core.io.Resource resource = resourceLoader.getResource("classpath:zxing/logo.png");
+            String logoFilePath = resource.getFile().getPath();
 
             //2、获取输出temp目录
             File tempPath = new File(ResourceUtils.getURL("classpath:").getPath());
@@ -234,7 +234,7 @@ public class MeetingServiceImpl implements MeetingService {
 
             //3、输出文件及路径
             String fileName = "QRCode.png";
-            String outFilePath = tempUpload.getAbsolutePath() + fileName;
+            String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;
 
             //4、二维码连接
             String contents = "http://www.baidu.com";

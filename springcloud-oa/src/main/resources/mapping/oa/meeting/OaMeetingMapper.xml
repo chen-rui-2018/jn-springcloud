@@ -32,6 +32,9 @@
         <result column="userName" jdbcType="VARCHAR" property="userName" />
         <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
         <result column="content" jdbcType="VARCHAR" property="content" />
+        <result column="meetingRoomName" jdbcType="VARCHAR" property="meetingRoomName" />
+        <result column="meetingStatusMessage" jdbcType="VARCHAR" property="meetingStatusMessage" />
+
 
 
         <collection property="tbOaMeetingRoom" ofType="com.jn.oa.meeting.entity.TbOaMeetingRoom">
@@ -51,26 +54,17 @@
             <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
         </collection>
 
-        <collection property="participantList" javaType="java.util.List" ofType="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
-            <id column="meetingparticipants_id" jdbcType="VARCHAR" property="id" />
-            <result column="meetingparticipants_meeting_id" jdbcType="VARCHAR" property="meetingId" />
-            <result column="meetingparticipants_meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
-            <result column="meetingparticipants_sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
-            <result column="meetingparticipants_sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
-            <result column="meetingparticipants_attendance_status" jdbcType="VARCHAR" property="attendanceStatus" />
-            <result column="meetingparticipants_record_status" jdbcType="TINYINT" property="recordStatus" />
-            <result column="meetingparticipants_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-            <result column="meetingparticipants_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-            <result column="meetingparticipants_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-            <result column="meetingparticipants_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <collection property="participantList" column="meeting_id" javaType="java.util.List" select="selectParticipantById" ofType="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
         </collection>
+
+
     </resultMap>
     <resultMap id="SelectBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingParticipantVo">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
         <result column="meeting_work_order_num" jdbcType="VARCHAR" property="workOrderNum" />
-        <result column="meeting_start_date" jdbcType="TIMESTAMP" property="startDate" />
-        <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
-        <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="meeting_start_date" jdbcType="VARCHAR" property="startDate" />
+        <result column="meeting_start_time" jdbcType="VARCHAR" property="startTime" />
+        <result column="meeting_end_time" jdbcType="VARCHAR" property="endTime" />
         <result column="meeting_meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
         <result column="meeting_approval_status" jdbcType="VARCHAR" property="approvalStatus" />
         <result column="meeting_record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -130,9 +124,9 @@
     <sql id="Base_Column_List">
     	meeting.id AS meeting_id,
 	meeting.work_order_num AS meeting_work_order_num,
-	meeting.start_time AS meeting_start_date,
-	meeting.start_time AS meeting_start_time,
-	meeting.end_time AS meeting_end_time,
+	date_format(meeting.start_time,'%Y-%m-%d') AS meeting_start_date,
+	date_format(meeting.start_time,'%k:%i')  AS meeting_start_time,
+	date_format(meeting.end_time,'%k:%i') AS meeting_end_time,
 	meeting.meeting_room_id AS meeting_meeting_room_id,
 	meeting.approval_status AS meeting_approval_status,
 	meeting.record_status AS meeting_record_status,
@@ -156,17 +150,21 @@
 	meeting.meeting_status AS meeting_meeting_status,
     u.NAME AS userName,
  	u.department_name AS departmentName,
-    p. meetingparticipants_id,
-	p.meetingparticipants_meeting_id,
-	p.meetingparticipants_meeting_user_id,
-	p. meetingparticipants_attendance_status,
 	meetingroom.meetingroom_id,
+	meetingroom.name as meetingRoomName,
 	meetingroom.name as meetingroom_name,
 	meetingroom.building as meetingroom_building,
     meetingroom.floor as meetingroom_floor,
     meetingroom.room_number as meetingroom_room_number,
     meetingroom.position as meetingroom_position,
-	tc.content as content
+	tc.content as content,
+	(CASE meeting.meeting_status
+
+	 WHEN 0 THEN '待开始'
+      WHEN 1 THEN '进行中'
+     WHEN 2 THEN '已完成'
+      WHEN 3 THEN '已取消'
+       END)meetingStatusMessage
   </sql>
     <update id="deleteBranchByIds" parameterType="java.util.Map">
         update tb_oa_meeting
@@ -200,17 +198,7 @@
         select c.meeting_id,c.content from tb_oa_meeting_content c where c.record_status!=0
         )tc on tc.meeting_id=meeting.id
         LEFT JOIN (
-        SELECT
-        meetingparticipants.id AS meetingparticipants_id,
-        meetingparticipants.meeting_id AS meetingparticipants_meeting_id,
-        meetingparticipants.meeting_user_id AS meetingparticipants_meeting_user_id,
-        meetingparticipants.attendance_status AS meetingparticipants_attendance_status
-        FROM
-        tb_oa_meeting_participants meetingparticipants
-        WHERE
-        meetingparticipants.record_status != 0
-        )p on p.meetingparticipants_meeting_id=meeting.id
-        LEFT JOIN (
+
 
         SELECT
         m.id AS meetingroom_id,
@@ -247,10 +235,9 @@
         ) tt ON t.id = tt.user_id
         WHERE
         t.record_status = 1
-        ) u ON meeting.creator_account = u.id
+        ) u ON meeting.applicant = u.id
         WHERE
-
-         meeting_status !=3
+        1=1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
             and meeting.id =#{id,jdbcType=VARCHAR}
         </if>
@@ -260,11 +247,26 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(approvalStatus)">
             and meeting.approval_status = #{approvalStatus,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingStatus)">
+            and meeting.meeting_status = #{meetingStatus,jdbcType=VARCHAR}
+        </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
             and meetingroom.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
         </if>
-        <if test="startTime != null">AND  meeting.start_time <![CDATA[>=]]> #{startTime}</if>
-        <if test="endTime != null">AND meeting.end_time<![CDATA[<=]]>#{endTime}</if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            and meetingroom.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomName)">
+            and meetingroom.name like CONCAT('%', #{meetingRoomName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentName)">
+            and  u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
+        </if>
+
+
+        <if test="startTime != null">AND  Date(meeting.start_time) <![CDATA[>=]]> #{startTime}</if>
+        <if test="endTime != null">AND Date(meeting.end_time)<![CDATA[<=]]>#{endTime}</if>
+
         ORDER BY
         meeting.created_time DESC,
         meeting.id DESC
@@ -376,12 +378,25 @@
         ) tt ON t.id = tt.user_id
         WHERE
         t.record_status = 1
-        ) u ON meeting.creator_account = u.id
+        ) u ON meeting.applicant = u.id
         WHERE
-
-         meeting_status !=3
+        1=1
          and meeting.id=#{id,jdbcType=VARCHAR}
     </select>
 
+    <select id="selectParticipantById" resultType="com.jn.oa.meeting.entity.TbOaMeetingParticipants" parameterType="java.lang.String" >
 
+
+         SELECT
+        meetingparticipants.id AS id,
+        meetingparticipants.meeting_id AS meetingId,
+        meetingparticipants.meeting_user_id AS meetingUserId,
+        meetingparticipants.attendance_status AS attendanceStatus
+        FROM
+        tb_oa_meeting_participants meetingparticipants
+        WHERE
+        meetingparticipants.record_status != 0
+
+        and meetingparticipants.meeting_id=#{id}
+    </select>
 </mapper>

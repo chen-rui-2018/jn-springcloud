@@ -13,6 +13,7 @@ import com.jn.oa.meeting.dao.OaMeetingRoomPhotoMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomMapper;
 import com.jn.oa.meeting.dao.OaMeetingRoomMapper;
 import com.jn.oa.meeting.dao.TbOaMeetingRoomPhotoMapper;
+import com.jn.oa.meeting.entity.TbOaMeeting;
 import com.jn.oa.meeting.entity.TbOaMeetingRoom;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria;
 import com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto;
@@ -22,6 +23,7 @@ import com.jn.oa.meeting.model.OaMeetingRoomAdd;
 import com.jn.oa.meeting.model.OaMeetingRoomOrderPage;
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
 import com.jn.oa.meeting.service.MeetingRoomService;
+import com.jn.oa.meeting.vo.OaMeetingRoomOrderVo;
 import com.jn.oa.meeting.vo.OaMeetingRoomVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
@@ -155,6 +157,8 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
         //设置最近更新人信息
         tbOaMeetingRoom.setModifiedTime(new Date());
         tbOaMeetingRoom.setModifierAccount(user.getId());
+        //设置会议室位置信息
+        tbOaMeetingRoom.setPosition(tbOaMeetingRoom.getBuilding()+tbOaMeetingRoom.getFloor()+tbOaMeetingRoom.getRoomNumber());
         tbOaMeetingRoomMapper.updateByPrimaryKeySelective(tbOaMeetingRoom);
         logger.info("[会议室] 更新会议室成功！,tbOaMeetingRoomId: {}", tbOaMeetingRoom.getId());
     }
@@ -194,7 +198,16 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Override
     public PaginationData selectMeetingRoomAndMeetingOrder(OaMeetingRoomOrderPage oaMeetingRoomOrderPage) {
         Page<Object> objects = PageHelper.startPage(oaMeetingRoomOrderPage.getPage(), oaMeetingRoomOrderPage.getRows());
-        return new PaginationData(oaMeetingRoomMapper.selectMeetingRoomAndMeetingOrder(oaMeetingRoomOrderPage)
+
+        List<OaMeetingRoomOrderVo> oaMeetingRoomOrderVoList=oaMeetingRoomMapper.selectMeetingRoomAndMeetingOrder(oaMeetingRoomOrderPage);
+        for(OaMeetingRoomOrderVo oaMeetingRoomOrderVo:oaMeetingRoomOrderVoList){
+
+            oaMeetingRoomOrderPage.setMeetingRoomId(oaMeetingRoomOrderVo.getId());
+            List<TbOaMeeting> tbOaMeetingList=oaMeetingRoomMapper.selectMeetingByTimeAndId(oaMeetingRoomOrderPage);
+            oaMeetingRoomOrderVo.setMeetingList(tbOaMeetingList);
+        }
+
+        return new PaginationData(oaMeetingRoomOrderVoList
                 , objects.getTotal());
     }
 

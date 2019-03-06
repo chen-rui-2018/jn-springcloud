@@ -24,7 +24,7 @@ public interface MeetingService {
      * @param oaMeetingPage
      * @return
      */
-    PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage);
+    PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage,User user);
 
     /**
      * 新增会议

@@ -33,16 +33,16 @@ public class OaMeetingVo implements Serializable {
     private String workOrderNum;
 
     @ApiModelProperty(value = "开始日期")
-    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
-    private Date startDate;
+    //@JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
+    private String startDate;
 
     @ApiModelProperty(value = "开始时间")
-    @JsonFormat(pattern="HH:mm",timezone="GMT+8")
-    private Date startTime;
+    //@JsonFormat(pattern="HH:mm",timezone="GMT+8")
+    private String startTime;
 
     @ApiModelProperty(value = "结束时间")
-    @JsonFormat(pattern="HH:mm",timezone="GMT+8")
-    private Date endTime;
+    //@JsonFormat(pattern="HH:mm",timezone="GMT+8")
+    private String endTime;
 
     @ApiModelProperty(value = "会议室id")
     private String meetingRoomId;
@@ -98,6 +98,9 @@ public class OaMeetingVo implements Serializable {
     @ApiModelProperty(value = "会议室")
     private TbOaMeetingRoom tbOaMeetingRoom;
 
+    @ApiModelProperty(value = "会议室名称")
+    private String meetingRoomName;
+
     @ApiModelProperty(value = "会议申请内容")
     private String content;
 
@@ -121,6 +124,25 @@ public class OaMeetingVo implements Serializable {
 
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
+
+    @ApiModelProperty(value = "会议状态名称")
+    private String meetingStatusMessage;
+
+    public String getMeetingStatusMessage() {
+        return meetingStatusMessage;
+    }
+
+    public void setMeetingStatusMessage(String meetingStatusMessage) {
+        this.meetingStatusMessage = meetingStatusMessage;
+    }
+
+    public String getMeetingRoomName() {
+        return meetingRoomName;
+    }
+
+    public void setMeetingRoomName(String meetingRoomName) {
+        this.meetingRoomName = meetingRoomName;
+    }
 
     public String getApprovalRole() {
         return approvalRole;
@@ -154,13 +176,7 @@ public class OaMeetingVo implements Serializable {
         this.tbOaMeetingRoom = tbOaMeetingRoom;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
 
     public String getContent() {
         return content;
@@ -236,19 +252,27 @@ public class OaMeetingVo implements Serializable {
         this.workOrderNum = workOrderNum;
     }
 
-    public Date getStartTime() {
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Date startTime) {
+    public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
-    public Date getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
 

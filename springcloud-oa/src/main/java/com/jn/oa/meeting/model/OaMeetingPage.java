@@ -1,8 +1,10 @@
 package com.jn.oa.meeting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -29,9 +31,13 @@ public class OaMeetingPage extends Page implements Serializable {
     private String workOrderNum;
 
     @ApiModelProperty(value = "开始时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date startTime;
 
     @ApiModelProperty(value = "结束时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date endTime;
 
     @ApiModelProperty(value = "会议室id")
@@ -42,6 +48,39 @@ public class OaMeetingPage extends Page implements Serializable {
 
     @ApiModelProperty(value = "会议状态（0:待开始、1:进行中、2:已完成、3:已取消）")
     private String meetingStatus;
+
+    @ApiModelProperty(value = "申请人")
+    private String applicant;
+
+    @ApiModelProperty(value = "会议室名称")
+    private String meetingRoomName;
+
+    @ApiModelProperty(value = "部门名称")
+    private String departmentName;
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getMeetingRoomName() {
+        return meetingRoomName;
+    }
+
+    public void setMeetingRoomName(String meetingRoomName) {
+        this.meetingRoomName = meetingRoomName;
+    }
+
+    public String getApplicant() {
+        return applicant;
+    }
+
+    public void setApplicant(String applicant) {
+        this.applicant = applicant;
+    }
 
     public String getMeetingStatus() {
         return meetingStatus;

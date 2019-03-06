@@ -27,6 +27,7 @@ import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
 import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.io.IOUtils;
@@ -71,6 +72,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Resource
     private OaMeetingParticipantMapper oaMeetingParticipantMapper;
 
+
     @Autowired
     private UploadClient uploadClient;
 
@@ -84,7 +86,23 @@ public class MeetingServiceImpl implements MeetingService {
      */
     @Override
     @ServiceLog(doAction = "关键字分页查询会议申请列表")
-    public PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage) {
+    public PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage,User user) {
+        String roleId="531a2a04-be44-4239-a36b-5b09aac3499d";
+        int count=0;
+        if(user.getSysRole()!=null&&user.getSysRole().size()!=0){
+            for(SysRole role:user.getSysRole()){
+                if(!role.getId().equals(roleId)){
+                    count++;
+                }
+            }
+        }else{
+            count++;
+        }
+        if(count>0){
+            //没有角色信息
+            oaMeetingPage.setApplicant(user.getId());
+        }
+
         Page<Object> objects = PageHelper.startPage(oaMeetingPage.getPage(), oaMeetingPage.getRows());
         return new PaginationData(oaMeetingMapper.selectMeetingListByCondition(oaMeetingPage)
                 , objects.getTotal());
@@ -103,12 +121,7 @@ public class MeetingServiceImpl implements MeetingService {
     public void insertOaMeeting(OaMeetingAdd oaMeetingAdd) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
-        //名称校验
-        List<TbOaMeeting> tbSysFileGroups = checkName(tbOaMeeting.getTitle());
-        if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
-            logger.warn("[会议申请] 添加会议申请失败，该会议申请名称已存在！,tbOaMeetingName: {}", tbOaMeeting.getTitle());
-            throw new JnSpringCloudException(OaExceptionEnums.ADDERR_NAME_EXIST);
-        }
+
         //保存会议申请内容
         TbOaMeetingContent tbOaMeetingContent=new TbOaMeetingContent();
         tbOaMeetingContent.setContent(oaMeetingAdd.getOaMeetingContent());
@@ -122,9 +135,10 @@ public class MeetingServiceImpl implements MeetingService {
         //保存参会人员信息
         saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount(),oaMeetingAdd.getId());
 
-        //默认提交为审批状态为“审批中”，会议状态是“待开始”
-        tbOaMeeting.setApprovalStatus(OaMeetingApproveStatusEnums.APPROVAL.getCode());
+        //默认会议状态是“待开始”
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.TO_BEGIN.getCode());
+        //重新生成二维码
+        //saveQRCode(tbOaMeeting);
         tbOaMeetingMapper.insert(tbOaMeeting);
         logger.info("[会议申请] 添加会议申请成功！,tbOaMeetingId: {}", tbOaMeeting.getId());
     }
@@ -161,22 +175,11 @@ public class MeetingServiceImpl implements MeetingService {
     @ServiceLog(doAction = "更新会议申请信息")
     @Transactional(rollbackFor = Exception.class)
     public void updateOaMeetingById(OaMeetingAdd oaMeetingAdd, User user) {
-        String tbOaMeetingTitle = oaMeetingAdd.getTitle();
         //判断修改信息是否存在
         TbOaMeeting oaMeetingSelect = tbOaMeetingMapper.selectByPrimaryKey(oaMeetingAdd.getId());
         if (oaMeetingSelect == null || OaStatusEnums.DELETED.getCode().equals(oaMeetingSelect.getRecordStatus())) {
             logger.warn("[会议申请] 会议修改失败,修改信息不存在,oaMeetingId: {}", oaMeetingAdd.getId());
             throw new JnSpringCloudException(OaExceptionEnums.UPDATEDATA_NOT_EXIST);
-        } else {
-            //判断名称是否修改
-            if (!oaMeetingSelect.getTitle().equals(tbOaMeetingTitle)) {
-                //校验名称是否已经在数据库中存在
-                List<TbOaMeeting> tbOaMeetings = checkName(tbOaMeetingTitle);
-                if (tbOaMeetings != null && tbOaMeetings.size() > 0) {
-                    logger.warn("[会议申请] 更新会议申请失败，该会议申请名称已存在！,oaMeetingTitle: {}", tbOaMeetingTitle);
-                    throw new JnSpringCloudException(OaExceptionEnums.UPDATEERR_NAME_EXIST);
-                }
-            }
         }
         //根据会议id删除参会人员
         oaMeetingParticipantMapper.deleteBranchByMeetingIds( getDeleteMap( user, null, oaMeetingAdd.getId()));
@@ -188,6 +191,8 @@ public class MeetingServiceImpl implements MeetingService {
         //设置最近更新人信息
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(user.getId());
+        //重新生成二维码
+       // saveQRCode(tbOaMeeting);
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
         logger.info("[会议申请] 更新会议申请成功！,tbOaMeetingId: {}", tbOaMeeting.getId());
     }
@@ -209,6 +214,38 @@ public class MeetingServiceImpl implements MeetingService {
         return oaMeetingParticipantVo;
     }
 
+    private void saveQRCode(TbOaMeeting tbOaMeeting){
+
+        try {
+            //1、生成二维码
+            File file = ResourceUtils.getFile("classpath:zxing");
+
+
+            File upload = new File(file.getAbsolutePath(),"static/images/upload/");
+            if(!upload.exists()) upload.mkdirs();
+            System.out.println("upload url:"+upload.getAbsolutePath());
+
+            String contents = "http://www.baidu.com";
+            String fileName= "QRCode.png";
+            String outFilePath = file.getPath() + File.separator +fileName;
+            String logoFilePath = file.getPath() + File.separator + "logo.png";
+            QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, logoFilePath);
+
+            //2、上传至fastdfs
+            // File QRCodeFile = ResourceUtils.getFile("classpath:zxing/QRCode.png");
+            // FileInputStream fileInputStream = new FileInputStream(QRCodeFile);
+             file = ResourceUtils.getFile(outFilePath);
+            MultipartFile multipartFile =  MultipartFileUtil.from(file,null);
+
+            Result<String> result = uploadClient.uploadFile(multipartFile, false);
+            tbOaMeeting.setSignInQr(result.getData());
+        }catch (Exception e){
+            e.printStackTrace();
+            logger.warn("生成会议签到二维码失败！,oaMeetingId: {}",tbOaMeeting.getId() );
+            throw new JnSpringCloudException(OaExceptionEnums.CTEATE_QRCODE_FAIL);
+        }
+    }
+
     /**
      * 审批会议审核
      * @param oaMeetingApprove
@@ -223,32 +260,6 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(approveUser.getId());
         tbOaMeeting.setApprovalOpinion(oaMeetingApprove.getApprovalOpinion());
-
-        //审核通过
-        if(OaMeetingApproveStatusEnums.APPROVAL_PASS.getCode().equals(oaMeetingApprove.getApprovalStatus())){
-            try {
-                //1、生成二维码
-                File file = ResourceUtils.getFile("classpath:zxing");
-                String contents = "http://www.baidu.com";
-                String fileName= "QRCode.png";
-                String outFilePath = file.getPath() + File.separator +fileName;
-                String logoFilePath = file.getPath() + File.separator + "logo.png";
-                QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, logoFilePath);
-
-                //2、上传至fastdfs
-                // File QRCodeFile = ResourceUtils.getFile("classpath:zxing/QRCode.png");
-                // FileInputStream fileInputStream = new FileInputStream(QRCodeFile);
-                MultipartFile multipartFile =  MultipartFileUtil.from(file,fileName);
-
-                Result<String> result = uploadClient.uploadFile(multipartFile, false);
-                tbOaMeeting.setSignInQr(result.getData());
-            }catch (Exception e){
-                e.printStackTrace();
-                logger.warn("生成会议签到二维码失败！,oaMeetingId: {}",oaMeetingApprove.getId() );
-                throw new JnSpringCloudException(OaExceptionEnums.CTEATE_QRCODE_FAIL);
-            }
-
-        }
         //作废的会议状态，设置为已取消
         if(OaMeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())){
             tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
@@ -267,7 +278,7 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeeting.setId(meetingId);
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.COMPLETED.getCode());
         tbOaMeeting.setModifiedTime(new Date());
-        tbOaMeeting.setModifierAccount(approveUser.getId());
+        tbOaMeeting.setModifierAccount(approveUser.getAccount());
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
     }
 
@@ -281,8 +292,9 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeeting tbOaMeeting =new TbOaMeeting();
         tbOaMeeting.setId(meetingId);
         tbOaMeeting.setApprovalStatus(OaMeetingApproveStatusEnums.CANCELLED.getCode());
+        tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
         tbOaMeeting.setModifiedTime(new Date());
-        tbOaMeeting.setModifierAccount(user.getId());
+        tbOaMeeting.setModifierAccount(user.getAccount());
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
     }
 
@@ -330,10 +342,10 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeetingCriteria.Criteria criteria = tbOaMeetingCriteria.createCriteria();
         criteria.andTitleEqualTo(tbOaMeetingTitle);
         //筛选已取消的数据
-        Byte cancelledStatus = Byte.parseByte(OaMeetingApproveStatusEnums .CANCELLED.getCode());
-        //        //过滤已作废的数据
-         //Byte invalidStatus = Byte.parseByte(OaMeetingStatusEnums.INVALID.getCode());
-        criteria.andRecordStatusEqualTo(cancelledStatus);
+        //过滤已作废的数据
+        //Byte invalidStatus = Byte.parseByte(OaMeetingStatusEnums.INVALID.getCode());
+        criteria.andApprovalStatusNotEqualTo(OaMeetingApproveStatusEnums .CANCELLED.getCode());
+
        // criteria.andRecordStatusEqualTo(invalidStatus);
         return tbOaMeetingMapper.selectByExample(tbOaMeetingCriteria);
     }

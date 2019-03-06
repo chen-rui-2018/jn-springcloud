@@ -90,7 +90,7 @@ public class OaMeetingServiceTest {
         oaMeetingPage.setPage(1);
         oaMeetingPage.setRows(10);
         //oaMeetingRoomPage.setName("3");
-        PaginationData data = meetingService.selectOaMeetingListBySearchKey(oaMeetingPage);
+        PaginationData data = meetingService.selectOaMeetingListBySearchKey(oaMeetingPage,user);
         Assert.assertThat(data, Matchers.anything());
     }
 

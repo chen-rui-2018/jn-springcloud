@@ -68,6 +68,12 @@
             <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         </collection>
     </resultMap>
+    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
+        <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+    </resultMap>
 
     <sql id="Base_Column_List">
     meetingroom.id as meetingroom_id, meetingroom.name as meetingroom_name, meetingroom.building as meetingroom_building,
@@ -179,28 +185,35 @@
 	meetingroom.creator_account AS meetingroom_creator_account,
 	meetingroom.created_time AS meetingroom_created_time,
 	meetingroom.modifier_account AS meetingroom_modifier_account,
-	meetingroom.modified_time AS meetingroom_modified_time,
-	meeting.id as meeting_id,
-	meeting.title  as meeting_title,
-	meeting.start_time as meeting_start_time,
-	meeting.end_time as meeting_end_time
+	meetingroom.modified_time AS meetingroom_modified_time
+
 
 FROM
 	tb_oa_meeting_room meetingroom
 
-	left join (
-	select m.id,m.title  ,m.start_time,m.end_time,m.meeting_room_id
-		FROM
-		tb_oa_meeting m
-		where m.meeting_status !=3
-	)meeting on meeting.meeting_room_id=meetingroom.id
+
 
 	where meetingroom.record_status!=0
 
-        <if test=" meetingStartTime !=null">
-            <![CDATA[and Date(meeting.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')]]>
-        </if>
 
+
+    </select>
+    <select id="selectMeetingByTimeAndId"  resultMap="meetingBaseResultMap" parameterType="com.jn.oa.meeting.model.OaMeetingRoomOrderPage">
+        select
+        m.id as meeting_id,
+        m.title  as meeting_title,
+        m.start_time as meeting_start_time,
+        m.end_time as meeting_end_time
+
+        FROM
+        tb_oa_meeting m
+        where m.meeting_status !=3
+        <if test=" meetingStartTime !=null">
+            <![CDATA[and Date(m.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')]]>
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            <![CDATA[and m.meeting_room_id =#{meetingRoomId}]]>
+        </if>
     </select>
 
     <select id="selectAvailableMeetingRoomList"  resultMap="SelectResultMap"  parameterType="com.jn.oa.meeting.model.OaMeetingRoomPage" >
@@ -224,7 +237,7 @@ FROM
         FROM
         tb_oa_meeting meeting
 
-        where (meeting.approval_status=1)or(meeting.approval_status =2 and ( meeting.meeting_status =0 or meeting.meeting_status =1))
+        where ( meeting.meeting_status =0 or meeting.meeting_status =1)
         <if test="startTime != null">AND  meeting.start_time <![CDATA[>=]]> #{startTime}</if>
         <if test="endTime != null">AND meeting.end_time<![CDATA[<=]]>#{endTime}</if>
 
@@ -245,9 +258,13 @@ FROM
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roomNumber)">
             and meetingroom.room_number =#{roomNumber,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and meetingroom.id =#{id,jdbcType=VARCHAR}
+        </if>
         order by meetingroom.created_time desc,meetingroom.id desc
 
 
     </select>
+
 
 </mapper>

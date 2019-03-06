@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.meeting.dao.OaMeetingParticipantMapper">
-
+<resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
+    <id column="meetingparticipants_id" jdbcType="VARCHAR" property="id" />
+    <result column="meetingparticipants_meeting_id" jdbcType="VARCHAR" property="meetingId" />
+    <result column="meetingparticipants_meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
+    <result column="meetingparticipants_sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
+    <result column="meetingparticipants_sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
+    <result column="meetingparticipants_attendance_status" jdbcType="VARCHAR" property="attendanceStatus" />
+    <result column="meetingparticipants_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="meetingparticipants_userName" jdbcType="VARCHAR" property="userName" />
+    <result column="meetingparticipants_account" jdbcType="VARCHAR" property="account" />
+</resultMap>
 
 
     <update id="deleteBranchByIds" parameterType="java.util.Map">
@@ -26,4 +36,6 @@
         where meeting_id =   #{meetingId}
 
     </update>
+
+
 </mapper>

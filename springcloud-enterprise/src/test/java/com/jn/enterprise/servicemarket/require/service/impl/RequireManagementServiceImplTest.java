@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -78,6 +79,9 @@ public class RequireManagementServiceImplTest {
      */
     @Test
     public void getRequireNum() {
+        String requireNum = requireManagementService.getRequireNum();
+        logger.info("获取需求单号:{}",requireNum);
+        assertThat(requireNum, notNullValue());
     }
 
     /**

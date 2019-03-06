@@ -145,7 +145,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     public String getRequireNum(){
         lock.lock();
         try {
-            return DateUtils.getDate("yyyyMMddHHmmss")+RandomUtils.nextInt(10);
+            return "XQ-"+DateUtils.getDate("yyyyMMddHHmmss");
         } finally {
             lock.unlock();
         }

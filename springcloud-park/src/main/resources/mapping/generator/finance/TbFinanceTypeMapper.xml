@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceTypeMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceType">
-    <id column="t_id" jdbcType="INTEGER" property="id" />
-    <result column="t_finance_name" jdbcType="VARCHAR" property="financeName" />
-    <result column="t_department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="t_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="t_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="t_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="t_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="t_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="type_id" jdbcType="INTEGER" property="id" />
+    <result column="type_finance_name" jdbcType="VARCHAR" property="financeName" />
+    <result column="type_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="type_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="type_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="type_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="type_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,9 +69,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    t.id as t_id, t.finance_name as t_finance_name, t.department_id as t_department_id, 
-    t.record_status as t_record_status, t.creator_account as t_creator_account, t.created_time as t_created_time, 
-    t.modifier_account as t_modifier_account, t.modified_time as t_modified_time
+    type.id as type_id, type.finance_name as type_finance_name, type.record_status as type_record_status, 
+    type.creator_account as type_creator_account, type.created_time as type_created_time, 
+    type.modifier_account as type_modifier_account, type.modified_time as type_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceTypeExample" resultMap="BaseResultMap">
     select
@@ -80,7 +79,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_type t
+    from tb_finance_type type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -91,15 +90,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_type t
-    where t.id = #{id,jdbcType=INTEGER}
+    from tb_finance_type type
+    where type.id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_type
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceTypeExample">
-    delete from tb_finance_type t
+    delete from tb_finance_type type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -108,12 +107,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_finance_type (finance_name, department_id, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
-    values (#{financeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_finance_type (finance_name, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{financeName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceType">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -123,9 +122,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="financeName != null">
         finance_name,
-      </if>
-      <if test="departmentId != null">
-        department_id,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -147,9 +143,6 @@
       <if test="financeName != null">
         #{financeName,jdbcType=VARCHAR},
       </if>
-      <if test="departmentId != null">
-        #{departmentId,jdbcType=VARCHAR},
-      </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -168,37 +161,34 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceTypeExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_type t
+    select count(*) from tb_finance_type type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_type t
+    update tb_finance_type type
     <set>
       <if test="record.id != null">
-        t.id = #{record.id,jdbcType=INTEGER},
+        type.id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.financeName != null">
-        t.finance_name = #{record.financeName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.departmentId != null">
-        t.department_id = #{record.departmentId,jdbcType=VARCHAR},
+        type.finance_name = #{record.financeName,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        t.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        type.record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        t.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        type.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        t.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        type.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        t.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        type.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        t.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        type.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -206,15 +196,14 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_type t
-    set t.id = #{record.id,jdbcType=INTEGER},
-      t.finance_name = #{record.financeName,jdbcType=VARCHAR},
-      t.department_id = #{record.departmentId,jdbcType=VARCHAR},
-      t.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      t.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      t.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      t.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      t.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_finance_type type
+    set type.id = #{record.id,jdbcType=INTEGER},
+      type.finance_name = #{record.financeName,jdbcType=VARCHAR},
+      type.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      type.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      type.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      type.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      type.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -224,9 +213,6 @@
     <set>
       <if test="financeName != null">
         finance_name = #{financeName,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -249,7 +235,6 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceType">
     update tb_finance_type
     set finance_name = #{financeName,jdbcType=VARCHAR},
-      department_id = #{departmentId,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

@@ -3,12 +3,12 @@ package com.jn.park.finance.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbFinanceType implements Serializable {
-    /*@ApiModelProperty("财务项目ID")*/
-    private Integer id;
+public class TbFinanceDictionary implements Serializable {
+    /*@ApiModelProperty("字典名称")*/
+    private String dicKey;
 
-    /*@ApiModelProperty("财务项目名称")*/
-    private String financeName;
+    /*@ApiModelProperty("字典值")*/
+    private String dicValue;
 
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/
     private Byte recordStatus;
@@ -27,20 +27,20 @@ public class TbFinanceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
-        return id;
+    public String getDicKey() {
+        return dicKey;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDicKey(String dicKey) {
+        this.dicKey = dicKey == null ? null : dicKey.trim();
     }
 
-    public String getFinanceName() {
-        return financeName;
+    public String getDicValue() {
+        return dicValue;
     }
 
-    public void setFinanceName(String financeName) {
-        this.financeName = financeName == null ? null : financeName.trim();
+    public void setDicValue(String dicValue) {
+        this.dicValue = dicValue == null ? null : dicValue.trim();
     }
 
     public Byte getRecordStatus() {
@@ -94,9 +94,9 @@ public class TbFinanceType implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbFinanceType other = (TbFinanceType) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getFinanceName() == null ? other.getFinanceName() == null : this.getFinanceName().equals(other.getFinanceName()))
+        TbFinanceDictionary other = (TbFinanceDictionary) that;
+        return (this.getDicKey() == null ? other.getDicKey() == null : this.getDicKey().equals(other.getDicKey()))
+            && (this.getDicValue() == null ? other.getDicValue() == null : this.getDicValue().equals(other.getDicValue()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -108,8 +108,8 @@ public class TbFinanceType implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getFinanceName() == null) ? 0 : getFinanceName().hashCode());
+        result = prime * result + ((getDicKey() == null) ? 0 : getDicKey().hashCode());
+        result = prime * result + ((getDicValue() == null) ? 0 : getDicValue().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -124,8 +124,8 @@ public class TbFinanceType implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", financeName=").append(financeName);
+        sb.append(", dicKey=").append(dicKey);
+        sb.append(", dicValue=").append(dicValue);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

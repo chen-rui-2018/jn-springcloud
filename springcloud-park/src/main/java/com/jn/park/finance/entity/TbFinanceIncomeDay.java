@@ -1,14 +1,21 @@
 package com.jn.park.finance.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
-public class TbFinanceType implements Serializable {
-    /*@ApiModelProperty("财务项目ID")*/
-    private Integer id;
+public class TbFinanceIncomeDay implements Serializable {
+    /*@ApiModelProperty("费用日期")*/
+    private Date incomeDay;
 
-    /*@ApiModelProperty("财务项目名称")*/
-    private String financeName;
+    /*@ApiModelProperty("收入类型标识 0：电费 ；1：物业费；2：楼宇租；3：其他；4：合计")*/
+    private Byte incomeType;
+
+    /*@ApiModelProperty("收入类型名称")*/
+    private String incomeTypename;
+
+    /*@ApiModelProperty("收入金额")*/
+    private BigDecimal income;
 
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/
     private Byte recordStatus;
@@ -27,20 +34,36 @@ public class TbFinanceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
-        return id;
+    public Date getIncomeDay() {
+        return incomeDay;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setIncomeDay(Date incomeDay) {
+        this.incomeDay = incomeDay;
     }
 
-    public String getFinanceName() {
-        return financeName;
+    public Byte getIncomeType() {
+        return incomeType;
     }
 
-    public void setFinanceName(String financeName) {
-        this.financeName = financeName == null ? null : financeName.trim();
+    public void setIncomeType(Byte incomeType) {
+        this.incomeType = incomeType;
+    }
+
+    public String getIncomeTypename() {
+        return incomeTypename;
+    }
+
+    public void setIncomeTypename(String incomeTypename) {
+        this.incomeTypename = incomeTypename == null ? null : incomeTypename.trim();
+    }
+
+    public BigDecimal getIncome() {
+        return income;
+    }
+
+    public void setIncome(BigDecimal income) {
+        this.income = income;
     }
 
     public Byte getRecordStatus() {
@@ -94,9 +117,11 @@ public class TbFinanceType implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbFinanceType other = (TbFinanceType) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getFinanceName() == null ? other.getFinanceName() == null : this.getFinanceName().equals(other.getFinanceName()))
+        TbFinanceIncomeDay other = (TbFinanceIncomeDay) that;
+        return (this.getIncomeDay() == null ? other.getIncomeDay() == null : this.getIncomeDay().equals(other.getIncomeDay()))
+            && (this.getIncomeType() == null ? other.getIncomeType() == null : this.getIncomeType().equals(other.getIncomeType()))
+            && (this.getIncomeTypename() == null ? other.getIncomeTypename() == null : this.getIncomeTypename().equals(other.getIncomeTypename()))
+            && (this.getIncome() == null ? other.getIncome() == null : this.getIncome().equals(other.getIncome()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -108,8 +133,10 @@ public class TbFinanceType implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getFinanceName() == null) ? 0 : getFinanceName().hashCode());
+        result = prime * result + ((getIncomeDay() == null) ? 0 : getIncomeDay().hashCode());
+        result = prime * result + ((getIncomeType() == null) ? 0 : getIncomeType().hashCode());
+        result = prime * result + ((getIncomeTypename() == null) ? 0 : getIncomeTypename().hashCode());
+        result = prime * result + ((getIncome() == null) ? 0 : getIncome().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -124,8 +151,10 @@ public class TbFinanceType implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", financeName=").append(financeName);
+        sb.append(", incomeDay=").append(incomeDay);
+        sb.append(", incomeType=").append(incomeType);
+        sb.append(", incomeTypename=").append(incomeTypename);
+        sb.append(", income=").append(income);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

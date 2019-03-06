@@ -226,6 +226,66 @@ public class TbFinanceExpensesExample {
             return (Criteria) this;
         }
 
+        public Criteria andCostIsNull() {
+            addCriterion("e.cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIsNotNull() {
+            addCriterion("e.cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostEqualTo(BigDecimal value) {
+            addCriterion("e.cost =", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotEqualTo(BigDecimal value) {
+            addCriterion("e.cost <>", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostGreaterThan(BigDecimal value) {
+            addCriterion("e.cost >", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("e.cost >=", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostLessThan(BigDecimal value) {
+            addCriterion("e.cost <", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("e.cost <=", value, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIn(List<BigDecimal> values) {
+            addCriterion("e.cost in", values, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotIn(List<BigDecimal> values) {
+            addCriterion("e.cost not in", values, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("e.cost between", value1, value2, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("e.cost not between", value1, value2, "cost");
+            return (Criteria) this;
+        }
+
         public Criteria andCostBeforeTypeIdIsNull() {
             addCriterion("e.cost_before_type_id is null");
             return (Criteria) this;
@@ -943,66 +1003,6 @@ public class TbFinanceExpensesExample {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("e.modified_time not between", value1, value2, "modifiedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostIsNull() {
-            addCriterion("e.cost is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostIsNotNull() {
-            addCriterion("e.cost is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostEqualTo(BigDecimal value) {
-            addCriterion("e.cost =", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostNotEqualTo(BigDecimal value) {
-            addCriterion("e.cost <>", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostGreaterThan(BigDecimal value) {
-            addCriterion("e.cost >", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("e.cost >=", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostLessThan(BigDecimal value) {
-            addCriterion("e.cost <", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("e.cost <=", value, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostIn(List<BigDecimal> values) {
-            addCriterion("e.cost in", values, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostNotIn(List<BigDecimal> values) {
-            addCriterion("e.cost not in", values, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("e.cost between", value1, value2, "cost");
-            return (Criteria) this;
-        }
-
-        public Criteria andCostNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("e.cost not between", value1, value2, "cost");
             return (Criteria) this;
         }
     }

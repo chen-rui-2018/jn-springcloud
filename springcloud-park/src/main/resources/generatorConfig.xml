@@ -121,11 +121,27 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务项目类型-->
-        <table tableName="tb_finance_type" alias="t">
+        <table tableName="tb_finance_type" alias="type">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--部门与财务类型关系表-->
+        <table tableName="tb_finance_department_to_type" alias="dtpye">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务事项-工单表-->
         <table tableName="tb_finance_work_order" alias="wo">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--财务协同-收入情况(日表)-->
+        <table tableName="tb_finance_income_day" alias="iday">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--财务协同-收入情况(月表)-->
+        <table tableName="tb_finance_income_month" alias="imonth">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--财务协同-字典表-->
+        <table tableName="tb_finance_dictionary" alias="dict">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>

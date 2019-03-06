@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "需求管理（web+手机）")
+@Api(tags = "需求管理")
 @RestController
 @RequestMapping(value = "/serviceMarket/requireManagementController")
 public class RequireManagementController extends BaseController {
@@ -52,7 +52,8 @@ public class RequireManagementController extends BaseController {
             logger.warn("用户提需求获取当前登录用户信息失败");
             return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        requireManagementService.userDemand(requireParam,user.getAccount());
+        int responseNum = requireManagementService.userDemand(requireParam, user.getAccount());
+        logger.info("-----数据响应条数:{}----",responseNum);
         return  new Result();
     }
 
@@ -67,7 +68,8 @@ public class RequireManagementController extends BaseController {
             logger.warn("用户提需求获取当前登录用户信息失败");
             return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        requireManagementService.userDemandTechnology(requireTechnologyParam,user.getAccount());
+        int responseNum = requireManagementService.userDemandTechnology(requireTechnologyParam, user.getAccount());
+        logger.info("-----数据响应条数:{}----",responseNum);
         return  new Result();
     }
 
@@ -158,4 +160,25 @@ public class RequireManagementController extends BaseController {
         logger.info("-----数据响应条数：{}-----",responseNum);
         return  new Result();
     }
+
+
+    @ControllerLog(doAction = "需求管理列表查询（后台门户管理）")
+    @ApiOperation(value = "需求管理列表查询（后台门户管理）", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/serviceMarket/requireManagementController/getPortalRequireInfoList")
+    @RequestMapping(value = "/getPortalRequireInfoList")
+    public Result getPortalRequireInfoList(@RequestBody @Validated RequirePortalParam requirePortalParam){
+        PaginationData requireOtherList = requireManagementService.getPortalRequireInfoList(requirePortalParam);
+        return  new Result(requireOtherList);
+    }
+
+    @ControllerLog(doAction = "需求详情（后台门户管理）")
+    @ApiOperation(value = "需求详情（后台门户管理）", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/serviceMarket/requireManagementController/getPortalRequireDetails")
+    @RequestMapping(value = "/getPortalRequireDetails")
+    public Result getPortalRequireDetails(@ApiParam(value = "需求编号" ,required = true)@RequestParam("reqNum") String reqNum){
+        Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
+        RequirePortalDetails requirePortalDetails = requireManagementService.getPortalRequireDetails(reqNum);
+        return  new Result(requirePortalDetails);
+    }
+
 }

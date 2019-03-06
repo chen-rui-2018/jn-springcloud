@@ -15,7 +15,7 @@ public interface RequireManagementService {
      * @param requireParam 用户提需求入参
      * @param account      用户账号
      */
-    void userDemand(RequireParam requireParam,String account);
+    int userDemand(RequireParam requireParam,String account);
 
     /**
      * 获取需求单号
@@ -28,7 +28,7 @@ public interface RequireManagementService {
      * @param requireTechnologyParam 用户提需求入参
      * @param account                用户账号
      */
-     void userDemandTechnology(RequireTechnologyParam requireTechnologyParam,String account);
+     int userDemandTechnology(RequireTechnologyParam requireTechnologyParam,String account);
 
     /**
      * 对他人的需求列表查询
@@ -82,4 +82,18 @@ public interface RequireManagementService {
      * @return
      */
     int handleRequire(HandleRequireParam handleRequireParam);
+
+    /**
+     * 需求管理列表查询（后台门户管理）
+     * @param requirePortalParam  需求管理列表查询入参
+     * @return
+     */
+    PaginationData getPortalRequireInfoList( RequirePortalParam requirePortalParam);
+
+    /**
+     * 需求详情（后台门户管理）
+     * @param reqNum 需求编号
+     * @return
+     */
+    RequirePortalDetails getPortalRequireDetails(String reqNum);
 }

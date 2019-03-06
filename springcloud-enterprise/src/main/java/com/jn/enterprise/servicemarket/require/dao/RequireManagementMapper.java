@@ -1,8 +1,6 @@
 package com.jn.enterprise.servicemarket.require.dao;
 
-import com.jn.enterprise.servicemarket.require.model.RequireInfoList;
-import com.jn.enterprise.servicemarket.require.model.RequireOtherParam;
-import com.jn.enterprise.servicemarket.require.model.RequireReceivedParam;
+import com.jn.enterprise.servicemarket.require.model.*;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +30,18 @@ public interface RequireManagementMapper {
      * @return
      */
     List<RequireInfoList>getRequireReceivedList(RequireReceivedParam requireReceivedParam,@Param("account")String account,@Param("orgId")String orgId);
+
+    /**
+     * 需求管理列表查询（后台门户管理）
+     * @param requirePortalParam 需求管理列表查询入参
+     * @return
+     */
+    List<RequirePortalInfoList>getPortalRequireInfoList(RequirePortalParam requirePortalParam);
+
+    /**
+     * 需求详情（后台门户管理）
+     * @param reqNum
+     * @return
+     */
+    RequirePortalDetails getPortalRequireDetails(@Param("reqNum") String reqNum);
 }

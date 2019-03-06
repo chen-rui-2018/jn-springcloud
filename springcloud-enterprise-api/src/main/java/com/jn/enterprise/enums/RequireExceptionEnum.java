@@ -15,6 +15,8 @@ public enum RequireExceptionEnum implements CodeAndMsg {
     ORG_ID_NOT_EXIST("5020532","当前产品所对应机构在系统中不存在或产品已失效"),
     REQUIRE_NUM_NOT_NULL("5020533","需求单号不能为空"),
     REQUIRE_INFO_NOT_EXIST("5020534","当前需求在系统中不存在或已失效"),
+    REQUIRE_REPEATED_SUBMIT("5020535","系统已存在当前需求，请勿重复提需求"),
+    START_MORE_THEN_END("5020536","提交开始时间晚于提交结束时间"),
     ;
 
     /**

@@ -104,4 +104,100 @@
         order by sr.issue_account desc
     </select>
 
+    <!--需求管理列表查询（后台门户管理）-->
+    <select id="getPortalRequireInfoList" parameterType="com.jn.enterprise.servicemarket.require.model.RequirePortalParam"
+            resultType="com.jn.enterprise.servicemarket.require.model.RequirePortalInfoList">
+        SELECT
+        sr.req_num AS "reqNum"					                  <!--需求单号-->
+        ,sr.`business_id` AS "businessId"				          <!--领域id-->
+        ,sr.`business_area` AS "businessArea"			          <!--领域名称-->
+        ,sr.`org_id` AS "orgId"					                  <!--机构id-->
+        ,sr.`org_name` AS "orgName"					              <!--机构名称-->
+        ,IFNULL(sr.`advisor_account,"未指定")` AS "advisorAccount" <!--顾问账号-->
+        ,IFNULL(sr.`advisor_name`,"未指定") AS "advisorName"	      <!--顾问名称-->
+        ,sr.issue_account AS "issueAccount"				          <!--需求人-->
+        ,sr.`product_id` AS "productId"				              <!--产品id-->
+        ,sr.`product_name` AS "productName"				          <!--产品名称-->
+        ,CASE sp.product_type
+        WHEN '0' THEN "常规服务产品"
+        WHEN '1' THEN "特色服务产品"
+        ELSE ''
+        END  AS "productType"					                  <!--产品分类-->
+        ,DATE_FORMAT(sr.`issue_time`,"%Y/%m/%d")AS requireTime	  <!--需求日期-->
+        ,CASE sr.handle_result
+        WHEN '1' THEN "对接成功"
+        WHEN '2' THEN "对接失败"
+        WHEN '3' THEN "企业需求撤销"
+        WHEN '4' THEN "未对接"
+        ELSE '--'
+        END AS "handleResult"				 	                  <!--对接结果-->
+        FROM tb_service_require sr
+        LEFT JOIN tb_service_product sp
+        ON sr.product_id=sp.product_id
+        where 1=1
+        <if test="productType!=null and productType!=''">           <!--产品类型精确搜索-->
+            and sp.product_type=#{productType}
+        </if>
+        <if test="handleResult!=null and handleResult!=''">         <!--对接结果精确搜索-->
+            and sr.handle_result=#{handleResult}
+        </if>
+        <if test="businessId!=null and businessId!=''">             <!--业务领域精确搜索-->
+            and sr.businessId=#{businessId}
+        </if>
+        <if test="serviceOrg!=null and serviceOrg!=''">             <!--服务机构模糊搜索-->
+            and (sr.org_id like  CONCAT('%', #{serviceOrg}, '%') or sr.org_name like CONCAT('%', #{serviceOrg}, '%'))
+        </if>
+        <if test="requireStartTime!=null and requireStartTime!=''"> <!--需求日期开始时间精确搜索-->
+            and date_format(sr.`issue_time`,'%Y%m')&gt;=#{requireStartTime}
+        </if>
+        <if test="requireEndTime!=null and requireEndTime!=''">     <!--需求日期结束时间精确搜索-->
+            and date_format(sr.`issue_time`,'%Y%m')&lt;=#{requireEndTime}
+        </if>
+        <if test="serviceProduct!=null and serviceProduct!=''">     <!--服务产品模糊搜索-->
+            and (sr.product_id like  CONCAT('%', #{serviceProduct}, '%') or sr.product_name like CONCAT('%', #{serviceProduct}, '%'))
+        </if>
+        ORDER BY sr.`issue_time` DESC
+    </select>
+
+    <select id="getPortalRequireDetails" resultType="com.jn.enterprise.servicemarket.require.model.RequirePortalDetails">
+        SELECT
+        sr.req_num AS "reqNum"					                  <!--需求单号-->
+        ,sr.`business_area` AS "businessArea"			          <!--领域名称-->
+        ,sr.`org_name` AS "orgName"					              <!--机构名称-->
+        ,IFNULL(sr.`advisor_name`,"未指定") AS "advisorName"	      <!--顾问名称-->
+        ,sr.issue_account AS "issueAccount"				          <!--需求人-->
+        ,sr.`product_name` AS "productName"				          <!--产品名称-->
+        ,CASE sp.product_type
+        WHEN '0' THEN "常规服务产品"
+        WHEN '1' THEN "特色服务产品"
+        ELSE ''
+        END  AS "productType"					                  <!--产品分类-->
+        ,DATE_FORMAT(sr.`issue_time`,"%Y/%m/%d")AS issueTime	  <!--发布时间-->
+        ,sr.req_name as "reqName"                                 <!--联系人姓名-->
+        ,sr.req_phone as "reqPhone"                               <!--联系人手机-->
+        ,sr.req_email as "reqEmail"                               <!--联系人邮箱-->
+        ,sr.contract_amount as "contractAmount"                   <!--合同总金额-->
+        ,sr.req_detail as "requireDetail"                         <!--需求描述-->
+        ,CASE sr.handle_result
+        WHEN '1' THEN "对接成功"
+        WHEN '2' THEN "对接失败"
+        WHEN '3' THEN "企业需求撤销"
+        WHEN '4' THEN "未对接"
+        ELSE '暂无'
+        END AS "handleResult"				 	                  <!--对接结果-->
+        ,IFNULL(sr.result_detail,"暂无") as "resultDetail"         <!--结果描述-->
+        ,sr.financing_amount as "financingAmount"                 <!--[科技金融]融资金额-->
+        ,sr.financing_period as "financingPeriod"                 <!--[科技金融]融资期限-->
+        ,sr.actual_loan_amount as "actualLoanAmount"              <!--[科技金融]实际贷款金额(万元)-->
+        ,sr.funds_req_desc as "fundsReqDesc"                      <!--[科技金融]资金需求说明-->
+        ,DATE_FORMAT(sr.expected_date,"%Y/%m/%d")as "expectedDate"<!--[科技金融]资金需求日期")-->
+        ,sr.contract_home_page as "contractHomePage"              <!--合同首页-->
+        ,sr.contract_end_page as "contractEndPage"                <!--合同尾页-->
+        FROM tb_service_require sr
+        LEFT JOIN tb_service_product sp
+        ON sr.product_id=sp.product_id
+        where 1=1
+        and sr.req_num=#{reqNum}
+    </select>
+
 </mapper>

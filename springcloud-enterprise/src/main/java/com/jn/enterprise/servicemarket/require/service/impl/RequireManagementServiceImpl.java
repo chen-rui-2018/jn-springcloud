@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.require.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -26,7 +27,6 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.apache.commons.lang.math.RandomUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -80,7 +80,13 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      */
     @ServiceLog(doAction = " 用户提需求(非科技金融)")
     @Override
-    public void userDemand(RequireParam requireParam, String account) {
+    public int userDemand(RequireParam requireParam, String account) {
+        //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
+        long num =getTbServiceRequireNum(requireParam.getProductId(),requireParam.getRequireDetail(), account);
+        if(num!=0){
+            logger.warn("用户提需求(非科技金融),系统已存在当前需求，请勿重复提需求");
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireParam.getProductId());
         if(tbServiceProductList.isEmpty()){
@@ -101,9 +107,32 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         }
         UserExtensionInfo user = userExtension.getData();
         TbServiceRequire tbServiceRequire=new TbServiceRequire();
-        insertRequireInfo(requireParam.getProductId(),requireParam.getProductName(),requireParam.getRequireDetail(),
+        return insertRequireInfo(requireParam.getProductId(),requireParam.getProductName(),requireParam.getRequireDetail(),
                          tbServiceProductList.get(0).getOrgId(), tbServiceProductList.get(0).getOrgName(),tbServiceProductList.get(0).getSignoryId(),tbServiceProductList.get(0).getSignoryName(),
                          tbServiceOrgInfoList.get(0).getOrgPhone(),tbServiceOrgInfoList.get(0).getConEmail(), user, tbServiceRequire);
+    }
+
+    /**
+     * 根据条件查询需求数据条数
+     * @param productId     产品id
+     * @param requireDetail 需求描述
+     * @param account       用户账号
+     * @return
+     */
+    private long getTbServiceRequireNum(String productId, String requireDetail,String account) {
+        //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
+        //数据状态  0：删除  1：有效
+        byte recordStatus=1;
+        //需求状态  (-1:已撤销 1：待处理，2：已处理)
+        String status="-1";
+        //对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)
+        String handleResult="2";
+        TbServiceRequireCriteria example=new TbServiceRequireCriteria();
+        example.createCriteria().andProductIdEqualTo(productId)
+                .andIssueAccountEqualTo(account).andReqDetailEqualTo(requireDetail)
+                .andStatusNotEqualTo(status).andHandleResultNotEqualTo(handleResult)
+                .andRecordStatusEqualTo(recordStatus);
+        return tbServiceRequireMapper.countByExample(example);
     }
 
 
@@ -129,7 +158,13 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      */
     @Override
     @ServiceLog(doAction = "用户提需求(科技金融)")
-    public void userDemandTechnology(RequireTechnologyParam requireTechnologyParam, String account) {
+    public int userDemandTechnology(RequireTechnologyParam requireTechnologyParam, String account) {
+        //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
+        long num =getTbServiceRequireNum(requireTechnologyParam.getProductId(),requireTechnologyParam.getRequireDetail(), account);
+        if(num!=0){
+            logger.warn("用户提需求(科技金融),系统已存在当前需求，请勿重复提需求");
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireTechnologyParam.getProductId());
         if(tbServiceProductList.isEmpty()){
@@ -161,9 +196,9 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setFundsReqDesc(requireTechnologyParam.getFundsReqDesc());
         //资金需求日期
         tbServiceRequire.setExpectedDate(DateUtils.parseDate(requireTechnologyParam.getExpectedDate()));
-        insertRequireInfo(requireTechnologyParam.getProductId(),requireTechnologyParam.getProductName(),requireTechnologyParam.getRequireDetail(),
-                tbServiceProductList.get(0).getOrgId(), tbServiceProductList.get(0).getOrgName(),tbServiceProductList.get(0).getSignoryId(),tbServiceProductList.get(0).getSignoryName(),
-                tbServiceOrgInfoList.get(0).getOrgPhone(),tbServiceOrgInfoList.get(0).getConEmail(), user, tbServiceRequire);
+        return insertRequireInfo(requireTechnologyParam.getProductId(), requireTechnologyParam.getProductName(), requireTechnologyParam.getRequireDetail(),
+                tbServiceProductList.get(0).getOrgId(), tbServiceProductList.get(0).getOrgName(), tbServiceProductList.get(0).getSignoryId(), tbServiceProductList.get(0).getSignoryName(),
+                tbServiceOrgInfoList.get(0).getOrgPhone(), tbServiceOrgInfoList.get(0).getConEmail(), user, tbServiceRequire);
     }
 
 
@@ -182,7 +217,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      * @param tbServiceRequire      提需求bean  (科技金融提需求，科技金融相关字段不能空)
      */
     @ServiceLog(doAction = "设置提需求bean属性并保存")
-    private void insertRequireInfo(String productId,String productName, String requireDetail,
+    private int insertRequireInfo(String productId,String productName, String requireDetail,
                                    String orgId,String orgName,String businessId,String businessArea,
                                    String orgPhone,String conEmail,
                                    UserExtensionInfo user, TbServiceRequire tbServiceRequire) {
@@ -201,7 +236,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setProductName(productName);
         //根据产品id查询产品和顾问关联表（tb_service_and_advisor），获取账号
         List<TbServiceAndAdvisor> advisorByProductId = getAdvisorByProductId(productId);
-        if(advisorByProductId.isEmpty()){
+        if(!advisorByProductId.isEmpty()){
             List<String> accountList=new ArrayList<>(16);
             for(TbServiceAndAdvisor serviceAndAdvisor:advisorByProductId){
                 accountList.add(serviceAndAdvisor.getAdvisorAccount());
@@ -246,7 +281,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         //数据状态  0：删除  1：有效
         byte recordStatus=1;
         tbServiceRequire.setRecordStatus(recordStatus);
-        tbServiceRequireMapper.insertSelective(tbServiceRequire);
+        return tbServiceRequireMapper.insertSelective(tbServiceRequire);
     }
 
     /**
@@ -499,5 +534,85 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         byte recordStatus=1;
         example.createCriteria().andReqNumEqualTo(handleRequireParam.getReqNum()).andRecordStatusEqualTo(recordStatus);
         return tbServiceRequireMapper.updateByExampleSelective(tbServiceRequire, example);
+    }
+
+    /**
+     * 需求管理列表查询（后台门户管理）
+     * @param requirePortalParam  需求管理列表查询入参
+     * @return
+     */
+    @ServiceLog(doAction = "需求管理列表查询（后台门户管理）")
+    @Override
+    public PaginationData getPortalRequireInfoList(RequirePortalParam requirePortalParam) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(requirePortalParam==null || StringUtils.isBlank(requirePortalParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+            List<RequirePortalInfoList> portalRequireInfoList = requireManagementMapper.getPortalRequireInfoList(requirePortalParam);
+            if(portalRequireInfoList.isEmpty()){
+                return new PaginationData(portalRequireInfoList, objects == null ? 0 : objects.getTotal());
+            }
+            return getPaginationData(requirePortalParam, objects);
+        }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(requirePortalParam.getNeedPage())){
+            objects = PageHelper.startPage(requirePortalParam.getPage(),
+                    requirePortalParam.getRows() == 0 ? 15 : requirePortalParam.getRows(), true);
+        }
+        return getPaginationData(requirePortalParam, objects);
+    }
+
+    /**
+     * 需求管理列表查询数据处理
+     * @param requirePortalParam
+     * @param objects
+     * @return
+     */
+    @ServiceLog(doAction = "需求管理列表查询数据处理")
+    private PaginationData getPaginationData(RequirePortalParam requirePortalParam, Page<Object> objects) {
+        if(StringUtils.isNotBlank(requirePortalParam.getRequireStartTime())
+                && StringUtils.isNotBlank(requirePortalParam.getRequireEndTime())){
+            int startTime = Integer.parseInt(requirePortalParam.getRequireStartTime());
+            int endTime=Integer.parseInt(requirePortalParam.getRequireEndTime());
+            if(startTime>endTime){
+                logger.warn("需求管理列表查询提交开始时间：[{}]晚于提交结束时间：[{}]",requirePortalParam.getRequireStartTime(),requirePortalParam.getRequireEndTime());
+                throw new JnSpringCloudException(RequireExceptionEnum.START_MORE_THEN_END);
+            }
+        }
+        List<RequirePortalInfoList> portalRequireInfoList = requireManagementMapper.getPortalRequireInfoList(requirePortalParam);
+        //根据账号获取用户信息，得到企业名称
+        List<String>accountList=new ArrayList<>(16);
+        for(RequirePortalInfoList requirePortalInfoList:portalRequireInfoList){
+            accountList.add(requirePortalInfoList.getIssueAccount());
+        }
+        if(accountList.isEmpty()){
+            return new PaginationData(portalRequireInfoList, objects == null ? 0 : objects.getTotal());
+        }
+
+        //设置企业名称
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        for(RequirePortalInfoList requirePortalInfo:portalRequireInfoList){
+            for(UserExtensionInfo userExtensionInfo:moreUserExtension.getData()){
+                if(requirePortalInfo.getIssueAccount().equals(userExtensionInfo.getAccount())){
+                    requirePortalInfo.setCompanyName(userExtensionInfo.getCompanyName());
+                    break;
+                }
+            }
+        }
+        return new PaginationData(portalRequireInfoList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 需求详情（后台门户管理）
+     * @param reqNum 需求编号
+     * @return
+     */
+    @ServiceLog(doAction = "需求详情（后台门户管理）")
+    @Override
+    public RequirePortalDetails getPortalRequireDetails(String reqNum) {
+        return requireManagementMapper.getPortalRequireDetails(reqNum);
     }
 }

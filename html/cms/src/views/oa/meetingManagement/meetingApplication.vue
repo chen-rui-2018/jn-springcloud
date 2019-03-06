@@ -1,34 +1,60 @@
 <template>
   <div class="meetingApplication">
     <div class="meetingApplication-top">
-      <el-form ref="meetingForm" :model="meetingForm" :show-message="false" hide-required-asterisk class="demo-meetingForm">
+      <el-form ref="meetingForm" :model="meetingForm" :rules="rules" hide-required-asterisk class="demo-meetingForm">
         <div style="display:flex">
-          <el-form-item label="工单编号" prop="workOrderNum" class="inline">
-            <span> {{ meetingForm.workOrderNum }} </span>
-          </el-form-item>
-          <el-form-item label="工单名称" prop="title" class="inline">
-            <span>{{ meetingForm.title }}</span>
-          </el-form-item>
-        </div>
-        <!-- <div style="display:flex">
-          <el-form-item label="姓名" class="inline" >
-            <span> {{ accountName }} </span>
-          </el-form-item>
-          <el-form-item label="部门" prop="department " class="inline" >
-            <span> 招商部</span>
-          </el-form-item>
-        </div> -->
-        <div style="display:flex">
-          <el-form-item label="会议室" prop="meetingRoomId" class="inline">
-            <el-input v-model="meetingroomName" :disabled="lookMeetingroom" clearable placeholder="请选择" @click.native="abc()"/>
-          </el-form-item>
           <el-form-item label="会议主题" prop="title" class="inline">
             <el-input v-model="meetingForm.title" :disabled="lookMeetingroom" placeholder="请输入内容" clearable />
           </el-form-item>
+          <el-form-item label="会议时间:" prop="meetingTime">
+            <!-- <el-date-picker
+              v-model="startDate"
+              value-format="yyyy-MM-dd"
+              type="date"
+              placeholder="选择日期"/> -->
+            <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间"/>
+            至
+            <el-date-picker v-model="meetingForm.endTime" :disabled="lookMeetingroom" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" />
+          <!-- </el-form-item> -->
+          </el-form-item>
+        </div>
+        <!-- <div style="display:flex">
+          <el-form-item label="开始时间" class="inline">
+            <el-time-select
+              v-model="meetingForm.startTime"
+              :picker-options="{
+                start: '09:00',
+                step: '00:30',
+                end: '18:00'
+              }"
+              placeholder="开始时间"/>
+          </el-form-item>
+          <el-form-item label="结束时间" class="inline">
+            <el-time-select
+              v-model="meetingForm.endTime"
+              :picker-options="{
+                start: '09:00',
+                step: '00:30',
+                end: '18:00',
+                minTime: meetingForm.startTime
+              }"
+              placeholder="结束时间"/>
+          </el-form-item>
+        </div> -->
+        <div style="display:flex">
+          <el-form-item label="预约部门" class="inline">
+            <span> {{ department }} </span>
+          </el-form-item>
+          <el-form-item label="预约人" class="inline">
+            <span>{{ userName }}</span>
+          </el-form-item>
         </div>
         <div style="display:flex">
+          <el-form-item label="会议室" prop="meetingRoomId" class="inline">
+            <el-input v-model="meetingroomName" :disabled="lookMeetingroom" clearable placeholder="请选择会议室" @click.native="showMeetingroom()"/>
+          </el-form-item>
           <el-form-item label="参与人员" prop="participantsId">
-            <el-select v-model="meetingForm.participantsId" multiple placeholder="请选择" style="width:100%">
+            <el-select v-model="meetingForm.participantsId" :disabled="lookMeetingroom" multiple placeholder="请选择参与人员" style="width:100%">
               <el-option
                 v-for="item in participantsIdOptions"
                 :key="item.value"
@@ -36,70 +62,44 @@
                 :value="item.value"/>
                 <!-- <el-input v-model="meetingForm.participantsId" :disabled="lookMeetingroom" clearable placeholder="请输入内容" /> -->
           </el-select></el-form-item>
-          <el-form-item label="会议时间:">
-            <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间" />
-            至
-            <el-date-picker v-model="meetingForm.endTime" :disabled="lookMeetingroom" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" />
-          </el-form-item>
         </div>
+
         <el-form-item label="会议内容" prop="oaMeetingContent" class="inline ueditor">
           <div class="editor-container">
             <UE ref="ue" :default-msg="defaultMsg" :disabled="lookMeetingroom" :config="config" />
           </div>
         </el-form-item>
-        <el-form-item label="审批进度" prop="approvalStatus" class="inline">
-          <el-steps :space="300" :active="approvals()" finish-status="success">
-            <el-step title="发起审批"/>
-            <el-step title="领导审批"/>
-            <el-step title="审批完成 "/>
-          </el-steps>
-        </el-form-item>
-        <el-form-item v-if="isShow" label="审批状态">
-          <el-radio v-model="meetingForm.approvalStatus" :disabled="lookMeetingroom" label="2">通过</el-radio>
-          <el-radio v-model="meetingForm.approvalStatus" :disabled="lookMeetingroom" label="3">不通过</el-radio>
-          <!-- <el-radio-group v-model="meetingForm.approvalStatus" :disabled="lookMeetingroom">
-            <el-radio label="通过"/>
-            <el-radio label="不通过"/>
-          </el-radio-group> -->
-        </el-form-item>
-        <el-form-item v-if="isShowApprovalOpinion" label="审批意见" >
-          <el-input v-model="meetingForm.approvalOpinion" :disabled="isShowApprovalOpinion" type="textarea" placeholder="请输入内容"/>
-        </el-form-item>
-        <div class="primaryList">
-          <el-button v-if="!isShow" type="primary" @click="submitForm('meetingForm')">{{ bottonText==="编辑会议"?'再次提交':'提交' }}</el-button>
-          <el-button v-if="!isShow" @click="cancel">取消</el-button>
-          <!-- <el-button v-if="!isShow  >作废</el-button> -->
-          <el-button v-if="isShow" type="primary" @click="goBack($route)">返回</el-button>
-        </div>
       </el-form>
+      <div class="primaryList">
+        <el-button v-if="!isShow" type="primary" @click="dialogStatus==='会议申请'?submitForm('meetingForm'):updateData()" >提交</el-button>
+        <el-button v-if="!isShow" @click="cancel">取消</el-button>
+        <el-button @click="goBack($route)">返回</el-button>
+      </div>
     </div>
     <template v-if="dialogFormVisible">
       <el-dialog :visible.sync="dialogFormVisible" class="lookMeetingroom">
-        <el-form :inline="true" :model="meetingroomForm" class="filter-bar">
-          <!-- <el-form-item label="位置">
-            <el-select v-model="listQuery.recordStatus" placeholder="请选择" clearable style="width: 150px" class="filter-item" @change="selecteUserStatus">
-              <el-option v-for="(item,index) in userStatusOptions" :key="item" :label="item" :value="index" />
-            </el-select>
-          </el-form-item> -->
-          <el-form-item label="会议时间:">
+        <el-form :inline="true" class="filter-bar">
+          <!-- <el-form-item label="会议时间:">
             <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间" />
             至
             <el-date-picker v-model="listQuery.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" />
-          </el-form-item>
-          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-        </el-form>
-        <div class="usableMeetingroom">可预约的会议室</div>
-        <div class="meetingroomList">
-          <div v-for="(item,index) in meetingroomList" :key="index" @click="checkMeetingroom(item)">
-            <img :src="item.attachmentPaths[0]" alt="会议室图片">
-            <h3>{{ item.name }}</h3>
-            <div>会议室说明:{{ item.explains }},可参与人数<span>{{ item.capacity }}</span> </div>
+          </el-form-item> -->
+          <!-- <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button> -->
+          <div class="usableMeetingroom">可预约的会议室</div>
+
+          <div class="meetingroomList">
+            <div v-for="(item,idx) in meetingroomList" :key="idx" :class="{'active':idx==index}" @click="checkMeetingroom(item,idx)">
+              <img :src="item.attachmentPaths[0]?item.attachmentPaths[0]:'/static/images/meetingroom.jpg'" alt="会议室图片">
+              <h3>{{ item.name }}</h3>
+              <div>会议室说明:{{ item.explains }} </div>
+              <div>可参与人数:{{ item.capacity }} </div>
+            </div>
           </div>
-        </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button :disabled="isDisabled" type="primary" @click="dialogStatus==='会议申请'?createUserData():updateData()">确认</el-button>
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-        </div>
+          <div class="dialog-footer">
+            <el-button :disabled="isDisabled" type="primary" @click="createUserData()">确认</el-button>
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+          </div>
+        </el-form>
       </el-dialog>
     </template>
   </div>
@@ -108,14 +108,47 @@
 <script>
 import UE from '../../../components/ue.vue'
 import {
-  paramApi, api, userAllList
+  paramApi, api, userAllList, getUserInfo
 } from '@/api/oa/meetingManagement'
 export default {
   components: {
     UE
   },
   data() {
+    var checkBuilding = (rule, value, callback) => {
+      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+      if (!reg.test(value)) {
+        callback(new Error('名称只允许数字、中文、字母及下划线'))
+      } else {
+        callback()
+      }
+    }
     return {
+      // pickerOptionsStart: {
+      //   disabledDate: time => {
+      //     const endDateVal = this.meetingForm.endTime
+      //     if (endDateVal) {
+      //       return time.getTime() > new Date(endDateVal).getTime()
+      //     }
+      //   }
+      // },
+      // pickerOptionsEnd: {
+      //   disabledDate: time => {
+      //     const beginDateVal = this.meetingForm.startTime
+      //     if (beginDateVal) {
+      //       return (
+      //         time.getTime() <
+      //                           new Date(beginDateVal).getTime()
+      //       )
+      //     }
+      //   }
+      // },
+      department: '',
+      userName: '',
+      oldMeetingTitle: '',
+      pageTitle: '',
+      approvalBotton: false,
+      index: 0,
       meetingroomName: '',
       dialogStatus: '',
       meetingroomForm: {
@@ -124,44 +157,50 @@ export default {
       },
       meetingroomList: [],
       isDisabled: false,
-      isShowApprovalOpinion: false,
-      bottonText: '',
       participantsIdOptions: [],
       lookMeetingroom: false,
       isShow: false,
-      accountName: '',
       defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 200,
         wordCount: false
       },
-      describe: '有投影仪',
       dialogFormVisible: false,
       listQuery: {
-        recordStatus: '',
         page: 1,
         rows: 10,
         startTime: '',
         endTime: ''
       },
+      // startDate: '',
       meetingForm: {
-        workOrderNum: '',
         title: '',
-        recordStatus: '',
-        participantsId: '',
+        participantsId: [],
         meetingRoomId: '',
         startTime: '',
         endTime: '',
         oaMeetingContent: '',
-        approvalStatus: ''
+        id: ''
       },
-      userStatusOptions: ['会议室1', '会议室2']
+      // userStatusOptions: ['会议室1', '会议室2']
+      rules: {
+        title: [
+          { required: true, message: '请输入会议主题', trigger: 'blur' },
+          { validator: checkBuilding, trigger: 'blur' }
+        ],
+        meetingRoomId: [{ required: true, message: '请选择会议室', trigger: 'change' }],
+        // participantsId: [{ required: true, message: '请选择参会人员', trigger: 'change' }],
+        // meetingTime: [{ required: true, message: '请选择会议时间', trigger: 'bulr' }],
+        oaMeetingContent: [{ required: true, message: '请输入会议内容', trigger: 'blur' }]
+      }
+
     }
   },
   created() {
     this.initList()
     this.getALLlist()
+    this.getUserInfo()
   },
   methods: {
     // 取消
@@ -180,23 +219,51 @@ export default {
       }
       this.initList()
     },
+    // 确认选中的会议室
     createUserData() {
-      this.meetingroomName = this.meetingroomForm.meetingroomName
-      this.meetingForm.meetingRoomId = this.meetingroomForm.meetingroomId
+      if (!this.meetingroomForm.meetingroomId) {
+        this.meetingroomName = this.meetingroomList[0].name
+        this.meetingForm.meetingRoomId = this.meetingroomList[0].id
+      } else {
+        this.meetingroomName = this.meetingroomForm.meetingroomName
+        this.meetingForm.meetingRoomId = this.meetingroomForm.meetingroomId
+      }
       this.dialogFormVisible = false
     },
     // 选中的会议室
-    checkMeetingroom(item) {
+    checkMeetingroom(item, idx) {
       this.meetingroomForm.meetingroomId = item.id
       this.meetingroomForm.meetingroomName = item.name
+      this.index = idx
     },
     // 获取所有用户
     getALLlist() {
       userAllList().then(res => {
         if (res.data.code === '0000') {
           res.data.data.forEach(val => {
-            this.participantsIdOptions.push({ value: val.id, label: val.name })
+            if (val.name !== null) {
+              this.participantsIdOptions.push({ value: val.id, label: val.name })
+            } else {
+              this.participantsIdOptions.push({ value: val.id, label: val.account })
+            }
           })
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    // 获取登陆用户信息
+    getUserInfo() {
+      getUserInfo().then(res => {
+        if (res.data.code === '0000') {
+          this.userName = res.data.data.name
+          if (res.data.data.sysDepartmentPostVO !== null) {
+            res.data.data.sysDepartmentPostVO.forEach(val => {
+              if (val.isDefault === '1') {
+                this.department = val.departmentName
+              }
+            })
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -218,134 +285,153 @@ export default {
         }
       })
     },
-    // 处理状态
-    approvals() {
-      if (this.meetingForm.approvalStatus === '1') {
-        return 2
-      } else if (this.meetingForm.approvalStatus === '2') {
-        return 3
-      } else if (this.meetingForm.approvalStatus === '3') {
-        return 1
-      } else {
-        return 1
-      }
-    },
-    abc() {
+    // 跳出弹框选择会议室
+    showMeetingroom() {
       this.dialogFormVisible = true
+      this.index = 0
       // 调用接口发送请求
+      this.listQuery.startTime = this.meetingForm.startTime
+      this.listQuery.endTime = this.meetingForm.endTime
       api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.meetingroomList = res.data.data.rows
         } else {
           this.$message.error(res.data.result)
         }
       })
     },
-    handleFilter() {},
-    selecteUserStatus() {},
-    submitForm() {
+    // 弹出的选择会议室对话框的查询条件
+    handleFilter() {
+      api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
+        if (res.data.code === '0000') {
+          this.meetingroomList = res.data.data.rows
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
+    },
+    // 编辑会议申请
+    updateData() {
       this.meetingForm.oaMeetingContent = this.$refs.ue.getUEContent()
-      console.log(this.meetingForm)
       this.isDisabled = true
       this.$refs['meetingForm'].validate(valid => {
         if (valid) {
-          // 调用接口发送请求
-          api('oa/oaMeeting/add', this.meetingForm).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '添加成功',
-                type: 'success'
-              })
-              this.goBack(this.$route)
-            } else {
-              this.$message.error(res.data.result)
-            }
-            this.isDisabled = false
-            // 重置表单元素的数据
-            this.$refs['meetingForm'].resetFields()
-          })
+          if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            // 调用接口发送请求
+            api('oa/oaMeeting/update', this.meetingForm).then(res => {
+              if (res.data.code === '0000') {
+                this.$message({
+                  message: '编辑成功',
+                  type: 'success'
+                })
+                this.goBack(this.$route)
+                // 重置表单元素的数据
+                this.$refs['meetingForm'].resetFields()
+              } else {
+                this.$message.error(res.data.result)
+              }
+              this.isDisabled = false
+            })
+          }
+          if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+            alert('请选择参会人员')
+          } else if (!this.meetingForm.startTime) {
+            alert('请选择会议开始时间')
+          } else if (!this.meetingForm.endTime) {
+            alert('请选择会议结束时间')
+          }
+        } else {
+          this.isDisabled = false
+        }
+      })
+    },
+    // 点击提交的时候
+    submitForm() {
+      this.meetingForm.oaMeetingContent = this.$refs.ue.getUEContent()
+      this.isDisabled = true
+      this.$refs['meetingForm'].validate(valid => {
+        if (valid) {
+          if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+            // 调用接口发送请求
+            api('oa/oaMeeting/add', this.meetingForm).then(res => {
+              if (res.data.code === '0000') {
+                this.$message({
+                  message: '添加成功',
+                  type: 'success'
+                })
+                this.goBack(this.$route)
+                // 重置表单元素的数据
+                this.$refs['meetingForm'].resetFields()
+              } else {
+                this.$message.error(res.data.result)
+              }
+              this.isDisabled = false
+            })
+          }
+          if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+            alert('请选择参会人员')
+          } else if (!this.meetingForm.startTime) {
+            alert('请选择会议开始时间')
+          } else if (!this.meetingForm.endTime) {
+            alert('请选择会议结束时间')
+          }
         } else {
           this.isDisabled = false
         }
       })
     },
     initList() {
-      if (localStorage.getItem('userName')) {
-        this.accountName = localStorage.getItem('userName')
-      } else {
-        this.accountName = localStorage.getItem('account')
-      }
       var query = this.$route.query
-      console.log(query)
-      this.bottonText = query.title
+      this.pageTitle = query.title
       if (query.id) {
         if (query.title === '查看会议') {
           this.lookMeetingroom = true
           this.isShow = true
         }
-        this.isShowApprovalOpinion = true
+        this.meetingForm.id = query.id
         paramApi('oa/oaMeeting/selectById', query.id, 'id').then(res => {
           if (res.data.code === '0000') {
-            // this.defaultMsg = data.oaMeetingContent
             var data = res.data.data
-            this.meetingForm.workOrderNum = data.workOrderNum
             this.meetingForm.title = data.title
-            this.meetingForm.participantsId = data.participantsId
+            data.participantList.forEach(val => {
+              this.meetingForm.participantsId.push(val.meetingUserId)
+            })
             this.meetingForm.meetingRoomId = data.meetingRoomId
             this.meetingForm.startTime = data.startTime
             this.meetingForm.endTime = data.endTime
-            this.meetingForm.oaMeetingContent = data.oaMeetingContent
-            this.meetingForm.approvalStatus = data.approvalStatus
-            this.meetingForm.recordStatus = data.recordStatus.toString()
-            this.approvals()
+            this.defaultMsg = data.content
+            if (data.tbOaMeetingRoom.name !== null) {
+              this.meetingroomName = data.tbOaMeetingRoom.name
+            }
+            this.oldMeetingTitle = data.title
           } else {
             this.$message.error(res.data.result)
           }
         })
       } else {
-        var obj = this.$route.query
-        var date = new Date()
-        var Y = date.getFullYear()
-        var m = date.getMonth() + 1
-        var d = date.getDate()
-        var H = date.getHours()
-        var M = date.getMinutes()
-        var s = date.getSeconds()
-        if (m < 10) {
-          m = '0' + m
-        }
-        if (d < 10) {
-          d = '0' + d
-        }
-        if (H < 10) {
-          H = '0' + H
-        }
-        if (M < 10) {
-          M = '0' + M
-        }
-        if (s < 10) {
-          s = '0' + s
-        }
         this.dialogStatus = '会议申请'
-        var num = Math.floor(Math.random() * (9999 - 1000)) + 1000
-        var workOrderNum = obj.workOrder + '-' + Y + m + d + H + M + s + num
-        this.meetingForm.workOrderNum = workOrderNum
+        this.meetingroomName = query.name
+        this.meetingForm.meetingRoomId = query.meetId
+        // alert(this.meetingroomForm.meetingroomId)
+        this.meetingForm.startTime = query.currentTime
       }
     }
   }
 }
 </script>
 <style lang="scss">
+
 .meetingApplication{
-  .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
-    line-height: 22px !important;
-}
-}
-.el-select-dropdown{
-  top:320px !important;
+  .el-form-item__error{
+    left:22px;
+    top:unset;
+    padding-top: unset;
+  }
 }
 .meetingApplication-top {
+   .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+    line-height: 22px !important;
+}
   .inline {
     display: inline-block;
   }
@@ -413,10 +499,17 @@ export default {
      display: inline-block;
      margin-right: 21px;
      margin-top: 30px;
+    //  box-sizing: border-box;
      img{
        width: 100%;
        height: 100%;
      }
+   }
+   .active{
+     border:2px solid blueviolet;
+   }
+   h3{
+     text-align: center;
    }
   }
   .meetingroomList div:nth-child(3n){
@@ -424,6 +517,8 @@ export default {
    }
    .dialog-footer{
      text-align: center;
+     margin-top:20px;
    }
+
 }
 </style>

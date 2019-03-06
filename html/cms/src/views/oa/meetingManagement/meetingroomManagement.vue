@@ -22,7 +22,6 @@
       <el-table-column label="会议室名称" align="center" prop="name" />
       <el-table-column label="会议室位置" align="center" prop="position" />
       <el-table-column label="创建人" align="center" prop="userName" />
-      <el-table-column label="部门" align="center" prop="departmentName" />
       <el-table-column label="会议室容量" align="center" prop="capacity" />
       <el-table-column label="会议室说明" align="center" prop="explains" />
       <el-table-column label="会议室状态" align="center" prop="recordStatus">
@@ -34,13 +33,13 @@
         <template slot-scope="scope">
           <!-- 编辑按钮 -->
           <el-button
-            v-if="scope.row.creatorAccount!==userID"
+            v-if="!isShow"
             type="text"
             class="operation"
             @click="look(scope.row)">查看
           </el-button>
-          <el-button v-if="scope.row.creatorAccount===userID" type="text" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button v-if="scope.row.creatorAccount===userID" type="text" @click="deleteMeetingroom(scope.row)">删除</el-button>
+          <el-button v-if="isShow" type="text" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-if="isShow" type="text" @click="deleteMeetingroom(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,20 +59,15 @@
 </template>
 
 <script>
-import store from '@/store'
 import {
-  api, paramApi
+  api, paramApi, getUserInfo
 } from '@/api/oa/meetingManagement'
 export default {
   data() {
     return {
+      isShow: false,
       isDisabled: false,
-      dialogImageUrl: '',
-      lookMeetingroom: false,
-      addMeetingroom: false,
       title: '',
-      dialogFormVisible: false,
-      userID: '',
       meetingroomList: [],
       listLoading: false,
       listQuery: {
@@ -82,16 +76,6 @@ export default {
         rows: 10
       },
       total: 0,
-      meetingroomForm: {
-        name: '',
-        building: '',
-        floor: '',
-        roomNumber: '',
-        capacity: '',
-        recordStatus: '',
-        explains: ''
-
-      },
       statusOptions: [
         {
           value: '1',
@@ -106,35 +90,28 @@ export default {
   },
   mounted() {
     this.initList()
+    this.getUserInfo()
   },
   methods: {
-    uploadDone(res, file, fileList) {
-      console.log(res)
-      console.log(file)
-      console.log(fileList)
-      this.meetingroomForm.imgArr.push({ 'imgUrl': res.data.temp_path })
-    },
-    // 限制最多只能传3张图片
-    handleExceed(files, fileList) {
-      this.$message.warning(`最多只能上传3张图片`)
-    },
-    // 删除图片
-    handleRemove(file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
-    },
-    // 获取token
-    getToken() {
-      console.log(store.getters.token)
-      var token = store.getters.token
-      return { 'token': token }
+    // 获取登陆用户信息
+    getUserInfo() {
+      var sysId = '531a2a04-be44-4239-a36b-5b09aac3499d'
+      getUserInfo().then(res => {
+        if (res.data.code === '0000') {
+          console.log(res.data.data.sysRole)
+          res.data.data.sysRole.forEach(val => {
+            if (val.id === sysId) {
+              this.isShow = true
+            }
+          })
+          // if(res)
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
     },
     // 编辑会议室
     handleUpdate(row) {
-      console.log(row)
       this.$router.push({ name: 'editMeetingroom', query: { id: row.id, title: '编辑会议室' }})
     },
     // 查看会议室
@@ -184,7 +161,6 @@ export default {
       this.listLoading = true
       api('oa/oaMeetingRoom/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.meetingroomList = res.data.data.rows
           this.total = res.data.data.total
           if (this.meetingroomList.length === 0 && this.total > 0) {
@@ -214,58 +190,7 @@ export default {
 </script>
 
 <style lang="scss">
-.addMeetingroom {
-  .el-dialog{
-    margin-top:5vh !important;
-    width: 80vw;
-    .el-upload--picture-card {
-      width: 60px;
-    height: 60px;
-    line-height: 64px;
+  .el-pagination{
+      margin-top:15px;
     }
-  }
-  .header {
-    color: cadetblue;
-    background: #f0f0f0;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: Center;
-    padding: 20px 0px;
-    border:1px solid #ccc;
-  }
-  .inline {
-    display: inline-block;
-  }
-  .el-form-item__label {
-    width: 120px;
-    padding: 15px 0;
-    display: inline-block;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .el-form-item {
-    margin-bottom: 0px;
-    flex: 1;
-    display: flex;
-  }
-  .el-form-item__content {
-    flex: 1;
-    display: inline-block;
-    padding: 15px;
-    border: 1px solid #ccc;
-  }
-  .primaryList {
-    margin-top: 30px;
-    text-align: center;
-  }
-  .el-form-item__error{
-    left:22px;
-    top:unset;
-    padding-top: unset;
-  }
-}
 </style>

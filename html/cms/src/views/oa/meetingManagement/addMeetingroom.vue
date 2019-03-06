@@ -61,7 +61,7 @@
         <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="title==='新增会议室'?submitForm('meetingroomForm'):updateData()">提交</el-button>
         <!-- <el-button v-if="!lookMeetingroom" :disabled="isDisabled" type="primary" @click="submitForm('meetingroomForm')">提交</el-button> -->
         <el-button v-if="!lookMeetingroom" @click="cancel" >取消</el-button>
-        <el-button v-if="lookMeetingroom" type="primary" @click="goBack($route)" >返回</el-button>
+        <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
     </el-form>
@@ -146,6 +146,7 @@ export default {
         roomNumber: [{ required: true, message: '请输入房间号', trigger: 'blur' },
           { validator: checkBuilding, trigger: 'blur' }],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }],
+        // attachmentPaths: [{ required: true, message: '请选择会议图片', trigger: 'change' }],
         capacity: [{ required: true, message: '请输入会议室容量', trigger: 'blur' }]
       }
     }
@@ -177,9 +178,6 @@ export default {
     imgUploadError() {
       this.$message.error('上传图片失败!')
     },
-    // imgUploadError(err, file, fileList) { // 图片上传失败调用
-    //   this.$message.error('上传图片失败!')
-    // },
     // 新增提交表单
     submitForm() {
       console.log(this.meetingroomForm)
@@ -247,14 +245,22 @@ export default {
     // 删除图片
     handleRemove(file, fileList) {
       // 删除的
-      // 先获取当前用户已经删除了文件路径
-      var delFile = file.response.data
-      var index = this.meetingroomForm.attachmentPaths.indexOf(delFile)
-      this.meetingroomForm.attachmentPaths.splice(index, 1)
+      if (this.title === '编辑会议室') {
+        var editDelFile = file.url
+        var editIndex = this.meetingroomForm.attachmentPaths.indexOf(editDelFile)
+        this.meetingroomForm.attachmentPaths.splice(editIndex, 1)
+      } else {
+        // 先获取当前用户已经删除了文件路径
+        var delFile = file.response.data
+        var index = this.meetingroomForm.attachmentPaths.indexOf(delFile)
+        this.meetingroomForm.attachmentPaths.splice(index, 1)
+      }
     },
     // 预览图片
     handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.response.data
+      if (this.title === '编辑会议室') {
+        this.dialogImageUrl = file.url
+      }
       this.dialogVisible = true
     },
     // 限制最多只能传3张图片
@@ -293,7 +299,16 @@ export default {
             this.meetingroomForm.roomNumber = data.roomNumber
             this.meetingroomForm.capacity = data.capacity
             this.meetingroomForm.explains = data.explains
-            this.fileList = data.attachmentPaths
+            this.meetingroomForm.attachmentPaths = data.attachmentPaths
+            // this.fileList = data.attachmentPaths
+            if (data.attachmentPaths.length > 0 && data.attachmentPaths !== null) {
+              var fileListArr = []
+              data.attachmentPaths.forEach(val => {
+                fileListArr.push({ name: '', url: val })
+              })
+              // 数组去重
+              this.fileList = Array.from(new Set(fileListArr))
+            }
             this.meetingroomForm.recordStatus = data.recordStatus.toString()
             // if (this.fileList.length > 0) {
             //   this.showImg = true

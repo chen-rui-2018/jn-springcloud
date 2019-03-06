@@ -1,28 +1,27 @@
 <template>
   <div v-loading="listLoading" class="meetingManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.approvalStatus">
+      <el-radio-group v-model="listQuery.meetingStatus">
         <el-radio-button label="">全部</el-radio-button>
-        <el-radio-button label= "1">审核中</el-radio-button>
-        <el-radio-button label="2">审核通过</el-radio-button>
-        <el-radio-button label="3">审核不通过</el-radio-button>
-        <el-radio-button label="0">已取消</el-radio-button>
+        <el-radio-button label= "1">进行中</el-radio-button>
+        <el-radio-button label="2">已完成</el-radio-button>
+        <el-radio-button label="3">已取消</el-radio-button>
+        <el-radio-button label="0">待开始</el-radio-button>
       </el-radio-group>
-      <el-form-item label="会议名称:" style="margin-left: 20px;">
+      <el-form-item label="会议名称:" style="margin-left: 20px;" class="meetingName">
         <el-input v-model="listQuery.title" maxlength="20" placeholder="请输入会议名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
-      <!-- <el-form-item label="会议时间:">
-        <el-date-picker
-          v-model="listQuery.time"
-          type="datetimerange"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"/>
-      </el-form-item> -->
-
+      <el-form-item label="申请人部门:" style="margin-left: 20px;" class="meetingName">
+        <el-input v-model="listQuery.title" maxlength="20" placeholder="请输入部门" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+      </el-form-item>
+      <el-form-item label="会议时间:">
+        <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择开始日期"/>
+        至
+        <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" />
+      </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <!-- <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-plus" @click="handleCreate">新增</el-button> -->
       <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="handleAppointment">会议预约</el-button>
+      <el-button class="filter-item" type="primary" >导出</el-button>
     </el-form>
     <!-- 表格 -->
     <el-table :data="meetingList" border fit highlight-current-row style="width: 100%;height:100%;">
@@ -30,7 +29,7 @@
         <el-table-column type="index" width="60" label="序号" align="center" />
         <!-- 表格第二列  姓名 -->
         <el-table-column label="名称" align="center" prop="title" />
-        <el-table-column label="会议室" align="center" prop="meetingName" />
+        <el-table-column label="会议室" align="center" prop="tbOaMeetingRoom.name" />
         <el-table-column label="日期" align="center" prop="startDate" />
         <el-table-column label="开始时间" align="center" prop="startTime" />
         <el-table-column label="结束时间" align="center" prop="endTime" />
@@ -43,9 +42,9 @@
             <div>预约人:{{ scope.row.userName }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="预计人数" align="center" prop="department">
+        <el-table-column label="预计人数" align="center" prop="department" min-width="120">
           <template slot-scope="scope">
-            <span>预计人数:{{ scope.row.departmentNam }} 0人</span>
+            <span>预计人数:{{ scope.row.participantList.length?scope.row.participantList.length:'0' }} 人</span>
           </template>
         </el-table-column>
         <el-table-column label="签到人数" align="center" class-name="small-padding fixed-width">
@@ -65,15 +64,7 @@
           <!-- <span :class="scope.row.meetingStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus===1?'可用':'不可用' }}</span> -->
         </template>
       </el-table-column>
-      <el-table-column label="审核状态" align="center" prop="approvalStatus">
-        <template slot-scope="scope">
-          <span v-if="scope.row.approvalStatus==='0'" >已取消</span>
-          <span v-if="scope.row.approvalStatus==='1'" >审核中</span>
-          <span v-if="scope.row.approvalStatus==='2'" >审核通过</span>
-          <span v-if="scope.row.approvalStatus==='3'" >审核不通过</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="240">
         <template slot-scope="scope">
           <el-button
             type="text"
@@ -81,30 +72,28 @@
             @click="lookDetails(scope.row)">查看详情
           </el-button>
           <el-button
-            v-if="scope.row.approvalStatus==='1'"
+            v-if="scope.row.meetingStatus==='0'"
             type="text"
             class="operation"
             @click="handleCancel(scope.row)">取消会议
           </el-button>
           <el-button
-            v-if="scope.row.approvalStatus==='2' && scope.row.meetingStatus !=='2'"
+            v-if="scope.row.meetingStatus==='1'"
             type="text"
             class="operation"
             @click="handleDeleteActivity(scope.row)">结束会议
           </el-button>
           <el-button
-            v-if="scope.row.approvalStatus==='2'"
             type="text"
             class="operation"
             @click="handleErweima(scope.row)">签到二维码
           </el-button>
           <el-button
-            v-if="scope.row.approvalStatus==='3'"
+            v-if="scope.row.meetingStatus==='0'"
             type="text"
             class="operation"
             @click="handleEdit(scope.row)">编辑
           </el-button>
-          <!-- <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button> -->
         </template>
       </el-table-column>
     </el-table>
@@ -127,7 +116,8 @@
       class="erweima"
       title="请扫描二维码"
       width="40%">
-      <img :src="imgurl" alt="二维码图片">
+      <!-- <img :src="imgurl" alt="二维码图片"> -->
+      <img src="/static/images/timg.jpg" alt="二维码图片">
     </el-dialog>
   </div>
 </template>
@@ -145,13 +135,13 @@ export default {
       meetingList: [],
       listLoading: false,
       listQuery: {
-        approvalStatus: '',
+        meetingStatus: '',
         page: 1,
         rows: 10,
-        title: ''
-        // time: ''
-      },
-      meetingStatusOptions: ['可用', '不可用']
+        title: '',
+        startTime: '',
+        endTime: ''
+      }
     }
   },
   mounted() {
@@ -219,30 +209,32 @@ export default {
         .catch(() => {
         })
     },
-    handleSizeChange() {},
-    handleCurrentChange() {},
+    // 表格分页功能
+    handleSizeChange(val) {
+      this.listQuery.rows = val
+      this.initList()
+    },
+    // 表格分页功能
+    handleCurrentChange(val) {
+      this.listQuery.page = val
+      this.initList()
+    },
     // 查询数据
     handleFilter() {
       this.listQuery.page = 1
       this.initList()
     },
-    handleCreate() {},
+    // 跳转到会议预约页面
     handleAppointment() {
       this.$router.push({ name: 'conferenceReservation' })
     },
     // 获取会议列表
     initList() {
       this.listLoading = true
-      console.log(this.listQuery)
       api('oa/oaMeeting/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.meetingList = res.data.data.rows
           this.total = res.data.data.total
-          // if (this.userList.length === 0 && this.total > 0) {
-          //   this.listQuery.page = 1
-          //   this.initList()
-          // }
         } else {
           this.$message.error(res.data.result)
         }
@@ -257,6 +249,32 @@ export default {
   .erweima{
     .el-dialog{
       margin-top: 8vh !important;
+      img{
+           width: 60%;
+    display: block;
+    border-style: none;
+    margin: 0 auto;
+      }
     }
+  }
+  .meetingName{
+    .el-input--medium .el-input__inner{
+      width: 180px;
+    }
+  }
+  .meetingManagement{
+    .el-pagination{
+      margin-top:15px;
+    }
+
+  .filter-bar{
+    .el-date-editor.el-input, .el-date-editor.el-input__inner{
+      width: 180px;
+    }
+    .el-radio-button--medium .el-radio-button__inner,.el-button--medium{
+
+         padding:10px;
+    }
+  }
   }
 </style>

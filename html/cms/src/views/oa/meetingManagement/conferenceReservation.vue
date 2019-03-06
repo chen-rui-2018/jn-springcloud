@@ -60,395 +60,166 @@
       </div>
     </div>
     <div class="table">
-      <el-table :data="tableData3">
+      <el-table :data="rowTableData" :span-method="arraySpanMethod">
         <el-table-column label="会议室" align="center">
-          <el-table-column prop="roomNumber" label="编号" align="center" />
-          <el-table-column prop="name" label="名称" align="center"/>
-          <el-table-column prop="position" label="位置" align="center"/>
+          <el-table-column type="index" label="序号" align="center" />
+          <el-table-column prop="[0].title" label="名称" align="center" />
+          <el-table-column prop="[0].position" label="位置" align="center" />
         </el-table-column>
         <el-table-column label="上午" align="center">
-          <el-table-column label="9:00" prop="time0" align="center" width="40">
-            <template slot-scope="scope">
-              <span :class="scope.row.time0=='可预约' ? 'text-green' : 'text-red'" @click="handle(scope.row)" >{{ scope.row.time0 }}</span>
-            </template>
+          <el-table-column label="9:00" prop="[0]" align="center" width="40">
+            <template slot-scope="scope" >
+              <meeting-div1 v-if="scope.row[0].status=='0'" :post-id="scope.row[0].id" :post-title="scope.row[0].title" :post-time="'9:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[0].status=='1'" :post-title="scope.row[0].name"/></template>
           </el-table-column>
-          <el-table-column label="9:30" prop="time0" align="center" width="40">
+          <el-table-column label="9:30" prop="[1]" align="center" width="40">
             <template slot-scope="scope">
-              <span :class="scope.row.time1=='可预约' ? 'text-green' : 'text-red'" >{{ scope.row.time1 }}</span>
-            </template>
+              <meeting-div1 v-if="scope.row[1].status=='0'" :post-id="scope.row[1].id" :post-title="scope.row[1].title" :post-time="'9:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[1].status=='1'" :post-title="scope.row[1].name"/></template>
           </el-table-column>
-          <!-- <el-table-column label="9:30" prop="time1" align="center" width="40"/> -->
-          <el-table-column label="10:00" prop="time2" align="center" width="40"/>
-          <el-table-column label="10:30" prop="time3" align="center" width="40"/>
-          <el-table-column label="11:00" prop="time4" align="center" width="40"/>
-          <el-table-column label="11:30" prop="time5" align="center" width="40"/>
-          <el-table-column label="12:00" prop="time6" align="center" width="40"/>
+          <el-table-column label="10:00" prop="[2]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[2].status=='0'" :post-id="scope.row[2].id" :post-title="scope.row[2].title" :post-time="'10:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[2].status=='1'" :post-title="scope.row[2].name"/></template>
+          </el-table-column>
+          <el-table-column label="10:30" prop="[3]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[3].status=='0'" :post-id="scope.row[3].id" :post-title="scope.row[3].title" :post-time="'10:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[3].status=='1'" :post-title="scope.row[3].name"/></template>
+          </el-table-column>
+          <el-table-column label="11:00" prop="[4]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[4].status=='0'" :post-id="scope.row[4].id" :post-title="scope.row[4].title" :post-time="'11:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[4].status=='1'" :post-title="scope.row[4].name"/></template>
+          </el-table-column>
+          <el-table-column label="11:30" prop="[5]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[5].status=='0'" :post-id="scope.row[5].id" :post-title="scope.row[5].title" :post-time="'11:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[5].status=='1'" :post-title="scope.row[5].name"/></template>
+          </el-table-column>
+          <el-table-column label="12:00" prop="[6]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[6].status=='0'" :post-id="scope.row[6].id" :post-title="scope.row[6].title" :post-time="'12:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[6].status=='1'" :post-title="scope.row[6].name"/></template>
+          </el-table-column>
         </el-table-column>
         <el-table-column label="下午" align="center">
-          <!-- <el-table-column v-for="(item,index) in downData" :key="index" :label="item" prop="bookable" align="center" width="40"/> -->
-
-          <!-- <el-table-column prop="time" label="13:30" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="14:00" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="14:30" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="15:00" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="15:30" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="16:00" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="16:30" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="17:00" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="17:30" align="center" width="40">可预约 </el-table-column>
-          <el-table-column prop="time" label="18:00" align="center" width="40">可预约 </el-table-column> -->
-          <el-table-column label="13:30" prop="time7" align="center" width="40"/>
-          <el-table-column label="14:00" prop="time8" align="center" width="40"/>
-          <el-table-column label="14:30" prop="time9" align="center" width="40"/>
-          <el-table-column label="15:00" prop="time10" align="center" width="40"/>
-          <el-table-column label="15:30" prop="time11" align="center" width="40"/>
-          <el-table-column label="16:00" prop="time12" align="center" width="40"/>
-          <el-table-column label="16:30" prop="time13" align="center" width="40"/>
-          <el-table-column label="17:00" prop="time14" align="center" width="40"/>
-          <el-table-column label="17:30" prop="time15" align="center" width="40"/>
-          <el-table-column label="18:00" prop="time16" align="center" width="40"/>
+          <el-table-column label="13:30" prop="[7]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[7].status=='0'" :post-id="scope.row[7].id" :post-title="scope.row[7].title" :post-time="'13:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[7].status=='1'" :post-title="scope.row[7].name"/></template>
+          </el-table-column>
+          <el-table-column label="14:00" prop="[8]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[8].status=='0'" :post-id="scope.row[8].id" :post-title="scope.row[8].title" :post-time="'14:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[8].status=='1'" :post-title="scope.row[8].name"/></template>
+          </el-table-column>
+          <el-table-column label="14:30" prop="[9]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[9].status=='0'" :post-id="scope.row[9].id" :post-title="scope.row[9].title" :post-time="'14:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[9].status=='1'" :post-title="scope.row[9].name"/></template>
+          </el-table-column>
+          <el-table-column label="15:00" prop="[10]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[10].status=='0'" :post-id="scope.row[10].id" :post-title="scope.row[10].title" :post-time="'15:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[10].status=='1'" :post-title="scope.row[10].name"/></template>
+          </el-table-column>
+          <el-table-column label="15:30" prop="[11]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[11].status=='0'" :post-id="scope.row[11].id" :post-title="scope.row[11].title" :post-time="'15:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[11].status=='1'" :post-title="scope.row[11].name"/></template>
+          </el-table-column>
+          <el-table-column label="16:00" prop="[12]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[12].status=='0'" :post-id="scope.row[12].id" :post-title="scope.row[12].title" :post-time="'16:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[12].status=='1'" :post-title="scope.row[12].name"/></template>
+          </el-table-column>
+          <el-table-column label="16:30" prop="[13]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[13].status=='0'" :post-id="scope.row[13].id" :post-title="scope.row[13].title" :post-time="'16:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[13].status=='1'" :post-title="scope.row[13].name"/></template>
+          </el-table-column>
+          <el-table-column label="17:00" prop="[14]" align="center" width="40" >
+            <template slot-scope="scope" >
+              <meeting-div1 v-if="scope.row[14].status=='0'" :post-id="scope.row[14].id" :post-title="scope.row[14].title" :post-time="'17:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[14].status=='1'" :post-title="scope.row[14].name"/></template>
+          </el-table-column>
+          <el-table-column label="17:30" prop="[15]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[15].status=='0'" :post-id="scope.row[15].id" :post-title="scope.row[15].title" :post-time="'17:30'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[15].status=='1'" :post-title="scope.row[15].name"/></template>
+          </el-table-column>
+          <el-table-column label="18:00" prop="[16]" align="center" width="40">
+            <template slot-scope="scope">
+              <meeting-div1 v-if="scope.row[16].status=='0'" :post-id="scope.row[16].id" :post-title="scope.row[16].title" :post-time="'18:00'" @meeting_order="meeting_order"/>
+            <meeting-div2 v-if="scope.row[16].status=='1'" :post-title="scope.row[16].name"/></template>
+          </el-table-column>
         </el-table-column>
       </el-table>
-      <!-- 分页 -->
-      <el-pagination
-        v-show="total>0"
-        :current-page="listQuery.page"
-        :page-sizes="[5,10,20,30, 50]"
-        :page-size="listQuery.rows"
-        :total="total"
-        class="tablePagination"
-        background
-        layout="total, sizes, prev, pager, next, jumper"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange" />
     </div>
-
-    <!-- <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="handle">新增</el-button> -->
   </div>
 </template>
 
 <script>
-import {
-  api
-} from '@/api/oa/meetingManagement'
+import { api } from '@/api/oa/meetingManagement'
 export default {
   name: 'Date',
+  components: { // 组件-新加
+    'meeting-div1': { // 预约组件
+      props: ['postId', 'postTitle', 'postTime'],
+      template: '<div class="textStyle" @click="meeting_order(postId,postTitle,postTime)">预约</div>',
+      methods: {
+        meeting_order(id, title, time) { // 会议预约
+          this.$emit('meeting_order', id, title, time)
+        }
+      }
+    },
+    'meeting-div2': { // 会议组件
+      props: ['postTitle'],
+      template: '<div class="" >{{postTitle}}</div>',
+      methods: {
+      }
+    }},
 
   data() {
     return {
-      downData: ['13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00'],
+      downData: [
+        '13:30',
+        '14:00',
+        '14:30',
+        '15:00',
+        '15:30',
+        '16:00',
+        '16:30',
+        '17:00',
+        '17:30',
+        '18:00'
+      ],
       upData: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00'],
-      compareData: [900, 930, 1000, 1030, 1100, 1130, 1200, 1330, 1400, 1430, 1500, 1530, 1600, 1630, 1700, 1730, 1800], // 用来比较后台传来的时间值，9:00这里设为900，下面会把后台值进行转换，也是转换成这些格式进行对比
+      compareData: [
+        900,
+        930,
+        1000,
+        1030,
+        1100,
+        1130,
+        1200,
+        1330,
+        1400,
+        1430,
+        1500,
+        1530,
+        1600,
+        1630,
+        1700,
+        1730,
+        1800
+      ], // 用来比较后台传来的时间值，9:00这里设为900，下面会把后台值进行转换，也是转换成这些格式进行对比
       listQuery: {
         page: 1,
         rows: 10,
-        currentDay: ''
+        meetingStartTime: ''
       },
-      // staticData: {
-      //   'result': 'OK',
-      //   'code': '0000',
-      //   'data': {
-      //     'rows': [
-      //       {
-      //         'id': '86580b0b-b1a2-4803-974a-877f0f41e6b1',
-      //         'name': '测试会议室名称',
-      //         'building': '102栋',
-      //         'floor': '2层',
-      //         'roomNumber': '1012',
-      //         'position': null,
-      //         'explains': '测试数据',
-      //         'recordStatus': 1,
-      //         'capacity': '10',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-19 17:55',
-      //         'modifierAccount': 'wangsong',
-      //         'modifiedTime': '2019-02-26 19:37',
-      //         'meetingList': [
-      //           {
-      //             'id': '028491dd-fb28-4672-baca-b7f5c276bd54',
-      //             'workOrderNum': null,
-      //             'startTime': '2019-02-26T07:00:00.000+0000',
-      //             'endTime': '2019-02-26T09:13:43.000+0000',
-      //             'meetingRoomId': null,
-      //             'approvalStatus': null,
-      //             'recordStatus': null,
-      //             'creatorAccount': null,
-      //             'createdTime': null,
-      //             'modifierAccount': null,
-      //             'modifiedTime': null,
-      //             'userIdStr': null,
-      //             'applicant': null,
-      //             'applicationTime': null,
-      //             'signInQr': null,
-      //             'wechatRemind': null,
-      //             'messageRemind': null,
-      //             'pcRemind': null,
-      //             'appRemind': null,
-      //             'isRemind': null,
-      //             'title': '测试会议标题',
-      //             'approvalRole': null,
-      //             'approvalUser': null,
-      //             'approvalOpinion': null,
-      //             'meetingStatus': null
-      //           },
-      //           {
-      //             'id': '028491dd-fb28-4672-baca-b7f5c276bd54',
-      //             'workOrderNum': null,
-      //             'startTime': '2019-02-26T09:00:00.000+0000',
-      //             'endTime': '2019-02-26T09:13:43.000+0000',
-      //             'meetingRoomId': null,
-      //             'approvalStatus': null,
-      //             'recordStatus': null,
-      //             'creatorAccount': null,
-      //             'createdTime': null,
-      //             'modifierAccount': null,
-      //             'modifiedTime': null,
-      //             'userIdStr': null,
-      //             'applicant': null,
-      //             'applicationTime': null,
-      //             'signInQr': null,
-      //             'wechatRemind': null,
-      //             'messageRemind': null,
-      //             'pcRemind': null,
-      //             'appRemind': null,
-      //             'isRemind': null,
-      //             'title': '王磊非我房价哦i额外附加哦问佛吉',
-      //             'approvalRole': null,
-      //             'approvalUser': null,
-      //             'approvalOpinion': null,
-      //             'meetingStatus': null
-      //           }
-      //         ]
-      //       },
-      //       {
-      //         'id': '15c6af99-3bd5-46d1-b44b-467d8e753537',
-      //         'name': '测试会议室',
-      //         'building': '1',
-      //         'floor': '2',
-      //         'roomNumber': '22',
-      //         'position': '1222',
-      //         'explains': '测试专用',
-      //         'recordStatus': 1,
-      //         'capacity': '30',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-27 13:10',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '26797a07-acfb-4c1e-87aa-fb9bd9e353cb',
-      //         'name': 'sss',
-      //         'building': 'sss',
-      //         'floor': 'ss',
-      //         'roomNumber': 'ss',
-      //         'position': 'sssssss',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '33',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-26 14:23',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '28501e4f-04f9-474f-95db-e890584474ab',
-      //         'name': '测试',
-      //         'building': '110',
-      //         'floor': '2',
-      //         'roomNumber': '208',
-      //         'position': '1102208',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '50',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-22 15:47',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '3f3eff4b-eae6-417d-8123-1706cd09e8c0',
-      //         'name': 'sss',
-      //         'building': 'sss',
-      //         'floor': 'ss',
-      //         'roomNumber': 'ss',
-      //         'position': 'sssssss',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '33',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-26 12:01',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '4990b82e-06c8-4fff-b90c-58a485536f83',
-      //         'name': 'sssssssssss',
-      //         'building': 'sss',
-      //         'floor': 'ss',
-      //         'roomNumber': 'ss',
-      //         'position': 'sssssss',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '22',
-      //         'remark': null,
-      //         'creatorAccount': 'wangsong',
-      //         'createdTime': '2019-02-26 19:26',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '51702fed-c8cc-40a1-b0c2-753ef42d297e',
-      //         'name': 'ss',
-      //         'building': 'ss',
-      //         'floor': 'ss',
-      //         'roomNumber': 'ss',
-      //         'position': 'ssssss',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '23',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-26 14:42',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '51756571-b6ba-46ec-b540-6bdad727bb11',
-      //         'name': '122',
-      //         'building': '22',
-      //         'floor': '22',
-      //         'roomNumber': '22',
-      //         'position': '222222',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '222',
-      //         'remark': null,
-      //         'creatorAccount': 'wangsong',
-      //         'createdTime': '2019-02-26 19:20',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '64e62a82-6e9e-4982-8e20-be59eb37f65b',
-      //         'name': '12331e2',
-      //         'building': '222222',
-      //         'floor': '222',
-      //         'roomNumber': '22222222222',
-      //         'position': '22222222222222222222',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '222',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-26 17:37',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-
-      //         ]
-      //       },
-      //       {
-      //         'id': '91e8ddbf-621f-49bd-ac8e-650b727ffd73',
-      //         'name': 'sss',
-      //         'building': 'sss',
-      //         'floor': 'ss',
-      //         'roomNumber': 'ss',
-      //         'position': 'sssssss',
-      //         'explains': '',
-      //         'recordStatus': 1,
-      //         'capacity': '33',
-      //         'remark': null,
-      //         'creatorAccount': '10000',
-      //         'createdTime': '2019-02-26 11:50',
-      //         'modifierAccount': null,
-      //         'modifiedTime': null,
-      //         'meetingList': [
-      //           {
-      //             'id': '028491dd-fb28-4672-baca-b7f5c276bd54',
-      //             'workOrderNum': null,
-      //             'startTime': '2019-02-26T07:00:00.000+0000',
-      //             'endTime': '2019-02-26T07:13:43.000+0000',
-      //             'meetingRoomId': null,
-      //             'approvalStatus': null,
-      //             'recordStatus': null,
-      //             'creatorAccount': null,
-      //             'createdTime': null,
-      //             'modifierAccount': null,
-      //             'modifiedTime': null,
-      //             'userIdStr': null,
-      //             'applicant': null,
-      //             'applicationTime': null,
-      //             'signInQr': null,
-      //             'wechatRemind': null,
-      //             'messageRemind': null,
-      //             'pcRemind': null,
-      //             'appRemind': null,
-      //             'isRemind': null,
-      //             'title': '测试会议标题',
-      //             'approvalRole': null,
-      //             'approvalUser': null,
-      //             'approvalOpinion': null,
-      //             'meetingStatus': null
-      //           },
-      //           {
-      //             'id': '028491dd-fb28-4672-baca-b7f5c276bd54',
-      //             'workOrderNum': null,
-      //             'startTime': '2019-02-26T09:00:00.000+0000',
-      //             'endTime': '2019-02-26T10:30:43.000+0000',
-      //             'meetingRoomId': null,
-      //             'approvalStatus': null,
-      //             'recordStatus': null,
-      //             'creatorAccount': null,
-      //             'createdTime': null,
-      //             'modifierAccount': null,
-      //             'modifiedTime': null,
-      //             'userIdStr': null,
-      //             'applicant': null,
-      //             'applicationTime': null,
-      //             'signInQr': null,
-      //             'wechatRemind': null,
-      //             'messageRemind': null,
-      //             'pcRemind': null,
-      //             'appRemind': null,
-      //             'isRemind': null,
-      //             'title': '王磊非我房价哦i额外附加哦问佛吉',
-      //             'approvalRole': null,
-      //             'approvalUser': null,
-      //             'approvalOpinion': null,
-      //             'meetingStatus': null
-      //           }
-      //         ]
-      //       }
-      //     ],
-      //     'total': 18
-      //   }
-      // },
       total: 0,
       tableData3: [],
       currentYear: 1970, // 年份
@@ -475,13 +246,28 @@ export default {
       restDaysList: [],
       banList: [],
       xiuList: [],
-      selectIndex: ''
+      selectIndex: '',
+      rowTableData: [
+        // 列表横向数据
+        [
+          {
+            status: 0, // 可预约状态
+            id: 123, // 数据id
+            title: '123', // 会议室名称
+            name: '123', // 会议名称
+            num: '', // 编号
+            position: '' // 位置
+          }
+        ]
+      ],
+      leftCol: 3 // 数据左侧列数
     }
   },
 
   created() {
     this.initList()
     this.initData(null)
+    // this.calcDataA()
   },
 
   methods: {
@@ -506,7 +292,14 @@ export default {
       this.currentYear = date.getFullYear() // 当前年份
       this.currentMonth = date.getMonth() + 1 // 当前月份
       this.currentWeek = date.getDay() // 1...6,0   // 今天是星期几
-
+      if (this.currentMonth < 10) {
+        this.currentMonth = '0' + this.currentMonth
+      }
+      if (this.currentDay < 10) {
+        this.currentDay = '0' + this.currentDay
+      }
+      this.listQuery.meetingStartTime =
+        this.currentYear + '-' + this.currentMonth + '-' + this.currentDay
       // 当前月的第一天是星期几
       date.setDate(1)
       this.firstWeek = date.getDay()
@@ -572,7 +365,6 @@ export default {
         date.getMonth() + 1,
         date.getDate()
       )
-      console.log(this.params.selectDay)
       for (let i = 0; i < 42; i++) {
         if (index === i) {
           this.isSelected.push(true)
@@ -580,54 +372,242 @@ export default {
         }
         this.isSelected.push(false)
       }
-      this.listQuery.currentDay = this.params.selectDay
+      var selectDay = new Date(this.params.selectDay)
+      var today_time = new Date().getTime()
+      // alert(today_time)
+      // alert(selectDay)
+      // alert(today_time - selectDay)
+      var time = (today_time - selectDay) / 1000 / 60 / 60 / 24
+      if (time > 1) {
+        alert('对不起,您不能预约当前日期之前的会议,请重新选择')
+        return
+      } else if (time < -3) {
+        alert('对不起,您只能预约3天之内的会议,请重新选择')
+        return
+      }
+      this.listQuery.meetingStartTime = this.params.selectDay
       this.initList()
     },
-    handle(row) {
-      console.log(row)
-      this.$router.push({ name: 'meetingApplication', query: { workOrder: 'HYGL', title: '会议申请', meetId: row.id, name: row.name }})
+    handle16(row) {
+      var currentTime = this.listQuery.meetingStartTime + '\xa0' + '18:00:00'
+      this.$router.push({
+        name: 'meetingApplication',
+        query: {
+          title: '会议申请',
+          meetId: row.id,
+          name: row.name,
+          currentTime: currentTime
+        }
+      })
     },
+
     // 页面初始化
     initList() {
-      const self = this
       api('oa/oaMeetingRoom/orderList', this.listQuery).then(res => {
         console.log(res)
         if (res.data.code === '0000') {
-          self.tableData3 = res.data.data.rows
+          // this.tableData3 = res.data.data.rows
           // this.tableData3 = this.staticData.data.rows
           // console.log(this.tableData3)
-          self.total = res.data.data.total
-          self.calcData()
+          this.staticData = res.data.data.rows
+          this.total = res.data.data.total
+          this.calcDataA()
         } else {
           this.$message.error(res.data.result)
         }
       })
     },
-    calcData() { // 抽开始时间和结束时间出来进行对比
-      this.tableData3.forEach((item) => {
-        const vals = []
-        for (let i = 0; i < this.compareData.length; i++) { // 先设定初始值为“可预约”，如果有会议且在某个时间范围才填充进去
-          vals.push('可预约')
-        }
-        if (item.meetingList.length > 1) {
-          item.meetingList.forEach((timeItem) => {
-            for (let i = 0; i < this.compareData.length; i++) { // 时间转换和对比
-              let m = new Date(timeItem.startTime).getMinutes() < 10 ? ('0' + new Date(timeItem.startTime).getMinutes()) : new Date(timeItem.startTime).getMinutes()
-              const sd = Number(new Date(timeItem.startTime).getHours() + '' + m)
-              m = new Date(timeItem.endTime).getMinutes() < 10 ? ('0' + new Date(timeItem.endTime).getMinutes()) : new Date(timeItem.endTime).getMinutes()
-              const ed = Number(new Date(timeItem.endTime).getHours() + '' + m)
-              if (sd <= this.compareData[i] && ed >= this.compareData[i]) {
-                vals[i] = timeItem.title
-              }
-            }
-          })
-        }
-        for (let i = 0; i < vals.length; i++) { // 动态设置参数用来填充
-          item['time' + i] = vals[i]
+    // calcData() { // 抽开始时间和结束时间出来进行对比
+    //   this.tableData3.forEach((item) => {
+    //     const vals = []
+    //     for (let i = 0; i < this.compareData.length; i++) { // 先设定初始值为“可预约”，如果有会议且在某个时间范围才填充进去
+    //       vals.push('预约')
+    //     }
+    //     if (item.meetingList.length > 0) {
+    //       item.meetingList.forEach((timeItem) => {
+    //         for (let i = 0; i < this.compareData.length; i++) { // 时间转换和对比
+    //           let m = new Date(timeItem.startTime).getMinutes() < 10 ? ('0' + new Date(timeItem.startTime).getMinutes()) : new Date(timeItem.startTime).getMinutes()
+    //           // console.log(m)
+    //           const sd = Number(new Date(timeItem.startTime).getHours() + '' + m)
+    //           // console.log(sd)
+    //           m = new Date(timeItem.endTime).getMinutes() < 10 ? ('0' + new Date(timeItem.endTime).getMinutes()) : new Date(timeItem.endTime).getMinutes()
+    //           // console.log(m)
+    //           const ed = Number(new Date(timeItem.endTime).getHours() + '' + m)
+    //           // console.log(ed)
+    //           if (sd <= this.compareData[i] && ed >= this.compareData[i]) {
+    //             vals[i] = timeItem.title
+    //           }
+    //         }
+    //       })
+    //     }
+    //     for (let i = 0; i < vals.length; i++) { // 动态设置参数用来填充
+    //       item['time' + i] = vals[i]
+    //     }
+    //   })
+    //   // console.log(JSON.stringify(this.tableData3))
+    // },
+    // 点击预约按钮的时候
+    meeting_order(id, title, time) {
+      // 会议预约
+      console.log(id)
+      console.log(title)
+      console.log(time)
+      var currentTime = this.listQuery.meetingStartTime + '\xa0' + time + ':00'
+      this.$router.push({
+        name: 'meetingApplication',
+        query: {
+          title: '会议申请',
+          meetId: id,
+          name: title,
+          currentTime: currentTime
         }
       })
-      // console.log(JSON.stringify(this.tableData3))
     },
+    calTdMerge(start, end) {
+      var _start = start
+        .replace(/^.*T/, '')
+        .slice(0, 5)
+        .split(':')
+      var _end = end
+        .replace(/^.*T/, '')
+        .slice(0, 5)
+        .split(':')
+      function getColNum(num) {
+        var _num_a = parseInt(num[0])
+        var _num_b = parseInt(num[1])
+        if (_num_a === 9) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 0
+          } else {
+            return 1
+          }
+        } else if (_num_a === 10) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 2
+          } else {
+            return 3
+          }
+        } else if (_num_a === 11) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 4
+          } else {
+            return 5
+          }
+        } else if (_num_a === 12) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 6
+          } else {
+            return 6
+          }
+        } else if (_num_a === 13) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 7
+          } else {
+            return 7
+          }
+        } else if (_num_a === 14) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 8
+          } else {
+            return 9
+          }
+        } else if (_num_a === 15) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 10
+          } else {
+            return 11
+          }
+        } else if (_num_a === 16) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 12
+          } else {
+            return 13
+          }
+        } else if (_num_a === 17) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 14
+          } else {
+            return 15
+          }
+        } else if (_num_a === 18) {
+          if (_num_b >= 0 && _num_b <= 29) {
+            return 17
+          } else {
+            return 17
+          }
+        }
+        //  else {
+        //   alert('会议时间必须是从9:00到18:00')
+        //   return
+        // }
+      }
+      var _start_col = getColNum(_start)
+      var _end_col = getColNum(_end)
+      var _arr = []
+      for (var i = _start_col; i <= _end_col; i++) {
+        _arr.push(i)
+      }
+      return _arr
+    },
+    calcDataA() {
+      // 渲染横向数据与纵向数据
+      var arr_row = []
+      var arr_data = this.staticData
+      for (var i = 0; i < arr_data.length; i++) {
+        var _arr = []
+        for (var j = 0; j < 17; j++) {
+          var obj = {
+            status: '0',
+            id: arr_data[i].id,
+            num: arr_data[i].roomNumber,
+            position: arr_data[i].position,
+            title: arr_data[i].name,
+            name: ''
+          }
+          _arr.push(obj)
+        }
+        for (var k = 0; k < arr_data[i].meetingList.length; k++) {
+          console.log(arr_data[i].meetingList[k])
+          var get_arr = this.calTdMerge(
+            arr_data[i].meetingList[k].startTime,
+            arr_data[i].meetingList[k].endTime
+          )
+          for (var l = 0; l < get_arr.length; l++) {
+            var _index = get_arr[l]
+            if (l === 0) {
+              _arr[_index].status = 1
+              _arr[_index].size = get_arr.length
+            } else {
+              _arr[_index].status = 2
+            }
+            _arr[_index].id = arr_data[i].meetingList[k].id
+            _arr[_index].name = arr_data[i].meetingList[k].title
+          }
+        }
+        arr_row.push(_arr)
+      }
+      this.rowTableData = arr_row
+      console.log(this.rowTableData)
+    },
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      // 合并单元格
+      var _num = this.leftCol
+      if (columnIndex >= _num) {
+        //				          		console.log(this.rowTableData[rowIndex][columnIndex-_num].status)
+        if (this.rowTableData[rowIndex][columnIndex - _num].status === 0) {
+          return [1, 1]
+        } else if (
+          this.rowTableData[rowIndex][columnIndex - _num].status === 1
+        ) {
+          return [1, this.rowTableData[rowIndex][columnIndex - _num].size]
+        } else if (
+          this.rowTableData[rowIndex][columnIndex - _num].status === 2
+        ) {
+          return [0, 0]
+        }
+      }
+    },
+
     // 表格分页功能
     handleSizeChange(val) {
       this.listQuery.rows = val
@@ -643,69 +623,86 @@ export default {
 </script>
 
 <style lang="scss">
+.conferenceReservation {
+  display: -webkit-box;
 
-.conferenceReservation{
-    display: flex;
-    .el-table .cell, .el-table th div, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
-  padding: 0px ;
-}
+  .el-table .cell,
+  .el-table th div,
+  .el-table--border td:first-child .cell,
+  .el-table--border th:first-child .cell {
+    padding: 0px;
+  }
 
-.table{
+  .table {
     margin-left: 15px;
-    flex:8;
-    .el-pagination{
-      margin-top:15px;
+    flex: 8;
+    .textStyle {
+      color: #090;
+      cursor: pointer;
     }
-}
-.month {
-  font-size: 24px;
-  text-align: center;
-  margin-top: 20px;
-}
+    .textBgc {
+      background-color: rgb(0, 176, 240);
+    }
+    .el-pagination {
+      margin-top: 15px;
+    }
+  }
+  .month {
+    font-size: 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
 
-.weekdays {
-  background-color: #20a0ff;
-  opacity: 0.6;
-  display: flex;
-  font-size: 16px;
-  margin-top: 20px;
-}
+  .weekdays {
+    background-color: #20a0ff;
+    opacity: 0.6;
+    display: flex;
+    font-size: 16px;
+    margin-top: 20px;
+  }
 
-.days {
-  display: flex;
-}
+  .days {
+    display: flex;
+  }
 
-li {
-  flex: 1;
-  font-size: 20px;
-  /* width: 50px; */
-  list-style-type: none;
-  text-align: center;
-  margin:2px  0px;
-  /* line-height: 60px; */
-  cursor: pointer;
-}
-.selected {
-  display: inline-block;
-  width: 30px;
-  /* height: 30px; */
-  color: #fff;
-  border-radius: 50%;
-  background-color: #1e90ff;
-}
-.todyActive {
-  display: inline-block;
-  color: #fff;
-  border-radius: 50%;
-  background-color: #324057;
-}
-i {
-  margin-right: 30px;
-  cursor: pointer;
-}
+  li {
+    flex: 1;
+    font-size: 20px;
+    /* width: 50px; */
+    list-style-type: none;
+    text-align: center;
+    margin: 2px 0px;
+    /* line-height: 60px; */
+    cursor: pointer;
+  }
+  .selected {
+    display: inline-block;
+    width: 30px;
+    /* height: 30px; */
+    color: #fff;
+    border-radius: 50%;
+    background-color: #1e90ff;
+  }
+  .todyActive {
+    display: inline-block;
+    color: #fff;
+    border-radius: 50%;
+    background-color: #324057;
+  }
 
-.other-month {
-  color: #eec591;
-}
+  .other-month {
+    color: #eec591;
+  }
+  .date {
+    i {
+      margin-right: 20px;
+      cursor: pointer;
+    }
+    ul,
+    menu,
+    dir {
+      padding-inline-start: 0px;
+    }
+  }
 }
 </style>

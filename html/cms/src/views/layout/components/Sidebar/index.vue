@@ -56,7 +56,7 @@ export default {
 <style lang="scss" scoped>
 .logo {
   height: 56px;
-  background: url("/static/corporate/logo/logo.jpg") no-repeat;
+  background: url("/static/corporate/logo/logo.jpg") no-repeat center;
   // background:url('~@/assets/images/logo.jpg') center center / 100% 100% no-repeat ;
 }
 .s-logo {

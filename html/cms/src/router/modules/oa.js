@@ -37,6 +37,12 @@ const oaRouter = {
           meta: { title: '查看会议', noCache: false }
         },
         {
+          path: 'approvalMeetingApplication',
+          component: () => import('@/views/oa/meetingManagement/meetingApplication'),
+          name: 'approvalMeetingApplication',
+          meta: { title: '审批会议', noCache: false }
+        },
+        {
           path: 'editmeetingApplication',
           component: () => import('@/views/oa/meetingManagement/meetingApplication'),
           name: 'editmeetingApplication',

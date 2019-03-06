@@ -97,9 +97,9 @@
     //, autoClearEmptyNode : true //getContent时，是否删除空的inlineElement节点（包括嵌套的情况）
 
     // 启用自动保存
-    //, enableAutoSave: true
+    enableAutoSave: false,
     // 自动保存间隔时间， 单位ms
-    //, saveInterval: 500
+    saveInterval: 0,
 
     //, fullscreen : false //是否开启初始化时即全屏，默认关闭
 
@@ -452,9 +452,9 @@
   }
 
   function optimizationPath(path) {
-    var protocol = /^[a-z]+:\/\//.exec(path)[ 0 ],
-      tmp = null,
-      res = []
+    var protocol = /^[a-z]+:\/\//.exec(path)[ 0 ]
+    var tmp = null
+    var res = []
 
     path = path.replace(protocol, '').split('?')[0].split('#')[0]
 

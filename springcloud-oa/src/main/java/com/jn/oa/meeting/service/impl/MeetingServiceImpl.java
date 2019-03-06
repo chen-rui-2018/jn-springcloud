@@ -48,6 +48,7 @@ import java.util.*;
 
 /**
  * 会议申请service
+ *
  * @author： yuanyy
  * @date： Created on 2019/1/29 17:01
  * @version： v1.0
@@ -77,7 +78,6 @@ public class MeetingServiceImpl implements MeetingService {
     private UploadClient uploadClient;
 
 
-
     /**
      * 根据关键字分页查询会议申请列表
      *
@@ -86,19 +86,19 @@ public class MeetingServiceImpl implements MeetingService {
      */
     @Override
     @ServiceLog(doAction = "关键字分页查询会议申请列表")
-    public PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage,User user) {
-        String roleId="531a2a04-be44-4239-a36b-5b09aac3499d";
-        int count=0;
-        if(user.getSysRole()!=null&&user.getSysRole().size()!=0){
-            for(SysRole role:user.getSysRole()){
-                if(!role.getId().equals(roleId)){
+    public PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage, User user) {
+        String roleId = "531a2a04-be44-4239-a36b-5b09aac3499d";
+        int count = 0;
+        if (user.getSysRole() != null && user.getSysRole().size() != 0) {
+            for (SysRole role : user.getSysRole()) {
+                if (!role.getId().equals(roleId)) {
                     count++;
                 }
             }
-        }else{
+        } else {
             count++;
         }
-        if(count>0){
+        if (count > 0) {
             //没有角色信息
             oaMeetingPage.setApplicant(user.getId());
         }
@@ -123,7 +123,7 @@ public class MeetingServiceImpl implements MeetingService {
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 
         //保存会议申请内容
-        TbOaMeetingContent tbOaMeetingContent=new TbOaMeetingContent();
+        TbOaMeetingContent tbOaMeetingContent = new TbOaMeetingContent();
         tbOaMeetingContent.setContent(oaMeetingAdd.getOaMeetingContent());
         tbOaMeetingContent.setCreatedTime(new Date());
         tbOaMeetingContent.setCreatorAccount(oaMeetingAdd.getCreatorAccount());
@@ -133,7 +133,7 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeetingContent.setRecordStatus(status);
         tbOaMeetingContentMapper.insert(tbOaMeetingContent);
         //保存参会人员信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount(),oaMeetingAdd.getId());
+        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(), oaMeetingAdd.getCreatorAccount(), oaMeetingAdd.getId());
 
         //默认会议状态是“待开始”
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.TO_BEGIN.getCode());
@@ -145,10 +145,11 @@ public class MeetingServiceImpl implements MeetingService {
 
     /**
      * 保存用户参会人员信息
+     *
      * @param participantsIds
      */
-    private  void saveOaMeetingParticipant(String[] participantsIds,String creatorAccount,String meetingId){
-        if(participantsIds!=null&&participantsIds.length>0) {
+    private void saveOaMeetingParticipant(String[] participantsIds, String creatorAccount, String meetingId) {
+        if (participantsIds != null && participantsIds.length > 0) {
             //保存参会人员信息
             for (String participantsId : participantsIds) {
                 TbOaMeetingParticipants tbOaMeetingParticipants = new TbOaMeetingParticipants();
@@ -182,9 +183,9 @@ public class MeetingServiceImpl implements MeetingService {
             throw new JnSpringCloudException(OaExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
         //根据会议id删除参会人员
-        oaMeetingParticipantMapper.deleteBranchByMeetingIds( getDeleteMap( user, null, oaMeetingAdd.getId()));
+        oaMeetingParticipantMapper.deleteBranchByMeetingIds(getDeleteMap(user, null, oaMeetingAdd.getId()));
         //保存参会人员的信息
-        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(),oaMeetingAdd.getCreatorAccount(),oaMeetingAdd.getId());
+        saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(), oaMeetingAdd.getCreatorAccount(), oaMeetingAdd.getId());
 
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
@@ -192,7 +193,7 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeeting.setModifiedTime(new Date());
         tbOaMeeting.setModifierAccount(user.getId());
         //重新生成二维码
-       // saveQRCode(tbOaMeeting);
+        saveQRCode(tbOaMeeting);
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
         logger.info("[会议申请] 更新会议申请成功！,tbOaMeetingId: {}", tbOaMeeting.getId());
     }
@@ -207,53 +208,63 @@ public class MeetingServiceImpl implements MeetingService {
     @ServiceLog(doAction = "根据id查询会议申请")
     public OaMeetingParticipantVo selectOaMeetingById(String id) {
 
-        OaMeetingParticipantVo oaMeetingParticipantVo= oaMeetingMapper.selectMeetingById(id);
+        OaMeetingParticipantVo oaMeetingParticipantVo = oaMeetingMapper.selectMeetingById(id);
 
 
         logger.info("[会议申请] 根据Id查询会议申请成功！,tbOaMeetingId: {}", id);
         return oaMeetingParticipantVo;
     }
 
-    private void saveQRCode(TbOaMeeting tbOaMeeting){
+    private void saveQRCode(TbOaMeeting tbOaMeeting) {
 
         try {
-            //1、生成二维码
-            File file = ResourceUtils.getFile("classpath:zxing");
+            //1、二维码logo
+            File logoFile = ResourceUtils.getFile("classpath:zxing");
+            String logoFilePath = logoFile.getPath() + File.separator + "logo.png";
 
+            //2、获取输出temp目录
+            File tempPath = new File(ResourceUtils.getURL("classpath:").getPath());
+            if (!tempPath.exists()) {
+                tempPath = new File("");
+            }
+            File tempUpload = new File(tempPath.getAbsolutePath(), "temp/upload/");
+            if (!tempUpload.exists()) {
+                tempUpload.mkdirs();
+            }
 
-            File upload = new File(file.getAbsolutePath(),"static/images/upload/");
-            if(!upload.exists()) upload.mkdirs();
-            System.out.println("upload url:"+upload.getAbsolutePath());
+            //3、输出文件及路径
+            String fileName = "QRCode.png";
+            String outFilePath = tempUpload.getAbsolutePath() + fileName;
 
+            //4、二维码连接
             String contents = "http://www.baidu.com";
-            String fileName= "QRCode.png";
-            String outFilePath = file.getPath() + File.separator +fileName;
-            String logoFilePath = file.getPath() + File.separator + "logo.png";
+
+            //5、调用工具类生成二维码
             QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, logoFilePath);
 
-            //2、上传至fastdfs
-            // File QRCodeFile = ResourceUtils.getFile("classpath:zxing/QRCode.png");
-            // FileInputStream fileInputStream = new FileInputStream(QRCodeFile);
-             file = ResourceUtils.getFile(outFilePath);
-            MultipartFile multipartFile =  MultipartFileUtil.from(file,null);
+            //6、File转换为MultipartFile
+            MultipartFile multipartFile = MultipartFileUtil.from(ResourceUtils.getFile(outFilePath), null);
 
+            //7、上传文件至fastdfs
             Result<String> result = uploadClient.uploadFile(multipartFile, false);
+
             tbOaMeeting.setSignInQr(result.getData());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            logger.warn("生成会议签到二维码失败！,oaMeetingId: {}",tbOaMeeting.getId() );
+            logger.warn("生成会议签到二维码失败！,oaMeetingId: {}", tbOaMeeting.getId());
             throw new JnSpringCloudException(OaExceptionEnums.CTEATE_QRCODE_FAIL);
         }
     }
 
     /**
      * 审批会议审核
+     *
      * @param oaMeetingApprove
      * @param approveUser
      */
     @Override
     public void approveOaMeeting(OaMeetingApprove oaMeetingApprove, User approveUser) {
-        TbOaMeeting tbOaMeeting =new TbOaMeeting();
+        TbOaMeeting tbOaMeeting = new TbOaMeeting();
         tbOaMeeting.setApprovalUser(approveUser.getId());
         tbOaMeeting.setId(oaMeetingApprove.getId());
         tbOaMeeting.setApprovalStatus(oaMeetingApprove.getApprovalStatus());
@@ -261,7 +272,7 @@ public class MeetingServiceImpl implements MeetingService {
         tbOaMeeting.setModifierAccount(approveUser.getId());
         tbOaMeeting.setApprovalOpinion(oaMeetingApprove.getApprovalOpinion());
         //作废的会议状态，设置为已取消
-        if(OaMeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())){
+        if (OaMeetingApproveStatusEnums.INVALID.getCode().equals(oaMeetingApprove.getApprovalStatus())) {
             tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
         }
         tbOaMeetingMapper.updateByPrimaryKeySelective(tbOaMeeting);
@@ -269,12 +280,13 @@ public class MeetingServiceImpl implements MeetingService {
 
     /**
      * 结束会议
+     *
      * @param meetingId
      * @param approveUser
      */
     @Override
     public void finishOaMeeting(String meetingId, User approveUser) {
-        TbOaMeeting tbOaMeeting =new TbOaMeeting();
+        TbOaMeeting tbOaMeeting = new TbOaMeeting();
         tbOaMeeting.setId(meetingId);
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.COMPLETED.getCode());
         tbOaMeeting.setModifiedTime(new Date());
@@ -284,12 +296,13 @@ public class MeetingServiceImpl implements MeetingService {
 
     /**
      * 取消会议
+     *
      * @param meetingId
      * @param user
      */
     @Override
     public void cancelOaMeeting(String meetingId, User user) {
-        TbOaMeeting tbOaMeeting =new TbOaMeeting();
+        TbOaMeeting tbOaMeeting = new TbOaMeeting();
         tbOaMeeting.setId(meetingId);
         tbOaMeeting.setApprovalStatus(OaMeetingApproveStatusEnums.CANCELLED.getCode());
         tbOaMeeting.setMeetingStatus(OaMeetingStatusEnums.CANCELLED.getCode());
@@ -309,24 +322,26 @@ public class MeetingServiceImpl implements MeetingService {
     @ServiceLog(doAction = "删除会议申请信息")
     @Transactional(rollbackFor = Exception.class)
     public void deleteOaMeetingByIds(String[] ids, User user) {
-        if (ids.length == 0){
+        if (ids.length == 0) {
             return;
         }
         //封装用户组id及最近更新人信息
-        Map<String, Object> map = getDeleteMap(user, ids,null);
+        Map<String, Object> map = getDeleteMap(user, ids, null);
         oaMeetingMapper.deleteBranchByIds(map);
     }
+
     /**
      * 封装删除信息
+     *
      * @param user 当前用户
-     * @param ids 用户组id数组
+     * @param ids  用户组id数组
      * @return
      */
-    private Map<String, Object> getDeleteMap(User user, String[] ids,String meetingId) {
+    private Map<String, Object> getDeleteMap(User user, String[] ids, String meetingId) {
         Map<String, Object> map = new HashMap<>(16);
         map.put("ids", ids);
         map.put("account", user.getAccount());
-        map.put("meetingId",meetingId);
+        map.put("meetingId", meetingId);
         return map;
     }
 
@@ -344,9 +359,9 @@ public class MeetingServiceImpl implements MeetingService {
         //筛选已取消的数据
         //过滤已作废的数据
         //Byte invalidStatus = Byte.parseByte(OaMeetingStatusEnums.INVALID.getCode());
-        criteria.andApprovalStatusNotEqualTo(OaMeetingApproveStatusEnums .CANCELLED.getCode());
+        criteria.andApprovalStatusNotEqualTo(OaMeetingApproveStatusEnums.CANCELLED.getCode());
 
-       // criteria.andRecordStatusEqualTo(invalidStatus);
+        // criteria.andRecordStatusEqualTo(invalidStatus);
         return tbOaMeetingMapper.selectByExample(tbOaMeetingCriteria);
     }
 

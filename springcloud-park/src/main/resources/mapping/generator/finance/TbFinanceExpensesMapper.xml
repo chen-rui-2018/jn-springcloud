@@ -15,6 +15,7 @@
     <result column="e_created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="e_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="e_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="e_cost" jdbcType="DECIMAL" property="cost" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -79,7 +80,8 @@
     e.cost_before_type_name as e_cost_before_type_name, e.cost_after_type_id as e_cost_after_type_id, 
     e.cost_after_type_name as e_cost_after_type_name, e.department_id as e_department_id, 
     e.department_name as e_department_name, e.record_status as e_record_status, e.creator_account as e_creator_account, 
-    e.created_time as e_created_time, e.modifier_account as e_modifier_account, e.modified_time as e_modified_time
+    e.created_time as e_created_time, e.modifier_account as e_modifier_account, e.modified_time as e_modified_time, 
+    e.cost as e_cost
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesExample" resultMap="BaseResultMap">
     select
@@ -119,12 +121,12 @@
       cost_before_type_name, cost_after_type_id, cost_after_type_name, 
       department_id, department_name, record_status, 
       creator_account, created_time, modifier_account, 
-      modified_time)
+      modified_time, cost)
     values (#{costHappendTime,jdbcType=TIMESTAMP}, #{costBeforeTypeId,jdbcType=INTEGER}, 
       #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=INTEGER}, #{costAfterTypeName,jdbcType=VARCHAR}, 
       #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{cost,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceExpenses">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -168,6 +170,9 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="cost != null">
+        cost,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="costHappendTime != null">
@@ -205,6 +210,9 @@
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -256,6 +264,9 @@
       <if test="record.modifiedTime != null">
         e.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.cost != null">
+        e.cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -275,7 +286,8 @@
       e.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       e.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       e.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      e.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+      e.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      e.cost = #{record.cost,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -319,6 +331,9 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -335,7 +350,8 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      cost = #{cost,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

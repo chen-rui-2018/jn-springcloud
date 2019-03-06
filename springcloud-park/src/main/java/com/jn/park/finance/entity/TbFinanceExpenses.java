@@ -1,6 +1,7 @@
 package com.jn.park.finance.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbFinanceExpenses implements Serializable {
@@ -42,6 +43,9 @@ public class TbFinanceExpenses implements Serializable {
 
     /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
+
+    /*@ApiModelProperty("费用金额")*/
+    private BigDecimal cost;
 
     private static final long serialVersionUID = 1L;
 
@@ -149,6 +153,14 @@ public class TbFinanceExpenses implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -173,7 +185,8 @@ public class TbFinanceExpenses implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getCost() == null ? other.getCost() == null : this.getCost().equals(other.getCost()));
     }
 
     @Override
@@ -193,6 +206,7 @@ public class TbFinanceExpenses implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getCost() == null) ? 0 : getCost().hashCode());
         return result;
     }
 
@@ -215,6 +229,7 @@ public class TbFinanceExpenses implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", cost=").append(cost);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -135,4 +135,22 @@ public class RequireInfoList extends Page implements Serializable {
     public void setHandleResult(String handleResult) {
         this.handleResult = handleResult;
     }
+
+    @Override
+    public String toString() {
+        return "RequireInfoList{" +
+                "reqNum='" + reqNum + '\'' +
+                ", businessId='" + businessId + '\'' +
+                ", businessArea='" + businessArea + '\'' +
+                ", productId='" + productId + '\'' +
+                ", productName='" + productName + '\'' +
+                ", orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", advisorAccount='" + advisorAccount + '\'' +
+                ", advisorName='" + advisorName + '\'' +
+                ", requireTime='" + requireTime + '\'' +
+                ", status='" + status + '\'' +
+                ", handleResult='" + handleResult + '\'' +
+                '}';
+    }
 }

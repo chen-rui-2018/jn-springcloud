@@ -27,6 +27,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import org.apache.commons.lang.math.RandomUtils;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -119,6 +120,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
      * @param account       用户账号
      * @return
      */
+    @ServiceLog(doAction = "根据条件查询需求数据条数")
     private long getTbServiceRequireNum(String productId, String requireDetail,String account) {
         //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
         //数据状态  0：删除  1：有效
@@ -336,7 +338,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public PaginationData getRequireOtherList(RequireOtherParam requireOtherParam, String account) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(requireOtherParam==null || StringUtils.isBlank(requireOtherParam.getNeedPage())){
+        if(requireOtherParam==null){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
@@ -357,20 +359,27 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     /**
      * 撤销对他人的需求
      * @param reqNum 需求单号
+     * @param account 用户账号
      * @return
      */
     @ServiceLog(doAction ="撤销对他人的需求")
     @Override
-    public int cancelRequire(String reqNum) {
+    public int cancelRequire(String reqNum,String account) {
         TbServiceRequireCriteria example=new TbServiceRequireCriteria();
         //数据状态  0：删除  1：有效
         byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andReqNumEqualTo(reqNum).andIssueAccountEqualTo(account).andRecordStatusEqualTo(recordStatus);
         TbServiceRequire tbServiceRequire=new TbServiceRequire();
         //对接结果 1:对接成功 2:对接失败  3:企业需求撤销 4:未对接
         tbServiceRequire.setHandleResult("3");
         //状态 -1:已撤销 1：待处理，2：已处理)
         tbServiceRequire.setStatus("-1");
+        //清空结果描述
+        tbServiceRequire.setResultDetail("");
+        //修改人
+        tbServiceRequire.setModifierAccount(account);
+        //修改时间
+        tbServiceRequire.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         return tbServiceRequireMapper.updateByExampleSelective(tbServiceRequire, example);
     }
 
@@ -426,7 +435,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         if(StringUtils.isNotBlank(userExtension.getData().getAffiliateCode())){
             orgId=userExtension.getData().getAffiliateCode();
         }
-        if(requireReceivedParam==null || StringUtils.isBlank(requireReceivedParam.getNeedPage())){
+        if(requireReceivedParam==null){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
@@ -458,7 +467,13 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         TbServiceRequireCriteria example=new TbServiceRequireCriteria();
         //数据状态  0：删除  1：有效
         byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(reqNum).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andReqNumEqualTo(reqNum).andStatusEqualTo("1")
+                .andHandleResultEqualTo("4").andRecordStatusEqualTo(recordStatus);
+        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
+        if(tbServiceRequireList.isEmpty()){
+            logger.warn("对接需求操作,需求单号：[{}]对应需求状态为“待处理”，对接结果为“未对接”的数据在系统中不存在,不能进行对接操作",reqNum);
+            throw new JnSpringCloudException(RequireExceptionEnum.DATA_NOT_ALLOW_OPERATING);
+        }
         TbServiceRequire tbServiceRequire=new TbServiceRequire();
         //需求状态：-1:已撤销 1：待处理，2：已处理)
         tbServiceRequire.setStatus("2");
@@ -512,9 +527,27 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "对接需求（我收到的需求）")
     @Override
     public int handleRequire(HandleRequireParam handleRequireParam) {
+        TbServiceRequireCriteria example=new TbServiceRequireCriteria();
+        byte recordStatus=1;
+        example.createCriteria().andReqNumEqualTo(handleRequireParam.getReqNum()).andStatusEqualTo("1").andRecordStatusEqualTo(recordStatus);
+        List<TbServiceRequire> tbServiceRequireList = tbServiceRequireMapper.selectByExample(example);
+        if(tbServiceRequireList.isEmpty()){
+            logger.warn("需求单号为：{},状态为“待处理”的需求在系统中不存在或已失效",handleRequireParam.getReqNum());
+            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_INFO_NOT_EXIST);
+        }
+
         TbServiceRequire tbServiceRequire=new TbServiceRequire();
-        //是否科技金融类
+        //是否科技金融类 0:非科技金融   1：科技金融
         String isTechnology="0";
+        if(tbServiceRequireList.get(0).getExpectedDate()!=null
+                && isTechnology.equals(handleRequireParam.getIsTechnology())){
+            logger.warn("需求单号为：{}的需求是科技金融类型，与传递的是否科技金融isTechnology:[0:否]不匹配",handleRequireParam.getReqNum());
+            throw new JnSpringCloudException(RequireExceptionEnum.IS_TECHNOLOGY_NOT_MATCH);
+        }else if(tbServiceRequireList.get(0).getExpectedDate()!=null
+                && !isTechnology.equals(handleRequireParam.getIsTechnology())){
+            logger.warn("需求单号为：{}的需求是非科技金融类型，与传递的是否科技金融isTechnology:[1:是]不匹配",handleRequireParam.getReqNum());
+            throw new JnSpringCloudException(RequireExceptionEnum.IS_NOT_TECHNOLOGY_NOT_MATCH);
+        }
         if(isTechnology.equals(handleRequireParam.getIsTechnology())){
             //非科技金融，合同总金额（万元）
             tbServiceRequire.setContractAmount(handleRequireParam.getContractAmount());
@@ -530,9 +563,6 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setContractHomePage(handleRequireParam.getContractHomePage());
         //合同尾页
         tbServiceRequire.setContractEndPage(handleRequireParam.getContractEndPage());
-        TbServiceRequireCriteria example=new TbServiceRequireCriteria();
-        byte recordStatus=1;
-        example.createCriteria().andReqNumEqualTo(handleRequireParam.getReqNum()).andRecordStatusEqualTo(recordStatus);
         return tbServiceRequireMapper.updateByExampleSelective(tbServiceRequire, example);
     }
 
@@ -545,7 +575,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public PaginationData getPortalRequireInfoList(RequirePortalParam requirePortalParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(requirePortalParam==null || StringUtils.isBlank(requirePortalParam.getNeedPage())){
+        if(requirePortalParam==null){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;

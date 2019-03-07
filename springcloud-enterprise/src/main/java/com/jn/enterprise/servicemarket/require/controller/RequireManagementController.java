@@ -95,7 +95,13 @@ public class RequireManagementController extends BaseController {
     @RequestMapping(value = "/cancelRequire")
     public Result cancelRequire(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
-        int responseNum=requireManagementService.cancelRequire(reqNum);
+        //获取当前登录用户基本信息
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("对他人的需求获取当前登录用户信息失败");
+            return new Result(RequireExceptionEnum.NETWORK_ANOMALY.getCode(),RequireExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum=requireManagementService.cancelRequire(reqNum,user.getAccount());
         logger.info("-----数据响应条数：{}-----",responseNum);
         return  new Result();
     }

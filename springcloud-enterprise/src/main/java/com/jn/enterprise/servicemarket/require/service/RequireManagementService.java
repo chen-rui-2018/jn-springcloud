@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.require.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.require.model.*;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @Author: yangph
@@ -28,7 +29,7 @@ public interface RequireManagementService {
      * @param requireTechnologyParam 用户提需求入参
      * @param account                用户账号
      */
-     int userDemandTechnology(RequireTechnologyParam requireTechnologyParam,String account);
+     int userDemandTechnology(@Validated RequireTechnologyParam requireTechnologyParam, String account);
 
     /**
      * 对他人的需求列表查询
@@ -41,9 +42,10 @@ public interface RequireManagementService {
     /**
      * 撤销对他人的需求
      * @param reqNum 需求单号
+     * @param account 用户账号
      * @return
      */
-     int cancelRequire(String reqNum);
+     int cancelRequire(String reqNum,String account);
 
     /**
      * 需求详情（对他人需求）

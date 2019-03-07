@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.require.dao.RequireManagementMapper">
     <!--对他人的需求列表查询-->
-    <select id="getRequireOtherList" parameterType="com.jn.enterprise.servicemarket.require.model.RequireOtherParam"
-            resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
+    <select id="getRequireOtherList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
             sr.`req_num` AS "reqNum"			                        <!--需求单号-->
             ,sr.`org_id` AS "orgId"				                        <!--机构id-->
@@ -31,21 +30,20 @@
         WHERE 1=1
         and sr.record_status='1'
         AND sr.issue_account=#{account}           <!--发布人  对他人的需求-->
-        <if test="intentProduct!=null and intentProduct!=''">
-            and (sr.product_id like CONCAT('%', #{intentProduct}, '%') or sr.product_name like CONCAT('%', #{intentProduct}, '%'))
+        <if test="requireOtherParam.intentProduct!=null and requireOtherParam.intentProduct!=''">
+            and (sr.product_id like CONCAT('%', #{requireOtherParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireOtherParam.intentProduct}, '%'))
         </if>
-        <if test="intentOrg!=null and intentOrg!=''">
-            and (sr.org_id like CONCAT('%', #{intentOrg}, '%') or sr.product_name like CONCAT('%', #{intentOrg}, '%'))
+        <if test="requireOtherParam.intentOrg!=null and requireOtherParam.intentOrg!=''">
+            and (sr.org_id like CONCAT('%', #{requireOtherParam.intentOrg}, '%') or sr.org_name like CONCAT('%', #{requireOtherParam.intentOrg}, '%'))
         </if>
-        <if test="handleResult!=null and handleResult!=''">
-            and sr.handle_result=#{handleResult} 
+        <if test="requireOtherParam.handleResult!=null and requireOtherParam.handleResult!=''">
+            and sr.handle_result=#{requireOtherParam.handleResult}
         </if>
         order by sr.issue_account desc
     </select>
 
     <!--我收到的需求列表查询-->
-    <select id="getRequireReceivedList" parameterType="com.jn.enterprise.servicemarket.require.model.RequireReceivedParam"
-            resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
+    <select id="getRequireReceivedList" resultType="com.jn.enterprise.servicemarket.require.model.RequireInfoList">
         SELECT
         sr.`req_num` AS "reqNum"			                          <!--需求单号-->
         ,sr.`org_id` AS "orgId"				                          <!--机构id-->
@@ -61,45 +59,46 @@
         WHEN '1' THEN "待处理"
         WHEN '2' THEN "已处理"
         ELSE '--'
-        END AS  "status"				     <!--需求状态-->
+        END AS  "status"				              <!--需求状态-->
         ,CASE sr.handle_result
         WHEN '1' THEN "对接成功"
         WHEN '2' THEN "对接失败"
         WHEN '3' THEN "企业需求撤销"
         WHEN '4' THEN "未对接"
         ELSE '--'
-        END AS "handleResult"				 <!--对接结果-->
+        END AS "handleResult"				          <!--对接结果-->
         FROM tb_service_require sr
-        <if test="orgId!=null and orgId!=''">
+        <if test="orgId==null or orgId==''">          <!--顾问账号  我收到的需求-->
             left join tb_service_and_advisor tsa
             on sr.product_id=tsa.product_id
         </if>
         WHERE 1=1
         and sr.record_status='1'
-        <if test="orgId!=null and orgId!=''">
-            AND tsa.advisor_account=#{account}         <!--顾问账号  我收到的需求-->
+        <if test="orgId==null or orgId==''">           <!--顾问账号  我收到的需求-->
+            AND tsa.advisor_account=#{account}
         </if>
-        <if test="orgId==null and orgId==''">          <!--机构账号  我收到的需求 -->
+        <if test="orgId!=null and orgId!=''">          <!--机构账号  我收到的需求 -->
           and sr.product_id in
           (
             select
               sp.product_id
             from tb_service_product sp
-            where sp.org_id=#{orgId}
+            where 1=1
+            and sp.org_id=#{orgId}
             and sp.record_status='1'                  <!--数据状态为有效-->
             and sp.status='1'                         <!--审核状态为有效-->
           )
           and sr.advisor_account is null              <!--机构管理员或联系人只能查看没有意向顾问的需求-->
           and sr.advisor_name is null
         </if>
-        <if test="intentProduct!=null and intentProduct!=''"> <!--意向产品-->
-            and (sr.product_id like CONCAT('%', #{intentProduct}, '%') or sr.product_name like CONCAT('%', #{intentProduct}, '%'))
+        <if test="requireReceivedParam.intentProduct!=null and requireReceivedParam.intentProduct!=''"> <!--意向产品-->
+            and (sr.product_id like CONCAT('%', #{requireReceivedParam.intentProduct}, '%') or sr.product_name like CONCAT('%', #{requireReceivedParam.intentProduct}, '%'))
         </if>
-        <if test="handleResult!=null and handleResult!=''">   <!--对接结果-->
-            and sr.handle_result=#{handleResult}
+        <if test="requireReceivedParam.handleResult!=null and requireReceivedParam.handleResult!=''">   <!--对接结果-->
+            and sr.handle_result=#{requireReceivedParam.handleResult}
         </if>
-        <if test="requirePerson!=null and requirePerson!=''"> <!--需求人-->
-            and (sr.req_name like CONCAT('%', #{requirePerson}, '%') or sr.issue_account like CONCAT('%', #{requirePerson}, '%'))
+        <if test="requireReceivedParam.requirePerson!=null and requireReceivedParam.requirePerson!=''"> <!--需求人-->
+            and (sr.req_name like CONCAT('%', #{requireReceivedParam.requirePerson}, '%') or sr.issue_account like CONCAT('%', #{requireReceivedParam.requirePerson}, '%'))
         </if>
         order by sr.issue_account desc
     </select>
@@ -113,7 +112,7 @@
         ,sr.`business_area` AS "businessArea"			          <!--领域名称-->
         ,sr.`org_id` AS "orgId"					                  <!--机构id-->
         ,sr.`org_name` AS "orgName"					              <!--机构名称-->
-        ,IFNULL(sr.`advisor_account,"未指定")` AS "advisorAccount" <!--顾问账号-->
+        ,IFNULL(sr.`advisor_account`,"未指定") AS"advisorAccount" <!--顾问账号-->
         ,IFNULL(sr.`advisor_name`,"未指定") AS "advisorName"	      <!--顾问名称-->
         ,sr.issue_account AS "issueAccount"				          <!--需求人-->
         ,sr.`product_id` AS "productId"				              <!--产品id-->
@@ -142,7 +141,7 @@
             and sr.handle_result=#{handleResult}
         </if>
         <if test="businessId!=null and businessId!=''">             <!--业务领域精确搜索-->
-            and sr.businessId=#{businessId}
+            and sr.business_id=#{businessId}
         </if>
         <if test="serviceOrg!=null and serviceOrg!=''">             <!--服务机构模糊搜索-->
             and (sr.org_id like  CONCAT('%', #{serviceOrg}, '%') or sr.org_name like CONCAT('%', #{serviceOrg}, '%'))
@@ -190,7 +189,7 @@
         ,sr.financing_period as "financingPeriod"                 <!--[科技金融]融资期限-->
         ,sr.actual_loan_amount as "actualLoanAmount"              <!--[科技金融]实际贷款金额(万元)-->
         ,sr.funds_req_desc as "fundsReqDesc"                      <!--[科技金融]资金需求说明-->
-        ,DATE_FORMAT(sr.expected_date,"%Y/%m/%d")as "expectedDate"<!--[科技金融]资金需求日期")-->
+        ,DATE_FORMAT(sr.expected_date,"%Y-%m-%d")as "expectedDate"<!--[科技金融]资金需求日期")-->
         ,sr.contract_home_page as "contractHomePage"              <!--合同首页-->
         ,sr.contract_end_page as "contractEndPage"                <!--合同尾页-->
         FROM tb_service_require sr

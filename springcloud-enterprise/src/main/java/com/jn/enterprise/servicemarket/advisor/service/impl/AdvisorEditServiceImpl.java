@@ -76,13 +76,18 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             insertServiceAdvisorInfo(advisorBaseInfo);
         }else{
             TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
+            //把id,orgId,orgName,businessArea保留,防止copy时被覆盖
+            advisorBaseInfo.setId(tbServiceAdvisor.getId());
+            advisorBaseInfo.setOrgId(tbServiceAdvisor.getOrgId());
+            advisorBaseInfo.setOrgName(tbServiceAdvisor.getOrgName());
+            advisorBaseInfo.setBusinessArea(tbServiceAdvisor.getBusinessArea());
             //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
             BeanUtils.copyProperties(advisorBaseInfo, tbServiceAdvisor);
             //修改人
             tbServiceAdvisor.setModifierAccount(advisorBaseInfo.getAdvisorAccount());
             //修改时间
             tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-            //更新全部字段
+            //更新全部的字段（基本信息有的字段可能为空，不能使用selective更新方式）
             tbServiceAdvisorMapper.updateByExample(tbServiceAdvisor, example);
         }
     }

@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -20,7 +19,7 @@ public class RequirePortalDetails extends Page implements Serializable {
     @ApiModelProperty(value = "企业名称")
     private String companyName;
     @ApiModelProperty(value = "发布时间")
-    private Date issueTime;
+    private String issueTime;
     @ApiModelProperty(value = "业务领域")
     private String businessArea;
     @ApiModelProperty(value = "服务机构")
@@ -78,11 +77,11 @@ public class RequirePortalDetails extends Page implements Serializable {
         this.companyName = companyName;
     }
 
-    public Date getIssueTime() {
+    public String getIssueTime() {
         return issueTime;
     }
 
-    public void setIssueTime(Date issueTime) {
+    public void setIssueTime(String issueTime) {
         this.issueTime = issueTime;
     }
 

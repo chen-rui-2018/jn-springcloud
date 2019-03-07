@@ -20,7 +20,7 @@ public interface RequireManagementMapper {
      * @param account
      * @return
      */
-    List<RequireInfoList> getRequireOtherList(RequireOtherParam requireOtherParam, @Param("account")String account);
+    List<RequireInfoList> getRequireOtherList( @Param("requireOtherParam")RequireOtherParam requireOtherParam, @Param("account")String account);
 
     /**
      * 我收到的需求列表查询
@@ -29,7 +29,7 @@ public interface RequireManagementMapper {
      * @param orgId
      * @return
      */
-    List<RequireInfoList>getRequireReceivedList(RequireReceivedParam requireReceivedParam,@Param("account")String account,@Param("orgId")String orgId);
+    List<RequireInfoList>getRequireReceivedList(@Param("requireReceivedParam")RequireReceivedParam requireReceivedParam,@Param("account")String account,@Param("orgId")String orgId);
 
     /**
      * 需求管理列表查询（后台门户管理）

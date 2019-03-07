@@ -48,7 +48,7 @@ public class UserUpgradeController {
     }
 
     @ControllerLog(doAction = "升级员工")
-    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "升级员工", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/changeToStaff")
     public Result changeToStaff(@RequestBody @Validated StaffCheckParam staffCheckParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -75,9 +75,9 @@ public class UserUpgradeController {
 
 
 
-    @ControllerLog(doAction = "升级员工")
-    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/changeToStaff")
+    @ControllerLog(doAction = "查询公司列表")
+    @ApiOperation(value = "查询公司列表", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/selectCompany")
     public Result selectCompany(@ApiParam(name="comName",value = "企业名")@RequestParam(value = "comName")  String comName) {
         List<Conpany> conpanies = userUpgradeService.selectCompany(comName);
         return new Result(conpanies);

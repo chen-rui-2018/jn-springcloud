@@ -56,9 +56,6 @@ public class UserJoinController extends BaseController {
     @ApiOperation(value = "用户注册",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/addUser")
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
-        Assert.notNull(userRegister.getPhone(),UserJoinExceptionEnum.PHONE_NUMBER_CANNOT_EMPTY.getMessage());
-        Assert.notNull(userRegister.getPassword(),UserJoinExceptionEnum.PASSWORD_CANNOT_EMPTY.getMessage());
-        Assert.notNull(userRegister.getMessageCode(),UserJoinExceptionEnum.MESSAGE_CODE_CANNOT_EMPTY.getMessage());
         userJoinService.addUser(userRegister);
         return new Result();
     }
@@ -68,9 +65,6 @@ public class UserJoinController extends BaseController {
     @ApiOperation(value = "修改密码",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/updatePassword")
     public Result updatePassword(@RequestBody @Validated UserRegister userRegister){
-        Assert.notNull(userRegister.getPhone(),UserJoinExceptionEnum.PHONE_NUMBER_CANNOT_EMPTY.getMessage());
-        Assert.notNull(userRegister.getMessageCode(),UserJoinExceptionEnum.PASSWORD_CANNOT_EMPTY.getMessage());
-        Assert.notNull(userRegister.getMessageCode(),UserJoinExceptionEnum.MESSAGE_CODE_CANNOT_EMPTY.getMessage());
         userJoinService.updateUser(userRegister);
         return new Result();
     }
@@ -82,7 +76,7 @@ public class UserJoinController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String phone = user.getPhone();
         userJoinService.getCode(phone);
-        return new Result("*****{}，验证码发送成功。",phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()-1));
+        return new Result("验证码发送成功。接收尾号：",phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()-1));
     }
 
 }

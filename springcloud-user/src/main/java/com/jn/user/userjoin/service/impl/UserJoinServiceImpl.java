@@ -11,6 +11,8 @@ import com.jn.system.model.User;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
 import com.jn.user.userjoin.service.UserJoinService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -30,6 +32,7 @@ import java.util.Random;
 @Service
 @EnableBinding(value = {MessageSource.class})
 public class UserJoinServiceImpl implements UserJoinService {
+    private static Logger logger = LoggerFactory.getLogger(UserJoinServiceImpl.class);
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
@@ -62,6 +65,7 @@ public class UserJoinServiceImpl implements UserJoinService {
         smsTemplateVo.setMobiles(m);
         String[] t = {messageCode};
         smsTemplateVo.setContents(t);
+        logger.info("短信发送成功：接收号码：{},验证码：{}",phone,messageCode);
         messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
     }
 

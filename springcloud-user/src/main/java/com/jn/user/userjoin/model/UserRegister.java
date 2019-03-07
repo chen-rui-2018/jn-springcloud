@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -18,9 +19,12 @@ import java.io.Serializable;
 public class UserRegister implements Serializable {
     @ApiModelProperty("注册手机号")
     @NotNull(message = "手机号不能为空")
+    @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
+            message = "{phone:'手机号码验证出错'}")
     private String phone;
     @ApiModelProperty("短信验证码")
     @NotNull(message = "验证码不能为空")
+    @Pattern(regexp ="[0-9]{6}",message = "验证码只能是6位数字")
     private String messageCode;
     @ApiModelProperty("密码")
     @NotNull(message = "密码不能为空")

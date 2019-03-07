@@ -94,6 +94,7 @@ public class OrgManageController extends BaseController {
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
+        Assert.notNull(orgContactData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgService.saveOrUpdateOrgContactData(orgContactData, user.getAccount());
         logger.info("保存服务机构资质信息成功，响应条数："+i);

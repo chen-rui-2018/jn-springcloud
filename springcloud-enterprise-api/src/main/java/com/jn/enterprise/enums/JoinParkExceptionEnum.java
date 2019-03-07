@@ -13,6 +13,7 @@ public enum JoinParkExceptionEnum implements CodeAndMsg {
     COMPANY_IS_EXIST("3020511","企业已存在，不能再次认证。"),
     FOUND_TIME_IS_ERROR("3020511","公司注册时间格式错误[yyyy-MM-dd]"),
     RUN_TIME_IS_ERROR("3020511","公司落地时间格式错误[yyyy-MM-dd]"),
+    USER_IS_COMPANY_EXIST("3020511","您已是员工账号，不能再次申请"),
     ;
 
     /**

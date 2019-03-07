@@ -56,9 +56,9 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "企业性质[数组]")
     private String[] companyNature;
 
-    @ApiModelProperty(value = "荣誉证书列表")
-    @NotNull(message = "荣誉证书列表不能为空")
-    private List<OrgLicense> honorLicense;
+    @ApiModelProperty(value = "机构资质集合")
+    @NotNull(message = "机构资质列表不能为空")
+    private List<OrgLicense> licenses;
 
     @ApiModelProperty("业务领域")
     @NotNull(message = "业务领域不能为空")
@@ -213,12 +213,12 @@ public class OrgDetailParameter implements Serializable {
         this.companyNature = companyNature;
     }
 
-    public List<OrgLicense> getHonorLicense() {
-        return honorLicense;
+    public List<OrgLicense> getLicenses() {
+        return licenses;
     }
 
-    public void setHonorLicense(List<OrgLicense> honorLicense) {
-        this.honorLicense = honorLicense;
+    public void setLicenses(List<OrgLicense> licenses) {
+        this.licenses = licenses;
     }
 
     public String getBusinessType() {

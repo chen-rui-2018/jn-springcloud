@@ -12,6 +12,7 @@ import com.jn.enterprise.joinpark.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.joinpark.company.entity.TbServiceCompany;
 import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria;
 import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaff;
+import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaffCriteria;
 import com.jn.enterprise.joinpark.usermanage.model.*;
 import com.jn.enterprise.joinpark.usermanage.service.UserUpgradeService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -136,6 +137,13 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     @Override
     @ServiceLog(doAction = "升级员工")
     public int changeToStaff(StaffCheckParam staffCheckParam, String phone, String account){
+
+        TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
+        companyStaffCriteria.createCriteria().andAccountEqualTo(account).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbServiceCompanyStaff> tbServiceCompanyStaffs = tbServiceCompanyStaffMapper.selectByExample(companyStaffCriteria);
+        if(null !=tbServiceCompanyStaffs && tbServiceCompanyStaffs.size()>0){
+            throw new JnSpringCloudException(JoinParkExceptionEnum.USER_IS_COMPANY_EXIST);
+        }
         TbServiceCompanyStaff tbServiceCompanyStaff = new TbServiceCompanyStaff();
         tbServiceCompanyStaff.setId(UUID.randomUUID().toString().replaceAll("-",""));
         tbServiceCompanyStaff.setComName(staffCheckParam.getComName());
@@ -143,6 +151,8 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         tbServiceCompanyStaff.setAccount(account);
         tbServiceCompanyStaff.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
         int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
+
+
         //TODO 调用工作流审核 jiangyl
 
         return insert;

@@ -63,10 +63,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        userExtension
+                        userTag
                     </contexts>
                     <tableNames>
-                        tb_user_person
+                        tb_tag_code,
+                        tb_user_tag
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

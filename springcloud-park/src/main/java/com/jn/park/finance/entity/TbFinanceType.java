@@ -10,6 +10,12 @@ public class TbFinanceType implements Serializable {
     /*@ApiModelProperty("财务项目名称")*/
     private String financeName;
 
+    /*@ApiModelProperty("显示顺序（越小越靠前）")*/
+    private Integer showOrder;
+
+    /*@ApiModelProperty("是否公用（0否,1所有部门都适用）")*/
+    private Byte isPublic;
+
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/
     private Byte recordStatus;
 
@@ -41,6 +47,22 @@ public class TbFinanceType implements Serializable {
 
     public void setFinanceName(String financeName) {
         this.financeName = financeName == null ? null : financeName.trim();
+    }
+
+    public Integer getShowOrder() {
+        return showOrder;
+    }
+
+    public void setShowOrder(Integer showOrder) {
+        this.showOrder = showOrder;
+    }
+
+    public Byte getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Byte isPublic) {
+        this.isPublic = isPublic;
     }
 
     public Byte getRecordStatus() {
@@ -97,6 +119,8 @@ public class TbFinanceType implements Serializable {
         TbFinanceType other = (TbFinanceType) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getFinanceName() == null ? other.getFinanceName() == null : this.getFinanceName().equals(other.getFinanceName()))
+            && (this.getShowOrder() == null ? other.getShowOrder() == null : this.getShowOrder().equals(other.getShowOrder()))
+            && (this.getIsPublic() == null ? other.getIsPublic() == null : this.getIsPublic().equals(other.getIsPublic()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -110,6 +134,8 @@ public class TbFinanceType implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getFinanceName() == null) ? 0 : getFinanceName().hashCode());
+        result = prime * result + ((getShowOrder() == null) ? 0 : getShowOrder().hashCode());
+        result = prime * result + ((getIsPublic() == null) ? 0 : getIsPublic().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -126,6 +152,8 @@ public class TbFinanceType implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", financeName=").append(financeName);
+        sb.append(", showOrder=").append(showOrder);
+        sb.append(", isPublic=").append(isPublic);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

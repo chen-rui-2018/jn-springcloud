@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbFinanceDictionary implements Serializable {
+    /*@ApiModelProperty("")*/
+    private Integer id;
+
     /*@ApiModelProperty("字典名称")*/
     private String dicKey;
 
@@ -26,6 +29,14 @@ public class TbFinanceDictionary implements Serializable {
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getDicKey() {
         return dicKey;
@@ -95,7 +106,8 @@ public class TbFinanceDictionary implements Serializable {
             return false;
         }
         TbFinanceDictionary other = (TbFinanceDictionary) that;
-        return (this.getDicKey() == null ? other.getDicKey() == null : this.getDicKey().equals(other.getDicKey()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getDicKey() == null ? other.getDicKey() == null : this.getDicKey().equals(other.getDicKey()))
             && (this.getDicValue() == null ? other.getDicValue() == null : this.getDicValue().equals(other.getDicValue()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -108,6 +120,7 @@ public class TbFinanceDictionary implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getDicKey() == null) ? 0 : getDicKey().hashCode());
         result = prime * result + ((getDicValue() == null) ? 0 : getDicValue().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -124,6 +137,7 @@ public class TbFinanceDictionary implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", dicKey=").append(dicKey);
         sb.append(", dicValue=").append(dicValue);
         sb.append(", recordStatus=").append(recordStatus);

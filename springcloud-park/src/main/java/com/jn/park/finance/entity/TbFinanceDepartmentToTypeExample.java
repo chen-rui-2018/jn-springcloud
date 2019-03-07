@@ -105,6 +105,66 @@ public class TbFinanceDepartmentToTypeExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("dtpye.id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("dtpye.id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("dtpye.id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("dtpye.id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("dtpye.id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dtpye.id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("dtpye.id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("dtpye.id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("dtpye.id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("dtpye.id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("dtpye.id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("dtpye.id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andDepartmentIdIsNull() {
             addCriterion("dtpye.department_id is null");
             return (Criteria) this;
@@ -245,63 +305,63 @@ public class TbFinanceDepartmentToTypeExample {
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdIsNull() {
-            addCriterion("dtpye.finance_Id is null");
+        public Criteria andFinanceTypeIdIsNull() {
+            addCriterion("dtpye.finance_type_Id is null");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdIsNotNull() {
-            addCriterion("dtpye.finance_Id is not null");
+        public Criteria andFinanceTypeIdIsNotNull() {
+            addCriterion("dtpye.finance_type_Id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdEqualTo(Integer value) {
-            addCriterion("dtpye.finance_Id =", value, "financeId");
+        public Criteria andFinanceTypeIdEqualTo(Integer value) {
+            addCriterion("dtpye.finance_type_Id =", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdNotEqualTo(Integer value) {
-            addCriterion("dtpye.finance_Id <>", value, "financeId");
+        public Criteria andFinanceTypeIdNotEqualTo(Integer value) {
+            addCriterion("dtpye.finance_type_Id <>", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdGreaterThan(Integer value) {
-            addCriterion("dtpye.finance_Id >", value, "financeId");
+        public Criteria andFinanceTypeIdGreaterThan(Integer value) {
+            addCriterion("dtpye.finance_type_Id >", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dtpye.finance_Id >=", value, "financeId");
+        public Criteria andFinanceTypeIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("dtpye.finance_type_Id >=", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdLessThan(Integer value) {
-            addCriterion("dtpye.finance_Id <", value, "financeId");
+        public Criteria andFinanceTypeIdLessThan(Integer value) {
+            addCriterion("dtpye.finance_type_Id <", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdLessThanOrEqualTo(Integer value) {
-            addCriterion("dtpye.finance_Id <=", value, "financeId");
+        public Criteria andFinanceTypeIdLessThanOrEqualTo(Integer value) {
+            addCriterion("dtpye.finance_type_Id <=", value, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdIn(List<Integer> values) {
-            addCriterion("dtpye.finance_Id in", values, "financeId");
+        public Criteria andFinanceTypeIdIn(List<Integer> values) {
+            addCriterion("dtpye.finance_type_Id in", values, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdNotIn(List<Integer> values) {
-            addCriterion("dtpye.finance_Id not in", values, "financeId");
+        public Criteria andFinanceTypeIdNotIn(List<Integer> values) {
+            addCriterion("dtpye.finance_type_Id not in", values, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdBetween(Integer value1, Integer value2) {
-            addCriterion("dtpye.finance_Id between", value1, value2, "financeId");
+        public Criteria andFinanceTypeIdBetween(Integer value1, Integer value2) {
+            addCriterion("dtpye.finance_type_Id between", value1, value2, "financeTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andFinanceIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("dtpye.finance_Id not between", value1, value2, "financeId");
+        public Criteria andFinanceTypeIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("dtpye.finance_type_Id not between", value1, value2, "financeTypeId");
             return (Criteria) this;
         }
 

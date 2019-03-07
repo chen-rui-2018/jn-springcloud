@@ -10,13 +10,21 @@ public interface TbFinanceDictionaryMapper {
 
     int deleteByExample(TbFinanceDictionaryExample example);
 
+    int deleteByPrimaryKey(Integer id);
+
     int insert(TbFinanceDictionary record);
 
     int insertSelective(TbFinanceDictionary record);
 
     List<TbFinanceDictionary> selectByExample(TbFinanceDictionaryExample example);
 
+    TbFinanceDictionary selectByPrimaryKey(Integer id);
+
     int updateByExampleSelective(@Param("record") TbFinanceDictionary record, @Param("example") TbFinanceDictionaryExample example);
 
     int updateByExample(@Param("record") TbFinanceDictionary record, @Param("example") TbFinanceDictionaryExample example);
+
+    int updateByPrimaryKeySelective(TbFinanceDictionary record);
+
+    int updateByPrimaryKey(TbFinanceDictionary record);
 }

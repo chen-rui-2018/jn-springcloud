@@ -4,6 +4,8 @@
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceType">
     <id column="type_id" jdbcType="INTEGER" property="id" />
     <result column="type_finance_name" jdbcType="VARCHAR" property="financeName" />
+    <result column="type_show_order" jdbcType="INTEGER" property="showOrder" />
+    <result column="type_is_public" jdbcType="TINYINT" property="isPublic" />
     <result column="type_record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="type_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="type_created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -69,9 +71,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    type.id as type_id, type.finance_name as type_finance_name, type.record_status as type_record_status, 
-    type.creator_account as type_creator_account, type.created_time as type_created_time, 
-    type.modifier_account as type_modifier_account, type.modified_time as type_modified_time
+    type.id as type_id, type.finance_name as type_finance_name, type.show_order as type_show_order, 
+    type.is_public as type_is_public, type.record_status as type_record_status, type.creator_account as type_creator_account, 
+    type.created_time as type_created_time, type.modifier_account as type_modifier_account, 
+    type.modified_time as type_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceTypeExample" resultMap="BaseResultMap">
     select
@@ -107,12 +110,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_finance_type (finance_name, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
-    values (#{financeName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+    insert into tb_finance_type (finance_name, show_order, is_public, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{financeName,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{isPublic,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceType">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -122,6 +125,12 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="financeName != null">
         finance_name,
+      </if>
+      <if test="showOrder != null">
+        show_order,
+      </if>
+      <if test="isPublic != null">
+        is_public,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -142,6 +151,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeName != null">
         #{financeName,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isPublic != null">
+        #{isPublic,jdbcType=TINYINT},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -175,6 +190,12 @@
       <if test="record.financeName != null">
         type.finance_name = #{record.financeName,jdbcType=VARCHAR},
       </if>
+      <if test="record.showOrder != null">
+        type.show_order = #{record.showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.isPublic != null">
+        type.is_public = #{record.isPublic,jdbcType=TINYINT},
+      </if>
       <if test="record.recordStatus != null">
         type.record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
@@ -199,6 +220,8 @@
     update tb_finance_type type
     set type.id = #{record.id,jdbcType=INTEGER},
       type.finance_name = #{record.financeName,jdbcType=VARCHAR},
+      type.show_order = #{record.showOrder,jdbcType=INTEGER},
+      type.is_public = #{record.isPublic,jdbcType=TINYINT},
       type.record_status = #{record.recordStatus,jdbcType=TINYINT},
       type.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       type.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -213,6 +236,12 @@
     <set>
       <if test="financeName != null">
         finance_name = #{financeName,jdbcType=VARCHAR},
+      </if>
+      <if test="showOrder != null">
+        show_order = #{showOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isPublic != null">
+        is_public = #{isPublic,jdbcType=TINYINT},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -235,6 +264,8 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceType">
     update tb_finance_type
     set finance_name = #{financeName,jdbcType=VARCHAR},
+      show_order = #{showOrder,jdbcType=INTEGER},
+      is_public = #{isPublic,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

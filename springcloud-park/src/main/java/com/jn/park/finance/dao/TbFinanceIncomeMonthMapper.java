@@ -10,13 +10,21 @@ public interface TbFinanceIncomeMonthMapper {
 
     int deleteByExample(TbFinanceIncomeMonthExample example);
 
+    int deleteByPrimaryKey(Integer id);
+
     int insert(TbFinanceIncomeMonth record);
 
     int insertSelective(TbFinanceIncomeMonth record);
 
     List<TbFinanceIncomeMonth> selectByExample(TbFinanceIncomeMonthExample example);
 
+    TbFinanceIncomeMonth selectByPrimaryKey(Integer id);
+
     int updateByExampleSelective(@Param("record") TbFinanceIncomeMonth record, @Param("example") TbFinanceIncomeMonthExample example);
 
     int updateByExample(@Param("record") TbFinanceIncomeMonth record, @Param("example") TbFinanceIncomeMonthExample example);
+
+    int updateByPrimaryKeySelective(TbFinanceIncomeMonth record);
+
+    int updateByPrimaryKey(TbFinanceIncomeMonth record);
 }

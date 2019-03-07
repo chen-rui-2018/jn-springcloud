@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbFinanceDepartmentToType implements Serializable {
+    /*@ApiModelProperty("")*/
+    private Integer id;
+
     /*@ApiModelProperty("部门ID")*/
     private String departmentId;
 
@@ -11,7 +14,7 @@ public class TbFinanceDepartmentToType implements Serializable {
     private String departmentName;
 
     /*@ApiModelProperty("财务类型")*/
-    private Integer financeId;
+    private Integer financeTypeId;
 
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/
     private Byte recordStatus;
@@ -30,6 +33,14 @@ public class TbFinanceDepartmentToType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getDepartmentId() {
         return departmentId;
     }
@@ -46,12 +57,12 @@ public class TbFinanceDepartmentToType implements Serializable {
         this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
-    public Integer getFinanceId() {
-        return financeId;
+    public Integer getFinanceTypeId() {
+        return financeTypeId;
     }
 
-    public void setFinanceId(Integer financeId) {
-        this.financeId = financeId;
+    public void setFinanceTypeId(Integer financeTypeId) {
+        this.financeTypeId = financeTypeId;
     }
 
     public Byte getRecordStatus() {
@@ -106,9 +117,10 @@ public class TbFinanceDepartmentToType implements Serializable {
             return false;
         }
         TbFinanceDepartmentToType other = (TbFinanceDepartmentToType) that;
-        return (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
             && (this.getDepartmentName() == null ? other.getDepartmentName() == null : this.getDepartmentName().equals(other.getDepartmentName()))
-            && (this.getFinanceId() == null ? other.getFinanceId() == null : this.getFinanceId().equals(other.getFinanceId()))
+            && (this.getFinanceTypeId() == null ? other.getFinanceTypeId() == null : this.getFinanceTypeId().equals(other.getFinanceTypeId()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -120,9 +132,10 @@ public class TbFinanceDepartmentToType implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
         result = prime * result + ((getDepartmentName() == null) ? 0 : getDepartmentName().hashCode());
-        result = prime * result + ((getFinanceId() == null) ? 0 : getFinanceId().hashCode());
+        result = prime * result + ((getFinanceTypeId() == null) ? 0 : getFinanceTypeId().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -137,9 +150,10 @@ public class TbFinanceDepartmentToType implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", departmentId=").append(departmentId);
         sb.append(", departmentName=").append(departmentName);
-        sb.append(", financeId=").append(financeId);
+        sb.append(", financeTypeId=").append(financeTypeId);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

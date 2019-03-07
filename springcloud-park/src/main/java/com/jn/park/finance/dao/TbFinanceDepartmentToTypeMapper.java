@@ -10,13 +10,21 @@ public interface TbFinanceDepartmentToTypeMapper {
 
     int deleteByExample(TbFinanceDepartmentToTypeExample example);
 
+    int deleteByPrimaryKey(Integer id);
+
     int insert(TbFinanceDepartmentToType record);
 
     int insertSelective(TbFinanceDepartmentToType record);
 
     List<TbFinanceDepartmentToType> selectByExample(TbFinanceDepartmentToTypeExample example);
 
+    TbFinanceDepartmentToType selectByPrimaryKey(Integer id);
+
     int updateByExampleSelective(@Param("record") TbFinanceDepartmentToType record, @Param("example") TbFinanceDepartmentToTypeExample example);
 
     int updateByExample(@Param("record") TbFinanceDepartmentToType record, @Param("example") TbFinanceDepartmentToTypeExample example);
+
+    int updateByPrimaryKeySelective(TbFinanceDepartmentToType record);
+
+    int updateByPrimaryKey(TbFinanceDepartmentToType record);
 }

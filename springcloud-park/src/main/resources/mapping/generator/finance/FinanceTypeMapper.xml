@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceTypeMapper">
+
+  <resultMap id="TypeResultMap" type="com.jn.park.finance.model.FinanceTypeModel"  extends="com.jn.park.finance.dao.TbFinanceTypeMapper.BaseResultMap">
+  </resultMap>
+
+  <select id="selectByDepart" resultMap="TypeResultMap">
+      select 
+       <include refid="com.jn.park.finance.dao.TbFinanceTypeMapper.Base_Column_List"/>
+       from 	tb_finance_type type
+          LEFT JOIN tb_finance_department_to_type dtype ON dtype.finance_Id = type.id
+      <where>
+        type.record_status=1 and dtype.record_status=1
+        <if test="departmentId != null">
+          and type.department_id =#{departmentId,jdbcType=VARCHAR}
+        </if>
+          or type.is_public=1
+      </where>
+      order by type.show_order
+  </select>
+</mapper>

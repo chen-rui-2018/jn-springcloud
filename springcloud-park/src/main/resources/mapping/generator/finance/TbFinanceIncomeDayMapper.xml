@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceIncomeDayMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceIncomeDay">
+    <id column="iday_id" jdbcType="INTEGER" property="id" />
     <result column="iday_income_day" jdbcType="TIMESTAMP" property="incomeDay" />
     <result column="iday_income_type" jdbcType="TINYINT" property="incomeType" />
     <result column="iday_income_typename" jdbcType="VARCHAR" property="incomeTypename" />
@@ -71,10 +72,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    iday.income_day as iday_income_day, iday.income_type as iday_income_type, iday.income_typename as iday_income_typename, 
-    iday.income as iday_income, iday.record_status as iday_record_status, iday.creator_account as iday_creator_account, 
-    iday.created_time as iday_created_time, iday.modifier_account as iday_modifier_account, 
-    iday.modified_time as iday_modified_time
+    iday.id as iday_id, iday.income_day as iday_income_day, iday.income_type as iday_income_type, 
+    iday.income_typename as iday_income_typename, iday.income as iday_income, iday.record_status as iday_record_status, 
+    iday.creator_account as iday_creator_account, iday.created_time as iday_created_time, 
+    iday.modifier_account as iday_modifier_account, iday.modified_time as iday_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDayExample" resultMap="BaseResultMap">
     select
@@ -90,6 +91,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_finance_income_day iday
+    where iday.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_finance_income_day
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDayExample">
     delete from tb_finance_income_day iday
     <if test="_parameter != null">
@@ -97,6 +108,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDay">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_finance_income_day (income_day, income_type, income_typename, 
       income, record_status, creator_account, 
       created_time, modifier_account, modified_time
@@ -107,6 +121,9 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDay">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_finance_income_day
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="incomeDay != null">
@@ -176,6 +193,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_finance_income_day iday
     <set>
+      <if test="record.id != null">
+        iday.id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.incomeDay != null">
         iday.income_day = #{record.incomeDay,jdbcType=TIMESTAMP},
       </if>
@@ -210,7 +230,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_finance_income_day iday
-    set iday.income_day = #{record.incomeDay,jdbcType=TIMESTAMP},
+    set iday.id = #{record.id,jdbcType=INTEGER},
+      iday.income_day = #{record.incomeDay,jdbcType=TIMESTAMP},
       iday.income_type = #{record.incomeType,jdbcType=TINYINT},
       iday.income_typename = #{record.incomeTypename,jdbcType=VARCHAR},
       iday.income = #{record.income,jdbcType=DECIMAL},
@@ -222,5 +243,51 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDay">
+    update tb_finance_income_day
+    <set>
+      <if test="incomeDay != null">
+        income_day = #{incomeDay,jdbcType=TIMESTAMP},
+      </if>
+      <if test="incomeType != null">
+        income_type = #{incomeType,jdbcType=TINYINT},
+      </if>
+      <if test="incomeTypename != null">
+        income_typename = #{incomeTypename,jdbcType=VARCHAR},
+      </if>
+      <if test="income != null">
+        income = #{income,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceIncomeDay">
+    update tb_finance_income_day
+    set income_day = #{incomeDay,jdbcType=TIMESTAMP},
+      income_type = #{incomeType,jdbcType=TINYINT},
+      income_typename = #{incomeTypename,jdbcType=VARCHAR},
+      income = #{income,jdbcType=DECIMAL},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

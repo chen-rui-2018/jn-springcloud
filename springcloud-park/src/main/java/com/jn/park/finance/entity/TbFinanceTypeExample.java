@@ -235,6 +235,126 @@ public class TbFinanceTypeExample {
             return (Criteria) this;
         }
 
+        public Criteria andShowOrderIsNull() {
+            addCriterion("type.show_order is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderIsNotNull() {
+            addCriterion("type.show_order is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderEqualTo(Integer value) {
+            addCriterion("type.show_order =", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotEqualTo(Integer value) {
+            addCriterion("type.show_order <>", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderGreaterThan(Integer value) {
+            addCriterion("type.show_order >", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderGreaterThanOrEqualTo(Integer value) {
+            addCriterion("type.show_order >=", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderLessThan(Integer value) {
+            addCriterion("type.show_order <", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderLessThanOrEqualTo(Integer value) {
+            addCriterion("type.show_order <=", value, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderIn(List<Integer> values) {
+            addCriterion("type.show_order in", values, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotIn(List<Integer> values) {
+            addCriterion("type.show_order not in", values, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderBetween(Integer value1, Integer value2) {
+            addCriterion("type.show_order between", value1, value2, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andShowOrderNotBetween(Integer value1, Integer value2) {
+            addCriterion("type.show_order not between", value1, value2, "showOrder");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicIsNull() {
+            addCriterion("type.is_public is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicIsNotNull() {
+            addCriterion("type.is_public is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicEqualTo(Byte value) {
+            addCriterion("type.is_public =", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicNotEqualTo(Byte value) {
+            addCriterion("type.is_public <>", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicGreaterThan(Byte value) {
+            addCriterion("type.is_public >", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicGreaterThanOrEqualTo(Byte value) {
+            addCriterion("type.is_public >=", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicLessThan(Byte value) {
+            addCriterion("type.is_public <", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicLessThanOrEqualTo(Byte value) {
+            addCriterion("type.is_public <=", value, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicIn(List<Byte> values) {
+            addCriterion("type.is_public in", values, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicNotIn(List<Byte> values) {
+            addCriterion("type.is_public not in", values, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicBetween(Byte value1, Byte value2) {
+            addCriterion("type.is_public between", value1, value2, "isPublic");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsPublicNotBetween(Byte value1, Byte value2) {
+            addCriterion("type.is_public not between", value1, value2, "isPublic");
+            return (Criteria) this;
+        }
+
         public Criteria andRecordStatusIsNull() {
             addCriterion("type.record_status is null");
             return (Criteria) this;

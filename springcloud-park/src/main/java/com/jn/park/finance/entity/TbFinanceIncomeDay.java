@@ -5,6 +5,9 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TbFinanceIncomeDay implements Serializable {
+    /*@ApiModelProperty("")*/
+    private Integer id;
+
     /*@ApiModelProperty("费用日期")*/
     private Date incomeDay;
 
@@ -33,6 +36,14 @@ public class TbFinanceIncomeDay implements Serializable {
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Date getIncomeDay() {
         return incomeDay;
@@ -118,7 +129,8 @@ public class TbFinanceIncomeDay implements Serializable {
             return false;
         }
         TbFinanceIncomeDay other = (TbFinanceIncomeDay) that;
-        return (this.getIncomeDay() == null ? other.getIncomeDay() == null : this.getIncomeDay().equals(other.getIncomeDay()))
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getIncomeDay() == null ? other.getIncomeDay() == null : this.getIncomeDay().equals(other.getIncomeDay()))
             && (this.getIncomeType() == null ? other.getIncomeType() == null : this.getIncomeType().equals(other.getIncomeType()))
             && (this.getIncomeTypename() == null ? other.getIncomeTypename() == null : this.getIncomeTypename().equals(other.getIncomeTypename()))
             && (this.getIncome() == null ? other.getIncome() == null : this.getIncome().equals(other.getIncome()))
@@ -133,6 +145,7 @@ public class TbFinanceIncomeDay implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getIncomeDay() == null) ? 0 : getIncomeDay().hashCode());
         result = prime * result + ((getIncomeType() == null) ? 0 : getIncomeType().hashCode());
         result = prime * result + ((getIncomeTypename() == null) ? 0 : getIncomeTypename().hashCode());
@@ -151,6 +164,7 @@ public class TbFinanceIncomeDay implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
         sb.append(", incomeDay=").append(incomeDay);
         sb.append(", incomeType=").append(incomeType);
         sb.append(", incomeTypename=").append(incomeTypename);

@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceDictionaryMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceDictionary">
+    <id column="dict_id" jdbcType="INTEGER" property="id" />
     <result column="dict_dic_key" jdbcType="VARCHAR" property="dicKey" />
     <result column="dict_dic_value" jdbcType="VARCHAR" property="dicValue" />
     <result column="dict_record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -69,9 +70,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    dict.dic_key as dict_dic_key, dict.dic_value as dict_dic_value, dict.record_status as dict_record_status, 
-    dict.creator_account as dict_creator_account, dict.created_time as dict_created_time, 
-    dict.modifier_account as dict_modifier_account, dict.modified_time as dict_modified_time
+    dict.id as dict_id, dict.dic_key as dict_dic_key, dict.dic_value as dict_dic_value, 
+    dict.record_status as dict_record_status, dict.creator_account as dict_creator_account, 
+    dict.created_time as dict_created_time, dict.modifier_account as dict_modifier_account, 
+    dict.modified_time as dict_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceDictionaryExample" resultMap="BaseResultMap">
     select
@@ -87,6 +89,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_finance_dictionary dict
+    where dict.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_finance_dictionary
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceDictionaryExample">
     delete from tb_finance_dictionary dict
     <if test="_parameter != null">
@@ -94,6 +106,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.finance.entity.TbFinanceDictionary">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_finance_dictionary (dic_key, dic_value, record_status, 
       creator_account, created_time, modifier_account, 
       modified_time)
@@ -102,6 +117,9 @@
       #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceDictionary">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into tb_finance_dictionary
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="dicKey != null">
@@ -159,6 +177,9 @@
   <update id="updateByExampleSelective" parameterType="map">
     update tb_finance_dictionary dict
     <set>
+      <if test="record.id != null">
+        dict.id = #{record.id,jdbcType=INTEGER},
+      </if>
       <if test="record.dicKey != null">
         dict.dic_key = #{record.dicKey,jdbcType=VARCHAR},
       </if>
@@ -187,7 +208,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_finance_dictionary dict
-    set dict.dic_key = #{record.dicKey,jdbcType=VARCHAR},
+    set dict.id = #{record.id,jdbcType=INTEGER},
+      dict.dic_key = #{record.dicKey,jdbcType=VARCHAR},
       dict.dic_value = #{record.dicValue,jdbcType=VARCHAR},
       dict.record_status = #{record.recordStatus,jdbcType=TINYINT},
       dict.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -197,5 +219,43 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.finance.entity.TbFinanceDictionary">
+    update tb_finance_dictionary
+    <set>
+      <if test="dicKey != null">
+        dic_key = #{dicKey,jdbcType=VARCHAR},
+      </if>
+      <if test="dicValue != null">
+        dic_value = #{dicValue,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceDictionary">
+    update tb_finance_dictionary
+    set dic_key = #{dicKey,jdbcType=VARCHAR},
+      dic_value = #{dicValue,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

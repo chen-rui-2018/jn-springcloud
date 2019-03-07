@@ -1,13 +1,20 @@
 package com.jn.park.finance.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.park.finance.dao.FinanceTypeMapper;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
 import com.jn.park.finance.entity.TbFinanceDepartmentToType;
 import com.jn.park.finance.entity.TbFinanceDepartmentToTypeExample;
 import com.jn.park.finance.entity.TbFinanceType;
+import com.jn.park.finance.entity.TbFinanceTypeExample;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
+import com.jn.park.finance.model.FinanceDepartmentToTypeModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceTypeService;
+import com.jn.system.log.annotation.ServiceLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,28 +31,38 @@ import java.util.List;
  */
 @Service
 public class FinanceTypeServiceImpl implements FinanceTypeService {
+    private static Logger logger = LoggerFactory.getLogger(FinanceTypeServiceImpl.class);
     @Autowired
     private TbFinanceTypeMapper tbFinanceTypeMapper;
     @Autowired
     private TbFinanceDepartmentToTypeMapper tbFinanceDepartmentToTypeMapper;
     @Autowired
     private FinanceTypeMapper financeTypeMapper;
+
+    @ServiceLog(doAction = "添加修改财务项目类型")
     @Override
     public Integer saveOrUpdate(FinanceTypeModel financeTypeModel, String userAccount) {
+        //校验名称是否合法
+        this.checkTypeName(financeTypeModel.getFinanceName(),financeTypeModel.getId());
+
         TbFinanceType tbFinanceType=new TbFinanceType();
         BeanUtils.copyProperties(financeTypeModel,tbFinanceType);
-        Integer count=0;
         if(null==financeTypeModel.getId()){
            tbFinanceType.setCreatedTime(new Date());
            tbFinanceType.setCreatorAccount(userAccount);
-           return tbFinanceTypeMapper.insertSelective(tbFinanceType);
+           int addCount=tbFinanceTypeMapper.insertSelective(tbFinanceType);
+           logger.info("【添加】财务项目类型成功，添加成功的条数为{},对应ID为{}",addCount,tbFinanceType.getId());
+           return tbFinanceType.getId();
         }else{
             tbFinanceType.setModifiedTime(new Date());
             tbFinanceType.setModifierAccount(userAccount);
-            return tbFinanceTypeMapper.updateByPrimaryKeySelective(tbFinanceType);
+            int updateCount=tbFinanceTypeMapper.updateByPrimaryKeySelective(tbFinanceType);
+            logger.info("【修改】财务项目类型成功，修改成功的条数为{}，对应ID为{}",updateCount,tbFinanceType.getId());
+            return updateCount;
         }
     }
 
+    @ServiceLog(doAction = "更新财务项目类型对应的部门")
     @Override
     public Integer updateDepartmentByType(Integer typeId, List<String> departmentIdList, String userAccount) {
         //1、删除 typeId类型的所有数据
@@ -56,9 +73,11 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
         deleteRecord.setRecordStatus(new Byte("-1"));
         deleteRecord.setModifiedTime(new Date());
         deleteRecord.setModifierAccount(userAccount);
-        tbFinanceDepartmentToTypeMapper.updateByExampleSelective(deleteRecord,example);
+        int deleteCount=tbFinanceDepartmentToTypeMapper.updateByExampleSelective(deleteRecord,example);
+        logger.info("成功删除了{}条数据，对应的财务项目类型ID为【{}】",deleteCount,typeId);
+
         //2、添加typeId类型的所有部门
-        int i=0;
+        int addCount=0;
         List<TbFinanceDepartmentToType>tbFinanceDepartmentToTypeList=new ArrayList<>();
         for(String departmentId:departmentIdList){
             TbFinanceDepartmentToType tbFinanceDepartmentToType=new TbFinanceDepartmentToType();
@@ -66,42 +85,40 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
             tbFinanceDepartmentToType.setFinanceTypeId(typeId);
             tbFinanceDepartmentToType.setCreatedTime(new Date());
             tbFinanceDepartmentToType.setCreatorAccount(userAccount);
-            tbFinanceDepartmentToTypeMapper.insert(tbFinanceDepartmentToType);
-            i++;
+            tbFinanceDepartmentToTypeMapper.insertSelective(tbFinanceDepartmentToType);
+            addCount++;
         }
-
-        return i;
+        logger.info("成功添加了{}条数据，对应的财务项目类型ID为【{}】",addCount,typeId);
+        return addCount;
     }
 
-    @Override
-    public Integer updateTypeByDepartment(String departmentId, List<Integer> typeIdList, String userAccount) {
-        //1、删除 typeId类型的所有数据
-        TbFinanceDepartmentToTypeExample example=new TbFinanceDepartmentToTypeExample();
-        TbFinanceDepartmentToTypeExample.Criteria criteria=example.createCriteria();
-        criteria.andDepartmentIdEqualTo(departmentId).andRecordStatusEqualTo(new Byte("1"));
-        TbFinanceDepartmentToType deleteRecord=new TbFinanceDepartmentToType();
-        deleteRecord.setRecordStatus(new Byte("-1"));
-        deleteRecord.setModifiedTime(new Date());
-        deleteRecord.setModifierAccount(userAccount);
-        tbFinanceDepartmentToTypeMapper.updateByExampleSelective(deleteRecord,example);
-        //2、添加typeId类型的所有部门
-        int i=0;
-        List<TbFinanceDepartmentToType>tbFinanceDepartmentToTypeList=new ArrayList<>();
-        for(Integer typeId:typeIdList){
-            TbFinanceDepartmentToType tbFinanceDepartmentToType=new TbFinanceDepartmentToType();
-            tbFinanceDepartmentToType.setDepartmentId(departmentId);
-            tbFinanceDepartmentToType.setFinanceTypeId(typeId);
-            tbFinanceDepartmentToType.setCreatedTime(new Date());
-            tbFinanceDepartmentToType.setCreatorAccount(userAccount);
-            tbFinanceDepartmentToTypeMapper.insert(tbFinanceDepartmentToType);
-            i++;
-        }
 
-        return i;
+    @ServiceLog(doAction = "查看所有财务项目类型")
+    @Override
+    public List<FinanceTypeModel> selectTypeByDepartmentId(String departmentId) {
+        return financeTypeMapper.selectTypeByDepartmentId(departmentId);
     }
 
+
+
+    @ServiceLog(doAction = "查看所有部门")
     @Override
-    public List<FinanceTypeModel> selectByDepart(String departmentId) {
-        return financeTypeMapper.selectByDepart(departmentId);
+    public List<FinanceDepartmentToTypeModel>selectDepartmentByTypeId(Integer typeId){
+
+        return financeTypeMapper.selectDepartmentByTypeId(typeId);
+    }
+
+   @ServiceLog(doAction = "校验费用类型名称是否已经存在")
+    private void checkTypeName(String typeName,Integer typeId){
+        TbFinanceTypeExample example=new TbFinanceTypeExample();
+        TbFinanceTypeExample.Criteria criteria=example.createCriteria();
+        criteria.andRecordStatusEqualTo(new Byte("1")).andFinanceNameEqualTo(typeName);
+        if(null!=typeId){
+            criteria.andIdNotEqualTo(typeId);
+        }
+        long count=tbFinanceTypeMapper.countByExample(example);
+        if(count>0){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"名称已经存在");
+        }
     }
 }

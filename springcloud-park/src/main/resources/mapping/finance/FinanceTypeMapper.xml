@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceTypeMapper">
+
+  <resultMap id="TypeResultMap" type="com.jn.park.finance.model.FinanceTypeModel"  extends="com.jn.park.finance.dao.TbFinanceTypeMapper.BaseResultMap">
+  </resultMap>
+
+  <select id="selectTypeByDepartmentId" resultType="com.jn.park.finance.model.FinanceTypeModel">
+      select 
+      type.id AS id,
+      type.finance_name AS financeName,
+      type.show_order AS showOrder,
+      type.is_public AS isPublic
+       from 	tb_finance_type type
+          LEFT JOIN tb_finance_department_to_type dtype ON dtype.finance_type_Id = type.id
+      <where>
+        type.record_status=1 and dtype.record_status=1
+        <if test="departmentId != null">
+          and dtype.department_id =#{departmentId,jdbcType=VARCHAR}
+        </if>
+          or type.is_public=1
+      </where>
+      order by type.show_order
+  </select>
+
+    <select id="selectDepartmentByTypeId" resultType="com.jn.park.finance.model.FinanceDepartmentToTypeModel">
+      select
+        dtype.id AS id,
+        dtype.department_id AS departmentId,
+        dtype.department_name AS departmentName,
+        dtype.finance_type_Id AS financeTypeId
+      from 	tb_finance_type type
+          LEFT JOIN tb_finance_department_to_type dtype ON dtype.finance_type_Id = type.id
+      <where>
+        type.record_status=1 and dtype.record_status=1
+        <if test="typeId != null">
+          and type.id =#{typeId,jdbcType=INTEGER}
+        </if>
+          and type.is_public=0
+      </where>
+      order by type.show_order
+  </select>
+</mapper>

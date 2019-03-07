@@ -1,6 +1,7 @@
 package com.jn.park.finance.dao;
 
 import com.jn.park.finance.model.FinanceBudgetHistoryModel;
+import com.jn.park.finance.model.FinanceDepartmentToTypeModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,5 +15,12 @@ public interface FinanceTypeMapper {
      * @param departmentId
      * @return
      */
-    List<FinanceTypeModel> selectByDepart(@Param("departmentId") String departmentId) ;
+    List<FinanceTypeModel> selectTypeByDepartmentId(@Param("departmentId") String departmentId) ;
+
+    /**
+     * 查看所有部门
+     * @param typeId
+     * @return
+     */
+    List<FinanceDepartmentToTypeModel>selectDepartmentByTypeId(@Param("typeId") Integer typeId);
 }

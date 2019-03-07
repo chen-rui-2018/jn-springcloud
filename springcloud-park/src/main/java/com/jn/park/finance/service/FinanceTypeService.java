@@ -1,6 +1,7 @@
 package com.jn.park.finance.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.park.finance.model.FinanceDepartmentToTypeModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 
 import java.util.List;
@@ -27,19 +28,18 @@ public interface FinanceTypeService {
      */
     Integer updateDepartmentByType(Integer typeId, List<String>departmentIdList,String userAccount);
 
-    /**
-     * 更新部门对应的财务项目类型
-     * @param departmentId
-     * @param typeIdList
-     * @param userAccount
-     * @return
-     */
-    Integer updateTypeByDepartment(String departmentId, List<Integer>typeIdList,String userAccount);
 
     /**
      * 查看所有财务项目类型
      * @param departmentId
      * @return
      */
-    List<FinanceTypeModel>selectByDepart(String departmentId);
+    List<FinanceTypeModel>selectTypeByDepartmentId(String departmentId);
+
+    /**
+     * 查看所有部门
+     * @param typeId
+     * @return
+     */
+    List<FinanceDepartmentToTypeModel>selectDepartmentByTypeId(Integer typeId);
 }

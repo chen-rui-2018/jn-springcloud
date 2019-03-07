@@ -20,6 +20,7 @@ import com.jn.park.finance.model.FinanceBudgetMoneyModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.service.FinanceBudgetService;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
+import com.jn.system.log.annotation.ServiceLog;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,12 +49,13 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
     @Autowired
     private FinanceBudgetMapper financeBudgetMapper;
 
-
+    @ServiceLog(doAction = "总预算查询")
     @Override
     public Result totalList(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount) {
         return null;
     }
 
+    @ServiceLog(doAction = "预算录入历史查询")
     @Override
     public PaginationData<List<FinanceBudgetHistoryVo>> historyList(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount) {
         TbFinanceBudgetHistoryExample example=new TbFinanceBudgetHistoryExample();
@@ -100,6 +102,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         return paginationData;
     }
 
+    @ServiceLog(doAction = "预算录入")
     @Override
     public Result add(FinanceBudgetHistoryVo financeBudgetHistoryVo, String userAccount) {
         this.checkBudgetType0(financeBudgetHistoryVo.getDepartmentId(),financeBudgetHistoryVo.getCostTypeId(),financeBudgetHistoryVo.getCostTypeName(),financeBudgetHistoryVo.getBudgetMoneyModels());

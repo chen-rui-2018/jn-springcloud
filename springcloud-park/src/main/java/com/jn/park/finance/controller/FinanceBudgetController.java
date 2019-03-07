@@ -22,7 +22,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 @Api(tags = "预算录入")
 @RestController
 @RequestMapping("/finance/budget")
-public class FinanceBudgetController extends BaseController {
+public class FinanceBudgetController extends FinanceBaseController {
 
     @ControllerLog(doAction = "总预算查询")
     @ApiOperation(value = "总预算查询", httpMethod = "POST", response = Result.class)

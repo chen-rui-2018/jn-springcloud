@@ -3,11 +3,9 @@ package com.jn.park.finance.service.impl;
 import com.jn.common.util.Assert;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
+import com.jn.park.finance.model.FinanceDepartmentToTypeModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceTypeService;
-import com.netflix.discovery.converters.Auto;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +27,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@FixMethodOrder(MethodSorters.JVM)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class FinanceTypeServiceImplTest {
     private static Logger logger = LoggerFactory.getLogger(FinanceTypeServiceImplTest.class);
     @Autowired
@@ -43,17 +41,13 @@ public class FinanceTypeServiceImplTest {
     private List<Integer>typeIdList=new ArrayList<>();
     private List<Integer>documentTypeIdList=new ArrayList<>();
 
-    @Before
-    public void setUp() throws Exception {
 
-        logger.info("Before====================>");
-    }
 
     @Test
-    public void saveOrUpdate() {
+    public void t10_SaveOrUpdate() {
 
         FinanceTypeModel financeTypeModel=new FinanceTypeModel();
-        financeTypeModel.setFinanceName("交通费3");
+        financeTypeModel.setFinanceName("交通费7");
         financeTypeModel.setIsPublic(new Byte("1"));
         int id1=financeTypeService.saveOrUpdate(financeTypeModel,"huangbq");
         logger.info("id1====>{}",id1);
@@ -61,45 +55,37 @@ public class FinanceTypeServiceImplTest {
         typeIdList.add(id1);
 
         FinanceTypeModel financeTypeModel2=new FinanceTypeModel();
-        financeTypeModel2.setFinanceName("团建费3");
+        financeTypeModel2.setFinanceName("团建费7");
         financeTypeModel2.setIsPublic(new Byte("0"));
         int id2=financeTypeService.saveOrUpdate(financeTypeModel2,"huangbq");
-        logger.info("id1====>{}",id2);
+        logger.info("id2====>{}",id2);
         typeIdList.add(id2);
 
-        financeTypeModel2.setFinanceName("团建费33");
+        financeTypeModel2.setFinanceName("团建费66");
         financeTypeModel2.setId(id2);
         financeTypeService.saveOrUpdate(financeTypeModel2,"huangbq2");
-
         Assert.isTrue(typeIdList.size()==2);
 
     }
 
     @Test
-    public void updateDepartmentByType() {
-    }
-
-    @Test
-    public void updateTypeByDepartment() {
-    }
-
-    @Test
-    public void selectByDepart() {
-        List<FinanceTypeModel>financeTypeModelList=financeTypeService.selectByDepart(null);
+    public void t20_selectTypeByDepartmentId() {
+        List<FinanceTypeModel>financeTypeModelList=financeTypeService.selectTypeByDepartmentId("depart01");
         logger.info("financeTypeModelList===>{}",financeTypeModelList);
     }
 
-    @After
-    public void after(){
-        logger.info("After====================>");
-        typeIdList.forEach(typeId->{
-            tbFinanceTypeMapper.deleteByPrimaryKey(typeId);
-        });
-
-        documentTypeIdList.forEach(typeId->{
-            tbFinanceTypeMapper.deleteByPrimaryKey(typeId);
-        });
+    @Test
+    public void test30_selectDepartmentByTypeId(){
+        List<FinanceDepartmentToTypeModel> financeDepartmentToTypeModelList=financeTypeService.selectDepartmentByTypeId(5);
+        logger.info("selectDepartmentByTypeId====>{}",financeDepartmentToTypeModelList);
     }
+
+    @Test
+    public void t40_updateDepartmentByType() {
+
+    }
+
+
 
 
 }

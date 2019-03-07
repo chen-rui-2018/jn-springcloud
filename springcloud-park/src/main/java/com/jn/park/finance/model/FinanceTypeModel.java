@@ -3,9 +3,9 @@ package com.jn.park.finance.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -23,9 +23,12 @@ public class FinanceTypeModel implements Serializable {
     @ApiModelProperty("财务项目名称")
     private String financeName;
 
+    @NotNull(message = "显示顺序不能为空")
+    @Min(value = 1,message = "显示顺序只能为正整数")
     @ApiModelProperty("显示顺序（越小越靠前）")
     private Integer showOrder;
 
+    @NotNull(message = "是否公用不能为空")
     @ApiModelProperty("是否公用（0否,1所有部门都适用）")
     private Byte isPublic;
 

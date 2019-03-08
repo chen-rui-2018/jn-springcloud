@@ -17,12 +17,13 @@ import java.util.List;
 public interface SysDepartmentService {
 
     /**
-     * 根据部门id获取部门信息
+     * 根据部门id获取当前部门及所有子部门信息
      *
-     * @param id
+     * @param id   部门id
+     * @param flag true 表示获取所有子部门，false表示只获取当前部门
      * @return
      */
-    SysDepartment selectByPrimaryKey(String id);
+    SysDepartmentVO selectDeptByKey(String id,Boolean flag);
 
     /**
      * 逻辑删除部门信息

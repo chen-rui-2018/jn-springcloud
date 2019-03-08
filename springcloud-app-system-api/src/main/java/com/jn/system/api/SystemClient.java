@@ -99,6 +99,7 @@ public interface SystemClient {
 
     /**
      * 添加用户
+     *
      * @param user
      * @return
      */
@@ -107,12 +108,20 @@ public interface SystemClient {
 
     /**
      * 根据用户ID或者账号，更新用户信息
+     *
      * @param user
      * @return
      */
     @RequestMapping(value = "/api/system/updateSysUser", method = RequestMethod.POST)
     Result updateSysUser(@RequestBody User user);
 
-
-
+    /**
+     * 根据部门id获取当前部门及所有子部门信息
+     *
+     * @param id   部门id
+     * @param flag true 表示获取所有子部门，false表示只获取当前部门
+     * @return
+     */
+    @RequestMapping(value = "/api/system/selectDeptByKey", method = RequestMethod.POST)
+    Result selectDeptByKey(@RequestParam("id")String id,@RequestParam("flag")Boolean flag);
 }

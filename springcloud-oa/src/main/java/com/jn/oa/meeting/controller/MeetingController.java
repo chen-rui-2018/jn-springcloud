@@ -55,6 +55,7 @@ public class MeetingController extends BaseController {
         return new Result(data);
     }
 
+
     @ControllerLog(doAction = "新增会议申请")
     @ApiOperation(value = "新增会议申请", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")

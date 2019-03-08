@@ -14,7 +14,10 @@ public enum OaExceptionEnums implements CodeAndMsg {
     ADDERR_NAME_EXIST("1100501","添加失败,名称已存在"),
     UPDATEERR_NAME_EXIST("1100502", "修改失败,名称已存在"),
     UPDATEDATA_NOT_EXIST("1100503","修改失败,修改信息不存在"),
-    CTEATE_QRCODE_FAIL("1100504", "生成二维码失败");
+    CTEATE_QRCODE_FAIL("1100504", "生成二维码失败"),
+    ADD_MEETINGROOM_CONFLICT("1100505","添加失败,会议室冲突"),
+    UPDATE_MEETINGROOM_CONFLICT("1100506","修改失败,会议室冲突"),
+    ;
 
     private String code;
     private String message;

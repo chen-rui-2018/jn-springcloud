@@ -45,7 +45,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "查询会议室列表")
     @ApiOperation(value = "查询会议室列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/list")
-    @RequiresPermissions("/oa/meetingRoom/list")
+    @RequiresPermissions("/oa/oaMeetingRoom/list")
     public Result list(@Validated @RequestBody OaMeetingRoomPage oaMeetingRoomPage) {
         PaginationData data = meetingRoomService.selectOaMeetingRoomListBySearchKey(oaMeetingRoomPage);
         return new Result(data);
@@ -54,7 +54,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "查询会议室预约列表")
     @ApiOperation(value = "查询会议室预约列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/orderList")
-    @RequiresPermissions("/oa/meetingRoom/orderList")
+    @RequiresPermissions("/oa/oaMeetingRoom/orderList")
     public Result orderList(@Validated @RequestBody OaMeetingRoomOrderPage oaMeetingRoomOrderPage) {
         PaginationData data = meetingRoomService.selectMeetingRoomAndMeetingOrder(oaMeetingRoomOrderPage);
         return new Result(data);
@@ -62,8 +62,10 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "查询会议室可用列表")
     @ApiOperation(value = "查询会议室可用列表", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/availableList")
-    @RequiresPermissions("/oa/meetingRoom/availableList")
+    @RequiresPermissions("/oa/oaMeetingRoom/availableList")
     public Result availableList(@Validated @RequestBody OaMeetingRoomPage oaMeetingRoomPage) {
+        Assert.notNull(oaMeetingRoomPage.getStartTime(), "会议开始时间不能为空");
+        Assert.notNull(oaMeetingRoomPage.getEndTime(), "会议结束时间不能为空");
         PaginationData data = meetingRoomService.selectAvailableMeetingRoomList(oaMeetingRoomPage);
         return new Result(data);
     }
@@ -73,7 +75,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "新增会议室")
     @ApiOperation(value = "新增会议室", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
-    @RequiresPermissions("/oa/meetingRoom/add")
+    @RequiresPermissions("/oa/oaMeetingRoom/add")
     public Result add(@Validated @RequestBody OaMeetingRoomAdd oaMeetingRoomAdd ) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -90,7 +92,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "修改会议室")
     @ApiOperation(value = "修改会议室", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/update")
-    @RequiresPermissions("/oa/meetingRoom/update")
+    @RequiresPermissions("/oa/oaMeetingRoom/update")
     public Result update(@Validated @RequestBody OaMeetingRoomAdd oaMeetingRoomAdd) {
         Assert.notNull(oaMeetingRoomAdd.getId(), "会议室ID不能为空");
         //获取当前登录用户信息
@@ -102,7 +104,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "批量删除会议室")
     @ApiOperation(value = "批量删除会议室", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/delete")
-    @RequiresPermissions("/oa/meetingRoom/delete")
+    @RequiresPermissions("/oa/oaMeetingRoom/delete")
     public Result delete(String[] ids) {
         Assert.noNullElements(ids, "会议室ID不能为空");
         //获取当前登录用户信息
@@ -114,7 +116,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "根据ID查询会议室")
     @ApiOperation(value = "根据ID查询会议室", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectById")
-    @RequiresPermissions("/oa/meetingRoom/selectById")
+    @RequiresPermissions("/oa/oaMeetingRoom/selectById")
     public Result selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议室ID不能为空");
         OaMeetingRoomVo oaMeetingRoomVo = meetingRoomService.selectOaMeetingRoomByIds(id);
@@ -124,7 +126,7 @@ public class MeetingRoomController extends BaseController {
     @ControllerLog(doAction = "校验会议室名称是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验会议室名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/checkName")
-    @RequiresPermissions("/oa/meetingRoom/checkName")
+    @RequiresPermissions("/oa/oaMeetingRoom/checkName")
     public Result checkName(String meetingRoomName) {
         String result = meetingRoomService.checkMeetingRoomName(meetingRoomName);
         return new Result(result);

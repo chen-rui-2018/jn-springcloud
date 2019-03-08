@@ -1,4 +1,4 @@
-package com.jn.server;
+package com.jn.oa.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jn.common.controller.BaseController;

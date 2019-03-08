@@ -59,6 +59,42 @@
 
 
     </resultMap>
+
+    <resultMap id="MeetingNoticeBaseResultMap" type="com.jn.oa.meeting.model.OaMeetingNotice">
+        <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="applicantPhone" jdbcType="VARCHAR" property="applicantPhone" />
+        <result column="applicantWechatAccount" jdbcType="VARCHAR" property="applicantWechatAccount" />
+        <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+    </resultMap>
+    <resultMap id="TbOaMeetingBaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
+        <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_work_order_num" jdbcType="VARCHAR" property="workOrderNum" />
+        <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="meeting_meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
+        <result column="meeting_approval_status" jdbcType="VARCHAR" property="approvalStatus" />
+        <result column="meeting_record_status" jdbcType="TINYINT" property="recordStatus" />
+        <result column="meeting_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="meeting_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="meeting_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="meeting_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="meeting_user_id_str" jdbcType="VARCHAR" property="userIdStr" />
+        <result column="meeting_applicant" jdbcType="VARCHAR" property="applicant" />
+        <result column="meeting_application_time" jdbcType="TIMESTAMP" property="applicationTime" />
+        <result column="meeting_sign_in_QR" jdbcType="VARCHAR" property="signInQr" />
+        <result column="meeting_wechat_remind" jdbcType="VARCHAR" property="wechatRemind" />
+        <result column="meeting_message_remind" jdbcType="VARCHAR" property="messageRemind" />
+        <result column="meeting_pc_remind" jdbcType="VARCHAR" property="pcRemind" />
+        <result column="meeting_app_remind" jdbcType="VARCHAR" property="appRemind" />
+        <result column="meeting_is_remind" jdbcType="VARCHAR" property="isRemind" />
+        <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+        <result column="meeting_approval_role" jdbcType="VARCHAR" property="approvalRole" />
+        <result column="meeting_approval_user" jdbcType="VARCHAR" property="approvalUser" />
+        <result column="meeting_approval_opinion" jdbcType="VARCHAR" property="approvalOpinion" />
+        <result column="meeting_meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
+    </resultMap>
+
+
     <resultMap id="SelectBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingParticipantVo">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
         <result column="meeting_work_order_num" jdbcType="VARCHAR" property="workOrderNum" />
@@ -121,6 +157,20 @@
         </collection>
     </resultMap>
 
+    <sql id="Meeting_Column_List">
+    meeting.id as meeting_id, meeting.work_order_num as meeting_work_order_num, meeting.start_time as meeting_start_time,
+    meeting.end_time as meeting_end_time, meeting.meeting_room_id as meeting_meeting_room_id,
+    meeting.approval_status as meeting_approval_status, meeting.record_status as meeting_record_status,
+    meeting.creator_account as meeting_creator_account, meeting.created_time as meeting_created_time,
+    meeting.modifier_account as meeting_modifier_account, meeting.modified_time as meeting_modified_time,
+    meeting.user_id_str as meeting_user_id_str, meeting.applicant as meeting_applicant,
+    meeting.application_time as meeting_application_time, meeting.sign_in_QR as meeting_sign_in_QR,
+    meeting.wechat_remind as meeting_wechat_remind, meeting.message_remind as meeting_message_remind,
+    meeting.pc_remind as meeting_pc_remind, meeting.app_remind as meeting_app_remind,
+    meeting.is_remind as meeting_is_remind, meeting.title as meeting_title, meeting.approval_role as meeting_approval_role,
+    meeting.approval_user as meeting_approval_user, meeting.approval_opinion as meeting_approval_opinion,
+    meeting.meeting_status as meeting_meeting_status
+  </sql>
     <sql id="Base_Column_List">
     	meeting.id AS meeting_id,
 	meeting.work_order_num AS meeting_work_order_num,
@@ -177,15 +227,47 @@
             #{id}
         </foreach>
     </update>
-    <update id="updateMeetingStatusByTime">
-         update tb_oa_meeting
+    <update id="updateMeetingRunningStatusByTime">
+        update tb_oa_meeting
         set
         meeting_status = 1,
         modified_time = now()
         where
-				meeting_status !=3
-				and approval_status=2
-				and start_time <![CDATA[<=]]>#{meetingStartTime}
+        id in (
+
+        select t.id		from
+        (
+        SELECT
+        round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
+        meeting.id
+        FROM
+        tb_oa_meeting meeting
+        WHERE
+        meeting.meeting_status =0
+
+        )t where  <![CDATA[ t.sub_time<=1 ]]>  )
+
+    </update>
+    <update id="updateMeetingCompleteStatusByTime">
+        update tb_oa_meeting
+        set
+        meeting_status =2,
+        modified_time = now()
+        where
+        id in (
+
+        select t.id		from
+        (
+        SELECT
+        round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
+        meeting.id
+        FROM
+        tb_oa_meeting meeting
+        WHERE
+        meeting.meeting_status =1
+
+        )t where  <![CDATA[  t.sub_time>=0 and t.sub_time<=10]]>  )
+
     </update>
 
     <select id="selectMeetingListByCondition" resultMap="BaseResultMap" parameterType="com.jn.oa.meeting.model.OaMeetingPage">
@@ -251,11 +333,9 @@
             and meeting.meeting_status = #{meetingStatus,jdbcType=VARCHAR}
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
-            and meetingroom.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
+            and meeting.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
         </if>
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
-            and meetingroom.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
-        </if>
+
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomName)">
             and meetingroom.name like CONCAT('%', #{meetingRoomName,jdbcType=VARCHAR}, '%')
         </if>
@@ -263,11 +343,15 @@
             and  u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
         </if>
 
-
         <if test="startTime != null">AND  Date(meeting.start_time) <![CDATA[>=]]> #{startTime}</if>
         <if test="endTime != null">AND Date(meeting.end_time)<![CDATA[<=]]>#{endTime}</if>
 
+        <if test="currentTime != null">AND  meeting.start_time <![CDATA[>=]]> #{currentTime} and  Date(meeting.start_time) <![CDATA[=]]> DATE_FORMAT(#{currentTime},'%Y-%m-%d')</if>
+
         ORDER BY
+        <if test="currentTime != null">
+        meeting.start_time asc ,
+        </if>
         meeting.created_time DESC,
         meeting.id DESC
     </select>
@@ -384,19 +468,75 @@
          and meeting.id=#{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectParticipantById" resultType="com.jn.oa.meeting.entity.TbOaMeetingParticipants" parameterType="java.lang.String" >
+    <select id="selectParticipantById" resultType="com.jn.oa.meeting.vo.OaParticipantVo" parameterType="java.lang.String" >
 
 
-         SELECT
+          SELECT
         meetingparticipants.id AS id,
         meetingparticipants.meeting_id AS meetingId,
         meetingparticipants.meeting_user_id AS meetingUserId,
-        meetingparticipants.attendance_status AS attendanceStatus
+        meetingparticipants.attendance_status AS attendanceStatus,
+				u.name as userName,
+				u.account
         FROM
         tb_oa_meeting_participants meetingparticipants
+
+				 LEFT JOIN (
+        SELECT
+        t.id,
+        t.NAME,
+        t.account
+
+        FROM
+        tb_sys_user t where t.record_status=1 )u on u.id =meetingparticipants.meeting_user_id
         WHERE
         meetingparticipants.record_status != 0
 
         and meetingparticipants.meeting_id=#{id}
     </select>
+
+    <select id="selectNotCompleteMeetingByTimeAndMeetingRoomId" resultMap="TbOaMeetingBaseResultMap" parameterType="com.jn.oa.meeting.entity.TbOaMeeting">
+        select
+       <include refid="Meeting_Column_List"/>
+        FROM
+        tb_oa_meeting meeting
+
+        where ( meeting.meeting_status =0 or meeting.meeting_status =1)
+
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            and meeting.meeting_room_id =#{meetingRoomId,jdbcType=VARCHAR}
+        </if>
+        <if test="startTime != null and endTime != null">
+
+            AND  <![CDATA[
+        	(
+                (meeting.start_time <=#{startTime}and #{startTime}<=meeting.end_time)
+                or
+                 (meeting.start_time <=#{endTime}and #{endTime}<=meeting.end_time)
+        	 )
+
+        ]]>
+
+        </if>
+    </select>
+
+    <select id="noticesApplicationMeeting" resultMap="MeetingNoticeBaseResultMap">
+        select
+             meeting.id AS meeting_id,
+          tt.phone as applicantPhone,
+            tt.wechat_account as applicantWechatAccount,
+            meeting.title AS meeting_title
+         from
+        (
+        SELECT
+        round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
+        meeting.start_time
+        FROM
+        tb_oa_meeting meeting
+        WHERE
+         meeting.meeting_status=0
+        ) t where <![CDATA[  t.sub_time>=0 and t.sub_time<=10  ]]>
+    </select>
+
+    
 </mapper>

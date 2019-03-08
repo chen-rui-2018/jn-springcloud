@@ -1,4 +1,4 @@
-package com.jn.server;
+package com.jn.oa.api;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;

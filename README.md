@@ -97,7 +97,7 @@
 ### 7.开发其他规范
 - Controller 返回的统一使用Result<T> 类 返回
 - 对象的参数校验，代码实现的：统一使用Assert 断言来判断，统一在controller层实现(eg:com.jn.controller.UploadController.upload)
-- 业务校验统一使用抛异常JnSpringCloudException来实现（eg：com.jn.server.SystemController.getUser）
+- 业务校验统一使用抛异常JnSpringCloudException来实现（eg：SystemController.getUser）
 - controller层，不需要捕获任何的异常,已经有统一地方进行了处理
 - controller层，都需要继承BaseController，用于统一处理参数
 - 不允许使用SimpleDateFormate 类，请使用com.jn.common.util.DateUtils

@@ -1,7 +1,9 @@
 package com.jn.oa.meeting.seivice;
 
+import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.news.vo.SmsTemplateVo;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.enums.OaMeetingApproveStatusEnums;
 import com.jn.oa.meeting.model.*;
@@ -16,6 +18,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -46,6 +49,10 @@ public class OaMeetingServiceTest {
     private static OaMeetingAdd oaMeetingAdd;
 
     private static OaMeetingApprove oaMeetingApprove;
+
+   /* @Autowired
+    private MessageSource messageSource;*/
+
 
     @BeforeClass
     public static void init() {
@@ -136,4 +143,16 @@ public class OaMeetingServiceTest {
     public void finishTest() {
         meetingService.finishOaMeeting(meetingId,user);
     }
+
+ /*   @Test
+    public void sendMessage() {
+        SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
+        smsTemplateVo.setTemplateId("1001");
+        String[] m = {"18312736252"};
+        smsTemplateVo.setMobiles(m);
+        String[] t = {"12345666"};
+        smsTemplateVo.setContents(t);
+        messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
+    }*/
+
 }

@@ -10,6 +10,8 @@ import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
 import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 /**
  * 会议service
  * @author： yuanyy
@@ -25,6 +27,14 @@ public interface MeetingService {
      * @return
      */
     PaginationData selectOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage,User user);
+
+    /**
+     * 查询展示会议申请
+     * @param oaMeetingPage
+     * @param
+     * @return
+     */
+    List<OaMeetingVo> selectShowOaMeetingListBySearchKey(OaMeetingPage oaMeetingPage);
 
     /**
      * 新增会议
@@ -83,6 +93,19 @@ public interface MeetingService {
      * @param user
      */
     void cancelOaMeeting(String meetingId,User user);
+
+
+    /**
+     * 定时十分钟通知会议申请人
+     */
+    void  noticesApplicationMeeting();
+
+
+
+    /**
+     * 更新会议状态：进行中、已完成
+     */
+    void updateMeetingStatusByTime();
 
 
 }

@@ -238,8 +238,19 @@ FROM
         tb_oa_meeting meeting
 
         where ( meeting.meeting_status =0 or meeting.meeting_status =1)
-        <if test="startTime != null">AND  meeting.start_time <![CDATA[>=]]> #{startTime}</if>
-        <if test="endTime != null">AND meeting.end_time<![CDATA[<=]]>#{endTime}</if>
+
+        <if test="startTime != null and endTime != null">
+
+        AND  <![CDATA[
+        	(
+                (meeting.start_time <=#{startTime}and #{startTime}<=meeting.end_time)
+                or
+                 (meeting.start_time <=#{endTime}and #{endTime}<=meeting.end_time)
+        	 )
+
+        ]]>
+
+        </if>
 
         )m
         ) and meetingroom.record_status!=0
@@ -265,6 +276,8 @@ FROM
 
 
     </select>
+
+
 
 
 </mapper>

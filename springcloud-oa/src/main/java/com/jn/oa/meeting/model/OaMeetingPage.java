@@ -40,6 +40,11 @@ public class OaMeetingPage extends Page implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date endTime;
 
+    @ApiModelProperty(value = "当前时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date currentTime;
+
     @ApiModelProperty(value = "会议室id")
     private String meetingRoomId;
 
@@ -64,6 +69,14 @@ public class OaMeetingPage extends Page implements Serializable {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    public Date getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(Date currentTime) {
+        this.currentTime = currentTime;
     }
 
     public String getMeetingRoomName() {

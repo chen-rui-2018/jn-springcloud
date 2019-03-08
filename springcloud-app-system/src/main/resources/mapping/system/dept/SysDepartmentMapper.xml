@@ -48,7 +48,8 @@
             (SELECT
             department_name
             FROM tb_sys_department
-            where id = t.parent_id) as parentName
+            where id = t.parent_id) as parentName,
+            `level`
             FROM
             `tb_sys_department` t
             where parent_id = #{id,jdbcType=VARCHAR}
@@ -70,5 +71,41 @@
 
     <select id="getDepartmentIds" resultType="java.lang.String">
         SELECT queryChildrenSysDepartmentInfo(#{id,jdbcType=VARCHAR}) <!--queryChildrenSysDepartmentInfo部门节点向下递归函数-->
+    </select>
+
+    <sql id="base_dept_columns">
+         id,
+         department_name as departmentName,
+         parent_id as parentId,
+         `level`,
+         created_time as createdTime
+    </sql>
+
+    <select id="selectByPrimaryKey" resultType="com.jn.system.dept.vo.SysDepartmentVO" parameterType="java.lang.String">
+        SELECT
+        <include refid="base_dept_columns"/>
+        FROM
+        `tb_sys_department` t
+        where id = #{id,jdbcType=VARCHAR}
+        and `record_status` = 1
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.jn.system.dept.vo.SysDepartmentVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="value" jdbcType="VARCHAR" property="value" javaType="java.lang.String"/>
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" javaType="java.lang.String"/>
+        <result column="label" jdbcType="VARCHAR" property="label" javaType="java.lang.String"/>
+        <result column="parentId" jdbcType="VARCHAR" property="parentId" javaType="java.lang.String"/>
+        <result column="level" jdbcType="VARCHAR" property="level" javaType="java.lang.String"/>
+        <collection property="children" ofType="com.jn.system.dept.vo.SysDepartmentVO"
+                    select="com.jn.system.dept.dao.SysDepartmentMapper.getChildDept" column="id"></collection>
+    </resultMap>
+    <select id="getChildDept" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="base_dept_columns"/>
+        FROM
+        `tb_sys_department` t
+        where parent_id = #{id,jdbcType=VARCHAR}
+        and `record_status` = 1
     </select>
 </mapper>

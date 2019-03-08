@@ -47,20 +47,22 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
     private SysDepartmentMapper sysDepartmentMapper;
 
     /**
-     * 根据部门id获取部门信息
+     * 根据部门id获取部门信息及所有子部门信息
      *
      * @param id
      * @return
      */
     @Override
     @ServiceLog(doAction = "根据部门id获取部门信息")
-    public SysDepartment selectByPrimaryKey(String id) {
-        TbSysDepartment tbSysDepartment = tbSysDepartmentMapper.selectByPrimaryKey(id);
-        SysDepartment sysDepartment = new SysDepartment();
-        if (tbSysDepartment != null) {
-            BeanUtils.copyProperties(tbSysDepartment, sysDepartment);
+    public SysDepartmentVO selectDeptByKey(String id,Boolean flag) {
+        SysDepartmentVO sysDepartmentVO = sysDepartmentMapper.selectByPrimaryKey(id);
+        if (flag){
+            if (sysDepartmentVO != null){
+                List<SysDepartmentVO> children = sysDepartmentMapper.getChildDept(id);
+                sysDepartmentVO.setChildren(children);
+            }
         }
-        return sysDepartment;
+        return sysDepartmentVO;
     }
 
     /**

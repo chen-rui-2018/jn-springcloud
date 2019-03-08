@@ -7,6 +7,8 @@ import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.dept.service.SysDepartmentService;
+import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -57,6 +59,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysFileGroupService sysFileGroupService;
+
+    @Autowired
+    private SysDepartmentService sysDepartmentService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -131,6 +136,13 @@ public class SystemController extends BaseController implements SystemClient {
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
         return new Result();
+    }
+
+    @Override
+    @ControllerLog(doAction = "根据部门id获取当前部门及所有子部门信息")
+    public Result selectDeptByKey(@RequestParam("id")String id,@RequestParam("flag")Boolean flag) {
+        SysDepartmentVO sysDepartmentVO = sysDepartmentService.selectDeptByKey(id,flag);
+        return new Result(sysDepartmentVO);
     }
 
     @Override

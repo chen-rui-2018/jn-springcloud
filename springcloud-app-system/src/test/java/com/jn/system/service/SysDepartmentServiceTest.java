@@ -76,7 +76,7 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void selectByPrimaryKeyTest() {
-        SysDepartment data = sysDepartmentService.selectByPrimaryKey(departmenId);
+        SysDepartmentVO data = sysDepartmentService.selectDeptByKey(departmenId,false);
         Assert.assertThat(data, Matchers.anything());
     }
 
@@ -89,7 +89,7 @@ public class SysDepartmentServiceTest {
         SysDepartment.setDepartmentName(departmentName);
         SysDepartment.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         try {
-            sysDepartmentService.update(SysDepartment,user);
+            sysDepartmentService.update(SysDepartment, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -121,7 +121,7 @@ public class SysDepartmentServiceTest {
         department.setParentId(SysLevelEnums.FIRST_LEVEL.getCode());
         list.add(department);
         try {
-            sysDepartmentService.addDepartmentBatch(list,user);
+            sysDepartmentService.addDepartmentBatch(list, user);
         } catch (JnSpringCloudException e) {
             Assert.assertThat(e, Matchers.anything());
         }
@@ -136,6 +136,6 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void zDeleteTest() {
-        sysDepartmentService.delete(departmenId,user);
+        sysDepartmentService.delete(departmenId, user);
     }
 }

@@ -47,4 +47,20 @@ public interface SysDepartmentMapper {
      * @return
      */
     String getDepartmentIds(String id);
+
+    /**
+     * 根据部门id获取部门信息
+     *
+     * @param id 部门id
+     * @return
+     */
+    SysDepartmentVO selectByPrimaryKey(String id);
+
+    /**
+     * 获取部门的所有子部门信息
+     *
+     * @param id 部门id
+     * @return
+     */
+    List<SysDepartmentVO> getChildDept(String id);
 }

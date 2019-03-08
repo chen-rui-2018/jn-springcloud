@@ -59,7 +59,7 @@
         </ul>
       </div>
     </div>
-    <div class="table">
+    <div v-if="errorTime" class="table">
       <el-table :data="rowTableData" :span-method="arraySpanMethod">
         <el-table-column label="会议室" align="center">
           <el-table-column type="index" label="序号" align="center" />
@@ -156,9 +156,12 @@
           </el-table-column>
         </el-table-column>
       </el-table>
+      <div class="pagination-container">
+        <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+      </div>
     </div>
-  </div>
-</template>
+    <div v-if="!errorTime" class="errorStyle">{{ errorText }}</div>
+</div></template>
 
 <script>
 import { api } from '@/api/oa/meetingManagement'
@@ -176,13 +179,15 @@ export default {
     },
     'meeting-div2': { // 会议组件
       props: ['postTitle'],
-      template: '<div class="" >{{postTitle}}</div>',
+      template: '<div class="textBgc" >{{postTitle}}</div>',
       methods: {
       }
     }},
 
   data() {
     return {
+      errorTime: true,
+      errorText: '',
       downData: [
         '13:30',
         '14:00',
@@ -374,32 +379,35 @@ export default {
       }
       var selectDay = new Date(this.params.selectDay)
       var today_time = new Date().getTime()
-      // alert(today_time)
-      // alert(selectDay)
-      // alert(today_time - selectDay)
       var time = (today_time - selectDay) / 1000 / 60 / 60 / 24
       if (time > 1) {
         alert('对不起,您不能预约当前日期之前的会议,请重新选择')
+        this.errorTime = false
+        this.errorText = '对不起,您不能预约当前日期之前的会议,请重新选择'
         return
-      } else if (time < -3) {
+      } else if (time < -2) {
         alert('对不起,您只能预约3天之内的会议,请重新选择')
+        this.errorTime = false
+        this.errorText = '对不起,您只能预约3天之内的会议,请重新选择'
         return
+      } else {
+        this.errorTime = true
       }
       this.listQuery.meetingStartTime = this.params.selectDay
       this.initList()
     },
-    handle16(row) {
-      var currentTime = this.listQuery.meetingStartTime + '\xa0' + '18:00:00'
-      this.$router.push({
-        name: 'meetingApplication',
-        query: {
-          title: '会议申请',
-          meetId: row.id,
-          name: row.name,
-          currentTime: currentTime
-        }
-      })
-    },
+    // handle16(row) {
+    //   var currentTime = this.listQuery.meetingStartTime + '\xa0' + '18:00:00'
+    //   this.$router.push({
+    //     name: 'meetingApplication',
+    //     query: {
+    //       title: '会议申请',
+    //       meetId: row.id,
+    //       name: row.name,
+    //       currentTime: currentTime
+    //     }
+    //   })
+    // },
 
     // 页面初始化
     initList() {
@@ -449,17 +457,22 @@ export default {
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
       // 会议预约
-      console.log(id)
-      console.log(title)
-      console.log(time)
-      var currentTime = this.listQuery.meetingStartTime + '\xa0' + time + ':00'
+      time.substring(0, 1)
+      if (time.substring(0, 1) !== 1) {
+        if (time.substring(0, 1) < 10) {
+          time = '0' + time
+        }
+      }
+      // var currentTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
+      // console.log(currentTime)
       this.$router.push({
         name: 'meetingApplication',
         query: {
           title: '会议申请',
           meetId: id,
           name: title,
-          currentTime: currentTime
+          currentTime: time,
+          currentDate: this.listQuery.meetingStartTime
         }
       })
     },
@@ -567,10 +580,18 @@ export default {
           _arr.push(obj)
         }
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
-          console.log(arr_data[i].meetingList[k])
+          console.log(arr_data[i].meetingList[k].startTime)
+          const m = new Date(arr_data[i].meetingList[k].startTime).getMinutes() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].startTime).getMinutes()) : new Date(arr_data[i].meetingList[k].startTime).getMinutes()
+          const h = new Date(arr_data[i].meetingList[k].startTime).getHours() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].startTime).getHours()) : new Date(arr_data[i].meetingList[k].startTime).getHours()
+          const sd = h + ':' + m
+          console.log(sd)
+          const em = new Date(arr_data[i].meetingList[k].endTime).getMinutes() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].endTime).getMinutes()) : new Date(arr_data[i].meetingList[k].endTime).getMinutes()
+          const eh = new Date(arr_data[i].meetingList[k].endTime).getHours() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].endTime).getHours()) : new Date(arr_data[i].meetingList[k].endTime).getHours()
+          const ed = eh + ':' + em
+          console.log(ed)
           var get_arr = this.calTdMerge(
-            arr_data[i].meetingList[k].startTime,
-            arr_data[i].meetingList[k].endTime
+            sd,
+            ed
           )
           for (var l = 0; l < get_arr.length; l++) {
             var _index = get_arr[l]
@@ -641,7 +662,7 @@ export default {
       cursor: pointer;
     }
     .textBgc {
-      background-color: rgb(0, 176, 240);
+      color: rgb(0, 176, 240);
     }
     .el-pagination {
       margin-top: 15px;
@@ -704,5 +725,9 @@ export default {
       padding-inline-start: 0px;
     }
   }
+}
+.errorStyle{
+  line-height: 392px;
+  margin:0 auto;
 }
 </style>

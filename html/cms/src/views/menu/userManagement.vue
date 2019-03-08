@@ -334,15 +334,15 @@ export default {
       }],
       positionOptions: [],
       temp: {
-        name: undefined,
-        account: undefined,
+        name: '',
+        account: '',
         recordStatus: '',
-        email: undefined,
-        phone: undefined,
-        id: undefined,
-        departmentId: undefined,
-        postId: undefined,
-        wechatAccount: undefined
+        email: '',
+        phone: '',
+        id: '',
+        departmentId: '',
+        postId: '',
+        wechatAccount: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -448,47 +448,8 @@ export default {
     // 导出功能
     handleExcel() {
       exportExcel(this.listQuery).then(res => {
-        // console.log(res.request.responseURL)
-        // window.location.href = res.request.responseURL
-        const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob)
-        downloadElement.href = href
-        downloadElement.download = 'rate.xlsx'
-        document.body.appendChild(downloadElement)
-        downloadElement.click()
-        document.body.removeChild(downloadElement) // 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        window.location.href = res.request.responseURL
       })
-      // exportExcel(this.listQuery).then((res) => {
-      //   console.log(res)
-      //   const link = document.createElement('a')
-      //   const blob = new Blob([res.data])
-      //   link.style.display = 'none'
-      //   link.href = URL.createObjectURL(blob)
-      //   const objectUrl = URL.createObjectURL(blob)
-      //   window.location.herf = objectUrl
-      //   let num = ''
-      //   for (let i = 0; i < 10; i++) {
-      //     num += Math.ceil(Math.random() * 10)
-      //   }
-      //   link.setAttribute('download', '用户_' + num + '.xlsx')
-      //   document.body.appendChild(link)
-      //   link.click()
-      //   document.body.removeChild(link)
-      // }).catch(error => {
-      //   this.$Notice.error({
-      //     title: '错误',
-      //     desc: '网络连接错误'
-      //   })
-      //   console.log(error)
-      // })
-      // exportExcel().then(res => {
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // })
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
-      //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
     },
     // 选择部门（新增用户对话框）
     handleChangeDepartment(value) {

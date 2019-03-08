@@ -6,22 +6,24 @@
           <el-form-item label="会议主题" prop="title" class="inline">
             <el-input v-model="meetingForm.title" :disabled="lookMeetingroom" placeholder="请输入内容" clearable />
           </el-form-item>
-          <el-form-item label="会议时间:" prop="meetingTime">
-            <!-- <el-date-picker
+          <el-form-item label="会议日期:" prop="meetingTime">
+            <el-date-picker
+              :disabled="lookMeetingroom"
               v-model="startDate"
               value-format="yyyy-MM-dd"
               type="date"
-              placeholder="选择日期"/> -->
-            <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间"/>
+              placeholder="选择日期"/>
+              <!-- <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间"/>
             至
-            <el-date-picker v-model="meetingForm.endTime" :disabled="lookMeetingroom" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" />
+            <el-date-picker v-model="meetingForm.endTime" :disabled="lookMeetingroom" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" /> -->
           <!-- </el-form-item> -->
           </el-form-item>
         </div>
-        <!-- <div style="display:flex">
+        <div style="display:flex">
           <el-form-item label="开始时间" class="inline">
             <el-time-select
-              v-model="meetingForm.startTime"
+              :disabled="lookMeetingroom"
+              v-model="startTime"
               :picker-options="{
                 start: '09:00',
                 step: '00:30',
@@ -31,16 +33,17 @@
           </el-form-item>
           <el-form-item label="结束时间" class="inline">
             <el-time-select
-              v-model="meetingForm.endTime"
+              :disabled="lookMeetingroom"
+              v-model="endTime"
               :picker-options="{
                 start: '09:00',
                 step: '00:30',
                 end: '18:00',
-                minTime: meetingForm.startTime
+                minTime: startTime
               }"
               placeholder="结束时间"/>
           </el-form-item>
-        </div> -->
+        </div>
         <div style="display:flex">
           <el-form-item label="预约部门" class="inline">
             <span> {{ department }} </span>
@@ -51,7 +54,7 @@
         </div>
         <div style="display:flex">
           <el-form-item label="会议室" prop="meetingRoomId" class="inline">
-            <el-input v-model="meetingroomName" :disabled="lookMeetingroom" clearable placeholder="请选择会议室" @click.native="showMeetingroom()"/>
+            <el-input v-model="meetingroomName" :disabled="lookMeetingroom" placeholder="请选择会议室" @click.native="showMeetingroom()"/>
           </el-form-item>
           <el-form-item label="参与人员" prop="participantsId">
             <el-select v-model="meetingForm.participantsId" :disabled="lookMeetingroom" multiple placeholder="请选择参与人员" style="width:100%">
@@ -60,14 +63,11 @@
                 :key="item.value"
                 :label="item.label"
                 :value="item.value"/>
-                <!-- <el-input v-model="meetingForm.participantsId" :disabled="lookMeetingroom" clearable placeholder="请输入内容" /> -->
           </el-select></el-form-item>
         </div>
 
         <el-form-item label="会议内容" prop="oaMeetingContent" class="inline ueditor">
-          <div class="editor-container">
-            <UE ref="ue" :default-msg="defaultMsg" :disabled="lookMeetingroom" :config="config" />
-          </div>
+          <el-input v-model="meetingForm.oaMeetingContent" type="textarea"/>
         </el-form-item>
       </el-form>
       <div class="primaryList">
@@ -79,14 +79,7 @@
     <template v-if="dialogFormVisible">
       <el-dialog :visible.sync="dialogFormVisible" class="lookMeetingroom">
         <el-form :inline="true" class="filter-bar">
-          <!-- <el-form-item label="会议时间:">
-            <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间" />
-            至
-            <el-date-picker v-model="listQuery.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" />
-          </el-form-item> -->
-          <!-- <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button> -->
           <div class="usableMeetingroom">可预约的会议室</div>
-
           <div class="meetingroomList">
             <div v-for="(item,idx) in meetingroomList" :key="idx" :class="{'active':idx==index}" @click="checkMeetingroom(item,idx)">
               <img :src="item.attachmentPaths[0]?item.attachmentPaths[0]:'/static/images/meetingroom.jpg'" alt="会议室图片">
@@ -106,14 +99,10 @@
 </template>
 
 <script>
-import UE from '../../../components/ue.vue'
 import {
   paramApi, api, userAllList, getUserInfo
 } from '@/api/oa/meetingManagement'
 export default {
-  components: {
-    UE
-  },
   data() {
     var checkBuilding = (rule, value, callback) => {
       const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
@@ -124,25 +113,8 @@ export default {
       }
     }
     return {
-      // pickerOptionsStart: {
-      //   disabledDate: time => {
-      //     const endDateVal = this.meetingForm.endTime
-      //     if (endDateVal) {
-      //       return time.getTime() > new Date(endDateVal).getTime()
-      //     }
-      //   }
-      // },
-      // pickerOptionsEnd: {
-      //   disabledDate: time => {
-      //     const beginDateVal = this.meetingForm.startTime
-      //     if (beginDateVal) {
-      //       return (
-      //         time.getTime() <
-      //                           new Date(beginDateVal).getTime()
-      //       )
-      //     }
-      //   }
-      // },
+      startTime: '',
+      endTime: '',
       department: '',
       userName: '',
       oldMeetingTitle: '',
@@ -160,7 +132,6 @@ export default {
       participantsIdOptions: [],
       lookMeetingroom: false,
       isShow: false,
-      defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 200,
@@ -173,7 +144,7 @@ export default {
         startTime: '',
         endTime: ''
       },
-      // startDate: '',
+      startDate: '',
       meetingForm: {
         title: '',
         participantsId: [],
@@ -183,15 +154,12 @@ export default {
         oaMeetingContent: '',
         id: ''
       },
-      // userStatusOptions: ['会议室1', '会议室2']
       rules: {
         title: [
           { required: true, message: '请输入会议主题', trigger: 'blur' },
           { validator: checkBuilding, trigger: 'blur' }
         ],
         meetingRoomId: [{ required: true, message: '请选择会议室', trigger: 'change' }],
-        // participantsId: [{ required: true, message: '请选择参会人员', trigger: 'change' }],
-        // meetingTime: [{ required: true, message: '请选择会议时间', trigger: 'bulr' }],
         oaMeetingContent: [{ required: true, message: '请输入会议内容', trigger: 'blur' }]
       }
 
@@ -209,9 +177,10 @@ export default {
         this.meetingForm.title = ''
         this.meetingroomName = ''
         this.meetingroomForm.meetingroomId = ''
-        this.meetingForm.participantsId = ''
+        this.meetingForm.participantsId = []
         this.meetingForm.startTime = ''
         this.meetingForm.endTime = ''
+        this.endTime = ''
         this.meetingForm.oaMeetingContent = ''
         this.$nextTick(() => {
           this.$refs['meetingForm'].clearValidate()
@@ -287,18 +256,26 @@ export default {
     },
     // 跳出弹框选择会议室
     showMeetingroom() {
-      this.dialogFormVisible = true
-      this.index = 0
-      // 调用接口发送请求
-      this.listQuery.startTime = this.meetingForm.startTime
-      this.listQuery.endTime = this.meetingForm.endTime
-      api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
-          this.meetingroomList = res.data.data.rows
-        } else {
-          this.$message.error(res.data.result)
+      if (this.dialogStatus !== '查看会议') {
+        if (!this.endTime) {
+          alert('请先选择会议结束时间')
+          return false
         }
-      })
+        this.dialogFormVisible = true
+        this.index = 0
+        // 调用接口发送请求
+        this.listQuery.startTime = this.startDate + ' ' + this.startTime + ':00'
+        if (this.endTime) {
+          this.listQuery.endTime = this.startDate + ' ' + this.endTime + ':00'
+        }
+        api('oa/oaMeetingRoom/availableList', this.listQuery).then(res => {
+          if (res.data.code === '0000') {
+            this.meetingroomList = res.data.data.rows
+          } else {
+            this.$message.error(res.data.result)
+          }
+        })
+      }
     },
     // 弹出的选择会议室对话框的查询条件
     handleFilter() {
@@ -312,73 +289,93 @@ export default {
     },
     // 编辑会议申请
     updateData() {
-      this.meetingForm.oaMeetingContent = this.$refs.ue.getUEContent()
       this.isDisabled = true
-      this.$refs['meetingForm'].validate(valid => {
-        if (valid) {
-          if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+      this.meetingForm.startTime = this.startDate + ' ' + this.startTime + ':00'
+      this.meetingForm.endTime = this.startDate + ' ' + this.endTime + ':00'
+      var today_time = new Date().getTime()
+      if (new Date(this.meetingForm.startTime - today_time < 0)) {
+        alert('会议开始时间必须大于当前当前时间')
+        return
+      }
+      if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
+        this.$refs['meetingForm'].validate(valid => {
+          if (valid) {
+            if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
-            api('oa/oaMeeting/update', this.meetingForm).then(res => {
-              if (res.data.code === '0000') {
-                this.$message({
-                  message: '编辑成功',
-                  type: 'success'
-                })
-                this.goBack(this.$route)
-                // 重置表单元素的数据
-                this.$refs['meetingForm'].resetFields()
-              } else {
-                this.$message.error(res.data.result)
-              }
-              this.isDisabled = false
-            })
+              api('oa/oaMeeting/update', this.meetingForm).then(res => {
+                if (res.data.code === '0000') {
+                  this.$message({
+                    message: '编辑成功',
+                    type: 'success'
+                  })
+                  this.goBack(this.$route)
+                  // 重置表单元素的数据
+                  this.$refs['meetingForm'].resetFields()
+                } else {
+                  this.$message.error(res.data.result)
+                }
+                this.isDisabled = false
+              })
+            }
+            if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+              alert('请选择参会人员')
+            } else if (!this.meetingForm.startTime) {
+              alert('请选择会议开始时间')
+            } else if (!this.meetingForm.endTime) {
+              alert('请选择会议结束时间')
+            }
+          } else {
+            this.isDisabled = false
           }
-          if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
-            alert('请选择参会人员')
-          } else if (!this.meetingForm.startTime) {
-            alert('请选择会议开始时间')
-          } else if (!this.meetingForm.endTime) {
-            alert('请选择会议结束时间')
-          }
-        } else {
-          this.isDisabled = false
-        }
-      })
+        })
+      } else {
+        alert('会议结束时间必须大于会议开始时间')
+      }
     },
     // 点击提交的时候
     submitForm() {
-      this.meetingForm.oaMeetingContent = this.$refs.ue.getUEContent()
       this.isDisabled = true
-      this.$refs['meetingForm'].validate(valid => {
-        if (valid) {
-          if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+      this.meetingForm.startTime = this.startDate + ' ' + this.startTime + ':00'
+      this.meetingForm.endTime = this.startDate + ' ' + this.endTime + ':00'
+      // var today_time = new Date().getTime()
+      // if (new Date(this.meetingForm.startTime - today_time < 0)) {
+      //   alert('会议开始时间必须大于当前当前时间')
+      //   return
+      // }
+      if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
+        this.$refs['meetingForm'].validate(valid => {
+          if (valid) {
+            if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
             // 调用接口发送请求
-            api('oa/oaMeeting/add', this.meetingForm).then(res => {
-              if (res.data.code === '0000') {
-                this.$message({
-                  message: '添加成功',
-                  type: 'success'
-                })
-                this.goBack(this.$route)
-                // 重置表单元素的数据
-                this.$refs['meetingForm'].resetFields()
-              } else {
-                this.$message.error(res.data.result)
-              }
-              this.isDisabled = false
-            })
+              api('oa/oaMeeting/add', this.meetingForm).then(res => {
+                if (res.data.code === '0000') {
+                  this.$message({
+                    message: '添加成功',
+                    type: 'success'
+                  })
+                  this.goBack(this.$route)
+                  // 重置表单元素的数据
+                  this.$refs['meetingForm'].resetFields()
+                } else {
+                  this.$message.error(res.data.result)
+                }
+                this.isDisabled = false
+              })
+            }
+            if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+              alert('请选择参会人员')
+            } else if (!this.meetingForm.startTime) {
+              alert('请选择会议开始时间')
+            } else if (!this.meetingForm.endTime) {
+              alert('请选择会议结束时间')
+            }
+          } else {
+            this.isDisabled = false
           }
-          if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
-            alert('请选择参会人员')
-          } else if (!this.meetingForm.startTime) {
-            alert('请选择会议开始时间')
-          } else if (!this.meetingForm.endTime) {
-            alert('请选择会议结束时间')
-          }
-        } else {
-          this.isDisabled = false
-        }
-      })
+        })
+      } else {
+        alert('会议结束时间必须大于会议开始时间')
+      }
     },
     initList() {
       var query = this.$route.query
@@ -387,19 +384,24 @@ export default {
         if (query.title === '查看会议') {
           this.lookMeetingroom = true
           this.isShow = true
+          this.dialogStatus = '查看会议'
         }
         this.meetingForm.id = query.id
         paramApi('oa/oaMeeting/selectById', query.id, 'id').then(res => {
           if (res.data.code === '0000') {
             var data = res.data.data
             this.meetingForm.title = data.title
+            var dataArr = []
             data.participantList.forEach(val => {
-              this.meetingForm.participantsId.push(val.meetingUserId)
+              // this.meetingForm.participantsId.push(val.meetingUserId)
+              dataArr.push(val.meetingUserId)
             })
+            this.meetingForm.participantsId = Array.from(new Set(dataArr))
             this.meetingForm.meetingRoomId = data.meetingRoomId
-            this.meetingForm.startTime = data.startTime
-            this.meetingForm.endTime = data.endTime
-            this.defaultMsg = data.content
+            this.startTime = data.startTime.substring(10, 16)
+            this.endTime = data.endTime.substring(10, 16)
+            this.startDate = data.startDate
+            this.meetingForm.oaMeetingContent = data.content
             if (data.tbOaMeetingRoom.name !== null) {
               this.meetingroomName = data.tbOaMeetingRoom.name
             }
@@ -413,7 +415,9 @@ export default {
         this.meetingroomName = query.name
         this.meetingForm.meetingRoomId = query.meetId
         // alert(this.meetingroomForm.meetingroomId)
-        this.meetingForm.startTime = query.currentTime
+        this.startTime = query.currentTime
+        this.startDate = query.currentDate
+        console.log(this.meetingForm.startTime)
       }
     }
   }

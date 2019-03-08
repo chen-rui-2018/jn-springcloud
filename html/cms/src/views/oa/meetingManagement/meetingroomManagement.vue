@@ -73,7 +73,8 @@ export default {
       listQuery: {
         name: '',
         page: 1,
-        rows: 10
+        rows: 10,
+        recordStatus: ''
       },
       total: 0,
       statusOptions: [
@@ -167,7 +168,6 @@ export default {
             this.listQuery.page = 1
             this.initList()
           }
-          this.userID = localStorage.getItem('id')
         } else {
           this.$message.error(res.data.result)
         }

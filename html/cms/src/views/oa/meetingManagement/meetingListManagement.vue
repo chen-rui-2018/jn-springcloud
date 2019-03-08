@@ -1,27 +1,29 @@
 <template>
   <div v-loading="listLoading" class="meetingManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.meetingStatus">
+      <el-radio-group v-model="listQuery.meetingStatus" style="width:40%">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label= "1">进行中</el-radio-button>
         <el-radio-button label="2">已完成</el-radio-button>
         <el-radio-button label="3">已取消</el-radio-button>
         <el-radio-button label="0">待开始</el-radio-button>
       </el-radio-group>
-      <el-form-item label="会议名称:" style="margin-left: 20px;" class="meetingName">
-        <el-input v-model="listQuery.title" maxlength="20" placeholder="请输入会议名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+      <el-form-item label="会议室名称:" class="meetingName" >
+        <el-input v-model="listQuery.meetingRoomName" maxlength="20" placeholder="请输入会议室名称" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
-      <el-form-item label="申请人部门:" style="margin-left: 20px;" class="meetingName">
-        <el-input v-model="listQuery.title" maxlength="20" placeholder="请输入部门" class="filter-item" clearable @keyup.enter.native="handleFilter" />
-      </el-form-item>
-      <el-form-item label="会议时间:">
-        <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择开始日期"/>
-        至
-        <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" />
-      </el-form-item>
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
-      <el-button class="filter-item" style="margin-left: 10px" type="primary" @click="handleAppointment">会议预约</el-button>
-      <el-button class="filter-item" type="primary" >导出</el-button>
+      <el-button class="filter-item" type="primary" style="float:right; margin-right:20px;" @click="handleAppointment">会议预约</el-button>
+      <div>
+        <el-form-item label="申请人部门:" style="width:39%;" class="meetingName">
+          <el-input v-model="listQuery.departmentName" maxlength="20" placeholder="请输入部门" class="filter-item" clearable @keyup.enter.native="handleFilter" />
+        </el-form-item>
+        <el-form-item label="会议时间:">
+          <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择开始日期"/>
+          至
+          <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" />
+        </el-form-item>
+        <div class="right_button">
+          <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+      <el-button class="filter-item" type="primary" @click="exportText">导出</el-button></div></div>
     </el-form>
     <!-- 表格 -->
     <el-table :data="meetingList" border fit highlight-current-row style="width: 100%;height:100%;">
@@ -116,15 +118,15 @@
       class="erweima"
       title="请扫描二维码"
       width="40%">
-      <!-- <img :src="imgurl" alt="二维码图片"> -->
-      <img src="/static/images/timg.jpg" alt="二维码图片">
+      <img :src="imgurl" alt="二维码图片">
+      <!-- <img src="/static/images/timg.jpg" alt="二维码图片"> -->
     </el-dialog>
   </div>
 </template>
 
 <script>
 import {
-  api, paramApi
+  api, paramApi, exportExcel
 } from '@/api/oa/meetingManagement'
 export default {
   data() {
@@ -138,9 +140,10 @@ export default {
         meetingStatus: '',
         page: 1,
         rows: 10,
-        title: '',
+        meetingRoomName: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        departmentName: ''
       }
     }
   },
@@ -148,9 +151,14 @@ export default {
     this.initList()
   },
   methods: {
+    // 导出
+    exportText() {
+      exportExcel('oa/oaMeeting/exportExcelMeeting').then(res => {
+        window.location.href = res.request.responseURL
+      })
+    },
     // 点击二维码
     handleErweima(row) {
-      console.log(row)
       this.erweimaDialogVisible = true
       this.imgurl = row.signInQr
     },
@@ -276,5 +284,10 @@ export default {
          padding:10px;
     }
   }
+  }
+  .right_button{
+    position: absolute;
+    top:12%;
+    right: 3%;
   }
 </style>

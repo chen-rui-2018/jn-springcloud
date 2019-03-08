@@ -68,7 +68,6 @@ const user = {
             commit('SET_TOKEN', data.data)
             setToken(response.data.data)
             getUsername().then(response => {
-              console.log(response)
               if (response.data.code === '0000') {
                 if (response.data.data.name) {
                   localStorage.setItem('userName', response.data.data.name)
@@ -76,7 +75,6 @@ const user = {
                   localStorage.setItem('account', response.data.data.account)
                 }
                 localStorage.setItem('id', response.data.data.id)
-                console.log(localStorage.getItem('id'))
               }
             })
             resolve(data)

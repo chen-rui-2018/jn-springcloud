@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container clearfix">
+        <header>
+            <span class="headTitle">B栋1306会议室</span>
+        </header>
+        <div class="dateTime color">2019/3/10</div>
+        <div class="conLeft">
+            <div id="time">
+                <div id="hours"></div>
+                <div id="min"></div>
+                <div id="sec"></div>
+            </div>
+            <div class="cityPos">
+                <div class="city">南京</div>
+                <p class="airQuality">空气质量：<span></span></p>
+            </div>
+            <h2>扫码签到</h2>
+            <div class="weaInfo clearfix">
+                <div class="weather">
+                    <span class="week"></span>&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+                    <span class="riqi weather-date">03月10日</span>
+                    <div class="temperature"><span class="weather-wd">21C~13C</span>
+                    </div>
+                    <p class="wea weather-date">中雨转大雨</p>
+                </div>
+                <div class="weaImg"></div>
+                <div class="erweima">
+                </div>
+            </div>
+        </div>
+        <div class="conRight">
+            <div class="meetingName">
+                <div class="name1">会议名称</div>
+                <div class="name2">白下高新区A部门会议</div>
+                <div class="name3 color"><span class="meetingTime">2019/3/10 9:00~11:00</span><span class="color currentMeet">当前会议</span></div>
+            </div>
+            <marquee direction="up" behavior="scroll" scrollamount="6" scrolldelay="0" loop="-1" width="895" height="232"
+                 hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
+                <div class="meetingName2">
+                </div>
+            </marquee>
+        </div>
+    </div>
+    </div>
+</body>
+<script src="./jquery.min.js"></script>
+<script type="text/javascript">
+    var se = document.querySelector('#sec');
+    var mi = document.querySelector('#min');
+    var ho = document.querySelector('#hours');
+    var myDiv = document.querySelector('#time');
+    var arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    bb();
+    setInterval(function () {
+        bb();
+    }, 1)
+
+    function bb() {
+        var myTime = new Date();
+        var hour = myTime.getHours() //时 0 ~ 23
+        var min = myTime.getMinutes() //分0~59
+        var s = myTime.getSeconds() //秒 0~59
+        se.style.transform = "rotate(" + (s * 6) + "deg)";
+        mi.style.transform = "rotate(" + (min * 6) + "deg)";
+        ho.style.transform = "rotate(" + (hour * 30) + "deg)";
+    }
+    for (var i = 1; i < 61; i++) {
+        var aaa = document.createElement('div');
+        aaa.id = 'scale';
+        aaa.style.transform = 'rotate(' + i * 6 + 'deg)';
+        myDiv.appendChild(aaa);
+
+        var bbb = document.createElement('div');
+        bbb.id = 'point';
+        aaa.appendChild(bbb);
+
+        var shuzi = document.createElement('div');
+        shuzi.id = 'number';
+        shuzi.style.transform = 'rotate(-' + i * 6 + 'deg)';
+        if (i % 5 == 0) {
+            shuzi.innerHTML = arr[i / 5 - 1];
+            bbb.style.height = '10px';
+            bbb.style.fontWeight = 'bolder';
+            bbb.style.width = '5px';
+        }
+        aaa.appendChild(shuzi);
+    }
+    $.ajax({
+        url: 'https://www.tianqiapi.com/api/',
+        data: {
+            version: 'v1',
+            cityid: '101230603'
+        },
+        dataType: 'json',
+        type: 'get',
+        success: function (res) {
+            console.log(res)
+            $('.airQuality>span').html(res.data[0].air_level)
+            $('.week').html(res.data[0].week)
+            $('.weather-wd').html(res.data[0].tem2 + '~' + res.data[0].tem1)
+            $('.wea').html(res.data[0].wea)
+            $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
+                res.data[0].wea_img + '.png>' + '</img>')
+            $('.riqi').html(res.data[0].date)
+        }
+    })
+    var data = {}
+    data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
+    $.ajax({
+        url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
+        data: JSON.stringify(data),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (res) {
+            console.log(res)
+            if(res.code=='0000'){
+                $('.headTitle').html(res.data[0].tbOaMeetingRoom.position)
+                $('.dateTime').html(res.data[0].startDate)
+                $('.name2').html('白下高新区'+res.data[0].departmentName+'部门会议')
+                $('.meetingTime').html(res.data[0].startDate+'&nbsp;'+res.data[0].startTime+'~'+res.data[0].endTime)
+                $('.erweima').append('<img src='+res.data[0].signInQr+'>')
+                for(var i=1;i<res.data.length;i++){
+                 var str='<span>会议名称：白下高新区'+res.data[i].departmentName+'会议</span>'+
+                    '<span class="color fr">'+res.data[i].startDate+res.data[i].startTime+'~'+res.data[i].endTime+'</span>'
+                }
+                $('.meetingName2').html(str)
+            }
+        }
+    })
+</script>
+
+</html>

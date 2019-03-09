@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
@@ -21,7 +22,9 @@ public class AffiliateParam extends Page implements Serializable {
     @Size(max = 32, message = "所属机构编码长度不能超过32个字")
     private String affiliateCode;
 
-    @ApiModelProperty("是否分页（“TRUE”:分页  “FALSE”:不分页）")
+    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
+    @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
+    @NotNull(message="是否需要分页不能为空")
     private String needPage;
 
     public String getAffiliateCode() {

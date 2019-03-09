@@ -251,12 +251,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new JnSpringCloudException(UserExtensionExceptionEnum.AFFILIATE_PARAM_NOT_NULL);
         }
         com.github.pagehelper.Page<Object> objects = null;
-        //是否分页标识
-        boolean needPage=false;
-        if(affiliateParam.getNeedPage()!=null && Boolean.TRUE.toString().equalsIgnoreCase(affiliateParam.getNeedPage())){
-            needPage=true;
-        }
-        if(needPage){
+        //是否分页标识  0：不分页  1：分页
+        String isPage="1";
+        if(isPage.equals(affiliateParam.getNeedPage())){
             objects = PageHelper.startPage(affiliateParam.getPage(),
                     affiliateParam.getRows() == 0 ? 15 : affiliateParam.getRows(), true);
         }
@@ -283,12 +280,9 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new JnSpringCloudException(UserExtensionExceptionEnum.COMPANY_PARAM_NOT_NULL);
         }
         com.github.pagehelper.Page<Object> objects = null;
-        //是否分页标识
-        boolean needPage=false;
-        if(companyParam.getNeedPage()!=null && Boolean.TRUE.toString().equalsIgnoreCase(companyParam.getNeedPage())){
-            needPage=true;
-        }
-        if(needPage){
+        //是否分页标识  0：不分页  1：分页
+        String isPage="1";
+        if(isPage.equals(companyParam.getNeedPage())){
             objects = PageHelper.startPage(companyParam.getPage(),
                     companyParam.getRows() == 0 ? 15 : companyParam.getRows(), true);
         }

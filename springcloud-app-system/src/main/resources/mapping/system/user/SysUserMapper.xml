@@ -45,7 +45,7 @@
         t.email,
         t.recordStatus,
         t.remark,
-        t.createdTime,
+        date_format(t.createdTime,'%Y-%m-%d %H:%i:%s') as createdTime,
         t.wechatAccount,
         t.departmentName,
         t.postName,
@@ -91,7 +91,7 @@
     </select>
 
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
-            parameterType="com.jn.system.user.model.SysUserPage">
+            parameterType="com.jn.system.model.UserPage">
         select
         <include refid="Get_User_Column"></include>
         from
@@ -124,6 +124,9 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(phone)">
+            and t.`phone` like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
+        </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
             and t.record_status = #{recordStatus,jdbcType=TINYINT}
         </if>
@@ -149,7 +152,7 @@
     </select>
 
     <select id="getSysUserByPageAndPost" resultType="com.jn.system.user.vo.SysUserVO"
-            parameterType="com.jn.system.user.model.SysUserPage">
+            parameterType="com.jn.system.model.UserPage">
         SELECT
         <include refid="Get_User_Column"></include>
         from
@@ -205,6 +208,9 @@
         <where>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
                 and t.`name` like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(phone)">
+                and t.`phone` like CONCAT('%', #{phone,jdbcType=VARCHAR}, '%')
             </if>
             <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
                 and t.recordStatus = #{recordStatus,jdbcType=TINYINT}

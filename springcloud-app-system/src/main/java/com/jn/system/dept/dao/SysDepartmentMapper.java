@@ -1,6 +1,7 @@
 package com.jn.system.dept.dao;
 
 import com.jn.system.dept.vo.SysDepartmentVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +39,7 @@ public interface SysDepartmentMapper {
      *
      * @return
      */
-    List<SysDepartmentVO> getDepartmentAll();
+    List<SysDepartmentVO> getDepartmentAll(@Param("level") String level);
 
     /**
      * 获取部门及子部门id

@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,7 @@ import java.util.*;
  * @modified By:
  */
 @Service
+@EnableBinding(value = {MessageSource.class})
 public class MeetingServiceImpl implements MeetingService {
     private static Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
 

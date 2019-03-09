@@ -42,15 +42,9 @@
         </div>
         <div class="conRight">
             <div class="meetingName">
-<<<<<<< Updated upstream
-                <div class="name1">会议名称</div>
-                <div class="name2">白下高新区A部门会议</div>
-                <div class="name3 color"><span class="meetingTime">2019/3/10 9:00~11:00</span><span class="color currentMeet">当前会议</span></div>
-=======
                 <div class="name1"></div>
                 <div class="name2"></div>
                 <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
->>>>>>> Stashed changes
             </div>
             <marquee direction="up" behavior="scroll" scrollamount="6" scrolldelay="0" loop="-1" width="895" height="232"
                  hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
@@ -125,27 +119,6 @@
     })
     var data = {}
     data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
-<<<<<<< Updated upstream
-    $.ajax({
-        url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
-        data: JSON.stringify(data),
-        dataType: 'json',
-        contentType: 'application/json',
-        type: 'post',
-        success: function (res) {
-            console.log(res)
-            if(res.code=='0000'){
-                $('.headTitle').html(res.data[0].tbOaMeetingRoom.position)
-                $('.dateTime').html(res.data[0].startDate)
-                $('.name2').html('白下高新区'+res.data[0].departmentName+'部门会议')
-                $('.meetingTime').html(res.data[0].startDate+'&nbsp;'+res.data[0].startTime+'~'+res.data[0].endTime)
-                $('.erweima').append('<img src='+res.data[0].signInQr+'>')
-                for(var i=1;i<res.data.length;i++){
-                 var str='<span>会议名称：白下高新区'+res.data[i].departmentName+'会议</span>'+
-                    '<span class="color fr">'+res.data[i].startDate+res.data[i].startTime+'~'+res.data[i].endTime+'</span>'
-                }
-                $('.meetingName2').html(str)
-=======
     aa()
     function aa() {
         $.ajax({
@@ -179,7 +152,6 @@
                 }else{
                     console.log(res.result);
                 }
->>>>>>> Stashed changes
             }
         })
     }

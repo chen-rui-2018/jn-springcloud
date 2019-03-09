@@ -343,10 +343,14 @@
             and  u.department_name like CONCAT('%', #{departmentName,jdbcType=VARCHAR}, '%')
         </if>
 
-        <if test="startTime != null">AND  Date(meeting.start_time) <![CDATA[>=]]> #{startTime}</if>
-        <if test="endTime != null">AND Date(meeting.end_time)<![CDATA[<=]]>#{endTime}</if>
+        <if test="startTime != null">AND  Date(meeting.start_time) &gt;= #{startTime}</if>
+        <if test="endTime != null">AND Date(meeting.end_time) &lt;= #{endTime}</if>
 
-        <if test="currentTime != null">AND  (meeting.start_time <![CDATA[>=]]> #{currentTime} or meeting.end_time <![CDATA[>=]]> #{currentTime} ) and  Date(meeting.start_time) <![CDATA[=]]> DATE_FORMAT(#{currentTime},'%Y-%m-%d')</if>
+        <if test="currentTime != null">
+          AND (meeting.start_time &gt;= #{currentTime} or meeting.end_time &lt;= #{currentTime} )
+          AND  Date(meeting.start_time) = DATE_FORMAT(#{currentTime},'%Y-%m-%d')
+        </if>
+
 
         ORDER BY
         <if test="currentTime != null">

@@ -147,6 +147,7 @@
             data.meetingRoomId = "88083894-0cfa-4264-9de4-f52e3bc56087";
             $('.headTitle').html("301");
         }else{
+            data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39";
             $('.headTitle').html("118");
         }
 
@@ -159,6 +160,13 @@
             success: function (res) {
                 console.log(res)
                 if (res.code == '0000') {
+
+                    if (res.data.length == 0){
+                        $('.name2').html('暂无会议！');
+                        $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
+                        return;
+                    }
+
                     $('.headTitle').html(res.data[0].meetingRoomName)
                     $('.dateTime').html(res.data[0].startDate)
                     if(res.data.length == 0 ){

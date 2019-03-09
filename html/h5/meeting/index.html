@@ -48,7 +48,7 @@
             </div>
             <marquee direction="up" behavior="scroll" scrollamount="6" scrolldelay="0" loop="-1" width="895" height="232"
                  hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
-                <div class="meetingName2">
+                <div class="meetingTotal">
                 </div>
             </marquee>
         </div>
@@ -121,8 +121,32 @@
     data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
     aa()
     function aa() {
+        var domain = window.location.host;
+
+        //获取会议室ID
+        var id = GetUrlParam("id");
+        if(id != ''){
+            data.meetingRoomId = id;
+        }
+
+        if(id=="59bc3578-b874-40ff-a733-1bd3969a2e39"){
+            $('.headTitle').html("118");
+        }else if(id=="1f5c6df4-8ff7-46c6-bdf0-cf5ccb38ee1c"){
+            $('.headTitle').html("多功能厅");
+        }else if(id=="1fcc5ba3-f00a-461d-a4fc-1607f6dd187b"){
+            $('.headTitle').html("党建会议室");
+        }else if(id=="1ff2bdda-a6e8-45e5-8a8a-69c97a360c20"){
+            $('.headTitle').html("117");
+        }else if(id=="7af8988a-49b2-457a-8912-3b65922b1e84"){
+            $('.headTitle').html("207");
+        }else if(id=="88083894-0cfa-4264-9de4-f52e3bc56087"){
+            $('.headTitle').html("301");
+        }else{
+            $('.headTitle').html("118");
+        }
+
         $.ajax({
-            url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
+            url: domain+'/springcloud-oa/guest/oaMeeting/showList',
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
@@ -132,12 +156,17 @@
                 if (res.code == '0000') {
                     $('.headTitle').html(res.data[0].meetingRoomName)
                     $('.dateTime').html(res.data[0].startDate)
-                    $('.name2').html('白下高新区' + res.data[0].departmentName + '部门会议')
+                    if(res.data.length == 0 ){
+                        $('.name2').html('暂无会议！');
+                    }else {
+                        $('.name2').html('白下高新区' + res.data[0].departmentName + '部门会议');
+                    }
                     $('.meetingTime').html(res.data[0].startDate + '&nbsp;' + res.data[0].startTime + '~' +
                         res
                         .data[0].endTime)
                     $('.erweima').html('<img src=' + res.data[0].signInQr + '>')
-                    var str = ''
+                    var str = '';
+
                     for (var i = 1; i < res.data.length; i++) {
                         str += '<div class="meetingName2"><span>会议名称：白下高新区' + res.data[i].departmentName +
                             '会议</span>' +
@@ -145,6 +174,7 @@
                             '~' +
                             res.data[i].endTime + '</span></div>'
                     }
+
                     if (res.data.length == 1) {
                         str += '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>'
                     }
@@ -152,10 +182,34 @@
                 }else{
                     console.log(res.result);
                 }
+            },error : function(err){
+                $('.name2').html('暂无会议！');
+                $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
             }
         })
     }
     setInterval(function(){aa()}, 60000)
+
+
+
+    function GetUrlParam(paraName) {
+        var url = document.location.toString();
+        var arrObj = url.split("?");
+        if (arrObj.length > 1) {
+            var arrPara = arrObj[1].split("&");
+            var arr;
+            for (var i = 0; i < arrPara.length; i++) {
+                arr = arrPara[i].split("=");
+                if (arr != null && arr[0] == paraName) {
+                    return arr[1];
+                }
+            }
+            return "";
+        }
+        else {
+            return "";
+        }
+    }
 </script>
 
 </html>

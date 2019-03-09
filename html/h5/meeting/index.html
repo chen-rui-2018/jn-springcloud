@@ -12,9 +12,9 @@
 <body>
     <div class="container clearfix">
         <header>
-            <span class="headTitle">B栋1306会议室</span>
+            <span class="headTitle"></span>
         </header>
-        <div class="dateTime color">2019/3/10</div>
+        <div class="dateTime color"></div>
         <div class="conLeft">
             <div id="time">
                 <div id="hours"></div>
@@ -30,10 +30,10 @@
                 <div class="weather">
                     <span class="week"></span>&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;
-                    <span class="riqi weather-date">03月10日</span>
-                    <div class="temperature"><span class="weather-wd">21C~13C</span>
+                    <span class="riqi weather-date"></span>
+                    <div class="temperature"><span class="weather-wd"></span>
                     </div>
-                    <p class="wea weather-date">中雨转大雨</p>
+                    <p class="wea weather-date"></p>
                 </div>
                 <div class="weaImg"></div>
                 <div class="erweima">
@@ -42,9 +42,15 @@
         </div>
         <div class="conRight">
             <div class="meetingName">
+<<<<<<< Updated upstream
                 <div class="name1">会议名称</div>
                 <div class="name2">白下高新区A部门会议</div>
                 <div class="name3 color"><span class="meetingTime">2019/3/10 9:00~11:00</span><span class="color currentMeet">当前会议</span></div>
+=======
+                <div class="name1"></div>
+                <div class="name2"></div>
+                <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
+>>>>>>> Stashed changes
             </div>
             <marquee direction="up" behavior="scroll" scrollamount="6" scrolldelay="0" loop="-1" width="895" height="232"
                  hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
@@ -100,8 +106,8 @@
     $.ajax({
         url: 'https://www.tianqiapi.com/api/',
         data: {
-            version: 'v1',
-            cityid: '101230603'
+            // version: 'v1',
+            // cityid: '101230603'
         },
         dataType: 'json',
         type: 'get',
@@ -113,11 +119,13 @@
             $('.wea').html(res.data[0].wea)
             $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
                 res.data[0].wea_img + '.png>' + '</img>')
-            $('.riqi').html(res.data[0].date)
+            $('.riqi').html(res.data[0].date);
+            $('.city').text(res.city)
         }
     })
     var data = {}
     data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
+<<<<<<< Updated upstream
     $.ajax({
         url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
         data: JSON.stringify(data),
@@ -137,9 +145,45 @@
                     '<span class="color fr">'+res.data[i].startDate+res.data[i].startTime+'~'+res.data[i].endTime+'</span>'
                 }
                 $('.meetingName2').html(str)
+=======
+    aa()
+    function aa() {
+        $.ajax({
+            url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'post',
+            success: function (res) {
+                console.log(res)
+                if (res.code == '0000') {
+                    $('.headTitle').html(res.data[0].meetingRoomName)
+                    $('.dateTime').html(res.data[0].startDate)
+                    $('.name2').html('白下高新区' + res.data[0].departmentName + '部门会议')
+                    $('.meetingTime').html(res.data[0].startDate + '&nbsp;' + res.data[0].startTime + '~' +
+                        res
+                        .data[0].endTime)
+                    $('.erweima').html('<img src=' + res.data[0].signInQr + '>')
+                    var str = ''
+                    for (var i = 1; i < res.data.length; i++) {
+                        str += '<div class="meetingName2"><span>会议名称：白下高新区' + res.data[i].departmentName +
+                            '会议</span>' +
+                            '<span class="color fr">' + res.data[i].startDate + '&nbsp' + res.data[i].startTime +
+                            '~' +
+                            res.data[i].endTime + '</span></div>'
+                    }
+                    if (res.data.length == 1) {
+                        str += '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>'
+                    }
+                    $('.meetingTotal').html(str)
+                }else{
+                    console.log(res.result);
+                }
+>>>>>>> Stashed changes
             }
-        }
-    })
+        })
+    }
+    setInterval(function(){aa()}, 60000)
 </script>
 
 </html>

@@ -105,7 +105,6 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
             saveOaMeetingRoomPhoto(attachmentPaths,tbOaMeetingRoom.getCreatorAccount(),tbOaMeetingRoom.getId());
         }
 
-        tbOaMeetingRoom.setRecordStatus(OaStatusEnums.EFFECTIVE.getCode());
         //设置会议室位置信息
         tbOaMeetingRoom.setPosition(tbOaMeetingRoom.getBuilding()+tbOaMeetingRoom.getFloor()+tbOaMeetingRoom.getRoomNumber());
         tbOaMeetingRoomMapper.insert(tbOaMeetingRoom);

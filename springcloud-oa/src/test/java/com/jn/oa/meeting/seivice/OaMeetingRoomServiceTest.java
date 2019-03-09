@@ -124,8 +124,7 @@ public class OaMeetingRoomServiceTest {
     public void updateTest() {
         OaMeetingRoomAdd oaMeetingRoom = new OaMeetingRoomAdd();
         oaMeetingRoom.setId("9ed9b3e8-c60e-4036-9193-1dabf8f910f1");
-        Byte recordStatus = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
-        oaMeetingRoom.setRecordStatus(recordStatus);
+        oaMeetingRoom.setRecordStatus(OaStatusEnums.EFFECTIVE.getCode());
         oaMeetingRoom.setName(meetingRoomName);
         try {
             meetingRoomService.updateOaMeetingRoomById(oaMeetingRoom,user,null);

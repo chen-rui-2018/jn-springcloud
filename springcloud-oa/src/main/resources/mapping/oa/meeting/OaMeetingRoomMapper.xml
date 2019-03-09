@@ -243,9 +243,9 @@ FROM
 
         AND  <![CDATA[
         	(
-                (meeting.start_time <=#{startTime}and #{startTime}<=meeting.end_time)
+                (meeting.start_time <#{startTime}and #{startTime}<meeting.end_time)
                 or
-                 (meeting.start_time <=#{endTime}and #{endTime}<=meeting.end_time)
+                 (meeting.start_time <#{endTime}and #{endTime}<meeting.end_time)
         	 )
 
         ]]>

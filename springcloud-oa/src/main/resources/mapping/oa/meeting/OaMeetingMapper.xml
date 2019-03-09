@@ -266,7 +266,7 @@
         WHERE
         meeting.meeting_status =1
 
-        )t where  <![CDATA[  t.sub_time>=0 and t.sub_time<=10]]>  )
+        )t where  <![CDATA[ t.sub_time<=-10]]>  )
 
     </update>
 
@@ -346,7 +346,7 @@
         <if test="startTime != null">AND  Date(meeting.start_time) <![CDATA[>=]]> #{startTime}</if>
         <if test="endTime != null">AND Date(meeting.end_time)<![CDATA[<=]]>#{endTime}</if>
 
-        <if test="currentTime != null">AND  meeting.start_time <![CDATA[>=]]> #{currentTime} and  Date(meeting.start_time) <![CDATA[=]]> DATE_FORMAT(#{currentTime},'%Y-%m-%d')</if>
+        <if test="currentTime != null">AND  (meeting.start_time <![CDATA[>=]]> #{currentTime} or meeting.end_time <![CDATA[>=]]> #{currentTime} ) and  Date(meeting.start_time) <![CDATA[=]]> DATE_FORMAT(#{currentTime},'%Y-%m-%d')</if>
 
         ORDER BY
         <if test="currentTime != null">
@@ -510,9 +510,9 @@
 
             AND  <![CDATA[
         	(
-                (meeting.start_time <=#{startTime}and #{startTime}<=meeting.end_time)
+                (meeting.start_time <#{startTime}and #{startTime}<meeting.end_time)
                 or
-                 (meeting.start_time <=#{endTime}and #{endTime}<=meeting.end_time)
+                 (meeting.start_time <#{endTime}and #{endTime}<meeting.end_time)
         	 )
 
         ]]>

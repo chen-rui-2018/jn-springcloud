@@ -252,6 +252,7 @@ public class OaMeetingVo implements Serializable {
         this.workOrderNum = workOrderNum;
     }
 
+    @JsonFormat(pattern="yyyy-MM-dd",timezone="GMT+8")
     public String getStartDate() {
         return startDate;
     }

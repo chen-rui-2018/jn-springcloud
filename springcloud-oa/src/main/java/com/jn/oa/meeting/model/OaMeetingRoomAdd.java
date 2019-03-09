@@ -40,7 +40,7 @@ public class OaMeetingRoomAdd implements Serializable {
     private String explains;
 
     @ApiModelProperty(value = "会议室状态(0:可用、1:不可用、-1:删除)")
-    private Byte recordStatus;
+    private String recordStatus;
 
     @ApiModelProperty(value = "会议室容量")
     private String capacity;
@@ -69,6 +69,14 @@ public class OaMeetingRoomAdd implements Serializable {
 
     public void setAttachmentPaths(String[] attachmentPaths) {
         this.attachmentPaths = attachmentPaths;
+    }
+
+    public String getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     public String getId() {
@@ -125,14 +133,6 @@ public class OaMeetingRoomAdd implements Serializable {
 
     public void setExplains(String explains) {
         this.explains = explains;
-    }
-
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
     }
 
     public String getCapacity() {

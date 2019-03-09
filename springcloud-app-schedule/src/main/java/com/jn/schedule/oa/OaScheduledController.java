@@ -1,8 +1,8 @@
-package com.jn.schedule.wechat;
+package com.jn.schedule.oa;
+
 
 import com.jn.common.util.LoadBalancerUtil;
 import com.jn.oa.api.OaClient;
-import com.jn.wechat.api.WechatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OaScheduledController {
+    @Autowired
+    private LoadBalancerUtil loadBalancerUtils;
     @Autowired
     private OaClient oaClient;
 

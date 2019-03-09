@@ -521,21 +521,26 @@
     </select>
 
     <select id="noticesApplicationMeeting" resultMap="MeetingNoticeBaseResultMap">
-        select
-             meeting.id AS meeting_id,
-          tt.phone as applicantPhone,
-            tt.wechat_account as applicantWechatAccount,
-            meeting.title AS meeting_title
-         from
-        (
-        SELECT
-        round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) as sub_time,
-        meeting.start_time
+               SELECT
+            t.id AS meeting_id,
+            tt.phone AS applicantPhone,
+            tt.wechat_account AS applicantWechatAccount,
+            t.title AS meeting_title
         FROM
-        tb_oa_meeting meeting
+            (
+        SELECT
+            round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) AS sub_time,
+            meeting.start_time,
+            meeting.applicant,
+            meeting.id,
+            meeting.title
+        FROM
+            tb_oa_meeting meeting
         WHERE
-         meeting.meeting_status=0
-        ) t where <![CDATA[  t.sub_time>=0 and t.sub_time<=10  ]]>
+            meeting.meeting_status = 0
+            ) t
+            LEFT JOIN ( SELECT t.id, t.phone, t.wechat_account FROM tb_sys_user t WHERE t.record_status = 1 ) tt ON tt.id = t.applicant
+         where <![CDATA[  t.sub_time>=0 and t.sub_time<=10  ]]>
     </select>
 
     

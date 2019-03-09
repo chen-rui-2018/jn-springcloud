@@ -17,6 +17,8 @@ public enum OaExceptionEnums implements CodeAndMsg {
     CTEATE_QRCODE_FAIL("1100504", "生成二维码失败"),
     ADD_MEETINGROOM_CONFLICT("1100505","添加失败,会议室冲突"),
     UPDATE_MEETINGROOM_CONFLICT("1100506","修改失败,会议室冲突"),
+    ADD_MEETING_TIME_CONFLICT("1100505","添加失败,会议开始时间不能小于当前时间"),
+    UPDATE_MEETING_TIME_CONFLICT("1100505","修改失败,会议开始时间不能小于当前时间"),
     ;
 
     private String code;

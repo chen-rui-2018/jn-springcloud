@@ -42,6 +42,7 @@ public class OaController extends BaseController implements OaClient {
      */
     @Override
     public Result<String> updateMeetingStatusByTime() {
+        logger.info("更新会议状态");
         meetingService.updateMeetingStatusByTime();
         return new Result();
     }

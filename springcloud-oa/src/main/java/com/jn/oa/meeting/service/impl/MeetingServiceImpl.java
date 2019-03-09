@@ -80,7 +80,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     private ResourceLoader resourceLoader;
 
-    @Resource
+    @Autowired
     private MessageSource messageSource;
 
     @Autowired
@@ -147,6 +147,10 @@ public class MeetingServiceImpl implements MeetingService {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
 
+        if(tbOaMeeting.getStartTime().getTime() < new Date().getTime()){
+            logger.warn("[会议申请] 会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
+            throw new JnSpringCloudException(OaExceptionEnums.ADD_MEETING_TIME_CONFLICT);
+        }
 
         List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
         if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
@@ -210,6 +214,12 @@ public class MeetingServiceImpl implements MeetingService {
     public void updateOaMeetingById(OaMeetingAdd oaMeetingAdd, User user) {
         TbOaMeeting tbOaMeeting = new TbOaMeeting();
         BeanUtils.copyProperties(oaMeetingAdd, tbOaMeeting);
+
+        if(tbOaMeeting.getStartTime().getTime() < new Date().getTime()){
+            logger.warn("[会议申请] 更改会议申请失败,会议开始时间不能小于当前时间,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
+            throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETING_TIME_CONFLICT);
+        }
+
         //判断修改信息是否存在
         TbOaMeeting oaMeetingSelect = tbOaMeetingMapper.selectByPrimaryKey(oaMeetingAdd.getId());
         if (oaMeetingSelect == null || OaStatusEnums.DELETED.getCode().equals(oaMeetingSelect.getRecordStatus())) {

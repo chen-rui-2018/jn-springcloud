@@ -1,10 +1,7 @@
 package com.jn.system.api;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
-import com.jn.system.model.UserLogin;
-import com.jn.system.model.UserNoPasswordLogin;
+import com.jn.system.model.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -123,5 +120,21 @@ public interface SystemClient {
      * @return
      */
     @RequestMapping(value = "/api/system/selectDeptByKey", method = RequestMethod.POST)
-    Result selectDeptByKey(@RequestParam("id")String id,@RequestParam("flag")Boolean flag);
+    Result selectDeptByKey(@RequestParam("id") String id, @RequestParam("flag") Boolean flag);
+
+    /**
+     * 条件分页查询用户信息
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserByPage", method = RequestMethod.POST)
+    Result getUserByPage(@RequestBody UserPage page);
+
+    /**
+     * 获取部门树信息
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getDepartmentTree", method = RequestMethod.POST)
+    Result getDepartmentTree();
 }

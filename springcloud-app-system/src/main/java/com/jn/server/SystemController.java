@@ -3,6 +3,7 @@ package com.jn.server;
 import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
@@ -13,10 +14,7 @@ import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
-import com.jn.system.model.UserLogin;
-import com.jn.system.model.UserNoPasswordLogin;
+import com.jn.system.model.*;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
@@ -140,9 +138,23 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "根据部门id获取当前部门及所有子部门信息")
-    public Result selectDeptByKey(@RequestParam("id")String id,@RequestParam("flag")Boolean flag) {
-        SysDepartmentVO sysDepartmentVO = sysDepartmentService.selectDeptByKey(id,flag);
+    public Result selectDeptByKey(@RequestParam("id") String id, @RequestParam("flag") Boolean flag) {
+        SysDepartmentVO sysDepartmentVO = sysDepartmentService.selectDeptByKey(id, flag);
         return new Result(sysDepartmentVO);
+    }
+
+    @Override
+    @ControllerLog(doAction = "条件分页查询用户")
+    public Result<User> getUserByPage(@RequestBody UserPage page) {
+        PaginationData data = sysUserService.findSysUserByPage(page);
+        return new Result(data);
+    }
+
+    @Override
+    @ControllerLog(doAction = "获取部门树信息")
+    public Result getDepartmentTree() {
+        List<SysDepartmentVO> departmentTree = sysDepartmentService.findDepartmentAllByLevel();
+        return new Result(departmentTree);
     }
 
     @Override

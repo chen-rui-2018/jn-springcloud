@@ -7,7 +7,7 @@
     <result column="cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="budget_month" jdbcType="DATE" property="budgetMonth" />
+    <result column="budget_month" jdbcType="CHAR" property="budgetMonth" />
     <result column="budget_money" jdbcType="DECIMAL" property="budgetMoney" />
     <result column="budget_Type" jdbcType="TINYINT" property="budgetType" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -118,7 +118,7 @@
       modifier_account, modified_time, creator_account
       )
     values (#{costTypeId,jdbcType=INTEGER}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
-      #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=DATE}, #{budgetMoney,jdbcType=DECIMAL}, 
+      #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=CHAR}, #{budgetMoney,jdbcType=DECIMAL}, 
       #{budgetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}
       )
@@ -180,7 +180,7 @@
         #{departmentName,jdbcType=VARCHAR},
       </if>
       <if test="budgetMonth != null">
-        #{budgetMonth,jdbcType=DATE},
+        #{budgetMonth,jdbcType=CHAR},
       </if>
       <if test="budgetMoney != null">
         #{budgetMoney,jdbcType=DECIMAL},
@@ -230,7 +230,7 @@
         department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.budgetMonth != null">
-        budget_month = #{record.budgetMonth,jdbcType=DATE},
+        budget_month = #{record.budgetMonth,jdbcType=CHAR},
       </if>
       <if test="record.budgetMoney != null">
         budget_money = #{record.budgetMoney,jdbcType=DECIMAL},
@@ -265,7 +265,7 @@
       cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
       department_id = #{record.departmentId,jdbcType=VARCHAR},
       department_name = #{record.departmentName,jdbcType=VARCHAR},
-      budget_month = #{record.budgetMonth,jdbcType=DATE},
+      budget_month = #{record.budgetMonth,jdbcType=CHAR},
       budget_money = #{record.budgetMoney,jdbcType=DECIMAL},
       budget_Type = #{record.budgetType,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -293,7 +293,7 @@
         department_name = #{departmentName,jdbcType=VARCHAR},
       </if>
       <if test="budgetMonth != null">
-        budget_month = #{budgetMonth,jdbcType=DATE},
+        budget_month = #{budgetMonth,jdbcType=CHAR},
       </if>
       <if test="budgetMoney != null">
         budget_money = #{budgetMoney,jdbcType=DECIMAL},
@@ -325,7 +325,7 @@
       cost_type_name = #{costTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},
-      budget_month = #{budgetMonth,jdbcType=DATE},
+      budget_month = #{budgetMonth,jdbcType=CHAR},
       budget_money = #{budgetMoney,jdbcType=DECIMAL},
       budget_Type = #{budgetType,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},

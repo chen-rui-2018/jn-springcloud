@@ -9,7 +9,7 @@ public class TbFinanceIncomeMonth implements Serializable {
     private Integer id;
 
     /*@ApiModelProperty("费用月份")*/
-    private String incomeDay;
+    private String incomeMonth;
 
     /*@ApiModelProperty("收入类型标识 0：电费 ；1：物业费；2：楼宇租；3：其他；4：合计")*/
     private String incomeType;
@@ -45,12 +45,12 @@ public class TbFinanceIncomeMonth implements Serializable {
         this.id = id;
     }
 
-    public String getIncomeDay() {
-        return incomeDay;
+    public String getIncomeMonth() {
+        return incomeMonth;
     }
 
-    public void setIncomeDay(String incomeDay) {
-        this.incomeDay = incomeDay == null ? null : incomeDay.trim();
+    public void setIncomeMonth(String incomeMonth) {
+        this.incomeMonth = incomeMonth == null ? null : incomeMonth.trim();
     }
 
     public String getIncomeType() {
@@ -130,7 +130,7 @@ public class TbFinanceIncomeMonth implements Serializable {
         }
         TbFinanceIncomeMonth other = (TbFinanceIncomeMonth) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getIncomeDay() == null ? other.getIncomeDay() == null : this.getIncomeDay().equals(other.getIncomeDay()))
+            && (this.getIncomeMonth() == null ? other.getIncomeMonth() == null : this.getIncomeMonth().equals(other.getIncomeMonth()))
             && (this.getIncomeType() == null ? other.getIncomeType() == null : this.getIncomeType().equals(other.getIncomeType()))
             && (this.getIncomeTypename() == null ? other.getIncomeTypename() == null : this.getIncomeTypename().equals(other.getIncomeTypename()))
             && (this.getIncome() == null ? other.getIncome() == null : this.getIncome().equals(other.getIncome()))
@@ -146,7 +146,7 @@ public class TbFinanceIncomeMonth implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getIncomeDay() == null) ? 0 : getIncomeDay().hashCode());
+        result = prime * result + ((getIncomeMonth() == null) ? 0 : getIncomeMonth().hashCode());
         result = prime * result + ((getIncomeType() == null) ? 0 : getIncomeType().hashCode());
         result = prime * result + ((getIncomeTypename() == null) ? 0 : getIncomeTypename().hashCode());
         result = prime * result + ((getIncome() == null) ? 0 : getIncome().hashCode());
@@ -165,7 +165,7 @@ public class TbFinanceIncomeMonth implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", incomeDay=").append(incomeDay);
+        sb.append(", incomeMonth=").append(incomeMonth);
         sb.append(", incomeType=").append(incomeType);
         sb.append(", incomeTypename=").append(incomeTypename);
         sb.append(", income=").append(income);

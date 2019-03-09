@@ -166,73 +166,73 @@ public class TbFinanceIncomeMonthExample {
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayIsNull() {
-            addCriterion("income_day is null");
+        public Criteria andIncomeMonthIsNull() {
+            addCriterion("income_month is null");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayIsNotNull() {
-            addCriterion("income_day is not null");
+        public Criteria andIncomeMonthIsNotNull() {
+            addCriterion("income_month is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayEqualTo(String value) {
-            addCriterion("income_day =", value, "incomeDay");
+        public Criteria andIncomeMonthEqualTo(String value) {
+            addCriterion("income_month =", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayNotEqualTo(String value) {
-            addCriterion("income_day <>", value, "incomeDay");
+        public Criteria andIncomeMonthNotEqualTo(String value) {
+            addCriterion("income_month <>", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayGreaterThan(String value) {
-            addCriterion("income_day >", value, "incomeDay");
+        public Criteria andIncomeMonthGreaterThan(String value) {
+            addCriterion("income_month >", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayGreaterThanOrEqualTo(String value) {
-            addCriterion("income_day >=", value, "incomeDay");
+        public Criteria andIncomeMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("income_month >=", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayLessThan(String value) {
-            addCriterion("income_day <", value, "incomeDay");
+        public Criteria andIncomeMonthLessThan(String value) {
+            addCriterion("income_month <", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayLessThanOrEqualTo(String value) {
-            addCriterion("income_day <=", value, "incomeDay");
+        public Criteria andIncomeMonthLessThanOrEqualTo(String value) {
+            addCriterion("income_month <=", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayLike(String value) {
-            addCriterion("income_day like", value, "incomeDay");
+        public Criteria andIncomeMonthLike(String value) {
+            addCriterion("income_month like", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayNotLike(String value) {
-            addCriterion("income_day not like", value, "incomeDay");
+        public Criteria andIncomeMonthNotLike(String value) {
+            addCriterion("income_month not like", value, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayIn(List<String> values) {
-            addCriterion("income_day in", values, "incomeDay");
+        public Criteria andIncomeMonthIn(List<String> values) {
+            addCriterion("income_month in", values, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayNotIn(List<String> values) {
-            addCriterion("income_day not in", values, "incomeDay");
+        public Criteria andIncomeMonthNotIn(List<String> values) {
+            addCriterion("income_month not in", values, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayBetween(String value1, String value2) {
-            addCriterion("income_day between", value1, value2, "incomeDay");
+        public Criteria andIncomeMonthBetween(String value1, String value2) {
+            addCriterion("income_month between", value1, value2, "incomeMonth");
             return (Criteria) this;
         }
 
-        public Criteria andIncomeDayNotBetween(String value1, String value2) {
-            addCriterion("income_day not between", value1, value2, "incomeDay");
+        public Criteria andIncomeMonthNotBetween(String value1, String value2) {
+            addCriterion("income_month not between", value1, value2, "incomeMonth");
             return (Criteria) this;
         }
 

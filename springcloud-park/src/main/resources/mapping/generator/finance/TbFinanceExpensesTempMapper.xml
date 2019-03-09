@@ -3,9 +3,10 @@
 <mapper namespace="com.jn.park.finance.dao.TbFinanceExpensesTempMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceExpensesTemp">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="cost_happend_time" jdbcType="TIMESTAMP" property="costHappendTime" />
+    <result column="cost_happend_time" jdbcType="CHAR" property="costHappendTime" />
     <result column="cost" jdbcType="DECIMAL" property="cost" />
-    <result column="cost_before_type_id" jdbcType="INTEGER" property="costBeforeTypeId" />
+    <result column="cost_id" jdbcType="VARCHAR" property="costId" />
+    <result column="excel_id" jdbcType="VARCHAR" property="excelId" />
     <result column="cost_before_type_name" jdbcType="VARCHAR" property="costBeforeTypeName" />
     <result column="cost_after_type_id" jdbcType="INTEGER" property="costAfterTypeId" />
     <result column="cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
@@ -76,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, cost_happend_time, cost, cost_before_type_id, cost_before_type_name, cost_after_type_id, 
+    id, cost_happend_time, cost, cost_id, excel_id, cost_before_type_name, cost_after_type_id, 
     cost_after_type_name, department_id, department_name, record_status, creator_account, 
     created_time, modifier_account, modified_time
   </sql>
@@ -114,16 +115,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_finance_expenses_temp (cost_happend_time, cost, cost_before_type_id, 
-      cost_before_type_name, cost_after_type_id, cost_after_type_name, 
-      department_id, department_name, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
-    values (#{costHappendTime,jdbcType=TIMESTAMP}, #{cost,jdbcType=DECIMAL}, #{costBeforeTypeId,jdbcType=INTEGER}, 
-      #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=INTEGER}, #{costAfterTypeName,jdbcType=VARCHAR}, 
-      #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_finance_expenses_temp (cost_happend_time, cost, cost_id, 
+      excel_id, cost_before_type_name, cost_after_type_id, 
+      cost_after_type_name, department_id, department_name, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costId,jdbcType=VARCHAR}, 
+      #{excelId,jdbcType=VARCHAR}, #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=INTEGER}, 
+      #{costAfterTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -137,8 +138,11 @@
       <if test="cost != null">
         cost,
       </if>
-      <if test="costBeforeTypeId != null">
-        cost_before_type_id,
+      <if test="costId != null">
+        cost_id,
+      </if>
+      <if test="excelId != null">
+        excel_id,
       </if>
       <if test="costBeforeTypeName != null">
         cost_before_type_name,
@@ -173,13 +177,16 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="costHappendTime != null">
-        #{costHappendTime,jdbcType=TIMESTAMP},
+        #{costHappendTime,jdbcType=CHAR},
       </if>
       <if test="cost != null">
         #{cost,jdbcType=DECIMAL},
       </if>
-      <if test="costBeforeTypeId != null">
-        #{costBeforeTypeId,jdbcType=INTEGER},
+      <if test="costId != null">
+        #{costId,jdbcType=VARCHAR},
+      </if>
+      <if test="excelId != null">
+        #{excelId,jdbcType=VARCHAR},
       </if>
       <if test="costBeforeTypeName != null">
         #{costBeforeTypeName,jdbcType=VARCHAR},
@@ -226,13 +233,16 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.costHappendTime != null">
-        cost_happend_time = #{record.costHappendTime,jdbcType=TIMESTAMP},
+        cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
       </if>
       <if test="record.cost != null">
         cost = #{record.cost,jdbcType=DECIMAL},
       </if>
-      <if test="record.costBeforeTypeId != null">
-        cost_before_type_id = #{record.costBeforeTypeId,jdbcType=INTEGER},
+      <if test="record.costId != null">
+        cost_id = #{record.costId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.excelId != null">
+        excel_id = #{record.excelId,jdbcType=VARCHAR},
       </if>
       <if test="record.costBeforeTypeName != null">
         cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
@@ -272,9 +282,10 @@
   <update id="updateByExample" parameterType="map">
     update tb_finance_expenses_temp
     set id = #{record.id,jdbcType=INTEGER},
-      cost_happend_time = #{record.costHappendTime,jdbcType=TIMESTAMP},
+      cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
       cost = #{record.cost,jdbcType=DECIMAL},
-      cost_before_type_id = #{record.costBeforeTypeId,jdbcType=INTEGER},
+      cost_id = #{record.costId,jdbcType=VARCHAR},
+      excel_id = #{record.excelId,jdbcType=VARCHAR},
       cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
       cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
       cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
@@ -293,13 +304,16 @@
     update tb_finance_expenses_temp
     <set>
       <if test="costHappendTime != null">
-        cost_happend_time = #{costHappendTime,jdbcType=TIMESTAMP},
+        cost_happend_time = #{costHappendTime,jdbcType=CHAR},
       </if>
       <if test="cost != null">
         cost = #{cost,jdbcType=DECIMAL},
       </if>
-      <if test="costBeforeTypeId != null">
-        cost_before_type_id = #{costBeforeTypeId,jdbcType=INTEGER},
+      <if test="costId != null">
+        cost_id = #{costId,jdbcType=VARCHAR},
+      </if>
+      <if test="excelId != null">
+        excel_id = #{excelId,jdbcType=VARCHAR},
       </if>
       <if test="costBeforeTypeName != null">
         cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
@@ -336,9 +350,10 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
     update tb_finance_expenses_temp
-    set cost_happend_time = #{costHappendTime,jdbcType=TIMESTAMP},
+    set cost_happend_time = #{costHappendTime,jdbcType=CHAR},
       cost = #{cost,jdbcType=DECIMAL},
-      cost_before_type_id = #{costBeforeTypeId,jdbcType=INTEGER},
+      cost_id = #{costId,jdbcType=VARCHAR},
+      excel_id = #{excelId,jdbcType=VARCHAR},
       cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
       cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
       cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},

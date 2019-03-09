@@ -61,7 +61,7 @@ public class FinanceBudgetServiceImplTest {
         for(int i=1;i<=5;i++){
             FinanceBudgetMoneyModel model=new FinanceBudgetMoneyModel();
             calendar.set(Calendar.MONTH,i);
-            model.setMonth(calendar.getTime());
+            model.setMonth(DateUtils.formatDate(calendar.getTime(),"yyyyMM"));
             model.setMoney(new BigDecimal(i*10));
             financeBudgetHistoryVo.getBudgetMoneyModels().add(model);
         }

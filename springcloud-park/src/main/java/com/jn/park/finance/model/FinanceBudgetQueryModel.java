@@ -24,10 +24,10 @@ public class FinanceBudgetQueryModel extends Page implements Serializable {
     private String departmentId;
 
     @ApiModelProperty("数据开始月份")
-    private Date startMonth;
+    private String startMonth;
 
     @ApiModelProperty("数据结束s月份")
-    private Date endMonth;
+    private String endMonth;
 
     @ApiModelProperty("排序条件")
     private String orderByClause;
@@ -48,19 +48,19 @@ public class FinanceBudgetQueryModel extends Page implements Serializable {
         this.departmentId = departmentId;
     }
 
-    public Date getStartMonth() {
+    public String getStartMonth() {
         return startMonth;
     }
 
-    public void setStartMonth(Date startMonth) {
+    public void setStartMonth(String startMonth) {
         this.startMonth = startMonth;
     }
 
-    public Date getEndMonth() {
+    public String getEndMonth() {
         return endMonth;
     }
 
-    public void setEndMonth(Date endMonth) {
+    public void setEndMonth(String endMonth) {
         this.endMonth = endMonth;
     }
 

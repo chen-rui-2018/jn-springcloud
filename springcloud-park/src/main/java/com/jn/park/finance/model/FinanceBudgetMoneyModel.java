@@ -18,15 +18,15 @@ public class FinanceBudgetMoneyModel implements Serializable {
 
     private static final long serialVersionUID = -2722782925178096971L;
     @ApiModelProperty("年月")
-    private Date month;
+    private String month;
     @ApiModelProperty("预算")
     private BigDecimal money;
 
-    public Date getMonth() {
+    public String getMonth() {
         return month;
     }
 
-    public void setMonth(Date month) {
+    public void setMonth(String month) {
         this.month = month;
     }
 

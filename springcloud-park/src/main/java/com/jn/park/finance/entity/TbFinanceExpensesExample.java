@@ -176,52 +176,62 @@ public class TbFinanceExpensesExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeEqualTo(Date value) {
+        public Criteria andCostHappendTimeEqualTo(String value) {
             addCriterion("cost_happend_time =", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeNotEqualTo(Date value) {
+        public Criteria andCostHappendTimeNotEqualTo(String value) {
             addCriterion("cost_happend_time <>", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeGreaterThan(Date value) {
+        public Criteria andCostHappendTimeGreaterThan(String value) {
             addCriterion("cost_happend_time >", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeGreaterThanOrEqualTo(Date value) {
+        public Criteria andCostHappendTimeGreaterThanOrEqualTo(String value) {
             addCriterion("cost_happend_time >=", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeLessThan(Date value) {
+        public Criteria andCostHappendTimeLessThan(String value) {
             addCriterion("cost_happend_time <", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeLessThanOrEqualTo(Date value) {
+        public Criteria andCostHappendTimeLessThanOrEqualTo(String value) {
             addCriterion("cost_happend_time <=", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeIn(List<Date> values) {
+        public Criteria andCostHappendTimeLike(String value) {
+            addCriterion("cost_happend_time like", value, "costHappendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostHappendTimeNotLike(String value) {
+            addCriterion("cost_happend_time not like", value, "costHappendTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostHappendTimeIn(List<String> values) {
             addCriterion("cost_happend_time in", values, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeNotIn(List<Date> values) {
+        public Criteria andCostHappendTimeNotIn(List<String> values) {
             addCriterion("cost_happend_time not in", values, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeBetween(Date value1, Date value2) {
+        public Criteria andCostHappendTimeBetween(String value1, String value2) {
             addCriterion("cost_happend_time between", value1, value2, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostHappendTimeNotBetween(Date value1, Date value2) {
+        public Criteria andCostHappendTimeNotBetween(String value1, String value2) {
             addCriterion("cost_happend_time not between", value1, value2, "costHappendTime");
             return (Criteria) this;
         }
@@ -286,63 +296,143 @@ public class TbFinanceExpensesExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdIsNull() {
-            addCriterion("cost_before_type_id is null");
+        public Criteria andCostIdIsNull() {
+            addCriterion("cost_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdIsNotNull() {
-            addCriterion("cost_before_type_id is not null");
+        public Criteria andCostIdIsNotNull() {
+            addCriterion("cost_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdEqualTo(Integer value) {
-            addCriterion("cost_before_type_id =", value, "costBeforeTypeId");
+        public Criteria andCostIdEqualTo(String value) {
+            addCriterion("cost_id =", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdNotEqualTo(Integer value) {
-            addCriterion("cost_before_type_id <>", value, "costBeforeTypeId");
+        public Criteria andCostIdNotEqualTo(String value) {
+            addCriterion("cost_id <>", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdGreaterThan(Integer value) {
-            addCriterion("cost_before_type_id >", value, "costBeforeTypeId");
+        public Criteria andCostIdGreaterThan(String value) {
+            addCriterion("cost_id >", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("cost_before_type_id >=", value, "costBeforeTypeId");
+        public Criteria andCostIdGreaterThanOrEqualTo(String value) {
+            addCriterion("cost_id >=", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdLessThan(Integer value) {
-            addCriterion("cost_before_type_id <", value, "costBeforeTypeId");
+        public Criteria andCostIdLessThan(String value) {
+            addCriterion("cost_id <", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdLessThanOrEqualTo(Integer value) {
-            addCriterion("cost_before_type_id <=", value, "costBeforeTypeId");
+        public Criteria andCostIdLessThanOrEqualTo(String value) {
+            addCriterion("cost_id <=", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdIn(List<Integer> values) {
-            addCriterion("cost_before_type_id in", values, "costBeforeTypeId");
+        public Criteria andCostIdLike(String value) {
+            addCriterion("cost_id like", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdNotIn(List<Integer> values) {
-            addCriterion("cost_before_type_id not in", values, "costBeforeTypeId");
+        public Criteria andCostIdNotLike(String value) {
+            addCriterion("cost_id not like", value, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdBetween(Integer value1, Integer value2) {
-            addCriterion("cost_before_type_id between", value1, value2, "costBeforeTypeId");
+        public Criteria andCostIdIn(List<String> values) {
+            addCriterion("cost_id in", values, "costId");
             return (Criteria) this;
         }
 
-        public Criteria andCostBeforeTypeIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("cost_before_type_id not between", value1, value2, "costBeforeTypeId");
+        public Criteria andCostIdNotIn(List<String> values) {
+            addCriterion("cost_id not in", values, "costId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIdBetween(String value1, String value2) {
+            addCriterion("cost_id between", value1, value2, "costId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostIdNotBetween(String value1, String value2) {
+            addCriterion("cost_id not between", value1, value2, "costId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdIsNull() {
+            addCriterion("excel_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdIsNotNull() {
+            addCriterion("excel_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdEqualTo(String value) {
+            addCriterion("excel_id =", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdNotEqualTo(String value) {
+            addCriterion("excel_id <>", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdGreaterThan(String value) {
+            addCriterion("excel_id >", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdGreaterThanOrEqualTo(String value) {
+            addCriterion("excel_id >=", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdLessThan(String value) {
+            addCriterion("excel_id <", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdLessThanOrEqualTo(String value) {
+            addCriterion("excel_id <=", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdLike(String value) {
+            addCriterion("excel_id like", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdNotLike(String value) {
+            addCriterion("excel_id not like", value, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdIn(List<String> values) {
+            addCriterion("excel_id in", values, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdNotIn(List<String> values) {
+            addCriterion("excel_id not in", values, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdBetween(String value1, String value2) {
+            addCriterion("excel_id between", value1, value2, "excelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andExcelIdNotBetween(String value1, String value2) {
+            addCriterion("excel_id not between", value1, value2, "excelId");
             return (Criteria) this;
         }
 

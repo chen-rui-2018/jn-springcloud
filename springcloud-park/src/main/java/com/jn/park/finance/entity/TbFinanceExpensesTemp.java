@@ -8,14 +8,17 @@ public class TbFinanceExpensesTemp implements Serializable {
     /*@ApiModelProperty("临时数据导入时的excel文件标号")*/
     private Integer id;
 
-    /*@ApiModelProperty("费用发生时间")*/
-    private Date costHappendTime;
+    /*@ApiModelProperty("费用发生时间YYYYMM")*/
+    private String costHappendTime;
 
     /*@ApiModelProperty("费用金额")*/
     private BigDecimal cost;
 
-    /*@ApiModelProperty("打标前费用类型")*/
-    private Integer costBeforeTypeId;
+    /*@ApiModelProperty("费用流水号")*/
+    private String costId;
+
+    /*@ApiModelProperty("批次号")*/
+    private String excelId;
 
     /*@ApiModelProperty("")*/
     private String costBeforeTypeName;
@@ -57,12 +60,12 @@ public class TbFinanceExpensesTemp implements Serializable {
         this.id = id;
     }
 
-    public Date getCostHappendTime() {
+    public String getCostHappendTime() {
         return costHappendTime;
     }
 
-    public void setCostHappendTime(Date costHappendTime) {
-        this.costHappendTime = costHappendTime;
+    public void setCostHappendTime(String costHappendTime) {
+        this.costHappendTime = costHappendTime == null ? null : costHappendTime.trim();
     }
 
     public BigDecimal getCost() {
@@ -73,12 +76,20 @@ public class TbFinanceExpensesTemp implements Serializable {
         this.cost = cost;
     }
 
-    public Integer getCostBeforeTypeId() {
-        return costBeforeTypeId;
+    public String getCostId() {
+        return costId;
     }
 
-    public void setCostBeforeTypeId(Integer costBeforeTypeId) {
-        this.costBeforeTypeId = costBeforeTypeId;
+    public void setCostId(String costId) {
+        this.costId = costId == null ? null : costId.trim();
+    }
+
+    public String getExcelId() {
+        return excelId;
+    }
+
+    public void setExcelId(String excelId) {
+        this.excelId = excelId == null ? null : excelId.trim();
     }
 
     public String getCostBeforeTypeName() {
@@ -176,7 +187,8 @@ public class TbFinanceExpensesTemp implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getCostHappendTime() == null ? other.getCostHappendTime() == null : this.getCostHappendTime().equals(other.getCostHappendTime()))
             && (this.getCost() == null ? other.getCost() == null : this.getCost().equals(other.getCost()))
-            && (this.getCostBeforeTypeId() == null ? other.getCostBeforeTypeId() == null : this.getCostBeforeTypeId().equals(other.getCostBeforeTypeId()))
+            && (this.getCostId() == null ? other.getCostId() == null : this.getCostId().equals(other.getCostId()))
+            && (this.getExcelId() == null ? other.getExcelId() == null : this.getExcelId().equals(other.getExcelId()))
             && (this.getCostBeforeTypeName() == null ? other.getCostBeforeTypeName() == null : this.getCostBeforeTypeName().equals(other.getCostBeforeTypeName()))
             && (this.getCostAfterTypeId() == null ? other.getCostAfterTypeId() == null : this.getCostAfterTypeId().equals(other.getCostAfterTypeId()))
             && (this.getCostAfterTypeName() == null ? other.getCostAfterTypeName() == null : this.getCostAfterTypeName().equals(other.getCostAfterTypeName()))
@@ -196,7 +208,8 @@ public class TbFinanceExpensesTemp implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getCostHappendTime() == null) ? 0 : getCostHappendTime().hashCode());
         result = prime * result + ((getCost() == null) ? 0 : getCost().hashCode());
-        result = prime * result + ((getCostBeforeTypeId() == null) ? 0 : getCostBeforeTypeId().hashCode());
+        result = prime * result + ((getCostId() == null) ? 0 : getCostId().hashCode());
+        result = prime * result + ((getExcelId() == null) ? 0 : getExcelId().hashCode());
         result = prime * result + ((getCostBeforeTypeName() == null) ? 0 : getCostBeforeTypeName().hashCode());
         result = prime * result + ((getCostAfterTypeId() == null) ? 0 : getCostAfterTypeId().hashCode());
         result = prime * result + ((getCostAfterTypeName() == null) ? 0 : getCostAfterTypeName().hashCode());
@@ -219,7 +232,8 @@ public class TbFinanceExpensesTemp implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", costHappendTime=").append(costHappendTime);
         sb.append(", cost=").append(cost);
-        sb.append(", costBeforeTypeId=").append(costBeforeTypeId);
+        sb.append(", costId=").append(costId);
+        sb.append(", excelId=").append(excelId);
         sb.append(", costBeforeTypeName=").append(costBeforeTypeName);
         sb.append(", costAfterTypeId=").append(costAfterTypeId);
         sb.append(", costAfterTypeName=").append(costAfterTypeName);

@@ -3,7 +3,6 @@ package com.jn.park.finance.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class TbFinanceTotalBudgetExample {
@@ -105,32 +104,6 @@ public class TbFinanceTotalBudgetExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -473,53 +446,63 @@ public class TbFinanceTotalBudgetExample {
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthEqualTo(Date value) {
-            addCriterionForJDBCDate("budget_month =", value, "budgetMonth");
+        public Criteria andBudgetMonthEqualTo(String value) {
+            addCriterion("budget_month =", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthNotEqualTo(Date value) {
-            addCriterionForJDBCDate("budget_month <>", value, "budgetMonth");
+        public Criteria andBudgetMonthNotEqualTo(String value) {
+            addCriterion("budget_month <>", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthGreaterThan(Date value) {
-            addCriterionForJDBCDate("budget_month >", value, "budgetMonth");
+        public Criteria andBudgetMonthGreaterThan(String value) {
+            addCriterion("budget_month >", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("budget_month >=", value, "budgetMonth");
+        public Criteria andBudgetMonthGreaterThanOrEqualTo(String value) {
+            addCriterion("budget_month >=", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthLessThan(Date value) {
-            addCriterionForJDBCDate("budget_month <", value, "budgetMonth");
+        public Criteria andBudgetMonthLessThan(String value) {
+            addCriterion("budget_month <", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("budget_month <=", value, "budgetMonth");
+        public Criteria andBudgetMonthLessThanOrEqualTo(String value) {
+            addCriterion("budget_month <=", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthIn(List<Date> values) {
-            addCriterionForJDBCDate("budget_month in", values, "budgetMonth");
+        public Criteria andBudgetMonthLike(String value) {
+            addCriterion("budget_month like", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthNotIn(List<Date> values) {
-            addCriterionForJDBCDate("budget_month not in", values, "budgetMonth");
+        public Criteria andBudgetMonthNotLike(String value) {
+            addCriterion("budget_month not like", value, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("budget_month between", value1, value2, "budgetMonth");
+        public Criteria andBudgetMonthIn(List<String> values) {
+            addCriterion("budget_month in", values, "budgetMonth");
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("budget_month not between", value1, value2, "budgetMonth");
+        public Criteria andBudgetMonthNotIn(List<String> values) {
+            addCriterion("budget_month not in", values, "budgetMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andBudgetMonthBetween(String value1, String value2) {
+            addCriterion("budget_month between", value1, value2, "budgetMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andBudgetMonthNotBetween(String value1, String value2) {
+            addCriterion("budget_month not between", value1, value2, "budgetMonth");
             return (Criteria) this;
         }
 
@@ -900,6 +883,76 @@ public class TbFinanceTotalBudgetExample {
 
         public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
             addCriterion("created_time not between", value1, value2, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateIsNull() {
+            addCriterion("deal_date is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateIsNotNull() {
+            addCriterion("deal_date is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateEqualTo(String value) {
+            addCriterion("deal_date =", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateNotEqualTo(String value) {
+            addCriterion("deal_date <>", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateGreaterThan(String value) {
+            addCriterion("deal_date >", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateGreaterThanOrEqualTo(String value) {
+            addCriterion("deal_date >=", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateLessThan(String value) {
+            addCriterion("deal_date <", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateLessThanOrEqualTo(String value) {
+            addCriterion("deal_date <=", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateLike(String value) {
+            addCriterion("deal_date like", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateNotLike(String value) {
+            addCriterion("deal_date not like", value, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateIn(List<String> values) {
+            addCriterion("deal_date in", values, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateNotIn(List<String> values) {
+            addCriterion("deal_date not in", values, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateBetween(String value1, String value2) {
+            addCriterion("deal_date between", value1, value2, "dealDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andDealDateNotBetween(String value1, String value2) {
+            addCriterion("deal_date not between", value1, value2, "dealDate");
             return (Criteria) this;
         }
     }

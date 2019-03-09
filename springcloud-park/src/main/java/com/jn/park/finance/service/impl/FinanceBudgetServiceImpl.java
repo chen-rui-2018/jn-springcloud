@@ -5,7 +5,6 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.DateUtils;
 import com.jn.park.finance.dao.FinanceBudgetMapper;
 import com.jn.park.finance.dao.TbFinanceBudgetHistoryMapper;
 import com.jn.park.finance.dao.TbFinanceTotalBudgetMapper;
@@ -130,7 +129,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         historyExampleCriteria.andBudgetTypeEqualTo(new Byte("0"));
         historyExampleCriteria.andCostTypeIdEqualTo(costTypeId);
         historyExampleCriteria.andDepartmentIdEqualTo(departmentId);
-        List<Date>monthList=new ArrayList<>();
+        List<String>monthList=new ArrayList<>();
         for(FinanceBudgetMoneyModel moneyModel:financeBudgetMoneyModelList){
             monthList.add(moneyModel.getMonth());
         }
@@ -139,10 +138,6 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         if(null!=historyList&&historyList.size()>0){
 
             String[] years=new String[historyList.size()];
-
-            for(int i=0;i<historyList.size();i++){
-                years[i]= DateUtils.formatDate(historyList.get(0).getBudgetMonth(),"yyyy年MM月");
-            }
             StringBuffer msg=new StringBuffer();
             msg.append("【年初预算】只能录入一次，你已经录入过【").append(StringUtils.join(years,",")).append("】的【").append(costTypeName).append("】预算了，不能再录入。");
             throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,msg.toString());
@@ -151,13 +146,13 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     }
 
-    private TbFinanceTotalBudget selectByPrimaryKey(Integer costTypeId,String departmentId,Date budgetMont){
+    private TbFinanceTotalBudget selectByPrimaryKey(Integer costTypeId,String departmentId,String budgetMonth){
         TbFinanceTotalBudgetExample totalBudgetExample=new TbFinanceTotalBudgetExample();
         TbFinanceTotalBudgetExample.Criteria totalBudgetExampleCriteria=totalBudgetExample.createCriteria();
         totalBudgetExampleCriteria.andRecordStatusEqualTo(new Byte("1"));
         totalBudgetExampleCriteria.andCostTypeIdEqualTo(costTypeId);
         totalBudgetExampleCriteria.andDepartmentIdEqualTo(departmentId);
-        totalBudgetExampleCriteria.andBudgetMonthEqualTo(budgetMont);
+        totalBudgetExampleCriteria.andBudgetMonthEqualTo(budgetMonth);
         List<TbFinanceTotalBudget> totalBudgetList=tbFinanceTotalBudgetMapper.selectByExample(totalBudgetExample);
         if(null==totalBudgetList){
             return null;
@@ -167,7 +162,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         return null;
     }
 
-    private void updateTotal(Integer costTypeId, String costTypeName, String departmentId, String departmentName,Date budgetMonth, String userAccount){
+    private void updateTotal(Integer costTypeId, String costTypeName, String departmentId, String departmentName,String budgetMonth, String userAccount){
         //查询预算历史中的总预算（按月统计）
         FinanceBudgetHistoryModel historyModel=financeBudgetMapper.calcHistoryMoney(departmentId,costTypeId,budgetMonth);
         //

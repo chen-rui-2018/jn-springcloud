@@ -13,7 +13,7 @@ import java.util.Map;
 public interface FinanceBudgetMapper {
 
     //查询预算历史中的总预算（按月统计）
-    FinanceBudgetHistoryModel calcHistoryMoney(@Param("departmentId")String departmentId, @Param("costTypeId")Integer costTypeId, @Param("budgetMonth")Date budgetMonth );
+    FinanceBudgetHistoryModel calcHistoryMoney(@Param("departmentId")String departmentId, @Param("costTypeId")Integer costTypeId, @Param("budgetMonth")String budgetMonth );
 
-    int updateTotal(@Param("departmentId") String departmentId,@Param("costTypeId")Integer costTypeId,@Param("budgetMonth")Date budgetMonth);
+    int updateTotal(@Param("departmentId") String departmentId,@Param("costTypeId")Integer costTypeId,@Param("budgetMonth")String budgetMonth);
 }

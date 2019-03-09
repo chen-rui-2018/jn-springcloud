@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.finance.dao.TbFinanceIncomeMonthMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceIncomeMonth">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="income_day" jdbcType="VARCHAR" property="incomeDay" />
+    <result column="income_month" jdbcType="CHAR" property="incomeMonth" />
     <result column="income_type" jdbcType="VARCHAR" property="incomeType" />
     <result column="income_typename" jdbcType="INTEGER" property="incomeTypename" />
     <result column="income" jdbcType="DECIMAL" property="income" />
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, income_day, income_type, income_typename, income, record_status, creator_account, 
+    id, income_month, income_type, income_typename, income, record_status, creator_account, 
     created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceIncomeMonthExample" resultMap="BaseResultMap">
@@ -109,11 +109,11 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_finance_income_month (income_day, income_type, income_typename, 
+    insert into tb_finance_income_month (income_month, income_type, income_typename, 
       income, record_status, creator_account, 
       created_time, modifier_account, modified_time
       )
-    values (#{incomeDay,jdbcType=VARCHAR}, #{incomeType,jdbcType=VARCHAR}, #{incomeTypename,jdbcType=INTEGER}, 
+    values (#{incomeMonth,jdbcType=CHAR}, #{incomeType,jdbcType=VARCHAR}, #{incomeTypename,jdbcType=INTEGER}, 
       #{income,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
@@ -124,8 +124,8 @@
     </selectKey>
     insert into tb_finance_income_month
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="incomeDay != null">
-        income_day,
+      <if test="incomeMonth != null">
+        income_month,
       </if>
       <if test="incomeType != null">
         income_type,
@@ -153,8 +153,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="incomeDay != null">
-        #{incomeDay,jdbcType=VARCHAR},
+      <if test="incomeMonth != null">
+        #{incomeMonth,jdbcType=CHAR},
       </if>
       <if test="incomeType != null">
         #{incomeType,jdbcType=VARCHAR},
@@ -194,8 +194,8 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.incomeDay != null">
-        income_day = #{record.incomeDay,jdbcType=VARCHAR},
+      <if test="record.incomeMonth != null">
+        income_month = #{record.incomeMonth,jdbcType=CHAR},
       </if>
       <if test="record.incomeType != null">
         income_type = #{record.incomeType,jdbcType=VARCHAR},
@@ -229,7 +229,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_finance_income_month
     set id = #{record.id,jdbcType=INTEGER},
-      income_day = #{record.incomeDay,jdbcType=VARCHAR},
+      income_month = #{record.incomeMonth,jdbcType=CHAR},
       income_type = #{record.incomeType,jdbcType=VARCHAR},
       income_typename = #{record.incomeTypename,jdbcType=INTEGER},
       income = #{record.income,jdbcType=DECIMAL},
@@ -245,8 +245,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.finance.entity.TbFinanceIncomeMonth">
     update tb_finance_income_month
     <set>
-      <if test="incomeDay != null">
-        income_day = #{incomeDay,jdbcType=VARCHAR},
+      <if test="incomeMonth != null">
+        income_month = #{incomeMonth,jdbcType=CHAR},
       </if>
       <if test="incomeType != null">
         income_type = #{incomeType,jdbcType=VARCHAR},
@@ -277,7 +277,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceIncomeMonth">
     update tb_finance_income_month
-    set income_day = #{incomeDay,jdbcType=VARCHAR},
+    set income_month = #{incomeMonth,jdbcType=CHAR},
       income_type = #{incomeType,jdbcType=VARCHAR},
       income_typename = #{incomeTypename,jdbcType=INTEGER},
       income = #{income,jdbcType=DECIMAL},

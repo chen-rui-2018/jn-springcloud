@@ -16,7 +16,7 @@
         AND bh.cost_type_id = #{costTypeId,jdbcType=INTEGER}
       )
     WHERE
-      tb.budget_month = #{budgetMonth,jdbcType=DATE}
+      tb.budget_month = #{budgetMonth,jdbcType=VARCHAR}
       AND tb.department_id = #{departmentId,jdbcType=VARCHAR}
       AND tb.cost_type_id = #{costTypeId,jdbcType=INTEGER}
   </update>
@@ -26,7 +26,7 @@
     select department_id departmentId,cost_type_id costTypeId,budget_month budgetMonth,sum(budget_money) budgetMoney from tb_finance_budget_history bh
     <where>
       record_status=1 and cost_type_id=#{costTypeId,jdbcType=INTEGER} and department_id=#{departmentId,jdbcType=VARCHAR} and
-        budget_month =#{budgetMonth,jdbcType=DATE}
+        budget_month =#{budgetMonth,jdbcType=VARCHAR}
     </where>
     group by department_id,cost_type_id,budget_month ;
   </select>

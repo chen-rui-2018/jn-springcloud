@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TbFinanceExpenses implements Serializable {
+public class TbFinanceExpensesMonth implements Serializable {
     /*@ApiModelProperty("主键")*/
     private Integer id;
 
@@ -13,15 +13,6 @@ public class TbFinanceExpenses implements Serializable {
 
     /*@ApiModelProperty("费用金额")*/
     private BigDecimal cost;
-
-    /*@ApiModelProperty("费用流水号")*/
-    private String costId;
-
-    /*@ApiModelProperty("批次号")*/
-    private String excelId;
-
-    /*@ApiModelProperty("打标前费用类型名称")*/
-    private String costBeforeTypeName;
 
     /*@ApiModelProperty("打标后费用类型")*/
     private Integer costAfterTypeId;
@@ -74,30 +65,6 @@ public class TbFinanceExpenses implements Serializable {
 
     public void setCost(BigDecimal cost) {
         this.cost = cost;
-    }
-
-    public String getCostId() {
-        return costId;
-    }
-
-    public void setCostId(String costId) {
-        this.costId = costId == null ? null : costId.trim();
-    }
-
-    public String getExcelId() {
-        return excelId;
-    }
-
-    public void setExcelId(String excelId) {
-        this.excelId = excelId == null ? null : excelId.trim();
-    }
-
-    public String getCostBeforeTypeName() {
-        return costBeforeTypeName;
-    }
-
-    public void setCostBeforeTypeName(String costBeforeTypeName) {
-        this.costBeforeTypeName = costBeforeTypeName == null ? null : costBeforeTypeName.trim();
     }
 
     public Integer getCostAfterTypeId() {
@@ -183,13 +150,10 @@ public class TbFinanceExpenses implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbFinanceExpenses other = (TbFinanceExpenses) that;
+        TbFinanceExpensesMonth other = (TbFinanceExpensesMonth) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getCostHappendTime() == null ? other.getCostHappendTime() == null : this.getCostHappendTime().equals(other.getCostHappendTime()))
             && (this.getCost() == null ? other.getCost() == null : this.getCost().equals(other.getCost()))
-            && (this.getCostId() == null ? other.getCostId() == null : this.getCostId().equals(other.getCostId()))
-            && (this.getExcelId() == null ? other.getExcelId() == null : this.getExcelId().equals(other.getExcelId()))
-            && (this.getCostBeforeTypeName() == null ? other.getCostBeforeTypeName() == null : this.getCostBeforeTypeName().equals(other.getCostBeforeTypeName()))
             && (this.getCostAfterTypeId() == null ? other.getCostAfterTypeId() == null : this.getCostAfterTypeId().equals(other.getCostAfterTypeId()))
             && (this.getCostAfterTypeName() == null ? other.getCostAfterTypeName() == null : this.getCostAfterTypeName().equals(other.getCostAfterTypeName()))
             && (this.getDepartmentId() == null ? other.getDepartmentId() == null : this.getDepartmentId().equals(other.getDepartmentId()))
@@ -208,9 +172,6 @@ public class TbFinanceExpenses implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getCostHappendTime() == null) ? 0 : getCostHappendTime().hashCode());
         result = prime * result + ((getCost() == null) ? 0 : getCost().hashCode());
-        result = prime * result + ((getCostId() == null) ? 0 : getCostId().hashCode());
-        result = prime * result + ((getExcelId() == null) ? 0 : getExcelId().hashCode());
-        result = prime * result + ((getCostBeforeTypeName() == null) ? 0 : getCostBeforeTypeName().hashCode());
         result = prime * result + ((getCostAfterTypeId() == null) ? 0 : getCostAfterTypeId().hashCode());
         result = prime * result + ((getCostAfterTypeName() == null) ? 0 : getCostAfterTypeName().hashCode());
         result = prime * result + ((getDepartmentId() == null) ? 0 : getDepartmentId().hashCode());
@@ -232,9 +193,6 @@ public class TbFinanceExpenses implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", costHappendTime=").append(costHappendTime);
         sb.append(", cost=").append(cost);
-        sb.append(", costId=").append(costId);
-        sb.append(", excelId=").append(excelId);
-        sb.append(", costBeforeTypeName=").append(costBeforeTypeName);
         sb.append(", costAfterTypeId=").append(costAfterTypeId);
         sb.append(", costAfterTypeName=").append(costAfterTypeName);
         sb.append(", departmentId=").append(departmentId);

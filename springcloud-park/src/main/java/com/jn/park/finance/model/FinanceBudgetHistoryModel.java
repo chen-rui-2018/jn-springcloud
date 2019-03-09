@@ -32,7 +32,7 @@ public class FinanceBudgetHistoryModel implements Serializable {
     private String departmentName;
 
     @ApiModelProperty("数据月份")
-    private Date budgetMonth;
+    private String budgetMonth;
 
     @ApiModelProperty("预算金额")
     private BigDecimal budgetMoney;
@@ -75,11 +75,11 @@ public class FinanceBudgetHistoryModel implements Serializable {
         this.departmentName = departmentName;
     }
 
-    public Date getBudgetMonth() {
+    public String getBudgetMonth() {
         return budgetMonth;
     }
 
-    public void setBudgetMonth(Date budgetMonth) {
+    public void setBudgetMonth(String budgetMonth) {
         this.budgetMonth = budgetMonth;
     }
 

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbFinanceBudgetHistoryExample {
+public class TbFinanceExpensesMonthExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbFinanceBudgetHistoryExample() {
+    public TbFinanceExpensesMonthExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -166,133 +166,263 @@ public class TbFinanceBudgetHistoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdIsNull() {
-            addCriterion("cost_type_id is null");
+        public Criteria andCostHappendTimeIsNull() {
+            addCriterion("cost_happend_time is null");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdIsNotNull() {
-            addCriterion("cost_type_id is not null");
+        public Criteria andCostHappendTimeIsNotNull() {
+            addCriterion("cost_happend_time is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdEqualTo(Integer value) {
-            addCriterion("cost_type_id =", value, "costTypeId");
+        public Criteria andCostHappendTimeEqualTo(String value) {
+            addCriterion("cost_happend_time =", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotEqualTo(Integer value) {
-            addCriterion("cost_type_id <>", value, "costTypeId");
+        public Criteria andCostHappendTimeNotEqualTo(String value) {
+            addCriterion("cost_happend_time <>", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdGreaterThan(Integer value) {
-            addCriterion("cost_type_id >", value, "costTypeId");
+        public Criteria andCostHappendTimeGreaterThan(String value) {
+            addCriterion("cost_happend_time >", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("cost_type_id >=", value, "costTypeId");
+        public Criteria andCostHappendTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("cost_happend_time >=", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdLessThan(Integer value) {
-            addCriterion("cost_type_id <", value, "costTypeId");
+        public Criteria andCostHappendTimeLessThan(String value) {
+            addCriterion("cost_happend_time <", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdLessThanOrEqualTo(Integer value) {
-            addCriterion("cost_type_id <=", value, "costTypeId");
+        public Criteria andCostHappendTimeLessThanOrEqualTo(String value) {
+            addCriterion("cost_happend_time <=", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdIn(List<Integer> values) {
-            addCriterion("cost_type_id in", values, "costTypeId");
+        public Criteria andCostHappendTimeLike(String value) {
+            addCriterion("cost_happend_time like", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotIn(List<Integer> values) {
-            addCriterion("cost_type_id not in", values, "costTypeId");
+        public Criteria andCostHappendTimeNotLike(String value) {
+            addCriterion("cost_happend_time not like", value, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdBetween(Integer value1, Integer value2) {
-            addCriterion("cost_type_id between", value1, value2, "costTypeId");
+        public Criteria andCostHappendTimeIn(List<String> values) {
+            addCriterion("cost_happend_time in", values, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("cost_type_id not between", value1, value2, "costTypeId");
+        public Criteria andCostHappendTimeNotIn(List<String> values) {
+            addCriterion("cost_happend_time not in", values, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameIsNull() {
-            addCriterion("cost_type_name is null");
+        public Criteria andCostHappendTimeBetween(String value1, String value2) {
+            addCriterion("cost_happend_time between", value1, value2, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameIsNotNull() {
-            addCriterion("cost_type_name is not null");
+        public Criteria andCostHappendTimeNotBetween(String value1, String value2) {
+            addCriterion("cost_happend_time not between", value1, value2, "costHappendTime");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameEqualTo(String value) {
-            addCriterion("cost_type_name =", value, "costTypeName");
+        public Criteria andCostIsNull() {
+            addCriterion("cost is null");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameNotEqualTo(String value) {
-            addCriterion("cost_type_name <>", value, "costTypeName");
+        public Criteria andCostIsNotNull() {
+            addCriterion("cost is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameGreaterThan(String value) {
-            addCriterion("cost_type_name >", value, "costTypeName");
+        public Criteria andCostEqualTo(BigDecimal value) {
+            addCriterion("cost =", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameGreaterThanOrEqualTo(String value) {
-            addCriterion("cost_type_name >=", value, "costTypeName");
+        public Criteria andCostNotEqualTo(BigDecimal value) {
+            addCriterion("cost <>", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameLessThan(String value) {
-            addCriterion("cost_type_name <", value, "costTypeName");
+        public Criteria andCostGreaterThan(BigDecimal value) {
+            addCriterion("cost >", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameLessThanOrEqualTo(String value) {
-            addCriterion("cost_type_name <=", value, "costTypeName");
+        public Criteria andCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost >=", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameLike(String value) {
-            addCriterion("cost_type_name like", value, "costTypeName");
+        public Criteria andCostLessThan(BigDecimal value) {
+            addCriterion("cost <", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameNotLike(String value) {
-            addCriterion("cost_type_name not like", value, "costTypeName");
+        public Criteria andCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost <=", value, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameIn(List<String> values) {
-            addCriterion("cost_type_name in", values, "costTypeName");
+        public Criteria andCostIn(List<BigDecimal> values) {
+            addCriterion("cost in", values, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameNotIn(List<String> values) {
-            addCriterion("cost_type_name not in", values, "costTypeName");
+        public Criteria andCostNotIn(List<BigDecimal> values) {
+            addCriterion("cost not in", values, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameBetween(String value1, String value2) {
-            addCriterion("cost_type_name between", value1, value2, "costTypeName");
+        public Criteria andCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost between", value1, value2, "cost");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeNameNotBetween(String value1, String value2) {
-            addCriterion("cost_type_name not between", value1, value2, "costTypeName");
+        public Criteria andCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost not between", value1, value2, "cost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdIsNull() {
+            addCriterion("cost_after_type_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdIsNotNull() {
+            addCriterion("cost_after_type_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdEqualTo(Integer value) {
+            addCriterion("cost_after_type_id =", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdNotEqualTo(Integer value) {
+            addCriterion("cost_after_type_id <>", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdGreaterThan(Integer value) {
+            addCriterion("cost_after_type_id >", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cost_after_type_id >=", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdLessThan(Integer value) {
+            addCriterion("cost_after_type_id <", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdLessThanOrEqualTo(Integer value) {
+            addCriterion("cost_after_type_id <=", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdIn(List<Integer> values) {
+            addCriterion("cost_after_type_id in", values, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdNotIn(List<Integer> values) {
+            addCriterion("cost_after_type_id not in", values, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdBetween(Integer value1, Integer value2) {
+            addCriterion("cost_after_type_id between", value1, value2, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("cost_after_type_id not between", value1, value2, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameIsNull() {
+            addCriterion("cost_after_type_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameIsNotNull() {
+            addCriterion("cost_after_type_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameEqualTo(String value) {
+            addCriterion("cost_after_type_name =", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameNotEqualTo(String value) {
+            addCriterion("cost_after_type_name <>", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameGreaterThan(String value) {
+            addCriterion("cost_after_type_name >", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameGreaterThanOrEqualTo(String value) {
+            addCriterion("cost_after_type_name >=", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameLessThan(String value) {
+            addCriterion("cost_after_type_name <", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameLessThanOrEqualTo(String value) {
+            addCriterion("cost_after_type_name <=", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameLike(String value) {
+            addCriterion("cost_after_type_name like", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameNotLike(String value) {
+            addCriterion("cost_after_type_name not like", value, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameIn(List<String> values) {
+            addCriterion("cost_after_type_name in", values, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameNotIn(List<String> values) {
+            addCriterion("cost_after_type_name not in", values, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameBetween(String value1, String value2) {
+            addCriterion("cost_after_type_name between", value1, value2, "costAfterTypeName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeNameNotBetween(String value1, String value2) {
+            addCriterion("cost_after_type_name not between", value1, value2, "costAfterTypeName");
             return (Criteria) this;
         }
 
@@ -436,196 +566,6 @@ public class TbFinanceBudgetHistoryExample {
             return (Criteria) this;
         }
 
-        public Criteria andBudgetMonthIsNull() {
-            addCriterion("budget_month is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthIsNotNull() {
-            addCriterion("budget_month is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthEqualTo(String value) {
-            addCriterion("budget_month =", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthNotEqualTo(String value) {
-            addCriterion("budget_month <>", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthGreaterThan(String value) {
-            addCriterion("budget_month >", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthGreaterThanOrEqualTo(String value) {
-            addCriterion("budget_month >=", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthLessThan(String value) {
-            addCriterion("budget_month <", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthLessThanOrEqualTo(String value) {
-            addCriterion("budget_month <=", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthLike(String value) {
-            addCriterion("budget_month like", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthNotLike(String value) {
-            addCriterion("budget_month not like", value, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthIn(List<String> values) {
-            addCriterion("budget_month in", values, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthNotIn(List<String> values) {
-            addCriterion("budget_month not in", values, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthBetween(String value1, String value2) {
-            addCriterion("budget_month between", value1, value2, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMonthNotBetween(String value1, String value2) {
-            addCriterion("budget_month not between", value1, value2, "budgetMonth");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyIsNull() {
-            addCriterion("budget_money is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyIsNotNull() {
-            addCriterion("budget_money is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyEqualTo(BigDecimal value) {
-            addCriterion("budget_money =", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyNotEqualTo(BigDecimal value) {
-            addCriterion("budget_money <>", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyGreaterThan(BigDecimal value) {
-            addCriterion("budget_money >", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("budget_money >=", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyLessThan(BigDecimal value) {
-            addCriterion("budget_money <", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("budget_money <=", value, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyIn(List<BigDecimal> values) {
-            addCriterion("budget_money in", values, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyNotIn(List<BigDecimal> values) {
-            addCriterion("budget_money not in", values, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("budget_money between", value1, value2, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetMoneyNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("budget_money not between", value1, value2, "budgetMoney");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeIsNull() {
-            addCriterion("budget_Type is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeIsNotNull() {
-            addCriterion("budget_Type is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeEqualTo(Byte value) {
-            addCriterion("budget_Type =", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeNotEqualTo(Byte value) {
-            addCriterion("budget_Type <>", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeGreaterThan(Byte value) {
-            addCriterion("budget_Type >", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("budget_Type >=", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeLessThan(Byte value) {
-            addCriterion("budget_Type <", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("budget_Type <=", value, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeIn(List<Byte> values) {
-            addCriterion("budget_Type in", values, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeNotIn(List<Byte> values) {
-            addCriterion("budget_Type not in", values, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeBetween(Byte value1, Byte value2) {
-            addCriterion("budget_Type between", value1, value2, "budgetType");
-            return (Criteria) this;
-        }
-
-        public Criteria andBudgetTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("budget_Type not between", value1, value2, "budgetType");
-            return (Criteria) this;
-        }
-
         public Criteria andRecordStatusIsNull() {
             addCriterion("record_status is null");
             return (Criteria) this;
@@ -683,6 +623,76 @@ public class TbFinanceBudgetHistoryExample {
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
             addCriterion("record_status not between", value1, value2, "recordStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountIsNull() {
+            addCriterion("creator_account is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountIsNotNull() {
+            addCriterion("creator_account is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountEqualTo(String value) {
+            addCriterion("creator_account =", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountNotEqualTo(String value) {
+            addCriterion("creator_account <>", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountGreaterThan(String value) {
+            addCriterion("creator_account >", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
+            addCriterion("creator_account >=", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountLessThan(String value) {
+            addCriterion("creator_account <", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
+            addCriterion("creator_account <=", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountLike(String value) {
+            addCriterion("creator_account like", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountNotLike(String value) {
+            addCriterion("creator_account not like", value, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountIn(List<String> values) {
+            addCriterion("creator_account in", values, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountNotIn(List<String> values) {
+            addCriterion("creator_account not in", values, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountBetween(String value1, String value2) {
+            addCriterion("creator_account between", value1, value2, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatorAccountNotBetween(String value1, String value2) {
+            addCriterion("creator_account not between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
@@ -873,76 +883,6 @@ public class TbFinanceBudgetHistoryExample {
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("modified_time not between", value1, value2, "modifiedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountIsNull() {
-            addCriterion("creator_account is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountIsNotNull() {
-            addCriterion("creator_account is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountEqualTo(String value) {
-            addCriterion("creator_account =", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountNotEqualTo(String value) {
-            addCriterion("creator_account <>", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountGreaterThan(String value) {
-            addCriterion("creator_account >", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("creator_account >=", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountLessThan(String value) {
-            addCriterion("creator_account <", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
-            addCriterion("creator_account <=", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountLike(String value) {
-            addCriterion("creator_account like", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountNotLike(String value) {
-            addCriterion("creator_account not like", value, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountIn(List<String> values) {
-            addCriterion("creator_account in", values, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountNotIn(List<String> values) {
-            addCriterion("creator_account not in", values, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountBetween(String value1, String value2) {
-            addCriterion("creator_account between", value1, value2, "creatorAccount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatorAccountNotBetween(String value1, String value2) {
-            addCriterion("creator_account not between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
     }

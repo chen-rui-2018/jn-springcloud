@@ -20,8 +20,8 @@ public class TbFinanceBudgetHistory implements Serializable {
     /*@ApiModelProperty("部门名称")*/
     private String departmentName;
 
-    /*@ApiModelProperty("数据月份")*/
-    private Date budgetMonth;
+    /*@ApiModelProperty("数据月份YYYYMM")*/
+    private String budgetMonth;
 
     /*@ApiModelProperty("预算金额")*/
     private BigDecimal budgetMoney;
@@ -86,12 +86,12 @@ public class TbFinanceBudgetHistory implements Serializable {
         this.departmentName = departmentName == null ? null : departmentName.trim();
     }
 
-    public Date getBudgetMonth() {
+    public String getBudgetMonth() {
         return budgetMonth;
     }
 
-    public void setBudgetMonth(Date budgetMonth) {
-        this.budgetMonth = budgetMonth;
+    public void setBudgetMonth(String budgetMonth) {
+        this.budgetMonth = budgetMonth == null ? null : budgetMonth.trim();
     }
 
     public BigDecimal getBudgetMoney() {

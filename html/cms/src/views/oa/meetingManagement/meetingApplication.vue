@@ -293,7 +293,7 @@ export default {
       this.meetingForm.startTime = this.startDate + ' ' + this.startTime + ':00'
       this.meetingForm.endTime = this.startDate + ' ' + this.endTime + ':00'
       var today_time = new Date().getTime()
-      if (new Date(this.meetingForm.startTime - today_time < 0)) {
+      if (new Date(this.meetingForm.startTime) - today_time < 0) {
         alert('会议开始时间必须大于当前当前时间')
         return
       }
@@ -337,45 +337,45 @@ export default {
       this.isDisabled = true
       this.meetingForm.startTime = this.startDate + ' ' + this.startTime + ':00'
       this.meetingForm.endTime = this.startDate + ' ' + this.endTime + ':00'
-      // var today_time = new Date().getTime()
-      // if (new Date(this.meetingForm.startTime - today_time < 0)) {
-      //   alert('会议开始时间必须大于当前当前时间')
-      //   return
-      // }
-      if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
-        this.$refs['meetingForm'].validate(valid => {
-          if (valid) {
-            if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
-            // 调用接口发送请求
-              api('oa/oaMeeting/add', this.meetingForm).then(res => {
-                if (res.data.code === '0000') {
-                  this.$message({
-                    message: '添加成功',
-                    type: 'success'
-                  })
-                  this.goBack(this.$route)
-                  // 重置表单元素的数据
-                  this.$refs['meetingForm'].resetFields()
-                } else {
-                  this.$message.error(res.data.result)
-                }
-                this.isDisabled = false
-              })
-            }
-            if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
-              alert('请选择参会人员')
-            } else if (!this.meetingForm.startTime) {
-              alert('请选择会议开始时间')
-            } else if (!this.meetingForm.endTime) {
-              alert('请选择会议结束时间')
-            }
-          } else {
-            this.isDisabled = false
-          }
-        })
-      } else {
-        alert('会议结束时间必须大于会议开始时间')
+      var today_time = new Date().getTime()
+      if (new Date(this.meetingForm.startTime) - today_time < 0) {
+        alert('会议开始时间必须大于当前当前时间')
+        return
       }
+      // if (new Date(this.meetingForm.endTime) - new Date(this.meetingForm.startTime) > 0) {
+      //   this.$refs['meetingForm'].validate(valid => {
+      //     if (valid) {
+      //       if (this.meetingForm.participantsId.length > 0 && this.meetingForm.startTime && this.meetingForm.endTime) {
+      //       // 调用接口发送请求
+      //         api('oa/oaMeeting/add', this.meetingForm).then(res => {
+      //           if (res.data.code === '0000') {
+      //             this.$message({
+      //               message: '添加成功',
+      //               type: 'success'
+      //             })
+      //             this.goBack(this.$route)
+      //             // 重置表单元素的数据
+      //             this.$refs['meetingForm'].resetFields()
+      //           } else {
+      //             this.$message.error(res.data.result)
+      //           }
+      //           this.isDisabled = false
+      //         })
+      //       }
+      //       if (this.meetingForm.participantsId.length === 0 || this.meetingForm.participantsId === null) {
+      //         alert('请选择参会人员')
+      //       } else if (!this.meetingForm.startTime) {
+      //         alert('请选择会议开始时间')
+      //       } else if (!this.meetingForm.endTime) {
+      //         alert('请选择会议结束时间')
+      //       }
+      //     } else {
+      //       this.isDisabled = false
+      //     }
+      //   })
+      // } else {
+      //   alert('会议结束时间必须大于会议开始时间')
+      // }
     },
     initList() {
       var query = this.$route.query
@@ -414,10 +414,8 @@ export default {
         this.dialogStatus = '会议申请'
         this.meetingroomName = query.name
         this.meetingForm.meetingRoomId = query.meetId
-        // alert(this.meetingroomForm.meetingroomId)
         this.startTime = query.currentTime
         this.startDate = query.currentDate
-        console.log(this.meetingForm.startTime)
       }
     }
   }

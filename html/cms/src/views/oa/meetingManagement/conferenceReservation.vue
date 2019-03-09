@@ -570,7 +570,7 @@ export default {
         var _arr = []
         for (var j = 0; j < 17; j++) {
           var obj = {
-            status: '0',
+            status: 0,
             id: arr_data[i].id,
             num: arr_data[i].roomNumber,
             position: arr_data[i].position,

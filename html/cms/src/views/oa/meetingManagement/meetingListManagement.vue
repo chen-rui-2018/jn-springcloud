@@ -153,7 +153,7 @@ export default {
   methods: {
     // 导出
     exportText() {
-      exportExcel('oa/oaMeeting/exportExcelMeeting').then(res => {
+      exportExcel(this.listQuery).then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -286,8 +286,7 @@ export default {
   }
   }
   .right_button{
-    position: absolute;
-    top:12%;
-    right: 3%;
+  float:right;
+  margin-right:20px;
   }
 </style>

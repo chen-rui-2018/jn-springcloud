@@ -1,6 +1,7 @@
 package com.jn.park.finance.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.park.finance.dao.FinanceTypeMapper;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
@@ -8,10 +9,11 @@ import com.jn.park.finance.entity.TbFinanceDepartmentToType;
 import com.jn.park.finance.entity.TbFinanceDepartmentToTypeExample;
 import com.jn.park.finance.entity.TbFinanceType;
 import com.jn.park.finance.entity.TbFinanceTypeExample;
-import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
+import com.jn.park.finance.enums.FinanceTypeExceptionEnums;
 import com.jn.park.finance.model.FinanceDepartmentToTypeModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceTypeService;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,8 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
     private TbFinanceDepartmentToTypeMapper tbFinanceDepartmentToTypeMapper;
     @Autowired
     private FinanceTypeMapper financeTypeMapper;
+    @Autowired
+    private SystemClient systemClient;
 
     @ServiceLog(doAction = "添加修改财务项目类型")
     @Override
@@ -96,6 +100,10 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
     @ServiceLog(doAction = "查看所有财务项目类型")
     @Override
     public List<FinanceTypeModel> selectTypeByDepartmentId(String departmentId) {
+        Result dept=systemClient.selectDeptByKey(departmentId,false);
+        if (null==dept.getData()){
+            throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_DEPT_NOT_EXIST);
+        }
         return financeTypeMapper.selectTypeByDepartmentId(departmentId);
     }
 
@@ -110,15 +118,24 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
 
    @ServiceLog(doAction = "校验费用类型名称是否已经存在")
     private void checkTypeName(String typeName,Integer typeId){
+       //修改操作时，name可能是null(不修改name)，此时路过校验
+        if(null!=typeId&&null==typeName){
+            return;
+        }
+        //新增时名称不能为空
+        if(null==typeId&&null==typeName){
+            throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_NAME_NOT_NULL);
+        }
         TbFinanceTypeExample example=new TbFinanceTypeExample();
         TbFinanceTypeExample.Criteria criteria=example.createCriteria();
         criteria.andRecordStatusEqualTo(new Byte("1")).andFinanceNameEqualTo(typeName);
+        //修改操作时，名字可修改为当前名称
         if(null!=typeId){
             criteria.andIdNotEqualTo(typeId);
         }
         long count=tbFinanceTypeMapper.countByExample(example);
         if(count>0){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"名称已经存在");
+            throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_NAME_EXIST);
         }
     }
 }

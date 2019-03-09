@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceDictionaryMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceDictionary">
-    <id column="dict_id" jdbcType="INTEGER" property="id" />
-    <result column="dict_dic_key" jdbcType="VARCHAR" property="dicKey" />
-    <result column="dict_dic_value" jdbcType="VARCHAR" property="dicValue" />
-    <result column="dict_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="dict_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="dict_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="dict_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="dict_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="dic_key" jdbcType="VARCHAR" property="dicKey" />
+    <result column="dic_value" jdbcType="VARCHAR" property="dicValue" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -70,10 +70,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    dict.id as dict_id, dict.dic_key as dict_dic_key, dict.dic_value as dict_dic_value, 
-    dict.record_status as dict_record_status, dict.creator_account as dict_creator_account, 
-    dict.created_time as dict_created_time, dict.modifier_account as dict_modifier_account, 
-    dict.modified_time as dict_modified_time
+    id, dic_key, dic_value, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceDictionaryExample" resultMap="BaseResultMap">
     select
@@ -81,7 +79,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_dictionary dict
+    from tb_finance_dictionary
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,15 +90,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_dictionary dict
-    where dict.id = #{id,jdbcType=INTEGER}
+    from tb_finance_dictionary
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_dictionary
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceDictionaryExample">
-    delete from tb_finance_dictionary dict
+    delete from tb_finance_dictionary
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -169,37 +167,37 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceDictionaryExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_dictionary dict
+    select count(*) from tb_finance_dictionary
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_dictionary dict
+    update tb_finance_dictionary
     <set>
       <if test="record.id != null">
-        dict.id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.dicKey != null">
-        dict.dic_key = #{record.dicKey,jdbcType=VARCHAR},
+        dic_key = #{record.dicKey,jdbcType=VARCHAR},
       </if>
       <if test="record.dicValue != null">
-        dict.dic_value = #{record.dicValue,jdbcType=VARCHAR},
+        dic_value = #{record.dicValue,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        dict.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        dict.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        dict.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        dict.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        dict.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -207,15 +205,15 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_dictionary dict
-    set dict.id = #{record.id,jdbcType=INTEGER},
-      dict.dic_key = #{record.dicKey,jdbcType=VARCHAR},
-      dict.dic_value = #{record.dicValue,jdbcType=VARCHAR},
-      dict.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      dict.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      dict.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      dict.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      dict.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_finance_dictionary
+    set id = #{record.id,jdbcType=INTEGER},
+      dic_key = #{record.dicKey,jdbcType=VARCHAR},
+      dic_value = #{record.dicValue,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceWorkOrderMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceWorkOrder">
-    <id column="wo_id" jdbcType="INTEGER" property="id" />
-    <result column="wo_order_Id" jdbcType="VARCHAR" property="orderId" />
-    <result column="wo_department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="wo_department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="wo_order_name" jdbcType="VARCHAR" property="orderName" />
-    <result column="wo_order_type" jdbcType="TINYINT" property="orderType" />
-    <result column="wo_order_publisher" jdbcType="VARCHAR" property="orderPublisher" />
-    <result column="wo_order_publish_time" jdbcType="TIMESTAMP" property="orderPublishTime" />
-    <result column="wo_order_publisher_comment" jdbcType="VARCHAR" property="orderPublisherComment" />
-    <result column="wo_order_auditing_state" jdbcType="TINYINT" property="orderAuditingState" />
-    <result column="wo_order_data" jdbcType="VARCHAR" property="orderData" />
-    <result column="wo_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="wo_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="wo_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="wo_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="wo_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="wo_check_progress" jdbcType="VARCHAR" property="checkProgress" />
-    <result column="wo_check_state" jdbcType="TINYINT" property="checkState" />
-    <result column="wo_check_comment" jdbcType="VARCHAR" property="checkComment" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="order_Id" jdbcType="VARCHAR" property="orderId" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="order_name" jdbcType="VARCHAR" property="orderName" />
+    <result column="order_type" jdbcType="TINYINT" property="orderType" />
+    <result column="order_publisher" jdbcType="VARCHAR" property="orderPublisher" />
+    <result column="order_publish_time" jdbcType="TIMESTAMP" property="orderPublishTime" />
+    <result column="order_publisher_comment" jdbcType="VARCHAR" property="orderPublisherComment" />
+    <result column="order_auditing_state" jdbcType="TINYINT" property="orderAuditingState" />
+    <result column="order_data" jdbcType="VARCHAR" property="orderData" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="check_progress" jdbcType="VARCHAR" property="checkProgress" />
+    <result column="check_state" jdbcType="TINYINT" property="checkState" />
+    <result column="check_comment" jdbcType="VARCHAR" property="checkComment" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -81,13 +81,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    wo.id as wo_id, wo.order_Id as wo_order_Id, wo.department_id as wo_department_id, 
-    wo.department_name as wo_department_name, wo.order_name as wo_order_name, wo.order_type as wo_order_type, 
-    wo.order_publisher as wo_order_publisher, wo.order_publish_time as wo_order_publish_time, 
-    wo.order_publisher_comment as wo_order_publisher_comment, wo.order_auditing_state as wo_order_auditing_state, 
-    wo.order_data as wo_order_data, wo.record_status as wo_record_status, wo.creator_account as wo_creator_account, 
-    wo.created_time as wo_created_time, wo.modifier_account as wo_modifier_account, wo.modified_time as wo_modified_time, 
-    wo.check_progress as wo_check_progress, wo.check_state as wo_check_state, wo.check_comment as wo_check_comment
+    id, order_Id, department_id, department_name, order_name, order_type, order_publisher, 
+    order_publish_time, order_publisher_comment, order_auditing_state, order_data, record_status, 
+    creator_account, created_time, modifier_account, modified_time, check_progress, check_state, 
+    check_comment
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceWorkOrderExample" resultMap="BaseResultMap">
     select
@@ -95,7 +92,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_work_order wo
+    from tb_finance_work_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -106,15 +103,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_work_order wo
-    where wo.id = #{id,jdbcType=INTEGER}
+    from tb_finance_work_order
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_work_order
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceWorkOrderExample">
-    delete from tb_finance_work_order wo
+    delete from tb_finance_work_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -257,70 +254,70 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceWorkOrderExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_work_order wo
+    select count(*) from tb_finance_work_order
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_work_order wo
+    update tb_finance_work_order
     <set>
       <if test="record.id != null">
-        wo.id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.orderId != null">
-        wo.order_Id = #{record.orderId,jdbcType=VARCHAR},
+        order_Id = #{record.orderId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        wo.department_id = #{record.departmentId,jdbcType=VARCHAR},
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        wo.department_name = #{record.departmentName,jdbcType=VARCHAR},
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.orderName != null">
-        wo.order_name = #{record.orderName,jdbcType=VARCHAR},
+        order_name = #{record.orderName,jdbcType=VARCHAR},
       </if>
       <if test="record.orderType != null">
-        wo.order_type = #{record.orderType,jdbcType=TINYINT},
+        order_type = #{record.orderType,jdbcType=TINYINT},
       </if>
       <if test="record.orderPublisher != null">
-        wo.order_publisher = #{record.orderPublisher,jdbcType=VARCHAR},
+        order_publisher = #{record.orderPublisher,jdbcType=VARCHAR},
       </if>
       <if test="record.orderPublishTime != null">
-        wo.order_publish_time = #{record.orderPublishTime,jdbcType=TIMESTAMP},
+        order_publish_time = #{record.orderPublishTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.orderPublisherComment != null">
-        wo.order_publisher_comment = #{record.orderPublisherComment,jdbcType=VARCHAR},
+        order_publisher_comment = #{record.orderPublisherComment,jdbcType=VARCHAR},
       </if>
       <if test="record.orderAuditingState != null">
-        wo.order_auditing_state = #{record.orderAuditingState,jdbcType=TINYINT},
+        order_auditing_state = #{record.orderAuditingState,jdbcType=TINYINT},
       </if>
       <if test="record.orderData != null">
-        wo.order_data = #{record.orderData,jdbcType=VARCHAR},
+        order_data = #{record.orderData,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        wo.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        wo.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        wo.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        wo.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        wo.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.checkProgress != null">
-        wo.check_progress = #{record.checkProgress,jdbcType=VARCHAR},
+        check_progress = #{record.checkProgress,jdbcType=VARCHAR},
       </if>
       <if test="record.checkState != null">
-        wo.check_state = #{record.checkState,jdbcType=TINYINT},
+        check_state = #{record.checkState,jdbcType=TINYINT},
       </if>
       <if test="record.checkComment != null">
-        wo.check_comment = #{record.checkComment,jdbcType=VARCHAR},
+        check_comment = #{record.checkComment,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -328,26 +325,26 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_work_order wo
-    set wo.id = #{record.id,jdbcType=INTEGER},
-      wo.order_Id = #{record.orderId,jdbcType=VARCHAR},
-      wo.department_id = #{record.departmentId,jdbcType=VARCHAR},
-      wo.department_name = #{record.departmentName,jdbcType=VARCHAR},
-      wo.order_name = #{record.orderName,jdbcType=VARCHAR},
-      wo.order_type = #{record.orderType,jdbcType=TINYINT},
-      wo.order_publisher = #{record.orderPublisher,jdbcType=VARCHAR},
-      wo.order_publish_time = #{record.orderPublishTime,jdbcType=TIMESTAMP},
-      wo.order_publisher_comment = #{record.orderPublisherComment,jdbcType=VARCHAR},
-      wo.order_auditing_state = #{record.orderAuditingState,jdbcType=TINYINT},
-      wo.order_data = #{record.orderData,jdbcType=VARCHAR},
-      wo.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      wo.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      wo.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      wo.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      wo.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      wo.check_progress = #{record.checkProgress,jdbcType=VARCHAR},
-      wo.check_state = #{record.checkState,jdbcType=TINYINT},
-      wo.check_comment = #{record.checkComment,jdbcType=VARCHAR}
+    update tb_finance_work_order
+    set id = #{record.id,jdbcType=INTEGER},
+      order_Id = #{record.orderId,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      order_name = #{record.orderName,jdbcType=VARCHAR},
+      order_type = #{record.orderType,jdbcType=TINYINT},
+      order_publisher = #{record.orderPublisher,jdbcType=VARCHAR},
+      order_publish_time = #{record.orderPublishTime,jdbcType=TIMESTAMP},
+      order_publisher_comment = #{record.orderPublisherComment,jdbcType=VARCHAR},
+      order_auditing_state = #{record.orderAuditingState,jdbcType=TINYINT},
+      order_data = #{record.orderData,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      check_progress = #{record.checkProgress,jdbcType=VARCHAR},
+      check_state = #{record.checkState,jdbcType=TINYINT},
+      check_comment = #{record.checkComment,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

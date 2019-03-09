@@ -2,29 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceRecordInformationMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceRecordInformation">
-    <id column="ri_id" jdbcType="INTEGER" property="id" />
-    <result column="ri_name" jdbcType="VARCHAR" property="name" />
-    <result column="ri_flow_type" jdbcType="VARCHAR" property="flowType" />
-    <result column="ri_department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="ri_department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="ri_deadline" jdbcType="TIMESTAMP" property="deadline" />
-    <result column="ri_create_state" jdbcType="TINYINT" property="createState" />
-    <result column="ri_financer_sure" jdbcType="TINYINT" property="financerSure" />
-    <result column="ri_early_warning" jdbcType="TINYINT" property="earlyWarning" />
-    <result column="ri_leader_early_warning" jdbcType="TINYINT" property="leaderEarlyWarning" />
-    <result column="ri_file_code" jdbcType="VARCHAR" property="fileCode" />
-    <result column="ri_file_name" jdbcType="VARCHAR" property="fileName" />
-    <result column="ri_creator_id" jdbcType="VARCHAR" property="creatorId" />
-    <result column="ri_is_warning" jdbcType="TINYINT" property="isWarning" />
-    <result column="ri_warning_rate" jdbcType="TINYINT" property="warningRate" />
-    <result column="ri_warning_object" jdbcType="TINYINT" property="warningObject" />
-    <result column="ri_warning_method" jdbcType="TINYINT" property="warningMethod" />
-    <result column="ri_warning-before_days" jdbcType="INTEGER" property="warningBeforeDays" />
-    <result column="ri_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="ri_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="ri_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="ri_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="ri_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="flow_type" jdbcType="VARCHAR" property="flowType" />
+    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="create_state" jdbcType="TINYINT" property="createState" />
+    <result column="financer_sure" jdbcType="TINYINT" property="financerSure" />
+    <result column="early_warning" jdbcType="TINYINT" property="earlyWarning" />
+    <result column="leader_early_warning" jdbcType="TINYINT" property="leaderEarlyWarning" />
+    <result column="file_code" jdbcType="VARCHAR" property="fileCode" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="creator_id" jdbcType="VARCHAR" property="creatorId" />
+    <result column="is_warning" jdbcType="TINYINT" property="isWarning" />
+    <result column="warning_rate" jdbcType="TINYINT" property="warningRate" />
+    <result column="warning_object" jdbcType="TINYINT" property="warningObject" />
+    <result column="warning_method" jdbcType="TINYINT" property="warningMethod" />
+    <result column="warning-before_days" jdbcType="INTEGER" property="warningBeforeDays" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,14 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    ri.id as ri_id, ri.name as ri_name, ri.flow_type as ri_flow_type, ri.department_id as ri_department_id, 
-    ri.department_name as ri_department_name, ri.deadline as ri_deadline, ri.create_state as ri_create_state, 
-    ri.financer_sure as ri_financer_sure, ri.early_warning as ri_early_warning, ri.leader_early_warning as ri_leader_early_warning, 
-    ri.file_code as ri_file_code, ri.file_name as ri_file_name, ri.creator_id as ri_creator_id, 
-    ri.is_warning as ri_is_warning, ri.warning_rate as ri_warning_rate, ri.warning_object as ri_warning_object, 
-    ri.warning_method as ri_warning_method, ri.warning-before_days as ri_warning-before_days, 
-    ri.record_status as ri_record_status, ri.creator_account as ri_creator_account, ri.created_time as ri_created_time, 
-    ri.modifier_account as ri_modifier_account, ri.modified_time as ri_modified_time
+    id, name, flow_type, department_id, department_name, deadline, create_state, financer_sure, 
+    early_warning, leader_early_warning, file_code, file_name, creator_id, is_warning, 
+    warning_rate, warning_object, warning_method, warning-before_days, record_status, 
+    creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceRecordInformationExample" resultMap="BaseResultMap">
     select
@@ -100,7 +96,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_record_information ri
+    from tb_finance_record_information
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -111,15 +107,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_record_information ri
-    where ri.id = #{id,jdbcType=INTEGER}
+    from tb_finance_record_information
+    where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_record_information
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceRecordInformationExample">
-    delete from tb_finance_record_information ri
+    delete from tb_finance_record_information
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -288,82 +284,82 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceRecordInformationExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_record_information ri
+    select count(*) from tb_finance_record_information
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_record_information ri
+    update tb_finance_record_information
     <set>
       <if test="record.id != null">
-        ri.id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.name != null">
-        ri.name = #{record.name,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.flowType != null">
-        ri.flow_type = #{record.flowType,jdbcType=VARCHAR},
+        flow_type = #{record.flowType,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        ri.department_id = #{record.departmentId,jdbcType=VARCHAR},
+        department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        ri.department_name = #{record.departmentName,jdbcType=VARCHAR},
+        department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.deadline != null">
-        ri.deadline = #{record.deadline,jdbcType=TIMESTAMP},
+        deadline = #{record.deadline,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createState != null">
-        ri.create_state = #{record.createState,jdbcType=TINYINT},
+        create_state = #{record.createState,jdbcType=TINYINT},
       </if>
       <if test="record.financerSure != null">
-        ri.financer_sure = #{record.financerSure,jdbcType=TINYINT},
+        financer_sure = #{record.financerSure,jdbcType=TINYINT},
       </if>
       <if test="record.earlyWarning != null">
-        ri.early_warning = #{record.earlyWarning,jdbcType=TINYINT},
+        early_warning = #{record.earlyWarning,jdbcType=TINYINT},
       </if>
       <if test="record.leaderEarlyWarning != null">
-        ri.leader_early_warning = #{record.leaderEarlyWarning,jdbcType=TINYINT},
+        leader_early_warning = #{record.leaderEarlyWarning,jdbcType=TINYINT},
       </if>
       <if test="record.fileCode != null">
-        ri.file_code = #{record.fileCode,jdbcType=VARCHAR},
+        file_code = #{record.fileCode,jdbcType=VARCHAR},
       </if>
       <if test="record.fileName != null">
-        ri.file_name = #{record.fileName,jdbcType=VARCHAR},
+        file_name = #{record.fileName,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorId != null">
-        ri.creator_id = #{record.creatorId,jdbcType=VARCHAR},
+        creator_id = #{record.creatorId,jdbcType=VARCHAR},
       </if>
       <if test="record.isWarning != null">
-        ri.is_warning = #{record.isWarning,jdbcType=TINYINT},
+        is_warning = #{record.isWarning,jdbcType=TINYINT},
       </if>
       <if test="record.warningRate != null">
-        ri.warning_rate = #{record.warningRate,jdbcType=TINYINT},
+        warning_rate = #{record.warningRate,jdbcType=TINYINT},
       </if>
       <if test="record.warningObject != null">
-        ri.warning_object = #{record.warningObject,jdbcType=TINYINT},
+        warning_object = #{record.warningObject,jdbcType=TINYINT},
       </if>
       <if test="record.warningMethod != null">
-        ri.warning_method = #{record.warningMethod,jdbcType=TINYINT},
+        warning_method = #{record.warningMethod,jdbcType=TINYINT},
       </if>
       <if test="record.warningBeforeDays != null">
-        ri.warning-before_days = #{record.warningBeforeDays,jdbcType=INTEGER},
+        warning-before_days = #{record.warningBeforeDays,jdbcType=INTEGER},
       </if>
       <if test="record.recordStatus != null">
-        ri.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        ri.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        ri.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        ri.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        ri.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -371,30 +367,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_record_information ri
-    set ri.id = #{record.id,jdbcType=INTEGER},
-      ri.name = #{record.name,jdbcType=VARCHAR},
-      ri.flow_type = #{record.flowType,jdbcType=VARCHAR},
-      ri.department_id = #{record.departmentId,jdbcType=VARCHAR},
-      ri.department_name = #{record.departmentName,jdbcType=VARCHAR},
-      ri.deadline = #{record.deadline,jdbcType=TIMESTAMP},
-      ri.create_state = #{record.createState,jdbcType=TINYINT},
-      ri.financer_sure = #{record.financerSure,jdbcType=TINYINT},
-      ri.early_warning = #{record.earlyWarning,jdbcType=TINYINT},
-      ri.leader_early_warning = #{record.leaderEarlyWarning,jdbcType=TINYINT},
-      ri.file_code = #{record.fileCode,jdbcType=VARCHAR},
-      ri.file_name = #{record.fileName,jdbcType=VARCHAR},
-      ri.creator_id = #{record.creatorId,jdbcType=VARCHAR},
-      ri.is_warning = #{record.isWarning,jdbcType=TINYINT},
-      ri.warning_rate = #{record.warningRate,jdbcType=TINYINT},
-      ri.warning_object = #{record.warningObject,jdbcType=TINYINT},
-      ri.warning_method = #{record.warningMethod,jdbcType=TINYINT},
-      ri.warning-before_days = #{record.warningBeforeDays,jdbcType=INTEGER},
-      ri.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      ri.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      ri.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      ri.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      ri.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_finance_record_information
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      flow_type = #{record.flowType,jdbcType=VARCHAR},
+      department_id = #{record.departmentId,jdbcType=VARCHAR},
+      department_name = #{record.departmentName,jdbcType=VARCHAR},
+      deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      create_state = #{record.createState,jdbcType=TINYINT},
+      financer_sure = #{record.financerSure,jdbcType=TINYINT},
+      early_warning = #{record.earlyWarning,jdbcType=TINYINT},
+      leader_early_warning = #{record.leaderEarlyWarning,jdbcType=TINYINT},
+      file_code = #{record.fileCode,jdbcType=VARCHAR},
+      file_name = #{record.fileName,jdbcType=VARCHAR},
+      creator_id = #{record.creatorId,jdbcType=VARCHAR},
+      is_warning = #{record.isWarning,jdbcType=TINYINT},
+      warning_rate = #{record.warningRate,jdbcType=TINYINT},
+      warning_object = #{record.warningObject,jdbcType=TINYINT},
+      warning_method = #{record.warningMethod,jdbcType=TINYINT},
+      warning-before_days = #{record.warningBeforeDays,jdbcType=INTEGER},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

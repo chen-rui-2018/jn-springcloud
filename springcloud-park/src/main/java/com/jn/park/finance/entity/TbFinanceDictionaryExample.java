@@ -106,522 +106,522 @@ public class TbFinanceDictionaryExample {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("dict.id is null");
+            addCriterion("id is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("dict.id is not null");
+            addCriterion("id is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(Integer value) {
-            addCriterion("dict.id =", value, "id");
+            addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(Integer value) {
-            addCriterion("dict.id <>", value, "id");
+            addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(Integer value) {
-            addCriterion("dict.id >", value, "id");
+            addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dict.id >=", value, "id");
+            addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(Integer value) {
-            addCriterion("dict.id <", value, "id");
+            addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(Integer value) {
-            addCriterion("dict.id <=", value, "id");
+            addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<Integer> values) {
-            addCriterion("dict.id in", values, "id");
+            addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<Integer> values) {
-            addCriterion("dict.id not in", values, "id");
+            addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(Integer value1, Integer value2) {
-            addCriterion("dict.id between", value1, value2, "id");
+            addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("dict.id not between", value1, value2, "id");
+            addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyIsNull() {
-            addCriterion("dict.dic_key is null");
+            addCriterion("dic_key is null");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyIsNotNull() {
-            addCriterion("dict.dic_key is not null");
+            addCriterion("dic_key is not null");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyEqualTo(String value) {
-            addCriterion("dict.dic_key =", value, "dicKey");
+            addCriterion("dic_key =", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyNotEqualTo(String value) {
-            addCriterion("dict.dic_key <>", value, "dicKey");
+            addCriterion("dic_key <>", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyGreaterThan(String value) {
-            addCriterion("dict.dic_key >", value, "dicKey");
+            addCriterion("dic_key >", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyGreaterThanOrEqualTo(String value) {
-            addCriterion("dict.dic_key >=", value, "dicKey");
+            addCriterion("dic_key >=", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyLessThan(String value) {
-            addCriterion("dict.dic_key <", value, "dicKey");
+            addCriterion("dic_key <", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyLessThanOrEqualTo(String value) {
-            addCriterion("dict.dic_key <=", value, "dicKey");
+            addCriterion("dic_key <=", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyLike(String value) {
-            addCriterion("dict.dic_key like", value, "dicKey");
+            addCriterion("dic_key like", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyNotLike(String value) {
-            addCriterion("dict.dic_key not like", value, "dicKey");
+            addCriterion("dic_key not like", value, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyIn(List<String> values) {
-            addCriterion("dict.dic_key in", values, "dicKey");
+            addCriterion("dic_key in", values, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyNotIn(List<String> values) {
-            addCriterion("dict.dic_key not in", values, "dicKey");
+            addCriterion("dic_key not in", values, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyBetween(String value1, String value2) {
-            addCriterion("dict.dic_key between", value1, value2, "dicKey");
+            addCriterion("dic_key between", value1, value2, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicKeyNotBetween(String value1, String value2) {
-            addCriterion("dict.dic_key not between", value1, value2, "dicKey");
+            addCriterion("dic_key not between", value1, value2, "dicKey");
             return (Criteria) this;
         }
 
         public Criteria andDicValueIsNull() {
-            addCriterion("dict.dic_value is null");
+            addCriterion("dic_value is null");
             return (Criteria) this;
         }
 
         public Criteria andDicValueIsNotNull() {
-            addCriterion("dict.dic_value is not null");
+            addCriterion("dic_value is not null");
             return (Criteria) this;
         }
 
         public Criteria andDicValueEqualTo(String value) {
-            addCriterion("dict.dic_value =", value, "dicValue");
+            addCriterion("dic_value =", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueNotEqualTo(String value) {
-            addCriterion("dict.dic_value <>", value, "dicValue");
+            addCriterion("dic_value <>", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueGreaterThan(String value) {
-            addCriterion("dict.dic_value >", value, "dicValue");
+            addCriterion("dic_value >", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueGreaterThanOrEqualTo(String value) {
-            addCriterion("dict.dic_value >=", value, "dicValue");
+            addCriterion("dic_value >=", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueLessThan(String value) {
-            addCriterion("dict.dic_value <", value, "dicValue");
+            addCriterion("dic_value <", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueLessThanOrEqualTo(String value) {
-            addCriterion("dict.dic_value <=", value, "dicValue");
+            addCriterion("dic_value <=", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueLike(String value) {
-            addCriterion("dict.dic_value like", value, "dicValue");
+            addCriterion("dic_value like", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueNotLike(String value) {
-            addCriterion("dict.dic_value not like", value, "dicValue");
+            addCriterion("dic_value not like", value, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueIn(List<String> values) {
-            addCriterion("dict.dic_value in", values, "dicValue");
+            addCriterion("dic_value in", values, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueNotIn(List<String> values) {
-            addCriterion("dict.dic_value not in", values, "dicValue");
+            addCriterion("dic_value not in", values, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueBetween(String value1, String value2) {
-            addCriterion("dict.dic_value between", value1, value2, "dicValue");
+            addCriterion("dic_value between", value1, value2, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andDicValueNotBetween(String value1, String value2) {
-            addCriterion("dict.dic_value not between", value1, value2, "dicValue");
+            addCriterion("dic_value not between", value1, value2, "dicValue");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIsNull() {
-            addCriterion("dict.record_status is null");
+            addCriterion("record_status is null");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIsNotNull() {
-            addCriterion("dict.record_status is not null");
+            addCriterion("record_status is not null");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusEqualTo(Byte value) {
-            addCriterion("dict.record_status =", value, "recordStatus");
+            addCriterion("record_status =", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotEqualTo(Byte value) {
-            addCriterion("dict.record_status <>", value, "recordStatus");
+            addCriterion("record_status <>", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusGreaterThan(Byte value) {
-            addCriterion("dict.record_status >", value, "recordStatus");
+            addCriterion("record_status >", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("dict.record_status >=", value, "recordStatus");
+            addCriterion("record_status >=", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusLessThan(Byte value) {
-            addCriterion("dict.record_status <", value, "recordStatus");
+            addCriterion("record_status <", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("dict.record_status <=", value, "recordStatus");
+            addCriterion("record_status <=", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIn(List<Byte> values) {
-            addCriterion("dict.record_status in", values, "recordStatus");
+            addCriterion("record_status in", values, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotIn(List<Byte> values) {
-            addCriterion("dict.record_status not in", values, "recordStatus");
+            addCriterion("record_status not in", values, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
-            addCriterion("dict.record_status between", value1, value2, "recordStatus");
+            addCriterion("record_status between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("dict.record_status not between", value1, value2, "recordStatus");
+            addCriterion("record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIsNull() {
-            addCriterion("dict.creator_account is null");
+            addCriterion("creator_account is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIsNotNull() {
-            addCriterion("dict.creator_account is not null");
+            addCriterion("creator_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountEqualTo(String value) {
-            addCriterion("dict.creator_account =", value, "creatorAccount");
+            addCriterion("creator_account =", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotEqualTo(String value) {
-            addCriterion("dict.creator_account <>", value, "creatorAccount");
+            addCriterion("creator_account <>", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountGreaterThan(String value) {
-            addCriterion("dict.creator_account >", value, "creatorAccount");
+            addCriterion("creator_account >", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("dict.creator_account >=", value, "creatorAccount");
+            addCriterion("creator_account >=", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLessThan(String value) {
-            addCriterion("dict.creator_account <", value, "creatorAccount");
+            addCriterion("creator_account <", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
-            addCriterion("dict.creator_account <=", value, "creatorAccount");
+            addCriterion("creator_account <=", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLike(String value) {
-            addCriterion("dict.creator_account like", value, "creatorAccount");
+            addCriterion("creator_account like", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotLike(String value) {
-            addCriterion("dict.creator_account not like", value, "creatorAccount");
+            addCriterion("creator_account not like", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIn(List<String> values) {
-            addCriterion("dict.creator_account in", values, "creatorAccount");
+            addCriterion("creator_account in", values, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotIn(List<String> values) {
-            addCriterion("dict.creator_account not in", values, "creatorAccount");
+            addCriterion("creator_account not in", values, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountBetween(String value1, String value2) {
-            addCriterion("dict.creator_account between", value1, value2, "creatorAccount");
+            addCriterion("creator_account between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotBetween(String value1, String value2) {
-            addCriterion("dict.creator_account not between", value1, value2, "creatorAccount");
+            addCriterion("creator_account not between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIsNull() {
-            addCriterion("dict.created_time is null");
+            addCriterion("created_time is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIsNotNull() {
-            addCriterion("dict.created_time is not null");
+            addCriterion("created_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeEqualTo(Date value) {
-            addCriterion("dict.created_time =", value, "createdTime");
+            addCriterion("created_time =", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotEqualTo(Date value) {
-            addCriterion("dict.created_time <>", value, "createdTime");
+            addCriterion("created_time <>", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeGreaterThan(Date value) {
-            addCriterion("dict.created_time >", value, "createdTime");
+            addCriterion("created_time >", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("dict.created_time >=", value, "createdTime");
+            addCriterion("created_time >=", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeLessThan(Date value) {
-            addCriterion("dict.created_time <", value, "createdTime");
+            addCriterion("created_time <", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("dict.created_time <=", value, "createdTime");
+            addCriterion("created_time <=", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIn(List<Date> values) {
-            addCriterion("dict.created_time in", values, "createdTime");
+            addCriterion("created_time in", values, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotIn(List<Date> values) {
-            addCriterion("dict.created_time not in", values, "createdTime");
+            addCriterion("created_time not in", values, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeBetween(Date value1, Date value2) {
-            addCriterion("dict.created_time between", value1, value2, "createdTime");
+            addCriterion("created_time between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("dict.created_time not between", value1, value2, "createdTime");
+            addCriterion("created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIsNull() {
-            addCriterion("dict.modifier_account is null");
+            addCriterion("modifier_account is null");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIsNotNull() {
-            addCriterion("dict.modifier_account is not null");
+            addCriterion("modifier_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountEqualTo(String value) {
-            addCriterion("dict.modifier_account =", value, "modifierAccount");
+            addCriterion("modifier_account =", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotEqualTo(String value) {
-            addCriterion("dict.modifier_account <>", value, "modifierAccount");
+            addCriterion("modifier_account <>", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountGreaterThan(String value) {
-            addCriterion("dict.modifier_account >", value, "modifierAccount");
+            addCriterion("modifier_account >", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("dict.modifier_account >=", value, "modifierAccount");
+            addCriterion("modifier_account >=", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLessThan(String value) {
-            addCriterion("dict.modifier_account <", value, "modifierAccount");
+            addCriterion("modifier_account <", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLessThanOrEqualTo(String value) {
-            addCriterion("dict.modifier_account <=", value, "modifierAccount");
+            addCriterion("modifier_account <=", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLike(String value) {
-            addCriterion("dict.modifier_account like", value, "modifierAccount");
+            addCriterion("modifier_account like", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotLike(String value) {
-            addCriterion("dict.modifier_account not like", value, "modifierAccount");
+            addCriterion("modifier_account not like", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIn(List<String> values) {
-            addCriterion("dict.modifier_account in", values, "modifierAccount");
+            addCriterion("modifier_account in", values, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotIn(List<String> values) {
-            addCriterion("dict.modifier_account not in", values, "modifierAccount");
+            addCriterion("modifier_account not in", values, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountBetween(String value1, String value2) {
-            addCriterion("dict.modifier_account between", value1, value2, "modifierAccount");
+            addCriterion("modifier_account between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotBetween(String value1, String value2) {
-            addCriterion("dict.modifier_account not between", value1, value2, "modifierAccount");
+            addCriterion("modifier_account not between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIsNull() {
-            addCriterion("dict.modified_time is null");
+            addCriterion("modified_time is null");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIsNotNull() {
-            addCriterion("dict.modified_time is not null");
+            addCriterion("modified_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeEqualTo(Date value) {
-            addCriterion("dict.modified_time =", value, "modifiedTime");
+            addCriterion("modified_time =", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotEqualTo(Date value) {
-            addCriterion("dict.modified_time <>", value, "modifiedTime");
+            addCriterion("modified_time <>", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeGreaterThan(Date value) {
-            addCriterion("dict.modified_time >", value, "modifiedTime");
+            addCriterion("modified_time >", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("dict.modified_time >=", value, "modifiedTime");
+            addCriterion("modified_time >=", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeLessThan(Date value) {
-            addCriterion("dict.modified_time <", value, "modifiedTime");
+            addCriterion("modified_time <", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("dict.modified_time <=", value, "modifiedTime");
+            addCriterion("modified_time <=", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIn(List<Date> values) {
-            addCriterion("dict.modified_time in", values, "modifiedTime");
+            addCriterion("modified_time in", values, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotIn(List<Date> values) {
-            addCriterion("dict.modified_time not in", values, "modifiedTime");
+            addCriterion("modified_time not in", values, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeBetween(Date value1, Date value2) {
-            addCriterion("dict.modified_time between", value1, value2, "modifiedTime");
+            addCriterion("modified_time between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("dict.modified_time not between", value1, value2, "modifiedTime");
+            addCriterion("modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
     }

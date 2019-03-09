@@ -121,7 +121,6 @@
     data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
     aa()
     function aa() {
-        var domain = window.location.host;
 
         //获取会议室ID
         var id = GetUrlParam("id");
@@ -146,7 +145,7 @@
         }
 
         $.ajax({
-            url: domain+'/springcloud-oa/guest/oaMeeting/showList',
+            url: getBaseUrl()+'/springcloud-oa/guest/oaMeeting/showList',
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
@@ -190,8 +189,19 @@
     }
     setInterval(function(){aa()}, 60000)
 
+    //获取domain
+    function getBaseUrl() {
+        var ishttps = 'https:' == document.location.protocol ? true : false;
+        var url = window.location.host;
+        if (ishttps) {
+            url = 'https://' + url;
+        } else {
+            url = 'http://' + url;
+        }
+        return url;
+    }
 
-
+    //获取参数 ?id= &ab=
     function GetUrlParam(paraName) {
         var url = document.location.toString();
         var arrObj = url.split("?");

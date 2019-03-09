@@ -9,7 +9,6 @@ import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.dept.service.SysDepartmentService;
-import com.jn.system.dept.vo.SysDepartmentVO;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -137,10 +136,10 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
-    @ControllerLog(doAction = "根据部门id获取当前部门及所有子部门信息")
-    public Result selectDeptByKey(@RequestParam("id") String id, @RequestParam("flag") Boolean flag) {
-        SysDepartmentVO sysDepartmentVO = sysDepartmentService.selectDeptByKey(id, flag);
-        return new Result(sysDepartmentVO);
+    @ControllerLog(doAction = "获取部门信息")
+    public Result selectDeptByParentId(@RequestParam("parentId") String parentId, @RequestParam("childsFlag") Boolean childsFlag) {
+        Result result = sysDepartmentService.selectDeptByKey(parentId, childsFlag);
+        return result;
     }
 
     @Override
@@ -151,10 +150,10 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
-    @ControllerLog(doAction = "获取部门树信息")
-    public Result getDepartmentTree() {
-        List<SysDepartmentVO> departmentTree = sysDepartmentService.findDepartmentAllByLevel();
-        return new Result(departmentTree);
+    @ControllerLog(doAction = "要查询的部门ID是否属于用户所属的部门或子部门")
+    public Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId) {
+        Boolean result = sysDepartmentService.checkUserDept(userId, deptId);
+        return new Result(result);
     }
 
     @Override

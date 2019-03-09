@@ -113,14 +113,14 @@ public interface SystemClient {
     Result updateSysUser(@RequestBody User user);
 
     /**
-     * 根据部门id获取当前部门及所有子部门信息
+     * 查询所有部门信息,并根据层级关系返回数据
      *
-     * @param id   部门id
-     * @param flag true 表示获取所有子部门，false表示只获取当前部门
+     * @param parentId   parentId,查询对应部门,为空时查询所以一级部门
+     * @param childsFlag 是否查询所有子部门,true是,false否
      * @return
      */
-    @RequestMapping(value = "/api/system/selectDeptByKey", method = RequestMethod.POST)
-    Result selectDeptByKey(@RequestParam("id") String id, @RequestParam("flag") Boolean flag);
+    @RequestMapping(value = "/api/system/selectDeptByParentId", method = RequestMethod.POST)
+    Result selectDeptByParentId(@RequestParam("parentId") String parentId, @RequestParam("childsFlag") Boolean childsFlag);
 
     /**
      * 条件分页查询用户信息
@@ -131,10 +131,15 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/getUserByPage", method = RequestMethod.POST)
     Result getUserByPage(@RequestBody UserPage page);
 
+
     /**
-     * 获取部门树信息
+     * 要查询的部门ID是否属于用户所属的部门或子部门
+     *
+     * @param userId 用户id
+     * @param deptId 部门id
      * @return
      */
-    @RequestMapping(value = "/api/system/getDepartmentTree", method = RequestMethod.POST)
-    Result getDepartmentTree();
+    @RequestMapping(value = "/api/system/checkUserDept", method = RequestMethod.POST)
+    Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId);
+
 }

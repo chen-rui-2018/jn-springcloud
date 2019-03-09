@@ -57,7 +57,7 @@
             ORDER BY created_time ASC;
     </select>
 
-    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
+    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO" parameterType="java.lang.String">
             SELECT
             id,
             t.id as `value`,
@@ -82,6 +82,9 @@
             GROUP BY t2.department_id) tt
             ON t.id = tt.department_id
             WHERE t.`record_status` = 1
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(level)">
+                and t.`level` = #{level,jdbcType=VARCHAR}
+            </if>
             ORDER BY t.created_time ASC;
     </select>
 

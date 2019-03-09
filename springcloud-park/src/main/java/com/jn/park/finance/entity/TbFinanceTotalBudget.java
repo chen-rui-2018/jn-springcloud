@@ -41,9 +41,6 @@ public class TbFinanceTotalBudget implements Serializable {
     /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
 
-    /*@ApiModelProperty("账期")*/
-    private String dealDate;
-
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -142,14 +139,6 @@ public class TbFinanceTotalBudget implements Serializable {
         this.createdTime = createdTime;
     }
 
-    public String getDealDate() {
-        return dealDate;
-    }
-
-    public void setDealDate(String dealDate) {
-        this.dealDate = dealDate == null ? null : dealDate.trim();
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -173,8 +162,7 @@ public class TbFinanceTotalBudget implements Serializable {
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
-            && (this.getDealDate() == null ? other.getDealDate() == null : this.getDealDate().equals(other.getDealDate()));
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()));
     }
 
     @Override
@@ -193,7 +181,6 @@ public class TbFinanceTotalBudget implements Serializable {
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
-        result = prime * result + ((getDealDate() == null) ? 0 : getDealDate().hashCode());
         return result;
     }
 
@@ -215,7 +202,6 @@ public class TbFinanceTotalBudget implements Serializable {
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", createdTime=").append(createdTime);
-        sb.append(", dealDate=").append(dealDate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -14,7 +14,6 @@
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="deal_date" jdbcType="CHAR" property="dealDate" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, cost_type_id, cost_type_name, department_id, department_name, budget_month, budget_number, 
-    record_status, modifier_account, creator_account, modified_time, created_time, deal_date
+    record_status, modifier_account, creator_account, modified_time, created_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudgetExample" resultMap="BaseResultMap">
     select
@@ -115,13 +114,11 @@
     insert into tb_finance_total_budget (cost_type_id, cost_type_name, department_id, 
       department_name, budget_month, budget_number, 
       record_status, modifier_account, creator_account, 
-      modified_time, created_time, deal_date
-      )
+      modified_time, created_time)
     values (#{costTypeId,jdbcType=INTEGER}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
       #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=CHAR}, #{budgetNumber,jdbcType=DECIMAL}, 
       #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{dealDate,jdbcType=CHAR}
-      )
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceTotalBudget">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -162,9 +159,6 @@
       <if test="createdTime != null">
         created_time,
       </if>
-      <if test="dealDate != null">
-        deal_date,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="costTypeId != null">
@@ -199,9 +193,6 @@
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="dealDate != null">
-        #{dealDate,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -250,9 +241,6 @@
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.dealDate != null">
-        deal_date = #{record.dealDate,jdbcType=CHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -271,8 +259,7 @@
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      deal_date = #{record.dealDate,jdbcType=CHAR}
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -313,9 +300,6 @@
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="dealDate != null">
-        deal_date = #{dealDate,jdbcType=CHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -331,8 +315,7 @@
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      deal_date = #{dealDate,jdbcType=CHAR}
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

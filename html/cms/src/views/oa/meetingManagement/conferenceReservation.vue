@@ -59,130 +59,414 @@
         </ul>
       </div>
     </div>
-    <div v-if="errorTime" class="table">
-      <el-table :data="rowTableData" :span-method="arraySpanMethod">
-        <el-table-column label="会议室" align="center">
-          <el-table-column type="index" label="序号" align="center" />
-          <el-table-column prop="[0].title" label="名称" align="center" />
-          <el-table-column prop="[0].position" label="位置" align="center" />
+    <div
+      v-if="errorTime"
+      class="table"
+    >
+      <el-table
+        :data="rowTableData"
+        :span-method="arraySpanMethod"
+      >
+        <el-table-column
+          label="会议室"
+          align="center"
+        >
+          <el-table-column
+            type="index"
+            label="序号"
+            align="center"
+          />
+          <el-table-column
+            prop="[0].title"
+            label="名称"
+            align="center"
+          />
+          <el-table-column
+            prop="[0].position"
+            label="位置"
+            align="center"
+          />
         </el-table-column>
-        <el-table-column label="上午" align="center">
-          <el-table-column label="9:00" prop="[0]" align="center" width="40">
-            <template slot-scope="scope" >
-              <meeting-div1 v-if="scope.row[0].status=='0'" :post-id="scope.row[0].id" :post-title="scope.row[0].title" :post-time="'9:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[0].status=='1'" :post-title="scope.row[0].name"/></template>
-          </el-table-column>
-          <el-table-column label="9:30" prop="[1]" align="center" width="40">
+        <el-table-column
+          label="上午"
+          align="center"
+        >
+          <el-table-column
+            label="9:00"
+            prop="[0]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[1].status=='0'" :post-id="scope.row[1].id" :post-title="scope.row[1].title" :post-time="'9:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[1].status=='1'" :post-title="scope.row[1].name"/></template>
+              <meeting-div1
+                v-if="scope.row[0].status=='0'"
+                :post-id="scope.row[0].id"
+                :post-title="scope.row[0].title"
+                :post-time="'9:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[0].status=='1'"
+                :post-title="scope.row[0].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="10:00" prop="[2]" align="center" width="40">
+          <el-table-column
+            label="9:30"
+            prop="[1]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[2].status=='0'" :post-id="scope.row[2].id" :post-title="scope.row[2].title" :post-time="'10:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[2].status=='1'" :post-title="scope.row[2].name"/></template>
+              <meeting-div1
+                v-if="scope.row[1].status=='0'"
+                :post-id="scope.row[1].id"
+                :post-title="scope.row[1].title"
+                :post-time="'9:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[1].status=='1'"
+                :post-title="scope.row[1].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="10:30" prop="[3]" align="center" width="40">
+          <el-table-column
+            label="10:00"
+            prop="[2]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[3].status=='0'" :post-id="scope.row[3].id" :post-title="scope.row[3].title" :post-time="'10:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[3].status=='1'" :post-title="scope.row[3].name"/></template>
+              <meeting-div1
+                v-if="scope.row[2].status=='0'"
+                :post-id="scope.row[2].id"
+                :post-title="scope.row[2].title"
+                :post-time="'10:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[2].status=='1'"
+                :post-title="scope.row[2].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="11:00" prop="[4]" align="center" width="40">
+          <el-table-column
+            label="10:30"
+            prop="[3]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[4].status=='0'" :post-id="scope.row[4].id" :post-title="scope.row[4].title" :post-time="'11:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[4].status=='1'" :post-title="scope.row[4].name"/></template>
+              <meeting-div1
+                v-if="scope.row[3].status=='0'"
+                :post-id="scope.row[3].id"
+                :post-title="scope.row[3].title"
+                :post-time="'10:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[3].status=='1'"
+                :post-title="scope.row[3].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="11:30" prop="[5]" align="center" width="40">
+          <el-table-column
+            label="11:00"
+            prop="[4]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[5].status=='0'" :post-id="scope.row[5].id" :post-title="scope.row[5].title" :post-time="'11:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[5].status=='1'" :post-title="scope.row[5].name"/></template>
+              <meeting-div1
+                v-if="scope.row[4].status=='0'"
+                :post-id="scope.row[4].id"
+                :post-title="scope.row[4].title"
+                :post-time="'11:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[4].status=='1'"
+                :post-title="scope.row[4].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="12:00" prop="[6]" align="center" width="40">
+          <el-table-column
+            label="11:30"
+            prop="[5]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[6].status=='0'" :post-id="scope.row[6].id" :post-title="scope.row[6].title" :post-time="'12:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[6].status=='1'" :post-title="scope.row[6].name"/></template>
+              <meeting-div1
+                v-if="scope.row[5].status=='0'"
+                :post-id="scope.row[5].id"
+                :post-title="scope.row[5].title"
+                :post-time="'11:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[5].status=='1'"
+                :post-title="scope.row[5].name"
+            /></template>
+          </el-table-column>
+          <el-table-column
+            label="12:00"
+            prop="[6]"
+            align="center"
+            width="40"
+          >
+            <template slot-scope="scope">
+              <meeting-div1
+                v-if="scope.row[6].status=='0'"
+                :post-id="scope.row[6].id"
+                :post-title="scope.row[6].title"
+                :post-time="'12:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[6].status=='1'"
+                :post-title="scope.row[6].name"
+            /></template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="下午" align="center">
-          <el-table-column label="13:30" prop="[7]" align="center" width="40">
+        <el-table-column
+          label="下午"
+          align="center"
+        >
+          <el-table-column
+            label="13:30"
+            prop="[7]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[7].status=='0'" :post-id="scope.row[7].id" :post-title="scope.row[7].title" :post-time="'13:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[7].status=='1'" :post-title="scope.row[7].name"/></template>
+              <meeting-div1
+                v-if="scope.row[7].status=='0'"
+                :post-id="scope.row[7].id"
+                :post-title="scope.row[7].title"
+                :post-time="'13:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[7].status=='1'"
+                :post-title="scope.row[7].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="14:00" prop="[8]" align="center" width="40">
+          <el-table-column
+            label="14:00"
+            prop="[8]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[8].status=='0'" :post-id="scope.row[8].id" :post-title="scope.row[8].title" :post-time="'14:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[8].status=='1'" :post-title="scope.row[8].name"/></template>
+              <meeting-div1
+                v-if="scope.row[8].status=='0'"
+                :post-id="scope.row[8].id"
+                :post-title="scope.row[8].title"
+                :post-time="'14:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[8].status=='1'"
+                :post-title="scope.row[8].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="14:30" prop="[9]" align="center" width="40">
+          <el-table-column
+            label="14:30"
+            prop="[9]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[9].status=='0'" :post-id="scope.row[9].id" :post-title="scope.row[9].title" :post-time="'14:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[9].status=='1'" :post-title="scope.row[9].name"/></template>
+              <meeting-div1
+                v-if="scope.row[9].status=='0'"
+                :post-id="scope.row[9].id"
+                :post-title="scope.row[9].title"
+                :post-time="'14:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[9].status=='1'"
+                :post-title="scope.row[9].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="15:00" prop="[10]" align="center" width="40">
+          <el-table-column
+            label="15:00"
+            prop="[10]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[10].status=='0'" :post-id="scope.row[10].id" :post-title="scope.row[10].title" :post-time="'15:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[10].status=='1'" :post-title="scope.row[10].name"/></template>
+              <meeting-div1
+                v-if="scope.row[10].status=='0'"
+                :post-id="scope.row[10].id"
+                :post-title="scope.row[10].title"
+                :post-time="'15:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[10].status=='1'"
+                :post-title="scope.row[10].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="15:30" prop="[11]" align="center" width="40">
+          <el-table-column
+            label="15:30"
+            prop="[11]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[11].status=='0'" :post-id="scope.row[11].id" :post-title="scope.row[11].title" :post-time="'15:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[11].status=='1'" :post-title="scope.row[11].name"/></template>
+              <meeting-div1
+                v-if="scope.row[11].status=='0'"
+                :post-id="scope.row[11].id"
+                :post-title="scope.row[11].title"
+                :post-time="'15:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[11].status=='1'"
+                :post-title="scope.row[11].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="16:00" prop="[12]" align="center" width="40">
+          <el-table-column
+            label="16:00"
+            prop="[12]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[12].status=='0'" :post-id="scope.row[12].id" :post-title="scope.row[12].title" :post-time="'16:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[12].status=='1'" :post-title="scope.row[12].name"/></template>
+              <meeting-div1
+                v-if="scope.row[12].status=='0'"
+                :post-id="scope.row[12].id"
+                :post-title="scope.row[12].title"
+                :post-time="'16:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[12].status=='1'"
+                :post-title="scope.row[12].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="16:30" prop="[13]" align="center" width="40">
+          <el-table-column
+            label="16:30"
+            prop="[13]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[13].status=='0'" :post-id="scope.row[13].id" :post-title="scope.row[13].title" :post-time="'16:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[13].status=='1'" :post-title="scope.row[13].name"/></template>
+              <meeting-div1
+                v-if="scope.row[13].status=='0'"
+                :post-id="scope.row[13].id"
+                :post-title="scope.row[13].title"
+                :post-time="'16:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[13].status=='1'"
+                :post-title="scope.row[13].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="17:00" prop="[14]" align="center" width="40" >
-            <template slot-scope="scope" >
-              <meeting-div1 v-if="scope.row[14].status=='0'" :post-id="scope.row[14].id" :post-title="scope.row[14].title" :post-time="'17:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[14].status=='1'" :post-title="scope.row[14].name"/></template>
-          </el-table-column>
-          <el-table-column label="17:30" prop="[15]" align="center" width="40">
+          <el-table-column
+            label="17:00"
+            prop="[14]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[15].status=='0'" :post-id="scope.row[15].id" :post-title="scope.row[15].title" :post-time="'17:30'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[15].status=='1'" :post-title="scope.row[15].name"/></template>
+              <meeting-div1
+                v-if="scope.row[14].status=='0'"
+                :post-id="scope.row[14].id"
+                :post-title="scope.row[14].title"
+                :post-time="'17:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[14].status=='1'"
+                :post-title="scope.row[14].name"
+            /></template>
           </el-table-column>
-          <el-table-column label="18:00" prop="[16]" align="center" width="40">
+          <el-table-column
+            label="17:30"
+            prop="[15]"
+            align="center"
+            width="40"
+          >
             <template slot-scope="scope">
-              <meeting-div1 v-if="scope.row[16].status=='0'" :post-id="scope.row[16].id" :post-title="scope.row[16].title" :post-time="'18:00'" @meeting_order="meeting_order"/>
-            <meeting-div2 v-if="scope.row[16].status=='1'" :post-title="scope.row[16].name"/></template>
+              <meeting-div1
+                v-if="scope.row[15].status=='0'"
+                :post-id="scope.row[15].id"
+                :post-title="scope.row[15].title"
+                :post-time="'17:30'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[15].status=='1'"
+                :post-title="scope.row[15].name"
+            /></template>
+          </el-table-column>
+          <el-table-column
+            label="18:00"
+            prop="[16]"
+            align="center"
+            width="40"
+          >
+            <template slot-scope="scope">
+              <meeting-div1
+                v-if="scope.row[16].status=='0'"
+                :post-id="scope.row[16].id"
+                :post-title="scope.row[16].title"
+                :post-time="'18:00'"
+                @meeting_order="meeting_order"
+              />
+              <meeting-div2
+                v-if="scope.row[16].status=='1'"
+                :post-title="scope.row[16].name"
+            /></template>
           </el-table-column>
         </el-table-column>
       </el-table>
       <div class="pagination-container">
-        <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
+        <el-pagination
+          v-show="total>0"
+          :current-page="listQuery.page"
+          :page-sizes="[10,20,30,50]"
+          :page-size="listQuery.rows"
+          :total="total"
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
-    <div v-if="!errorTime" class="errorStyle">{{ errorText }}</div>
-</div></template>
+    <div
+      v-if="!errorTime"
+      class="errorStyle"
+    >{{ errorText }}</div>
+  </div>
+</template>
 
 <script>
 import { api } from '@/api/oa/meetingManagement'
 export default {
   name: 'Date',
-  components: { // 组件-新加
-    'meeting-div1': { // 预约组件
+  components: {
+    // 组件-新加
+    'meeting-div1': {
+      // 预约组件
       props: ['postId', 'postTitle', 'postTime'],
-      template: '<div class="textStyle" @click="meeting_order(postId,postTitle,postTime)">预约</div>',
+      template:
+        '<div class="textStyle" @click="meeting_order(postId,postTitle,postTime)">预约</div>',
       methods: {
-        meeting_order(id, title, time) { // 会议预约
+        meeting_order(id, title, time) {
+          // 会议预约
           this.$emit('meeting_order', id, title, time)
         }
       }
     },
-    'meeting-div2': { // 会议组件
+    'meeting-div2': {
+      // 会议组件
       props: ['postTitle'],
       template: '<div class="textBgc" >{{postTitle}}</div>',
-      methods: {
-      }
-    }},
+      methods: {}
+    }
+  },
 
   data() {
     return {
@@ -254,16 +538,6 @@ export default {
       selectIndex: '',
       rowTableData: [
         // 列表横向数据
-        [
-          {
-            status: 0, // 可预约状态
-            id: 123, // 数据id
-            title: '123', // 会议室名称
-            name: '123', // 会议名称
-            num: '', // 编号
-            position: '' // 位置
-          }
-        ]
       ],
       leftCol: 3 // 数据左侧列数
     }
@@ -396,27 +670,11 @@ export default {
       this.listQuery.meetingStartTime = this.params.selectDay
       this.initList()
     },
-    // handle16(row) {
-    //   var currentTime = this.listQuery.meetingStartTime + '\xa0' + '18:00:00'
-    //   this.$router.push({
-    //     name: 'meetingApplication',
-    //     query: {
-    //       title: '会议申请',
-    //       meetId: row.id,
-    //       name: row.name,
-    //       currentTime: currentTime
-    //     }
-    //   })
-    // },
 
     // 页面初始化
     initList() {
       api('oa/oaMeetingRoom/orderList', this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
-          // this.tableData3 = res.data.data.rows
-          // this.tableData3 = this.staticData.data.rows
-          // console.log(this.tableData3)
           this.staticData = res.data.data.rows
           this.total = res.data.data.total
           this.calcDataA()
@@ -457,33 +715,35 @@ export default {
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
       // 会议预约
-      time.substring(0, 1)
-      if (time.substring(0, 1) !== 1) {
-        if (time.substring(0, 1) < 10) {
-          time = '0' + time
-        }
+      var timeArr = time.split(':')
+      if (timeArr[0] < 10) {
+        time = '0' + time
       }
-      // var currentTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
-      // console.log(currentTime)
-      this.$router.push({
-        name: 'meetingApplication',
-        query: {
-          title: '会议申请',
-          meetId: id,
-          name: title,
-          currentTime: time,
-          currentDate: this.listQuery.meetingStartTime
-        }
-      })
+      var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
+      var today_time = new Date().getTime()
+      if (new Date(clickTime) - today_time < 0) {
+        alert('对不起,会议预约时间必须大于当前时间,请重新选择')
+        return
+      }
+      // this.$router.push({
+      //   name: 'meetingApplication',
+      //   query: {
+      //     title: '会议申请',
+      //     meetId: id,
+      //     name: title,
+      //     currentTime: time,
+      //     currentDate: this.listQuery.meetingStartTime
+      //   }
+      // })
     },
     calTdMerge(start, end) {
       var _start = start
-        .replace(/^.*T/, '')
-        .slice(0, 5)
+        // .replace(/^.*T/, '')
+        // .slice(0, 5)
         .split(':')
       var _end = end
-        .replace(/^.*T/, '')
-        .slice(0, 5)
+        // .replace(/^.*T/, '')
+        // .slice(0, 5)
         .split(':')
       function getColNum(num) {
         var _num_a = parseInt(num[0])
@@ -544,15 +804,11 @@ export default {
           }
         } else if (_num_a === 18) {
           if (_num_b >= 0 && _num_b <= 29) {
-            return 17
+            return 16
           } else {
-            return 17
+            return 16
           }
         }
-        //  else {
-        //   alert('会议时间必须是从9:00到18:00')
-        //   return
-        // }
       }
       var _start_col = getColNum(_start)
       var _end_col = getColNum(_end)
@@ -580,19 +836,25 @@ export default {
           _arr.push(obj)
         }
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
-          console.log(arr_data[i].meetingList[k].startTime)
-          const m = new Date(arr_data[i].meetingList[k].startTime).getMinutes() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].startTime).getMinutes()) : new Date(arr_data[i].meetingList[k].startTime).getMinutes()
-          const h = new Date(arr_data[i].meetingList[k].startTime).getHours() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].startTime).getHours()) : new Date(arr_data[i].meetingList[k].startTime).getHours()
+          const m =
+            new Date(arr_data[i].meetingList[k].startTime).getMinutes() < 10
+              ? '0' + new Date(arr_data[i].meetingList[k].startTime).getMinutes()
+              : new Date(arr_data[i].meetingList[k].startTime).getMinutes()
+          const h =
+            new Date(arr_data[i].meetingList[k].startTime).getHours() < 10
+              ? '0' + new Date(arr_data[i].meetingList[k].startTime).getHours()
+              : new Date(arr_data[i].meetingList[k].startTime).getHours()
           const sd = h + ':' + m
-          console.log(sd)
-          const em = new Date(arr_data[i].meetingList[k].endTime).getMinutes() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].endTime).getMinutes()) : new Date(arr_data[i].meetingList[k].endTime).getMinutes()
-          const eh = new Date(arr_data[i].meetingList[k].endTime).getHours() < 10 ? ('0' + new Date(arr_data[i].meetingList[k].endTime).getHours()) : new Date(arr_data[i].meetingList[k].endTime).getHours()
+          const em =
+            new Date(arr_data[i].meetingList[k].endTime).getMinutes() < 10
+              ? '0' + new Date(arr_data[i].meetingList[k].endTime).getMinutes()
+              : new Date(arr_data[i].meetingList[k].endTime).getMinutes()
+          const eh =
+            new Date(arr_data[i].meetingList[k].endTime).getHours() < 10
+              ? '0' + new Date(arr_data[i].meetingList[k].endTime).getHours()
+              : new Date(arr_data[i].meetingList[k].endTime).getHours()
           const ed = eh + ':' + em
-          console.log(ed)
-          var get_arr = this.calTdMerge(
-            sd,
-            ed
-          )
+          var get_arr = this.calTdMerge(sd, ed)
           for (var l = 0; l < get_arr.length; l++) {
             var _index = get_arr[l]
             if (l === 0) {
@@ -608,13 +870,14 @@ export default {
         arr_row.push(_arr)
       }
       this.rowTableData = arr_row
-      console.log(this.rowTableData)
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       // 合并单元格
       var _num = this.leftCol
+      if (this.rowTableData.length === 0) {
+        return [1, 1]
+      }
       if (columnIndex >= _num) {
-        //				          		console.log(this.rowTableData[rowIndex][columnIndex-_num].status)
         if (this.rowTableData[rowIndex][columnIndex - _num].status === 0) {
           return [1, 1]
         } else if (
@@ -726,8 +989,8 @@ export default {
     }
   }
 }
-.errorStyle{
+.errorStyle {
   line-height: 392px;
-  margin:0 auto;
+  margin: 0 auto;
 }
 </style>

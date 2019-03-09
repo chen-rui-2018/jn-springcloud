@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,8 +21,12 @@ public class SysDepartmentVO implements Serializable {
     private static final long serialVersionUID = 8857934360566700442L;
 
     @ApiModelProperty("部门id")
-    private String value;
+    private String id;
     @ApiModelProperty("部门名称")
+    private String departmentName;
+    @ApiModelProperty("部门id，用于前端解析id别名")
+    private String value;
+    @ApiModelProperty("部门名称，用于前端解析部门名称别名")
     private String label;
     @ApiModelProperty("父级id")
     private String parentId;
@@ -29,20 +34,45 @@ public class SysDepartmentVO implements Serializable {
     private String parentName;
     @ApiModelProperty("等级")
     private String level;
+    @ApiModelProperty("创建时间")
+    private Date createdTime;
+    @ApiModelProperty("部门人数")
+    private Integer userAccount;
     @ApiModelProperty("子部门的集合")
     private List<SysDepartmentVO> children;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String value, String label, String parentId, String parentName,
-                           String level, List<SysDepartmentVO> children) {
+    public SysDepartmentVO(String id, String departmentName, String value, String label,
+                           String parentId, String parentName, String level, Date createdTime,
+                           Integer userAccount, List<SysDepartmentVO> children) {
+        this.id = id;
+        this.departmentName = departmentName;
         this.value = value;
         this.label = label;
         this.parentId = parentId;
         this.parentName = parentName;
         this.level = level;
+        this.createdTime = createdTime;
+        this.userAccount = userAccount;
         this.children = children;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 
     public String getValue() {
@@ -85,6 +115,22 @@ public class SysDepartmentVO implements Serializable {
         this.level = level;
     }
 
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Integer getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(Integer userAccount) {
+        this.userAccount = userAccount;
+    }
+
     public List<SysDepartmentVO> getChildren() {
         return children;
     }
@@ -96,11 +142,15 @@ public class SysDepartmentVO implements Serializable {
     @Override
     public String toString() {
         return "SysDepartmentVO{" +
-                "value='" + value + '\'' +
+                "id='" + id + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                ", value='" + value + '\'' +
                 ", label='" + label + '\'' +
                 ", parentId='" + parentId + '\'' +
                 ", parentName='" + parentName + '\'' +
                 ", level='" + level + '\'' +
+                ", createdTime=" + createdTime +
+                ", userAccount=" + userAccount +
                 ", children=" + children +
                 '}';
     }

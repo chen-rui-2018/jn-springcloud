@@ -1,12 +1,10 @@
-package com.jn.system.user.model;
+package com.jn.system.model;
 
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  *查询工具类
@@ -16,31 +14,35 @@ import java.util.Arrays;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUserPage",description = "用户条件分页查询类")
-public class SysUserPage extends Page implements Serializable {
+@ApiModel(value = "UserPage",description = "用户条件分页查询类")
+public class UserPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
 
-    @ApiModelProperty("名称")
+    @ApiModelProperty(value = "名称",example = "朱奕")
     private String name;
 
-    @ApiModelProperty(value = "状态",example = "0")
+    @ApiModelProperty(value = "状态",example = "1")
     private Byte recordStatus;
 
-    @ApiModelProperty("部门id")
+    @ApiModelProperty(value = "部门id",example = "6b561892-5310-4ea8-877d-e791df462d0e")
     private String departmentId;
 
-    @ApiModelProperty("岗位或岗位类型名称")
+    @ApiModelProperty(value = "岗位或岗位类型名称",example = "领导")
     private String postOrTypeName;
 
-    public SysUserPage() {
+    @ApiModelProperty(value = "手机号",example = "\"131\"")
+    private String phone;
+
+    public UserPage() {
     }
 
-    public SysUserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName) {
+    public UserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName, String phone) {
         this.name = name;
         this.recordStatus = recordStatus;
         this.departmentId = departmentId;
         this.postOrTypeName = postOrTypeName;
+        this.phone = phone;
     }
 
     public String getName() {
@@ -75,6 +77,14 @@ public class SysUserPage extends Page implements Serializable {
         this.postOrTypeName = postOrTypeName;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     @Override
     public String toString() {
         return "SysUserPage{" +
@@ -82,6 +92,7 @@ public class SysUserPage extends Page implements Serializable {
                 ", recordStatus=" + recordStatus +
                 ", departmentId='" + departmentId + '\'' +
                 ", postOrTypeName='" + postOrTypeName + '\'' +
+                ", phone='" + phone + '\'' +
                 '}';
     }
 }

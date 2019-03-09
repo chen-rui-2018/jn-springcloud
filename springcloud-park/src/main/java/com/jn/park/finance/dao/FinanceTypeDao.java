@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Date;
 import java.util.List;
 
-public interface FinanceTypeMapper {
+public interface FinanceTypeDao {
 
     /**
      *  查看所有财务项目类型

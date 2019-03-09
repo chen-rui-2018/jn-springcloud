@@ -5,13 +5,17 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
+import com.jn.park.finance.service.FinanceBudgetService;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.util.List;
 
 /**
  * @author： huangbq
@@ -23,14 +27,16 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 @RestController
 @RequestMapping("/finance/budget")
 public class FinanceBudgetController extends FinanceBaseController {
+    @Autowired
+    private FinanceBudgetService financeBudgetService;
 
     @ControllerLog(doAction = "总预算查询")
     @ApiOperation(value = "总预算查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/totalList")
-    @RequiresPermissions("/finance/budget/totalList")
-    public Result totalList( @RequestBody FinanceBudgetQueryModel financeBudgetQueryModel){
-        //todo
-        return new Result(new PaginationData<FinanceTotalBudgetVo>());
+    @PostMapping(value = "/selectTotalBudget")
+    @RequiresPermissions("/finance/budget/selectTotalBudget")
+    public Result selectTotalBudget( @RequestBody FinanceBudgetQueryModel financeBudgetQueryModel){
+        List<FinanceTotalBudgetVo>  financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(financeBudgetQueryModel,getUser().getAccount());
+        return new Result(financeTotalBudgetVoList);
     }
 
     @ControllerLog(doAction = "预算录入历史查询")

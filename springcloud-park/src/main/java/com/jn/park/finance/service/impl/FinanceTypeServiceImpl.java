@@ -2,7 +2,7 @@ package com.jn.park.finance.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
-import com.jn.park.finance.dao.FinanceTypeMapper;
+import com.jn.park.finance.dao.FinanceTypeDao;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
 import com.jn.park.finance.entity.TbFinanceDepartmentToType;
@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,6 +33,7 @@ import java.util.List;
  * @modified By:
  */
 @Service
+@Transactional
 public class FinanceTypeServiceImpl implements FinanceTypeService {
     private static Logger logger = LoggerFactory.getLogger(FinanceTypeServiceImpl.class);
     @Autowired
@@ -39,7 +41,7 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
     @Autowired
     private TbFinanceDepartmentToTypeMapper tbFinanceDepartmentToTypeMapper;
     @Autowired
-    private FinanceTypeMapper financeTypeMapper;
+    private FinanceTypeDao financeTypeDao;
     @Autowired
     private SystemClient systemClient;
 
@@ -104,7 +106,7 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
         if (null==dept.getData()){
             throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_DEPT_NOT_EXIST);
         }
-        return financeTypeMapper.selectTypeByDepartmentId(departmentId);
+        return financeTypeDao.selectTypeByDepartmentId(departmentId);
     }
 
 
@@ -113,7 +115,7 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
     @Override
     public List<FinanceDepartmentToTypeModel>selectDepartmentByTypeId(Integer typeId){
 
-        return financeTypeMapper.selectDepartmentByTypeId(typeId);
+        return financeTypeDao.selectDepartmentByTypeId(typeId);
     }
 
    @ServiceLog(doAction = "校验费用类型名称是否已经存在")

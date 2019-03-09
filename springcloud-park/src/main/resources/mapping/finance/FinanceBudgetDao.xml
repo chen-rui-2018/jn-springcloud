@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceBudgetDao">
+
+    <resultMap id="TotalBudgetVoResultMap" type="com.jn.park.finance.vo.FinanceTotalBudgetVo">
+        <result column="cost_type_id" jdbcType="INTEGER" property="costTypeId" />
+        <result column="cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+        <collection property="budgetMoneyModels"
+                    ofType="com.jn.park.finance.model.FinanceBudgetMoneyModel"
+                    select="selectEveryMonthBudgetMoney"
+                    column="{costTypeId=costTypeId,departmentId=departmentId,startMonth=startMonth,endMonth=endMonth}"></collection>
+    </resultMap>
+
+    <resultMap id="BudgetMoneyResultMap" type="com.jn.park.finance.model.FinanceBudgetMoneyModel">
+        <result column="month" jdbcType="CHAR" property="month" />
+        <result column="money" jdbcType="DECIMAL" property="money" />
+    </resultMap>
+
+    <!--查询指定时间段每个月的总预算-->
+    <select id="selectEveryMonthBudgetMoney" resultMap="BudgetMoneyResultMap">
+        SELECT
+            m.`month`,
+            IFNULL(tb.budget_number,0) AS money
+        FROM
+            tb_finance_total_budget tb
+        RIGHT JOIN tb_month m ON m.`month` = tb.budget_month
+        AND tb.record_status = 1
+        AND tb.cost_type_id = #{costTypeId,jdbcType=INTEGER}
+        AND tb.department_id = #{departmentId,jdbcType=VARCHAR}
+        WHERE
+            m. MONTH BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
+        ORDER BY m.`month`
+    </select>
+
+
+    <select id="selectTotalBudget" resultMap="TotalBudgetVoResultMap">
+        SELECT
+            tb.cost_type_id as costTypeId,
+            max(tb.cost_type_name) as costTypeName,
+            tb.department_id as departmentId,
+            max(tb.department_name) as departmentName,
+            #{startMonth,jdbcType=VARCHAR} as startMonth,
+            #{endMonth,jdbcType=VARCHAR} as endMonth
+        FROM
+            `tb_finance_total_budget` tb
+        LEFT JOIN tb_finance_type t ON t.id = tb.cost_type_id
+        WHERE
+            tb.record_status = 1
+        AND t.record_status = 1
+        AND tb.budget_month BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
+        GROUP BY
+            tb.cost_type_id,
+            tb.department_id
+        ORDER BY t.show_order
+
+    </select>
+
+  <!--查询预算历史中的总预算（按月统计）-->
+  <select id="calcHistoryMoney" resultType="com.jn.park.finance.model.FinanceBudgetHistoryModel">
+    select department_id departmentId,cost_type_id costTypeId,budget_month budgetMonth,sum(budget_money) budgetMoney from tb_finance_budget_history bh
+    <where>
+      record_status=1 and cost_type_id=#{costTypeId,jdbcType=INTEGER} and department_id=#{departmentId,jdbcType=VARCHAR} and
+        budget_month =#{budgetMonth,jdbcType=VARCHAR}
+    </where>
+    group by department_id,cost_type_id,budget_month ;
+  </select>
+</mapper>

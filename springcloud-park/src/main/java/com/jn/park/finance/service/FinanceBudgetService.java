@@ -6,6 +6,7 @@ import com.jn.park.finance.model.FinanceBudgetHistoryModel;
 import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
+import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.model.User;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -26,7 +27,7 @@ public interface FinanceBudgetService {
      * @param userAccount
      * @return
      */
-    Result totalList(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount);
+    List<FinanceTotalBudgetVo> selectTotalBudget(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount);
 
     /**
      * 预算录入历史查询

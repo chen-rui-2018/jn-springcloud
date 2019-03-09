@@ -6,6 +6,7 @@ import com.jn.oa.meeting.service.MeetingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 提供内部使用的API接口
@@ -15,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @version： v1.0
  * @modified By:
  */
-public class OaController  extends BaseController implements OaClient {
+@RestController
+public class OaController extends BaseController implements OaClient {
     private static Logger logger = LoggerFactory.getLogger(OaController.class);
 
     @Autowired
     private MeetingService meetingService;
+
     /**
      * 定时十分钟通知会议申请人
      *

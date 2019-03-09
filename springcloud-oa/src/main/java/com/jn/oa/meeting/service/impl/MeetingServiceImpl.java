@@ -80,8 +80,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     private ResourceLoader resourceLoader;
 
-  /*  @Resource
-    private MessageSource messageSource;*/
+    @Resource
+    private MessageSource messageSource;
 
     @Autowired
     public MeetingServiceImpl(ResourceLoader resourceLoader) {
@@ -370,7 +370,7 @@ public class MeetingServiceImpl implements MeetingService {
             smsTemplateVo.setMobiles(m);
             String[] t = {oaMeetingNotice.getTitle()};
             smsTemplateVo.setContents(t);
-           // messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
+            messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
 
             //更新会议通知状态
 

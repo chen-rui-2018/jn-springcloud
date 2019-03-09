@@ -180,6 +180,8 @@
                     $('.meetingTotal').html(str)
                 }else{
                     console.log(res.result);
+                    $('.name2').html('暂无会议！');
+                    $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
                 }
             },error : function(err){
                 $('.name2').html('暂无会议！');

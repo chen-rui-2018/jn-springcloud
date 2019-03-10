@@ -86,7 +86,7 @@
         max(th.department_name) as departmentName,
         th.created_time,
         th.budget_Type,
-        case th.budget_Type when 0 then '年初预算' else '临时预算'end as budget_Type_name
+        case th.budget_Type when 0 then '年初预算' else '临时预算'end as budget_Type_name,
         #{startMonth,jdbcType=VARCHAR} as startMonth,
         #{endMonth,jdbcType=VARCHAR} as endMonth
         FROM
@@ -100,7 +100,7 @@
             and t.id=#{costTypeId,jdbcType=INTEGER}
         </if>
         <if test="departmentId != null">
-            and tb.department_id in
+            and th.department_id in
             <foreach collection="departmentId.split(',')" open="(" item="item" index="index" separator="," close=")">
                 #{item,jdbcType=VARCHAR}
             </foreach>

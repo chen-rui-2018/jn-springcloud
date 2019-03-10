@@ -12,10 +12,10 @@ public class TbFinanceIncomeMonth implements Serializable {
     private String incomeMonth;
 
     /*@ApiModelProperty("收入类型标识 0：电费 ；1：物业费；2：楼宇租；3：其他；4：合计")*/
-    private String incomeType;
+    private Integer incomeType;
 
     /*@ApiModelProperty("收入类型名称")*/
-    private Integer incomeTypename;
+    private String incomeTypename;
 
     /*@ApiModelProperty("收入金额")*/
     private BigDecimal income;
@@ -53,20 +53,20 @@ public class TbFinanceIncomeMonth implements Serializable {
         this.incomeMonth = incomeMonth == null ? null : incomeMonth.trim();
     }
 
-    public String getIncomeType() {
+    public Integer getIncomeType() {
         return incomeType;
     }
 
-    public void setIncomeType(String incomeType) {
-        this.incomeType = incomeType == null ? null : incomeType.trim();
+    public void setIncomeType(Integer incomeType) {
+        this.incomeType = incomeType;
     }
 
-    public Integer getIncomeTypename() {
+    public String getIncomeTypename() {
         return incomeTypename;
     }
 
-    public void setIncomeTypename(Integer incomeTypename) {
-        this.incomeTypename = incomeTypename;
+    public void setIncomeTypename(String incomeTypename) {
+        this.incomeTypename = incomeTypename == null ? null : incomeTypename.trim();
     }
 
     public BigDecimal getIncome() {

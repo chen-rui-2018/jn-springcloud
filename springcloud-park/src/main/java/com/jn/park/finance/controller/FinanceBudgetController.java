@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.record.FnGroupCountRecord;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
@@ -36,7 +37,7 @@ public class FinanceBudgetController extends FinanceBaseController {
     @ApiOperation(value = "总预算查询", httpMethod = "GET")
     @GetMapping(value = "/selectTotalBudget")
     @RequiresPermissions("/finance/budget/selectTotalBudget")
-    public Result<List<FinanceTotalBudgetVo>> selectTotalBudget(  FinanceBudgetQueryModel financeBudgetQueryModel){
+    public Result<List<FinanceTotalBudgetVo>> selectTotalBudget(@Validated FinanceBudgetQueryModel financeBudgetQueryModel){
         //财务部能看所有部门的数据，非财务部的用户，需要校验下要查询的部门是否属于用户所属的部门
         if(!isFinanceDepartmentUser()){
             checkUserDepartmentId(financeBudgetQueryModel.getDepartmentId());
@@ -81,11 +82,14 @@ public class FinanceBudgetController extends FinanceBaseController {
      * @param endMonth
      */
     private void checkIsSomeYear(String startMonth,String endMonth){
-        if(null==startMonth||startMonth.length()==6){
+        if(null==startMonth||startMonth.length()!=6){
             throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
         }
-        if(null!=endMonth&&endMonth.length()==6){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
+        if(null!=endMonth&&endMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份格式必须是YYYYMM");
+        }
+        if((startMonth.compareTo(endMonth))>0){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份必须大于等于开始月份");
         }
         if(!startMonth.substring(0,4).equals(endMonth.substring(0,4))){
             throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"只能查同一年的数据");

@@ -1,9 +1,6 @@
 package com.jn.park.finance.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.finance.dao.FinanceBudgetDao;
 import com.jn.park.finance.dao.TbFinanceBudgetHistoryMapper;
@@ -29,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,49 +56,8 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     @ServiceLog(doAction = "预算录入历史查询")
     @Override
-    public PaginationData<List<FinanceBudgetHistoryVo>> historyList(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount) {
-        TbFinanceBudgetHistoryExample example=new TbFinanceBudgetHistoryExample();
-        TbFinanceBudgetHistoryExample.Criteria criteria=example.createCriteria();
-        //费用类型查询条件
-        if(null!= financeBudgetHistoryQueryModel.getCostTypeId()){
-            criteria.andCostTypeIdEqualTo(financeBudgetHistoryQueryModel.getCostTypeId());
-        }
-        //部门查询条件
-        if(null!= financeBudgetHistoryQueryModel.getDepartmentId()){
-            criteria.andDepartmentIdEqualTo(financeBudgetHistoryQueryModel.getDepartmentId());
-        }
-        //录入类型查询条件
-        if(null!= financeBudgetHistoryQueryModel.getBudgetType()){
-            criteria.andBudgetTypeEqualTo(financeBudgetHistoryQueryModel.getBudgetType());
-        }
-        //数据月份-开始
-        if(null!= financeBudgetHistoryQueryModel.getStartMonth()){
-            criteria.andBudgetMonthGreaterThanOrEqualTo(financeBudgetHistoryQueryModel.getStartMonth());
-        }
-        //数据月份-结束
-        if(null!= financeBudgetHistoryQueryModel.getEndMonth()){
-            criteria.andBudgetMonthLessThanOrEqualTo(financeBudgetHistoryQueryModel.getEndMonth());
-        }
-        //过滤已删除的数据
-        criteria.andRecordStatusEqualTo(new Byte("1"));
-        //设置排序条件
-        if(StringUtils.isNotBlank(financeBudgetHistoryQueryModel.getOrderByClause())){
-            example.setOrderByClause(financeBudgetHistoryQueryModel.getOrderByClause());
-        }else{
-            //默认排序
-            example.setOrderByClause("created_time desc");
-        }
-
-        Page<FinanceBudgetHistoryVo> page=PageHelper.startPage(financeBudgetHistoryQueryModel.getPage(), financeBudgetHistoryQueryModel.getRows());
-        List<TbFinanceBudgetHistory>list= tbFinanceBudgetHistoryMapper.selectByExample(example);
-        List<FinanceBudgetHistoryVo>voList=new ArrayList<>();
-        for (TbFinanceBudgetHistory history:list){
-            FinanceBudgetHistoryVo vo=new FinanceBudgetHistoryVo();
-            BeanUtils.copyProperties(history,vo);
-            voList.add(vo);
-        }
-        PaginationData<List<FinanceBudgetHistoryVo>>paginationData=new PaginationData<List<FinanceBudgetHistoryVo>>(voList,page.getTotal());
-        return paginationData;
+    public List<FinanceBudgetHistoryVo> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount) {
+        return financeBudgetDao.selectBudgetHistory(financeBudgetHistoryQueryModel);
     }
 
     @ServiceLog(doAction = "预算录入")
@@ -198,4 +153,6 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         }
 
     }
+
+
 }

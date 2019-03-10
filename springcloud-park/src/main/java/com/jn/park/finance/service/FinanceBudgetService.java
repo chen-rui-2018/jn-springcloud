@@ -35,7 +35,7 @@ public interface FinanceBudgetService {
      * @param userAccount
      * @return
      */
-    PaginationData<List<FinanceBudgetHistoryVo>> historyList(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount);
+    List<FinanceBudgetHistoryVo>selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount);
 
     /**
      * 预算录入

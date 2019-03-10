@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,10 +24,12 @@ public class FinanceBudgetQueryModel extends Page implements Serializable {
     @ApiModelProperty("部门ID")
     private String departmentId;
 
+    @NotNull(message = "数据开始月份不能为空")
     @ApiModelProperty("数据开始月份")
     private String startMonth;
 
-    @ApiModelProperty("数据结束s月份")
+    @NotNull(message = "数据结束月份不能为空")
+    @ApiModelProperty("数据结束月份")
     private String endMonth;
 
     @ApiModelProperty("排序条件")

@@ -8,6 +8,9 @@ import com.jn.system.model.User;
 import com.jn.system.vo.SysDepartmentPostVO;
 import org.apache.shiro.SecurityUtils;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author： huangbq
  * @date： Created on 2019/3/7 20:11
@@ -21,12 +24,14 @@ public abstract class FinanceBaseController extends BaseController {
 
     /**
      * 校验departmentId是否属于用户所属的部门
-     * @param user
      * @param departmentId
      */
-    protected void checkDepartmentId(User user,String departmentId){
+    protected void checkUserDepartmentId(String departmentId){
+        if(null==departmentId){
+            return;
+        }
         boolean flag=false;
-        for(SysDepartmentPostVO departmentPostVO:user.getSysDepartmentPostVO()){
+        for(SysDepartmentPostVO departmentPostVO:getUser().getSysDepartmentPostVO()){
             if(StringUtils.equals(departmentId,departmentPostVO.getDepartmentId())){
                 flag=true;
                 break;
@@ -38,13 +43,21 @@ public abstract class FinanceBaseController extends BaseController {
     }
 
     /**
-     * 是否为财务部
-     * @param user
+     * 用户所属的部门ID，多个ID用,隔开
      * @return
      */
-    protected boolean isFinanceDepartment(User user){
+    protected String getUserDepartmentIds(){
+        List<String>deaprtmentIdList= getUser().getSysDepartmentPostVO().stream().map(e->e.getDepartmentId()).collect(Collectors.toList());
+        return StringUtils.join(deaprtmentIdList.toArray(),",");
+    }
+
+    /**
+     * 是否为财务部
+     * @return
+     */
+    protected boolean isFinanceDepartmentUser(){
         //todo
-        for(SysDepartmentPostVO departmentPostVO:user.getSysDepartmentPostVO()){
+        for(SysDepartmentPostVO departmentPostVO:getUser().getSysDepartmentPostVO()){
             if(departmentPostVO.getDepartmentId().indexOf("财务部")>-1){
                 return true;
             }

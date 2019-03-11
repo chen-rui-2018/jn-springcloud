@@ -1,10 +1,6 @@
 package com.jn.enterprise.joinpark.usermanage.service;
 
-import com.jn.common.model.Result;
 import com.jn.enterprise.joinpark.usermanage.model.*;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorDetailParam;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -53,5 +49,5 @@ public interface UserUpgradeService {
      * @param comName
      * @return
      */
-    List<Conpany> selectCompany(String comName);
+    List<Company> selectCompany(String comName);
 }

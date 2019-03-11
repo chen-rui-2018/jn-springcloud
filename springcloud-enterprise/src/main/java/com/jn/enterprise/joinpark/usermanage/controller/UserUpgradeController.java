@@ -79,7 +79,7 @@ public class UserUpgradeController {
     @ApiOperation(value = "查询公司列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectCompany")
     public Result selectCompany(@ApiParam(name="comName",value = "企业名")@RequestParam(value = "comName")  String comName) {
-        List<Conpany> conpanies = userUpgradeService.selectCompany(comName);
+        List<Company> conpanies = userUpgradeService.selectCompany(comName);
         return new Result(conpanies);
     }
 

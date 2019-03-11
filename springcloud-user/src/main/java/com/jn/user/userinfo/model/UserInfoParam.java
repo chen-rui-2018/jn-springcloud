@@ -27,6 +27,9 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "个性签名")
     private String signature;
 
+    @ApiModelProperty(value = "头像路径")
+    private String avatar;
+
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
@@ -107,5 +110,13 @@ public class UserInfoParam implements Serializable {
 
     public void setJobs(String[] jobs) {
         this.jobs = jobs;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

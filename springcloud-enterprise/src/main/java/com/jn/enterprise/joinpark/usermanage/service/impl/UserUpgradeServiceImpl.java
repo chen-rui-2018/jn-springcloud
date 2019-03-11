@@ -1,7 +1,6 @@
 package com.jn.enterprise.joinpark.usermanage.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
-import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
@@ -183,15 +182,15 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
 
     @Override
     @ServiceLog(doAction = "查询公司列表")
-    public List<Conpany> selectCompany(String comName){
+    public List<Company> selectCompany(String comName){
         TbServiceCompanyCriteria companyCriteria = new TbServiceCompanyCriteria();
         companyCriteria.createCriteria().andComNameLike("%"+comName+"%").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID);
         List<TbServiceCompany> tbServiceCompanies = tbServiceCompanyMapper.selectByExample(companyCriteria);
-        List<Conpany> conpanies = new ArrayList<>(8);
+        List<Company> conpanies = new ArrayList<>(8);
         for (TbServiceCompany serviceCompany: tbServiceCompanies) {
-            Conpany conpany = new Conpany();
-            BeanUtils.copyProperties(serviceCompany,conpany);
-            conpanies.add(conpany);
+            Company company = new Company();
+            BeanUtils.copyProperties(serviceCompany, company);
+            conpanies.add(company);
         }
         return conpanies;
     }

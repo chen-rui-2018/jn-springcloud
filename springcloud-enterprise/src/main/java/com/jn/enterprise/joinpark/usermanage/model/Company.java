@@ -12,14 +12,17 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "Conpany",description = "公司企业")
-public class Conpany implements Serializable {
+@ApiModel(value = "Company",description = "公司企业")
+public class Company implements Serializable {
 
     @ApiModelProperty(value = "企业ID")
     private String id;
 
     @ApiModelProperty(value = "企业ID")
     private String comName;
+
+    @ApiModelProperty(value = "企业logo")
+    private String avatar;
 
     public String getId() {
         return id;
@@ -35,5 +38,13 @@ public class Conpany implements Serializable {
 
     public void setComName(String comName) {
         this.comName = comName;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

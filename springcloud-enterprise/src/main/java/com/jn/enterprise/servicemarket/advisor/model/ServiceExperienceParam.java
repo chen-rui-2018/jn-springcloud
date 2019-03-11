@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceExperience",description = "顾问服务经历入参")
+@ApiModel(value = "ServiceExperienceParam",description = "顾问服务经历入参")
 public class ServiceExperienceParam extends Page implements Serializable {
     @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;

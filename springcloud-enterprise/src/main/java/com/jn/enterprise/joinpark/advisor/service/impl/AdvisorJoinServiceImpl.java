@@ -5,11 +5,8 @@ import com.jn.enterprise.servicemarket.advisor.dao.AdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceHonorMapper;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceProExperMapper;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperienceCriteria;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonorCriteria;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExperCriteria;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorDetailParam;
+import com.jn.enterprise.servicemarket.advisor.entity.*;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
@@ -17,6 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 顾问认证
@@ -54,21 +56,54 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         serviceHonorCriteria.createCriteria().andAdvisorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         int deleteServiceHonorCount = tbServiceHonorMapper.deleteByExample(serviceHonorCriteria);
         logger.info("问荣誉资质历史数据删除成功，响应条数-{}",deleteServiceHonorCount);
-        int i = advisorMapper.insertServiceHonorList(advisorDetailParam.getServiceHonors());
+        List<ServiceHonorParam> serviceHonorParams = advisorDetailParam.getServiceHonors();
+        List<TbServiceHonor> serviceHonors = new ArrayList<>(16);
+        for(ServiceHonorParam param:serviceHonorParams){
+            TbServiceHonor serviceHonor = new TbServiceHonor();
+            BeanUtils.copyProperties(param,serviceHonor);
+            serviceHonor.setCreatedTime(new Date());
+            serviceHonor.setCreatorAccount(account);
+            serviceHonor.setModifiedTime(new Date());
+            serviceHonor.setModifierAccount(account);
+            serviceHonors.add(serviceHonor);
+        }
+        int i = advisorMapper.insertServiceHonorList(serviceHonors);
         logger.info("批量插入顾问荣誉资质成功，响应条数{}",i);
 
         TbServiceProExperCriteria serviceProExperCriteria = new TbServiceProExperCriteria();
         serviceProExperCriteria.createCriteria().andAdvisorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         int deleteServiceProCount = tbServiceProExperMapper.deleteByExample(serviceProExperCriteria);
         logger.info("顾问项目经验数据删除成功，响应条数--{}",deleteServiceProCount);
-        int i1 = advisorMapper.insertServiceProjectList(advisorDetailParam.getProjectExperiences());
+        List<ServiceProjectExperienceParam> projectExperiences = advisorDetailParam.getProjectExperiences();
+        List<TbServiceProExper> serviceProExpers = new ArrayList<>(16);
+        for (ServiceProjectExperienceParam param:projectExperiences) {
+            TbServiceProExper serviceProExper = new TbServiceProExper();
+            BeanUtils.copyProperties(param,serviceProExper);
+            serviceProExper.setCreatedTime(new Date());
+            serviceProExper.setCreatorAccount(account);
+            serviceProExper.setModifiedTime(new Date());
+            serviceProExper.setModifierAccount(account);
+            serviceProExpers.add(serviceProExper);
+        }
+        int i1 = advisorMapper.insertServiceProjectList(serviceProExpers);
         logger.info("批量插入顾问项目经验成功，响应条数{}",i1);
 
         TbServiceExperienceCriteria serviceExperienceCriteria = new TbServiceExperienceCriteria();
         serviceExperienceCriteria.createCriteria().andAdvisorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         int deleteServiceExperienceCount = tbServiceExperienceMapper.deleteByExample(serviceExperienceCriteria);
         logger.info("顾问服务经验数据删除成功，响应条数---{}",deleteServiceExperienceCount);
-        int i2 = advisorMapper.insertServiceExperienceList(advisorDetailParam.getServiceExperiences());
+        List<ServiceExperienceParam> serviceExperiences = advisorDetailParam.getServiceExperiences();
+        List<TbServiceExperience> tbServiceExperiences = new ArrayList<>(16);
+        for (ServiceExperienceParam param:serviceExperiences) {
+            TbServiceExperience serviceExperience = new TbServiceExperience();
+            BeanUtils.copyProperties(param,serviceExperience);
+            serviceExperience.setCreatedTime(new Date());
+            serviceExperience.setCreatorAccount(account);
+            serviceExperience.setModifiedTime(new Date());
+            serviceExperience.setModifierAccount(account);
+            tbServiceExperiences.add(serviceExperience);
+        }
+        int i2 = advisorMapper.insertServiceExperienceList(tbServiceExperiences);
         logger.info("批量插入顾问服务经验成功，响应条数{}",i2);
         AdvisorBaseInfo advisorBaseInfo = new AdvisorBaseInfo();
         BeanUtils.copyProperties(advisorDetailParam,advisorBaseInfo);

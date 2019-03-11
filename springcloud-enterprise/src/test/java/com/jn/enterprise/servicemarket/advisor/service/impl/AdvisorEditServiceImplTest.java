@@ -4,10 +4,7 @@ import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperience;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperience;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -53,7 +50,7 @@ public class AdvisorEditServiceImplTest {
     /**
      * 荣誉资质
      */
-    private ServiceHonor serviceHonor=new ServiceHonor();
+    private ServiceHonorParam serviceHonor=new ServiceHonorParam();
 
     //证件类型分类  荣誉资质 honor
     private String certificateType;
@@ -61,12 +58,12 @@ public class AdvisorEditServiceImplTest {
     /**
      *服务经历
      */
-    private ServiceExperience serviceExperience=new ServiceExperience();
+    private ServiceExperienceParam serviceExperience=new ServiceExperienceParam();
 
     /**
      * 项目经验
      */
-    private ServiceProjectExperience serviceProjectExperience=new ServiceProjectExperience();
+    private ServiceProjectExperienceParam serviceProjectExperience=new ServiceProjectExperienceParam();
 
     private String advisorAccount;
 

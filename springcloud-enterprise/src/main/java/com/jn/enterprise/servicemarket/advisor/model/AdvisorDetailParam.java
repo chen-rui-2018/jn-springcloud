@@ -43,13 +43,13 @@ public class AdvisorDetailParam implements Serializable {
     private String contactEmail;
 
     @ApiModelProperty(value = "荣誉资质")
-    private List<ServiceHonor> serviceHonors;
+    private List<ServiceHonorParam> serviceHonors;
 
     @ApiModelProperty(value = "项目经验")
-    private List<ServiceProjectExperience> projectExperiences;
+    private List<ServiceProjectExperienceParam> projectExperiences;
 
     @ApiModelProperty(value = "服务经验")
-    private List<ServiceExperience> serviceExperiences;
+    private List<ServiceExperienceParam> serviceExperiences;
 
     public String getOrgId() {
         return orgId;
@@ -123,27 +123,27 @@ public class AdvisorDetailParam implements Serializable {
         this.contactEmail = contactEmail;
     }
 
-    public List<ServiceHonor> getServiceHonors() {
+    public List<ServiceHonorParam> getServiceHonors() {
         return serviceHonors;
     }
 
-    public void setServiceHonors(List<ServiceHonor> serviceHonors) {
+    public void setServiceHonors(List<ServiceHonorParam> serviceHonors) {
         this.serviceHonors = serviceHonors;
     }
 
-    public List<ServiceProjectExperience> getProjectExperiences() {
+    public List<ServiceProjectExperienceParam> getProjectExperiences() {
         return projectExperiences;
     }
 
-    public void setProjectExperiences(List<ServiceProjectExperience> projectExperiences) {
+    public void setProjectExperiences(List<ServiceProjectExperienceParam> projectExperiences) {
         this.projectExperiences = projectExperiences;
     }
 
-    public List<ServiceExperience> getServiceExperiences() {
+    public List<ServiceExperienceParam> getServiceExperiences() {
         return serviceExperiences;
     }
 
-    public void setServiceExperiences(List<ServiceExperience> serviceExperiences) {
+    public void setServiceExperiences(List<ServiceExperienceParam> serviceExperiences) {
         this.serviceExperiences = serviceExperiences;
     }
 }

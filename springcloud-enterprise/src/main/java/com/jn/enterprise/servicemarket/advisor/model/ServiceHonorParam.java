@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质入参")
+@ApiModel(value = "ServiceHonorParam",description = "顾问荣誉资质入参")
 public class ServiceHonorParam extends Page implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;

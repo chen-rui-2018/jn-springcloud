@@ -1,5 +1,8 @@
 package com.jn.enterprise.servicemarket.advisor.dao;
 
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonor;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExper;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeam;
@@ -37,19 +40,19 @@ public interface AdvisorMapper {
      * @param list
      * @return
      */
-    int insertServiceHonorList(List<ServiceHonor> list);
+    int insertServiceHonorList(List<TbServiceHonor> list);
 
     /**
      * 批量插入顾问项目经验
      * @param list
      * @return
      */
-    int insertServiceProjectList(List<ServiceProjectExperience> list);
+    int insertServiceProjectList(List<TbServiceProExper> list);
 
     /**
      * 批量插入顾问服务经验
      * @param list
      * @return
      */
-    int insertServiceExperienceList(List<ServiceExperience> list);
+    int insertServiceExperienceList(List<TbServiceExperience> list);
 }

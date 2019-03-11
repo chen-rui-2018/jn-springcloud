@@ -172,7 +172,7 @@
                     if(res.data.length == 0 ){
                         $('.name2').html('暂无会议！');
                     }else {
-                        $('.name2').html('白下高新区' + res.data[0].departmentName + '部门会议');
+                        $('.name2').html(res.data[0].title);
                     }
                     $('.meetingTime').html(res.data[0].startDate + '&nbsp;' + res.data[0].startTime + '~' +
                         res
@@ -181,8 +181,8 @@
                     var str = '';
 
                     for (var i = 1; i < res.data.length; i++) {
-                        str += '<div class="meetingName2"><span>会议名称：白下高新区' + res.data[i].departmentName +
-                            '会议</span>' +
+                        str += '<div class="meetingName2"><span>会议名称：' + res.data[i].title +
+                            '</span>' +
                             '<span class="color fr">' + res.data[i].startDate + '&nbsp' + res.data[i].startTime +
                             '~' +
                             res.data[i].endTime + '</span></div>'

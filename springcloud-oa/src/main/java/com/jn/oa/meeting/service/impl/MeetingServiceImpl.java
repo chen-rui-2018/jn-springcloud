@@ -373,6 +373,7 @@ public class MeetingServiceImpl implements MeetingService {
     public void noticesApplicationMeeting() {
         List<OaMeetingNotice> oaMeetingNoticeList =oaMeetingMapper.noticesApplicationMeeting();
         for(OaMeetingNotice oaMeetingNotice:oaMeetingNoticeList){
+
             //短信通知
             SmsTemplateVo smsTemplateVo = new SmsTemplateVo();
             smsTemplateVo.setTemplateId(OaMeetingNoticesTemplateEnums.MESSAGE_TEMPLATE.getCode());
@@ -381,13 +382,14 @@ public class MeetingServiceImpl implements MeetingService {
             String[] t = {oaMeetingNotice.getTitle()};
             smsTemplateVo.setContents(t);
             messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
-
+            logger.info("[会议申请] 定时十分钟通知会议申请人！,Contents: {}，phone：{}", oaMeetingNotice.getTitle(),oaMeetingNotice.getApplicantPhone());
             //更新会议通知状态
 
             TbOaMeeting oaMeeting=new TbOaMeeting();
             oaMeeting.setId(oaMeetingNotice.getId());
             oaMeeting.setIsRemind( OaMeetingNoticesStatusEnums.HAVE_INFORMED.getCode());
             oaMeeting.setModifiedTime(new Date());
+            logger.info("[会议申请] 修改提醒！,meetingId: {}",oaMeetingNotice.getId());
             tbOaMeetingMapper.updateByPrimaryKeySelective(oaMeeting);
         }
     }

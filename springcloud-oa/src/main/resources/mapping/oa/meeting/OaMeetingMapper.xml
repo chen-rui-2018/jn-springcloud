@@ -547,7 +547,7 @@
             meeting.meeting_status = 0
             ) t
             LEFT JOIN ( SELECT t.id, t.phone, t.wechat_account FROM tb_sys_user t WHERE t.record_status = 1 ) tt ON tt.id = t.applicant
-         where <![CDATA[  t.sub_time>=0 and t.sub_time<=10  ]]>
+         where <![CDATA[  t.sub_time>=0 and t.sub_time<=12  ]]>
     </select>
 
     

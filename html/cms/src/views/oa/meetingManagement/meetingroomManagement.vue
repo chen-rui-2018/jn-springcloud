@@ -20,7 +20,7 @@
       <el-table-column type="index" width="60" label="序号" align="center" />
       <!-- 表格第二列  姓名 -->
       <el-table-column label="会议室名称" align="center" prop="name" />
-      <el-table-column label="会议室位置" align="center" prop="position" />
+      <el-table-column label="会议室位置" align="center" prop="building" />
       <el-table-column label="创建人" align="center" prop="userName" />
       <el-table-column label="会议室容量" align="center" prop="capacity" />
       <el-table-column label="会议室说明" align="center" prop="explains" />
@@ -99,13 +99,13 @@ export default {
       var sysId = '531a2a04-be44-4239-a36b-5b09aac3499d'
       getUserInfo().then(res => {
         if (res.data.code === '0000') {
-          console.log(res.data.data.sysRole)
-          res.data.data.sysRole.forEach(val => {
-            if (val.id === sysId) {
-              this.isShow = true
-            }
-          })
-          // if(res)
+          if (res.data.data.sysRole) {
+            res.data.data.sysRole.forEach(val => {
+              if (val.id === sysId) {
+                this.isShow = true
+              }
+            })
+          }
         } else {
           this.$message.error(res.data.result)
         }

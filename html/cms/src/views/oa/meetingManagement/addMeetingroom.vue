@@ -180,7 +180,6 @@ export default {
     },
     // 新增提交表单
     submitForm() {
-      console.log(this.meetingroomForm)
       this.isDisabled = true
       this.$refs['meetingroomForm'].validate(valid => {
         if (valid) {
@@ -212,7 +211,7 @@ export default {
         if (this.isActive(view)) {
           const latestView = visitedViews.slice(-1)[0]
           if (latestView) {
-            this.$router.push(latestView)
+            this.$router.push('meetingroomManagement')
           } else {
             this.$router.push('/')
           }

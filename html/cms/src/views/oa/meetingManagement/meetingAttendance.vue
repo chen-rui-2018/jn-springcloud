@@ -13,9 +13,9 @@
         <el-input v-model="listQuery.meetingroomName" maxlength="20" placeholder="请输入会议主题" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="会议时间:">
-        <el-date-picker v-model="listQuery.actiStartTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间" @change="getStarttime" />
+        <el-date-picker v-model="listQuery.actiStartTime" value-format="yyyy/MM/dd HH:mm:ss" type="datetime" placeholder="选择开始时间" @change="getStarttime" />
         至
-        <el-date-picker v-model="listQuery.actiEndTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" @change="getEndtime" />
+        <el-date-picker v-model="listQuery.actiEndTime" type="datetime" value-format="yyyy/MM/dd HH:mm:ss" placeholder="选择结束时间" @change="getEndtime" />
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
     </el-form>

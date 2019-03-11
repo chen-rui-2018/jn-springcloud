@@ -17,9 +17,9 @@
           <el-input v-model="listQuery.departmentName" maxlength="20" placeholder="请输入部门" class="filter-item" clearable @keyup.enter.native="handleFilter" />
         </el-form-item>
         <el-form-item label="会议时间:">
-          <el-date-picker v-model="listQuery.startTime" value-format="yyyy-MM-dd" type="date" placeholder="选择开始日期"/>
+          <el-date-picker v-model="listQuery.startTime" value-format="yyyy/MM/dd" type="date" placeholder="选择开始日期"/>
           至
-          <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy-MM-dd" placeholder="选择结束日期" />
+          <el-date-picker v-model="listQuery.endTime" type="date" value-format="yyyy/MM/dd" placeholder="选择结束日期" />
         </el-form-item>
         <div class="right_button">
           <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>

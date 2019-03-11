@@ -10,7 +10,7 @@
             <el-date-picker
               :disabled="lookMeetingroom"
               v-model="startDate"
-              value-format="yyyy-MM-dd"
+              value-format="yyyy/MM/dd"
               type="date"
               placeholder="选择日期"/>
               <!-- <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间"/>
@@ -247,7 +247,7 @@ export default {
         if (this.isActive(view)) {
           const latestView = visitedViews.slice(-1)[0]
           if (latestView) {
-            this.$router.push(latestView)
+            this.$router.push('meetingListManagement')
           } else {
             this.$router.push('/')
           }
@@ -402,7 +402,7 @@ export default {
             this.endTime = data.endTime.substring(10, 16)
             this.startDate = data.startDate
             this.meetingForm.oaMeetingContent = data.content
-            if (data.tbOaMeetingRoom.name !== null) {
+            if (data.tbOaMeetingRoom.name !== null || data.tbOaMeetingRoom.name !== '') {
               this.meetingroomName = data.tbOaMeetingRoom.name
             }
             this.oldMeetingTitle = data.title

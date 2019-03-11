@@ -82,7 +82,7 @@
             align="center"
           />
           <el-table-column
-            prop="[0].position"
+            prop="[0].building"
             label="位置"
             align="center"
           />
@@ -95,7 +95,8 @@
             label="9:00"
             prop="[0]"
             align="center"
-            width="40"
+            min-
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -114,7 +115,7 @@
             label="9:30"
             prop="[1]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -133,7 +134,7 @@
             label="10:00"
             prop="[2]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -152,7 +153,7 @@
             label="10:30"
             prop="[3]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -171,7 +172,7 @@
             label="11:00"
             prop="[4]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -190,7 +191,7 @@
             label="11:30"
             prop="[5]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -209,7 +210,7 @@
             label="12:00"
             prop="[6]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -233,7 +234,7 @@
             label="13:30"
             prop="[7]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -252,7 +253,7 @@
             label="14:00"
             prop="[8]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -271,7 +272,7 @@
             label="14:30"
             prop="[9]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -290,7 +291,7 @@
             label="15:00"
             prop="[10]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -309,7 +310,7 @@
             label="15:30"
             prop="[11]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -328,7 +329,7 @@
             label="16:00"
             prop="[12]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -347,7 +348,7 @@
             label="16:30"
             prop="[13]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -366,7 +367,7 @@
             label="17:00"
             prop="[14]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -385,7 +386,7 @@
             label="17:30"
             prop="[15]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -404,7 +405,7 @@
             label="18:00"
             prop="[16]"
             align="center"
-            width="40"
+            min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -452,7 +453,7 @@ export default {
       // 预约组件
       props: ['postId', 'postTitle', 'postTime'],
       template:
-        '<div class="textStyle" @click="meeting_order(postId,postTitle,postTime)">预约</div>',
+        '<button class="textStyle"  @click="meeting_order(postId,postTitle,postTime)">预约</button>',
       methods: {
         meeting_order(id, title, time) {
           // 会议预约
@@ -470,40 +471,9 @@ export default {
 
   data() {
     return {
+      Isdisabled: '',
       errorTime: true,
       errorText: '',
-      downData: [
-        '13:30',
-        '14:00',
-        '14:30',
-        '15:00',
-        '15:30',
-        '16:00',
-        '16:30',
-        '17:00',
-        '17:30',
-        '18:00'
-      ],
-      upData: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00'],
-      compareData: [
-        900,
-        930,
-        1000,
-        1030,
-        1100,
-        1130,
-        1200,
-        1330,
-        1400,
-        1430,
-        1500,
-        1530,
-        1600,
-        1630,
-        1700,
-        1730,
-        1800
-      ], // 用来比较后台传来的时间值，9:00这里设为900，下面会把后台值进行转换，也是转换成这些格式进行对比
       listQuery: {
         page: 1,
         rows: 10,
@@ -546,7 +516,6 @@ export default {
   created() {
     this.initList()
     this.initData(null)
-    // this.calcDataA()
   },
 
   methods: {
@@ -557,9 +526,8 @@ export default {
       if (m < 10) m = `0${m}`
       let d = day
       if (d < 10) d = `0${d}`
-      return `${y}-${m}-${d}`
+      return `${y}/${m}/${d}`
     },
-
     initData(cur) {
       let date = ''
       if (cur) {
@@ -567,7 +535,7 @@ export default {
       } else {
         date = new Date()
       }
-      this.currentDay = date.getDate() // 今日日期 几号
+      this.currentDay = date.getDate()// 今日日期 几号
       this.currentYear = date.getFullYear() // 当前年份
       this.currentMonth = date.getMonth() + 1 // 当前月份
       this.currentWeek = date.getDay() // 1...6,0   // 今天是星期几
@@ -578,7 +546,7 @@ export default {
         this.currentDay = '0' + this.currentDay
       }
       this.listQuery.meetingStartTime =
-        this.currentYear + '-' + this.currentMonth + '-' + this.currentDay
+        this.currentYear + '/' + this.currentMonth + '/' + this.currentDay
       // 当前月的第一天是星期几
       date.setDate(1)
       this.firstWeek = date.getDay()
@@ -610,7 +578,6 @@ export default {
           this.days = [] // 清空重新存放天数
         }
       }
-      // this.tableData3 = this.staticData.data.rows
     },
 
     // 上一個月   传入当前年份和月份
@@ -683,34 +650,18 @@ export default {
         }
       })
     },
-    // calcData() { // 抽开始时间和结束时间出来进行对比
-    //   this.tableData3.forEach((item) => {
-    //     const vals = []
-    //     for (let i = 0; i < this.compareData.length; i++) { // 先设定初始值为“可预约”，如果有会议且在某个时间范围才填充进去
-    //       vals.push('预约')
-    //     }
-    //     if (item.meetingList.length > 0) {
-    //       item.meetingList.forEach((timeItem) => {
-    //         for (let i = 0; i < this.compareData.length; i++) { // 时间转换和对比
-    //           let m = new Date(timeItem.startTime).getMinutes() < 10 ? ('0' + new Date(timeItem.startTime).getMinutes()) : new Date(timeItem.startTime).getMinutes()
-    //           // console.log(m)
-    //           const sd = Number(new Date(timeItem.startTime).getHours() + '' + m)
-    //           // console.log(sd)
-    //           m = new Date(timeItem.endTime).getMinutes() < 10 ? ('0' + new Date(timeItem.endTime).getMinutes()) : new Date(timeItem.endTime).getMinutes()
-    //           // console.log(m)
-    //           const ed = Number(new Date(timeItem.endTime).getHours() + '' + m)
-    //           // console.log(ed)
-    //           if (sd <= this.compareData[i] && ed >= this.compareData[i]) {
-    //             vals[i] = timeItem.title
-    //           }
-    //         }
-    //       })
-    //     }
-    //     for (let i = 0; i < vals.length; i++) { // 动态设置参数用来填充
-    //       item['time' + i] = vals[i]
-    //     }
-    //   })
-    //   // console.log(JSON.stringify(this.tableData3))
+    // 判断当前时间和按钮时间
+    // befoTime(time) {
+    //   // var time = '09:00'
+    //   var buttonTime = this.listQuery.meetingStartTime + ' ' + '09:00' + ':00'
+    //   var today_time = new Date().getTime()
+    //   if (new Date(buttonTime) - today_time < 0) {
+    //     this.Isdisabled = false
+    //     return true
+    //   } else {
+    //     this.Isdisabled = true
+    //     return false
+    //   }
     // },
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
@@ -829,32 +780,16 @@ export default {
             status: 0,
             id: arr_data[i].id,
             num: arr_data[i].roomNumber,
-            position: arr_data[i].position,
+            building: arr_data[i].building,
             title: arr_data[i].name,
             name: ''
           }
           _arr.push(obj)
         }
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
-          const m =
-            new Date(arr_data[i].meetingList[k].startTime).getMinutes() < 10
-              ? '0' + new Date(arr_data[i].meetingList[k].startTime).getMinutes()
-              : new Date(arr_data[i].meetingList[k].startTime).getMinutes()
-          const h =
-            new Date(arr_data[i].meetingList[k].startTime).getHours() < 10
-              ? '0' + new Date(arr_data[i].meetingList[k].startTime).getHours()
-              : new Date(arr_data[i].meetingList[k].startTime).getHours()
-          const sd = h + ':' + m
-          const em =
-            new Date(arr_data[i].meetingList[k].endTime).getMinutes() < 10
-              ? '0' + new Date(arr_data[i].meetingList[k].endTime).getMinutes()
-              : new Date(arr_data[i].meetingList[k].endTime).getMinutes()
-          const eh =
-            new Date(arr_data[i].meetingList[k].endTime).getHours() < 10
-              ? '0' + new Date(arr_data[i].meetingList[k].endTime).getHours()
-              : new Date(arr_data[i].meetingList[k].endTime).getHours()
-          const ed = eh + ':' + em
-          var get_arr = this.calTdMerge(sd, ed)
+          var startTime = (arr_data[i].meetingList[k].startTime).replace(/^.* /, '').slice(0, 5)
+          var endTime = (arr_data[i].meetingList[k].endTime).replace(/^.* /, '').slice(0, 5)
+          var get_arr = this.calTdMerge(startTime, endTime)
           for (var l = 0; l < get_arr.length; l++) {
             var _index = get_arr[l]
             if (l === 0) {
@@ -908,6 +843,7 @@ export default {
 
 <style lang="scss">
 .conferenceReservation {
+  display: flex;
   display: -webkit-box;
 
   .el-table .cell,
@@ -923,6 +859,16 @@ export default {
     .textStyle {
       color: #090;
       cursor: pointer;
+      background: #fff;
+      outline: none;
+      border: none;
+    }
+    .disabledStyle{
+      color:#666;
+      background: #fff;
+      outline: none;
+      border: none;
+      cursor: default;
     }
     .textBgc {
       color: rgb(0, 176, 240);

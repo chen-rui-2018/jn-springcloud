@@ -116,11 +116,12 @@ public interface SystemClient {
      * 查询所有部门信息,并根据层级关系返回数据
      *
      * @param parentId   parentId,查询对应部门,为空时查询所以一级部门
-     * @param childsFlag 是否查询所有子部门,true是,false否
+     * @param childFlag 是否查询所有子部门,true是,false否
      * @return
      */
     @RequestMapping(value = "/api/system/selectDeptByParentId", method = RequestMethod.POST)
-    Result selectDeptByParentId(@RequestParam("parentId") String parentId, @RequestParam("childsFlag") Boolean childsFlag);
+    Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
+                                @RequestParam(value = "childFlag",required = false) Boolean childFlag);
 
     /**
      * 条件分页查询用户信息

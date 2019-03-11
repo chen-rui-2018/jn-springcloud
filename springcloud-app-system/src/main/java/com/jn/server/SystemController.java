@@ -137,8 +137,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "获取部门信息")
-    public Result selectDeptByParentId(@RequestParam("parentId") String parentId, @RequestParam("childsFlag") Boolean childsFlag) {
-        Result result = sysDepartmentService.selectDeptByKey(parentId, childsFlag);
+    public Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
+                                       @RequestParam(value = "childFlag",required = false) Boolean childFlag) {
+        Result result = sysDepartmentService.selectDeptByKey(parentId, childFlag);
         return result;
     }
 

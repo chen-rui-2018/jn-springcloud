@@ -132,6 +132,9 @@ public class SysDepartmentVO implements Serializable {
     }
 
     public List<SysDepartmentVO> getChildren() {
+        if (children != null && children.size() == 0){
+            return null;
+        }
         return children;
     }
 

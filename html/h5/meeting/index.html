@@ -74,7 +74,7 @@
         var s = myTime.getSeconds() //秒 0~59
         se.style.transform = "rotate(" + (s * 6) + "deg)";
         mi.style.transform = "rotate(" + (min * 6) + "deg)";
-        ho.style.transform = "rotate(" + (hour * 30) + "deg)";
+        ho.style.transform = "rotate(" + (hour *30 +min/2) + "deg)";
     }
     for (var i = 1; i < 61; i++) {
         var aaa = document.createElement('div');
@@ -97,11 +97,12 @@
         }
         aaa.appendChild(shuzi);
     }
+    //南京 cityid：101190101
     $.ajax({
         url: 'https://www.tianqiapi.com/api/',
         data: {
-            // version: 'v1',
-            // cityid: '101230603'
+             version: 'v1',
+             cityid: '101190101'
         },
         dataType: 'json',
         type: 'get',
@@ -114,7 +115,7 @@
             $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
                 res.data[0].wea_img + '.png>' + '</img>')
             $('.riqi').html(res.data[0].date);
-            $('.city').text(res.city)
+            //$('.city').text(res.city)
         }
     })
     var data = {}

@@ -144,16 +144,16 @@ header {
 }
 
 .dateTime {
-    font-size: 30px;
+    font-size: 45px;
     position: relative;
-    left: 1668px;
+    left: 1598px;
     top: -60px;
 }
 
 .headTitle {
     color: #d7d400;
-    font-size: 34px;
-    margin-left: 220px;
+    font-size: 70px;
+    margin-left: 180px;
 }
 
 .meetingName {
@@ -181,17 +181,17 @@ header {
 }
 
 .name3 {
-    font-size: 30px;
-    padding-left: 30px;
-    line-height: 70px;
+    font-size: 45px;
+    line-height: 100px;
 }
 
 .currentMeet {
     float: right;
     text-align: center;
-    font-size: 26px;
-    width: 200px;
-    height: 75px;
+    font-size: 45px;
+    width: 270px;
+    height: 100px;
+    line-height: 100px;
     background: url(./img/bg22.png) 100% 100% / 100% 100% no-repeat;
 }
 

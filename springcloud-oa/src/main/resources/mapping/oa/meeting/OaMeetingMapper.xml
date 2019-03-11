@@ -347,6 +347,7 @@
         <if test="endTime != null">AND Date(meeting.end_time) &lt;= #{endTime}</if>
 
         <if test="currentTime != null">
+        and (meeting.meeting_status=0 or meeting.meeting_status=1 )
           AND (meeting.start_time &gt;= #{currentTime} or (meeting.end_time &gt;= #{currentTime} and meeting.start_time &lt;= #{currentTime}) )
           AND  Date(meeting.start_time) = DATE_FORMAT(#{currentTime},'%Y-%m-%d')
         </if>
@@ -517,6 +518,8 @@
                 (meeting.start_time <#{startTime}and #{startTime}<meeting.end_time)
                 or
                  (meeting.start_time <#{endTime}and #{endTime}<meeting.end_time)
+                 OR
+                 ((meeting.start_time =#{startTime})OR( #{endTime}=meeting.end_time) )
         	 )
 
         ]]>

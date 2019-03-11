@@ -22,8 +22,8 @@ public class OaMeetingRoomOrderPage extends Page implements Serializable {
     private static final long serialVersionUID = 7252981735944287744L;
 
     @ApiModelProperty(value = "会议开始时间")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy/MM/dd",timezone="GMT+8")
     private Date meetingStartTime;
 
     @ApiModelProperty(value = "会议室id")

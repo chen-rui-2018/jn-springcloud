@@ -124,6 +124,15 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
     @Transactional(rollbackFor = Exception.class)
     public void updateOaMeetingRoomById(OaMeetingRoomAdd oaMeetingRoom, User user, String[] attachmentPaths) {
         String tbOaMeetingRoomName = oaMeetingRoom.getName();
+
+
+  /*      List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
+        if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
+            logger.warn("[会议申请] 会议申请修改失败,会议室冲突,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
+            throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETINGROOM_CONFLICT);
+        }*/
+
+
         //判断修改信息是否存在
         TbOaMeetingRoom oaMeetingRoomSelect = tbOaMeetingRoomMapper.selectByPrimaryKey(oaMeetingRoom.getId());
         if (oaMeetingRoomSelect == null || OaStatusEnums.DELETED.getCode().equals(oaMeetingRoomSelect.getRecordStatus())) {
@@ -135,6 +144,7 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                 //校验名称是否已经在数据库中存在
                 List<TbOaMeetingRoom> tbSysFileGroups = checkName(tbOaMeetingRoomName);
                 if (tbSysFileGroups != null && tbSysFileGroups.size() > 0) {
+
                     logger.warn("[会议室] 更新会议室失败，该会议室名称已存在！,oaMeetingRoomName: {}", tbOaMeetingRoomName);
                     throw new JnSpringCloudException(OaExceptionEnums.UPDATEERR_NAME_EXIST);
                 }

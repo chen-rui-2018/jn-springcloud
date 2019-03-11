@@ -193,7 +193,7 @@ FROM
 
 
 
-	where meetingroom.record_status!=0
+	where meetingroom.record_status=1
 
 
 
@@ -209,10 +209,10 @@ FROM
         tb_oa_meeting m
         where m.meeting_status !=3
         <if test=" meetingStartTime !=null">
-            <![CDATA[and Date(m.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')]]>
+            and Date(m.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
-            <![CDATA[and m.meeting_room_id =#{meetingRoomId}]]>
+            and m.meeting_room_id =#{meetingRoomId}
         </if>
     </select>
 
@@ -253,7 +253,7 @@ FROM
         </if>
 
         )m
-        ) and meetingroom.record_status!=0
+        ) and meetingroom.record_status=1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
             and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
         </if>

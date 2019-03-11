@@ -132,7 +132,7 @@ public class AdvisorServiceImplTest {
     public void getServiceExperienceInfo(){
         List<ServiceExperience> serviceExperienceInfo = advisorService.getServiceExperienceInfo(advisorAccount);
         if(serviceExperienceInfo.isEmpty()){
-            assertThat(serviceExperienceInfo, nullValue());
+            assertThat(serviceExperienceInfo, anything());
         }else{
             for(ServiceExperience serviceExperience:serviceExperienceInfo){
                 logger.info(serviceExperience.toString());
@@ -148,7 +148,7 @@ public class AdvisorServiceImplTest {
     public void getProjectExperienceInfo(){
         List<ServiceProjectExperience> projectExperienceInfo = advisorService.getProjectExperienceInfo(advisorAccount);
         if(projectExperienceInfo.isEmpty()){
-            assertThat(projectExperienceInfo, nullValue());
+            assertThat(projectExperienceInfo, anything());
         }else{
             for(ServiceProjectExperience serviceProjectExperience:projectExperienceInfo){
                 logger.info(serviceProjectExperience.toString());
@@ -164,7 +164,7 @@ public class AdvisorServiceImplTest {
     public void getAdvisorHonorInfo(){
         List<ServiceHonor> advisorHonorInfo = advisorService.getAdvisorHonorInfo(advisorAccount);
         if(advisorHonorInfo.isEmpty()){
-            assertThat(advisorHonorInfo, nullValue());
+            assertThat(advisorHonorInfo, anything());
         }else{
             for(ServiceHonor serviceHonor:advisorHonorInfo){
                 logger.info(serviceHonor.toString());

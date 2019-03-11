@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
@@ -19,10 +20,12 @@ public class RequireOtherParam extends Page implements Serializable {
     private String intentProduct;
     @ApiModelProperty(value = "意向机构")
     private String intentOrg;
-    @ApiModelProperty(value = "对接结果")
-    private String dockingResult;
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
+    @Pattern(regexp = "^[1234]$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
+    private String handleResult;
     @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
+    @NotNull(message="是否需要分页不能为空")
     private String needPage;
 
     public String getIntentProduct() {
@@ -41,12 +44,12 @@ public class RequireOtherParam extends Page implements Serializable {
         this.intentOrg = intentOrg;
     }
 
-    public String getDockingResult() {
-        return dockingResult;
+    public String getHandleResult() {
+        return handleResult;
     }
 
-    public void setDockingResult(String dockingResult) {
-        this.dockingResult = dockingResult;
+    public void setHandleResult(String handleResult) {
+        this.handleResult = handleResult;
     }
 
     public String getNeedPage() {

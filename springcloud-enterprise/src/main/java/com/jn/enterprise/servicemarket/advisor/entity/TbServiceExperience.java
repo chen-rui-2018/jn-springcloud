@@ -14,6 +14,8 @@ public class TbServiceExperience implements Serializable {
 
     private String workTime;
 
+    private String workEndTime;
+
     private Date createdTime;
 
     private String creatorAccount;
@@ -64,6 +66,14 @@ public class TbServiceExperience implements Serializable {
 
     public void setWorkTime(String workTime) {
         this.workTime = workTime == null ? null : workTime.trim();
+    }
+
+    public String getWorkEndTime() {
+        return workEndTime;
+    }
+
+    public void setWorkEndTime(String workEndTime) {
+        this.workEndTime = workEndTime == null ? null : workEndTime.trim();
     }
 
     public Date getCreatedTime() {
@@ -123,6 +133,7 @@ public class TbServiceExperience implements Serializable {
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getPosition() == null ? other.getPosition() == null : this.getPosition().equals(other.getPosition()))
             && (this.getWorkTime() == null ? other.getWorkTime() == null : this.getWorkTime().equals(other.getWorkTime()))
+            && (this.getWorkEndTime() == null ? other.getWorkEndTime() == null : this.getWorkEndTime().equals(other.getWorkEndTime()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -139,6 +150,7 @@ public class TbServiceExperience implements Serializable {
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getPosition() == null) ? 0 : getPosition().hashCode());
         result = prime * result + ((getWorkTime() == null) ? 0 : getWorkTime().hashCode());
+        result = prime * result + ((getWorkEndTime() == null) ? 0 : getWorkEndTime().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -158,6 +170,7 @@ public class TbServiceExperience implements Serializable {
         sb.append(", companyName=").append(companyName);
         sb.append(", position=").append(position);
         sb.append(", workTime=").append(workTime);
+        sb.append(", workEndTime=").append(workEndTime);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

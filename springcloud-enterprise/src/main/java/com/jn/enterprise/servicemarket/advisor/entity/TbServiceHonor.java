@@ -12,6 +12,8 @@ public class TbServiceHonor implements Serializable {
 
     private String certificateType;
 
+    private String issuingAgency;
+
     private String getTime;
 
     private String certificatePhoto;
@@ -58,6 +60,14 @@ public class TbServiceHonor implements Serializable {
 
     public void setCertificateType(String certificateType) {
         this.certificateType = certificateType == null ? null : certificateType.trim();
+    }
+
+    public String getIssuingAgency() {
+        return issuingAgency;
+    }
+
+    public void setIssuingAgency(String issuingAgency) {
+        this.issuingAgency = issuingAgency == null ? null : issuingAgency.trim();
     }
 
     public String getGetTime() {
@@ -132,6 +142,7 @@ public class TbServiceHonor implements Serializable {
             && (this.getAdvisorAccount() == null ? other.getAdvisorAccount() == null : this.getAdvisorAccount().equals(other.getAdvisorAccount()))
             && (this.getCertificateName() == null ? other.getCertificateName() == null : this.getCertificateName().equals(other.getCertificateName()))
             && (this.getCertificateType() == null ? other.getCertificateType() == null : this.getCertificateType().equals(other.getCertificateType()))
+            && (this.getIssuingAgency() == null ? other.getIssuingAgency() == null : this.getIssuingAgency().equals(other.getIssuingAgency()))
             && (this.getGetTime() == null ? other.getGetTime() == null : this.getGetTime().equals(other.getGetTime()))
             && (this.getCertificatePhoto() == null ? other.getCertificatePhoto() == null : this.getCertificatePhoto().equals(other.getCertificatePhoto()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -149,6 +160,7 @@ public class TbServiceHonor implements Serializable {
         result = prime * result + ((getAdvisorAccount() == null) ? 0 : getAdvisorAccount().hashCode());
         result = prime * result + ((getCertificateName() == null) ? 0 : getCertificateName().hashCode());
         result = prime * result + ((getCertificateType() == null) ? 0 : getCertificateType().hashCode());
+        result = prime * result + ((getIssuingAgency() == null) ? 0 : getIssuingAgency().hashCode());
         result = prime * result + ((getGetTime() == null) ? 0 : getGetTime().hashCode());
         result = prime * result + ((getCertificatePhoto() == null) ? 0 : getCertificatePhoto().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -169,6 +181,7 @@ public class TbServiceHonor implements Serializable {
         sb.append(", advisorAccount=").append(advisorAccount);
         sb.append(", certificateName=").append(certificateName);
         sb.append(", certificateType=").append(certificateType);
+        sb.append(", issuingAgency=").append(issuingAgency);
         sb.append(", getTime=").append(getTime);
         sb.append(", certificatePhoto=").append(certificatePhoto);
         sb.append(", createdTime=").append(createdTime);

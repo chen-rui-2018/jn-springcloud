@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
@@ -17,6 +18,7 @@ import java.io.Serializable;
 public class OrgColleagueParam extends Page implements Serializable {
     @ApiModelProperty(value = "是否分页(1:分页   0:不分页)")
     @Pattern(regexp = "^[01]$", message = "{isDefault:'默认值只允许为0,1'}")
+    @NotNull(message="是否需要分页不能为空")
     private String needPage;
 
     public String getNeedPage() {

@@ -14,6 +14,8 @@ public class TbServiceProExper implements Serializable {
 
     private String projectTime;
 
+    private String projectEndTime;
+
     private String personalDuties;
 
     private Date createdTime;
@@ -66,6 +68,14 @@ public class TbServiceProExper implements Serializable {
 
     public void setProjectTime(String projectTime) {
         this.projectTime = projectTime == null ? null : projectTime.trim();
+    }
+
+    public String getProjectEndTime() {
+        return projectEndTime;
+    }
+
+    public void setProjectEndTime(String projectEndTime) {
+        this.projectEndTime = projectEndTime == null ? null : projectEndTime.trim();
     }
 
     public String getPersonalDuties() {
@@ -133,6 +143,7 @@ public class TbServiceProExper implements Serializable {
             && (this.getCompanyName() == null ? other.getCompanyName() == null : this.getCompanyName().equals(other.getCompanyName()))
             && (this.getProjectName() == null ? other.getProjectName() == null : this.getProjectName().equals(other.getProjectName()))
             && (this.getProjectTime() == null ? other.getProjectTime() == null : this.getProjectTime().equals(other.getProjectTime()))
+            && (this.getProjectEndTime() == null ? other.getProjectEndTime() == null : this.getProjectEndTime().equals(other.getProjectEndTime()))
             && (this.getPersonalDuties() == null ? other.getPersonalDuties() == null : this.getPersonalDuties().equals(other.getPersonalDuties()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -150,6 +161,7 @@ public class TbServiceProExper implements Serializable {
         result = prime * result + ((getCompanyName() == null) ? 0 : getCompanyName().hashCode());
         result = prime * result + ((getProjectName() == null) ? 0 : getProjectName().hashCode());
         result = prime * result + ((getProjectTime() == null) ? 0 : getProjectTime().hashCode());
+        result = prime * result + ((getProjectEndTime() == null) ? 0 : getProjectEndTime().hashCode());
         result = prime * result + ((getPersonalDuties() == null) ? 0 : getPersonalDuties().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -170,6 +182,7 @@ public class TbServiceProExper implements Serializable {
         sb.append(", companyName=").append(companyName);
         sb.append(", projectName=").append(projectName);
         sb.append(", projectTime=").append(projectTime);
+        sb.append(", projectEndTime=").append(projectEndTime);
         sb.append(", personalDuties=").append(personalDuties);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

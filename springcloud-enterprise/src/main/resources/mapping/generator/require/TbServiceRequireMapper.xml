@@ -25,6 +25,7 @@
     <result column="financing_amount" jdbcType="VARCHAR" property="financingAmount" />
     <result column="actual_loan_amount" jdbcType="VARCHAR" property="actualLoanAmount" />
     <result column="financing_period" jdbcType="VARCHAR" property="financingPeriod" />
+    <result column="funds_req_desc" jdbcType="VARCHAR" property="fundsReqDesc" />
     <result column="expected_date" jdbcType="TIMESTAMP" property="expectedDate" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="handle_time" jdbcType="TIMESTAMP" property="handleTime" />
@@ -102,9 +103,9 @@
     id, req_num, business_id, business_area, product_id, product_name, org_id, org_name, 
     advisor_account, advisor_name, org_telephone, org_email, req_detail, req_name, req_post, 
     req_phone, req_email, issue_time, issue_account, contract_amount, financing_amount, 
-    actual_loan_amount, financing_period, expected_date, status, handle_time, handle_result, 
-    result_detail, is_comment, contract_home_page, contract_end_page, comment_time, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    actual_loan_amount, financing_period, funds_req_desc, expected_date, status, handle_time, 
+    handle_result, result_detail, is_comment, contract_home_page, contract_end_page, 
+    comment_time, created_time, creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.require.entity.TbServiceRequireCriteria" resultMap="BaseResultMap">
     select
@@ -144,12 +145,12 @@
       req_detail, req_name, req_post, 
       req_phone, req_email, issue_time, 
       issue_account, contract_amount, financing_amount, 
-      actual_loan_amount, financing_period, expected_date, 
-      status, handle_time, handle_result, 
-      result_detail, is_comment, contract_home_page, 
-      contract_end_page, comment_time, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      actual_loan_amount, financing_period, funds_req_desc, 
+      expected_date, status, handle_time, 
+      handle_result, result_detail, is_comment, 
+      contract_home_page, contract_end_page, comment_time, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
     values (#{id,jdbcType=VARCHAR}, #{reqNum,jdbcType=VARCHAR}, #{businessId,jdbcType=VARCHAR}, 
       #{businessArea,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
       #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, 
@@ -157,12 +158,12 @@
       #{reqDetail,jdbcType=VARCHAR}, #{reqName,jdbcType=VARCHAR}, #{reqPost,jdbcType=VARCHAR}, 
       #{reqPhone,jdbcType=VARCHAR}, #{reqEmail,jdbcType=VARCHAR}, #{issueTime,jdbcType=TIMESTAMP}, 
       #{issueAccount,jdbcType=VARCHAR}, #{contractAmount,jdbcType=VARCHAR}, #{financingAmount,jdbcType=VARCHAR}, 
-      #{actualLoanAmount,jdbcType=VARCHAR}, #{financingPeriod,jdbcType=VARCHAR}, #{expectedDate,jdbcType=TIMESTAMP}, 
-      #{status,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, #{handleResult,jdbcType=VARCHAR}, 
-      #{resultDetail,jdbcType=VARCHAR}, #{isComment,jdbcType=VARCHAR}, #{contractHomePage,jdbcType=VARCHAR}, 
-      #{contractEndPage,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{actualLoanAmount,jdbcType=VARCHAR}, #{financingPeriod,jdbcType=VARCHAR}, #{fundsReqDesc,jdbcType=VARCHAR}, 
+      #{expectedDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{handleTime,jdbcType=TIMESTAMP}, 
+      #{handleResult,jdbcType=VARCHAR}, #{resultDetail,jdbcType=VARCHAR}, #{isComment,jdbcType=VARCHAR}, 
+      #{contractHomePage,jdbcType=VARCHAR}, #{contractEndPage,jdbcType=VARCHAR}, #{commentTime,jdbcType=TIMESTAMP}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.require.entity.TbServiceRequire">
     insert into tb_service_require
@@ -235,6 +236,9 @@
       </if>
       <if test="financingPeriod != null">
         financing_period,
+      </if>
+      <if test="fundsReqDesc != null">
+        funds_req_desc,
       </if>
       <if test="expectedDate != null">
         expected_date,
@@ -348,6 +352,9 @@
       </if>
       <if test="financingPeriod != null">
         #{financingPeriod,jdbcType=VARCHAR},
+      </if>
+      <if test="fundsReqDesc != null">
+        #{fundsReqDesc,jdbcType=VARCHAR},
       </if>
       <if test="expectedDate != null">
         #{expectedDate,jdbcType=TIMESTAMP},
@@ -471,6 +478,9 @@
       <if test="record.financingPeriod != null">
         financing_period = #{record.financingPeriod,jdbcType=VARCHAR},
       </if>
+      <if test="record.fundsReqDesc != null">
+        funds_req_desc = #{record.fundsReqDesc,jdbcType=VARCHAR},
+      </if>
       <if test="record.expectedDate != null">
         expected_date = #{record.expectedDate,jdbcType=TIMESTAMP},
       </if>
@@ -543,6 +553,7 @@
       financing_amount = #{record.financingAmount,jdbcType=VARCHAR},
       actual_loan_amount = #{record.actualLoanAmount,jdbcType=VARCHAR},
       financing_period = #{record.financingPeriod,jdbcType=VARCHAR},
+      funds_req_desc = #{record.fundsReqDesc,jdbcType=VARCHAR},
       expected_date = #{record.expectedDate,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=VARCHAR},
       handle_time = #{record.handleTime,jdbcType=TIMESTAMP},
@@ -630,6 +641,9 @@
       <if test="financingPeriod != null">
         financing_period = #{financingPeriod,jdbcType=VARCHAR},
       </if>
+      <if test="fundsReqDesc != null">
+        funds_req_desc = #{fundsReqDesc,jdbcType=VARCHAR},
+      </if>
       <if test="expectedDate != null">
         expected_date = #{expectedDate,jdbcType=TIMESTAMP},
       </if>
@@ -699,6 +713,7 @@
       financing_amount = #{financingAmount,jdbcType=VARCHAR},
       actual_loan_amount = #{actualLoanAmount,jdbcType=VARCHAR},
       financing_period = #{financingPeriod,jdbcType=VARCHAR},
+      funds_req_desc = #{fundsReqDesc,jdbcType=VARCHAR},
       expected_date = #{expectedDate,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=VARCHAR},
       handle_time = #{handleTime,jdbcType=TIMESTAMP},

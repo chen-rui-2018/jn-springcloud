@@ -1705,6 +1705,76 @@ public class TbServiceRequireCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andFundsReqDescIsNull() {
+            addCriterion("funds_req_desc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescIsNotNull() {
+            addCriterion("funds_req_desc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescEqualTo(String value) {
+            addCriterion("funds_req_desc =", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescNotEqualTo(String value) {
+            addCriterion("funds_req_desc <>", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescGreaterThan(String value) {
+            addCriterion("funds_req_desc >", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescGreaterThanOrEqualTo(String value) {
+            addCriterion("funds_req_desc >=", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescLessThan(String value) {
+            addCriterion("funds_req_desc <", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescLessThanOrEqualTo(String value) {
+            addCriterion("funds_req_desc <=", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescLike(String value) {
+            addCriterion("funds_req_desc like", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescNotLike(String value) {
+            addCriterion("funds_req_desc not like", value, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescIn(List<String> values) {
+            addCriterion("funds_req_desc in", values, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescNotIn(List<String> values) {
+            addCriterion("funds_req_desc not in", values, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescBetween(String value1, String value2) {
+            addCriterion("funds_req_desc between", value1, value2, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
+        public Criteria andFundsReqDescNotBetween(String value1, String value2) {
+            addCriterion("funds_req_desc not between", value1, value2, "fundsReqDesc");
+            return (Criteria) this;
+        }
+
         public Criteria andExpectedDateIsNull() {
             addCriterion("expected_date is null");
             return (Criteria) this;

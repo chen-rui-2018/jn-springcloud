@@ -50,6 +50,8 @@ public class TbServiceRequire implements Serializable {
 
     private String financingPeriod;
 
+    private String fundsReqDesc;
+
     private Date expectedDate;
 
     private String status;
@@ -264,6 +266,14 @@ public class TbServiceRequire implements Serializable {
         this.financingPeriod = financingPeriod == null ? null : financingPeriod.trim();
     }
 
+    public String getFundsReqDesc() {
+        return fundsReqDesc;
+    }
+
+    public void setFundsReqDesc(String fundsReqDesc) {
+        this.fundsReqDesc = fundsReqDesc == null ? null : fundsReqDesc.trim();
+    }
+
     public Date getExpectedDate() {
         return expectedDate;
     }
@@ -411,6 +421,7 @@ public class TbServiceRequire implements Serializable {
             && (this.getFinancingAmount() == null ? other.getFinancingAmount() == null : this.getFinancingAmount().equals(other.getFinancingAmount()))
             && (this.getActualLoanAmount() == null ? other.getActualLoanAmount() == null : this.getActualLoanAmount().equals(other.getActualLoanAmount()))
             && (this.getFinancingPeriod() == null ? other.getFinancingPeriod() == null : this.getFinancingPeriod().equals(other.getFinancingPeriod()))
+            && (this.getFundsReqDesc() == null ? other.getFundsReqDesc() == null : this.getFundsReqDesc().equals(other.getFundsReqDesc()))
             && (this.getExpectedDate() == null ? other.getExpectedDate() == null : this.getExpectedDate().equals(other.getExpectedDate()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getHandleTime() == null ? other.getHandleTime() == null : this.getHandleTime().equals(other.getHandleTime()))
@@ -454,6 +465,7 @@ public class TbServiceRequire implements Serializable {
         result = prime * result + ((getFinancingAmount() == null) ? 0 : getFinancingAmount().hashCode());
         result = prime * result + ((getActualLoanAmount() == null) ? 0 : getActualLoanAmount().hashCode());
         result = prime * result + ((getFinancingPeriod() == null) ? 0 : getFinancingPeriod().hashCode());
+        result = prime * result + ((getFundsReqDesc() == null) ? 0 : getFundsReqDesc().hashCode());
         result = prime * result + ((getExpectedDate() == null) ? 0 : getExpectedDate().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getHandleTime() == null) ? 0 : getHandleTime().hashCode());
@@ -500,6 +512,7 @@ public class TbServiceRequire implements Serializable {
         sb.append(", financingAmount=").append(financingAmount);
         sb.append(", actualLoanAmount=").append(actualLoanAmount);
         sb.append(", financingPeriod=").append(financingPeriod);
+        sb.append(", fundsReqDesc=").append(fundsReqDesc);
         sb.append(", expectedDate=").append(expectedDate);
         sb.append(", status=").append(status);
         sb.append(", handleTime=").append(handleTime);

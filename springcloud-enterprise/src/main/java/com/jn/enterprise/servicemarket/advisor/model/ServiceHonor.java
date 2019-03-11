@@ -15,7 +15,7 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质")
+@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质出参")
 public class ServiceHonor extends Page implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;

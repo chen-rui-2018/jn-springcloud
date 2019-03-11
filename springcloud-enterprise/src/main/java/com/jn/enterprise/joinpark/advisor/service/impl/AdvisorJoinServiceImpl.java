@@ -1,5 +1,7 @@
 package com.jn.enterprise.joinpark.advisor.service.impl;
 
+import com.jn.common.exception.JnSpringCloudException;
+import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.joinpark.advisor.service.AdvisorJoinService;
 import com.jn.enterprise.servicemarket.advisor.dao.AdvisorMapper;
 import com.jn.enterprise.servicemarket.advisor.dao.TbServiceExperienceMapper;
@@ -19,6 +21,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 顾问认证
@@ -61,10 +64,12 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         for(ServiceHonorParam param:serviceHonorParams){
             TbServiceHonor serviceHonor = new TbServiceHonor();
             BeanUtils.copyProperties(param,serviceHonor);
+            serviceHonor.setAdvisorAccount(account);
             serviceHonor.setCreatedTime(new Date());
             serviceHonor.setCreatorAccount(account);
             serviceHonor.setModifiedTime(new Date());
             serviceHonor.setModifierAccount(account);
+            serviceHonor.setId(UUID.randomUUID().toString().replaceAll("-",""));
             serviceHonors.add(serviceHonor);
         }
         int i = advisorMapper.insertServiceHonorList(serviceHonors);
@@ -79,10 +84,12 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         for (ServiceProjectExperienceParam param:projectExperiences) {
             TbServiceProExper serviceProExper = new TbServiceProExper();
             BeanUtils.copyProperties(param,serviceProExper);
+            serviceProExper.setAdvisorAccount(account);
             serviceProExper.setCreatedTime(new Date());
             serviceProExper.setCreatorAccount(account);
             serviceProExper.setModifiedTime(new Date());
             serviceProExper.setModifierAccount(account);
+            serviceProExper.setId(UUID.randomUUID().toString().replaceAll("-",""));
             serviceProExpers.add(serviceProExper);
         }
         int i1 = advisorMapper.insertServiceProjectList(serviceProExpers);
@@ -98,9 +105,11 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
             TbServiceExperience serviceExperience = new TbServiceExperience();
             BeanUtils.copyProperties(param,serviceExperience);
             serviceExperience.setCreatedTime(new Date());
+            serviceExperience.setAdvisorAccount(account);
             serviceExperience.setCreatorAccount(account);
             serviceExperience.setModifiedTime(new Date());
             serviceExperience.setModifierAccount(account);
+            serviceExperience.setId(UUID.randomUUID().toString().replaceAll("-",""));
             tbServiceExperiences.add(serviceExperience);
         }
         int i2 = advisorMapper.insertServiceExperienceList(tbServiceExperiences);
@@ -108,6 +117,12 @@ public class AdvisorJoinServiceImpl implements AdvisorJoinService {
         AdvisorBaseInfo advisorBaseInfo = new AdvisorBaseInfo();
         BeanUtils.copyProperties(advisorDetailParam,advisorBaseInfo);
         advisorBaseInfo.setAdvisorAccount(account);
+        try {
+            advisorBaseInfo.setWorkingYears(new Float(advisorDetailParam.getWorkingYears()));
+        }catch (Exception e){
+            logger.error("时间转换出错，请核对参数,{}",e.getMessage(),e);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.HONOR_INFO_NOT_EXIST);
+        }
         advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
         return 1;
     }

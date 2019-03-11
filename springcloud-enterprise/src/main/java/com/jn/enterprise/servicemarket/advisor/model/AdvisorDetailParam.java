@@ -25,8 +25,7 @@ public class AdvisorDetailParam implements Serializable {
     @ApiModelProperty(value = "业务领域")
     private String businessArea;
     @ApiModelProperty(value = "从业年限")
-    @Size(max=50,message="从业年限只能是数值，且小于50")
-    private Float workingYears;
+    private Double workingYears;
     @ApiModelProperty(value = "毕业学校")
     private String graduatedSchool;
     @ApiModelProperty(value = "学历")
@@ -75,11 +74,11 @@ public class AdvisorDetailParam implements Serializable {
         this.businessArea = businessArea;
     }
 
-    public Float getWorkingYears() {
+    public Double getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Float workingYears) {
+    public void setWorkingYears(Double workingYears) {
         this.workingYears = workingYears;
     }
 

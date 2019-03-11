@@ -132,7 +132,7 @@ public class AdvisorServiceImplTest {
     public void getServiceExperienceInfo(){
         List<ServiceExperience> serviceExperienceInfo = advisorService.getServiceExperienceInfo(advisorAccount);
         if(serviceExperienceInfo.isEmpty()){
-            assertThat(serviceExperienceInfo, nullValue());
+            assertThat(serviceExperienceInfo, anything());
         }else{
             for(ServiceExperience serviceExperience:serviceExperienceInfo){
                 logger.info(serviceExperience.toString());

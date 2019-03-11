@@ -36,14 +36,17 @@ public class SysDepartmentVO implements Serializable {
     private String level;
     @ApiModelProperty("创建时间")
     private Date createdTime;
+    @ApiModelProperty("部门人数")
+    private Integer userAccount;
     @ApiModelProperty("子部门的集合")
     private List<SysDepartmentVO> children;
 
     public SysDepartmentVO() {
     }
 
-    public SysDepartmentVO(String id, String departmentName, String value, String label, String parentId,
-                           String parentName, String level, Date createdTime, List<SysDepartmentVO> children) {
+    public SysDepartmentVO(String id, String departmentName, String value, String label,
+                           String parentId, String parentName, String level, Date createdTime,
+                           Integer userAccount, List<SysDepartmentVO> children) {
         this.id = id;
         this.departmentName = departmentName;
         this.value = value;
@@ -52,6 +55,7 @@ public class SysDepartmentVO implements Serializable {
         this.parentName = parentName;
         this.level = level;
         this.createdTime = createdTime;
+        this.userAccount = userAccount;
         this.children = children;
     }
 
@@ -119,6 +123,14 @@ public class SysDepartmentVO implements Serializable {
         this.createdTime = createdTime;
     }
 
+    public Integer getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(Integer userAccount) {
+        this.userAccount = userAccount;
+    }
+
     public List<SysDepartmentVO> getChildren() {
         if (children != null && children.size() == 0){
             return null;
@@ -141,6 +153,7 @@ public class SysDepartmentVO implements Serializable {
                 ", parentName='" + parentName + '\'' +
                 ", level='" + level + '\'' +
                 ", createdTime=" + createdTime +
+                ", userAccount=" + userAccount +
                 ", children=" + children +
                 '}';
     }

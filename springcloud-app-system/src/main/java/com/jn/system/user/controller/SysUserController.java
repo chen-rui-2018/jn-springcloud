@@ -7,6 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.permission.model.SysRoleUserAdd;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
@@ -57,18 +58,9 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/findSysUserByPage")
     @ApiOperation(value = "条件分页查询用户", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findSysUserByPage")
-    public Result findSysUserByPage(@Validated @RequestBody SysUserPage userPage) {
+    public Result findSysUserByPage(@Validated @RequestBody UserPage userPage) {
         PaginationData data = sysUserService.findSysUserByPage(userPage);
         return new Result(data);
-    }
-
-    @ControllerLog(doAction = "根据用户id返回用户信息")
-    @RequiresPermissions("/system/sysUser/findSysUserById")
-    @ApiOperation(value = "根据用户id返回用户信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findSysUserById")
-    public Result findSysUserById(String id) {
-        SysUser sysUser = sysUserService.findSysUserById(id);
-        return new Result(sysUser);
     }
 
     @ControllerLog(doAction = "逻辑删除用户")
@@ -183,7 +175,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/exportExcelUserInfo")
     @ApiOperation(value = "导出用户信息", httpMethod = "GET", response = Result.class)
     @RequestMapping(value = "/exportExcelUserInfo", method = RequestMethod.GET)
-    public void exportExcelUserInfo(SysUserPage userPage, HttpServletResponse response) {
+    public void exportExcelUserInfo(UserPage userPage, HttpServletResponse response) {
         String exportTitle = "帐号,姓名,部门,岗位,岗位类型,邮箱,手机,创建时间";
         String exportColName = "account,name,departmentName,postName,postTypeName,email,phone,createdTime";
         userPage.setPage(1);
@@ -199,7 +191,7 @@ public class SysUserController extends BaseController {
     @RequiresPermissions("/system/sysUser/getUserAll")
     @ApiOperation(value = "获取全部有效用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getUserAll")
-    public Result getUserAll(){
+    public Result getUserAll() {
         List<User> userAll = sysUserService.getUserAll();
         return new Result(userAll);
     }

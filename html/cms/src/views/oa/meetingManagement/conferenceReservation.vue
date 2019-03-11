@@ -725,16 +725,16 @@ export default {
         alert('对不起,会议预约时间必须大于当前时间,请重新选择')
         return
       }
-      // this.$router.push({
-      //   name: 'meetingApplication',
-      //   query: {
-      //     title: '会议申请',
-      //     meetId: id,
-      //     name: title,
-      //     currentTime: time,
-      //     currentDate: this.listQuery.meetingStartTime
-      //   }
-      // })
+      this.$router.push({
+        name: 'meetingApplication',
+        query: {
+          title: '会议申请',
+          meetId: id,
+          name: title,
+          currentTime: time,
+          currentDate: this.listQuery.meetingStartTime
+        }
+      })
     },
     calTdMerge(start, end) {
       var _start = start

@@ -92,26 +92,30 @@
           align="center"
         >
           <el-table-column
-            label="9:00"
-            prop="[0]"
+            v-for="(item, index) in upData"
+            :key="index"
+            :label="item"
+            :prop="index+''"
             align="center"
-            min-
             min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
-                v-if="scope.row[0].status=='0'"
-                :post-id="scope.row[0].id"
-                :post-title="scope.row[0].title"
-                :post-time="'9:00'"
+                v-if="scope.row[index].status=='0'"
+                :post-id="scope.row[index].id"
+                :post-title="scope.row[index].title"
+                :post-time="item"
+                :disabled="befoTime(item)"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
-                v-if="scope.row[0].status=='1'"
-                :post-title="scope.row[0].name"
+                v-if="scope.row[0+index].status=='1'"
+                :post-title="scope.row[0+index].name"
             /></template>
           </el-table-column>
-          <el-table-column
+        </el-table-column>
+        <!-- <el-table-column
             label="9:30"
             prop="[1]"
             align="center"
@@ -123,6 +127,8 @@
                 :post-id="scope.row[1].id"
                 :post-title="scope.row[1].title"
                 :post-time="'9:30'"
+                :disabled="befoTime('09:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -142,6 +148,8 @@
                 :post-id="scope.row[2].id"
                 :post-title="scope.row[2].title"
                 :post-time="'10:00'"
+                :disabled="befoTime('10:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -161,6 +169,8 @@
                 :post-id="scope.row[3].id"
                 :post-title="scope.row[3].title"
                 :post-time="'10:30'"
+                :disabled="befoTime('10:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -180,6 +190,8 @@
                 :post-id="scope.row[4].id"
                 :post-title="scope.row[4].title"
                 :post-time="'11:00'"
+                :disabled="befoTime('11:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -199,6 +211,8 @@
                 :post-id="scope.row[5].id"
                 :post-title="scope.row[5].title"
                 :post-time="'11:30'"
+                :disabled="befoTime('11:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -218,6 +232,8 @@
                 :post-id="scope.row[6].id"
                 :post-title="scope.row[6].title"
                 :post-time="'12:00'"
+                :disabled="befoTime('12:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -225,31 +241,35 @@
                 :post-title="scope.row[6].name"
             /></template>
           </el-table-column>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           label="下午"
           align="center"
         >
           <el-table-column
-            label="13:30"
-            prop="[7]"
+            v-for="(item,index) in downData"
+            :key="index"
+            :label="item"
+            :prop="index+7+''"
             align="center"
             min-width="50"
           >
             <template slot-scope="scope">
               <meeting-div1
-                v-if="scope.row[7].status=='0'"
-                :post-id="scope.row[7].id"
-                :post-title="scope.row[7].title"
-                :post-time="'13:30'"
+                v-if="scope.row[7+index].status=='0'"
+                :post-id="scope.row[7+index].id"
+                :post-title="scope.row[7+index].title"
+                :post-time="item"
+                :disabled="befoTime(item)"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
-                v-if="scope.row[7].status=='1'"
-                :post-title="scope.row[7].name"
+                v-if="scope.row[7+index].status=='1'"
+                :post-title="scope.row[7+index].name"
             /></template>
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="14:00"
             prop="[8]"
             align="center"
@@ -261,6 +281,8 @@
                 :post-id="scope.row[8].id"
                 :post-title="scope.row[8].title"
                 :post-time="'14:00'"
+                :disabled="befoTime('14:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -280,6 +302,8 @@
                 :post-id="scope.row[9].id"
                 :post-title="scope.row[9].title"
                 :post-time="'14:30'"
+                :disabled="befoTime('14:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -299,6 +323,8 @@
                 :post-id="scope.row[10].id"
                 :post-title="scope.row[10].title"
                 :post-time="'15:00'"
+                :disabled="befoTime('15:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -318,6 +344,8 @@
                 :post-id="scope.row[11].id"
                 :post-title="scope.row[11].title"
                 :post-time="'15:30'"
+                :disabled="befoTime('15:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -337,6 +365,8 @@
                 :post-id="scope.row[12].id"
                 :post-title="scope.row[12].title"
                 :post-time="'16:00'"
+                :disabled="befoTime('16:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -356,6 +386,8 @@
                 :post-id="scope.row[13].id"
                 :post-title="scope.row[13].title"
                 :post-time="'16:30'"
+                :disabled="befoTime('16:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -375,6 +407,8 @@
                 :post-id="scope.row[14].id"
                 :post-title="scope.row[14].title"
                 :post-time="'17:00'"
+                :disabled="befoTime('17:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -394,6 +428,8 @@
                 :post-id="scope.row[15].id"
                 :post-title="scope.row[15].title"
                 :post-time="'17:30'"
+                :disabled="befoTime('17:30')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -413,13 +449,15 @@
                 :post-id="scope.row[16].id"
                 :post-title="scope.row[16].title"
                 :post-time="'18:00'"
+                :disabled="befoTime('18:00')"
+                :class="Isdisabled?'textStyle':'disabledStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
                 v-if="scope.row[16].status=='1'"
                 :post-title="scope.row[16].name"
             /></template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table-column>
       </el-table>
       <div class="pagination-container">
@@ -471,6 +509,19 @@ export default {
 
   data() {
     return {
+      downData: [
+        '13:30',
+        '14:00',
+        '14:30',
+        '15:00',
+        '15:30',
+        '16:00',
+        '16:30',
+        '17:00',
+        '17:30',
+        '18:00'
+      ],
+      upData: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00'],
       Isdisabled: '',
       errorTime: true,
       errorText: '',
@@ -651,18 +702,17 @@ export default {
       })
     },
     // 判断当前时间和按钮时间
-    // befoTime(time) {
-    //   // var time = '09:00'
-    //   var buttonTime = this.listQuery.meetingStartTime + ' ' + '09:00' + ':00'
-    //   var today_time = new Date().getTime()
-    //   if (new Date(buttonTime) - today_time < 0) {
-    //     this.Isdisabled = false
-    //     return true
-    //   } else {
-    //     this.Isdisabled = true
-    //     return false
-    //   }
-    // },
+    befoTime(time) {
+      var buttonTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
+      var today_time = new Date().getTime()
+      if (new Date(buttonTime) - today_time < 0) {
+        this.Isdisabled = false
+        return true
+      } else {
+        this.Isdisabled = true
+        return false
+      }
+    },
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
       // 会议预约
@@ -670,12 +720,12 @@ export default {
       if (timeArr[0] < 10) {
         time = '0' + time
       }
-      var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
-      var today_time = new Date().getTime()
-      if (new Date(clickTime) - today_time < 0) {
-        alert('对不起,会议预约时间必须大于当前时间,请重新选择')
-        return
-      }
+      // var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
+      // var today_time = new Date().getTime()
+      // if (new Date(clickTime) - today_time < 0) {
+      //   alert('对不起,会议预约时间必须大于当前时间,请重新选择')
+      //   return
+      // }
       this.$router.push({
         name: 'meetingApplication',
         query: {
@@ -852,7 +902,6 @@ export default {
   .el-table--border th:first-child .cell {
     padding: 0px;
   }
-
   .table {
     margin-left: 15px;
     flex: 8;
@@ -864,7 +913,7 @@ export default {
       border: none;
     }
     .disabledStyle{
-      color:#666;
+      color:#ccc;
       background: #fff;
       outline: none;
       border: none;

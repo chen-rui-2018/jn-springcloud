@@ -2,9 +2,9 @@ package com.jn.enterprise.servicemarket.advisor.service;
 
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperience;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperience;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
 
 import java.util.List;
 
@@ -24,21 +24,21 @@ public interface AdvisorEditService {
 
     /**
      * 荣誉资质保存并更新
-     * @param serviceHonor  荣誉资质信息
+     * @param serviceHonorParam  荣誉资质信息
      */
-    void saveOrUpdateAdvisorHonor(ServiceHonor serviceHonor);
+    void saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
 
     /**
      * 服务经历保存并更新
-     * @param serviceExperience 服务经历信息
+     * @param serviceExperienceParam 服务经历信息
      */
-    void saveOrUpdateAdvisorExperience(ServiceExperience serviceExperience);
+    void saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
 
     /**
      * 项目经验保存并更新
-     * @param serviceProjectExperience  项目经验信息
+     * @param serviceProjectExperienceParam  项目经验信息
      */
-    void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperience serviceProjectExperience);
+    void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
 
     /**
      * 获取指定证件类型

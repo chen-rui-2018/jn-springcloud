@@ -4,9 +4,9 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperience;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonor;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperience;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -53,8 +53,8 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "荣誉资质保存并更新", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrUpdateAdvisorHonor")
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor")
-    public Result saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonor serviceHonor){
-        advisorEditService.saveOrUpdateAdvisorHonor(serviceHonor);
+    public Result saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonorParam serviceHonorParam){
+        advisorEditService.saveOrUpdateAdvisorHonor(serviceHonorParam);
         return new Result();
     }
 
@@ -63,8 +63,8 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "服务经历保存并更新", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrUpdateAdvisorExperience")
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorExperience")
-    public Result saveOrUpdateAdvisorExperience(@RequestBody @Validated ServiceExperience serviceExperience){
-        advisorEditService.saveOrUpdateAdvisorExperience(serviceExperience);
+    public Result saveOrUpdateAdvisorExperience(@RequestBody @Validated ServiceExperienceParam serviceExperienceParam){
+        advisorEditService.saveOrUpdateAdvisorExperience(serviceExperienceParam);
         return new Result();
     }
 
@@ -72,8 +72,8 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "项目经验保存并更新", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrUpdateAdvisorProjectExperience")
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience")
-    public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperience serviceProjectExperience){
-        advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperience);
+    public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperienceParam serviceProjectExperienceParam){
+        advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperienceParam);
         return new Result();
     }
 
@@ -81,7 +81,7 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "获取指定证件类型", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getCertificateTypeList")
     @RequiresPermissions("/serviceMarket/advisorEditController/getCertificateTypeList")
-    public Result getCertificateTypeList(){
+    public Result<List<TbServiceCertificateType>> getCertificateTypeList(){
         //证件类型分类 荣誉资质：honor
         String certificateType="honor";
         List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);

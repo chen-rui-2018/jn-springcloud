@@ -455,6 +455,76 @@ public class TbServiceExperienceCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andWorkEndTimeIsNull() {
+            addCriterion("work_end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeIsNotNull() {
+            addCriterion("work_end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeEqualTo(String value) {
+            addCriterion("work_end_time =", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeNotEqualTo(String value) {
+            addCriterion("work_end_time <>", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeGreaterThan(String value) {
+            addCriterion("work_end_time >", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("work_end_time >=", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeLessThan(String value) {
+            addCriterion("work_end_time <", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeLessThanOrEqualTo(String value) {
+            addCriterion("work_end_time <=", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeLike(String value) {
+            addCriterion("work_end_time like", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeNotLike(String value) {
+            addCriterion("work_end_time not like", value, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeIn(List<String> values) {
+            addCriterion("work_end_time in", values, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeNotIn(List<String> values) {
+            addCriterion("work_end_time not in", values, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeBetween(String value1, String value2) {
+            addCriterion("work_end_time between", value1, value2, "workEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkEndTimeNotBetween(String value1, String value2) {
+            addCriterion("work_end_time not between", value1, value2, "workEndTime");
+            return (Criteria) this;
+        }
+
         public Criteria andCreatedTimeIsNull() {
             addCriterion("created_time is null");
             return (Criteria) this;

@@ -7,7 +7,6 @@ import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -15,9 +14,9 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceExperience",description = "顾问服务经历出参")
-public class ServiceExperience extends Page implements Serializable {
-    @ApiModelProperty(value = "主键id")
+@ApiModel(value = "ServiceExperience",description = "顾问服务经历入参")
+public class ServiceExperienceParam extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;
     @ApiModelProperty(value = "顾问账号")
     @NotNull(message="顾问账号不能为空")
@@ -28,22 +27,15 @@ public class ServiceExperience extends Page implements Serializable {
     @ApiModelProperty(value = "职务")
     @NotNull(message="职务不能为空")
     private String position;
-    @ApiModelProperty(value = "工作时间(格式：201903)")
+    @ApiModelProperty(value = "工作开始时间(格式：201903)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
             message = "{workTime:'工作时间格式错误'}")
     private String workTime;
-    @ApiModelProperty(value = "创建时间")
-    private Date createdTime;
-    @ApiModelProperty(value = "创建人")
-    private String creatorAccount;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifiedTime;
-    @ApiModelProperty(value = "修改人")
-    private String modifierAccount;
-    @ApiModelProperty(value = "记录状态")
-    private Byte recordStatus;
+    @ApiModelProperty(value = "工作结束时间(格式：201904)")
+    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
+            message = "{workTime:'工作时间格式错误'}")
+    private String workEndTime;
 
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -85,59 +77,23 @@ public class ServiceExperience extends Page implements Serializable {
         this.workTime = workTime;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
+    public String getWorkEndTime() {
+        return workEndTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setWorkEndTime(String workEndTime) {
+        this.workEndTime = workEndTime;
     }
 
     @Override
     public String toString() {
-        return "ServiceExperience{" +
+        return "ServiceExperienceParam{" +
                 "id='" + id + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", companyName='" + companyName + '\'' +
                 ", position='" + position + '\'' +
-                ", workTime=" + workTime +
-                ", createdTime=" + createdTime +
-                ", creatorAccount='" + creatorAccount + '\'' +
-                ", modifiedTime=" + modifiedTime +
-                ", modifierAccount='" + modifierAccount + '\'' +
-                ", recordStatus=" + recordStatus +
+                ", workTime='" + workTime + '\'' +
+                ", workEndTime='" + workEndTime + '\'' +
                 '}';
     }
 }

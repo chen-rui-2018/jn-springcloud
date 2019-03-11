@@ -455,6 +455,76 @@ public class TbServiceProExperCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andProjectEndTimeIsNull() {
+            addCriterion("project_end_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeIsNotNull() {
+            addCriterion("project_end_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeEqualTo(String value) {
+            addCriterion("project_end_time =", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeNotEqualTo(String value) {
+            addCriterion("project_end_time <>", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeGreaterThan(String value) {
+            addCriterion("project_end_time >", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("project_end_time >=", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeLessThan(String value) {
+            addCriterion("project_end_time <", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeLessThanOrEqualTo(String value) {
+            addCriterion("project_end_time <=", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeLike(String value) {
+            addCriterion("project_end_time like", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeNotLike(String value) {
+            addCriterion("project_end_time not like", value, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeIn(List<String> values) {
+            addCriterion("project_end_time in", values, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeNotIn(List<String> values) {
+            addCriterion("project_end_time not in", values, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeBetween(String value1, String value2) {
+            addCriterion("project_end_time between", value1, value2, "projectEndTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectEndTimeNotBetween(String value1, String value2) {
+            addCriterion("project_end_time not between", value1, value2, "projectEndTime");
+            return (Criteria) this;
+        }
+
         public Criteria andPersonalDutiesIsNull() {
             addCriterion("personal_duties is null");
             return (Criteria) this;

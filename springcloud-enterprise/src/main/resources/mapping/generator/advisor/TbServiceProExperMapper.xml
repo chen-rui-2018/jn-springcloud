@@ -7,6 +7,7 @@
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
     <result column="project_time" jdbcType="VARCHAR" property="projectTime" />
+    <result column="project_end_time" jdbcType="VARCHAR" property="projectEndTime" />
     <result column="personal_duties" jdbcType="VARCHAR" property="personalDuties" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -73,8 +74,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, advisor_account, company_name, project_name, project_time, personal_duties, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    id, advisor_account, company_name, project_name, project_time, project_end_time, 
+    personal_duties, created_time, creator_account, modified_time, modifier_account, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExperCriteria" resultMap="BaseResultMap">
     select
@@ -108,13 +110,15 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExper">
     insert into tb_service_pro_exper (id, advisor_account, company_name, 
-      project_name, project_time, personal_duties, 
-      created_time, creator_account, modified_time, 
-      modifier_account, record_status)
+      project_name, project_time, project_end_time, 
+      personal_duties, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, #{companyName,jdbcType=VARCHAR}, 
-      #{projectName,jdbcType=VARCHAR}, #{projectTime,jdbcType=VARCHAR}, #{personalDuties,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+      #{projectName,jdbcType=VARCHAR}, #{projectTime,jdbcType=VARCHAR}, #{projectEndTime,jdbcType=VARCHAR}, 
+      #{personalDuties,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExper">
     insert into tb_service_pro_exper
@@ -133,6 +137,9 @@
       </if>
       <if test="projectTime != null">
         project_time,
+      </if>
+      <if test="projectEndTime != null">
+        project_end_time,
       </if>
       <if test="personalDuties != null">
         personal_duties,
@@ -168,6 +175,9 @@
       </if>
       <if test="projectTime != null">
         #{projectTime,jdbcType=VARCHAR},
+      </if>
+      <if test="projectEndTime != null">
+        #{projectEndTime,jdbcType=VARCHAR},
       </if>
       <if test="personalDuties != null">
         #{personalDuties,jdbcType=VARCHAR},
@@ -213,6 +223,9 @@
       <if test="record.projectTime != null">
         project_time = #{record.projectTime,jdbcType=VARCHAR},
       </if>
+      <if test="record.projectEndTime != null">
+        project_end_time = #{record.projectEndTime,jdbcType=VARCHAR},
+      </if>
       <if test="record.personalDuties != null">
         personal_duties = #{record.personalDuties,jdbcType=VARCHAR},
       </if>
@@ -243,6 +256,7 @@
       company_name = #{record.companyName,jdbcType=VARCHAR},
       project_name = #{record.projectName,jdbcType=VARCHAR},
       project_time = #{record.projectTime,jdbcType=VARCHAR},
+      project_end_time = #{record.projectEndTime,jdbcType=VARCHAR},
       personal_duties = #{record.personalDuties,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -267,6 +281,9 @@
       </if>
       <if test="projectTime != null">
         project_time = #{projectTime,jdbcType=VARCHAR},
+      </if>
+      <if test="projectEndTime != null">
+        project_end_time = #{projectEndTime,jdbcType=VARCHAR},
       </if>
       <if test="personalDuties != null">
         personal_duties = #{personalDuties,jdbcType=VARCHAR},
@@ -295,6 +312,7 @@
       company_name = #{companyName,jdbcType=VARCHAR},
       project_name = #{projectName,jdbcType=VARCHAR},
       project_time = #{projectTime,jdbcType=VARCHAR},
+      project_end_time = #{projectEndTime,jdbcType=VARCHAR},
       personal_duties = #{personalDuties,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

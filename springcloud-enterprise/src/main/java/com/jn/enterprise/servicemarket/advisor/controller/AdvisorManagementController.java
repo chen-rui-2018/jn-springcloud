@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
 import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 顾问管理
@@ -56,7 +59,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/echoUserInfo")
     @ApiOperation(value = "通过注册账号回显用户信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/echoUserInfo")
-    public Result echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true)@RequestParam("registerAccount") String registerAccount){
+    public Result<UserExtensionInfo> echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true)@RequestParam("registerAccount") String registerAccount){
         Assert.notNull(registerAccount, AdvisorExceptionEnum.REGISTER_ACCOUNT.getMessage());
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(registerAccount);
         return  userExtension;
@@ -76,7 +79,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
     @ApiOperation(value = "顾问管理", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getAdvisorManagementInfo")
-    public Result getAdvisorManagementInfo(@RequestBody @Validated AdvisorManagementParam advisorManagementParam){
+    public Result<PaginationData<List<TbServiceAdvisor>>> getAdvisorManagementInfo(@RequestBody @Validated AdvisorManagementParam advisorManagementParam){
         Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
         PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
         return  new Result(advisorManagementInfo);
@@ -95,7 +98,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/advisorDetails")
     @ApiOperation(value = "用户中心顾问详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/advisorDetails")
-    public Result advisorDetails(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);

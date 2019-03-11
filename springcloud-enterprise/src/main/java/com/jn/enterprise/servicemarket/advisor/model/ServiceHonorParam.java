@@ -6,8 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -15,13 +15,16 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质出参")
-public class ServiceHonor extends Page implements Serializable {
-    @ApiModelProperty(value = "主键id")
+@ApiModel(value = "ServiceHonor",description = "顾问荣誉资质入参")
+public class ServiceHonorParam extends Page implements Serializable {
+    @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
     @ApiModelProperty(value = "顾问账号")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
+    @ApiModelProperty(value = "颁发机构")
+    @Size(max=64,message = "颁发机构长度最多为64个字")
+    private String issuingAgency;
     @ApiModelProperty(value = "证书名称")
     @NotNull(message="证书名称不能为空")
     private String certificateName;
@@ -34,18 +37,7 @@ public class ServiceHonor extends Page implements Serializable {
     private String getTime;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;
-    @ApiModelProperty(value = "创建时间")
-    private Date createdTime;
-    @ApiModelProperty(value = "创建人")
-    private String creatorAccount;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifiedTime;
-    @ApiModelProperty(value = "修改人")
-    private String modifierAccount;
-    @ApiModelProperty(value = "记录状态")
-    private Byte recordStatus;
 
-    private static final long serialVersionUID = 1L;
 
     public String getId() {
         return id;
@@ -61,6 +53,14 @@ public class ServiceHonor extends Page implements Serializable {
 
     public void setAdvisorAccount(String advisorAccount) {
         this.advisorAccount = advisorAccount;
+    }
+
+    public String getIssuingAgency() {
+        return issuingAgency;
+    }
+
+    public void setIssuingAgency(String issuingAgency) {
+        this.issuingAgency = issuingAgency;
     }
 
     public String getCertificateName() {
@@ -95,60 +95,16 @@ public class ServiceHonor extends Page implements Serializable {
         this.certificatePhoto = certificatePhoto;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
-    }
-
     @Override
     public String toString() {
-        return "ServiceHonor{" +
+        return "ServiceHonorParam{" +
                 "id='" + id + '\'' +
                 ", advisorAccount='" + advisorAccount + '\'' +
+                ", issuingAgency='" + issuingAgency + '\'' +
                 ", certificateName='" + certificateName + '\'' +
                 ", certificateType='" + certificateType + '\'' +
                 ", getTime='" + getTime + '\'' +
                 ", certificatePhoto='" + certificatePhoto + '\'' +
-                ", createdTime=" + createdTime +
-                ", creatorAccount='" + creatorAccount + '\'' +
-                ", modifiedTime=" + modifiedTime +
-                ", modifierAccount='" + modifierAccount + '\'' +
-                ", recordStatus=" + recordStatus +
                 '}';
     }
 }

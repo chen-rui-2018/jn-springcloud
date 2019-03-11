@@ -385,6 +385,76 @@ public class TbServiceHonorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIssuingAgencyIsNull() {
+            addCriterion("issuing_agency is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyIsNotNull() {
+            addCriterion("issuing_agency is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyEqualTo(String value) {
+            addCriterion("issuing_agency =", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyNotEqualTo(String value) {
+            addCriterion("issuing_agency <>", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyGreaterThan(String value) {
+            addCriterion("issuing_agency >", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyGreaterThanOrEqualTo(String value) {
+            addCriterion("issuing_agency >=", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyLessThan(String value) {
+            addCriterion("issuing_agency <", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyLessThanOrEqualTo(String value) {
+            addCriterion("issuing_agency <=", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyLike(String value) {
+            addCriterion("issuing_agency like", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyNotLike(String value) {
+            addCriterion("issuing_agency not like", value, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyIn(List<String> values) {
+            addCriterion("issuing_agency in", values, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyNotIn(List<String> values) {
+            addCriterion("issuing_agency not in", values, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyBetween(String value1, String value2) {
+            addCriterion("issuing_agency between", value1, value2, "issuingAgency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssuingAgencyNotBetween(String value1, String value2) {
+            addCriterion("issuing_agency not between", value1, value2, "issuingAgency");
+            return (Criteria) this;
+        }
+
         public Criteria andGetTimeIsNull() {
             addCriterion("get_time is null");
             return (Criteria) this;

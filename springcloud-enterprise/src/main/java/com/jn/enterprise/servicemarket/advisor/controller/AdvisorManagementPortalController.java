@@ -7,6 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementPortalParam;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceManagementInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementPortalService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -49,7 +52,7 @@ public class AdvisorManagementPortalController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementPortalController/getAdvisorManagementInfoList")
     @ApiOperation(value = "服务顾问管理(后台门户管理)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getAdvisorManagementInfoList")
-    public Result getAdvisorManagementInfoList(@RequestBody @Validated AdvisorManagementPortalParam advisorManagementParam){
+    public Result<PaginationData<List<AdvisorServiceManagementInfo>>> getAdvisorManagementInfoList(@RequestBody @Validated AdvisorManagementPortalParam advisorManagementParam){
         PaginationData advisorManagementInfo = advisorManagementPortalService.getAdvisorManagementInfoList(advisorManagementParam);
         return  new Result(advisorManagementInfo);
     }

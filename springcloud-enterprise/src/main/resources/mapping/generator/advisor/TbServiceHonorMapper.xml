@@ -6,6 +6,7 @@
     <result column="advisor_account" jdbcType="VARCHAR" property="advisorAccount" />
     <result column="certificate_name" jdbcType="VARCHAR" property="certificateName" />
     <result column="certificate_type" jdbcType="VARCHAR" property="certificateType" />
+    <result column="issuing_agency" jdbcType="VARCHAR" property="issuingAgency" />
     <result column="get_time" jdbcType="VARCHAR" property="getTime" />
     <result column="certificate_photo" jdbcType="VARCHAR" property="certificatePhoto" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -73,8 +74,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, advisor_account, certificate_name, certificate_type, get_time, certificate_photo, 
-    created_time, creator_account, modified_time, modifier_account, record_status
+    id, advisor_account, certificate_name, certificate_type, issuing_agency, get_time, 
+    certificate_photo, created_time, creator_account, modified_time, modifier_account, 
+    record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonorCriteria" resultMap="BaseResultMap">
     select
@@ -108,13 +110,15 @@
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonor">
     insert into tb_service_honor (id, advisor_account, certificate_name, 
-      certificate_type, get_time, certificate_photo, 
-      created_time, creator_account, modified_time, 
-      modifier_account, record_status)
+      certificate_type, issuing_agency, get_time, 
+      certificate_photo, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{advisorAccount,jdbcType=VARCHAR}, #{certificateName,jdbcType=VARCHAR}, 
-      #{certificateType,jdbcType=VARCHAR}, #{getTime,jdbcType=VARCHAR}, #{certificatePhoto,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+      #{certificateType,jdbcType=VARCHAR}, #{issuingAgency,jdbcType=VARCHAR}, #{getTime,jdbcType=VARCHAR}, 
+      #{certificatePhoto,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonor">
     insert into tb_service_honor
@@ -130,6 +134,9 @@
       </if>
       <if test="certificateType != null">
         certificate_type,
+      </if>
+      <if test="issuingAgency != null">
+        issuing_agency,
       </if>
       <if test="getTime != null">
         get_time,
@@ -165,6 +172,9 @@
       </if>
       <if test="certificateType != null">
         #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="issuingAgency != null">
+        #{issuingAgency,jdbcType=VARCHAR},
       </if>
       <if test="getTime != null">
         #{getTime,jdbcType=VARCHAR},
@@ -210,6 +220,9 @@
       <if test="record.certificateType != null">
         certificate_type = #{record.certificateType,jdbcType=VARCHAR},
       </if>
+      <if test="record.issuingAgency != null">
+        issuing_agency = #{record.issuingAgency,jdbcType=VARCHAR},
+      </if>
       <if test="record.getTime != null">
         get_time = #{record.getTime,jdbcType=VARCHAR},
       </if>
@@ -242,6 +255,7 @@
       advisor_account = #{record.advisorAccount,jdbcType=VARCHAR},
       certificate_name = #{record.certificateName,jdbcType=VARCHAR},
       certificate_type = #{record.certificateType,jdbcType=VARCHAR},
+      issuing_agency = #{record.issuingAgency,jdbcType=VARCHAR},
       get_time = #{record.getTime,jdbcType=VARCHAR},
       certificate_photo = #{record.certificatePhoto,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -264,6 +278,9 @@
       </if>
       <if test="certificateType != null">
         certificate_type = #{certificateType,jdbcType=VARCHAR},
+      </if>
+      <if test="issuingAgency != null">
+        issuing_agency = #{issuingAgency,jdbcType=VARCHAR},
       </if>
       <if test="getTime != null">
         get_time = #{getTime,jdbcType=VARCHAR},
@@ -294,6 +311,7 @@
     set advisor_account = #{advisorAccount,jdbcType=VARCHAR},
       certificate_name = #{certificateName,jdbcType=VARCHAR},
       certificate_type = #{certificateType,jdbcType=VARCHAR},
+      issuing_agency = #{issuingAgency,jdbcType=VARCHAR},
       get_time = #{getTime,jdbcType=VARCHAR},
       certificate_photo = #{certificatePhoto,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

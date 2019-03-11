@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceExperience",description = "顾问服务经历入参")
+@ApiModel(value = "ServiceExperienceParam",description = "顾问服务经历入参")
 public class ServiceExperienceParam extends Page implements Serializable {
     @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;
@@ -29,11 +29,11 @@ public class ServiceExperienceParam extends Page implements Serializable {
     private String position;
     @ApiModelProperty(value = "工作开始时间(格式：201903)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{workTime:'工作时间格式错误'}")
+            message = "{workTime:'工作开始时间格式错误'}")
     private String workTime;
     @ApiModelProperty(value = "工作结束时间(格式：201904)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{workTime:'工作时间格式错误'}")
+            message = "{workTime:'工作结束时间格式错误'}")
     private String workEndTime;
 
 

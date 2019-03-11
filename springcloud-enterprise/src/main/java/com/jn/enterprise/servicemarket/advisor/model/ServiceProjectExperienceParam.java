@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceProjectExperience",description = "顾问项目经验入参")
+@ApiModel(value = "ServiceProjectExperienceParam",description = "顾问项目经验入参")
 public class ServiceProjectExperienceParam extends Page implements Serializable {
     @ApiModelProperty(value = "主键id(新增时为空，修改时必传)")
     private String id;
@@ -30,11 +30,11 @@ public class ServiceProjectExperienceParam extends Page implements Serializable 
     private String projectName;
     @ApiModelProperty(value = "项目开始时间(格式：201903)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{projectTime:'项目时间格式错误'}")
+            message = "{projectTime:'项目开始时间格式错误'}")
     private String projectTime;
     @ApiModelProperty(value = "项目结束时间(格式：201904)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{projectTime:'项目时间格式错误'}")
+            message = "{projectTime:'项目结束时间格式错误'}")
     private String projectEndTime;
     @ApiModelProperty(value = "个人职责")
     @Size(max = 500, message = "个人职责描述不能超过500字")

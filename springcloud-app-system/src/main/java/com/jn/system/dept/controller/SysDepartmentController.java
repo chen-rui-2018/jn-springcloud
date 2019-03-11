@@ -49,8 +49,8 @@ public class SysDepartmentController extends BaseController {
     @ApiOperation(value = "根据部门id获取部门信息及所有子部门信息", httpMethod = "POST", response = Result.class)
     @RequestMapping("/system/sysDepartment/selectDeptByKey")
     public Result selectDeptByKey(@RequestParam("id")String id, @RequestParam("flag")Boolean flag) {
-        SysDepartmentVO sysDepartmentVO = sysDepartmentService.selectDeptByKey(id,flag);
-        return new Result(sysDepartmentVO);
+        Result result = sysDepartmentService.selectDeptByKey(id, flag);
+        return result;
     }
 
     @ControllerLog(doAction = "逻辑删除部门")

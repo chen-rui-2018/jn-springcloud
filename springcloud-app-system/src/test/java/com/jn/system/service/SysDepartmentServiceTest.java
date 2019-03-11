@@ -1,6 +1,7 @@
 package com.jn.system.service;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.system.common.enums.SysLevelEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
@@ -76,7 +77,7 @@ public class SysDepartmentServiceTest {
 
     @Test
     public void selectByPrimaryKeyTest() {
-        SysDepartmentVO data = sysDepartmentService.selectDeptByKey(departmenId,false);
+        Result data = sysDepartmentService.selectDeptByKey(departmenId, false);
         Assert.assertThat(data, Matchers.anything());
     }
 
@@ -132,6 +133,14 @@ public class SysDepartmentServiceTest {
         String parentId = SysLevelEnums.FIRST_LEVEL.getCode();
         List<SysDepartmentVO> data = sysDepartmentService.getChildDepartmentByParentId(parentId);
         Assert.assertThat(data, Matchers.anything());
+    }
+
+    @Test
+    public void checkUserDept(){
+        //1.判断用户id不为空情况,部门id不为空情况
+        String userId = "10000";
+        Boolean result2 = sysDepartmentService.checkUserDept(userId, departmenId);
+        Assert.assertThat(result2, Matchers.anything());
     }
 
     @Test

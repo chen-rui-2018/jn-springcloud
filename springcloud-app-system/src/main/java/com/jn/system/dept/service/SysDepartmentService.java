@@ -1,5 +1,6 @@
 package com.jn.system.dept.service;
 
+import com.jn.common.model.Result;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.model.SysDepartment;
 import com.jn.system.dept.model.SysDepartmentCheckName;
@@ -19,11 +20,11 @@ public interface SysDepartmentService {
     /**
      * 根据部门id获取当前部门及所有子部门信息
      *
-     * @param id   部门id
-     * @param flag true 表示获取所有子部门，false表示只获取当前部门
+     * @param id         部门id
+     * @param isGetChild true 表示获取所有子部门，false表示只获取当前部门
      * @return
      */
-    SysDepartmentVO selectDeptByKey(String id,Boolean flag);
+    Result selectDeptByKey(String id, Boolean isGetChild);
 
     /**
      * 逻辑删除部门信息
@@ -79,4 +80,13 @@ public interface SysDepartmentService {
      * @return
      */
     List<SysDepartmentVO> getChildDepartmentByParentId(String parentId);
+
+    /**
+     * 要查询的部门ID是否属于用户所属的部门或子部门
+     *
+     * @param userId 用户id
+     * @param deptId 部门id
+     * @return
+     */
+    Boolean checkUserDept(String userId, String deptId);
 }

@@ -57,16 +57,35 @@
             ORDER BY created_time ASC;
     </select>
 
-    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO">
+    <select id="getDepartmentAll" resultType="com.jn.system.dept.vo.SysDepartmentVO" parameterType="java.lang.String">
             SELECT
-            id as value,
-            department_name as label,
-            parent_id as parentId,
-            `level`
+            id,
+            t.id as `value`,
+            t.department_name as label,
+            t.department_name as departmentName,
+            t.parent_id as parentId,
+            t.`level`,
+            t.created_time,
+            tt.userAccount
             FROM
-            `tb_sys_department`
-            WHERE `record_status` = 1
-            ORDER BY created_time ASC;
+            `tb_sys_department` t
+            LEFT JOIN
+            (SELECT
+            COUNT(t2.department_id) as userAccount,
+            department_id
+            FROM
+            tb_sys_user t1,
+            tb_sys_user_department_post t2
+            WHERE t1.id = t2.user_id
+            AND t1.record_status = 1
+            AND t2.record_status = 1
+            GROUP BY t2.department_id) tt
+            ON t.id = tt.department_id
+            WHERE t.`record_status` = 1
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(level)">
+                and t.`level` = #{level,jdbcType=VARCHAR}
+            </if>
+            ORDER BY t.created_time ASC;
     </select>
 
     <select id="getDepartmentIds" resultType="java.lang.String">

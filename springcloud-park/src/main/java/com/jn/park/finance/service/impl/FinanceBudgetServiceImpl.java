@@ -62,30 +62,34 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     @ServiceLog(doAction = "预算录入")
     @Override
-    public Result add(FinanceBudgetHistoryVo financeBudgetHistoryVo, String userAccount) {
+    public Result add(List<FinanceBudgetHistoryVo> financeBudgetHistoryVoList, String userAccount) {
 
-        int insertCount=0;
-        for(FinanceBudgetMoneyModel moneyModel:financeBudgetHistoryVo.getBudgetMoneyModels()){
-            //1、校验 是否已经录入过初年预算了
+        financeBudgetHistoryVoList.stream().forEach(financeBudgetHistoryVo -> {
+            int insertCount=0;
+            for(FinanceBudgetMoneyModel moneyModel:financeBudgetHistoryVo.getBudgetMoneyModels()){
+                //1、校验 是否已经录入过初年预算了
 
-            if((new Byte("0")).equals(financeBudgetHistoryVo.getBudgetType())){
-                this.checkBudgetType0(financeBudgetHistoryVo.getDepartmentId(),financeBudgetHistoryVo.getCostTypeId(),financeBudgetHistoryVo.getCostTypeName(),moneyModel.getMonth());
+                if((new Byte("0")).equals(financeBudgetHistoryVo.getBudgetType())){
+                    this.checkBudgetType0(financeBudgetHistoryVo.getDepartmentId(),financeBudgetHistoryVo.getCostTypeId(),financeBudgetHistoryVo.getCostTypeName(),moneyModel.getMonth());
+                }
+
+                //2、保存到历史表
+                TbFinanceBudgetHistory tbFinanceBudgetHistory=new TbFinanceBudgetHistory();
+                BeanUtils.copyProperties(financeBudgetHistoryVo,tbFinanceBudgetHistory);
+                tbFinanceBudgetHistory.setBudgetMonth(moneyModel.getMonth());
+                tbFinanceBudgetHistory.setBudgetMoney(moneyModel.getMoney());
+                tbFinanceBudgetHistory.setCreatedTime(new Date());
+                tbFinanceBudgetHistory.setCreatorAccount(userAccount);
+                tbFinanceBudgetHistoryMapper.insertSelective(tbFinanceBudgetHistory);
+                insertCount++;
+
+                //3、更新总预算表数据
+                this.updateTotal(financeBudgetHistoryVo.getCostTypeId(),financeBudgetHistoryVo.getCostTypeName(),financeBudgetHistoryVo.getDepartmentId(),financeBudgetHistoryVo.getDepartmentName(),moneyModel.getMonth(),userAccount);
             }
+        });
 
-            //2、保存到历史表
-            TbFinanceBudgetHistory tbFinanceBudgetHistory=new TbFinanceBudgetHistory();
-            BeanUtils.copyProperties(financeBudgetHistoryVo,tbFinanceBudgetHistory);
-            tbFinanceBudgetHistory.setBudgetMonth(moneyModel.getMonth());
-            tbFinanceBudgetHistory.setBudgetMoney(moneyModel.getMoney());
-            tbFinanceBudgetHistory.setCreatedTime(new Date());
-            tbFinanceBudgetHistory.setCreatorAccount(userAccount);
-            tbFinanceBudgetHistoryMapper.insertSelective(tbFinanceBudgetHistory);
-            insertCount++;
 
-            //3、更新总预算表数据
-            this.updateTotal(financeBudgetHistoryVo.getCostTypeId(),financeBudgetHistoryVo.getCostTypeName(),financeBudgetHistoryVo.getDepartmentId(),financeBudgetHistoryVo.getDepartmentName(),moneyModel.getMonth(),userAccount);
-        }
-        return new Result(String.format("成功录入【%s】条数据",insertCount));
+        return new Result(String.format("预算录入成功"));
     }
 
     //是否已经导入过年初预算了

@@ -62,10 +62,12 @@
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <!--覆盖生成XML文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
         <!--在各个字段添加注解-->
         <plugin type="com.jn.generator.CommentsPlugin"></plugin>
         <!--在生成xxxMapper.xml文件后，再生成一次，新的内容会以<b>覆盖</b>的方式加入到原来的xxxMapper.xml文件中-->
-        <plugin type="com.jn.generator.CoverMapperPlugin"></plugin>
+        <!--<plugin type="com.jn.generator.CoverMapperPlugin"></plugin>-->
         <commentGenerator>
             <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
             <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
@@ -107,7 +109,11 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务事项-财务文档上传-->
-        <table tableName="tb_finance_document" alias="d">
+        <table tableName="tb_finance_document" alias="doc">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--财务支出录入总表(月表)-->
+        <table tableName="tb_finance_expenses_month" alias="emonth">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务支出录入表-->
@@ -115,7 +121,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务支出录入临时表-->
-        <table tableName="tb_finance_expenses_temp" alias="et">
+        <table tableName="tb_finance_expenses_temp" alias="etemp">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务协同-备案资料-->
@@ -127,11 +133,11 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务项目类型-->
-        <table tableName="tb_finance_type" alias="type">
+        <table tableName="tb_finance_type" alias="t">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--部门与财务类型关系表-->
-        <table tableName="tb_finance_department_to_type" alias="dtpye">
+        <table tableName="tb_finance_department_to_type" alias="dt">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--财务事项-工单表-->
@@ -149,6 +155,13 @@
         <!--财务协同-字典表-->
         <table tableName="tb_finance_dictionary" alias="dict">
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--各费用年表-->
+        <table tableName="tb_finance_year" alias="y">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <!--财务协同-字典表月份表，做为左表进行关联查出1年中12个月的数据-->
+        <table tableName="tb_month" alias="m">
         </table>
     </context>
 </generatorConfiguration>

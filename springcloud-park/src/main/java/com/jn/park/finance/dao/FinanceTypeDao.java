@@ -12,10 +12,11 @@ public interface FinanceTypeDao {
 
     /**
      *  查看所有财务项目类型
-     * @param departmentId
+     * @param departmentIds
      * @return
      */
-    List<FinanceTypeModel> selectTypeByDepartmentId(@Param("departmentId") String departmentId) ;
+//    List<FinanceTypeModel> selectTypeByDepartmentId(@Param("departmentId") String departmentId) ;
+    List<FinanceTypeModel> selectTypeByDepartmentIds(@Param("departmentIds") String departmentIds,@Param("name") String name) ;
 
     /**
      * 查看所有部门

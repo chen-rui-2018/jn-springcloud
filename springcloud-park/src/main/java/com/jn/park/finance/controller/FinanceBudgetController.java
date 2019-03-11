@@ -2,22 +2,33 @@ package com.jn.park.finance.controller;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
+import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
+import com.jn.park.finance.model.FinanceBudgetMoneyModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
+import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceBudgetService;
+import com.jn.park.finance.service.FinanceTypeService;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.poi.hssf.record.FnGroupCountRecord;
+import org.apache.poi.ss.formula.functions.Finance;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +43,10 @@ import java.util.List;
 public class FinanceBudgetController extends FinanceBaseController {
     @Autowired
     private FinanceBudgetService financeBudgetService;
+    @Autowired
+    private FinanceTypeService financeTypeService;
+    @Autowired
+    private SystemClient systemClient;
 
     @ControllerLog(doAction = "总预算查询")
     @ApiOperation(value = "总预算查询", httpMethod = "GET")
@@ -72,7 +87,65 @@ public class FinanceBudgetController extends FinanceBaseController {
     @ApiOperation(value = "预算录入", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/add")
     @RequiresPermissions("/finance/budget/add")
-    public Result add( @RequestParam("file") CommonsMultipartFile file){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "file",value = "EXCEL模板文件，多个用逗号(,)隔开",dataType = "String",required = true,paramType = "query"),
+            @ApiImplicitParam(name = "budgetType",value = "预算类型 0：年初预算 1：临时预算",dataType = "Byte",required = true,paramType = "query"),
+            @ApiImplicitParam(name = "departmentId",value = "部门ID",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "departmentName",value = "部门名称",dataType = "String",paramType = "query")
+    })
+    public Result add(MultipartFile file,Byte budgetType,String departmentId,String departmentName){
+        //读出excel中的所有行数据
+        List<Object>rows=ExcelUtil.readExcel(file,null);
+        if(null==rows||rows.size()<2){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"至少要导入一行数据");
+        }
+
+        //第一行为表头，得出需要导入的年月列表
+        List<String>monthList=new ArrayList<>();
+        List<String>first=(List<String>)rows.get(0);
+        int firstSize=first.size();
+        try {
+            for(int i=1;i<firstSize;i++){
+                String month=DateUtils.formatDate(DateUtils.parseDate(first.get(i).toString(),"yyyy年MM月"),"yyyyMM");
+                monthList.add(month);
+            }
+        }catch (ParseException e){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"表头的格式为xxxx年xx月，如20190403");
+        }
+
+        //第二行开始为数据行
+        //多少行
+        int rowsSize=rows.size();
+        //每行多少个月
+        int monthCount=monthList.size();
+        List<FinanceBudgetHistoryVo>financeBudgetHistoryVoList=new ArrayList<>();
+        for(int i=1;i<rowsSize;i++){
+            List<String>data=(List<String>)rows.get(i);
+            FinanceBudgetHistoryVo financeBudgetHistoryVo=new FinanceBudgetHistoryVo();
+            financeBudgetHistoryVo.setBudgetType(budgetType);
+            List<FinanceTypeModel>typeModelList=financeTypeService.selectTypeByDepartmentIds(departmentId,data.get(0));
+            if(typeModelList.size()!=1){
+                throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,String.format("分类名【%s】不存在",data.get(0)));
+            }
+            financeBudgetHistoryVo.setCostTypeId(typeModelList.get(0).getId());
+            financeBudgetHistoryVo.setCostTypeName(typeModelList.get(0).getFinanceName());
+            financeBudgetHistoryVo.setDepartmentId(departmentId);
+            financeBudgetHistoryVo.setDepartmentName(departmentName);
+            List<FinanceBudgetMoneyModel>moneyModelList=new ArrayList<>();
+            for(int ii=1;ii<monthCount;ii++){
+                BigDecimal money=new BigDecimal(data.get(ii));
+                moneyModelList.add(new FinanceBudgetMoneyModel(monthList.get(ii),money));
+            }
+            financeBudgetHistoryVo.setBudgetMoneyModels(moneyModelList);
+            financeBudgetHistoryVoList.add(financeBudgetHistoryVo);
+        }
+
+        financeBudgetService.add(financeBudgetHistoryVoList,getUser().getAccount());
+
+
+
+
+
         return new Result();
     }
 

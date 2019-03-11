@@ -101,12 +101,15 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
 
     @ServiceLog(doAction = "查看所有财务项目类型")
     @Override
-    public List<FinanceTypeModel> selectTypeByDepartmentId(String departmentId) {
-        Result dept=systemClient.selectDeptByKey(departmentId,false);
-        if (null==dept.getData()){
-            throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_DEPT_NOT_EXIST);
+    public List<FinanceTypeModel> selectTypeByDepartmentIds(String departmentIds,String name) {
+        String[] departmentIdArr=departmentIds.split(",");
+        for(String departmentId:departmentIdArr){
+            Result dept=systemClient.selectDeptByParentId(departmentId,false);
+            if (null==dept.getData()){
+                throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_DEPT_NOT_EXIST);
+            }
         }
-        return financeTypeDao.selectTypeByDepartmentId(departmentId);
+        return financeTypeDao.selectTypeByDepartmentIds(departmentIds,name);
     }
 
 

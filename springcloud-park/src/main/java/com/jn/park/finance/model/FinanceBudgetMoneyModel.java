@@ -37,4 +37,12 @@ public class FinanceBudgetMoneyModel implements Serializable {
     public void setMoney(BigDecimal money) {
         this.money = money;
     }
+
+    public FinanceBudgetMoneyModel(String month, BigDecimal money) {
+        this.month = month;
+        this.money = money;
+    }
+
+    public FinanceBudgetMoneyModel() {
+    }
 }

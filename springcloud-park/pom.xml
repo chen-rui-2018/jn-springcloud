@@ -65,8 +65,7 @@
                     <contexts>
                         finance
                     </contexts>
-                    <tableNames>
-
+                    <tableNames>tb_finance_income_month
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

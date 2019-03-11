@@ -29,12 +29,15 @@ public interface FinanceTypeService {
     Integer updateDepartmentByType(Integer typeId, List<String>departmentIdList,String userAccount);
 
 
+
+
     /**
      * 查看所有财务项目类型
-     * @param departmentId
+     * @param departmentIds 用户的部门idS
+     * @param name 分类名 过滤条件（like）
      * @return
      */
-    List<FinanceTypeModel>selectTypeByDepartmentId(String departmentId);
+    List<FinanceTypeModel>selectTypeByDepartmentIds(String departmentIds,String name);
 
     /**
      * 查看所有部门

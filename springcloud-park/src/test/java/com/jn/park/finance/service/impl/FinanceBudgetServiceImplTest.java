@@ -80,7 +80,9 @@ public class FinanceBudgetServiceImplTest {
             model.setMoney(new BigDecimal(i*10));
             financeBudgetHistoryVo.getBudgetMoneyModels().add(model);
         }
-        financeBudgetService.add(financeBudgetHistoryVo,"huangbq");
+        List<FinanceBudgetHistoryVo>financeBudgetHistoryVoList=new ArrayList<>();
+        financeBudgetHistoryVoList.add(financeBudgetHistoryVo);
+        financeBudgetService.add(financeBudgetHistoryVoList,"huangbq");
 
 
         //2、
@@ -98,7 +100,9 @@ public class FinanceBudgetServiceImplTest {
             model.setMoney(new BigDecimal(i*10));
             financeBudgetHistoryVo.getBudgetMoneyModels().add(model);
         }
-        financeBudgetService.add(financeBudgetHistoryVo,"huangbq");
+        financeBudgetHistoryVoList.clear();
+        financeBudgetHistoryVoList.add(financeBudgetHistoryVo);
+        financeBudgetService.add(financeBudgetHistoryVoList,"huangbq");
 
 
 
@@ -121,7 +125,9 @@ public class FinanceBudgetServiceImplTest {
             model.setMoney(new BigDecimal(i*10));
             financeBudgetHistoryVo.getBudgetMoneyModels().add(model);
         }
-        financeBudgetService.add(financeBudgetHistoryVo,"huangbq");
+        financeBudgetHistoryVoList.clear();
+        financeBudgetHistoryVoList.add(financeBudgetHistoryVo);
+        financeBudgetService.add(financeBudgetHistoryVoList,"huangbq");
 
 
     }

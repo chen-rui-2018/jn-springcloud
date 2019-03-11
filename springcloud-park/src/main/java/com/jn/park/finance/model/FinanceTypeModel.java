@@ -28,11 +28,6 @@ public class FinanceTypeModel implements Serializable {
     @ApiModelProperty("显示顺序（越小越靠前）")
     private Integer showOrder;
 
-    @NotNull(message = "是否公用不能为空")
-    @ApiModelProperty("是否公用（0否,1所有部门都适用）")
-    private Byte isPublic;
-
-
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -59,37 +54,4 @@ public class FinanceTypeModel implements Serializable {
         this.showOrder = showOrder;
     }
 
-    public Byte getIsPublic() {
-        return isPublic;
-    }
-
-    public void setIsPublic(Byte isPublic) {
-        this.isPublic = isPublic;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        FinanceTypeModel that = (FinanceTypeModel) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(financeName, that.financeName) &&
-                Objects.equals(showOrder, that.showOrder) &&
-                Objects.equals(isPublic, that.isPublic);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, financeName, showOrder, isPublic);
-    }
-
-    @Override
-    public String toString() {
-        return "FinanceTypeModel{" +
-                "id=" + id +
-                ", financeName='" + financeName + '\'' +
-                ", showOrder=" + showOrder +
-                ", isPublic=" + isPublic +
-                '}';
-    }
 }

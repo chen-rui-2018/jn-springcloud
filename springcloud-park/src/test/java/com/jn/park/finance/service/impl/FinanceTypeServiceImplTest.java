@@ -57,8 +57,6 @@ public class FinanceTypeServiceImplTest {
             TbFinanceType type=new TbFinanceType();
             type.setId(1);
             type.setFinanceName(typeArr[i]);
-            //公用的类型
-            type.setIsPublic(Byte.parseByte("1"));
             type.setCreatorAccount("admin");
             type.setCreatedTime(new Date());
             tbFinanceTypeMapper.insertSelective(type);
@@ -88,7 +86,6 @@ public class FinanceTypeServiceImplTest {
             type.setId(1);
             type.setFinanceName("交通费"+i);
             //奇数的公用的类型
-            type.setIsPublic(Byte.parseByte(String.valueOf(i%2)));
             type.setCreatorAccount("huangbq");
             type.setCreatedTime(new Date());
             tbFinanceTypeMapper.insertSelective(type);
@@ -138,7 +135,6 @@ public class FinanceTypeServiceImplTest {
         //1、
         FinanceTypeModel financeTypeModel=new FinanceTypeModel();
         financeTypeModel.setFinanceName("团建费0");
-        financeTypeModel.setIsPublic(new Byte("1"));
         int id=financeTypeService.saveOrUpdate(financeTypeModel,"huangbq");
         Assert.isTrue(tbFinanceTypeMapper.selectByPrimaryKey(id)!=null);
 
@@ -175,7 +171,6 @@ public class FinanceTypeServiceImplTest {
         //1、
         FinanceTypeModel financeTypeModel=new FinanceTypeModel();
         financeTypeModel.setFinanceName("差旅支出");
-        financeTypeModel.setIsPublic(new Byte("1"));
         try {
             int updateCount=financeTypeService.saveOrUpdate(financeTypeModel,"huangbq");
             Assert.isTrue(updateCount==0);
@@ -186,7 +181,6 @@ public class FinanceTypeServiceImplTest {
 
         //2、
         financeTypeModel.setFinanceName(null);
-        financeTypeModel.setIsPublic(new Byte("1"));
         try {
             int updateCount=financeTypeService.saveOrUpdate(financeTypeModel,"huangbq");
             Assert.isTrue(updateCount==0);
@@ -206,22 +200,22 @@ public class FinanceTypeServiceImplTest {
     public void t200_selectTypeByDepartmentId() {
         //1、
         try {
-            List<FinanceTypeModel>xxxxxx=financeTypeService.selectTypeByDepartmentId("xxxxxx");
+            List<FinanceTypeModel>xxxxxx=financeTypeService.selectTypeByDepartmentIds("xxxxxx",null);
             Assert.isTrue(xxxxxx.size()==0);
         }catch (JnSpringCloudException e){
             Assert.isTrue(e.getMsg().equals(FinanceTypeExceptionEnums.TYPE_DEPT_NOT_EXIST.getMessage()));
         }
 
         //2、
-        List<FinanceTypeModel>tech0=financeTypeService.selectTypeByDepartmentId("281f4005-0363-4528-92a3-60a730532e53");
+        List<FinanceTypeModel>tech0=financeTypeService.selectTypeByDepartmentIds("281f4005-0363-4528-92a3-60a730532e53",null);
         Assert.isTrue(tech0.size()==11);
 
         //3、
-        List<FinanceTypeModel>finance0=financeTypeService.selectTypeByDepartmentId("2e2ca5b1-9293-44bb-a061-12085a348d17");
+        List<FinanceTypeModel>finance0=financeTypeService.selectTypeByDepartmentIds("2e2ca5b1-9293-44bb-a061-12085a348d17",null);
         Assert.isTrue(finance0.size()==12);
 
         //4、
-        List<FinanceTypeModel>zonghe=financeTypeService.selectTypeByDepartmentId("7f73787e-7cea-4b47-991d-a5a67465f272");
+        List<FinanceTypeModel>zonghe=financeTypeService.selectTypeByDepartmentIds("7f73787e-7cea-4b47-991d-a5a67465f272",null);
         Assert.isTrue(zonghe.size()==10);
     }
 

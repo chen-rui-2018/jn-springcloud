@@ -39,9 +39,9 @@ public interface FinanceBudgetService {
 
     /**
      * 预算录入
-     * @param financeBudgetHistoryVo
+     * @param financeBudgetHistoryVoList
      * @param userAccount
      * @return
      */
-    public Result add(FinanceBudgetHistoryVo financeBudgetHistoryVo, String userAccount) ;
+    public Result add(List<FinanceBudgetHistoryVo> financeBudgetHistoryVoList, String userAccount) ;
 }

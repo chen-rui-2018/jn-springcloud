@@ -71,16 +71,17 @@ public class FinanceTypeController extends FinanceBaseController {
     @ApiOperation(value = "查看所有财务项目类型", httpMethod = "GET", response = Result.class)
     @GetMapping(value = "selectTypeByDepartmentId")
     @RequiresPermissions("/finance/type/selectTypeByDepartmentId")
-    @ApiImplicitParams(
-            @ApiImplicitParam(name = "departmentId",value = "部门ID",dataType = "String",paramType = "query")
-    )
-    public Result<List<FinanceTypeModel>> selectTypeByDepartmentId(@ApiParam(name = "departmentId",value = "部门ID")String departmentId){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "departmentId",value = "部门ID，多个用逗号(,)隔开",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "name",value = "分类名",dataType = "String",paramType = "query")
+     })
+    public Result<List<FinanceTypeModel>> selectTypeByDepartmentId(String departmentIds,String name){
         //财务部能看所有部门的数据，非财务部的用户，需要校验下要查询的部门是否属于用户所属的部门
         if(!isFinanceDepartmentUser()){
-            checkUserDepartmentId(departmentId);
+            checkUserDepartmentId(departmentIds);
         }
 
-        List<FinanceTypeModel>typeModelList=financeTypeService.selectTypeByDepartmentId(departmentId);
+        List<FinanceTypeModel>typeModelList=financeTypeService.selectTypeByDepartmentIds(departmentIds,name);
         return new Result(typeModelList);
     }
 

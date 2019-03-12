@@ -25,7 +25,7 @@ public class TbApproveGuideMessage implements Serializable {
     /*@ApiModelProperty("要资料的审批指南ID")*/
     private Integer guideId;
 
-    /*@ApiModelProperty("回复状态")*/
+    /*@ApiModelProperty("回复状态(已回复,待回复)")*/
     private String replyStatus;
 
     /*@ApiModelProperty("回复者账号")*/
@@ -37,7 +37,7 @@ public class TbApproveGuideMessage implements Serializable {
     /*@ApiModelProperty("回复内容")*/
     private String replyMessage;
 
-    /*@ApiModelProperty("解决状态（已解决、未解决、其他内容）")*/
+    /*@ApiModelProperty("解决状态('已解决','未解决','其他')")*/
     private String solutionStatus;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/

@@ -23,7 +23,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "对外行政审批中心-行政审批指南管理")
+@Api(tags = "对外行政审批中心-后台-行政审批指南管理")
 @RestController
 @RequestMapping("/approve/guide")
 public class ApproveGuideController extends BaseController {
@@ -42,7 +42,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "指南标题列表")
     @ApiOperation(value = "指南标题列表", httpMethod = "GET")
     @GetMapping(value = "/guideTitleList")
-    @RequiresPermissions("/portal/approve/guide/guideTitleList")
+    @RequiresPermissions("/approve/guide/guideTitleList")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "parentId",value = "父分类ID"),
             @ApiImplicitParam(name = "showStatus",value = "显示状态（草稿，已发布，下线）"),
@@ -56,7 +56,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "发布指南内容")
     @ApiOperation(value = "发布指南内容", httpMethod = "POST")
     @PostMapping(value = "/addGuideContent")
-    @RequiresPermissions("/portal/approve/guide/addGuideContent")
+    @RequiresPermissions("/approve/guide/addGuideContent")
     public Result addGuideContent(ApproveGuideContentAddModel approveGuideContentAddModel){
         return new Result<>();
     }
@@ -64,7 +64,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "发布指南分类")
     @ApiOperation(value = "发布指南", httpMethod = "POST")
     @PostMapping(value = "/addGuideType")
-    @RequiresPermissions("/portal/approve/guide/addGuideType")
+    @RequiresPermissions("/approve/guide/addGuideType")
     public Result addGuideType(ApproveGuideTypeAddModel approveGuideTypeAddModel){
         return new Result<>();
     }
@@ -72,7 +72,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "设置首页排序(在门户首页的顺序asc)")
     @ApiOperation(value = "设置首页排序(在门户首页的顺序asc)", httpMethod = "POST")
     @PostMapping(value = "/updateGuideHomeSort")
-    @RequiresPermissions("/portal/approve/guide/updateGuideHomeSort")
+    @RequiresPermissions("/approve/guide/updateGuideHomeSort")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "主键",dataType = "Long",required = true),
             @ApiImplicitParam(name = "homeSort",value = "首页排序(在门户首页的顺序asc)",dataType = "Long",required = true)
@@ -84,7 +84,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "设置置顶顺序(在行政审批中心首页的顺序asc）")
     @ApiOperation(value = "设置置顶顺序(在行政审批中心首页的顺序asc）", httpMethod = "POST")
     @PostMapping(value = "/updateGuideTopSort")
-    @RequiresPermissions("/portal/approve/guide/updateGuideTopSort")
+    @RequiresPermissions("/approve/guide/updateGuideTopSort")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id",value = "主键",dataType = "Long",required = true),
             @ApiImplicitParam(name = "topSort",value = "置顶顺序(在行政审批中心首页的顺序asc）",dataType = "Long",required = true)
@@ -96,7 +96,7 @@ public class ApproveGuideController extends BaseController {
     @ControllerLog(doAction = "推送指南")
     @ApiOperation(value = "推送指南", httpMethod = "POST",notes = "把选中的审批指南推送给园区注册的所有企业")
     @PostMapping(value = "/push")
-    @RequiresPermissions("/portal/approve/guide/push")
+    @RequiresPermissions("/approve/guide/push")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "ids",value = "审批指南ID，多个用逗号（,）隔开",dataType = "Long",required = true)
     })

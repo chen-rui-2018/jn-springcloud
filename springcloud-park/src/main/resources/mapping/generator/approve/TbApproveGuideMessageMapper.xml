@@ -13,7 +13,7 @@
     <result column="gmess_reply_user_account" jdbcType="INTEGER" property="replyUserAccount" />
     <result column="gmess_reply_time" jdbcType="TIMESTAMP" property="replyTime" />
     <result column="gmess_reply_message" jdbcType="VARCHAR" property="replyMessage" />
-    <result column="gmess_solution_status" jdbcType="VARCHAR" property="solutionStatus" />
+    <result column="gmess_solution_status" jdbcType="CHAR" property="solutionStatus" />
     <result column="gmess_record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="gmess_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="gmess_create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -130,7 +130,7 @@
     values (#{companyName,jdbcType=VARCHAR}, #{concatName,jdbcType=TINYINT}, #{concatPhone,jdbcType=VARCHAR}, 
       #{title,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, #{guideId,jdbcType=INTEGER}, 
       #{replyStatus,jdbcType=CHAR}, #{replyUserAccount,jdbcType=INTEGER}, #{replyTime,jdbcType=TIMESTAMP}, 
-      #{replyMessage,jdbcType=VARCHAR}, #{solutionStatus,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{replyMessage,jdbcType=VARCHAR}, #{solutionStatus,jdbcType=CHAR}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
@@ -221,7 +221,7 @@
         #{replyMessage,jdbcType=VARCHAR},
       </if>
       <if test="solutionStatus != null">
-        #{solutionStatus,jdbcType=VARCHAR},
+        #{solutionStatus,jdbcType=CHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -283,7 +283,7 @@
         gmess.reply_message = #{record.replyMessage,jdbcType=VARCHAR},
       </if>
       <if test="record.solutionStatus != null">
-        gmess.solution_status = #{record.solutionStatus,jdbcType=VARCHAR},
+        gmess.solution_status = #{record.solutionStatus,jdbcType=CHAR},
       </if>
       <if test="record.recordStatus != null">
         gmess.record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -318,7 +318,7 @@
       gmess.reply_user_account = #{record.replyUserAccount,jdbcType=INTEGER},
       gmess.reply_time = #{record.replyTime,jdbcType=TIMESTAMP},
       gmess.reply_message = #{record.replyMessage,jdbcType=VARCHAR},
-      gmess.solution_status = #{record.solutionStatus,jdbcType=VARCHAR},
+      gmess.solution_status = #{record.solutionStatus,jdbcType=CHAR},
       gmess.record_status = #{record.recordStatus,jdbcType=TINYINT},
       gmess.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       gmess.create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -362,7 +362,7 @@
         reply_message = #{replyMessage,jdbcType=VARCHAR},
       </if>
       <if test="solutionStatus != null">
-        solution_status = #{solutionStatus,jdbcType=VARCHAR},
+        solution_status = #{solutionStatus,jdbcType=CHAR},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -394,7 +394,7 @@
       reply_user_account = #{replyUserAccount,jdbcType=INTEGER},
       reply_time = #{replyTime,jdbcType=TIMESTAMP},
       reply_message = #{replyMessage,jdbcType=VARCHAR},
-      solution_status = #{solutionStatus,jdbcType=VARCHAR},
+      solution_status = #{solutionStatus,jdbcType=CHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

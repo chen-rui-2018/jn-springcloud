@@ -34,7 +34,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "预算录入")
+@Api(tags = "财务协同-预算录入")
 @RestController
 @RequestMapping("/finance/budget")
 public class FinanceBudgetController extends FinanceBaseController {

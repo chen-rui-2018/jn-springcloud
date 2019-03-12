@@ -1,11 +1,16 @@
-package com.jn.oa.api;
+package com.jn.api;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.oa.api.OaClient;
+import com.jn.oa.email.service.EmailService;
 import com.jn.oa.meeting.service.MeetingService;
+import com.jn.oa.model.Email;
+import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -23,12 +28,16 @@ public class OaController extends BaseController implements OaClient {
     @Autowired
     private MeetingService meetingService;
 
+    @Autowired
+    private EmailService emailService;
+
     /**
      * 定时十分钟通知会议申请人
      *
      * @return
      */
     @Override
+    @ControllerLog(doAction = "定时十分钟通知会议申请人")
     public Result<String> noticesApplicationMeeting() {
         logger.info("进入定时十分钟通知会议申请人");
         meetingService.noticesApplicationMeeting();
@@ -41,9 +50,23 @@ public class OaController extends BaseController implements OaClient {
      * @return
      */
     @Override
+    @ControllerLog(doAction = "更新会议状态运行中")
     public Result<String> updateMeetingStatusByTime() {
         logger.info("更新会议状态");
         meetingService.updateMeetingStatusByTime();
+        return new Result();
+    }
+
+    /**
+     * 一键Email定时发送接口
+     *
+     * @param email
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "一键Email定时发送接口")
+    public Result regularSendEmail(@RequestBody Email email) {
+        emailService.regularSendEmail(email);
         return new Result();
     }
 

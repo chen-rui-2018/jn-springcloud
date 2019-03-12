@@ -1,7 +1,9 @@
 package com.jn.oa.api;
 
 import com.jn.common.model.Result;
+import com.jn.oa.model.Email;
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -25,12 +27,19 @@ public interface OaClient {
     Result<String> noticesApplicationMeeting();
 
     /**
-     *  更新会议状态
+     * 更新会议状态
      *
      * @return
      */
     @RequestMapping(value = "/api/oa/meetingStatus", method = RequestMethod.POST)
     Result<String> updateMeetingStatusByTime();
 
-
+    /**
+     * 一键Email定时发送接口
+     *
+     * @param email
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/regularSendEmail", method = RequestMethod.POST)
+    Result regularSendEmail(@RequestBody Email email);
 }

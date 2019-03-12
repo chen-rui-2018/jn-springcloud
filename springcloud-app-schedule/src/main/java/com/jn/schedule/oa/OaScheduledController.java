@@ -1,7 +1,6 @@
 package com.jn.schedule.oa;
 
 
-import com.jn.common.util.LoadBalancerUtil;
 import com.jn.oa.api.OaClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

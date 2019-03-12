@@ -18,13 +18,17 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-              console.log(111111111);
+              //console.log(111111111);
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(res)
               }
             }
+          })
+          //授权成功后，跳转进入小程序首页
+          wx.switchTab({
+            url: '/page/minibase/index/index'
           })
         } else {
           wx.reLaunch({
@@ -33,6 +37,7 @@ App({
         }
       }
     })
+    
   },
   onShow(opts) {
     console.log('App Show', opts)

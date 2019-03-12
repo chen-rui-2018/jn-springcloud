@@ -29,10 +29,7 @@ Page({
       //用户按了允许授权按钮
       var that = this;
       app.globalData.userInfo = e.detail.userInfo;
-      console.log(e.detail.userInfo.nickName);
-      console.log(e.detail.userInfo.avatarUrl);
-      console.log(e.detail.userInfo.province);
-      console.log(e.detail.userInfo.city);
+      console.log(e.detail.userInfo);
       //插入登录的用户的相关信息到数据库
       wx.request({
         url: app.globalData.urlPath + 'guest/mini/user/login',

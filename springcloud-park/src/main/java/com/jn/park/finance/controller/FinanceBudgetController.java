@@ -15,10 +15,7 @@ import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.poi.ss.formula.functions.Finance;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,12 +85,11 @@ public class FinanceBudgetController extends FinanceBaseController {
     @PostMapping(value = "/add")
     @RequiresPermissions("/finance/budget/add")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "file",value = "EXCEL模板文件，多个用逗号(,)隔开",dataType = "String",required = true,paramType = "query"),
             @ApiImplicitParam(name = "budgetType",value = "预算类型 0：年初预算 1：临时预算",dataType = "Byte",required = true,paramType = "query"),
-            @ApiImplicitParam(name = "departmentId",value = "部门ID",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "departmentName",value = "部门名称",dataType = "String",paramType = "query")
+            @ApiImplicitParam(name = "departmentId",value = "部门ID",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "departmentName",value = "部门名称",required = true,dataType = "String",paramType = "query")
     })
-    public Result add(MultipartFile file,Byte budgetType,String departmentId,String departmentName){
+    public Result add(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file, Byte budgetType, String departmentId, String departmentName){
         //读出excel中的所有行数据
         List<Object>rows=ExcelUtil.readExcel(file,null);
         if(null==rows||rows.size()<2){

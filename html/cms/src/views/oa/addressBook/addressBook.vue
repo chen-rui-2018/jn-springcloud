@@ -223,5 +223,8 @@ export default {
   .el-dialog{
     margin-top:8vh !important;
   }
+  .el-input.is-disabled .el-input__inner{
+    color:unset;
+  }
 }
 </style>

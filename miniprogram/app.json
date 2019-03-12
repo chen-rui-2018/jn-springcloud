@@ -2,6 +2,7 @@
   "pages": [
     "page/minibase/index/index",
     "page/minibase/logs/logs",
+    "page/minibase/authorize/authorize",
     "page/minibase/list/list",
     "page/minibase/operation/operation",
 
@@ -108,6 +109,12 @@
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
+      {
+        "pagePath": "page/minibase/index/index",
+        "iconPath": "image/icon_home_line.png",
+        "selectedIconPath": "image/icon_home_solid.png",
+        "text": "首页"
+      },
       {
         "pagePath": "page/component/index",
         "iconPath": "image/icon_component.png",

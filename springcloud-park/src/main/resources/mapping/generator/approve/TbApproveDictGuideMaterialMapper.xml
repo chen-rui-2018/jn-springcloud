@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.approve.dao.TbApproveDictGuideMaterialMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.approve.entity.TbApproveDictGuideMaterial">
+    <id column="dgm_id" jdbcType="INTEGER" property="id" />
+    <result column="dgm_name" jdbcType="VARCHAR" property="name" />
+    <result column="dgm_sample" jdbcType="VARCHAR" property="sample" />
+    <result column="dgm_paper_quantity" jdbcType="VARCHAR" property="paperQuantity" />
+    <result column="dgm_is_need_electronic" jdbcType="TINYINT" property="isNeedElectronic" />
+    <result column="dgm_is_required" jdbcType="TINYINT" property="isRequired" />
+    <result column="dgm_show_status" jdbcType="CHAR" property="showStatus" />
+    <result column="dgm_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="dgm_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="dgm_create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="dgm_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="dgm_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    dgm.id as dgm_id, dgm.name as dgm_name, dgm.sample as dgm_sample, dgm.paper_quantity as dgm_paper_quantity, 
+    dgm.is_need_electronic as dgm_is_need_electronic, dgm.is_required as dgm_is_required, 
+    dgm.show_status as dgm_show_status, dgm.record_status as dgm_record_status, dgm.creator_account as dgm_creator_account, 
+    dgm.create_time as dgm_create_time, dgm.modifier_account as dgm_modifier_account, 
+    dgm.modified_time as dgm_modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterialCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_approve_dict_guide_material dgm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_approve_dict_guide_material dgm
+    where dgm.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_approve_dict_guide_material
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterialCriteria">
+    delete from tb_approve_dict_guide_material dgm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterial">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_approve_dict_guide_material (name, sample, paper_quantity, 
+      is_need_electronic, is_required, show_status, 
+      record_status, creator_account, create_time, 
+      modifier_account, modified_time)
+    values (#{name,jdbcType=VARCHAR}, #{sample,jdbcType=VARCHAR}, #{paperQuantity,jdbcType=VARCHAR}, 
+      #{isNeedElectronic,jdbcType=TINYINT}, #{isRequired,jdbcType=TINYINT}, #{showStatus,jdbcType=CHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterial">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_approve_dict_guide_material
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sample != null">
+        sample,
+      </if>
+      <if test="paperQuantity != null">
+        paper_quantity,
+      </if>
+      <if test="isNeedElectronic != null">
+        is_need_electronic,
+      </if>
+      <if test="isRequired != null">
+        is_required,
+      </if>
+      <if test="showStatus != null">
+        show_status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sample != null">
+        #{sample,jdbcType=VARCHAR},
+      </if>
+      <if test="paperQuantity != null">
+        #{paperQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="isNeedElectronic != null">
+        #{isNeedElectronic,jdbcType=TINYINT},
+      </if>
+      <if test="isRequired != null">
+        #{isRequired,jdbcType=TINYINT},
+      </if>
+      <if test="showStatus != null">
+        #{showStatus,jdbcType=CHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterialCriteria" resultType="java.lang.Long">
+    select count(*) from tb_approve_dict_guide_material dgm
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_approve_dict_guide_material dgm
+    <set>
+      <if test="record.id != null">
+        dgm.id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        dgm.name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sample != null">
+        dgm.sample = #{record.sample,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paperQuantity != null">
+        dgm.paper_quantity = #{record.paperQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isNeedElectronic != null">
+        dgm.is_need_electronic = #{record.isNeedElectronic,jdbcType=TINYINT},
+      </if>
+      <if test="record.isRequired != null">
+        dgm.is_required = #{record.isRequired,jdbcType=TINYINT},
+      </if>
+      <if test="record.showStatus != null">
+        dgm.show_status = #{record.showStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        dgm.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        dgm.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        dgm.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        dgm.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        dgm.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_approve_dict_guide_material dgm
+    set dgm.id = #{record.id,jdbcType=INTEGER},
+      dgm.name = #{record.name,jdbcType=VARCHAR},
+      dgm.sample = #{record.sample,jdbcType=VARCHAR},
+      dgm.paper_quantity = #{record.paperQuantity,jdbcType=VARCHAR},
+      dgm.is_need_electronic = #{record.isNeedElectronic,jdbcType=TINYINT},
+      dgm.is_required = #{record.isRequired,jdbcType=TINYINT},
+      dgm.show_status = #{record.showStatus,jdbcType=CHAR},
+      dgm.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      dgm.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      dgm.create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      dgm.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      dgm.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterial">
+    update tb_approve_dict_guide_material
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sample != null">
+        sample = #{sample,jdbcType=VARCHAR},
+      </if>
+      <if test="paperQuantity != null">
+        paper_quantity = #{paperQuantity,jdbcType=VARCHAR},
+      </if>
+      <if test="isNeedElectronic != null">
+        is_need_electronic = #{isNeedElectronic,jdbcType=TINYINT},
+      </if>
+      <if test="isRequired != null">
+        is_required = #{isRequired,jdbcType=TINYINT},
+      </if>
+      <if test="showStatus != null">
+        show_status = #{showStatus,jdbcType=CHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.approve.entity.TbApproveDictGuideMaterial">
+    update tb_approve_dict_guide_material
+    set name = #{name,jdbcType=VARCHAR},
+      sample = #{sample,jdbcType=VARCHAR},
+      paper_quantity = #{paperQuantity,jdbcType=VARCHAR},
+      is_need_electronic = #{isNeedElectronic,jdbcType=TINYINT},
+      is_required = #{isRequired,jdbcType=TINYINT},
+      show_status = #{showStatus,jdbcType=CHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

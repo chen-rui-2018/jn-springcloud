@@ -63,9 +63,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        finance
+                        approve
                     </contexts>
-                    <tableNames>tb_finance_income_month
+                    <tableNames>
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

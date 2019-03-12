@@ -85,6 +85,12 @@ const oaRouter = {
           meta: { title: '会议考勤列表', noCache: true, icon: 'list' }
         }
       ]
+    },
+    {
+      path: 'addressBook',
+      component: () => import('@/views/oa/addressBook/addressBook'),
+      name: 'addressBook',
+      meta: { title: '通讯录管理', noCache: true }
     }
 
   ]

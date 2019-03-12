@@ -20,7 +20,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "财务项目类型维护")
+@Api(tags = "财务协同-财务项目类型维护")
 @RestController
 @RequestMapping("/finance/type")
 public class FinanceTypeController extends FinanceBaseController {

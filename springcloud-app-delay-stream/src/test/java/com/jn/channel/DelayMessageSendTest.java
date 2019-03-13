@@ -7,6 +7,7 @@ import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.enums.DelayStreamExceptionEnum;
 import com.jn.send.model.Delay;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -52,6 +53,7 @@ public class DelayMessageSendTest {
 
 
     @Test
+    @Ignore
     public void send() throws InterruptedException {
        ProcessReceiver.latch = new CountDownLatch(2);
        //没有日期

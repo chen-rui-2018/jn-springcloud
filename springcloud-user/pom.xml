@@ -15,6 +15,10 @@
     <dependencies>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-app-system-api</artifactId>
         </dependency>
         <dependency>
@@ -25,6 +29,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-news-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -49,10 +63,11 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        userTag
                     </contexts>
                     <tableNames>
-
+                        tb_tag_code,
+                        tb_user_tag
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

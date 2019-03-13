@@ -536,7 +536,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             if (!userList.isEmpty()) {
                 for (UserExtensionInfo user : userList) {
                     for (ActivityApplyDetail detail : activityApplyList) {
-                        if (user!= null) {
+                        if (user!= null && user.getAccount().equals(detail.getAccount())) {
                             BeanUtils.copyProperties(user, detail);
                         }
                     }

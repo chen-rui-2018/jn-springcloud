@@ -5,8 +5,8 @@
 
 body {
     color: #fff;
-    width: 100%;
-    height: 100%;
+    width: 1080px;
+    height: 1920px;
     font-family: '微软雅黑';
 }
 
@@ -108,10 +108,6 @@ header {
 
 .shuziTime {
     margin: 198px 0 102px 0;
-}
-.headTitle{
-    width: 540px;
-    margin:0 auto;
 }
 /* 时钟样式 */
 a {

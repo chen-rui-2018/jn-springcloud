@@ -155,9 +155,7 @@ export function paramApi(url, query, parameter) {
 // 导出功能
 export function exportExcel(query) {
   return request({
-    url: 'system/sysUser/exportExcelUserInfo',
-    method: 'get',
-    data: query,
-    responseType: 'blob'
+    url: `system/sysUser/exportExcelUserInfo?name=${query.name}&postOrTypeName=${query.postOrTypeName}&recordStatus=${query.recordStatus}`,
+    method: 'get'
   })
 }

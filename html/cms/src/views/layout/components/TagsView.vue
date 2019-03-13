@@ -105,6 +105,8 @@ export default {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
           const latestView = visitedViews.slice(-1)[0]
+          console.log(latestView)
+          console.log(this.$route)
           if (latestView) {
             this.$router.push(latestView)
           } else {

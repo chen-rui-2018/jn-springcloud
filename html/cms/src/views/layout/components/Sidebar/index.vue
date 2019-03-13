@@ -38,6 +38,7 @@ export default {
   created() {
     var token = localStorage.getItem(token)
     getUserInfo(token).then(res => {
+      console.log(res)
       this.menuItems = res.data.data
     })
   },
@@ -55,7 +56,7 @@ export default {
 <style lang="scss" scoped>
 .logo {
   height: 56px;
-  background: url("/static/corporate/logo/logo.jpg") no-repeat;
+  background: url("/static/corporate/logo/logo.jpg") no-repeat center;
   // background:url('~@/assets/images/logo.jpg') center center / 100% 100% no-repeat ;
 }
 .s-logo {

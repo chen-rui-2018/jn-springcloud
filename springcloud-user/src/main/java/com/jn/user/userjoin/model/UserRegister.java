@@ -27,6 +27,7 @@ public class UserRegister implements Serializable {
     @Pattern(regexp ="[0-9]{6}",message = "验证码只能是6位数字")
     private String messageCode;
     @ApiModelProperty("密码")
+    @Pattern(regexp ="^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$",message = "密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文")
     @NotNull(message = "密码不能为空")
     private String password;
 

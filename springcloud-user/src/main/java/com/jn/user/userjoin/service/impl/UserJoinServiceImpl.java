@@ -2,11 +2,13 @@ package com.jn.user.userjoin.service.impl;
 
 import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.news.vo.SmsTemplateVo;
 import com.jn.system.api.SystemClient;
+import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.user.userjoin.enums.UserJoinExceptionEnum;
 import com.jn.user.userjoin.model.UserRegister;
@@ -51,6 +53,7 @@ public class UserJoinServiceImpl implements UserJoinService {
     @Autowired
     private SystemClient systemClient;
 
+    @ServiceLog(doAction = "获取验证码")
     @Override
     public void getCode(String phone){
         if(StringUtils.isEmpty(phone)){
@@ -69,11 +72,11 @@ public class UserJoinServiceImpl implements UserJoinService {
         messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
     }
 
+    @ServiceLog(doAction = "用户注册")
     @Override
-    public void addUser(UserRegister userRegister){
+    public Result addUser(UserRegister userRegister){
         //从redis中取出短信验证码
-        Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
-        String code = (String)cache.get(userRegister.getPhone());
+        String code = this.getSendCodeByPhone(userRegister.getPhone());
         if(!StringUtils.equals(code,userRegister.getMessageCode())){
             //验证码有误
             throw new JnSpringCloudException(UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG);
@@ -82,15 +85,15 @@ public class UserJoinServiceImpl implements UserJoinService {
             user.setPhone(userRegister.getPhone());
             user.setAccount(userRegister.getPhone());
             user.setPassword(userRegister.getPassword());
-            systemClient.addSysUser(user);
+           return systemClient.addSysUser(user);
 
     }
 
+    @ServiceLog(doAction = "修改密码")
     @Override
-    public void updateUser(UserRegister userRegister){
+    public Result updateUser(UserRegister userRegister){
         //从redis中取出短信验证码
-        Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
-        String code = (String)cache.get(userRegister.getPhone());
+        String code = this.getSendCodeByPhone(userRegister.getPhone());
         if(!StringUtils.equals(code,userRegister.getMessageCode())){
             //验证码有误
             throw new JnSpringCloudException(UserJoinExceptionEnum.MESSAGE_CODE_IS_WRONG);
@@ -98,7 +101,13 @@ public class UserJoinServiceImpl implements UserJoinService {
         User user = new User();
         user.setAccount(userRegister.getPhone());
         user.setPassword(userRegister.getPassword());
-        systemClient.updateSysUser(user);
+        return systemClient.updateSysUser(user);
+    }
+
+    @Override
+    public String getSendCodeByPhone(String phone){
+        Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
+        return (String)cache.get(phone);
     }
 
 }

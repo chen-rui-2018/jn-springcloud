@@ -1,6 +1,7 @@
 package com.jn.enterprise.joinpark.usermanage.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
@@ -42,21 +43,11 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     private static Logger logger = LoggerFactory.getLogger(UserUpgradeServiceImpl.class);
 
     @Autowired
-    private RedisCacheFactory redisCacheFactory;
-    @Autowired
     private TbServiceCompanyMapper tbServiceCompanyMapper;
     @Autowired
     private TbServiceCompanyStaffMapper tbServiceCompanyStaffMapper;
     @Autowired
     private UserExtensionClient userExtensionClient;
-
-    @Value(value = "${message.code.expire}")
-    private int expire;
-
-    /**
-     * 短信验证码组名
-     */
-    private static final String USER_MESSAGE_CODE="user_message_code";
 
     /**
      * 数据状态 1:有效
@@ -74,8 +65,8 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     @ServiceLog(doAction = "升级企业")
     public int changeToCompany(CompanyCheckParam companyCheckParam,String phone,String account){
         //从redis中取出短信验证码
-        Cache<Object> cache = redisCacheFactory.getCache(USER_MESSAGE_CODE, expire);
-        String code = (String)cache.get(phone);
+        Result sendCodeByPhone = userExtensionClient.getSendCodeByPhone(phone);
+        String code = (String)sendCodeByPhone.getData();
         if(!StringUtils.equals(code,companyCheckParam.getCheckCode())){
             //验证码有误
             throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
@@ -136,7 +127,11 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     @Override
     @ServiceLog(doAction = "升级员工")
     public int changeToStaff(StaffCheckParam staffCheckParam, String phone, String account){
-
+        String code = (String)userExtensionClient.getSendCodeByPhone(phone).getData();
+        if(!StringUtils.equals(code,staffCheckParam.getCheckCode())){
+            //验证码有误
+            throw new JnSpringCloudException(JoinParkExceptionEnum.MESSAGE_CODE_IS_WRONG);
+        }
         TbServiceCompanyStaffCriteria companyStaffCriteria = new TbServiceCompanyStaffCriteria();
         companyStaffCriteria.createCriteria().andAccountEqualTo(account).andCheckStatusNotEqualTo(COMPANY_APPLY_IS_NOT_VALID).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceCompanyStaff> tbServiceCompanyStaffs = tbServiceCompanyStaffMapper.selectByExample(companyStaffCriteria);

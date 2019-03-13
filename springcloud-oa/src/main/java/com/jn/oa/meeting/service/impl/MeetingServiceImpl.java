@@ -14,10 +14,7 @@ import com.jn.oa.common.enums.OaExceptionEnums;
 import com.jn.oa.common.enums.OaReturnMessageEnum;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.oa.meeting.dao.*;
-import com.jn.oa.meeting.entity.TbOaMeeting;
-import com.jn.oa.meeting.entity.TbOaMeetingContent;
-import com.jn.oa.meeting.entity.TbOaMeetingCriteria;
-import com.jn.oa.meeting.entity.TbOaMeetingParticipants;
+import com.jn.oa.meeting.entity.*;
 import com.jn.oa.meeting.enums.OaMeetingApproveStatusEnums;
 import com.jn.oa.meeting.enums.OaMeetingNoticesStatusEnums;
 import com.jn.oa.meeting.enums.OaMeetingNoticesTemplateEnums;
@@ -227,17 +224,31 @@ public class MeetingServiceImpl implements MeetingService {
             throw new JnSpringCloudException(OaExceptionEnums.UPDATEDATA_NOT_EXIST);
         }
 
-        List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
-        if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
-            logger.warn("[会议申请] 会议申请修改失败,会议室冲突,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
-            throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETINGROOM_CONFLICT);
+        //修改时，判断会议申请的开始时间与结束时间是否与数据库中的开始时间与结束时间一致，不一致则进行会议冲突判断
+        TbOaMeeting tbOaMeetingDB =tbOaMeetingMapper.selectByPrimaryKey(tbOaMeeting.getId());
+        if(tbOaMeetingDB!=null&&tbOaMeetingDB.getStartTime().compareTo(tbOaMeeting.getStartTime())!=0&&tbOaMeetingDB.getEndTime().compareTo(tbOaMeeting.getEndTime())!=0){
+            List<TbOaMeeting> tbOaMeetingList= oaMeetingMapper.selectNotCompleteMeetingByTimeAndMeetingRoomId(tbOaMeeting);
+            if(tbOaMeetingList!=null&&tbOaMeetingList.size()>0){
+                logger.warn("[会议申请] 会议申请修改失败,会议室冲突,oaMeetingId: {},oaMeetingRoomId:{}", oaMeetingAdd.getId(),oaMeetingAdd.getMeetingRoomId());
+                throw new JnSpringCloudException(OaExceptionEnums.UPDATE_MEETINGROOM_CONFLICT);
+            }
         }
+
 
         //根据会议id删除参会人员
         oaMeetingParticipantMapper.deleteBranchByMeetingIds(getDeleteMap(user, null, oaMeetingAdd.getId()));
         //保存参会人员的信息
         saveOaMeetingParticipant(oaMeetingAdd.getParticipantsId(), oaMeetingAdd.getCreatorAccount(), oaMeetingAdd.getId());
 
+        //保存会议申请内容
+        TbOaMeetingContent tbOaMeetingContent = new TbOaMeetingContent();
+        tbOaMeetingContent.setModifiedTime(new Date());
+        tbOaMeetingContent.setModifierAccount(user.getAccount());
+        tbOaMeetingContent.setContent(oaMeetingAdd.getOaMeetingContent());
+        TbOaMeetingContentCriteria contentCriteria=new TbOaMeetingContentCriteria();
+        TbOaMeetingContentCriteria.Criteria criteria1=contentCriteria.createCriteria();
+        criteria1.andMeetingIdEqualTo(oaMeetingAdd.getId());
+        tbOaMeetingContentMapper.updateByExampleSelective(tbOaMeetingContent,contentCriteria);
 
         //设置最近更新人信息
         tbOaMeeting.setModifiedTime(new Date());
@@ -379,10 +390,10 @@ public class MeetingServiceImpl implements MeetingService {
             smsTemplateVo.setTemplateId(OaMeetingNoticesTemplateEnums.MESSAGE_TEMPLATE.getCode());
             String[] m = {oaMeetingNotice.getApplicantPhone()};
             smsTemplateVo.setMobiles(m);
-            String[] t = {oaMeetingNotice.getTitle()};
+            String[] t = {oaMeetingNotice.getMeetingRoomName(),oaMeetingNotice.getTitle()};
             smsTemplateVo.setContents(t);
             messageSource.outputSms().send(MessageBuilder.withPayload(smsTemplateVo).build());
-            logger.info("[会议申请] 定时十分钟通知会议申请人！,Contents: {}，phone：{}", oaMeetingNotice.getTitle(),oaMeetingNotice.getApplicantPhone());
+            logger.info("[会议申请] 定时十分钟通知会议申请人！,Contents: {}，phone：{}",Arrays.toString(t),oaMeetingNotice.getApplicantPhone());
             //更新会议通知状态
 
             TbOaMeeting oaMeeting=new TbOaMeeting();

@@ -1,5 +1,6 @@
 package com.jn.user.userjoin.service;
 
+import com.jn.common.model.Result;
 import com.jn.system.model.User;
 import com.jn.user.userjoin.model.UserRegister;
 
@@ -24,11 +25,18 @@ public interface UserJoinService {
      * 用户注册
      * @param userRegister
      */
-    void addUser(UserRegister userRegister);
+    Result addUser(UserRegister userRegister);
 
     /**
      * 修改密码
      * @param userRegister
      */
-    void updateUser(UserRegister userRegister);
+    Result updateUser(UserRegister userRegister);
+
+    /**
+     * 根据手机号获取验证码
+     * @param phone
+     * @return
+     */
+    String getSendCodeByPhone(String phone);
 }

@@ -56,8 +56,7 @@ public class UserJoinController extends BaseController {
     @ApiOperation(value = "用户注册",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/addUser")
     public Result addUser(@RequestBody @Validated UserRegister userRegister){
-        userJoinService.addUser(userRegister);
-        return new Result();
+        return userJoinService.addUser(userRegister);
     }
 
 
@@ -65,8 +64,7 @@ public class UserJoinController extends BaseController {
     @ApiOperation(value = "修改密码",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/updatePassword")
     public Result updatePassword(@RequestBody @Validated UserRegister userRegister){
-        userJoinService.updateUser(userRegister);
-        return new Result();
+        return userJoinService.updateUser(userRegister);
     }
 
     @ControllerLog(doAction = "获取短信验证码[当前用户]")
@@ -78,5 +76,6 @@ public class UserJoinController extends BaseController {
         userJoinService.getCode(phone);
         return new Result("验证码发送成功。接收尾号：",phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()-1));
     }
+
 
 }

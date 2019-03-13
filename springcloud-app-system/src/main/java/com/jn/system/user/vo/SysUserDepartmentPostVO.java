@@ -1,6 +1,6 @@
 package com.jn.system.user.vo;
 
-import com.jn.system.dept.vo.SysDepartmentPostVO;
+import com.jn.system.vo.SysDepartmentPostVO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +14,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "SysUserDepartmentPostVO",description = "用户具有的部门及岗位")
+@ApiModel(value = "SysUserDepartmentPostVO", description = "用户具有的部门及岗位")
 public class SysUserDepartmentPostVO implements Serializable {
     private static final long serialVersionUID = -1994539003144578150L;
     @ApiModelProperty("id")

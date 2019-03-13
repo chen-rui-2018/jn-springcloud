@@ -1,10 +1,7 @@
 package com.jn.system.api;
 
 import com.jn.common.model.Result;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
-import com.jn.system.model.UserLogin;
-import com.jn.system.model.UserNoPasswordLogin;
+import com.jn.system.model.*;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,5 +85,62 @@ public interface SystemClient {
      */
     @RequestMapping(value = "/api/system/getUserFilePermission", method = RequestMethod.POST)
     Result<Boolean> getUserFilePermission(@RequestBody String userId, @RequestParam("fileUrl") String fileUrl);
+
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserAll", method = RequestMethod.POST)
+    Result getUserAll();
+
+    /**
+     * 添加用户
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/addSysUser", method = RequestMethod.POST)
+    Result addSysUser(@RequestBody User user);
+
+    /**
+     * 根据用户ID或者账号，更新用户信息
+     *
+     * @param user
+     * @return
+     */
+    @RequestMapping(value = "/api/system/updateSysUser", method = RequestMethod.POST)
+    Result updateSysUser(@RequestBody User user);
+
+    /**
+     * 查询所有部门信息,并根据层级关系返回数据
+     *
+     * @param parentId   parentId,查询对应部门,为空时查询所以一级部门
+     * @param childFlag 是否查询所有子部门,true是,false否
+     * @return
+     */
+    @RequestMapping(value = "/api/system/selectDeptByParentId", method = RequestMethod.POST)
+    Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
+                                @RequestParam(value = "childFlag",required = false) Boolean childFlag);
+
+    /**
+     * 条件分页查询用户信息
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserByPage", method = RequestMethod.POST)
+    Result getUserByPage(@RequestBody UserPage page);
+
+
+    /**
+     * 要查询的部门ID是否属于用户所属的部门或子部门
+     *
+     * @param userId 用户id
+     * @param deptId 部门id
+     * @return
+     */
+    @RequestMapping(value = "/api/system/checkUserDept", method = RequestMethod.POST)
+    Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId);
 
 }

@@ -133,7 +133,7 @@
           <el-table-column class="text-center" prop="name" label="总分" />
           <el-table-column class="text-center" prop="address" label="记录数" />
           <el-table-column class="text-center" prop="qushi" label="趋势">
-            <template slot-scope="scope">
+            <template >
               <i class="fa fa-long-arrow-up" />
             </template>
           </el-table-column>

@@ -12,11 +12,11 @@ import com.jn.system.dept.dao.TbSysUserDepartmentPostMapper;
 import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
 import com.jn.system.dept.model.SysDepartmentPost;
-import com.jn.system.dept.vo.SysDepartmentPostVO;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.permission.dao.SysRoleMapper;
-import com.jn.system.permission.model.SysRole;
 import com.jn.system.user.dao.*;
 import com.jn.system.user.enmus.SysUserExceptionEnums;
 import com.jn.system.user.entity.TbSysUser;
@@ -26,6 +26,7 @@ import com.jn.system.user.service.SysUserService;
 import com.jn.system.user.vo.SysUserGroupVO;
 import com.jn.system.user.vo.SysUserRoleVO;
 import com.jn.system.user.vo.SysUserVO;
+import com.jn.system.vo.SysDepartmentPostVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -137,6 +138,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param tbSysUser
      */
     private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
+
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
         sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
@@ -147,7 +149,9 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPost.setPostId(sysUser.getPostId());
         sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
         sysUserDepartmentPost.setCreatedTime(new Date());
+
         tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
+
     }
 
     /**
@@ -173,7 +177,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询用户")
-    public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
+    public PaginationData findSysUserByPage(UserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
         List<SysUserVO> sysUserVOList = new ArrayList<SysUserVO>();
@@ -196,8 +200,8 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @ServiceLog(doAction = "删除用户")
     @Transactional(rollbackFor = Exception.class)
-    public void deleteSysUser(String[] ids,User user) {
-        if (ids.length == 0){
+    public void deleteSysUser(String[] ids, User user) {
+        if (ids.length == 0) {
             return;
         }
         //封装删除id及更新人信息
@@ -220,7 +224,7 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     @ServiceLog(doAction = "更新用户")
     @Transactional(rollbackFor = Exception.class)
-    public void updateSysUser(SysUser sysUser,User user) {
+    public void updateSysUser(SysUser sysUser, User user) {
         //判断修改信息是否存在
         TbSysUser tbSysUser1 = tbSysUserMapper.selectByPrimaryKey(sysUser.getId());
         if (tbSysUser1 == null || SysStatusEnums.DELETED.getCode().equals(tbSysUser1.getRecordStatus().toString())) {
@@ -305,8 +309,9 @@ public class SysUserServiceImpl implements SysUserService {
 
     /**
      * 封装删除信息
+     *
      * @param user 当前用户信息
-     * @param ids 用户id数组
+     * @param ids  用户id数组
      * @return
      */
     private Map<String, Object> getDeleteMap(User user, String[] ids) {
@@ -480,24 +485,6 @@ public class SysUserServiceImpl implements SysUserService {
     }
 
     /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "根据用户id返回用户信息")
-    public SysUser findSysUserById(String id) {
-        TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
-        SysUser sysUser = new SysUser();
-        if (tbSysUser != null) {
-            BeanUtils.copyProperties(tbSysUser, sysUser);
-            sysUser.setPassword("");
-        }
-        return sysUser;
-    }
-
-    /**
      * 校验账号是否存在
      *
      * @param account
@@ -530,8 +517,21 @@ public class SysUserServiceImpl implements SysUserService {
         for (TbSysUser tbSysUser1 : tbSysUsers) {
             User user1 = new User();
             BeanUtils.copyProperties(tbSysUser1, user1);
+            user1.setSysRole(sysRoleMapper.findSysRoleByUserId(tbSysUser1.getId()));
+            user1.setSysDepartmentPostVO(sysUserDepartmentPostMapper.findDepartmentAndPostByUserId(tbSysUser1.getId()));
             users.add(user1);
         }
         return users;
+    }
+
+    /**
+     * 获取所有有效用户信息
+     *
+     * @return
+     */
+    @Override
+    public List<User> getUserAll() {
+        List<User> userList = sysUserMapper.getUserAll();
+        return userList;
     }
 }

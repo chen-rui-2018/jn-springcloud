@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -43,13 +44,13 @@ public class SysDepartmentController extends BaseController {
     @Autowired
     private SysDepartmentService sysDepartmentService;
 
-    @ControllerLog(doAction = "根据部门id获取部门信息")
-    @RequiresPermissions("/system/sysDepartment/selectByPrimaryKey")
-    @ApiOperation(value = "根据部门id获取部门信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/selectByPrimaryKey")
-    public Result selectByPrimaryKey(String id) {
-        SysDepartment sysDepartment = sysDepartmentService.selectByPrimaryKey(id);
-        return new Result(sysDepartment);
+    @ControllerLog(doAction = "根据部门id获取部门信息及所有子部门信息")
+    @RequiresPermissions("/system/sysDepartment/selectDeptByKey")
+    @ApiOperation(value = "根据部门id获取部门信息及所有子部门信息", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/system/sysDepartment/selectDeptByKey")
+    public Result selectDeptByKey(@RequestParam("id")String id, @RequestParam("flag")Boolean flag) {
+        Result result = sysDepartmentService.selectDeptByKey(id, flag);
+        return result;
     }
 
     @ControllerLog(doAction = "逻辑删除部门")

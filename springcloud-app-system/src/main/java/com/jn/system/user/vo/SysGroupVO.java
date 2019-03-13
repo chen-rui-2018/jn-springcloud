@@ -1,6 +1,6 @@
 package com.jn.system.user.vo;
 
-import com.jn.system.permission.model.SysRole;
+import com.jn.system.model.SysRole;
 import com.jn.system.user.model.SysTUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

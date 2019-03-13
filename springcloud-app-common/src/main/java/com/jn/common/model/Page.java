@@ -14,10 +14,10 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "Page",description = "分页")
 public class Page {
 
-    @ApiModelProperty("页码")
+    @ApiModelProperty(value = "页码",example = "1")
     private int page;
 
-    @ApiModelProperty("每页显示数量")
+    @ApiModelProperty(value = "每页显示数量",example = "10")
     private int rows;
 
     public int getPage() {

@@ -1,0 +1,23 @@
+.filter-bar {
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.filter-bar > ul {
+  margin: 0;
+  padding: 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  list-style: none;
+}
+
+.filter-bar > ul li {
+  margin-bottom: 10px;
+}
+
+.filter-bar > ul li + li {
+  margin-left: 10px;
+}
+/*# sourceMappingURL=project.css.map */

@@ -74,6 +74,7 @@ const user = {
                 } else {
                   localStorage.setItem('account', response.data.data.account)
                 }
+                localStorage.setItem('id', response.data.data.id)
               }
             })
             resolve(data)

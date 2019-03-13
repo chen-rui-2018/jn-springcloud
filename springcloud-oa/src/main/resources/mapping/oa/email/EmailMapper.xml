@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.email.dao.EmailMapper">
+
+    <select id="list" resultType="com.jn.oa.email.model.Email" parameterType="com.jn.oa.email.model.EmailPage">
+        SELECT
+        t.id,
+        t.work_order_num as workOrderNum,
+        t.title,
+        t.email_content as emailContent,
+        t.send_status as sendStatus,
+        t.is_delay as isDelay,
+        t.delay_send_time as delaySendTime,
+        t.send_time as sendTime,
+        t.created_time as createdTime,
+        t.creator,
+        t.userAccounts
+        FROM
+        (SELECT
+            t1.id,
+            t1.work_order_num,
+            t1.title,
+            t1.email_content,
+            t1.send_status,
+            t1.is_delay,
+            t1.delay_send_time,
+            t1.send_time,
+            t1.created_time,
+            (SELECT
+             `name`
+            FROM
+            tb_sys_user
+            WHERE account = t1.creator_account ) as creator,
+            GROUP_CONCAT(t2.`name`) as userAccounts
+            FROM
+            tb_oa_email t1
+            LEFT JOIN
+            (SELECT
+            t.id,
+            t.account,
+            t.`name`,
+            tt.email_id
+            FROM
+            tb_sys_user t,
+            tb_oa_email_user tt
+            WHERE t.account = tt.user_account
+            AND t.record_status = 1
+            AND tt.record_status = 1
+            ) t2
+        ON t1.id = t2.email_id
+        WHERE t1.record_status = 1
+        GROUP BY t1.id) t
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
+                t.title like CONCAT('%', #{title,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creator)">
+                t.creator like CONCAT('%', #{creator,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(sendStatus)">
+                and t.send_status = #{sendStatus,jdbcType=TINYINT}
+            </if>
+        </where>
+        ORDER BY t.created_time DESC ,id DESC
+    </select>
+
+</mapper>

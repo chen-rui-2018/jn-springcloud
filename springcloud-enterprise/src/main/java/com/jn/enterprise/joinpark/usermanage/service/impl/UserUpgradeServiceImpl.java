@@ -144,6 +144,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         tbServiceCompanyStaff.setComId(staffCheckParam.getComId());
         tbServiceCompanyStaff.setAccount(account);
         tbServiceCompanyStaff.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
+        tbServiceCompanyStaff.setRecordStatus(new Byte(RECORD_STATUS_VALID));
         int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
 
 

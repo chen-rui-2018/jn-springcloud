@@ -74,8 +74,9 @@ public class UserJoinController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String phone = user.getPhone();
         userJoinService.getCode(phone);
-        return new Result("验证码发送成功。接收尾号：",phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()-1));
+        Result<String> result = new Result<>();
+        result.setData("验证码发送成功。接收尾号:"+phone.substring((phone.length()>4)?phone.length()-4:0,phone.length()));
+        return result;
     }
-
 
 }

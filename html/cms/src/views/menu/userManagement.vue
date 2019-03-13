@@ -25,7 +25,7 @@
     <!-- 主体部分 -->
     <div class="userManagement-content">
       <div v-if="isShow" class="userManagement-content-left">
-        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick"/>
+        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
       </div>
       <div class="userManagement-content-right">
         <el-table :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
@@ -334,15 +334,15 @@ export default {
       }],
       positionOptions: [],
       temp: {
-        name: undefined,
-        account: undefined,
+        name: '',
+        account: '',
         recordStatus: '',
-        email: undefined,
-        phone: undefined,
-        id: undefined,
-        departmentId: undefined,
-        postId: undefined,
-        wechatAccount: undefined
+        email: '',
+        phone: '',
+        id: '',
+        departmentId: '',
+        postId: '',
+        wechatAccount: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',

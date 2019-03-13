@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.email.dao.EmailUserMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_oa_email_user
+        (id, email_id,user_account,record_status,creator_account,created_time) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id,jdbcType=VARCHAR},
+            #{item.emailId,jdbcType=VARCHAR},
+            #{item.userAccount,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT},
+            #{item.creatorAccount,jdbcType=VARCHAR},
+            now())
+        </foreach>
+    </insert>
+
+    <update id="deleteBatchByEmaiilId" parameterType="java.lang.String">
+        update tb_oa_email_user
+        set record_status = 0,
+        modifier_account = #{userAccount,jdbcType=VARCHAR},
+        modified_time = now()
+        where email_id = #{emailId,jdbcType=VARCHAR}
+        and record_status = 1
+    </update>
+
+    <select id="getUserEmailInfo" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT
+        GROUP_CONCAT(t2.email)
+        FROM
+        tb_oa_email_user t1,
+        tb_sys_user t2
+        WHERE t1.user_account = t2.account
+        AND t1.record_status
+        AND t2.record_status
+        AND t1.email_id = #{id,jdbcType=VARCHAR}
+        GROUP BY t1.email_id
+    </select>
+
+</mapper>

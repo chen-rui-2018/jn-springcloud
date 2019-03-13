@@ -11,7 +11,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
-
+import '../static/UE/ueditor.config'
+import '../static/UE/ueditor.all'
+import '../static/UE/lang/zh-cn/zh-cn'
+import '../static/UE/ueditor.parse.min.js'
 import App from './App'
 import router from './router'
 import store from './store'

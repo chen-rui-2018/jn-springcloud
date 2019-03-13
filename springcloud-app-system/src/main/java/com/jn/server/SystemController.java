@@ -1,4 +1,4 @@
-package com.jn.oa;
+package com.jn.server;
 
 import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;

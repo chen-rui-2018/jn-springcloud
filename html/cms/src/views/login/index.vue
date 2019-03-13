@@ -48,14 +48,14 @@
 export default {
   name: 'Login',
   data() {
-    var validatePassword = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
-      if (!reg.test(value)) {
-        callback(new Error('请输入6到16位由字母或数字组成的密码'))
-      } else {
-        callback()
-      }
-    }
+    // var validatePassword = (rule, value, callback) => {
+    //   const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
+    //   if (!reg.test(value)) {
+    //     callback(new Error('请输入6到16位由字母或数字组成的密码'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     const validateUsername = (rule, value, callback) => {
       const reg = /[A-Za-z0-9]{6,16}$/
       if (!reg.test(value)) {
@@ -76,8 +76,8 @@ export default {
           { validator: validateUsername, trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '密码不能为空', trigger: 'blur' },
-          { validator: validatePassword, trigger: 'blur' }
+          { required: true, message: '密码不能为空', trigger: 'blur' }
+          // { validator: validatePassword, trigger: 'blur' }
         ]
       },
       passwordType: 'password',

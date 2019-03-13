@@ -165,7 +165,7 @@
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
       <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
-          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
+          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="18" />
           <span class="show-pwd" @click="showPwd">
             <svg-icon icon-class="eye" />
           </span>
@@ -260,9 +260,9 @@ export default {
       }
     }
     var checkPassword = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
+      const reg = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位由字母或数字组成的密码'))
+        callback(new Error('密码至少为字母、数字两种组成8-16位字符，不包含空格,中文'))
       } else {
         callback()
       }

@@ -1,4 +1,4 @@
-package com.jn.oa;
+package com.jn.server;
 
 import com.jn.channel.DelayMessageSend;
 import com.jn.common.model.Result;

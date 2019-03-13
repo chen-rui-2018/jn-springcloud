@@ -117,8 +117,6 @@
 </template>
 <script>
 import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { getList, getAllModule, addDictionary, editDictionary, deleteDictionary, sortSearch, groupSort } from '@/api/Permission-model/dataDictionary'
-// import '../../utils/index.js'
 export default {
   data() {
     var check = (rule, value, callback) => {
@@ -191,12 +189,10 @@ export default {
     handleSizeChange(val) {
       this.dictionaryForm.rows = val
       this.initList()
-      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange(val) {
       this.dictionaryForm.page = val
       this.initList()
-      // console.log(`当前页: ${val}`)
     },
     handleSearch() {
       if (!this.groupformInline.moduleCode) {

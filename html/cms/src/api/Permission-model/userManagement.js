@@ -42,11 +42,8 @@ export function api(url, query) {
 // }
 export function paramApi(url, query, parameter) {
   const param = new URLSearchParams()
-  // param.append('account', query)
   param.append(parameter, query)
-
   return request({
-    // url: 'system/sysUser/checkUserName',
     url: systemUrl + url,
     method: 'post',
     data: param
@@ -158,7 +155,5 @@ export function exportExcel(query) {
   return request({
     url: systemUrl + `system/sysUser/exportExcelUserInfo?name=${query.name}&postOrTypeName=${query.postOrTypeName}&recordStatus=${query.recordStatus}`,
     method: 'get'
-    // data: query
-    // responseType: 'blob'
   })
 }

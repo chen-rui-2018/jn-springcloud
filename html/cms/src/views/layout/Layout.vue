@@ -6,11 +6,10 @@
     <!-- 右边主体部分 -->
     <div class="main-container">
       <navbar/>
-      <tags-view/>
-      <app-main/>
+      <tags-view />
+      <app-main />
     </div>
-  </div>
-</template>
+</div></template>
 
 <script>
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
@@ -25,6 +24,10 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
+  data() {
+    return {
+    }
+  },
   computed: {
     sidebar() {
       return this.$store.state.app.sidebar

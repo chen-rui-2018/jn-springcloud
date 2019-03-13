@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.item.dao.WorkPlanMapper">
+
+    <select id="list" resultType="com.jn.oa.item.vo.WorkPlanVO" parameterType="com.jn.oa.item.model.WorkPlanPage">
+        SELECT
+        t.id,
+        t.item_id as itemId,
+        t.item_name as itemName,
+        t.work_plan_name as workPlanName,
+        t.content,
+        t.demand_describe as demandDescribe,
+        t.plan_start_time as planStartTime,
+        t.plan_end_time as planEndTime,
+        t.start_time as startTime,
+        t.end_time as endTime,
+        t.plan_time as planTime,
+        t.total_consume_time as totalConsumeTime,
+        t.total_remain_time as totalRemainTime,
+        t.work_plan_status as workPlanStatus,
+        t.attachment,
+        t.created_time as createdTime,
+        t.creator_account as creatorAccount,
+        t.responsibleUserName,
+        t.responsibleUserAccount
+        FROM
+        (SELECT DISTINCT
+        t1.id,
+        t1.item_id,
+        t2.item_name,
+        t1.work_plan_name,
+        t1.content,
+        t1.demand_describe,
+        t1.plan_start_time,
+        t1.plan_end_time,
+        t1.start_time,
+        t1.end_time,
+        t1.plan_time,
+        t1.total_consume_time,
+        t1.total_remain_time,
+        t1.work_plan_status,
+        t1.attachment,
+        t1.created_time,
+        t1.creator_account,
+        GROUP_CONCAT(t4.`name`) as responsibleUserName,
+        GROUP_CONCAT(t4.`account`) as responsibleUserAccount
+        FROM tb_oa_work_plan t1,
+        tb_oa_item t2,
+        tb_oa_work_plan_user t3,
+        tb_sys_user t4
+        WHERE t1.item_id = t2.id
+        and t1.id = t3.work_plan_id
+        and t3.responsible_user_account = t4.account
+        AND t1.record_status = 1
+        AND t2.record_status = 1
+        AND t3.record_status = 1
+        GROUP BY t1.id
+        ) t
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userAccount)">
+            INNER JOIN
+            (SELECT
+            t1.id
+            FROM tb_oa_work_plan t1,
+            tb_oa_work_plan_user t2
+            WHERE t1.id = t2.work_plan_id
+            AND t2.responsible_user_account = #{userAccount,jdbcType=VARCHAR}
+            AND t1.record_status = 1
+            AND t2.record_status = 1
+            ) tt
+            on t.id = tt.id
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanName)">
+            and t.work_plan_name like CONCAT('%', #{workPlanName,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(itemId)">
+            and t.item_id = #{itemId,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(workPlanStatus)">
+            and t.work_plan_status = #{workPlanStatus,jdbcType=VARCHAR}
+        </if>
+        ORDER BY t.created_time DESC ,t.id DESC
+    </select>
+</mapper>

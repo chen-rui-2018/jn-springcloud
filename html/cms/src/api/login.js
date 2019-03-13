@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+var systemUrl = 'springcloud-app-system/'
 export function loginByUsername(account, password) {
   localStorage.setItem('account', account)
   const data = {
@@ -7,28 +7,28 @@ export function loginByUsername(account, password) {
     password
   }
   return request({
-    url: 'login',
+    url: systemUrl + 'login',
     method: 'post',
     data
   })
 }
 export function getUsername() {
   return request({
-    url: 'system/sysUser/getUserInfo',
+    url: systemUrl + 'system/sysUser/getUserInfo',
     method: 'post'
   })
 }
 
 export function logout() {
   return request({
-    url: '/login/logout',
+    url: systemUrl + '/login/logout',
     method: 'post'
   })
 }
 
 export function getUserInfo(token) {
   return request({
-    url: 'system/sysMenu/getDynamicMenu',
+    url: systemUrl + 'system/sysMenu/getDynamicMenu',
     method: 'post',
     params: { token }
   })

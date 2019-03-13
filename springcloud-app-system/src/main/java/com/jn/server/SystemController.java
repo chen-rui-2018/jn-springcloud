@@ -145,7 +145,7 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "条件分页查询用户")
-    public Result<User> getUserByPage(@RequestBody UserPage page) {
+    public Result getUserByPage(@RequestBody UserPage page) {
         PaginationData data = sysUserService.findSysUserByPage(page);
         return new Result(data);
     }

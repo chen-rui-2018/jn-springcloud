@@ -133,6 +133,9 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            ORDER BY tt.is_default desc
+        </if>
         ) t
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)"> <!-- 对同一部门同一用户多个岗位信息去重 -->
             LEFT JOIN
@@ -145,8 +148,8 @@
             AND tt.`record_status` = 1
             GROUP BY t.id
             HAVING COUNT(t.id) > 1) tt
-            ON t.id = tt.id AND t.is_default = '0'
-            WHERE tt.id IS NULL
+            ON t.id = tt.id
+            GROUP BY t.id
         </if>
         ORDER BY t.createdTime desc, t.id desc
     </select>

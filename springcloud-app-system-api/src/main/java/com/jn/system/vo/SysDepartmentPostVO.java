@@ -30,14 +30,18 @@ public class SysDepartmentPostVO implements Serializable {
     private String postId;
     @ApiModelProperty("岗位民称")
     private String postName;
+    @ApiModelProperty("岗位类型名称")
+    private String postTypeName;
+    @ApiModelProperty("岗位类型id")
+    private String postTypeId;
     @ApiModelProperty("是否默认")
     private String isDefault;
 
     public SysDepartmentPostVO() {
     }
 
-    public SysDepartmentPostVO(String id, String departmentId, String departmentName, String parentId,
-                               String level, String postId, String postName, String isDefault) {
+    public SysDepartmentPostVO(String id, String departmentId, String departmentName, String parentId, String level,
+                               String postId, String postName, String postTypeName, String postTypeId, String isDefault) {
         this.id = id;
         this.departmentId = departmentId;
         this.departmentName = departmentName;
@@ -45,6 +49,8 @@ public class SysDepartmentPostVO implements Serializable {
         this.level = level;
         this.postId = postId;
         this.postName = postName;
+        this.postTypeName = postTypeName;
+        this.postTypeId = postTypeId;
         this.isDefault = isDefault;
     }
 
@@ -104,6 +110,22 @@ public class SysDepartmentPostVO implements Serializable {
         this.postName = postName;
     }
 
+    public String getPostTypeName() {
+        return postTypeName;
+    }
+
+    public void setPostTypeName(String postTypeName) {
+        this.postTypeName = postTypeName;
+    }
+
+    public String getPostTypeId() {
+        return postTypeId;
+    }
+
+    public void setPostTypeId(String postTypeId) {
+        this.postTypeId = postTypeId;
+    }
+
     public String getIsDefault() {
         return isDefault;
     }
@@ -122,8 +144,9 @@ public class SysDepartmentPostVO implements Serializable {
                 ", level='" + level + '\'' +
                 ", postId='" + postId + '\'' +
                 ", postName='" + postName + '\'' +
+                ", postTypeName='" + postTypeName + '\'' +
+                ", postTypeId='" + postTypeId + '\'' +
                 ", isDefault='" + isDefault + '\'' +
                 '}';
     }
-
 }

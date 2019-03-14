@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgApproveMapper">
+    <select id="getOrgApplyDetailById" parameterType="java.lang.String"
+            resultType="com.jn.enterprise.servicemarket.org.model.OrgApplyDetail">
+            SELECT
+              org.org_id AS "orgId",
+              org.org_name AS "orgName",
+              org.org_code AS "orgCode",
+              date_format(org.org_register_time,'%Y-%m-%d') AS "orgRegisterTime",
+              org.org_synopsis AS "orgSynopsis",
+              org.org_business AS "orgBusiness",
+              org.business_type AS "businessType",
+              ele.staff_count AS "staffCount",
+              ele.profession_num AS "professionNum",
+              ele.bachelor_num AS "bachelorNum",
+              ele.master_num AS "masterNum",
+              ele.doctor_num AS "doctorNum",
+              ele.returnee_num AS "returneeNum",
+              info.org_phone AS "orgPhone",
+              info.org_web AS "orgWeb",
+              info.con_name AS "conName",
+              info.con_phone AS "conPhone",
+              info.con_email AS "conEmail",
+              CONCAT(info.org_province,info.org_city,info.org_area,info.org_address) AS "orgAddress"
+            FROM
+              tb_service_org org
+              LEFT JOIN tb_service_org_element ele
+                ON org.org_id = ele.org_id
+              LEFT JOIN tb_service_org_info info
+                ON org.org_id = info.org_id
+            where org.org_id = #{orgId}
+            LIMIT 1
+    </select>
+
+</mapper>

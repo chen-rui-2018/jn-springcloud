@@ -22,9 +22,17 @@
             <artifactId>springcloud-park-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-user-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -49,10 +57,14 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        activity
                     </contexts>
                     <tableNames>
-
+                        tb_activity,
+                        tb_activity_apply,
+                        tb_activity_type,
+                        tb_park_like,
+                        tb_activity_file
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

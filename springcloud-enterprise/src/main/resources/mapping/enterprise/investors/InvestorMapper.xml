@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.technologyfinancial.investors.dao.InvestorMapper">
+    <!--投资人列表查询-->
+    <select id="getInvestorInfoList" resultType="com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow">
+        select
+          si.investor_account as "investorAccount"        <!--投资人账号-->
+          ,si.investor_name as "investorName"             <!--投资人姓名-->
+          ,si.avatar as "avatar"                          <!--投资人头像-->
+          ,si.org_name as "orgName"                       <!--所属单位-->
+          ,si.position as "position"                      <!--职务-->
+          ,GROUP_CONCAT(sma.main_name) as "mainAreaList"  <!--主投领域-->
+        from tb_service_investor si
+        left join tb_service_investor_main_area sma
+        on si.investor_account=sma.investor_account
+        where 1=1
+        <if test="mainArea!=null and mainArea!=''">       <!--主投领域精确搜索-->
+            and sma.main_code=#{mainCode}
+        </if>
+        <if test="keyWords!=null and keyWords!=''">       <!--关键字模糊搜索-->
+            and
+            (
+                si.investor_name like  CONCAT('%', #{keyWords}, '%')
+                or si.org_name like CONCAT('%', #{keyWords}, '%')
+                or si.position like CONCAT('%', #{keyWords}, '%')
+                or sma.main_name like CONCAT('%', #{keyWords}, '%')
+            )
+        </if>
+        group by
+        si.investor_account
+        ,si.investor_name
+        ,si.avatar
+        ,si.org_name
+        ,si.position
+        order by si.created_time desc
+    </select>
+
+</mapper>

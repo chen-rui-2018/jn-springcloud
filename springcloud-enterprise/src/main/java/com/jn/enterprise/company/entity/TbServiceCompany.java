@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.company.entity;
+package com.jn.enterprise.company.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -67,9 +67,15 @@ public class TbServiceCompany implements Serializable {
 
     private String addrPark;
 
+    private String parkBuildId;
+
+    private String parkBuildName;
+
     private BigDecimal creditPoints;
 
     private String comType;
+
+    private String isJoinActivity;
 
     private String checkStatus;
 
@@ -337,6 +343,22 @@ public class TbServiceCompany implements Serializable {
         this.addrPark = addrPark == null ? null : addrPark.trim();
     }
 
+    public String getParkBuildId() {
+        return parkBuildId;
+    }
+
+    public void setParkBuildId(String parkBuildId) {
+        this.parkBuildId = parkBuildId == null ? null : parkBuildId.trim();
+    }
+
+    public String getParkBuildName() {
+        return parkBuildName;
+    }
+
+    public void setParkBuildName(String parkBuildName) {
+        this.parkBuildName = parkBuildName == null ? null : parkBuildName.trim();
+    }
+
     public BigDecimal getCreditPoints() {
         return creditPoints;
     }
@@ -351,6 +373,14 @@ public class TbServiceCompany implements Serializable {
 
     public void setComType(String comType) {
         this.comType = comType == null ? null : comType.trim();
+    }
+
+    public String getIsJoinActivity() {
+        return isJoinActivity;
+    }
+
+    public void setIsJoinActivity(String isJoinActivity) {
+        this.isJoinActivity = isJoinActivity == null ? null : isJoinActivity.trim();
     }
 
     public String getCheckStatus() {
@@ -460,8 +490,11 @@ public class TbServiceCompany implements Serializable {
             && (this.getComAddress() == null ? other.getComAddress() == null : this.getComAddress().equals(other.getComAddress()))
             && (this.getComTele() == null ? other.getComTele() == null : this.getComTele().equals(other.getComTele()))
             && (this.getAddrPark() == null ? other.getAddrPark() == null : this.getAddrPark().equals(other.getAddrPark()))
+            && (this.getParkBuildId() == null ? other.getParkBuildId() == null : this.getParkBuildId().equals(other.getParkBuildId()))
+            && (this.getParkBuildName() == null ? other.getParkBuildName() == null : this.getParkBuildName().equals(other.getParkBuildName()))
             && (this.getCreditPoints() == null ? other.getCreditPoints() == null : this.getCreditPoints().equals(other.getCreditPoints()))
             && (this.getComType() == null ? other.getComType() == null : this.getComType().equals(other.getComType()))
+            && (this.getIsJoinActivity() == null ? other.getIsJoinActivity() == null : this.getIsJoinActivity().equals(other.getIsJoinActivity()))
             && (this.getCheckStatus() == null ? other.getCheckStatus() == null : this.getCheckStatus().equals(other.getCheckStatus()))
             && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
             && (this.getComSource() == null ? other.getComSource() == null : this.getComSource().equals(other.getComSource()))
@@ -507,8 +540,11 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getComAddress() == null) ? 0 : getComAddress().hashCode());
         result = prime * result + ((getComTele() == null) ? 0 : getComTele().hashCode());
         result = prime * result + ((getAddrPark() == null) ? 0 : getAddrPark().hashCode());
+        result = prime * result + ((getParkBuildId() == null) ? 0 : getParkBuildId().hashCode());
+        result = prime * result + ((getParkBuildName() == null) ? 0 : getParkBuildName().hashCode());
         result = prime * result + ((getCreditPoints() == null) ? 0 : getCreditPoints().hashCode());
         result = prime * result + ((getComType() == null) ? 0 : getComType().hashCode());
+        result = prime * result + ((getIsJoinActivity() == null) ? 0 : getIsJoinActivity().hashCode());
         result = prime * result + ((getCheckStatus() == null) ? 0 : getCheckStatus().hashCode());
         result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
         result = prime * result + ((getComSource() == null) ? 0 : getComSource().hashCode());
@@ -557,8 +593,11 @@ public class TbServiceCompany implements Serializable {
         sb.append(", comAddress=").append(comAddress);
         sb.append(", comTele=").append(comTele);
         sb.append(", addrPark=").append(addrPark);
+        sb.append(", parkBuildId=").append(parkBuildId);
+        sb.append(", parkBuildName=").append(parkBuildName);
         sb.append(", creditPoints=").append(creditPoints);
         sb.append(", comType=").append(comType);
+        sb.append(", isJoinActivity=").append(isJoinActivity);
         sb.append(", checkStatus=").append(checkStatus);
         sb.append(", checkTime=").append(checkTime);
         sb.append(", comSource=").append(comSource);

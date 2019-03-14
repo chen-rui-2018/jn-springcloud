@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.company.entity;
+package com.jn.enterprise.company.entity;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -2216,6 +2216,146 @@ public class TbServiceCompanyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andParkBuildIdIsNull() {
+            addCriterion("park_build_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdIsNotNull() {
+            addCriterion("park_build_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdEqualTo(String value) {
+            addCriterion("park_build_id =", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdNotEqualTo(String value) {
+            addCriterion("park_build_id <>", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdGreaterThan(String value) {
+            addCriterion("park_build_id >", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdGreaterThanOrEqualTo(String value) {
+            addCriterion("park_build_id >=", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdLessThan(String value) {
+            addCriterion("park_build_id <", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdLessThanOrEqualTo(String value) {
+            addCriterion("park_build_id <=", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdLike(String value) {
+            addCriterion("park_build_id like", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdNotLike(String value) {
+            addCriterion("park_build_id not like", value, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdIn(List<String> values) {
+            addCriterion("park_build_id in", values, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdNotIn(List<String> values) {
+            addCriterion("park_build_id not in", values, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdBetween(String value1, String value2) {
+            addCriterion("park_build_id between", value1, value2, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildIdNotBetween(String value1, String value2) {
+            addCriterion("park_build_id not between", value1, value2, "parkBuildId");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameIsNull() {
+            addCriterion("park_build_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameIsNotNull() {
+            addCriterion("park_build_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameEqualTo(String value) {
+            addCriterion("park_build_name =", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameNotEqualTo(String value) {
+            addCriterion("park_build_name <>", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameGreaterThan(String value) {
+            addCriterion("park_build_name >", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameGreaterThanOrEqualTo(String value) {
+            addCriterion("park_build_name >=", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameLessThan(String value) {
+            addCriterion("park_build_name <", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameLessThanOrEqualTo(String value) {
+            addCriterion("park_build_name <=", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameLike(String value) {
+            addCriterion("park_build_name like", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameNotLike(String value) {
+            addCriterion("park_build_name not like", value, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameIn(List<String> values) {
+            addCriterion("park_build_name in", values, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameNotIn(List<String> values) {
+            addCriterion("park_build_name not in", values, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameBetween(String value1, String value2) {
+            addCriterion("park_build_name between", value1, value2, "parkBuildName");
+            return (Criteria) this;
+        }
+
+        public Criteria andParkBuildNameNotBetween(String value1, String value2) {
+            addCriterion("park_build_name not between", value1, value2, "parkBuildName");
+            return (Criteria) this;
+        }
+
         public Criteria andCreditPointsIsNull() {
             addCriterion("credit_points is null");
             return (Criteria) this;
@@ -2343,6 +2483,76 @@ public class TbServiceCompanyCriteria {
 
         public Criteria andComTypeNotBetween(String value1, String value2) {
             addCriterion("com_type not between", value1, value2, "comType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityIsNull() {
+            addCriterion("is_join_activity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityIsNotNull() {
+            addCriterion("is_join_activity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityEqualTo(String value) {
+            addCriterion("is_join_activity =", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityNotEqualTo(String value) {
+            addCriterion("is_join_activity <>", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityGreaterThan(String value) {
+            addCriterion("is_join_activity >", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityGreaterThanOrEqualTo(String value) {
+            addCriterion("is_join_activity >=", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityLessThan(String value) {
+            addCriterion("is_join_activity <", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityLessThanOrEqualTo(String value) {
+            addCriterion("is_join_activity <=", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityLike(String value) {
+            addCriterion("is_join_activity like", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityNotLike(String value) {
+            addCriterion("is_join_activity not like", value, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityIn(List<String> values) {
+            addCriterion("is_join_activity in", values, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityNotIn(List<String> values) {
+            addCriterion("is_join_activity not in", values, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityBetween(String value1, String value2) {
+            addCriterion("is_join_activity between", value1, value2, "isJoinActivity");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsJoinActivityNotBetween(String value1, String value2) {
+            addCriterion("is_join_activity not between", value1, value2, "isJoinActivity");
             return (Criteria) this;
         }
 

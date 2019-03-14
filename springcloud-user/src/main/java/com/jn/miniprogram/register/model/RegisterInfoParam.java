@@ -28,12 +28,24 @@ public class RegisterInfoParam implements Serializable {
     @ApiModelProperty(value = "openId)")
     @NotNull(message = "openId不能为空")
     private String openId;
-    @ApiModelProperty(value = "微信号)")
-    private String weChatAccount;
-    @ApiModelProperty(value = "微信呢称)")
-    private String weChatNickName;
-    @ApiModelProperty(value = "微信头像)")
-    private String weChatAvatar;
+    @ApiModelProperty(value = "unionId)")
+    @NotNull(message = "unionId不能为空")
+    private String unionId;
+    @ApiModelProperty(value = "用户呢称)")
+    private String nickName;
+    @ApiModelProperty(value = "用户头像url)")
+    private String avatarUrl;
+    @ApiModelProperty(value = "性别)")
+    @Pattern(regexp="^[0-2]$",message="{gender:'性别只能是 0(未知)、1(男性)、2（女性）'}")
+    private String gender;
+    @ApiModelProperty(value = "用户所在国家)")
+    private String country;
+    @ApiModelProperty(value = "用户所在省份)")
+    private String province;
+    @ApiModelProperty(value = "用户所在城市)")
+    private String city;
+    @ApiModelProperty(value = "语言)")
+    private String language;
 
     public String getPhone() {
         return phone;
@@ -59,27 +71,67 @@ public class RegisterInfoParam implements Serializable {
         this.openId = openId;
     }
 
-    public String getWeChatAccount() {
-        return weChatAccount;
+    public String getUnionId() {
+        return unionId;
     }
 
-    public void setWeChatAccount(String weChatAccount) {
-        this.weChatAccount = weChatAccount;
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
     }
 
-    public String getWeChatNickName() {
-        return weChatNickName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setWeChatNickName(String weChatNickName) {
-        this.weChatNickName = weChatNickName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public String getWeChatAvatar() {
-        return weChatAvatar;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setWeChatAvatar(String weChatAvatar) {
-        this.weChatAvatar = weChatAvatar;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

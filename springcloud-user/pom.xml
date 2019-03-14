@@ -63,11 +63,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        userTag
+                        weChatInfo
                     </contexts>
                     <tableNames>
-                        tb_tag_code,
-                        tb_user_tag
+                        tb_wechat_user_info
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

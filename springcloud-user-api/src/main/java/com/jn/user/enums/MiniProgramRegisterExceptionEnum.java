@@ -9,6 +9,7 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum MiniProgramRegisterExceptionEnum implements CodeAndMsg {
+    NETWORK_ANOMALY("3020501", "网络异常，请稍后重试。"),
     MESSAGE_CODE_IS_WRONG("3020510","短信验证码错误"),
     PHONE_NUMBER_CANNOT_EMPTY("3020511","手机号不能为空"),
     MESSAGE_CODE_CANNOT_EMPTY("3020512","短信验证码不能为空"),
@@ -16,6 +17,8 @@ public enum MiniProgramRegisterExceptionEnum implements CodeAndMsg {
     USER_PHONE_IS_NOT_EXIST("3020514","用户手机号不存在"),
     WE_CHAT_OPENID_NOT_NULL("3020515","微信用户OpenId不能为空"),
     CODE_IS_ERROR("3020516","短信验证码错误或验证码已失效"),
+    OPEN_ID_FORMAT_ERROR("3020517","openId格式不正确"),
+    UNION_ID_FORMAT_ERROR("3020518","unionId格式不正确"),
     ;
     private String code;
     private String message;

@@ -7,42 +7,47 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- *查询工具类
+ * 查询工具类
  *
  * @author： shaobao
  * @date： Created on 2018/11/5 9:52
  * @version： v1.0
  * @modified By:
  **/
-@ApiModel(value = "UserPage",description = "用户条件分页查询类")
+@ApiModel(value = "UserPage", description = "用户条件分页查询类")
 public class UserPage extends Page implements Serializable {
 
     private static final long serialVersionUID = 2197567068130372509L;
 
-    @ApiModelProperty(value = "名称",example = "朱奕")
+    @ApiModelProperty(value = "名称", example = "朱奕")
     private String name;
 
-    @ApiModelProperty(value = "状态",example = "1")
+    @ApiModelProperty(value = "状态", example = "1")
     private Byte recordStatus;
 
-    @ApiModelProperty(value = "部门id",example = "6b561892-5310-4ea8-877d-e791df462d0e")
+    @ApiModelProperty(value = "部门id", example = "6b561892-5310-4ea8-877d-e791df462d0e")
     private String departmentId;
 
-    @ApiModelProperty(value = "岗位或岗位类型名称",example = "领导")
+    @ApiModelProperty(value = "岗位或岗位类型名称", example = "领导")
     private String postOrTypeName;
 
-    @ApiModelProperty(value = "手机号",example = "\"131\"")
+    @ApiModelProperty(value = "手机号", example = "\"131\"")
     private String phone;
+
+    @ApiModelProperty(value = "用户组id", example = "\"10000\"")
+    private String userGroupId;
 
     public UserPage() {
     }
 
-    public UserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName, String phone) {
+    public UserPage(String name, Byte recordStatus, String departmentId, String postOrTypeName,
+                    String phone, String userGroupId) {
         this.name = name;
         this.recordStatus = recordStatus;
         this.departmentId = departmentId;
         this.postOrTypeName = postOrTypeName;
         this.phone = phone;
+        this.userGroupId = userGroupId;
     }
 
     public String getName() {
@@ -85,14 +90,23 @@ public class UserPage extends Page implements Serializable {
         this.phone = phone;
     }
 
+    public String getUserGroupId() {
+        return userGroupId;
+    }
+
+    public void setUserGroupId(String userGroupId) {
+        this.userGroupId = userGroupId;
+    }
+
     @Override
     public String toString() {
-        return "SysUserPage{" +
+        return "UserPage{" +
                 "name='" + name + '\'' +
                 ", recordStatus=" + recordStatus +
                 ", departmentId='" + departmentId + '\'' +
                 ", postOrTypeName='" + postOrTypeName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", userGroupId='" + userGroupId + '\'' +
                 '}';
     }
 }

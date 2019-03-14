@@ -63,7 +63,6 @@
 
 <script>
 import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { getPostTypeList, addPostTypeList, editPostTypeList, deletePostTypeById, checkPostTypeName } from '@/api/Permission-model/postTypeManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -72,7 +71,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增岗位类型') {
-          paramApi(this.postTypeForm.postTypeName).then(res => {
+          paramApi('system/sysPostType/checkPostTypeName', this.postTypeForm.postTypeName, 'postTypeName').then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()

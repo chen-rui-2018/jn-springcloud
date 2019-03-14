@@ -49,10 +49,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        demo
+                        paybill
                     </contexts>
                     <tableNames>
-
+                        tb_payment_bill
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

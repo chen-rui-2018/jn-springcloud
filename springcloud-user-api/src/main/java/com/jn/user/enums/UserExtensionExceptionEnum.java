@@ -13,6 +13,7 @@ public enum UserExtensionExceptionEnum implements CodeAndMsg {
     USER_ACCOUNT_NOT_NULL("3020501","用户账号不能为空"),
     AFFILIATE_PARAM_NOT_NULL("3020502","所属机构编码不能为空"),
     COMPANY_PARAM_NOT_NULL("3020503","所属企业编码不能为空"),
+    USER_EXTENSION_NOT_EXISTS("3020504","当前账号对应用户信息不存在"),
     ;
     /**
      * 编码

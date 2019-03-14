@@ -55,4 +55,11 @@ public interface UserInfoService {
      * @return
      */
     PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam);
+
+    /**
+     * 更新redis中的用户信息
+     * @param account 用户账号
+     * @return  true:更新成功  失败会抛异常
+     */
+    boolean updateRedisUserInfo(String account);
 }

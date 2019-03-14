@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
@@ -314,6 +315,31 @@ public class UserInfoServiceImpl implements UserInfoService {
                 .andRecordStatusEqualTo(recordStatus);
         List<TbUserPerson> companyList = tbUserPersonMapper.selectByExample(example);
         return getPaginationData(objects, companyList);
+    }
+
+    /**
+     * 更新redis中的用户信息
+     * @param account 用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "更新redis中的用户信息")
+    @Override
+    public boolean updateRedisUserInfo(String account) {
+        Assert.notNull(account,UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
+        //从数据库中获取用户信息
+        List<TbUserPerson> tbUserPeople = getTbUserPeople(account);
+        if (tbUserPeople.isEmpty()) {
+            logger.warn("用户[{}]扩展信息不存在或已被删除",account);
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS);
+        }else{
+            TbUserPerson tbUserPerson = tbUserPeople.get(0);
+            UserExtensionInfo userExtensionInfo=new UserExtensionInfo();
+            BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+            //把用户拓展信息写入redis中
+            Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
+            cache.put(account, userExtensionInfo);
+            return true;
+        }
     }
 
     /**

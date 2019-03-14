@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "InvestorInfoShow", description = "科技金融投资人列表展示出参")
-public class InvestorInfoShow implements Serializable {
+@ApiModel(value = "InvestorInfoListShow", description = "科技金融投资人列表展示出参")
+public class InvestorInfoListShow implements Serializable {
     @ApiModelProperty(value = "投资人账号")
     private String investorAccount;
     @ApiModelProperty(value = "投资人姓名")

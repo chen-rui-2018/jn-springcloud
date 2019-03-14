@@ -17,12 +17,12 @@
         </el-radio-group>
       </div></el-col>
       <el-col :span="15"><div class="grid-content bg-purple"><el-form :inline="true" :model="listQuery" class="filter-bar">
-        <el-form-item label="活动类型" style="margin-left:10px">
+        <el-form-item label="活动类型" style="margin-left:10px;line-height: 34px;">
           <el-select v-model="listQuery.actiType" placeholder="请选择活动类型" clearable class="filter-item" @change="selecteType">
             <el-option v-for="item in typeOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="活动名称">
+        <el-form-item label="活动名称" style="line-height: 34px;">
           <el-input v-model="listQuery.actiName" maxlength="20" placeholder="请输入活动名称" class="filter-item" clearable />
         </el-form-item>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
@@ -84,9 +84,10 @@
       <el-table-column label="状态" prop="actiStatus" align="center" min-width="85">
         <template slot-scope="scope">
           <span v-if="scope.row.actiStatus==='1'">待发布</span>
-          <span v-if="scope.row.actiStatus==='2'">报名中</span>
+          <span v-if="scope.row.actiStatus==='2'&& scope.row.isApply==='1'">报名中</span>
           <span v-if="scope.row.actiStatus==='3'">已结束</span>
           <span v-if="scope.row.actiStatus==='4'">已取消</span>
+          <span v-if="scope.row.actiStatus==='2'&& scope.row.isApply==='0'">停止报名</span>
         </template>
       </el-table-column>
       <el-table-column fit label="操作" align="center" width="auto" min-width="200">
@@ -144,7 +145,7 @@
 
 <script>
 import {
-  getActivityList, getActivityType, cancelActivity, deleteActivity, cancelApply, pushMessage
+  getActivityList, getActivityType, cancelActivity, deleteActivity, cancelApply, pushMessage, deleteDraftActivity
 } from '@/api/portalManagement/activity'
 export default {
   data() {
@@ -180,6 +181,7 @@ export default {
       })
         .then(() => {
           api(parameter).then(res => {
+            console.log(res)
             if (res.data.code === '0000') {
               this.$message({
                 message: successTooltip,
@@ -204,7 +206,7 @@ export default {
     },
     // 停止报名
     cancelApply(row) {
-      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, staactiStatus: '0' })
+      this.secondaryConfirmation('是否停止报名？', '停止报名成功', cancelApply, { activityId: row.id, actiStatus: '0' })
     },
     // 批量删除
     handleBatchDeleteActivity() {
@@ -224,7 +226,13 @@ export default {
     },
     // 删除活动
     handleDeleteActivity(row) {
-      this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteActivity, row.id)
+      if (row.actiStatus !== '1') {
+        const arr = []
+        arr.push(row.id)
+        this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteActivity, arr)
+      } else {
+        this.secondaryConfirmation('是否删除此活动？', '删除成功', deleteDraftActivity, row.id)
+      }
     },
     // 取消活动
     handleCancelActivity(row) {
@@ -244,7 +252,7 @@ export default {
           res.data.data.rows.forEach(val => {
             this.typeOptions.push({
               value: val.typeId,
-              label: val.typeName
+              label: val.actiType
             })
           })
         } else {
@@ -261,11 +269,14 @@ export default {
     },
     // 编辑
     editDo(row) {
-      this.$router.push({ path: `activityEdit`, query: { row: row }})
+      // row = JSON.stringify(row)
+      this.$router.push({ path: `activityEdit`, query: { activityId: row.id }})
     },
     // 查看
     checkDo(row) {
-      this.$router.push({ path: `activityCheck`, query: { row: row }})
+      // row = JSON.stringify(row)
+      // this.$router.push({ path: `activityCheck`, query: { row: row }})
+      this.$router.push({ path: `activityCheck`, query: { activityId: row.id }})
     },
     // 项目初始化
     initList() {

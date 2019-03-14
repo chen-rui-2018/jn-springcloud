@@ -38,7 +38,7 @@ const menuRouter = {
       // hidden: true
     },
     {
-      path: 'mendepartmentManagementuManagement',
+      path: 'departmentManagement',
       component: () => import('@/views/menu/departmentManagement'),
       name: 'departmentManagement',
       meta: { title: '部门管理', noCache: true }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 服务机构认证基本信息
@@ -13,13 +14,13 @@ import javax.validation.constraints.NotNull;
  * @modified By:
  */
 @ApiModel(value = "OrgBasicData",description = "服务机构认证基本信息")
-public class OrgBasicData {
+public class OrgBasicData implements Serializable {
 
     @ApiModelProperty(value = "机构ID[新增id传空，修改不能为空]")
     private String orgId;
 
-    @ApiModelProperty(value = "服务商名称")
-    @NotNull(message = "服务商名称不能为空")
+    @ApiModelProperty(value = "机构名称")
+    @NotNull(message = "机构名称不能为空")
     private String orgName;
 
     @ApiModelProperty(value = "统一社会信用代码/组织机构代码")
@@ -30,8 +31,8 @@ public class OrgBasicData {
     @NotNull(message = "注册时间不能为空")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "服务商简介")
-    @NotNull(message = "服务商简介不能为空")
+    @ApiModelProperty(value = "机构简介")
+    @NotNull(message = "机构简介不能为空")
     private String orgSynopsis;
 
     @ApiModelProperty(value = "主营业务")

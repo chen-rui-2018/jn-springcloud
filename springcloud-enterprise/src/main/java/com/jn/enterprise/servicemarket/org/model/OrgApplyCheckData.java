@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  * 机构申请审核信息
@@ -14,7 +15,7 @@ import javax.validation.constraints.Pattern;
  * @modified By:
  */
 @ApiModel(value = "OrgApplyCheckData",description = "机构申请审核信息")
-public class OrgApplyCheckData {
+public class OrgApplyCheckData implements Serializable {
     @ApiModelProperty(value = "机构ID")
     @NotNull(message = "机构ID不能为空")
     private String orgId;

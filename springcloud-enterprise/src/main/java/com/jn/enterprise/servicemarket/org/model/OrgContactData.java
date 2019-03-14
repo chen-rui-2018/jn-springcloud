@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * 服务机构联系方式
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @modified By:
  */
 @ApiModel(value = "OrgContactData",description = "服务机构联系方式")
-public class OrgContactData {
+public class OrgContactData implements Serializable {
 
     @ApiModelProperty(value = "机构ID")
     private String orgId;

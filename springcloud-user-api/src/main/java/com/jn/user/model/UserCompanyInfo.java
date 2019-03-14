@@ -22,7 +22,7 @@ public class UserCompanyInfo implements Serializable {
     @ApiModelProperty("所属企业编码")
     @Size(max = 32, message = "所属企业编码长度不能超过32个字")
     private String companyCode;
-    @ApiModelProperty("所属机构名称")
+    @ApiModelProperty("所属企业名称")
     @Size(max =100, message = "所属企业名称长度不能超过100个字")
     private String companyName;
 

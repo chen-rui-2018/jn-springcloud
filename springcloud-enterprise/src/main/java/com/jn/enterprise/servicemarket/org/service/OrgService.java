@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.org.model.*;
+import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 
 /**
  * 服务机构service
@@ -24,7 +25,7 @@ public interface OrgService {
      * @param orgId
      * @return
      */
-    OrgDetail getServiceOrgDetail(String orgId);
+    OrgDetailVo getServiceOrgDetail(String orgId);
 
     /**
      * 保存服务机构基本信息(id为空时为新增)
@@ -32,7 +33,7 @@ public interface OrgService {
      * @param account
      * @return
      */
-    int saveOrUpdateOrgBasicData(OrgBasicData orgBasicData,String account);
+    String saveOrUpdateOrgBasicData(OrgBasicData orgBasicData,String account);
 
     /**
      * 保存服务机构资质信息
@@ -43,7 +44,7 @@ public interface OrgService {
     int saveOrgLicenseData(OrgLicenseData orgLicenseData,String account);
 
     /**
-     * 保存服务机构团队信息(传入Id为修改，否则为新增)
+     * 保存服务机构团队信息
      * @param orgTeamData
      * @param account
      * @return

@@ -104,6 +104,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         }
         //没有顾问信息，添加顾问
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
+        BeanUtils.copyProperties(advisorBaseInfo,tbServiceAdvisor);
         //主键id
         tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //机构id、机构名称

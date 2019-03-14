@@ -4,6 +4,8 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * 机构查询入参Bean
  * @author： jiangyl
@@ -12,7 +14,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @modified By:
  */
 @ApiModel(value = "OrgParameter",description = "机构查询入参")
-public class OrgParameter extends Page {
+public class OrgParameter extends Page implements Serializable {
 
     @ApiModelProperty("一级业务领域")
     private String businessType;

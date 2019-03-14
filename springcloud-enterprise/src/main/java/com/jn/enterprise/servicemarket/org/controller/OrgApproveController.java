@@ -7,6 +7,8 @@ import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,7 +57,7 @@ public class OrgApproveController extends BaseController{
     @RequestMapping(value = "/getOrgCount")
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgCount")
     public Result getOrgCount(){
-        OrgApplyCount orgCount = orgApproveService.getOrgCount();
+        OrgApplyCountVo orgCount = orgApproveService.getOrgCount();
         return new Result(orgCount);
     }
 
@@ -65,8 +67,8 @@ public class OrgApproveController extends BaseController{
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgApplyDetail")
     public Result getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true)@RequestParam(value = "orgId") String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
-        OrgApplyDetail orgApplyDetail = orgApproveService.getOrgApplyDetail(orgId);
-        return new Result(orgApplyDetail);
+        OrgApplyDetailVo orgApplyDetailVo = orgApproveService.getOrgApplyDetail(orgId);
+        return new Result(orgApplyDetailVo);
     }
 
     @ControllerLog(doAction = "服务机构申请审核")

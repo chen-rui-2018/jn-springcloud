@@ -8,6 +8,7 @@ import com.jn.enterprise.servicemarket.comment.model.*;
 import com.jn.enterprise.servicemarket.comment.service.CommentService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class CommentServiceImplTest {
     }
 
     @Test
-    public void getRatingCommentDetail() {
+    public void getRatingCommentDetail1() {
         RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
         assertThat(ratingCommentDetail,notNullValue());
     }

@@ -5,15 +5,22 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.Assert;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.cache.RedisCacheFactory;
 import com.jn.common.util.cache.service.Cache;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.User;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.dao.TbUserPersonMapper;
 import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
+import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
+import com.jn.user.usertag.dao.TbUserTagMapper;
+import com.jn.user.usertag.dao.UserTagMapper;
+import com.jn.user.usertag.entity.TbUserTag;
+import com.jn.user.usertag.entity.TbUserTagCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,7 +29,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 获取用户信息
@@ -40,7 +49,10 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private TbUserPersonMapper tbUserPersonMapper;
-
+    @Autowired
+    private UserTagMapper userTagMapper;
+    @Autowired
+    private TbUserTagMapper tbUserTagMapper;
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
@@ -54,6 +66,13 @@ public class UserInfoServiceImpl implements UserInfoService {
     private static final String USER_EXTENSION_INFO="user_extension_info";
 
     /**
+     * 数据状态 1:有效
+     */
+    private final static String RECORD_STATUS_VALID = "1";
+    private final static String TAG_CODE_IS_HOBBY = "0";
+    private final static String TAG_CODE_IS_JOB = "1";
+
+    /**
      * 根据账号获取用户扩展信息
      * @param account 用户账号
      * @return
@@ -61,6 +80,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     @ServiceLog(doAction = "根据账号获取用户扩展信息")
     @Override
     public UserExtensionInfo getUserExtension(String account) {
+        if(StringUtils.isEmpty(account)){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_INFO_GET_ERROR);
+        }
         //从redis中取出用户扩展信息
         Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
         UserExtensionInfo userExtensionInfo = (UserExtensionInfo)cache.get(account);
@@ -342,5 +364,69 @@ public class UserInfoServiceImpl implements UserInfoService {
         }
     }
 
+    @Override
+    @ServiceLog(doAction = "保存/修改用户信息")
+    public int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user){
+        if(null == user ){
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_INFO_GET_ERROR);
+        }
+        TbUserPersonCriteria personCriteria = new TbUserPersonCriteria();
+        personCriteria.createCriteria().andAccountEqualTo(user.getAccount()).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbUserPerson> tbUserPeople = tbUserPersonMapper.selectByExample(personCriteria);
+        TbUserPerson tbUserPerson = new TbUserPerson();
+        BeanUtils.copyProperties(user,tbUserPerson);
+        BeanUtils.copyProperties(userInfoParam,tbUserPerson);
+        int a;
+        if(null == tbUserPeople || tbUserPeople.size() == 0){
+            //新增
+            tbUserPerson.setId(UUID.randomUUID().toString().replaceAll("-",""));
+            tbUserPerson.setCreatedTime(new Date());
+            tbUserPerson.setCreatorAccount(user.getAccount());
+
+            tbUserPerson.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+            a = tbUserPersonMapper.insert(tbUserPerson);
+        }else if(null!=tbUserPeople && tbUserPeople.size()==1){
+            //修改
+            tbUserPerson.setId(tbUserPeople.get(0).getId());
+            tbUserPerson.setModifiedTime(new Date());
+            tbUserPerson.setModifierAccount(user.getAccount());
+            a = tbUserPersonMapper.updateByPrimaryKeySelective(tbUserPerson);
+        }else{
+            //用户数据存在多条
+            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_DATA_MULTIPLE_ERROR);
+        }
+
+        List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), user.getAccount());
+        List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), user.getAccount());
+        hobbys.addAll(jobs);
+        TbUserTagCriteria tagCriteria = new TbUserTagCriteria();
+        tagCriteria.createCriteria().andCreatorAccountEqualTo(user.getAccount());
+        int i = tbUserTagMapper.deleteByExample(tagCriteria);
+        logger.info("删除用户兴趣爱好/职业标签数据 {} 条",i);
+        int i1 = userTagMapper.insertUserTag(hobbys);
+        logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+        //更新redis缓存数据
+        updateRedisUserInfo(user.getAccount());
+        return a;
+    }
+
+
+    private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account){
+        List<TbUserTag> tags = new ArrayList<>(8);
+        if(null != s && s.length>0){
+            for (String a:s) {
+                TbUserTag tag = new TbUserTag();
+                tag.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                tag.setTagId(a);
+                tag.setUserId(id);
+                tag.setTagType(type);
+                tag.setCreatedTime(new Date());
+                tag.setCreatorAccount(account);
+                tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+                tags.add(tag);
+            }
+        }
+        return tags;
+    }
 
 }

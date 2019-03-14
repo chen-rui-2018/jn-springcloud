@@ -49,9 +49,9 @@ public class OrgManageController extends BaseController {
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
     public Result saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        int i = orgService.saveOrUpdateOrgBasicData(orgBasicData,user.getAccount());
-        logger.info("保存服务机构基本信息成功，响应条数："+i);
-        return new Result(i);
+        String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, user.getAccount());
+        logger.info("保存服务机构基本信息成功，响应ID："+s);
+        return new Result(s);
     }
 
     @ControllerLog(doAction = "修改服务机构基本信息")
@@ -61,9 +61,9 @@ public class OrgManageController extends BaseController {
     public Result updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         Assert.notNull(orgBasicData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        int i = orgService.saveOrUpdateOrgBasicData(orgBasicData,user.getAccount());
-        logger.info("保存服务机构基本信息成功，响应条数："+i);
-        return new Result(i);
+        String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, user.getAccount());
+        logger.info("修改服务机构基本信息成功，响应ID："+s);
+        return new Result(s);
     }
 
     @ControllerLog(doAction = "保存/修改服务机构资质信息")
@@ -94,6 +94,7 @@ public class OrgManageController extends BaseController {
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
+        Assert.notNull(orgContactData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgService.saveOrUpdateOrgContactData(orgContactData, user.getAccount());
         logger.info("保存服务机构资质信息成功，响应条数："+i);

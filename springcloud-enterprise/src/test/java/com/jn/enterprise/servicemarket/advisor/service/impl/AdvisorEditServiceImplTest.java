@@ -8,6 +8,7 @@ import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -90,7 +91,7 @@ public class AdvisorEditServiceImplTest {
 
         //荣誉资质信息保存并更新
         //主键id
-        //serviceHonor.setId("9e5c70bd003a4e1082b9995d98ccecf2");
+        serviceHonor.setId("9e5c70bd003a4e1082b9995d98ccecf2");
         //顾问账号
         serviceHonor.setAdvisorAccount(advisorAccount);
         //证书名称
@@ -140,6 +141,7 @@ public class AdvisorEditServiceImplTest {
      * 基本信息保存并更新
      */
     @Test
+    @Ignore
     public void saveOrUpdateAdvisorBaseInfo() {
         try {
             advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);

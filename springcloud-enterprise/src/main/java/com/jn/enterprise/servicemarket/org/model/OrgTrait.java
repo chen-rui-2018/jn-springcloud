@@ -3,6 +3,8 @@ package com.jn.enterprise.servicemarket.org.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
+
 /**
  * 服务机构特性值
  * @author： jiangyl
@@ -11,7 +13,7 @@ import io.swagger.annotations.ApiModelProperty;
  * @modified By:
  */
 @ApiModel(value = "OrgTrait",description = "服务机构特性值")
-public class OrgTrait {
+public class OrgTrait implements Serializable {
     @ApiModelProperty(value = "特性值ID")
     private String id;
     @ApiModelProperty(value = "机构ID")

@@ -48,7 +48,8 @@ App({
   globalData: {
     hasLogin: false,
     openid: null,
-    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/'
+    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/',
+    registerUrl:'http://sw8cyn.natappfree.cc/springcloud-user/guest/miniprogram/miniprogramRegisterController/'
   },
   // lazy loading openid
   getUserOpenId(callback) {

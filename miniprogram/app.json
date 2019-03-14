@@ -2,6 +2,7 @@
   "pages": [
     "page/minibase/start/index",
     "page/minibase/index/index",
+    "page/register/register",
     "page/minibase/logs/logs",
     "page/minibase/authorize/authorize",
     "page/minibase/list/list",

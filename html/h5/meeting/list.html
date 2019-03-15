@@ -26,9 +26,10 @@
     </div>
 </body>
 <script src="./jquery.min.js"></script>
+<script src="./style.js"></script>
 <script>
     $.ajax({
-        url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showMeetingRoomList',
+        url: getBaseUrl()+'/springcloud-oa/guest/oaMeeting/showMeetingRoomList',
         data: {
         },
         dataType: 'json',
@@ -41,7 +42,7 @@
              trs+="<li or-id='"+value.id+"'>"+value.name+"</li>"
              $(".conList>ul").append(trs)  
            }) 
-        }     
+        }   
   })
   $(document).on('click','.conList>ul>li',function(){
     $(this).addClass("active").siblings().removeClass('active')

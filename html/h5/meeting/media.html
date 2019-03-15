@@ -26,7 +26,7 @@
             <div class="meetingName">
                 <!-- <div class="name1"></div> -->
                 <div class="name2"></div>
-                <div class="name3 clearfix color"><span class="meetingTime">1111111</span><span class="color currentMeet">当前会议</span></div>
+                <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
             </div>
             <marquee direction="up" behavior="scroll" scrollamount="3" scrolldelay="0" loop="-1" width="895" height="340"
                 hspace="10" vspace="10" style="margin-top:32px;overflow: hidden;">
@@ -74,6 +74,7 @@
     </div>
 </body>
 <script src="./jquery.min.js"></script>
+<script src="./style.js"></script>
 <script type="text/javascript">
     //南京 cityid：101190101
     $.ajax({
@@ -90,9 +91,9 @@
             $('.week').html(res.data[0].week)
             $('.weather-wd').html(res.data[0].tem2 + '~' + res.data[0].tem1)
             $('.wea').html(res.data[0].wea)
-            $('.weaImg').html('<img class="weaImg" src="./image/duoyun.png"></img>')
-            // $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
-            //     res.data[0].wea_img + '.png>' + '</img>')
+            // $('.weaImg').html('<img class="weaImg" src="./image/duoyun.png"></img>')
+            $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
+                res.data[0].wea_img + '.png>' + '</img>')
             $('.riqi').html(res.data[0].date);
             $('.city').text(res.city)
         }
@@ -103,7 +104,7 @@
 
     function aa() {
         $.ajax({
-            url: 'http://192.168.10.31:1101/springcloud-oa/guest/oaMeeting/showList',
+            url: getBaseUrl() + '/springcloud-oa/guest/oaMeeting/showList',
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
@@ -164,73 +165,6 @@
         aa()
     }, 60000)
 
-    //获取domain
-    function getBaseUrl() {
-        var ishttps = 'https:' == document.location.protocol ? true : false;
-        var url = window.location.host;
-        if (ishttps) {
-            url = 'https://' + url;
-        } else {
-            url = 'http://' + url;
-        }
-        return url;
-    }
-
-    //获取参数 ?id= &ab=
-    function GetUrlParam(paraName) {
-        var url = document.location.toString();
-        var arrObj = url.split("?");
-        if (arrObj.length > 1) {
-            var arrPara = arrObj[1].split("&");
-            var arr;
-            for (var i = 0; i < arrPara.length; i++) {
-                arr = arrPara[i].split("=");
-                if (arr != null && arr[0] == paraName) {
-                    return arr[1];
-                }
-            }
-            return "";
-        } else {
-            return "";
-        }
-    }
-    $(document).on('click','.hrefPage',function(){
-    location.href="./list.html"
-  })
-    // 数字时钟
-    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-        "November", "December"
-    ];
-    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-
-    // Create a newDate() object
-    var newDate = new Date();
-    // Extract the current date from Date object
-    newDate.setDate(newDate.getDate());
-    // Output the day, date, month and year    
-    $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' +
-        newDate.getFullYear());
-
-    setInterval(function () {
-        // Create a newDate() object and extract the seconds of the current time on the visitor's
-        var seconds = new Date().getSeconds();
-        // Add a leading zero to seconds value
-        $(".sec").html((seconds < 10 ? "0" : "") + seconds);
-    }, 1000);
-
-    setInterval(function () {
-        // Create a newDate() object and extract the minutes of the current time on the visitor's
-        var minutes = new Date().getMinutes();
-        // Add a leading zero to the minutes value
-        $(".min").html((minutes < 10 ? "0" : "") + minutes);
-    }, 1000);
-
-    setInterval(function () {
-        // Create a newDate() object and extract the hours of the current time on the visitor's
-        var hours = new Date().getHours();
-        // Add a leading zero to the hours value
-        $(".hours").html((hours < 10 ? "0" : "") + hours);
-    }, 1000);
 </script>
 
 </html>

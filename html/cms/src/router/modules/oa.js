@@ -13,6 +13,18 @@ const oaRouter = {
   },
   children: [
     {
+      path: 'noticeManagement',
+      component: () => import('@/views/oa/notice/noticeManagement'),
+      name: 'noticeManagement',
+      meta: { title: '公告管理', noCache: true }
+    },
+    {
+      path: 'addnoticeManagement',
+      component: () => import('@/views/oa/notice/addnoticeManagement'),
+      name: 'addnoticeManagement',
+      meta: { title: '新增公告', noCache: false }
+    },
+    {
       path: 'meetingManagement',
       component: () => import('@/views/oa/meetingManagement/index'),
       name: 'meetingManagement',

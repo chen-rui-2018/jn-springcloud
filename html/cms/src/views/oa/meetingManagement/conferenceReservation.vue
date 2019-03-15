@@ -398,18 +398,6 @@ export default {
         }
       })
     },
-    // 判断当前时间和按钮时间
-    // befoTime(time) {
-    //   var buttonTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
-    //   var today_time = new Date().getTime()
-    //   if (new Date(buttonTime) - today_time < 0) {
-    //     // this.Isdisabled = false
-    //     return true
-    //   } else {
-    //     // this.Isdisabled = true
-    //     return false
-    //   }
-    // },
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
       // 会议预约
@@ -417,7 +405,6 @@ export default {
       if (timeArr[0] < 10) {
         time = '0' + time
       }
-      // this.befoTime(time)
       var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
       var today_time = new Date().getTime()
       if (new Date(clickTime) - today_time < 0) {
@@ -537,7 +524,9 @@ export default {
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
           var startTime = (arr_data[i].meetingList[k].startTime).replace(/^.* /, '').slice(0, 5)
           var endTime = (arr_data[i].meetingList[k].endTime).replace(/^.* /, '').slice(0, 5)
+          console.log(startTime, endTime)
           var get_arr = this.calTdMerge(startTime, endTime)
+          console.log(get_arr)
           for (var l = 0; l < get_arr.length; l++) {
             var _index = get_arr[l]
             if (l === 0) {
@@ -553,6 +542,7 @@ export default {
         arr_row.push(_arr)
       }
       this.rowTableData = arr_row
+      console.log(this.rowTableData)
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       // 合并单元格

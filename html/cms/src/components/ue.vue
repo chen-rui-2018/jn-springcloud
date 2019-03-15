@@ -41,3 +41,8 @@ export default {
   }
 }
 </script>
+<style>
+   .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+    line-height: 22px;
+}
+</style>

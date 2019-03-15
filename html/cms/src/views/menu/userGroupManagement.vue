@@ -30,11 +30,7 @@
           {{ scope.row.sysRoleList.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>

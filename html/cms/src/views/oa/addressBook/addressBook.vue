@@ -26,7 +26,7 @@
           <el-table-column label="部门" prop="departmentName" align="center" />
           <el-table-column label="岗位" prop="postName" align="center" />
           <el-table-column label="岗位类型" prop="postTypeName" align="center" />
-          <el-table-column label="邮箱" prop="email" align="center" />
+          <el-table-column label="邮箱" prop="email" align="center" min-width="120" />
           <el-table-column label="联系方式" prop="phone" align="center" />
           <el-table-column label="微信" prop="wechatAccount" align="center"/>
           <el-table-column fit label="操作" align="center">
@@ -43,7 +43,7 @@
 
     <!-- S 新增弹窗 -->
     <template v-if="dialogFormVisible">
-      <el-dialog :visible.sync="dialogFormVisible" title="通讯录详情" width="600px">
+      <el-dialog :visible.sync="dialogFormVisible" title="通讯录详情" width="700px">
         <div class="userInfo">
           <div class="addressBook-top">
             <div class="userName">
@@ -235,14 +235,19 @@ export default {
   }
   .addressBook-top{
     display:flex;
-    justify-content:space-between;
+    // justify-content:space-between;
+    .userName{
+      flex:1;
+    }
   }
   .userContact{
-    margin-right:40px;
+    flex:1;
     >div{
     margin:15px 0px ;
     color:rgb(169,169,169);
     >span{
+      margin-left:20px;
+      font-size:20px;
       color:black;
     }
     }

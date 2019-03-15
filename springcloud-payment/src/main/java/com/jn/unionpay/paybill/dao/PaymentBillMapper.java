@@ -34,5 +34,11 @@ public interface PaymentBillMapper {
      * @return
      */
     List<PayBillSubCount> statisticsBillAmountSubCount(PayBillCountParam payBillCountParam);
+
+    /**
+     * 查询当前时段类缴费总金额
+     * @param payBillCountParam
+     * @return
+     */
     PayBillCountVO statisticsBillAmount(PayBillCountParam payBillCountParam);
 }

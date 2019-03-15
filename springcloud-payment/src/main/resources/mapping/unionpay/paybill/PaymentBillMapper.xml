@@ -8,7 +8,7 @@
         b.bill_num as "billNum",
         b.bill_name as "billName",
         b.bill_type as "billType",
-        c.code_value as "billTypeName"
+        c.code_value as "billTypeName",
         b.bill_obj_id as "billObjId",
         b.bill_amount as "billAmount",
         date_format(b.bill_create_time,'%Y-%m-%d %H:%i:%s') as "billCreateTime",
@@ -57,7 +57,7 @@
         b.bill_num as "billNum",
         b.bill_name as "billName",
         b.bill_type as "billType",
-        c.code_value as "billTypeName"
+        c.code_value as "billTypeName",
         b.bill_obj_id as "billObjId",
         b.bill_obj_name as "billObjName",
                 b.bill_obj_type as "billObjType",
@@ -153,7 +153,7 @@
         </if>
    </select>
 
-    <select id="statisticsBillAmountSubCount" parameterMap="com.jn.paybill.model.PayBillSubCount">
+    <select id="statisticsBillAmountSubCount" parameterType="com.jn.paybill.model.PayBillCountParam" resultType="com.jn.paybill.model.PayBillSubCount">
         SELECT
         SUM(b.bill_amount) AS "billTypeAmount",
         DATE_FORMAT(b.bill_create_time, '%Y%m%d') AS "billDate",
@@ -164,7 +164,7 @@
         FROM
         tb_payment_bill pb
         WHERE pb.bill_status = '1'
-        AND pb.bill_type = typeId
+        AND pb.bill_type = billTypeId
         AND pb.bill_create_time &lt;= STR_TO_DATE(
         CONCAT(
         DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
@@ -184,7 +184,7 @@
         FROM
         tb_payment_bill pb
         WHERE pb.bill_status NOT IN ('1', '0')
-        AND pb.bill_type = typeId
+        AND pb.bill_type = billTypeId
         AND pb.bill_create_time &lt;= STR_TO_DATE(
         CONCAT(
         DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
@@ -217,10 +217,10 @@
                 #{billTypeId}
             </foreach>
         </if>
-        GROUP BY days,typeId ;
+        GROUP BY billDate,billTypeId
     </select>
 
-    <select id="statisticsBillAmount" parameterMap="com.jn.paybill.model.PayBillCountVO">
+    <select id="statisticsBillAmount"  parameterType="com.jn.paybill.model.PayBillCountParam" resultType="com.jn.paybill.model.PayBillCountVO">
         SELECT
         SUM(b.bill_amount) AS "totleAmount"
         ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
@@ -240,7 +240,7 @@
             </if>
         ) as "totleUnpayAmountDaily"
         ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
-        WHERE t.record_status = 1 and t.bill_status = '1'
+        WHERE t.record_status = 1 and t.bill_status  NOT IN ('1', '0')
         <if test="billStartTime !=null and billStartTime !='' ">
             and t.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>

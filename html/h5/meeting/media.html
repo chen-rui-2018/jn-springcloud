@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>南京白下区-会议室</title>
     <!-- <link rel="stylesheet" href="./style.css"> -->
-    <link rel="stylesheet" href="./media.css">
+    <link rel="stylesheet" href="css/media.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
         <header>
             <div class="hrefPage">
                 <img src="./image/fanhui.png" alt="">
-                <span class="headTitle">118</span>
+                <span class="headTitle">118会议室</span>
             </div>
         </header>
         <div class="content clearfix">
@@ -73,8 +73,8 @@
 
     </div>
 </body>
-<script src="./jquery.min.js"></script>
-<script src="./style.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
 <script type="text/javascript">
     //南京 cityid：101190101
     $.ajax({
@@ -99,10 +99,12 @@
         }
     })
     var data = {}
-    data.meetingRoomId = location.href.split('id=')[1]
-    aa()
+    data.meetingRoomId = GetUrlParam("id");
 
-    function aa() {
+    init()
+
+    function init() {
+        $(".headTitle").html(decodeURIComponent(GetUrlParam("name")));
         $.ajax({
             url: getBaseUrl() + '/springcloud-oa/guest/oaMeeting/showList',
             data: JSON.stringify(data),
@@ -162,8 +164,46 @@
         })
     }
     setInterval(function () {
-        aa()
+        init()
     }, 60000)
+
+    $(document).on('click','.hrefPage',function(){
+        location.href="list.html"
+    })
+    // 数字时钟
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December"
+    ];
+    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    // Create a newDate() object
+    var newDate = new Date();
+    // Extract the current date from Date object
+    newDate.setDate(newDate.getDate());
+    // Output the day, date, month and year
+    $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' +
+        newDate.getFullYear());
+
+    setInterval(function () {
+        // Create a newDate() object and extract the seconds of the current time on the visitor's
+        var seconds = new Date().getSeconds();
+        // Add a leading zero to seconds value
+        $(".sec").html((seconds < 10 ? "0" : "") + seconds);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the minutes of the current time on the visitor's
+        var minutes = new Date().getMinutes();
+        // Add a leading zero to the minutes value
+        $(".min").html((minutes < 10 ? "0" : "") + minutes);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the hours of the current time on the visitor's
+        var hours = new Date().getHours();
+        // Add a leading zero to the hours value
+        $(".hours").html((hours < 10 ? "0" : "") + hours);
+    }, 1000);
 
 </script>
 

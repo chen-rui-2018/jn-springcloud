@@ -36,7 +36,7 @@ body {
 }
 
 #time {
-    background: url('./img/bg.png') 100% 100% / 100% 100% no-repeat;
+    background: url('../image/vertical/bg.png') 100% 100% / 100% 100% no-repeat;
     border-radius: 50%;
     width: 450px;
     height: 454px;
@@ -134,13 +134,13 @@ body {
 .container {
     width: 1920px;
     height: 1080px;
-    background: url(./img/mainbg.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/mainbg.png) 100% 100% / 100% 100% no-repeat;
 }
 
 header {
     height: 101px;
     line-height: 101px;
-    background: url(./img/headerbg.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/headerbg.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .dateTime {
@@ -162,7 +162,7 @@ header {
     /* line-height: 547px; */
     /* text-align: center; */
     padding: 0 40px;
-    background: url(./img/bg11.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg11.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .name1 {
@@ -192,7 +192,7 @@ header {
     width: 270px;
     height: 100px;
     line-height: 100px;
-    background: url(./img/bg22.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg22.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .cityPos {
@@ -251,7 +251,7 @@ header {
     padding: 28px;
     width: 180px;
     height: 180px;
-    background: url(./img/bg5.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg5.png) 100% 100% / 100% 100% no-repeat;
 }
 .erweima>img{
     width: 100%;
@@ -264,7 +264,7 @@ header {
     margin-left: 8px;
     margin-top: 30px;
     height: 132px;
-    background: url(./img/bg2.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg2.png) 100% 100% / 100% 100% no-repeat;
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -275,7 +275,7 @@ header {
     margin-left: 8px;
     margin-top: 10px;
     height: 149px;
-    background: url(./img/bg2.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg2.png) 100% 100% / 100% 100% no-repeat;
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -286,7 +286,7 @@ header {
     line-height: 92px;
     padding: 0 40px;
     margin-bottom:48px;
-    background: url(./img/bg1.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg1.png) 100% 100% / 100% 100% no-repeat;
 }
 
 

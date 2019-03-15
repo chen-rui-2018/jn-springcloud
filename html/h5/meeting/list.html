@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>会议室列表</title>
-    <link rel="stylesheet" href="./media.css">
+    <title>南京白下区-会议室</title>
+    <link rel="stylesheet" href="css/media.css">
 </head>
 
 <body>
@@ -25,8 +25,8 @@
         </div>
     </div>
 </body>
-<script src="./jquery.min.js"></script>
-<script src="./style.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
 <script>
     $.ajax({
         url: getBaseUrl()+'/springcloud-oa/guest/oaMeeting/showMeetingRoomList',
@@ -37,18 +37,18 @@
         success: function (res) {
             console.log(res)
             var arr=res.data
-            $.each(arr,function(i,value) {   
+            $.each(arr,function(i,value) {
              var trs = "";
              trs+="<li or-id='"+value.id+"'>"+value.name+"</li>"
-             $(".conList>ul").append(trs)  
-           }) 
-        }   
-  })
-  $(document).on('click','.conList>ul>li',function(){
+             $(".conList>ul").append(trs)
+           })
+        }
+    })
+    $(document).on('click','.conList>ul>li',function(){
     $(this).addClass("active").siblings().removeClass('active')
-    location.href="./media.html?id="+$(this).attr('or-id')
-  })
+    location.href="./media.html?id="+$(this).attr('or-id')+"&name="+encodeURIComponent($(this).html())
+    })
 
- 
+
 </script>
 </html>

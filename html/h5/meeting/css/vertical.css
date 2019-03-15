@@ -42,7 +42,7 @@ body {
 .container {
     width: 1080px;
     height: 1920px;
-    background: url(./img/shu-bg.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/shu-bg.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .content {
@@ -65,7 +65,7 @@ body {
     padding: 28px;
     width: 180px;
     height: 180px;
-    background: url(./img/bg5.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/bg5.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .weaImg>img {
@@ -94,7 +94,7 @@ body {
 header {
     height: 101px;
     line-height: 101px;
-    background: url(./img/shu1.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/vertical/shu1.png) 100% 100% / 100% 100% no-repeat;
 }
 
 .dateTime {

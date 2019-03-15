@@ -39,13 +39,13 @@ body {
 .container {
     width: 1080px;
     height: 1920px;
-    background: url(./image/bg1.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/bg1.png) 100% 100% / 100% 100% no-repeat;
 }
 
 header {
     height: 101px;
     line-height: 101px;
-    background: url(./image/list3.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/list3.png) 100% 100% / 100% 100% no-repeat;
 }
 .hrefPage{
     margin-left: 90px;
@@ -67,7 +67,7 @@ header {
     width: 822px;
     height: 547px;
     padding: 0 40px;
-    background: url(./image/main.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/main.png) 100% 100% / 100% 100% no-repeat;
 }
 /* .name1 {
     color: #fcfcfc;
@@ -98,7 +98,7 @@ header {
     width: 221px;
     height: 81px;
     line-height: 80px;
-    background: url(./image/current.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/current.png) 100% 100% / 100% 100% no-repeat;
 }
 .meetingName2{
     width: 820px;
@@ -106,7 +106,7 @@ header {
     line-height: 152px;
     padding: 0 40px;
     margin-bottom:38px;
-    background: url(./image/list4.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/list4.png) 100% 100% / 100% 100% no-repeat;
 }
 .weaInfo{
     margin-top:82px;
@@ -132,7 +132,7 @@ header {
     padding:35px;
     width: 300px;
     height: 300px;
-    background: url(./image/erweim.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/erweim.png) 100% 100% / 100% 100% no-repeat;
 }
 .erweima>img{
     width: 100%;
@@ -187,7 +187,7 @@ header {
 .containerList{
     width: 1080px;
     height: 1920px;
-    background: url(./image/bg1.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/bg1.png) 100% 100% / 100% 100% no-repeat;
 }
 .headList{
     color: #d7d400;
@@ -204,7 +204,7 @@ height: 100%;
     height: 125px;
     line-height: 125px;
     text-align: center;
-    background: url(./image/list2.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/list2.png) 100% 100% / 100% 100% no-repeat;
     float: left;
     margin-right:106px;
     margin-bottom:160px;
@@ -213,7 +213,7 @@ height: 100%;
 }
 .conList>ul>li.active{
     color:#d7d400;
-    background: url(./image/list1.png) 100% 100% / 100% 100% no-repeat;
+    background: url(../image/list1.png) 100% 100% / 100% 100% no-repeat;
 }
 .conList>ul>li:nth-child(2n){
     margin-right:0;

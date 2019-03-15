@@ -16,6 +16,8 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     START_TIME_NOT_AFTER_END_TIME("6020504","结束时间不能少于开始时间"),
     BILL_ID_IS_NOT_NULL("6020505","账单标识不能为空"),
     BILL_IS_NOT_EXIT("6020506","账单不存在"),
+    BILL_PAY_ORDER_CREATE_ERROR("6020507","支付订单创建异常，请稍后重试"),
+    BILL_ORDER_IS_NOT_EXIT("6020507","支付订单创建异常，请稍后重试"),
     ;
     /**
      * 编码

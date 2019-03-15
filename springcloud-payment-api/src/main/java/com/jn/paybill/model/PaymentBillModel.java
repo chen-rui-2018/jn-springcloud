@@ -27,11 +27,7 @@ public class PaymentBillModel implements Serializable {
     @ApiModelProperty(value = "账单类型")
     @NotBlank(message = "账单类型不能为空")
     private String billType;
-    @ApiModelProperty(value = "账单对象类型[1企业2个人]")
-    @NotBlank(message = "账单对象类型不能为空")
-    @Pattern(regexp="^\\[12]$",message="{billObjType:'账单对象类型只允许为1/2'}")
-    private String billObjType;
-    @ApiModelProperty(value = "账单对象ID")
+    @ApiModelProperty(value = "账单对象[Account]")
     @NotBlank(message = "账单对象ID不能为空")
     private String billObjId;
     @ApiModelProperty(value = "账单对象名")
@@ -80,13 +76,6 @@ public class PaymentBillModel implements Serializable {
         this.billType = billType;
     }
 
-    public String getBillObjType() {
-        return billObjType;
-    }
-
-    public void setBillObjType(String billObjType) {
-        this.billObjType = billObjType;
-    }
 
     public String getBillObjId() {
         return billObjId;
@@ -150,7 +139,6 @@ public class PaymentBillModel implements Serializable {
                 "billNum='" + billNum + '\'' +
                 ", billName='" + billName + '\'' +
                 ", billType='" + billType + '\'' +
-                ", billObjType='" + billObjType + '\'' +
                 ", billObjId='" + billObjId + '\'' +
                 ", billObjName='" + billObjName + '\'' +
                 ", billAmount=" + billAmount +

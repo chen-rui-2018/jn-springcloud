@@ -4,10 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.paybill.api.PayBillClient;
-import com.jn.paybill.model.PayBillVO;
-import com.jn.paybill.model.PaymentBill;
-import com.jn.paybill.model.PaymentBillModel;
-import com.jn.paybill.model.PaymentBillParam;
+import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.unionpay.paybill.service.PayBillService;
 import io.swagger.annotations.ApiOperation;
@@ -57,5 +54,23 @@ public class PayBillServerController extends BaseController implements PayBillCl
     @Override
     public Result<PayBillVO> getPayBillDetailByIdOrNum(@RequestParam String idOrNum){
         return new Result<>(payBillService.getPayBillDetailByIdOrNum(idOrNum));
+    }
+
+
+    @ControllerLog(doAction = "按天查询缴费系统中各分类的收入情况")
+    @ApiOperation(value = "按天查询缴费系统中各分类的收入情况", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/statisticsBillAmount")
+    @Override
+    public Result<PayBillCountVO> statisticsBillAmount(@RequestBody PayBillCountParam payBillCountParam){
+        PayBillCountVO payBillCountVO = payBillService.statisticsBillAmount(payBillCountParam);
+        return new Result<>(payBillCountVO);
+    }
+
+    @ControllerLog(doAction = "支付回调接口")
+    @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/payCallBack")
+    @Override
+    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
+        return new Result<>(payBillService.payCallBack(callBackParam));
     }
 }

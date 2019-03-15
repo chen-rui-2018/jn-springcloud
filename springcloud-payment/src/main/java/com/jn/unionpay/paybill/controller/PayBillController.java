@@ -7,10 +7,12 @@ import com.jn.common.util.Assert;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.*;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import com.jn.unionpay.paybill.service.PayBillService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,13 +80,19 @@ public class PayBillController extends BaseController {
      */
     @ControllerLog(doAction = "统一缴费--发起支付")
     @ApiOperation(value = "统一缴费--发起支付", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/statisticsBillAmount")
+    @RequestMapping(value = "/startPayment")
     public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
-        return new Result<>(payBillService.startPayment(payInitiateParam));
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        return new Result<>(payBillService.startPayment(payInitiateParam,user));
     }
 
 
-    //TODO 支付回调接口
+    @ControllerLog(doAction = "支付回调接口")
+    @ApiOperation(value = "统一缴费--支付回调接口", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/payCallBack")
+    public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
+        return new Result<>(payBillService.payCallBack(callBackParam));
+    }
 
 
 }

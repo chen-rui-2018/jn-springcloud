@@ -32,6 +32,16 @@ public class OaMeetingNotice implements Serializable {
     @ApiModelProperty(value = "会议申请人微信账号")
     private String applicantWechatAccount;
 
+    @ApiModelProperty(value = "会议申请人微信账号")
+    private String meetingRoomName;
+
+    public String getMeetingRoomName() {
+        return meetingRoomName;
+    }
+
+    public void setMeetingRoomName(String meetingRoomName) {
+        this.meetingRoomName = meetingRoomName;
+    }
 
     public String getId() {
         return id;

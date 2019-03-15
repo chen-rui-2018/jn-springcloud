@@ -7,102 +7,72 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>南京白下区-会议室</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vertical.css">
 </head>
 
 <body>
-    <div class="container clearfix">
+    <div class="container">
         <header>
-            <span class="headTitle"></span>
+            <div class="headTitle">118会议室</div>
+            <!--<div class="dateTime color">2019-3-13</div>-->
         </header>
-        <div class="dateTime color"></div>
-        <div class="conLeft">
-            <div id="time">
-                <div id="hours"></div>
-                <div id="min"></div>
-                <div id="sec"></div>
+        <div class="shuziTime">
+            <div class="clock">
+
+                <ul>
+                    <li class="hours"> </li>
+                    <li id="point">:</li>
+                    <li class="min"> </li>
+                    <li id="point">:</li>
+                    <li class="sec"> </li>
+                </ul>
+
             </div>
-            <div class="cityPos">
-                <div class="city">南京</div>
-                <p class="airQuality">空气质量：<span></span></p>
-            </div>
-            <h2>扫码签到</h2>
-            <div class="weaInfo clearfix">
-                <div class="weather">
-                    <span class="week"></span>&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;
-                    <span class="riqi weather-date"></span>
-                    <div class="temperature"><span class="weather-wd"></span>
+        </div>
+            <div class="content">
+                <div class="weaInfo clearfix">
+                    <div class="weather fl">
+                        <span class="week"></span>&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        <span class="riqi weather-date"></span>
+                        <div class="temperature"><span class="weather-wd"></span>
+                        </div>
+                        <p class="wea weather-date"></p>
                     </div>
-                    <p class="wea weather-date"></p>
+                    <div class="qua fl">
+                        <div class="city"></div>
+                        <p class="airQuality">空气质量：<span></span></p>
+                        <div class="weaImg"></div>
+                    </div>
+                    <div class="erwima1 fr">
+                        <div class="sign">扫码签到</div>
+                        <div class="erweima" style="margin-right:0px;">
+                        </div>
+                    </div>
                 </div>
-                <div class="weaImg"></div>
-                <div class="erweima">
+                <div class="meetingCont">
+                    <div class="meetingName">
+                        <div class="name1"></div>
+                        <div class="name2"></div>
+                        <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
+                    </div>
+                    <marquee direction="up" behavior="scroll" scrollamount="3" scrolldelay="0" loop="-1" width="895"
+                        height="232" hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
+                        <div class="meetingTotal">
+                        </div>
+                    </marquee>
                 </div>
             </div>
-        </div>
-        <div class="conRight">
-            <div class="meetingName">
-                <div class="name1"></div>
-                <div class="name2"></div>
-                <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
-            </div>
-            <marquee direction="up" behavior="scroll" scrollamount="3" scrolldelay="0" loop="-1" width="895" height="232"
-                 hspace="10" vspace="10" style="margin-top:40px;overflow: hidden;">
-                <div class="meetingTotal">
-                </div>
-            </marquee>
-        </div>
-    </div>
-    </div>
+        
 </body>
 <script src="js/jquery.min.js"></script>
 <script type="text/javascript">
-    var se = document.querySelector('#sec');
-    var mi = document.querySelector('#min');
-    var ho = document.querySelector('#hours');
-    var myDiv = document.querySelector('#time');
-    var arr = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
-    bb();
-    setInterval(function () {
-        bb();
-    }, 1)
-
-    function bb() {
-        var myTime = new Date();
-        var hour = myTime.getHours() //时 0 ~ 23
-        var min = myTime.getMinutes() //分0~59
-        var s = myTime.getSeconds() //秒 0~59
-        se.style.transform = "rotate(" + (s * 6) + "deg)";
-        mi.style.transform = "rotate(" + (min * 6) + "deg)";
-        ho.style.transform = "rotate(" + (hour *30 +min/2) + "deg)";
-    }
-    for (var i = 1; i < 61; i++) {
-        var aaa = document.createElement('div');
-        aaa.id = 'scale';
-        aaa.style.transform = 'rotate(' + i * 6 + 'deg)';
-        myDiv.appendChild(aaa);
-
-        var bbb = document.createElement('div');
-        bbb.id = 'point';
-        aaa.appendChild(bbb);
-
-        var shuzi = document.createElement('div');
-        shuzi.id = 'number';
-        shuzi.style.transform = 'rotate(-' + i * 6 + 'deg)';
-        if (i % 5 == 0) {
-            shuzi.innerHTML = arr[i / 5 - 1];
-            bbb.style.height = '10px';
-            bbb.style.fontWeight = 'bolder';
-            bbb.style.width = '5px';
-        }
-        aaa.appendChild(shuzi);
-    }
     //南京 cityid：101190101
     $.ajax({
         url: 'https://www.tianqiapi.com/api/',
         data: {
-             version: 'v1',
-             cityid: '101190101'
+            version: 'v1',
+            cityid: '101190101'
         },
         dataType: 'json',
         type: 'get',
@@ -115,17 +85,18 @@
             $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
                 res.data[0].wea_img + '.png>' + '</img>')
             $('.riqi').html(res.data[0].date);
-            //$('.city').text(res.city)
+            $('.city').text(res.city)
         }
     })
     var data = {}
     data.meetingRoomId = "59bc3578-b874-40ff-a733-1bd3969a2e39"
     aa()
+
     function aa() {
 
         //获取会议室ID
         var id = GetUrlParam("id");
-        if(id != ''){
+        if (id != '') {
             data.meetingRoomId = id;
         }
 
@@ -156,7 +127,7 @@
         }
 
         $.ajax({
-            url: getBaseUrl()+'/springcloud-oa/guest/oaMeeting/showList',
+            url: getBaseUrl() + '/springcloud-oa/guest/oaMeeting/showList',
             data: JSON.stringify(data),
             dataType: 'json',
             contentType: 'application/json',
@@ -165,17 +136,18 @@
                 console.log(res)
                 if (res.code == '0000') {
 
-                    if (res.data.length == 0){
+                    if (res.data.length == 0) {
                         $('.name2').html('暂无会议！');
-                        $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
+                        $('.meetingTotal').html(
+                            '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
                         return;
                     }
 
                     $('.headTitle').html(res.data[0].meetingRoomName)
                     $('.dateTime').html(res.data[0].startDate)
-                    if(res.data.length == 0 ){
+                    if (res.data.length == 0) {
                         $('.name2').html('暂无会议！');
-                    }else {
+                    } else {
                         $('.name2').html(res.data[0].title);
                     }
                     $('.meetingTime').html(res.data[0].startDate + '&nbsp;' + res.data[0].startTime + '~' +
@@ -196,18 +168,23 @@
                         str += '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>'
                     }
                     $('.meetingTotal').html(str)
-                }else{
+                } else {
                     console.log(res.result);
                     $('.name2').html('暂无会议！');
-                    $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
+                    $('.meetingTotal').html(
+                        '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
                 }
-            },error : function(err){
+            },
+            error: function (err) {
                 $('.name2').html('暂无会议！');
-                $('.meetingTotal').html('<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
+                $('.meetingTotal').html(
+                    '<div class="meetingName2" style="text-align:center">今天没有会议安排了</div>');
             }
         })
     }
-    setInterval(function(){aa()}, 60000)
+    setInterval(function () {
+        aa()
+    }, 60000)
 
     //获取domain
     function getBaseUrl() {
@@ -235,11 +212,45 @@
                 }
             }
             return "";
-        }
-        else {
+        } else {
             return "";
         }
     }
+
+    // 数字时钟
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December"
+    ];
+    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    // Create a newDate() object
+    var newDate = new Date();
+    // Extract the current date from Date object
+    newDate.setDate(newDate.getDate());
+    // Output the day, date, month and year    
+    $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' +
+        newDate.getFullYear());
+
+    setInterval(function () {
+        // Create a newDate() object and extract the seconds of the current time on the visitor's
+        var seconds = new Date().getSeconds();
+        // Add a leading zero to seconds value
+        $(".sec").html((seconds < 10 ? "0" : "") + seconds);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the minutes of the current time on the visitor's
+        var minutes = new Date().getMinutes();
+        // Add a leading zero to the minutes value
+        $(".min").html((minutes < 10 ? "0" : "") + minutes);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the hours of the current time on the visitor's
+        var hours = new Date().getHours();
+        // Add a leading zero to the hours value
+        $(".hours").html((hours < 10 ? "0" : "") + hours);
+    }, 1000);
 </script>
 
 </html>

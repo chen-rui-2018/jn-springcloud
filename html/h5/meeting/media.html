@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>南京白下区-会议室</title>
+    <!-- <link rel="stylesheet" href="./style.css"> -->
+    <link rel="stylesheet" href="css/media.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="hrefPage">
+                <img src="./image/fanhui.png" alt="">
+                <span class="headTitle">118会议室</span>
+            </div>
+        </header>
+        <div class="content clearfix">
+            <div class="logo">
+                <img src="./image/logo.png" alt="">
+            </div>
+            <!-- <div class="meetingCont"> -->
+            <div class="meetingName">
+                <!-- <div class="name1"></div> -->
+                <div class="name2"></div>
+                <div class="name3 clearfix color"><span class="meetingTime"></span><span class="color currentMeet">当前会议</span></div>
+            </div>
+            <marquee direction="up" behavior="scroll" scrollamount="3" scrolldelay="0" loop="-1" width="895" height="340"
+                hspace="10" vspace="10" style="margin-top:32px;overflow: hidden;">
+                <div class="meetingTotal">
+                </div>
+            </marquee>
+            <!-- </div> -->
+            <div class="weaInfo clearfix">
+                <div class="infoLeft fl clearfix">
+                    <div class="shuziTime">
+                        <div class="clock">
+                            <ul>
+                                <li class="hours"> </li>
+                                <li id="point">:</li>
+                                <li class="min"> </li>
+                                <li id="point">:</li>
+                                <li class="sec"> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bottom">
+                        <div class="weather fl">
+                            <span class="week"></span>&nbsp;&nbsp;&nbsp;
+                            &nbsp;&nbsp;&nbsp;
+                            <span class="riqi weather-date"></span>
+                            <div class="temperature"><span class="weather-wd"></span>
+                            </div>
+                            <p class="wea weather-date"></p>
+                        </div>
+                        <div class="qua fl">
+                            <div class="city">南京</div>
+                            <!-- <p class="airQuality">空气质量：<span></span></p> -->
+                            <div class="weaImg">图片</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="erwima1 fr">
+                    <div class="sign">扫码签到</div>
+                    <div class="erweima">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
+<script type="text/javascript">
+    //南京 cityid：101190101
+    $.ajax({
+        url: 'https://www.tianqiapi.com/api/',
+        data: {
+            version: 'v1',
+            cityid: '101190101'
+        },
+        dataType: 'json',
+        type: 'get',
+        success: function (res) {
+            console.log(res)
+            $('.airQuality>span').html(res.data[0].air_level)
+            $('.week').html(res.data[0].week)
+            $('.weather-wd').html(res.data[0].tem2 + '~' + res.data[0].tem1)
+            $('.wea').html(res.data[0].wea)
+            // $('.weaImg').html('<img class="weaImg" src="./image/duoyun.png"></img>')
+            $('.weaImg').html('<img class="weaImg" src=https://cdn.huyahaha.com/tianqiapi/skin/peach/' +
+                res.data[0].wea_img + '.png>' + '</img>')
+            $('.riqi').html(res.data[0].date);
+            $('.city').text(res.city)
+        }
+    })
+    var data = {}
+    data.meetingRoomId = GetUrlParam("id");
+
+    init()
+
+    function init() {
+        $(".headTitle").html(decodeURIComponent(GetUrlParam("name")));
+        $.ajax({
+            url: getBaseUrl() + '/springcloud-oa/guest/oaMeeting/showList',
+            data: JSON.stringify(data),
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'post',
+            success: function (res) {
+                console.log(res)
+                if (res.code == '0000') {
+
+                    if (res.data.length == 0) {
+                        $('.name2').html('暂无会议！');
+                        $('.meetingTotal').html(
+                            '<div class="meetingName2" style="text-align:center;font-size:34px;">今天没有会议安排了</div>'
+                        );
+                        return;
+                    }
+
+                    $('.headTitle').html(res.data[0].meetingRoomName)
+                    $('.dateTime').html(res.data[0].startDate)
+                    if (res.data.length == 0) {
+                        $('.name2').html('暂无会议！');
+                    } else {
+                        $('.name2').html(res.data[0].title);
+                    }
+                    $('.meetingTime').html(res.data[0].startDate + '&nbsp;' + res.data[0].startTime + '~' +
+                        res
+                        .data[0].endTime)
+                    $('.erweima').html('<img src=' + res.data[0].signInQr + '>')
+                    var str = '';
+
+                    for (var i = 1; i < res.data.length; i++) {
+                        str += '<div class="meetingName2" style="font-size:34px"><span>会议名称：' + res.data[i]
+                            .title +
+                            '</span>' +
+                            '<span class="color fr" style="font-size:38px">' + res.data[i].startDate + '&nbsp' + res.data[i].startTime +
+                            '~' +
+                            res.data[i].endTime + '</span></div>'
+                    }
+
+                    if (res.data.length == 1) {
+                        str += '<div class="meetingName2" style="text-align:center;font-size:40px;">今天没有会议安排了</div>'
+                    }
+                    $('.meetingTotal').html(str)
+                } else {
+                    console.log(res.result);
+                    $('.name2').html('暂无会议！');
+                    $('.meetingTotal').html(
+                        '<div class="meetingName2" style="text-align:center;font-size:40px;">今天没有会议安排了</div>');
+                }
+            },
+            error: function (err) {
+                $('.name2').html('暂无会议！');
+                $('.meetingTotal').html(
+                    '<div class="meetingName2" style="text-align:center;font-size:40px">今天没有会议安排了</div>');
+            }
+        })
+    }
+    setInterval(function () {
+        init()
+    }, 60000)
+
+    $(document).on('click','.hrefPage',function(){
+        location.href="list.html"
+    })
+    // 数字时钟
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December"
+    ];
+    var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+
+    // Create a newDate() object
+    var newDate = new Date();
+    // Extract the current date from Date object
+    newDate.setDate(newDate.getDate());
+    // Output the day, date, month and year
+    $('#Date').html(dayNames[newDate.getDay()] + " " + newDate.getDate() + ' ' + monthNames[newDate.getMonth()] + ' ' +
+        newDate.getFullYear());
+
+    setInterval(function () {
+        // Create a newDate() object and extract the seconds of the current time on the visitor's
+        var seconds = new Date().getSeconds();
+        // Add a leading zero to seconds value
+        $(".sec").html((seconds < 10 ? "0" : "") + seconds);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the minutes of the current time on the visitor's
+        var minutes = new Date().getMinutes();
+        // Add a leading zero to the minutes value
+        $(".min").html((minutes < 10 ? "0" : "") + minutes);
+    }, 1000);
+
+    setInterval(function () {
+        // Create a newDate() object and extract the hours of the current time on the visitor's
+        var hours = new Date().getHours();
+        // Add a leading zero to the hours value
+        $(".hours").html((hours < 10 ? "0" : "") + hours);
+    }, 1000);
+
+</script>
+
+</html>

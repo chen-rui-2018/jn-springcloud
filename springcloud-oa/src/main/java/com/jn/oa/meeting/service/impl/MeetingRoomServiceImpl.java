@@ -74,6 +74,15 @@ public class MeetingRoomServiceImpl implements MeetingRoomService {
                 , objects.getTotal());
 
     }
+
+    @Override
+    @ServiceLog(doAction = "关键字查询会议室列表")
+    public List<OaMeetingRoomVo> selectOaMeetingRoomListBySearchKeyNoPage(OaMeetingRoomPage oaMeetingRoomPage) {
+        return oaMeetingRoomMapper.selectListByCondition(oaMeetingRoomPage);
+    }
+
+
+
     @Override
     @ServiceLog(doAction = "关键字分页查询会议室可用列表")
     public PaginationData selectAvailableMeetingRoomList(OaMeetingRoomPage oaMeetingRoomPage) {

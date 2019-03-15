@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>南京白下区-会议室</title>
+    <link rel="stylesheet" href="css/media.css">
+</head>
+
+<body>
+    <div class="containerList">
+        <header>
+            <span class="headList">会议室列表</span>
+        </header>
+        <div class="content">
+            <div class="logo">
+                <img src="./image/logo.png" alt="">
+            </div>
+            <div class="conList">
+                <ul class="clearfix">
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="js/jquery.min.js"></script>
+<script src="js/common.js"></script>
+<script>
+    $.ajax({
+        url: getBaseUrl()+'/springcloud-oa/guest/oaMeeting/showMeetingRoomList',
+        data: {
+        },
+        dataType: 'json',
+        type: 'post',
+        success: function (res) {
+            console.log(res)
+            var arr=res.data
+            $.each(arr,function(i,value) {
+             var trs = "";
+             trs+="<li or-id='"+value.id+"'>"+value.name+"</li>"
+             $(".conList>ul").append(trs)
+           })
+        }
+    })
+    $(document).on('click','.conList>ul>li',function(){
+    $(this).addClass("active").siblings().removeClass('active')
+    location.href="./media.html?id="+$(this).attr('or-id')+"&name="+encodeURIComponent($(this).html())
+    })
+
+
+</script>
+</html>

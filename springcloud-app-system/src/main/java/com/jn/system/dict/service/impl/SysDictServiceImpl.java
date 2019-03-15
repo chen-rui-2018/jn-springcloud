@@ -240,7 +240,8 @@ public class SysDictServiceImpl implements SysDictService {
         List<SysDictKeyValue> list = new ArrayList<SysDictKeyValue>();
         for (TbSysDict tbSysDict : tbSysDicts) {
             SysDictKeyValue dict = new SysDictKeyValue();
-            BeanUtils.copyProperties(tbSysDict, dict);
+            dict.setKey(tbSysDict.getDictKey());
+            dict.setValue(tbSysDict.getDictValue());
             list.add(dict);
         }
 

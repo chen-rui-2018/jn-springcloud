@@ -16,40 +16,41 @@ import java.io.Serializable;
 @ApiModel(value = "SysDictKeyValue", description = "数据字典keyValue实体")
 public class SysDictKeyValue implements Serializable {
     private static final long serialVersionUID = -2023039860330219992L;
+
     @ApiModelProperty(value = "数据字典键")
-    private String dictKey;
+    private String key;
     @ApiModelProperty(value = "数据字典值")
-    private String dictValue;
+    private String value;
 
     public SysDictKeyValue() {
     }
 
-    public SysDictKeyValue(String dictKey, String dictValue) {
-        this.dictKey = dictKey;
-        this.dictValue = dictValue;
+    public SysDictKeyValue(String key, String value) {
+        this.key = key;
+        this.value = value;
     }
 
-    public String getDictKey() {
-        return dictKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setDictKey(String dictKey) {
-        this.dictKey = dictKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getDictValue() {
-        return dictValue;
+    public String getValue() {
+        return value;
     }
 
-    public void setDictValue(String dictValue) {
-        this.dictValue = dictValue;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     @Override
     public String toString() {
         return "SysDictKeyValue{" +
-                "dictKey='" + dictKey + '\'' +
-                ", dictValue='" + dictValue + '\'' +
+                "key='" + key + '\'' +
+                ", value='" + value + '\'' +
                 '}';
     }
 }

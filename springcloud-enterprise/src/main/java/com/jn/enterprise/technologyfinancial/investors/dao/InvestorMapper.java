@@ -1,5 +1,9 @@
 package com.jn.enterprise.technologyfinancial.investors.dao;
 
+import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorEduExp;
+import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorMainArea;
+import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorMainRound;
+import com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorWorkExp;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -22,4 +26,28 @@ public interface InvestorMapper {
      * @return
      */
     List<InvestorInfoListShow> getInvestorInfoList(@Param("mainCode") String mainArea, @Param("keyWords")String keyWords);
+
+    /**
+     * 批量新增投资人主投领域信息
+     * @param mainAreaList
+     */
+    void insertInvestorMainAreaBatch(@Param("list")List<TbServiceInvestorMainArea> mainAreaList);
+
+    /**
+     * 批量新增投资人主投轮次信息
+     * @param mainRoundList
+     */
+    void insertInvestorMainRoundBatch(@Param("list")List<TbServiceInvestorMainRound> mainRoundList);
+
+    /**
+     * 批量新增投资人工作经历信息
+     * @param workExpList
+     */
+    void insertInvestorWorkExperienceBatch(@Param("list")List<TbServiceInvestorWorkExp> workExpList);
+
+    /**
+     * 批量新增投资人教育经历信息
+     * @param eduExpList
+     */
+    void insertInvestorEduExperienceBatch(@Param("list")List<TbServiceInvestorEduExp> eduExpList);
 }

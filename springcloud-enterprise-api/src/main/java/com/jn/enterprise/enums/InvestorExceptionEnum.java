@@ -13,6 +13,12 @@ public enum InvestorExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     INVESTOR_ACCOUNT_NOT_NULL("5020521","投资人账号不能为空"),
     INVESTOR_INFO_NOT_EXIST("5020522","当前投资人信息不存在"),
+    AFFILIATION_NAME("5020523","所属单位名称不能为空"),
+    INVESTOR_INFO_NOT_NULL("5020524","投资人认证信息不能为空"),
+    INVESTOR_MAIN_AREA_NOT_NULL("5020525","投资人主投领域不能为空"),
+    INVESTOR_MAIN_ROUND_NOT_NULL("5020526","投资人主投轮次不能为空"),
+    INVESTOR_WORK_START_TIME_LATER_END_TIME("","投资人认证工作经历中数据开始时间晚于结束时间"),
+    INVESTOR_EDU_START_TIME_LATER_END_TIME("","投资人认证教育经历中数据开始时间晚于结束时间"),
     ;
 
     /**

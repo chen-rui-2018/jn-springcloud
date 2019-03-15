@@ -1,8 +1,12 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.technologyfinancial.investors.model.AffiliaationUnitShow;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorAuthenticateParam;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+
+import java.util.List;
 
 /**
  * 科技金融投资人
@@ -25,4 +29,19 @@ public interface InvestorService {
      * @return
      */
     InvestorInfoDetailsVo getInvestorInfoDetails(String investorAccount);
+
+    /**
+     * 查询所属单位
+     * @param orgName 单位名称
+     * @return
+     */
+    List<AffiliaationUnitShow> getAffiliationUnit(String orgName);
+
+    /**
+     * 新增投资人认证信息
+     * @param investorAuthenticateParam 投资人认证信息
+     * @param investorAccount           投资人账号
+     * @return
+     */
+    int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam,String investorAccount);
 }

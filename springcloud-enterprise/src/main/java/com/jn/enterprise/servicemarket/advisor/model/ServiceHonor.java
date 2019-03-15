@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +15,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ServiceHonor",description = "顾问荣誉资质出参")
-public class ServiceHonor extends Page implements Serializable {
+public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")

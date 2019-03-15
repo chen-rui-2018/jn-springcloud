@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ServiceExperienceParam",description = "顾问服务经历入参")
-public class ServiceExperienceParam extends Page implements Serializable {
+public class ServiceExperienceParam  implements Serializable {
     @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;
     @ApiModelProperty(value = "顾问账号")

@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
+import com.jn.enterprise.technologyfinancial.investors.model.AffiliaationUnitShow;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Author: yangph
@@ -57,5 +60,15 @@ public class InvestorController extends BaseController {
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
         return  new Result(investorInfoDetailsVo);
+    }
+
+    @ControllerLog(doAction = "查询所属单位")
+    @ApiOperation(value = "查询所属单位", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
+    @RequestMapping(value = "/getAffiliationUnit")
+    public Result<List<AffiliaationUnitShow>> getAffiliationUnit(@ApiParam(value = "单位名称" ,required = true)@RequestParam("orgName") String orgName){
+        Assert.notNull(orgName, InvestorExceptionEnum.AFFILIATION_NAME.getMessage());
+        List<AffiliaationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
+        return  new Result(affiliationUnit);
     }
 }

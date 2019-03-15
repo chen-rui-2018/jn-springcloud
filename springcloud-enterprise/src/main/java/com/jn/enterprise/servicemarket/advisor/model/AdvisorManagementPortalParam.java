@@ -1,6 +1,7 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
 import com.jn.common.model.Page;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
+@ApiModel(value = "AdvisorManagementPortalParam",description = "(门户管理)顾问管理入参")
 public class AdvisorManagementPortalParam extends Page implements Serializable {
     @ApiModelProperty(value = "顾问账号")
     private String advisorName;

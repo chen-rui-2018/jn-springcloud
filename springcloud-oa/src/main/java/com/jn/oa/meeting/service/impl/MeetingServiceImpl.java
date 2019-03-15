@@ -297,7 +297,7 @@ public class MeetingServiceImpl implements MeetingService {
             String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;
 
             //4、二维码连接
-            String contents = "http://www.baidu.com";
+            String contents = "会议室二维码签到开发中";
 
             //5、调用工具类生成二维码
             QRCodeUtils.EncodeHelper(QRCodeUtils.width, QRCodeUtils.height, contents, outFilePath, "");

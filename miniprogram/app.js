@@ -2,11 +2,12 @@ const openIdUrl = require('./config').openIdUrl
 
 App({
   onLaunch(opts) {
-    console.log('App Launch', opts);
+    console.log('App Launch', opts)
     // 登录
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log(res)
       }
     })
     // 获取用户信息
@@ -18,7 +19,7 @@ App({
             success: res => {
               // 可以将 res 发送给后台解码出 unionId
               this.globalData.userInfo = res.userInfo
-              //console.log(111111111);
+              console.log('=====>' + res.userInfo)
               // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
               // 所以此处加入 callback 以防止这种情况
               if (this.userInfoReadyCallback) {
@@ -26,7 +27,7 @@ App({
               }
             }
           })
-          //授权成功后，跳转进入小程序首页
+          // 授权成功后，跳转进入小程序首页
           wx.switchTab({
             url: '/page/minibase/index/index'
           })
@@ -37,7 +38,6 @@ App({
         }
       }
     })
-    
   },
   onShow(opts) {
     console.log('App Show', opts)
@@ -48,8 +48,7 @@ App({
   globalData: {
     hasLogin: false,
     openid: null,
-    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/',
-    registerUrl:'http://sw8cyn.natappfree.cc/springcloud-user/guest/miniprogram/miniprogramRegisterController/'
+    urlPath: 'http://sw8cyn.natappfree.cc/springcloud-wechat-miniprogram/'
   },
   // lazy loading openid
   getUserOpenId(callback) {

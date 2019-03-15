@@ -2,13 +2,14 @@
   "pages": [
     "page/minibase/start/index",
     "page/minibase/index/index",
-    "page/register/register",
-    "page/minibase/logs/logs",
+    "page/minibase/register/register",
     "page/minibase/authorize/authorize",
-    "page/minibase/list/list",
-    "page/minibase/operation/operation",
     "page/minibase/user/index",
 
+    "page/minibase/logs/logs",
+    "page/minibase/list/list",
+    "page/minibase/operation/operation",
+    
     "page/component/index",
     "page/component/pages/view/view",
     "page/component/pages/scroll-view/scroll-view",

@@ -25,6 +25,12 @@ const oaRouter = {
       meta: { title: '新增公告', noCache: false }
     },
     {
+      path: 'editnoticeManagement',
+      component: () => import('@/views/oa/notice/addnoticeManagement'),
+      name: 'editnoticeManagement',
+      meta: { title: '编辑公告', noCache: false }
+    },
+    {
       path: 'meetingManagement',
       component: () => import('@/views/oa/meetingManagement/index'),
       name: 'meetingManagement',

@@ -10,8 +10,8 @@
         <el-input v-model="listQuery.noticeTitle" maxlength="20" placeholder="请输入标题" class="filter-item" clearable @keyup.enter.native="handleFilter" />
       </el-form-item>
       <el-form-item label="发布平台:" style="margin:0px 30px;">
-        <el-select v-model="listQuery.platformType" placeholder="请选择平台类型" clearable class="filter-item" @change="selecteCodeStatus">
-          <el-option v-for="item in codeOptions" :key="item.dictKey" :label="item.dictValue" :value="item.dictKey" />
+        <el-select v-model="listQuery.platformType" placeholder="请选择平台类型" clearable class="filter-item">
+          <el-option v-for="item in codeOptions" :key="item.Key" :label="item.label" :value="item.key" />
         </el-select>
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
@@ -34,7 +34,7 @@
       <el-table-column label="发布人" align="center" prop="creator"/>
       <el-table-column :show-overflow-tooltip="true" label="公告内容" align="center" prop="noticeContent">
         <template slot-scope="scope">
-          <el-button type="text" @click="handleUpdate(scope.row)">预览</el-button>
+          <el-button type="text" @click="handlePreview(scope.row)">预览</el-button>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" min-width="120" prop="createdTime"/>
@@ -46,7 +46,7 @@
       <el-table-column label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button type="text" @click="handleUpdate(scope.row)">编辑</el-button>
-          <el-button type="text" @click="deleteUsergroup(scope.row)">删除</el-button>
+          <el-button type="text" @click="deletenotice(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -67,22 +67,12 @@
 
 <script>
 import {
-  api, getCode
+  api, getCode, paramApi
 } from '@/api/oa/meetingManagement'
 export default {
   data() {
     return {
-      noticeForm: {
-        noticeTitle: '',
-        effectiveTime: '',
-        failureTime: '',
-        recordStatus: '',
-        platformType: [],
-        noticeContent: ''
-
-      },
       dataList: [],
-      platformType: '',
       noticeList: [],
       codeOptions: [],
       total: 0,
@@ -106,9 +96,39 @@ export default {
     this.getCode()
   },
   methods: {
+    // 删除数据
+    deletenotice(row) {
+      this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          paramApi('oa/notice/delete', row.id, 'noticeId').then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              if (this.total % this.listQuery.rows === 1) {
+                this.listQuery.page = this.listQuery.page - 1
+              }
+              this.initList()
+            } else {
+              this.$message.error(res.data.result)
+            }
+          })
+        })
+        .catch(() => {
+        })
+    },
+    // 编辑数据
+    handleUpdate(row) {
+      this.$router.push({ name: 'editnoticeManagement', query: { title: '编辑公告', id: row.id }})
+    },
     // 点击新增按钮的时候
     handleCreate() {
-      this.$router.push({ name: 'addnoticeManagement', query: { title: '新增公告', workOrder: 'GGGL' }})
+      this.$router.push({ name: 'addnoticeManagement', query: { title: '新增公告', workOrderNum: 'GGGL' }})
     },
     // 表格分页功能
     handleSizeChange(val) {
@@ -148,7 +168,9 @@ export default {
     getCode() {
       getCode(this.code).then(res => {
         if (res.data.code === '0000') {
+          console.log(res)
           this.codeOptions = res.data.data
+          console.log(this.codeOptions)
         } else {
           this.$message.error(res.data.result)
         }

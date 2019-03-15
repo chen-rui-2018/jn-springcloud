@@ -65,7 +65,9 @@
     >
       <el-table
         :data="rowTableData"
+        :cell-style="tableRowStyle"
         :span-method="arraySpanMethod"
+        :header-cell-style="{background:'rgb(242, 242, 242)'}"
       >
         <el-table-column
           label="会议室"
@@ -80,6 +82,7 @@
             prop="[0].title"
             label="名称"
             align="center"
+            min-width="100"
           />
           <el-table-column
             prop="[0].building"
@@ -267,6 +270,18 @@ export default {
   },
 
   methods: {
+    // 修改table tr行的背景色
+    tableRowStyle({ row, rowIndex, column, columnIndex }) {
+      if (columnIndex === 1) { // 指定列号
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none;'
+      } else if (columnIndex === 2) {
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none;'
+      } else if (columnIndex === 0) {
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none; border'
+      } else {
+        return ''
+      }
+    },
     // 格式化日期
     formatDate(year, month, day) {
       const y = year
@@ -373,11 +388,6 @@ export default {
         alert('对不起,您不能预约当前日期之前的会议,请重新选择')
         this.errorTime = false
         this.errorText = '对不起,您不能预约当前日期之前的会议,请重新选择'
-        return
-      } else if (time < -2) {
-        alert('对不起,您只能预约3天之内的会议,请重新选择')
-        this.errorTime = false
-        this.errorText = '对不起,您只能预约3天之内的会议,请重新选择'
         return
       } else {
         this.errorTime = true
@@ -524,9 +534,7 @@ export default {
         for (var k = 0; k < arr_data[i].meetingList.length; k++) {
           var startTime = (arr_data[i].meetingList[k].startTime).replace(/^.* /, '').slice(0, 5)
           var endTime = (arr_data[i].meetingList[k].endTime).replace(/^.* /, '').slice(0, 5)
-          console.log(startTime, endTime)
           var get_arr = this.calTdMerge(startTime, endTime)
-          console.log(get_arr)
           for (var l = 0; l < get_arr.length; l++) {
             var _index = get_arr[l]
             if (l === 0) {
@@ -542,7 +550,6 @@ export default {
         arr_row.push(_arr)
       }
       this.rowTableData = arr_row
-      console.log(this.rowTableData)
     },
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       // 合并单元格
@@ -590,6 +597,13 @@ export default {
   .el-table--border th:first-child .cell {
     padding: 0px;
   }
+  .el-table thead.has-gutter th{
+        border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+  .el-table--border, .el-table--group {
+    border: 1px solid #ccc;
+}
   .table {
     margin-left: 15px;
     flex: 8;

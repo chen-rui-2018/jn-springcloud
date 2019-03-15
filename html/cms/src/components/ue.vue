@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ueQuidtor">
     <script id="editor" type="text/plain" />
   </div>
 </template>
@@ -41,8 +41,11 @@ export default {
   }
 }
 </script>
-<style>
+<style  lang="scss">
+.ueQuidtor{
+
    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
-    line-height: 22px;
+    line-height: 22px !important;
+}
 }
 </style>

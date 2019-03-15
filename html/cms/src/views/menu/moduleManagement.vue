@@ -151,7 +151,6 @@ export default {
                 type: 'success'
               })
               if (this.total % this.moduleForm.rows === 1) {
-                debugger
                 this.moduleForm.page = this.moduleForm.page - 1
               }
               this.initList()

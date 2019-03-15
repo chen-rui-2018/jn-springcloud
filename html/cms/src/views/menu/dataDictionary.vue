@@ -301,7 +301,6 @@ export default {
                 type: 'success'
               })
               if (this.total % this.dictionaryForm.rows === 1) {
-                debugger
                 this.dictionaryForm.page = this.dictionaryForm.page - 1
               }
               this.initList()

@@ -1,10 +1,10 @@
 <template>
-  <div class="addMeetingroom">
+  <div class="addnotice">
     <div class="header">{{ title }}</div>
-    <el-form ref="meetingroomForm" :model="meetingroomForm" :rules="rules" class="demo-meetingroomForm">
+    <el-form ref="noticeForm" :model="noticeForm" :rules="rules">
       <div style="display:flex">
-        <el-form-item label="编号" class="inline setheight">
-          <span>{{ workOrder }}</span>
+        <el-form-item id="setheight" label="编号" class="inline ">
+          <span>{{ noticeForm.workOrderNum }}</span>
         </el-form-item>
         <el-form-item label="公告标题" prop="noticeTitle" class="inline">
           <el-input v-model="noticeForm.noticeTitle" clearable placeholder="请输入公告标题" maxlength="20"/>
@@ -14,12 +14,14 @@
         <el-form-item label="生效时间" prop="effectiveTime" class="inline" >
           <el-date-picker
             v-model="noticeForm.effectiveTime"
+            value-format="yyyy-MM-dd"
             type="date"
             placeholder="选择生效时间"/>
         </el-form-item>
         <el-form-item label="失效时间" prop="failureTime" class="inline" >
           <el-date-picker
             v-model="noticeForm.failureTime"
+            value-format="yyyy-MM-dd"
             type="date"
             placeholder="选择失效时间"/>
         </el-form-item>
@@ -27,16 +29,16 @@
       <div style="display:flex">
         <el-form-item label="状态" prop="recordStatus" class="inline">
           <el-select v-model="noticeForm.recordStatus" placeholder="请选择状态">
-            <el-option v-for="item in statusOptions" :key="item.dictKey" :label="item.dictValue" :value="item.dictKey" />
+            <el-option v-for="item in statusOptions" :key="item.id" :label="item.label" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="平台类型" prop="platformType" class="inline">
-          <el-select v-model="noticeForm.platformType" multiple placeholder="请选择">
+          <el-select v-model="noticeForm.platformType" value-key="key" multiple placeholder="请选择">
             <el-option
               v-for="item in codeOptions"
-              :key="item.value"
+              :key="item.key"
               :label="item.label"
-              :value="item.value"/>
+              :value="item"/>
           </el-select>
         </el-form-item>
       </div>
@@ -48,7 +50,7 @@
         </el-form-item>
       </div>
       <div class="primaryList">
-        <el-button :disabled="isDisabled" type="primary" @click="title==='新增会议室'?submitForm('meetingroomForm'):updateData()">提交</el-button>
+        <el-button :disabled="isDisabled" type="primary" @click="title==='新增公告'?submitForm():updateData()">提交</el-button>
         <el-button @click="cancel" >取消</el-button>
         <el-button @click="goBack($route)" >返回</el-button>
 
@@ -59,7 +61,7 @@
 
 <script>
 import {
-  api, paramApi
+  api, paramApi, getCode
 } from '@/api/oa/meetingManagement'
 import UE from '@/components/ue.vue'
 export default {
@@ -73,96 +75,100 @@ export default {
         callback()
       }
     }
-    var checkBuilding = (rule, value, callback) => {
-      const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
-      if (!reg.test(value)) {
-        callback(new Error('名称只允许数字、中文、字母及下划线'))
-      } else {
-        callback()
-      }
-    }
+    // var checkBuilding = (rule, value, callback) => {
+    //   const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
+    //   if (!reg.test(value)) {
+    //     callback(new Error('名称只允许数字、中文、字母及下划线'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
-      defaultMsg: '这里是UE测试',
+      defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
-      workOrder: '',
+      codeOptions: [],
       isDisabled: false,
       statusOptions: [
         {
-          value: '1',
-          label: '可用'
+          id: '1',
+          label: '有效'
         },
         {
-          value: '2',
-          label: '不可用'
+          id: '2',
+          label: '失效'
         }
       ],
       title: '',
       noticeForm: {
+        workOrderNum: '',
         noticeTitle: '',
         effectiveTime: '',
         failureTime: '',
         recordStatus: '',
-        platformType: [],
-        noticeContent: ''
+        platformType: '',
+        noticeContent: '',
+        id: ''
+      },
+      code: {
+        groupCode: 'platform_type',
+        moduleCode: 'springcloud-oa',
+        parentGroupCode: 'notice'
       },
       rules: {
         noticeTitle: [
           { required: true, message: '请输入公告标题', trigger: 'blur' },
           { validator: checknoticeTitle, trigger: 'blur' }
         ],
-        building: [{ required: true, message: '请输入楼宇', trigger: 'blur' },
-          { validator: checkBuilding, trigger: 'blur' }],
-        floor: [{ required: true, message: '请输入楼层', trigger: 'blur' },
-          { validator: checkBuilding, trigger: 'blur' }],
-        roomNumber: [{ required: true, message: '请输入房间号', trigger: 'blur' },
-          { validator: checkBuilding, trigger: 'blur' }],
+        effectiveTime: [{ required: true, message: '请选择生效时间', trigger: 'change' }],
+        failureTime: [{ required: true, message: '请选择失效时间', trigger: 'change' }],
+        platformType: [{ required: true, message: '请选择平台类型', trigger: 'change' }],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }],
-        capacity: [{ required: true, message: '请输入会议室容量', trigger: 'blur' }]
+        noticeContent: [{ required: true, message: '请输入公告内容', trigger: 'blur' }]
       }
     }
   },
   created() {
     this.initList()
+    this.getCode()
   },
   methods: {
     cancel() {
-      if (this.title === '新增会议室') {
-        this.meetingroomForm.roomNumber = ''
-        this.meetingroomForm.name = ''
-        this.meetingroomForm.building = ''
-        this.meetingroomForm.explains = ''
-        this.meetingroomForm.capacity = ''
-        this.meetingroomForm.floor = ''
-        this.meetingroomForm.recordStatus = ''
-        this.meetingroomForm.attachmentPaths = []
-        this.$nextTick(() => {
-          this.$refs['meetingroomForm'].clearValidate()
-        })
-      }
-      this.initList()
     },
+    // this.initList()
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      this.$refs['meetingroomForm'].validate(valid => {
+      var platformTypeArr = []
+      this.noticeForm.platformType.forEach(val => {
+        platformTypeArr.push({
+          key: val.key,
+          value: val.label
+        })
+      })
+      this.noticeForm.platformType = JSON.stringify(platformTypeArr)
+      this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
+      this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
+      this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
+
+      this.$refs['noticeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('oa/oaMeetingRoom/add', this.meetingroomForm).then(res => {
+          api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
                 message: '添加成功',
                 type: 'success'
               })
               this.goBack(this.$route)
+              // 重置表单元素的数据
+              this.$refs['noticeForm'].resetFields()
             } else {
               this.$message.error(res.data.result)
             }
             this.isDisabled = false
-            // 重置表单元素的数据
-            this.$refs['meetingroomForm'].resetFields()
           })
         } else {
           this.isDisabled = false
@@ -175,90 +181,88 @@ export default {
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          // const latestView = visitedViews.slice(-1)[0]
-          // if (latestView) {
-          //   this.$router.push('meetingroomManagement')
-          // } else {
-          //   this.$router.push('/')
-          // }
           this.$router.push('noticeManagement')
         }
       })
     },
     // 编辑表单
     updateData() {
-      this.isDisabled = true
-      this.$refs['meetingroomForm'].validate(valid => {
-        if (valid) {
-          // 调用接口发送请求
-          api('oa/oaMeetingRoom/update', this.meetingroomForm).then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                message: '编辑成功',
-                type: 'success'
-              })
-              this.goBack(this.$route)
-            } else {
-              this.$message.error(res.data.result)
-            }
-            this.isDisabled = false
-          })
-        } else {
-          this.isDisabled = false
-        }
+      // this.isDisabled = true
+      var platformArr = []
+      console.log(this.noticeForm.platformType)
+      this.noticeForm.platformType.forEach(val => {
+        platformArr.push({
+          key: val.key,
+          value: val.label
+        })
       })
+      this.noticeForm.platformType = JSON.stringify(platformArr)
+      console.log(this.noticeForm.platformType)
+      this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
+      this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
+      this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
+      // this.$refs['noticeForm'].validate(valid => {
+      //   if (valid) {
+      //     // 调用接口发送请求
+      //     api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
+      //       if (res.data.code === '0000') {
+      //         this.$message({
+      //           message: '编辑成功',
+      //           type: 'success'
+      //         })
+      //         this.goBack(this.$route)
+      //       } else {
+      //         this.$message.error(res.data.result)
+      //       }
+      //       this.isDisabled = false
+      //     })
+      //   } else {
+      //     this.isDisabled = false
+      //   }
+      // })
     },
     // 页面初始化
     initList() {
       var query = this.$route.query
       console.log(query)
-      this.workOrder = query.workOrder
       this.title = query.title
+      this.noticeForm.workOrderNum = query.workOrderNum
       if (query.id) {
-        this.meetingroomForm.id = query.id
-        paramApi('oa/oaMeetingRoom/selectById', query.id, 'id').then(res => {
+        this.noticeForm.id = query.id
+        paramApi('oa/notice/getNoticeById', query.id, 'noticeId').then(res => {
           if (res.data.code === '0000') {
+            console.log(res)
             var data = res.data.data
-            this.meetingroomForm.name = data.name
-            this.meetingroomForm.building = data.building
-            this.meetingroomForm.floor = data.floor
-            this.meetingroomForm.roomNumber = data.roomNumber
-            this.meetingroomForm.capacity = data.capacity
-            this.meetingroomForm.explains = data.explains
-            this.meetingroomForm.attachmentPaths = data.attachmentPaths
-            // this.fileList = data.attachmentPaths
-            if (data.attachmentPaths.length > 0 && data.attachmentPaths !== null) {
-              var fileListArr = []
-              data.attachmentPaths.forEach(val => {
-                fileListArr.push({ name: '', url: val })
-              })
-              // 数组去重
-              this.fileList = Array.from(new Set(fileListArr))
-            }
-            this.meetingroomForm.recordStatus = data.recordStatus.toString()
-            // if (this.fileList.length > 0) {
-            //   this.showImg = true
-            // }
-            if (query.title === '查看会议室') {
-              this.lookMeetingroom = true
-            }
+            this.noticeForm.noticeTitle = data.noticeTitle
+            this.noticeForm.workOrderNum = data.workOrderNum
+            this.noticeForm.effectiveTime = data.effectiveTime.slice(0, 10)
+            this.noticeForm.failureTime = data.failureTime.slice(0, 10)
+            this.noticeForm.recordStatus = data.recordStatus.toString()
+            this.noticeForm.platformType = JSON.parse(data.platformType)
+            console.log(this.noticeForm.platformType)
+            this.defaultMsg = data.noticeContent
           } else {
             this.$message.error(res.data.result)
           }
         })
       }
     },
-    // 改变平台状态
-    selecteCodeStatus(value) {
-      console.log(value)
-      this.listQuery.platformType = value
+    // 获取平台类型
+    getCode() {
+      getCode(this.code).then(res => {
+        if (res.data.code === '0000') {
+          this.codeOptions = res.data.data
+        } else {
+          this.$message.error(res.data.result)
+        }
+      })
     }
   }
 }
 </script>
 
 <style lang="scss">
-.addMeetingroom {
+.addnotice {
   .header {
     color: cadetblue;
     background: #f0f0f0;
@@ -294,10 +298,10 @@ export default {
     flex: 1;
     // line-height: 36px;
     display: inline-block;
-    padding: 10px  15px;
+    padding:  15px;
     border: 1px solid #ccc;
   }
-  .setheight{
+  #setheight{
     .el-form-item__content {
       line-height: 36px;
     }
@@ -310,6 +314,9 @@ export default {
     left:22px;
     top:unset;
     padding-top: unset;
+  }
+    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+    line-height: 22px;
   }
 }
 </style>

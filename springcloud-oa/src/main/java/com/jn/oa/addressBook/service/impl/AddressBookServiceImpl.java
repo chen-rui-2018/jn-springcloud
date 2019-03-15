@@ -1,13 +1,13 @@
 package com.jn.oa.addressBook.service.impl;
 
 import com.jn.common.model.Result;
+import com.jn.oa.addressBook.domain.AddressBookProperties;
 import com.jn.oa.addressBook.service.AddressBookService;
 import com.jn.oa.common.enums.OaStatusEnums;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
-import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,9 @@ public class AddressBookServiceImpl implements AddressBookService {
 
     @Autowired
     private SystemClient systemClient;
+
+    @Autowired
+    private AddressBookProperties addressBookProperties;
 
     /**
      * 获取用户信息详情
@@ -51,6 +54,9 @@ public class AddressBookServiceImpl implements AddressBookService {
     public Result list(UserPage userPage) {
         //只获取有效用户,所以设置查询状态为有效
         userPage.setRecordStatus(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
+        //从配置文件中读取园区用户用户组的id
+        String userGroupId = addressBookProperties.getUserGroupId();
+        userPage.setUserGroupId(userGroupId);
         Result result = systemClient.getUserByPage(userPage);
         return result;
     }

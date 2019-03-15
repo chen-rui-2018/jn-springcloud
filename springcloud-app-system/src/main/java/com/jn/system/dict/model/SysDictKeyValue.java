@@ -20,14 +20,14 @@ public class SysDictKeyValue implements Serializable {
     @ApiModelProperty(value = "数据字典键")
     private String key;
     @ApiModelProperty(value = "数据字典值")
-    private String value;
+    private String lable;
 
     public SysDictKeyValue() {
     }
 
-    public SysDictKeyValue(String key, String value) {
+    public SysDictKeyValue(String key, String lable) {
         this.key = key;
-        this.value = value;
+        this.lable = lable;
     }
 
     public String getKey() {
@@ -38,19 +38,19 @@ public class SysDictKeyValue implements Serializable {
         this.key = key;
     }
 
-    public String getValue() {
-        return value;
+    public String getLable() {
+        return lable;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setLable(String lable) {
+        this.lable = lable;
     }
 
     @Override
     public String toString() {
         return "SysDictKeyValue{" +
                 "key='" + key + '\'' +
-                ", value='" + value + '\'' +
+                ", lable='" + lable + '\'' +
                 '}';
     }
 }

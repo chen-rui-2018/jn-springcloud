@@ -241,7 +241,7 @@ public class SysDictServiceImpl implements SysDictService {
         for (TbSysDict tbSysDict : tbSysDicts) {
             SysDictKeyValue dict = new SysDictKeyValue();
             dict.setKey(tbSysDict.getDictKey());
-            dict.setValue(tbSysDict.getDictValue());
+            dict.setLable(tbSysDict.getDictValue());
             list.add(dict);
         }
 

@@ -26,9 +26,8 @@ export default {
     this.editor = window.UE.getEditor('editor', this.config) // 初始化UE
     this.editor.addListener('ready', function() {
       setTimeout(function() {
-        // debugger
         _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
-      }, 500)
+      }, 200)
     })
   },
   destroyed() {

@@ -51,7 +51,7 @@
       </div>
       <div class="primaryList">
         <el-button :disabled="isDisabled" type="primary" @click="title==='新增公告'?submitForm():updateData()">提交</el-button>
-        <el-button @click="cancel" >取消</el-button>
+        <!-- <el-button :disabled="isDisabled" @click="cancel">取消</el-button> -->
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -108,7 +108,7 @@ export default {
         effectiveTime: '',
         failureTime: '',
         recordStatus: '',
-        platformType: '',
+        platformType: [],
         noticeContent: '',
         id: ''
       },
@@ -135,9 +135,23 @@ export default {
     this.getCode()
   },
   methods: {
-    cancel() {
-    },
-    // this.initList()
+    // cancel() {
+    //   this.isDisabled = true
+    //   if (this.title === '新增公告') {
+    //     this.noticeForm.noticeTitle = ''
+    //     this.noticeForm.effectiveTime = ''
+    //     this.noticeForm.failureTime = ''
+    //     this.noticeForm.recordStatus = ''
+    //     this.noticeForm.platformType = []
+    //     this.defaultMsg = ''
+    //     this.$nextTick(() => {
+    //       this.$refs['noticeForm'].clearValidate()
+    //     })
+    //     this.isDisabled = false
+    //   }
+    //   this.initList()
+    //   // this.isDisabled = false
+    // },
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
@@ -150,8 +164,6 @@ export default {
       this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
       this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
       this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
-      // this.noticeForm.recordStatus = Number(this.noticeForm.recordStatus)
-
       this.$refs['noticeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求

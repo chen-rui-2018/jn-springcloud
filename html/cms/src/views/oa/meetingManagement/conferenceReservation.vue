@@ -67,6 +67,7 @@
         :data="rowTableData"
         :cell-style="tableRowStyle"
         :span-method="arraySpanMethod"
+        :cell-class-name="rowClass"
         :header-cell-style="{background:'rgb(242, 242, 242)'}"
       >
         <el-table-column
@@ -189,7 +190,7 @@ export default {
     'meeting-div2': {
       // 会议组件
       props: ['postTitle'],
-      template: '<div class="textBgc" >{{postTitle}}</div>',
+      template: '<div class="" >{{postTitle}}</div>',
       methods: {}
     }
   },
@@ -389,6 +390,27 @@ export default {
   },
 
   methods: {
+
+    rowClass({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex >= this.leftCol) {
+        if (
+          this.rowTableData[rowIndex][columnIndex - this.leftCol].status === 1
+        ) {
+          return 'meetingBgc'
+        } else if (
+          this.rowTableData[rowIndex][columnIndex - this.leftCol].status === 2
+        ) {
+          return 'meetingBgc'
+        }
+      }
+      // if (rowIndex === 5 && columnIndex === 4) {
+      //   return 'rgb196'
+      // } else if (rowIndex === 6 && columnIndex === 4) {
+      //   return 'bacColorf4984e'
+      // } else if (rowIndex === 6 && columnIndex === 5) {
+      //   return 'bacColor317eb0'
+      // }
+    },
     // 修改table tr行的背景色
     tableRowStyle({ row, rowIndex, column, columnIndex }) {
       // const sbb = this.arraySpanMethod()
@@ -744,10 +766,10 @@ export default {
       border: none;
       cursor: default;
     }
-    .textBgc {
-      // background: blue;
-      color: rgb(0, 176, 240);
-    }
+    // .textBgc {
+    //   // background: blue;
+    //   color: rgb(0, 176, 240);
+    // }
     .el-pagination {
       margin-top: 15px;
     }
@@ -815,6 +837,7 @@ export default {
   margin: 0 auto;
 }
 .meetingBgc{
-  background: #324057;
+  background: rgb(0, 176, 240);
+  color:black;
 }
 </style>

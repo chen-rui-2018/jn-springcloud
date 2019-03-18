@@ -15,7 +15,7 @@ public enum PersonnelFlowNodeEnum {
 
     FIRST_START("10","人才意向申报"),
     FIRST_START_10("1010","企业-人才意向申报"),
-    FIRST_START_20("1020","人才中心-审批人才意向申报"),
+    FIRST_START_20("1020","人才中心-人才意向申报审核"),
 
     TWO_AREA_PLAN_COUNSEL("20","区级计划书辅导"),
     TWO_AREA_PLAN_COUNSEL_10("2010","人才中心-上传人才申报书模板"),
@@ -28,7 +28,7 @@ public enum PersonnelFlowNodeEnum {
 
     THREE_ADD_INFO("30","完善申报资料"),
     THREE_ADD_INFO_10("3010","企业-完善申报资料"),
-    THREE_ADD_INFO_20("3020","人才中心-审批完善申报资料"),
+    THREE_ADD_INFO_20("3020","人才中心-完善申报资料审核"),
 
     FOUR_AREA_ANSWER_COUNSEL("40","区级答辩辅导"),
     FOUR_AREA_ANSWER_COUNSEL_10("4010","人才中心-上传答辩材料及发送预约辅导"),

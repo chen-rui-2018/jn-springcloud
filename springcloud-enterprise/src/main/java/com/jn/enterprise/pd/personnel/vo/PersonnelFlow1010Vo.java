@@ -1,7 +1,6 @@
-package com.jn.enterprise.pd.personnel.model;
+package com.jn.enterprise.pd.personnel.vo;
 
 import com.jn.enterprise.pd.personnel.enums.PersonnelFlowNodeEnum;
-import com.jn.enterprise.pd.personnel.vo.PersonnelFlowNodeBaseAbstractVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,19 +13,14 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "PersonnelFirstStart10Model",description = "人才意向申报")
-public class PersonnelFirstStart10Model extends PersonnelFlowNodeBaseAbstractVo implements Serializable {
-
-    public PersonnelFirstStart10Model(String nodeNo) {
-        //初始化流程 流程所在的节点
-        super(nodeNo);
-    }
-
+@ApiModel(value = "PersonnelFlow1010Vo",description = "企业-人才意向申报")
+public class PersonnelFlow1010Vo extends PersonnelFlowNodeBaseAbstractVo implements Serializable {
     @Override
-    public String getNextFormAction() {
-        return "/person/first/10";
+    public PersonnelFlowNodeEnum getFlowNodeEnum() {
+        return PersonnelFlowNodeEnum.FIRST_START_10;
     }
 
+    //todo 补充本节点的表单内容（流程相关的除外）
 
     @ApiModelProperty("企业（团队）名称")
     private String name;
@@ -64,6 +58,8 @@ public class PersonnelFirstStart10Model extends PersonnelFlowNodeBaseAbstractVo 
 
     @ApiModelProperty("项目介绍书附件地址")
     private String projectIntroductionFile;
+
+
 
     public String getName() {
         return name;

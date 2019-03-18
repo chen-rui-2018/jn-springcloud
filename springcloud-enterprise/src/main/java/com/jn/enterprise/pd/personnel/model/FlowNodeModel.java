@@ -9,8 +9,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "PersonnelFlowNodeModel",description = "审批节点")
-public class PersonnelFlowNodeModel {
+@ApiModel(value = "FlowNodeModel",description = "审批节点")
+public class FlowNodeModel {
 
     @ApiModelProperty("节点编码")
     private String nodeNo;
@@ -44,7 +44,7 @@ public class PersonnelFlowNodeModel {
         this.nodeStatus = nodeStatus;
     }
 
-    public PersonnelFlowNodeModel(String nodeNo, String nodeName, Integer nodeStatus) {
+    public FlowNodeModel(String nodeNo, String nodeName, Integer nodeStatus) {
         this.nodeNo = nodeNo;
         this.nodeName = nodeName;
         this.nodeStatus = nodeStatus;

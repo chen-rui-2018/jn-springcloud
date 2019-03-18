@@ -9,6 +9,7 @@
     <result column="send_status" jdbcType="VARCHAR" property="sendStatus" />
     <result column="is_delay" jdbcType="VARCHAR" property="isDelay" />
     <result column="delay_send_time" jdbcType="TIMESTAMP" property="delaySendTime" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
     <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -76,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, work_order_num, title, email_content, send_status, is_delay, delay_send_time, 
-    send_time, record_status, creator_account, created_time, modifier_account, modified_time
+    attachment, send_time, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.email.entity.TbOaEmailCriteria" resultMap="BaseResultMap">
     select
@@ -111,14 +113,14 @@
   <insert id="insert" parameterType="com.jn.oa.email.entity.TbOaEmail">
     insert into tb_oa_email (id, work_order_num, title, 
       email_content, send_status, is_delay, 
-      delay_send_time, send_time, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
+      delay_send_time, attachment, send_time, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
     values (#{id,jdbcType=VARCHAR}, #{workOrderNum,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{emailContent,jdbcType=VARCHAR}, #{sendStatus,jdbcType=VARCHAR}, #{isDelay,jdbcType=VARCHAR}, 
-      #{delaySendTime,jdbcType=TIMESTAMP}, #{sendTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{delaySendTime,jdbcType=TIMESTAMP}, #{attachment,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.email.entity.TbOaEmail">
     insert into tb_oa_email
@@ -143,6 +145,9 @@
       </if>
       <if test="delaySendTime != null">
         delay_send_time,
+      </if>
+      <if test="attachment != null">
+        attachment,
       </if>
       <if test="sendTime != null">
         send_time,
@@ -184,6 +189,9 @@
       </if>
       <if test="delaySendTime != null">
         #{delaySendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="attachment != null">
+        #{attachment,jdbcType=VARCHAR},
       </if>
       <if test="sendTime != null">
         #{sendTime,jdbcType=TIMESTAMP},
@@ -235,6 +243,9 @@
       <if test="record.delaySendTime != null">
         delay_send_time = #{record.delaySendTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.attachment != null">
+        attachment = #{record.attachment,jdbcType=VARCHAR},
+      </if>
       <if test="record.sendTime != null">
         send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       </if>
@@ -267,6 +278,7 @@
       send_status = #{record.sendStatus,jdbcType=VARCHAR},
       is_delay = #{record.isDelay,jdbcType=VARCHAR},
       delay_send_time = #{record.delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
       send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -298,6 +310,9 @@
       <if test="delaySendTime != null">
         delay_send_time = #{delaySendTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="attachment != null">
+        attachment = #{attachment,jdbcType=VARCHAR},
+      </if>
       <if test="sendTime != null">
         send_time = #{sendTime,jdbcType=TIMESTAMP},
       </if>
@@ -327,6 +342,7 @@
       send_status = #{sendStatus,jdbcType=VARCHAR},
       is_delay = #{isDelay,jdbcType=VARCHAR},
       delay_send_time = #{delaySendTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
       send_time = #{sendTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

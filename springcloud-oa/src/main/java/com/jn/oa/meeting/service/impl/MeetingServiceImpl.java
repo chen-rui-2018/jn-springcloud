@@ -294,7 +294,7 @@ public class MeetingServiceImpl implements MeetingService {
 
             //3、输出文件及路径
             String fileName = "QRCode.png";
-            String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;
+            String outFilePath = tempUpload.getAbsolutePath() + File.separator + fileName;  
 
             //4、二维码连接
             String contents = "会议室二维码签到开发中";

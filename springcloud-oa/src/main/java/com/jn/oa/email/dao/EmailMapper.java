@@ -1,9 +1,10 @@
 package com.jn.oa.email.dao;
 
-import com.jn.oa.email.model.Email;
+import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.email.model.EmailPage;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 一键Emaildao层
@@ -20,5 +21,20 @@ public interface EmailMapper {
      * @param emailPage 分页条件
      * @return
      */
-    List<Email> list(EmailPage emailPage);
+    List<EmailVO> list(EmailPage emailPage);
+
+    /**
+     * 获取邮件任务详情
+     *
+     * @param emailId
+     * @return
+     */
+    EmailVO getEmailDetails(String emailId);
+
+    /**
+     * (逻辑)批量删除邮件任务
+     *
+     * @param map
+     */
+    void deleteBatch(Map<String, Object> map);
 }

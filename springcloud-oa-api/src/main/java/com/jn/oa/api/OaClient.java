@@ -41,5 +41,5 @@ public interface OaClient {
      * @return
      */
     @RequestMapping(value = "/api/oa/regularSendEmail", method = RequestMethod.POST)
-    Result regularSendEmail(@RequestBody Email email);
+    Result<Boolean> regularSendEmail(@RequestBody Email email);
 }

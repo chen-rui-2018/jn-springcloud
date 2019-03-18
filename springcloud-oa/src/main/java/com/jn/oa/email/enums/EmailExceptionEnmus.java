@@ -17,6 +17,9 @@ public enum EmailExceptionEnmus implements CodeAndMsg {
     RECIPIENTS_NOT_EMPTY("6013504","邮件收件人不能为空"),
     TIMING_FAILURE("6013505","邮件定时设置失败,请稍后再试"),
     EMAIL_NOT_EXIST("6013506","一键发送失败,邮件任务不存在或已被删除"),
+    FILE_IS_NULL("6013507","附件上传失败,上传文件为空"),
+    UPLOAD_FILE_ERRPR("6013508","附件上传失败,请稍后再试"),
+    EMAIL_SEND_FAIL("6013509","邮件发送失败")
     ;
 
     private String code;

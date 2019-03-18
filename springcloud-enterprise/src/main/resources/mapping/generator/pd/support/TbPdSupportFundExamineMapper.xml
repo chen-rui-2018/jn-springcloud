@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.support.dao.TbPdSupportFundExamineMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamine">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="personnel_name" jdbcType="VARCHAR" property="personnelName" />
+    <result column="application_amount" jdbcType="DECIMAL" property="applicationAmount" />
+    <result column="partner_name" jdbcType="VARCHAR" property="partnerName" />
+    <result column="use_fund" jdbcType="VARCHAR" property="useFund" />
+    <result column="contact" jdbcType="VARCHAR" property="contact" />
+    <result column="contact_number" jdbcType="VARCHAR" property="contactNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="application_materials" jdbcType="VARCHAR" property="applicationMaterials" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, personnel_name, application_amount, partner_name, use_fund, contact, contact_number, 
+    email, application_materials, status, record_status, creator_account, created_time, 
+    modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamineCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_support_fund_examine
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_support_fund_examine
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pd_support_fund_examine
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamineCriteria">
+    delete from tb_pd_support_fund_examine
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamine">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_support_fund_examine (name, personnel_name, application_amount, 
+      partner_name, use_fund, contact, 
+      contact_number, email, application_materials, 
+      status, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{name,jdbcType=VARCHAR}, #{personnelName,jdbcType=VARCHAR}, #{applicationAmount,jdbcType=DECIMAL}, 
+      #{partnerName,jdbcType=VARCHAR}, #{useFund,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, 
+      #{contactNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{applicationMaterials,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamine">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_support_fund_examine
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="personnelName != null">
+        personnel_name,
+      </if>
+      <if test="applicationAmount != null">
+        application_amount,
+      </if>
+      <if test="partnerName != null">
+        partner_name,
+      </if>
+      <if test="useFund != null">
+        use_fund,
+      </if>
+      <if test="contact != null">
+        contact,
+      </if>
+      <if test="contactNumber != null">
+        contact_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="applicationMaterials != null">
+        application_materials,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelName != null">
+        #{personnelName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationAmount != null">
+        #{applicationAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="partnerName != null">
+        #{partnerName,jdbcType=VARCHAR},
+      </if>
+      <if test="useFund != null">
+        #{useFund,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationMaterials != null">
+        #{applicationMaterials,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamineCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_support_fund_examine
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_support_fund_examine
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.personnelName != null">
+        personnel_name = #{record.personnelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicationAmount != null">
+        application_amount = #{record.applicationAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.partnerName != null">
+        partner_name = #{record.partnerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.useFund != null">
+        use_fund = #{record.useFund,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contact != null">
+        contact = #{record.contact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactNumber != null">
+        contact_number = #{record.contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicationMaterials != null">
+        application_materials = #{record.applicationMaterials,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_support_fund_examine
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      personnel_name = #{record.personnelName,jdbcType=VARCHAR},
+      application_amount = #{record.applicationAmount,jdbcType=DECIMAL},
+      partner_name = #{record.partnerName,jdbcType=VARCHAR},
+      use_fund = #{record.useFund,jdbcType=VARCHAR},
+      contact = #{record.contact,jdbcType=VARCHAR},
+      contact_number = #{record.contactNumber,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
+      application_materials = #{record.applicationMaterials,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamine">
+    update tb_pd_support_fund_examine
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="personnelName != null">
+        personnel_name = #{personnelName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationAmount != null">
+        application_amount = #{applicationAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="partnerName != null">
+        partner_name = #{partnerName,jdbcType=VARCHAR},
+      </if>
+      <if test="useFund != null">
+        use_fund = #{useFund,jdbcType=VARCHAR},
+      </if>
+      <if test="contact != null">
+        contact = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNumber != null">
+        contact_number = #{contactNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationMaterials != null">
+        application_materials = #{applicationMaterials,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundExamine">
+    update tb_pd_support_fund_examine
+    set name = #{name,jdbcType=VARCHAR},
+      personnel_name = #{personnelName,jdbcType=VARCHAR},
+      application_amount = #{applicationAmount,jdbcType=DECIMAL},
+      partner_name = #{partnerName,jdbcType=VARCHAR},
+      use_fund = #{useFund,jdbcType=VARCHAR},
+      contact = #{contact,jdbcType=VARCHAR},
+      contact_number = #{contactNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      application_materials = #{applicationMaterials,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

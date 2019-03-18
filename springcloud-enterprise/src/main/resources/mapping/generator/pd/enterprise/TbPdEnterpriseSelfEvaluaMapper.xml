@@ -1,0 +1,677 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.enterprise.dao.TbPdEnterpriseSelfEvaluaMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvalua">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="enterprise_name" jdbcType="VARCHAR" property="enterpriseName" />
+    <result column="unified_social_credit" jdbcType="VARCHAR" property="unifiedSocialCredit" />
+    <result column="contacts_name" jdbcType="VARCHAR" property="contactsName" />
+    <result column="contacts_phone" jdbcType="VARCHAR" property="contactsPhone" />
+    <result column="contacts_email" jdbcType="VARCHAR" property="contactsEmail" />
+    <result column="enterprise_registration_time" jdbcType="TIMESTAMP" property="enterpriseRegistrationTime" />
+    <result column="is_china_territory" jdbcType="TINYINT" property="isChinaTerritory" />
+    <result column="detailed_address" jdbcType="VARCHAR" property="detailedAddress" />
+    <result column="is_core_technology" jdbcType="TINYINT" property="isCoreTechnology" />
+    <result column="technical_neighborhood" jdbcType="VARCHAR" property="technicalNeighborhood" />
+    <result column="workers_tatal" jdbcType="INTEGER" property="workersTatal" />
+    <result column="technical_personnel" jdbcType="INTEGER" property="technicalPersonnel" />
+    <result column="is_illegal_activities" jdbcType="TINYINT" property="isIllegalActivities" />
+    <result column="corporate_income_1" jdbcType="DECIMAL" property="corporateIncome1" />
+    <result column="corporate_income_2" jdbcType="DECIMAL" property="corporateIncome2" />
+    <result column="corporate_income_3" jdbcType="DECIMAL" property="corporateIncome3" />
+    <result column="total_sales_revenue_1" jdbcType="DECIMAL" property="totalSalesRevenue1" />
+    <result column="total_sales_revenue_2" jdbcType="DECIMAL" property="totalSalesRevenue2" />
+    <result column="total_sales_revenue_3" jdbcType="DECIMAL" property="totalSalesRevenue3" />
+    <result column="total_revenue_products_1" jdbcType="DECIMAL" property="totalRevenueProducts1" />
+    <result column="total_revenue_products_2" jdbcType="DECIMAL" property="totalRevenueProducts2" />
+    <result column="total_revenue_products_3" jdbcType="DECIMAL" property="totalRevenueProducts3" />
+    <result column="total_amount_research_1" jdbcType="DECIMAL" property="totalAmountResearch1" />
+    <result column="total_amount_research_2" jdbcType="DECIMAL" property="totalAmountResearch2" />
+    <result column="total_amount_research_3" jdbcType="DECIMAL" property="totalAmountResearch3" />
+    <result column="research_china_1" jdbcType="DECIMAL" property="researchChina1" />
+    <result column="research_china_2" jdbcType="DECIMAL" property="researchChina2" />
+    <result column="research_china_3" jdbcType="DECIMAL" property="researchChina3" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, enterprise_name, unified_social_credit, contacts_name, contacts_phone, contacts_email, 
+    enterprise_registration_time, is_china_territory, detailed_address, is_core_technology, 
+    technical_neighborhood, workers_tatal, technical_personnel, is_illegal_activities, 
+    corporate_income_1, corporate_income_2, corporate_income_3, total_sales_revenue_1, 
+    total_sales_revenue_2, total_sales_revenue_3, total_revenue_products_1, total_revenue_products_2, 
+    total_revenue_products_3, total_amount_research_1, total_amount_research_2, total_amount_research_3, 
+    research_china_1, research_china_2, research_china_3, record_status, creator_account, 
+    created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvaluaCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_enterprise_self_evalua
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_enterprise_self_evalua
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pd_enterprise_self_evalua
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvaluaCriteria">
+    delete from tb_pd_enterprise_self_evalua
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvalua">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_enterprise_self_evalua (enterprise_name, unified_social_credit, 
+      contacts_name, contacts_phone, contacts_email, 
+      enterprise_registration_time, is_china_territory, 
+      detailed_address, is_core_technology, technical_neighborhood, 
+      workers_tatal, technical_personnel, is_illegal_activities, 
+      corporate_income_1, corporate_income_2, corporate_income_3, 
+      total_sales_revenue_1, total_sales_revenue_2, 
+      total_sales_revenue_3, total_revenue_products_1, 
+      total_revenue_products_2, total_revenue_products_3, 
+      total_amount_research_1, total_amount_research_2, 
+      total_amount_research_3, research_china_1, research_china_2, 
+      research_china_3, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{enterpriseName,jdbcType=VARCHAR}, #{unifiedSocialCredit,jdbcType=VARCHAR}, 
+      #{contactsName,jdbcType=VARCHAR}, #{contactsPhone,jdbcType=VARCHAR}, #{contactsEmail,jdbcType=VARCHAR}, 
+      #{enterpriseRegistrationTime,jdbcType=TIMESTAMP}, #{isChinaTerritory,jdbcType=TINYINT}, 
+      #{detailedAddress,jdbcType=VARCHAR}, #{isCoreTechnology,jdbcType=TINYINT}, #{technicalNeighborhood,jdbcType=VARCHAR}, 
+      #{workersTatal,jdbcType=INTEGER}, #{technicalPersonnel,jdbcType=INTEGER}, #{isIllegalActivities,jdbcType=TINYINT}, 
+      #{corporateIncome1,jdbcType=DECIMAL}, #{corporateIncome2,jdbcType=DECIMAL}, #{corporateIncome3,jdbcType=DECIMAL}, 
+      #{totalSalesRevenue1,jdbcType=DECIMAL}, #{totalSalesRevenue2,jdbcType=DECIMAL}, 
+      #{totalSalesRevenue3,jdbcType=DECIMAL}, #{totalRevenueProducts1,jdbcType=DECIMAL}, 
+      #{totalRevenueProducts2,jdbcType=DECIMAL}, #{totalRevenueProducts3,jdbcType=DECIMAL}, 
+      #{totalAmountResearch1,jdbcType=DECIMAL}, #{totalAmountResearch2,jdbcType=DECIMAL}, 
+      #{totalAmountResearch3,jdbcType=DECIMAL}, #{researchChina1,jdbcType=DECIMAL}, #{researchChina2,jdbcType=DECIMAL}, 
+      #{researchChina3,jdbcType=DECIMAL}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvalua">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_enterprise_self_evalua
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="enterpriseName != null">
+        enterprise_name,
+      </if>
+      <if test="unifiedSocialCredit != null">
+        unified_social_credit,
+      </if>
+      <if test="contactsName != null">
+        contacts_name,
+      </if>
+      <if test="contactsPhone != null">
+        contacts_phone,
+      </if>
+      <if test="contactsEmail != null">
+        contacts_email,
+      </if>
+      <if test="enterpriseRegistrationTime != null">
+        enterprise_registration_time,
+      </if>
+      <if test="isChinaTerritory != null">
+        is_china_territory,
+      </if>
+      <if test="detailedAddress != null">
+        detailed_address,
+      </if>
+      <if test="isCoreTechnology != null">
+        is_core_technology,
+      </if>
+      <if test="technicalNeighborhood != null">
+        technical_neighborhood,
+      </if>
+      <if test="workersTatal != null">
+        workers_tatal,
+      </if>
+      <if test="technicalPersonnel != null">
+        technical_personnel,
+      </if>
+      <if test="isIllegalActivities != null">
+        is_illegal_activities,
+      </if>
+      <if test="corporateIncome1 != null">
+        corporate_income_1,
+      </if>
+      <if test="corporateIncome2 != null">
+        corporate_income_2,
+      </if>
+      <if test="corporateIncome3 != null">
+        corporate_income_3,
+      </if>
+      <if test="totalSalesRevenue1 != null">
+        total_sales_revenue_1,
+      </if>
+      <if test="totalSalesRevenue2 != null">
+        total_sales_revenue_2,
+      </if>
+      <if test="totalSalesRevenue3 != null">
+        total_sales_revenue_3,
+      </if>
+      <if test="totalRevenueProducts1 != null">
+        total_revenue_products_1,
+      </if>
+      <if test="totalRevenueProducts2 != null">
+        total_revenue_products_2,
+      </if>
+      <if test="totalRevenueProducts3 != null">
+        total_revenue_products_3,
+      </if>
+      <if test="totalAmountResearch1 != null">
+        total_amount_research_1,
+      </if>
+      <if test="totalAmountResearch2 != null">
+        total_amount_research_2,
+      </if>
+      <if test="totalAmountResearch3 != null">
+        total_amount_research_3,
+      </if>
+      <if test="researchChina1 != null">
+        research_china_1,
+      </if>
+      <if test="researchChina2 != null">
+        research_china_2,
+      </if>
+      <if test="researchChina3 != null">
+        research_china_3,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="enterpriseName != null">
+        #{enterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="unifiedSocialCredit != null">
+        #{unifiedSocialCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsName != null">
+        #{contactsName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsPhone != null">
+        #{contactsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsEmail != null">
+        #{contactsEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseRegistrationTime != null">
+        #{enterpriseRegistrationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isChinaTerritory != null">
+        #{isChinaTerritory,jdbcType=TINYINT},
+      </if>
+      <if test="detailedAddress != null">
+        #{detailedAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isCoreTechnology != null">
+        #{isCoreTechnology,jdbcType=TINYINT},
+      </if>
+      <if test="technicalNeighborhood != null">
+        #{technicalNeighborhood,jdbcType=VARCHAR},
+      </if>
+      <if test="workersTatal != null">
+        #{workersTatal,jdbcType=INTEGER},
+      </if>
+      <if test="technicalPersonnel != null">
+        #{technicalPersonnel,jdbcType=INTEGER},
+      </if>
+      <if test="isIllegalActivities != null">
+        #{isIllegalActivities,jdbcType=TINYINT},
+      </if>
+      <if test="corporateIncome1 != null">
+        #{corporateIncome1,jdbcType=DECIMAL},
+      </if>
+      <if test="corporateIncome2 != null">
+        #{corporateIncome2,jdbcType=DECIMAL},
+      </if>
+      <if test="corporateIncome3 != null">
+        #{corporateIncome3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue1 != null">
+        #{totalSalesRevenue1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue2 != null">
+        #{totalSalesRevenue2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue3 != null">
+        #{totalSalesRevenue3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts1 != null">
+        #{totalRevenueProducts1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts2 != null">
+        #{totalRevenueProducts2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts3 != null">
+        #{totalRevenueProducts3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch1 != null">
+        #{totalAmountResearch1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch2 != null">
+        #{totalAmountResearch2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch3 != null">
+        #{totalAmountResearch3,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina1 != null">
+        #{researchChina1,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina2 != null">
+        #{researchChina2,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina3 != null">
+        #{researchChina3,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvaluaCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_enterprise_self_evalua
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_enterprise_self_evalua
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.enterpriseName != null">
+        enterprise_name = #{record.enterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unifiedSocialCredit != null">
+        unified_social_credit = #{record.unifiedSocialCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactsName != null">
+        contacts_name = #{record.contactsName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactsPhone != null">
+        contacts_phone = #{record.contactsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactsEmail != null">
+        contacts_email = #{record.contactsEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enterpriseRegistrationTime != null">
+        enterprise_registration_time = #{record.enterpriseRegistrationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isChinaTerritory != null">
+        is_china_territory = #{record.isChinaTerritory,jdbcType=TINYINT},
+      </if>
+      <if test="record.detailedAddress != null">
+        detailed_address = #{record.detailedAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isCoreTechnology != null">
+        is_core_technology = #{record.isCoreTechnology,jdbcType=TINYINT},
+      </if>
+      <if test="record.technicalNeighborhood != null">
+        technical_neighborhood = #{record.technicalNeighborhood,jdbcType=VARCHAR},
+      </if>
+      <if test="record.workersTatal != null">
+        workers_tatal = #{record.workersTatal,jdbcType=INTEGER},
+      </if>
+      <if test="record.technicalPersonnel != null">
+        technical_personnel = #{record.technicalPersonnel,jdbcType=INTEGER},
+      </if>
+      <if test="record.isIllegalActivities != null">
+        is_illegal_activities = #{record.isIllegalActivities,jdbcType=TINYINT},
+      </if>
+      <if test="record.corporateIncome1 != null">
+        corporate_income_1 = #{record.corporateIncome1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.corporateIncome2 != null">
+        corporate_income_2 = #{record.corporateIncome2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.corporateIncome3 != null">
+        corporate_income_3 = #{record.corporateIncome3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalSalesRevenue1 != null">
+        total_sales_revenue_1 = #{record.totalSalesRevenue1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalSalesRevenue2 != null">
+        total_sales_revenue_2 = #{record.totalSalesRevenue2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalSalesRevenue3 != null">
+        total_sales_revenue_3 = #{record.totalSalesRevenue3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalRevenueProducts1 != null">
+        total_revenue_products_1 = #{record.totalRevenueProducts1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalRevenueProducts2 != null">
+        total_revenue_products_2 = #{record.totalRevenueProducts2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalRevenueProducts3 != null">
+        total_revenue_products_3 = #{record.totalRevenueProducts3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalAmountResearch1 != null">
+        total_amount_research_1 = #{record.totalAmountResearch1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalAmountResearch2 != null">
+        total_amount_research_2 = #{record.totalAmountResearch2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalAmountResearch3 != null">
+        total_amount_research_3 = #{record.totalAmountResearch3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.researchChina1 != null">
+        research_china_1 = #{record.researchChina1,jdbcType=DECIMAL},
+      </if>
+      <if test="record.researchChina2 != null">
+        research_china_2 = #{record.researchChina2,jdbcType=DECIMAL},
+      </if>
+      <if test="record.researchChina3 != null">
+        research_china_3 = #{record.researchChina3,jdbcType=DECIMAL},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_enterprise_self_evalua
+    set id = #{record.id,jdbcType=INTEGER},
+      enterprise_name = #{record.enterpriseName,jdbcType=VARCHAR},
+      unified_social_credit = #{record.unifiedSocialCredit,jdbcType=VARCHAR},
+      contacts_name = #{record.contactsName,jdbcType=VARCHAR},
+      contacts_phone = #{record.contactsPhone,jdbcType=VARCHAR},
+      contacts_email = #{record.contactsEmail,jdbcType=VARCHAR},
+      enterprise_registration_time = #{record.enterpriseRegistrationTime,jdbcType=TIMESTAMP},
+      is_china_territory = #{record.isChinaTerritory,jdbcType=TINYINT},
+      detailed_address = #{record.detailedAddress,jdbcType=VARCHAR},
+      is_core_technology = #{record.isCoreTechnology,jdbcType=TINYINT},
+      technical_neighborhood = #{record.technicalNeighborhood,jdbcType=VARCHAR},
+      workers_tatal = #{record.workersTatal,jdbcType=INTEGER},
+      technical_personnel = #{record.technicalPersonnel,jdbcType=INTEGER},
+      is_illegal_activities = #{record.isIllegalActivities,jdbcType=TINYINT},
+      corporate_income_1 = #{record.corporateIncome1,jdbcType=DECIMAL},
+      corporate_income_2 = #{record.corporateIncome2,jdbcType=DECIMAL},
+      corporate_income_3 = #{record.corporateIncome3,jdbcType=DECIMAL},
+      total_sales_revenue_1 = #{record.totalSalesRevenue1,jdbcType=DECIMAL},
+      total_sales_revenue_2 = #{record.totalSalesRevenue2,jdbcType=DECIMAL},
+      total_sales_revenue_3 = #{record.totalSalesRevenue3,jdbcType=DECIMAL},
+      total_revenue_products_1 = #{record.totalRevenueProducts1,jdbcType=DECIMAL},
+      total_revenue_products_2 = #{record.totalRevenueProducts2,jdbcType=DECIMAL},
+      total_revenue_products_3 = #{record.totalRevenueProducts3,jdbcType=DECIMAL},
+      total_amount_research_1 = #{record.totalAmountResearch1,jdbcType=DECIMAL},
+      total_amount_research_2 = #{record.totalAmountResearch2,jdbcType=DECIMAL},
+      total_amount_research_3 = #{record.totalAmountResearch3,jdbcType=DECIMAL},
+      research_china_1 = #{record.researchChina1,jdbcType=DECIMAL},
+      research_china_2 = #{record.researchChina2,jdbcType=DECIMAL},
+      research_china_3 = #{record.researchChina3,jdbcType=DECIMAL},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvalua">
+    update tb_pd_enterprise_self_evalua
+    <set>
+      <if test="enterpriseName != null">
+        enterprise_name = #{enterpriseName,jdbcType=VARCHAR},
+      </if>
+      <if test="unifiedSocialCredit != null">
+        unified_social_credit = #{unifiedSocialCredit,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsName != null">
+        contacts_name = #{contactsName,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsPhone != null">
+        contacts_phone = #{contactsPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactsEmail != null">
+        contacts_email = #{contactsEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="enterpriseRegistrationTime != null">
+        enterprise_registration_time = #{enterpriseRegistrationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isChinaTerritory != null">
+        is_china_territory = #{isChinaTerritory,jdbcType=TINYINT},
+      </if>
+      <if test="detailedAddress != null">
+        detailed_address = #{detailedAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="isCoreTechnology != null">
+        is_core_technology = #{isCoreTechnology,jdbcType=TINYINT},
+      </if>
+      <if test="technicalNeighborhood != null">
+        technical_neighborhood = #{technicalNeighborhood,jdbcType=VARCHAR},
+      </if>
+      <if test="workersTatal != null">
+        workers_tatal = #{workersTatal,jdbcType=INTEGER},
+      </if>
+      <if test="technicalPersonnel != null">
+        technical_personnel = #{technicalPersonnel,jdbcType=INTEGER},
+      </if>
+      <if test="isIllegalActivities != null">
+        is_illegal_activities = #{isIllegalActivities,jdbcType=TINYINT},
+      </if>
+      <if test="corporateIncome1 != null">
+        corporate_income_1 = #{corporateIncome1,jdbcType=DECIMAL},
+      </if>
+      <if test="corporateIncome2 != null">
+        corporate_income_2 = #{corporateIncome2,jdbcType=DECIMAL},
+      </if>
+      <if test="corporateIncome3 != null">
+        corporate_income_3 = #{corporateIncome3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue1 != null">
+        total_sales_revenue_1 = #{totalSalesRevenue1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue2 != null">
+        total_sales_revenue_2 = #{totalSalesRevenue2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesRevenue3 != null">
+        total_sales_revenue_3 = #{totalSalesRevenue3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts1 != null">
+        total_revenue_products_1 = #{totalRevenueProducts1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts2 != null">
+        total_revenue_products_2 = #{totalRevenueProducts2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalRevenueProducts3 != null">
+        total_revenue_products_3 = #{totalRevenueProducts3,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch1 != null">
+        total_amount_research_1 = #{totalAmountResearch1,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch2 != null">
+        total_amount_research_2 = #{totalAmountResearch2,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmountResearch3 != null">
+        total_amount_research_3 = #{totalAmountResearch3,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina1 != null">
+        research_china_1 = #{researchChina1,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina2 != null">
+        research_china_2 = #{researchChina2,jdbcType=DECIMAL},
+      </if>
+      <if test="researchChina3 != null">
+        research_china_3 = #{researchChina3,jdbcType=DECIMAL},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.enterprise.entity.TbPdEnterpriseSelfEvalua">
+    update tb_pd_enterprise_self_evalua
+    set enterprise_name = #{enterpriseName,jdbcType=VARCHAR},
+      unified_social_credit = #{unifiedSocialCredit,jdbcType=VARCHAR},
+      contacts_name = #{contactsName,jdbcType=VARCHAR},
+      contacts_phone = #{contactsPhone,jdbcType=VARCHAR},
+      contacts_email = #{contactsEmail,jdbcType=VARCHAR},
+      enterprise_registration_time = #{enterpriseRegistrationTime,jdbcType=TIMESTAMP},
+      is_china_territory = #{isChinaTerritory,jdbcType=TINYINT},
+      detailed_address = #{detailedAddress,jdbcType=VARCHAR},
+      is_core_technology = #{isCoreTechnology,jdbcType=TINYINT},
+      technical_neighborhood = #{technicalNeighborhood,jdbcType=VARCHAR},
+      workers_tatal = #{workersTatal,jdbcType=INTEGER},
+      technical_personnel = #{technicalPersonnel,jdbcType=INTEGER},
+      is_illegal_activities = #{isIllegalActivities,jdbcType=TINYINT},
+      corporate_income_1 = #{corporateIncome1,jdbcType=DECIMAL},
+      corporate_income_2 = #{corporateIncome2,jdbcType=DECIMAL},
+      corporate_income_3 = #{corporateIncome3,jdbcType=DECIMAL},
+      total_sales_revenue_1 = #{totalSalesRevenue1,jdbcType=DECIMAL},
+      total_sales_revenue_2 = #{totalSalesRevenue2,jdbcType=DECIMAL},
+      total_sales_revenue_3 = #{totalSalesRevenue3,jdbcType=DECIMAL},
+      total_revenue_products_1 = #{totalRevenueProducts1,jdbcType=DECIMAL},
+      total_revenue_products_2 = #{totalRevenueProducts2,jdbcType=DECIMAL},
+      total_revenue_products_3 = #{totalRevenueProducts3,jdbcType=DECIMAL},
+      total_amount_research_1 = #{totalAmountResearch1,jdbcType=DECIMAL},
+      total_amount_research_2 = #{totalAmountResearch2,jdbcType=DECIMAL},
+      total_amount_research_3 = #{totalAmountResearch3,jdbcType=DECIMAL},
+      research_china_1 = #{researchChina1,jdbcType=DECIMAL},
+      research_china_2 = #{researchChina2,jdbcType=DECIMAL},
+      research_china_3 = #{researchChina3,jdbcType=DECIMAL},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -18,7 +18,7 @@ public class PersonnelFirstStart20Model extends PersonnelFirstStart10Model imple
 
     public PersonnelFirstStart20Model(String nodeNo) {
         //初始化流程 流程所在的节点
-        super(PersonnelFlowNodeEnum.FIRST_START_20.getNodeNo());
+        super(nodeNo);
     }
 
     @Override

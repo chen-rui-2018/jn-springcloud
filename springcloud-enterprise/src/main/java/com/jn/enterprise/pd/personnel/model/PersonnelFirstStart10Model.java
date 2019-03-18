@@ -14,12 +14,12 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel("人才意向申报")
+@ApiModel(value = "PersonnelFirstStart10Model",description = "人才意向申报")
 public class PersonnelFirstStart10Model extends PersonnelFlowNodeBaseAbstractVo implements Serializable {
 
     public PersonnelFirstStart10Model(String nodeNo) {
         //初始化流程 流程所在的节点
-        super(PersonnelFlowNodeEnum.FIRST_START_10.getNodeNo());
+        super(nodeNo);
     }
 
     @Override

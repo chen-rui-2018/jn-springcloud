@@ -12,6 +12,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @modified By:
  */
 @Api(tags = "项目申报-人才申报-门户")
-@Controller
+@RestController
 @RequestMapping("/portal/pd/personnel")
 public class PersonnelPortalController extends BaseController {
 
@@ -32,6 +33,15 @@ public class PersonnelPortalController extends BaseController {
     @PostMapping(value = "/flow/firstStart10")
     @RequiresPermissions("/portal/pd/personnel/flow/firstStart10")
     public Result<PersonnelFirstStart10Model> firstStart10(){
+        PersonnelFirstStart10Model startModel =new PersonnelFirstStart10Model(PersonnelFlowNodeEnum.FIRST_START_10.getNodeNo());
+        return new Result<>(startModel);
+    }
+
+    @ControllerLog(doAction = "查看")
+    @ApiOperation(value = "查看", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/flow/detail")
+    @RequiresPermissions("/portal/pd/personnel/flow/detail")
+    public Result flow(){
         PersonnelFirstStart10Model startModel =new PersonnelFirstStart10Model(PersonnelFlowNodeEnum.FIRST_START_10.getNodeNo());
         return new Result<>(startModel);
     }

@@ -11,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @modified By:
  */
 @Api(tags = "项目申报-人才申报-后台")
-@Controller
+@RestController
 @RequestMapping("/pd/personnel")
 public class PersonnelController extends BaseController {
 

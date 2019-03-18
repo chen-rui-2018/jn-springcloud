@@ -72,7 +72,7 @@ public abstract class PersonnelFlowNodeBaseAbstractVo {
             }else{
                 nodeStatus=2;
             }
-            leftNodeModelList.add(new PersonnelFlowNodeModel(nodeEnum.getNodeNo(),nodeEnum.getNodeName(),nodeStatus));
+            subNodeModelList.add(new PersonnelFlowNodeModel(nodeEnum.getNodeNo(),nodeEnum.getNodeName(),nodeStatus));
 
 
 

@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="noticeManagement">
     <el-form :inline="true" :model="listQuery" class="filter-bar">
-      <el-radio-group v-model="listQuery.resordStatus">
+      <el-radio-group v-model="listQuery.recordStatus">
         <el-radio-button label="">全部</el-radio-button>
         <el-radio-button label= "1">有效</el-radio-button>
         <el-radio-button label="2">失效</el-radio-button>
@@ -11,7 +11,7 @@
       </el-form-item>
       <el-form-item label="发布平台:" style="margin:0px 30px;">
         <el-select v-model="listQuery.platformType" placeholder="请选择平台类型" clearable class="filter-item">
-          <el-option v-for="item in codeOptions" :key="item.Key" :label="item.label" :value="item.key" />
+          <el-option v-for="item in codeOptions" :key="item.Key" :label="item.lable" :value="item.key" />
         </el-select>
       </el-form-item>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
@@ -25,9 +25,9 @@
           <el-button class="setCursor" type="text">{{ scope.row.noticeTitle }}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="发布平台" align="center" prop="platformType">
+      <el-table-column :show-overflow-tooltip="true" label="发布平台" align="center" prop="platformType">
         <template slot-scope="scope">
-          <div v-for="(item, index) in JSON.parse(scope.row.platformType)" :key="index">{{ item.value }}</div>
+          <span>{{ disposePlatformType(JSON.parse(scope.row.platformType)) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="起止时间" min-width="180" align="center" prop="startAndEndTime"/>
@@ -40,7 +40,7 @@
       <el-table-column label="创建时间" align="center" min-width="120" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
-          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'有效':'无效' }}</span>
+          <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'有效':'失效' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" min-width="100" class-name="small-padding fixed-width">
@@ -62,6 +62,14 @@
       layout="total, sizes, prev, pager, next, jumper"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange" />
+    <!-- S 新增弹窗 -->
+    <template v-if="dialogFormVisible">
+      <el-dialog :visible.sync="dialogFormVisible" title="公告内容" width="700px">
+        <div class="editor-container">
+          <UE ref="ue" :default-msg="defaultMsg" :config="config"/>
+        </div>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
@@ -69,20 +77,28 @@
 import {
   api, getCode, paramApi
 } from '@/api/oa/meetingManagement'
+import UE from '@/components/ue.vue'
 export default {
+  components: { UE },
   data() {
     return {
-      dataList: [],
+      dialogFormVisible: false,
+      defaultMsg: '',
+      config: {
+        initialFrameWidth: '100%',
+        initialFrameHeight: 300
+      },
+      dataList: [{ 'key': '1', 'value': '协同办公' }, { 'key': '2', 'value': '外部系统' }],
       noticeList: [],
       codeOptions: [],
       total: 0,
       listLoading: false,
       listQuery: {
-        resordStatus: '',
+        recordStatus: '',
         page: 1,
         rows: 10,
         noticeTitle: '',
-        platformType: ''
+        platformType: []
       },
       code: {
         groupCode: 'platform_type',
@@ -96,6 +112,11 @@ export default {
     this.getCode()
   },
   methods: {
+    // 预览公告内容
+    handlePreview(row) {
+      this.dialogFormVisible = true
+      this.defaultMsg = row.noticeContent
+    },
     // 删除数据
     deletenotice(row) {
       this.$confirm(`此操作将永久删除这条数据, 是否继续?`, '删除提示', {
@@ -148,9 +169,9 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
+      // this.listQuery.recordStatus = Number(this.listQuery.recordStatus)
       api('oa/notice/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.noticeList = res.data.data.rows
           this.total = res.data.data.total
         } else {
@@ -159,18 +180,23 @@ export default {
         this.listLoading = false
       })
     },
-    // 改变平台状态
-    selecteCodeStatus(value) {
-      console.log(value)
-      this.listQuery.platformType = value
+    disposePlatformType(data) {
+      const PlatformTypeArr = []
+      data.forEach(val => {
+        PlatformTypeArr.push(val.lable)
+      })
+      return PlatformTypeArr.join('、')
     },
+    // // 改变状态
+    // selecteCodeStatus(value) {
+    //   console.log(value)
+    //   this.listQuery.recordStatus = value
+    // },
     // 获取平台类型
     getCode() {
       getCode(this.code).then(res => {
         if (res.data.code === '0000') {
-          console.log(res)
           this.codeOptions = res.data.data
-          console.log(this.codeOptions)
         } else {
           this.$message.error(res.data.result)
         }

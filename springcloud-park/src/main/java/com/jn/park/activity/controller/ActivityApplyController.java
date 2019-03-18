@@ -6,9 +6,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
+import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityQueryPaging;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
+import com.jn.user.model.UserExtensionInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -118,5 +120,14 @@ public class ActivityApplyController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivityCheck(applyId,user.getAccount());
         return new Result(i);
+    }
+    @ControllerLog(doAction = "报名人资料")
+//    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
+    @ApiOperation(value = "报名人资料", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/activityApplyInfo")
+    public Result activityApplyInfo(@ApiParam(value = "用户账号",required = true) @RequestParam(value = "account") String account){
+        Assert.notNull(account, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
+        UserExtensionInfo user =  activityApplyService.activityApplyInfo(account);
+        return new Result(user);
     }
 }

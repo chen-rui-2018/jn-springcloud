@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceDocumentsDao">
+    <!--支出录入查询-->
+    <select id="findAll" parameterType="com.jn.park.finance.model.FinanceDocumentsFindAllModel" resultType="com.jn.park.finance.vo.FinanceDocumentsFindAllVo">
+        SELECT
+        t.id as "id",
+        t.doc_Id as "docid",
+        t.doc_name as "docname",
+        t.doc_uploader as "docuploader",
+        t.doc_upload_time as "docuploadtime",
+        t.`comment` as "comment"
+         FROM
+        `tb_finance_document` t
+        where t.record_status=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(documentCode)">
+        AND t.doc_filecode = #{documentCode}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(documentName)">
+        AND t.doc_filename = #{documentName}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(documentUploader)">
+        AND t.doc_uploader = #{documentUploader}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(endTime)">
+        and  DATE_FORMAT(t.doc_upload_time,'%Y-%m') between #{startTime} and #{endTime}
+        </if>
+
+    </select>
+
+
+    <!--上传文档保存资料-->
+    <insert id="uploading" parameterType="com.jn.park.finance.model.FinanceDocumentsUploadingModel">
+      insert into tb_finance_document
+      (doc_Id, department_id, department_name,
+      doc_name, doc_uploader, doc_upload_time,
+      comment, doc_filename, doc_filecode,
+       created_time,creator_account
+       )
+    values (
+       #{docId,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR},
+      #{docName,jdbcType=VARCHAR}, #{docUploader,jdbcType=VARCHAR}, SYSDATE(),
+      #{comment,jdbcType=VARCHAR}, #{docFileName,jdbcType=VARCHAR}, #{docFileCode,jdbcType=VARCHAR},
+      SYSDATE(),#{docUploader,jdbcType=VARCHAR}
+      )
+    </insert>
+
+</mapper>

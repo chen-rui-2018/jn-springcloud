@@ -169,6 +169,9 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             List<String>parentIds=new ArrayList<>(16);
             parentIds.add(activityQueryPaging.getActivityId());
             List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+            if(list.isEmpty()){
+                return new PaginationData(list,objects==null?0:objects.getTotal());
+            }
             //获取评论用户头像信息
             getCommentUserAvatar(list);
             list= getCommentChildComment(list,activityQueryPaging.getActivityId());

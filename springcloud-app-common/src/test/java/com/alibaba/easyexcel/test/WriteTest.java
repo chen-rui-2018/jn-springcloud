@@ -9,6 +9,7 @@ import com.alibaba.excel.metadata.Table;
 import com.alibaba.excel.support.ExcelTypeEnum;
 import com.jn.common.util.file.FileUtil;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 
 import static com.alibaba.easyexcel.test.util.DataUtil.*;
 
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class WriteTest {
 

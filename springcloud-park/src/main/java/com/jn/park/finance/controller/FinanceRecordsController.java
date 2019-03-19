@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "财务备案")
+@Api(tags = "财务协同-财务备案")
 @RestController
 @RequestMapping("/finance/records")
 public class FinanceRecordsController extends BaseController {

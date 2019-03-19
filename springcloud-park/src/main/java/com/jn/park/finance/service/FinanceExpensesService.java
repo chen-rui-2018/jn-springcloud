@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
 import com.jn.park.finance.model.FinanceExpensesPageModel;
 import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
+import com.jn.park.finance.model.FinanceSelectDepartmentModel;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
 import com.jn.park.finance.vo.FinanceExpendImportDataVo;
@@ -66,6 +67,13 @@ public interface FinanceExpensesService {
      * @return
      */
     List<FinanceExpendFinanceTypeVo> selectFinanceType();
+
+    /**
+     * 查询部门信息
+     * @return
+     */
+    List<FinanceSelectDepartmentModel> selectDepartment();
+
 
     /**
      * 根据导入的费用类型对比，看是否有相同的费用类型

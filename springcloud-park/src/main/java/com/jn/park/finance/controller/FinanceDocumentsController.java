@@ -13,6 +13,7 @@ import com.jn.park.finance.enums.FinanceExceptionEnums;
 import com.jn.park.finance.model.FinanceDocumentsFindAllModel;
 import com.jn.park.finance.model.FinanceDocumentsUploadingModel;
 import com.jn.park.finance.service.FinanceDocumentsService;
+import com.jn.park.finance.vo.FinanceDocumentsFindAllVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -58,7 +59,7 @@ public class FinanceDocumentsController extends BaseController {
     @ApiOperation(value = "财务文档查询", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findAll")
     @RequiresPermissions("/finance/documents/findAll")
-    public Result findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
+    public Result<FinanceDocumentsFindAllVo> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
         //todo
         PaginationData findAll=financeDocumentsService.findAll(financeDocumentsFindAllModel);
         return new Result(findAll);
@@ -93,20 +94,10 @@ public class FinanceDocumentsController extends BaseController {
             ||!document.getRecordStatus().equals(new Byte("1"))){
             throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"文件不存在");
         }
-        response.setHeader("content-disposition", "attachment;filename="+document.getDocName());
+        response.setHeader("content-disposition", "attachment;filename="+document.getDocFilename());
         DownLoad downLoad=new DownLoad(document.getDocFilecode(),false);
         ResponseEntity<byte[]> entity= downLoadClient.downLoad(downLoad);
         return entity;
-    }
-
-    @ControllerLog(doAction = "预览")
-    @ApiOperation(value = "预览", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/preview")
-    @RequiresPermissions("/finance/documents/preview")
-    public Result preview(){
-        //todo
-
-        return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }
 
 
@@ -114,9 +105,8 @@ public class FinanceDocumentsController extends BaseController {
     @ApiOperation(value = "获取部门信息", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/getDepartment")
     @RequiresPermissions("/finance/documents/getDepartment")
-    public Result getDepartment(){
+    public Result<SysDepartmentPostVO> getDepartment(){
         //todo
-
         //部门信息
         List<SysDepartmentPostVO> sysDepartmentPostVO = getUser().getSysDepartmentPostVO();
         return new Result(sysDepartmentPostVO);

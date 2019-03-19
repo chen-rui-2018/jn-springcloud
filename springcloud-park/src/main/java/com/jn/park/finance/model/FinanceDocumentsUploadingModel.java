@@ -38,9 +38,12 @@ public class FinanceDocumentsUploadingModel extends Page implements Serializable
     @ApiModelProperty(value = "附件名称")
     private String docFileName;
 
-    @ApiModelProperty(value = "附件code")
-    private String docFileCode;
+    @ApiModelProperty(value = "附件Url")
+    private String docFileUrl;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getDocId() {
         return docId;
@@ -98,12 +101,12 @@ public class FinanceDocumentsUploadingModel extends Page implements Serializable
         this.docFileName = docFileName;
     }
 
-    public String getDocFileCode() {
-        return docFileCode;
+    public String getDocFileUrl() {
+        return docFileUrl;
     }
 
-    public void setDocFileCode(String docFileCode) {
-        this.docFileCode = docFileCode;
+    public void setDocFileUrl(String docFileUrl) {
+        this.docFileUrl = docFileUrl;
     }
 
 
@@ -117,7 +120,7 @@ public class FinanceDocumentsUploadingModel extends Page implements Serializable
                 ", docUploader='" + docUploader + '\'' +
                 ", comment='" + comment + '\'' +
                 ", docFileName='" + docFileName + '\'' +
-                ", docFileCode='" + docFileCode + '\'' +
+                ", docFileUrl='" + docFileUrl + '\'' +
                 '}';
     }
 }

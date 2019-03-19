@@ -20,7 +20,7 @@ import java.util.Map;
  * @version： v1.0
  * @modified By:
  */
-@Component("FinanceExpendDao")
+@Component("FinanceExpensesDao")
 public interface FinanceExpensesDao {
     /**
      * 支出录入分页查询

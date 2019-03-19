@@ -4,43 +4,83 @@
 
     <!--支出录入查询-->
     <select id="findAll" parameterType="com.jn.park.finance.model.FinanceExpensesPageModel" resultType="com.jn.park.finance.vo.FinanceExpendVo">
-        SELECT t.cost_happend_time as "costhappendtime",
-        t.cost as "cost",
-        t.cost_after_type_name as "costaftertypename",
-        IFNULL(t.modified_time,t.cost_happend_time)  as "modifiedtime",
-        t.department_name as "departmentname"
-        FROM `tb_finance_expenses_month` t
-        where t.department_id=#{departmentId}
-        and t.record_status ='1'
-        <!--and t.cost_after_type_id=#{costAfterTypeId}-->
-        and t.cost_happend_time BETWEEN #{startTime} and  #{endTime}
+        SELECT
+        t.cost_happend_time AS "costhappendtime",
+        t.cost AS "cost",
+        t.cost_after_type_name AS "costaftertypename",
+        IFNULL(
+        t.modified_time,
+        t.cost_happend_time
+        ) AS "modifiedtime",
+        t.department_name AS "departmentname"
+        FROM
+        `tb_finance_expenses_month` t
+        WHERE
+        t.record_status = '1'
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        AND t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(cost)">
+        AND t.cost = #{cost}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costAfterTypeId)">
+        AND t.cost_after_type_id=#{costAfterTypeId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startTime)">
+        AND t.cost_happend_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startMonth)">
+        AND DATE_FORMAT(t.modified_time,'%Y%m') BETWEEN #{startMonth} AND #{endMonth}
+        </if>
+        order by ${orderByClause}
+
     </select>
 
 
     <!--支出录入历史查询-->
     <select id="findHistoryAll" parameterType="com.jn.park.finance.model.FinanceExpensesHistoryPageModel" resultType="com.jn.park.finance.vo.FinanceExpendHistoryVo">
-        SELECT t.cost_happend_time as "costhappendtime",
-        t.cost_id as "costid",
-        t.cost as "cost",
-        t.cost_before_type_name as "costbeforetypename",
-        t.cost_after_type_name as "costaftertypename",
-        t.created_time as "createdtime",
-        t.department_name as "departmentname"
-         from tb_finance_expenses_temp t
-        WHERE t.record_status=1
-        AND t.cost_id like concat(concat("%",#{costId}),"%")
-        AND t.department_id=#{departmentId}
-        AND t.cost_happend_time BETWEEN #{startTime} and  #{endTime}
+        SELECT
+        t.cost_happend_time AS "costhappendtime",
+        t.cost_id AS "costid",
+        t.cost AS "cost",
+        t.cost_before_type_name AS "costbeforetypename",
+        t.cost_after_type_name AS "costaftertypename",
+        t.created_time AS "createdtime",
+        t.department_name AS "departmentname"
+        FROM
+        tb_finance_expenses t
+        WHERE
+        t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costId)">
+            AND t.cost_id like concat(concat("%",#{costId}),"%")
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costAfterTypeId)">
+        AND t.cost_after_type_id = #{costAfterTypeId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        AND t.department_id = #{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(cost)">
+        AND t.cost = #{cost}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startTime)">
+        AND t.cost_happend_time BETWEEN #{startTime} AND #{endTime}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(startMonth)">
+        AND DATE_FORMAT(t.modified_time, '%Y%m') BETWEEN #{startMonth} AND #{endMonth}
+        </if>
+        order by ${orderByClause}
+
     </select>
 
     <!--导入 到临时表-->
     <insert id="importData" parameterType="java.util.Map">
-        insert into tb_finance_expenses_temp (cost_happend_time,cost,cost_id,excel_id,cost_before_type_name,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time)values
+        insert into tb_finance_expenses_temp (cost_happend_time,cost,cost_id,excel_id,cost_before_type_name,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time,modifier_account,modified_time)values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
             (
             <choose>
                 <when test="item.costHappendTime != null" >
-                    '${item.costHappendTime}',
+                    #{item.costHappendTime},
                 </when>
                 <otherwise>
                     null,
@@ -48,7 +88,7 @@
             </choose>
             <choose>
                 <when test="item.cost != null" >
-                    '${item.cost}',
+                    #{item.cost},
                 </when>
                 <otherwise>
                     null,
@@ -56,7 +96,7 @@
             </choose>
             <choose>
                 <when test="item.costId != null" >
-                    '${item.costId}',
+                    #{item.costId},
                 </when>
                 <otherwise>
                     null,
@@ -64,7 +104,7 @@
             </choose>
             <choose>
                 <when test="item.excelId != null" >
-                    '${item.excelId}',
+                    #{item.excelId},
                 </when>
                 <otherwise>
                     null,
@@ -72,7 +112,7 @@
             </choose>
             <choose>
                 <when test="item.costBeforeTypeName != null" >
-                    '${item.costBeforeTypeName}',
+                    #{item.costBeforeTypeName},
                 </when>
                 <otherwise>
                     null,
@@ -80,7 +120,7 @@
             </choose>
             <choose>
                 <when test="item.costAfterTypeId != null" >
-                    '${item.costAfterTypeId}',
+                    #{item.costAfterTypeId},
                 </when>
                 <otherwise>
                     null,
@@ -88,7 +128,7 @@
             </choose>
             <choose>
                 <when test="item.costAfterTypeName != null" >
-                    '${item.costAfterTypeName}',
+                    #{item.costAfterTypeName},
                 </when>
                 <otherwise>
                     null,
@@ -96,7 +136,7 @@
             </choose>
             <choose>
                 <when test="item.departmentId != null" >
-                    '${item.departmentId}',
+                    #{item.departmentId},
                 </when>
                 <otherwise>
                     null,
@@ -104,12 +144,14 @@
             </choose>
             <choose>
                 <when test="item.departmentName != null" >
-                    '${item.departmentName}',
+                    #{item.departmentName},
                 </when>
                 <otherwise>
                     null,
                 </otherwise>
             </choose>
+            #{account},
+            SYSDATE(),
             #{account},
             SYSDATE()
             )
@@ -137,12 +179,12 @@
 
     <!--保存 到支出记录表-->
     <insert id="saveMarkData" parameterType="java.util.Map">
-        insert into tb_finance_expenses_month (cost_happend_time,cost,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time) values
+        insert into tb_finance_expenses (cost_happend_time,cost,cost_id,excel_id,cost_before_type_name,cost_after_type_id,cost_after_type_name,department_id,department_name,creator_account,created_time,modifier_account,modified_time) values
         <foreach collection="list" item="item" index="index" open="" close="" separator=",">
             (
             <choose>
                 <when test="item.costHappendTime != null" >
-                    '${item.costHappendTime}',
+                    #{item.costHappendTime},
                 </when>
                 <otherwise>
                     null,
@@ -150,7 +192,31 @@
             </choose>
             <choose>
                 <when test="item.cost != null" >
-                    '${item.cost}',
+                    #{item.cost},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costId != null" >
+                    #{item.costId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.excelId != null" >
+                    #{item.excelId},
+                </when>
+                <otherwise>
+                    null,
+                </otherwise>
+            </choose>
+            <choose>
+                <when test="item.costBeforeTypeName != null" >
+                    #{item.costBeforeTypeName},
                 </when>
                 <otherwise>
                     null,
@@ -158,7 +224,7 @@
             </choose>
             <choose>
                 <when test="item.costAfterTypeId != null" >
-                    '${item.costAfterTypeId}',
+                    #{item.costAfterTypeId},
                 </when>
                 <otherwise>
                     null,
@@ -166,7 +232,7 @@
             </choose>
             <choose>
                 <when test="item.costAfterTypeName != null" >
-                    '${item.costAfterTypeName}',
+                    #{item.costAfterTypeName},
                 </when>
                 <otherwise>
                     null,
@@ -174,7 +240,7 @@
             </choose>
             <choose>
                 <when test="item.departmentId != null" >
-                    '${item.departmentId}',
+                    #{item.departmentId},
                 </when>
                 <otherwise>
                     null,
@@ -182,12 +248,14 @@
             </choose>
             <choose>
                 <when test="item.departmentName != null" >
-                    '${item.departmentName}',
+                    #{item.departmentName},
                 </when>
                 <otherwise>
                     null,
                 </otherwise>
             </choose>
+            #{account},
+            SYSDATE(),
             #{account},
             SYSDATE()
             )

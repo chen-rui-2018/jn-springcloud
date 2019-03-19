@@ -9,12 +9,11 @@ import com.jn.park.finance.service.FinanceIndexService;
 import com.jn.park.finance.vo.*;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -26,6 +25,7 @@ import java.util.*;
  * @modified By:
  */
 @Service
+@Transactional
 public class FinanceIndexServiceImpl implements FinanceIndexService {
     private static Logger logger = LoggerFactory.getLogger(FinanceIndexServiceImpl.class);
 
@@ -101,20 +101,20 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         List<Map<String,Object>> data2 = (List<Map<String,Object>>) data1.get("children");
         int k=data2.size();
         Map<String,Object> map =new HashMap<>();
-        List<FinanceExpendDepartmentModel> financeExpendDepartmentModels=new ArrayList<>();
+        List<FinanceExpensesDepartmentModel> financeExpensesDepartmentModels =new ArrayList<>();
         //遍历获取到里面所有的部门ID及部门名称
         for (int i=0;i<k;i++){
-            FinanceExpendDepartmentModel fedm=new FinanceExpendDepartmentModel();
+            FinanceExpensesDepartmentModel fedm=new FinanceExpensesDepartmentModel();
             fedm.setDepartmentId(data2.get(i).get("id").toString());
             fedm.setDepartmentName(data2.get(i).get("departmentName").toString());
             //将时间塞进去
             fedm.setStartTime(begin);
             fedm.setEndTime(end);
-            financeExpendDepartmentModels.add(fedm);
+            financeExpensesDepartmentModels.add(fedm);
         }
         map.put("startTime",begin);
         map.put("endTime",end);
-        map.put("list",financeExpendDepartmentModels);
+        map.put("list", financeExpensesDepartmentModels);
         //查询所有部门的支出占比
         List<FinanceIndexBudgetExpendRatioVo> budgetExpendRatio=financeIndexDao.budgetExpendRatio(map);
 

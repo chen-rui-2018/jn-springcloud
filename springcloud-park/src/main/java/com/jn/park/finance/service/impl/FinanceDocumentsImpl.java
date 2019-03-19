@@ -12,6 +12,7 @@ import com.jn.park.finance.vo.FinanceDocumentsFindAllVo;
 import com.jn.upload.api.UploadClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.List;
  * @modified By:
  */
 @Service
+@Transactional
 public class FinanceDocumentsImpl implements FinanceDocumentsService {
     @Autowired
     private FinanceDocumentsDao financeDocumentsDao;
@@ -53,7 +55,7 @@ public class FinanceDocumentsImpl implements FinanceDocumentsService {
         }
         //获取返回的路径
         String url =(String)filepath.getData();
-        financeDocumentsUploadingModel.setDocFileCode(url);
+        financeDocumentsUploadingModel.setDocFileUrl(url);
         //文件上传人
         financeDocumentsUploadingModel.setDocUploader(Account);
         //文档编号

@@ -43,7 +43,7 @@ public class FinanceExpensesController extends BaseController {
     @ApiOperation(value = "支出录入查询", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findAll")
     @RequiresPermissions("/finance/expenses/findAll")
-    public Result findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
+    public Result<FinanceExpendHistoryVo> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
         //todo
         PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
         return new Result(findAll);
@@ -53,7 +53,7 @@ public class FinanceExpensesController extends BaseController {
     @ApiOperation(value = "支出录入历史查询", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findHistoryAll")
     @RequiresPermissions("/finance/expenses/findHistoryAll")
-    public Result findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
+    public Result<FinanceExpendHistoryVo> findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
         //todo
         PaginationData findHistoryAll= financeExpensesService.findHistoryAll(financeEhpm);
         return new Result(findHistoryAll);
@@ -63,7 +63,7 @@ public class FinanceExpensesController extends BaseController {
     @ApiOperation(value = "录入导入", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/importData")
     @RequiresPermissions("/finance/expenses/importData")
-    public Result importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
+    public Result<FinanceExpendImportDataVo> importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
         //todo
         List<FinanceExpendImportDataVo> financeExpendImportDataVos=financeExpensesService.importData(file,getUser());
 
@@ -80,13 +80,23 @@ public class FinanceExpensesController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "查询财务类型")
-    @ApiOperation(value = "查询财务类型", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "获取财务类型")
+    @ApiOperation(value = "获取财务类型", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectFinanceType")
     @RequiresPermissions("/finance/expenses/selectFinanceType")
-    public Result selectFinanceType(){
+    public Result<FinanceExpendFinanceTypeVo>  selectFinanceType(){
         //todo
         List<FinanceExpendFinanceTypeVo> selectFinanceType= financeExpensesService.selectFinanceType();
+        return new Result(selectFinanceType);
+    }
+
+    @ControllerLog(doAction = "获取部门信息")
+    @ApiOperation(value = "获取部门信息", httpMethod = "POST", response = Result.class)
+    @PostMapping(value = "/selectDepartment")
+    @RequiresPermissions("/finance/expenses/selectDepartment")
+    public Result<FinanceSelectDepartmentModel>  selectDepartment(){
+        //todo
+        List<FinanceSelectDepartmentModel> selectFinanceType= financeExpensesService.selectDepartment();
         return new Result(selectFinanceType);
     }
 

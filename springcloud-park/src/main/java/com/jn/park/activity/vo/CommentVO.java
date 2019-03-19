@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "CommentAdd", description = "活动报名信息")
+@ApiModel(value = "CommentVO", description = "活动报名信息")
 public class CommentVO implements Serializable {
     @ApiModelProperty(value = "点评ID")
     private String id;

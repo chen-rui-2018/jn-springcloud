@@ -48,6 +48,9 @@ public class EmailAdd implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date delaySendTime;
 
+    @ApiModelProperty(value = "附件", example = "\"[{\"title\":\"附件\",\"url\":\"https:www.baidu.com\"}]\"")
+    private String attachment;
+
     @ApiModelProperty(value = "邮件接收人账号", example = "[\"wangsong\"]")
     @NotNull(message = "邮件接收人不能为空")
     private String[] userAccounts;
@@ -56,7 +59,7 @@ public class EmailAdd implements Serializable {
     }
 
     public EmailAdd(String id, String workOrderNum, String title, String emailContent, String sendStatus,
-                    String isDelay, Date delaySendTime, String[] userAccounts) {
+                    String isDelay, Date delaySendTime, String attachment, String[] userAccounts) {
         this.id = id;
         this.workOrderNum = workOrderNum;
         this.title = title;
@@ -64,6 +67,7 @@ public class EmailAdd implements Serializable {
         this.sendStatus = sendStatus;
         this.isDelay = isDelay;
         this.delaySendTime = delaySendTime;
+        this.attachment = attachment;
         this.userAccounts = userAccounts;
     }
 
@@ -123,6 +127,14 @@ public class EmailAdd implements Serializable {
         this.delaySendTime = delaySendTime;
     }
 
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
+    }
+
     public String[] getUserAccounts() {
         return userAccounts;
     }
@@ -141,6 +153,7 @@ public class EmailAdd implements Serializable {
                 ", sendStatus='" + sendStatus + '\'' +
                 ", isDelay='" + isDelay + '\'' +
                 ", delaySendTime=" + delaySendTime +
+                ", attachment='" + attachment + '\'' +
                 ", userAccounts=" + Arrays.toString(userAccounts) +
                 '}';
     }

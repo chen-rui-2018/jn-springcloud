@@ -25,7 +25,7 @@ public class AddressBookServiceTest {
     private static String userAccount;
 
     @BeforeClass
-    private void init() {
+    public static void init() {
         userAccount = "wangsong";
     }
 

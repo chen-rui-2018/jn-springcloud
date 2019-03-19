@@ -65,9 +65,9 @@ public class OaController extends BaseController implements OaClient {
      */
     @Override
     @ControllerLog(doAction = "一键Email定时发送接口")
-    public Result regularSendEmail(@RequestBody Email email) {
-        emailService.regularSendEmail(email);
-        return new Result();
+    public Result<Boolean> regularSendEmail(@RequestBody Email email) {
+        Boolean result = emailService.regularSendEmail(email);
+        return new Result(result);
     }
 
 

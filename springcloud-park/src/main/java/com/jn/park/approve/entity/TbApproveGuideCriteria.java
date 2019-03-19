@@ -1,6 +1,7 @@
 package com.jn.park.approve.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TbApproveGuideCriteria {
@@ -1014,62 +1015,52 @@ public class TbApproveGuideCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeEqualTo(String value) {
+        public Criteria andCreatedTimeEqualTo(Date value) {
             addCriterion("g.created_time =", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeNotEqualTo(String value) {
+        public Criteria andCreatedTimeNotEqualTo(Date value) {
             addCriterion("g.created_time <>", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeGreaterThan(String value) {
+        public Criteria andCreatedTimeGreaterThan(Date value) {
             addCriterion("g.created_time >", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("g.created_time >=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeLessThan(String value) {
+        public Criteria andCreatedTimeLessThan(Date value) {
             addCriterion("g.created_time <", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeLessThanOrEqualTo(String value) {
+        public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
             addCriterion("g.created_time <=", value, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeLike(String value) {
-            addCriterion("g.created_time like", value, "createdTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedTimeNotLike(String value) {
-            addCriterion("g.created_time not like", value, "createdTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedTimeIn(List<String> values) {
+        public Criteria andCreatedTimeIn(List<Date> values) {
             addCriterion("g.created_time in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeNotIn(List<String> values) {
+        public Criteria andCreatedTimeNotIn(List<Date> values) {
             addCriterion("g.created_time not in", values, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeBetween(String value1, String value2) {
+        public Criteria andCreatedTimeBetween(Date value1, Date value2) {
             addCriterion("g.created_time between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
-        public Criteria andCreatedTimeNotBetween(String value1, String value2) {
+        public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
             addCriterion("g.created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
@@ -1154,62 +1145,52 @@ public class TbApproveGuideCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeEqualTo(String value) {
+        public Criteria andModifiedTimeEqualTo(Date value) {
             addCriterion("g.modified_time =", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotEqualTo(String value) {
+        public Criteria andModifiedTimeNotEqualTo(Date value) {
             addCriterion("g.modified_time <>", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeGreaterThan(String value) {
+        public Criteria andModifiedTimeGreaterThan(Date value) {
             addCriterion("g.modified_time >", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeGreaterThanOrEqualTo(String value) {
+        public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
             addCriterion("g.modified_time >=", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeLessThan(String value) {
+        public Criteria andModifiedTimeLessThan(Date value) {
             addCriterion("g.modified_time <", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeLessThanOrEqualTo(String value) {
+        public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
             addCriterion("g.modified_time <=", value, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeLike(String value) {
-            addCriterion("g.modified_time like", value, "modifiedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifiedTimeNotLike(String value) {
-            addCriterion("g.modified_time not like", value, "modifiedTime");
-            return (Criteria) this;
-        }
-
-        public Criteria andModifiedTimeIn(List<String> values) {
+        public Criteria andModifiedTimeIn(List<Date> values) {
             addCriterion("g.modified_time in", values, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotIn(List<String> values) {
+        public Criteria andModifiedTimeNotIn(List<Date> values) {
             addCriterion("g.modified_time not in", values, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeBetween(String value1, String value2) {
+        public Criteria andModifiedTimeBetween(Date value1, Date value2) {
             addCriterion("g.modified_time between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
 
-        public Criteria andModifiedTimeNotBetween(String value1, String value2) {
+        public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
             addCriterion("g.modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }

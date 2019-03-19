@@ -1,6 +1,7 @@
 package com.jn.park.approve.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class TbApproveGuideMaterials implements Serializable {
     /*@ApiModelProperty("")*/
@@ -34,13 +35,13 @@ public class TbApproveGuideMaterials implements Serializable {
     private String creatorAccount;
 
     /*@ApiModelProperty("创建时间")*/
-    private String createdTime;
+    private Date createdTime;
 
     /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
     /*@ApiModelProperty("最新更新时间")*/
-    private String modifiedTime;
+    private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
 
@@ -124,12 +125,12 @@ public class TbApproveGuideMaterials implements Serializable {
         this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
     }
 
-    public String getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(String createdTime) {
-        this.createdTime = createdTime == null ? null : createdTime.trim();
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getModifierAccount() {
@@ -140,12 +141,12 @@ public class TbApproveGuideMaterials implements Serializable {
         this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
-    public String getModifiedTime() {
+    public Date getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(String modifiedTime) {
-        this.modifiedTime = modifiedTime == null ? null : modifiedTime.trim();
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
     }
 
     @Override

@@ -15,9 +15,9 @@
     <result column="gc_qq_group_number" jdbcType="VARCHAR" property="qqGroupNumber" />
     <result column="gc_record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="gc_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="gc_created_time" jdbcType="VARCHAR" property="createdTime" />
+    <result column="gc_created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="gc_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="gc_modified_time" jdbcType="VARCHAR" property="modifiedTime" />
+    <result column="gc_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.park.approve.entity.TbApproveGuideContent">
     <result column="gc_detail" jdbcType="LONGVARCHAR" property="detail" />
@@ -150,8 +150,8 @@
       #{dealDays,jdbcType=INTEGER}, #{dealAddress,jdbcType=VARCHAR}, #{dealTime,jdbcType=VARCHAR}, 
       #{linkPhone,jdbcType=VARCHAR}, #{dealOnlineUrl,jdbcType=VARCHAR}, #{isDealModelOfMessage,jdbcType=TINYINT}, 
       #{isDealModelOfQqGroup,jdbcType=TINYINT}, #{qqGroupNumber,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR})
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{detail,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.approve.entity.TbApproveGuideContent">
     insert into tb_approve_guide_content
@@ -249,13 +249,13 @@
         #{creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
-        #{createdTime,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="modifiedTime != null">
-        #{modifiedTime,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="detail != null">
         #{detail,jdbcType=LONGVARCHAR},
@@ -311,13 +311,13 @@
         gc.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        gc.created_time = #{record.createdTime,jdbcType=VARCHAR},
+        gc.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
         gc.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        gc.modified_time = #{record.modifiedTime,jdbcType=VARCHAR},
+        gc.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.detail != null">
         gc.detail = #{record.detail,jdbcType=LONGVARCHAR},
@@ -342,9 +342,9 @@
       gc.qq_group_number = #{record.qqGroupNumber,jdbcType=VARCHAR},
       gc.record_status = #{record.recordStatus,jdbcType=TINYINT},
       gc.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      gc.created_time = #{record.createdTime,jdbcType=VARCHAR},
+      gc.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       gc.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      gc.modified_time = #{record.modifiedTime,jdbcType=VARCHAR},
+      gc.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       gc.detail = #{record.detail,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -365,9 +365,9 @@
       gc.qq_group_number = #{record.qqGroupNumber,jdbcType=VARCHAR},
       gc.record_status = #{record.recordStatus,jdbcType=TINYINT},
       gc.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      gc.created_time = #{record.createdTime,jdbcType=VARCHAR},
+      gc.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       gc.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      gc.modified_time = #{record.modifiedTime,jdbcType=VARCHAR}
+      gc.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -412,13 +412,13 @@
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="detail != null">
         detail = #{detail,jdbcType=LONGVARCHAR},
@@ -440,9 +440,9 @@
       qq_group_number = #{qqGroupNumber,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where guide_id = #{guideId,jdbcType=INTEGER}
   </update>
@@ -460,9 +460,9 @@
       qq_group_number = #{qqGroupNumber,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where guide_id = #{guideId,jdbcType=INTEGER}
   </update>
 </mapper>

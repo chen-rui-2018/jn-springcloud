@@ -213,10 +213,6 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--行政审批字典表-办理材料-->
-        <table tableName="tb_approve_dict_guide_material" alias="dgm">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
         <!--行政审批指南表-->
         <table tableName="tb_approve_guide" alias="g" >
             <generatedKey column="id" sqlStatement="MySql" identity="true" />

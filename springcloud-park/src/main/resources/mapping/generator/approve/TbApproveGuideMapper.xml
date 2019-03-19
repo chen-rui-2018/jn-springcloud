@@ -16,9 +16,9 @@
     <result column="g_show_status" jdbcType="CHAR" property="showStatus" />
     <result column="g_record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="g_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="g_created_time" jdbcType="VARCHAR" property="createdTime" />
+    <result column="g_created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="g_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="g_modified_time" jdbcType="VARCHAR" property="modifiedTime" />
+    <result column="g_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -129,8 +129,8 @@
       #{level,jdbcType=TINYINT}, #{isPage,jdbcType=TINYINT}, #{code,jdbcType=VARCHAR}, 
       #{defaultSort,jdbcType=INTEGER}, #{typeImageUrl,jdbcType=VARCHAR}, #{homeSort,jdbcType=INTEGER}, 
       #{topSort,jdbcType=INTEGER}, #{showStatus,jdbcType=CHAR}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=VARCHAR})
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.approve.entity.TbApproveGuide">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -228,13 +228,13 @@
         #{creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
-        #{createdTime,jdbcType=VARCHAR},
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="modifiedTime != null">
-        #{modifiedTime,jdbcType=VARCHAR},
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -290,13 +290,13 @@
         g.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        g.created_time = #{record.createdTime,jdbcType=VARCHAR},
+        g.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
         g.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        g.modified_time = #{record.modifiedTime,jdbcType=VARCHAR},
+        g.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -319,9 +319,9 @@
       g.show_status = #{record.showStatus,jdbcType=CHAR},
       g.record_status = #{record.recordStatus,jdbcType=TINYINT},
       g.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      g.created_time = #{record.createdTime,jdbcType=VARCHAR},
+      g.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       g.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      g.modified_time = #{record.modifiedTime,jdbcType=VARCHAR}
+      g.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -369,13 +369,13 @@
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=VARCHAR},
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=VARCHAR},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -395,9 +395,9 @@
       show_status = #{showStatus,jdbcType=CHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=VARCHAR}
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

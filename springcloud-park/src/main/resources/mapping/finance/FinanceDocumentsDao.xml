@@ -40,7 +40,7 @@
     values (
        #{docId,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR},
       #{docName,jdbcType=VARCHAR}, #{docUploader,jdbcType=VARCHAR}, SYSDATE(),
-      #{comment,jdbcType=VARCHAR}, #{docFileName,jdbcType=VARCHAR}, #{docFileCode,jdbcType=VARCHAR},
+      #{comment,jdbcType=VARCHAR}, #{docFileName,jdbcType=VARCHAR}, #{docFileUrl,jdbcType=VARCHAR},
       SYSDATE(),#{docUploader,jdbcType=VARCHAR}
       )
     </insert>

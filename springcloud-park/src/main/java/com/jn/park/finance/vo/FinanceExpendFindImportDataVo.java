@@ -37,11 +37,20 @@ public class FinanceExpendFindImportDataVo implements Serializable  {
     private String costAfterTypeName;
 
 
+    @ApiModelProperty(value = "批次号")
+    private String excelId;
+
+
+
     @ApiModelProperty(value = "费用发生部门Id")
     private String departmentId;
 
     @ApiModelProperty(value = "费用发生部门名称")
     private String departmentName;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public String getId() {
         return id;
@@ -99,6 +108,14 @@ public class FinanceExpendFindImportDataVo implements Serializable  {
         this.costAfterTypeName = costAfterTypeName;
     }
 
+    public String getExcelId() {
+        return excelId;
+    }
+
+    public void setExcelId(String excelId) {
+        this.excelId = excelId;
+    }
+
     public String getDepartmentId() {
         return departmentId;
     }
@@ -113,5 +130,21 @@ public class FinanceExpendFindImportDataVo implements Serializable  {
 
     public void setDepartmentName(String departmentName) {
         this.departmentName = departmentName;
+    }
+
+    @Override
+    public String toString() {
+        return "FinanceExpendFindImportDataVo{" +
+                "id='" + id + '\'' +
+                ", costHappendTime='" + costHappendTime + '\'' +
+                ", cost='" + cost + '\'' +
+                ", costId='" + costId + '\'' +
+                ", costBeforeTypeName='" + costBeforeTypeName + '\'' +
+                ", costAfterTypeId='" + costAfterTypeId + '\'' +
+                ", costAfterTypeName='" + costAfterTypeName + '\'' +
+                ", excelId='" + excelId + '\'' +
+                ", departmentId='" + departmentId + '\'' +
+                ", departmentName='" + departmentName + '\'' +
+                '}';
     }
 }

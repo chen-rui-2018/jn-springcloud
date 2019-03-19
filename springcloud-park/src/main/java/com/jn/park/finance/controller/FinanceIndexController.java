@@ -45,7 +45,7 @@ public class FinanceIndexController extends BaseController {
     @PostMapping(value = "/ratioAndState")
     @RequiresPermissions("/finance/index/ratioAndState")
     @ApiImplicitParam(name = "year",value = "年份",dataType = "String",paramType = "query")
-    public Result ratioAndState(String year){
+    public Result<FinanceIndexVo> ratioAndState(String year){
         //todo
         FinanceIndexVo financeIndexVo =financeIndexService.ratioAndState(year);
 
@@ -58,7 +58,7 @@ public class FinanceIndexController extends BaseController {
     @PostMapping(value = "/budgetExpendRatio")
     @RequiresPermissions("/finance/index/budgetExpendRatio")
     @ApiImplicitParam(name = "year",value = "年份",dataType = "String",paramType = "query")
-    public Result budgetExpendRatio(String year){
+    public Result<FinanceIndexBudgetExpendRatioVo> budgetExpendRatio(String year){
         //todo
         List<FinanceIndexBudgetExpendRatioVo> financeIndexBudgetExpendRatioVos=financeIndexService.budgetExpendRatio(year);
         return new Result(financeIndexBudgetExpendRatioVos);

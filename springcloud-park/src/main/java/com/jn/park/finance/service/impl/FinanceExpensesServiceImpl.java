@@ -5,22 +5,23 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.finance.dao.FinanceExpensesDao;
+import com.jn.park.finance.entity.TbFinanceExpensesExample;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.enums.FinanceExceptionEnums;
-import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
-import com.jn.park.finance.model.FinanceExpensesPageModel;
-import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
+import com.jn.park.finance.model.*;
 import com.jn.park.finance.service.FinanceExpensesService;
 import com.jn.park.finance.vo.*;
+import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -31,14 +32,24 @@ import java.util.*;
  * @modified By:
  */
 @Service
+@Transactional
 public class FinanceExpensesServiceImpl implements FinanceExpensesService {
 
     @Autowired
     private FinanceExpensesDao financeExpensesDao;
 
+    @Autowired
+    private SystemClient systemClient;
+
     @ServiceLog(doAction="支出录入分页查询")
     @Override
     public PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel) {
+
+
+        if(null==financeExpensesPageModel.getOrderByClause()){
+            financeExpensesPageModel.setOrderByClause("cost_happend_time desc");
+        }
+
         Page<Object> objects = PageHelper.startPage(financeExpensesPageModel.getPage(), financeExpensesPageModel.getRows());
         List<FinanceExpendVo> findAll = financeExpensesDao.findAll(financeExpensesPageModel);
         return new PaginationData(findAll,objects.getTotal());
@@ -47,6 +58,11 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @ServiceLog(doAction="支出录入历史分页查询")
     @Override
     public PaginationData findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel) {
+
+        if(null==financeExpensesHistoryPageModel.getOrderByClause()){
+            financeExpensesHistoryPageModel.setOrderByClause("cost_happend_time desc");
+        }
+
         Page<Object> objects = PageHelper.startPage(financeExpensesHistoryPageModel.getPage(), financeExpensesHistoryPageModel.getRows());
         List<FinanceExpendHistoryVo> findHistoryAll = financeExpensesDao.findHistoryAll(financeExpensesHistoryPageModel);
         return new PaginationData(findHistoryAll,objects.getTotal());
@@ -67,8 +83,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
         //生成一个批次号  取分秒毫秒+三位随机数，避免重复
         //获取分秒毫秒
         Date day=new Date();
-        SimpleDateFormat df = new SimpleDateFormat("mmssSSS");
-        String msm=df.format(day);
+        String msm=DateUtils.formatDate(day,"Hmmss");
         //三位随机数
         int rd = (int)(Math.random()*900 + 100);
         String random = Integer.toString(rd);
@@ -184,6 +199,43 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @Override
     public List<FinanceExpendFinanceTypeVo> selectFinanceType() {
         return financeExpensesDao.selectFinanceType();
+    }
+
+    @ServiceLog(doAction="查询部门信息")
+    @Override
+    public List<FinanceSelectDepartmentModel> selectDepartment() {
+        //查询所有的根节点 不传部门ID，childflag为false表示不查询下面的子节点
+        Result result = systemClient.selectDeptByParentId(null, false);
+        //定义变量接受根节点ID
+        String rootDepartmentId=null;
+        //返回的是一个封装的result，获取到里面的date
+        List<Map<String,Object>> data = (List<Map<String,Object>>) result.getData();
+        //遍历，获取到ID
+        for(Map<String,Object> map:data){
+            if(String.valueOf(map.get("departmentName")).indexOf("科创")>-1){
+                rootDepartmentId=String.valueOf(map.get("id"));
+                break;
+            }
+        }
+        //判断是否拿到了根节点ID
+        if(null==rootDepartmentId){
+            throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"获取根节点失败");
+        }
+        //再通过拿到的根节点作为条件再调用一次，childflag为true时表示查询它下面的所有子节点（下一级）
+        Result firstLevelResult = systemClient.selectDeptByParentId(rootDepartmentId, true);
+        Map<String,Object> data1 = (Map<String,Object>) firstLevelResult.getData();
+        List<Map<String,Object>> data2 = (List<Map<String,Object>>) data1.get("children");
+        int k=data2.size();
+        Map<String,Object> map =new HashMap<>();
+        List<FinanceSelectDepartmentModel> financeSelectDepartmentModels =new ArrayList<>();
+        //遍历获取到里面所有的部门ID及部门名称
+        for (int i=0;i<k;i++){
+            FinanceSelectDepartmentModel fedm=new FinanceSelectDepartmentModel();
+            fedm.setDepartmentId(data2.get(i).get("id").toString());
+            fedm.setDepartmentName(data2.get(i).get("departmentName").toString());
+            financeSelectDepartmentModels.add(fedm);
+        }
+        return financeSelectDepartmentModels;
     }
 
     @ServiceLog(doAction="根据导入的费用类型对比，看是否有相同的费用类型")

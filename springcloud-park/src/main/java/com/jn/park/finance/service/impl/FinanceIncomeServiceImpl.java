@@ -8,6 +8,7 @@ import com.jn.park.finance.vo.FinanceIncomeSummarizingProportionVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * @modified By:
  */
 @Service
+@Transactional
 public class FinanceIncomeServiceImpl implements FinanceIncomeService {
     @Autowired
     private FinanceIncomeDao financeIncomeDao;

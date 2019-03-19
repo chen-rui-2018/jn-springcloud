@@ -1,6 +1,6 @@
 package com.jn.miniprogram.register.service;
 
-import com.jn.miniprogram.register.model.RegisterInfoParam;
+import com.jn.user.model.RegisterInfoParam;
 
 /**
  * @Author: yangph

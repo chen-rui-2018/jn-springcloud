@@ -1,4 +1,4 @@
-package com.jn.miniprogram.register.model;
+package com.jn.user.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

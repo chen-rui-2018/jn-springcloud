@@ -3,7 +3,7 @@ package com.jn.miniprogram.register.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.miniprogram.register.model.RegisterInfoParam;
+import com.jn.user.model.RegisterInfoParam;
 import com.jn.miniprogram.register.service.MiniprogramRegisterService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.enums.MiniProgramRegisterExceptionEnum;
@@ -31,12 +31,12 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Api(tags = "微信小程序注册绑定")
 @RestController
-@RequestMapping("/guest/miniprogram/miniprogramRegisterController")
-public class MiniprogramRegisterController extends BaseController {
+@RequestMapping("/guest/miniProgram/miniProgramRegisterController")
+public class MiniProgramRegisterController extends BaseController {
     /**
      * 日志组件
      */
-    private static final Logger logger= LoggerFactory.getLogger(MiniprogramRegisterController.class);
+    private static final Logger logger= LoggerFactory.getLogger(MiniProgramRegisterController.class);
 
     @Autowired
     private MiniprogramRegisterService miniprogramRegisterService;

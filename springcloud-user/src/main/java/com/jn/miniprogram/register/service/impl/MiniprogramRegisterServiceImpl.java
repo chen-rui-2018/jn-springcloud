@@ -6,7 +6,7 @@ import com.jn.common.util.StringUtils;
 import com.jn.miniprogram.register.dao.TbWechatUserInfoMapper;
 import com.jn.miniprogram.register.entity.TbWechatUserInfo;
 import com.jn.miniprogram.register.entity.TbWechatUserInfoCriteria;
-import com.jn.miniprogram.register.model.RegisterInfoParam;
+import com.jn.user.model.RegisterInfoParam;
 import com.jn.miniprogram.register.service.MiniprogramRegisterService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.enums.MiniProgramRegisterExceptionEnum;

@@ -17,7 +17,7 @@ import java.util.List;
 public interface PayBillService {
 
     /**
-     * 根据条件查询某个用户账单数据
+     * 根据条件查询账单数据
      * @param paymentBillParam
      * @return
      */

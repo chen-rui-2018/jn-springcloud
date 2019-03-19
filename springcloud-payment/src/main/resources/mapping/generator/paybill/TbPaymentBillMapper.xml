@@ -15,6 +15,7 @@
     <result column="bill_create_account" jdbcType="VARCHAR" property="billCreateAccount" />
     <result column="bill_remark" jdbcType="VARCHAR" property="billRemark" />
     <result column="bill_status" jdbcType="VARCHAR" property="billStatus" />
+    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="is_urge" jdbcType="VARCHAR" property="isUrge" />
     <result column="urge_time" jdbcType="TIMESTAMP" property="urgeTime" />
@@ -22,6 +23,9 @@
     <result column="is_remind" jdbcType="VARCHAR" property="isRemind" />
     <result column="remind_time" jdbcType="TIMESTAMP" property="remindTime" />
     <result column="remind_id" jdbcType="VARCHAR" property="remindId" />
+    <result column="check_account" jdbcType="VARCHAR" property="checkAccount" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -89,8 +93,9 @@
   <sql id="Base_Column_List">
     bill_id, bill_num, bill_name, bill_type, bill_obj_type, bill_obj_id, bill_obj_name, 
     bill_amount, bill_create_time, pay_end_time, bill_create_account, bill_remark, bill_status, 
-    order_id, is_urge, urge_time, urge_num, is_remind, remind_time, remind_id, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    pay_type, order_id, is_urge, urge_time, urge_num, is_remind, remind_time, remind_id, 
+    check_account, check_time, check_remark, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.unionpay.paybill.entity.TbPaymentBillCriteria" resultMap="BaseResultMap">
     select
@@ -127,20 +132,22 @@
       bill_type, bill_obj_type, bill_obj_id, 
       bill_obj_name, bill_amount, bill_create_time, 
       pay_end_time, bill_create_account, bill_remark, 
-      bill_status, order_id, is_urge, 
-      urge_time, urge_num, is_remind, 
-      remind_time, remind_id, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      bill_status, pay_type, order_id, 
+      is_urge, urge_time, urge_num, 
+      is_remind, remind_time, remind_id, 
+      check_account, check_time, check_remark, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
     values (#{billId,jdbcType=VARCHAR}, #{billNum,jdbcType=VARCHAR}, #{billName,jdbcType=VARCHAR}, 
       #{billType,jdbcType=VARCHAR}, #{billObjType,jdbcType=VARCHAR}, #{billObjId,jdbcType=VARCHAR}, 
       #{billObjName,jdbcType=VARCHAR}, #{billAmount,jdbcType=DOUBLE}, #{billCreateTime,jdbcType=TIMESTAMP}, 
       #{payEndTime,jdbcType=TIMESTAMP}, #{billCreateAccount,jdbcType=VARCHAR}, #{billRemark,jdbcType=VARCHAR}, 
-      #{billStatus,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, #{isUrge,jdbcType=VARCHAR}, 
-      #{urgeTime,jdbcType=TIMESTAMP}, #{urgeNum,jdbcType=INTEGER}, #{isRemind,jdbcType=VARCHAR}, 
-      #{remindTime,jdbcType=TIMESTAMP}, #{remindId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{billStatus,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{isUrge,jdbcType=VARCHAR}, #{urgeTime,jdbcType=TIMESTAMP}, #{urgeNum,jdbcType=INTEGER}, 
+      #{isRemind,jdbcType=VARCHAR}, #{remindTime,jdbcType=TIMESTAMP}, #{remindId,jdbcType=VARCHAR}, 
+      #{checkAccount,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{checkRemark,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.unionpay.paybill.entity.TbPaymentBill">
     insert into tb_payment_bill
@@ -184,6 +191,9 @@
       <if test="billStatus != null">
         bill_status,
       </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
       <if test="orderId != null">
         order_id,
       </if>
@@ -204,6 +214,15 @@
       </if>
       <if test="remindId != null">
         remind_id,
+      </if>
+      <if test="checkAccount != null">
+        check_account,
+      </if>
+      <if test="checkTime != null">
+        check_time,
+      </if>
+      <if test="checkRemark != null">
+        check_remark,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -261,6 +280,9 @@
       <if test="billStatus != null">
         #{billStatus,jdbcType=VARCHAR},
       </if>
+      <if test="payType != null">
+        #{payType,jdbcType=VARCHAR},
+      </if>
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
       </if>
@@ -281,6 +303,15 @@
       </if>
       <if test="remindId != null">
         #{remindId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAccount != null">
+        #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkRemark != null">
+        #{checkRemark,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -347,6 +378,9 @@
       <if test="record.billStatus != null">
         bill_status = #{record.billStatus,jdbcType=VARCHAR},
       </if>
+      <if test="record.payType != null">
+        pay_type = #{record.payType,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderId != null">
         order_id = #{record.orderId,jdbcType=VARCHAR},
       </if>
@@ -367,6 +401,15 @@
       </if>
       <if test="record.remindId != null">
         remind_id = #{record.remindId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkAccount != null">
+        check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkTime != null">
+        check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.checkRemark != null">
+        check_remark = #{record.checkRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -403,6 +446,7 @@
       bill_create_account = #{record.billCreateAccount,jdbcType=VARCHAR},
       bill_remark = #{record.billRemark,jdbcType=VARCHAR},
       bill_status = #{record.billStatus,jdbcType=VARCHAR},
+      pay_type = #{record.payType,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       is_urge = #{record.isUrge,jdbcType=VARCHAR},
       urge_time = #{record.urgeTime,jdbcType=TIMESTAMP},
@@ -410,6 +454,9 @@
       is_remind = #{record.isRemind,jdbcType=VARCHAR},
       remind_time = #{record.remindTime,jdbcType=TIMESTAMP},
       remind_id = #{record.remindId,jdbcType=VARCHAR},
+      check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      check_time = #{record.checkTime,jdbcType=TIMESTAMP},
+      check_remark = #{record.checkRemark,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -458,6 +505,9 @@
       <if test="billStatus != null">
         bill_status = #{billStatus,jdbcType=VARCHAR},
       </if>
+      <if test="payType != null">
+        pay_type = #{payType,jdbcType=VARCHAR},
+      </if>
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=VARCHAR},
       </if>
@@ -478,6 +528,15 @@
       </if>
       <if test="remindId != null">
         remind_id = #{remindId,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAccount != null">
+        check_account = #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -511,6 +570,7 @@
       bill_create_account = #{billCreateAccount,jdbcType=VARCHAR},
       bill_remark = #{billRemark,jdbcType=VARCHAR},
       bill_status = #{billStatus,jdbcType=VARCHAR},
+      pay_type = #{payType,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
       is_urge = #{isUrge,jdbcType=VARCHAR},
       urge_time = #{urgeTime,jdbcType=TIMESTAMP},
@@ -518,6 +578,9 @@
       is_remind = #{isRemind,jdbcType=VARCHAR},
       remind_time = #{remindTime,jdbcType=TIMESTAMP},
       remind_id = #{remindId,jdbcType=VARCHAR},
+      check_account = #{checkAccount,jdbcType=VARCHAR},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
+      check_remark = #{checkRemark,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

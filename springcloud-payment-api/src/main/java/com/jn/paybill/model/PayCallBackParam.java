@@ -20,7 +20,7 @@ public class PayCallBackParam implements Serializable {
     @ApiModelProperty(value = "订单ID")
     @NotBlank(message = "活动id不能为空！")
     private String orderId;
-    @ApiModelProperty(value = "支付状态")
+    @ApiModelProperty(value = "支付状态[2已支付3支付失败]")
     @NotBlank(message = "支付状态不能为空！")
     private String payStatus;
     @ApiModelProperty(value = "支付时间")
@@ -28,7 +28,7 @@ public class PayCallBackParam implements Serializable {
     @ApiModelProperty(value = "支付平台订单ID")
     @NotBlank(message = "支付平台订单ID不能为空")
     private String payOrderId;
-    @ApiModelProperty(value = "支付方式")
+    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]")
     private String payType;
 
     public String getOrderId() {

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.unionpay.payremind.dao.PaymentRemindMapper">
+
+    <resultMap id="billRemindDetail" type="com.jn.unionpay.payremind.model.PayRemindVO">
+    <id column="r_remindId" jdbcType="VARCHAR" property="remindId" javaType="java.lang.String"/>
+    <result column="r_bankName" jdbcType="VARCHAR" property="bankName" javaType="java.lang.String"/>
+    <result column="r_bankId" jdbcType="VARCHAR" property="bankId" javaType="java.lang.String"/>
+    <result column="r_bankAccount" jdbcType="VARCHAR" property="bankAccount" javaType="java.lang.String"/>
+    <result column="r_payAmount" jdbcType="VARCHAR" property="payAmount" javaType="java.lang.String"/>
+    <result column="r_payRemark" jdbcType="VARCHAR" property="payRemark" javaType="java.lang.String"/>
+    <result column="r_payImg" jdbcType="VARCHAR" property="payImg" javaType="java.lang.String"/>
+    <result column="r_remindStatus" jdbcType="VARCHAR" property="remindStatus" javaType="java.lang.String"/>
+    <result column="r_checkRemark" jdbcType="VARCHAR" property="checkRemark" javaType="java.lang.String"/>
+        <!-- 账单列表 -->
+        <collection property="bills" javaType="java.util.List"
+                    ofType="com.jn.paybill.model.PayBillVO">
+            <id column="b_billId" property="billId" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billNum" property="billNum" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billName" property="billName" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billType" property="billType" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billObjId" property="billObjId" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billAmount" property="billAmount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billCreateTime" property="billCreateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_payEndTime" property="payEndTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billRemark" property="billRemark" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billStatus" property="billStatus" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_isUrge" property="isUrge" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+   <select id="getBillRemindDetail" resultMap="billRemindDetail">
+        select
+          r.remind_id as "r_remindId"
+          ,r.bank_name as "r_bankName"
+          ,r.bank_id as "r_bankId"
+          ,r.bank_account as "r_bankAccount"
+          ,r.pay_amount as "r_payAmount"
+          ,r.pay_remark as "r_payRemark"
+          ,r.pay_img as "r_payImg"
+          ,r.remind_status as "r_remindStatus"
+          ,r.check_remark as "r_checkRemark"
+          ,b.bill_id as "b_billId"
+          ,b.bill_num as "b_billNum"
+          ,b.bill_name as "b_billName"
+          ,b.bill_type as "b_billType"
+          ,b.bill_obj_id as "b_billObjId"
+          ,b.bill_amount as "b_billAmount"
+          ,date_format(b.bill_create_time,'%Y-%m-%d %H:%i:%s')  AS "b_billCreateTime"
+          ,date_format(b.pay_end_time,'%Y-%m-%d %H:%i:%s')  AS "b_payEndTime"
+          ,b.bill_remark as "b_billRemark"
+          ,b.bill_status as "b_billStatus"
+          ,b.is_urge as "b_isUrge"
+        from tb_payment_remind r left join tb_payment_bill b on b.remind_id = r.remind_id
+        where r.remind_id = #{remindId}
+   </select>
+
+
+</mapper>

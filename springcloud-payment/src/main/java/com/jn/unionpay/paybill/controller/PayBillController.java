@@ -34,7 +34,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/guest/pay/bill")
 public class PayBillController extends BaseController {
-    private static Logger logger = LoggerFactory.getLogger(PayBillController.class);
 
     @Autowired
     private PayBillService payBillService;
@@ -93,6 +92,8 @@ public class PayBillController extends BaseController {
     public Result<PayCallBackVO> payCallBack(@RequestBody PayCallBackParam callBackParam){
         return new Result<>(payBillService.payCallBack(callBackParam));
     }
+
+
 
 
 }

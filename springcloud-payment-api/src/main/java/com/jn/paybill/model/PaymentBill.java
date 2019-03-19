@@ -3,6 +3,7 @@ package com.jn.paybill.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -34,33 +35,35 @@ public class PaymentBill implements Serializable {
     @ApiModelProperty(value = "账单金额")
     private Double billAmount;
     @ApiModelProperty(value = "账单生成时间")
-    private Date billCreateTime;
+    private String billCreateTime;
     @ApiModelProperty(value = "最晚缴费时间")
-    private Date payEndTime;
+    private String payEndTime;
     @ApiModelProperty(value = "生成操作人")
     private String billCreateAccount;
     @ApiModelProperty(value = "账单说明")
     private String billRemark;
-    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3确认支付]")
+    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3支付失败4确认支付5支付审核不通过]")
     private String billStatus;
     @ApiModelProperty(value = "是否已催付[0否1是]")
     private String isUrge;
     @ApiModelProperty(value = "最后一次催付时间")
-    private Date urgeTime;
+    private String urgeTime;
     @ApiModelProperty(value = "催付次数")
     private Integer urgeNum;
+    @ApiModelProperty(value = "支付方式(10线上 11线下)")
+    private String billPayType;
     @ApiModelProperty(value = "是否提醒审核 0否1是")
     private String isRemind;
     @ApiModelProperty(value = "提醒审核时间")
-    private Date remindTime;
+    private String remindTime;
     @ApiModelProperty(value = "提醒审核ID")
     private String remindId;
     @ApiModelProperty(value = "创建时间")
-    private Date createdTime;
+    private String createdTime;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
     @ApiModelProperty(value = "最新更新时间")
-    private Date modifiedTime;
+    private String modifiedTime;
     @ApiModelProperty(value = "最新更新者账号")
     private String modifierAccount;
 
@@ -73,7 +76,7 @@ public class PaymentBill implements Serializable {
     @ApiModelProperty(value = "订单支付总金额")
     private Double orderAmount;
     @ApiModelProperty(value = "订单支付时间")
-    private Date payTime;
+    private String payTime;
     @ApiModelProperty(value = "订单支付状态[0未支付1已支付]")
     private String orderStatus;
     @ApiModelProperty(value = "支付平台订单编号")
@@ -87,12 +90,13 @@ public class PaymentBill implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+
     public String getBillId() {
         return billId;
     }
 
     public void setBillId(String billId) {
-        this.billId = billId == null ? null : billId.trim();
+        this.billId = billId;
     }
 
     public String getBillNum() {
@@ -100,7 +104,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillNum(String billNum) {
-        this.billNum = billNum == null ? null : billNum.trim();
+        this.billNum = billNum;
     }
 
     public String getBillName() {
@@ -108,7 +112,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillName(String billName) {
-        this.billName = billName == null ? null : billName.trim();
+        this.billName = billName;
     }
 
     public String getBillType() {
@@ -116,7 +120,15 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillType(String billType) {
-        this.billType = billType == null ? null : billType.trim();
+        this.billType = billType;
+    }
+
+    public String getBillTypeName() {
+        return billTypeName;
+    }
+
+    public void setBillTypeName(String billTypeName) {
+        this.billTypeName = billTypeName;
     }
 
     public String getBillObjType() {
@@ -124,7 +136,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillObjType(String billObjType) {
-        this.billObjType = billObjType == null ? null : billObjType.trim();
+        this.billObjType = billObjType;
     }
 
     public String getBillObjId() {
@@ -132,7 +144,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillObjId(String billObjId) {
-        this.billObjId = billObjId == null ? null : billObjId.trim();
+        this.billObjId = billObjId;
     }
 
     public String getBillObjName() {
@@ -140,7 +152,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillObjName(String billObjName) {
-        this.billObjName = billObjName == null ? null : billObjName.trim();
+        this.billObjName = billObjName;
     }
 
     public Double getBillAmount() {
@@ -151,19 +163,19 @@ public class PaymentBill implements Serializable {
         this.billAmount = billAmount;
     }
 
-    public Date getBillCreateTime() {
+    public String getBillCreateTime() {
         return billCreateTime;
     }
 
-    public void setBillCreateTime(Date billCreateTime) {
+    public void setBillCreateTime(String billCreateTime) {
         this.billCreateTime = billCreateTime;
     }
 
-    public Date getPayEndTime() {
+    public String getPayEndTime() {
         return payEndTime;
     }
 
-    public void setPayEndTime(Date payEndTime) {
+    public void setPayEndTime(String payEndTime) {
         this.payEndTime = payEndTime;
     }
 
@@ -172,7 +184,7 @@ public class PaymentBill implements Serializable {
     }
 
     public void setBillCreateAccount(String billCreateAccount) {
-        this.billCreateAccount = billCreateAccount == null ? null : billCreateAccount.trim();
+        this.billCreateAccount = billCreateAccount;
     }
 
     public String getBillRemark() {
@@ -196,14 +208,14 @@ public class PaymentBill implements Serializable {
     }
 
     public void setIsUrge(String isUrge) {
-        this.isUrge = isUrge == null ? null : isUrge.trim();
+        this.isUrge = isUrge;
     }
 
-    public Date getUrgeTime() {
+    public String getUrgeTime() {
         return urgeTime;
     }
 
-    public void setUrgeTime(Date urgeTime) {
+    public void setUrgeTime(String urgeTime) {
         this.urgeTime = urgeTime;
     }
 
@@ -215,19 +227,27 @@ public class PaymentBill implements Serializable {
         this.urgeNum = urgeNum;
     }
 
+    public String getBillPayType() {
+        return billPayType;
+    }
+
+    public void setBillPayType(String billPayType) {
+        this.billPayType = billPayType;
+    }
+
     public String getIsRemind() {
         return isRemind;
     }
 
     public void setIsRemind(String isRemind) {
-        this.isRemind = isRemind == null ? null : isRemind.trim();
+        this.isRemind = isRemind;
     }
 
-    public Date getRemindTime() {
+    public String getRemindTime() {
         return remindTime;
     }
 
-    public void setRemindTime(Date remindTime) {
+    public void setRemindTime(String remindTime) {
         this.remindTime = remindTime;
     }
 
@@ -236,14 +256,14 @@ public class PaymentBill implements Serializable {
     }
 
     public void setRemindId(String remindId) {
-        this.remindId = remindId == null ? null : remindId.trim();
+        this.remindId = remindId;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -252,14 +272,14 @@ public class PaymentBill implements Serializable {
     }
 
     public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
+        this.creatorAccount = creatorAccount;
     }
 
-    public Date getModifiedTime() {
+    public String getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
+    public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
     }
 
@@ -268,107 +288,86 @@ public class PaymentBill implements Serializable {
     }
 
     public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
+        this.modifierAccount = modifierAccount;
     }
 
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        PaymentBill other = (PaymentBill) that;
-        return (this.getBillId() == null ? other.getBillId() == null : this.getBillId().equals(other.getBillId()))
-            && (this.getBillNum() == null ? other.getBillNum() == null : this.getBillNum().equals(other.getBillNum()))
-            && (this.getBillName() == null ? other.getBillName() == null : this.getBillName().equals(other.getBillName()))
-            && (this.getBillType() == null ? other.getBillType() == null : this.getBillType().equals(other.getBillType()))
-            && (this.getBillObjType() == null ? other.getBillObjType() == null : this.getBillObjType().equals(other.getBillObjType()))
-            && (this.getBillObjId() == null ? other.getBillObjId() == null : this.getBillObjId().equals(other.getBillObjId()))
-            && (this.getBillObjName() == null ? other.getBillObjName() == null : this.getBillObjName().equals(other.getBillObjName()))
-            && (this.getBillAmount() == null ? other.getBillAmount() == null : this.getBillAmount().equals(other.getBillAmount()))
-            && (this.getBillCreateTime() == null ? other.getBillCreateTime() == null : this.getBillCreateTime().equals(other.getBillCreateTime()))
-            && (this.getPayEndTime() == null ? other.getPayEndTime() == null : this.getPayEndTime().equals(other.getPayEndTime()))
-            && (this.getBillCreateAccount() == null ? other.getBillCreateAccount() == null : this.getBillCreateAccount().equals(other.getBillCreateAccount()))
-            && (this.getBillRemark() == null ? other.getBillRemark() == null : this.getBillRemark().equals(other.getBillRemark()))
-            && (this.getBillStatus() == null ? other.getBillStatus() == null : this.getBillStatus().equals(other.getBillStatus()))
-            && (this.getIsUrge() == null ? other.getIsUrge() == null : this.getIsUrge().equals(other.getIsUrge()))
-            && (this.getUrgeTime() == null ? other.getUrgeTime() == null : this.getUrgeTime().equals(other.getUrgeTime()))
-            && (this.getUrgeNum() == null ? other.getUrgeNum() == null : this.getUrgeNum().equals(other.getUrgeNum()))
-            && (this.getIsRemind() == null ? other.getIsRemind() == null : this.getIsRemind().equals(other.getIsRemind()))
-            && (this.getRemindTime() == null ? other.getRemindTime() == null : this.getRemindTime().equals(other.getRemindTime()))
-            && (this.getRemindId() == null ? other.getRemindId() == null : this.getRemindId().equals(other.getRemindId()))
-            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
-            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()));
+    public String getOrderId() {
+        return orderId;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getBillId() == null) ? 0 : getBillId().hashCode());
-        result = prime * result + ((getBillNum() == null) ? 0 : getBillNum().hashCode());
-        result = prime * result + ((getBillName() == null) ? 0 : getBillName().hashCode());
-        result = prime * result + ((getBillType() == null) ? 0 : getBillType().hashCode());
-        result = prime * result + ((getBillObjType() == null) ? 0 : getBillObjType().hashCode());
-        result = prime * result + ((getBillObjId() == null) ? 0 : getBillObjId().hashCode());
-        result = prime * result + ((getBillObjName() == null) ? 0 : getBillObjName().hashCode());
-        result = prime * result + ((getBillAmount() == null) ? 0 : getBillAmount().hashCode());
-        result = prime * result + ((getBillCreateTime() == null) ? 0 : getBillCreateTime().hashCode());
-        result = prime * result + ((getPayEndTime() == null) ? 0 : getPayEndTime().hashCode());
-        result = prime * result + ((getBillCreateAccount() == null) ? 0 : getBillCreateAccount().hashCode());
-        result = prime * result + ((getBillRemark() == null) ? 0 : getBillRemark().hashCode());
-        result = prime * result + ((getBillStatus() == null) ? 0 : getBillStatus().hashCode());
-        result = prime * result + ((getIsUrge() == null) ? 0 : getIsUrge().hashCode());
-        result = prime * result + ((getUrgeTime() == null) ? 0 : getUrgeTime().hashCode());
-        result = prime * result + ((getUrgeNum() == null) ? 0 : getUrgeNum().hashCode());
-        result = prime * result + ((getIsRemind() == null) ? 0 : getIsRemind().hashCode());
-        result = prime * result + ((getRemindTime() == null) ? 0 : getRemindTime().hashCode());
-        result = prime * result + ((getRemindId() == null) ? 0 : getRemindId().hashCode());
-        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
-        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
-        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
-        return result;
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", billId=").append(billId);
-        sb.append(", billNum=").append(billNum);
-        sb.append(", billName=").append(billName);
-        sb.append(", billType=").append(billType);
-        sb.append(", billObjType=").append(billObjType);
-        sb.append(", billObjId=").append(billObjId);
-        sb.append(", billObjName=").append(billObjName);
-        sb.append(", billAmount=").append(billAmount);
-        sb.append(", billCreateTime=").append(billCreateTime);
-        sb.append(", payEndTime=").append(payEndTime);
-        sb.append(", billCreateAccount=").append(billCreateAccount);
-        sb.append(", billRemark=").append(billRemark);
-        sb.append(", billStatus=").append(billStatus);
-        sb.append(", isUrge=").append(isUrge);
-        sb.append(", urgeTime=").append(urgeTime);
-        sb.append(", urgeNum=").append(urgeNum);
-        sb.append(", isRemind=").append(isRemind);
-        sb.append(", remindTime=").append(remindTime);
-        sb.append(", remindId=").append(remindId);
-        sb.append(", createdTime=").append(createdTime);
-        sb.append(", creatorAccount=").append(creatorAccount);
-        sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", modifierAccount=").append(modifierAccount);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
+
+    public String getOrderName() {
+        return orderName;
+    }
+
+    public void setOrderName(String orderName) {
+        this.orderName = orderName;
+    }
+
+    public Double getOrderAmount() {
+        return orderAmount;
+    }
+
+    public void setOrderAmount(Double orderAmount) {
+        this.orderAmount = orderAmount;
+    }
+
+    public String getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(String payTime) {
+        this.payTime = payTime;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getPayId() {
+        return payId;
+    }
+
+    public void setPayId(String payId) {
+        this.payId = payId;
+    }
+
+    public Double getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(Double payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType;
+    }
+
+    public String getPayRemark() {
+        return payRemark;
+    }
+
+    public void setPayRemark(String payRemark) {
+        this.payRemark = payRemark;
     }
 }

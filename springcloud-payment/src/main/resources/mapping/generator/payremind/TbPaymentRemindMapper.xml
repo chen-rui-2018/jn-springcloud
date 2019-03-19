@@ -4,9 +4,15 @@
   <resultMap id="BaseResultMap" type="com.jn.unionpay.payremind.entity.TbPaymentRemind">
     <id column="remind_id" jdbcType="VARCHAR" property="remindId" />
     <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
+    <result column="bank_id" jdbcType="VARCHAR" property="bankId" />
+    <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
     <result column="pay_amount" jdbcType="DOUBLE" property="payAmount" />
-    <result column="pay_remark" jdbcType="DATE" property="payRemark" />
+    <result column="pay_remark" jdbcType="VARCHAR" property="payRemark" />
     <result column="pay_img" jdbcType="VARCHAR" property="payImg" />
+    <result column="remind_status" jdbcType="VARCHAR" property="remindStatus" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
+    <result column="check_account" jdbcType="VARCHAR" property="checkAccount" />
+    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -72,8 +78,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    remind_id, bank_name, pay_amount, pay_remark, pay_img, created_time, creator_account, 
-    modified_time, modifier_account, record_status
+    remind_id, bank_name, bank_id, bank_account, pay_amount, pay_remark, pay_img, remind_status, 
+    check_remark, check_account, check_time, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.unionpay.payremind.entity.TbPaymentRemindCriteria" resultMap="BaseResultMap">
     select
@@ -106,12 +113,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.unionpay.payremind.entity.TbPaymentRemind">
-    insert into tb_payment_remind (remind_id, bank_name, pay_amount, 
-      pay_remark, pay_img, created_time, 
+    insert into tb_payment_remind (remind_id, bank_name, bank_id, 
+      bank_account, pay_amount, pay_remark, 
+      pay_img, remind_status, check_remark, 
+      check_account, check_time, created_time, 
       creator_account, modified_time, modifier_account, 
       record_status)
-    values (#{remindId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{payAmount,jdbcType=DOUBLE}, 
-      #{payRemark,jdbcType=DATE}, #{payImg,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+    values (#{remindId,jdbcType=VARCHAR}, #{bankName,jdbcType=VARCHAR}, #{bankId,jdbcType=VARCHAR}, 
+      #{bankAccount,jdbcType=VARCHAR}, #{payAmount,jdbcType=DOUBLE}, #{payRemark,jdbcType=VARCHAR}, 
+      #{payImg,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, #{checkRemark,jdbcType=VARCHAR}, 
+      #{checkAccount,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT})
   </insert>
@@ -124,6 +135,12 @@
       <if test="bankName != null">
         bank_name,
       </if>
+      <if test="bankId != null">
+        bank_id,
+      </if>
+      <if test="bankAccount != null">
+        bank_account,
+      </if>
       <if test="payAmount != null">
         pay_amount,
       </if>
@@ -132,6 +149,18 @@
       </if>
       <if test="payImg != null">
         pay_img,
+      </if>
+      <if test="remindStatus != null">
+        remind_status,
+      </if>
+      <if test="checkRemark != null">
+        check_remark,
+      </if>
+      <if test="checkAccount != null">
+        check_account,
+      </if>
+      <if test="checkTime != null">
+        check_time,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -156,14 +185,32 @@
       <if test="bankName != null">
         #{bankName,jdbcType=VARCHAR},
       </if>
+      <if test="bankId != null">
+        #{bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
       <if test="payAmount != null">
         #{payAmount,jdbcType=DOUBLE},
       </if>
       <if test="payRemark != null">
-        #{payRemark,jdbcType=DATE},
+        #{payRemark,jdbcType=VARCHAR},
       </if>
       <if test="payImg != null">
         #{payImg,jdbcType=VARCHAR},
+      </if>
+      <if test="remindStatus != null">
+        #{remindStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="checkRemark != null">
+        #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAccount != null">
+        #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        #{checkTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -197,14 +244,32 @@
       <if test="record.bankName != null">
         bank_name = #{record.bankName,jdbcType=VARCHAR},
       </if>
+      <if test="record.bankId != null">
+        bank_id = #{record.bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankAccount != null">
+        bank_account = #{record.bankAccount,jdbcType=VARCHAR},
+      </if>
       <if test="record.payAmount != null">
         pay_amount = #{record.payAmount,jdbcType=DOUBLE},
       </if>
       <if test="record.payRemark != null">
-        pay_remark = #{record.payRemark,jdbcType=DATE},
+        pay_remark = #{record.payRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.payImg != null">
         pay_img = #{record.payImg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remindStatus != null">
+        remind_status = #{record.remindStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkRemark != null">
+        check_remark = #{record.checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkAccount != null">
+        check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.checkTime != null">
+        check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -230,9 +295,15 @@
     update tb_payment_remind
     set remind_id = #{record.remindId,jdbcType=VARCHAR},
       bank_name = #{record.bankName,jdbcType=VARCHAR},
+      bank_id = #{record.bankId,jdbcType=VARCHAR},
+      bank_account = #{record.bankAccount,jdbcType=VARCHAR},
       pay_amount = #{record.payAmount,jdbcType=DOUBLE},
-      pay_remark = #{record.payRemark,jdbcType=DATE},
+      pay_remark = #{record.payRemark,jdbcType=VARCHAR},
       pay_img = #{record.payImg,jdbcType=VARCHAR},
+      remind_status = #{record.remindStatus,jdbcType=VARCHAR},
+      check_remark = #{record.checkRemark,jdbcType=VARCHAR},
+      check_account = #{record.checkAccount,jdbcType=VARCHAR},
+      check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -248,14 +319,32 @@
       <if test="bankName != null">
         bank_name = #{bankName,jdbcType=VARCHAR},
       </if>
+      <if test="bankId != null">
+        bank_id = #{bankId,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
       <if test="payAmount != null">
         pay_amount = #{payAmount,jdbcType=DOUBLE},
       </if>
       <if test="payRemark != null">
-        pay_remark = #{payRemark,jdbcType=DATE},
+        pay_remark = #{payRemark,jdbcType=VARCHAR},
       </if>
       <if test="payImg != null">
         pay_img = #{payImg,jdbcType=VARCHAR},
+      </if>
+      <if test="remindStatus != null">
+        remind_status = #{remindStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="checkAccount != null">
+        check_account = #{checkAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="checkTime != null">
+        check_time = #{checkTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -278,9 +367,15 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.unionpay.payremind.entity.TbPaymentRemind">
     update tb_payment_remind
     set bank_name = #{bankName,jdbcType=VARCHAR},
+      bank_id = #{bankId,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
       pay_amount = #{payAmount,jdbcType=DOUBLE},
-      pay_remark = #{payRemark,jdbcType=DATE},
+      pay_remark = #{payRemark,jdbcType=VARCHAR},
       pay_img = #{payImg,jdbcType=VARCHAR},
+      remind_status = #{remindStatus,jdbcType=VARCHAR},
+      check_remark = #{checkRemark,jdbcType=VARCHAR},
+      check_account = #{checkAccount,jdbcType=VARCHAR},
+      check_time = #{checkTime,jdbcType=TIMESTAMP},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

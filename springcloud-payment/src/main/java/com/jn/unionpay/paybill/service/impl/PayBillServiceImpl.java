@@ -68,10 +68,13 @@ public class PayBillServiceImpl implements PayBillService {
      */
     private static final String BILL_OBJ_TYPE_IS_COMPANY = "1";
     private static final String BILL_OBJ_TYPE_IS_INDIVIDUAL = "2";
-
+    /**
+     * 支付方式 10线上11线下
+     */
+    private static final String PAY_METHOD_ONLINE = "10";
 
     @Override
-    @ServiceLog(doAction = "根据条件查询某个用户账单数据")
+    @ServiceLog(doAction = "根据条件查询账单数据")
     public PaginationData<List<PaymentBill>> getPaymentBillList(PaymentBillParam paymentBillParam){
         Date billCreateTimeBegin = null;
         Date billCreateTimeEnd = null;
@@ -249,11 +252,12 @@ public class PayBillServiceImpl implements PayBillService {
         TbPaymentBill paymentBill = new TbPaymentBill();
         paymentBill.setBillStatus(BILL_ORDER_IS_PAY);
         paymentBill.setModifiedTime(new Date());
+        paymentBill.setPayType(PAY_METHOD_ONLINE);
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
         billCriteria.createCriteria().andOrderIdEqualTo(callBackParam.getOrderId()).andRecordStatusEqualTo(new Byte(BILL_STATE_NOT_DELETE));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
         int i1 = tbPaymentBillMapper.updateByExampleSelective(paymentBill, billCriteria);
-        logger.info("支付回调-账单处理响应条数:{}",i);
+        logger.info("支付回调-账单处理响应条数:{}",i1);
 
         for(TbPaymentBill bill:tbPaymentBills){
             //回调各业务侧，通知支付成功

@@ -3,6 +3,8 @@ package com.jn.paybill.model;
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -38,10 +40,16 @@ public class PaymentBillParam extends Page implements Serializable {
     private String billCreateAccount;
     @ApiModelProperty(value = "账单说明")
     private String billRemark;
-    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3确认支付]")
+    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3支付失败4确认支付5支付审核不通过]")
+    @Pattern(regexp = "^[0,1,3,4,5]$", message = "{billStatus:'账单状态[0、1、2、3、4、5]'}")
     private String billStatus;
     @ApiModelProperty(value = "是否已催付[0否1是]")
+    @Pattern(regexp = "^[01]$", message = "{isUrge:'支付方式只能为[0、1]'}")
     private String isUrge;
+    @ApiModelProperty(value = "排序字段",notes = "支付方式排序：billType支付方式,billCreateTime账单生成时间,billStatus账单状态")
+    private String orderBy;
+    @ApiModelProperty(value = "搜索关键字")
+    private String searchCode;
 
     public String getBillId() {
         return billId;
@@ -153,5 +161,21 @@ public class PaymentBillParam extends Page implements Serializable {
 
     public void setIsUrge(String isUrge) {
         this.isUrge = isUrge;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public String getSearchCode() {
+        return searchCode;
+    }
+
+    public void setSearchCode(String searchCode) {
+        this.searchCode = searchCode;
     }
 }

@@ -19,7 +19,9 @@
             WHEN '0' THEN "待审核"
             WHEN '1' THEN "待支付"
             WHEN '2' THEN "已支付"
-            WHEN '3' THEN "已确认支付"
+            WHEN '3' THEN "支付失败"
+            WHEN '4' THEN "已确认支付"
+            WHEN '5' THEN "支付审核失败"
             ELSE '-'
             END AS  "billStatus",
         CASE b.is_urge
@@ -62,6 +64,7 @@
         b.bill_obj_name as "billObjName",
                 b.bill_obj_type as "billObjType",
         b.bill_amount as "billAmount",
+        b.remind_id as "remindId",
         date_format(b.bill_create_time,'%Y-%m-%d %H:%i:%s') as "billCreateTime",
         date_format(b.pay_end_time,'%Y-%m-%d %H:%i:%s') as "payEndTime",
         date_format(b.urge_time,'%Y-%m-%d %H:%i:%s') as "urgeTime",
@@ -71,9 +74,16 @@
             WHEN '0' THEN "待审核"
             WHEN '1' THEN "待支付"
             WHEN '2' THEN "已支付"
-            WHEN '3' THEN "已确认支付"
+            WHEN '3' THEN "支付失败"
+            WHEN '4' THEN "已确认支付"
+            WHEN '5' THEN "支付审核失败"
             ELSE '-'
             END AS  "billStatus",
+        CASE b.bill_pay_type
+            WHEN '10' THEN "线上"
+            WHEN '11' THEN "线下"
+            ELSE '-'
+            END AS  "billPayType",
         CASE b.is_urge
             WHEN '0' THEN "否"
             WHEN '1' THEN "是"
@@ -86,7 +96,6 @@
             b.creator_account as "creatorAccount",
             b.modifier_account as "modifierAccount",
             date_format(b.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime",
-
         CASE o.order_status
             WHEN '0' THEN "未支付"
             WHEN '1' THEN "已支付"
@@ -108,6 +117,10 @@
         o.pay_remark as "payRemark"
       from tb_payment_bill b left join tb_payment_order o on b.order_id = o.id left join  tb_payment_code c on  c.id = b.bill_type
       where b.record_status = 1
+        <if test="searchCode !=null and searchCode !='' ">
+            and ( b.bill_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') or b.bill_obj_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%')
+                  or b.bill_remark like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') )
+        </if>
         <if test="billId !=null and billId !='' ">
             and b.bill_id = #{billId,jdbcType=VARCHAR}
         </if>
@@ -138,7 +151,6 @@
         <if test="isUrge !=null and isUrge !='' ">
             and b.is_urge = #{isUrge,jdbcType=VARCHAR}
         </if>
-
         <if test="billCreateTimeBegin !=null and billCreateTimeBegin !='' ">
             and b.bill_create_time &gt; #{billCreateTimeBegin,jdbcType=VARCHAR}
         </if>
@@ -151,6 +163,10 @@
         <if test="payEndTimeEnd !=null and payEndTimeEnd !='' ">
             and b.pay_end_time &lt; #{payEndTimeEnd,jdbcType=VARCHAR}
         </if>
+        <if test="orderBy !=null and orderBy !='' ">
+            order by #{orderBy,jdbcType=VARCHAR}
+        </if>
+
    </select>
 
     <select id="statisticsBillAmountSubCount" parameterType="com.jn.paybill.model.PayBillCountParam" resultType="com.jn.paybill.model.PayBillSubCount">
@@ -163,7 +179,7 @@
         SUM(pb.bill_amount)
         FROM
         tb_payment_bill pb
-        WHERE pb.bill_status = '1'
+        WHERE pb.bill_status  NOT IN ('2', '4')
         AND pb.bill_type = billTypeId
         AND pb.bill_create_time &lt;= STR_TO_DATE(
         CONCAT(
@@ -183,7 +199,7 @@
         SUM(pb.bill_amount)
         FROM
         tb_payment_bill pb
-        WHERE pb.bill_status NOT IN ('1', '0')
+        WHERE pb.bill_status IN ('2', '4')
         AND pb.bill_type = billTypeId
         AND pb.bill_create_time &lt;= STR_TO_DATE(
         CONCAT(
@@ -203,7 +219,7 @@
         tb_payment_bill b
         LEFT JOIN tb_payment_code c
         ON b.bill_type = c.id
-        WHERE b.record_status = 1
+        WHERE b.record_status = 1 and b.bill_status != '0'
         <if test="billStartTime !=null and billStartTime !='' ">
             and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>
@@ -224,7 +240,7 @@
         SELECT
         SUM(b.bill_amount) AS "totleAmount"
         ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
-            WHERE t.record_status = 1 and t.bill_status = '1'
+            WHERE t.record_status = 1 and t.bill_status  NOT IN ('2', '4')
             <if test="billStartTime !=null and billStartTime !='' ">
                 and t.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
             </if>
@@ -240,7 +256,7 @@
             </if>
         ) as "totleUnpayAmountDaily"
         ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
-        WHERE t.record_status = 1 and t.bill_status  NOT IN ('1', '0')
+        WHERE t.record_status = 1 and t.bill_status IN ('2', '4')
         <if test="billStartTime !=null and billStartTime !='' ">
             and t.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>
@@ -257,7 +273,7 @@
         ) as "totlePayAmountDaily"
         FROM
         tb_payment_bill b
-        WHERE b.record_status = 1
+        WHERE b.record_status = 1 and b.bill_status != '0'
         <if test="billStartTime !=null and billStartTime !='' ">
             and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>

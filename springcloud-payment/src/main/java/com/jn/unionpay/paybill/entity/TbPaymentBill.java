@@ -30,6 +30,8 @@ public class TbPaymentBill implements Serializable {
 
     private String billStatus;
 
+    private String payType;
+
     private String orderId;
 
     private String isUrge;
@@ -43,6 +45,12 @@ public class TbPaymentBill implements Serializable {
     private Date remindTime;
 
     private String remindId;
+
+    private String checkAccount;
+
+    private Date checkTime;
+
+    private String checkRemark;
 
     private Date createdTime;
 
@@ -160,6 +168,14 @@ public class TbPaymentBill implements Serializable {
         this.billStatus = billStatus == null ? null : billStatus.trim();
     }
 
+    public String getPayType() {
+        return payType;
+    }
+
+    public void setPayType(String payType) {
+        this.payType = payType == null ? null : payType.trim();
+    }
+
     public String getOrderId() {
         return orderId;
     }
@@ -214,6 +230,30 @@ public class TbPaymentBill implements Serializable {
 
     public void setRemindId(String remindId) {
         this.remindId = remindId == null ? null : remindId.trim();
+    }
+
+    public String getCheckAccount() {
+        return checkAccount;
+    }
+
+    public void setCheckAccount(String checkAccount) {
+        this.checkAccount = checkAccount == null ? null : checkAccount.trim();
+    }
+
+    public Date getCheckTime() {
+        return checkTime;
+    }
+
+    public void setCheckTime(Date checkTime) {
+        this.checkTime = checkTime;
+    }
+
+    public String getCheckRemark() {
+        return checkRemark;
+    }
+
+    public void setCheckRemark(String checkRemark) {
+        this.checkRemark = checkRemark == null ? null : checkRemark.trim();
     }
 
     public Date getCreatedTime() {
@@ -281,6 +321,7 @@ public class TbPaymentBill implements Serializable {
             && (this.getBillCreateAccount() == null ? other.getBillCreateAccount() == null : this.getBillCreateAccount().equals(other.getBillCreateAccount()))
             && (this.getBillRemark() == null ? other.getBillRemark() == null : this.getBillRemark().equals(other.getBillRemark()))
             && (this.getBillStatus() == null ? other.getBillStatus() == null : this.getBillStatus().equals(other.getBillStatus()))
+            && (this.getPayType() == null ? other.getPayType() == null : this.getPayType().equals(other.getPayType()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
             && (this.getIsUrge() == null ? other.getIsUrge() == null : this.getIsUrge().equals(other.getIsUrge()))
             && (this.getUrgeTime() == null ? other.getUrgeTime() == null : this.getUrgeTime().equals(other.getUrgeTime()))
@@ -288,6 +329,9 @@ public class TbPaymentBill implements Serializable {
             && (this.getIsRemind() == null ? other.getIsRemind() == null : this.getIsRemind().equals(other.getIsRemind()))
             && (this.getRemindTime() == null ? other.getRemindTime() == null : this.getRemindTime().equals(other.getRemindTime()))
             && (this.getRemindId() == null ? other.getRemindId() == null : this.getRemindId().equals(other.getRemindId()))
+            && (this.getCheckAccount() == null ? other.getCheckAccount() == null : this.getCheckAccount().equals(other.getCheckAccount()))
+            && (this.getCheckTime() == null ? other.getCheckTime() == null : this.getCheckTime().equals(other.getCheckTime()))
+            && (this.getCheckRemark() == null ? other.getCheckRemark() == null : this.getCheckRemark().equals(other.getCheckRemark()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -312,6 +356,7 @@ public class TbPaymentBill implements Serializable {
         result = prime * result + ((getBillCreateAccount() == null) ? 0 : getBillCreateAccount().hashCode());
         result = prime * result + ((getBillRemark() == null) ? 0 : getBillRemark().hashCode());
         result = prime * result + ((getBillStatus() == null) ? 0 : getBillStatus().hashCode());
+        result = prime * result + ((getPayType() == null) ? 0 : getPayType().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         result = prime * result + ((getIsUrge() == null) ? 0 : getIsUrge().hashCode());
         result = prime * result + ((getUrgeTime() == null) ? 0 : getUrgeTime().hashCode());
@@ -319,6 +364,9 @@ public class TbPaymentBill implements Serializable {
         result = prime * result + ((getIsRemind() == null) ? 0 : getIsRemind().hashCode());
         result = prime * result + ((getRemindTime() == null) ? 0 : getRemindTime().hashCode());
         result = prime * result + ((getRemindId() == null) ? 0 : getRemindId().hashCode());
+        result = prime * result + ((getCheckAccount() == null) ? 0 : getCheckAccount().hashCode());
+        result = prime * result + ((getCheckTime() == null) ? 0 : getCheckTime().hashCode());
+        result = prime * result + ((getCheckRemark() == null) ? 0 : getCheckRemark().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -346,6 +394,7 @@ public class TbPaymentBill implements Serializable {
         sb.append(", billCreateAccount=").append(billCreateAccount);
         sb.append(", billRemark=").append(billRemark);
         sb.append(", billStatus=").append(billStatus);
+        sb.append(", payType=").append(payType);
         sb.append(", orderId=").append(orderId);
         sb.append(", isUrge=").append(isUrge);
         sb.append(", urgeTime=").append(urgeTime);
@@ -353,6 +402,9 @@ public class TbPaymentBill implements Serializable {
         sb.append(", isRemind=").append(isRemind);
         sb.append(", remindTime=").append(remindTime);
         sb.append(", remindId=").append(remindId);
+        sb.append(", checkAccount=").append(checkAccount);
+        sb.append(", checkTime=").append(checkTime);
+        sb.append(", checkRemark=").append(checkRemark);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

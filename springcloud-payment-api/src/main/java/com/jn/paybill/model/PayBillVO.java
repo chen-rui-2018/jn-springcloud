@@ -37,7 +37,7 @@ public class PayBillVO implements Serializable {
     private String billCreateAccount;
     @ApiModelProperty(value = "账单说明")
     private String billRemark;
-    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3确认支付]")
+    @ApiModelProperty(value = "账单状态[0未审核1待支付2已支付待审核3支付失败4确认支付5支付审核不通过]")
     private String billStatus;
     @ApiModelProperty(value = "是否已催付[0否1是]")
     private String isUrge;
@@ -244,5 +244,34 @@ public class PayBillVO implements Serializable {
 
     public void setBillTypeName(String billTypeName) {
         this.billTypeName = billTypeName;
+    }
+
+    @Override
+    public String toString() {
+        return "PayBillVO{" +
+                "billId='" + billId + '\'' +
+                ", billNum='" + billNum + '\'' +
+                ", billName='" + billName + '\'' +
+                ", billType='" + billType + '\'' +
+                ", billTypeName='" + billTypeName + '\'' +
+                ", billObjId='" + billObjId + '\'' +
+                ", billAmount=" + billAmount +
+                ", billCreateTime='" + billCreateTime + '\'' +
+                ", payEndTime='" + payEndTime + '\'' +
+                ", billCreateAccount='" + billCreateAccount + '\'' +
+                ", billRemark='" + billRemark + '\'' +
+                ", billStatus='" + billStatus + '\'' +
+                ", isUrge='" + isUrge + '\'' +
+                ", orderId='" + orderId + '\'' +
+                ", orderNum='" + orderNum + '\'' +
+                ", orderName='" + orderName + '\'' +
+                ", orderAmount=" + orderAmount +
+                ", payTime=" + payTime +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", payId='" + payId + '\'' +
+                ", payAmount=" + payAmount +
+                ", payType='" + payType + '\'' +
+                ", payRemark='" + payRemark + '\'' +
+                '}';
     }
 }

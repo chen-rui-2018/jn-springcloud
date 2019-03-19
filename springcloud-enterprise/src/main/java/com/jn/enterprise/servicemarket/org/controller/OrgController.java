@@ -41,7 +41,7 @@ public class OrgController extends BaseController {
     private OrgService orgService;
 
 
-    @ControllerLog(doAction = "获取服务机构列表")
+    @ControllerLog(doAction = "获取服务机构列表(app+pc)")
     @ApiOperation(value = "获取服务机构列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectServiceOrgList")
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
@@ -50,7 +50,7 @@ public class OrgController extends BaseController {
         return new Result(paginationData);
     }
 
-    @ControllerLog(doAction = "获取服务机构详情")
+    @ControllerLog(doAction = "获取服务机构详情(app+pc)")
     @ApiOperation(value = "获取服务机构详情", httpMethod = "POST", response = Result.class,
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")

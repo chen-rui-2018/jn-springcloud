@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务机构管理")
+@Api(tags = "服务机构管理,(app机构认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/org")
 public class OrgManageController extends BaseController {
@@ -43,7 +43,7 @@ public class OrgManageController extends BaseController {
     @Autowired
     private OrgService orgService;
 
-    @ControllerLog(doAction = "保存服务机构基本信息")
+    @ControllerLog(doAction = "保存服务机构基本信息,(app-基本资料)")
     @ApiOperation(value = "保存服务机构基本信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgBasicData")
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
@@ -54,7 +54,7 @@ public class OrgManageController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "修改服务机构基本信息")
+    @ControllerLog(doAction = "修改服务机构基本信息,(app-修改基本资料)")
     @ApiOperation(value = "修改服务机构基本信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateOrgBasicData")
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
@@ -66,7 +66,7 @@ public class OrgManageController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "保存/修改服务机构资质信息")
+    @ControllerLog(doAction = "保存/修改服务机构资质信息,(app-资质认证)")
     @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同]", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgLicenseData")
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
@@ -78,7 +78,7 @@ public class OrgManageController extends BaseController {
     }
 
 
-    @ControllerLog(doAction = "保存/修改服务机构团队信息")
+    @ControllerLog(doAction = "保存/修改服务机构团队信息,(app-团队资料)")
     @ApiOperation(value = "保存/修改服务机构团队信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgTeamData")
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
@@ -89,7 +89,7 @@ public class OrgManageController extends BaseController {
         return new Result(i);
     }
 
-    @ControllerLog(doAction = "保存/修改服务机构联系方式")
+    @ControllerLog(doAction = "保存/修改服务机构联系方式,(app-联系方式)")
     @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同]", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")

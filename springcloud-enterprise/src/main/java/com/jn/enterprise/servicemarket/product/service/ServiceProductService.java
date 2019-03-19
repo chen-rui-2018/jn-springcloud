@@ -136,4 +136,17 @@ public interface ServiceProductService {
      * @return
      */
     PaginationData advisorProductList(AdvisorProductQuery query,Boolean needPage);
+
+    /**
+     * 服务产品信息,上架常规服务产品时展示
+     * @param productId
+     * @return
+     */
+    WebServiceProductInfo  findShelfProductInfo(String productId);
+
+    /**
+     * 查找服务产品统计信息
+     * @return
+     */
+    ServiceStatistics  findServiceStatistics();
 }

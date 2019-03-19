@@ -96,4 +96,18 @@ public interface ServiceProductDao {
      * @return
      */
     List<CommonServiceShelf>  productQueryList(@Param("productName") String productName);
+
+    /**
+     * 服务产品信息,上架常规服务产品时展示
+     * @param productId
+     * @return
+     */
+    WebServiceProductInfo findShelfProductInfo(@Param("productId") String productId);
+
+    /**
+     * 服务产品列表统计信息界面
+     * @return
+     */
+   ServiceStatistics findServiceStatistics();
+
 }

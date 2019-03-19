@@ -113,11 +113,11 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         //保存服务产品的基本信息
         tbServiceProductMapper.insertSelective(tbServiceProduct);
         //服务产品描述不为空则 插入详情;
-        if (StringUtils.isNotBlank(content.getServiceDetails())) {
+        if (StringUtils.isNotBlank(content.getProductDetails())) {
             TbServiceDetails details = new TbServiceDetails();
             details.setProductId(content.getProductId());
             try{
-                details.setServiceDetails(content.getServiceDetails().getBytes("UTF-8"));
+                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
             }catch(UnsupportedEncodingException e){
                 e.printStackTrace();
                 logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
@@ -178,6 +178,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
         ServiceProductDetail detail =  productDao.findServiceDetail(productId);
+        try {
+            detail.getContent().setProductDetails(new String(detail.getContent().getServiceDetails(),"UTF-8"));
+        }catch (UnsupportedEncodingException e ){
+            e.printStackTrace();
+            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
+        }
         return detail;
     }
 
@@ -240,12 +246,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         product.setModifierAccount(account);
         product.setModifiedTime(new Date());
         tbServiceProductMapper.updateByPrimaryKeySelective(product);
-        if (StringUtils.isNotBlank(content.getServiceDetails())){
+        if (StringUtils.isNotBlank(content.getProductDetails())){
             TbServiceDetailsCriteria criteria = new TbServiceDetailsCriteria();
             criteria.createCriteria().andProductIdEqualTo(content.getProductId());
             TbServiceDetails details = new TbServiceDetails();
             try{
-                details.setServiceDetails(content.getServiceDetails().getBytes("UTF-8"));
+                details.setServiceDetails(content.getProductDetails().getBytes("UTF-8"));
             }catch(UnsupportedEncodingException e){
                 e.printStackTrace();
                 logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
@@ -269,6 +275,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductDetails findWebProductDetails(String productId) {
         WebServiceProductInfo info= productDao.findWebProductDetails(productId);
+        try {
+            info.setProductDetails(new String(info.getServiceDetails(), "UTF-8"));
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
+        }
         if(info== null){
             return null;
         }
@@ -318,12 +330,26 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         }
         return data;
     }
+    @ServiceLog(doAction = "服务产品信息,上架常规服务产品时展示")
+    @Override
+    public WebServiceProductInfo findShelfProductInfo(String productId)  {
+        WebServiceProductInfo data =   productDao.findShelfProductInfo(productId);
+        try {
+            data.setProductDetails(new String(data.getServiceDetails(), "UTF-8"));
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
+        }
+        return data;
+    }
+
     @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
     @Override
     public List<CommonServiceShelf> productQueryList(String productName) {
         List<CommonServiceShelf> data=productDao.productQueryList(productName);
         return data;
     }
+
     @ServiceLog(doAction = "机构-编辑常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -369,6 +395,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
           List<AdvisorProductInfo> data =  advisorDao.advisorProductList(query.getAdvisorAccount(),query.getProductType(),query.getPraise());
 
         return new PaginationData(data,objects==null?0:objects.getTotal());
+    }
+    @ServiceLog(doAction = "服务产品列表界面的统计信息")
+    @Override
+    public ServiceStatistics findServiceStatistics() {
+        ServiceStatistics serviceStatistics =   productDao.findServiceStatistics();
+        return serviceStatistics;
     }
 
     /**

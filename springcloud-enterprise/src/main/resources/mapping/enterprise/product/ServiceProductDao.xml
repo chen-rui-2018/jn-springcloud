@@ -97,7 +97,7 @@
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName",          <!--联系人名称-->
-           t4.service_details as "serviceDetails", <!--服务详情-->
+           t4.service_details as "productDetails", <!--服务详情-->
           (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
            select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
            )) as "advisorName"                 <!--顾问名称-->
@@ -124,7 +124,7 @@
             <result column="referPrice" property="referPrice"/>
             <result column="serviceCycle" property="serviceCycle"/>
             <result column="pictureUrl" property="pictureUrl"/>
-            <result column="serviceDetails" property="serviceDetails"/>
+            <result column="productDetails" property="productDetails"/>
         </association>
     </resultMap>
     <!--产品审批-->
@@ -295,7 +295,7 @@ from tb_service_product t1
             and  t1.product_name like concat('%',#{productName},'%')
         </if>
        </select>
-    <!--常规产品发布时,选择框的产品列表-->
+    <!--常规产品上架时,选择框的产品列表-->
     <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">
          select
        t1.product_id as "productId"
@@ -320,5 +320,39 @@ from tb_service_product t1
         <if test ="productName !=null and productName != ''">
             and t1.product_name like concat("%",#{productName},"%")
         </if>
+    </select>
+    <select id="findShelfProductInfo" resultType="com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo" >
+        select
+            t1.product_id as "productId"
+            ,t1.signory_id as "signory"
+            ,t1.signory_name as "signoryName"
+            ,t1.product_name as "productName"
+            ,t1.serial_number as "serialNumber"
+            ,t1.refer_price as "referPrice"
+            ,t1.picture_url as "pictureUrl"
+            ,t1.service_cycle as "serviceCycle"
+            ,t2.service_details as "serviceDetails"
+            ,(select count(*) from  tb_service_product tp where tp.template_id = #{productId}) as "upShelfOrgNumber"
+            from tb_service_product t1
+            left join tb_service_details t2 on t1.product_id  = t2.product_id
+            where  t1.product_id =#{productId}
+    </select>
+    <select id="findServiceStatistics" resultType="com.jn.enterprise.servicemarket.product.model.ServiceStatistics">
+      select
+        tt.featureCount+tt.commentCount as "productCount"
+        ,tt.orgCount as "orgCount"
+        ,tt.advisorCount as "advisorCount"
+        ,tt.requireCount as "requireCount"
+        ,tt.commentCount as "commentCount"
+        from
+            (
+        select
+        count(tp.product_id) as "featureCount"
+        ,(select count(ta.id) from tb_service_advisor ta)  as "advisorCount"
+        ,(select count(tr.id) from tb_service_require tr) as "requireCount"
+        ,(select count(tra.id)  from tb_service_rating tra) as "commentCount"
+        ,(select count(tso.org_id) from tb_service_org tso)   as "orgCount"
+        ,(select count(tp2.product_id) from tb_service_product tp2 where tp.template_id is null)   as "commentsCount"
+        from tb_service_product tp where product_type = "1")tt;
     </select>
 </mapper>

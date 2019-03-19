@@ -1,7 +1,7 @@
 package com.jn.oa.email.dao;
 
-import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.email.model.EmailPage;
+import com.jn.oa.email.vo.EmailVO;
 
 import java.util.List;
 import java.util.Map;

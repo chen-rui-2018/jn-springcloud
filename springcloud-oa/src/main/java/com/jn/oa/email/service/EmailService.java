@@ -1,10 +1,10 @@
 package com.jn.oa.email.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.email.model.DownAttachment;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
+import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.model.Email;
 import com.jn.system.model.User;
 import org.springframework.http.ResponseEntity;

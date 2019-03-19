@@ -37,6 +37,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -240,7 +241,7 @@ public class EmailServiceImpl implements EmailService {
      * @param attachment 附件信息
      * @throws IOException
      */
-    private void downlownAttachment(List<String>    fileList, EmailVo emailVo, String attachment) throws IOException {
+    private void downlownAttachment(List<String> fileList, EmailVo emailVo, String attachment) throws IOException {
         if (attachment != null) {
             ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, String>> list = objectMapper.readValue(attachment, List.class);
@@ -364,8 +365,13 @@ public class EmailServiceImpl implements EmailService {
                 try {
                     Map<String, String> map = new HashMap<String, String>(16);
                     String title = file.getOriginalFilename();
+                    //为了防止下载时名称重复，对文件名称做处理
+                    String[] split = title.split("\\.");
+                    String str = DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS");
+                    String fileName = split[0] + str + RandomStringUtils.random(4) + "." + split[1];
+
                     Result<String> result = uploadClient.uploadFile(file, false);
-                    map.put("title", title);
+                    map.put("title", fileName);
                     map.put("url", result.getData());
                     list.add(map);
                 } catch (IOException e) {

@@ -27,7 +27,7 @@ export default {
     this.editor.addListener('ready', function() {
       setTimeout(function() {
         _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
-      }, 50)
+      }, 200)
     })
   },
   destroyed() {

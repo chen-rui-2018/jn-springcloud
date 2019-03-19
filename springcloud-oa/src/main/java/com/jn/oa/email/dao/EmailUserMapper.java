@@ -4,6 +4,7 @@ import com.jn.oa.email.entity.TbOaEmailUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 一键Email邮件接收人dao
@@ -32,8 +33,16 @@ public interface EmailUserMapper {
 
     /**
      * 获取邮件任务的所有接收人邮箱
+     *
      * @param eamilId
      * @return
      */
     String getUserEmailInfo(String eamilId);
+
+    /**
+     * 批量删除一键Email的接受人信息
+     *
+     * @param map
+     */
+    void deleteBatch(Map<String, Object> map);
 }

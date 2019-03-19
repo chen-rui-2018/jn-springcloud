@@ -56,14 +56,14 @@ export default {
     //     callback()
     //   }
     // }
-    const validateUsername = (rule, value, callback) => {
-      const reg = /[A-Za-z0-9]{6,16}$/
-      if (!reg.test(value)) {
-        callback(new Error('请输入6到16位长度字符的数字及字母'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   const reg = /[A-Za-z0-9]{6,16}$/
+    //   if (!reg.test(value)) {
+    //     callback(new Error('请输入6到16位长度字符的数字及字母'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       checked: true,
       loginForm: {
@@ -72,8 +72,7 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { validator: validateUsername, trigger: 'blur' }
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' }

@@ -90,6 +90,33 @@
         where u.id = #{id,jdbcType=VARCHAR}
     </select>
 
+    <sql id="Group_Select_Sql">
+            (
+                SELECT
+                    t3.id,
+                    t3.account,
+                    t3.`name`,
+                    t3.phone,
+                    t3.email,
+                    t3.creator_account,
+                    t3.created_time,
+                    t3.record_status,
+                    t3.remark,
+                    t3.wechat_account,
+                    t3.modified_time,
+                    t3.modifier_account
+                FROM
+                    tb_sys_group t1,
+                    tb_sys_user_group t2,
+                    tb_sys_user t3
+                WHERE t1.id = t2.group_id
+                    AND t2.user_id = t3.id
+                    AND t1.record_status = 1
+                    AND t2.record_status = 1
+                    AND t3.record_status != 0
+                    AND t1.id = #{userGroupId,jdbcType=VARCHAR}
+            ) t
+    </sql>
     <select id="findSysUserByPage" resultType="com.jn.system.user.vo.SysUserVO"
             parameterType="com.jn.system.model.UserPage">
         select
@@ -97,7 +124,13 @@
         from
         (select
         <include refid="Get_User_Page_Column"/>
-        from tb_sys_user t
+        from
+        <if test="@org.apache.commons.lang.StringUtils@isBlank(userGroupId)">
+            tb_sys_user t
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(userGroupId)">
+            <include refid="Group_Select_Sql"/>
+        </if>
         left join
         (select
         t1.department_name,
@@ -133,20 +166,23 @@
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
             and tt.department_id = #{departmentId,jdbcType=VARCHAR}
         </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+            ORDER BY tt.is_default desc
+        </if>
         ) t
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)"> <!-- 对同一部门同一用户多个岗位信息去重 -->
             LEFT JOIN
-            (SELECT t.id
-            FROM tb_sys_user t
-            INNER JOIN tb_sys_user_department_post tt
-            ON t.id = tt.user_id
-            where t.record_status != 0
-            AND tt.department_id = #{departmentId,jdbcType=VARCHAR}
-            AND tt.`record_status` = 1
+            (SELECT t3.id
+            FROM tb_sys_user t3
+            INNER JOIN tb_sys_user_department_post t4
+            ON t3.id = t4.user_id
+            where t3.record_status != 0
+            AND t4.department_id = #{departmentId,jdbcType=VARCHAR}
+            AND t4.`record_status` = 1
+            GROUP BY t3.id
+            HAVING COUNT(t3.id) > 1) tt
+            ON t.id = tt.id
             GROUP BY t.id
-            HAVING COUNT(t.id) > 1) tt
-            ON t.id = tt.id AND t.is_default = '0'
-            WHERE tt.id IS NULL
         </if>
         ORDER BY t.createdTime desc, t.id desc
     </select>

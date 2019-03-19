@@ -256,7 +256,7 @@ export default {
 <style lang="scss" >
   .erweima{
     .el-dialog{
-      margin-top: 8vh !important;
+      height: 400px;
       img{
            width: 60%;
     display: block;

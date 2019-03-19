@@ -46,7 +46,6 @@ public class PersonnelFlow1010Vo extends PersonnelFlowNodeBaseAbstractVo impleme
     @ApiModelProperty("企业简介")
     private String companyProfile;
 
-
     @ApiModelProperty("联系人姓名")
     private String contactName;
 
@@ -156,4 +155,7 @@ public class PersonnelFlow1010Vo extends PersonnelFlowNodeBaseAbstractVo impleme
     public void setProjectIntroductionFile(String projectIntroductionFile) {
         this.projectIntroductionFile = projectIntroductionFile;
     }
+
+
+
 }

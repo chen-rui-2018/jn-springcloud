@@ -70,7 +70,7 @@
                     <contexts>
                         finance
                     </contexts>
-                    <tableNames>tb_finance_income_month
+                    <tableNames>
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

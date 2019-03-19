@@ -44,29 +44,29 @@ public class TbFinanceRecordInformation implements Serializable {
     private String creatorId;
 
     /*@ApiModelProperty("是否预警
-	0：否，1:是")*/
+0：否，1:是")*/
     private Byte isWarning;
 
     /*@ApiModelProperty("预警频率
-	0：每天预警一次、
-	1：仅第一天预警一次、2：第一天和最后一天各预警一次")*/
+0：每天预警一次、
+1：仅第一天预警一次、2：第一天和最后一天各预警一次")*/
     private Byte warningRate;
 
     /*@ApiModelProperty("预警对象
-	0：全部
-	1：负责人
-	2：领导")*/
+0：全部
+1：负责人
+2：领导")*/
     private Byte warningObject;
 
     /*@ApiModelProperty("预警方式
-	0：短信
-	1：邮件
-	2：APP
-	3：公共号方式")*/
+0：短信
+1：邮件
+2：APP
+3：公共号方式")*/
     private Byte warningMethod;
 
     /*@ApiModelProperty("预警提前的天数
-	输入数值；整数")*/
+输入数值；整数")*/
     private Integer warningBeforeDays;
 
     /*@ApiModelProperty("是否删除0标记删除，1正常")*/

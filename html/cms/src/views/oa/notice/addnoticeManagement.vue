@@ -37,7 +37,7 @@
             <el-option
               v-for="item in codeOptions"
               :key="item.key"
-              :label="item.label"
+              :label="item.lable"
               :value="item"/>
           </el-select>
         </el-form-item>
@@ -51,7 +51,7 @@
       </div>
       <div class="primaryList">
         <el-button :disabled="isDisabled" type="primary" @click="title==='新增公告'?submitForm():updateData()">提交</el-button>
-        <el-button @click="cancel" >取消</el-button>
+        <!-- <el-button :disabled="isDisabled" @click="cancel">取消</el-button> -->
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -108,7 +108,7 @@ export default {
         effectiveTime: '',
         failureTime: '',
         recordStatus: '',
-        platformType: '',
+        platformType: [],
         noticeContent: '',
         id: ''
       },
@@ -124,7 +124,7 @@ export default {
         ],
         effectiveTime: [{ required: true, message: '请选择生效时间', trigger: 'change' }],
         failureTime: [{ required: true, message: '请选择失效时间', trigger: 'change' }],
-        platformType: [{ required: true, message: '请选择平台类型', trigger: 'change' }],
+        // platformType: [{ required: true, message: '请选择平台类型', trigger: 'blur' }],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }],
         noticeContent: [{ required: true, message: '请输入公告内容', trigger: 'blur' }]
       }
@@ -135,24 +135,35 @@ export default {
     this.getCode()
   },
   methods: {
-    cancel() {
-    },
-    // this.initList()
+    // cancel() {
+    //   this.isDisabled = true
+    //   if (this.title === '新增公告') {
+    //     this.noticeForm.noticeTitle = ''
+    //     this.noticeForm.effectiveTime = ''
+    //     this.noticeForm.failureTime = ''
+    //     this.noticeForm.recordStatus = ''
+    //     this.noticeForm.platformType = []
+    //     this.defaultMsg = ''
+    //     this.$nextTick(() => {
+    //       this.$refs['noticeForm'].clearValidate()
+    //     })
+    //     this.isDisabled = false
+    //   }
+    //   this.initList()
+    //   // this.isDisabled = false
+    // },
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      var platformTypeArr = []
-      this.noticeForm.platformType.forEach(val => {
-        platformTypeArr.push({
-          key: val.key,
-          value: val.label
-        })
-      })
-      this.noticeForm.platformType = JSON.stringify(platformTypeArr)
+      if (this.noticeForm.platformType.length === 0) {
+        alert('请选择发布平台')
+        this.isDisabled = false
+        return
+      }
+      this.noticeForm.platformType = JSON.stringify(this.noticeForm.platformType)
       this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
       this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
       this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
-
       this.$refs['noticeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
@@ -187,51 +198,40 @@ export default {
     },
     // 编辑表单
     updateData() {
-      // this.isDisabled = true
-      var platformArr = []
-      console.log(this.noticeForm.platformType)
-      this.noticeForm.platformType.forEach(val => {
-        platformArr.push({
-          key: val.key,
-          value: val.label
-        })
-      })
-      this.noticeForm.platformType = JSON.stringify(platformArr)
-      console.log(this.noticeForm.platformType)
+      this.isDisabled = true
+      this.noticeForm.platformType = JSON.stringify(this.noticeForm.platformType)
       this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
       this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
       this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
-      // this.$refs['noticeForm'].validate(valid => {
-      //   if (valid) {
-      //     // 调用接口发送请求
-      //     api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
-      //       if (res.data.code === '0000') {
-      //         this.$message({
-      //           message: '编辑成功',
-      //           type: 'success'
-      //         })
-      //         this.goBack(this.$route)
-      //       } else {
-      //         this.$message.error(res.data.result)
-      //       }
-      //       this.isDisabled = false
-      //     })
-      //   } else {
-      //     this.isDisabled = false
-      //   }
-      // })
+      this.$refs['noticeForm'].validate(valid => {
+        if (valid) {
+          // 调用接口发送请求
+          api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                message: '编辑成功',
+                type: 'success'
+              })
+              this.goBack(this.$route)
+            } else {
+              this.$message.error(res.data.result)
+            }
+            this.isDisabled = false
+          })
+        } else {
+          this.isDisabled = false
+        }
+      })
     },
     // 页面初始化
     initList() {
       var query = this.$route.query
-      console.log(query)
       this.title = query.title
       this.noticeForm.workOrderNum = query.workOrderNum
       if (query.id) {
         this.noticeForm.id = query.id
         paramApi('oa/notice/getNoticeById', query.id, 'noticeId').then(res => {
           if (res.data.code === '0000') {
-            console.log(res)
             var data = res.data.data
             this.noticeForm.noticeTitle = data.noticeTitle
             this.noticeForm.workOrderNum = data.workOrderNum
@@ -239,7 +239,6 @@ export default {
             this.noticeForm.failureTime = data.failureTime.slice(0, 10)
             this.noticeForm.recordStatus = data.recordStatus.toString()
             this.noticeForm.platformType = JSON.parse(data.platformType)
-            console.log(this.noticeForm.platformType)
             this.defaultMsg = data.noticeContent
           } else {
             this.$message.error(res.data.result)

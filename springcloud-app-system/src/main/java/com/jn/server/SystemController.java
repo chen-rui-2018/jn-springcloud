@@ -3,18 +3,17 @@ package com.jn.server;
 import com.jn.authorization.LoginService;
 import com.jn.common.controller.BaseController;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
-import com.jn.system.model.MenuResources;
-import com.jn.system.model.User;
-import com.jn.system.model.UserLogin;
-import com.jn.system.model.UserNoPasswordLogin;
+import com.jn.system.model.*;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
@@ -57,6 +56,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysFileGroupService sysFileGroupService;
+
+    @Autowired
+    private SysDepartmentService sysDepartmentService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -131,6 +133,28 @@ public class SystemController extends BaseController implements SystemClient {
         BeanUtils.copyProperties(user, SysUserAdd);
         sysUserService.addSysUser(SysUserAdd, new User());
         return new Result();
+    }
+
+    @Override
+    @ControllerLog(doAction = "获取部门信息")
+    public Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
+                                       @RequestParam(value = "childFlag",required = false) Boolean childFlag) {
+        Result result = sysDepartmentService.selectDeptByKey(parentId, childFlag);
+        return result;
+    }
+
+    @Override
+    @ControllerLog(doAction = "条件分页查询用户")
+    public Result getUserByPage(@RequestBody UserPage page) {
+        PaginationData data = sysUserService.findSysUserByPage(page);
+        return new Result(data);
+    }
+
+    @Override
+    @ControllerLog(doAction = "要查询的部门ID是否属于用户所属的部门或子部门")
+    public Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId) {
+        Boolean result = sysDepartmentService.checkUserDept(userId, deptId);
+        return new Result(result);
     }
 
     @Override

@@ -123,19 +123,6 @@
 
 <script>
 import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import {
-//   getPermissionList,
-//   addPermissionList,
-//   editPermissionList,
-//   checkPermissionName,
-//   getRoleInfo,
-//   updataRole,
-//   deletePermissionById,
-//   getAllList,
-//   updataAllData,
-//   getFileGroupInfo,
-//   updataFileGroup
-// } from '@/api/Permission-model/permissionManagement'
 export default {
 
   data() {
@@ -293,7 +280,7 @@ export default {
     },
     // 授权文件组分页功能
     handleFileGroupCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -309,6 +296,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
       api('system/sysPermission/addFileGroupToPermission', { permissionId: this.permissionId, fileGroupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -318,7 +311,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
-        // this.initList()
+        this.initList()
+        this.getFileGroup()
       })
     },
     // 显示授权文件组对话框
@@ -356,7 +350,7 @@ export default {
     },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -372,6 +366,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
       api('system/sysPermission/addRoleToPermission', { permissionId: this.permissionId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -381,7 +381,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
-        // this.initList()
+        this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框

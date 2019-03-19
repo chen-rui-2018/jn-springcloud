@@ -2,8 +2,8 @@ package com.jn.system.user.dao;
 
 import com.jn.system.dept.entity.TbSysUserDepartmentPost;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.user.model.SysUser;
-import com.jn.system.user.model.SysUserPage;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
 
@@ -26,7 +26,7 @@ public interface SysUserMapper {
      * @param userSysUserPage
      * @return
      */
-    List<SysUserVO> findSysUserByPage(SysUserPage userSysUserPage);
+    List<SysUserVO> findSysUserByPage(UserPage userSysUserPage);
 
     /**
      * 删除用户
@@ -72,7 +72,7 @@ public interface SysUserMapper {
      * @param sysUserPage
      * @return
      */
-    List<SysUserVO> getSysUserByPageAndPost(SysUserPage sysUserPage);
+    List<SysUserVO> getSysUserByPageAndPost(UserPage sysUserPage);
 
     /**
      * 获取所有有效用户

@@ -65,9 +65,6 @@
 
 <script>
 import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import {
-//   getDepartment, updateDepartment, createDepartment, checkDepartmentName, deleteDepartmentById, updateAllMenu, getOldData
-// } from '@/api/Permission-model/departmentManagement'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -76,7 +73,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增部门') {
-          paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
+          api('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
             if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -87,7 +84,7 @@ export default {
           })
         } else {
           if (this.oldDepartmentName !== this.departmentForm.departmentName) {
-            paramApi('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }, 'departmentName').then(res => {
+            api('system/sysDepartment/checkDepartmentName', { departmentName: this.departmentForm.departmentName, parentId: this.departmentForm.parentId }).then(res => {
               if (res.data.code === '0000') {
                 if (res.data.data === 'success') {
                   callback()

@@ -118,16 +118,6 @@
 </template>
 
 <script>
-// import {
-//   roleList,
-//   addRoleList,
-//   checkRoleName,
-//   editRoleList,
-//   deleteRoleById,
-//   getAllUserInfo,
-//   updataUser,
-//   getUserGroupInfo, updataUserGroup, getAuthorityInfo, updataAuthority
-// } from '@/api/Permission-model/roleManagement'
 import { api, paramApi } from '@/api/Permission-model/userManagement'
 export default {
   data() {
@@ -244,7 +234,7 @@ export default {
   methods: {
     // 授权权限分页功能
     handleAuthorityCurrentChange(val) {
-      if (this.authorityTotal - this.moveArr > (val - 1) * this.authorityRows) {
+      if (this.authorityTotal > (val - 1) * this.authorityRows) {
         this.authorityPage = val
       } else {
         this.authorityPage = val - 1
@@ -260,6 +250,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.authorityTotal = this.authorityTotal - this.moveArr
+      if (this.authorityTotal > (this.authorityPage - 1) * this.authorityRows) {
+        this.authorityPage = this.authorityPage
+      } else {
+        this.authorityPage = this.authorityPage - 1
+      }
       api('system/sysRole/rolePermissionAuthorization', { roleId: this.roleId, permissionId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -270,6 +266,7 @@ export default {
           this.$message.error(res.data.result)
         }
         this.initList()
+        this.getAuthority()
       })
     },
     // 显示授权权限对话框
@@ -319,6 +316,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
       api('/system/sysRole/userGroupRoleAuthorization', { roleId: this.roleId, userGroupId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -328,11 +331,13 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getUserGroup()
       })
     },
     // 授权用户组分页功能
     handleUserGroupCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
@@ -412,7 +417,7 @@ export default {
     },
     // 授权用户分页功能
     handleUserCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
@@ -428,6 +433,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
       api('system/sysRole/userRoleAuthorization', { roleId: this.roleId, userId: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -438,6 +449,7 @@ export default {
           this.$message.error(res.data.result)
         }
         this.initList()
+        this.getUser()
       })
     },
     // 显示授权用户对话框

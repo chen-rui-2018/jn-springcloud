@@ -38,12 +38,7 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-fastdfs-api</artifactId>
         </dependency>
-        <!--mybatis-generate生成插件-->
-        <dependency>
-            <groupId>com.jn</groupId>
-            <artifactId>jn-spring-cloud-generator</artifactId>
-            <version>1.0-RELEASE</version>
-        </dependency>
+
     </dependencies>
     <build>
         <plugins>

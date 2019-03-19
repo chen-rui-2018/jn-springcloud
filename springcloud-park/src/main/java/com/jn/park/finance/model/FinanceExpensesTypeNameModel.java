@@ -11,9 +11,9 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "FinanceExpendTypeNameModel",description = "打标后费用类型")
+@ApiModel(value = "FinanceExpensesTypeNameModel",description = "打标后费用类型")
 
-public class FinanceExpendTypeNameModel implements Serializable {
+public class FinanceExpensesTypeNameModel implements Serializable {
 
     @ApiModelProperty("打标后费用类型ID")
     private int costAfterTypeId ;

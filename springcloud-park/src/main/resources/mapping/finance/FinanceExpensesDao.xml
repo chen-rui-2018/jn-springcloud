@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.park.finance.dao.FinanceExpendDao">
+<mapper namespace="com.jn.park.finance.dao.FinanceExpensesDao">
 
     <!--支出录入查询-->
-    <select id="findAll" parameterType="com.jn.park.finance.model.FinanceExpendPageModel" resultType="com.jn.park.finance.vo.FinanceExpendVo">
+    <select id="findAll" parameterType="com.jn.park.finance.model.FinanceExpensesPageModel" resultType="com.jn.park.finance.vo.FinanceExpendVo">
         SELECT t.cost_happend_time as "costhappendtime",
         t.cost as "cost",
         t.cost_after_type_name as "costaftertypename",
@@ -18,7 +18,7 @@
 
 
     <!--支出录入历史查询-->
-    <select id="findHistoryAll" parameterType="com.jn.park.finance.model.FinanceExpendHistoryPageModel" resultType="com.jn.park.finance.vo.FinanceExpendHistoryVo">
+    <select id="findHistoryAll" parameterType="com.jn.park.finance.model.FinanceExpensesHistoryPageModel" resultType="com.jn.park.finance.vo.FinanceExpendHistoryVo">
         SELECT t.cost_happend_time as "costhappendtime",
         t.cost_id as "costid",
         t.cost as "cost",
@@ -203,7 +203,7 @@
     </select>
 
     <!--根据导入的费用类型对比，看是否有相同的费用类型-->
-    <select id="selectAfterTypeName" resultType="com.jn.park.finance.model.FinanceExpendTypeNameModel">
+    <select id="selectAfterTypeName" resultType="com.jn.park.finance.model.FinanceExpensesTypeNameModel">
 
         select t.id as "costAfterTypeId",
         t.finance_name as "costAfterTypeName"

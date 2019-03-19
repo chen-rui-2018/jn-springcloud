@@ -1,8 +1,8 @@
 package com.jn.park.finance.service.impl;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.finance.model.FinanceExpendPageModel;
-import com.jn.park.finance.model.FinanceExpendTypeNameModel;
+import com.jn.park.finance.model.FinanceExpensesPageModel;
+import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
 import com.jn.park.finance.service.FinanceExpensesService;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
@@ -34,13 +34,13 @@ public class FinanceExpensesServiceImplTest {
 
     @Test
     public void findAll() {
-        FinanceExpendPageModel financeExpendPageModel=new FinanceExpendPageModel();
+        FinanceExpensesPageModel financeExpensesPageModel =new FinanceExpensesPageModel();
 
-        financeExpendPageModel.setDepartmentId("a794452f-fad6-4697-afe1-e62542bd753a");
-        financeExpendPageModel.setStartTime("201901");
-        financeExpendPageModel.setEndTime("201912");
+        financeExpensesPageModel.setDepartmentId("a794452f-fad6-4697-afe1-e62542bd753a");
+        financeExpensesPageModel.setStartTime("201901");
+        financeExpensesPageModel.setEndTime("201912");
 
-        PaginationData findAll= financeExpensesService.findAll(financeExpendPageModel);
+        PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
 
     }
 
@@ -75,7 +75,7 @@ public class FinanceExpensesServiceImplTest {
     }
     @Test
     public void selectAfterTypeName(){
-        List<FinanceExpendTypeNameModel> selectAfterTypeName= financeExpensesService.selectAfterTypeName("办公支出");
+        List<FinanceExpensesTypeNameModel> selectAfterTypeName= financeExpensesService.selectAfterTypeName("办公支出");
         //System.out.println(selectAfterTypeName);
     }
 }

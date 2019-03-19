@@ -1,12 +1,8 @@
 package com.jn.park.finance.controller;
 
 import com.jn.common.controller.BaseController;
-import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.common.util.excel.ExcelUtil;
-import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
-import com.jn.park.finance.enums.FinanceExceptionEnums;
 import com.jn.park.finance.model.*;
 import com.jn.park.finance.service.FinanceExpensesService;
 import com.jn.park.finance.vo.*;
@@ -24,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -35,31 +30,30 @@ import java.util.*;
  */
 @Api(tags = "财务协同-支出录入")
 @RestController
-@RequestMapping("/finance/expend")
+@RequestMapping("/finance/expenses")
 public class FinanceExpensesController extends BaseController {
 
     protected User getUser(){
         return  (User) SecurityUtils.getSubject().getPrincipal();
     }
-
     @Autowired
     private FinanceExpensesService financeExpensesService;
 
     @ControllerLog(doAction = "支出录入查询")
     @ApiOperation(value = "支出录入查询", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findAll")
-    @RequiresPermissions("/finance/expend/findAll")
-    public Result findAll(@RequestBody FinanceExpendPageModel financeExpendPageModel){
+    @RequiresPermissions("/finance/expenses/findAll")
+    public Result findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
         //todo
-        PaginationData findAll= financeExpensesService.findAll(financeExpendPageModel);
+        PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
         return new Result(findAll);
     }
 
     @ControllerLog(doAction = "支出录入历史查询")
     @ApiOperation(value = "支出录入历史查询", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/findHistoryAll")
-    @RequiresPermissions("/finance/expend/findHistoryAll")
-    public Result findHistoryAll(@RequestBody FinanceExpendHistoryPageModel financeEhpm){
+    @RequiresPermissions("/finance/expenses/findHistoryAll")
+    public Result findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
         //todo
         PaginationData findHistoryAll= financeExpensesService.findHistoryAll(financeEhpm);
         return new Result(findHistoryAll);
@@ -68,7 +62,7 @@ public class FinanceExpensesController extends BaseController {
     @ControllerLog(doAction = "录入导入")
     @ApiOperation(value = "录入导入", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/importData")
-    @RequiresPermissions("/finance/expend/importData")
+    @RequiresPermissions("/finance/expenses/importData")
     public Result importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
         //todo
         List<FinanceExpendImportDataVo> financeExpendImportDataVos=financeExpensesService.importData(file,getUser());
@@ -76,31 +70,10 @@ public class FinanceExpensesController extends BaseController {
         return new Result(financeExpendImportDataVos);
     }
 
-    /*@ControllerLog(doAction = "查询导入的数据")
-    @ApiOperation(value = "查询导入的数据", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findImportData")
-    @RequiresPermissions("/finance/expend/findImportData")
-    public Result<FinanceExpendFindImportDataVo> findImportData(){
-        //todo
-        List<FinanceExpendFindImportDataVo> findImportData= financeExpensesService.findImportData(excelId);
-        return new Result(findImportData);
-    }*/
-
-
-
-    /*@ControllerLog(doAction = "批量打标")
-    @ApiOperation(value = "批量打标", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/batchMark")
-    @RequiresPermissions("/finance/expend/batchMark")
-    public Result batchMark(){
-        //todo
-        return new Result(new PaginationData<FinanceTotalBudgetVo>());
-    }*/
-
     @ControllerLog(doAction = "保存打标数据")
     @ApiOperation(value = "保存打标数据", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/saveMarkData")
-    @RequiresPermissions("/finance/expend/saveMarkData")
+    @RequiresPermissions("/finance/expenses/saveMarkData")
     public Result saveMarkData(@RequestBody List<FinanceExpendFindImportDataVo> feList){
         //todo
         Result result=financeExpensesService.saveMarkData(feList,getUser());
@@ -110,7 +83,7 @@ public class FinanceExpensesController extends BaseController {
     @ControllerLog(doAction = "查询财务类型")
     @ApiOperation(value = "查询财务类型", httpMethod = "POST", response = Result.class)
     @PostMapping(value = "/selectFinanceType")
-    @RequiresPermissions("/finance/expend/selectFinanceType")
+    @RequiresPermissions("/finance/expenses/selectFinanceType")
     public Result selectFinanceType(){
         //todo
         List<FinanceExpendFinanceTypeVo> selectFinanceType= financeExpensesService.selectFinanceType();

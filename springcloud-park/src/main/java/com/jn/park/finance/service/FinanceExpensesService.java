@@ -2,18 +2,16 @@ package com.jn.park.finance.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.park.finance.model.FinanceExpendHistoryPageModel;
-import com.jn.park.finance.model.FinanceExpendPageModel;
-import com.jn.park.finance.model.FinanceExpendTypeNameModel;
+import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
+import com.jn.park.finance.model.FinanceExpensesPageModel;
+import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
 import com.jn.park.finance.vo.FinanceExpendImportDataVo;
 import com.jn.system.model.User;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 支出录入
@@ -26,17 +24,17 @@ public interface FinanceExpensesService {
 
     /**
      * 支出录入查询分页查询
-     * @param financeExpendPageModel
+     * @param financeExpensesPageModel
      * @return
      */
-    PaginationData findAll(FinanceExpendPageModel financeExpendPageModel);
+    PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel);
 
     /**
      * 支出录入历史查询分页查询
-     * @param financeExpendHistoryPageModel
+     * @param financeExpensesHistoryPageModel
      * @return
      */
-    PaginationData findHistoryAll(FinanceExpendHistoryPageModel financeExpendHistoryPageModel);
+    PaginationData findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel);
 
 
     /**
@@ -74,5 +72,5 @@ public interface FinanceExpensesService {
      * @param costBeforeTypeName
      * @return
      */
-    List<FinanceExpendTypeNameModel> selectAfterTypeName(String costBeforeTypeName);
+    List<FinanceExpensesTypeNameModel> selectAfterTypeName(String costBeforeTypeName);
 }

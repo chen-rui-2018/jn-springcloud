@@ -1,8 +1,8 @@
 package com.jn.park.finance.dao;
 
-import com.jn.park.finance.model.FinanceExpendHistoryPageModel;
-import com.jn.park.finance.model.FinanceExpendPageModel;
-import com.jn.park.finance.model.FinanceExpendTypeNameModel;
+import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
+import com.jn.park.finance.model.FinanceExpensesPageModel;
+import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
 import com.jn.park.finance.vo.FinanceExpendHistoryVo;
@@ -21,20 +21,20 @@ import java.util.Map;
  * @modified By:
  */
 @Component("FinanceExpendDao")
-public interface FinanceExpendDao {
+public interface FinanceExpensesDao {
     /**
      * 支出录入分页查询
-     * @param financeExpendPageModel
+     * @param financeExpensesPageModel
      * @return
      */
-    List<FinanceExpendVo> findAll(FinanceExpendPageModel financeExpendPageModel);
+    List<FinanceExpendVo> findAll(FinanceExpensesPageModel financeExpensesPageModel);
 
     /**
      * 支出录入历史分页查询
-     * @param financeExpendHistoryPageModel
+     * @param financeExpensesHistoryPageModel
      * @return
      */
-    List<FinanceExpendHistoryVo> findHistoryAll(FinanceExpendHistoryPageModel financeExpendHistoryPageModel);
+    List<FinanceExpendHistoryVo> findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel);
 
 
     /**
@@ -68,5 +68,5 @@ public interface FinanceExpendDao {
      * @param costBeforeTypeName 部门名称
      * @return
      */
-    List<FinanceExpendTypeNameModel> selectAfterTypeName(@Param("costBeforeTypeName") String costBeforeTypeName);
+    List<FinanceExpensesTypeNameModel> selectAfterTypeName(@Param("costBeforeTypeName") String costBeforeTypeName);
 }

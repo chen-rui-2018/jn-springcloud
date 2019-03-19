@@ -13,8 +13,8 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "FinanceExpendDepartmentModel",description = "首页部门支出预算模块")
-public class FinanceExpendDepartmentModel extends Page implements Serializable {
+@ApiModel(value = "FinanceExpensesDepartmentModel",description = "首页部门支出预算模块")
+public class FinanceExpensesDepartmentModel extends Page implements Serializable {
 
 
     private static final long serialVersionUID = -8287278418633994400L;

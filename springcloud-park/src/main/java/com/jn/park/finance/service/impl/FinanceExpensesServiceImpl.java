@@ -6,12 +6,12 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.excel.ExcelUtil;
-import com.jn.park.finance.dao.FinanceExpendDao;
+import com.jn.park.finance.dao.FinanceExpensesDao;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.enums.FinanceExceptionEnums;
-import com.jn.park.finance.model.FinanceExpendHistoryPageModel;
-import com.jn.park.finance.model.FinanceExpendPageModel;
-import com.jn.park.finance.model.FinanceExpendTypeNameModel;
+import com.jn.park.finance.model.FinanceExpensesHistoryPageModel;
+import com.jn.park.finance.model.FinanceExpensesPageModel;
+import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
 import com.jn.park.finance.service.FinanceExpensesService;
 import com.jn.park.finance.vo.*;
 import com.jn.system.log.annotation.ServiceLog;
@@ -34,21 +34,21 @@ import java.util.*;
 public class FinanceExpensesServiceImpl implements FinanceExpensesService {
 
     @Autowired
-    private FinanceExpendDao financeExpendDao;
+    private FinanceExpensesDao financeExpensesDao;
 
     @ServiceLog(doAction="支出录入分页查询")
     @Override
-    public PaginationData findAll(FinanceExpendPageModel financeExpendPageModel) {
-        Page<Object> objects = PageHelper.startPage(financeExpendPageModel.getPage(), financeExpendPageModel.getRows());
-        List<FinanceExpendVo> findAll = financeExpendDao.findAll(financeExpendPageModel);
+    public PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel) {
+        Page<Object> objects = PageHelper.startPage(financeExpensesPageModel.getPage(), financeExpensesPageModel.getRows());
+        List<FinanceExpendVo> findAll = financeExpensesDao.findAll(financeExpensesPageModel);
         return new PaginationData(findAll,objects.getTotal());
     }
 
     @ServiceLog(doAction="支出录入历史分页查询")
     @Override
-    public PaginationData findHistoryAll(FinanceExpendHistoryPageModel financeExpendHistoryPageModel) {
-        Page<Object> objects = PageHelper.startPage(financeExpendHistoryPageModel.getPage(), financeExpendHistoryPageModel.getRows());
-        List<FinanceExpendHistoryVo> findHistoryAll = financeExpendDao.findHistoryAll(financeExpendHistoryPageModel);
+    public PaginationData findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel) {
+        Page<Object> objects = PageHelper.startPage(financeExpensesHistoryPageModel.getPage(), financeExpensesHistoryPageModel.getRows());
+        List<FinanceExpendHistoryVo> findHistoryAll = financeExpensesDao.findHistoryAll(financeExpensesHistoryPageModel);
         return new PaginationData(findHistoryAll,objects.getTotal());
     }
 
@@ -91,7 +91,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             //类型
             String costBeforeTypeName=data.get(3);
             //通过类型名称查询是否有该类型，有就改变“打标后的费用类型ID及打标后的费用类型名称“，没有就不做处理
-            List<FinanceExpendTypeNameModel> typeName= this.selectAfterTypeName(costBeforeTypeName);
+            List<FinanceExpensesTypeNameModel> typeName= this.selectAfterTypeName(costBeforeTypeName);
             if(typeName.size()>0){
                 financeExpendImportDataVo.setCostAfterTypeId(typeName.get(0).getCostAfterTypeId()+"");
                 financeExpendImportDataVo.setCostAfterTypeName(typeName.get(0).getCostAfterTypeName());
@@ -112,14 +112,14 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
         map.put("excelId",excelId);
         map.put("list",financeExpendImportDataVos);
         map.put("account",User.getAccount());
-        financeExpendDao.importData(map);
+        financeExpensesDao.importData(map);
         return financeExpendImportDataVos;
     }
 
     @ServiceLog(doAction="查询本次导入的支出录入")
     @Override
     public List<FinanceExpendFindImportDataVo> findImportData(String excelId) {
-        return financeExpendDao.findImportData(excelId);
+        return financeExpensesDao.findImportData(excelId);
     }
 
     @ServiceLog(doAction="保存打标数据")
@@ -168,7 +168,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             try {
                 map.put("list",feList);
                 map.put("account",User.getAccount());
-                financeExpendDao.saveMarkData(map);
+                financeExpensesDao.saveMarkData(map);
             }catch (Exception e){
                 throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"保存数据失败");
             }
@@ -183,12 +183,12 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @ServiceLog(doAction="查询财务类型")
     @Override
     public List<FinanceExpendFinanceTypeVo> selectFinanceType() {
-        return financeExpendDao.selectFinanceType();
+        return financeExpensesDao.selectFinanceType();
     }
 
     @ServiceLog(doAction="根据导入的费用类型对比，看是否有相同的费用类型")
     @Override
-    public List<FinanceExpendTypeNameModel> selectAfterTypeName(String costBeforeTypeName) {
-        return financeExpendDao.selectAfterTypeName(costBeforeTypeName);
+    public List<FinanceExpensesTypeNameModel> selectAfterTypeName(String costBeforeTypeName) {
+        return financeExpensesDao.selectAfterTypeName(costBeforeTypeName);
     }
 }

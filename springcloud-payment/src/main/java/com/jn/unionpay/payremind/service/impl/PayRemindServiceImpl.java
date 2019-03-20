@@ -1,6 +1,7 @@
 package com.jn.unionpay.payremind.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.paybill.enums.PayBillExceptionEnum;
 import com.jn.paybill.model.PayBillEntryCallbackParam;
@@ -8,6 +9,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.unionpay.paybill.dao.TbPaymentBillMapper;
 import com.jn.unionpay.paybill.entity.TbPaymentBill;
 import com.jn.unionpay.paybill.entity.TbPaymentBillCriteria;
+import com.jn.unionpay.paybill.enums.PayBillEnum;
 import com.jn.unionpay.payremind.dao.PaymentRemindMapper;
 import com.jn.unionpay.payremind.dao.TbPaymentRemindMapper;
 import com.jn.unionpay.payremind.entity.TbPaymentRemind;
@@ -26,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -45,27 +48,7 @@ public class PayRemindServiceImpl implements PayRemindService {
     @Autowired
     private PaymentRemindMapper paymentRemindMapper;
 
-    /**
-     * 数据有效状态 1有效0删除数据
-     */
-    private static final String BILL_STATE_NOT_DELETE = "1";
-
-    /**
-     * 账单/订单状态 1待支付2已支付3支付审核成功4支付审核不通过
-     */
-    private static final String BILL_ORDER_PAY_CHECKED = "3";
-
     private static final int AMOUNT_DOUBLE_FORMAT = 2;
-
-    /**
-     * 支付方式 10线上11线下
-     */
-    private static final String PAY_METHOD_OFFLINE = "11";
-
-    /**
-     * 核对单审核状态 0未审核
-     */
-    private static final String REMIND_IS_NOT_CHECK = "0" ;
 
     @Override
     @ServiceLog(doAction = "保存账单核对提醒信息")
@@ -75,7 +58,7 @@ public class PayRemindServiceImpl implements PayRemindService {
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_ID_IS_NOT_NULL);
         }
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
-        billCriteria.createCriteria().andBillIdIn(Arrays.asList(payRemindParam.getBillIds())).andRecordStatusEqualTo(new Byte(BILL_STATE_NOT_DELETE));
+        billCriteria.createCriteria().andBillIdIn(Arrays.asList(payRemindParam.getBillIds())).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
         if(tbPaymentBills.size()!=payRemindParam.getBillIds().length){
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_IS_NOT_EXIT,"选择账单数: "+payRemindParam.getBillIds().length
@@ -86,8 +69,11 @@ public class PayRemindServiceImpl implements PayRemindService {
         for (TbPaymentBill bill:tbPaymentBills) {
             totalAmount = totalAmount.add(new BigDecimal(bill.getBillAmount()));
             billIdList.add(bill.getBillId());
-            if(StringUtils.equals(bill.getBillStatus(),BILL_ORDER_PAY_CHECKED)){
-                throw new JnSpringCloudException(PayBillExceptionEnum.CHECK_ORDER_EXIST_CHECKED_BILL);
+            if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_PAY_CHECKED.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.CHECK_ORDER_EXIST_CHECKED_BILL,"账单："+bill.getBillNum()+"支付已审核通过，无需再次提交。");
+            }
+            if(StringUtils.equals(bill.getBillPayType(),PayBillEnum.PAY_METHOD_ONLINE.getCode())&&StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_IS_PAY.getCode())){
+                throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY_NOT_CHECK,"账单："+bill.getBillNum()+"已线下支付，无需提交审核。");
             }
         }
         DecimalFormat df = new DecimalFormat("#.00");
@@ -100,7 +86,7 @@ public class PayRemindServiceImpl implements PayRemindService {
         paymentBillCriteria.createCriteria().andBillIdIn(billIdList);
         TbPaymentBill bill = new TbPaymentBill();
         bill.setIsRemind("1");
-        bill.setPayType(PAY_METHOD_OFFLINE);
+        bill.setBillPayType(PayBillEnum.PAY_METHOD_OFFLINE.getCode());
         bill.setRemindId(remindId);
         bill.setRemindTime(new Date());
         int i = tbPaymentBillMapper.updateByExampleSelective(bill, paymentBillCriteria);
@@ -108,7 +94,7 @@ public class PayRemindServiceImpl implements PayRemindService {
         TbPaymentRemind tbPaymentRemind = new TbPaymentRemind();
         tbPaymentRemind.setRemindId(remindId);
         BeanUtils.copyProperties(payRemindParam,tbPaymentRemind);
-        tbPaymentRemind.setRecordStatus(new Byte(BILL_STATE_NOT_DELETE));
+        tbPaymentRemind.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         tbPaymentRemind.setCreatedTime(new Date());
         tbPaymentRemind.setCreatorAccount(account);
         int insert = tbPaymentRemindMapper.insert(tbPaymentRemind);
@@ -147,7 +133,7 @@ public class PayRemindServiceImpl implements PayRemindService {
             tbPaymentRemind.setCheckAccount(account);
             tbPaymentRemind.setCheckRemark(payRemindCheckParam.getCheckRemark());
             TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
-            billCriteria.createCriteria().andRemindIdEqualTo(payRemindCheckParam.getId()).andRecordStatusEqualTo(new Byte(BILL_STATE_NOT_DELETE));
+            billCriteria.createCriteria().andRemindIdEqualTo(payRemindCheckParam.getId()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
             i1 = tbPaymentBillMapper.updateByExampleSelective(bill, billCriteria);
         }else{
             bill.setBillId(payRemindCheckParam.getId());
@@ -162,9 +148,14 @@ public class PayRemindServiceImpl implements PayRemindService {
     public int createBillRemind(PayBillEntryParam payBillEntryParam, String account){
         TbPaymentBill paymentBill = new TbPaymentBill();
         BeanUtils.copyProperties(payBillEntryParam,paymentBill);
+        try {
+            paymentBill.setPayEndTime(DateUtils.parseDate(payBillEntryParam.getPayEndTime(),"yyyy-MM-dd HH:mm:ss"));
+        }catch (ParseException e){
+            throw new JnSpringCloudException(PayBillExceptionEnum.TIME_CONVERSION_ERROR);
+        }
         paymentBill.setBillId(UUID.randomUUID().toString().replaceAll("-",""));
-        paymentBill.setBillStatus(REMIND_IS_NOT_CHECK);
-        paymentBill.setRecordStatus(new Byte(BILL_STATE_NOT_DELETE));
+        paymentBill.setBillStatus(PayBillEnum.REMIND_IS_NOT_CHECK.getCode());
+        paymentBill.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         paymentBill.setCreatorAccount(account);
         paymentBill.setCreatedTime(new Date());
         paymentBill.setBillCreateTime(new Date());
@@ -185,7 +176,7 @@ public class PayRemindServiceImpl implements PayRemindService {
         if(null == paymentBill){
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_IS_NOT_EXIT);
         }
-        if(!StringUtils.equals(paymentBill.getBillStatus(),REMIND_IS_NOT_CHECK)){
+        if(!StringUtils.equals(paymentBill.getBillStatus(),PayBillEnum.REMIND_IS_NOT_CHECK.getCode())){
             throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_NOT_CHECK);
         }
         TbPaymentBill tbPaymentBill = new TbPaymentBill();

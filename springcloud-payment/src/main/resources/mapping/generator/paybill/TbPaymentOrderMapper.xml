@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jn.unionpay.paybill.entity.TbPaymentOrder">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="order_num" jdbcType="VARCHAR" property="orderNum" />
+    <result column="bill_ids" jdbcType="VARCHAR" property="billIds" />
     <result column="order_name" jdbcType="VARCHAR" property="orderName" />
     <result column="order_type" jdbcType="VARCHAR" property="orderType" />
     <result column="order_obj_type" jdbcType="VARCHAR" property="orderObjType" />
@@ -81,7 +82,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, order_num, order_name, order_type, order_obj_type, order_obj_id, order_obj_name, 
+    id, order_num, bill_ids, order_name, order_type, order_obj_type, order_obj_id, order_obj_name, 
     order_amount, pay_time, order_status, pay_id, pay_amount, pay_type, pay_remark, created_time, 
     creator_account, modified_time, modifier_account, record_status
   </sql>
@@ -116,20 +117,20 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.unionpay.paybill.entity.TbPaymentOrder">
-    insert into tb_payment_order (id, order_num, order_name, 
-      order_type, order_obj_type, order_obj_id, 
-      order_obj_name, order_amount, pay_time, 
-      order_status, pay_id, pay_amount, 
-      pay_type, pay_remark, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
-    values (#{id,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{orderName,jdbcType=VARCHAR}, 
-      #{orderType,jdbcType=VARCHAR}, #{orderObjType,jdbcType=VARCHAR}, #{orderObjId,jdbcType=VARCHAR}, 
-      #{orderObjName,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DOUBLE}, #{payTime,jdbcType=TIMESTAMP}, 
-      #{orderStatus,jdbcType=VARCHAR}, #{payId,jdbcType=VARCHAR}, #{payAmount,jdbcType=DOUBLE}, 
-      #{payType,jdbcType=VARCHAR}, #{payRemark,jdbcType=DATE}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+    insert into tb_payment_order (id, order_num, bill_ids, 
+      order_name, order_type, order_obj_type, 
+      order_obj_id, order_obj_name, order_amount, 
+      pay_time, order_status, pay_id, 
+      pay_amount, pay_type, pay_remark, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{id,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{billIds,jdbcType=VARCHAR}, 
+      #{orderName,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{orderObjType,jdbcType=VARCHAR}, 
+      #{orderObjId,jdbcType=VARCHAR}, #{orderObjName,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DOUBLE}, 
+      #{payTime,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=VARCHAR}, #{payId,jdbcType=VARCHAR}, 
+      #{payAmount,jdbcType=DOUBLE}, #{payType,jdbcType=VARCHAR}, #{payRemark,jdbcType=DATE}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.unionpay.paybill.entity.TbPaymentOrder">
     insert into tb_payment_order
@@ -139,6 +140,9 @@
       </if>
       <if test="orderNum != null">
         order_num,
+      </if>
+      <if test="billIds != null">
+        bill_ids,
       </if>
       <if test="orderName != null">
         order_name,
@@ -198,6 +202,9 @@
       </if>
       <if test="orderNum != null">
         #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="billIds != null">
+        #{billIds,jdbcType=VARCHAR},
       </if>
       <if test="orderName != null">
         #{orderName,jdbcType=VARCHAR},
@@ -267,6 +274,9 @@
       <if test="record.orderNum != null">
         order_num = #{record.orderNum,jdbcType=VARCHAR},
       </if>
+      <if test="record.billIds != null">
+        bill_ids = #{record.billIds,jdbcType=VARCHAR},
+      </if>
       <if test="record.orderName != null">
         order_name = #{record.orderName,jdbcType=VARCHAR},
       </if>
@@ -327,6 +337,7 @@
     update tb_payment_order
     set id = #{record.id,jdbcType=VARCHAR},
       order_num = #{record.orderNum,jdbcType=VARCHAR},
+      bill_ids = #{record.billIds,jdbcType=VARCHAR},
       order_name = #{record.orderName,jdbcType=VARCHAR},
       order_type = #{record.orderType,jdbcType=VARCHAR},
       order_obj_type = #{record.orderObjType,jdbcType=VARCHAR},
@@ -353,6 +364,9 @@
     <set>
       <if test="orderNum != null">
         order_num = #{orderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="billIds != null">
+        bill_ids = #{billIds,jdbcType=VARCHAR},
       </if>
       <if test="orderName != null">
         order_name = #{orderName,jdbcType=VARCHAR},
@@ -411,6 +425,7 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.unionpay.paybill.entity.TbPaymentOrder">
     update tb_payment_order
     set order_num = #{orderNum,jdbcType=VARCHAR},
+      bill_ids = #{billIds,jdbcType=VARCHAR},
       order_name = #{orderName,jdbcType=VARCHAR},
       order_type = #{orderType,jdbcType=VARCHAR},
       order_obj_type = #{orderObjType,jdbcType=VARCHAR},

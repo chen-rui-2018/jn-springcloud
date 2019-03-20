@@ -272,6 +272,76 @@ public class TbPaymentOrderCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andBillIdsIsNull() {
+            addCriterion("bill_ids is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsIsNotNull() {
+            addCriterion("bill_ids is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsEqualTo(String value) {
+            addCriterion("bill_ids =", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsNotEqualTo(String value) {
+            addCriterion("bill_ids <>", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsGreaterThan(String value) {
+            addCriterion("bill_ids >", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsGreaterThanOrEqualTo(String value) {
+            addCriterion("bill_ids >=", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsLessThan(String value) {
+            addCriterion("bill_ids <", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsLessThanOrEqualTo(String value) {
+            addCriterion("bill_ids <=", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsLike(String value) {
+            addCriterion("bill_ids like", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsNotLike(String value) {
+            addCriterion("bill_ids not like", value, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsIn(List<String> values) {
+            addCriterion("bill_ids in", values, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsNotIn(List<String> values) {
+            addCriterion("bill_ids not in", values, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsBetween(String value1, String value2) {
+            addCriterion("bill_ids between", value1, value2, "billIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andBillIdsNotBetween(String value1, String value2) {
+            addCriterion("bill_ids not between", value1, value2, "billIds");
+            return (Criteria) this;
+        }
+
         public Criteria andOrderNameIsNull() {
             addCriterion("order_name is null");
             return (Criteria) this;

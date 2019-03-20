@@ -25,6 +25,8 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     PAYMENT_REMIND_ID_IS_NOT_NULL("6020512","支付核对单ID不能为空"),
     PAYMENT_REMIND_IS_NOT_WAIT_CHECK("6020513","支付核对单已审核，无需再次审核。"),
     PAYMENT_STATUS_IS_NOT_CHECK("6020515","账单状态不为待审核，无需处理数据。"),
+    PAYMENT_STATUS_IS_PAY("6020516","账单已支付，无需再次支付。"),
+    PAYMENT_STATUS_IS_PAY_NOT_CHECK("6020517","账单已线上支付，无需提交支付审核。"),
     ;
     /**
      * 编码

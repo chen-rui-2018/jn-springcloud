@@ -985,73 +985,73 @@ public class TbPaymentBillCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIsNull() {
-            addCriterion("pay_type is null");
+        public Criteria andBillPayTypeIsNull() {
+            addCriterion("bill_pay_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIsNotNull() {
-            addCriterion("pay_type is not null");
+        public Criteria andBillPayTypeIsNotNull() {
+            addCriterion("bill_pay_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeEqualTo(String value) {
-            addCriterion("pay_type =", value, "payType");
+        public Criteria andBillPayTypeEqualTo(String value) {
+            addCriterion("bill_pay_type =", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotEqualTo(String value) {
-            addCriterion("pay_type <>", value, "payType");
+        public Criteria andBillPayTypeNotEqualTo(String value) {
+            addCriterion("bill_pay_type <>", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeGreaterThan(String value) {
-            addCriterion("pay_type >", value, "payType");
+        public Criteria andBillPayTypeGreaterThan(String value) {
+            addCriterion("bill_pay_type >", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeGreaterThanOrEqualTo(String value) {
-            addCriterion("pay_type >=", value, "payType");
+        public Criteria andBillPayTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("bill_pay_type >=", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeLessThan(String value) {
-            addCriterion("pay_type <", value, "payType");
+        public Criteria andBillPayTypeLessThan(String value) {
+            addCriterion("bill_pay_type <", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeLessThanOrEqualTo(String value) {
-            addCriterion("pay_type <=", value, "payType");
+        public Criteria andBillPayTypeLessThanOrEqualTo(String value) {
+            addCriterion("bill_pay_type <=", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeLike(String value) {
-            addCriterion("pay_type like", value, "payType");
+        public Criteria andBillPayTypeLike(String value) {
+            addCriterion("bill_pay_type like", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotLike(String value) {
-            addCriterion("pay_type not like", value, "payType");
+        public Criteria andBillPayTypeNotLike(String value) {
+            addCriterion("bill_pay_type not like", value, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeIn(List<String> values) {
-            addCriterion("pay_type in", values, "payType");
+        public Criteria andBillPayTypeIn(List<String> values) {
+            addCriterion("bill_pay_type in", values, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotIn(List<String> values) {
-            addCriterion("pay_type not in", values, "payType");
+        public Criteria andBillPayTypeNotIn(List<String> values) {
+            addCriterion("bill_pay_type not in", values, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeBetween(String value1, String value2) {
-            addCriterion("pay_type between", value1, value2, "payType");
+        public Criteria andBillPayTypeBetween(String value1, String value2) {
+            addCriterion("bill_pay_type between", value1, value2, "billPayType");
             return (Criteria) this;
         }
 
-        public Criteria andPayTypeNotBetween(String value1, String value2) {
-            addCriterion("pay_type not between", value1, value2, "payType");
+        public Criteria andBillPayTypeNotBetween(String value1, String value2) {
+            addCriterion("bill_pay_type not between", value1, value2, "billPayType");
             return (Criteria) this;
         }
 

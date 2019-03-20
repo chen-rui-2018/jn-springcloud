@@ -30,7 +30,7 @@ public class TbPaymentBill implements Serializable {
 
     private String billStatus;
 
-    private String payType;
+    private String billPayType;
 
     private String orderId;
 
@@ -168,12 +168,12 @@ public class TbPaymentBill implements Serializable {
         this.billStatus = billStatus == null ? null : billStatus.trim();
     }
 
-    public String getPayType() {
-        return payType;
+    public String getBillPayType() {
+        return billPayType;
     }
 
-    public void setPayType(String payType) {
-        this.payType = payType == null ? null : payType.trim();
+    public void setBillPayType(String billPayType) {
+        this.billPayType = billPayType == null ? null : billPayType.trim();
     }
 
     public String getOrderId() {
@@ -321,7 +321,7 @@ public class TbPaymentBill implements Serializable {
             && (this.getBillCreateAccount() == null ? other.getBillCreateAccount() == null : this.getBillCreateAccount().equals(other.getBillCreateAccount()))
             && (this.getBillRemark() == null ? other.getBillRemark() == null : this.getBillRemark().equals(other.getBillRemark()))
             && (this.getBillStatus() == null ? other.getBillStatus() == null : this.getBillStatus().equals(other.getBillStatus()))
-            && (this.getPayType() == null ? other.getPayType() == null : this.getPayType().equals(other.getPayType()))
+            && (this.getBillPayType() == null ? other.getBillPayType() == null : this.getBillPayType().equals(other.getBillPayType()))
             && (this.getOrderId() == null ? other.getOrderId() == null : this.getOrderId().equals(other.getOrderId()))
             && (this.getIsUrge() == null ? other.getIsUrge() == null : this.getIsUrge().equals(other.getIsUrge()))
             && (this.getUrgeTime() == null ? other.getUrgeTime() == null : this.getUrgeTime().equals(other.getUrgeTime()))
@@ -356,7 +356,7 @@ public class TbPaymentBill implements Serializable {
         result = prime * result + ((getBillCreateAccount() == null) ? 0 : getBillCreateAccount().hashCode());
         result = prime * result + ((getBillRemark() == null) ? 0 : getBillRemark().hashCode());
         result = prime * result + ((getBillStatus() == null) ? 0 : getBillStatus().hashCode());
-        result = prime * result + ((getPayType() == null) ? 0 : getPayType().hashCode());
+        result = prime * result + ((getBillPayType() == null) ? 0 : getBillPayType().hashCode());
         result = prime * result + ((getOrderId() == null) ? 0 : getOrderId().hashCode());
         result = prime * result + ((getIsUrge() == null) ? 0 : getIsUrge().hashCode());
         result = prime * result + ((getUrgeTime() == null) ? 0 : getUrgeTime().hashCode());
@@ -394,7 +394,7 @@ public class TbPaymentBill implements Serializable {
         sb.append(", billCreateAccount=").append(billCreateAccount);
         sb.append(", billRemark=").append(billRemark);
         sb.append(", billStatus=").append(billStatus);
-        sb.append(", payType=").append(payType);
+        sb.append(", billPayType=").append(billPayType);
         sb.append(", orderId=").append(orderId);
         sb.append(", isUrge=").append(isUrge);
         sb.append(", urgeTime=").append(urgeTime);

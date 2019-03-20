@@ -56,7 +56,7 @@
                         paybill
                     </contexts>
                     <tableNames>
-                        tb_payment_bill
+                        tb_payment_order
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

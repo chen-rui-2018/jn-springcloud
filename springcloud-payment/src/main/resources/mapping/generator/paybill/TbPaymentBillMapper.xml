@@ -15,7 +15,7 @@
     <result column="bill_create_account" jdbcType="VARCHAR" property="billCreateAccount" />
     <result column="bill_remark" jdbcType="VARCHAR" property="billRemark" />
     <result column="bill_status" jdbcType="VARCHAR" property="billStatus" />
-    <result column="pay_type" jdbcType="VARCHAR" property="payType" />
+    <result column="bill_pay_type" jdbcType="VARCHAR" property="billPayType" />
     <result column="order_id" jdbcType="VARCHAR" property="orderId" />
     <result column="is_urge" jdbcType="VARCHAR" property="isUrge" />
     <result column="urge_time" jdbcType="TIMESTAMP" property="urgeTime" />
@@ -93,7 +93,7 @@
   <sql id="Base_Column_List">
     bill_id, bill_num, bill_name, bill_type, bill_obj_type, bill_obj_id, bill_obj_name, 
     bill_amount, bill_create_time, pay_end_time, bill_create_account, bill_remark, bill_status, 
-    pay_type, order_id, is_urge, urge_time, urge_num, is_remind, remind_time, remind_id, 
+    bill_pay_type, order_id, is_urge, urge_time, urge_num, is_remind, remind_time, remind_id, 
     check_account, check_time, check_remark, created_time, creator_account, modified_time, 
     modifier_account, record_status
   </sql>
@@ -132,7 +132,7 @@
       bill_type, bill_obj_type, bill_obj_id, 
       bill_obj_name, bill_amount, bill_create_time, 
       pay_end_time, bill_create_account, bill_remark, 
-      bill_status, pay_type, order_id, 
+      bill_status, bill_pay_type, order_id, 
       is_urge, urge_time, urge_num, 
       is_remind, remind_time, remind_id, 
       check_account, check_time, check_remark, 
@@ -142,7 +142,7 @@
       #{billType,jdbcType=VARCHAR}, #{billObjType,jdbcType=VARCHAR}, #{billObjId,jdbcType=VARCHAR}, 
       #{billObjName,jdbcType=VARCHAR}, #{billAmount,jdbcType=DOUBLE}, #{billCreateTime,jdbcType=TIMESTAMP}, 
       #{payEndTime,jdbcType=TIMESTAMP}, #{billCreateAccount,jdbcType=VARCHAR}, #{billRemark,jdbcType=VARCHAR}, 
-      #{billStatus,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{billStatus,jdbcType=VARCHAR}, #{billPayType,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
       #{isUrge,jdbcType=VARCHAR}, #{urgeTime,jdbcType=TIMESTAMP}, #{urgeNum,jdbcType=INTEGER}, 
       #{isRemind,jdbcType=VARCHAR}, #{remindTime,jdbcType=TIMESTAMP}, #{remindId,jdbcType=VARCHAR}, 
       #{checkAccount,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{checkRemark,jdbcType=VARCHAR}, 
@@ -191,8 +191,8 @@
       <if test="billStatus != null">
         bill_status,
       </if>
-      <if test="payType != null">
-        pay_type,
+      <if test="billPayType != null">
+        bill_pay_type,
       </if>
       <if test="orderId != null">
         order_id,
@@ -280,8 +280,8 @@
       <if test="billStatus != null">
         #{billStatus,jdbcType=VARCHAR},
       </if>
-      <if test="payType != null">
-        #{payType,jdbcType=VARCHAR},
+      <if test="billPayType != null">
+        #{billPayType,jdbcType=VARCHAR},
       </if>
       <if test="orderId != null">
         #{orderId,jdbcType=VARCHAR},
@@ -378,8 +378,8 @@
       <if test="record.billStatus != null">
         bill_status = #{record.billStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.payType != null">
-        pay_type = #{record.payType,jdbcType=VARCHAR},
+      <if test="record.billPayType != null">
+        bill_pay_type = #{record.billPayType,jdbcType=VARCHAR},
       </if>
       <if test="record.orderId != null">
         order_id = #{record.orderId,jdbcType=VARCHAR},
@@ -446,7 +446,7 @@
       bill_create_account = #{record.billCreateAccount,jdbcType=VARCHAR},
       bill_remark = #{record.billRemark,jdbcType=VARCHAR},
       bill_status = #{record.billStatus,jdbcType=VARCHAR},
-      pay_type = #{record.payType,jdbcType=VARCHAR},
+      bill_pay_type = #{record.billPayType,jdbcType=VARCHAR},
       order_id = #{record.orderId,jdbcType=VARCHAR},
       is_urge = #{record.isUrge,jdbcType=VARCHAR},
       urge_time = #{record.urgeTime,jdbcType=TIMESTAMP},
@@ -505,8 +505,8 @@
       <if test="billStatus != null">
         bill_status = #{billStatus,jdbcType=VARCHAR},
       </if>
-      <if test="payType != null">
-        pay_type = #{payType,jdbcType=VARCHAR},
+      <if test="billPayType != null">
+        bill_pay_type = #{billPayType,jdbcType=VARCHAR},
       </if>
       <if test="orderId != null">
         order_id = #{orderId,jdbcType=VARCHAR},
@@ -570,7 +570,7 @@
       bill_create_account = #{billCreateAccount,jdbcType=VARCHAR},
       bill_remark = #{billRemark,jdbcType=VARCHAR},
       bill_status = #{billStatus,jdbcType=VARCHAR},
-      pay_type = #{payType,jdbcType=VARCHAR},
+      bill_pay_type = #{billPayType,jdbcType=VARCHAR},
       order_id = #{orderId,jdbcType=VARCHAR},
       is_urge = #{isUrge,jdbcType=VARCHAR},
       urge_time = #{urgeTime,jdbcType=TIMESTAMP},

@@ -39,9 +39,9 @@ public class PayBillEntryParam implements Serializable {
     @ApiModelProperty(value = "账单金额")
     @NotBlank(message = "账单金额不能为空")
     private Double billAmount;
-    @ApiModelProperty(value = "最晚缴费时间")
+    @ApiModelProperty(value = "最晚缴费时间 yyyy-MM-dd HH:mm:ss")
     @NotBlank(message = "最晚缴费时间不能为空")
-    private Date payEndTime;
+    private String payEndTime;
     @ApiModelProperty(value = "缴费说明")
     @NotBlank(message = "缴费说明不能为空")
     private String billRemark;
@@ -102,11 +102,11 @@ public class PayBillEntryParam implements Serializable {
         this.billAmount = billAmount;
     }
 
-    public Date getPayEndTime() {
+    public String getPayEndTime() {
         return payEndTime;
     }
 
-    public void setPayEndTime(Date payEndTime) {
+    public void setPayEndTime(String payEndTime) {
         this.payEndTime = payEndTime;
     }
 

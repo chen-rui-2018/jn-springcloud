@@ -7,7 +7,7 @@
     <result column="r_bankName" jdbcType="VARCHAR" property="bankName" javaType="java.lang.String"/>
     <result column="r_bankId" jdbcType="VARCHAR" property="bankId" javaType="java.lang.String"/>
     <result column="r_bankAccount" jdbcType="VARCHAR" property="bankAccount" javaType="java.lang.String"/>
-    <result column="r_payAmount" jdbcType="VARCHAR" property="payAmount" javaType="java.lang.String"/>
+    <result column="r_payAmount" jdbcType="DOUBLE" property="payAmount" javaType="java.lang.Double"/>
     <result column="r_payRemark" jdbcType="VARCHAR" property="payRemark" javaType="java.lang.String"/>
     <result column="r_payImg" jdbcType="VARCHAR" property="payImg" javaType="java.lang.String"/>
     <result column="r_remindStatus" jdbcType="VARCHAR" property="remindStatus" javaType="java.lang.String"/>
@@ -20,7 +20,7 @@
             <result column="b_billName" property="billName" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <result column="b_billType" property="billType" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <result column="b_billObjId" property="billObjId" jdbcType="VARCHAR" javaType="java.lang.String"/>
-            <result column="b_billAmount" property="billAmount" jdbcType="VARCHAR" javaType="java.lang.String"/>
+            <result column="b_billAmount" property="billAmount" jdbcType="DOUBLE" javaType="java.lang.Double"/>
             <result column="b_billCreateTime" property="billCreateTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <result column="b_payEndTime" property="payEndTime" jdbcType="VARCHAR" javaType="java.lang.String"/>
             <result column="b_billRemark" property="billRemark" jdbcType="VARCHAR" javaType="java.lang.String"/>

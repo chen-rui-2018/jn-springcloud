@@ -2,6 +2,7 @@ package com.jn.unionpay.paycode.service.impl;
 
 import com.jn.paycode.model.PaymentCode;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.unionpay.paybill.enums.PayBillEnum;
 import com.jn.unionpay.paycode.dao.TbPaymentCodeMapper;
 import com.jn.unionpay.paycode.entity.TbPaymentCode;
 import com.jn.unionpay.paycode.entity.TbPaymentCodeCriteria;
@@ -28,17 +29,11 @@ public class PayCodeServiceImpl implements PayCodeService {
     @Autowired
     private TbPaymentCodeMapper tbPaymentCodeMapper;
 
-    /**
-     * 数据有效状态 1有效0删除数据
-     */
-    private static final String BILL_STATE_NOT_DELETE = "1";
-    private static final String BILL_TYPE_CODE = "1";
-
     @Override
     @ServiceLog(doAction = "查找账单类型值")
     public List<PaymentCode> getBillTypeList() {
         TbPaymentCodeCriteria codeCriteria = new TbPaymentCodeCriteria();
-        codeCriteria.createCriteria().andCodeTypeEqualTo(BILL_TYPE_CODE).andRecordStatusEqualTo(new Byte(BILL_STATE_NOT_DELETE));
+        codeCriteria.createCriteria().andCodeTypeEqualTo(PayBillEnum.PAYMENT_CODE_TYPE_BILL.getCode()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentCode> tbPaymentCodes = tbPaymentCodeMapper.selectByExample(codeCriteria);
         List<PaymentCode> codes = new ArrayList<>(16);
         for (TbPaymentCode paymentCode:tbPaymentCodes) {

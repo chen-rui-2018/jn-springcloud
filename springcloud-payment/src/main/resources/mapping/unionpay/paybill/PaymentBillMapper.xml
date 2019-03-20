@@ -71,6 +71,7 @@
         b.bill_create_account as "billCreateAccount",
         b.bill_remark as "billRemark",
         CASE b.bill_status
+            WHEN '-1' THEN "账单审核不通过"
             WHEN '0' THEN "待审核"
             WHEN '1' THEN "待支付"
             WHEN '2' THEN "已支付"
@@ -163,6 +164,9 @@
         <if test="payEndTimeEnd !=null and payEndTimeEnd !='' ">
             and b.pay_end_time &lt; #{payEndTimeEnd,jdbcType=VARCHAR}
         </if>
+        <if test='queryType == null or queryType == "" or queryType == "1" '>
+            and b.bill_status not in ('0','-1')
+        </if>
         <if test="orderBy !=null and orderBy !='' ">
             order by #{orderBy,jdbcType=VARCHAR}
         </if>
@@ -219,7 +223,7 @@
         tb_payment_bill b
         LEFT JOIN tb_payment_code c
         ON b.bill_type = c.id
-        WHERE b.record_status = 1 and b.bill_status != '0'
+        WHERE b.record_status = 1 and b.bill_status not in ('0','-1')
         <if test="billStartTime !=null and billStartTime !='' ">
             and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>
@@ -273,7 +277,7 @@
         ) as "totlePayAmountDaily"
         FROM
         tb_payment_bill b
-        WHERE b.record_status = 1 and b.bill_status != '0'
+        WHERE b.record_status = 1 and b.bill_status not in ('0','-1')
         <if test="billStartTime !=null and billStartTime !='' ">
             and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
         </if>

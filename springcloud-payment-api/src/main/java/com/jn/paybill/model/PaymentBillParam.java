@@ -44,12 +44,15 @@ public class PaymentBillParam extends Page implements Serializable {
     @Pattern(regexp = "^[0,1,3,4,5]$", message = "{billStatus:'账单状态[0、1、2、3、4、5]'}")
     private String billStatus;
     @ApiModelProperty(value = "是否已催付[0否1是]")
-    @Pattern(regexp = "^[01]$", message = "{isUrge:'支付方式只能为[0、1]'}")
+    @Pattern(regexp = "^[0,1]$", message = "{isUrge:'支付方式只能为[0、1]'}")
     private String isUrge;
     @ApiModelProperty(value = "排序字段",notes = "支付方式排序：billType支付方式,billCreateTime账单生成时间,billStatus账单状态")
     private String orderBy;
     @ApiModelProperty(value = "搜索关键字")
     private String searchCode;
+    @ApiModelProperty(value = "查询类型[1前端业务2后台业务]",notes = "前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务")
+    @Pattern(regexp = "^[2,1]$", message = "{isUrge:'支付方式只能为[2、1]'}")
+    private String queryType;
 
     public String getBillId() {
         return billId;
@@ -177,5 +180,13 @@ public class PaymentBillParam extends Page implements Serializable {
 
     public void setSearchCode(String searchCode) {
         this.searchCode = searchCode;
+    }
+
+    public String getQueryType() {
+        return queryType;
+    }
+
+    public void setQueryType(String queryType) {
+        this.queryType = queryType;
     }
 }

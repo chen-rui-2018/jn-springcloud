@@ -17,11 +17,11 @@ import java.util.Date;
  */
 @ApiModel(value = "PayBillEntryCallbackParam", description = "缴费账单录入审核回调Bean")
 public class PayBillEntryCallbackParam implements Serializable {
-    @ApiModelProperty(value = "账单编号")
-    @NotBlank(message = "账单编号不能为空")
+    @ApiModelProperty(value = "账单id")
+    @NotBlank(message = "账单ID不能为空")
     private String billId;
-    @ApiModelProperty(value = "账单类型id")
-    @NotBlank(message = "账单对象ID不能为空")
+    @ApiModelProperty(value = "账单状态 -1审核不通过 1审核通过")
+    @NotBlank(message = "账单状态不能为空")
     private String billStatus;
 
     public String getBillId() {

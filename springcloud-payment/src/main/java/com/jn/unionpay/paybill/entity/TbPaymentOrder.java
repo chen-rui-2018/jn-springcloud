@@ -8,6 +8,8 @@ public class TbPaymentOrder implements Serializable {
 
     private String orderNum;
 
+    private String billIds;
+
     private String orderName;
 
     private String orderType;
@@ -58,6 +60,14 @@ public class TbPaymentOrder implements Serializable {
 
     public void setOrderNum(String orderNum) {
         this.orderNum = orderNum == null ? null : orderNum.trim();
+    }
+
+    public String getBillIds() {
+        return billIds;
+    }
+
+    public void setBillIds(String billIds) {
+        this.billIds = billIds == null ? null : billIds.trim();
     }
 
     public String getOrderName() {
@@ -210,6 +220,7 @@ public class TbPaymentOrder implements Serializable {
         TbPaymentOrder other = (TbPaymentOrder) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getOrderNum() == null ? other.getOrderNum() == null : this.getOrderNum().equals(other.getOrderNum()))
+            && (this.getBillIds() == null ? other.getBillIds() == null : this.getBillIds().equals(other.getBillIds()))
             && (this.getOrderName() == null ? other.getOrderName() == null : this.getOrderName().equals(other.getOrderName()))
             && (this.getOrderType() == null ? other.getOrderType() == null : this.getOrderType().equals(other.getOrderType()))
             && (this.getOrderObjType() == null ? other.getOrderObjType() == null : this.getOrderObjType().equals(other.getOrderObjType()))
@@ -235,6 +246,7 @@ public class TbPaymentOrder implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getOrderNum() == null) ? 0 : getOrderNum().hashCode());
+        result = prime * result + ((getBillIds() == null) ? 0 : getBillIds().hashCode());
         result = prime * result + ((getOrderName() == null) ? 0 : getOrderName().hashCode());
         result = prime * result + ((getOrderType() == null) ? 0 : getOrderType().hashCode());
         result = prime * result + ((getOrderObjType() == null) ? 0 : getOrderObjType().hashCode());
@@ -263,6 +275,7 @@ public class TbPaymentOrder implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", orderNum=").append(orderNum);
+        sb.append(", billIds=").append(billIds);
         sb.append(", orderName=").append(orderName);
         sb.append(", orderType=").append(orderType);
         sb.append(", orderObjType=").append(orderObjType);

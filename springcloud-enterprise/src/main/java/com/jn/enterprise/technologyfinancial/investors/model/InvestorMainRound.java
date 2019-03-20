@@ -33,4 +33,12 @@ public class InvestorMainRound implements Serializable {
     public void setMainRoundName(String mainRoundName) {
         this.mainRoundName = mainRoundName;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorMainRound{" +
+                "mainRoundCode='" + mainRoundCode + '\'' +
+                ", mainRoundName='" + mainRoundName + '\'' +
+                '}';
+    }
 }

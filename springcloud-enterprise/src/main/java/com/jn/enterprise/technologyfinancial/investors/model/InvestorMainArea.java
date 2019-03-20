@@ -33,4 +33,12 @@ public class InvestorMainArea implements Serializable {
     public void setMainName(String mainName) {
         this.mainName = mainName;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorMainArea{" +
+                "mainCode='" + mainCode + '\'' +
+                ", mainName='" + mainName + '\'' +
+                '}';
+    }
 }

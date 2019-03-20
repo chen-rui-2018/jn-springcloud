@@ -14,33 +14,33 @@ import java.io.Serializable;
 @ApiModel(value = "FinancialProductListParam", description = "科技金融首页投资人数、金融产品数、金融机构数")
 public class TechnologyInfoNum implements Serializable {
     @ApiModelProperty(value = "投资人数)")
-    private String investorsNum;
+    private long investorsNum;
     @ApiModelProperty(value = "金融产品数)")
-    private String financialProductNum;
+    private long financialProductNum;
     @ApiModelProperty(value = "金融机构数)")
-    private String financialOrgNum;
+    private long financialOrgNum;
 
-    public String getInvestorsNum() {
+    public long getInvestorsNum() {
         return investorsNum;
     }
 
-    public void setInvestorsNum(String investorsNum) {
+    public void setInvestorsNum(long investorsNum) {
         this.investorsNum = investorsNum;
     }
 
-    public String getFinancialProductNum() {
+    public long getFinancialProductNum() {
         return financialProductNum;
     }
 
-    public void setFinancialProductNum(String financialProductNum) {
+    public void setFinancialProductNum(long financialProductNum) {
         this.financialProductNum = financialProductNum;
     }
 
-    public String getFinancialOrgNum() {
+    public long getFinancialOrgNum() {
         return financialOrgNum;
     }
 
-    public void setFinancialOrgNum(String financialOrgNum) {
+    public void setFinancialOrgNum(long financialOrgNum) {
         this.financialOrgNum = financialOrgNum;
     }
 }

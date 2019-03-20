@@ -21,11 +21,11 @@ import java.util.List;
 public interface InvestorMapper {
     /**
      * 投资人列表查询
-     * @param mainArea 主投领域
+     * @param mainCode 主投领域
      * @param keyWords 关键字
      * @return
      */
-    List<InvestorInfoListShow> getInvestorInfoList(@Param("mainCode") String mainArea, @Param("keyWords")String keyWords);
+    List<InvestorInfoListShow> getInvestorInfoList(@Param("mainCode") String mainCode, @Param("keyWords")String keyWords);
 
     /**
      * 批量新增投资人主投领域信息

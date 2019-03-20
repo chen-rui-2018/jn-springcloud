@@ -2,8 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.technologyfinancial.financial.product.dao.FinancialProductMapper">
     <!--金融产品列表查询-->
-    <select id="getFinancialProductList" parameterType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListParam"
-            resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo">
+    <select id="getFinancialProductList" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo">
         SELECT 
             sp.`product_id` AS "productId"				        <!--产品id-->
             ,sp.`product_name` AS "productName"			        <!--产品名称-->
@@ -25,57 +24,36 @@
         AND sr.`record_status`='1'
         LEFT JOIN tb_service_require sq
         ON sp.`product_id`=sq.`product_id`
-        AND sq.`status`='2'						              <!--已处理-->
+        AND sq.`status`='2'						                <!--已处理-->
         AND sq.`record_status`='1'
         WHERE 1=1
         AND sp.`record_status`='1'
-        AND sp.`status`='1'						              <!--有效-->
+        AND sp.`status`='1'						                <!--有效-->
         AND sp.`org_id` IS NOT NULL
-        AND sp.`signory_id`='technology_finance'			  <!--科技金融-->
-        <if test="loanTerm == 1 ">  <!--贷款期限3个月及以下-->
-            and sp.loan_term_max &lt;=3
+        AND sp.`signory_id`=#{businessAreaId}			        <!--科技金融-->
+        <if test="financialParam.loanTermMin !=null and financialParam.loanTermMin !=''">     <!--贷款期限大于等于最小值-->
+            and sp.loan_term_min &gt;=#{financialParam.loanTermMin}
         </if>
-        <if test="loanTerm == 2 ">  <!--贷款期限6个月及以下-->
-            and sp.loan_term_max &lt;=6
+        <if test="financialParam.loanTermMax !=null and financialParam.loanTermMax !=''">     <!--贷款期限小于等于最大值-->
+            and sp.loan_term_max &lt;=#{financialParam.loanTermMax}
         </if>
-        <if test="loanTerm == 3 ">  <!--贷款期限12个月及以下-->
-            and sp.loan_term_max &lt;=12
+        <if test="financialParam.assureMethodCode !=null and financialParam.assureMethodCode!='' ">  <!--担保方式-->
+            and sp.assure_method_code=#{financialParam.assureMethodCode}
         </if>
-        <if test="loanTerm == 4 ">  <!--贷款期限36个月及以下-->
-            and sp.loan_term_max &lt;=36
+        <if test="financialParam.onlineLoan !=null and financialParam.onlineLoan!='' ">          <!--网贷直联-->
+            and sp.is_online_loan=#{financialParam.onlineLoan}
         </if>
-        <if test="loanTerm == 5 ">  <!--贷款期限36个月以上-->
-            and sp.loan_term_max &gt;36
+        <if test="financialParam.policyProduct !=null and financialParam.policyProduct!='' ">    <!--政策性产品-->
+            and sp.is_policy_pro=#{financialParam.policyProduct}
         </if>
-        <if test="assureMethodCode !=null and assureMethodCode!='' ">  <!--担保方式-->
-            and sp.assure_method_code=#{assureMethodCode}
+        <if test="financialParam.loanAmountMin !=null and financialParam.loanAmountMin !='' ">   <!--贷款额度大于等于最小值-->
+            and sp.loan_amount_min &gt; #{financialParam.loanAmountMin}
         </if>
-        <if test="onlineLoan !=null and onlineLoan!='' ">  <!--网贷直联-->
-            and sp.is_online_loan=#{onlineLoan}
+        <if test="financialParam.loanAmountMax !=null and financialParam.loanAmountMax !='' ">   <!--贷款额度小于等于最大值-->
+            and sp.loan_amount_max &lt; #{financialParam.loanAmountMax}
         </if>
-        <if test="policyProduct !=null and policyProduct!='' ">  <!--政策性产品-->
-            and sp.is_policy_pro=#{policyProduct}
-        </if>
-        <if test="loanAmount == 1">  <!--贷款额度 100万及以下-->
-            and sp.loan_amount_max &lt;=100
-        </if>
-        <if test="loanAmount == 2">  <!--贷款额度 200万及以下-->
-            and sp.loan_amount_max &lt;=200
-        </if>
-        <if test="loanAmount == 3">  <!--贷款额度 300万及以下-->
-            and sp.loan_amount_max &lt;=300
-        </if>
-        <if test="loanAmount == 4">  <!--贷款额度 500万及以下-->
-            and sp.loan_amount_max &lt;=500
-        </if>
-        <if test="loanAmount == 5">  <!--贷款额度 1000万及以下-->
-            and sp.loan_amount_max &lt;=1000
-        </if>
-        <if test="loanAmount == 5">  <!--贷款额度 1000万以上-->
-            and sp.loan_amount_max &gt; 1000
-        </if>
-        <if test="keyWord!=null and keyWord!=''">  <!--关键词-->
-            and (sp.product_name like  CONCAT('%', #{keyWord}, '%') or sp.org_name like CONCAT('%', #{keyWord}, '%'))
+        <if test="financialParam.keyWord !=null and financialParam.keyWord !=''">  <!--关键词-->
+            and (sp.product_name like  CONCAT('%', #{financialParam.keyWord}, '%') or sp.org_name like CONCAT('%', #{financialParam.keyWord}, '%'))
         </if>
         GROUP BY sp.`product_id`
             ,sp.`product_name`

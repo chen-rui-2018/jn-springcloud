@@ -1,9 +1,7 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.technologyfinancial.investors.model.AffiliaationUnitShow;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorAuthenticateParam;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
+import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 
 import java.util.List;
@@ -44,4 +42,16 @@ public interface InvestorService {
      * @return
      */
     int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam,String investorAccount);
+
+    /**
+     * 查询投资人主投领域
+     * @return
+     */
+    List<InvestorMainArea> getInvestorMainArea();
+
+    /**
+     * 查询投资人主投轮次
+     * @return
+     */
+    List<InvestorMainRound> getInvestorMainRound();
 }

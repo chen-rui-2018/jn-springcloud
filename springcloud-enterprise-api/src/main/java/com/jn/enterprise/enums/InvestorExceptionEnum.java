@@ -17,8 +17,11 @@ public enum InvestorExceptionEnum implements CodeAndMsg {
     INVESTOR_INFO_NOT_NULL("5020524","投资人认证信息不能为空"),
     INVESTOR_MAIN_AREA_NOT_NULL("5020525","投资人主投领域不能为空"),
     INVESTOR_MAIN_ROUND_NOT_NULL("5020526","投资人主投轮次不能为空"),
-    INVESTOR_WORK_START_TIME_LATER_END_TIME("","投资人认证工作经历中数据开始时间晚于结束时间"),
-    INVESTOR_EDU_START_TIME_LATER_END_TIME("","投资人认证教育经历中数据开始时间晚于结束时间"),
+    INVESTOR_WORK_START_TIME_LATER_END_TIME("5020527","投资人认证工作经历中数据开始时间晚于结束时间"),
+    INVESTOR_EDU_START_TIME_LATER_END_TIME("5020528","投资人认证教育经历中数据开始时间晚于结束时间"),
+    MAIN_AREA_INFO_NOT_EXIST("5020529","系统中主投领域信息不存在"),
+    MAIN_ROUND_INFO_NOT_EXIST("5020530","系统中主投轮次信息不存在"),
+    INVESTOR_INFO_EXIST("5020531","当前投资人认证信息已存在"),
     ;
 
     /**

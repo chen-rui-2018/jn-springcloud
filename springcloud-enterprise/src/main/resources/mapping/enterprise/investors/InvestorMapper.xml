@@ -14,7 +14,7 @@
         left join tb_service_investor_main_area sma
         on si.investor_account=sma.investor_account
         where 1=1
-        <if test="mainArea!=null and mainArea!=''">       <!--主投领域精确搜索-->
+        <if test="mainCode!=null and mainCode!=''">       <!--主投领域精确搜索-->
             and sma.main_code=#{mainCode}
         </if>
         <if test="keyWords!=null and keyWords!=''">       <!--关键字模糊搜索-->
@@ -41,18 +41,15 @@
           modified_time, modifier_account, record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
-            ( select #{item.id,jdbcType=VARCHAR}
-            ,#{item.investorAccount,jdbcType=VARCHAR}
-            ,#{item.mainCode,jdbcType=VARCHAR}
-            ,#{item.mainName,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=VARCHAR}
-            ,#{item.creatorAccount,jdbcType=DATE}
-            ,#{item.conSpeciality,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=TIMESTAMP}
-            ,#{item.creatorAccount,jdbcType=VARCHAR}
-            ,#{item.modifiedTime,jdbcType=TIMESTAMP}
-            ,#{item.modifierAccount,jdbcType=VARCHAR}
-            ,#{item.recordStatus,jdbcType=TINYINT}
+            ( select #{item.id,jdbcType=VARCHAR}  AS "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.mainCode,jdbcType=VARCHAR} as "mainCode"
+            ,#{item.mainName,jdbcType=VARCHAR} as "mainName"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
             from dual )
         </foreach>
         )A
@@ -64,18 +61,15 @@
           modified_time, modifier_account, record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
-            ( select #{item.id,jdbcType=VARCHAR}
-            ,#{item.investorAccount,jdbcType=VARCHAR}
-            ,#{item.mainRoundCode,jdbcType=VARCHAR}
-            ,#{item.mainRoundName,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=VARCHAR}
-            ,#{item.creatorAccount,jdbcType=DATE}
-            ,#{item.conSpeciality,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=TIMESTAMP}
-            ,#{item.creatorAccount,jdbcType=VARCHAR}
-            ,#{item.modifiedTime,jdbcType=TIMESTAMP}
-            ,#{item.modifierAccount,jdbcType=VARCHAR}
-            ,#{item.recordStatus,jdbcType=TINYINT}
+            ( select #{item.id,jdbcType=VARCHAR}    as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.mainRoundCode,jdbcType=VARCHAR} as "mainRoundCode"
+            ,#{item.mainRoundName,jdbcType=VARCHAR} as "mainRoundName"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
             from dual )
         </foreach>
         )A
@@ -87,19 +81,17 @@
       created_time, creator_account, modified_time, modifier_account, record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
-            ( select #{item.id,jdbcType=VARCHAR}
-            ,#{item.investorAccount,jdbcType=VARCHAR}
-            ,#{item.startTime,jdbcType=VARCHAR}
-            ,#{item.endTime,jdbcType=VARCHAR}
-            ,#{item.companyName,jdbcType=VARCHAR}
-            ,#{item.position,jdbcType=VARCHAR}
-            ,#{item.creatorAccount,jdbcType=DATE}
-            ,#{item.conSpeciality,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=TIMESTAMP}
-            ,#{item.creatorAccount,jdbcType=VARCHAR}
-            ,#{item.modifiedTime,jdbcType=TIMESTAMP}
-            ,#{item.modifierAccount,jdbcType=VARCHAR}
-            ,#{item.recordStatus,jdbcType=TINYINT}
+            ( select #{item.id,jdbcType=VARCHAR} as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.startTime,jdbcType=VARCHAR} as "startTime"
+            ,#{item.endTime,jdbcType=VARCHAR} as "endTime"
+            ,#{item.companyName,jdbcType=VARCHAR} as "companyName"
+            ,#{item.position,jdbcType=VARCHAR} as "position"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
             from dual )
         </foreach>
         )A
@@ -111,20 +103,19 @@
           created_time, creator_account, modified_time, modifier_account, record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
-            ( select #{item.id,jdbcType=VARCHAR}
-            ,#{item.investorAccount,jdbcType=VARCHAR}
-            ,#{item.startTime,jdbcType=VARCHAR}
-            ,#{item.endTime,jdbcType=VARCHAR}
-            ,#{item.schoolName,jdbcType=VARCHAR}
-            ,#{item.professionTitle,jdbcType=VARCHAR}
-            ,#{item.creatorAccount,jdbcType=DATE}
-            ,#{item.conSpeciality,jdbcType=VARCHAR}
-            ,#{item.createdTime,jdbcType=TIMESTAMP}
-            ,#{item.creatorAccount,jdbcType=VARCHAR}
-            ,#{item.modifiedTime,jdbcType=TIMESTAMP}
-            ,#{item.modifierAccount,jdbcType=VARCHAR}
-            ,#{item.recordStatus,jdbcType=TINYINT}
+            ( select #{item.id,jdbcType=VARCHAR} as "id"
+            ,#{item.investorAccount,jdbcType=VARCHAR} as "investorAccount"
+            ,#{item.startTime,jdbcType=VARCHAR} as "startTime"
+            ,#{item.endTime,jdbcType=VARCHAR} as "endTime"
+            ,#{item.schoolName,jdbcType=VARCHAR} as "schoolName"
+            ,#{item.professionTitle,jdbcType=VARCHAR} as "professionTitle"
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as "modifiedTime"
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as "modifierAccount"
+            ,#{item.recordStatus,jdbcType=TINYINT} as "recordStatus"
             from dual )
         </foreach>
+        )A
     </insert>
 </mapper>

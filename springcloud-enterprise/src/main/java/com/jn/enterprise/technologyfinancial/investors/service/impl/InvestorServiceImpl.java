@@ -62,6 +62,12 @@ public class InvestorServiceImpl implements InvestorService {
     @Autowired
     private TbServiceOrgMapper tbServiceOrgMapper;
 
+    @Autowired
+    private TbServiceMainAreaMapper tbServiceMainAreaMapper;
+
+    @Autowired
+    private TbServiceMainRoundMapper tbServiceMainRoundMapper;
+
     /**
      * 时间格式
      */
@@ -228,6 +234,19 @@ public class InvestorServiceImpl implements InvestorService {
         Assert.notNull(investorAuthenticateParam, InvestorExceptionEnum.INVESTOR_INFO_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainAreaList(), InvestorExceptionEnum.INVESTOR_MAIN_AREA_NOT_NULL.getMessage());
         Assert.notNull(investorAuthenticateParam.getInvestorMainRoundList(), InvestorExceptionEnum.INVESTOR_MAIN_ROUND_NOT_NULL.getMessage());
+
+        //判断条件  状态是有效(1)  审批状态不包含审批不通过（-1）
+        String status="1";
+        String approvalStatus="-1";
+        //判断投资人是否已存在
+        TbServiceInvestorCriteria example=new TbServiceInvestorCriteria();
+        example.createCriteria().andInvestorAccountEqualTo(investorAccount).andStatusEqualTo(status).andApprovalStatusNotEqualTo(approvalStatus);
+        long isExists = tbServiceInvestorMapper.countByExample(example);
+        if(isExists>0){
+            logger.warn("当前投资人[{}]认证信息已存在",investorAccount);
+            throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_EXIST);
+        }
+
         //投资人基本信息
         TbServiceInvestor tbServiceInvestor=new TbServiceInvestor();
         BeanUtils.copyProperties(investorAuthenticateParam, tbServiceInvestor);
@@ -240,10 +259,14 @@ public class InvestorServiceImpl implements InvestorService {
         addInvestorMainRoundBatch(investorAccount, investorMainRoundList);
         //工作经历
         List<InvestorWorkExperience> investorWorkExperienceList = investorAuthenticateParam.getInvestorWorkExperienceList();
-        addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceList);
+        if(investorWorkExperienceList!=null && !investorWorkExperienceList.isEmpty()){
+            addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceList);
+        }
         //教育经历
         List<InvestorEduExperience> investorEduExperienceList = investorAuthenticateParam.getInvestorEduExperienceList();
-        addInvestorEduExperienceBatch(investorAccount,investorEduExperienceList);
+        if(investorEduExperienceList!=null && !investorEduExperienceList.isEmpty()){
+            addInvestorEduExperienceBatch(investorAccount,investorEduExperienceList);
+        }
         return responseNum;
     }
 
@@ -405,6 +428,8 @@ public class InvestorServiceImpl implements InvestorService {
         tbServiceInvestor.setStatus("1");
         //审批状态 ( - 1：不通过    0：待审批   1：审批通过  2：审批中 )
         tbServiceInvestor.setApprovalStatus("0");
+        //投资人账号
+        tbServiceInvestor.setInvestorAccount(investorAccount);
         //创建人
         tbServiceInvestor.setCreatorAccount(investorAccount);
         //创建时间
@@ -412,5 +437,53 @@ public class InvestorServiceImpl implements InvestorService {
         //数据状态
         tbServiceInvestor.setRecordStatus(RECORD_STATUS);
         return tbServiceInvestorMapper.insertSelective(tbServiceInvestor);
+    }
+
+    /**
+     * 查询投资人主投领域
+     * @return
+     */
+    @ServiceLog(doAction = "查询投资人主投领域")
+    @Override
+    public List<InvestorMainArea> getInvestorMainArea() {
+        TbServiceMainAreaCriteria example=new TbServiceMainAreaCriteria();
+        example.createCriteria().andMainCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbServiceMainArea> tbServiceMainAreaList = tbServiceMainAreaMapper.selectByExample(example);
+        if(tbServiceMainAreaList.isEmpty()){
+            logger.warn("系统中主投领域信息不存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.MAIN_AREA_INFO_NOT_EXIST);
+        }
+        List<InvestorMainArea>resultList=new ArrayList<>(16);
+        for(TbServiceMainArea tbServiceMainArea:tbServiceMainAreaList){
+            InvestorMainArea investorMainArea=new InvestorMainArea();
+            investorMainArea.setMainCode(tbServiceMainArea.getMainCode());
+            investorMainArea.setMainName(tbServiceMainArea.getMainName());
+            resultList.add(investorMainArea);
+        }
+        return resultList;
+    }
+
+    /**
+     * 查询投资人主投轮次
+     * @return
+     */
+    @ServiceLog(doAction = "查询投资人主投轮次")
+    @Override
+    public List<InvestorMainRound> getInvestorMainRound() {
+        TbServiceMainRoundCriteria example=new TbServiceMainRoundCriteria();
+        example.createCriteria().andMainRoundCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbServiceMainRound> tbServiceMainRoundList = tbServiceMainRoundMapper.selectByExample(example);
+        if(tbServiceMainRoundList.isEmpty()){
+            logger.warn("系统中主投轮次信息不存在");
+            throw new JnSpringCloudException(InvestorExceptionEnum.MAIN_ROUND_INFO_NOT_EXIST);
+        }
+        List<InvestorMainRound>resultList=new ArrayList<>(16);
+        for(TbServiceMainRound tbServiceMainRound:tbServiceMainRoundList){
+            InvestorMainRound investorMainRound=new InvestorMainRound();
+            investorMainRound.setMainRoundCode(tbServiceMainRound.getMainRoundCode());
+            investorMainRound.setMainRoundName(tbServiceMainRound.getMainRoundName());
+            resultList.add(investorMainRound);
+        }
+        return resultList;
     }
 }

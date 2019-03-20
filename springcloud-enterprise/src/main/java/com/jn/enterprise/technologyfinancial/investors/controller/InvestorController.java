@@ -7,6 +7,8 @@ import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.technologyfinancial.investors.model.AffiliaationUnitShow;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorMainArea;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorMainRound;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -70,5 +72,23 @@ public class InvestorController extends BaseController {
         Assert.notNull(orgName, InvestorExceptionEnum.AFFILIATION_NAME.getMessage());
         List<AffiliaationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
         return  new Result(affiliationUnit);
+    }
+
+    @ControllerLog(doAction = "查询投资人主投领域")
+    @ApiOperation(value = "查询投资人主投领域", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainArea")
+    @RequestMapping(value = "/getInvestorMainArea")
+    public Result<List<InvestorMainArea>> getInvestorMainArea(){
+        List<InvestorMainArea> investorMainAreaList = investorService.getInvestorMainArea();
+        return  new Result(investorMainAreaList);
+    }
+
+    @ControllerLog(doAction = "查询投资人主投轮次")
+    @ApiOperation(value = "查询投资人主投轮次", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainRound")
+    @RequestMapping(value = "/getInvestorMainRound")
+    public Result<List<InvestorMainRound>> getInvestorMainRound(){
+        List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
+        return  new Result(investorMainRound);
     }
 }

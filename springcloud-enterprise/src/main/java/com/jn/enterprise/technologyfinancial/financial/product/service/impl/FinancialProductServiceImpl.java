@@ -55,6 +55,9 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     @Autowired
     private TbServiceOrgMapper tbServiceOrgMapper;
 
+    /**
+     * 数据状态 0：已删除   1：有效
+     */
     private static final byte RECORD_STATUS=1;
 
     /**
@@ -76,7 +79,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
             int pageNum=1;
             int pageSize=15;
             objects = PageHelper.startPage(pageNum,pageSize, true);
-            List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam);
+            List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam,BUSINESS_AREA);
             return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
         }
         //需要分页标识
@@ -85,7 +88,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
             objects = PageHelper.startPage(financialProductListParam.getPage(),
                     financialProductListParam.getRows() == 0 ? 15 : financialProductListParam.getRows(), true);
         }
-        List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam);
+        List<FinancialProductListInfo> financialProductList = financialProductMapper.getFinancialProductList(financialProductListParam,BUSINESS_AREA);
         return new PaginationData(financialProductList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -114,6 +117,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
      * 金融产品贷款类别
      * @return
      */
+    @ServiceLog(doAction = "金融产品贷款类别")
     @Override
     public List<FinacialProductLoanType> getFinancialProductLoanType() {
         TbServiceProductLoanTypeCriteria example=new TbServiceProductLoanTypeCriteria();
@@ -166,11 +170,11 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     public TechnologyInfoNum getTechnologyInfoNum() {
         TechnologyInfoNum technologyInfoNum=new TechnologyInfoNum();
         //投资人个数
-        technologyInfoNum.setInvestorsNum(getInvestorNum()+"");
+        technologyInfoNum.setInvestorsNum(getInvestorNum());
         //金融产品数
-        technologyInfoNum.setFinancialProductNum(getFinancialProductNum()+"");
+        technologyInfoNum.setFinancialProductNum(getFinancialProductNum());
         //金融机构数
-        technologyInfoNum.setFinancialOrgNum(getFinancialOrgNum()+"");
+        technologyInfoNum.setFinancialOrgNum(getFinancialOrgNum());
         return technologyInfoNum;
     }
 

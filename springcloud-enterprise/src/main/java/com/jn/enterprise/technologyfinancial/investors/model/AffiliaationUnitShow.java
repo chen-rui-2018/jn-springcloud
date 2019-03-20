@@ -33,4 +33,12 @@ public class AffiliaationUnitShow implements Serializable {
     public void setOrgName(String orgName) {
         this.orgName = orgName;
     }
+
+    @Override
+    public String toString() {
+        return "AffiliaationUnitShow{" +
+                "orgId='" + orgId + '\'' +
+                ", orgName='" + orgName + '\'' +
+                '}';
+    }
 }

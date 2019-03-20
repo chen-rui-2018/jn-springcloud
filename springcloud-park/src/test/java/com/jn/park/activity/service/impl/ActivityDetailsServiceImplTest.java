@@ -81,7 +81,7 @@ public class ActivityDetailsServiceImplTest {
      */
     @Test
     public void getCommentInfo() {
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging, true);
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,account, true);
         List<Comment> list= (List<Comment>)commentInfo.getRows();
         assertThat(list.size(), greaterThan(0));
     }

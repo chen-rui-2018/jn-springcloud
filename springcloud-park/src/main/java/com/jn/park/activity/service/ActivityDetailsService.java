@@ -31,9 +31,10 @@ public interface ActivityDetailsService {
      * 根据活动id获取活动点评信息
      * @param activityQueryPaging
      * @param isPage     是否分页  true：分页   false:不分页
+     * @param loginAccount 当前登录用来账号
      * @return
      */
-    PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage);
+    PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息

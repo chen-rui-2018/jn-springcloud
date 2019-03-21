@@ -32,11 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "微信小程序注册绑定")
 @RestController
 @RequestMapping("/api/miniProgramRegister")
-public class MiniProgramRegisterController extends BaseController implements MiniProgramRegisterClient {
+public class MiniProgramController extends BaseController implements MiniProgramRegisterClient {
     /**
      * 日志组件
      */
-    private static final Logger logger= LoggerFactory.getLogger(MiniProgramRegisterController.class);
+    private static final Logger logger= LoggerFactory.getLogger(MiniProgramController.class);
 
     @Autowired
     private MiniprogramRegisterService miniprogramRegisterService;

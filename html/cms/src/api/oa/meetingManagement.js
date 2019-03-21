@@ -39,3 +39,11 @@ export function exportExcel(query) {
     method: 'get'
   })
 }
+// 获取平台类型
+export function getCode(query) {
+  return request({
+    url: 'springcloud-app-system/system/sysDict/getDict',
+    method: 'post',
+    data: query
+  })
+}

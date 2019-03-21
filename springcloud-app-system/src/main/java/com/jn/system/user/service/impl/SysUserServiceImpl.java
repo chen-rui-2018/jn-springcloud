@@ -100,7 +100,9 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
-        tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        if (tbSysUser.getPassword() == null){
+            tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
         logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
@@ -180,7 +182,7 @@ public class SysUserServiceImpl implements SysUserService {
     public PaginationData findSysUserByPage(UserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
-        List<SysUserVO> sysUserVOList = new ArrayList<SysUserVO>();
+        List<SysUserVO> sysUserVOList = null;
         if (StringUtils.isBlank(sysUserPage.getPostOrTypeName())) {
             //当查询条件中岗位或岗位类型名称为空时
             sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);

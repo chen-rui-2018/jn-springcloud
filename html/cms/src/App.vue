@@ -19,4 +19,7 @@ body{
 .avatar-uploader{
   background-color: #f8f8f8;
 }
+ul{
+  list-style: none
+}
 </style>

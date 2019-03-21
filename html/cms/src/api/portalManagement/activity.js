@@ -35,7 +35,7 @@ export function deleteActivity(query) {
     data: param
   })
 }
-// 删除非草稿活动
+// 删除草稿活动
 export function deleteDraftActivity(query) {
   const param = new URLSearchParams()
   param.append('activityId', query)
@@ -106,10 +106,45 @@ export function getApplyActivityList(query) {
   })
 }
 // 下载签到二维码
-export function downloadSignCodeImg(query) {
+// export function downloadSignCodeImg(query) {
+//   return request({
+//     url: 'http://192.168.10.31:1101/springcloud-park/activity/downloadSignCodeImg?activityId=' + query.activityId,
+//     method: 'post',
+//     data: query
+//   })
+// }
+// 在线签到
+export function signInActivity(query) {
   return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/downloadSignCodeImg',
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/activityApply/signInActivity',
     method: 'post',
     data: query
   })
 }
+// 后台签到
+export function signInActivityBackend(query) {
+  return request({
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/activityApply/signInActivityBackend',
+    method: 'post',
+    data: query
+  })
+}
+// 活动报名人数导出
+export function exportDataExcel(query) {
+  return request({
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/exportDataExcel',
+    method: 'post',
+    data: query
+  })
+}
+// 获取活动详情
+export function getActivityDetailsForManage(query) {
+  const param = new URLSearchParams()
+  param.append('activityId', query)
+  return request({
+    url: 'http://192.168.10.31:1101/springcloud-park/activity/getActivityDetailsForManage',
+    method: 'post',
+    data: param
+  })
+}
+

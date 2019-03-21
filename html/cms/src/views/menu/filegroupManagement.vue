@@ -19,11 +19,7 @@
       <el-table-column type="index" align="center" label="序号" width="60"/>
       <!-- 表格第二列  姓名 -->
       <el-table-column label="文件组名称" align="center" prop="fileGroupName" />
-      <el-table-column label="创建时间" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createdTime"/>
       <el-table-column label="描述" prop="fileGroupDescribe" align="center" />
       <el-table-column label="状态" align="center" prop="recordStatus" >
         <template slot-scope="scope">
@@ -71,7 +67,6 @@
 
 <script>
 import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import { addFileGroupList, updataFileGroup, allFileGroupList, checkFileGroupName, deleteFileGroupById } from '@/api/Permission-model/filegroup'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {

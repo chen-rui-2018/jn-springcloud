@@ -28,11 +28,7 @@
         </template>
       </el-table-column>
       <el-table-column label="文件路径" align="center" prop="fileUrl" min-width="100"/>
-      <el-table-column label="创建时间" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" align="center" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="recordStatus">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus==1?'生效':'未生效' }}</span>
@@ -46,10 +42,6 @@
 
 <script>
 import { api } from '@/api/Permission-model/userManagement'
-// import {
-//   getFileList
-
-// } from '@/api/Permission-model/fileManagement'
 export default {
   data() {
     return {

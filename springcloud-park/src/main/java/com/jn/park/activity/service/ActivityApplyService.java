@@ -4,6 +4,8 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.model.ActivityApplyDetail;
 import com.jn.park.model.ActivityApplyParam;
 import com.jn.park.model.ActivityQueryPaging;
+import com.jn.system.model.User;
+import com.jn.user.model.UserExtensionInfo;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -96,4 +98,10 @@ public interface ActivityApplyService {
      */
     void addApplyInfo(String activityId, String account,String status);
 
+    /**
+     * 报名人资料
+     * @param account
+     * @return
+     */
+    UserExtensionInfo activityApplyInfo(String account);
 }

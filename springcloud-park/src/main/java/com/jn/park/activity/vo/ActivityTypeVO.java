@@ -15,7 +15,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityType", description = "活动类型")
+@ApiModel(value = "ActivityTypeVO", description = "活动类型")
 public class ActivityTypeVO implements Serializable {
     @ApiModelProperty(value = "类型ID")
     private String typeId;

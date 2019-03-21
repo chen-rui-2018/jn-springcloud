@@ -5,8 +5,14 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.OrgDetailAndProductVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
+import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
+import com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo;
+import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 服务机构
@@ -39,13 +47,15 @@ public class OrgController extends BaseController {
 
     @Autowired
     private OrgService orgService;
+    @Autowired
+    private ServiceProductService productService;
 
 
-    @ControllerLog(doAction = "获取服务机构列表(app+pc)")
-    @ApiOperation(value = "获取服务机构列表", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "获取服务机构列表")
+    @ApiOperation(value = "获取服务机构列表,(app机构列表)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectServiceOrgList")
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
-    public Result selectServiceOrgList(@RequestBody @Validated OrgParameter orgParameter){
+    public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@RequestBody @Validated OrgParameter orgParameter){
         PaginationData paginationData = orgService.selectServiceOrgList(orgParameter);
         return new Result(paginationData);
     }
@@ -55,7 +65,7 @@ public class OrgController extends BaseController {
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
-    public Result getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+    public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
@@ -65,9 +75,16 @@ public class OrgController extends BaseController {
             notes = "查询条件orgId")
     @RequestMapping(value = "/getOrgInfoForManage")
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
-    public Result getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+    public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
-        return new Result(orgService.getServiceOrgDetail(orgId));
+        ProductInquiryInfo info = new ProductInquiryInfo();
+        info.setOrgId(orgId);
+        PaginationData<List<WebServiceProductInfo>> infoList = productService.findWebProductList(info,true);
+        OrgDetailVo orgDetailVo = orgService.getServiceOrgDetail(orgId);
+        OrgDetailAndProductVo vo = new OrgDetailAndProductVo();
+        vo.setOrgDetailVo(orgDetailVo);
+        vo.setProductList(infoList);
+        return new Result(vo);
     }
 
 }

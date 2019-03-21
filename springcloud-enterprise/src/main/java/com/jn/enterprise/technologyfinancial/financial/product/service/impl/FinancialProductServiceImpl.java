@@ -308,7 +308,6 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         info.setOrgId(commonService.getOrgId());
         info.setTemplateId(templateId);
         info.setProductId(commonService.getProductId());
-        info.setSerialNumber(commonService.getSerialNumber());
         if(product.getRefRateMin()!=null && product.getRefRateMax()!=null ) {
             info.setRefRateMin(String.valueOf(product.getRefRateMin()));
             info.setRefRateMax(String.valueOf(product.getRefRateMax()));

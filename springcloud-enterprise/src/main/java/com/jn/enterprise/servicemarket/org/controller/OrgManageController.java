@@ -55,7 +55,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改服务机构基本信息,")
-    @ApiOperation(value = "修改服务机构基本信息,(app-修改基本资料(我的机构))", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "修改服务机构基本信息,(app-修改基本资料))", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/updateOrgBasicData")
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
     public Result updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
@@ -67,7 +67,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构资质信息")
-    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证,修改资质)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgLicenseData")
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
     public Result saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
@@ -79,7 +79,7 @@ public class OrgManageController extends BaseController {
 
 
     @ControllerLog(doAction = "保存/修改服务机构团队信息")
-    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料,修改团队资料)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgTeamData")
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
     public Result saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
@@ -90,7 +90,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构联系方式")
-    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式,修改联系方式)", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
@@ -100,7 +100,5 @@ public class OrgManageController extends BaseController {
         logger.info("保存服务机构资质信息成功，响应条数："+i);
         return new Result(i);
     }
-
-
 
 }

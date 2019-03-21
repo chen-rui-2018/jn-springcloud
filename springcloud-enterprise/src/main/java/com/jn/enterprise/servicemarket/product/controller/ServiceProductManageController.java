@@ -5,10 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
-import com.jn.enterprise.servicemarket.product.model.ServiceContent;
-import com.jn.enterprise.servicemarket.product.model.ServiceProductApproval;
-import com.jn.enterprise.servicemarket.product.model.ServiceProductDetail;
-import com.jn.enterprise.servicemarket.product.model.ServiceSelectConstraint;
+import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -24,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -37,6 +35,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/servicemarket/product/manage/")
 public class ServiceProductManageController extends BaseController {
+
     @Autowired
     private  ServiceProductService productService;
 
@@ -58,7 +57,7 @@ public class ServiceProductManageController extends BaseController {
     @ApiOperation(value = "查找服务产品列表信息", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/servicemarket/product/findServiceList")
     @RequestMapping(value = "/findServiceList")
-    public Result findServiceList(@RequestBody  ServiceSelectConstraint constraint){
+    public Result<PaginationData< List<ServiceProductManage>>> findServiceList(@RequestBody  ServiceSelectConstraint constraint){
         PaginationData data =  productService.findServiceList(constraint);
         return new Result(data);
     }
@@ -68,7 +67,7 @@ public class ServiceProductManageController extends BaseController {
     @ApiOperation(value = "服务产品详情查看", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/servicemarket/product/findServiceDetail")
     @RequestMapping(value = "/findServiceDetail")
-    public Result findServiceDetail(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
+    public Result<ServiceProductDetail> findServiceDetail(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
         Assert.notNull(productId, ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
         ServiceProductDetail detail =  productService.findServiceDetail(productId);
         return new Result(detail);
@@ -97,7 +96,7 @@ public class ServiceProductManageController extends BaseController {
     @ApiOperation(value ="特色产品发布",httpMethod = "POST",response = Result.class)
     @RequiresPermissions("/servicemarket/product/featuredProductRelease")
     @RequestMapping(value = "/featuredProductRelease")
-     public Result featuredProductRelease(@RequestBody  ServiceSelectConstraint constraint){
+     public Result<PaginationData<List<ServiceProductManage>>> featuredProductRelease(@RequestBody  ServiceSelectConstraint constraint){
         PaginationData data =   productService.featuredProductRelease(constraint);
         return new Result(data);
 
@@ -113,7 +112,7 @@ public class ServiceProductManageController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "获取产品编号")
-    @ApiOperation(value ="获取产品编号",httpMethod = "POST",response = Result.class)
+    @ApiOperation(value ="获取产品编号(app新增特色产品获取编号)",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/getProductSerialNumber")
     public Result getProductSerialNumber(@ApiParam(name = "productType", value = "服务产品类型(0:常规-1:特色)", required = true) @RequestParam String productType){
         return new Result(productService.getProductSerialNumber(productType));

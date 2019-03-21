@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.joinpark.company.dao.TbServiceCompanyMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.joinpark.company.entity.TbServiceCompany">
+<mapper namespace="com.jn.enterprise.company.dao.TbServiceCompanyMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.company.entity.TbServiceCompany">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="com_name" jdbcType="VARCHAR" property="comName" />
     <result column="com_name_short" jdbcType="VARCHAR" property="comNameShort" />
@@ -11,30 +11,46 @@
     <result column="owners" jdbcType="VARCHAR" property="owners" />
     <result column="owner_law" jdbcType="VARCHAR" property="ownerLaw" />
     <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="owner_phone" jdbcType="VARCHAR" property="ownerPhone" />
+    <result column="owner_wechat" jdbcType="VARCHAR" property="ownerWechat" />
+    <result column="owner_qq" jdbcType="VARCHAR" property="ownerQq" />
     <result column="bank_name" jdbcType="VARCHAR" property="bankName" />
     <result column="bank_account" jdbcType="VARCHAR" property="bankAccount" />
     <result column="products" jdbcType="VARCHAR" property="products" />
     <result column="material" jdbcType="VARCHAR" property="material" />
     <result column="com_property" jdbcType="VARCHAR" property="comProperty" />
     <result column="reg_capital" jdbcType="DECIMAL" property="regCapital" />
+    <result column="add_capital" jdbcType="VARCHAR" property="addCapital" />
     <result column="com_scale" jdbcType="DECIMAL" property="comScale" />
     <result column="founding_time" jdbcType="TIMESTAMP" property="foundingTime" />
     <result column="run_time" jdbcType="TIMESTAMP" property="runTime" />
     <result column="indu_type" jdbcType="VARCHAR" property="induType" />
-    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="indu_code" jdbcType="VARCHAR" property="induCode" />
     <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
     <result column="lic_starttime" jdbcType="TIMESTAMP" property="licStarttime" />
     <result column="lic_endtime" jdbcType="TIMESTAMP" property="licEndtime" />
+    <result column="register_type" jdbcType="VARCHAR" property="registerType" />
     <result column="org_code" jdbcType="VARCHAR" property="orgCode" />
+    <result column="main_products" jdbcType="VARCHAR" property="mainProducts" />
+    <result column="business_scope" jdbcType="VARCHAR" property="businessScope" />
     <result column="contact" jdbcType="VARCHAR" property="contact" />
     <result column="con_phone" jdbcType="VARCHAR" property="conPhone" />
+    <result column="con_wechat" jdbcType="VARCHAR" property="conWechat" />
+    <result column="con_qq" jdbcType="VARCHAR" property="conQq" />
     <result column="con_address" jdbcType="VARCHAR" property="conAddress" />
     <result column="postcode" jdbcType="VARCHAR" property="postcode" />
     <result column="com_address" jdbcType="VARCHAR" property="comAddress" />
     <result column="com_tele" jdbcType="VARCHAR" property="comTele" />
+    <result column="com_web" jdbcType="VARCHAR" property="comWeb" />
+    <result column="com_server" jdbcType="VARCHAR" property="comServer" />
+    <result column="com_demand" jdbcType="VARCHAR" property="comDemand" />
     <result column="addr_park" jdbcType="VARCHAR" property="addrPark" />
+    <result column="com_synopsis" jdbcType="VARCHAR" property="comSynopsis" />
+    <result column="park_build_id" jdbcType="VARCHAR" property="parkBuildId" />
+    <result column="park_build_name" jdbcType="VARCHAR" property="parkBuildName" />
     <result column="credit_points" jdbcType="DECIMAL" property="creditPoints" />
     <result column="com_type" jdbcType="VARCHAR" property="comType" />
+    <result column="is_join_activity" jdbcType="VARCHAR" property="isJoinActivity" />
     <result column="check_status" jdbcType="VARCHAR" property="checkStatus" />
     <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
     <result column="com_source" jdbcType="VARCHAR" property="comSource" />
@@ -104,13 +120,16 @@
   </sql>
   <sql id="Base_Column_List">
     id, com_name, com_name_short, avatar, com_admin, unify_code, owners, owner_law, owner_id, 
-    bank_name, bank_account, products, material, com_property, reg_capital, com_scale, 
-    founding_time, run_time, indu_type, industry, business_license, lic_starttime, lic_endtime, 
-    org_code, contact, con_phone, con_address, postcode, com_address, com_tele, addr_park, 
-    credit_points, com_type, check_status, check_time, com_source, creator_account, modifier_account, 
-    created_time, modified_time, record_status
+    owner_phone, owner_wechat, owner_qq, bank_name, bank_account, products, material, 
+    com_property, reg_capital, add_capital, com_scale, founding_time, run_time, indu_type, 
+    indu_code, business_license, lic_starttime, lic_endtime, register_type, org_code, 
+    main_products, business_scope, contact, con_phone, con_wechat, con_qq, con_address, 
+    postcode, com_address, com_tele, com_web, com_server, com_demand, addr_park, com_synopsis, 
+    park_build_id, park_build_name, credit_points, com_type, is_join_activity, check_status, 
+    check_time, com_source, creator_account, modifier_account, created_time, modified_time, 
+    record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -134,43 +153,55 @@
     delete from tb_service_company
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyCriteria">
     delete from tb_service_company
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompany">
+  <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     insert into tb_service_company (id, com_name, com_name_short, 
       avatar, com_admin, unify_code, 
       owners, owner_law, owner_id, 
+      owner_phone, owner_wechat, owner_qq, 
       bank_name, bank_account, products, 
       material, com_property, reg_capital, 
-      com_scale, founding_time, run_time, 
-      indu_type, industry, business_license, 
-      lic_starttime, lic_endtime, org_code, 
-      contact, con_phone, con_address, 
+      add_capital, com_scale, founding_time, 
+      run_time, indu_type, indu_code, 
+      business_license, lic_starttime, lic_endtime, 
+      register_type, org_code, main_products, 
+      business_scope, contact, con_phone, 
+      con_wechat, con_qq, con_address, 
       postcode, com_address, com_tele, 
-      addr_park, credit_points, com_type, 
-      check_status, check_time, com_source, 
-      creator_account, modifier_account, created_time, 
-      modified_time, record_status)
+      com_web, com_server, com_demand, 
+      addr_park, com_synopsis, park_build_id, 
+      park_build_name, credit_points, com_type, 
+      is_join_activity, check_status, check_time, 
+      com_source, creator_account, modifier_account, 
+      created_time, modified_time, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{comNameShort,jdbcType=VARCHAR}, 
       #{avatar,jdbcType=VARCHAR}, #{comAdmin,jdbcType=VARCHAR}, #{unifyCode,jdbcType=VARCHAR}, 
       #{owners,jdbcType=VARCHAR}, #{ownerLaw,jdbcType=VARCHAR}, #{ownerId,jdbcType=VARCHAR}, 
+      #{ownerPhone,jdbcType=VARCHAR}, #{ownerWechat,jdbcType=VARCHAR}, #{ownerQq,jdbcType=VARCHAR}, 
       #{bankName,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{products,jdbcType=VARCHAR}, 
       #{material,jdbcType=VARCHAR}, #{comProperty,jdbcType=VARCHAR}, #{regCapital,jdbcType=DECIMAL}, 
-      #{comScale,jdbcType=DECIMAL}, #{foundingTime,jdbcType=TIMESTAMP}, #{runTime,jdbcType=TIMESTAMP}, 
-      #{induType,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, 
-      #{licStarttime,jdbcType=TIMESTAMP}, #{licEndtime,jdbcType=TIMESTAMP}, #{orgCode,jdbcType=VARCHAR}, 
-      #{contact,jdbcType=VARCHAR}, #{conPhone,jdbcType=VARCHAR}, #{conAddress,jdbcType=VARCHAR}, 
+      #{addCapital,jdbcType=VARCHAR}, #{comScale,jdbcType=DECIMAL}, #{foundingTime,jdbcType=TIMESTAMP}, 
+      #{runTime,jdbcType=TIMESTAMP}, #{induType,jdbcType=VARCHAR}, #{induCode,jdbcType=VARCHAR}, 
+      #{businessLicense,jdbcType=VARCHAR}, #{licStarttime,jdbcType=TIMESTAMP}, #{licEndtime,jdbcType=TIMESTAMP}, 
+      #{registerType,jdbcType=VARCHAR}, #{orgCode,jdbcType=VARCHAR}, #{mainProducts,jdbcType=VARCHAR}, 
+      #{businessScope,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{conPhone,jdbcType=VARCHAR}, 
+      #{conWechat,jdbcType=VARCHAR}, #{conQq,jdbcType=VARCHAR}, #{conAddress,jdbcType=VARCHAR}, 
       #{postcode,jdbcType=VARCHAR}, #{comAddress,jdbcType=VARCHAR}, #{comTele,jdbcType=VARCHAR}, 
-      #{addrPark,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DECIMAL}, #{comType,jdbcType=VARCHAR}, 
-      #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{comSource,jdbcType=VARCHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
+      #{comWeb,jdbcType=VARCHAR}, #{comServer,jdbcType=VARCHAR}, #{comDemand,jdbcType=VARCHAR}, 
+      #{addrPark,jdbcType=VARCHAR}, #{comSynopsis,jdbcType=VARCHAR}, #{parkBuildId,jdbcType=VARCHAR}, 
+      #{parkBuildName,jdbcType=VARCHAR}, #{creditPoints,jdbcType=DECIMAL}, #{comType,jdbcType=VARCHAR}, 
+      #{isJoinActivity,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, 
+      #{comSource,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompany">
+  <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     insert into tb_service_company
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -200,6 +231,15 @@
       <if test="ownerId != null">
         owner_id,
       </if>
+      <if test="ownerPhone != null">
+        owner_phone,
+      </if>
+      <if test="ownerWechat != null">
+        owner_wechat,
+      </if>
+      <if test="ownerQq != null">
+        owner_qq,
+      </if>
       <if test="bankName != null">
         bank_name,
       </if>
@@ -218,6 +258,9 @@
       <if test="regCapital != null">
         reg_capital,
       </if>
+      <if test="addCapital != null">
+        add_capital,
+      </if>
       <if test="comScale != null">
         com_scale,
       </if>
@@ -230,8 +273,8 @@
       <if test="induType != null">
         indu_type,
       </if>
-      <if test="industry != null">
-        industry,
+      <if test="induCode != null">
+        indu_code,
       </if>
       <if test="businessLicense != null">
         business_license,
@@ -242,14 +285,29 @@
       <if test="licEndtime != null">
         lic_endtime,
       </if>
+      <if test="registerType != null">
+        register_type,
+      </if>
       <if test="orgCode != null">
         org_code,
+      </if>
+      <if test="mainProducts != null">
+        main_products,
+      </if>
+      <if test="businessScope != null">
+        business_scope,
       </if>
       <if test="contact != null">
         contact,
       </if>
       <if test="conPhone != null">
         con_phone,
+      </if>
+      <if test="conWechat != null">
+        con_wechat,
+      </if>
+      <if test="conQq != null">
+        con_qq,
       </if>
       <if test="conAddress != null">
         con_address,
@@ -263,14 +321,35 @@
       <if test="comTele != null">
         com_tele,
       </if>
+      <if test="comWeb != null">
+        com_web,
+      </if>
+      <if test="comServer != null">
+        com_server,
+      </if>
+      <if test="comDemand != null">
+        com_demand,
+      </if>
       <if test="addrPark != null">
         addr_park,
+      </if>
+      <if test="comSynopsis != null">
+        com_synopsis,
+      </if>
+      <if test="parkBuildId != null">
+        park_build_id,
+      </if>
+      <if test="parkBuildName != null">
+        park_build_name,
       </if>
       <if test="creditPoints != null">
         credit_points,
       </if>
       <if test="comType != null">
         com_type,
+      </if>
+      <if test="isJoinActivity != null">
+        is_join_activity,
       </if>
       <if test="checkStatus != null">
         check_status,
@@ -325,6 +404,15 @@
       <if test="ownerId != null">
         #{ownerId,jdbcType=VARCHAR},
       </if>
+      <if test="ownerPhone != null">
+        #{ownerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerWechat != null">
+        #{ownerWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerQq != null">
+        #{ownerQq,jdbcType=VARCHAR},
+      </if>
       <if test="bankName != null">
         #{bankName,jdbcType=VARCHAR},
       </if>
@@ -343,6 +431,9 @@
       <if test="regCapital != null">
         #{regCapital,jdbcType=DECIMAL},
       </if>
+      <if test="addCapital != null">
+        #{addCapital,jdbcType=VARCHAR},
+      </if>
       <if test="comScale != null">
         #{comScale,jdbcType=DECIMAL},
       </if>
@@ -355,8 +446,8 @@
       <if test="induType != null">
         #{induType,jdbcType=VARCHAR},
       </if>
-      <if test="industry != null">
-        #{industry,jdbcType=VARCHAR},
+      <if test="induCode != null">
+        #{induCode,jdbcType=VARCHAR},
       </if>
       <if test="businessLicense != null">
         #{businessLicense,jdbcType=VARCHAR},
@@ -367,14 +458,29 @@
       <if test="licEndtime != null">
         #{licEndtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="registerType != null">
+        #{registerType,jdbcType=VARCHAR},
+      </if>
       <if test="orgCode != null">
         #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProducts != null">
+        #{mainProducts,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null">
+        #{businessScope,jdbcType=VARCHAR},
       </if>
       <if test="contact != null">
         #{contact,jdbcType=VARCHAR},
       </if>
       <if test="conPhone != null">
         #{conPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="conWechat != null">
+        #{conWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="conQq != null">
+        #{conQq,jdbcType=VARCHAR},
       </if>
       <if test="conAddress != null">
         #{conAddress,jdbcType=VARCHAR},
@@ -388,14 +494,35 @@
       <if test="comTele != null">
         #{comTele,jdbcType=VARCHAR},
       </if>
+      <if test="comWeb != null">
+        #{comWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="comServer != null">
+        #{comServer,jdbcType=VARCHAR},
+      </if>
+      <if test="comDemand != null">
+        #{comDemand,jdbcType=VARCHAR},
+      </if>
       <if test="addrPark != null">
         #{addrPark,jdbcType=VARCHAR},
+      </if>
+      <if test="comSynopsis != null">
+        #{comSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="parkBuildId != null">
+        #{parkBuildId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkBuildName != null">
+        #{parkBuildName,jdbcType=VARCHAR},
       </if>
       <if test="creditPoints != null">
         #{creditPoints,jdbcType=DECIMAL},
       </if>
       <if test="comType != null">
         #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="isJoinActivity != null">
+        #{isJoinActivity,jdbcType=VARCHAR},
       </if>
       <if test="checkStatus != null">
         #{checkStatus,jdbcType=VARCHAR},
@@ -423,7 +550,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyCriteria" resultType="java.lang.Long">
     select count(*) from tb_service_company
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -459,6 +586,15 @@
       <if test="record.ownerId != null">
         owner_id = #{record.ownerId,jdbcType=VARCHAR},
       </if>
+      <if test="record.ownerPhone != null">
+        owner_phone = #{record.ownerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerWechat != null">
+        owner_wechat = #{record.ownerWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerQq != null">
+        owner_qq = #{record.ownerQq,jdbcType=VARCHAR},
+      </if>
       <if test="record.bankName != null">
         bank_name = #{record.bankName,jdbcType=VARCHAR},
       </if>
@@ -477,6 +613,9 @@
       <if test="record.regCapital != null">
         reg_capital = #{record.regCapital,jdbcType=DECIMAL},
       </if>
+      <if test="record.addCapital != null">
+        add_capital = #{record.addCapital,jdbcType=VARCHAR},
+      </if>
       <if test="record.comScale != null">
         com_scale = #{record.comScale,jdbcType=DECIMAL},
       </if>
@@ -489,8 +628,8 @@
       <if test="record.induType != null">
         indu_type = #{record.induType,jdbcType=VARCHAR},
       </if>
-      <if test="record.industry != null">
-        industry = #{record.industry,jdbcType=VARCHAR},
+      <if test="record.induCode != null">
+        indu_code = #{record.induCode,jdbcType=VARCHAR},
       </if>
       <if test="record.businessLicense != null">
         business_license = #{record.businessLicense,jdbcType=VARCHAR},
@@ -501,14 +640,29 @@
       <if test="record.licEndtime != null">
         lic_endtime = #{record.licEndtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.registerType != null">
+        register_type = #{record.registerType,jdbcType=VARCHAR},
+      </if>
       <if test="record.orgCode != null">
         org_code = #{record.orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainProducts != null">
+        main_products = #{record.mainProducts,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessScope != null">
+        business_scope = #{record.businessScope,jdbcType=VARCHAR},
       </if>
       <if test="record.contact != null">
         contact = #{record.contact,jdbcType=VARCHAR},
       </if>
       <if test="record.conPhone != null">
         con_phone = #{record.conPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conWechat != null">
+        con_wechat = #{record.conWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conQq != null">
+        con_qq = #{record.conQq,jdbcType=VARCHAR},
       </if>
       <if test="record.conAddress != null">
         con_address = #{record.conAddress,jdbcType=VARCHAR},
@@ -522,14 +676,35 @@
       <if test="record.comTele != null">
         com_tele = #{record.comTele,jdbcType=VARCHAR},
       </if>
+      <if test="record.comWeb != null">
+        com_web = #{record.comWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comServer != null">
+        com_server = #{record.comServer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comDemand != null">
+        com_demand = #{record.comDemand,jdbcType=VARCHAR},
+      </if>
       <if test="record.addrPark != null">
         addr_park = #{record.addrPark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comSynopsis != null">
+        com_synopsis = #{record.comSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkBuildId != null">
+        park_build_id = #{record.parkBuildId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkBuildName != null">
+        park_build_name = #{record.parkBuildName,jdbcType=VARCHAR},
       </if>
       <if test="record.creditPoints != null">
         credit_points = #{record.creditPoints,jdbcType=DECIMAL},
       </if>
       <if test="record.comType != null">
         com_type = #{record.comType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isJoinActivity != null">
+        is_join_activity = #{record.isJoinActivity,jdbcType=VARCHAR},
       </if>
       <if test="record.checkStatus != null">
         check_status = #{record.checkStatus,jdbcType=VARCHAR},
@@ -571,30 +746,46 @@
       owners = #{record.owners,jdbcType=VARCHAR},
       owner_law = #{record.ownerLaw,jdbcType=VARCHAR},
       owner_id = #{record.ownerId,jdbcType=VARCHAR},
+      owner_phone = #{record.ownerPhone,jdbcType=VARCHAR},
+      owner_wechat = #{record.ownerWechat,jdbcType=VARCHAR},
+      owner_qq = #{record.ownerQq,jdbcType=VARCHAR},
       bank_name = #{record.bankName,jdbcType=VARCHAR},
       bank_account = #{record.bankAccount,jdbcType=VARCHAR},
       products = #{record.products,jdbcType=VARCHAR},
       material = #{record.material,jdbcType=VARCHAR},
       com_property = #{record.comProperty,jdbcType=VARCHAR},
       reg_capital = #{record.regCapital,jdbcType=DECIMAL},
+      add_capital = #{record.addCapital,jdbcType=VARCHAR},
       com_scale = #{record.comScale,jdbcType=DECIMAL},
       founding_time = #{record.foundingTime,jdbcType=TIMESTAMP},
       run_time = #{record.runTime,jdbcType=TIMESTAMP},
       indu_type = #{record.induType,jdbcType=VARCHAR},
-      industry = #{record.industry,jdbcType=VARCHAR},
+      indu_code = #{record.induCode,jdbcType=VARCHAR},
       business_license = #{record.businessLicense,jdbcType=VARCHAR},
       lic_starttime = #{record.licStarttime,jdbcType=TIMESTAMP},
       lic_endtime = #{record.licEndtime,jdbcType=TIMESTAMP},
+      register_type = #{record.registerType,jdbcType=VARCHAR},
       org_code = #{record.orgCode,jdbcType=VARCHAR},
+      main_products = #{record.mainProducts,jdbcType=VARCHAR},
+      business_scope = #{record.businessScope,jdbcType=VARCHAR},
       contact = #{record.contact,jdbcType=VARCHAR},
       con_phone = #{record.conPhone,jdbcType=VARCHAR},
+      con_wechat = #{record.conWechat,jdbcType=VARCHAR},
+      con_qq = #{record.conQq,jdbcType=VARCHAR},
       con_address = #{record.conAddress,jdbcType=VARCHAR},
       postcode = #{record.postcode,jdbcType=VARCHAR},
       com_address = #{record.comAddress,jdbcType=VARCHAR},
       com_tele = #{record.comTele,jdbcType=VARCHAR},
+      com_web = #{record.comWeb,jdbcType=VARCHAR},
+      com_server = #{record.comServer,jdbcType=VARCHAR},
+      com_demand = #{record.comDemand,jdbcType=VARCHAR},
       addr_park = #{record.addrPark,jdbcType=VARCHAR},
+      com_synopsis = #{record.comSynopsis,jdbcType=VARCHAR},
+      park_build_id = #{record.parkBuildId,jdbcType=VARCHAR},
+      park_build_name = #{record.parkBuildName,jdbcType=VARCHAR},
       credit_points = #{record.creditPoints,jdbcType=DECIMAL},
       com_type = #{record.comType,jdbcType=VARCHAR},
+      is_join_activity = #{record.isJoinActivity,jdbcType=VARCHAR},
       check_status = #{record.checkStatus,jdbcType=VARCHAR},
       check_time = #{record.checkTime,jdbcType=TIMESTAMP},
       com_source = #{record.comSource,jdbcType=VARCHAR},
@@ -607,7 +798,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompany">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     update tb_service_company
     <set>
       <if test="comName != null">
@@ -634,6 +825,15 @@
       <if test="ownerId != null">
         owner_id = #{ownerId,jdbcType=VARCHAR},
       </if>
+      <if test="ownerPhone != null">
+        owner_phone = #{ownerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerWechat != null">
+        owner_wechat = #{ownerWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerQq != null">
+        owner_qq = #{ownerQq,jdbcType=VARCHAR},
+      </if>
       <if test="bankName != null">
         bank_name = #{bankName,jdbcType=VARCHAR},
       </if>
@@ -652,6 +852,9 @@
       <if test="regCapital != null">
         reg_capital = #{regCapital,jdbcType=DECIMAL},
       </if>
+      <if test="addCapital != null">
+        add_capital = #{addCapital,jdbcType=VARCHAR},
+      </if>
       <if test="comScale != null">
         com_scale = #{comScale,jdbcType=DECIMAL},
       </if>
@@ -664,8 +867,8 @@
       <if test="induType != null">
         indu_type = #{induType,jdbcType=VARCHAR},
       </if>
-      <if test="industry != null">
-        industry = #{industry,jdbcType=VARCHAR},
+      <if test="induCode != null">
+        indu_code = #{induCode,jdbcType=VARCHAR},
       </if>
       <if test="businessLicense != null">
         business_license = #{businessLicense,jdbcType=VARCHAR},
@@ -676,14 +879,29 @@
       <if test="licEndtime != null">
         lic_endtime = #{licEndtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="registerType != null">
+        register_type = #{registerType,jdbcType=VARCHAR},
+      </if>
       <if test="orgCode != null">
         org_code = #{orgCode,jdbcType=VARCHAR},
+      </if>
+      <if test="mainProducts != null">
+        main_products = #{mainProducts,jdbcType=VARCHAR},
+      </if>
+      <if test="businessScope != null">
+        business_scope = #{businessScope,jdbcType=VARCHAR},
       </if>
       <if test="contact != null">
         contact = #{contact,jdbcType=VARCHAR},
       </if>
       <if test="conPhone != null">
         con_phone = #{conPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="conWechat != null">
+        con_wechat = #{conWechat,jdbcType=VARCHAR},
+      </if>
+      <if test="conQq != null">
+        con_qq = #{conQq,jdbcType=VARCHAR},
       </if>
       <if test="conAddress != null">
         con_address = #{conAddress,jdbcType=VARCHAR},
@@ -697,14 +915,35 @@
       <if test="comTele != null">
         com_tele = #{comTele,jdbcType=VARCHAR},
       </if>
+      <if test="comWeb != null">
+        com_web = #{comWeb,jdbcType=VARCHAR},
+      </if>
+      <if test="comServer != null">
+        com_server = #{comServer,jdbcType=VARCHAR},
+      </if>
+      <if test="comDemand != null">
+        com_demand = #{comDemand,jdbcType=VARCHAR},
+      </if>
       <if test="addrPark != null">
         addr_park = #{addrPark,jdbcType=VARCHAR},
+      </if>
+      <if test="comSynopsis != null">
+        com_synopsis = #{comSynopsis,jdbcType=VARCHAR},
+      </if>
+      <if test="parkBuildId != null">
+        park_build_id = #{parkBuildId,jdbcType=VARCHAR},
+      </if>
+      <if test="parkBuildName != null">
+        park_build_name = #{parkBuildName,jdbcType=VARCHAR},
       </if>
       <if test="creditPoints != null">
         credit_points = #{creditPoints,jdbcType=DECIMAL},
       </if>
       <if test="comType != null">
         com_type = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="isJoinActivity != null">
+        is_join_activity = #{isJoinActivity,jdbcType=VARCHAR},
       </if>
       <if test="checkStatus != null">
         check_status = #{checkStatus,jdbcType=VARCHAR},
@@ -733,7 +972,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.joinpark.company.entity.TbServiceCompany">
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.company.entity.TbServiceCompany">
     update tb_service_company
     set com_name = #{comName,jdbcType=VARCHAR},
       com_name_short = #{comNameShort,jdbcType=VARCHAR},
@@ -743,30 +982,46 @@
       owners = #{owners,jdbcType=VARCHAR},
       owner_law = #{ownerLaw,jdbcType=VARCHAR},
       owner_id = #{ownerId,jdbcType=VARCHAR},
+      owner_phone = #{ownerPhone,jdbcType=VARCHAR},
+      owner_wechat = #{ownerWechat,jdbcType=VARCHAR},
+      owner_qq = #{ownerQq,jdbcType=VARCHAR},
       bank_name = #{bankName,jdbcType=VARCHAR},
       bank_account = #{bankAccount,jdbcType=VARCHAR},
       products = #{products,jdbcType=VARCHAR},
       material = #{material,jdbcType=VARCHAR},
       com_property = #{comProperty,jdbcType=VARCHAR},
       reg_capital = #{regCapital,jdbcType=DECIMAL},
+      add_capital = #{addCapital,jdbcType=VARCHAR},
       com_scale = #{comScale,jdbcType=DECIMAL},
       founding_time = #{foundingTime,jdbcType=TIMESTAMP},
       run_time = #{runTime,jdbcType=TIMESTAMP},
       indu_type = #{induType,jdbcType=VARCHAR},
-      industry = #{industry,jdbcType=VARCHAR},
+      indu_code = #{induCode,jdbcType=VARCHAR},
       business_license = #{businessLicense,jdbcType=VARCHAR},
       lic_starttime = #{licStarttime,jdbcType=TIMESTAMP},
       lic_endtime = #{licEndtime,jdbcType=TIMESTAMP},
+      register_type = #{registerType,jdbcType=VARCHAR},
       org_code = #{orgCode,jdbcType=VARCHAR},
+      main_products = #{mainProducts,jdbcType=VARCHAR},
+      business_scope = #{businessScope,jdbcType=VARCHAR},
       contact = #{contact,jdbcType=VARCHAR},
       con_phone = #{conPhone,jdbcType=VARCHAR},
+      con_wechat = #{conWechat,jdbcType=VARCHAR},
+      con_qq = #{conQq,jdbcType=VARCHAR},
       con_address = #{conAddress,jdbcType=VARCHAR},
       postcode = #{postcode,jdbcType=VARCHAR},
       com_address = #{comAddress,jdbcType=VARCHAR},
       com_tele = #{comTele,jdbcType=VARCHAR},
+      com_web = #{comWeb,jdbcType=VARCHAR},
+      com_server = #{comServer,jdbcType=VARCHAR},
+      com_demand = #{comDemand,jdbcType=VARCHAR},
       addr_park = #{addrPark,jdbcType=VARCHAR},
+      com_synopsis = #{comSynopsis,jdbcType=VARCHAR},
+      park_build_id = #{parkBuildId,jdbcType=VARCHAR},
+      park_build_name = #{parkBuildName,jdbcType=VARCHAR},
       credit_points = #{creditPoints,jdbcType=DECIMAL},
       com_type = #{comType,jdbcType=VARCHAR},
+      is_join_activity = #{isJoinActivity,jdbcType=VARCHAR},
       check_status = #{checkStatus,jdbcType=VARCHAR},
       check_time = #{checkTime,jdbcType=TIMESTAMP},
       com_source = #{comSource,jdbcType=VARCHAR},

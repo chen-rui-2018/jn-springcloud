@@ -10,6 +10,8 @@ public class TbUserTag implements Serializable {
 
     private String tagId;
 
+    private String tagName;
+
     private String tagType;
 
     private Date createdTime;
@@ -46,6 +48,14 @@ public class TbUserTag implements Serializable {
 
     public void setTagId(String tagId) {
         this.tagId = tagId == null ? null : tagId.trim();
+    }
+
+    public String getTagName() {
+        return tagName;
+    }
+
+    public void setTagName(String tagName) {
+        this.tagName = tagName == null ? null : tagName.trim();
     }
 
     public String getTagType() {
@@ -111,6 +121,7 @@ public class TbUserTag implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
             && (this.getTagId() == null ? other.getTagId() == null : this.getTagId().equals(other.getTagId()))
+            && (this.getTagName() == null ? other.getTagName() == null : this.getTagName().equals(other.getTagName()))
             && (this.getTagType() == null ? other.getTagType() == null : this.getTagType().equals(other.getTagType()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -126,6 +137,7 @@ public class TbUserTag implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
         result = prime * result + ((getTagId() == null) ? 0 : getTagId().hashCode());
+        result = prime * result + ((getTagName() == null) ? 0 : getTagName().hashCode());
         result = prime * result + ((getTagType() == null) ? 0 : getTagType().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -144,6 +156,7 @@ public class TbUserTag implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", userId=").append(userId);
         sb.append(", tagId=").append(tagId);
+        sb.append(", tagName=").append(tagName);
         sb.append(", tagType=").append(tagType);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);

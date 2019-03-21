@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.technologyfinancial.investors.dao.InvestorMapper">
     <!--投资人列表查询-->
-    <select id="getInvestorInfoList" resultType="com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoShow">
+    <select id="getInvestorInfoList" resultType="com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow">
         select
           si.investor_account as "investorAccount"        <!--投资人账号-->
           ,si.investor_name as "investorName"             <!--投资人姓名-->

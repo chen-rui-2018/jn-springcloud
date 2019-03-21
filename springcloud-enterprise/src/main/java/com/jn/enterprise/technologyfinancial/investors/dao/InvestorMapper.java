@@ -1,6 +1,6 @@
 package com.jn.enterprise.technologyfinancial.investors.dao;
 
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoShow;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -21,5 +21,5 @@ public interface InvestorMapper {
      * @param keyWords 关键字
      * @return
      */
-    List<InvestorInfoShow> getInvestorInfoList(@Param("mainCode") String mainArea, @Param("keyWords")String keyWords);
+    List<InvestorInfoListShow> getInvestorInfoList(@Param("mainCode") String mainArea, @Param("keyWords")String keyWords);
 }

@@ -5,6 +5,7 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="user_id" jdbcType="VARCHAR" property="userId" />
     <result column="tag_id" jdbcType="VARCHAR" property="tagId" />
+    <result column="tag_name" jdbcType="VARCHAR" property="tagName" />
     <result column="tag_type" jdbcType="VARCHAR" property="tagType" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_id, tag_id, tag_type, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    id, user_id, tag_id, tag_name, tag_type, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.usertag.entity.TbUserTagCriteria" resultMap="BaseResultMap">
     select
@@ -106,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.user.usertag.entity.TbUserTag">
     insert into tb_user_tag (id, user_id, tag_id, 
-      tag_type, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      tag_name, tag_type, created_time, 
+      creator_account, modified_time, modifier_account, 
+      record_status)
     values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{tagId,jdbcType=VARCHAR}, 
-      #{tagType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{tagName,jdbcType=VARCHAR}, #{tagType,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.usertag.entity.TbUserTag">
     insert into tb_user_tag
@@ -125,6 +126,9 @@
       </if>
       <if test="tagId != null">
         tag_id,
+      </if>
+      <if test="tagName != null">
+        tag_name,
       </if>
       <if test="tagType != null">
         tag_type,
@@ -154,6 +158,9 @@
       </if>
       <if test="tagId != null">
         #{tagId,jdbcType=VARCHAR},
+      </if>
+      <if test="tagName != null">
+        #{tagName,jdbcType=VARCHAR},
       </if>
       <if test="tagType != null">
         #{tagType,jdbcType=VARCHAR},
@@ -193,6 +200,9 @@
       <if test="record.tagId != null">
         tag_id = #{record.tagId,jdbcType=VARCHAR},
       </if>
+      <if test="record.tagName != null">
+        tag_name = #{record.tagName,jdbcType=VARCHAR},
+      </if>
       <if test="record.tagType != null">
         tag_type = #{record.tagType,jdbcType=VARCHAR},
       </if>
@@ -221,6 +231,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       user_id = #{record.userId,jdbcType=VARCHAR},
       tag_id = #{record.tagId,jdbcType=VARCHAR},
+      tag_name = #{record.tagName,jdbcType=VARCHAR},
       tag_type = #{record.tagType,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -239,6 +250,9 @@
       </if>
       <if test="tagId != null">
         tag_id = #{tagId,jdbcType=VARCHAR},
+      </if>
+      <if test="tagName != null">
+        tag_name = #{tagName,jdbcType=VARCHAR},
       </if>
       <if test="tagType != null">
         tag_type = #{tagType,jdbcType=VARCHAR},
@@ -265,6 +279,7 @@
     update tb_user_tag
     set user_id = #{userId,jdbcType=VARCHAR},
       tag_id = #{tagId,jdbcType=VARCHAR},
+      tag_name = #{tagName,jdbcType=VARCHAR},
       tag_type = #{tagType,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

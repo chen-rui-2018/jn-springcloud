@@ -1,7 +1,7 @@
-package com.jn.enterprise.joinpark.company.dao;
+package com.jn.enterprise.company.dao;
 
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaff;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaffCriteria;
+import com.jn.enterprise.company.entity.TbServiceCompanyStaff;
+import com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria;
 import java.util.List;
 
 import com.jn.enterprise.joinpark.usermanage.model.StaffCheckCallBackParam;

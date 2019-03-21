@@ -58,7 +58,7 @@ public class ActivityDetailsServiceImplTest {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
-        account="qianqi";
+        account="wangsong";
         activityQueryPaging.setActivityId(activityId);
         activityQueryPaging.setPage(1);
         activityQueryPaging.setRows(15);
@@ -70,6 +70,9 @@ public class ActivityDetailsServiceImplTest {
     @Test
     public void findActivityDetails() {
         ActivityDetailVO activityDetails = activityDetailsService.findActivityDetails(activityId, account);
+        if(activityDetails!=null){
+            logger.info(activityDetails.toString());
+        }
         assertThat(activityDetails,anything());
     }
 
@@ -78,7 +81,7 @@ public class ActivityDetailsServiceImplTest {
      */
     @Test
     public void getCommentInfo() {
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging, true);
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,account, true);
         List<Comment> list= (List<Comment>)commentInfo.getRows();
         assertThat(list.size(), greaterThan(0));
     }

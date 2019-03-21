@@ -1,11 +1,9 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,7 +14,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ServiceExperience",description = "顾问服务经历出参")
-public class ServiceExperience extends Page implements Serializable {
+public class ServiceExperience implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")
@@ -29,8 +27,6 @@ public class ServiceExperience extends Page implements Serializable {
     @NotNull(message="职务不能为空")
     private String position;
     @ApiModelProperty(value = "工作时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{workTime:'工作时间格式错误'}")
     private String workTime;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;

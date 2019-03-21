@@ -46,21 +46,31 @@ public class ActivityDetailsController extends BaseController {
     public Result getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        Result result=new Result();
-        String account="";
-        if(user !=null && user.getAccount()!=null){
-           account=user.getAccount();
+        if(user==null || user.getAccount()==null){
+            Result result=new Result();
+            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
+            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
+            logger.warn("获取活动详情接口获取当前登录用户失败");
+            return result;
         }
-        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,account);
-        result.setData(activityDetailVO);
-        return result;
+        ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,user.getAccount());
+        return new Result(activityDetailVO);
     }
 
     @ControllerLog(doAction = "获取评论信息")
     @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/getCommentInfo")
     public Result getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,Boolean.TRUE);
+        //获取当前登录用户
+        User loginUser=(User) SecurityUtils.getSubject().getPrincipal();
+        if(loginUser==null || loginUser.getAccount()==null){
+            Result result=new Result();
+            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
+            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
+            logger.warn("获取评论信息接口获取当前登录用户失败");
+            return result;
+        }
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,loginUser.getAccount(),Boolean.TRUE);
         return new Result(commentInfo);
     }
 }

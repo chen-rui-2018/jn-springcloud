@@ -39,20 +39,13 @@ public class CompanyServerController extends BaseController implements CompanyCl
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
-    @ControllerLog(doAction = "根据企业ID查询企业详细信息")
-    @ApiOperation(value = "根据企业ID查询企业详细信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetail")
-    @Override
-    public Result<ServiceCompany> getCompanyDetail(@RequestBody String companyId){
-        return new Result<>(companyService.getCompanyDetail(companyId));
-    }
 
-    @ControllerLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）")
-    @ApiOperation(value = "根据用户账号查询企业信息（用户为企业管理员）", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetailByAccount")
+    @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
+    @ApiOperation(value = "根据用户账号/企业ID查询企业信息（用户为企业管理员）", httpMethod = "POST", response = Result.class)
+    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId")
     @Override
-    public Result<ServiceCompany> getCompanyDetailByAccount(@RequestBody String account){
-        return new Result<>(companyService.getCompanyDetailByAccount(account));
+    public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(@RequestBody String accountOrCompanyId){
+        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
     }
 
 }

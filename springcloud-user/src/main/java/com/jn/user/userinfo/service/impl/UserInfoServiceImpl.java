@@ -17,8 +17,11 @@ import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.entity.TbUserPersonCriteria;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
+import com.jn.user.usertag.dao.TbTagCodeMapper;
 import com.jn.user.usertag.dao.TbUserTagMapper;
 import com.jn.user.usertag.dao.UserTagMapper;
+import com.jn.user.usertag.entity.TbTagCode;
+import com.jn.user.usertag.entity.TbTagCodeCriteria;
 import com.jn.user.usertag.entity.TbUserTag;
 import com.jn.user.usertag.entity.TbUserTagCriteria;
 import org.slf4j.Logger;
@@ -56,6 +59,8 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private RedisCacheFactory redisCacheFactory;
+    @Autowired
+    private TbTagCodeMapper tbTagCodeMapper;
 
     @Value(value = "${user.outhrache.information.expire}")
     private int expire;
@@ -395,9 +400,11 @@ public class UserInfoServiceImpl implements UserInfoService {
             //用户数据存在多条
             throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_DATA_MULTIPLE_ERROR);
         }
-
-        List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), user.getAccount());
-        List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), user.getAccount());
+        TbTagCodeCriteria tbTagCodeCriteria = new TbTagCodeCriteria();
+        tbTagCodeCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbTagCode> tagCodes = tbTagCodeMapper.selectByExample(tbTagCodeCriteria);
+        List<TbUserTag> hobbys = getUserTagList(userInfoParam.getHobbys(), TAG_CODE_IS_HOBBY, tbUserPerson.getId(), user.getAccount(),tagCodes);
+        List<TbUserTag> jobs = getUserTagList(userInfoParam.getJobs(), TAG_CODE_IS_JOB, tbUserPerson.getId(), user.getAccount(),tagCodes);
         hobbys.addAll(jobs);
         TbUserTagCriteria tagCriteria = new TbUserTagCriteria();
         tagCriteria.createCriteria().andCreatorAccountEqualTo(user.getAccount());
@@ -411,8 +418,9 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
 
-    private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account){
+    private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account,List<TbTagCode> tagCodes){
         List<TbUserTag> tags = new ArrayList<>(8);
+
         if(null != s && s.length>0){
             for (String a:s) {
                 TbUserTag tag = new TbUserTag();
@@ -423,6 +431,10 @@ public class UserInfoServiceImpl implements UserInfoService {
                 tag.setCreatedTime(new Date());
                 tag.setCreatorAccount(account);
                 tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+                for (TbTagCode tbUserTag:tagCodes
+                     ) {
+                    tag.setTagName(tbUserTag.getTagVaule());
+                }
                 tags.add(tag);
             }
         }

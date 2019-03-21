@@ -9,6 +9,8 @@ import com.jn.oa.meeting.model.OaMeetingRoomPage;
 import com.jn.oa.meeting.vo.OaMeetingRoomVo;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 /**
  * 会议室service
  * @author： yuanyy
@@ -24,6 +26,14 @@ public interface MeetingRoomService {
      * @return
      */
     PaginationData selectOaMeetingRoomListBySearchKey(OaMeetingRoomPage oaMeetingRoomPage);
+
+    /**
+     * 根据关键字查询会议室列表
+     *
+     * @param oaMeetingRoomPage
+     * @return
+     */
+    List<OaMeetingRoomVo> selectOaMeetingRoomListBySearchKeyNoPage(OaMeetingRoomPage oaMeetingRoomPage);
 
     /**
      * 新增会议室

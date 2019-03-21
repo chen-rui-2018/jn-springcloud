@@ -1,5 +1,8 @@
 package com.jn.enterprise.joinpark.usermanage.service;
 
+import com.jn.enterprise.company.model.Company;
+import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
+import com.jn.enterprise.company.model.CompanyCheckParam;
 import com.jn.enterprise.joinpark.usermanage.model.*;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public interface UserUpgradeService {
      * @param account
      * @return
      */
-    int changeToCompany(CompanyCheckParam companyCheckParam,String phone,String account);
+    int changeToCompany(CompanyCheckParam companyCheckParam, String phone, String account);
 
     /**
      * 升级员工

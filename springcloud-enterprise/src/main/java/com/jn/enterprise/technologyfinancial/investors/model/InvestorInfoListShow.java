@@ -73,4 +73,16 @@ public class InvestorInfoListShow implements Serializable {
     public void setMainAreaList(String mainAreaList) {
         this.mainAreaList = mainAreaList;
     }
+
+    @Override
+    public String toString() {
+        return "InvestorInfoListShow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", investorName='" + investorName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", position='" + position + '\'' +
+                ", mainAreaList='" + mainAreaList + '\'' +
+                '}';
+    }
 }

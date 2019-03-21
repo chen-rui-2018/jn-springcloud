@@ -180,20 +180,7 @@ public class UserInfoServiceImplTest {
             assertThat(e.getCode(),equalTo(UserExtensionExceptionEnum.COMPANY_PARAM_NOT_NULL.getCode()));
         }
     }
-    /**
-     * 更新redis中的用户信息
-     */
-    @Test
-    public void updateRedisUserInfo(){
-        try {
-            boolean result = userInfoService.updateRedisUserInfo(account);
-            assertThat(result, anything());
-        } catch (JnSpringCloudException e) {
-            logger.info("更新redis中的用户信息失败");
-            assertThat(e.getCode(),equalTo(UserExtensionExceptionEnum.USER_EXTENSION_NOT_EXISTS.getCode()));
-        }
-    }
-    
+
     @Test
     public void saveOrUpdateUserInfo(){
         UserInfoParam userInfoParam = new UserInfoParam();
@@ -218,4 +205,5 @@ public class UserInfoServiceImplTest {
         }
 
     }
+
 }

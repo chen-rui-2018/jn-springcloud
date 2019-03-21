@@ -225,6 +225,12 @@
 
         <table tableName="tb_service_product">
         </table>
+
+        <table tableName="tb_service_product_loan_type">
+        </table>
+
+        <table tableName="tb_service_product_assure_type">
+        </table>
     </context>
 
     <!--服务评价-->
@@ -423,8 +429,8 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_service_company">
-        </table>
+        <table tableName="tb_service_company"></table>
+        <table tableName="tb_service_company_pro_img"></table>
         <table tableName="tb_service_company_staff">
         </table>
     </context>

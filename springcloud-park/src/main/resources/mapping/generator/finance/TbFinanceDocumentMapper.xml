@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceDocumentMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceDocument">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="doc_Id" jdbcType="VARCHAR" property="docId" />
-    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="doc_name" jdbcType="VARCHAR" property="docName" />
-    <result column="doc_uploader" jdbcType="VARCHAR" property="docUploader" />
-    <result column="doc_upload_time" jdbcType="TIMESTAMP" property="docUploadTime" />
-    <result column="comment" jdbcType="VARCHAR" property="comment" />
-    <result column="doc_filename" jdbcType="VARCHAR" property="docFilename" />
-    <result column="doc_filecode" jdbcType="VARCHAR" property="docFilecode" />
-    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <id column="doc_id" jdbcType="INTEGER" property="id" />
+    <result column="doc_doc_Id" jdbcType="VARCHAR" property="docId" />
+    <result column="doc_department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="doc_department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="doc_doc_name" jdbcType="VARCHAR" property="docName" />
+    <result column="doc_doc_uploader" jdbcType="VARCHAR" property="docUploader" />
+    <result column="doc_doc_upload_time" jdbcType="TIMESTAMP" property="docUploadTime" />
+    <result column="doc_comment" jdbcType="VARCHAR" property="comment" />
+    <result column="doc_doc_filename" jdbcType="VARCHAR" property="docFilename" />
+    <result column="doc_doc_filecode" jdbcType="VARCHAR" property="docFilecode" />
+    <result column="doc_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="doc_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="doc_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="doc_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="doc_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -77,9 +77,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, doc_Id, department_id, department_name, doc_name, doc_uploader, doc_upload_time, 
-    comment, doc_filename, doc_filecode, record_status, created_time, modifier_account, 
-    modified_time, creator_account
+    doc.id as doc_id, doc.doc_Id as doc_doc_Id, doc.department_id as doc_department_id, 
+    doc.department_name as doc_department_name, doc.doc_name as doc_doc_name, doc.doc_uploader as doc_doc_uploader, 
+    doc.doc_upload_time as doc_doc_upload_time, doc.comment as doc_comment, doc.doc_filename as doc_doc_filename, 
+    doc.doc_filecode as doc_doc_filecode, doc.record_status as doc_record_status, doc.created_time as doc_created_time, 
+    doc.modifier_account as doc_modifier_account, doc.modified_time as doc_modified_time, 
+    doc.creator_account as doc_creator_account
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceDocumentExample" resultMap="BaseResultMap">
     select
@@ -87,7 +90,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_document
+    from tb_finance_document doc
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -98,15 +101,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_document
-    where id = #{id,jdbcType=INTEGER}
+    from tb_finance_document doc
+    where doc.id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_document
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceDocumentExample">
-    delete from tb_finance_document
+    delete from tb_finance_document doc
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -221,58 +224,58 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceDocumentExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_document
+    select count(*) from tb_finance_document doc
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_document
+    update tb_finance_document doc
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        doc.id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.docId != null">
-        doc_Id = #{record.docId,jdbcType=VARCHAR},
+        doc.doc_Id = #{record.docId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        department_id = #{record.departmentId,jdbcType=VARCHAR},
+        doc.department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        department_name = #{record.departmentName,jdbcType=VARCHAR},
+        doc.department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.docName != null">
-        doc_name = #{record.docName,jdbcType=VARCHAR},
+        doc.doc_name = #{record.docName,jdbcType=VARCHAR},
       </if>
       <if test="record.docUploader != null">
-        doc_uploader = #{record.docUploader,jdbcType=VARCHAR},
+        doc.doc_uploader = #{record.docUploader,jdbcType=VARCHAR},
       </if>
       <if test="record.docUploadTime != null">
-        doc_upload_time = #{record.docUploadTime,jdbcType=TIMESTAMP},
+        doc.doc_upload_time = #{record.docUploadTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.comment != null">
-        comment = #{record.comment,jdbcType=VARCHAR},
+        doc.comment = #{record.comment,jdbcType=VARCHAR},
       </if>
       <if test="record.docFilename != null">
-        doc_filename = #{record.docFilename,jdbcType=VARCHAR},
+        doc.doc_filename = #{record.docFilename,jdbcType=VARCHAR},
       </if>
       <if test="record.docFilecode != null">
-        doc_filecode = #{record.docFilecode,jdbcType=VARCHAR},
+        doc.doc_filecode = #{record.docFilecode,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=TINYINT},
+        doc.record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.createdTime != null">
-        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        doc.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        doc.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        doc.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.creatorAccount != null">
-        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        doc.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -280,22 +283,22 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_document
-    set id = #{record.id,jdbcType=INTEGER},
-      doc_Id = #{record.docId,jdbcType=VARCHAR},
-      department_id = #{record.departmentId,jdbcType=VARCHAR},
-      department_name = #{record.departmentName,jdbcType=VARCHAR},
-      doc_name = #{record.docName,jdbcType=VARCHAR},
-      doc_uploader = #{record.docUploader,jdbcType=VARCHAR},
-      doc_upload_time = #{record.docUploadTime,jdbcType=TIMESTAMP},
-      comment = #{record.comment,jdbcType=VARCHAR},
-      doc_filename = #{record.docFilename,jdbcType=VARCHAR},
-      doc_filecode = #{record.docFilecode,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR}
+    update tb_finance_document doc
+    set doc.id = #{record.id,jdbcType=INTEGER},
+      doc.doc_Id = #{record.docId,jdbcType=VARCHAR},
+      doc.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      doc.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      doc.doc_name = #{record.docName,jdbcType=VARCHAR},
+      doc.doc_uploader = #{record.docUploader,jdbcType=VARCHAR},
+      doc.doc_upload_time = #{record.docUploadTime,jdbcType=TIMESTAMP},
+      doc.comment = #{record.comment,jdbcType=VARCHAR},
+      doc.doc_filename = #{record.docFilename,jdbcType=VARCHAR},
+      doc.doc_filecode = #{record.docFilecode,jdbcType=VARCHAR},
+      doc.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      doc.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      doc.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      doc.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      doc.creator_account = #{record.creatorAccount,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

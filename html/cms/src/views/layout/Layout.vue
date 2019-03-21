@@ -6,10 +6,11 @@
     <!-- 右边主体部分 -->
     <div class="main-container">
       <navbar/>
-      <tags-view />
-      <app-main />
+      <tags-view :flag-num="flagNum"/>
+      <app-main @goBack="goBack"/>
     </div>
-</div></template>
+  </div>
+</template>
 
 <script>
 import { Navbar, Sidebar, AppMain, TagsView } from './components'
@@ -26,6 +27,7 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
+      flagNum: 0
     }
   },
   computed: {
@@ -47,6 +49,9 @@ export default {
   methods: {
     handleClickOutside() {
       this.$store.dispatch('closeSideBar', { withoutAnimation: false })
+    },
+    goBack() {
+      this.flagNum++
     }
   }
 }

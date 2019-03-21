@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,7 +15,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ServiceHonorParam",description = "顾问荣誉资质入参")
-public class ServiceHonorParam extends Page implements Serializable {
+public class ServiceHonorParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
     @ApiModelProperty(value = "顾问账号")

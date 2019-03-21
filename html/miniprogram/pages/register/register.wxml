@@ -1,0 +1,20 @@
+<view class="register">
+    <view class="{{allShow?'show':'hide'}}">
+        <view class="s2 s2-1">
+            <view class="inpt-wrap">
+                <view><view class="tit">手机号：</view></view>
+                <view class="flex-1"><input placeholder="请输入手机号码" class="inp" bindinput ="userPhoneInput"/></view>
+            </view>
+            <view class="inpt-wrap">
+                <view><view class="tit">验证码：</view></view>
+                <view class="flex-1" ><input placeholder="请输入验证码" class="inp" bindinput ="userCodeInput"/></view>
+                <view><view class="split"></view></view>
+                <view>
+                <view class="get-code" class="{{is_show?'show':'hide'}}" bindtap="getCode">获取验证码</view>
+                <view class="get-code" class="{{is_show?'hide':'show'}}" >重新发送{{last_time}}秒</view>
+                </view>
+            </view>
+            <button class="btn mt-2" bindtap="finishRegister">完 成</button>
+        </view>
+    </view>
+</view>

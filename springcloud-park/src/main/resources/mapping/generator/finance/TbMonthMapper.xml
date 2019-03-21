@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbMonthMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbMonth">
-    <id column="month" jdbcType="CHAR" property="month" />
+    <id column="m_month" jdbcType="CHAR" property="month" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -63,7 +63,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    month
+    m.month as m_month
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbMonthExample" resultMap="BaseResultMap">
     select
@@ -71,7 +71,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_month
+    from tb_month m
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -84,7 +84,7 @@
     where month = #{month,jdbcType=CHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbMonthExample">
-    delete from tb_month
+    delete from tb_month m
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -107,16 +107,16 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbMonthExample" resultType="java.lang.Long">
-    select count(*) from tb_month
+    select count(*) from tb_month m
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_month
+    update tb_month m
     <set>
       <if test="record.month != null">
-        month = #{record.month,jdbcType=CHAR},
+        m.month = #{record.month,jdbcType=CHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -124,8 +124,8 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_month
-    set month = #{record.month,jdbcType=CHAR}
+    update tb_month m
+    set m.month = #{record.month,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

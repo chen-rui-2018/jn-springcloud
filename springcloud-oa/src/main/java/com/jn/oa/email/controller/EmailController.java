@@ -5,7 +5,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
-import com.jn.oa.email.model.DownAttachment;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
 import com.jn.oa.email.service.EmailService;
@@ -17,18 +16,12 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -104,28 +97,6 @@ public class EmailController extends BaseController {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         emailService.deleteBatch(emailIds, user);
         return new Result();
-    }
-
-
-    @ControllerLog(doAction = "附件上传")
-    @RequiresPermissions("/oa/email/uploadAttachment")
-    @ApiOperation(value = "附件上传", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/uploadAttachment")
-    public Result uploadAttachment(HttpServletRequest request) {
-        //获取上传文件
-        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
-
-        String attachment = emailService.uploadAttachment(files);
-        return new Result(attachment);
-    }
-
-    @ControllerLog(doAction = "附件下载")
-    @RequiresPermissions("/oa/email/downLoadAttachment")
-    @ApiOperation(value = "附件下载", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/downLoadAttachment")
-    public ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response) {
-        ResponseEntity<byte[]> attachment = emailService.downLoadAttachment(downAttachment, response);
-        return attachment;
     }
 
 }

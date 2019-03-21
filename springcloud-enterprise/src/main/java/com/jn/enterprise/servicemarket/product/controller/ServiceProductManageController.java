@@ -84,7 +84,7 @@ public class ServiceProductManageController extends BaseController {
     return new Result();
     }
     @ControllerLog(doAction = "服务产品上架/下架")
-    @ApiOperation(value ="服务产品上架/下架",httpMethod = "POST",response = Result.class)
+    @ApiOperation(value ="服务产品上架/下架,(前端 App产品上架下架操作)",httpMethod = "POST",response = Result.class)
     @RequiresPermissions("/servicemarket/product/productShelf")
     @RequestMapping(value = "/productShelf")
     public Result productShelf(@RequestBody @Validated  ServiceProductApproval approval){
@@ -112,5 +112,10 @@ public class ServiceProductManageController extends BaseController {
         productService.modifyCommonService(content,user.getAccount());
         return new Result();
     }
-
+    @ControllerLog(doAction = "获取产品编号")
+    @ApiOperation(value ="获取产品编号",httpMethod = "POST",response = Result.class)
+    @RequestMapping(value = "/getProductSerialNumber")
+    public Result getProductSerialNumber(@ApiParam(name = "productType", value = "服务产品类型(0:常规-1:特色)", required = true) @RequestParam String productType){
+        return new Result(productService.getProductSerialNumber(productType));
+    }
 }

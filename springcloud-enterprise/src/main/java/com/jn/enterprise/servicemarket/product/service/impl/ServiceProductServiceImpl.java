@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.enums.ServiceSortTypeEnum;
@@ -64,20 +65,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         String status = content.getProductType().equals(productType) ? "0":"1";
         //数据记录状态
         Byte recordStatus = 1;
-        //产品编号
-        String serialNumber = null;
-        if(productType.equals(content.getProductType())){
-            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
-            criteria.createCriteria().andProductTypeEqualTo(productType).andOrgIdEqualTo(content.getOrgId());
-            long number = tbServiceProductMapper .countByExample(criteria);
-            serialNumber = "TS000"+(content.getOrgId()==null?"":content.getOrgId())+number+((Math.random()*9+1)*1000);
-        }else
-        {
-            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
-            criteria.createCriteria().andProductTypeEqualTo("0");
-            long number = tbServiceProductMapper .countByExample(criteria);
-            serialNumber = "CG000"+(content.getOrgId()==null?"":content.getOrgId())+number+((Math.random()*9+1)*1000);
-        }
+
         if(productType.equals(content.getProductType())){
              if(StringUtils.isBlank(content.getOrgId())){
                 logger.warn("[服务产品新增]，特色服务产品机构id{}不能为空：orgId: {},特色服务产品的机构id不能为空!");
@@ -102,7 +90,6 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         tbServiceProduct.setCreatorAccount(account);
         tbServiceProduct.setStatus(status);
         tbServiceProduct.setRecordStatus(recordStatus);
-        tbServiceProduct.setSerialNumber(serialNumber);
         //设置机构名称
         if (StringUtils.isNotBlank(content.getOrgId())){
             TbServiceOrg org= tbServiceOrgMapper.selectByPrimaryKey(content.getOrgId());
@@ -166,6 +153,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setOrgId(commonService.getOrgId());
         content.setProductId(commonService.getProductId());
         content.setAdvisorAccount(commonService.getAdvisorAccount());
+        content.setSerialNumber(commonService.getSerialNumber());
         addServiceProduct(content,account,commonService.getTemplateId());
     }
 
@@ -184,6 +172,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             e.printStackTrace();
             logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
         }
+        //添加产品浏览数
+        TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
+        TbServiceProduct productUpdate = new TbServiceProduct();
+        productUpdate.setViewCount(product.getViewCount()+1);
+        productUpdate.setProductId(productId);
+        tbServiceProductMapper.updateByPrimaryKeySelective(productUpdate);
         return detail;
     }
 
@@ -290,6 +284,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         WebServiceProductDetails details = new WebServiceProductDetails();
         details.setInfo(info);
         details.setInfoList(infoList);
+        //添加产品浏览数
+        TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
+        TbServiceProduct productUpdate = new TbServiceProduct();
+        productUpdate.setViewCount(product.getViewCount()+1);
+        productUpdate.setProductId(productId);
+        tbServiceProductMapper.updateByPrimaryKeySelective(productUpdate);
         return details;
     }
     @ServiceLog(doAction = "web前台服务产品列表")
@@ -402,6 +402,28 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         ServiceStatistics serviceStatistics =   productDao.findServiceStatistics();
         return serviceStatistics;
     }
+    @ServiceLog(doAction = "获取服务产品编号")
+    @Override
+    public String getProductSerialNumber(String productType){
+        //产品编号
+        String serialNumber = null;
+        String commentsType = "0";
+        String featureType = "1";
+        Date date = new Date();
+        String dataStr = DateUtils.formatDate(date,"yyyyMMddHHmmss");
+        if(productType.equals(featureType)){
+            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+            criteria.createCriteria().andProductTypeEqualTo(featureType);
+            long number = tbServiceProductMapper .countByExample(criteria);
+            serialNumber = "TS00"+number+dataStr+(int)((Math.random()*9+1)*1000);
+        }else {
+            TbServiceProductCriteria criteria = new TbServiceProductCriteria();
+            criteria.createCriteria().andProductTypeEqualTo(commentsType);
+            long number = tbServiceProductMapper .countByExample(criteria);
+            serialNumber = "CG00"+number+dataStr+(int)((Math.random()*9+1)*1000);
+        }
+        return serialNumber;
+    }
 
     /**
      * 校验新增产品时传入的价格字段
@@ -446,6 +468,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
        }
        return map;
     }
+
+
 
     /**
      * 添加顾问信息

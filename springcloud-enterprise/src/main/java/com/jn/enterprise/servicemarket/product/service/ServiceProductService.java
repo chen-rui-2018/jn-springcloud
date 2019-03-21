@@ -149,4 +149,10 @@ public interface ServiceProductService {
      * @return
      */
     ServiceStatistics  findServiceStatistics();
+
+    /**
+     * 获取服务产品编号
+     * @param productType
+     */
+    String getProductSerialNumber(String productType);
 }

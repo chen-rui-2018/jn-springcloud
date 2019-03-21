@@ -338,7 +338,7 @@ from tb_service_product t1
             where  t1.product_id =#{productId}
     </select>
     <select id="findServiceStatistics" resultType="com.jn.enterprise.servicemarket.product.model.ServiceStatistics">
-      select
+     select
         tt.featureCount+tt.commentCount as "productCount"
         ,tt.orgCount as "orgCount"
         ,tt.advisorCount as "advisorCount"
@@ -348,11 +348,11 @@ from tb_service_product t1
             (
         select
         count(tp.product_id) as "featureCount"
-        ,(select count(ta.id) from tb_service_advisor ta)  as "advisorCount"
-        ,(select count(tr.id) from tb_service_require tr) as "requireCount"
-        ,(select count(tra.id)  from tb_service_rating tra) as "commentCount"
-        ,(select count(tso.org_id) from tb_service_org tso)   as "orgCount"
-        ,(select count(tp2.product_id) from tb_service_product tp2 where tp.template_id is null)   as "commentsCount"
-        from tb_service_product tp where product_type = "1")tt;
+        ,(select count(ta.id) from tb_service_advisor ta where ta.approval_status ="2" and ta.record_status= 1)  as "advisorCount"
+        ,(select count(tr.id) from tb_service_require tr where tr.record_status=1) as "requireCount"
+        ,(select count(tra.id)  from tb_service_rating tra where tra.record_status = 1  ) as "commentCount"
+        ,(select count(tso.org_id) from tb_service_org tso where tso.record_status=1 and tso.org_status="1")   as "orgCount"
+        ,(select count(tp2.product_id) from tb_service_product tp2 where tp.template_id is null and tp2.record_status=1 and tp2.status="1")   as "commentsCount"
+        from tb_service_product tp where product_type = "1" and tp.record_status=1 and tp.status="1" )tt;
     </select>
 </mapper>

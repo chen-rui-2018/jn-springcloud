@@ -5,6 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
+import com.jn.enterprise.servicemarket.org.model.OrgDetail;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -50,8 +51,8 @@ public class OrgController extends BaseController {
         return new Result(paginationData);
     }
 
-    @ControllerLog(doAction = "获取服务机构详情(app+pc)")
-    @ApiOperation(value = "获取服务机构详情", httpMethod = "POST", response = Result.class,
+    @ControllerLog(doAction = "获取服务机构详情")
+    @ApiOperation(value = "获取服务机构详情,(app机构详情)", httpMethod = "POST", response = Result.class,
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
@@ -60,6 +61,16 @@ public class OrgController extends BaseController {
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
 
+    @ControllerLog(doAction = "获取服务机构详情+产品列表")
+    @ApiOperation(value = "获取服机构信息(app机构信息)", httpMethod = "POST", response = Result.class,
+            notes = "查询条件orgId")
+    @RequestMapping(value = "/getOrgInfoForManage")
+    @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
+    public Result getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+        Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
+        OrgDetail orgDetail = orgService.getServiceOrgDetail(orgId);
 
+        return new Result(orgService.getServiceOrgDetail(orgId));
+    }
 
 }

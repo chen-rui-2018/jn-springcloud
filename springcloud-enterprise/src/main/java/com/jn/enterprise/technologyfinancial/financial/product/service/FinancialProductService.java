@@ -1,6 +1,7 @@
 package com.jn.enterprise.technologyfinancial.financial.product.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.technologyfinancial.financial.product.model.*;
 
 import java.util.List;
@@ -43,4 +44,25 @@ public interface FinancialProductService {
      * @return
      */
     TechnologyInfoNum getTechnologyInfoNum();
+
+    /**
+     * 科技金融添加常规产品
+     * @param info
+     * @param account
+     */
+    void  addFinancialProduct(FinancialProductAddInfo info,String account);
+    /**
+     * 科技金融上架常规产品
+     * @param commonService
+     * @param account
+     */
+   void upShelfCommonProduct( CommonServiceShelf commonService,String account);
+
+    /**
+     * 科技金融上架特色服务产品
+     * @param info
+     * @param account
+     */
+   void  upShelfFeatureProduct(FinancialProductAddInfo info,String account);
+
 }

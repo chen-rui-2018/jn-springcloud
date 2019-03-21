@@ -18,6 +18,9 @@ public class CommonServiceShelf implements Serializable {
     @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true)
     @NotBlank(message = "模板id不能为空")
     private String templateId;
+    @ApiModelProperty(value = "产品编号",required = true)
+    @NotBlank(message = "产品编号不能为空")
+    private String serialNumber;
     @ApiModelProperty(value = "服务产品Id")
     private String productId;
     @ApiModelProperty(value = "服务产品名称")
@@ -64,5 +67,13 @@ public class CommonServiceShelf implements Serializable {
 
     public void setOrgId(String orgId) {
         this.orgId = orgId;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
     }
 }

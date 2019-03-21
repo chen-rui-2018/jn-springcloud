@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.usermanage.model;
+package com.jn.enterprise.company.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

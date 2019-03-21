@@ -1,89 +1,147 @@
 package com.jn.company.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
 
+/**
+ * 企业详情Bean
+ * @author： jiangyl
+ * @String： Created on 2019/3/5 19:53
+ * @version： v1.0
+ * @modified By:
+ */
+@ApiModel(value = "ServiceCompany",description = "企业详情Bean")
 public class ServiceCompany implements Serializable {
+    @ApiModelProperty(value = "企业ID")
     private String id;
-
+    @ApiModelProperty(value = "企业名称")
     private String comName;
-
+    @ApiModelProperty(value = "企业简称")
     private String comNameShort;
-
+    @ApiModelProperty(value = "企业logo地址")
     private String avatar;
-
+    @ApiModelProperty(value = "企业管理员(申请人)")
     private String comAdmin;
-
+    @ApiModelProperty(value = "统一社会信用代码")
     private String unifyCode;
-
+    @ApiModelProperty(value = "投资人/股东")
     private String owners;
-
+    @ApiModelProperty(value = "企业法人")
     private String ownerLaw;
-
+    @ApiModelProperty(value = "法人身份证号")
     private String ownerId;
-
+    @ApiModelProperty(value = "法人电话")
+    private String ownerPhone;
+    @ApiModelProperty(value = "法人微信")
+    private String ownerWechat;
+    @ApiModelProperty(value = "法人qq")
+    private String ownerQq;
+    @ApiModelProperty(value = "开户银行")
     private String bankName;
-
+    @ApiModelProperty(value = "银行账号")
     private String bankAccount;
-
+    @ApiModelProperty(value = "主营业务/主要产品")
     private String products;
-
+    @ApiModelProperty(value = "主要原材料")
     private String material;
-
+    @ApiModelProperty(value = "企业性质 多个,分隔")
     private String comProperty;
 
+    @ApiModelProperty(value = "企业性质[数组]")
+    private String[] comPropertys;
+
+    @ApiModelProperty(value = "企业性质名称[数组]")
+    private String[] comPropertyNames;
+
+    @ApiModelProperty(value = "注册资本 万元")
     private Long regCapital;
-
+    @ApiModelProperty(value = "增资情况")
+    private String addCapital;
+    @ApiModelProperty(value = "企业规模 万元")
     private Long comScale;
-
-    private Date foundingTime;
-
-    private Date runTime;
-
+    @ApiModelProperty(value = "成立时间")
+    private String foundingTime;
+    @ApiModelProperty(value = "落地时间")
+    private String runTime;
+    @ApiModelProperty(value = "行业分类(产业领域、所属行业)")
     private String induType;
 
-    private String industry;
+    @ApiModelProperty(value = "行业分类(产业领域、所属行业)名称")
+    private String induTypeName;
 
+    @ApiModelProperty(value = "行业代码")
+    private String induCode;
+    @ApiModelProperty(value = "营业执照")
     private String businessLicense;
-
-    private Date licStarttime;
-
-    private Date licEndtime;
-
+    @ApiModelProperty(value = "营业执照开始时间")
+    private String licStarttime;
+    @ApiModelProperty(value = "营业执照到期时间")
+    private String licEndtime;
+    @ApiModelProperty(value = "注册登记类型")
+    private String registerType;
+    @ApiModelProperty(value = "组织机构代码")
     private String orgCode;
-
+    @ApiModelProperty(value = "主要产品")
+    private String mainProducts;
+    @ApiModelProperty(value = "业务范围")
+    private String businessScope;
+    @ApiModelProperty(value = "联系人")
     private String contact;
-
+    @ApiModelProperty(value = "联系人手机号")
     private String conPhone;
-
+    @ApiModelProperty(value = "联系人微信")
+    private String conWechat;
+    @ApiModelProperty(value = "联系人qq")
+    private String conQq;
+    @ApiModelProperty(value = "联系人地址")
     private String conAddress;
-
+    @ApiModelProperty(value = "邮编")
     private String postcode;
-
+    @ApiModelProperty(value = "公司地址-注册地址")
     private String comAddress;
-
+    @ApiModelProperty(value = "公司座机-固定电话")
     private String comTele;
-
+    @ApiModelProperty(value = "企业官网地址")
+    private String comWeb;
+    @ApiModelProperty(value = "我的服务")
+    private String comServer;
+    @ApiModelProperty(value = "我的需求")
+    private String comDemand;
+    @ApiModelProperty(value = "公司园区地址-实际经营地址")
     private String addrPark;
-
+    @ApiModelProperty(value = "公司简介")
+    private String comSynopsis;
+    @ApiModelProperty(value = "园区楼宇ID")
+    private String parkBuildId;
+    @ApiModelProperty(value = "园区楼宇名称")
+    private String parkBuildName;
+    @ApiModelProperty(value = "信用积分")
     private BigDecimal creditPoints;
-
+    @ApiModelProperty(value = "企业类型")
     private String comType;
-
+    @ApiModelProperty(value = "是否参加园区获取【0否1是】")
+    private String isJoinActivity;
+    @ApiModelProperty(value = "审核状态 0审核中 1通过 -1审核不通过")
     private String checkStatus;
-
-    private Date checkTime;
-
+    @ApiModelProperty(value = "审核时间")
+    private String checkTime;
+    @ApiModelProperty(value = "企业来源 1人才企业2招商企业")
     private String comSource;
-
+    @ApiModelProperty(value = "创建人")
     private String creatorAccount;
-
+    @ApiModelProperty(value = "修改人")
     private String modifierAccount;
+    @ApiModelProperty(value = "创建时间")
+    private String createdTime;
+    @ApiModelProperty(value = "修改时间")
+    private String modifiedTime;
+    @ApiModelProperty(value = "企业宣传图片")
+    private List<CompanyProImg> proImgs;
 
-    private Date createdTime;
-
-    private Date modifiedTime;
 
     public String getId() {
         return id;
@@ -157,6 +215,30 @@ public class ServiceCompany implements Serializable {
         this.ownerId = ownerId;
     }
 
+    public String getOwnerPhone() {
+        return ownerPhone;
+    }
+
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone;
+    }
+
+    public String getOwnerWechat() {
+        return ownerWechat;
+    }
+
+    public void setOwnerWechat(String ownerWechat) {
+        this.ownerWechat = ownerWechat;
+    }
+
+    public String getOwnerQq() {
+        return ownerQq;
+    }
+
+    public void setOwnerQq(String ownerQq) {
+        this.ownerQq = ownerQq;
+    }
+
     public String getBankName() {
         return bankName;
     }
@@ -205,6 +287,14 @@ public class ServiceCompany implements Serializable {
         this.regCapital = regCapital;
     }
 
+    public String getAddCapital() {
+        return addCapital;
+    }
+
+    public void setAddCapital(String addCapital) {
+        this.addCapital = addCapital;
+    }
+
     public Long getComScale() {
         return comScale;
     }
@@ -213,19 +303,19 @@ public class ServiceCompany implements Serializable {
         this.comScale = comScale;
     }
 
-    public Date getFoundingTime() {
+    public String getFoundingTime() {
         return foundingTime;
     }
 
-    public void setFoundingTime(Date foundingTime) {
+    public void setFoundingTime(String foundingTime) {
         this.foundingTime = foundingTime;
     }
 
-    public Date getRunTime() {
+    public String getRunTime() {
         return runTime;
     }
 
-    public void setRunTime(Date runTime) {
+    public void setRunTime(String runTime) {
         this.runTime = runTime;
     }
 
@@ -237,12 +327,12 @@ public class ServiceCompany implements Serializable {
         this.induType = induType;
     }
 
-    public String getIndustry() {
-        return industry;
+    public String getInduCode() {
+        return induCode;
     }
 
-    public void setIndustry(String industry) {
-        this.industry = industry;
+    public void setInduCode(String induCode) {
+        this.induCode = induCode;
     }
 
     public String getBusinessLicense() {
@@ -253,20 +343,28 @@ public class ServiceCompany implements Serializable {
         this.businessLicense = businessLicense;
     }
 
-    public Date getLicStarttime() {
+    public String getLicStarttime() {
         return licStarttime;
     }
 
-    public void setLicStarttime(Date licStarttime) {
+    public void setLicStarttime(String licStarttime) {
         this.licStarttime = licStarttime;
     }
 
-    public Date getLicEndtime() {
+    public String getLicEndtime() {
         return licEndtime;
     }
 
-    public void setLicEndtime(Date licEndtime) {
+    public void setLicEndtime(String licEndtime) {
         this.licEndtime = licEndtime;
+    }
+
+    public String getRegisterType() {
+        return registerType;
+    }
+
+    public void setRegisterType(String registerType) {
+        this.registerType = registerType;
     }
 
     public String getOrgCode() {
@@ -275,6 +373,22 @@ public class ServiceCompany implements Serializable {
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode;
+    }
+
+    public String getMainProducts() {
+        return mainProducts;
+    }
+
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts;
+    }
+
+    public String getBusinessScope() {
+        return businessScope;
+    }
+
+    public void setBusinessScope(String businessScope) {
+        this.businessScope = businessScope;
     }
 
     public String getContact() {
@@ -291,6 +405,22 @@ public class ServiceCompany implements Serializable {
 
     public void setConPhone(String conPhone) {
         this.conPhone = conPhone;
+    }
+
+    public String getConWechat() {
+        return conWechat;
+    }
+
+    public void setConWechat(String conWechat) {
+        this.conWechat = conWechat;
+    }
+
+    public String getConQq() {
+        return conQq;
+    }
+
+    public void setConQq(String conQq) {
+        this.conQq = conQq;
     }
 
     public String getConAddress() {
@@ -325,12 +455,60 @@ public class ServiceCompany implements Serializable {
         this.comTele = comTele;
     }
 
+    public String getComWeb() {
+        return comWeb;
+    }
+
+    public void setComWeb(String comWeb) {
+        this.comWeb = comWeb;
+    }
+
+    public String getComServer() {
+        return comServer;
+    }
+
+    public void setComServer(String comServer) {
+        this.comServer = comServer;
+    }
+
+    public String getComDemand() {
+        return comDemand;
+    }
+
+    public void setComDemand(String comDemand) {
+        this.comDemand = comDemand;
+    }
+
     public String getAddrPark() {
         return addrPark;
     }
 
     public void setAddrPark(String addrPark) {
         this.addrPark = addrPark;
+    }
+
+    public String getComSynopsis() {
+        return comSynopsis;
+    }
+
+    public void setComSynopsis(String comSynopsis) {
+        this.comSynopsis = comSynopsis;
+    }
+
+    public String getParkBuildId() {
+        return parkBuildId;
+    }
+
+    public void setParkBuildId(String parkBuildId) {
+        this.parkBuildId = parkBuildId;
+    }
+
+    public String getParkBuildName() {
+        return parkBuildName;
+    }
+
+    public void setParkBuildName(String parkBuildName) {
+        this.parkBuildName = parkBuildName;
     }
 
     public BigDecimal getCreditPoints() {
@@ -349,6 +527,14 @@ public class ServiceCompany implements Serializable {
         this.comType = comType;
     }
 
+    public String getIsJoinActivity() {
+        return isJoinActivity;
+    }
+
+    public void setIsJoinActivity(String isJoinActivity) {
+        this.isJoinActivity = isJoinActivity;
+    }
+
     public String getCheckStatus() {
         return checkStatus;
     }
@@ -357,11 +543,11 @@ public class ServiceCompany implements Serializable {
         this.checkStatus = checkStatus;
     }
 
-    public Date getCheckTime() {
+    public String getCheckTime() {
         return checkTime;
     }
 
-    public void setCheckTime(Date checkTime) {
+    public void setCheckTime(String checkTime) {
         this.checkTime = checkTime;
     }
 
@@ -389,19 +575,51 @@ public class ServiceCompany implements Serializable {
         this.modifierAccount = modifierAccount;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
-    public Date getModifiedTime() {
+    public String getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
+    public void setModifiedTime(String modifiedTime) {
         this.modifiedTime = modifiedTime;
+    }
+
+    public List<CompanyProImg> getProImgs() {
+        return proImgs;
+    }
+
+    public void setProImgs(List<CompanyProImg> proImgs) {
+        this.proImgs = proImgs;
+    }
+
+    public String[] getComPropertys() {
+        return comPropertys;
+    }
+
+    public void setComPropertys(String[] comPropertys) {
+        this.comPropertys = comPropertys;
+    }
+
+    public String[] getComPropertyNames() {
+        return comPropertyNames;
+    }
+
+    public void setComPropertyNames(String[] comPropertyNames) {
+        this.comPropertyNames = comPropertyNames;
+    }
+
+    public String getInduTypeName() {
+        return induTypeName;
+    }
+
+    public void setInduTypeName(String induTypeName) {
+        this.induTypeName = induTypeName;
     }
 }

@@ -32,19 +32,11 @@ public interface CompanyClient {
     Result<PaginationData<List<ServiceCompany>>> getCompanyList(@RequestBody ServiceCompanyParam serviceCompanyParam);
 
     /**
-     * 根据企业ID查询企业详细信息
-     * @param companyId
+     * 根据用户账号/企业ID查询企业信息（用户为企业管理员）
+     * @param accountOrCompanyId
      * @return
      */
-    @RequestMapping(value = "/api/company/getCompanyDetail", method = RequestMethod.POST)
-    Result<ServiceCompany> getCompanyDetail(@RequestBody String companyId);
-
-    /**
-     * 根据用户账号查询企业信息（用户为企业管理员
-     * @param account
-     * @return
-     */
-    @RequestMapping(value = "/api/company/getCompanyDetailByAccount", method = RequestMethod.POST)
-    Result<ServiceCompany> getCompanyDetailByAccount(@RequestBody String account);
+    @RequestMapping(value = "/api/company/getCompanyDetailByAccountOrCompanyId", method = RequestMethod.POST)
+    Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(@RequestBody String accountOrCompanyId);
 
 }

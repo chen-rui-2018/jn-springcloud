@@ -58,7 +58,15 @@ public interface FinanceIndexService {
      * @param departmentId 部门ID
      * @return
      */
-    List<FinanceIndexSectionExpendFormsVo>  sectionExpendForms(String year, String departmentId);
+    FianceDynamicTableVo<List<FinanceIndexSectionExpendFormsVo>>  sectionExpendForms(String year, String departmentId);
+
+    /**
+     * 导出
+     * @param year 年份
+     * @param departmentId 部门ID
+     * @return
+     */
+    List<FinanceIndexExpendFormsExportVo>  expendFormsExport(String year, String departmentId);
 
     /**
      * 类型下拉框

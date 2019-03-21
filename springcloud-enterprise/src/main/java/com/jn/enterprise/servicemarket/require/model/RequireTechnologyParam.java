@@ -30,7 +30,6 @@ public class RequireTechnologyParam extends Page implements Serializable {
     private String financingAmount;
     @ApiModelProperty(value = "实际贷款金额（万元）")
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
-    @NotNull(message = "实际贷款金额不能为空")
     private String actualLoanAmount;
     @ApiModelProperty(value = "融资期限（月）")
     @Pattern(regexp ="[0-9]*",message = "融资期限只能输入数字")

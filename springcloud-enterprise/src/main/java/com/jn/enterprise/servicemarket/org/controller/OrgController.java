@@ -41,7 +41,7 @@ public class OrgController extends BaseController {
     private OrgService orgService;
 
 
-    @ControllerLog(doAction = "获取服务机构列表")
+    @ControllerLog(doAction = "获取服务机构列表(app+pc)")
     @ApiOperation(value = "获取服务机构列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectServiceOrgList")
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
@@ -51,7 +51,7 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情")
-    @ApiOperation(value = "获取服务机构详情", httpMethod = "POST", response = Result.class,
+    @ApiOperation(value = "获取服务机构详情,(app机构详情)", httpMethod = "POST", response = Result.class,
             notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage")
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
@@ -60,6 +60,14 @@ public class OrgController extends BaseController {
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
 
-
+    @ControllerLog(doAction = "获取服务机构详情+产品列表")
+    @ApiOperation(value = "获取服机构信息(app机构信息)", httpMethod = "POST", response = Result.class,
+            notes = "查询条件orgId")
+    @RequestMapping(value = "/getOrgInfoForManage")
+    @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
+    public Result getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+        Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
+        return new Result(orgService.getServiceOrgDetail(orgId));
+    }
 
 }

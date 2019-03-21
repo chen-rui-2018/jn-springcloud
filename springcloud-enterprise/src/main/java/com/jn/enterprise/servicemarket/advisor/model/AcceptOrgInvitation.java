@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,7 +14,7 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "AcceptOrgInvitation", description = "接受机构邀请入参")
-public class AcceptOrgInvitation extends Page implements Serializable {
+public class AcceptOrgInvitation implements Serializable {
     @ApiModelProperty(value = "顾问基本信息)")
     private AdvisorServiceInfo advisorServiceInfo;
     @ApiModelProperty(value = "顾问荣誉资质)")

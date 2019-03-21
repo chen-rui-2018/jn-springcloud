@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +13,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "InviteAdvisorInfo",description = "顾问邀请入参")
-public class InviteAdvisorInfo extends Page implements Serializable {
+public class InviteAdvisorInfo implements Serializable {
     @ApiModelProperty(value = "注册手机/邮箱")
     @NotNull(message = "注册手机/邮箱不能为空")
     private String registerAccount;

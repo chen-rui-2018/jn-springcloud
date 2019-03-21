@@ -189,7 +189,7 @@
 					t.cost as "cost",
 					t.cost_after_type_id as "costaftertypeid",
 					t.department_id as "departmentid"
-					from tb_finance_expenses t
+					from tb_finance_expenses_month t
 					where t.record_status =1
 					and  t.cost_after_type_id=#{costTypeId,jdbcType=INTEGER}
 					and t.department_id=#{departmentId,jdbcType=VARCHAR}) t2

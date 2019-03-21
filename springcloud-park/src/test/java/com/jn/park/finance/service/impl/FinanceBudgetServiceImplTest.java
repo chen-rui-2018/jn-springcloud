@@ -11,6 +11,7 @@ import com.jn.park.finance.model.FinanceBudgetHistoryModel;
 import com.jn.park.finance.model.FinanceBudgetMoneyModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.service.FinanceBudgetService;
+import com.jn.park.finance.vo.FianceDynamicTableVo;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import org.junit.FixMethodOrder;
@@ -137,7 +138,7 @@ public class FinanceBudgetServiceImplTest {
         FinanceBudgetQueryModel model=new FinanceBudgetQueryModel();
         model.setStartMonth("201901");
         model.setEndMonth("201912");
-        List<FinanceTotalBudgetVo> financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(model,"huangbq");
-        logger.info("========>{}",financeTotalBudgetVoList.size());
+        FianceDynamicTableVo<List<FinanceTotalBudgetVo>> financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(model,"huangbq");
+        logger.info("========>{}",financeTotalBudgetVoList.getRows());
     }
 }

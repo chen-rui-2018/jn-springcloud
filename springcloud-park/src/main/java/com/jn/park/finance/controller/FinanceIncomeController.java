@@ -1,12 +1,13 @@
 package com.jn.park.finance.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
+import com.jn.common.util.excel.ExcelUtil;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.service.FinanceIncomeService;
-import com.jn.park.finance.vo.FinanceIncomeLastYearContrastVo;
-import com.jn.park.finance.vo.FinanceIncomePeriodVo;
-import com.jn.park.finance.vo.FinanceIncomeSummarizingProportionVo;
-import com.jn.park.finance.vo.FinanceTotalBudgetVo;
+import com.jn.park.finance.vo.*;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import com.jn.common.model.Result;
@@ -15,10 +16,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -45,6 +48,7 @@ public class FinanceIncomeController extends BaseController {
     })
     public Result<FinanceIncomePeriodVo> periodContrast(String startTime,String endTime){
         //todo
+        this.checkIsSomeYear(startTime,endTime);
         List<FinanceIncomePeriodVo> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
         return new Result(periodContrast);
     }
@@ -59,6 +63,7 @@ public class FinanceIncomeController extends BaseController {
     })
     public Result<FinanceIncomeSummarizingProportionVo> summarizingProportion(String startTime,String endTime){
         //todo
+        this.checkIsSomeYear(startTime,endTime);
         List<FinanceIncomeSummarizingProportionVo> summarizingProportion=financeIncomeService.summarizingProportion(startTime,endTime);
         return new Result(summarizingProportion);
     }
@@ -71,18 +76,58 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
     })
-    public Result<FinanceIncomeLastYearContrastVo> lastYearContrast(String startTime,String endTime){
+    public Result<FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>>> lastYearContrast(String startTime,String endTime){
         //todo
-        List<FinanceIncomeLastYearContrastVo> lastYearContrast=financeIncomeService.lastYearContrast(startTime,endTime);
+        this.checkIsSomeYear(startTime,endTime);
+        FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>> lastYearContrast=financeIncomeService.lastYearContrast(startTime,endTime);
         return new Result(lastYearContrast);
     }
 
     @ControllerLog(doAction = "导出往年对比数据")
-    @ApiOperation(value = "导出往年对比数据", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/exportContrast")
+    @ApiOperation(value = "导出往年对比数据", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/exportContrast")
     @RequiresPermissions("/finance/income/exportContrast")
-    public Result exportContrast(){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
+    })
+    public Result exportContrast(HttpServletResponse response, String startTime, String endTime){
         //todo
+        this.checkIsSomeYear(startTime,endTime);
+        List<FinanceIncomeExportContrastVo> sectionExpendForms=financeIncomeService.exportContrast(startTime,endTime);
+
+        String exportTitle = "分类,去年1月收入,今年1月收入,去年2月收入,今年2月收入,去年3月收入,今年3月收入," +
+                "去年4月收入,今年4月收入,去年5月收入,今年5月收入,去年6月收入,今年6月收入,去年7月收入,今年7月收入,去年8月收入," +
+                "今年8月收入,去年9月收入,今年9月收入,去年10月收入,今年10月收入,去年11月收入,今年11月收入,去年12月收入,今年12月收入";
+
+        String exportColName = "incomeTypeName,income1,lastYearIncome1,income2,lastYearIncome2,income3,lastYearIncome3," +
+                "income4,lastYearIncome4,income5,lastYearIncome5,income6,lastYearIncome5,income7,lastYearIncome7,income8,lastYearIncome7," +
+                "income9,lastYearIncome9,income10,lastYearIncome10,income11,lastYearIncome11,income12,lastYearIncome12,";
+
+        String fileName = startTime+"-"+endTime+"往年对比数据";
+        String sheetName = startTime+"-"+endTime+"往年对比数据";
+        ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, sectionExpendForms);
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
+    }
+
+
+    /**
+     * 校验开始结束日期是否为同一年
+     * @param startMonth
+     * @param endMonth
+     */
+    private void checkIsSomeYear(String startMonth,String endMonth){
+        if(StringUtils.isBlank(startMonth)||startMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
+        }
+        if(null!=endMonth&&endMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份格式必须是YYYYMM");
+        }
+        if((startMonth.compareTo(endMonth))>0){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份必须大于等于开始月份");
+        }
+        if(!startMonth.substring(0,4).equals(endMonth.substring(0,4))){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"只能查同一年的数据");
+        }
     }
 }

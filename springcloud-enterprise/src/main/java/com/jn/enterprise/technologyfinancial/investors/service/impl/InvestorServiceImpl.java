@@ -4,7 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.technologyfinancial.investors.dao.InvestorMapper;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoShow;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListShow;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ public class InvestorServiceImpl implements InvestorService {
             int pageNum=1;
             int pageSize=15;
             objects = PageHelper.startPage(pageNum,pageSize, true);
-            List<InvestorInfoShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
+            List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
             return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
         }
         //需要分页标识
@@ -54,7 +54,7 @@ public class InvestorServiceImpl implements InvestorService {
             objects = PageHelper.startPage(investorInfoListParam.getPage(),
                     investorInfoListParam.getRows() == 0 ? 15 : investorInfoListParam.getRows(), true);
         }
-        List<InvestorInfoShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
+        List<InvestorInfoListShow> investorInfoList = investorMapper.getInvestorInfoList(investorInfoListParam.getMainCode(), investorInfoListParam.getKeyWords());
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
     }
 }

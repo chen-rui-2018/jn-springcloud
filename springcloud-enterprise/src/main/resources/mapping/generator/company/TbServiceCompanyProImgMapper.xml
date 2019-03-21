@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+<mapper namespace="com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.company.entity.TbServiceCompanyProImg">
+    <id column="img_id" jdbcType="VARCHAR" property="imgId" />
     <result column="com_id" jdbcType="VARCHAR" property="comId" />
-    <result column="com_name" jdbcType="VARCHAR" property="comName" />
-    <result column="account" jdbcType="VARCHAR" property="account" />
-    <result column="check_status" jdbcType="VARCHAR" property="checkStatus" />
-    <result column="check_account" jdbcType="VARCHAR" property="checkAccount" />
-    <result column="check_time" jdbcType="TIMESTAMP" property="checkTime" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="pro_id" jdbcType="VARCHAR" property="proId" />
+    <result column="img_url" jdbcType="VARCHAR" property="imgUrl" />
+    <result column="img_introd" jdbcType="VARCHAR" property="imgIntrod" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -74,16 +72,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, com_id, com_name, account, check_status, check_account, check_time, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    img_id, com_id, pro_id, img_url, img_introd, creator_account, modifier_account, created_time, 
+    modified_time, record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImgCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_service_company_staff
+    from tb_service_company_pro_img
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,151 +92,131 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_service_company_staff
-    where id = #{id,jdbcType=VARCHAR}
+    from tb_service_company_pro_img
+    where img_id = #{imgId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_service_company_staff
-    where id = #{id,jdbcType=VARCHAR}
+    delete from tb_service_company_pro_img
+    where img_id = #{imgId,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria">
-    delete from tb_service_company_staff
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImgCriteria">
+    delete from tb_service_company_pro_img
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
-    insert into tb_service_company_staff (id, com_id, com_name, 
-      account, check_status, check_account, 
-      check_time, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
-    values (#{id,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, 
-      #{account,jdbcType=VARCHAR}, #{checkStatus,jdbcType=VARCHAR}, #{checkAccount,jdbcType=VARCHAR}, 
-      #{checkTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+  <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImg">
+    insert into tb_service_company_pro_img (img_id, com_id, pro_id, 
+      img_url, img_introd, creator_account, 
+      modifier_account, created_time, modified_time, 
+      record_status)
+    values (#{imgId,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{proId,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{imgIntrod,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
-    insert into tb_service_company_staff
+  <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImg">
+    insert into tb_service_company_pro_img
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="imgId != null">
+        img_id,
       </if>
       <if test="comId != null">
         com_id,
       </if>
-      <if test="comName != null">
-        com_name,
+      <if test="proId != null">
+        pro_id,
       </if>
-      <if test="account != null">
-        account,
+      <if test="imgUrl != null">
+        img_url,
       </if>
-      <if test="checkStatus != null">
-        check_status,
-      </if>
-      <if test="checkAccount != null">
-        check_account,
-      </if>
-      <if test="checkTime != null">
-        check_time,
-      </if>
-      <if test="createdTime != null">
-        created_time,
+      <if test="imgIntrod != null">
+        img_introd,
       </if>
       <if test="creatorAccount != null">
         creator_account,
       </if>
-      <if test="modifiedTime != null">
-        modified_time,
-      </if>
       <if test="modifierAccount != null">
         modifier_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
       </if>
       <if test="recordStatus != null">
         record_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+      <if test="imgId != null">
+        #{imgId,jdbcType=VARCHAR},
       </if>
       <if test="comId != null">
         #{comId,jdbcType=VARCHAR},
       </if>
-      <if test="comName != null">
-        #{comName,jdbcType=VARCHAR},
+      <if test="proId != null">
+        #{proId,jdbcType=VARCHAR},
       </if>
-      <if test="account != null">
-        #{account,jdbcType=VARCHAR},
+      <if test="imgUrl != null">
+        #{imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="checkStatus != null">
-        #{checkStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="checkAccount != null">
-        #{checkAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="checkTime != null">
-        #{checkTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createdTime != null">
-        #{createdTime,jdbcType=TIMESTAMP},
+      <if test="imgIntrod != null">
+        #{imgIntrod,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="modifiedTime != null">
-        #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaffCriteria" resultType="java.lang.Long">
-    select count(*) from tb_service_company_staff
+  <select id="countByExample" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImgCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_company_pro_img
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_service_company_staff
+    update tb_service_company_pro_img
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+      <if test="record.imgId != null">
+        img_id = #{record.imgId,jdbcType=VARCHAR},
       </if>
       <if test="record.comId != null">
         com_id = #{record.comId,jdbcType=VARCHAR},
       </if>
-      <if test="record.comName != null">
-        com_name = #{record.comName,jdbcType=VARCHAR},
+      <if test="record.proId != null">
+        pro_id = #{record.proId,jdbcType=VARCHAR},
       </if>
-      <if test="record.account != null">
-        account = #{record.account,jdbcType=VARCHAR},
+      <if test="record.imgUrl != null">
+        img_url = #{record.imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="record.checkStatus != null">
-        check_status = #{record.checkStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="record.checkAccount != null">
-        check_account = #{record.checkAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.checkTime != null">
-        check_time = #{record.checkTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.createdTime != null">
-        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      <if test="record.imgIntrod != null">
+        img_introd = #{record.imgIntrod,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.modifiedTime != null">
-        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="record.modifierAccount != null">
         modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -249,75 +227,65 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_service_company_staff
-    set id = #{record.id,jdbcType=VARCHAR},
+    update tb_service_company_pro_img
+    set img_id = #{record.imgId,jdbcType=VARCHAR},
       com_id = #{record.comId,jdbcType=VARCHAR},
-      com_name = #{record.comName,jdbcType=VARCHAR},
-      account = #{record.account,jdbcType=VARCHAR},
-      check_status = #{record.checkStatus,jdbcType=VARCHAR},
-      check_account = #{record.checkAccount,jdbcType=VARCHAR},
-      check_time = #{record.checkTime,jdbcType=TIMESTAMP},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      pro_id = #{record.proId,jdbcType=VARCHAR},
+      img_url = #{record.imgUrl,jdbcType=VARCHAR},
+      img_introd = #{record.imgIntrod,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
-    update tb_service_company_staff
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImg">
+    update tb_service_company_pro_img
     <set>
       <if test="comId != null">
         com_id = #{comId,jdbcType=VARCHAR},
       </if>
-      <if test="comName != null">
-        com_name = #{comName,jdbcType=VARCHAR},
+      <if test="proId != null">
+        pro_id = #{proId,jdbcType=VARCHAR},
       </if>
-      <if test="account != null">
-        account = #{account,jdbcType=VARCHAR},
+      <if test="imgUrl != null">
+        img_url = #{imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="checkStatus != null">
-        check_status = #{checkStatus,jdbcType=VARCHAR},
-      </if>
-      <if test="checkAccount != null">
-        check_account = #{checkAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="checkTime != null">
-        check_time = #{checkTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      <if test="imgIntrod != null">
+        img_introd = #{imgIntrod,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
       </if>
-      <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where img_id = #{imgId,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyStaff">
-    update tb_service_company_staff
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.company.entity.TbServiceCompanyProImg">
+    update tb_service_company_pro_img
     set com_id = #{comId,jdbcType=VARCHAR},
-      com_name = #{comName,jdbcType=VARCHAR},
-      account = #{account,jdbcType=VARCHAR},
-      check_status = #{checkStatus,jdbcType=VARCHAR},
-      check_account = #{checkAccount,jdbcType=VARCHAR},
-      check_time = #{checkTime,jdbcType=TIMESTAMP},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      pro_id = #{proId,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      img_introd = #{imgIntrod,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       record_status = #{recordStatus,jdbcType=TINYINT}
-    where id = #{id,jdbcType=VARCHAR}
+    where img_id = #{imgId,jdbcType=VARCHAR}
   </update>
 </mapper>

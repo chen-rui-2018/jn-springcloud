@@ -4,15 +4,12 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.common.util.cache.RedisCacheFactory;
-import com.jn.common.util.cache.service.Cache;
+import com.jn.enterprise.company.dao.ServiceCompanyProImgMapper;
+import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
+import com.jn.enterprise.company.entity.*;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
-import com.jn.enterprise.joinpark.company.dao.TbServiceCompanyMapper;
-import com.jn.enterprise.joinpark.company.dao.TbServiceCompanyStaffMapper;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompany;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaff;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyStaffCriteria;
+import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
+import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
 import com.jn.enterprise.joinpark.usermanage.model.*;
 import com.jn.enterprise.joinpark.usermanage.service.UserUpgradeService;
 import com.jn.system.log.annotation.ServiceLog;
@@ -22,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -48,6 +44,8 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
     private TbServiceCompanyStaffMapper tbServiceCompanyStaffMapper;
     @Autowired
     private UserExtensionClient userExtensionClient;
+    @Autowired
+    private ServiceCompanyProImgMapper serviceCompanyProImgMapper;
 
     /**
      * 数据状态 1:有效
@@ -97,6 +95,23 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         serviceCompany.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
         serviceCompany.setRecordStatus(new Byte(RECORD_STATUS_VALID));
 
+        List<CompanyProImgParam> imgParams = companyCheckParam.getImgParams();
+        if(null!=imgParams && imgParams.size()>0){
+            List<TbServiceCompanyProImg> imgs = new ArrayList<>(16);
+            for (CompanyProImgParam img:imgParams) {
+                TbServiceCompanyProImg proImg = new TbServiceCompanyProImg();
+                BeanUtils.copyProperties(img,proImg);
+                proImg.setImgId(UUID.randomUUID().toString().replaceAll("-",""));
+                proImg.setComId(serviceCompany.getId());
+                proImg.setCreatedTime(new Date());
+                proImg.setCreatorAccount(account);
+                proImg.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+            }
+            int i = serviceCompanyProImgMapper.insertCompanyProImgs(imgs);
+            logger.info("批量插入企业宣传图片成功，响应条数：{}",i);
+        }
+
+
         //TODO 调用工作流审核 jiangyl
 
         return tbServiceCompanyMapper.insert(serviceCompany);
@@ -144,6 +159,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
         tbServiceCompanyStaff.setComId(staffCheckParam.getComId());
         tbServiceCompanyStaff.setAccount(account);
         tbServiceCompanyStaff.setCheckStatus(COMPANY_APPLY_IS_CHECKING);
+        tbServiceCompanyStaff.setRecordStatus(new Byte(RECORD_STATUS_VALID));
         int insert = tbServiceCompanyStaffMapper.insert(tbServiceCompanyStaff);
 
 

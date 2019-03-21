@@ -2,6 +2,7 @@ package com.jn.enterprise.technologyfinancial.investors.dao;
 
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListParam;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListShow;
+import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementNameParam;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,5 +22,12 @@ public interface InvestorManagementMapper {
      * @return
      */
     List<InvestorManagementListShow> getInvestorManagementList(InvestorManagementListParam investorManagementListParam);
+
+    /**
+     * 投资人管理姓名查询
+     * @param investorManagementNameParam
+     * @return
+     */
+    List<String> getInvestorManagementNames(InvestorManagementNameParam investorManagementNameParam);
 
 }

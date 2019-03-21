@@ -23,6 +23,9 @@ public enum InvestorExceptionEnum implements CodeAndMsg {
     MAIN_ROUND_INFO_NOT_EXIST("5020530","系统中主投轮次信息不存在"),
     INVESTOR_INFO_EXIST("5020531","当前投资人认证信息已存在"),
     START_TIME_MORE_THAN_END_TIME("5020532","投资日期开始时间晚于投资日期结束时间"),
+    CURRENT_INVESTOR_HAVE_UP("5020533","当前投资人已上架,请勿重复操作"),
+    CURRENT_INVESTOR_HAVE_DOWN("5020534","当前投资人已下架,请勿重复操作"),
+    INVESTOR_ACCOUNT_NOT_EXIST("5020535","当前投资人账号在系统中不存在或已失效"),
     ;
 
     /**

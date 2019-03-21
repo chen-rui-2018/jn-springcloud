@@ -48,7 +48,19 @@
           <if test="position !=null and position !=''">              <!--职务-->
               and si.position = #{position}
           </if>
+    </select>
 
+    <select id="getInvestorManagementNames" parameterType="com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementNameParam"
+            resultType="java.lang.String">
+        select
+          si.investor_name as "investorName"
+        from tb_service_investor si
+        where 1=1
+        and si.approval_status='1'    <!--审批通过-->
+        and si.record_status='1'
+        <if test="investorName !=null and investorName!=''">    <!--姓名-->
+            and si.investor_name like concat('%',#{investorName},'%')
+        </if>
 
     </select>
 </mapper>

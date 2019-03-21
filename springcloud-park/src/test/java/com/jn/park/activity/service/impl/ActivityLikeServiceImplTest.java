@@ -47,7 +47,7 @@ public class ActivityLikeServiceImplTest {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
-        account="qianqi";
+        account="wangsong";
     }
 
     /**

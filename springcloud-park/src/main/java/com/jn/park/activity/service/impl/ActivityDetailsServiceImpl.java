@@ -85,9 +85,23 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         //根据活动id查询点赞信息
         List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
         int minLikeNum=0;
-        if (activityLikeInfo.size()>minLikeNum) {
+        if (activityLikeInfo.isEmpty()) {
+            //当前用户没有点赞
+            activityDetailVO.setAccountIsLike(false);
+        }else{
             activityDetailVO.setActivityLikeList(activityLikeInfo);
             activityDetailVO.setLikeNum(activityLikeInfo.size());
+            for(TbParkLike parkLike:activityLikeInfo){
+                if(account.equals(parkLike.getCreatorAccount())){
+                    //当前用户已点赞
+                    activityDetailVO.setAccountIsLike(true);
+                    break;
+                }
+            }
+            //点赞列表中没有当前用户信息
+            if(activityDetailVO.getAccountIsLike()==null){
+                activityDetailVO.setAccountIsLike(false);
+            }
         }
         //是否展示报名人(0：否   1：是）若不展示报名人，不查询报名信息
         String showApplyNum="1";
@@ -97,7 +111,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             int minApplyNum=0;
             if (activityApplyInfo.size()>minApplyNum) {
                 activityDetailVO.setActivityApplyList(activityApplyInfo);
-                activityDetailVO.setRealapplyNum(activityApplyInfo.size());
+                activityDetailVO.setRealApplyNum(activityApplyInfo.size());
             }
         }
         //获取报名截止倒计时信息， 报名截止时间、系统当前时间，是否报名成功标志
@@ -154,11 +168,12 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * 根据活动id获取活动点评信息
      * @param activityQueryPaging
      * @param isPage     是否分页  true：分页   false:不分页
+     * @param loginAccount  当前登录用户
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage){
+    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
         Page<Object> objects=null;
         try {
             if(isPage){
@@ -168,13 +183,13 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);
             parentIds.add(activityQueryPaging.getActivityId());
-            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds,loginAccount);
             if(list.isEmpty()){
                 return new PaginationData(list,objects==null?0:objects.getTotal());
             }
             //获取评论用户头像信息
             getCommentUserAvatar(list);
-            list= getCommentChildComment(list,activityQueryPaging.getActivityId());
+            list= getCommentChildComment(list,activityQueryPaging.getActivityId(),loginAccount);
             return new PaginationData(list,objects==null?0:objects.getTotal());
         } finally {
             if(objects!=null){
@@ -211,8 +226,6 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
                 }
             }
         }
-
-
     }
 
     /**
@@ -221,14 +234,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * @return
      */
     @ServiceLog(doAction = "获取评论的子评论")
-    private List<Comment> getCommentChildComment(List<Comment> list,String activityId) {
+    private List<Comment> getCommentChildComment(List<Comment> list,String activityId,String loginAccount) {
         //获取第一层评论的id
         List<String>parentIds=new ArrayList<>(16);
         for(Comment cm:list){
             parentIds.add(cm.getId());
         }
         //根据第一层评论id查询下一层的评论信息
-        List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds);
+        List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds,loginAccount);
         //获取评论用户头像信息
         getCommentUserAvatar(commentInfo);
         for(Comment comment:list){
@@ -312,9 +325,6 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     @ServiceLog(doAction = "获取园区活动信息")
     @Override
     public TbActivity getActivityInfo(String activityId){
-        TbActivityCriteria example=new TbActivityCriteria();
-        //草稿、已删除的活动不能被查询出来
-        example.createCriteria().andIdEqualTo(activityId).andActiStatusNotEqualTo(ACTIVITY_STATE_DRAFT).andRecordStatusNotEqualTo(new Byte(ACTIVITY_STATE_DELETE));
         return tbActivityMapper.selectByPrimaryKey(activityId);
     }
 }

@@ -43,6 +43,8 @@ public class Comment extends Page implements Serializable {
     private List<Comment> childList;
     @ApiModelProperty(value = "当前评论的子节点个数")
     private int childNum;
+    @ApiModelProperty(value = "当前用户是否已点赞('true':已点赞  'false':未点赞)")
+    private String isCommentLike;
 
     private static final long serialVersionUID = 1L;
 
@@ -150,6 +152,14 @@ public class Comment extends Page implements Serializable {
         this.childNum = childNum;
     }
 
+    public String getIsCommentLike() {
+        return isCommentLike;
+    }
+
+    public void setIsCommentLike(String isCommentLike) {
+        this.isCommentLike = isCommentLike;
+    }
+
     @Override
     public String toString() {
         return "Comment{" +
@@ -166,6 +176,7 @@ public class Comment extends Page implements Serializable {
                 ", avatar='" + avatar + '\'' +
                 ", childList=" + childList +
                 ", childNum=" + childNum +
+                ", isCommentLike='" + isCommentLike + '\'' +
                 '}';
     }
 }

@@ -107,632 +107,632 @@ public class TbFinanceIncomeDayExample {
         }
 
         public Criteria andIdIsNull() {
-            addCriterion("id is null");
+            addCriterion("iday.id is null");
             return (Criteria) this;
         }
 
         public Criteria andIdIsNotNull() {
-            addCriterion("id is not null");
+            addCriterion("iday.id is not null");
             return (Criteria) this;
         }
 
         public Criteria andIdEqualTo(Integer value) {
-            addCriterion("id =", value, "id");
+            addCriterion("iday.id =", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotEqualTo(Integer value) {
-            addCriterion("id <>", value, "id");
+            addCriterion("iday.id <>", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThan(Integer value) {
-            addCriterion("id >", value, "id");
+            addCriterion("iday.id >", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("id >=", value, "id");
+            addCriterion("iday.id >=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThan(Integer value) {
-            addCriterion("id <", value, "id");
+            addCriterion("iday.id <", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdLessThanOrEqualTo(Integer value) {
-            addCriterion("id <=", value, "id");
+            addCriterion("iday.id <=", value, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdIn(List<Integer> values) {
-            addCriterion("id in", values, "id");
+            addCriterion("iday.id in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotIn(List<Integer> values) {
-            addCriterion("id not in", values, "id");
+            addCriterion("iday.id not in", values, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdBetween(Integer value1, Integer value2) {
-            addCriterion("id between", value1, value2, "id");
+            addCriterion("iday.id between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("id not between", value1, value2, "id");
+            addCriterion("iday.id not between", value1, value2, "id");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayIsNull() {
-            addCriterion("income_day is null");
+            addCriterion("iday.income_day is null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayIsNotNull() {
-            addCriterion("income_day is not null");
+            addCriterion("iday.income_day is not null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayEqualTo(Date value) {
-            addCriterion("income_day =", value, "incomeDay");
+            addCriterion("iday.income_day =", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayNotEqualTo(Date value) {
-            addCriterion("income_day <>", value, "incomeDay");
+            addCriterion("iday.income_day <>", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayGreaterThan(Date value) {
-            addCriterion("income_day >", value, "incomeDay");
+            addCriterion("iday.income_day >", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayGreaterThanOrEqualTo(Date value) {
-            addCriterion("income_day >=", value, "incomeDay");
+            addCriterion("iday.income_day >=", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayLessThan(Date value) {
-            addCriterion("income_day <", value, "incomeDay");
+            addCriterion("iday.income_day <", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayLessThanOrEqualTo(Date value) {
-            addCriterion("income_day <=", value, "incomeDay");
+            addCriterion("iday.income_day <=", value, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayIn(List<Date> values) {
-            addCriterion("income_day in", values, "incomeDay");
+            addCriterion("iday.income_day in", values, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayNotIn(List<Date> values) {
-            addCriterion("income_day not in", values, "incomeDay");
+            addCriterion("iday.income_day not in", values, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayBetween(Date value1, Date value2) {
-            addCriterion("income_day between", value1, value2, "incomeDay");
+            addCriterion("iday.income_day between", value1, value2, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeDayNotBetween(Date value1, Date value2) {
-            addCriterion("income_day not between", value1, value2, "incomeDay");
+            addCriterion("iday.income_day not between", value1, value2, "incomeDay");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeIsNull() {
-            addCriterion("income_type is null");
+            addCriterion("iday.income_type is null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeIsNotNull() {
-            addCriterion("income_type is not null");
+            addCriterion("iday.income_type is not null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeEqualTo(Byte value) {
-            addCriterion("income_type =", value, "incomeType");
+            addCriterion("iday.income_type =", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeNotEqualTo(Byte value) {
-            addCriterion("income_type <>", value, "incomeType");
+            addCriterion("iday.income_type <>", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeGreaterThan(Byte value) {
-            addCriterion("income_type >", value, "incomeType");
+            addCriterion("iday.income_type >", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeGreaterThanOrEqualTo(Byte value) {
-            addCriterion("income_type >=", value, "incomeType");
+            addCriterion("iday.income_type >=", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeLessThan(Byte value) {
-            addCriterion("income_type <", value, "incomeType");
+            addCriterion("iday.income_type <", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeLessThanOrEqualTo(Byte value) {
-            addCriterion("income_type <=", value, "incomeType");
+            addCriterion("iday.income_type <=", value, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeIn(List<Byte> values) {
-            addCriterion("income_type in", values, "incomeType");
+            addCriterion("iday.income_type in", values, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeNotIn(List<Byte> values) {
-            addCriterion("income_type not in", values, "incomeType");
+            addCriterion("iday.income_type not in", values, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeBetween(Byte value1, Byte value2) {
-            addCriterion("income_type between", value1, value2, "incomeType");
+            addCriterion("iday.income_type between", value1, value2, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypeNotBetween(Byte value1, Byte value2) {
-            addCriterion("income_type not between", value1, value2, "incomeType");
+            addCriterion("iday.income_type not between", value1, value2, "incomeType");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameIsNull() {
-            addCriterion("income_typename is null");
+            addCriterion("iday.income_typename is null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameIsNotNull() {
-            addCriterion("income_typename is not null");
+            addCriterion("iday.income_typename is not null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameEqualTo(String value) {
-            addCriterion("income_typename =", value, "incomeTypename");
+            addCriterion("iday.income_typename =", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameNotEqualTo(String value) {
-            addCriterion("income_typename <>", value, "incomeTypename");
+            addCriterion("iday.income_typename <>", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameGreaterThan(String value) {
-            addCriterion("income_typename >", value, "incomeTypename");
+            addCriterion("iday.income_typename >", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameGreaterThanOrEqualTo(String value) {
-            addCriterion("income_typename >=", value, "incomeTypename");
+            addCriterion("iday.income_typename >=", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameLessThan(String value) {
-            addCriterion("income_typename <", value, "incomeTypename");
+            addCriterion("iday.income_typename <", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameLessThanOrEqualTo(String value) {
-            addCriterion("income_typename <=", value, "incomeTypename");
+            addCriterion("iday.income_typename <=", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameLike(String value) {
-            addCriterion("income_typename like", value, "incomeTypename");
+            addCriterion("iday.income_typename like", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameNotLike(String value) {
-            addCriterion("income_typename not like", value, "incomeTypename");
+            addCriterion("iday.income_typename not like", value, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameIn(List<String> values) {
-            addCriterion("income_typename in", values, "incomeTypename");
+            addCriterion("iday.income_typename in", values, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameNotIn(List<String> values) {
-            addCriterion("income_typename not in", values, "incomeTypename");
+            addCriterion("iday.income_typename not in", values, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameBetween(String value1, String value2) {
-            addCriterion("income_typename between", value1, value2, "incomeTypename");
+            addCriterion("iday.income_typename between", value1, value2, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeTypenameNotBetween(String value1, String value2) {
-            addCriterion("income_typename not between", value1, value2, "incomeTypename");
+            addCriterion("iday.income_typename not between", value1, value2, "incomeTypename");
             return (Criteria) this;
         }
 
         public Criteria andIncomeIsNull() {
-            addCriterion("income is null");
+            addCriterion("iday.income is null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeIsNotNull() {
-            addCriterion("income is not null");
+            addCriterion("iday.income is not null");
             return (Criteria) this;
         }
 
         public Criteria andIncomeEqualTo(BigDecimal value) {
-            addCriterion("income =", value, "income");
+            addCriterion("iday.income =", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeNotEqualTo(BigDecimal value) {
-            addCriterion("income <>", value, "income");
+            addCriterion("iday.income <>", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeGreaterThan(BigDecimal value) {
-            addCriterion("income >", value, "income");
+            addCriterion("iday.income >", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("income >=", value, "income");
+            addCriterion("iday.income >=", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeLessThan(BigDecimal value) {
-            addCriterion("income <", value, "income");
+            addCriterion("iday.income <", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("income <=", value, "income");
+            addCriterion("iday.income <=", value, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeIn(List<BigDecimal> values) {
-            addCriterion("income in", values, "income");
+            addCriterion("iday.income in", values, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeNotIn(List<BigDecimal> values) {
-            addCriterion("income not in", values, "income");
+            addCriterion("iday.income not in", values, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("income between", value1, value2, "income");
+            addCriterion("iday.income between", value1, value2, "income");
             return (Criteria) this;
         }
 
         public Criteria andIncomeNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("income not between", value1, value2, "income");
+            addCriterion("iday.income not between", value1, value2, "income");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIsNull() {
-            addCriterion("record_status is null");
+            addCriterion("iday.record_status is null");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIsNotNull() {
-            addCriterion("record_status is not null");
+            addCriterion("iday.record_status is not null");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusEqualTo(Byte value) {
-            addCriterion("record_status =", value, "recordStatus");
+            addCriterion("iday.record_status =", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotEqualTo(Byte value) {
-            addCriterion("record_status <>", value, "recordStatus");
+            addCriterion("iday.record_status <>", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusGreaterThan(Byte value) {
-            addCriterion("record_status >", value, "recordStatus");
+            addCriterion("iday.record_status >", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusGreaterThanOrEqualTo(Byte value) {
-            addCriterion("record_status >=", value, "recordStatus");
+            addCriterion("iday.record_status >=", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusLessThan(Byte value) {
-            addCriterion("record_status <", value, "recordStatus");
+            addCriterion("iday.record_status <", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusLessThanOrEqualTo(Byte value) {
-            addCriterion("record_status <=", value, "recordStatus");
+            addCriterion("iday.record_status <=", value, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusIn(List<Byte> values) {
-            addCriterion("record_status in", values, "recordStatus");
+            addCriterion("iday.record_status in", values, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotIn(List<Byte> values) {
-            addCriterion("record_status not in", values, "recordStatus");
+            addCriterion("iday.record_status not in", values, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusBetween(Byte value1, Byte value2) {
-            addCriterion("record_status between", value1, value2, "recordStatus");
+            addCriterion("iday.record_status between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andRecordStatusNotBetween(Byte value1, Byte value2) {
-            addCriterion("record_status not between", value1, value2, "recordStatus");
+            addCriterion("iday.record_status not between", value1, value2, "recordStatus");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIsNull() {
-            addCriterion("creator_account is null");
+            addCriterion("iday.creator_account is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIsNotNull() {
-            addCriterion("creator_account is not null");
+            addCriterion("iday.creator_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountEqualTo(String value) {
-            addCriterion("creator_account =", value, "creatorAccount");
+            addCriterion("iday.creator_account =", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotEqualTo(String value) {
-            addCriterion("creator_account <>", value, "creatorAccount");
+            addCriterion("iday.creator_account <>", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountGreaterThan(String value) {
-            addCriterion("creator_account >", value, "creatorAccount");
+            addCriterion("iday.creator_account >", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("creator_account >=", value, "creatorAccount");
+            addCriterion("iday.creator_account >=", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLessThan(String value) {
-            addCriterion("creator_account <", value, "creatorAccount");
+            addCriterion("iday.creator_account <", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLessThanOrEqualTo(String value) {
-            addCriterion("creator_account <=", value, "creatorAccount");
+            addCriterion("iday.creator_account <=", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountLike(String value) {
-            addCriterion("creator_account like", value, "creatorAccount");
+            addCriterion("iday.creator_account like", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotLike(String value) {
-            addCriterion("creator_account not like", value, "creatorAccount");
+            addCriterion("iday.creator_account not like", value, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountIn(List<String> values) {
-            addCriterion("creator_account in", values, "creatorAccount");
+            addCriterion("iday.creator_account in", values, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotIn(List<String> values) {
-            addCriterion("creator_account not in", values, "creatorAccount");
+            addCriterion("iday.creator_account not in", values, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountBetween(String value1, String value2) {
-            addCriterion("creator_account between", value1, value2, "creatorAccount");
+            addCriterion("iday.creator_account between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatorAccountNotBetween(String value1, String value2) {
-            addCriterion("creator_account not between", value1, value2, "creatorAccount");
+            addCriterion("iday.creator_account not between", value1, value2, "creatorAccount");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIsNull() {
-            addCriterion("created_time is null");
+            addCriterion("iday.created_time is null");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIsNotNull() {
-            addCriterion("created_time is not null");
+            addCriterion("iday.created_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeEqualTo(Date value) {
-            addCriterion("created_time =", value, "createdTime");
+            addCriterion("iday.created_time =", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotEqualTo(Date value) {
-            addCriterion("created_time <>", value, "createdTime");
+            addCriterion("iday.created_time <>", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeGreaterThan(Date value) {
-            addCriterion("created_time >", value, "createdTime");
+            addCriterion("iday.created_time >", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("created_time >=", value, "createdTime");
+            addCriterion("iday.created_time >=", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeLessThan(Date value) {
-            addCriterion("created_time <", value, "createdTime");
+            addCriterion("iday.created_time <", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("created_time <=", value, "createdTime");
+            addCriterion("iday.created_time <=", value, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeIn(List<Date> values) {
-            addCriterion("created_time in", values, "createdTime");
+            addCriterion("iday.created_time in", values, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotIn(List<Date> values) {
-            addCriterion("created_time not in", values, "createdTime");
+            addCriterion("iday.created_time not in", values, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeBetween(Date value1, Date value2) {
-            addCriterion("created_time between", value1, value2, "createdTime");
+            addCriterion("iday.created_time between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("created_time not between", value1, value2, "createdTime");
+            addCriterion("iday.created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIsNull() {
-            addCriterion("modifier_account is null");
+            addCriterion("iday.modifier_account is null");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIsNotNull() {
-            addCriterion("modifier_account is not null");
+            addCriterion("iday.modifier_account is not null");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountEqualTo(String value) {
-            addCriterion("modifier_account =", value, "modifierAccount");
+            addCriterion("iday.modifier_account =", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotEqualTo(String value) {
-            addCriterion("modifier_account <>", value, "modifierAccount");
+            addCriterion("iday.modifier_account <>", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountGreaterThan(String value) {
-            addCriterion("modifier_account >", value, "modifierAccount");
+            addCriterion("iday.modifier_account >", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountGreaterThanOrEqualTo(String value) {
-            addCriterion("modifier_account >=", value, "modifierAccount");
+            addCriterion("iday.modifier_account >=", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLessThan(String value) {
-            addCriterion("modifier_account <", value, "modifierAccount");
+            addCriterion("iday.modifier_account <", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLessThanOrEqualTo(String value) {
-            addCriterion("modifier_account <=", value, "modifierAccount");
+            addCriterion("iday.modifier_account <=", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountLike(String value) {
-            addCriterion("modifier_account like", value, "modifierAccount");
+            addCriterion("iday.modifier_account like", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotLike(String value) {
-            addCriterion("modifier_account not like", value, "modifierAccount");
+            addCriterion("iday.modifier_account not like", value, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountIn(List<String> values) {
-            addCriterion("modifier_account in", values, "modifierAccount");
+            addCriterion("iday.modifier_account in", values, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotIn(List<String> values) {
-            addCriterion("modifier_account not in", values, "modifierAccount");
+            addCriterion("iday.modifier_account not in", values, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountBetween(String value1, String value2) {
-            addCriterion("modifier_account between", value1, value2, "modifierAccount");
+            addCriterion("iday.modifier_account between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifierAccountNotBetween(String value1, String value2) {
-            addCriterion("modifier_account not between", value1, value2, "modifierAccount");
+            addCriterion("iday.modifier_account not between", value1, value2, "modifierAccount");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIsNull() {
-            addCriterion("modified_time is null");
+            addCriterion("iday.modified_time is null");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIsNotNull() {
-            addCriterion("modified_time is not null");
+            addCriterion("iday.modified_time is not null");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeEqualTo(Date value) {
-            addCriterion("modified_time =", value, "modifiedTime");
+            addCriterion("iday.modified_time =", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotEqualTo(Date value) {
-            addCriterion("modified_time <>", value, "modifiedTime");
+            addCriterion("iday.modified_time <>", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeGreaterThan(Date value) {
-            addCriterion("modified_time >", value, "modifiedTime");
+            addCriterion("iday.modified_time >", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("modified_time >=", value, "modifiedTime");
+            addCriterion("iday.modified_time >=", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeLessThan(Date value) {
-            addCriterion("modified_time <", value, "modifiedTime");
+            addCriterion("iday.modified_time <", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeLessThanOrEqualTo(Date value) {
-            addCriterion("modified_time <=", value, "modifiedTime");
+            addCriterion("iday.modified_time <=", value, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeIn(List<Date> values) {
-            addCriterion("modified_time in", values, "modifiedTime");
+            addCriterion("iday.modified_time in", values, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotIn(List<Date> values) {
-            addCriterion("modified_time not in", values, "modifiedTime");
+            addCriterion("iday.modified_time not in", values, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeBetween(Date value1, Date value2) {
-            addCriterion("modified_time between", value1, value2, "modifiedTime");
+            addCriterion("iday.modified_time between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
 
         public Criteria andModifiedTimeNotBetween(Date value1, Date value2) {
-            addCriterion("modified_time not between", value1, value2, "modifiedTime");
+            addCriterion("iday.modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
     }

@@ -1,0 +1,49 @@
+package com.jn.enterprise.servicemarket.advisor.service;
+
+import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
+
+import java.util.List;
+
+/**
+ * 编辑顾问资料
+ * @Author: yangph
+ * @Date: 2019/2/27 10:12
+ * @Version v1.0
+ * @modified By:
+ */
+public interface AdvisorEditService {
+    /**
+     * 基本信息保存并更新
+     * @param advisorBaseInfo  顾问资料基本信息
+     */
+    void saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo);
+
+    /**
+     * 荣誉资质保存并更新
+     * @param serviceHonorParam  荣誉资质信息
+     */
+    void saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
+
+    /**
+     * 服务经历保存并更新
+     * @param serviceExperienceParam 服务经历信息
+     */
+    void saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
+
+    /**
+     * 项目经验保存并更新
+     * @param serviceProjectExperienceParam  项目经验信息
+     */
+    void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
+
+    /**
+     * 获取指定证件类型
+     * @param certificateType 证件类型分类
+     * @return
+     */
+    List<TbServiceCertificateType> getCertificateTypeList(String certificateType);
+}

@@ -13,7 +13,9 @@ public enum CommentExceptionEnum  implements CodeAndMsg {
     SENSITIVE_WORDS_IN_COMMENT("4020513","评论中有敏感词，请修改后重新提交"),
     APPLY_P_ID_NOT_NULL("4020239","活动/点评id不能为空"),
     APPLY_CONTENT_NOT_EMPTY("4020240","评论内容不能为空"),
-    APPLY_ROOT_ID_NOT_NULL("4020241","活动id/服务id不能为空")
+    APPLY_ROOT_ID_NOT_NULL("4020241","活动id/服务id不能为空"),
+    CURRENT_ACCOUNT_HAVE_LIKE("4020242","当前用户已点赞，请勿重复操作"),
+    CURRENT_ACCOUNT_HAVE_CANCEL_LIKE("4020243","当前用户已取消点赞，请勿重复操作"),
     ;
     /**
      * 编码

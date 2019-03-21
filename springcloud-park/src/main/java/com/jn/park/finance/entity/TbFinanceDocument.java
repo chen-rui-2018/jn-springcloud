@@ -31,7 +31,7 @@ public class TbFinanceDocument implements Serializable {
     /*@ApiModelProperty("附件名称-存储用户上传时的文件名称")*/
     private String docFilename;
 
-    /*@ApiModelProperty("附件编码-对应数据库存储文件的ID")*/
+    /*@ApiModelProperty("附件URL-对应FASTDFS存储的全路径")*/
     private String docFilecode;
 
     /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/

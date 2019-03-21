@@ -9,6 +9,7 @@ import com.jn.park.comment.model.CommentAdd;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -112,7 +113,12 @@ public class CommentServiceImplTest {
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.info("活动评论点赞失败");
-            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()));
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()),
+                            Matchers.containsString(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_LIKE.getCode()),
+                            Matchers.containsString(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_CANCEL_LIKE.getCode())
+                    ));
         }
 
     }
@@ -126,7 +132,13 @@ public class CommentServiceImplTest {
             commentService.commentActivityCancelLike(id,account);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
-            assertThat(e.getCode(),equalTo(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()));
+            logger.info("活动评论取消点赞失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(ActivityExceptionEnum.APPLY_IS_NOT_EXIST.getCode()),
+                            Matchers.containsString(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_LIKE.getCode()),
+                            Matchers.containsString(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_CANCEL_LIKE.getCode())
+                    ));
         }
 
     }

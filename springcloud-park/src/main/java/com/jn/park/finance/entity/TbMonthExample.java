@@ -105,72 +105,72 @@ public class TbMonthExample {
         }
 
         public Criteria andMonthIsNull() {
-            addCriterion("month is null");
+            addCriterion("m.month is null");
             return (Criteria) this;
         }
 
         public Criteria andMonthIsNotNull() {
-            addCriterion("month is not null");
+            addCriterion("m.month is not null");
             return (Criteria) this;
         }
 
         public Criteria andMonthEqualTo(String value) {
-            addCriterion("month =", value, "month");
+            addCriterion("m.month =", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthNotEqualTo(String value) {
-            addCriterion("month <>", value, "month");
+            addCriterion("m.month <>", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthGreaterThan(String value) {
-            addCriterion("month >", value, "month");
+            addCriterion("m.month >", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthGreaterThanOrEqualTo(String value) {
-            addCriterion("month >=", value, "month");
+            addCriterion("m.month >=", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthLessThan(String value) {
-            addCriterion("month <", value, "month");
+            addCriterion("m.month <", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthLessThanOrEqualTo(String value) {
-            addCriterion("month <=", value, "month");
+            addCriterion("m.month <=", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthLike(String value) {
-            addCriterion("month like", value, "month");
+            addCriterion("m.month like", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthNotLike(String value) {
-            addCriterion("month not like", value, "month");
+            addCriterion("m.month not like", value, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthIn(List<String> values) {
-            addCriterion("month in", values, "month");
+            addCriterion("m.month in", values, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthNotIn(List<String> values) {
-            addCriterion("month not in", values, "month");
+            addCriterion("m.month not in", values, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthBetween(String value1, String value2) {
-            addCriterion("month between", value1, value2, "month");
+            addCriterion("m.month between", value1, value2, "month");
             return (Criteria) this;
         }
 
         public Criteria andMonthNotBetween(String value1, String value2) {
-            addCriterion("month not between", value1, value2, "month");
+            addCriterion("m.month not between", value1, value2, "month");
             return (Criteria) this;
         }
     }

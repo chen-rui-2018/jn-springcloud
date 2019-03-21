@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -68,4 +69,12 @@ public interface UserExtensionClient {
      */
     @RequestMapping(value = "/api/user/getUserExtensionByCompanyCode", method = RequestMethod.POST)
     Result getUserExtensionByCompanyCode(@RequestBody @Validated CompanyParam companyParam);
+
+    /**
+     * 通过手机号获取已发送的验证码
+     * @param phone
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getSendCodeByPhone", method = RequestMethod.POST)
+    Result getSendCodeByPhone(@RequestBody  String phone);
 }

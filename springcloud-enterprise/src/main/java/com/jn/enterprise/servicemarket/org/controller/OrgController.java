@@ -5,7 +5,6 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.OrgExceptionEnum;
-import com.jn.enterprise.servicemarket.org.model.OrgDetail;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -68,8 +67,6 @@ public class OrgController extends BaseController {
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
     public Result getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
-        OrgDetail orgDetail = orgService.getServiceOrgDetail(orgId);
-
         return new Result(orgService.getServiceOrgDetail(orgId));
     }
 

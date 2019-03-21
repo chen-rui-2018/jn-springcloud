@@ -9,13 +9,16 @@ import com.jn.user.api.UserExtensionClient;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.service.UserInfoService;
+import com.jn.user.userjoin.service.UserJoinService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,6 +40,8 @@ public class UserExtensionController extends BaseController implements UserExten
 
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserJoinService userJoinService;
 
 
 
@@ -104,4 +109,13 @@ public class UserExtensionController extends BaseController implements UserExten
         PaginationData paginationData=userInfoService.getUserExtensionByCompanyCode(companyParam);
         return new Result(paginationData);
     }
+
+    @ControllerLog(doAction = "通过手机号获取已发送的验证码")
+    @ApiOperation(value = "通过手机号获取已发送的验证码",httpMethod = "POST",response = Result.class)
+    @RequestMapping(value = "/getSendCodeByPhone")
+    @Override
+    public Result<String> getSendCodeByPhone(@RequestBody String phone){
+        return new Result<>(userJoinService.getSendCodeByPhone(phone));
+    }
+
 }

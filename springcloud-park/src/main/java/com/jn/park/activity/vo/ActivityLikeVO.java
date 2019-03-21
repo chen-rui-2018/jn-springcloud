@@ -14,7 +14,7 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityLike", description = "活动点赞信息")
+@ApiModel(value = "ActivityLikeVO", description = "活动点赞信息")
 public class ActivityLikeVO implements Serializable {
     @ApiModelProperty(value = "点赞ID")
     private String id;

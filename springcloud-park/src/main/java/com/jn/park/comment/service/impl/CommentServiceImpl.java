@@ -172,7 +172,13 @@ public class CommentServiceImpl implements CommentService {
         long optionLikeNum = tbParkLikeMapper.countByExample(optionLikeExample);
         //已点赞/已取消点赞，不做操作
         if(optionLikeNum>0){
-            //ignore
+            if(Integer.parseInt(state)>0){
+                logger.warn("当前用户已点赞，请勿重复操作");
+                throw new JnSpringCloudException(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_LIKE);
+            }else{
+                logger.warn("当前用户已取消点赞，请勿重复操作");
+                throw new JnSpringCloudException(CommentExceptionEnum.CURRENT_ACCOUNT_HAVE_CANCEL_LIKE);
+            }
         }else if(existLikeNum>0){
             //当前活动、评论、服务存在当前用户的点赞信息，更新点赞表点赞状态
             updateParkLikeState(id, account, state);

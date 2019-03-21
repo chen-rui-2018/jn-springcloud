@@ -3,6 +3,7 @@ package com.jn.user.userinfo.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.user.model.*;
+import com.jn.user.userinfo.model.UserInfoParam;
 
 import java.util.List;
 
@@ -55,4 +56,14 @@ public interface UserInfoService {
      * @return
      */
     PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam);
+
+
+    /**
+     * 保存/修改用户信息
+     * @param userInfoParam
+     * @param account
+     * @return
+     */
+    int saveOrUpdateUserInfo(UserInfoParam userInfoParam,String account);
+
 }

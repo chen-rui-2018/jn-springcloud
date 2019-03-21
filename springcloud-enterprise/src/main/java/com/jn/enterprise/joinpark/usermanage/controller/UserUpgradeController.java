@@ -1,6 +1,9 @@
 package com.jn.enterprise.joinpark.usermanage.controller;
 
 import com.jn.common.model.Result;
+import com.jn.enterprise.company.model.Company;
+import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
+import com.jn.enterprise.company.model.CompanyCheckParam;
 import com.jn.enterprise.joinpark.usermanage.model.*;
 import com.jn.enterprise.joinpark.usermanage.service.UserUpgradeService;
 import com.jn.system.log.annotation.ControllerLog;
@@ -39,7 +42,7 @@ public class UserUpgradeController {
 
 
     @ControllerLog(doAction = "升级企业")
-    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class,notes = "返回值为响应数据条数")
     @RequestMapping(value = "/changeToCompany")
     public Result changeToCompany(@RequestBody @Validated CompanyCheckParam companyCheckParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();

@@ -88,14 +88,4 @@ public class InvestorController extends BaseController {
         List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
         return  new Result(investorMainRound);
     }
-
-
-    @ControllerLog(doAction = "投资人管理")
-    @ApiOperation(value = "投资人管理", httpMethod = "POST", response = Result.class)
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorManagementList")
-    @RequestMapping(value = "/getInvestorManagementList")
-    public Result<PaginationData<List<InvestorInfoListShow>>> getInvestorManagementList(@RequestBody @Validated InvestorInfoListParam investorInfoListParam){
-        PaginationData investorInfoList = investorService.getInvestorInfoList(investorInfoListParam);
-        return  new Result(investorInfoList);
-    }
 }

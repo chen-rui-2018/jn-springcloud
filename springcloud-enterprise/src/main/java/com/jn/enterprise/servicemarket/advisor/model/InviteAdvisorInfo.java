@@ -14,10 +14,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "InviteAdvisorInfo",description = "顾问邀请入参")
 public class InviteAdvisorInfo implements Serializable {
-    @ApiModelProperty(value = "注册手机/邮箱")
+    @ApiModelProperty(value = "注册手机/邮箱",required = true)
     @NotNull(message = "注册手机/邮箱不能为空")
     private String registerAccount;
-    @ApiModelProperty(value = "邀请人账号(当前登录用户账号)")
+    @ApiModelProperty(value = "邀请人账号(当前登录用户账号)",required = true)
     @NotNull(message = "邀请人账号不能为空")
     private String inviteAccount;
 

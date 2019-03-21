@@ -22,6 +22,7 @@ public enum InvestorExceptionEnum implements CodeAndMsg {
     MAIN_AREA_INFO_NOT_EXIST("5020529","系统中主投领域信息不存在"),
     MAIN_ROUND_INFO_NOT_EXIST("5020530","系统中主投轮次信息不存在"),
     INVESTOR_INFO_EXIST("5020531","当前投资人认证信息已存在"),
+    START_TIME_MORE_THAN_END_TIME("5020532","投资日期开始时间晚于投资日期结束时间"),
     ;
 
     /**

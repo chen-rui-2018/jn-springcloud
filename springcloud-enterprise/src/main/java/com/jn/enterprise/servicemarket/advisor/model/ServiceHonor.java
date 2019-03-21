@@ -18,17 +18,17 @@ import java.util.Date;
 public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "证书名称")
+    @ApiModelProperty(value = "证书名称",required = true)
     @NotNull(message="证书名称不能为空")
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
     @NotNull(message="证书类型不能为空")
     private String certificateType;
     @ApiModelProperty(value = "获得时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{getTime:'获得时间格式错误'}")
     private String getTime;
     @ApiModelProperty(value = "证书证件")

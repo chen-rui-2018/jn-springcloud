@@ -16,10 +16,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "OrgApplyCheckData",description = "机构申请审核信息")
 public class OrgApplyCheckData implements Serializable {
-    @ApiModelProperty(value = "机构ID")
+    @ApiModelProperty(value = "机构ID",required = true)
     @NotNull(message = "机构ID不能为空")
     private String orgId;
-    @ApiModelProperty(value = "审核状态2不通过1通过")
+    @ApiModelProperty(value = "审核状态2不通过1通过",required = true)
     @Pattern(regexp = "^[21]$", message = "{checkStatus:'审核状态只允许为2,1'}")
     private String checkStatus;
     @ApiModelProperty(value = "审批意见")

@@ -17,7 +17,7 @@ import java.io.Serializable;
 @ApiModel(value = "CompanyCheckParam",description = "用户信息入参")
 public class UserInfoParam implements Serializable {
 
-    @ApiModelProperty(value = "用户昵称")
+    @ApiModelProperty(value = "用户昵称",required = true)
     @NotNull(message = "用户昵称不能为空")
     private String nick_name;
 

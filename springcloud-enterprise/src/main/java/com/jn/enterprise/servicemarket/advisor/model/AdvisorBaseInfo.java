@@ -22,7 +22,7 @@ public class AdvisorBaseInfo  implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "机构名称")
     private String orgName;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限")

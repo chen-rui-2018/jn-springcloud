@@ -14,10 +14,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ApprovalParam",description = "审批顾问信息入参")
 public class ApprovalParam  implements Serializable {
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message = "顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "审批结果(approved:审批通过   approvalNotPassed:审批不通过)")
+    @ApiModelProperty(value = "审批结果(approved:审批通过   approvalNotPassed:审批不通过)",required = true)
     @NotNull(message = "审批结果不能为空")
     private String approvalResults;
     @ApiModelProperty(value = "审批说明")

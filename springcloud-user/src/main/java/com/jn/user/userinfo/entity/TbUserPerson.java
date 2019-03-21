@@ -30,6 +30,8 @@ public class TbUserPerson implements Serializable {
 
     private String idCard;
 
+    private String signature;
+
     private String company;
 
     private String post;
@@ -160,6 +162,14 @@ public class TbUserPerson implements Serializable {
         this.idCard = idCard == null ? null : idCard.trim();
     }
 
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature == null ? null : signature.trim();
+    }
+
     public String getCompany() {
         return company;
     }
@@ -281,6 +291,7 @@ public class TbUserPerson implements Serializable {
             && (this.getSex() == null ? other.getSex() == null : this.getSex().equals(other.getSex()))
             && (this.getAge() == null ? other.getAge() == null : this.getAge().equals(other.getAge()))
             && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
+            && (this.getSignature() == null ? other.getSignature() == null : this.getSignature().equals(other.getSignature()))
             && (this.getCompany() == null ? other.getCompany() == null : this.getCompany().equals(other.getCompany()))
             && (this.getPost() == null ? other.getPost() == null : this.getPost().equals(other.getPost()))
             && (this.getEducation() == null ? other.getEducation() == null : this.getEducation().equals(other.getEducation()))
@@ -312,6 +323,7 @@ public class TbUserPerson implements Serializable {
         result = prime * result + ((getSex() == null) ? 0 : getSex().hashCode());
         result = prime * result + ((getAge() == null) ? 0 : getAge().hashCode());
         result = prime * result + ((getIdCard() == null) ? 0 : getIdCard().hashCode());
+        result = prime * result + ((getSignature() == null) ? 0 : getSignature().hashCode());
         result = prime * result + ((getCompany() == null) ? 0 : getCompany().hashCode());
         result = prime * result + ((getPost() == null) ? 0 : getPost().hashCode());
         result = prime * result + ((getEducation() == null) ? 0 : getEducation().hashCode());
@@ -346,6 +358,7 @@ public class TbUserPerson implements Serializable {
         sb.append(", sex=").append(sex);
         sb.append(", age=").append(age);
         sb.append(", idCard=").append(idCard);
+        sb.append(", signature=").append(signature);
         sb.append(", company=").append(company);
         sb.append(", post=").append(post);
         sb.append(", education=").append(education);

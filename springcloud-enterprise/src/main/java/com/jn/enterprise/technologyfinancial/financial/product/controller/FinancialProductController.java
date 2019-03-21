@@ -45,7 +45,7 @@ public class FinancialProductController extends BaseController {
     @ApiOperation(value = "金融产品列表查询", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductList")
     @RequestMapping(value = "/getInvestorInfoList")
-    public Result getFinancialProductList(@RequestBody @Validated FinancialProductListParam financialProductListParam){
+    public Result<PaginationData<List<FinancialProductListInfo>>> getFinancialProductList(@RequestBody @Validated FinancialProductListParam financialProductListParam){
         PaginationData investorInfoList = financialProductService.getFinancialProductList(financialProductListParam);
         return  new Result(investorInfoList);
     }
@@ -54,7 +54,7 @@ public class FinancialProductController extends BaseController {
     @ApiOperation(value = "金融产品详情", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductDetails")
     @RequestMapping(value = "/getFinancialProductDetails")
-    public Result getFinancialProductDetails(@ApiParam(value = "产品id" ,required = true) @RequestParam("productId") String productId){
+    public Result<FinacialProductDetails> getFinancialProductDetails(@ApiParam(value = "产品id" ,required = true) @RequestParam("productId") String productId){
         Assert.notNull(productId, FinancialProductExceptionEnum.PRODUCT_ID_NOT_NULL.getMessage());
         FinacialProductDetails finacialProductDetails = financialProductService.getFinancialProductDetails(productId);
         return  new Result(finacialProductDetails);
@@ -64,7 +64,7 @@ public class FinancialProductController extends BaseController {
     @ApiOperation(value = "金融产品贷款类别", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductLoanType")
     @RequestMapping(value = "/getFinancialProductLoanType")
-    public Result getFinancialProductLoanType(){
+    public Result<List<FinacialProductLoanType>> getFinancialProductLoanType(){
         List<FinacialProductLoanType> finacialProductLoanTypeList = financialProductService.getFinancialProductLoanType();
         return  new Result(finacialProductLoanTypeList);
     }
@@ -73,7 +73,7 @@ public class FinancialProductController extends BaseController {
     @ApiOperation(value = "金融产品担保方式", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductAssureType")
     @RequestMapping(value = "/getFinancialProductAssureType")
-    public Result getFinancialProductAssureType(){
+    public Result<List<FinancialProductAssureType>> getFinancialProductAssureType(){
         List<FinancialProductAssureType> financialProductAssureTypeList = financialProductService.getFinancialProductAssureType();
         return  new Result(financialProductAssureTypeList);
     }
@@ -83,7 +83,7 @@ public class FinancialProductController extends BaseController {
     @ApiOperation(value = "科技金融首页投资人数，金融产品数，金融机构数", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/financialProductController/getTechnologyInfoNum")
     @RequestMapping(value = "/getTechnologyInfoNum")
-    public Result getTechnologyInfoNum(){
+    public Result<TechnologyInfoNum> getTechnologyInfoNum(){
         TechnologyInfoNum technologyInfoNum= financialProductService.getTechnologyInfoNum();
         return  new Result(technologyInfoNum);
     }

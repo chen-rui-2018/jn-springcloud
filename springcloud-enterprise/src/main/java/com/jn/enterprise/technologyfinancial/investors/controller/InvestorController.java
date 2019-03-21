@@ -5,10 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
-import com.jn.enterprise.technologyfinancial.investors.model.AffiliaationUnitShow;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorMainArea;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorMainRound;
+import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
@@ -49,13 +46,13 @@ public class InvestorController extends BaseController {
     @ApiOperation(value = "投资人列表查询", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoList")
     @RequestMapping(value = "/getInvestorInfoList")
-    public Result getInvestorInfoList(@RequestBody @Validated InvestorInfoListParam investorInfoListParam){
+    public Result<PaginationData<List<InvestorInfoListShow>>> getInvestorInfoList(@RequestBody @Validated InvestorInfoListParam investorInfoListParam){
         PaginationData investorInfoList = investorService.getInvestorInfoList(investorInfoListParam);
         return  new Result(investorInfoList);
     }
 
-    @ControllerLog(doAction = "投资人详情")
-    @ApiOperation(value = "投资人详情", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "投资人详情/投资人查看")
+    @ApiOperation(value = "投资人详情/投资人查看", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoDetails")
     @RequestMapping(value = "/getInvestorInfoDetails")
     public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true)@RequestParam("investorAccount") String investorAccount){
@@ -90,5 +87,15 @@ public class InvestorController extends BaseController {
     public Result<List<InvestorMainRound>> getInvestorMainRound(){
         List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
         return  new Result(investorMainRound);
+    }
+
+
+    @ControllerLog(doAction = "投资人管理")
+    @ApiOperation(value = "投资人管理", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/technologyFinancial/investorController/getInvestorManagementList")
+    @RequestMapping(value = "/getInvestorManagementList")
+    public Result<PaginationData<List<InvestorInfoListShow>>> getInvestorManagementList(@RequestBody @Validated InvestorInfoListParam investorInfoListParam){
+        PaginationData investorInfoList = investorService.getInvestorInfoList(investorInfoListParam);
+        return  new Result(investorInfoList);
     }
 }

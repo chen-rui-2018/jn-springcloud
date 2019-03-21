@@ -65,6 +65,7 @@
         <result column="applicantPhone" jdbcType="VARCHAR" property="applicantPhone" />
         <result column="applicantWechatAccount" jdbcType="VARCHAR" property="applicantWechatAccount" />
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+        <result column="meetingRoomName" jdbcType="VARCHAR" property="meetingRoomName" />
     </resultMap>
     <resultMap id="TbOaMeetingBaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeeting">
         <id column="meeting_id" jdbcType="VARCHAR" property="id" />
@@ -532,18 +533,25 @@
             t.id AS meeting_id,
             tt.phone AS applicantPhone,
             tt.wechat_account AS applicantWechatAccount,
-            t.title AS meeting_title
+            t.title AS meeting_title,
+			t.meetingRoomName
         FROM
             (
-        SELECT
+          SELECT
             round( ( UNIX_TIMESTAMP( meeting.start_time ) - UNIX_TIMESTAMP( NOW( ) ) ) / 60 ) AS sub_time,
             meeting.start_time,
             meeting.applicant,
             meeting.id,
-            meeting.title
+            meeting.title,
+		meetingroom.name as meetingRoomName
         FROM
             tb_oa_meeting meeting
-        WHERE
+						left JOIN
+						(
+						 select r.name ,r.id from tb_oa_meeting_room  r
+						)meetingroom on meetingroom.id = meeting.meeting_room_id
+
+						 WHERE
            meeting.is_remind is null
             ) t
             LEFT JOIN ( SELECT t.id, t.phone, t.wechat_account FROM tb_sys_user t WHERE t.record_status = 1 ) tt ON tt.id = t.applicant

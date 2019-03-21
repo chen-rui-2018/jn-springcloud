@@ -3,10 +3,13 @@ package com.jn.oa.email.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.oa.email.model.DownAttachment;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
 import com.jn.oa.email.service.EmailService;
+import com.jn.oa.email.vo.EmailVO;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -14,11 +17,18 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -45,12 +55,12 @@ public class EmailController extends BaseController {
 
         //判断是添加操作还是编辑操作
         Boolean isAdd = StringUtils.isBlank(emailAdd.getId()) ? true : false;
-        if (isAdd){
+        if (isAdd) {
             //设置id
             emailAdd.setId(UUID.randomUUID().toString());
         }
 
-        emailService.addOrUpdate(emailAdd, user,isAdd);
+        emailService.addOrUpdate(emailAdd, user, isAdd);
         return new Result();
     }
 
@@ -61,7 +71,7 @@ public class EmailController extends BaseController {
     public Result sendEmailManual(String emailId) {
         //获取当前用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        emailService.sendEmailManual(emailId,user);
+        emailService.sendEmailManual(emailId, user);
         return new Result();
     }
 
@@ -70,10 +80,52 @@ public class EmailController extends BaseController {
     @ApiOperation(value = "一键Email列表功能", httpMethod = "POST", response = Result.class)
     @RequestMapping("/list")
     public Result list(@Validated @RequestBody EmailPage emailPage) {
-        //获取当前用户信息
         PaginationData data = emailService.list(emailPage);
         return new Result(data);
     }
 
+    @ControllerLog(doAction = "查看邮件任务详情功能")
+    @RequiresPermissions("/oa/email/getEmailDetails")
+    @ApiOperation(value = "查看邮件任务详情功能", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/getEmailDetails")
+    public Result getEmailDetails(String emailId) {
+        EmailVO emailVO = emailService.getEmailDetails(emailId);
+        return new Result(emailVO);
+    }
+
+    @ControllerLog(doAction = "(逻辑)批量删除邮件任务")
+    @RequiresPermissions("/oa/email/deleteBatch")
+    @ApiOperation(value = "(逻辑)批量删除邮件任务", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/deleteBatch")
+    public Result deleteBatch(@RequestParam("emailIds") String[] emailIds) {
+        Assert.noNullElements(emailIds, "删除邮件不能为空");
+
+        //获取当前用户信息
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        emailService.deleteBatch(emailIds, user);
+        return new Result();
+    }
+
+
+    @ControllerLog(doAction = "附件上传")
+    @RequiresPermissions("/oa/email/uploadAttachment")
+    @ApiOperation(value = "附件上传", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/uploadAttachment")
+    public Result uploadAttachment(HttpServletRequest request) {
+        //获取上传文件
+        List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
+
+        String attachment = emailService.uploadAttachment(files);
+        return new Result(attachment);
+    }
+
+    @ControllerLog(doAction = "附件下载")
+    @RequiresPermissions("/oa/email/downLoadAttachment")
+    @ApiOperation(value = "附件下载", httpMethod = "POST", response = Result.class)
+    @RequestMapping("/downLoadAttachment")
+    public ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response) {
+        ResponseEntity<byte[]> attachment = emailService.downLoadAttachment(downAttachment, response);
+        return attachment;
+    }
 
 }

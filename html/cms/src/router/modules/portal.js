@@ -49,13 +49,6 @@ const portalRouter = {
       name: 'applyActivityList',
       meta: { title: '活动报名列表', noCache: false },
       hidden: true
-    },
-    {
-      path: 'activityTypeList',
-      component: () => import('@/views/portal/activityTypeList'),
-      name: 'activityTypeList',
-      meta: { title: '活动类型列表', noCache: false },
-      hidden: true
     }
   ]
 }

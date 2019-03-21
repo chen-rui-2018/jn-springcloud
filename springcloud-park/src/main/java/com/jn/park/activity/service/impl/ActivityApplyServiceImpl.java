@@ -273,6 +273,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         tbActivityApplyMapper.insertSelective(activityApply);
     }
 
+
     /**
      * 修改园区活动报名人数
      *
@@ -519,7 +520,12 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         List<ActivityApplyDetail> accountList = activityApplyMapper.findApplyAccountList(activityIdList);
         return findUserExtension(accountList);
     }
-
+    @ServiceLog(doAction = "活动报名人资料")
+    @Override
+    public UserExtensionInfo activityApplyInfo(String account) {
+        Result<UserExtensionInfo> result = userExtensionClient.getUserExtension(account);
+        return result.getData();
+    }
     /**
      * 完善报名人详细信息
      * @param activityApplyList
@@ -536,7 +542,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
             if (!userList.isEmpty()) {
                 for (UserExtensionInfo user : userList) {
                     for (ActivityApplyDetail detail : activityApplyList) {
-                        if (user!= null) {
+                        if (user!= null && user.getAccount().equals(detail.getAccount())) {
                             BeanUtils.copyProperties(user, detail);
                         }
                     }

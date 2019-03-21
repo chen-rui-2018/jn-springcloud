@@ -1,5 +1,6 @@
 package com.jn.park.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:jiangyl
  */
+@ApiModel(value = "ActivityApplyDetail", description = "活动报名信息")
 public class ActivityApplyDetail implements Serializable {
     @ApiModelProperty(value = "报名信息标识")
     private String id;

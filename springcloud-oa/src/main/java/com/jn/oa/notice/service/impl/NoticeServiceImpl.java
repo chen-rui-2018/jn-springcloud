@@ -136,7 +136,7 @@ public class NoticeServiceImpl implements NoticeService {
     public Notice getNoticeById(String noticeId) {
         TbOaNotice tbOaNotice = tbOaNoticeMapper.selectByPrimaryKey(noticeId);
         //判断公告存在,且为删除时,返回公告内容
-        if (tbOaNotice != null && new Byte(OaStatusEnums.EFFECTIVE.getCode()).equals(tbOaNotice.getRecordStatus())) {
+        if (tbOaNotice != null && !new Byte(OaStatusEnums.DELETED.getCode()).equals(tbOaNotice.getRecordStatus())) {
             Notice notice = new Notice();
             BeanUtils.copyProperties(tbOaNotice, notice);
             return notice;

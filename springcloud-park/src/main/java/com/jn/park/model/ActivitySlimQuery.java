@@ -24,7 +24,7 @@ public class ActivitySlimQuery extends Page implements Serializable {
     private String startTime;
     @ApiModelProperty(value = "结束时间(活动开始时间小于此时间 格式:'yyyy-MM-dd')")
     private String endTime;
-    @ApiModelProperty(value = "排序字段名称(若要按感兴趣人数排序则传入'acti_Like')")
+    @ApiModelProperty(value = "排序字段名称(若要按感兴趣人数排序则传入'acti_Like',浏览数（acti_views）,报名人数（apply_num）,点赞人数（partic_num）,开始时间（acti_start_time)")
     private String orderBy;
 
 

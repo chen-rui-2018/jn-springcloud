@@ -66,7 +66,7 @@
         <el-input v-model="activityForm.actiNumber" placeholder="活动限制人数" style="width: 205px;" />
         <span class="acPeople">人</span>
       </el-form-item>
-      <el-form-item v-model="activityForm.typeId" label="活动海报" prop="actiPosterUrl">
+      <el-form-item v-model="activityForm.actiPosterUrl" label="活动海报" prop="actiPosterUrl">
         <div class="poster" @click="handleClick">
           <i class="el-icon-plus" />
           <!-- <span>+</span> -->
@@ -90,8 +90,8 @@
         </el-steps>
       </el-form-item>
       <el-form-item>
-        <el-button v-if="row.actiStatus==='1'" type="primary" @click="saveDrafts">保存草稿</el-button>
-        <el-button type="primary" @click="release">发布</el-button>
+        <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="saveDrafts">保存草稿</el-button>
+        <el-button v-if="activityForm.actiStatus==='1'" type="primary" @click="release">发布</el-button>
         <el-button type="primary" @click="goBack">返回</el-button>
       </el-form-item>
     </el-form>
@@ -101,20 +101,22 @@
         <i class="el-icon-plus" />
       </el-upload> -->
       <!-- <p>已选择的图片</p> -->
-      <el-upload :show-file-list="false" :auto-upload="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/">
+      <el-upload :headers="headers" :show-file-list="false" :auto-upload="false" :multiple="false" :on-change="changeImg" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" class="avatar-uploader" action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload">
         <img v-if="imageUrl" :src="imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon" />
       </el-upload>
-      <p style="color:#495461">从海报模板库选择</p>
+      <!-- <div v-if="templateImgList!==null&&templateImgList.length>0"> -->
+      <div v-if="templateImgList.length>0" style="color:#495461">从海报模板库选择</div>
       <div class="localImg">
         <div class="actype">{{ typeName }}</div>
         <div class="acimg">
           <ul class="acUl">
-            <li v-if="templateImgList"><img alt="活动海报" @click="selectImg()"></li>
+            <li v-if="templateImgList!==null&&templateImgList.length>0"><img alt="活动海报" @click="selectImg()"></li>
             <li v-for="item in templateImgList" :key="item"><img :src="item" alt="活动海报" @click="selectImg(item)"></li>
           </ul>
         </div>
       </div>
+      <!-- </div> -->
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirm">确 定</el-button>
         <el-button @click="dialogPosterVisible = false">取 消</el-button>
@@ -125,37 +127,26 @@
 
 <script>
 import UE from '../../components/UE/ue.vue'
+import { getToken } from '@/utils/auth'
 import {
   getActivityType,
   getEventPoster,
   saveActivityDraft,
-  publishActivity
+  publishActivity,
+  getActivityDetailsForManage
 } from '@/api/portalManagement/activity'
 export default {
   components: { UE },
   data() {
     return {
+      headers: {
+        token: getToken()
+      },
       content: '',
       editorOption: {},
       typeOptions: [],
       parkIdOptions: [],
       activityForm: {
-        // actiOrder: undefined,
-        // isIndex: undefined,
-        // actiType: undefined,
-        // actiName: undefined,
-        // actiStartTime: undefined,
-        // actiEndTime: undefined,
-        // applyEndTime: undefined,
-        // mesSendTime: undefined,
-        // parkId: undefined,
-        // actiAddress: undefined,
-        // actiCost: undefined,
-        // actiOrganizer: undefined,
-        // showApplyNum: undefined,
-        // actiNumber: undefined,
-        // actiPosterUrl: undefined,
-        // actiDetail: undefined,
         actiOrder: 0,
         isIndex: '',
         actiType: '',
@@ -194,14 +185,30 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.row) {
-      this.row = this.$route.query.row
-      this.getEditContent()
+    console.log(this.$route.query.activityId)
+    if (this.$route.query.activityId) {
+      // this.row = JSON.parse(this.$route.query.row)
+      this.init()
+      // this.getEditContent()
     } else {
       this.getActivityType()
     }
   },
   methods: {
+    init() {
+      // const data = {
+      //   activityId: this.$route.query.activityId
+      // }
+      getActivityDetailsForManage(this.$route.query.activityId).then(res => {
+        console.log(res)
+        if (res.data.code === '0000') {
+          this.activityForm = res.data.data
+          this.defaultMsg = this.activityForm.actiDetail
+        } else {
+          this.$message(res.data.result)
+        }
+      })
+    },
     handleRemove() {},
     handlePictureCardPreview() {},
     getEndtime() {},
@@ -268,15 +275,22 @@ export default {
       // this.imageUrl = URL.createObjectURL(file.raw)
     },
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
+      // const isJPG = file.type === 'image/jpeg'
+      // const isLt2M = file.size / 1024 / 1024 < 2
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!')
+      // }
+      // if (!isLt2M) {
+      //   this.$message.error('上传头像图片大小不能超过 2MB!')
+      // }
+      // return isJPG && isLt2M
+      if (file.size > 4 * 1024 * 1024) {
+        this.$message({
+          type: 'warning',
+          message: '文件大小必须小于4M'
+        })
+        return false
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
     },
     getActivityType() {
       getActivityType().then(res => {
@@ -294,7 +308,7 @@ export default {
     },
     // 获取编辑行的内容
     getEditContent() {
-      const row = this.$route.query.row
+      const row = this.row
       this.activityForm.actiName = row.actiName
       this.activityForm.actiType = row.actiType
       this.activityForm.actiStatus = row.actiStatus
@@ -324,17 +338,6 @@ export default {
         return
       }
       const data = this.activityForm
-      // insterOrUpdateActivity(data).then(res => {
-      //   if (res.data.code === '0000') {
-      //     this.$message({
-      //       message: '保存草稿成功',
-      //       type: 'success'
-      //     })
-      //     this.goBack()
-      //   } else {
-      //     this.$message(res.data.result)
-      //   }
-      // })
       saveActivityDraft(data).then(res => {
         console.log(res)
         if (res.data.code === '0000') {
@@ -455,6 +458,7 @@ export default {
         return
       }
       this.activityForm.actiDetail = this.$refs.ue.getUEContent()
+      console.log(this.activityForm.actiDetail)
       if (!this.activityForm.actiDetail) {
         this.$message({
           message: '活动详情不能为空',
@@ -464,17 +468,6 @@ export default {
       }
       this.activityForm.actiStatus = 2
       const data = this.activityForm
-      // insterOrUpdateActivity(data).then(res => {
-      //   if (res.data.code === '0000') {
-      //     this.$message({
-      //       message: '发布成功',
-      //       type: 'success'
-      //     })
-      //     this.goBack()
-      //   } else {
-      //     this.$message(res.data.result)
-      //   }
-      // })
       publishActivity(data).then(res => {
         console.log(res)
         if (res.data.code === '0000') {

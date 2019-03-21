@@ -423,8 +423,8 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_service_company">
-        </table>
+        <table tableName="tb_service_company"></table>
+        <table tableName="tb_service_company_pro_img"></table>
         <table tableName="tb_service_company_staff">
         </table>
     </context>

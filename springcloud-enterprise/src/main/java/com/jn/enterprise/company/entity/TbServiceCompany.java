@@ -23,6 +23,12 @@ public class TbServiceCompany implements Serializable {
 
     private String ownerId;
 
+    private String ownerPhone;
+
+    private String ownerWechat;
+
+    private String ownerQq;
+
     private String bankName;
 
     private String bankAccount;
@@ -35,6 +41,8 @@ public class TbServiceCompany implements Serializable {
 
     private Long regCapital;
 
+    private String addCapital;
+
     private Long comScale;
 
     private Date foundingTime;
@@ -43,7 +51,7 @@ public class TbServiceCompany implements Serializable {
 
     private String induType;
 
-    private String industry;
+    private String induCode;
 
     private String businessLicense;
 
@@ -51,11 +59,21 @@ public class TbServiceCompany implements Serializable {
 
     private Date licEndtime;
 
+    private String registerType;
+
     private String orgCode;
+
+    private String mainProducts;
+
+    private String businessScope;
 
     private String contact;
 
     private String conPhone;
+
+    private String conWechat;
+
+    private String conQq;
 
     private String conAddress;
 
@@ -65,7 +83,15 @@ public class TbServiceCompany implements Serializable {
 
     private String comTele;
 
+    private String comWeb;
+
+    private String comServer;
+
+    private String comDemand;
+
     private String addrPark;
+
+    private String comSynopsis;
 
     private String parkBuildId;
 
@@ -167,6 +193,30 @@ public class TbServiceCompany implements Serializable {
         this.ownerId = ownerId == null ? null : ownerId.trim();
     }
 
+    public String getOwnerPhone() {
+        return ownerPhone;
+    }
+
+    public void setOwnerPhone(String ownerPhone) {
+        this.ownerPhone = ownerPhone == null ? null : ownerPhone.trim();
+    }
+
+    public String getOwnerWechat() {
+        return ownerWechat;
+    }
+
+    public void setOwnerWechat(String ownerWechat) {
+        this.ownerWechat = ownerWechat == null ? null : ownerWechat.trim();
+    }
+
+    public String getOwnerQq() {
+        return ownerQq;
+    }
+
+    public void setOwnerQq(String ownerQq) {
+        this.ownerQq = ownerQq == null ? null : ownerQq.trim();
+    }
+
     public String getBankName() {
         return bankName;
     }
@@ -215,6 +265,14 @@ public class TbServiceCompany implements Serializable {
         this.regCapital = regCapital;
     }
 
+    public String getAddCapital() {
+        return addCapital;
+    }
+
+    public void setAddCapital(String addCapital) {
+        this.addCapital = addCapital == null ? null : addCapital.trim();
+    }
+
     public Long getComScale() {
         return comScale;
     }
@@ -247,12 +305,12 @@ public class TbServiceCompany implements Serializable {
         this.induType = induType == null ? null : induType.trim();
     }
 
-    public String getIndustry() {
-        return industry;
+    public String getInduCode() {
+        return induCode;
     }
 
-    public void setIndustry(String industry) {
-        this.industry = industry == null ? null : industry.trim();
+    public void setInduCode(String induCode) {
+        this.induCode = induCode == null ? null : induCode.trim();
     }
 
     public String getBusinessLicense() {
@@ -279,12 +337,36 @@ public class TbServiceCompany implements Serializable {
         this.licEndtime = licEndtime;
     }
 
+    public String getRegisterType() {
+        return registerType;
+    }
+
+    public void setRegisterType(String registerType) {
+        this.registerType = registerType == null ? null : registerType.trim();
+    }
+
     public String getOrgCode() {
         return orgCode;
     }
 
     public void setOrgCode(String orgCode) {
         this.orgCode = orgCode == null ? null : orgCode.trim();
+    }
+
+    public String getMainProducts() {
+        return mainProducts;
+    }
+
+    public void setMainProducts(String mainProducts) {
+        this.mainProducts = mainProducts == null ? null : mainProducts.trim();
+    }
+
+    public String getBusinessScope() {
+        return businessScope;
+    }
+
+    public void setBusinessScope(String businessScope) {
+        this.businessScope = businessScope == null ? null : businessScope.trim();
     }
 
     public String getContact() {
@@ -301,6 +383,22 @@ public class TbServiceCompany implements Serializable {
 
     public void setConPhone(String conPhone) {
         this.conPhone = conPhone == null ? null : conPhone.trim();
+    }
+
+    public String getConWechat() {
+        return conWechat;
+    }
+
+    public void setConWechat(String conWechat) {
+        this.conWechat = conWechat == null ? null : conWechat.trim();
+    }
+
+    public String getConQq() {
+        return conQq;
+    }
+
+    public void setConQq(String conQq) {
+        this.conQq = conQq == null ? null : conQq.trim();
     }
 
     public String getConAddress() {
@@ -335,12 +433,44 @@ public class TbServiceCompany implements Serializable {
         this.comTele = comTele == null ? null : comTele.trim();
     }
 
+    public String getComWeb() {
+        return comWeb;
+    }
+
+    public void setComWeb(String comWeb) {
+        this.comWeb = comWeb == null ? null : comWeb.trim();
+    }
+
+    public String getComServer() {
+        return comServer;
+    }
+
+    public void setComServer(String comServer) {
+        this.comServer = comServer == null ? null : comServer.trim();
+    }
+
+    public String getComDemand() {
+        return comDemand;
+    }
+
+    public void setComDemand(String comDemand) {
+        this.comDemand = comDemand == null ? null : comDemand.trim();
+    }
+
     public String getAddrPark() {
         return addrPark;
     }
 
     public void setAddrPark(String addrPark) {
         this.addrPark = addrPark == null ? null : addrPark.trim();
+    }
+
+    public String getComSynopsis() {
+        return comSynopsis;
+    }
+
+    public void setComSynopsis(String comSynopsis) {
+        this.comSynopsis = comSynopsis == null ? null : comSynopsis.trim();
     }
 
     public String getParkBuildId() {
@@ -468,28 +598,41 @@ public class TbServiceCompany implements Serializable {
             && (this.getOwners() == null ? other.getOwners() == null : this.getOwners().equals(other.getOwners()))
             && (this.getOwnerLaw() == null ? other.getOwnerLaw() == null : this.getOwnerLaw().equals(other.getOwnerLaw()))
             && (this.getOwnerId() == null ? other.getOwnerId() == null : this.getOwnerId().equals(other.getOwnerId()))
+            && (this.getOwnerPhone() == null ? other.getOwnerPhone() == null : this.getOwnerPhone().equals(other.getOwnerPhone()))
+            && (this.getOwnerWechat() == null ? other.getOwnerWechat() == null : this.getOwnerWechat().equals(other.getOwnerWechat()))
+            && (this.getOwnerQq() == null ? other.getOwnerQq() == null : this.getOwnerQq().equals(other.getOwnerQq()))
             && (this.getBankName() == null ? other.getBankName() == null : this.getBankName().equals(other.getBankName()))
             && (this.getBankAccount() == null ? other.getBankAccount() == null : this.getBankAccount().equals(other.getBankAccount()))
             && (this.getProducts() == null ? other.getProducts() == null : this.getProducts().equals(other.getProducts()))
             && (this.getMaterial() == null ? other.getMaterial() == null : this.getMaterial().equals(other.getMaterial()))
             && (this.getComProperty() == null ? other.getComProperty() == null : this.getComProperty().equals(other.getComProperty()))
             && (this.getRegCapital() == null ? other.getRegCapital() == null : this.getRegCapital().equals(other.getRegCapital()))
+            && (this.getAddCapital() == null ? other.getAddCapital() == null : this.getAddCapital().equals(other.getAddCapital()))
             && (this.getComScale() == null ? other.getComScale() == null : this.getComScale().equals(other.getComScale()))
             && (this.getFoundingTime() == null ? other.getFoundingTime() == null : this.getFoundingTime().equals(other.getFoundingTime()))
             && (this.getRunTime() == null ? other.getRunTime() == null : this.getRunTime().equals(other.getRunTime()))
             && (this.getInduType() == null ? other.getInduType() == null : this.getInduType().equals(other.getInduType()))
-            && (this.getIndustry() == null ? other.getIndustry() == null : this.getIndustry().equals(other.getIndustry()))
+            && (this.getInduCode() == null ? other.getInduCode() == null : this.getInduCode().equals(other.getInduCode()))
             && (this.getBusinessLicense() == null ? other.getBusinessLicense() == null : this.getBusinessLicense().equals(other.getBusinessLicense()))
             && (this.getLicStarttime() == null ? other.getLicStarttime() == null : this.getLicStarttime().equals(other.getLicStarttime()))
             && (this.getLicEndtime() == null ? other.getLicEndtime() == null : this.getLicEndtime().equals(other.getLicEndtime()))
+            && (this.getRegisterType() == null ? other.getRegisterType() == null : this.getRegisterType().equals(other.getRegisterType()))
             && (this.getOrgCode() == null ? other.getOrgCode() == null : this.getOrgCode().equals(other.getOrgCode()))
+            && (this.getMainProducts() == null ? other.getMainProducts() == null : this.getMainProducts().equals(other.getMainProducts()))
+            && (this.getBusinessScope() == null ? other.getBusinessScope() == null : this.getBusinessScope().equals(other.getBusinessScope()))
             && (this.getContact() == null ? other.getContact() == null : this.getContact().equals(other.getContact()))
             && (this.getConPhone() == null ? other.getConPhone() == null : this.getConPhone().equals(other.getConPhone()))
+            && (this.getConWechat() == null ? other.getConWechat() == null : this.getConWechat().equals(other.getConWechat()))
+            && (this.getConQq() == null ? other.getConQq() == null : this.getConQq().equals(other.getConQq()))
             && (this.getConAddress() == null ? other.getConAddress() == null : this.getConAddress().equals(other.getConAddress()))
             && (this.getPostcode() == null ? other.getPostcode() == null : this.getPostcode().equals(other.getPostcode()))
             && (this.getComAddress() == null ? other.getComAddress() == null : this.getComAddress().equals(other.getComAddress()))
             && (this.getComTele() == null ? other.getComTele() == null : this.getComTele().equals(other.getComTele()))
+            && (this.getComWeb() == null ? other.getComWeb() == null : this.getComWeb().equals(other.getComWeb()))
+            && (this.getComServer() == null ? other.getComServer() == null : this.getComServer().equals(other.getComServer()))
+            && (this.getComDemand() == null ? other.getComDemand() == null : this.getComDemand().equals(other.getComDemand()))
             && (this.getAddrPark() == null ? other.getAddrPark() == null : this.getAddrPark().equals(other.getAddrPark()))
+            && (this.getComSynopsis() == null ? other.getComSynopsis() == null : this.getComSynopsis().equals(other.getComSynopsis()))
             && (this.getParkBuildId() == null ? other.getParkBuildId() == null : this.getParkBuildId().equals(other.getParkBuildId()))
             && (this.getParkBuildName() == null ? other.getParkBuildName() == null : this.getParkBuildName().equals(other.getParkBuildName()))
             && (this.getCreditPoints() == null ? other.getCreditPoints() == null : this.getCreditPoints().equals(other.getCreditPoints()))
@@ -518,28 +661,41 @@ public class TbServiceCompany implements Serializable {
         result = prime * result + ((getOwners() == null) ? 0 : getOwners().hashCode());
         result = prime * result + ((getOwnerLaw() == null) ? 0 : getOwnerLaw().hashCode());
         result = prime * result + ((getOwnerId() == null) ? 0 : getOwnerId().hashCode());
+        result = prime * result + ((getOwnerPhone() == null) ? 0 : getOwnerPhone().hashCode());
+        result = prime * result + ((getOwnerWechat() == null) ? 0 : getOwnerWechat().hashCode());
+        result = prime * result + ((getOwnerQq() == null) ? 0 : getOwnerQq().hashCode());
         result = prime * result + ((getBankName() == null) ? 0 : getBankName().hashCode());
         result = prime * result + ((getBankAccount() == null) ? 0 : getBankAccount().hashCode());
         result = prime * result + ((getProducts() == null) ? 0 : getProducts().hashCode());
         result = prime * result + ((getMaterial() == null) ? 0 : getMaterial().hashCode());
         result = prime * result + ((getComProperty() == null) ? 0 : getComProperty().hashCode());
         result = prime * result + ((getRegCapital() == null) ? 0 : getRegCapital().hashCode());
+        result = prime * result + ((getAddCapital() == null) ? 0 : getAddCapital().hashCode());
         result = prime * result + ((getComScale() == null) ? 0 : getComScale().hashCode());
         result = prime * result + ((getFoundingTime() == null) ? 0 : getFoundingTime().hashCode());
         result = prime * result + ((getRunTime() == null) ? 0 : getRunTime().hashCode());
         result = prime * result + ((getInduType() == null) ? 0 : getInduType().hashCode());
-        result = prime * result + ((getIndustry() == null) ? 0 : getIndustry().hashCode());
+        result = prime * result + ((getInduCode() == null) ? 0 : getInduCode().hashCode());
         result = prime * result + ((getBusinessLicense() == null) ? 0 : getBusinessLicense().hashCode());
         result = prime * result + ((getLicStarttime() == null) ? 0 : getLicStarttime().hashCode());
         result = prime * result + ((getLicEndtime() == null) ? 0 : getLicEndtime().hashCode());
+        result = prime * result + ((getRegisterType() == null) ? 0 : getRegisterType().hashCode());
         result = prime * result + ((getOrgCode() == null) ? 0 : getOrgCode().hashCode());
+        result = prime * result + ((getMainProducts() == null) ? 0 : getMainProducts().hashCode());
+        result = prime * result + ((getBusinessScope() == null) ? 0 : getBusinessScope().hashCode());
         result = prime * result + ((getContact() == null) ? 0 : getContact().hashCode());
         result = prime * result + ((getConPhone() == null) ? 0 : getConPhone().hashCode());
+        result = prime * result + ((getConWechat() == null) ? 0 : getConWechat().hashCode());
+        result = prime * result + ((getConQq() == null) ? 0 : getConQq().hashCode());
         result = prime * result + ((getConAddress() == null) ? 0 : getConAddress().hashCode());
         result = prime * result + ((getPostcode() == null) ? 0 : getPostcode().hashCode());
         result = prime * result + ((getComAddress() == null) ? 0 : getComAddress().hashCode());
         result = prime * result + ((getComTele() == null) ? 0 : getComTele().hashCode());
+        result = prime * result + ((getComWeb() == null) ? 0 : getComWeb().hashCode());
+        result = prime * result + ((getComServer() == null) ? 0 : getComServer().hashCode());
+        result = prime * result + ((getComDemand() == null) ? 0 : getComDemand().hashCode());
         result = prime * result + ((getAddrPark() == null) ? 0 : getAddrPark().hashCode());
+        result = prime * result + ((getComSynopsis() == null) ? 0 : getComSynopsis().hashCode());
         result = prime * result + ((getParkBuildId() == null) ? 0 : getParkBuildId().hashCode());
         result = prime * result + ((getParkBuildName() == null) ? 0 : getParkBuildName().hashCode());
         result = prime * result + ((getCreditPoints() == null) ? 0 : getCreditPoints().hashCode());
@@ -571,28 +727,41 @@ public class TbServiceCompany implements Serializable {
         sb.append(", owners=").append(owners);
         sb.append(", ownerLaw=").append(ownerLaw);
         sb.append(", ownerId=").append(ownerId);
+        sb.append(", ownerPhone=").append(ownerPhone);
+        sb.append(", ownerWechat=").append(ownerWechat);
+        sb.append(", ownerQq=").append(ownerQq);
         sb.append(", bankName=").append(bankName);
         sb.append(", bankAccount=").append(bankAccount);
         sb.append(", products=").append(products);
         sb.append(", material=").append(material);
         sb.append(", comProperty=").append(comProperty);
         sb.append(", regCapital=").append(regCapital);
+        sb.append(", addCapital=").append(addCapital);
         sb.append(", comScale=").append(comScale);
         sb.append(", foundingTime=").append(foundingTime);
         sb.append(", runTime=").append(runTime);
         sb.append(", induType=").append(induType);
-        sb.append(", industry=").append(industry);
+        sb.append(", induCode=").append(induCode);
         sb.append(", businessLicense=").append(businessLicense);
         sb.append(", licStarttime=").append(licStarttime);
         sb.append(", licEndtime=").append(licEndtime);
+        sb.append(", registerType=").append(registerType);
         sb.append(", orgCode=").append(orgCode);
+        sb.append(", mainProducts=").append(mainProducts);
+        sb.append(", businessScope=").append(businessScope);
         sb.append(", contact=").append(contact);
         sb.append(", conPhone=").append(conPhone);
+        sb.append(", conWechat=").append(conWechat);
+        sb.append(", conQq=").append(conQq);
         sb.append(", conAddress=").append(conAddress);
         sb.append(", postcode=").append(postcode);
         sb.append(", comAddress=").append(comAddress);
         sb.append(", comTele=").append(comTele);
+        sb.append(", comWeb=").append(comWeb);
+        sb.append(", comServer=").append(comServer);
+        sb.append(", comDemand=").append(comDemand);
         sb.append(", addrPark=").append(addrPark);
+        sb.append(", comSynopsis=").append(comSynopsis);
         sb.append(", parkBuildId=").append(parkBuildId);
         sb.append(", parkBuildName=").append(parkBuildName);
         sb.append(", creditPoints=").append(creditPoints);

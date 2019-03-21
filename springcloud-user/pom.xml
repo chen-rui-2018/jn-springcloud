@@ -66,7 +66,6 @@
                         userTag
                     </contexts>
                     <tableNames>
-                        tb_tag_code,
                         tb_user_tag
                     </tableNames>
                     <verbose>true</verbose>

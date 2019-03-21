@@ -56,7 +56,8 @@
                         company
                     </contexts>
                     <tableNames>
-                        tb_service_company
+                        tb_service_company,
+                        tb_service_company_pro_img
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

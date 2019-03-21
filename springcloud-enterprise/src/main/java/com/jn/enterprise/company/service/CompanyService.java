@@ -22,18 +22,12 @@ public interface CompanyService {
      */
     PaginationData<List<ServiceCompany>> getCompanyList(ServiceCompanyParam serviceCompanyParam);
 
-    /**
-     * 根据企业ID查询详情
-     * @param companyId
-     * @return
-     */
-    ServiceCompany getCompanyDetail(String companyId);
 
     /**
      * 根据用户账号查询企业信息（用户为企业管理员）
      * @param account
      * @return
      */
-    ServiceCompany getCompanyDetailByAccount(String account);
+    ServiceCompany getCompanyDetailByAccountOrId(String account);
 
 }

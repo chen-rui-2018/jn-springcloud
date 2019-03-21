@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.usermanage.model;
+package com.jn.company.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,8 +12,8 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "CompanyProImgParam",description = "公司企业宣传图片入参")
-public class CompanyProImgParam implements Serializable {
+@ApiModel(value = "CompanyProImgParam",description = "公司企业宣传图片")
+public class CompanyProImg implements Serializable {
 
     @ApiModelProperty(value = "企业ID")
     private String comId;

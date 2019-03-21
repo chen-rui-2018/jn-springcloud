@@ -5,8 +5,11 @@ import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.company.dao.ServiceCompanyProImgMapper;
-import com.jn.enterprise.company.dao.TbServiceCompanyProImgMapper;
 import com.jn.enterprise.company.entity.*;
+import com.jn.enterprise.company.model.Company;
+import com.jn.enterprise.company.model.CompanyCheckCallBackParam;
+import com.jn.enterprise.company.model.CompanyCheckParam;
+import com.jn.enterprise.company.model.CompanyProImgParam;
 import com.jn.enterprise.enums.JoinParkExceptionEnum;
 import com.jn.enterprise.company.dao.TbServiceCompanyMapper;
 import com.jn.enterprise.company.dao.TbServiceCompanyStaffMapper;
@@ -61,7 +64,7 @@ public class UserUpgradeServiceImpl implements UserUpgradeService {
 
     @Override
     @ServiceLog(doAction = "升级企业")
-    public int changeToCompany(CompanyCheckParam companyCheckParam,String phone,String account){
+    public int changeToCompany(CompanyCheckParam companyCheckParam, String phone, String account){
         //从redis中取出短信验证码
         Result sendCodeByPhone = userExtensionClient.getSendCodeByPhone(phone);
         String code = (String)sendCodeByPhone.getData();

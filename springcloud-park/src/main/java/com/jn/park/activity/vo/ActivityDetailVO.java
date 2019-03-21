@@ -27,11 +27,13 @@ public class ActivityDetailVO implements Serializable {
     @ApiModelProperty(value = "活动报名信息，活动id、报名人、报名时间、报名状态、签到状态、签到时间、签到方式、报名人数")
     private List activityApplyList;
     @ApiModelProperty(value = "实际报名人数")
-    private Integer realapplyNum;
+    private Integer realApplyNum;
     @ApiModelProperty(value = "系统当前时间")
     private String sysTemTime;
     @ApiModelProperty(value = "报名成功标志，报名成功为true，否则为false,默认为true")
     private Boolean applySuccess;
+    @ApiModelProperty(value = "当前用户是否已点赞，已点赞：true，未点赞：false")
+    private Boolean accountIsLike;
 
     private static final long serialVersionUID = 1L;
 
@@ -67,12 +69,12 @@ public class ActivityDetailVO implements Serializable {
         this.activityApplyList = activityApplyList;
     }
 
-    public Integer getRealapplyNum() {
-        return realapplyNum;
+    public Integer getRealApplyNum() {
+        return realApplyNum;
     }
 
-    public void setRealapplyNum(Integer realapplyNum) {
-        this.realapplyNum = realapplyNum;
+    public void setRealApplyNum(Integer realApplyNum) {
+        this.realApplyNum = realApplyNum;
     }
 
     public String getSysTemTime() {
@@ -91,6 +93,14 @@ public class ActivityDetailVO implements Serializable {
         this.applySuccess = applySuccess;
     }
 
+    public Boolean getAccountIsLike() {
+        return accountIsLike;
+    }
+
+    public void setAccountIsLike(Boolean accountIsLike) {
+        this.accountIsLike = accountIsLike;
+    }
+
     @Override
     public String toString() {
         return "ActivityDetailVO{" +
@@ -98,9 +108,10 @@ public class ActivityDetailVO implements Serializable {
                 ", activityLikeList=" + activityLikeList +
                 ", likeNum=" + likeNum +
                 ", activityApplyList=" + activityApplyList +
-                ", realapplyNum=" + realapplyNum +
+                ", realApplyNum=" + realApplyNum +
                 ", sysTemTime='" + sysTemTime + '\'' +
                 ", applySuccess=" + applySuccess +
+                ", accountIsLike=" + accountIsLike +
                 '}';
     }
 }

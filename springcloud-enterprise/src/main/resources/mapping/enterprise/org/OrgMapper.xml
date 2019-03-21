@@ -11,9 +11,9 @@
         date_format(a.org_register_time,'%Y-%m-%d %H:%i:%s') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
         CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
-        (select count(1) from tb_service_transaction t where t.org_id = a.org_id ) as "transactionNum" <!-- 累计交易笔数 -->
+        (select count(1) from tb_service_require t where t.org_id = a.org_id and t.record_status = '1' and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
         ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
-              WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
+        WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
         ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id = a.org_id)  AS "evaluationNum"  <!-- 评价次数 -->
         from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id
         where 1=1 and a.record_status != '0'
@@ -44,7 +44,7 @@
         </if>
     </select>
 
-    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.model.OrgDetail">
+    <resultMap id="queryServiceOrgDetailMap" type="com.jn.enterprise.servicemarket.org.vo.OrgDetailVo">
         <id column="s_id" jdbcType="VARCHAR" property="orgId" javaType="java.lang.String"/>
         <result column="s_businessType" jdbcType="VARCHAR" property="businessType" javaType="java.lang.String"/>
         <result column="s_businessSType" jdbcType="VARCHAR" property="businessSType" javaType="java.lang.String"/>
@@ -58,6 +58,7 @@
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_operateStatus" jdbcType="VARCHAR" property="operateStatus" javaType="java.lang.String"/>
         <result column="s_orgPrincipal" jdbcType="VARCHAR" property="orgPrincipal" javaType="java.lang.String"/>
+        <result column="s_orgWeb" jdbcType="VARCHAR" property="orgWeb" javaType="java.lang.String"/>
         <result column="s_orgSpeciality" jdbcType="VARCHAR" property="orgSpeciality" javaType="java.lang.String"/>
         <result column="s_professionNum" jdbcType="VARCHAR" property="professionNum" javaType="java.lang.Integer"/>
         <result column="s_staffCount" jdbcType="VARCHAR" property="staffCount" javaType="java.lang.Integer"/>
@@ -85,7 +86,8 @@
         <!-- 执业资质 -->
         <collection property="honorLicense" javaType="java.util.List"
                     ofType="com.jn.enterprise.servicemarket.org.model.OrgLicense">
-            <id column="st_id" property="id" jdbcType="VARCHAR"/>
+            <id column="sh_id" property="id" jdbcType="VARCHAR"/>
+            <id column="sh_orgId" property="orgId" jdbcType="VARCHAR"/>
             <result column="sh_certName" property="certName" jdbcType="VARCHAR"/>
             <result column="sh_fileUrl" property="fileUrl" jdbcType="VARCHAR"/>
             <result column="sh_isFeatures" property="isFeatures" jdbcType="VARCHAR"/>
@@ -95,7 +97,7 @@
         <!-- 团队信息 -->
         <collection property="orgTeams" javaType="java.util.List"
                     ofType="com.jn.enterprise.servicemarket.org.model.OrgTeam">
-            <id column="te_id" property="id" jdbcType="VARCHAR"/>
+            <id column="te_id" property="orgId" jdbcType="VARCHAR"/>
             <result column="te_orgId" property="orgId" jdbcType="VARCHAR"/>
             <result column="te_conName" property="conName" jdbcType="VARCHAR"/>
             <result column="te_conPosition" property="conPosition" jdbcType="VARCHAR"/>
@@ -115,7 +117,7 @@
           o.org_business AS "s_orgBusiness",
           o.org_synopsis AS "s_orgSynopsis",
           o.org_show AS "s_orgShow",
-          (SELECT COUNT(1) FROM tb_service_transaction tr WHERE tr.org_id = o.org_id) AS "s_transactionCount",
+          (select count(1) from tb_service_require tr where tr.org_id = o.org_id and tr.record_status = '1' and tr.handle_result = '1' ) AS "s_transactionCount",
           (SELECT(SUM(attitude_score) / COUNT(1)) FROM tb_service_rating ra WHERE ra.org_id = o.org_id) AS "s_orgServiceScore",
           o.org_hobby AS "s_orgHobby",
           o.org_speciality AS "s_orgSpeciality",
@@ -138,9 +140,11 @@
           i.con_name AS "s_conName",
           i.con_phone AS "s_conPhone",
           i.con_email AS "s_conEmail",
+          i.org_web as "s_orgWeb",
           date_format(o.org_register_time,'%Y-%m-%d')  AS "s_orgRegisterTime",
           o.org_logo AS "s_orgLogo",
-          li.id AS "st_id",
+          li.id AS "sh_id",
+          li.org_id AS "sh_orgId",
           li.cert_name AS "sh_certName",
           li.file_url AS "sh_fileUrl",
           li.is_features "AS sh_isFeatures",

@@ -16,10 +16,7 @@ import com.jn.enterprise.servicemarket.product.model.*;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.enterprise.servicemarket.product.vo.WebServiceProductDetails;
 import org.hamcrest.Matchers;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.slf4j.Logger;
@@ -108,6 +105,7 @@ public class ServiceProductServiceImplTest {
      * 新增常规服务产品信息
      */
     @Test
+    @Ignore
     public void addServiceProduct() {
         ServiceContent content = new ServiceContent();
         content.setProductId(productId);
@@ -156,6 +154,7 @@ public class ServiceProductServiceImplTest {
      *机构上架常规服务产品
      */
     @Test
+    @Ignore
     public void upShelfCommonService() {
         CommonServiceShelf commonService = new CommonServiceShelf();
         commonService.setProductId(commonProductId);

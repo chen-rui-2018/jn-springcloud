@@ -129,4 +129,77 @@
     </select>
 
 
+    <!--批量插入顾问荣誉资质-->
+    <insert id="insertServiceHonorList" parameterType="java.util.List">
+        insert into tb_service_honor (id,advisor_account,certificate_name,certificate_type,issuing_agency
+        ,get_time,certificate_photo,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.certificateName,jdbcType=VARCHAR} as 'certificateName'
+            ,#{item.certificateType,jdbcType=VARCHAR} as 'certificateType'
+            ,#{item.issuingAgency,jdbcType=VARCHAR} as 'issuingAgency'
+            ,#{item.getTime,jdbcType=VARCHAR} as 'getTime'
+            ,#{item.certificatePhoto,jdbcType=VARCHAR} as 'certificatePhoto'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+    <!--批量插入顾问项目经验-->
+    <insert id="insertServiceProjectList" parameterType="java.util.List">
+        insert into tb_service_pro_exper (id,advisor_account,company_name,project_name
+        ,project_time,project_end_time,personal_duties,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.companyName,jdbcType=VARCHAR} as 'companyName'
+            ,#{item.projectName,jdbcType=VARCHAR} as 'projectName'
+            ,#{item.projectTime,jdbcType=VARCHAR} as 'projectTime'
+            ,#{item.projectEndTime,jdbcType=VARCHAR} as 'projectEndTime'
+            ,#{item.personalDuties,jdbcType=VARCHAR} as 'personalDuties'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+    <!--批量插入顾问服务经验-->
+    <insert id="insertServiceExperienceList" parameterType="java.util.List">
+        insert into tb_service_experience (id,advisor_account,company_name,position
+        ,work_time,work_end_time,created_time,creator_account,modified_time,modifier_account,record_status)
+        select A.* from(
+        <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
+            ( select #{item.id,jdbcType=VARCHAR} as 'id'
+            ,#{item.advisorAccount,jdbcType=VARCHAR} as 'advisorAccount'
+            ,#{item.companyName,jdbcType=VARCHAR} as 'companyName'
+            ,#{item.position,jdbcType=VARCHAR} as 'position'
+            ,#{item.workTime,jdbcType=VARCHAR} as 'workTime'
+            ,#{item.workEndTime,jdbcType=VARCHAR} as 'workEndTime'
+            ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
+            ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'
+            ,#{item.modifiedTime,jdbcType=TIMESTAMP} as 'modifiedTime'
+            ,#{item.modifierAccount,jdbcType=VARCHAR} as 'modifierAccount'
+            ,1 as 'recordStatus'
+            from dual )
+        </foreach>
+        )A
+    </insert>
+
+
+
+
 </mapper>

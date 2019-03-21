@@ -28,6 +28,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     PROJECT_EXPERIENCE_INFO_NOT_EXIST("5020515","当前项目经验在系统中已失效或已删除"),
     START_MORE_THEN_END("5020515","提交开始时间晚于提交结束时间"),
     ORG_INFO_NOT_NULL("5020516","机构id或机构名称不能为空"),
+    TIME_CHANGE_ERROR("5020517","时间转换出错，请核对参数"),
     ;
 
     /**

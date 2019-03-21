@@ -6,6 +6,7 @@ import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.dept.model.SysDepartmentPost;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysUserService;
 import com.jn.system.vo.SysDepartmentPostVO;
@@ -81,7 +82,7 @@ public class SysUserServiceTest {
 
     @Test
     public void findSysUserByPageTest() {
-        SysUserPage sysUserPage = new SysUserPage();
+        UserPage sysUserPage = new UserPage();
         sysUserPage.setPage(1);
         sysUserPage.setRows(10);
         PaginationData data = sysUserService.findSysUserByPage(sysUserPage);
@@ -164,12 +165,6 @@ public class SysUserServiceTest {
         for (User user : data) {
             System.out.println(user);
         }
-        Assert.assertThat(data, Matchers.anything());
-    }
-
-    @Test
-    public void findSysUserByIdTest() {
-        SysUser data = sysUserService.findSysUserById(userId);
         Assert.assertThat(data, Matchers.anything());
     }
 

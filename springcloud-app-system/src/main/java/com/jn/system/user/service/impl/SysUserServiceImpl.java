@@ -15,6 +15,7 @@ import com.jn.system.dept.model.SysDepartmentPost;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.user.dao.*;
 import com.jn.system.user.enmus.SysUserExceptionEnums;
@@ -99,7 +100,9 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
-        tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        if (tbSysUser.getPassword() == null){
+            tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
         logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
@@ -137,6 +140,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param tbSysUser
      */
     private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
+
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
         sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
@@ -147,7 +151,9 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPost.setPostId(sysUser.getPostId());
         sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
         sysUserDepartmentPost.setCreatedTime(new Date());
+
         tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
+
     }
 
     /**
@@ -173,10 +179,10 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询用户")
-    public PaginationData findSysUserByPage(SysUserPage sysUserPage) {
+    public PaginationData findSysUserByPage(UserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
-        List<SysUserVO> sysUserVOList = new ArrayList<SysUserVO>();
+        List<SysUserVO> sysUserVOList = null;
         if (StringUtils.isBlank(sysUserPage.getPostOrTypeName())) {
             //当查询条件中岗位或岗位类型名称为空时
             sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
@@ -478,24 +484,6 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPost.setPostId(sysDepartmentPost.getPostId());
         sysUserDepartmentPost.setIsDefault(sysDepartmentPost.getIsDefault());
         return sysUserDepartmentPost;
-    }
-
-    /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "根据用户id返回用户信息")
-    public SysUser findSysUserById(String id) {
-        TbSysUser tbSysUser = tbSysUserMapper.selectByPrimaryKey(id);
-        SysUser sysUser = new SysUser();
-        if (tbSysUser != null) {
-            BeanUtils.copyProperties(tbSysUser, sysUser);
-            sysUser.setPassword("");
-        }
-        return sysUser;
     }
 
     /**

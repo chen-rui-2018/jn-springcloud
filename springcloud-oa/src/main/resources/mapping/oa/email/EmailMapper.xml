@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.email.dao.EmailMapper">
+
+    <update id="deleteBatch" parameterType="java.util.Map">
+        update tb_oa_email
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="list" resultType="com.jn.oa.email.vo.EmailVO" parameterType="com.jn.oa.email.model.EmailPage">
+        SELECT
+        t.id,
+        t.work_order_num as workOrderNum,
+        t.title,
+        t.email_content as emailContent,
+        t.send_status as sendStatus,
+        t.is_delay as isDelay,
+        t.delay_send_time as delaySendTime,
+        t.send_time as sendTime,
+        t.attachment,
+        t.created_time as createdTime,
+        t.creator,
+        t.userAccounts
+        FROM
+        (SELECT
+            t1.id,
+            t1.work_order_num,
+            t1.title,
+            t1.email_content,
+            t1.send_status,
+            t1.is_delay,
+            t1.delay_send_time,
+            t1.send_time,
+            t1.attachment,
+            t1.created_time,
+            (SELECT
+             `name`
+            FROM
+            tb_sys_user
+            WHERE account = t1.creator_account ) as creator,
+            GROUP_CONCAT(t2.`name`) as userAccounts
+            FROM
+            tb_oa_email t1
+            LEFT JOIN
+            (SELECT
+            t.id,
+            t.account,
+            t.`name`,
+            tt.email_id
+            FROM
+            tb_sys_user t,
+            tb_oa_email_user tt
+            WHERE t.account = tt.user_account
+            AND t.record_status = 1
+            AND tt.record_status = 1
+            ) t2
+        ON t1.id = t2.email_id
+        WHERE t1.record_status = 1
+        GROUP BY t1.id) t
+        <where>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(title)">
+                t.title like CONCAT('%', #{title,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creator)">
+                t.creator like CONCAT('%', #{creator,jdbcType=VARCHAR},'%')
+            </if>
+            <if test="@org.apache.commons.lang.StringUtils@isNotBlank(sendStatus)">
+                and t.send_status = #{sendStatus,jdbcType=VARCHAR}
+            </if>
+        </where>
+        ORDER BY t.created_time DESC ,id DESC
+    </select>
+
+    <resultMap id="BaseResultMap" type="com.jn.oa.email.vo.EmailVO">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="work_order_num" jdbcType="VARCHAR" property="workOrderNum"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="email_content" jdbcType="VARCHAR" property="emailContent"/>
+        <result column="send_status" jdbcType="VARCHAR" property="sendStatus"/>
+        <result column="is_delay" jdbcType="VARCHAR" property="isDelay"/>
+        <result column="attachment" jdbcType="VARCHAR" property="attachment"/>
+        <result column="delay_send_time" jdbcType="TIMESTAMP" property="delaySendTime"/>
+        <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="departName" jdbcType="VARCHAR" property="departName"/>
+
+        <collection property="receiverList" ofType="com.jn.oa.email.model.EmailReceiver">
+            <id column="userId" jdbcType="VARCHAR" property="userId"/>
+            <result column="account" jdbcType="VARCHAR" property="account"/>
+            <result column="name" jdbcType="VARCHAR" property="name"/>
+            <result column="email" jdbcType="VARCHAR" property="email"/>
+        </collection>
+    </resultMap>
+    <select id="getEmailDetails" resultMap="BaseResultMap" parameterType="java.lang.String">
+            SELECT
+            t1.id,
+            t1.work_order_num,
+            t1.title,
+            t1.email_content,
+            t1.send_status,
+            t1.is_delay,
+            t1.attachment,
+            t1.delay_send_time,
+            t1.send_time,
+            t1.created_time,
+            t1.creator,
+            t1.departName,
+            t2.id AS userId,
+            t2.account,
+            t2.`name`,
+            t2.email
+        FROM
+            (
+                SELECT
+                    t.id,
+                    t.work_order_num,
+                    t.title,
+                    t.email_content,
+                    t.send_status,
+                    t.is_delay,
+                    t.delay_send_time,
+                    t.send_time,
+                    t.attachment,
+                    t.created_time,
+                    tt.`name` AS creator,
+                    tt.department_name AS departName
+                FROM
+                    tb_oa_email t
+                LEFT JOIN (
+                    SELECT
+                        t1.account,
+                        t1.`name`,
+                        t3.department_name
+                    FROM
+                        tb_sys_user t1,
+                        tb_sys_user_department_post t2,
+                        tb_sys_department t3
+                    WHERE
+                        t1.id = t2.user_id
+                    AND t2.department_id = t3.id
+                    AND t1.record_status = 1
+                    AND t2.record_status = 1
+                    AND t3.record_status = 1
+                    AND t2.is_default = '1'
+                ) tt ON t.creator_account = tt.account
+                WHERE
+                    t.record_status = 1
+            ) t1
+        LEFT JOIN (
+            SELECT
+                t.id,
+                t.account,
+                t.`name`,
+                t.email,
+                tt.email_id
+            FROM
+                tb_sys_user t,
+                tb_oa_email_user tt
+            WHERE
+                t.account = tt.user_account
+            AND t.record_status = 1
+            AND tt.record_status = 1
+        ) t2 ON t1.id = t2.email_id
+        WHERE t1.id = #{id,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

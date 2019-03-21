@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -18,5 +18,8 @@ body{
 }
 .avatar-uploader{
   background-color: #f8f8f8;
+}
+ul{
+  list-style: none
 }
 </style>

@@ -124,7 +124,8 @@ public class AdvisorManagementPortalServiceImplTest {
             logger.warn("服务顾问详情获取失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST.getCode())
                     )
             );
         }

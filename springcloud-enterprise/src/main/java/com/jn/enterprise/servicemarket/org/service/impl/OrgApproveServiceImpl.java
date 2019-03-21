@@ -12,6 +12,9 @@ import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.service.OrgApproveService;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -63,7 +66,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
     public PaginationData getOrgApplyList(OrgApplyParameter orgApplyParameter){
-        List<OrgApply> orgApplyList = new ArrayList<>(8);
+        List<OrgApplyVo> orgApplyVoList = new ArrayList<>(8);
         Page<Object> objects = PageHelper.startPage(orgApplyParameter.getPage(), orgApplyParameter.getRows() == 0 ? 15 : orgApplyParameter.getRows());
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
         TbServiceOrgCriteria.Criteria criteria = orgCriteria.createCriteria();
@@ -76,45 +79,45 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         List<TbServiceOrg> tbServiceOrgs = tbServiceOrgMapper.selectByExample(orgCriteria);
         List<String> accountList = new ArrayList<>();
         for (TbServiceOrg serviceOrg:tbServiceOrgs) {
-            OrgApply orgApply = new OrgApply();
-            BeanUtils.copyProperties(serviceOrg,orgApply);
+            OrgApplyVo orgApplyVo = new OrgApplyVo();
+            BeanUtils.copyProperties(serviceOrg, orgApplyVo);
             if(null != serviceOrg.getCreatedTime()){
-                orgApply.setCreatedTime(DateUtils.formatDate(serviceOrg.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+                orgApplyVo.setCreatedTime(DateUtils.formatDate(serviceOrg.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
             }
             if(null != serviceOrg.getOrgRegisterTime()){
-                orgApply.setOrgRegisterTime(DateUtils.formatDate(serviceOrg.getOrgRegisterTime(),"yyyy-MM-dd"));
+                orgApplyVo.setOrgRegisterTime(DateUtils.formatDate(serviceOrg.getOrgRegisterTime(),"yyyy-MM-dd"));
             }
-            orgApplyList.add(orgApply);
+            orgApplyVoList.add(orgApplyVo);
             accountList.add(serviceOrg.getOrgAccount());
         }
         Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
         List<UserExtensionInfo> userExtensions = moreUserExtension.getData();
-        for (OrgApply orgApply:orgApplyList) {
+        for (OrgApplyVo orgApplyVo : orgApplyVoList) {
             for (UserExtensionInfo userExtesion:userExtensions) {
-                if(StringUtils.equals(orgApply.getOrgAccount(),userExtesion.getAccount())){
-                    BeanUtils.copyProperties(userExtesion,orgApply);
+                if(StringUtils.equals(orgApplyVo.getOrgAccount(),userExtesion.getAccount())){
+                    BeanUtils.copyProperties(userExtesion, orgApplyVo);
                 }
             }
         }
-        PaginationData data = new PaginationData(orgApplyList, objects.getTotal());
+        PaginationData data = new PaginationData(orgApplyVoList, objects.getTotal());
         return data;
     }
 
     @Override
     @ServiceLog(doAction = "查询机构入驻数据")
-    public OrgApplyCount getOrgCount(){
-        OrgApplyCount orgApplyCount = new OrgApplyCount();
+    public OrgApplyCountVo getOrgCount(){
+        OrgApplyCountVo orgApplyCountVo = new OrgApplyCountVo();
         // 入驻机构总数（已审核通过数）
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
         orgCriteria.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         long orgCount = tbServiceOrgMapper.countByExample(orgCriteria);
-        orgApplyCount.setOrgCount(orgCount+"");
+        orgApplyCountVo.setOrgCount(orgCount+"");
         logger.info("入驻机构总数（已审核通过数）{}",orgCount);
         // 待审核机构数
         TbServiceOrgCriteria orgCriteria1 = new TbServiceOrgCriteria();
         orgCriteria1.createCriteria().andOrgStatusEqualTo("0").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         long waitApplyCount = tbServiceOrgMapper.countByExample(orgCriteria1);
-        orgApplyCount.setWaitApplyCount(waitApplyCount+"");
+        orgApplyCountVo.setWaitApplyCount(waitApplyCount+"");
         logger.info("待审核机构数{}",waitApplyCount);
         // 本月入驻机构数
         Calendar cale = Calendar.getInstance();
@@ -127,7 +130,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         TbServiceOrgCriteria orgCriteria2 = new TbServiceOrgCriteria();
         orgCriteria2.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(cale.getTime(),new Date());
         long monthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria2);
-        orgApplyCount.setMonthJoinOrgCount(monthJoinOrgCount+"");
+        orgApplyCountVo.setMonthJoinOrgCount(monthJoinOrgCount+"");
         logger.info("本月入驻机构数{}",monthJoinOrgCount);
         //上月入驻机构数
         Calendar startCalendar = Calendar.getInstance();
@@ -147,19 +150,19 @@ public class OrgApproveServiceImpl implements OrgApproveService {
         TbServiceOrgCriteria orgCriteria3 = new TbServiceOrgCriteria();
         orgCriteria3.createCriteria().andOrgStatusEqualTo("1").andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID)).andCheckTimeBetween(startCalendar.getTime(),endCalendar.getTime());
         long lastMonthJoinOrgCount = tbServiceOrgMapper.countByExample(orgCriteria3);
-        orgApplyCount.setLastMonthJoinOrgCount(lastMonthJoinOrgCount+"");
+        orgApplyCountVo.setLastMonthJoinOrgCount(lastMonthJoinOrgCount+"");
         logger.info("上月入驻机构数{}",lastMonthJoinOrgCount);
         //本月入驻环比
         DecimalFormat df = new DecimalFormat("0.00");
         String format = df.format(monthJoinOrgCount / (double) lastMonthJoinOrgCount * 100);
-        orgApplyCount.setMonthJoinOrgRatio(format);
-        return orgApplyCount;
+        orgApplyCountVo.setMonthJoinOrgRatio(format);
+        return orgApplyCountVo;
     }
 
     @Override
     @ServiceLog(doAction = "查询机构申请详细信息")
-    public OrgApplyDetail getOrgApplyDetail(String orgId){
-        OrgApplyDetail orgApplyDetail = orgApproveMapper.getOrgApplyDetailById(orgId);
+    public OrgApplyDetailVo getOrgApplyDetail(String orgId){
+        OrgApplyDetailVo orgApplyDetailVo = orgApproveMapper.getOrgApplyDetailById(orgId);
 
         TbServiceOrgLicenseCriteria licenseCriteria = new TbServiceOrgLicenseCriteria();
         licenseCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
@@ -171,7 +174,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
             BeanUtils.copyProperties(tbServiceOrgLicense,orgLicense);
             licenses.add(orgLicense);
         }
-        orgApplyDetail.setOrgLicenses(licenses);
+        orgApplyDetailVo.setOrgLicenses(licenses);
         TbServiceOrgTeamCriteria teamCriteria = new TbServiceOrgTeamCriteria();
         teamCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceOrgTeam> orgTeamList = tbServiceOrgTeamMapper.selectByExample(teamCriteria);
@@ -181,7 +184,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
             BeanUtils.copyProperties(tbServiceOrgTeam,orgTeam);
             teams.add(orgTeam);
         }
-        orgApplyDetail.setOrgTeams(teams);
+        orgApplyDetailVo.setOrgTeams(teams);
         TbServiceOrgTraitCriteria traitCriteria = new TbServiceOrgTraitCriteria();
         traitCriteria.createCriteria().andOrgIdEqualTo(orgId).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
         List<TbServiceOrgTrait> orgTraits = tbServiceOrgTraitMapper.selectByExample(traitCriteria);
@@ -191,9 +194,9 @@ public class OrgApproveServiceImpl implements OrgApproveService {
             BeanUtils.copyProperties(tbServiceOrgTrait,trait);
             traits1.add(trait);
         }
-        orgApplyDetail.setOrgTraits(traits1);
+        orgApplyDetailVo.setOrgTraits(traits1);
         //TODO 对接审核流接口信息  jiangyl
-        return orgApplyDetail;
+        return orgApplyDetailVo;
     }
 
 

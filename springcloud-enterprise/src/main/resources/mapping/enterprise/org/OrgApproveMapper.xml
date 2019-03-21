@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgApproveMapper">
     <select id="getOrgApplyDetailById" parameterType="java.lang.String"
-            resultType="com.jn.enterprise.servicemarket.org.model.OrgApplyDetail">
+            resultType="com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo">
             SELECT
               org.org_id AS "orgId",
               org.org_name AS "orgName",

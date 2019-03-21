@@ -2,6 +2,7 @@ package com.jn.system.user.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
+import com.jn.system.model.UserPage;
 import com.jn.system.user.model.*;
 import com.jn.system.vo.SysDepartmentPostVO;
 
@@ -30,7 +31,7 @@ public interface SysUserService {
      * @param userPage
      * @return
      */
-    PaginationData findSysUserByPage(SysUserPage userPage);
+    PaginationData findSysUserByPage(UserPage userPage);
 
     /**
      * 逻辑删除用户
@@ -95,14 +96,6 @@ public interface SysUserService {
      * @return
      */
     void saveDepartmentAndPostOfUser(SysUserDepartmentPostAdd sysUserDepartmentPostAdd, User user);
-
-    /**
-     * 根据用户id返回用户信息
-     *
-     * @param id
-     * @return
-     */
-    SysUser findSysUserById(String id);
 
     /**
      * 校验用户账号是否存在

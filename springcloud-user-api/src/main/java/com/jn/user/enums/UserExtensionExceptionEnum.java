@@ -14,8 +14,10 @@ public enum UserExtensionExceptionEnum implements CodeAndMsg {
     AFFILIATE_PARAM_NOT_NULL("3020502","所属机构编码不能为空"),
     COMPANY_PARAM_NOT_NULL("3020503","所属企业编码不能为空"),
     USER_EXTENSION_NOT_EXISTS("3020504","当前账号对应用户信息不存在"),
-    USER_PASSWORD_IS_ERROR("3020504","输入的旧密码不正确"),
-    USER_PASSWORD_NOT_EQUALS("3020505","输入的两次密码不相等")
+    USER_PASSWORD_IS_ERROR("3020505","输入的旧密码不正确"),
+    USER_PASSWORD_NOT_EQUALS("3020506","输入的两次密码不相等"),
+    USER_INFO_GET_ERROR("3020507","当前用户信息获取错误， 请重新登录。"),
+    USER_DATA_MULTIPLE_ERROR("3020508","用户数据存在多条，请联系管理员"),
     ;
     /**
      * 编码

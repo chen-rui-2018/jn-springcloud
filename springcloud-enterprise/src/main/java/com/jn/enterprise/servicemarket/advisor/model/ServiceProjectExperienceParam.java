@@ -33,7 +33,7 @@ public class ServiceProjectExperienceParam  implements Serializable {
     private String projectTime;
     @ApiModelProperty(value = "项目结束时间(格式：201904)")
     @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
-            message = "{projectTime:'项目结束时间格式错误'}")
+            message = "{projectEndTime:'项目结束时间格式错误'}")
     private String projectEndTime;
     @ApiModelProperty(value = "个人职责")
     @Size(max = 500, message = "个人职责描述不能超过500字")

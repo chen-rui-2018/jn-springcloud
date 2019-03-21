@@ -1,7 +1,9 @@
 package com.jn.park.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import java.io.Serializable;
 import java.util.List;
 /**
  * 活动信息部分字段
@@ -11,7 +13,8 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-public class ActivitySlim {
+@ApiModel(value = "ActivitySlim", description = "活动信息")
+public class ActivitySlim implements Serializable {
     @ApiModelProperty(value = "活动ID")
     private String id;
     @ApiModelProperty(value = "活动名称")

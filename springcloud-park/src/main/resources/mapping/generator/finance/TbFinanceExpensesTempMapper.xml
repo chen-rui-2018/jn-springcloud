@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.TbFinanceExpensesTempMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceExpensesTemp">
+    <id column="etemp_id" jdbcType="INTEGER" property="id" />
+    <result column="etemp_cost_happend_time" jdbcType="CHAR" property="costHappendTime" />
+    <result column="etemp_cost" jdbcType="DECIMAL" property="cost" />
+    <result column="etemp_cost_id" jdbcType="VARCHAR" property="costId" />
+    <result column="etemp_excel_id" jdbcType="VARCHAR" property="excelId" />
+    <result column="etemp_cost_before_type_name" jdbcType="VARCHAR" property="costBeforeTypeName" />
+    <result column="etemp_cost_after_type_id" jdbcType="INTEGER" property="costAfterTypeId" />
+    <result column="etemp_cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
+    <result column="etemp_department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="etemp_department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="etemp_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="etemp_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="etemp_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="etemp_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="etemp_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    etemp.id as etemp_id, etemp.cost_happend_time as etemp_cost_happend_time, etemp.cost as etemp_cost, 
+    etemp.cost_id as etemp_cost_id, etemp.excel_id as etemp_excel_id, etemp.cost_before_type_name as etemp_cost_before_type_name, 
+    etemp.cost_after_type_id as etemp_cost_after_type_id, etemp.cost_after_type_name as etemp_cost_after_type_name, 
+    etemp.department_id as etemp_department_id, etemp.department_name as etemp_department_name, 
+    etemp.record_status as etemp_record_status, etemp.creator_account as etemp_creator_account, 
+    etemp.created_time as etemp_created_time, etemp.modifier_account as etemp_modifier_account, 
+    etemp.modified_time as etemp_modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTempExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_finance_expenses_temp etemp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_finance_expenses_temp etemp
+    where etemp.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_finance_expenses_temp
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTempExample">
+    delete from tb_finance_expenses_temp etemp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_expenses_temp (cost_happend_time, cost, cost_id, 
+      excel_id, cost_before_type_name, cost_after_type_id, 
+      cost_after_type_name, department_id, department_name, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costId,jdbcType=VARCHAR}, 
+      #{excelId,jdbcType=VARCHAR}, #{costBeforeTypeName,jdbcType=VARCHAR}, #{costAfterTypeId,jdbcType=INTEGER}, 
+      #{costAfterTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_finance_expenses_temp
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="costHappendTime != null">
+        cost_happend_time,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="costId != null">
+        cost_id,
+      </if>
+      <if test="excelId != null">
+        excel_id,
+      </if>
+      <if test="costBeforeTypeName != null">
+        cost_before_type_name,
+      </if>
+      <if test="costAfterTypeId != null">
+        cost_after_type_id,
+      </if>
+      <if test="costAfterTypeName != null">
+        cost_after_type_name,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="departmentName != null">
+        department_name,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="costHappendTime != null">
+        #{costHappendTime,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="costId != null">
+        #{costId,jdbcType=VARCHAR},
+      </if>
+      <if test="excelId != null">
+        #{excelId,jdbcType=VARCHAR},
+      </if>
+      <if test="costBeforeTypeName != null">
+        #{costBeforeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="costAfterTypeId != null">
+        #{costAfterTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="costAfterTypeName != null">
+        #{costAfterTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTempExample" resultType="java.lang.Long">
+    select count(*) from tb_finance_expenses_temp etemp
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_finance_expenses_temp etemp
+    <set>
+      <if test="record.id != null">
+        etemp.id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.costHappendTime != null">
+        etemp.cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
+      </if>
+      <if test="record.cost != null">
+        etemp.cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costId != null">
+        etemp.cost_id = #{record.costId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.excelId != null">
+        etemp.excel_id = #{record.excelId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costBeforeTypeName != null">
+        etemp.cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costAfterTypeId != null">
+        etemp.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.costAfterTypeName != null">
+        etemp.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentId != null">
+        etemp.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.departmentName != null">
+        etemp.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        etemp.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        etemp.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        etemp.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        etemp.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        etemp.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_finance_expenses_temp etemp
+    set etemp.id = #{record.id,jdbcType=INTEGER},
+      etemp.cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
+      etemp.cost = #{record.cost,jdbcType=DECIMAL},
+      etemp.cost_id = #{record.costId,jdbcType=VARCHAR},
+      etemp.excel_id = #{record.excelId,jdbcType=VARCHAR},
+      etemp.cost_before_type_name = #{record.costBeforeTypeName,jdbcType=VARCHAR},
+      etemp.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+      etemp.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
+      etemp.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      etemp.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      etemp.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      etemp.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      etemp.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      etemp.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      etemp.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
+    update tb_finance_expenses_temp
+    <set>
+      <if test="costHappendTime != null">
+        cost_happend_time = #{costHappendTime,jdbcType=CHAR},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="costId != null">
+        cost_id = #{costId,jdbcType=VARCHAR},
+      </if>
+      <if test="excelId != null">
+        excel_id = #{excelId,jdbcType=VARCHAR},
+      </if>
+      <if test="costBeforeTypeName != null">
+        cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="costAfterTypeId != null">
+        cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="costAfterTypeName != null">
+        cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null">
+        department_id = #{departmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentName != null">
+        department_name = #{departmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceExpensesTemp">
+    update tb_finance_expenses_temp
+    set cost_happend_time = #{costHappendTime,jdbcType=CHAR},
+      cost = #{cost,jdbcType=DECIMAL},
+      cost_id = #{costId,jdbcType=VARCHAR},
+      excel_id = #{excelId,jdbcType=VARCHAR},
+      cost_before_type_name = #{costBeforeTypeName,jdbcType=VARCHAR},
+      cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+      cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
+      department_id = #{departmentId,jdbcType=VARCHAR},
+      department_name = #{departmentName,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,9 +15,7 @@ import java.util.List;
  * @modified By:
  */
 @ApiModel(value = "OrgTeamData",description = "机构团队信息")
-public class OrgTeamData {
-    @ApiModelProperty(value = "人员结构ID[新增时ID传空,修改需传ID]")
-    private String id;
+public class OrgTeamData implements Serializable {
 
     @ApiModelProperty(value = "机构ID")
     private String orgId;
@@ -43,13 +42,6 @@ public class OrgTeamData {
     @ApiModelProperty(value = "团队人员列表")
     private List<OrgTeam> orgTeams;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getOrgId() {
         return orgId;

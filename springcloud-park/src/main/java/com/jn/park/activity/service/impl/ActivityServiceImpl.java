@@ -366,7 +366,7 @@ public class ActivityServiceImpl implements ActivityService {
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_TIME_PARSE_ERROR2);
         }
         if(StringUtils.isNotEmpty(orderBy)){
-            String [] orders = {"acti_views","acti_like","apply_num","partic_num"};
+            String [] orders = {"acti_views","acti_like","apply_num","partic_num","acti_start_time"};
             Boolean flag = false;
             for(String order : orders){
                 if(orderBy.equals(order)){
@@ -391,6 +391,7 @@ public class ActivityServiceImpl implements ActivityService {
                 activityIdList.add(slim.getId());
             }
         }
+        //获得活动报名人信息
         List<ActivityApplyDetail> activityApplyList = activityApplyService.findApplyAccountList(activityIdList);
         if (activitySlimList != null && activitySlimList.size() > 0) {
             for (ActivitySlim slim : activitySlimList) {
@@ -404,6 +405,7 @@ public class ActivityServiceImpl implements ActivityService {
                 }
                 slim.setAvatarList(avatars);
             }
+            //设置是否显示报名人信息
             for (ActivitySlim slim : activitySlimList) {
                 if (invalid.equals(slim.getShowApplyNum())) {
                     slim.setAvatar(null);

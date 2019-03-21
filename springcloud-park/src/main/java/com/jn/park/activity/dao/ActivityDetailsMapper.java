@@ -29,9 +29,10 @@ public interface ActivityDetailsMapper {
      * 获取点评信息
      * @param activityId 活动id
      * @param parentIds  评论id/活动id
+     * @param loginAccount 当前登录用户账号
      * @return
      */
-    List<Comment>getCommentInfo(@Param("activityId") String activityId,@Param("list") List<String> parentIds);
+    List<Comment>getCommentInfo(@Param("activityId") String activityId,@Param("list") List<String> parentIds,@Param("loginAccount") String loginAccount);
 
     /**
      * 获取活动报名信息

@@ -2,6 +2,8 @@ package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.org.model.*;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
 
 /**
  * 服务机构认证审核接口
@@ -23,14 +25,14 @@ public interface OrgApproveService {
      * 查询机构入驻数据
      * @return
      */
-    OrgApplyCount getOrgCount();
+    OrgApplyCountVo getOrgCount();
 
     /**
      * 查询机构审核详情
      * @param orgId
      * @return
      */
-    OrgApplyDetail getOrgApplyDetail(String orgId);
+    OrgApplyDetailVo getOrgApplyDetail(String orgId);
 
     /**
      * 机构申请审核

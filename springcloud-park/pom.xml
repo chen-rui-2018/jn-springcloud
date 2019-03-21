@@ -34,6 +34,11 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-app-delay-stream-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-fastdfs-api</artifactId>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -44,6 +49,13 @@
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jn</groupId>
+                        <artifactId>jn-spring-cloud-generator</artifactId>
+                        <version>1.0-RELEASE</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>Generate MyBatis Artifacts</id>

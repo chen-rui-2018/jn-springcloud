@@ -49,61 +49,6 @@ const portalRouter = {
       name: 'applyActivityList',
       meta: { title: '活动报名列表', noCache: false },
       hidden: true
-    },
-    // {
-    //   path: 'activityTypeList',
-    //   component: () => import('@/views/portal/activityTypeList'),
-    //   name: 'activityTypeList',
-    //   meta: { title: '活动类型列表', noCache: false },
-    //   hidden: true
-    // }
-    {
-      path: 'ServiceManagement',
-      component: () => import('@/views/portal/ServiceManagement'),
-      name: 'ServiceManagement',
-      meta: { title: '服务管理', noCache: true },
-      children: [
-        {
-          path: 'featuredProduct',
-          component: () => import('@/views/portal/ServiceManagement/featuredProduct'),
-          name: 'featuredProduct',
-          meta: { title: '特色服务产品', noCache: true }
-        },
-        {
-          path: 'productApprover/:id',
-          component: () => import('@/views/portal/ServiceManagement/productApprover'),
-          name: 'productApprover',
-          meta: { title: '特色服务产品审批非科技金融', noCache: false },
-          hidden: true
-        },
-        {
-          path: 'productApproverFinance/:id',
-          component: () => import('@/views/portal/ServiceManagement/productApproverFinance'),
-          name: 'productApproverFinance',
-          meta: { title: '特色服务产品审批科技金融', noCache: false }
-
-        },
-        {
-          path: 'findServiceDetail/:id',
-          component: () => import('@/views/portal/ServiceManagement/findServiceDetail'),
-          name: 'findServiceDetail',
-          meta: { title: '特色服务产品查看非科技金融', noCache: false },
-          hidden: true
-        },
-        {
-          path: 'findServiceDetailfinance/:id',
-          component: () => import('@/views/portal/ServiceManagement/findServiceDetailfinance'),
-          name: 'findServiceDetailfinance',
-          meta: { title: '特色服务产品查看科技金融', noCache: false },
-          hidden: true
-        },
-        {
-          path: 'generalProduct',
-          component: () => import('@/views/portal/ServiceManagement/generalProduct'),
-          name: 'generalProduct',
-          meta: { title: '服务产品管理', noCache: true }
-        }
-      ]
     }
   ]
 }

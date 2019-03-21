@@ -34,7 +34,7 @@ public class IndustryController {
     private IndustryService industryService;
 
     @ControllerLog(doAction = "机构字典")
-    @ApiOperation(value = "机构字典[字段类型：0业务领域1行业领域2发展阶段3企业性质]", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "机构字典[字段类型：0业务领域1行业领域2发展阶段3企业性质][不分页查询]", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/selectIndustryList")
     public Result selectIndustryList(@RequestBody @Validated IndustryDictParameter industryDictParameter){
         List<IndustryDictionary> industryDictionary = industryService.getIndustryDictionary(industryDictParameter);

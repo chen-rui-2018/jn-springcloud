@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.company.entity;
+package com.jn.enterprise.company.entity;
 
 import java.io.Serializable;
 import java.util.Date;

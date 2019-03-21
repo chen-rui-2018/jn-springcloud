@@ -2,6 +2,7 @@ package com.jn.user.userinfo.service;
 
 
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.model.UserInfoParam;
 
@@ -64,12 +65,13 @@ public interface UserInfoService {
      */
     boolean updateRedisUserInfo(String account);
 
+    
     /**
      * 保存/修改用户信息
      * @param userInfoParam
-     * @param account
+     * @param user
      * @return
      */
-    int saveOrUpdateUserInfo(UserInfoParam userInfoParam,String account);
+    int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user);
 
 }

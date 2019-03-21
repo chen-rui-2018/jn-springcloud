@@ -56,8 +56,8 @@ public class OrgController extends BaseController {
     @RequestMapping(value = "/selectServiceOrgList")
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@RequestBody @Validated OrgParameter orgParameter){
-        PaginationData paginationData = orgService.selectServiceOrgList(orgParameter);
-        return new Result(paginationData);
+        PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter);
+        return new Result<>(paginationData);
     }
 
     @ControllerLog(doAction = "获取服务机构详情")
@@ -67,7 +67,7 @@ public class OrgController extends BaseController {
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
-        return new Result(orgService.getServiceOrgDetail(orgId));
+        return new Result<>(orgService.getServiceOrgDetail(orgId));
     }
 
     @ControllerLog(doAction = "获取服务机构详情+产品列表")

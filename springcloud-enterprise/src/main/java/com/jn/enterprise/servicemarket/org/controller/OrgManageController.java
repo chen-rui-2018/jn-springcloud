@@ -44,21 +44,21 @@ public class OrgManageController extends BaseController {
     private OrgService orgService;
 
     @ControllerLog(doAction = "保存服务机构基本信息")
-    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)", httpMethod = "POST", response = Result.class ,notes = "返回结果为机构ID")
     @RequestMapping(value = "/saveOrgBasicData")
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
-    public Result saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
+    public Result<String> saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, user.getAccount());
         logger.info("保存服务机构基本信息成功，响应ID："+s);
-        return new Result(s);
+        return new Result<>(s);
     }
 
     @ControllerLog(doAction = "修改服务机构基本信息,")
-    @ApiOperation(value = "修改服务机构基本信息,(app-修改基本资料))", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "修改服务机构基本信息,(app-修改基本资料(我的机构))", httpMethod = "POST", response = Result.class ,notes = "返回结果为机构ID")
     @RequestMapping(value = "/updateOrgBasicData")
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
-    public Result updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
+    public Result<String> updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         Assert.notNull(orgBasicData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String s = orgService.saveOrUpdateOrgBasicData(orgBasicData, user.getAccount());
@@ -67,10 +67,10 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构资质信息")
-    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证,修改资质)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证)", httpMethod = "POST", response = Result.class ,notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgLicenseData")
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
-    public Result saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
+    public Result<Integer> saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgService.saveOrgLicenseData(orgLicenseData, user.getAccount());
         logger.info("保存服务机构资质信息成功，响应条数："+i);
@@ -79,10 +79,10 @@ public class OrgManageController extends BaseController {
 
 
     @ControllerLog(doAction = "保存/修改服务机构团队信息")
-    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料,修改团队资料)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料)", httpMethod = "POST", response = Result.class ,notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgTeamData")
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
-    public Result saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
+    public Result<Integer> saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgService.saveOrUpdateOrgTeamData(orgTeamData, user.getAccount());
         logger.info("保存服务机构资质信息成功，响应条数："+i);
@@ -90,10 +90,10 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构联系方式")
-    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式,修改联系方式)", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式)", httpMethod = "POST", response = Result.class,notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgContactData")
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
-    public Result saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
+    public Result<Integer> saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
         Assert.notNull(orgContactData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgService.saveOrUpdateOrgContactData(orgContactData, user.getAccount());

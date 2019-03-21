@@ -20,9 +20,10 @@ public class OrgApplyCheckData implements Serializable {
     @NotNull(message = "机构ID不能为空")
     private String orgId;
     @ApiModelProperty(value = "审核状态2不通过1通过",required = true)
+    @NotNull(message = "审核状态不能为空")
     @Pattern(regexp = "^[21]$", message = "{checkStatus:'审核状态只允许为2,1'}")
     private String checkStatus;
-    @ApiModelProperty(value = "审批意见")
+    @ApiModelProperty(value = "审批意见",required = true)
     @NotNull(message = "审批意见不能为空")
     private String ckeckMessage;
 

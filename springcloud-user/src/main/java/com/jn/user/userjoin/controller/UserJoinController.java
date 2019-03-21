@@ -70,7 +70,7 @@ public class UserJoinController extends BaseController {
     @ControllerLog(doAction = "获取短信验证码[当前用户]")
     @ApiOperation(value = "获取短信验证码[当前用户]",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/getUserCode")
-    public Result getUserCode(){
+    public Result<String> getUserCode(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         String phone = user.getPhone();
         userJoinService.getCode(phone);

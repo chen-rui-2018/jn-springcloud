@@ -173,7 +173,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
+    public PaginationData<List<Comment>> getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
         Page<Object> objects=null;
         try {
             if(isPage){
@@ -190,7 +190,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             //获取评论用户头像信息
             getCommentUserAvatar(list);
             list= getCommentChildComment(list,activityQueryPaging.getActivityId(),loginAccount);
-            return new PaginationData(list,objects==null?0:objects.getTotal());
+            return new PaginationData<>(list,objects==null?0:objects.getTotal());
         } finally {
             if(objects!=null){
                 objects.close();

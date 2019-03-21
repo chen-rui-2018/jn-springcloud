@@ -33,7 +33,7 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
-    @ApiModelProperty(value = "性别[0女1男]")
+    @ApiModelProperty(value = "性别[0女1男]",required = true)
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'性别只允许为0,1'}")
     private String sex;

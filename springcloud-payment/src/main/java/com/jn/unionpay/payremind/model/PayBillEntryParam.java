@@ -17,32 +17,32 @@ import java.util.Date;
  */
 @ApiModel(value = "PayBillEntryParam", description = "缴费账单录入")
 public class PayBillEntryParam implements Serializable {
-    @ApiModelProperty(value = "账单编号")
+    @ApiModelProperty(value = "账单编号",required = true)
     @NotBlank(message = "账单编号不能为空")
     private String billNum;
-    @ApiModelProperty(value = "账单类型id")
+    @ApiModelProperty(value = "账单类型id",required = true)
     @NotBlank(message = "账单对象ID不能为空")
     private String billType;
-    @ApiModelProperty(value = "账单类型名称")
+    @ApiModelProperty(value = "账单类型名称",required = true)
     @NotBlank(message = "账单类型名称不能为空")
     private String billName;
-    @ApiModelProperty(value = "账单对象类型[1企业2个人]")
+    @ApiModelProperty(value = "账单对象类型[1企业2个人]",required = true)
     @NotBlank(message = "账单对象不能为空")
     @Pattern(regexp = "^[12]$", message = "{billObjType:'账单对象只能为1,2'}")
     private String billObjType;
-    @ApiModelProperty(value = "账单对象ID")
+    @ApiModelProperty(value = "账单对象ID",required = true)
     @NotBlank(message = "账单对象ID不能为空")
     private String billObjId;
-    @ApiModelProperty(value = "账单对象名称")
+    @ApiModelProperty(value = "账单对象名称",required = true)
     @NotBlank(message = "账单对象名称不能为空")
     private String billObjName;
-    @ApiModelProperty(value = "账单金额")
+    @ApiModelProperty(value = "账单金额",required = true)
     @NotBlank(message = "账单金额不能为空")
     private Double billAmount;
-    @ApiModelProperty(value = "最晚缴费时间 yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty(value = "最晚缴费时间 yyyy-MM-dd HH:mm:ss",required = true)
     @NotBlank(message = "最晚缴费时间不能为空")
     private String payEndTime;
-    @ApiModelProperty(value = "缴费说明")
+    @ApiModelProperty(value = "缴费说明",required = true)
     @NotBlank(message = "缴费说明不能为空")
     private String billRemark;
 

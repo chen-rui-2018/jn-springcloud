@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 活动类型管理
@@ -61,19 +62,19 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityTypeList")
     @RequiresPermissions("/activity/activityType/findActivityTypeList")
-    public Result findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
-        PaginationData activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
-        return new Result(activityTypeList);
+    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
+        PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
+        return new Result<>(activityTypeList);
     }
 
     @ControllerLog(doAction = "展示当前活动类型")
     @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/findActivityType")
     @RequiresPermissions("/activity/activityType/findActivityType")
-    public Result findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "typeId") String typeId) {
+    public Result<ActivityType> findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "typeId") String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         ActivityType vo = activityTypeService.findActivityTypeById(typeId);
-        return new Result(vo);
+        return new Result<>(vo);
     }
 
     @ControllerLog(doAction = "编辑当前活动类型")

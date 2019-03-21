@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.technologyfinancial.financial.product.dao.FinancialProductMapper">
+    <!--金融产品列表查询-->
+    <select id="getFinancialProductList" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo">
+        SELECT 
+            sp.`product_id` AS "productId"				        <!--产品id-->
+            ,sp.`product_name` AS "productName"			        <!--产品名称-->
+            ,sp.`org_id` AS "orgId"					            <!--机构id-->
+            ,sp.`org_name` AS "orgName"				            <!--机构名称-->
+            ,sp.`ref_rate_min` AS "refRateMin"			        <!--参考利率最小值-->
+            ,sp.`ref_rate_max` AS "refRateMax"			        <!--参考利率最大值-->
+            ,sp.`loan_amount_min` AS "loanAmountMin"		    <!--贷款额度最小值-->
+            ,sp.`loan_amount_max` AS "loanAmountMax"		    <!--贷款额度最大值-->
+            ,sp.`assure_method_name` AS "assureMethodName"  	<!--担保方式-->
+            ,sp.`loan_term_min` AS "loanTermMin"			    <!--贷款期限最小值-->
+            ,sp.`loan_term_max` AS "loanTermMax"			    <!--贷款期限最大值-->
+            ,COUNT(sr.`attitude_score`) AS "ratingNum"		    <!--评价次数-->
+            ,IFNULL(AVG(sr.`attitude_score`),0) AS "ratingScore"<!--评价分数-->
+            ,COUNT(sq.`product_id`) AS "transactionNum"		    <!--累计交易数-->
+        FROM tb_service_product sp 
+        LEFT JOIN tb_service_rating sr
+        ON sp.`product_id`=sr.`product_id`
+        AND sr.`record_status`='1'
+        LEFT JOIN tb_service_require sq
+        ON sp.`product_id`=sq.`product_id`
+        AND sq.`status`='2'						                <!--已处理-->
+        AND sq.`record_status`='1'
+        WHERE 1=1
+        AND sp.`record_status`='1'
+        AND sp.`status`='1'						                <!--有效-->
+        AND sp.`org_id` IS NOT NULL
+        AND sp.`signory_id`=#{businessAreaId}			        <!--科技金融-->
+        <if test="financialParam.loanTermMin !=null and financialParam.loanTermMin !=''">     <!--贷款期限大于等于最小值-->
+            and sp.loan_term_min &gt;=#{financialParam.loanTermMin}
+        </if>
+        <if test="financialParam.loanTermMax !=null and financialParam.loanTermMax !=''">     <!--贷款期限小于等于最大值-->
+            and sp.loan_term_max &lt;=#{financialParam.loanTermMax}
+        </if>
+        <if test="financialParam.assureMethodCode !=null and financialParam.assureMethodCode!='' ">  <!--担保方式-->
+            and sp.assure_method_code=#{financialParam.assureMethodCode}
+        </if>
+        <if test="financialParam.onlineLoan !=null and financialParam.onlineLoan!='' ">          <!--网贷直联-->
+            and sp.is_online_loan=#{financialParam.onlineLoan}
+        </if>
+        <if test="financialParam.policyProduct !=null and financialParam.policyProduct!='' ">    <!--政策性产品-->
+            and sp.is_policy_pro=#{financialParam.policyProduct}
+        </if>
+        <if test="financialParam.loanAmountMin !=null and financialParam.loanAmountMin !='' ">   <!--贷款额度大于等于最小值-->
+            and sp.loan_amount_min &gt; #{financialParam.loanAmountMin}
+        </if>
+        <if test="financialParam.loanAmountMax !=null and financialParam.loanAmountMax !='' ">   <!--贷款额度小于等于最大值-->
+            and sp.loan_amount_max &lt; #{financialParam.loanAmountMax}
+        </if>
+        <if test="financialParam.keyWord !=null and financialParam.keyWord !=''">  <!--关键词-->
+            and (sp.product_name like  CONCAT('%', #{financialParam.keyWord}, '%') or sp.org_name like CONCAT('%', #{financialParam.keyWord}, '%'))
+        </if>
+        GROUP BY sp.`product_id`
+            ,sp.`product_name`
+            ,sp.`org_id`
+            ,sp.`org_name`
+            ,sp.`ref_rate_min`
+            ,sp.`ref_rate_max`
+            ,sp.`loan_amount_min`
+            ,sp.`loan_amount_max`
+            ,sp.`assure_method_name`
+            ,sp.`loan_term_min`
+            ,sp.`loan_term_max` 
+
+    </select>
+
+</mapper>

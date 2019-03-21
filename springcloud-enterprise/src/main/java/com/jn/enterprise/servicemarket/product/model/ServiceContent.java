@@ -43,8 +43,10 @@ public class ServiceContent  implements Serializable {
     private String productType;
     @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔")
     private String advisorAccount;
-    @ApiModelProperty(value = "服务产品描述")
-    private String serviceDetails;
+    @ApiModelProperty(value = "服务产品描述byte数组")
+    private byte[] serviceDetails;
+    @ApiModelProperty(value = "服务产品详情")
+    private String productDetails;
 
     private static final long serialVersionUID = 1L;
 
@@ -136,11 +138,19 @@ public class ServiceContent  implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public String getServiceDetails() {
+    public byte[] getServiceDetails() {
         return serviceDetails;
     }
 
-    public void setServiceDetails(String serviceDetails) {
+    public void setServiceDetails(byte[] serviceDetails) {
         this.serviceDetails = serviceDetails;
+    }
+
+    public String getProductDetails() {
+        return productDetails;
+    }
+
+    public void setProductDetails(String productDetails) {
+        this.productDetails = productDetails;
     }
 }

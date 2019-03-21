@@ -1,7 +1,7 @@
-package com.jn.enterprise.joinpark.company.dao;
+package com.jn.enterprise.company.dao;
 
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompany;
-import com.jn.enterprise.joinpark.company.entity.TbServiceCompanyCriteria;
+import com.jn.enterprise.company.entity.TbServiceCompany;
+import com.jn.enterprise.company.entity.TbServiceCompanyCriteria;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 

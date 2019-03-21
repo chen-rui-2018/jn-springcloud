@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "InvestorInfoShow", description = "科技金融投资人列表展示出参")
-public class InvestorInfoShow implements Serializable {
+@ApiModel(value = "InvestorInfoListShow", description = "科技金融投资人列表展示出参")
+public class InvestorInfoListShow implements Serializable {
     @ApiModelProperty(value = "投资人账号")
     private String investorAccount;
     @ApiModelProperty(value = "投资人姓名")
@@ -72,5 +72,17 @@ public class InvestorInfoShow implements Serializable {
 
     public void setMainAreaList(String mainAreaList) {
         this.mainAreaList = mainAreaList;
+    }
+
+    @Override
+    public String toString() {
+        return "InvestorInfoListShow{" +
+                "investorAccount='" + investorAccount + '\'' +
+                ", investorName='" + investorName + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", orgName='" + orgName + '\'' +
+                ", position='" + position + '\'' +
+                ", mainAreaList='" + mainAreaList + '\'' +
+                '}';
     }
 }

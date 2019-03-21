@@ -3,6 +3,7 @@ package com.jn.user.userinfo.service.impl;
 import com.jn.SpringCloudUserApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.model.UserInfoParam;
@@ -66,7 +67,6 @@ public class UserInfoServiceImplTest {
     public void setUp() throws Exception {
         //获取用户扩展信息
         account="wangsong";
-
         //批量获取用户扩展信息
         accountList.add(account);
         accountList.add("qianqi");
@@ -187,8 +187,10 @@ public class UserInfoServiceImplTest {
         userInfoParam.setSex("1");
         userInfoParam.setJobs(new String[]{"101","102"});
         userInfoParam.setHobbys(new String[]{"001","002"});
+        User user = new User();
+        user.setAccount("wangsong");
         try{
-            int i = userInfoService.saveOrUpdateUserInfo(userInfoParam, account);
+            int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user );
             assertThat(i,greaterThanOrEqualTo(0));
         }catch (JnSpringCloudException e){
             logger.info("保存/修改用户信息失败");

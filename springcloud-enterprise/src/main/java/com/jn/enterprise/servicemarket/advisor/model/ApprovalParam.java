@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,7 +13,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ApprovalParam",description = "审批顾问信息入参")
-public class ApprovalParam extends Page implements Serializable {
+public class ApprovalParam  implements Serializable {
     @ApiModelProperty(value = "顾问账号")
     @NotNull(message = "顾问账号不能为空")
     private String advisorAccount;

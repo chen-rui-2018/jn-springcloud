@@ -105,9 +105,42 @@ public class UserInfoServiceImpl implements UserInfoService {
         }else{
             TbUserPerson tbUserPerson = tbUserPeople.get(0);
             BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+            getUserHobbyAndJobs(userExtensionInfo);
             //把用户拓展信息写入redis中
             cache.put(account, userExtensionInfo);
             return userExtensionInfo;
+        }
+    }
+
+    /**
+     * 获取用户兴趣爱好和用户工作
+     * @param userExtensionInfo
+     */
+    @ServiceLog(doAction = "获取用户兴趣爱好和用户工作")
+    private void getUserHobbyAndJobs(UserExtensionInfo userExtensionInfo) {
+        //获取用户兴趣爱好
+        TbUserTagCriteria exampleHobby=new TbUserTagCriteria();
+        exampleHobby.createCriteria().andUserIdEqualTo(userExtensionInfo.getId())
+                .andTagTypeEqualTo(TAG_CODE_IS_HOBBY).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbUserTag> tbUserTaHobbygList = tbUserTagMapper.selectByExample(exampleHobby);
+        if(!tbUserTaHobbygList.isEmpty()){
+            List<String>hobbyList=new ArrayList<>();
+            for(TbUserTag tbUserTag:tbUserTaHobbygList){
+                hobbyList.add(tbUserTag.getTagName());
+            }
+            userExtensionInfo.setHobbys(hobbyList);
+        }
+        //获取用户工作
+        TbUserTagCriteria exampleJob=new TbUserTagCriteria();
+        exampleJob.createCriteria().andUserIdEqualTo(userExtensionInfo.getId())
+                .andTagTypeEqualTo(TAG_CODE_IS_JOB).andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbUserTag> tbUserTagJobList = tbUserTagMapper.selectByExample(exampleJob);
+        if(!tbUserTagJobList.isEmpty()){
+            List<String>jobList=new ArrayList<>();
+            for(TbUserTag tbUserTag:tbUserTagJobList){
+                jobList.add(tbUserTag.getTagName());
+            }
+            userExtensionInfo.setJobs(jobList);
         }
     }
 
@@ -145,6 +178,8 @@ public class UserInfoServiceImpl implements UserInfoService {
         //批量获取用户扩展信息
         List<UserExtensionInfo> personUserExtensionList = getPersonUserInfoBatche(needSelectAccountList);
         for(UserExtensionInfo user:personUserExtensionList){
+            //用户兴趣爱好和工作信息
+            getUserHobbyAndJobs(user);
             userList.add(user);
             //把用户拓展信息写入redis中
             cache.put(user.getAccount(), user);
@@ -341,6 +376,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             TbUserPerson tbUserPerson = tbUserPeople.get(0);
             UserExtensionInfo userExtensionInfo=new UserExtensionInfo();
             BeanUtils.copyProperties(tbUserPerson, userExtensionInfo);
+            //用户兴趣爱好和工作信息
+            getUserHobbyAndJobs(userExtensionInfo);
             //把用户拓展信息写入redis中
             Cache<Object> cache = redisCacheFactory.getCache(USER_EXTENSION_INFO, expire);
             cache.put(account, userExtensionInfo);

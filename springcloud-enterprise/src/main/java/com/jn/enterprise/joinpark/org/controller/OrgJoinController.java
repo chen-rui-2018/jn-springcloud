@@ -34,9 +34,10 @@ public class OrgJoinController {
 
 
     @ControllerLog(doAction = "保存/修改机构认证信息")
-    @ApiOperation(value = "保存/修改机构认证信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改机构认证信息", httpMethod = "POST", response = Result.class,
+    notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/saveOrUpdateOrgDetail")
-    public Result saveOrUpdateOrgDetail(@RequestBody @Validated OrgDetailParameter orgDetailParameter) {
+    public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated OrgDetailParameter orgDetailParameter) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgJoinService.saveOrUpdateOrgDetail(orgDetailParameter,user.getAccount());
         logger.info("保存/修改机构认证信息成功，响应条数{}",i);

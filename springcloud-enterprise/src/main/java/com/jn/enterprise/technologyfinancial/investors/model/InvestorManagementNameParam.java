@@ -10,35 +10,25 @@ import java.io.Serializable;
 
 /**
  * @Author: yangph
- * @Date: 2019/3/9 16:42
+ * @Date: 2019/3/21 19:16
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "InvestorInfoListParam", description = "科技金融投资人列表查询入参")
-public class InvestorInfoListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "主投领域id")
-    private String mainCode;
-    @ApiModelProperty(value = "关键字")
-    private String keyWords;
+@ApiModel(value = "InvestorManagementNameParam", description = "科技金融管理投资人管理姓名查询入参")
+public class InvestorManagementNameParam extends Page implements Serializable {
+    @ApiModelProperty(value = "姓名")
+    private String investorName;
     @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;
 
-    public String getMainCode() {
-        return mainCode;
+    public String getInvestorName() {
+        return investorName;
     }
 
-    public void setMainCode(String mainCode) {
-        this.mainCode = mainCode;
-    }
-
-    public String getKeyWords() {
-        return keyWords;
-    }
-
-    public void setKeyWords(String keyWords) {
-        this.keyWords = keyWords;
+    public void setInvestorName(String investorName) {
+        this.investorName = investorName;
     }
 
     public String getNeedPage() {

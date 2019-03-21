@@ -38,7 +38,7 @@ public class FinancialProductListParam extends Page implements Serializable {
     private String loanAmountMax;
     @ApiModelProperty(value = "关键词)")
     private String keyWord;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
+    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

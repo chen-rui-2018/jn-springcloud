@@ -20,7 +20,7 @@ public class OrgLicenseData implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
 
-    @ApiModelProperty(value = "一级业务领域")
+    @ApiModelProperty(value = "一级业务领域",required = true)
     @NotNull(message = "一级业务领域不能为空")
     private String businessType;
 

@@ -18,34 +18,34 @@ import java.util.Date;
  */
 @ApiModel(value = "PaymentBillModel", description = "缴费账单生成实体")
 public class PaymentBillModel implements Serializable {
-    @ApiModelProperty(value = "账单编号")
+    @ApiModelProperty(value = "账单编号",required = true)
     @NotBlank(message = "账单编号不能为空")
     private String billNum;
-    @ApiModelProperty(value = "账单名称")
+    @ApiModelProperty(value = "账单名称",required = true)
     @NotBlank(message = "账单名称不能为空")
     private String billName;
-    @ApiModelProperty(value = "账单类型")
+    @ApiModelProperty(value = "账单类型",required = true)
     @NotBlank(message = "账单类型不能为空")
     private String billType;
-    @ApiModelProperty(value = "账单对象[Account]")
+    @ApiModelProperty(value = "账单对象[Account]",required = true)
     @NotBlank(message = "账单对象ID不能为空")
     private String billObjId;
-    @ApiModelProperty(value = "账单对象名")
+    @ApiModelProperty(value = "账单对象名",required = true)
     @NotBlank(message = "账单对象名不能为空")
     private String billObjName;
-    @ApiModelProperty(value = "账单金额")
+    @ApiModelProperty(value = "账单金额",required = true)
     @NotBlank(message = "账单金额不能为空")
     private Double billAmount;
-    @ApiModelProperty(value = "账单生成时间[yyyy-MM-dd HH:mm:ss]")
+    @ApiModelProperty(value = "账单生成时间[yyyy-MM-dd HH:mm:ss]",required = true)
     @NotBlank(message = "账单生成时间不能为空")
     private String billCreateTime;
-    @ApiModelProperty(value = "最晚缴费时间[yyyy-MM-dd HH:mm:ss]")
+    @ApiModelProperty(value = "最晚缴费时间[yyyy-MM-dd HH:mm:ss]",required = true)
     @NotBlank(message = "最晚缴费时间不能为空")
     private String payEndTime;
-    @ApiModelProperty(value = "生成操作人")
+    @ApiModelProperty(value = "生成操作人",required = true)
     @NotBlank(message = "生成操作人不能为空")
     private String billCreateAccount;
-    @ApiModelProperty(value = "账单说明")
+    @ApiModelProperty(value = "账单说明",required = true)
     @NotBlank(message = "账单说明不能为空")
     private String billRemark;
 

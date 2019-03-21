@@ -153,7 +153,6 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         content.setOrgId(commonService.getOrgId());
         content.setProductId(commonService.getProductId());
         content.setAdvisorAccount(commonService.getAdvisorAccount());
-        content.setSerialNumber(commonService.getSerialNumber());
         addServiceProduct(content,account,commonService.getTemplateId());
     }
 

@@ -14,7 +14,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "UserExtension", description = "个人用户扩展信息")
+@ApiModel(value = "UserExtensionInfo", description = "个人用户扩展信息")
 public class UserExtensionInfo implements Serializable {
     @ApiModelProperty(value = "用户id")
     private String id;
@@ -36,7 +36,7 @@ public class UserExtensionInfo implements Serializable {
     private String name;
     @ApiModelProperty(value = "呢称")
     private String nickName;
-    @ApiModelProperty(value = "性别")
+    @ApiModelProperty(value = "性别(0:女  1：男)")
     private String sex;
     @ApiModelProperty(value = "年龄")
     private Integer age;

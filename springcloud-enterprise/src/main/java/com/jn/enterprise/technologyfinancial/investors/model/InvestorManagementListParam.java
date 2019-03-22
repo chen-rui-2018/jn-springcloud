@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -24,8 +25,9 @@ public class InvestorManagementListParam extends Page implements Serializable {
     @ApiModelProperty(value = "所属单位")
     private String affiliationUnit;
     @ApiModelProperty(value = "手机号码")
-    @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
-            message = "{phone:'手机号码验证出错'}")
+    @Pattern(regexp = "^[0-9]*$",
+            message = "{phone:'手机号只能是数字'}")
+    @Size(max=11,message = "手机号码最多为11位")
     private String phone;
     @ApiModelProperty(value = "申请日期开始时间(格式：201903)")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",

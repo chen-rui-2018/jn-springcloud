@@ -3,16 +3,20 @@ package com.jn.enterprise.technologyfinancial.investors.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.InvestorExceptionEnum;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListParam;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListShow;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementNameParam;
 import com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementUpOrDownParam;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorManagementService;
+import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
+import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -21,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,6 +47,9 @@ public class InvestorManagementController extends BaseController {
 
     @Autowired
     private InvestorManagementService investorManagementService;
+
+    @Autowired
+    private InvestorService investorService;
 
     @ControllerLog(doAction = "投资人管理列表查询")
     @ApiOperation(value = "投资人管理列表查询", httpMethod = "POST", response = Result.class)
@@ -74,5 +82,15 @@ public class InvestorManagementController extends BaseController {
         int responseNum = investorManagementService.investorUpOrDown(investorManagementUpOrDownParam, user.getAccount());
         logger.info("-------投资人上架/下架操作成功，数据响应条数是[{}]-------",responseNum);
         return  new Result(responseNum);
+    }
+
+    @ControllerLog(doAction = "投资人详情")
+    @ApiOperation(value = "投资人详情", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/technologyFinancial/investorManagementController/getInvestorInfoDetails")
+    @RequestMapping(value = "/getInvestorInfoDetails")
+    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true)@RequestParam("investorAccount") String investorAccount){
+        Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
+        InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
+        return  new Result(investorInfoDetailsVo);
     }
 }

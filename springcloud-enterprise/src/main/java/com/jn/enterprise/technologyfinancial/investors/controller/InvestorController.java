@@ -9,9 +9,11 @@ import com.jn.enterprise.technologyfinancial.investors.model.*;
 import com.jn.enterprise.technologyfinancial.investors.service.InvestorService;
 import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +53,22 @@ public class InvestorController extends BaseController {
         return  new Result(investorInfoList);
     }
 
-    @ControllerLog(doAction = "投资人详情/投资人查看")
+    @ControllerLog(doAction = "投资人认证")
+    @ApiOperation(value = "投资人认证", httpMethod = "POST", response = Result.class,notes = "返回数据为数据响应条数")
+    @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
+    @RequestMapping(value = "/addInvestorInfo")
+    public Result<Integer> addInvestorInfo(@RequestBody @Validated InvestorAuthenticateParam investorAuthenticateParam){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("投资人认证获取当前登录用户失败");
+            return new Result(InvestorExceptionEnum.NETWORK_ANOMALY.getCode(),InvestorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = investorService.addInvestorInfo(investorAuthenticateParam, user.getAccount());
+        logger.info("-------投资人认证成功，数据响应条数是[{}]-------",responseNum);
+        return  new Result(responseNum);
+    }
+
+    @ControllerLog(doAction = "投资人详情")
     @ApiOperation(value = "投资人详情/投资人查看", httpMethod = "POST", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoDetails")
     @RequestMapping(value = "/getInvestorInfoDetails")

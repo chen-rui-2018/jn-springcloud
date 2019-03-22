@@ -2,6 +2,7 @@ package com.jn.park.finance.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
 import com.jn.park.finance.dao.FinanceTypeDao;
 import com.jn.park.finance.dao.TbFinanceDepartmentToTypeMapper;
 import com.jn.park.finance.dao.TbFinanceTypeMapper;
@@ -124,11 +125,11 @@ public class FinanceTypeServiceImpl implements FinanceTypeService {
    @ServiceLog(doAction = "校验费用类型名称是否已经存在")
     private void checkTypeName(String typeName,Integer typeId){
        //修改操作时，name可能是null(不修改name)，此时路过校验
-        if(null!=typeId&&null==typeName){
+        if(null!=typeId&& StringUtils.isBlank(typeName)){
             return;
         }
         //新增时名称不能为空
-        if(null==typeId&&null==typeName){
+        if(null==typeId&&StringUtils.isBlank(typeName)){
             throw new JnSpringCloudException(FinanceTypeExceptionEnums.TYPE_NAME_NOT_NULL);
         }
         TbFinanceTypeExample example=new TbFinanceTypeExample();

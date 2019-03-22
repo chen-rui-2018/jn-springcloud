@@ -1,8 +1,11 @@
 package com.jn.enterprise.servicemarket.org.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
+
+import java.util.List;
 
 /**
  * 服务机构service
@@ -18,7 +21,7 @@ public interface OrgService {
      * @param orgParment
      * @return
      */
-    PaginationData selectServiceOrgList(OrgParameter orgParment);
+    PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParment);
 
     /**
      * 根据机构ID查询机构详情

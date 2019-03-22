@@ -62,8 +62,9 @@ public class ServiceProductServiceImplTest {
     private static String pictureUrl;
     private static String productType;
     private static String advisorAccount;
-    private static String serviceDetails;
+    private static String productDetails;
     private static String account;
+    private static String comments;
 
     @Autowired
     private ServiceProductService productService;
@@ -95,8 +96,9 @@ public class ServiceProductServiceImplTest {
         pictureUrl="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2828282156,4161557038&fm=26&gp=0.jpg";
         productType = "0";
         advisorAccount = "wangsong,qianqi";
-        serviceDetails = "莫听穿林打叶声,何妨吟啸且徐行.竹杖芒鞋轻胜马,一蓑烟雨任平生";
+        productDetails = "莫听穿林打叶声,何妨吟啸且徐行.竹杖芒鞋轻胜马,一蓑烟雨任平生";
         account = "wangsong";
+        comments = productDetails;
     }
 
     /**
@@ -114,7 +116,7 @@ public class ServiceProductServiceImplTest {
         content.setSerialNumber(serialNumber);
         content.setSignoryName(signoryName);
         content.setServiceCycle(serviceCycle);
-        content.setServiceDetails(serviceDetails);
+        content.setProductDetails(productDetails);
         content.setSignoryId(signoryId);
         try {
           productId =  productService.addServiceProduct(content,account,null);
@@ -136,7 +138,7 @@ public class ServiceProductServiceImplTest {
     @Test
     public void findServiceList() {
         ServiceSelectConstraint constraint = new ServiceSelectConstraint();
-        constraint.setOrgName("机构1");
+        constraint.setOrgName("orgName");
         constraint.setOrgType("");
         constraint.setProductName("");
         constraint.setProductType("");
@@ -198,7 +200,7 @@ public class ServiceProductServiceImplTest {
         ServiceProductApproval approval =  new ServiceProductApproval();
         approval.setProductId("");
         approval.setStatus("2");
-        approval.setApprovalComments(serviceDetails);
+        approval.setApprovalComments(comments);
 
         productService.productApproval(approval,account);
 
@@ -212,7 +214,7 @@ public class ServiceProductServiceImplTest {
         ServiceProductApproval approval = new ServiceProductApproval();
         approval.setProductId("228043fd4f37438ea34e5a9ccdea2271");
         approval.setStatus("-1");
-        approval.setApprovalComments(serviceDetails);
+        approval.setApprovalComments(comments);
         productService.productShelf(approval,account);
         logger.info("服务产品上架/下架成功产品id="+approval.getProductId());
     }
@@ -345,7 +347,7 @@ public class ServiceProductServiceImplTest {
         content.setReferPrice("100-1000");
         content.setPictureUrl(pictureUrl);
         content.setAdvisorAccount("wangsong,zhaoliu");
-        content.setServiceDetails(serviceDetails);
+        content.setProductDetails(productDetails);
         content.setProductType("1");
         try{
             productService.updateFeatureProduct(  content,"wangsong");

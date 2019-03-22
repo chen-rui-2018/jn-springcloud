@@ -19,72 +19,72 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "服务机构id[新增传空，修改ID必传]")
     private String orgId;
 
-    @ApiModelProperty("机构名称")
+    @ApiModelProperty(value = "机构名称",required = true)
     @NotNull(message = "机构名称不能为空")
     private String orgName;
 
-    @ApiModelProperty("主营业务")
+    @ApiModelProperty(value = "主营业务",required = true)
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty("机构简介")
+    @ApiModelProperty(value = "机构简介",required = true)
     @NotNull(message = "机构简介不能为空")
     private String orgSynopsis;
 
-    @ApiModelProperty(value = "机构LOGO")
+    @ApiModelProperty(value = "机构LOGO",required = true)
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 
-    @ApiModelProperty(value = "机构注册时间yyyy-MM-dd")
+    @ApiModelProperty(value = "机构注册时间yyyy-MM-dd",required = true)
     @NotNull(message = "机构注册时间不能为空")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "组织机构代码")
+    @ApiModelProperty(value = "组织机构代码",required = true)
     @NotNull(message = "组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "业务擅长[数组]")
+    @ApiModelProperty(value = "业务擅长[数组]",required = true)
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
 
-    @ApiModelProperty(value = "行业领域[数组]")
+    @ApiModelProperty(value = "行业领域[数组]",required = true)
     private String[] industrySector;
 
-    @ApiModelProperty(value = "发展阶段[数组]")
+    @ApiModelProperty(value = "发展阶段[数组]",required = true)
     private String[] developmentStage;
 
-    @ApiModelProperty(value = "企业性质[数组]")
+    @ApiModelProperty(value = "企业性质[数组]",required = true)
     private String[] companyNature;
 
-    @ApiModelProperty(value = "机构资质集合")
+    @ApiModelProperty(value = "机构资质集合",required = true)
     @NotNull(message = "机构资质列表不能为空")
     private List<OrgLicense> licenses;
 
-    @ApiModelProperty("业务领域")
+    @ApiModelProperty(value = "业务领域",required = true)
     @NotNull(message = "业务领域不能为空")
     private String businessType;
 
-    @ApiModelProperty(value = "员工总人数")
+    @ApiModelProperty(value = "员工总人数",required = true)
     @NotNull(message = "员工总人数不能为空")
     private Integer staffCount;
 
-    @ApiModelProperty(value = "执业人员人数")
+    @ApiModelProperty(value = "执业人员人数",required = true)
     @NotNull(message = "执业人员人数不能为空")
     private Integer professionNum;
 
-    @ApiModelProperty(value = "本科学历人数")
+    @ApiModelProperty(value = "本科学历人数",required = true)
     @NotNull(message = "本科学历人数不能为空")
     private Integer bachelorNum;
 
-    @ApiModelProperty(value = "硕士学历人数")
+    @ApiModelProperty(value = "硕士学历人数",required = true)
     @NotNull(message = "硕士学历人数不能为空")
     private Integer masterNum;
 
-    @ApiModelProperty(value = "博士学历人数")
+    @ApiModelProperty(value = "博士学历人数",required = true)
     @NotNull(message = "博士学历人数不能为空")
     private Integer doctorNum;
 
-    @ApiModelProperty(value = "海归员工人数")
+    @ApiModelProperty(value = "海归员工人数",required = true)
     @NotNull(message = "海归员工人数不能为空")
     private Integer returneeNum;
 
@@ -94,31 +94,31 @@ public class OrgDetailParameter implements Serializable {
     @ApiModelProperty(value = "法人/负责人")
     private String orgPrincipal;
 
-    @ApiModelProperty(value = "机构咨询电话")
+    @ApiModelProperty(value = "机构咨询电话",required = true)
     @NotNull(message = "机构咨询电话不能为空")
     private String orgPhone;
 
-    @ApiModelProperty(value = "省")
+    @ApiModelProperty(value = "省",required = true)
     @NotNull(message = "省不能为空")
     private String orgProvince;
-    @ApiModelProperty(value = "市")
+    @ApiModelProperty(value = "市",required = true)
     @NotNull(message = "市不能为空")
     private String orgCity;
-    @ApiModelProperty(value = "区县")
+    @ApiModelProperty(value = "区县",required = true)
     @NotNull(message = "区县不能为空")
     private String orgArea;
-    @ApiModelProperty(value = "详细地址")
+    @ApiModelProperty(value = "详细地址",required = true)
     @NotNull(message = "详细地址不能为空")
     private String orgAddress;
-    @ApiModelProperty(value = "联系人姓名")
+    @ApiModelProperty(value = "联系人姓名",required = true)
     @NotNull(message = "联系人姓名不能为空")
     private String conName;
 
-    @ApiModelProperty(value = "联系人电话")
+    @ApiModelProperty(value = "联系人电话",required = true)
     @NotNull(message = "联系人电话不能为空")
     private String conPhone;
 
-    @ApiModelProperty(value = "联系人邮箱")
+    @ApiModelProperty(value = "联系人邮箱",required = true)
     @NotNull(message = "联系人邮箱不能为空")
     private String conEmail;
 

@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -12,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问管理信息（后台门户管理）")
-public class AdvisorServiceManagementInfo extends Page implements Serializable {
+@ApiModel(value = "AdvisorServiceManagementInfo",description = "服务顾问管理信息（后台门户管理）")
+public class AdvisorServiceManagementInfo implements Serializable {
     @ApiModelProperty(value = "顾问头像")
     private String avatar;
     @ApiModelProperty(value = "顾问姓名")

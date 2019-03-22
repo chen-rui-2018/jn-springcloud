@@ -22,17 +22,21 @@ public class AdvisorDetailParam implements Serializable {
     private String orgId;
     @ApiModelProperty(value = "机构名称")
     private String orgName;
-    @ApiModelProperty(value = "业务领域")
+    @NotNull(message="业务领域不能为空")
+    @ApiModelProperty(value = "业务领域",required = true)
     private String businessArea;
-    @ApiModelProperty(value = "从业年限")
+    @NotNull(message="从业年限不能为空")
+    @ApiModelProperty(value = "从业年限",required = true)
     private Double workingYears;
-    @ApiModelProperty(value = "毕业学校")
+    @NotNull(message="毕业学校不能为空")
+    @ApiModelProperty(value = "毕业学校",required = true)
     private String graduatedSchool;
     @ApiModelProperty(value = "学历")
     private String education;
     @ApiModelProperty(value = "个人简介")
     private String personalProfile;
-    @ApiModelProperty(value = "联系手机")
+    @ApiModelProperty(value = "联系手机",required = true)
+    @NotNull(message="联系手机不能为空")
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
             message = "{phone:'手机号码验证出错'}")
     private String phone;

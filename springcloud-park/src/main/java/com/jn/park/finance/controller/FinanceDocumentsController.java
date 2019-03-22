@@ -58,10 +58,10 @@ public class FinanceDocumentsController extends BaseController {
 
 
     @ControllerLog(doAction = "财务文档查询")
-    @ApiOperation(value = "财务文档查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findAll")
+    @ApiOperation(value = "财务文档查询",notes = "财务文档查询", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/documents/findAll")
-    public Result<FinanceDocumentsFindAllVo> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
+    public Result<PaginationData<List<FinanceDocumentsFindAllVo>>> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
         //todo
         this.checkIsSomeYear(financeDocumentsFindAllModel.getStartTime(),financeDocumentsFindAllModel.getEndTime());
         PaginationData findAll=financeDocumentsService.findAll(financeDocumentsFindAllModel);
@@ -105,10 +105,10 @@ public class FinanceDocumentsController extends BaseController {
 
 
     @ControllerLog(doAction = "获取部门信息")
-    @ApiOperation(value = "获取部门信息", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getUserDepartment")
+    @ApiOperation(value = "获取部门信息",notes = "获取部门信息",httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/getUserDepartment")
     @RequiresPermissions("/finance/documents/getUserDepartment")
-    public Result<SysDepartmentPostVO> getUserDepartment(){
+    public Result<List<SysDepartmentPostVO>> getUserDepartment(){
         //todo
         //部门信息
         List<SysDepartmentPostVO> sysDepartmentPostVO = getUser().getSysDepartmentPostVO();

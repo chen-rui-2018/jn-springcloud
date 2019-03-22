@@ -39,8 +39,8 @@ public class FinanceIncomeController extends BaseController {
     private FinanceIncomeService financeIncomeService;
 
     @ControllerLog(doAction = "明细,同期对比")
-    @ApiOperation(value = "明细,同期对比", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/periodContrast")
+    @ApiOperation(value = "明细,同期对比",notes = "同期对比",httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/periodContrast")
     @RequiresPermissions("/finance/income/periodContrast")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
@@ -54,8 +54,8 @@ public class FinanceIncomeController extends BaseController {
     }
 
     @ControllerLog(doAction = "汇总占比")
-    @ApiOperation(value = "汇总占比", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/summarizingProportion")
+    @ApiOperation(value = "汇总占比",notes = "汇总占比", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/summarizingProportion")
     @RequiresPermissions("/finance/income/summarizingProportion")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
@@ -69,8 +69,8 @@ public class FinanceIncomeController extends BaseController {
     }
 
     @ControllerLog(doAction = "往年对比")
-    @ApiOperation(value = "往年对比", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/lastYearContrast")
+    @ApiOperation(value = "往年对比", notes = "往年对比",httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/lastYearContrast")
     @RequiresPermissions("/finance/income/lastYearContrast")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
@@ -88,13 +88,11 @@ public class FinanceIncomeController extends BaseController {
     @GetMapping(value = "/exportContrast")
     @RequiresPermissions("/finance/income/exportContrast")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
+            @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query"),
     })
-    public Result exportContrast(HttpServletResponse response, String startTime, String endTime){
+    public Result exportContrast(HttpServletResponse response, String year){
         //todo
-        this.checkIsSomeYear(startTime,endTime);
-        List<FinanceIncomeExportContrastVo> sectionExpendForms=financeIncomeService.exportContrast(startTime,endTime);
+        List<FinanceIncomeExportContrastVo> sectionExpendForms=financeIncomeService.exportContrast(year);
 
         String exportTitle = "分类,去年1月收入,今年1月收入,去年2月收入,今年2月收入,去年3月收入,今年3月收入," +
                 "去年4月收入,今年4月收入,去年5月收入,今年5月收入,去年6月收入,今年6月收入,去年7月收入,今年7月收入,去年8月收入," +
@@ -104,8 +102,8 @@ public class FinanceIncomeController extends BaseController {
                 "income4,lastYearIncome4,income5,lastYearIncome5,income6,lastYearIncome5,income7,lastYearIncome7,income8,lastYearIncome7," +
                 "income9,lastYearIncome9,income10,lastYearIncome10,income11,lastYearIncome11,income12,lastYearIncome12,";
 
-        String fileName = startTime+"-"+endTime+"往年对比数据";
-        String sheetName = startTime+"-"+endTime+"往年对比数据";
+        String fileName = year+"年-往年对比数据";
+        String sheetName = year+"年-往年对比数据";
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, sectionExpendForms);
         return new Result(new PaginationData<FinanceTotalBudgetVo>());
     }

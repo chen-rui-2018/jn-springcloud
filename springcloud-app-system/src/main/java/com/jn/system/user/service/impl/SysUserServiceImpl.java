@@ -100,7 +100,7 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
-        if (tbSysUser.getPassword() == null){
+        if (StringUtils.isBlank(tbSysUser.getPassword())){
             tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
         }
         //添加用户信息

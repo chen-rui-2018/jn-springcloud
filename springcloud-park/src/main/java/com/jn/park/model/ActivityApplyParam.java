@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @ApiModel(value = "ActivityApplyParam",description = "活动申请人查询入参")
 public class ActivityApplyParam extends Page {
-    @ApiModelProperty(value = "活动ID")
+    @ApiModelProperty(value = "活动ID",required = true)
     @NotBlank(message = "活动id不能为空！")
     private String activityId;
 

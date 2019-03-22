@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "HandleRequireParam", description = "对接需求入参")
 public class HandleRequireParam extends Page implements Serializable {
-    @ApiModelProperty(value = "需求单号")
+    @ApiModelProperty(value = "需求单号",required = true)
     @NotNull(message = "需求单号不能为空")
     private String reqNum;
     @ApiModelProperty(value = "合同总金额")
@@ -26,7 +26,7 @@ public class HandleRequireParam extends Page implements Serializable {
     private String handleResult;
     @ApiModelProperty(value = "结果描述")
     private String resultDetail;
-    @ApiModelProperty(value = "实际贷款金额（万元）")
+    @ApiModelProperty(value = "实际贷款金额（万元）",required = true)
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
     @NotNull(message = "实际贷款金额不能为空")
     private String actualLoanAmount;
@@ -34,7 +34,7 @@ public class HandleRequireParam extends Page implements Serializable {
     private String contractHomePage;
     @ApiModelProperty(value = "合同尾页")
     private String contractEndPage;
-    @ApiModelProperty(value = "是否科技金融类:0:非科技金融类  1：是科技金融类")
+    @ApiModelProperty(value = "是否科技金融类:0:非科技金融类  1：是科技金融类",required = true)
     @NotNull(message = "是否科技金融类不能为空")
     @Pattern(regexp = "^[01]$", message = "{isTechnology:'默认值只允许为0,1'}")
     private String isTechnology;

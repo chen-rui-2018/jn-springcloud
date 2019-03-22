@@ -3,6 +3,7 @@ package com.jn.park.finance.controller;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
@@ -11,16 +12,19 @@ import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.model.FinanceTypeModel;
 import com.jn.park.finance.service.FinanceBudgetService;
 import com.jn.park.finance.service.FinanceTypeService;
+import com.jn.park.finance.vo.FianceDynamicTableVo;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.api.SystemClient;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.*;
-import org.apache.poi.ss.formula.functions.Finance;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
@@ -49,16 +53,16 @@ public class FinanceBudgetController extends FinanceBaseController {
     @ApiOperation(value = "总预算查询", httpMethod = "GET")
     @GetMapping(value = "/selectTotalBudget")
     @RequiresPermissions("/finance/budget/selectTotalBudget")
-    public Result<List<FinanceTotalBudgetVo>> selectTotalBudget(@Validated FinanceBudgetQueryModel financeBudgetQueryModel){
+    public Result<FianceDynamicTableVo<List<FinanceTotalBudgetVo>>> selectTotalBudget(@Validated FinanceBudgetQueryModel financeBudgetQueryModel){
         //财务部能看所有部门的数据，非财务部的用户，需要校验下要查询的部门是否属于用户所属的部门
         if(!isFinanceDepartmentUser()){
             checkUserDepartmentId(financeBudgetQueryModel.getDepartmentId());
-            if(null==financeBudgetQueryModel.getDepartmentId()){
+            if(StringUtils.isBlank(financeBudgetQueryModel.getDepartmentId())){
                 financeBudgetQueryModel.setDepartmentId(getUserDepartmentIds());
             }
         }
         this.checkIsSomeYear(financeBudgetQueryModel.getStartMonth(),financeBudgetQueryModel.getEndMonth());
-        List<FinanceTotalBudgetVo>  financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(financeBudgetQueryModel,getUser().getAccount());
+        FianceDynamicTableVo<List<FinanceTotalBudgetVo>>  financeTotalBudgetVoList=financeBudgetService.selectTotalBudget(financeBudgetQueryModel,getUser().getAccount());
         return new Result(financeTotalBudgetVoList);
     }
 
@@ -66,16 +70,17 @@ public class FinanceBudgetController extends FinanceBaseController {
     @ApiOperation(value = "预算录入历史查询", httpMethod = "GET", response = Result.class)
     @GetMapping(value = "/selectBudgetHistory")
     @RequiresPermissions("/finance/budget/selectBudgetHistory")
-    public Result<List<FinanceBudgetHistoryVo>> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel){
+    public Result<FianceDynamicTableVo<List<FinanceBudgetHistoryVo>>> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel){
         //财务部能看所有部门的数据，非财务部的用户，需要校验下要查询的部门是否属于用户所属的部门
+
         if(!isFinanceDepartmentUser()){
             checkUserDepartmentId(financeBudgetHistoryQueryModel.getDepartmentId());
-            if(null==financeBudgetHistoryQueryModel.getDepartmentId()){
+            if(StringUtils.isBlank(financeBudgetHistoryQueryModel.getDepartmentId())){
                 financeBudgetHistoryQueryModel.setDepartmentId(getUserDepartmentIds());
             }
         }
         this.checkIsSomeYear(financeBudgetHistoryQueryModel.getStartMonth(),financeBudgetHistoryQueryModel.getEndMonth());
-        List<FinanceBudgetHistoryVo> financeBudgetHistoryVoList =financeBudgetService.selectBudgetHistory(financeBudgetHistoryQueryModel,getUser().getAccount());
+        FianceDynamicTableVo<List<FinanceBudgetHistoryVo>> financeBudgetHistoryVoList =financeBudgetService.selectBudgetHistory(financeBudgetHistoryQueryModel,getUser().getAccount());
         return new Result(financeBudgetHistoryVoList);
     }
 
@@ -151,7 +156,7 @@ public class FinanceBudgetController extends FinanceBaseController {
      * @param endMonth
      */
     private void checkIsSomeYear(String startMonth,String endMonth){
-        if(null==startMonth||startMonth.length()!=6){
+        if(StringUtils.isBlank(startMonth)||startMonth.length()!=6){
             throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
         }
         if(null!=endMonth&&endMonth.length()!=6){

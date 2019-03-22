@@ -6,6 +6,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
+import com.jn.common.util.StringUtils;
 import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.finance.dao.FinanceExpensesDao;
 import com.jn.park.finance.entity.TbFinanceExpensesExample;
@@ -46,7 +47,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     public PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel) {
 
 
-        if(null==financeExpensesPageModel.getOrderByClause()){
+        if(StringUtils.isBlank(financeExpensesPageModel.getOrderByClause())){
             financeExpensesPageModel.setOrderByClause("cost_happend_time desc");
         }
 
@@ -59,7 +60,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
     @Override
     public PaginationData findHistoryAll(FinanceExpensesHistoryPageModel financeExpensesHistoryPageModel) {
 
-        if(null==financeExpensesHistoryPageModel.getOrderByClause()){
+        if(StringUtils.isBlank(financeExpensesHistoryPageModel.getOrderByClause())){
             financeExpensesHistoryPageModel.setOrderByClause("cost_happend_time desc");
         }
 
@@ -218,7 +219,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
             }
         }
         //判断是否拿到了根节点ID
-        if(null==rootDepartmentId){
+        if(StringUtils.isBlank(rootDepartmentId)){
             throw new JnSpringCloudException(FinanceExceptionEnums.UN_KNOW,"获取根节点失败");
         }
         //再通过拿到的根节点作为条件再调用一次，childflag为true时表示查询它下面的所有子节点（下一级）

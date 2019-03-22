@@ -15,23 +15,23 @@ import java.io.Serializable;
  */
 @ApiModel(value = "PayRemindParam", description = "账单核对提醒")
 public class PayRemindParam implements Serializable {
-    @ApiModelProperty(value = "账单[数组]")
+    @ApiModelProperty(value = "账单[数组]",required = true)
     @NotBlank(message = "账单不能为空")
     private String[] billIds;
-    @ApiModelProperty(value = "开户行名称")
+    @ApiModelProperty(value = "开户行名称",required = true)
     @NotBlank(message = "支付平台订单ID不能为空")
     private String bankName;
-    @ApiModelProperty(value = "银行卡号")
+    @ApiModelProperty(value = "银行卡号",required = true)
     private String bankId;
-    @ApiModelProperty(value = "银行户名")
+    @ApiModelProperty(value = "银行户名",required = true)
     private String bankAccount;
-    @ApiModelProperty(value = "缴费金额")
+    @ApiModelProperty(value = "缴费金额",required = true)
     @NotBlank(message = "缴费金额不能为空")
     private Double payAmount;
     @ApiModelProperty(value = "缴费说明")
     private String payRemark;
     @NotBlank(message = "缴费图片不能为空")
-    @ApiModelProperty(value = "缴费证明(图片链接)")
+    @ApiModelProperty(value = "缴费证明(图片链接)",required = true)
     private String payImg;
 
     public String[] getBillIds() {

@@ -9,7 +9,6 @@ import com.jn.user.model.*;
 import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.usertag.dao.UserTagMapper;
-import com.jn.user.usertag.entity.TbUserTag;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.anything;

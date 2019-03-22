@@ -86,7 +86,7 @@ public class InvestorServiceImpl implements InvestorService {
     @Override
     public PaginationData getInvestorInfoList(InvestorInfoListParam investorInfoListParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(investorInfoListParam==null){
+        if(StringUtils.isBlank(investorInfoListParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;

@@ -65,7 +65,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
 
     @Override
     @ServiceLog(doAction = "查询机构审核认证列表")
-    public PaginationData getOrgApplyList(OrgApplyParameter orgApplyParameter){
+    public PaginationData< List<OrgApplyVo>> getOrgApplyList(OrgApplyParameter orgApplyParameter){
         List<OrgApplyVo> orgApplyVoList = new ArrayList<>(8);
         Page<Object> objects = PageHelper.startPage(orgApplyParameter.getPage(), orgApplyParameter.getRows() == 0 ? 15 : orgApplyParameter.getRows());
         TbServiceOrgCriteria orgCriteria = new TbServiceOrgCriteria();
@@ -99,7 +99,7 @@ public class OrgApproveServiceImpl implements OrgApproveService {
                 }
             }
         }
-        PaginationData data = new PaginationData(orgApplyVoList, objects.getTotal());
+        PaginationData<List<OrgApplyVo>> data = new PaginationData<>(orgApplyVoList, objects.getTotal());
         return data;
     }
 

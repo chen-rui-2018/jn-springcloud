@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.technologyfinancial.investors.dao.InvestorManagementMapper">
+    <!--投资人管理列表查询-->
+    <select id="getInvestorManagementList" parameterType="com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListParam"
+            resultType="com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementListShow">
+          select
+            si.investor_account as "investorAccount"                <!--投资人账号-->
+            ,si.investor_name as "investorName"                     <!--投资人姓名-->
+            ,case si.sex
+              when '0' then "女"
+              when '1' then "男"
+              else "未知"
+              end as "sex"                                          <!--投资人性别-->
+            ,si.org_name as "orgName"                               <!--所属单位-->
+            ,si.position as "position"                              <!--职务-->
+            ,concat_ws('-',si.address_province,si.address_city,si.address_area) as "permanentAddress"  <!--常住地-->
+            ,si.phone as "phone"                                    <!--手机-->
+            ,si.email as "email"                                    <!--邮箱-->
+            ,date_format(si.created_time,'%Y/%m/%d') as "applyTime" <!--申请日期-->
+            ,case si.status
+              when '0' then "无效"
+              when '1' then "有效"
+              else "未知"
+              end as "status"                                       <!--状态-->
+          from tb_service_investor si
+          where 1=1
+          and si.record_status=1
+          and si.approval_status='1'                                <!--审批通过-->
+          <if test="status !=null and status !=''">                 <!--状态-->
+              and si.status=#{status}
+          </if>
+          <if test="investorName !=null and investorName !=''">     <!--姓名-->
+              and si.investor_name=#{investorName}
+          </if>
+          <if test="affiliationUnit !=null and affiliationUnit !=''"><!--所属单位-->
+              and si.org_name like concat('%',#{affiliationUnit},'%')
+          </if>
+          <if test="phone !=null and phone !=''">                    <!--手机号码-->
+              and si.phone like concat('%',#{phone},'%')
+          </if>
+          <if test="applyStartTime !=null and applyStartTime !=''">  <!--申请日期开始时间-->
+              and date_format(si.created_time,'%Y%m')&gt;=#{applyStartTime}
+          </if>
+          <if test="applyEndTime !=null and applyEndTime !=''">      <!--申请日期结束时间-->
+              and date_format(si.created_time,'%Y%m')&lt;=#{applyEndTime}
+          </if>
+          <if test="position !=null and position !=''">              <!--职务-->
+              and si.position = #{position}
+          </if>
+    </select>
+
+    <select id="getInvestorManagementNames" parameterType="com.jn.enterprise.technologyfinancial.investors.model.InvestorManagementNameParam"
+            resultType="java.lang.String">
+        select
+          si.investor_name as "investorName"
+        from tb_service_investor si
+        where 1=1
+        and si.approval_status='1'    <!--审批通过-->
+        and si.record_status='1'
+        <if test="investorName !=null and investorName!=''">    <!--姓名-->
+            and si.investor_name like concat('%',#{investorName},'%')
+        </if>
+
+    </select>
+</mapper>

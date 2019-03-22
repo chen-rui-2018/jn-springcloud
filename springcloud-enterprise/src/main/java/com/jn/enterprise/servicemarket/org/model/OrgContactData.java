@@ -18,30 +18,30 @@ public class OrgContactData implements Serializable {
 
     @ApiModelProperty(value = "机构ID")
     private String orgId;
-    @ApiModelProperty(value = "省")
+    @ApiModelProperty(value = "省",required = true)
     @NotNull(message = "省不能为空")
     private String orgProvince;
-    @ApiModelProperty(value = "市")
+    @ApiModelProperty(value = "市",required = true)
     @NotNull(message = "市不能为空")
     private String orgCity;
-    @ApiModelProperty(value = "区县")
+    @ApiModelProperty(value = "区县",required = true)
     @NotNull(message = "区县不能为空")
     private String orgArea;
-    @ApiModelProperty(value = "详细地址")
+    @ApiModelProperty(value = "详细地址",required = true)
     @NotNull(message = "详细地址不能为空")
     private String orgAddress;
-    @ApiModelProperty(value = "咨询电话")
+    @ApiModelProperty(value = "咨询电话",required = true)
     @NotNull(message = "咨询电话不能为空")
     private String orgPhone;
-    @ApiModelProperty(value = "联系人姓名")
+    @ApiModelProperty(value = "联系人姓名",required = true)
     @NotNull(message = "联系人姓名不能为空")
     private String conName;
     @ApiModelProperty(value = "服务商网址")
     private String orgWeb;
-    @ApiModelProperty(value = "联系人手机")
+    @ApiModelProperty(value = "联系人手机",required = true)
     @NotNull(message = "联系人手机不能为空")
     private String conPhone;
-    @ApiModelProperty(value = "联系人邮箱")
+    @ApiModelProperty(value = "联系人邮箱",required = true)
     @NotNull(message = "联系人邮箱不能为空")
     private String conEmail;
 

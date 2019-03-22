@@ -17,13 +17,13 @@ import java.io.Serializable;
 @ApiModel(value = "PayInitiateParam", description = "支付发起参数")
 public class PayInitiateParam implements Serializable {
 
-    @ApiModelProperty(value = "账单ID[数组]")
+    @ApiModelProperty(value = "账单ID[数组]",required = true)
     @NotBlank(message = "账单ID[数组]不能为空")
     private String[] billIds;
 
     @NotBlank(message = "支付方式不能为空")
     @Pattern(regexp = "^[0,1,2]$", message = "{payMenthed:'支付方式只能为[0、1、2]'}")
-    @ApiModelProperty(value = "支付方式[暂定：0微信1支付宝2银联]")
+    @ApiModelProperty(value = "支付方式[暂定：0微信1支付宝2银联]",required = true)
     private String payMenthed;
 
     public String[] getBillIds() {

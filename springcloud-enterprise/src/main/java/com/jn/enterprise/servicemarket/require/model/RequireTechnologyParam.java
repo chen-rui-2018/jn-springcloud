@@ -16,26 +16,26 @@ import java.io.Serializable;
  */
 @ApiModel(value = "RequireTechnologyParam", description = "需求管理（科技金融提需求入参）")
 public class RequireTechnologyParam extends Page implements Serializable {
-    @ApiModelProperty(value = "产品Id")
+    @ApiModelProperty(value = "产品Id",required = true)
     @NotNull(message = "产品Id不能为空")
     private String productId;
-    @ApiModelProperty(value = "产品名称")
+    @ApiModelProperty(value = "产品名称",required = true)
     @NotNull(message = "产品名称不能为空")
     private String productName;
     @ApiModelProperty(value = "需求描述")
     private String requireDetail;
-    @ApiModelProperty(value = "融资金额（万元）")
+    @ApiModelProperty(value = "融资金额（万元）",required = true)
     @Pattern(regexp ="[0-9]*",message = "融资金额只能输入数字")
     @NotNull(message = "融资金额不能为空")
     private String financingAmount;
     @ApiModelProperty(value = "实际贷款金额（万元）")
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
     private String actualLoanAmount;
-    @ApiModelProperty(value = "融资期限（月）")
+    @ApiModelProperty(value = "融资期限（月）",required = true)
     @Pattern(regexp ="[0-9]*",message = "融资期限只能输入数字")
     @NotNull(message = "融资期限不能为空")
     private String financingPeriod;
-    @ApiModelProperty(value = "资金需求日期(格式：2019-03-22)")
+    @ApiModelProperty(value = "资金需求日期(格式：2019-03-22)",required = true)
     @NotNull(message = "资金需求日期不能为空")
     @Pattern(regexp = "(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-" +
             "(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})" +

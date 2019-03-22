@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "OrgColleagueParam", description = "机构同事列表查询入参")
 public class OrgColleagueParam extends Page implements Serializable {
-    @ApiModelProperty(value = "是否分页(1:分页   0:不分页)")
+    @ApiModelProperty(value = "是否分页(1:分页   0:不分页)",required = true)
     @Pattern(regexp = "^[01]$", message = "{isDefault:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

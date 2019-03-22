@@ -40,7 +40,7 @@ public class UserCenterController extends BaseController {
     @ControllerLog(doAction = "根据用户账号获取用户资料信息")
     @ApiOperation(value = "根据用户账号获取用户资料信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getUserPersonInfo")
-    public Result getUserPersonInfo(@ApiParam(name = "account", value = "服务产品id", required = true) @RequestParam String account) {
+    public Result<UserExtensionInfo> getUserPersonInfo(@ApiParam(name = "account", value = "服务产品id", required = true) @RequestParam String account) {
         UserExtensionInfo userInfo = userCenterService.getUserExtension(account);
         return new Result(userInfo);
     }

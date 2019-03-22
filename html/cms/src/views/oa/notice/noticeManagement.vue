@@ -20,7 +20,7 @@
     <!-- 表格 -->
     <el-table :data="noticeList" border fit highlight-current-row style="width: 100%;height:100%;">
       <el-table-column type="index" width="60" label="序号" align="center" />
-      <el-table-column label="公告标题" align="center" prop="noticeTitle">
+      <el-table-column :show-overflow-tooltip="true" label="公告标题" align="center" prop="noticeTitle">
         <template slot-scope="scope">
           <el-button class="setCursor" type="text">{{ scope.row.noticeTitle }}</el-button>
         </template>
@@ -64,7 +64,7 @@
       @current-change="handleCurrentChange" />
     <!-- S 新增弹窗 -->
     <template v-if="dialogFormVisible">
-      <el-dialog :visible.sync="dialogFormVisible" title="公告内容" width="700px">
+      <el-dialog :visible.sync="dialogFormVisible" class="noticeContent" title="公告内容" width="700px">
         <div class="editor-container">
           <UE ref="ue" :default-msg="defaultMsg" :config="config"/>
         </div>
@@ -105,6 +105,12 @@ export default {
         moduleCode: 'springcloud-oa',
         parentGroupCode: 'notice'
       }
+    }
+  },
+  watch: {
+    // 如果 `radio` 发生改变，这个函数就会运行
+    'listQuery.recordStatus': function() {
+      this.initList()
     }
   },
   mounted() {
@@ -169,7 +175,6 @@ export default {
     // 初始化
     initList() {
       this.listLoading = true
-      // this.listQuery.recordStatus = Number(this.listQuery.recordStatus)
       api('oa/notice/list', this.listQuery).then(res => {
         if (res.data.code === '0000') {
           this.noticeList = res.data.data.rows
@@ -213,4 +218,13 @@ export default {
     .el-pagination{
       margin-top:15px;
     }
+
+</style>
+<style lang="scss">
+.noticeContent{
+.el-dialog{
+      height: 550px;
+      overflow: auto;
+    }
+}
 </style>

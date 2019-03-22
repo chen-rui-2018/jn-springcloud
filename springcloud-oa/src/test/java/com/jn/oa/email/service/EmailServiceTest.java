@@ -3,11 +3,12 @@ package com.jn.oa.email.service;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.file.MultipartFileUtil;
-import com.jn.oa.email.vo.EmailVO;
+import com.jn.oa.common.service.CommonService;
 import com.jn.oa.email.enums.EmailIsDelayEnums;
 import com.jn.oa.email.enums.EmailSendStatusEnums;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
+import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.model.Email;
 import com.jn.system.model.User;
 import org.hamcrest.Matchers;
@@ -26,7 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 一键Email单元测试
@@ -43,6 +47,8 @@ public class EmailServiceTest {
 
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private CommonService commonService;
 
     private static User user;
 
@@ -82,7 +88,7 @@ public class EmailServiceTest {
             MultipartFile file1 = MultipartFileUtil.from(file, null);
             List<MultipartFile> files = new ArrayList<MultipartFile>();
             files.add(file1);
-            String attachment = emailService.uploadAttachment(files);
+            String attachment = commonService.uploadAttachment(files);
             Assert.assertThat(attachment, Matchers.notNullValue(String.class));
 
             emailAdd.setAttachment(attachment);
@@ -167,7 +173,6 @@ public class EmailServiceTest {
             Assert.assertThat(e, Matchers.anything());
         }
     }
-
 
     @Test
     public void t006_deleteBatch() {

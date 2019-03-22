@@ -61,7 +61,9 @@ public class FinanceIncomeServiceImpl implements FinanceIncomeService {
     }
 
     @Override
-    public List<FinanceIncomeExportContrastVo> exportContrast(String startTime, String endTime) {
+    public List<FinanceIncomeExportContrastVo> exportContrast(String year) {
+        String startTime=year+"01";
+        String endTime=year+"12";
 
         //返回就过
         List<FinanceIncomeExportContrastVo> financeIncomeExportContrastVos=new ArrayList<>();

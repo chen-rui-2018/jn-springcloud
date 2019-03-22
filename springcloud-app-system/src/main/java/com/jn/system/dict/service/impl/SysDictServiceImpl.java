@@ -200,7 +200,7 @@ public class SysDictServiceImpl implements SysDictService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询数据字典列表")
-    public PaginationData getDictByPage(SysDictPage sysDictPage) {
+    public PaginationData<List<SysDict>> getDictByPage(SysDictPage sysDictPage) {
         Page<Object> objects = PageHelper.startPage(sysDictPage.getPage(), sysDictPage.getRows());
         List<SysDict> sysDictList = sysDictMapper.getDictByPage(sysDictPage);
         PaginationData date = new PaginationData(sysDictList, objects.getTotal());

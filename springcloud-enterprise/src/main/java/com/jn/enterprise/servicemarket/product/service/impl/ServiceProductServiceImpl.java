@@ -165,22 +165,34 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
         ServiceProductDetail detail =  productDao.findServiceDetail(productId);
-        try {
-            detail.getContent().setProductDetails(new String(detail.getContent().getServiceDetails(),"UTF-8"));
-        }catch (UnsupportedEncodingException e ){
-            e.printStackTrace();
-            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
+        if(detail == null){
+            return detail;
+        }
+        if(detail!=null){
+            ServiceContent content= detail.getContent();
+            if (content!=null){
+                byte[] serviceDetails =  content.getServiceDetails();
+                if(serviceDetails!= null) {
+                    try {
+                        String productDetails = new String(serviceDetails, "UTF-8");
+                        content.setProductDetails(productDetails);
+                        detail.setContent(content);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                        logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
+                    }
+                }
+            }
         }
         //添加产品浏览数
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
-        productUpdate.setViewCount(product.getViewCount()+1);
+        int viewCount = product.getViewCount()==null?0:Integer.valueOf(product.getViewCount());
+        productUpdate.setViewCount(viewCount+1);
         productUpdate.setProductId(productId);
         tbServiceProductMapper.updateByPrimaryKeySelective(productUpdate);
         return detail;
     }
-
-
     @ServiceLog(doAction = "服务产品审核")
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -268,11 +280,13 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductDetails findWebProductDetails(String productId) {
         WebServiceProductInfo info= productDao.findWebProductDetails(productId);
-        try {
-            info.setProductDetails(new String(info.getServiceDetails(), "UTF-8"));
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
+        if(info.getServiceDetails()!=null) {
+            try {
+                info.setProductDetails(new String(info.getServiceDetails(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+                logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
+            }
         }
         if(info== null){
             return null;
@@ -286,6 +300,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         //添加产品浏览数
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
+
         productUpdate.setViewCount(product.getViewCount()+1);
         productUpdate.setProductId(productId);
         tbServiceProductMapper.updateByPrimaryKeySelective(productUpdate);

@@ -31,7 +31,7 @@ import java.util.UUID;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务产品管理")
+@Api(tags = "(非科技金融)服务产品管理")
 @RestController
 @RequestMapping(value = "/servicemarket/product/manage/")
 public class ServiceProductManageController extends BaseController {

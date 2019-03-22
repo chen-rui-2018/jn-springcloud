@@ -97,7 +97,7 @@
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName",          <!--联系人名称-->
-           t4.service_details as "productDetails", <!--服务详情-->
+           t4.service_details as "serviceDetails", <!--服务详情-->
           (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
            select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
            )) as "advisorName"                 <!--顾问名称-->
@@ -124,7 +124,7 @@
             <result column="referPrice" property="referPrice"/>
             <result column="serviceCycle" property="serviceCycle"/>
             <result column="pictureUrl" property="pictureUrl"/>
-            <result column="productDetails" property="productDetails"/>
+            <result column="serviceDetails" property="serviceDetails"/>
         </association>
     </resultMap>
     <!--产品审批-->

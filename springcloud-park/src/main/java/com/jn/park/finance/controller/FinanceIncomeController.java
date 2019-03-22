@@ -43,8 +43,8 @@ public class FinanceIncomeController extends BaseController {
     @GetMapping(value = "/periodContrast")
     @RequiresPermissions("/finance/income/periodContrast")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
+            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query",example = "201901"),
+            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FinanceIncomePeriodVo> periodContrast(String startTime,String endTime){
         //todo
@@ -58,8 +58,8 @@ public class FinanceIncomeController extends BaseController {
     @GetMapping(value = "/summarizingProportion")
     @RequiresPermissions("/finance/income/summarizingProportion")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
+            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query",example = "201901"),
+            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FinanceIncomeSummarizingProportionVo> summarizingProportion(String startTime,String endTime){
         //todo
@@ -73,8 +73,8 @@ public class FinanceIncomeController extends BaseController {
     @GetMapping(value = "/lastYearContrast")
     @RequiresPermissions("/finance/income/lastYearContrast")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query"),
-            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query")
+            @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query",example = "201901"),
+            @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
     public Result<FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>>> lastYearContrast(String startTime,String endTime){
         //todo
@@ -88,7 +88,7 @@ public class FinanceIncomeController extends BaseController {
     @GetMapping(value = "/exportContrast")
     @RequiresPermissions("/finance/income/exportContrast")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019"),
     })
     public Result exportContrast(HttpServletResponse response, String year){
         //todo

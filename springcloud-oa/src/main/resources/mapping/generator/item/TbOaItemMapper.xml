@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.item.dao.TbOaItemMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.item.entity.TbOaItem">
-    <result column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="item_mark" jdbcType="VARCHAR" property="itemMark" />
     <result column="item_name" jdbcType="VARCHAR" property="itemName" />
     <result column="responsible_account" jdbcType="VARCHAR" property="responsibleAccount" />
@@ -100,6 +100,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_oa_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_oa_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.item.entity.TbOaItemCriteria">
     delete from tb_oa_item
     <if test="_parameter != null">
@@ -338,5 +348,87 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.item.entity.TbOaItem">
+    update tb_oa_item
+    <set>
+      <if test="itemMark != null">
+        item_mark = #{itemMark,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibleAccount != null">
+        responsible_account = #{responsibleAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="itemContent != null">
+        item_content = #{itemContent,jdbcType=VARCHAR},
+      </if>
+      <if test="itemStatus != null">
+        item_status = #{itemStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalStatus != null">
+        approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAdvise != null">
+        approval_advise = #{approvalAdvise,jdbcType=VARCHAR},
+      </if>
+      <if test="planStartTime != null">
+        plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="planEndTime != null">
+        plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalPlanTime != null">
+        total_plan_time = #{totalPlanTime,jdbcType=DOUBLE},
+      </if>
+      <if test="totalConsumeTime != null">
+        total_consume_time = #{totalConsumeTime,jdbcType=DOUBLE},
+      </if>
+      <if test="totalRemainTime != null">
+        total_remain_time = #{totalRemainTime,jdbcType=DOUBLE},
+      </if>
+      <if test="itemProgress != null">
+        item_progress = #{itemProgress,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaItem">
+    update tb_oa_item
+    set item_mark = #{itemMark,jdbcType=VARCHAR},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      responsible_account = #{responsibleAccount,jdbcType=VARCHAR},
+      item_content = #{itemContent,jdbcType=VARCHAR},
+      item_status = #{itemStatus,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      approval_advise = #{approvalAdvise,jdbcType=VARCHAR},
+      plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      total_plan_time = #{totalPlanTime,jdbcType=DOUBLE},
+      total_consume_time = #{totalConsumeTime,jdbcType=DOUBLE},
+      total_remain_time = #{totalRemainTime,jdbcType=DOUBLE},
+      item_progress = #{itemProgress,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

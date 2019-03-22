@@ -1,4 +1,4 @@
-package com.jn.oa.email.model;
+package com.jn.oa.common.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

@@ -93,8 +93,11 @@
         RIGHT JOIN tb_month m
         on m.month=t.cost_happend_time
         and t.record_status=1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
         and t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+            and t.cost_after_type_id=#{typeId}
         </if>
         and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
         where m.month BETWEEN #{startTime} AND  #{endTime} ) t1
@@ -104,8 +107,11 @@
         IFNULL(SUM(t.budget_number),0) as "budgetnumber"
         from tb_finance_total_budget t
         where t.record_status = 1
-        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
         and t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+            and t.cost_type_id=#{typeId}
         </if>
         and t.budget_month BETWEEN #{startTime} AND  #{endTime} group by t.budget_month ) t2
         ON t2.budgetmonth=t1.month

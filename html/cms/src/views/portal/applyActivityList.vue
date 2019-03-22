@@ -176,14 +176,12 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route.params.id)
     this.getApplyActivityList()
   },
   methods: {
     getApplyActivityList() {
       this.actiList.activityId = this.$route.params.id
       getApplyActivityList(this.actiList).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total
@@ -221,8 +219,6 @@ export default {
         rows: this.total
       }
       exportDataExcel(data).then(res => {
-        console.log(res)
-        debugger
         window.location.href = res.request.responseURL
       })
     },
@@ -234,7 +230,6 @@ export default {
         applyId: i.id
       }
       signInActivityBackend(data).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.getApplyActivityList()
           this.$message(res.data.result)

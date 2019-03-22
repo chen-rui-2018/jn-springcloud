@@ -24,4 +24,31 @@ public class FinanceIncomeMoneyModel implements Serializable {
     private BigDecimal lastYearMoney;
 
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public void setMoney(BigDecimal money) {
+        this.money = money;
+    }
+
+    public BigDecimal getLastYearMoney() {
+        return lastYearMoney;
+    }
+
+    public void setLastYearMoney(BigDecimal lastYearMoney) {
+        this.lastYearMoney = lastYearMoney;
+    }
 }

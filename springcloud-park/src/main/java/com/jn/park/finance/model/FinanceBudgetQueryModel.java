@@ -18,18 +18,18 @@ import java.util.Date;
 public class FinanceBudgetQueryModel implements Serializable {
     private static final long serialVersionUID = -361729989487640941L;
 
-    @ApiModelProperty("费用类型ID")
+    @ApiModelProperty(value = "费用类型ID",example = "4")
     private Integer costTypeId;
 
-    @ApiModelProperty("部门ID")
+    @ApiModelProperty(value = "部门ID",example = "281f4005-0363-4528-92a3-60a730532e53")
     private String departmentId;
 
     @NotNull(message = "数据开始月份不能为空")
-    @ApiModelProperty("数据开始月份")
+    @ApiModelProperty(value = "数据开始月份",example = "201901")
     private String startMonth;
 
     @NotNull(message = "数据结束月份不能为空")
-    @ApiModelProperty("数据结束月份")
+    @ApiModelProperty(value = "数据结束月份",example = "201912")
     private String endMonth;
 
     @ApiModelProperty("排序条件")

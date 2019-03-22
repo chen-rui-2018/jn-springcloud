@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,23 +15,23 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ServiceHonorParam",description = "顾问荣誉资质入参")
-public class ServiceHonorParam extends Page implements Serializable {
+public class ServiceHonorParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "颁发机构")
     @Size(max=64,message = "颁发机构长度最多为64个字")
     private String issuingAgency;
-    @ApiModelProperty(value = "证书名称")
+    @ApiModelProperty(value = "证书名称",required = true)
     @NotNull(message="证书名称不能为空")
     private String certificateName;
-    @ApiModelProperty(value = "证书类型")
+    @ApiModelProperty(value = "证书类型",required = true)
     @NotNull(message="证书类型不能为空")
     private String certificateType;
     @ApiModelProperty(value = "颁发/获得时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{getTime:'颁发/获得时间格式错误'}")
     private String getTime;
     @ApiModelProperty(value = "证书证件")

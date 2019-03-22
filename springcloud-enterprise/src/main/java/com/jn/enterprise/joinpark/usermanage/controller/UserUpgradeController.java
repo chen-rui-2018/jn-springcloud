@@ -42,18 +42,18 @@ public class UserUpgradeController {
 
 
     @ControllerLog(doAction = "升级企业")
-    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class,notes = "返回值为响应数据条数")
+    @ApiOperation(value = "升级企业", httpMethod = "POST", response = Result.class,notes = "返回值为响应数据条数,正常情况为1")
     @RequestMapping(value = "/changeToCompany")
-    public Result changeToCompany(@RequestBody @Validated CompanyCheckParam companyCheckParam) {
+    public Result<Integer> changeToCompany(@RequestBody @Validated CompanyCheckParam companyCheckParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = userUpgradeService.changeToCompany(companyCheckParam, user.getPhone(), user.getAccount());
         return new Result(i);
     }
 
     @ControllerLog(doAction = "升级员工")
-    @ApiOperation(value = "升级员工", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "升级员工", httpMethod = "POST", response = Result.class,notes = "返回值为响应数据条数，正常为情况1")
     @RequestMapping(value = "/changeToStaff")
-    public Result changeToStaff(@RequestBody @Validated StaffCheckParam staffCheckParam) {
+    public Result<Integer> changeToStaff(@RequestBody @Validated StaffCheckParam staffCheckParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = userUpgradeService.changeToStaff(staffCheckParam, user.getPhone(), user.getAccount());
         return new Result(i);
@@ -63,7 +63,7 @@ public class UserUpgradeController {
     @ControllerLog(doAction = "升级企业工作流回调接口")
     @ApiOperation(value = "升级企业工作流回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/changeToCompanyCallBack")
-    public Result changeToCompanyCallBack(@RequestBody @Validated CompanyCheckCallBackParam companyCheckCallBackParam) {
+    public Result<Boolean> changeToCompanyCallBack(@RequestBody @Validated CompanyCheckCallBackParam companyCheckCallBackParam) {
         Boolean aBoolean = userUpgradeService.changeToCompanyCallBack(companyCheckCallBackParam);
         return new Result(aBoolean);
     }
@@ -71,7 +71,7 @@ public class UserUpgradeController {
     @ControllerLog(doAction = "升级员工工作流回调接口")
     @ApiOperation(value = "升级员工工作流回调接口", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/changeToStaffCallBack")
-    public Result changeToStaffCallBack(@RequestBody @Validated StaffCheckCallBackParam staffCheckCallBackParam) {
+    public Result<Boolean> changeToStaffCallBack(@RequestBody @Validated StaffCheckCallBackParam staffCheckCallBackParam) {
         Boolean aBoolean = userUpgradeService.changeToStaffCallBack(staffCheckCallBackParam);
         return new Result(aBoolean);
     }
@@ -79,9 +79,9 @@ public class UserUpgradeController {
 
 
     @ControllerLog(doAction = "查询公司列表")
-    @ApiOperation(value = "查询公司列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询公司列表", httpMethod = "POST", response = Result.class,notes = "comName可为空，不分页查询，只用于查询企业基本数据{企业id，企业名，企业logo}")
     @RequestMapping(value = "/selectCompany")
-    public Result selectCompany(@ApiParam(name="comName",value = "企业名")@RequestParam(value = "comName")  String comName) {
+    public Result<List<Company>> selectCompany(@ApiParam(name="comName",value = "企业名")@RequestParam(value = "comName")  String comName) {
         List<Company> conpanies = userUpgradeService.selectCompany(comName);
         return new Result(conpanies);
     }

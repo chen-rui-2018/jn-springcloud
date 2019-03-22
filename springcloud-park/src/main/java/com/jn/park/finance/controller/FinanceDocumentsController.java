@@ -9,7 +9,9 @@ import com.jn.down.api.DownLoadClient;
 import com.jn.down.model.DownLoad;
 import com.jn.park.finance.dao.TbFinanceDocumentMapper;
 import com.jn.park.finance.entity.TbFinanceDocument;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.enums.FinanceExceptionEnums;
+import com.jn.park.finance.model.FinanceDerpartmentModel;
 import com.jn.park.finance.model.FinanceDocumentsFindAllModel;
 import com.jn.park.finance.model.FinanceDocumentsUploadingModel;
 import com.jn.park.finance.service.FinanceDocumentsService;
@@ -29,7 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author： tangry
@@ -61,6 +63,7 @@ public class FinanceDocumentsController extends BaseController {
     @RequiresPermissions("/finance/documents/findAll")
     public Result<FinanceDocumentsFindAllVo> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
         //todo
+        this.checkIsSomeYear(financeDocumentsFindAllModel.getStartTime(),financeDocumentsFindAllModel.getEndTime());
         PaginationData findAll=financeDocumentsService.findAll(financeDocumentsFindAllModel);
         return new Result(findAll);
     }
@@ -103,12 +106,47 @@ public class FinanceDocumentsController extends BaseController {
 
     @ControllerLog(doAction = "获取部门信息")
     @ApiOperation(value = "获取部门信息", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getDepartment")
-    @RequiresPermissions("/finance/documents/getDepartment")
-    public Result<SysDepartmentPostVO> getDepartment(){
+    @PostMapping(value = "/getUserDepartment")
+    @RequiresPermissions("/finance/documents/getUserDepartment")
+    public Result<SysDepartmentPostVO> getUserDepartment(){
         //todo
         //部门信息
         List<SysDepartmentPostVO> sysDepartmentPostVO = getUser().getSysDepartmentPostVO();
-        return new Result(sysDepartmentPostVO);
+        //保存要返回的結果
+        List<FinanceDerpartmentModel> financeDerpartmentModelList=new ArrayList<>();
+        //遍历
+        Map<String,String> idSet=new HashMap();
+        sysDepartmentPostVO.stream().forEach(e->{
+            if(!idSet.containsKey(e.getDepartmentId())){
+                FinanceDerpartmentModel model=new FinanceDerpartmentModel();
+                model.setDepartmentId(e.getDepartmentId());
+                model.setDepartmentName(e.getDepartmentName());
+                financeDerpartmentModelList.add(model);
+            }
+            idSet.put(e.getDepartmentId(),null);
+        });
+
+        return new Result(financeDerpartmentModelList);
+    }
+
+
+    /**
+     * 校验开始结束日期是否为同一年
+     * @param startMonth
+     * @param endMonth
+     */
+    private void checkIsSomeYear(String startMonth,String endMonth){
+        if(StringUtils.isBlank(startMonth)||startMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
+        }
+        if(null!=endMonth&&endMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份格式必须是YYYYMM");
+        }
+        if((startMonth.compareTo(endMonth))>0){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份必须大于等于开始月份");
+        }
+        if(!startMonth.substring(0,4).equals(endMonth.substring(0,4))){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"只能查同一年的数据");
+        }
     }
 }

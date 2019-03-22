@@ -73,7 +73,7 @@
         group by t1.product_id,t4.product_id,t5.product_id
         )tt where 1=1
         <if test ="productType != null and productType!=''">
-            and tt.product_type = #{productType}
+            and tt.productType = #{productType}
         </if>
         <if test="praise != null and praise !=''">
             and   round(tt.attitudeScore,1) = 5

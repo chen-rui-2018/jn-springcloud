@@ -5,6 +5,7 @@ import com.jn.common.model.Result;
 import com.jn.park.finance.model.FinanceBudgetHistoryModel;
 import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
+import com.jn.park.finance.vo.FianceDynamicTableVo;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.model.User;
@@ -27,7 +28,7 @@ public interface FinanceBudgetService {
      * @param userAccount
      * @return
      */
-    List<FinanceTotalBudgetVo> selectTotalBudget(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount);
+    FianceDynamicTableVo<List<FinanceTotalBudgetVo>> selectTotalBudget(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount);
 
     /**
      * 预算录入历史查询
@@ -35,7 +36,7 @@ public interface FinanceBudgetService {
      * @param userAccount
      * @return
      */
-    List<FinanceBudgetHistoryVo>selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount);
+    FianceDynamicTableVo<List<FinanceBudgetHistoryVo>>selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount);
 
     /**
      * 预算录入

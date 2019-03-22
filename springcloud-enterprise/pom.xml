@@ -53,11 +53,12 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        company
+                        service_product
                     </contexts>
                     <tableNames>
-                        tb_service_company,
-                        tb_service_company_pro_img
+                        tb_service_product,
+                        tb_service_product_loan_type,
+                        tb_service_product_assure_type
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

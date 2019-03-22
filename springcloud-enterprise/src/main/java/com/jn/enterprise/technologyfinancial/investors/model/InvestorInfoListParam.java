@@ -20,7 +20,7 @@ public class InvestorInfoListParam extends Page implements Serializable {
     private String mainCode;
     @ApiModelProperty(value = "关键字")
     private String keyWords;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
+    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

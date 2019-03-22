@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,19 +15,19 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "AdvisorBaseInfo", description = "顾问资料基本信息")
-public class AdvisorBaseInfo extends Page implements Serializable {
+public class AdvisorBaseInfo  implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "机构Id")
     private String orgId;
     @ApiModelProperty(value = "机构名称")
     private String orgName;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限")
     @Size(max=50,message="从业年限只能是数值，且小于50")
-    private Float workingYears;
+    private Double workingYears;
     @ApiModelProperty(value = "毕业学校")
     private String graduatedSchool;
     @ApiModelProperty(value = "学历")
@@ -82,11 +81,11 @@ public class AdvisorBaseInfo extends Page implements Serializable {
         this.advisorAccount = advisorAccount;
     }
 
-    public Float getWorkingYears() {
+    public Double getWorkingYears() {
         return workingYears;
     }
 
-    public void setWorkingYears(Float workingYears) {
+    public void setWorkingYears(Double workingYears) {
         this.workingYears = workingYears;
     }
 

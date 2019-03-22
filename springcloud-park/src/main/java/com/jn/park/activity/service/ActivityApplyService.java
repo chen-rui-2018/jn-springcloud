@@ -42,7 +42,7 @@ public interface ActivityApplyService {
      * @param needPage 是否需要分页
      * @return
      */
-    PaginationData applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
+    PaginationData<List<ActivityApplyDetail>> applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage);
 
     /**
      * 生成二维码

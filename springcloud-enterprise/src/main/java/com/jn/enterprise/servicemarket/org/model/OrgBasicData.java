@@ -19,31 +19,31 @@ public class OrgBasicData implements Serializable {
     @ApiModelProperty(value = "机构ID[新增id传空，修改不能为空]")
     private String orgId;
 
-    @ApiModelProperty(value = "机构名称")
+    @ApiModelProperty(value = "机构名称",required = true)
     @NotNull(message = "机构名称不能为空")
     private String orgName;
 
-    @ApiModelProperty(value = "统一社会信用代码/组织机构代码")
+    @ApiModelProperty(value = "统一社会信用代码/组织机构代码",required = true)
     @NotNull(message = "统一社会信用代码/组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "注册时间 yyyy-MM-dd")
+    @ApiModelProperty(value = "注册时间 yyyy-MM-dd",required = true)
     @NotNull(message = "注册时间不能为空")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "机构简介")
+    @ApiModelProperty(value = "机构简介",required = true)
     @NotNull(message = "机构简介不能为空")
     private String orgSynopsis;
 
-    @ApiModelProperty(value = "主营业务")
+    @ApiModelProperty(value = "主营业务",required = true)
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "业务擅长[数组]")
+    @ApiModelProperty(value = "业务擅长[数组]",required = true)
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
 
-    @ApiModelProperty(value = "机构LOGO")
+    @ApiModelProperty(value = "机构LOGO",required = true)
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 

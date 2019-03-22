@@ -19,55 +19,55 @@ import java.util.List;
 @ApiModel(value = "CompanyCheckParam",description = "升级企业入参")
 public class CompanyCheckParam implements Serializable {
     @NotNull(message = "企业名称不能为空")
-    @ApiModelProperty(value = "企业名称[必传]")
+    @ApiModelProperty(value = "企业名称",required = true)
     private String comName;
     @ApiModelProperty(value = "企业简称")
     private String comNameShort;
     @NotNull(message = "企业logo不能为空")
-    @ApiModelProperty(value = "企业logo[必传]")
+    @ApiModelProperty(value = "企业logo",required = true)
     private String avatar;
     @NotNull(message = "企业领域不能为空")
-    @ApiModelProperty(value = "企业领域[产业领域、所属行业][必传]",notes = "传机构字典接口返回的ID")
+    @ApiModelProperty(value = "企业领域[产业领域、所属行业]",required = true,notes = "传机构字典接口返回的ID")
     private String induType;
     @NotNull(message = "企业法人不能为空")
-    @ApiModelProperty(value = "企业法人[必传]")
+    @ApiModelProperty(value = "企业法人",required = true)
     private String ownerLaw;
     @ApiModelProperty(value = "法人身份证号")
     private String ownerId;
     @ApiModelProperty(value = "公司联系电话")
     private String conPhone;
     @NotNull(message = "注册时间不能为空")
-    @ApiModelProperty(value = "注册时间yyyy-MM-dd[必传]")
+    @ApiModelProperty(value = "注册时间yyyy-MM-dd",required = true)
     private String foundingTime;
     @NotNull(message = "落地时间不能为空")
-    @ApiModelProperty(value = "落地时间yyyy-MM-dd[必传]")
+    @ApiModelProperty(value = "落地时间yyyy-MM-dd",required = true)
     private String runTime;
     @NotNull(message = "公司注册地址不能为空")
-    @ApiModelProperty(value = "公司注册地址[必传]")
+    @ApiModelProperty(value = "公司注册地址",required = true)
     private String comAddress;
     @NotNull(message = "实际经营地址不能为空")
-    @ApiModelProperty(value = "实际经营地址（园区地址）[必传]")
+    @ApiModelProperty(value = "实际经营地址（园区地址）",required = true)
     private String addrPark;
     @ApiModelProperty(value = "固定电话")
     private String comTele;
     @NotNull(message = "注册资金不能为空")
-    @ApiModelProperty(value = "注册资金（万元）[必传]")
+    @ApiModelProperty(value = "注册资金（万元）",required = true)
     private Long regCapital;
     @ApiModelProperty(value = "企业规模（万元）")
     private Long comScale;
     @NotNull(message = "统一社会信用代码不能为空")
-    @ApiModelProperty(value = "统一社会信用代码[必传]")
+    @ApiModelProperty(value = "统一社会信用代码",required = true)
     private String unifyCode;
     @ApiModelProperty(value = "三证一体或营业执照照片")
     private String businessLicense;
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[多个用,分隔][必传]",notes = "传机构字典接口返回的ID")
+    @ApiModelProperty(value = "企业性质[多个用,分隔]",required = true,notes = "传机构字典接口返回的ID")
     private String comProperty;
     @NotNull(message = "企业来源不能为空")
-    @ApiModelProperty(value = "企业来源[必传] ",notes = "1人才企业2招商企业")
+    @ApiModelProperty(value = "企业来源 ",notes = "1人才企业2招商企业",required = true)
     private String comSource;
     @NotNull(message = "验证码不能为空")
-    @ApiModelProperty(value = "验证码[必传]")
+    @ApiModelProperty(value = "验证码",required = true)
     private String checkCode;
     @ApiModelProperty(value = "法人微信")
     private String ownerWechat;

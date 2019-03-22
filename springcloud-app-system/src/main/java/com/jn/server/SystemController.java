@@ -8,6 +8,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
@@ -155,6 +156,13 @@ public class SystemController extends BaseController implements SystemClient {
     public Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId) {
         Boolean result = sysDepartmentService.checkUserDept(userId, deptId);
         return new Result(result);
+    }
+
+    @Override
+    @ControllerLog(doAction = "根据部门名称获取部门信息")
+    public Result getDept(@RequestParam("deptName") String deptName) {
+        TbSysDepartment tbSysDepartment= sysDepartmentService.getDept(deptName);
+        return new Result(tbSysDepartment);
     }
 
     @Override

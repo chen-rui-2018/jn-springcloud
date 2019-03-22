@@ -19,9 +19,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -45,8 +45,8 @@ public class SysDictModuleController extends BaseController {
     private SysDictModuleService sysDictModuleService;
 
     @ControllerLog(doAction = "新增模块")
-    @ApiOperation(value = "新增模块", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增模块", notes = "新增模块")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysModule/add")
     public Result add(@Validated @RequestBody SysDictModuleEdit sysModule) {
         //获取当前登录用户信息
@@ -66,8 +66,8 @@ public class SysDictModuleController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改模块")
-    @ApiOperation(value = "修改模块", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @ApiOperation(value = "修改模块", notes = "修改模块")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysModule/update")
     public Result update(@Validated @RequestBody SysDictModuleEdit sysModule) {
         Assert.notNull(sysModule.getId(), "模块id不能为空");
@@ -85,8 +85,8 @@ public class SysDictModuleController extends BaseController {
     }
 
     @ControllerLog(doAction = "逻辑删除模块")
-    @ApiOperation(value = "逻辑删除模块", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @ApiOperation(value = "逻辑删除模块", notes = "逻辑删除模块")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysModule/delete")
     public Result delete(String moduleId) {
         //获取当前登录用户信息
@@ -96,19 +96,19 @@ public class SysDictModuleController extends BaseController {
     }
 
     @ControllerLog(doAction = "模块列表")
-    @ApiOperation(value = "模块列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ApiOperation(value = "模块列表", notes = "模块列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysModule/list")
-    public Result list(@Validated @RequestBody SysDictModulePage sysDictModulePage) {
-        PaginationData data = sysDictModuleService.getModuleByPage(sysDictModulePage);
+    public Result<PaginationData<List<SysDictModule>>> list(@Validated @RequestBody SysDictModulePage sysDictModulePage) {
+        PaginationData<List<SysDictModule>> data = sysDictModuleService.getModuleByPage(sysDictModulePage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "获取全部模块")
-    @ApiOperation(value = "获取全部模块", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getAll")
+    @ApiOperation(value = "获取全部模块", notes = "获取全部模块")
+    @RequestMapping(value = "/getAll", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysModule/getAll")
-    public Result getAll() {
+    public Result<List<SysDictModule>> getAll() {
         List<SysDictModule> sysDictModuleList = sysDictModuleService.getAll();
         return new Result(sysDictModuleList);
     }

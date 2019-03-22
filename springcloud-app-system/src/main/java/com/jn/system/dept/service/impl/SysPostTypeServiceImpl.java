@@ -81,7 +81,7 @@ public class SysPostTypeServiceImpl implements SysPostTypeService {
      */
     @Override
     @ServiceLog(doAction = "列表查询岗位类型")
-    public PaginationData getPostTypeByPage(SysPostTypePage postTypePage) {
+    public PaginationData<List<SysPostType>> getPostTypeByPage(SysPostTypePage postTypePage) {
         //条件分页查询
         Page<Object> objects = PageHelper.startPage(postTypePage.getPage(), postTypePage.getRows());
         List<SysPostType> sysPostTypeList = sysPostTypeMapper.getPostTypeByPage(postTypePage);

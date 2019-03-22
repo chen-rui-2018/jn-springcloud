@@ -91,7 +91,7 @@ public class ActivityTypeServiceImpl implements ActivityTypeService {
 
     @ServiceLog(doAction = "查询活动类型列表")
     @Override
-    public PaginationData findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage) {
+    public PaginationData<List<ActivityType>> findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage) {
         String valid = "1";
         Page<Object> objects=null;
         if(isPage) {

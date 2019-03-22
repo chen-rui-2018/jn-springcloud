@@ -38,7 +38,7 @@ public class ParkCodeController  {
     @ApiOperation(value = "查询园区字典", httpMethod = "POST", response = Result.class,
             notes = "codeType：查询的字典类型（例如查询园区列表,codeType=parkName）")
     @RequestMapping(value = "/getParkCodeByType")
-    public Result getParkCodeByType(@ApiParam(name="codeType",value = "字典类型",required = true)@RequestParam(value = "codeType") String codeType){
+    public Result<List<TbParkCode>> getParkCodeByType(@ApiParam(name="codeType",value = "字典类型",required = true)@RequestParam(value = "codeType") String codeType){
         Assert.notNull(codeType, ParkCodeExceptionEnum.CODE_TYPE_NOT_NULL.getMessage());
         List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType(codeType);
         return new Result(parkCodeByType);

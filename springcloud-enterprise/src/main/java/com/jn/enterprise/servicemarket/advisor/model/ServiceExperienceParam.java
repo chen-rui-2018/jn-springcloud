@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "ServiceExperienceParam",description = "顾问服务经历入参")
-public class ServiceExperienceParam extends Page implements Serializable {
+public class ServiceExperienceParam  implements Serializable {
     @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;
     @ApiModelProperty(value = "顾问账号")
@@ -28,11 +27,11 @@ public class ServiceExperienceParam extends Page implements Serializable {
     @NotNull(message="职务不能为空")
     private String position;
     @ApiModelProperty(value = "工作开始时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{workTime:'工作开始时间格式错误'}")
     private String workTime;
     @ApiModelProperty(value = "工作结束时间(格式：201904)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20((0[0-9])|(1[0-8]))))((0?[1-9])|(1[0-2]))",
+    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{workEndTime:'工作结束时间格式错误'}")
     private String workEndTime;
 

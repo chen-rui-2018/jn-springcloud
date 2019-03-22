@@ -8,6 +8,7 @@ import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 活动详情
@@ -43,7 +46,7 @@ public class ActivityDetailsController extends BaseController {
     @ControllerLog(doAction = "获取活动详情")
     @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/getActivityDetails")
-    public Result getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestParam(value = "activityId") String activityId){
+    public Result<ActivityDetailVO> getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -54,13 +57,13 @@ public class ActivityDetailsController extends BaseController {
             return result;
         }
         ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,user.getAccount());
-        return new Result(activityDetailVO);
+        return new Result<>(activityDetailVO);
     }
 
     @ControllerLog(doAction = "获取评论信息")
     @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/getCommentInfo")
-    public Result getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
+    public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
         //获取当前登录用户
         User loginUser=(User) SecurityUtils.getSubject().getPrincipal();
         if(loginUser==null || loginUser.getAccount()==null){
@@ -70,7 +73,7 @@ public class ActivityDetailsController extends BaseController {
             logger.warn("获取评论信息接口获取当前登录用户失败");
             return result;
         }
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,loginUser.getAccount(),Boolean.TRUE);
-        return new Result(commentInfo);
+        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,loginUser.getAccount(),Boolean.TRUE);
+        return new Result<>(commentInfo);
     }
 }

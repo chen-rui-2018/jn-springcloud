@@ -2,6 +2,7 @@ package com.jn.enterprise.servicemarket.product.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @ApiModel(value = "CommonServiceShelf", description = "上架常规产品信息")
 public class CommonServiceShelf implements Serializable {
     @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true)
+    @NotBlank(message = "模板id不能为空")
     private String templateId;
     @ApiModelProperty(value = "服务产品Id")
     private String productId;
@@ -22,7 +24,8 @@ public class CommonServiceShelf implements Serializable {
     private String productName;
     @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔")
     private String advisorAccount;
-    @ApiModelProperty(value = "机构id" ,required = true)
+    @ApiModelProperty(value = "上架此产品的机构id" ,required = true)
+    @NotBlank(message = "机构名称不能为空")
     private String orgId;
     public String getTemplateId() {
         return templateId;

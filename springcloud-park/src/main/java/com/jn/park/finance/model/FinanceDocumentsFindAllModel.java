@@ -4,6 +4,7 @@ import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,9 +29,11 @@ public class FinanceDocumentsFindAllModel extends Page implements Serializable {
     @ApiModelProperty(value = "上传人")
     private String  documentUploader;
 
+    @NotNull(message = "开始时间不能为空")
     @ApiModelProperty(value = "开始时间 YYYY-MM")
     private String startTime;
 
+    @NotNull(message = "结束时间不能为空")
     @ApiModelProperty(value = "结束时间 YYYY-MM")
     private String endTime;
 

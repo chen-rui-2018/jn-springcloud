@@ -12,8 +12,7 @@ import com.jn.common.api.CodeAndMsg;
 public enum CompanyExceptionEnum implements CodeAndMsg {
     NETWORK_ANOMALY("5020901", "网络异常，请稍后重试。"),
     COMPANY_INFO_NOT_EXIST("5020501","企业信息不存在"),
-    COMPANY_ID_INFO_NOT_NULL("5020502","企业ID不能为空"),
-    ACCOUNT_NOT_NULL("5020502","用户账号不能为空"),
+    COMPANY_ID_INFO_NOT_NULL("5020502","企业ID或用户账号不能为空"),
 
     ;
 

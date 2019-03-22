@@ -98,7 +98,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "查询活动列表")
     @Override
-    public PaginationData selectActivityList(ActivityParment activityParment) {
+    public PaginationData<List<Activity>> selectActivityList(ActivityParment activityParment) {
         Page<Object> objects = PageHelper.startPage(activityParment.getPage(), activityParment.getRows() == 0 ? 15 : activityParment.getRows());
         ActivityContent activity = new ActivityContent();
         BeanUtils.copyProperties(activityParment, activity);
@@ -116,7 +116,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
 
         }
-        PaginationData data = new PaginationData(activities, objects.getTotal());
+        PaginationData<List<Activity>> data = new PaginationData(activities, objects.getTotal());
         return data;
     }
 
@@ -347,7 +347,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "获取前台活动列表")
     @Override
-    public PaginationData activityListSlim(ActivitySlimQuery activitySlimQuery) {
+    public PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery) {
 
         String typeId = activitySlimQuery.getTypeId();
         String keyWord = activitySlimQuery.getKeyWord();

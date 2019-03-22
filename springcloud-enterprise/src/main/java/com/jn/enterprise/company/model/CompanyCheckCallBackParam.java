@@ -1,4 +1,4 @@
-package com.jn.enterprise.joinpark.usermanage.model;
+package com.jn.enterprise.company.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -16,15 +16,15 @@ import java.io.Serializable;
 @ApiModel(value = "CompanyCheckCallBackParam",description = "升级企业审核回调入参")
 public class CompanyCheckCallBackParam implements Serializable {
     @NotNull(message = "企业ID不能为空")
-    @ApiModelProperty(value = "企业ID")
+    @ApiModelProperty(value = "企业ID",required = true)
     private String id;
     @ApiModelProperty(value = "企业名称")
     private String comName;
     @NotNull(message = "审核人不能为空")
-    @ApiModelProperty(value = "审核人")
+    @ApiModelProperty(value = "审核人",required = true)
     private String checkAccount;
     @NotNull(message = "审核状态不能为空")
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态",required = true)
     private String status;
 
     public String getId() {

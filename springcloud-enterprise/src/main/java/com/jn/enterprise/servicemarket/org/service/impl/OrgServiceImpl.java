@@ -58,10 +58,10 @@ public class OrgServiceImpl implements OrgService {
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
-    public PaginationData selectServiceOrgList(OrgParameter orgParameter){
+    public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
         Page<Object> objects = PageHelper.startPage(orgParameter.getPage(), orgParameter.getRows() == 0 ? 15 : orgParameter.getRows());
         List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
-        PaginationData data = new PaginationData(serviceOrg, objects.getTotal());
+        PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrg, objects.getTotal());
         return data;
     }
 

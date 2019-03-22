@@ -16,7 +16,7 @@ public class IndustryData {
     @ApiModelProperty(value = "领域ID[新增时传空，修改时ID必传]")
     private String id;
 
-    @ApiModelProperty(value = "领域值")
+    @ApiModelProperty(value = "领域值",required = true)
     @NotNull(message = "领域值不能为空")
     private String preValue;
 

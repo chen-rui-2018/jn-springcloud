@@ -59,10 +59,9 @@ public class FinancialProductServiceImplTest {
      * 添加金融机构产品
      */
     private String templateId;
-    private String commontProductId;
+    private String commonProductId;
     private String featureProductId;
     private String templateSerialNumber;
-    private String commontSerialNumber;
     private String featureSerialNumber;
     private String orgId;
     private String account;
@@ -93,10 +92,10 @@ public class FinancialProductServiceImplTest {
          * 添加金融机构产品
          */
         templateId = "fc62d95701d649aaa006b34157168576";
-        commontProductId = "84a18e9cb3e04394a5d454137fa3cae3";
+        commonProductId = "84a18e9cb3e04394a5d454137fa3cae3";
         featureProductId = "187084fd57a443e288962ff88b8eee2f";
         templateSerialNumber = "CG0018201903211042367682";
-        commontSerialNumber = "CG0018201903211042367683";
+
         featureSerialNumber = "TS003201903201045559647";
         orgId = "040e6f1a459e49989fd6db3dc2dfd6a4";
         account ="wangsong";
@@ -135,8 +134,8 @@ public class FinancialProductServiceImplTest {
          */
         shelf.setTemplateId(templateId);
         shelf.setOrgId(orgId);
-        shelf.setProductId(commontProductId);
-        shelf.setSerialNumber(commontSerialNumber);
+        shelf.setProductId(commonProductId);
+
 
         /**
          * 上架特色产品
@@ -271,7 +270,7 @@ public class FinancialProductServiceImplTest {
     @Test
     public void zDeleteTest() {
         productMapper.deleteByPrimaryKey(templateId);
-        productMapper.deleteByPrimaryKey(commontProductId);
+        productMapper.deleteByPrimaryKey(commonProductId);
         productMapper.deleteByPrimaryKey(featureProductId);
         logger.info("删除数据成功!");
     }

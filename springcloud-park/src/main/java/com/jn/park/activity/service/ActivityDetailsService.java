@@ -6,6 +6,7 @@ import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.Comment;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public interface ActivityDetailsService {
      * @param loginAccount 当前登录用来账号
      * @return
      */
-    PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage);
+    PaginationData<List<Comment>> getCommentInfo(ActivityQueryPaging activityQueryPaging, String loginAccount, Boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息

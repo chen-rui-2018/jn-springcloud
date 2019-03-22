@@ -17,7 +17,7 @@ import java.util.Date;
 public class AdvisorServiceInfo implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "顾问姓名")

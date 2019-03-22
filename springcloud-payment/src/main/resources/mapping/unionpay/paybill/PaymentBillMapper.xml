@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.unionpay.paybill.dao.PaymentBillMapper">
+    <!-- 根据账单ID或账单编号查询账单详情 -->
+   <select id="getPayBillDetailByIdOrNum" resultType="com.jn.paybill.model.PayBillVO">
+      select
+        b.bill_id as "billId",
+        b.bill_num as "billNum",
+        b.bill_name as "billName",
+        b.bill_type as "billType",
+        c.code_value as "billTypeName",
+        b.bill_obj_id as "billObjId",
+        b.bill_amount as "billAmount",
+        date_format(b.bill_create_time,'%Y-%m-%d %H:%i:%s') as "billCreateTime",
+        date_format(b.pay_end_time,'%Y-%m-%d %H:%i:%s') as "payEndTime",
+        b.bill_create_account as "billCreateAccount",
+        b.bill_remark as "billRemark",
+        CASE b.bill_status
+            WHEN '0' THEN "待审核"
+            WHEN '1' THEN "待支付"
+            WHEN '2' THEN "已支付"
+            WHEN '3' THEN "支付失败"
+            WHEN '4' THEN "已确认支付"
+            WHEN '5' THEN "支付审核失败"
+            ELSE '-'
+            END AS  "billStatus",
+        CASE b.is_urge
+            WHEN '0' THEN "否"
+            WHEN '1' THEN "是"
+            ELSE '-'
+            END AS  "isUrge",
+        CASE o.order_status
+            WHEN '0' THEN "未支付"
+            WHEN '1' THEN "已支付"
+            ELSE '-'
+            END AS  "orderStatus",
+        b.order_id as "orderId",
+        o.order_num as "orderNum",
+        o.order_name as "orderName",
+        o.order_amount as "orderAmount",
+        date_format(o.pay_time,'%Y-%m-%d %H:%i:%s') as "payTime",
+        o.pay_id as "payId",
+        o.pay_amount as "payAmount",
+        CASE o.pay_type
+            WHEN '0' THEN "微信"
+            WHEN '1' THEN "支付宝"
+            WHEN '2' THEN "银联"
+            ELSE '-'
+            END AS  "payType",
+        o.pay_remark as "payRemark"
+      from tb_payment_bill b left join tb_payment_order o on b.order_id = o.id left join  tb_payment_code c on  c.id = b.bill_type
+      where b.record_status = 1 and b.bill_id = #{idOrNum} or b.bill_num = #{idOrNum} LIMIT 1
+   </select>
+
+    <!-- 根据条件查询账单列表 -->
+    <select id="getPaymentBillList" resultType="com.jn.paybill.model.PaymentBill" parameterType="com.jn.paybill.model.PaymentBillParam">
+       select
+        b.bill_id as "billId",
+        b.bill_num as "billNum",
+        b.bill_name as "billName",
+        b.bill_type as "billType",
+        c.code_value as "billTypeName",
+        b.bill_obj_id as "billObjId",
+        b.bill_obj_name as "billObjName",
+                b.bill_obj_type as "billObjType",
+        b.bill_amount as "billAmount",
+        b.remind_id as "remindId",
+        date_format(b.bill_create_time,'%Y-%m-%d %H:%i:%s') as "billCreateTime",
+        date_format(b.pay_end_time,'%Y-%m-%d %H:%i:%s') as "payEndTime",
+        date_format(b.urge_time,'%Y-%m-%d %H:%i:%s') as "urgeTime",
+        b.bill_create_account as "billCreateAccount",
+        b.bill_remark as "billRemark",
+        CASE b.bill_status
+            WHEN '-1' THEN "账单审核不通过"
+            WHEN '0' THEN "待审核"
+            WHEN '1' THEN "待支付"
+            WHEN '2' THEN "已支付"
+            WHEN '3' THEN "支付失败"
+            WHEN '4' THEN "已确认支付"
+            WHEN '5' THEN "支付审核失败"
+            ELSE '-'
+            END AS  "billStatus",
+        CASE b.bill_pay_type
+            WHEN '10' THEN "线上"
+            WHEN '11' THEN "线下"
+            ELSE '-'
+            END AS  "billPayType",
+        CASE b.is_urge
+            WHEN '0' THEN "否"
+            WHEN '1' THEN "是"
+            ELSE '-'
+            END AS  "isUrge",
+            b.urge_num as "urgeNum",
+            b.is_remind as "isRemind",
+            date_format(b.remind_time,'%Y-%m-%d %H:%i:%s') as "remindTime",
+            date_format(b.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime",
+            b.creator_account as "creatorAccount",
+            b.modifier_account as "modifierAccount",
+            date_format(b.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime",
+        CASE o.order_status
+            WHEN '0' THEN "未支付"
+            WHEN '1' THEN "已支付"
+            ELSE '-'
+            END AS  "orderStatus",
+        b.order_id as "orderId",
+        o.order_num as "orderNum",
+        o.order_name as "orderName",
+        o.order_amount as "orderAmount",
+        date_format(o.pay_time,'%Y-%m-%d %H:%i:%s') as "payTime",
+        o.pay_id as "payId",
+        o.pay_amount as "payAmount",
+        CASE o.pay_type
+            WHEN '0' THEN "微信"
+            WHEN '1' THEN "支付宝"
+            WHEN '2' THEN "银联"
+            ELSE '-'
+            END AS  "payType",
+        o.pay_remark as "payRemark"
+      from tb_payment_bill b left join tb_payment_order o on b.order_id = o.id left join  tb_payment_code c on  c.id = b.bill_type
+      where b.record_status = 1
+        <if test="searchCode !=null and searchCode !='' ">
+            and ( b.bill_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') or b.bill_obj_name like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%')
+                  or b.bill_remark like CONCAT('%', #{searchCode,jdbcType=VARCHAR}, '%') )
+        </if>
+        <if test="billId !=null and billId !='' ">
+            and b.bill_id = #{billId,jdbcType=VARCHAR}
+        </if>
+        <if test="billNum !=null and billNum !='' ">
+            and b.bill_num = #{billNum,jdbcType=VARCHAR}
+        </if>
+        <if test="billName !=null and billName !='' ">
+            and b.bill_name = #{billName,jdbcType=VARCHAR}
+        </if>
+        <if test="billType !=null and billType !='' ">
+            and b.bill_type = #{billType,jdbcType=VARCHAR}
+        </if>
+        <if test="billObjId !=null and billObjId !='' ">
+            and b.bill_obj_id = #{billObjId,jdbcType=VARCHAR}
+        </if>
+        <if test="billAmount !=null and billAmount !='' ">
+            and b.bill_amount = #{billAmount,jdbcType=VARCHAR}
+        </if>
+        <if test="billCreateAccount !=null and billCreateAccount !='' ">
+            and b.bill_create_account = #{billCreateAccount,jdbcType=VARCHAR}
+        </if>
+        <if test="billRemark !=null and billRemark !='' ">
+            and b.bill_remark = #{billRemark,jdbcType=VARCHAR}
+        </if>
+        <if test="billStatus !=null and billStatus !='' ">
+            and b.bill_status = #{billStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="isUrge !=null and isUrge !='' ">
+            and b.is_urge = #{isUrge,jdbcType=VARCHAR}
+        </if>
+        <if test="billCreateTimeBegin !=null and billCreateTimeBegin !='' ">
+            and b.bill_create_time &gt; #{billCreateTimeBegin,jdbcType=VARCHAR}
+        </if>
+        <if test="billCreateTimeEnd !=null and billCreateTimeEnd !='' ">
+            and b.bill_create_time &lt; #{billCreateTimeEnd,jdbcType=VARCHAR}
+        </if>
+        <if test="payEndTimeBegin !=null and payEndTimeBegin !='' ">
+            and b.bill_create_time &gt; #{payEndTimeBegin,jdbcType=VARCHAR}
+        </if>
+        <if test="payEndTimeEnd !=null and payEndTimeEnd !='' ">
+            and b.pay_end_time &lt; #{payEndTimeEnd,jdbcType=VARCHAR}
+        </if>
+        <if test='queryType == null or queryType == "" or queryType == "1" '>
+            and b.bill_status not in ('0','-1')
+        </if>
+        <if test="orderBy !=null and orderBy !='' ">
+            order by #{orderBy,jdbcType=VARCHAR}
+        </if>
+
+   </select>
+
+    <select id="statisticsBillAmountSubCount" parameterType="com.jn.paybill.model.PayBillCountParam" resultType="com.jn.paybill.model.PayBillSubCount">
+        SELECT
+        SUM(b.bill_amount) AS "billTypeAmount",
+        DATE_FORMAT(b.bill_create_time, '%Y%m%d') AS "billDate",
+        b.bill_type AS "billTypeId",
+        c.code_value AS "billTypeName",
+        (SELECT
+        SUM(pb.bill_amount)
+        FROM
+        tb_payment_bill pb
+        WHERE pb.bill_status  NOT IN ('2', '4')
+        AND pb.bill_type = billTypeId
+        AND pb.bill_create_time &lt;= STR_TO_DATE(
+        CONCAT(
+        DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
+        '23-59-59'
+        ),
+        '%Y-%m-%d %H-%i-%s'
+        )
+        AND pb.bill_create_time &gt;= STR_TO_DATE(
+        CONCAT(
+        DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
+        '00-00-00'
+        ),
+        '%Y-%m-%d %H-%i-%s'
+        )) AS "billTypeUnpayAmount",
+        (SELECT
+        SUM(pb.bill_amount)
+        FROM
+        tb_payment_bill pb
+        WHERE pb.bill_status IN ('2', '4')
+        AND pb.bill_type = billTypeId
+        AND pb.bill_create_time &lt;= STR_TO_DATE(
+        CONCAT(
+        DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
+        '23-59-59'
+        ),
+        '%Y-%m-%d %H-%i-%s'
+        )
+        AND pb.bill_create_time &gt;= STR_TO_DATE(
+        CONCAT(
+        DATE_FORMAT(b.bill_create_time, '%Y-%m-%d'),
+        '00-00-00'
+        ),
+        '%Y-%m-%d %H-%i-%s'
+        )) AS "billTypePayAmount"
+        FROM
+        tb_payment_bill b
+        LEFT JOIN tb_payment_code c
+        ON b.bill_type = c.id
+        WHERE b.record_status = 1 and b.bill_status not in ('0','-1')
+        <if test="billStartTime !=null and billStartTime !='' ">
+            and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billEndTime !=null and billEndTime !='' ">
+            and b.bill_create_time &lt; #{billEndTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billTypeIds !=null and billTypeIds.length!=0 ">
+            and b.bill_type in
+            <foreach collection="billTypeIds" item="billTypeId" index="index"
+                     open="(" close=")" separator=",">
+                #{billTypeId}
+            </foreach>
+        </if>
+        GROUP BY billDate,billTypeId
+    </select>
+
+    <select id="statisticsBillAmount"  parameterType="com.jn.paybill.model.PayBillCountParam" resultType="com.jn.paybill.model.PayBillCountVO">
+        SELECT
+        SUM(b.bill_amount) AS "totleAmount"
+        ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
+            WHERE t.record_status = 1 and t.bill_status  NOT IN ('2', '4')
+            <if test="billStartTime !=null and billStartTime !='' ">
+                and t.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
+            </if>
+            <if test="billEndTime !=null and billEndTime !='' ">
+                and t.bill_create_time &lt; #{billEndTime,jdbcType=VARCHAR}
+            </if>
+            <if test="billTypeIds !=null and billTypeIds.length!=0 ">
+                and t.bill_type in
+                <foreach collection="billTypeIds" item="billTypeId" index="index"
+                         open="(" close=")" separator=",">
+                    #{billTypeId}
+                </foreach>
+            </if>
+        ) as "totleUnpayAmountDaily"
+        ,(SELECT SUM(t.bill_amount) FROM tb_payment_bill t
+        WHERE t.record_status = 1 and t.bill_status IN ('2', '4')
+        <if test="billStartTime !=null and billStartTime !='' ">
+            and t.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billEndTime !=null and billEndTime !='' ">
+            and t.bill_create_time &lt; #{billEndTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billTypeIds !=null and billTypeIds.length!=0 ">
+            and t.bill_type in
+            <foreach collection="billTypeIds" item="billTypeId" index="index"
+                     open="(" close=")" separator=",">
+                #{billTypeId}
+            </foreach>
+        </if>
+        ) as "totlePayAmountDaily"
+        FROM
+        tb_payment_bill b
+        WHERE b.record_status = 1 and b.bill_status not in ('0','-1')
+        <if test="billStartTime !=null and billStartTime !='' ">
+            and b.bill_create_time &gt; #{billStartTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billEndTime !=null and billEndTime !='' ">
+            and b.bill_create_time &lt; #{billEndTime,jdbcType=VARCHAR}
+        </if>
+        <if test="billTypeIds !=null and billTypeIds.length!=0 ">
+            and b.bill_type in
+            <foreach collection="billTypeIds" item="billTypeId" index="index"
+                     open="(" close=")" separator=",">
+                #{billTypeId}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

@@ -39,22 +39,13 @@ public class CompanyController extends BaseController {
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
-    @ControllerLog(doAction = "根据企业ID查询企业详细信息")
-    @ApiOperation(value = "根据企业ID查询企业详细信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetail")
-    public Result<ServiceCompany> getCompanyDetail(
-            @ApiParam(name="companyId",value = "企业ID",required = true)
-            @RequestParam(value = "companyId") String companyId){
-        return new Result<>(companyService.getCompanyDetail(companyId));
-    }
-
-    @ControllerLog(doAction = "根据用户账号查询企业信息（用户为企业管理员）")
+    @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
     @ApiOperation(value = "根据用户账号查询企业信息（用户为企业管理员）", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetailByAccount")
-    public Result<ServiceCompany> getCompanyDetailByAccount(
-            @ApiParam(name="account",value = "用户账号",required = true)
-            @RequestParam(value = "account") String account){
-        return new Result<>(companyService.getCompanyDetailByAccount(account));
+    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId")
+    public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
+            @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true)
+            @RequestParam(value = "accountOrCompanyId") String accountOrCompanyId){
+        return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
     }
 
 }

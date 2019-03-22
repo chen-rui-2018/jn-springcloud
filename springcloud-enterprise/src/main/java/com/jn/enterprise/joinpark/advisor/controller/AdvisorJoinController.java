@@ -34,13 +34,14 @@ public class AdvisorJoinController {
     private AdvisorJoinService advisorJoinService;
 
     @ControllerLog(doAction = "保存/修改顾问认证信息")
-    @ApiOperation(value = "保存/修改顾问认证信息", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存/修改顾问认证信息", httpMethod = "POST", response = Result.class,
+    notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/saveOrUpdateOrgDetail")
-    public Result saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
+    public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated AdvisorDetailParam advisorDetailParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = advisorJoinService.saveOrUpdateAdvisorDetail(advisorDetailParam,user.getAccount());
         logger.info("保存/修改顾问认证信息成功，响应条数{}",i);
-        return new Result(i);
+        return new Result<>(i);
     }
 
 

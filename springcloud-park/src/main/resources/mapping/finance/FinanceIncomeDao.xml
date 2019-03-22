@@ -73,7 +73,7 @@
     </resultMap>
 
     <select id="selectEveryLastYearContrast" resultMap="selectEveryLastYearContrastMap">
-      SELECT m.`month` as "incomemonth", IFNULL(t.income,0) as "income",IFNULL(t.last_year_income,0) as "lastyearincome"
+      SELECT  right(m.`month`,2) as "month", IFNULL(t.income,0) as "income",IFNULL(t.last_year_income,0) as "lastyearincome"
         FROM tb_finance_income_month t
         RIGHT JOIN tb_month m
         on m.month=t.income_month
@@ -84,6 +84,7 @@
     </select>
 
     <resultMap id="selectEveryLastYearContrastMap" type="com.jn.park.finance.model.FinanceIncomeLastYearContrastModel">
+        <result column="month" jdbcType="VARCHAR" property="month" />
         <result column="income" jdbcType="VARCHAR" property="income" />
         <result column="last_year_income" jdbcType="VARCHAR" property="lastYearIncome" />
     </resultMap>

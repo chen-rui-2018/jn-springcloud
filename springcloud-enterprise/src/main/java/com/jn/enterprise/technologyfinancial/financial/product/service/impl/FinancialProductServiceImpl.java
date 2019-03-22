@@ -80,7 +80,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
     @Override
     public PaginationData getFinancialProductList(FinancialProductListParam financialProductListParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(financialProductListParam==null || StringUtils.isBlank(financialProductListParam.getNeedPage())){
+        if(StringUtils.isBlank(financialProductListParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
@@ -308,7 +308,6 @@ public class FinancialProductServiceImpl implements FinancialProductService {
         info.setOrgId(commonService.getOrgId());
         info.setTemplateId(templateId);
         info.setProductId(commonService.getProductId());
-        info.setSerialNumber(commonService.getSerialNumber());
         if(product.getRefRateMin()!=null && product.getRefRateMax()!=null ) {
             info.setRefRateMin(String.valueOf(product.getRefRateMin()));
             info.setRefRateMax(String.valueOf(product.getRefRateMax()));

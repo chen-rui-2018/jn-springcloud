@@ -110,7 +110,6 @@ public class FinancialProductController extends BaseController {
     public Result upShelfCommonProduct(@RequestBody @Validated CommonServiceShelf commonService ){
         Assert.notNull(commonService.getTemplateId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_TEMPLE_ID_EMPTY.getMessage());
         Assert.notNull(commonService.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
-        Assert.notNull(commonService.getSerialNumber(), ServiceProductExceptionEnum.SERVICE_PRODUCT_SERIALNUMBER_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
         String productId = UUID.randomUUID().toString().replaceAll("-", "");

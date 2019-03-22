@@ -17,6 +17,8 @@ public class FinanceIncomeLastYearContrastModel implements Serializable {
     private String lastYearIncome;
     @ApiModelProperty(value = "今年")
     private String income;
+    @ApiModelProperty(value = "月份")
+    private String month;
 
     public String getLastYearIncome() {
         return lastYearIncome;
@@ -32,5 +34,13 @@ public class FinanceIncomeLastYearContrastModel implements Serializable {
 
     public void setIncome(String income) {
         this.income = income;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

@@ -17,16 +17,16 @@ import java.io.Serializable;
  */
 @ApiModel(value = "UserRegister",description = "用户注册信息")
 public class UserRegister implements Serializable {
-    @ApiModelProperty("注册手机号")
+    @ApiModelProperty(value = "注册手机号",required = true)
     @NotNull(message = "手机号不能为空")
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
             message = "{phone:'手机号码验证出错'}")
     private String phone;
-    @ApiModelProperty("短信验证码")
+    @ApiModelProperty(value = "短信验证码",required = true)
     @NotNull(message = "验证码不能为空")
     @Pattern(regexp ="[0-9]{6}",message = "验证码只能是6位数字")
     private String messageCode;
-    @ApiModelProperty("密码")
+    @ApiModelProperty(value = "密码",required = true)
     @Pattern(regexp ="^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$",message = "密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文")
     @NotNull(message = "密码不能为空")
     private String password;

@@ -1,8 +1,11 @@
 package com.jn.park.finance.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
+import com.jn.common.util.StringUtils;
+import com.jn.park.finance.enums.FinanceBudgetExceptionEnums;
 import com.jn.park.finance.model.*;
 import com.jn.park.finance.service.FinanceExpensesService;
 import com.jn.park.finance.vo.*;
@@ -45,6 +48,8 @@ public class FinanceExpensesController extends BaseController {
     @RequiresPermissions("/finance/expenses/findAll")
     public Result<FinanceExpendHistoryVo> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
         //todo
+        this.checkIsSomeYear(financeExpensesPageModel.getStartMonth(),financeExpensesPageModel.getEndMonth());
+        this.checkIsSomeYear(financeExpensesPageModel.getStartTime(),financeExpensesPageModel.getEndTime());
         PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
         return new Result(findAll);
     }
@@ -55,6 +60,8 @@ public class FinanceExpensesController extends BaseController {
     @RequiresPermissions("/finance/expenses/findHistoryAll")
     public Result<FinanceExpendHistoryVo> findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
         //todo
+        this.checkIsSomeYear(financeEhpm.getStartMonth(),financeEhpm.getEndMonth());
+        this.checkIsSomeYear(financeEhpm.getStartTime(),financeEhpm.getEndTime());
         PaginationData findHistoryAll= financeExpensesService.findHistoryAll(financeEhpm);
         return new Result(findHistoryAll);
     }
@@ -101,5 +108,24 @@ public class FinanceExpensesController extends BaseController {
     }
 
 
+    /**
+     * 校验开始结束日期是否为同一年
+     * @param startMonth
+     * @param endMonth
+     */
+    private void checkIsSomeYear(String startMonth,String endMonth){
+        if(StringUtils.isBlank(startMonth)||startMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
+        }
+        if(null!=endMonth&&endMonth.length()!=6){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份格式必须是YYYYMM");
+        }
+        if((startMonth.compareTo(endMonth))>0){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份必须大于等于开始月份");
+        }
+        if(!startMonth.substring(0,4).equals(endMonth.substring(0,4))){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"只能查同一年的数据");
+        }
+    }
 
 }

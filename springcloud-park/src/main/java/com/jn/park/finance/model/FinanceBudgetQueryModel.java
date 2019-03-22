@@ -15,7 +15,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "FinanceBudgetQueryModel",description = "总预算查询条件")
-public class FinanceBudgetQueryModel extends Page implements Serializable {
+public class FinanceBudgetQueryModel implements Serializable {
     private static final long serialVersionUID = -361729989487640941L;
 
     @ApiModelProperty("费用类型ID")

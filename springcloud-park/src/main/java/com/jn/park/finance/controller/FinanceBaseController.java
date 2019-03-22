@@ -27,7 +27,7 @@ public abstract class FinanceBaseController extends BaseController {
      * @param departmentId
      */
     protected void checkUserDepartmentId(String departmentId){
-        if(null==departmentId){
+        if(StringUtils.isBlank(departmentId)){
             return;
         }
         boolean flag=false;

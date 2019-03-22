@@ -4,6 +4,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
 import com.jn.system.model.UserPage;
 import com.jn.system.user.model.*;
+import com.jn.system.user.vo.SysUserGroupVO;
+import com.jn.system.user.vo.SysUserRoleVO;
+import com.jn.system.user.vo.SysUserVO;
 import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
@@ -31,7 +34,7 @@ public interface SysUserService {
      * @param userPage
      * @return
      */
-    PaginationData findSysUserByPage(UserPage userPage);
+    PaginationData<List<SysUserVO>> findSysUserByPage(UserPage userPage);
 
     /**
      * 逻辑删除用户
@@ -55,7 +58,7 @@ public interface SysUserService {
      * @param sysUserGroupPage
      * @return
      */
-    PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
+    PaginationData<SysUserGroupVO> findSysGroupByUserId(SysUserGroupPage sysUserGroupPage);
 
     /**
      * 往用户中添加用户组
@@ -71,7 +74,7 @@ public interface SysUserService {
      * @param sysUserRolePage
      * @return
      */
-    PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage);
+    PaginationData<SysUserRoleVO> findSysRoleByUserId(SysUserRolePage sysUserRolePage);
 
     /**
      * 为用户添加角色权限

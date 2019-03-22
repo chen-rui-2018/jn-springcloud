@@ -115,13 +115,13 @@ public interface SystemClient {
     /**
      * 查询所有部门信息,并根据层级关系返回数据
      *
-     * @param parentId   parentId,查询对应部门,为空时查询所以一级部门
+     * @param parentId  parentId,查询对应部门,为空时查询所以一级部门
      * @param childFlag 是否查询所有子部门,true是,false否
      * @return
      */
     @RequestMapping(value = "/api/system/selectDeptByParentId", method = RequestMethod.POST)
-    Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
-                                @RequestParam(value = "childFlag",required = false) Boolean childFlag);
+    Result selectDeptByParentId(@RequestParam(value = "parentId", required = false) String parentId,
+                                @RequestParam(value = "childFlag", required = false) Boolean childFlag);
 
     /**
      * 条件分页查询用户信息
@@ -142,5 +142,14 @@ public interface SystemClient {
      */
     @RequestMapping(value = "/api/system/checkUserDept", method = RequestMethod.POST)
     Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId);
+
+    /**
+     * 根据部门名称,获取部门信息
+     *
+     * @param deptName 部门名称
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getDept", method = RequestMethod.POST)
+    Result getDept(@RequestParam("deptName") String deptName);
 
 }

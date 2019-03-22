@@ -17,10 +17,7 @@ import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -43,10 +40,10 @@ public class FinanceExpensesController extends BaseController {
     private FinanceExpensesService financeExpensesService;
 
     @ControllerLog(doAction = "支出录入查询")
-    @ApiOperation(value = "支出录入查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findAll")
+    @ApiOperation(value = "支出录入查询",notes = "支出录入查询", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/expenses/findAll")
-    public Result<FinanceExpendHistoryVo> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
+    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
         //todo
         this.checkIsSomeYear(financeExpensesPageModel.getStartMonth(),financeExpensesPageModel.getEndMonth());
         this.checkIsSomeYear(financeExpensesPageModel.getStartTime(),financeExpensesPageModel.getEndTime());
@@ -55,10 +52,10 @@ public class FinanceExpensesController extends BaseController {
     }
 
     @ControllerLog(doAction = "支出录入历史查询")
-    @ApiOperation(value = "支出录入历史查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findHistoryAll")
+    @ApiOperation(value = "支出录入历史查询",notes = "支出录入历史查询", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/findHistoryAll")
     @RequiresPermissions("/finance/expenses/findHistoryAll")
-    public Result<FinanceExpendHistoryVo> findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
+    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
         //todo
         this.checkIsSomeYear(financeEhpm.getStartMonth(),financeEhpm.getEndMonth());
         this.checkIsSomeYear(financeEhpm.getStartTime(),financeEhpm.getEndTime());
@@ -88,20 +85,20 @@ public class FinanceExpensesController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取财务类型")
-    @ApiOperation(value = "获取财务类型", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectFinanceType")
+    @ApiOperation(value = "获取财务类型",notes = "获取财务类型", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/selectFinanceType")
     @RequiresPermissions("/finance/expenses/selectFinanceType")
-    public Result<FinanceExpendFinanceTypeVo>  selectFinanceType(){
+    public Result<List<FinanceExpendFinanceTypeVo>>  selectFinanceType(){
         //todo
         List<FinanceExpendFinanceTypeVo> selectFinanceType= financeExpensesService.selectFinanceType();
         return new Result(selectFinanceType);
     }
 
     @ControllerLog(doAction = "获取部门信息")
-    @ApiOperation(value = "获取部门信息", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectDepartment")
+    @ApiOperation(value = "获取部门信息",notes = "获取部门信息", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/selectDepartment")
     @RequiresPermissions("/finance/expenses/selectDepartment")
-    public Result<FinanceSelectDepartmentModel>  selectDepartment(){
+    public Result<List<FinanceSelectDepartmentModel>>  selectDepartment(){
         //todo
         List<FinanceSelectDepartmentModel> selectFinanceType= financeExpensesService.selectDepartment();
         return new Result(selectFinanceType);

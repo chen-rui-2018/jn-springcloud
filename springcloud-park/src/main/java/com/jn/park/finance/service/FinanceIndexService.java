@@ -42,7 +42,7 @@ public interface FinanceIndexService {
      * @param typeId 类型ID
      * @return
      */
-    List<FinanceIndexSectionBudgetExpendVo>  sectionBudgetExpend(String year, String departmentId, int typeId);
+    List<FinanceIndexSectionBudgetExpendVo>  sectionBudgetExpend(String year, String departmentId, String typeId);
 
     /**
      * 部门资产明细/ 各项支出占比情况

@@ -54,7 +54,7 @@ public interface SysFileGroupService {
      * @param sysFileGroupPage
      * @return
      */
-    PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage);
+    PaginationData<List<SysFileGroup>> selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage);
 
     /**
      * 根据用户获取文件组

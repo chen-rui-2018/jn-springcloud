@@ -20,21 +20,21 @@ public class FinanceDocumentsFindAllModel extends Page implements Serializable {
 
     private static final long serialVersionUID = 5842851749684048601L;
 
-    @ApiModelProperty(value = "文档编码")
+    @ApiModelProperty(value = "文档编码",example = "WDZL20190322001")
     private String  documentCode;
 
-    @ApiModelProperty(value = "文档名称")
+    @ApiModelProperty(value = "文档名称",example = "测试001")
     private String  documentName;
 
-    @ApiModelProperty(value = "上传人")
+    @ApiModelProperty(value = "上传人",example = "ad123")
     private String  documentUploader;
 
     @NotNull(message = "开始时间不能为空")
-    @ApiModelProperty(value = "开始时间 YYYY-MM")
+    @ApiModelProperty(value = "开始时间 YYYY-MM",example = "2019-01")
     private String startTime;
 
     @NotNull(message = "结束时间不能为空")
-    @ApiModelProperty(value = "结束时间 YYYY-MM")
+    @ApiModelProperty(value = "结束时间 YYYY-MM",example = "2019-12")
     private String endTime;
 
 

@@ -53,5 +53,5 @@ public interface SysDictModuleService {
      * @param sysDictModulePage 查询条件
      * @return
      */
-    PaginationData getModuleByPage(SysDictModulePage sysDictModulePage);
+    PaginationData<List<SysDictModule>> getModuleByPage(SysDictModulePage sysDictModulePage);
 }

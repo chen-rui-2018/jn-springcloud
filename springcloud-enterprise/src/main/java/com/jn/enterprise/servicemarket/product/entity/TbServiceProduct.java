@@ -32,14 +32,6 @@ public class TbServiceProduct implements Serializable {
 
     private String status;
 
-    private Date createdTime;
-
-    private String creatorAccount;
-
-    private Date modifiedTime;
-
-    private String modifierAccount;
-
     private String approvalAccount;
 
     private String approvalComments;
@@ -47,6 +39,50 @@ public class TbServiceProduct implements Serializable {
     private Date approvalTime;
 
     private Date releaseTime;
+
+    private Double refRateMin;
+
+    private Double refRateMax;
+
+    private String isOnlineLoan;
+
+    private String isPolicyPro;
+
+    private String isGeneralPro;
+
+    private String isRmb;
+
+    private String loanCategoryCode;
+
+    private String loanCategoryName;
+
+    private Double loanAmountMin;
+
+    private Double loanAmountMax;
+
+    private Integer loanTermMin;
+
+    private Integer loanTermMax;
+
+    private String assureMethodCode;
+
+    private String assureMethodName;
+
+    private String productFeature;
+
+    private String applyCondition;
+
+    private String submitMaterial;
+
+    private String applicableCust;
+
+    private Date createdTime;
+
+    private String creatorAccount;
+
+    private Date modifiedTime;
+
+    private String modifierAccount;
 
     private Byte recordStatus;
 
@@ -164,38 +200,6 @@ public class TbServiceProduct implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
-    }
-
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
-    }
-
     public String getApprovalAccount() {
         return approvalAccount;
     }
@@ -226,6 +230,182 @@ public class TbServiceProduct implements Serializable {
 
     public void setReleaseTime(Date releaseTime) {
         this.releaseTime = releaseTime;
+    }
+
+    public Double getRefRateMin() {
+        return refRateMin;
+    }
+
+    public void setRefRateMin(Double refRateMin) {
+        this.refRateMin = refRateMin;
+    }
+
+    public Double getRefRateMax() {
+        return refRateMax;
+    }
+
+    public void setRefRateMax(Double refRateMax) {
+        this.refRateMax = refRateMax;
+    }
+
+    public String getIsOnlineLoan() {
+        return isOnlineLoan;
+    }
+
+    public void setIsOnlineLoan(String isOnlineLoan) {
+        this.isOnlineLoan = isOnlineLoan == null ? null : isOnlineLoan.trim();
+    }
+
+    public String getIsPolicyPro() {
+        return isPolicyPro;
+    }
+
+    public void setIsPolicyPro(String isPolicyPro) {
+        this.isPolicyPro = isPolicyPro == null ? null : isPolicyPro.trim();
+    }
+
+    public String getIsGeneralPro() {
+        return isGeneralPro;
+    }
+
+    public void setIsGeneralPro(String isGeneralPro) {
+        this.isGeneralPro = isGeneralPro == null ? null : isGeneralPro.trim();
+    }
+
+    public String getIsRmb() {
+        return isRmb;
+    }
+
+    public void setIsRmb(String isRmb) {
+        this.isRmb = isRmb == null ? null : isRmb.trim();
+    }
+
+    public String getLoanCategoryCode() {
+        return loanCategoryCode;
+    }
+
+    public void setLoanCategoryCode(String loanCategoryCode) {
+        this.loanCategoryCode = loanCategoryCode == null ? null : loanCategoryCode.trim();
+    }
+
+    public String getLoanCategoryName() {
+        return loanCategoryName;
+    }
+
+    public void setLoanCategoryName(String loanCategoryName) {
+        this.loanCategoryName = loanCategoryName == null ? null : loanCategoryName.trim();
+    }
+
+    public Double getLoanAmountMin() {
+        return loanAmountMin;
+    }
+
+    public void setLoanAmountMin(Double loanAmountMin) {
+        this.loanAmountMin = loanAmountMin;
+    }
+
+    public Double getLoanAmountMax() {
+        return loanAmountMax;
+    }
+
+    public void setLoanAmountMax(Double loanAmountMax) {
+        this.loanAmountMax = loanAmountMax;
+    }
+
+    public Integer getLoanTermMin() {
+        return loanTermMin;
+    }
+
+    public void setLoanTermMin(Integer loanTermMin) {
+        this.loanTermMin = loanTermMin;
+    }
+
+    public Integer getLoanTermMax() {
+        return loanTermMax;
+    }
+
+    public void setLoanTermMax(Integer loanTermMax) {
+        this.loanTermMax = loanTermMax;
+    }
+
+    public String getAssureMethodCode() {
+        return assureMethodCode;
+    }
+
+    public void setAssureMethodCode(String assureMethodCode) {
+        this.assureMethodCode = assureMethodCode == null ? null : assureMethodCode.trim();
+    }
+
+    public String getAssureMethodName() {
+        return assureMethodName;
+    }
+
+    public void setAssureMethodName(String assureMethodName) {
+        this.assureMethodName = assureMethodName == null ? null : assureMethodName.trim();
+    }
+
+    public String getProductFeature() {
+        return productFeature;
+    }
+
+    public void setProductFeature(String productFeature) {
+        this.productFeature = productFeature == null ? null : productFeature.trim();
+    }
+
+    public String getApplyCondition() {
+        return applyCondition;
+    }
+
+    public void setApplyCondition(String applyCondition) {
+        this.applyCondition = applyCondition == null ? null : applyCondition.trim();
+    }
+
+    public String getSubmitMaterial() {
+        return submitMaterial;
+    }
+
+    public void setSubmitMaterial(String submitMaterial) {
+        this.submitMaterial = submitMaterial == null ? null : submitMaterial.trim();
+    }
+
+    public String getApplicableCust() {
+        return applicableCust;
+    }
+
+    public void setApplicableCust(String applicableCust) {
+        this.applicableCust = applicableCust == null ? null : applicableCust.trim();
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
+    }
+
+    public Date getModifiedTime() {
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(Date modifiedTime) {
+        this.modifiedTime = modifiedTime;
+    }
+
+    public String getModifierAccount() {
+        return modifierAccount;
+    }
+
+    public void setModifierAccount(String modifierAccount) {
+        this.modifierAccount = modifierAccount == null ? null : modifierAccount.trim();
     }
 
     public Byte getRecordStatus() {
@@ -262,14 +442,32 @@ public class TbServiceProduct implements Serializable {
             && (this.getProductType() == null ? other.getProductType() == null : this.getProductType().equals(other.getProductType()))
             && (this.getViewCount() == null ? other.getViewCount() == null : this.getViewCount().equals(other.getViewCount()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
-            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getApprovalAccount() == null ? other.getApprovalAccount() == null : this.getApprovalAccount().equals(other.getApprovalAccount()))
             && (this.getApprovalComments() == null ? other.getApprovalComments() == null : this.getApprovalComments().equals(other.getApprovalComments()))
             && (this.getApprovalTime() == null ? other.getApprovalTime() == null : this.getApprovalTime().equals(other.getApprovalTime()))
             && (this.getReleaseTime() == null ? other.getReleaseTime() == null : this.getReleaseTime().equals(other.getReleaseTime()))
+            && (this.getRefRateMin() == null ? other.getRefRateMin() == null : this.getRefRateMin().equals(other.getRefRateMin()))
+            && (this.getRefRateMax() == null ? other.getRefRateMax() == null : this.getRefRateMax().equals(other.getRefRateMax()))
+            && (this.getIsOnlineLoan() == null ? other.getIsOnlineLoan() == null : this.getIsOnlineLoan().equals(other.getIsOnlineLoan()))
+            && (this.getIsPolicyPro() == null ? other.getIsPolicyPro() == null : this.getIsPolicyPro().equals(other.getIsPolicyPro()))
+            && (this.getIsGeneralPro() == null ? other.getIsGeneralPro() == null : this.getIsGeneralPro().equals(other.getIsGeneralPro()))
+            && (this.getIsRmb() == null ? other.getIsRmb() == null : this.getIsRmb().equals(other.getIsRmb()))
+            && (this.getLoanCategoryCode() == null ? other.getLoanCategoryCode() == null : this.getLoanCategoryCode().equals(other.getLoanCategoryCode()))
+            && (this.getLoanCategoryName() == null ? other.getLoanCategoryName() == null : this.getLoanCategoryName().equals(other.getLoanCategoryName()))
+            && (this.getLoanAmountMin() == null ? other.getLoanAmountMin() == null : this.getLoanAmountMin().equals(other.getLoanAmountMin()))
+            && (this.getLoanAmountMax() == null ? other.getLoanAmountMax() == null : this.getLoanAmountMax().equals(other.getLoanAmountMax()))
+            && (this.getLoanTermMin() == null ? other.getLoanTermMin() == null : this.getLoanTermMin().equals(other.getLoanTermMin()))
+            && (this.getLoanTermMax() == null ? other.getLoanTermMax() == null : this.getLoanTermMax().equals(other.getLoanTermMax()))
+            && (this.getAssureMethodCode() == null ? other.getAssureMethodCode() == null : this.getAssureMethodCode().equals(other.getAssureMethodCode()))
+            && (this.getAssureMethodName() == null ? other.getAssureMethodName() == null : this.getAssureMethodName().equals(other.getAssureMethodName()))
+            && (this.getProductFeature() == null ? other.getProductFeature() == null : this.getProductFeature().equals(other.getProductFeature()))
+            && (this.getApplyCondition() == null ? other.getApplyCondition() == null : this.getApplyCondition().equals(other.getApplyCondition()))
+            && (this.getSubmitMaterial() == null ? other.getSubmitMaterial() == null : this.getSubmitMaterial().equals(other.getSubmitMaterial()))
+            && (this.getApplicableCust() == null ? other.getApplicableCust() == null : this.getApplicableCust().equals(other.getApplicableCust()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
+            && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
     }
 
@@ -291,14 +489,32 @@ public class TbServiceProduct implements Serializable {
         result = prime * result + ((getProductType() == null) ? 0 : getProductType().hashCode());
         result = prime * result + ((getViewCount() == null) ? 0 : getViewCount().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
-        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
-        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
-        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getApprovalAccount() == null) ? 0 : getApprovalAccount().hashCode());
         result = prime * result + ((getApprovalComments() == null) ? 0 : getApprovalComments().hashCode());
         result = prime * result + ((getApprovalTime() == null) ? 0 : getApprovalTime().hashCode());
         result = prime * result + ((getReleaseTime() == null) ? 0 : getReleaseTime().hashCode());
+        result = prime * result + ((getRefRateMin() == null) ? 0 : getRefRateMin().hashCode());
+        result = prime * result + ((getRefRateMax() == null) ? 0 : getRefRateMax().hashCode());
+        result = prime * result + ((getIsOnlineLoan() == null) ? 0 : getIsOnlineLoan().hashCode());
+        result = prime * result + ((getIsPolicyPro() == null) ? 0 : getIsPolicyPro().hashCode());
+        result = prime * result + ((getIsGeneralPro() == null) ? 0 : getIsGeneralPro().hashCode());
+        result = prime * result + ((getIsRmb() == null) ? 0 : getIsRmb().hashCode());
+        result = prime * result + ((getLoanCategoryCode() == null) ? 0 : getLoanCategoryCode().hashCode());
+        result = prime * result + ((getLoanCategoryName() == null) ? 0 : getLoanCategoryName().hashCode());
+        result = prime * result + ((getLoanAmountMin() == null) ? 0 : getLoanAmountMin().hashCode());
+        result = prime * result + ((getLoanAmountMax() == null) ? 0 : getLoanAmountMax().hashCode());
+        result = prime * result + ((getLoanTermMin() == null) ? 0 : getLoanTermMin().hashCode());
+        result = prime * result + ((getLoanTermMax() == null) ? 0 : getLoanTermMax().hashCode());
+        result = prime * result + ((getAssureMethodCode() == null) ? 0 : getAssureMethodCode().hashCode());
+        result = prime * result + ((getAssureMethodName() == null) ? 0 : getAssureMethodName().hashCode());
+        result = prime * result + ((getProductFeature() == null) ? 0 : getProductFeature().hashCode());
+        result = prime * result + ((getApplyCondition() == null) ? 0 : getApplyCondition().hashCode());
+        result = prime * result + ((getSubmitMaterial() == null) ? 0 : getSubmitMaterial().hashCode());
+        result = prime * result + ((getApplicableCust() == null) ? 0 : getApplicableCust().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
+        result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         return result;
     }
@@ -323,14 +539,32 @@ public class TbServiceProduct implements Serializable {
         sb.append(", productType=").append(productType);
         sb.append(", viewCount=").append(viewCount);
         sb.append(", status=").append(status);
-        sb.append(", createdTime=").append(createdTime);
-        sb.append(", creatorAccount=").append(creatorAccount);
-        sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", approvalAccount=").append(approvalAccount);
         sb.append(", approvalComments=").append(approvalComments);
         sb.append(", approvalTime=").append(approvalTime);
         sb.append(", releaseTime=").append(releaseTime);
+        sb.append(", refRateMin=").append(refRateMin);
+        sb.append(", refRateMax=").append(refRateMax);
+        sb.append(", isOnlineLoan=").append(isOnlineLoan);
+        sb.append(", isPolicyPro=").append(isPolicyPro);
+        sb.append(", isGeneralPro=").append(isGeneralPro);
+        sb.append(", isRmb=").append(isRmb);
+        sb.append(", loanCategoryCode=").append(loanCategoryCode);
+        sb.append(", loanCategoryName=").append(loanCategoryName);
+        sb.append(", loanAmountMin=").append(loanAmountMin);
+        sb.append(", loanAmountMax=").append(loanAmountMax);
+        sb.append(", loanTermMin=").append(loanTermMin);
+        sb.append(", loanTermMax=").append(loanTermMax);
+        sb.append(", assureMethodCode=").append(assureMethodCode);
+        sb.append(", assureMethodName=").append(assureMethodName);
+        sb.append(", productFeature=").append(productFeature);
+        sb.append(", applyCondition=").append(applyCondition);
+        sb.append(", submitMaterial=").append(submitMaterial);
+        sb.append(", applicableCust=").append(applicableCust);
+        sb.append(", createdTime=").append(createdTime);
+        sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

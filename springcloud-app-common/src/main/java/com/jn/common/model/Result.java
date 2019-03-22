@@ -21,7 +21,6 @@ public class Result<T> implements Serializable {
     private String result = "OK";
     @ApiModelProperty(value = "返回结果编码",notes = "成功统一编码为0000",dataType = "String")
     private String code = GlobalConstants.SUCCESS_CODE;
-    @ApiModelProperty(value = "返回具体实体",dataType = "object")
     private T data;
 
     public String getCode() {

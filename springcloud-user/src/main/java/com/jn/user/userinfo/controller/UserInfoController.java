@@ -35,16 +35,16 @@ public class UserInfoController {
     @ControllerLog(doAction = "保存用户资料")
     @ApiOperation(value = "保存用户资料", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/saveUserInfo")
-    public Result saveUserInfo(@RequestBody @Validated UserInfoParam userInfoParam) {
+    public Result<Integer> saveUserInfo(@RequestBody @Validated UserInfoParam userInfoParam) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
-        int i = userInfoService.saveOrUpdateUserInfo(userInfoParam, null==user?null:user.getAccount());
+        int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user);
         return new Result(i);
     }
 
     @ControllerLog(doAction = "获取当前前户资料")
     @ApiOperation(value = "获取当前用户资料", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/getUserExtension")
-    public Result getUserExtension(){
+    public Result<UserExtensionInfo> getUserExtension(){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         UserExtensionInfo userExtension = userInfoService.getUserExtension(null==user?null:user.getAccount());
         return new Result(userExtension);

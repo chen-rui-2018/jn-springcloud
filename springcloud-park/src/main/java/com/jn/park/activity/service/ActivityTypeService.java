@@ -9,6 +9,8 @@ import com.jn.park.model.ActivityTypeQuery;
 import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 
 /**
  * 活动类型服务类
@@ -33,7 +35,7 @@ public interface ActivityTypeService {
      * @param isPage
      * @return
      */
-    PaginationData findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage);
+    PaginationData<List<ActivityType>> findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage);
 
     /**
      * 根据活动类型id(typeId) 获取当前活动类型内容

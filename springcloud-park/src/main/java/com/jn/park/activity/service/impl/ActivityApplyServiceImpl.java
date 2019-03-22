@@ -354,13 +354,13 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
      */
     @ServiceLog(doAction = "查询表名信息列表（后台）")
     @Override
-    public PaginationData applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage) {
+    public PaginationData<List<ActivityApplyDetail>> applyActivityList(ActivityApplyParam activityApplyParam, Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
         if (needPage) {
             objects = PageHelper.startPage(activityApplyParam.getPage(), activityApplyParam.getRows() == 0 ? 15 : activityApplyParam.getRows(), true);
         }
         List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), null);
-        return new PaginationData(activityApplyList, objects == null ? 0 : objects.getTotal());
+        return new PaginationData<>(activityApplyList, objects == null ? 0 : objects.getTotal());
     }
 
     /**

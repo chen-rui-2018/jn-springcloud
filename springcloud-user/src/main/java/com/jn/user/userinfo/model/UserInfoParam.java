@@ -17,7 +17,7 @@ import java.io.Serializable;
 @ApiModel(value = "CompanyCheckParam",description = "用户信息入参")
 public class UserInfoParam implements Serializable {
 
-    @ApiModelProperty(value = "用户昵称")
+    @ApiModelProperty(value = "用户昵称",required = true)
     @NotNull(message = "用户昵称不能为空")
     private String nick_name;
 
@@ -33,7 +33,7 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
-    @ApiModelProperty(value = "性别[0女1男]")
+    @ApiModelProperty(value = "性别[0女1男]",required = true)
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'性别只允许为0,1'}")
     private String sex;
@@ -41,10 +41,10 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "公司")
     private String company;
 
-    @ApiModelProperty(value = "兴趣爱好[数组]")
+    @ApiModelProperty(value = "兴趣爱好ID[数组]")
     private String[] hobbys;
 
-    @ApiModelProperty(value = "职业[数组]")
+    @ApiModelProperty(value = "职业ID[数组]")
     private String[] jobs;
 
 

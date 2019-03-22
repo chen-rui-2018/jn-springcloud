@@ -1,6 +1,8 @@
 package com.jn.park.model;
 
 import com.jn.common.model.Page;
+import com.jn.common.util.Assert;
+import com.jn.park.enums.ActivityExceptionEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,31 +17,32 @@ import java.math.BigDecimal;
  */
 @ApiModel(value = "ActivityContent", description = "活动基本信息")
 public class ActivityContent extends Page implements Serializable {
+
     @ApiModelProperty(value = "活动ID(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值)")
+    @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值)",required = true)
     private String actiType;
-    @ApiModelProperty(value = "活动名称")
+    @ApiModelProperty(value = "活动名称",required = true)
     private String actiName;
-    @ApiModelProperty(value = "活动开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss)")
+    @ApiModelProperty(value = "活动开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss)",required = true)
     private String actiStartTime;
-    @ApiModelProperty(value = "活动结束时间")
+    @ApiModelProperty(value = "活动结束时间",required = true)
     private String actiEndTime;
-    @ApiModelProperty(value = "活动报名结束时间")
+    @ApiModelProperty(value = "活动报名结束时间",required = true)
     private String applyEndTime;
-    @ApiModelProperty(value = "活动消息发送时间")
+    @ApiModelProperty(value = "活动消息发送时间",required = true)
     private String mesSendTime;
-    @ApiModelProperty(value = "活动园区(传通过/getParkCodeByType查询的园区列表值)")
+    @ApiModelProperty(value = "活动园区(传通过/getParkCodeByType查询的园区列表值)",required = true)
     private String parkId;
-    @ApiModelProperty(value = "活动地址")
+    @ApiModelProperty(value = "活动地址",required = true)
     private String actiAddress;
-    @ApiModelProperty(value = "活动费用")
+    @ApiModelProperty(value = "活动费用",required = true)
     private BigDecimal actiCost;
-    @ApiModelProperty(value = "活动主办方")
+    @ApiModelProperty(value = "活动主办方",required = true)
     private String actiOrganizer;
-    @ApiModelProperty(value = "活动人数")
+    @ApiModelProperty(value = "活动人数",required = true)
     private Integer actiNumber;
-    @ApiModelProperty(value = "活动海报路径")
+    @ApiModelProperty(value = "活动海报路径",required = true)
     private String actiPosterUrl;
     @ApiModelProperty(value = "活动状态(修改只能修改活动状态actiStatus为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)")
     private String actiStatus;
@@ -51,7 +54,7 @@ public class ActivityContent extends Page implements Serializable {
     private String actiDetail;
     @ApiModelProperty(value = "是否展示报名人-0否1是")
     private String showApplyNum;
-    @ApiModelProperty(value = "报名是否需审核-0否1是")
+    @ApiModelProperty(value = "报名是否需审核-0否1是",required = true)
     private String applyCheck;
 
     public String getId() {

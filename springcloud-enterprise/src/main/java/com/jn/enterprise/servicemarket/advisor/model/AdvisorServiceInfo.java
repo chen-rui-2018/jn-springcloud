@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,11 +13,11 @@ import java.util.Date;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorInquiryInfo",description = "服务顾问信息")
-public class AdvisorServiceInfo extends Page implements Serializable {
+@ApiModel(value = "AdvisorServiceInfo",description = "服务顾问信息")
+public class AdvisorServiceInfo implements Serializable {
     @ApiModelProperty(value = "机构ID")
     private String orgId;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true)
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "顾问姓名")

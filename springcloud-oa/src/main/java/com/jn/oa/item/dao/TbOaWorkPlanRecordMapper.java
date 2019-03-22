@@ -10,13 +10,21 @@ public interface TbOaWorkPlanRecordMapper {
 
     int deleteByExample(TbOaWorkPlanRecordCriteria example);
 
+    int deleteByPrimaryKey(String id);
+
     int insert(TbOaWorkPlanRecord record);
 
     int insertSelective(TbOaWorkPlanRecord record);
 
     List<TbOaWorkPlanRecord> selectByExample(TbOaWorkPlanRecordCriteria example);
 
+    TbOaWorkPlanRecord selectByPrimaryKey(String id);
+
     int updateByExampleSelective(@Param("record") TbOaWorkPlanRecord record, @Param("example") TbOaWorkPlanRecordCriteria example);
 
     int updateByExample(@Param("record") TbOaWorkPlanRecord record, @Param("example") TbOaWorkPlanRecordCriteria example);
+
+    int updateByPrimaryKeySelective(TbOaWorkPlanRecord record);
+
+    int updateByPrimaryKey(TbOaWorkPlanRecord record);
 }

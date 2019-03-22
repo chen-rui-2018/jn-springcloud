@@ -50,8 +50,8 @@ public class FinanceIndexController extends BaseController {
     /** 测试通过 2019/3/14
      */
     @ControllerLog(doAction = "首页-管委会支出预算占比")
-    @ApiOperation(value = "管委会支出预算占比", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/ratioAndState")
+    @ApiOperation(value = "管委会支出预算占比",notes = "管委会支出预算占比", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/ratioAndState")
     @RequiresPermissions("/finance/index/ratioAndState")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query")
     public Result<FinanceIndexVo> ratioAndState(String year){
@@ -63,8 +63,8 @@ public class FinanceIndexController extends BaseController {
 
 
     @ControllerLog(doAction = "首页-各部门预算支出占比模块")
-    @ApiOperation(value = "各部门预算支出占比模块", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/budgetExpendRatio")
+    @ApiOperation(value = "各部门预算支出占比模块",notes = "各部门预算支出占比模块", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/budgetExpendRatio")
     @RequiresPermissions("/finance/index/budgetExpendRatio")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query")
     public Result<FinanceIndexBudgetExpendRatioVo> budgetExpendRatio(String year){
@@ -76,8 +76,8 @@ public class FinanceIndexController extends BaseController {
     /** 测试通过 2019/3/14
      */
     @ControllerLog(doAction = "首页-已支出全年预算统计-柱状图")
-    @ApiOperation(value = "已支出全年预算统计柱状图", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/expendBudget")
+    @ApiOperation(value = "已支出全年预算统计柱状图",notes = "已支出全年预算统计-柱状图", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/expendBudget")
     @RequiresPermissions("/finance/index/expendBudget")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query")
     public Result<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year){
@@ -87,8 +87,8 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "明细-部门支出预算统计-柱状图")
-    @ApiOperation(value = "部门支出预算统计", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sectionBudgetExpend")
+    @ApiOperation(value = "部门支出预算统计",notes = "部门支出预算统计", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/sectionBudgetExpend")
     @RequiresPermissions("/finance/index/sectionBudgetExpend")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query"),
@@ -102,8 +102,8 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "明细-各项累计支出占比-饼状图")
-    @ApiOperation(value = "各项累计支出占比", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/accumulativeExpendRatio")
+    @ApiOperation(value = "各项累计支出占比",notes = "各项累计支出占比-饼状图", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/accumulativeExpendRatio")
     @RequiresPermissions("/finance/index/accumulativeExpendRatio")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query"),
@@ -117,8 +117,8 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "部门预算支出报表")
-    @ApiOperation(value = "部门预算支出报表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sectionExpendForms")
+    @ApiOperation(value = "部门预算支出报表",notes = "部门预算支出报表", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/sectionExpendForms")
     @RequiresPermissions("/finance/index/sectionExpendForms")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query"),
@@ -158,8 +158,8 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "明细-分类条件下拉框选项")
-    @ApiOperation(value = "分类条件下拉框选项", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/downType")
+    @ApiOperation(value = "分类条件下拉框选项",notes = "分类条件下拉框选项", httpMethod = "GET", response = Result.class)
+    @GetMapping(value = "/downType")
     @RequiresPermissions("/finance/index/downType")
     public Result<FinanceIndexDownTypeModel> downType(){
         //todo

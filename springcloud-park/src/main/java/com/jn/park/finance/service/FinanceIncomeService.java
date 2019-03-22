@@ -1,8 +1,6 @@
 package com.jn.park.finance.service;
 
-import com.jn.park.finance.vo.FinanceIncomeLastYearContrastVo;
-import com.jn.park.finance.vo.FinanceIncomePeriodVo;
-import com.jn.park.finance.vo.FinanceIncomeSummarizingProportionVo;
+import com.jn.park.finance.vo.*;
 
 import java.util.List;
 
@@ -38,7 +36,14 @@ public interface FinanceIncomeService {
      * @param endTime 结束时间
      * @return
      */
-    List<FinanceIncomeLastYearContrastVo> lastYearContrast(String startTime, String endTime);
+    FianceDynamicTableVo<List<FinanceIncomeLastYearContrastVo>> lastYearContrast(String startTime, String endTime);
+
+    /**
+     * 导出往年对比数据
+     * @param year 年份
+     * @return
+     */
+    List<FinanceIncomeExportContrastVo> exportContrast(String year);
 
 
 }

@@ -213,7 +213,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询用户组已经具有的角色信息,且条件分页获取用户组未拥有的角色信息")
-    public PaginationData selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
+    public PaginationData<SysGroupRoleVO> selectGroupRoleAndOtherRole(SysGroupRolePage sysGroupRolePage) {
         //获取用户组具有的角色
         List<SysRole> roleOfGroupList = sysGroupRoleMapper.findRoleByGroupId(sysGroupRolePage.getGroupId());
         //条件分页查询用户组为拥有的角色信息
@@ -286,7 +286,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
-    public PaginationData findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
+    public PaginationData<SysGroupUserVO> findOtherUserByPage(SysGroupUserPage sysGroupUserPage) {
         //获取用户组已拥有用户
         List<SysTUser> userAllOfGroup = sysGroupUserMapper.findUserByGroupId(sysGroupUserPage.getGroupId());
         Page<Object> objects = PageHelper.startPage(sysGroupUserPage.getPage(), sysGroupUserPage.getRows());

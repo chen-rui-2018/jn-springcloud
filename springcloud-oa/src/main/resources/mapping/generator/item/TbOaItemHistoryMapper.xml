@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.item.dao.TbOaItemHistoryMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.item.entity.TbOaItemHistory">
-    <result column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="item_id" jdbcType="VARCHAR" property="itemId" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="operate_reocrd" jdbcType="VARCHAR" property="operateReocrd" />
@@ -88,6 +88,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_oa_item_history
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_oa_item_history
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.item.entity.TbOaItemHistoryCriteria">
     delete from tb_oa_item_history
     <if test="_parameter != null">
@@ -220,5 +230,47 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
+    update tb_oa_item_history
+    <set>
+      <if test="itemId != null">
+        item_id = #{itemId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateReocrd != null">
+        operate_reocrd = #{operateReocrd,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaItemHistory">
+    update tb_oa_item_history
+    set item_id = #{itemId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_reocrd = #{operateReocrd,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -35,7 +35,7 @@ public class UserTagController extends BaseController {
     @ControllerLog(doAction = "获取用户字典列表")
     @ApiOperation(value = "获取用户字典列表",httpMethod = "POST",response = Result.class)
     @RequestMapping(value = "/getTagCodeList")
-    public Result getTagCodeList(){
+    public Result<List<TagCode>> getTagCodeList(){
         List<TagCode> tagCodeList = userTagService.getTagCodeList();
         return new Result(tagCodeList);
     }

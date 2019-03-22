@@ -33,8 +33,10 @@ public class WebServiceProductInfo implements Serializable {
     private String serviceCycle;
     @ApiModelProperty(value ="产品图片")
     private String pictureUrl;
-    @ApiModelProperty(value = "产品详情")
+    @ApiModelProperty(value = "前台展示产品详情")
     private String productDetails;
+    @ApiModelProperty(value = "产品详情")
+    private byte[] serviceDetails;
     @ApiModelProperty(value = "交易数")
     private Integer transactionsNumber;
     @ApiModelProperty(value = "浏览数")
@@ -43,6 +45,24 @@ public class WebServiceProductInfo implements Serializable {
     private String evaluationScore;
     @ApiModelProperty(value = "评价数")
     private String evaluationNumber;
+    @ApiModelProperty(value = "上架此产品的机构数")
+    private String upShelfOrgNumber;
+
+    public byte[] getServiceDetails() {
+        return serviceDetails;
+    }
+
+    public void setServiceDetails(byte[] serviceDetails) {
+        this.serviceDetails = serviceDetails;
+    }
+
+    public String getUpShelfOrgNumber() {
+        return upShelfOrgNumber;
+    }
+
+    public void setUpShelfOrgNumber(String upShelfOrgNumber) {
+        this.upShelfOrgNumber = upShelfOrgNumber;
+    }
 
     public String getSignoryId() {
         return signoryId;

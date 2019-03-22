@@ -4,6 +4,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyCountVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgApplyDetailVo;
+import com.jn.enterprise.servicemarket.org.vo.OrgApplyVo;
+
+import java.util.List;
 
 /**
  * 服务机构认证审核接口
@@ -19,7 +22,7 @@ public interface OrgApproveService {
      * @param orgApplyParameter
      * @return
      */
-    PaginationData getOrgApplyList(OrgApplyParameter orgApplyParameter);
+    PaginationData<List<OrgApplyVo>> getOrgApplyList(OrgApplyParameter orgApplyParameter);
 
     /**
      * 查询机构入驻数据

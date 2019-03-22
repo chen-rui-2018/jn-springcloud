@@ -1,5 +1,7 @@
 package com.jn.common.model;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * Pagination 分頁
  *
@@ -10,6 +12,7 @@ package com.jn.common.model;
  */
 public class PaginationData<T> {
     private T rows;
+    @ApiModelProperty(value = "总页数")
     private long total;
 
     public T getRows() {

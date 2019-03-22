@@ -309,4 +309,24 @@ public class SysDepartmentServiceImpl implements SysDepartmentService {
         }
         return false;
     }
+
+    /**
+     * 根据部门名称获取部门信息
+     *
+     * @param deptName
+     * @return
+     */
+    @Override
+    public TbSysDepartment getDept(String deptName) {
+        TbSysDepartmentCriteria tbSysDepartmentCriteria = new TbSysDepartmentCriteria();
+        tbSysDepartmentCriteria.setOrderByClause("level asc");
+        TbSysDepartmentCriteria.Criteria criteria = tbSysDepartmentCriteria.createCriteria();
+        criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+        criteria.andDepartmentNameEqualTo(deptName);
+        List<TbSysDepartment> tbSysDepartments = tbSysDepartmentMapper.selectByExample(tbSysDepartmentCriteria);
+        if (tbSysDepartments != null && tbSysDepartments.size() > 0){
+            return tbSysDepartments.get(0);
+        }
+        return null;
+    }
 }

@@ -1,7 +1,10 @@
 package com.jn.enterprise.technologyfinancial.investors.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.technologyfinancial.investors.model.InvestorInfoListParam;
+import com.jn.enterprise.technologyfinancial.investors.model.*;
+import com.jn.enterprise.technologyfinancial.investors.vo.InvestorInfoDetailsVo;
+
+import java.util.List;
 
 /**
  * 科技金融投资人
@@ -17,4 +20,38 @@ public interface InvestorService {
      * @return
      */
     PaginationData getInvestorInfoList(InvestorInfoListParam investorInfoListParam);
+
+    /**
+     * 投资人详情
+     * @param investorAccount 投资人账号
+     * @return
+     */
+    InvestorInfoDetailsVo getInvestorInfoDetails(String investorAccount);
+
+    /**
+     * 查询所属单位
+     * @param orgName 单位名称
+     * @return
+     */
+    List<AffiliaationUnitShow> getAffiliationUnit(String orgName);
+
+    /**
+     * 新增投资人认证信息
+     * @param investorAuthenticateParam 投资人认证信息
+     * @param investorAccount           投资人账号
+     * @return
+     */
+    int addInvestorInfo(InvestorAuthenticateParam investorAuthenticateParam,String investorAccount);
+
+    /**
+     * 查询投资人主投领域
+     * @return
+     */
+    List<InvestorMainArea> getInvestorMainArea();
+
+    /**
+     * 查询投资人主投轮次
+     * @return
+     */
+    List<InvestorMainRound> getInvestorMainRound();
 }

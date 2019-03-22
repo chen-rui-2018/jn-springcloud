@@ -16,15 +16,15 @@ import java.io.Serializable;
 @ApiModel(value = "StaffCheckCallBackParam",description = "升级员工回调入参")
 public class StaffCheckCallBackParam implements Serializable {
     @NotNull(message = "申请ID不能为空")
-    @ApiModelProperty(value = "申请ID")
+    @ApiModelProperty(value = "申请ID",required = true)
     private String id;
 
     @NotNull(message = "审核状态不能为空")
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态",required = true)
     private String checkStatus;
 
     @NotNull(message = "审核人不能为空")
-    @ApiModelProperty(value = "审核人")
+    @ApiModelProperty(value = "审核人",required = true)
     private String checkAccount;
 
     public String getId() {

@@ -338,7 +338,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public PaginationData getRequireOtherList(RequireOtherParam requireOtherParam, String account) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(requireOtherParam==null){
+        if(StringUtils.isBlank(requireOtherParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
@@ -435,7 +435,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         if(StringUtils.isNotBlank(userExtension.getData().getAffiliateCode())){
             orgId=userExtension.getData().getAffiliateCode();
         }
-        if(requireReceivedParam==null){
+        if(StringUtils.isBlank(requireReceivedParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;
@@ -575,7 +575,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public PaginationData getPortalRequireInfoList(RequirePortalParam requirePortalParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(requirePortalParam==null){
+        if(StringUtils.isBlank(requirePortalParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;

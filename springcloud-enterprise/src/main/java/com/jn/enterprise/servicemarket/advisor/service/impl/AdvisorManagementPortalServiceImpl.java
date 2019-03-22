@@ -48,7 +48,7 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
     @Override
     public PaginationData getAdvisorManagementInfoList(AdvisorManagementPortalParam advisorManagementParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(advisorManagementParam==null || StringUtils.isBlank(advisorManagementParam.getNeedPage())){
+        if(StringUtils.isBlank(advisorManagementParam.getNeedPage())){
             //默认查询第1页的15条数据
             int pageNum=1;
             int pageSize=15;

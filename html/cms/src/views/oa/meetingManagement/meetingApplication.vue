@@ -13,10 +13,6 @@
               value-format="yyyy/MM/dd"
               type="date"
               placeholder="选择日期"/>
-              <!-- <el-date-picker v-model="meetingForm.startTime" :disabled="lookMeetingroom" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择开始时间"/>
-            至
-            <el-date-picker v-model="meetingForm.endTime" :disabled="lookMeetingroom" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择结束时间" /> -->
-          <!-- </el-form-item> -->
           </el-form-item>
         </div>
         <div style="display:flex">
@@ -168,7 +164,6 @@ export default {
   created() {
     this.initList()
     this.getALLlist()
-    this.getUserInfo()
   },
   methods: {
     // 取消
@@ -226,12 +221,14 @@ export default {
       getUserInfo().then(res => {
         if (res.data.code === '0000') {
           this.userName = res.data.data.name
-          if (res.data.data.sysDepartmentPostVO !== null) {
+          if (res.data.data.sysDepartmentPostVO.length > 0) {
             res.data.data.sysDepartmentPostVO.forEach(val => {
               if (val.isDefault === '1') {
                 this.department = val.departmentName
               }
             })
+          } else {
+            this.department = '无'
           }
         } else {
           this.$message.error(res.data.result)
@@ -245,12 +242,7 @@ export default {
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          const latestView = visitedViews.slice(-1)[0]
-          if (latestView) {
-            this.$router.push('meetingListManagement')
-          } else {
-            this.$router.push('/')
-          }
+          this.$router.push('meetingListManagement')
         }
       })
     },
@@ -404,19 +396,32 @@ export default {
             })
             this.meetingForm.participantsId = Array.from(new Set(dataArr))
             this.meetingForm.meetingRoomId = data.meetingRoomId
-            this.startTime = data.startTime.substring(10, 16)
-            this.endTime = data.endTime.substring(10, 16)
-            this.startDate = data.startDate.replace(/-/g, '/')
+            if (data.startTime !== null) {
+              this.startTime = data.startTime.substring(10, 16)
+            }
+            if (data.endTime !== null) {
+              this.endTime = data.endTime.substring(10, 16)
+            }
+            if (data.startDate !== null) {
+              this.startDate = data.startDate.replace(/-/g, '/')
+            }
             this.meetingForm.oaMeetingContent = data.content
-            if (data.tbOaMeetingRoom.name !== null || data.tbOaMeetingRoom.name !== '') {
+            if (data.tbOaMeetingRoom !== null) {
               this.meetingroomName = data.tbOaMeetingRoom.name
             }
+            if (data.departmentName) {
+              this.department = data.departmentName
+            } else {
+              this.department = '无'
+            }
+            this.userName = data.userName
             this.oldMeetingTitle = data.title
           } else {
             this.$message.error(res.data.result)
           }
         })
       } else {
+        this.getUserInfo()
         this.dialogStatus = '会议申请'
         this.meetingroomName = query.name
         this.meetingForm.meetingRoomId = query.meetId

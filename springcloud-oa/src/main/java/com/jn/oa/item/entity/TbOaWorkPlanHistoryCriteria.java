@@ -315,6 +315,76 @@ public class TbOaWorkPlanHistoryCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andOperateDetailsIsNull() {
+            addCriterion("operate_details is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsIsNotNull() {
+            addCriterion("operate_details is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsEqualTo(String value) {
+            addCriterion("operate_details =", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsNotEqualTo(String value) {
+            addCriterion("operate_details <>", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsGreaterThan(String value) {
+            addCriterion("operate_details >", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsGreaterThanOrEqualTo(String value) {
+            addCriterion("operate_details >=", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsLessThan(String value) {
+            addCriterion("operate_details <", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsLessThanOrEqualTo(String value) {
+            addCriterion("operate_details <=", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsLike(String value) {
+            addCriterion("operate_details like", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsNotLike(String value) {
+            addCriterion("operate_details not like", value, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsIn(List<String> values) {
+            addCriterion("operate_details in", values, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsNotIn(List<String> values) {
+            addCriterion("operate_details not in", values, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsBetween(String value1, String value2) {
+            addCriterion("operate_details between", value1, value2, "operateDetails");
+            return (Criteria) this;
+        }
+
+        public Criteria andOperateDetailsNotBetween(String value1, String value2) {
+            addCriterion("operate_details not between", value1, value2, "operateDetails");
+            return (Criteria) this;
+        }
+
         public Criteria andOperateRecodeIsNull() {
             addCriterion("operate_recode is null");
             return (Criteria) this;

@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.item.dao.TbOaWorkPlanHistoryMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.item.entity.TbOaWorkPlanHistory">
-    <result column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="work_plan_id" jdbcType="VARCHAR" property="workPlanId" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="operate_details" jdbcType="VARCHAR" property="operateDetails" />
     <result column="operate_recode" jdbcType="VARCHAR" property="operateRecode" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -71,8 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, work_plan_id, remark, operate_recode, record_status, creator_account, created_time, 
-    modifier_account, modified_time
+    id, work_plan_id, remark, operate_details, operate_recode, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistoryCriteria" resultMap="BaseResultMap">
     select
@@ -88,6 +89,16 @@
       order by ${orderByClause}
     </if>
   </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_oa_work_plan_history
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_oa_work_plan_history
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistoryCriteria">
     delete from tb_oa_work_plan_history
     <if test="_parameter != null">
@@ -96,13 +107,13 @@
   </delete>
   <insert id="insert" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistory">
     insert into tb_oa_work_plan_history (id, work_plan_id, remark, 
-      operate_recode, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
+      operate_details, operate_recode, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{workPlanId,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{operateRecode,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+      #{operateDetails,jdbcType=VARCHAR}, #{operateRecode,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistory">
     insert into tb_oa_work_plan_history
@@ -115,6 +126,9 @@
       </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="operateDetails != null">
+        operate_details,
       </if>
       <if test="operateRecode != null">
         operate_recode,
@@ -144,6 +158,9 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateDetails != null">
+        #{operateDetails,jdbcType=VARCHAR},
       </if>
       <if test="operateRecode != null">
         #{operateRecode,jdbcType=VARCHAR},
@@ -183,6 +200,9 @@
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.operateDetails != null">
+        operate_details = #{record.operateDetails,jdbcType=VARCHAR},
+      </if>
       <if test="record.operateRecode != null">
         operate_recode = #{record.operateRecode,jdbcType=VARCHAR},
       </if>
@@ -211,6 +231,7 @@
     set id = #{record.id,jdbcType=VARCHAR},
       work_plan_id = #{record.workPlanId,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
+      operate_details = #{record.operateDetails,jdbcType=VARCHAR},
       operate_recode = #{record.operateRecode,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -220,5 +241,51 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistory">
+    update tb_oa_work_plan_history
+    <set>
+      <if test="workPlanId != null">
+        work_plan_id = #{workPlanId,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="operateDetails != null">
+        operate_details = #{operateDetails,jdbcType=VARCHAR},
+      </if>
+      <if test="operateRecode != null">
+        operate_recode = #{operateRecode,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaWorkPlanHistory">
+    update tb_oa_work_plan_history
+    set work_plan_id = #{workPlanId,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      operate_details = #{operateDetails,jdbcType=VARCHAR},
+      operate_recode = #{operateRecode,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

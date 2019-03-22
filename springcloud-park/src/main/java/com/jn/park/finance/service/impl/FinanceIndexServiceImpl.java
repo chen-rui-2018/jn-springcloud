@@ -133,7 +133,7 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
 
     @ServiceLog(doAction = "监控明细部门支出预算统计（柱状图）")
     @Override
-    public List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, int typeId) {
+    public List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, String typeId) {
         //拼接年月
         String startTime=year+"01";
         String endTime=year+"12";

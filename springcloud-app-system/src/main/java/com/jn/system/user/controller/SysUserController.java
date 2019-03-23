@@ -89,9 +89,9 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "查询用户已经具有的用户组信息")
+    @ControllerLog(doAction = "查询用户的用户组信息")
     @RequiresPermissions("/system/sysUser/findSysGroupByUserId")
-    @ApiOperation(value = "查询用户已经具有的用户组信息",
+    @ApiOperation(value = "查询用户的用户组信息",
             notes = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息")
     @RequestMapping(value = "/findSysGroupByUserId", method = RequestMethod.POST)
     public Result<PaginationData<SysUserGroupVO>> findSysGroupByUserId(@Validated @RequestBody SysUserGroupPage sysUserGroupPage) {
@@ -111,9 +111,9 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "查询用户已经具有的角色信息")
+    @ControllerLog(doAction = "查询用户的角色信息")
     @RequiresPermissions("/system/sysUser/findSysRoleByUserId")
-    @ApiOperation(value = "查询用户已经具有的角色信息",
+    @ApiOperation(value = "查询用户的角色信息",
             notes = "查询用户已经具有的角色信息,且条件分页获取用户未拥有的角色信息")
     @RequestMapping(value = "/findSysRoleByUserId", method = RequestMethod.POST)
     public Result<PaginationData<SysUserRoleVO>> findSysRoleByUserId(@Validated @RequestBody SysUserRolePage sysUserRolePage) {
@@ -121,9 +121,9 @@ public class SysUserController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "为用户添加角色权限")
+    @ControllerLog(doAction = "用户添加角色权限")
     @RequiresPermissions("/system/sysUser/saveSysRoleToSysUser")
-    @ApiOperation(value = "为用户添加角色权限", notes = "为用户添加角色权限")
+    @ApiOperation(value = "用户添加角色权限", notes = "用户添加角色权限")
     @RequestMapping(value = "/saveSysRoleToSysUser", method = RequestMethod.POST)
     public Result saveSysRoleToSysUser(@Validated @RequestBody SysRoleUserAdd sysRoleUserAdd) {
         Assert.notNull(sysRoleUserAdd.getUserId(), "用户id不能为空");
@@ -133,18 +133,18 @@ public class SysUserController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据用户id查询用户已经具有的岗位部门信息")
+    @ControllerLog(doAction = "获取用户岗位部门信息")
     @RequiresPermissions("/system/sysUser/findDepartmentandPostByUserId")
-    @ApiOperation(value = "根据用户id查询用户已经具有的岗位部门信息", notes = "根据用户id查询用户已经具有的岗位部门信息")
+    @ApiOperation(value = "获取用户岗位部门信息", notes = "根据用户id查询用户已经具有的岗位部门信息")
     @RequestMapping(value = "/findDepartmentandPostByUserId", method = RequestMethod.POST)
     public Result<List<SysDepartmentPostVO>> findDepartmentandPostByUserId(String userId) {
         List<SysDepartmentPostVO> sysDepartmentPostVOList = sysUserService.findDepartmentandPostByUserId(userId);
         return new Result(sysDepartmentPostVOList);
     }
 
-    @ControllerLog(doAction = "为用户添加部门岗位")
+    @ControllerLog(doAction = "用户添加部门岗位")
     @RequiresPermissions("/system/sysUser/saveDepartmentandPostOfUser")
-    @ApiOperation(value = "为用户添加部门岗位", notes = "为用户添加部门岗位")
+    @ApiOperation(value = "用户添加部门岗位", notes = "用户添加部门岗位")
     @RequestMapping(value = "/saveDepartmentandPostOfUser", method = RequestMethod.POST)
     public Result saveDepartmentAndPostOfUser(@Validated @RequestBody SysUserDepartmentPostAdd sysUserDepartmentPostAdd) {
         Assert.notNull(sysUserDepartmentPostAdd.getUserId(), "用户id不能为空");
@@ -190,9 +190,9 @@ public class SysUserController extends BaseController {
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, dataRows);
     }
 
-    @ControllerLog(doAction = "获取全部有效用户信息")
+    @ControllerLog(doAction = "获取全部用户")
     @RequiresPermissions("/system/sysUser/getUserAll")
-    @ApiOperation(value = "获取全部有效用户信息", notes = "获取全部有效用户信息")
+    @ApiOperation(value = "获取全部用户", notes = "获取全部有效用户信息")
     @RequestMapping(value = "/getUserAll", method = RequestMethod.POST)
     public Result<List<User>> getUserAll() {
         List<User> userAll = sysUserService.getUserAll();

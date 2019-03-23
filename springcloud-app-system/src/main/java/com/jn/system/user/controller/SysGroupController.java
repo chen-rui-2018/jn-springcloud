@@ -11,6 +11,7 @@ import com.jn.system.user.entity.TbSysGroup;
 import com.jn.system.user.model.*;
 import com.jn.system.user.service.SysGroupService;
 import com.jn.system.user.vo.SysGroupRoleVO;
+import com.jn.system.user.vo.SysGroupUserRoleVO;
 import com.jn.system.user.vo.SysGroupUserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -47,8 +49,8 @@ public class SysGroupController extends BaseController {
     @ApiOperation(value = "分页查询用户组信息", notes = "分页查询用户组信息")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysGroup/list")
-    public Result list(@Validated @RequestBody SysGroupPage groupPage) {
-        PaginationData data = sysGroupService.findSysGroupAll(groupPage);
+    public Result<PaginationData<List<SysGroupUserRoleVO>>> list(@Validated @RequestBody SysGroupPage groupPage) {
+        PaginationData<List<SysGroupUserRoleVO>> data = sysGroupService.findSysGroupAll(groupPage);
         return new Result(data);
     }
 
@@ -94,8 +96,8 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据用户组id获取用户组信息")
-    @ApiOperation(value = "根据用户组id获取用户组信息", notes = "根据用户组id获取用户组信息")
+    @ControllerLog(doAction = "获取用户组信息")
+    @ApiOperation(value = "获取用户组信息", notes = "根据用户组id获取用户组信息")
     @RequestMapping(value = "/selectByPrimaryKey", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysGroup/selectByPrimaryKey")
     public Result<TbSysGroup> selectByPrimaryKey(String id) {
@@ -103,8 +105,8 @@ public class SysGroupController extends BaseController {
         return new Result(sysGroup);
     }
 
-    @ControllerLog(doAction = "查询用户组已经具有的角色信息")
-    @ApiOperation(value = "查询用户组已经具有的角色信息",
+    @ControllerLog(doAction = "查询用户组的角色信息")
+    @ApiOperation(value = "查询用户组的角色信息",
             notes = "查询用户组已经具有的角色信息")
     @RequestMapping(value = "/selectGroupRoleAndOtherRole", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysGroup/selectGroupRoleAndOtherRole")
@@ -125,8 +127,8 @@ public class SysGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "查询用户组已经具有的用户信息")
-    @ApiOperation(value = "查询用户组已经具有的用户信息",
+    @ControllerLog(doAction = "查询用户组的用户信息")
+    @ApiOperation(value = "查询用户组的用户信息",
             notes = "查询用户组已经具有的用户信息,且条件分页获取用户组未拥有的用户信息")
     @RequestMapping(value = "/findOtherUserByPage", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysGroup/findOtherUserByPage")

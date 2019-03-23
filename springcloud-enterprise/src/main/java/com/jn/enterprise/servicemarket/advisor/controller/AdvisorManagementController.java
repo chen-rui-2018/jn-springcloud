@@ -5,19 +5,20 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementShow;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
-import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.system.model.User;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,8 +68,9 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/inviteAdvisor")
     @ApiOperation(value = "邀请顾问",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
-    public Result inviteAdvisor(@Validated InviteAdvisorInfo inviteAdvisorInfo){
-        int responseNum = advisorManagementService.inviteAdvisor(inviteAdvisorInfo);
+    public Result inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true) String registerAccount){
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        int responseNum = advisorManagementService.inviteAdvisor(registerAccount,user.getAccount());
         logger.info("------邀请顾问操作成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }
@@ -77,7 +79,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
     @ApiOperation(value = "顾问管理")
     @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
-    public Result<PaginationData<List<TbServiceAdvisor>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
+    public Result<PaginationData<List<AdvisorManagementShow>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
         Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
         PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
         return  new Result(advisorManagementInfo);

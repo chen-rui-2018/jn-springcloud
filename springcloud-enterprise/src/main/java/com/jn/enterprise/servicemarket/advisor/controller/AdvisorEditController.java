@@ -2,11 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -45,8 +41,8 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "基本信息保存并更新")
     @RequestMapping(value = "/saveOrUpdateAdvisorBaseInfo",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo")
-    public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated  AdvisorBaseInfo advisorBaseInfo){
-        int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
+    public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
+        int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
         logger.info("------基本信息保存并更新成功，数据响应条数：{}------",responseNum);
         return new Result(responseNum);
     }
@@ -85,10 +81,10 @@ public class AdvisorEditController extends BaseController {
     @ApiOperation(value = "获取指定证件类型")
     @RequestMapping(value = "/getCertificateTypeList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/advisorEditController/getCertificateTypeList")
-    public Result<List<TbServiceCertificateType>> getCertificateTypeList(){
+    public Result<List<AdvisorCertificateTypeShow>> getCertificateTypeList(){
         //证件类型分类 荣誉资质：honor
         String certificateType="honor";
-        List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
         return new Result(certificateTypeList);
     }
 

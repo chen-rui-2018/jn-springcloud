@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorListParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
@@ -46,13 +46,13 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务顾问列表")
     @ApiOperation(value = "服务顾问列表",notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/getServiceConsultantList",method = RequestMethod.GET)
-    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(AdvisorInquiryInfo advisorInquiryInfo){
-        PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
+    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(AdvisorListParam advisorListParam){
+        PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorListParam, Boolean.TRUE);
         return  new Result(serviceConsultantList);
     }
 
     @ControllerLog(doAction = "服务顾问详情")
-    @ApiOperation(value = "服务顾问详情")
+    @ApiOperation(value = "服务顾问详情",notes="根据顾问账号获取顾问详情")
     @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
     public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true)@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
@@ -61,7 +61,7 @@ public class AdvisorController extends BaseController {
     }
 
     @ControllerLog(doAction = "服务评价")
-    @ApiOperation(value = "服务评价")
+    @ApiOperation(value = "服务评价",notes="根据顾问账号和评价类型获取顾问的评价")
     @RequestMapping(value = "/getServiceRatingInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);

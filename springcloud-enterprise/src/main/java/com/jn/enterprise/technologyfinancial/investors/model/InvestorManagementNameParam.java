@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class InvestorManagementNameParam extends Page implements Serializable {
     @ApiModelProperty(value = "姓名")
     private String investorName;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
+    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

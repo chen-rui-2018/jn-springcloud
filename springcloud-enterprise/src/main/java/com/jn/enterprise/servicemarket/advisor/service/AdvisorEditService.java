@@ -1,10 +1,6 @@
 package com.jn.enterprise.servicemarket.advisor.service;
 
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 
 import java.util.List;
 
@@ -18,10 +14,10 @@ import java.util.List;
 public interface AdvisorEditService {
     /**
      * 基本信息保存并更新
-     * @param advisorBaseInfo  顾问资料基本信息
+     * @param advisorBaseInfoParam  顾问资料基本信息
      * @return
      */
-    int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo);
+    int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam);
 
     /**
      * 荣誉资质保存并更新
@@ -49,5 +45,5 @@ public interface AdvisorEditService {
      * @param certificateType 证件类型分类
      * @return
      */
-    List<TbServiceCertificateType> getCertificateTypeList(String certificateType);
+    List<AdvisorCertificateTypeShow> getCertificateTypeList(String certificateType);
 }

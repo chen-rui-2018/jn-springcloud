@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfoParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementPortalParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorServiceManagementInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
@@ -69,8 +69,8 @@ public class AdvisorManagementPortalController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementPortalController/updateAdvisorBaseInfo")
     @ApiOperation(value = "服务顾问基本资料修改(后台门户管理)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateAdvisorBaseInfo",method = RequestMethod.POST)
-    public Result<Integer> updateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfo advisorBaseInfo){
-        int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
+    public Result<Integer> updateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
+        int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
         logger.info("------服务顾问基本资料修改(后台门户管理)成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }

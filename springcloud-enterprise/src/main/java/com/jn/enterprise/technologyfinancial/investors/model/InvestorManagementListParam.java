@@ -39,7 +39,7 @@ public class InvestorManagementListParam extends Page implements Serializable {
     private String applyEndTime;
     @ApiModelProperty(value = "职务")
     private String position;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true)
+    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

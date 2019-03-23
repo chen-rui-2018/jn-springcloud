@@ -60,19 +60,19 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     /**
      * 服务顾问列表查询
-     * @param advisorInquiryInfo 查询条件
+     * @param advisorListParam 查询条件
      * @param needPage           是否需要分页
      * @return
      */
     @Override
     @ServiceLog(doAction = "服务顾问列表查询")
-    public PaginationData getServiceConsultantList(AdvisorInquiryInfo advisorInquiryInfo, Boolean needPage) {
+    public PaginationData getServiceConsultantList(AdvisorListParam advisorListParam, Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
         if(needPage){
-            objects = PageHelper.startPage(advisorInquiryInfo.getPage(), advisorInquiryInfo.getRows() == 0 ? 15 : advisorInquiryInfo.getRows(), true);
+            objects = PageHelper.startPage(advisorListParam.getPage(), advisorListParam.getRows() == 0 ? 15 : advisorListParam.getRows(), true);
         }
         AdvisorQueryConditions queryConditions=new AdvisorQueryConditions();
-        BeanUtils.copyProperties(advisorInquiryInfo, queryConditions);
+        BeanUtils.copyProperties(advisorListParam, queryConditions);
         if(StringUtils.isBlank(queryConditions.getSortTypes()) ){
             //默认综合排序
             queryConditions.setSortTypes(ServiceSortTypeEnum.INTEGRATE.getCode());
@@ -128,7 +128,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         ServiceEvaluationParam serviceEvaluationParam =new ServiceEvaluationParam();
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
         serviceEvaluationParam.setRatingType(ratingType);
-        serviceEvaluationParam.setNeedPage(Boolean.FALSE);
+        serviceEvaluationParam.setNeedPage("0");
         PaginationData pageData = getServiceRatingInfo(serviceEvaluationParam);
         List<ServiceRating> serviceRatingInfoList =(List<ServiceRating>) pageData.getRows();
         if(!serviceRatingInfoList.isEmpty()){
@@ -194,7 +194,9 @@ public class AdvisorServiceImpl implements AdvisorService {
     @Override
     public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
         com.github.pagehelper.Page<Object> objects = null;
-        if(serviceEvaluationParam.getNeedPage()){
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(serviceEvaluationParam.getNeedPage())){
             objects = PageHelper.startPage(serviceEvaluationParam.getPage(),
                     serviceEvaluationParam.getRows() == 0 ? 15 : serviceEvaluationParam.getRows(), true);
         }

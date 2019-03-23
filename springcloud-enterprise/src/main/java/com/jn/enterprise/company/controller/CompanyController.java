@@ -37,7 +37,7 @@ public class CompanyController extends BaseController {
     }
 
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
-    @ApiOperation(value = "根据用户账号查询企业信息（用户为企业管理员）")
+    @ApiOperation(value = "根据用户账号查询企业信息",notes = "用户为企业管理员")
     @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId",method = RequestMethod.GET)
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
             @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true)

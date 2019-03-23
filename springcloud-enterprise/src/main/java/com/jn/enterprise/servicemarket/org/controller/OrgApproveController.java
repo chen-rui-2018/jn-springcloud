@@ -54,7 +54,7 @@ public class OrgApproveController extends BaseController{
     }
 
     @ControllerLog(doAction = "查询机构入驻数据")
-    @ApiOperation(value = "查询机构入驻数据")
+    @ApiOperation(value = "查询机构入驻数据",notes = "统计数据")
     @RequestMapping(value = "/getOrgCount",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgCount")
     public Result<OrgApplyCountVo> getOrgCount(){

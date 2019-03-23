@@ -42,8 +42,8 @@ public class CommentController extends BaseController {
      */
     private static Logger logger = LoggerFactory.getLogger(CommentController.class);
 
-    @ControllerLog(doAction = "获取对他人的评价列表(客户对机构的评价)")
-    @ApiOperation(value = "获取对他人的评价列表(客户对机构的评价)")
+    @ControllerLog(doAction = "获取对他人的评价列表（客户对机构的评价）")
+    @ApiOperation(value = "获取对他人的评价列表",notes = "客户对机构的评价")
     @RequestMapping(value = "/getGiveOthersCommentList",method = RequestMethod.GET)
     @RequiresPermissions("/guest/serviceMarket/comment/getGiveOthersCommentList")
     public Result<PaginationData<List<Rating>>> getGiveOthersCommentList(@Validated RatingParameter ratingParameter){
@@ -53,7 +53,7 @@ public class CommentController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取我收到的评价列表(机构/顾问收到的评价)")
-    @ApiOperation(value = "获取我收到的评价列表(机构/顾问收到的评价)")
+    @ApiOperation(value = "获取我收到的评价列表",notes = "机构/顾问收到的评价")
     @RequestMapping(value = "/getGiveMeCommentList",method = RequestMethod.GET)
     @RequiresPermissions("/guest/serviceMarket/comment/getGiveMeCommentList")
     public Result<PaginationData<List<Rating>>> getGiveMeCommentList(@Validated ReceiveRatingParameter receiveRatingParameter){
@@ -63,7 +63,7 @@ public class CommentController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取评价页详情")
-    @ApiOperation(value = "获取评价页详情(已评价和未评价都从这接口获取)")
+    @ApiOperation(value = "获取评价页详情",notes = "已评价和未评价都从这接口获取")
     @RequestMapping(value = "/getRatingCommentDetail",method = RequestMethod.GET)
     @RequiresPermissions("/guest/serviceMarket/comment/getRatingCommentDetail")
     public Result getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true)@RequestParam(value = "id") String id){

@@ -64,7 +64,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "基本信息保存并更新")
     @Override
-    public void saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo) {
+    public int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo) {
         //根据账号查询是否存在顾问信息
         //数据状态  0：删除  1：正常
         byte recordStatus=1;
@@ -73,7 +73,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
-            insertServiceAdvisorInfo(advisorBaseInfo);
+            return insertServiceAdvisorInfo(advisorBaseInfo);
         }else{
             TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
             //把id,orgId,orgName,businessArea保留,防止copy时被覆盖
@@ -88,7 +88,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //修改时间
             tbServiceAdvisor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //更新全部的字段（基本信息有的字段可能为空，不能使用selective更新方式）
-            tbServiceAdvisorMapper.updateByExample(tbServiceAdvisor, example);
+            return tbServiceAdvisorMapper.updateByExample(tbServiceAdvisor, example);
         }
     }
 
@@ -97,7 +97,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      * @param advisorBaseInfo
      */
     @ServiceLog(doAction = "新增顾问信息")
-    private void insertServiceAdvisorInfo(AdvisorBaseInfo advisorBaseInfo) {
+    private int insertServiceAdvisorInfo(AdvisorBaseInfo advisorBaseInfo) {
         if(StringUtils.isBlank(advisorBaseInfo.getOrgId()) || StringUtils.isBlank(advisorBaseInfo.getOrgName())){
             logger.warn("基本信息保存并更新，机构id或机构名称不能为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_INFO_NOT_NULL);
@@ -132,7 +132,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         tbServiceAdvisor.setCreatorAccount(advisorBaseInfo.getAdvisorAccount());
         //记录状态 0标记删除，1正常
         tbServiceAdvisor.setRecordStatus((byte)1);
-        tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
+        return tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 
     /**
@@ -141,7 +141,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "荣誉资质保存并更新")
     @Override
-    public void saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam) {
+    public int saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam) {
         //判断证书类型是否在系统中
         boolean isExist=false;
         //证件类型分类 荣誉资质：honor
@@ -176,7 +176,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             tbServiceHonor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
             tbServiceHonor.setModifierAccount(serviceHonorParam.getAdvisorAccount());
-            tbServiceHonorMapper.updateByExample(tbServiceHonor, example);
+            return tbServiceHonorMapper.updateByExample(tbServiceHonor, example);
         }else{
             //没有主键id，新增
             TbServiceHonor tbServiceHonor=new TbServiceHonor();
@@ -190,7 +190,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //数据状态
             byte recordStatus=1;
             tbServiceHonor.setRecordStatus(recordStatus);
-            tbServiceHonorMapper.insertSelective(tbServiceHonor);
+            return tbServiceHonorMapper.insertSelective(tbServiceHonor);
         }
     }
 
@@ -218,7 +218,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "服务经历保存并更新")
     @Override
-    public void saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam) {
+    public int saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam) {
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceExperienceParam.getId())){
             byte recordStatus=1;
@@ -237,7 +237,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             tbServiceExperience.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
             //修改人
             tbServiceExperience.setModifierAccount(serviceExperienceParam.getAdvisorAccount());
-            tbServiceExperienceMapper.updateByExample(tbServiceExperience, example);
+            return tbServiceExperienceMapper.updateByExample(tbServiceExperience, example);
         }else{
             //没有主键id,新增
             TbServiceExperience tbServiceExperience=new TbServiceExperience();
@@ -251,7 +251,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //数据状态
             byte recordStatus=1;
             tbServiceExperience.setRecordStatus(recordStatus);
-            tbServiceExperienceMapper.insertSelective(tbServiceExperience);
+            return tbServiceExperienceMapper.insertSelective(tbServiceExperience);
         }
     }
 
@@ -261,7 +261,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
      */
     @ServiceLog(doAction = "项目经验保存并更新")
     @Override
-    public void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam) {
+    public int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam) {
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceProjectExperienceParam.getId())){
             byte recordStatus=1;
@@ -282,7 +282,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             tbServiceProExper.setModifierAccount(tbServiceProExper.getAdvisorAccount());
             //数据状态
             tbServiceProExper.setRecordStatus(recordStatus);
-            tbServiceProExperMapper.updateByExample(tbServiceProExper, example);
+            return tbServiceProExperMapper.updateByExample(tbServiceProExper, example);
         }else{
             //没有主键id,新增
             TbServiceProExper tbServiceProExper=new TbServiceProExper();
@@ -296,7 +296,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //数据状态
             byte recordStatus=1;
             tbServiceProExper.setRecordStatus(recordStatus);
-            tbServiceProExperMapper.insertSelective(tbServiceProExper);
+            return tbServiceProExperMapper.insertSelective(tbServiceProExper);
         }
     }
 }

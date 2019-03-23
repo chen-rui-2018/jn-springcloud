@@ -62,7 +62,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
     @Override
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
-    public void inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo) {
+    public int inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo) {
         //1.判断顾问表中是否已存在当前机构和顾问关联的数据（审核状态为非解除状态，非审批不通过状态）
         //通过机构账号从服务机构表获得机构编码和机构名称
         TbServiceOrg serviceOrgInfo = getServiceOrgInfo(inviteAdvisorInfo.getInviteAccount());
@@ -82,14 +82,15 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         //不存在当前机构和顾问关联的数据（审核状态为非解除状态）
         if(tbServiceAdvisorList.isEmpty()){
             //2.往顾问信息表添加一条机构和顾问的信息
-            insertServiceAdvisorInfo(inviteAdvisorInfo,serviceOrgInfo);
+            int responseNum = insertServiceAdvisorInfo(inviteAdvisorInfo, serviceOrgInfo);
             //3.todo:调用消息接口，向被邀顾问发送短信或邮件（顾问可通过信息中的链接直接跳转到接收机构邀请页面） yangph
+
+            return responseNum;
         }else{
             //存在当前机构和顾问关联的数据（审核状态为非解除状态）
             logger.warn("当前被邀请的顾问[{}]已经被邀请，请不要重复邀请！！！",inviteAdvisorInfo.getRegisterAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_IS_EXIT);
         }
-
     }
 
 
@@ -98,7 +99,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @param inviteAdvisorInfo
      */
     @ServiceLog(doAction = "往顾问信息表添加顾问信息")
-    private void insertServiceAdvisorInfo(InviteAdvisorInfo inviteAdvisorInfo,TbServiceOrg serviceOrgInfo ) {
+    private int insertServiceAdvisorInfo(InviteAdvisorInfo inviteAdvisorInfo,TbServiceOrg serviceOrgInfo ) {
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         //主键id
         tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -127,7 +128,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         tbServiceAdvisor.setCreatorAccount(inviteAdvisorInfo.getInviteAccount());
         //记录状态 0标记删除，1正常
         tbServiceAdvisor.setRecordStatus((byte)1);
-        tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
+        return tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 
     /**
@@ -228,7 +229,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "审批顾问填写信息")
     @Override
-    public void approvalAdvisorInfo(ApprovalParam approvalParam) {
+    public int approvalAdvisorInfo(ApprovalParam approvalParam) {
         //根据顾问账号判断待审批状态的顾问在系统中是否存在
         //待审批状态值“1”
         String approvalStatus="1";
@@ -244,7 +245,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             //审批结果为“审批通过”，根据顾问账号更新审批状态信息
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="2";
-            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
+            return updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
         }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(approvalParam.getApprovalResults())){
             //审批结果为“审批不通过”，根据顾问账号更新审批状态信息
             //审批不通过
@@ -254,7 +255,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="3";
-            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
+            return updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
         }else{
             logger.warn("审批顾问[{}]填写资料的审批状态值与系统不符", approvalParam.getAdvisorAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
@@ -268,7 +269,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @param approvalDesc    审批说明
      */
      @ServiceLog(doAction = "修改顾问审批状态")
-    private void updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
+    private int updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
@@ -279,7 +280,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             //审批通过，没有审批说明，需清空审批不通过的审批说明
             tbServiceAdvisor.setApprovalDesc("");
         }
-        tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
+        return tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
     }
 
     /**

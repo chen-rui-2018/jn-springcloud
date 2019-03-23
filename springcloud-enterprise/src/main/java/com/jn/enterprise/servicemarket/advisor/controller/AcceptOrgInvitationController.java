@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,21 +36,23 @@ public class AcceptOrgInvitationController extends BaseController {
     private AcceptOrgInvitationService acceptOrgInvitationService;
 
     @ControllerLog(doAction = "接受机构邀请")
-    @ApiOperation(value = "接受机构邀请", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/acceptOrgInvitation")
-    public Result acceptOrgInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
+    @ApiOperation(value = "接受机构邀请",notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/acceptOrgInvitation",method = RequestMethod.POST)
+    public Result<Integer> acceptOrgInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
-        acceptOrgInvitationService.acceptOrgInvitation(advisorAccount);
-        return  new Result();
+        int responseNum = acceptOrgInvitationService.acceptOrgInvitation(advisorAccount);
+        logger.info("------接受机构邀请成功，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 
     @ControllerLog(doAction = "拒绝邀请")
-    @ApiOperation(value = "拒绝邀请", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/refuseInvitation")
+    @ApiOperation(value = "拒绝邀请",notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/refuseInvitation",method = RequestMethod.POST)
     public Result refuseInvitation(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount")  String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
-        acceptOrgInvitationService.refuseInvitation(advisorAccount);
-        return  new Result();
+        int responseNum = acceptOrgInvitationService.refuseInvitation(advisorAccount);
+        logger.info("------拒绝邀请成功，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 
 }

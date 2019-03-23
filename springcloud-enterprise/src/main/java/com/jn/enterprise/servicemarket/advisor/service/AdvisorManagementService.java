@@ -17,7 +17,7 @@ public interface AdvisorManagementService {
      * 邀请顾问
      * @param inviteAdvisorInfo  邀请顾问入参（被邀请人和邀请人账号）
      */
-    void inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo);
+    int inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo);
 
     /**
      * 顾问管理
@@ -30,5 +30,5 @@ public interface AdvisorManagementService {
      * 审批顾问填写信息
      * @param approvalParam  审批顾问信息入参(顾问账号，审批结果，审批说明)
      */
-    void approvalAdvisorInfo(ApprovalParam approvalParam);
+    int approvalAdvisorInfo(ApprovalParam approvalParam);
 }

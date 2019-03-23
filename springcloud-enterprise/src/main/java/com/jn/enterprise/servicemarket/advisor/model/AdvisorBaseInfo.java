@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -26,7 +25,6 @@ public class AdvisorBaseInfo  implements Serializable {
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "从业年限")
-    @Size(max=50,message="从业年限只能是数值，且小于50")
     private Double workingYears;
     @ApiModelProperty(value = "毕业学校")
     private String graduatedSchool;

@@ -19,26 +19,30 @@ public interface AdvisorEditService {
     /**
      * 基本信息保存并更新
      * @param advisorBaseInfo  顾问资料基本信息
+     * @return
      */
-    void saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo);
+    int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo);
 
     /**
      * 荣誉资质保存并更新
      * @param serviceHonorParam  荣誉资质信息
+     * @return
      */
-    void saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
+    int saveOrUpdateAdvisorHonor(ServiceHonorParam serviceHonorParam);
 
     /**
      * 服务经历保存并更新
      * @param serviceExperienceParam 服务经历信息
+     * @return
      */
-    void saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
+    int saveOrUpdateAdvisorExperience(ServiceExperienceParam serviceExperienceParam);
 
     /**
      * 项目经验保存并更新
      * @param serviceProjectExperienceParam  项目经验信息
+     * @return
      */
-    void saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
+    int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam);
 
     /**
      * 获取指定证件类型

@@ -18,10 +18,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 行业领域管理
@@ -39,18 +38,18 @@ public class IndustryManageController extends BaseController {
     private IndustryService industryService;
 
     @ControllerLog(doAction = "行业领域列表")
-    @ApiOperation(value = "行业领域列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/selectIndustryList")
+    @ApiOperation(value = "行业领域列表")
+    @RequestMapping(value = "/selectIndustryList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/industryManage/selectIndustryList")
-    public Result selectIndustryList(@RequestBody @Validated IndustryParameter industryParameter){
+    public Result<PaginationData<List<Industry>>> selectIndustryList(@Validated IndustryParameter industryParameter){
         PaginationData paginationData = industryService.selectIndustryList(industryParameter);
         return new Result(paginationData);
     }
 
 
     @ControllerLog(doAction = "新增行业领域")
-    @ApiOperation(value = "新增行业领域", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveIndustry")
+    @ApiOperation(value = "新增行业领域")
+    @RequestMapping(value = "/saveIndustry",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/industryManage/saveIndustry")
     public Result saveIndustry(@RequestBody @Validated IndustryData industryData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -59,10 +58,10 @@ public class IndustryManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改行业领域")
-    @ApiOperation(value = "修改行业领域", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/updateIndustry")
+    @ApiOperation(value = "修改行业领域")
+    @RequestMapping(value = "/updateIndustry",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/industryManage/updateIndustry")
-    public Result updateIndustry(@RequestBody @Validated IndustryData industryData){
+    public Result<Boolean> updateIndustry(@RequestBody @Validated IndustryData industryData){
         Assert.notNull(industryData.getId(), OrgExceptionEnum.PRE_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Boolean b = industryService.saveOrUpdateIndustry(industryData,user.getAccount());
@@ -70,10 +69,10 @@ public class IndustryManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "行业领域详情")
-    @ApiOperation(value = "行业领域详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getIndustryDetail")
+    @ApiOperation(value = "行业领域详情")
+    @RequestMapping(value = "/getIndustryDetail",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/industryManage/getIndustryDetail")
-    public Result getIndustryDetail(@ApiParam(value = "领域id" ,required = true) @RequestParam(value = "id") String id){
+    public Result<Industry> getIndustryDetail(@ApiParam(value = "领域id" ,required = true) @RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.PRE_ID_IS_NOT_NULL.getMessage());
         Industry industryDetail = industryService.getIndustryDetail(id);
         return new Result(industryDetail);

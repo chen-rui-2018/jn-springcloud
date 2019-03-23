@@ -19,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,17 +44,16 @@ public class AdvisorController extends BaseController {
 
 
     @ControllerLog(doAction = "服务顾问列表")
-    @ApiOperation(value = "服务顾问列表", httpMethod = "POST", response = Result.class
-                ,notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
-    @RequestMapping(value = "/getServiceConsultantList")
-    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(@RequestBody AdvisorInquiryInfo advisorInquiryInfo){
+    @ApiOperation(value = "服务顾问列表",notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
+    @RequestMapping(value = "/getServiceConsultantList",method = RequestMethod.GET)
+    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(AdvisorInquiryInfo advisorInquiryInfo){
         PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
         return  new Result(serviceConsultantList);
     }
 
     @ControllerLog(doAction = "服务顾问详情")
-    @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getServiceAdvisorInfo")
+    @ApiOperation(value = "服务顾问详情")
+    @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
     public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true)@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
@@ -65,9 +61,9 @@ public class AdvisorController extends BaseController {
     }
 
     @ControllerLog(doAction = "服务评价")
-    @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getServiceRatingInfo")
-    public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationParam serviceEvaluationParam){
+    @ApiOperation(value = "服务评价")
+    @RequestMapping(value = "/getServiceRatingInfo",method = RequestMethod.GET)
+    public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);
         return  new Result(serviceRatingInfo);
     }

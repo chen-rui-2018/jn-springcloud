@@ -22,10 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,18 +49,17 @@ public class OrgController extends BaseController {
 
 
     @ControllerLog(doAction = "获取服务机构列表")
-    @ApiOperation(value = "获取服务机构列表,(app机构列表)", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/selectServiceOrgList")
+    @ApiOperation(value = "获取服务机构列表,(app机构列表)")
+    @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
-    public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@RequestBody @Validated OrgParameter orgParameter){
+    public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
         PaginationData<List<ServiceOrg>> paginationData = orgService.selectServiceOrgList(orgParameter);
         return new Result<>(paginationData);
     }
 
     @ControllerLog(doAction = "获取服务机构详情")
-    @ApiOperation(value = "获取服务机构详情,(app机构详情)", httpMethod = "POST", response = Result.class,
-            notes = "查询条件orgId")
-    @RequestMapping(value = "/getActivityDetailsForManage")
+    @ApiOperation(value = "获取服务机构详情,(app机构详情)", notes = "查询条件orgId")
+    @RequestMapping(value = "/getActivityDetailsForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
@@ -71,9 +67,8 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情+产品列表")
-    @ApiOperation(value = "获取服机构信息(app机构信息)", httpMethod = "POST", response = Result.class,
-            notes = "查询条件orgId")
-    @RequestMapping(value = "/getOrgInfoForManage")
+    @ApiOperation(value = "获取服机构信息(app机构信息)",notes = "查询条件orgId")
+    @RequestMapping(value = "/getOrgInfoForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
     public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());

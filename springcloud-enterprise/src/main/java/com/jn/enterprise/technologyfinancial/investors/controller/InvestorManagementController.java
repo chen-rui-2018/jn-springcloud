@@ -23,10 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,19 +49,19 @@ public class InvestorManagementController extends BaseController {
     private InvestorService investorService;
 
     @ControllerLog(doAction = "投资人管理列表查询")
-    @ApiOperation(value = "投资人管理列表查询", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "投资人管理列表查询", httpMethod = "GET", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorManagementList")
-    @RequestMapping(value = "/getInvestorManagementList")
-    public Result<PaginationData<List<InvestorManagementListShow>>> getInvestorManagementList(@RequestBody @Validated InvestorManagementListParam investorManagementListParam){
+    @RequestMapping(value = "/getInvestorManagementList",method = RequestMethod.GET)
+    public Result<PaginationData<List<InvestorManagementListShow>>> getInvestorManagementList(@Validated InvestorManagementListParam investorManagementListParam){
         PaginationData investorManagementList = investorManagementService.getInvestorManagementList(investorManagementListParam);
         return  new Result(investorManagementList);
     }
 
     @ControllerLog(doAction = "投资人管理姓名查询")
-    @ApiOperation(value = "投资人管理姓名查询", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "投资人管理姓名查询", httpMethod = "GET", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorManagementNames")
-    @RequestMapping(value = "/getInvestorManagementNames")
-    public Result<PaginationData<List<String>>> getInvestorManagementNames(@RequestBody @Validated InvestorManagementNameParam investorManagementListParam){
+    @RequestMapping(value = "/getInvestorManagementNames",method = RequestMethod.GET)
+    public Result<PaginationData<List<String>>> getInvestorManagementNames(@Validated InvestorManagementNameParam investorManagementListParam){
         PaginationData investorManagementNames = investorManagementService.getInvestorManagementNames(investorManagementListParam);
         return  new Result(investorManagementNames);
     }
@@ -72,7 +69,7 @@ public class InvestorManagementController extends BaseController {
     @ControllerLog(doAction = "投资人上架/下架")
     @ApiOperation(value = "投资人上架/下架", httpMethod = "POST", response = Result.class,notes = "返回数据为数据响应条数")
     @RequiresPermissions("/technologyFinancial/investorController/investorUpOrDown")
-    @RequestMapping(value = "/investorUpOrDown")
+    @RequestMapping(value = "/investorUpOrDown",method = RequestMethod.POST)
     public Result<Integer> investorUpOrDown(@RequestBody @Validated InvestorManagementUpOrDownParam investorManagementUpOrDownParam){
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -85,9 +82,9 @@ public class InvestorManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "投资人详情")
-    @ApiOperation(value = "投资人详情", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "投资人详情", httpMethod = "GET", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorManagementController/getInvestorInfoDetails")
-    @RequestMapping(value = "/getInvestorInfoDetails")
+    @RequestMapping(value = "/getInvestorInfoDetails",method = RequestMethod.GET)
     public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true)@RequestParam("investorAccount") String investorAccount){
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);

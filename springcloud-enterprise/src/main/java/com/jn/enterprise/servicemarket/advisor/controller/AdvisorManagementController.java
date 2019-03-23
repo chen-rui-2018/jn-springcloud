@@ -23,10 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -57,8 +54,8 @@ public class AdvisorManagementController extends BaseController {
 
     @ControllerLog(doAction = "通过注册账号回显用户信息")
     @RequiresPermissions("/advisor/advisorManagementController/echoUserInfo")
-    @ApiOperation(value = "通过注册账号回显用户信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/echoUserInfo")
+    @ApiOperation(value = "通过注册账号回显用户信息")
+    @RequestMapping(value = "/echoUserInfo",method = RequestMethod.GET)
     public Result<UserExtensionInfo> echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true)@RequestParam("registerAccount") String registerAccount){
         Assert.notNull(registerAccount, AdvisorExceptionEnum.REGISTER_ACCOUNT.getMessage());
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(registerAccount);
@@ -68,18 +65,19 @@ public class AdvisorManagementController extends BaseController {
 
     @ControllerLog(doAction = "邀请顾问")
     @RequiresPermissions("/advisor/advisorManagementController/inviteAdvisor")
-    @ApiOperation(value = "邀请顾问", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/inviteAdvisor")
-    public Result inviteAdvisor(@RequestBody @Validated InviteAdvisorInfo inviteAdvisorInfo){
-        advisorManagementService.inviteAdvisor(inviteAdvisorInfo);
-        return  new Result();
+    @ApiOperation(value = "邀请顾问",notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
+    public Result inviteAdvisor(@Validated InviteAdvisorInfo inviteAdvisorInfo){
+        int responseNum = advisorManagementService.inviteAdvisor(inviteAdvisorInfo);
+        logger.info("------邀请顾问操作成功，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 
     @ControllerLog(doAction = "顾问管理")
     @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
-    @ApiOperation(value = "顾问管理", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getAdvisorManagementInfo")
-    public Result<PaginationData<List<TbServiceAdvisor>>> getAdvisorManagementInfo(@RequestBody @Validated AdvisorManagementParam advisorManagementParam){
+    @ApiOperation(value = "顾问管理")
+    @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
+    public Result<PaginationData<List<TbServiceAdvisor>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
         Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
         PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
         return  new Result(advisorManagementInfo);
@@ -87,17 +85,18 @@ public class AdvisorManagementController extends BaseController {
 
     @ControllerLog(doAction = "审批顾问填写信息")
     @RequiresPermissions("/advisor/advisorManagementController/approvalAdvisorInfo")
-    @ApiOperation(value = "审批顾问填写信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/approvalAdvisorInfo")
+    @ApiOperation(value = "审批顾问填写信息",notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/approvalAdvisorInfo",method = RequestMethod.POST)
     public Result approvalAdvisorInfo(@RequestBody @Validated ApprovalParam approvalParam){
-        advisorManagementService.approvalAdvisorInfo(approvalParam);
-        return  new Result();
+        int responseNum = advisorManagementService.approvalAdvisorInfo(approvalParam);
+        logger.info("------审批顾问填写信息成功，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 
     @ControllerLog(doAction = "用户中心顾问详情")
     @RequiresPermissions("/advisor/advisorManagementController/advisorDetails")
-    @ApiOperation(value = "用户中心顾问详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/advisorDetails")
+    @ApiOperation(value = "用户中心顾问详情")
+    @RequestMapping(value = "/advisorDetails",method = RequestMethod.GET)
     public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);

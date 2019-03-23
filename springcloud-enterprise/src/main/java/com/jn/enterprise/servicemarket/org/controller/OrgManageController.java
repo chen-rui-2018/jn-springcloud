@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -44,8 +45,8 @@ public class OrgManageController extends BaseController {
     private OrgService orgService;
 
     @ControllerLog(doAction = "保存服务机构基本信息")
-    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)", httpMethod = "POST", response = Result.class ,notes = "返回结果为机构ID")
-    @RequestMapping(value = "/saveOrgBasicData")
+    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)")
+    @RequestMapping(value = "/saveOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
     public Result<String> saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -54,9 +55,9 @@ public class OrgManageController extends BaseController {
         return new Result<>(s);
     }
 
-    @ControllerLog(doAction = "修改服务机构基本信息,")
-    @ApiOperation(value = "修改服务机构基本信息,(app-修改基本资料(我的机构))", httpMethod = "POST", response = Result.class ,notes = "返回结果为机构ID")
-    @RequestMapping(value = "/updateOrgBasicData")
+    @ControllerLog(doAction = "修改服务机构基本信息")
+    @ApiOperation(value = "修改服务机构基本信息(app-修改基本资料(我的机构))",notes = "返回结果为机构ID")
+    @RequestMapping(value = "/updateOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
     public Result<String> updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
         Assert.notNull(orgBasicData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
@@ -67,8 +68,8 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构资质信息")
-    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证)", httpMethod = "POST", response = Result.class ,notes = "返回结果为响应数据条数，正常情况为1")
-    @RequestMapping(value = "/saveOrgLicenseData")
+    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证)",notes = "返回结果为响应数据条数，正常情况为1")
+    @RequestMapping(value = "/saveOrgLicenseData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
     public Result<Integer> saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -79,8 +80,8 @@ public class OrgManageController extends BaseController {
 
 
     @ControllerLog(doAction = "保存/修改服务机构团队信息")
-    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料)", httpMethod = "POST", response = Result.class ,notes = "返回结果为响应数据条数，正常情况为1")
-    @RequestMapping(value = "/saveOrgTeamData")
+    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料)",notes = "返回结果为响应数据条数，正常情况为1")
+    @RequestMapping(value = "/saveOrgTeamData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
     public Result<Integer> saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -90,8 +91,8 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构联系方式")
-    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式)", httpMethod = "POST", response = Result.class,notes = "返回结果为响应数据条数，正常情况为1")
-    @RequestMapping(value = "/saveOrgContactData")
+    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式)",notes = "返回结果为响应数据条数，正常情况为1")
+    @RequestMapping(value = "/saveOrgContactData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result<Integer> saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){
         Assert.notNull(orgContactData.getOrgId(), OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());

@@ -3,9 +3,13 @@ package com.jn.user.userinfo.service.impl;
 import com.jn.SpringCloudUserApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
+import com.jn.user.userinfo.model.UserInfoParam;
 import com.jn.user.userinfo.service.UserInfoService;
+import com.jn.user.usertag.dao.UserTagMapper;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +24,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -39,6 +44,8 @@ public class UserInfoServiceImplTest {
 
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private UserTagMapper userTagMapper;
 
     /**
      * 账号
@@ -60,7 +67,6 @@ public class UserInfoServiceImplTest {
     public void setUp() throws Exception {
         //获取用户扩展信息
         account="wangsong";
-
         //批量获取用户扩展信息
         accountList.add(account);
         accountList.add("qianqi");
@@ -171,4 +177,30 @@ public class UserInfoServiceImplTest {
             assertThat(e.getCode(),equalTo(UserExtensionExceptionEnum.COMPANY_PARAM_NOT_NULL.getCode()));
         }
     }
+
+    @Test
+    public void saveOrUpdateUserInfo(){
+        UserInfoParam userInfoParam = new UserInfoParam();
+        userInfoParam.setName("张桑");
+        userInfoParam.setNick_name("飞凡网");
+        userInfoParam.setAge(20);
+        userInfoParam.setSex("1");
+        userInfoParam.setJobs(new String[]{"101","102"});
+        userInfoParam.setHobbys(new String[]{"001","002"});
+        User user = new User();
+        user.setAccount("wangsong");
+        try{
+            int i = userInfoService.saveOrUpdateUserInfo(userInfoParam,user );
+            assertThat(i,greaterThanOrEqualTo(0));
+        }catch (JnSpringCloudException e){
+            logger.info("保存/修改用户信息失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(UserExtensionExceptionEnum.USER_INFO_GET_ERROR.getCode()),
+                            Matchers.containsString(UserExtensionExceptionEnum.USER_DATA_MULTIPLE_ERROR.getCode())
+                    ));
+        }
+
+    }
+
 }

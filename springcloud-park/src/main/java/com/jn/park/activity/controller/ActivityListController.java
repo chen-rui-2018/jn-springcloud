@@ -5,7 +5,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.activity.service.ActivityTypeService;
+import com.jn.park.model.ActivitySlim;
 import com.jn.park.model.ActivitySlimQuery;
+import com.jn.park.model.ActivityType;
 import com.jn.park.model.ActivityTypeQuery;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 前台活动列表和活动类型列表
@@ -43,17 +47,17 @@ public class ActivityListController extends BaseController {
     @ControllerLog(doAction = "获取前台活动列表")
     @ApiOperation(value = "获取前台活动列表", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/guest/activityListSlim")
-    public Result activityListSlim(@RequestBody ActivitySlimQuery activitySlimQuery) {
-        PaginationData paginationData = activityService.activityListSlim(activitySlimQuery);
-        return new Result(paginationData);
+    public Result<PaginationData<List<ActivitySlim>>> activityListSlim(@RequestBody ActivitySlimQuery activitySlimQuery) {
+        PaginationData<List<ActivitySlim>> paginationData = activityService.activityListSlim(activitySlimQuery);
+        return new Result<>(paginationData);
     }
 
     @ControllerLog(doAction = "查询活动类型列表")
     @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class,notes="作为活动的查询条件")
     @RequestMapping(value = "/guest/findActivityTypeList")
-    public Result findActivityTypeListByState() {
-        PaginationData  activityTypeList = activityTypeService.findActivityTypeListByState(new ActivityTypeQuery(),Boolean.FALSE);
-        return new Result(activityTypeList);
+    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByState() {
+        PaginationData<List<ActivityType>>  activityTypeList = activityTypeService.findActivityTypeListByState(new ActivityTypeQuery(),Boolean.FALSE);
+        return new Result<>(activityTypeList);
     }
 
 

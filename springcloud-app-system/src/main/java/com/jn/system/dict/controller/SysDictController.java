@@ -16,9 +16,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -42,8 +42,8 @@ public class SysDictController extends BaseController {
     private SysDictService sysDictService;
 
     @ControllerLog(doAction = "新增数据字典")
-    @ApiOperation(value = "新增数据字典", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增数据字典", notes = "新增数据字典")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/add")
     public Result add(@Validated @RequestBody SysDictAdd sysDict) {
         //获取当前登录用户信息
@@ -64,8 +64,8 @@ public class SysDictController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改数据字典")
-    @ApiOperation(value = "修改数据字典", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @ApiOperation(value = "修改数据字典", notes = "修改数据字典")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/update")
     public Result update(@Validated @RequestBody SysDictEdit sysDict) {
         //获取当前登录用户信息
@@ -83,8 +83,8 @@ public class SysDictController extends BaseController {
     }
 
     @ControllerLog(doAction = "逻辑删除数据字典")
-    @ApiOperation(value = "逻辑删除数据字典", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @ApiOperation(value = "逻辑删除数据字典", notes = "逻辑删除数据字典")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/delete")
     public Result delete(String dictId) {
         //获取当前登录用户信息
@@ -94,8 +94,8 @@ public class SysDictController extends BaseController {
     }
 
     @ControllerLog(doAction = "数据字典分组排序")
-    @ApiOperation(value = "数据字典分组排序", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sortByGroup")
+    @ApiOperation(value = "数据字典分组排序", notes = "数据字典分组排序")
+    @RequestMapping(value = "/sortByGroup", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/sortByGroup")
     public Result sortByGroup(@Validated @RequestBody List<SysDictEdit> sysDictList) {
         //获取当前登录用户信息
@@ -105,28 +105,28 @@ public class SysDictController extends BaseController {
     }
 
     @ControllerLog(doAction = "分组排序搜索功能")
-    @ApiOperation(value = "分组排序搜索功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/sortSearch")
+    @ApiOperation(value = "分组排序搜索功能", notes = "分组排序搜索功能")
+    @RequestMapping(value = "/sortSearch", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/sortSearch")
-    public Result sortSearch(@Validated @RequestBody SysDictInvoke sysDictInvoke) {
+    public Result<List<TbSysDict>> sortSearch(@Validated @RequestBody SysDictInvoke sysDictInvoke) {
         List<TbSysDict> dictList = sysDictService.sortSearch(sysDictInvoke);
         return new Result(dictList);
     }
 
     @ControllerLog(doAction = "数据字典列表")
-    @ApiOperation(value = "数据字典列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ApiOperation(value = "数据字典列表", notes = "数据字典列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/list")
-    public Result list(@Validated @RequestBody SysDictPage sysDictPage) {
-        PaginationData data = sysDictService.getDictByPage(sysDictPage);
+    public Result<PaginationData<List<SysDict>>> list(@Validated @RequestBody SysDictPage sysDictPage) {
+        PaginationData<List<SysDict>> data = sysDictService.getDictByPage(sysDictPage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "数据字典调用")
-    @ApiOperation(value = "数据字典调用", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/getDict")
+    @ApiOperation(value = "数据字典调用", notes = "数据字典调用")
+    @RequestMapping(value = "/getDict", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysDict/getDict")
-    public Result getDict(@Validated @RequestBody SysDictInvoke sysDictInvoke) {
+    public Result<List<SysDictKeyValue>> getDict(@Validated @RequestBody SysDictInvoke sysDictInvoke) {
         List<SysDictKeyValue> dictList = sysDictService.getDict(sysDictInvoke);
         return new Result(dictList);
     }

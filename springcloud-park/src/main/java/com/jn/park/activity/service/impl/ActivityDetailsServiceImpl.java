@@ -168,11 +168,12 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * 根据活动id获取活动点评信息
      * @param activityQueryPaging
      * @param isPage     是否分页  true：分页   false:不分页
+     * @param loginAccount  当前登录用户
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData getCommentInfo(ActivityQueryPaging activityQueryPaging, Boolean isPage){
+    public PaginationData<List<Comment>> getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
         Page<Object> objects=null;
         try {
             if(isPage){
@@ -182,14 +183,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);
             parentIds.add(activityQueryPaging.getActivityId());
-            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds);
+            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds,loginAccount);
             if(list.isEmpty()){
                 return new PaginationData(list,objects==null?0:objects.getTotal());
             }
             //获取评论用户头像信息
             getCommentUserAvatar(list);
-            list= getCommentChildComment(list,activityQueryPaging.getActivityId());
-            return new PaginationData(list,objects==null?0:objects.getTotal());
+            list= getCommentChildComment(list,activityQueryPaging.getActivityId(),loginAccount);
+            return new PaginationData<>(list,objects==null?0:objects.getTotal());
         } finally {
             if(objects!=null){
                 objects.close();
@@ -225,8 +226,6 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
                 }
             }
         }
-
-
     }
 
     /**
@@ -235,14 +234,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
      * @return
      */
     @ServiceLog(doAction = "获取评论的子评论")
-    private List<Comment> getCommentChildComment(List<Comment> list,String activityId) {
+    private List<Comment> getCommentChildComment(List<Comment> list,String activityId,String loginAccount) {
         //获取第一层评论的id
         List<String>parentIds=new ArrayList<>(16);
         for(Comment cm:list){
             parentIds.add(cm.getId());
         }
         //根据第一层评论id查询下一层的评论信息
-        List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds);
+        List<Comment> commentInfo = activityDetailsMapper.getCommentInfo(activityId, parentIds,loginAccount);
         //获取评论用户头像信息
         getCommentUserAvatar(commentInfo);
         for(Comment comment:list){

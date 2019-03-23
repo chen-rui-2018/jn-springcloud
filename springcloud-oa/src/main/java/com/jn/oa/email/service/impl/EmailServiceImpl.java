@@ -24,7 +24,6 @@ import com.jn.oa.email.entity.TbOaEmailUser;
 import com.jn.oa.email.enums.EmailExceptionEnmus;
 import com.jn.oa.email.enums.EmailIsDelayEnums;
 import com.jn.oa.email.enums.EmailSendStatusEnums;
-import com.jn.oa.email.model.DownAttachment;
 import com.jn.oa.email.model.EmailAdd;
 import com.jn.oa.email.model.EmailPage;
 import com.jn.oa.email.service.EmailService;
@@ -35,9 +34,7 @@ import com.jn.send.api.DelaySendMessageClient;
 import com.jn.send.model.Delay;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
-import com.jn.upload.api.UploadClient;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -47,9 +44,7 @@ import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -91,9 +86,6 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private EmailMapper emailMapper;
-
-    @Autowired
-    private UploadClient uploadClient;
 
     @Autowired
     private DownLoadClient downLoadClient;
@@ -343,72 +335,6 @@ public class EmailServiceImpl implements EmailService {
         //批量删除一键Email的接收人
         emailUserMapper.deleteBatch(map);
         logger.info("[一键Email] 一键Email邮件接收人删除成功！,emailIds: {}", Arrays.toString(emailIds));
-    }
-
-    /**
-     * 附件批量上传
-     *
-     * @param files
-     */
-    @Override
-    @ServiceLog(doAction = "附件批量上传")
-    public String uploadAttachment(List<MultipartFile> files) {
-
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-
-        for (MultipartFile file : files) {
-            if (file.isEmpty()) {
-                logger.warn("[一键Email] 附件上传失败");
-                throw new JnSpringCloudException(EmailExceptionEnmus.FILE_IS_NULL);
-            } else {
-                //获取文件名称
-                try {
-                    Map<String, String> map = new HashMap<String, String>(16);
-                    String title = file.getOriginalFilename();
-                    //为了防止下载时名称重复，对文件名称做处理
-                    String[] split = title.split("\\.");
-                    String str = DateUtils.formatDate(new Date(), "yyyyMMddHHmmssSSS");
-                    String fileName = split[0] + str + RandomStringUtils.random(4) + "." + split[1];
-
-                    Result<String> result = uploadClient.uploadFile(file, false);
-                    map.put("title", fileName);
-                    map.put("url", result.getData());
-                    list.add(map);
-                } catch (IOException e) {
-                    throw new JnSpringCloudException(EmailExceptionEnmus.UPLOAD_FILE_ERRPR);
-                }
-            }
-        }
-
-        //将集合转成json字符串
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String attachment = objectMapper.writeValueAsString(list);
-            logger.info("[一键Email] 附件上传成功");
-            return attachment;
-        } catch (JsonProcessingException e) {
-            logger.error("JsonProcessingException转换异常，附件上传失败失败。", e);
-            throw new JnSpringCloudException(EmailExceptionEnmus.UPLOAD_FILE_ERRPR);
-        }
-
-    }
-
-    /**
-     * 附件下载
-     *
-     * @param downAttachment 附件下载实体
-     * @param response
-     * @return
-     */
-    @Override
-    @ServiceLog(doAction = "附件下载")
-    public ResponseEntity<byte[]> downLoadAttachment(DownAttachment downAttachment, HttpServletResponse response) {
-        DownLoad downLoad = new DownLoad();
-        downLoad.setUrl(downAttachment.getUrl());
-        downLoad.setToken(false);
-        response.setHeader("Content-Disposition", "attchement;filename=" + downAttachment.getTitle());
-        ResponseEntity<byte[]> responseEntity = downLoadClient.downLoad(downLoad);
-        return responseEntity;
     }
 
     /**

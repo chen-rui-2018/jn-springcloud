@@ -2,7 +2,9 @@ package com.jn.user.userinfo.service;
 
 
 import com.jn.common.model.PaginationData;
+import com.jn.system.model.User;
 import com.jn.user.model.*;
+import com.jn.user.userinfo.model.UserInfoParam;
 
 import java.util.List;
 
@@ -55,4 +57,21 @@ public interface UserInfoService {
      * @return
      */
     PaginationData getUserExtensionByCompanyCode(CompanyParam companyParam);
+
+    /**
+     * 更新redis中的用户信息
+     * @param account 用户账号
+     * @return  true:更新成功  失败会抛异常
+     */
+    boolean updateRedisUserInfo(String account);
+
+    
+    /**
+     * 保存/修改用户信息
+     * @param userInfoParam
+     * @param user
+     * @return
+     */
+    int saveOrUpdateUserInfo(UserInfoParam userInfoParam, User user);
+
 }

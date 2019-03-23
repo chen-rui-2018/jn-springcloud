@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
@@ -44,9 +45,9 @@ public class SysPostTypeController extends BaseController {
 
     @ControllerLog(doAction = "校验岗位类型名称是否存在")
     @RequiresPermissions("/system/sysPostType/checkPostTypeName")
-    @ApiOperation(value = "校验岗位类型名称是否存在", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkPostTypeName")
-    public Result checkPostTypeName(String postTypeName) {
+    @ApiOperation(value = "校验岗位类型名称是否存在",notes = "fail表示名称已存在,success表示可以使用")
+    @RequestMapping(value = "/checkPostTypeName",method = RequestMethod.POST)
+    public Result<String> checkPostTypeName(String postTypeName) {
         Assert.notNull(postTypeName, "岗位类型名称不能为空");
         String result = sysPostTypeService.checkPostTypeName(postTypeName);
         return new Result(result);
@@ -54,8 +55,8 @@ public class SysPostTypeController extends BaseController {
 
     @ControllerLog(doAction = "增加岗位类型")
     @RequiresPermissions("/system/sysPostType/add")
-    @ApiOperation(value = "增加岗位类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add")
+    @ApiOperation(value = "增加岗位类型", notes = "增加岗位类型")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     public Result add(@Validated @RequestBody SysPostTypeAdd postTypeAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -71,17 +72,17 @@ public class SysPostTypeController extends BaseController {
 
     @ControllerLog(doAction = "列表查询岗位类型")
     @RequiresPermissions("/system/sysPostType/list")
-    @ApiOperation(value = "列表查询岗位类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/list")
-    public Result list(@Validated @RequestBody SysPostTypePage postTypePage) {
-        PaginationData data = sysPostTypeService.getPostTypeByPage(postTypePage);
+    @ApiOperation(value = "列表查询岗位类型", notes = "列表查询岗位类型")
+    @RequestMapping(value = "/list",method = RequestMethod.POST)
+    public Result<PaginationData<List<SysPostType>>> list(@Validated @RequestBody SysPostTypePage postTypePage) {
+        PaginationData<List<SysPostType>> data = sysPostTypeService.getPostTypeByPage(postTypePage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "修改岗位类型")
     @RequiresPermissions("/system/sysPostType/update")
-    @ApiOperation(value = "修改岗位类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/update")
+    @ApiOperation(value = "修改岗位类型", notes = "修改岗位类型")
+    @RequestMapping(value = "/update",method = RequestMethod.POST)
     public Result update(@Validated @RequestBody SysPostType postType) {
         Assert.notNull(postType.getId(), "岗位类型id不能为空");
         //获取当前登录用户信息
@@ -92,8 +93,8 @@ public class SysPostTypeController extends BaseController {
 
     @ControllerLog(doAction = "逻辑删除岗位类型")
     @RequiresPermissions("/system/sysPostType/delete")
-    @ApiOperation(value = "逻辑删除岗位类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/delete")
+    @ApiOperation(value = "逻辑删除岗位类型", notes = "逻辑删除岗位类型")
+    @RequestMapping(value = "/delete",method = RequestMethod.POST)
     public Result delete(String postTypeId) {
         Assert.notNull(postTypeId, "岗位类型id不能为空");
         //获取当前登录用户信息
@@ -104,9 +105,9 @@ public class SysPostTypeController extends BaseController {
 
     @ControllerLog(doAction = "获取所有岗位类型")
     @RequiresPermissions("/system/sysPostType/getPostTypeAll")
-    @ApiOperation(value = "获取所有岗位类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getPostTypeAll")
-    public Result getPostTypeAll() {
+    @ApiOperation(value = "获取所有岗位类型", notes = "获取所有岗位类型")
+    @RequestMapping(value = "/getPostTypeAll",method = RequestMethod.POST)
+    public Result<List<TbSysPostType>> getPostTypeAll() {
         List<TbSysPostType> tbSysPostTypes = sysPostTypeService.getPostTypeAll();
         return new Result(tbSysPostTypes);
     }

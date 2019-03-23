@@ -12,6 +12,14 @@ export default{
 <style lang='scss'>
 body{
   padding-right:0 !important
+
+}
+ body .el-table th.gutter{
+    display: table-cell!important;
+ }
+
+ body .el-table colgroup.gutter{
+    display: table-cell!important;
 }
 .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
     line-height: 22px;

@@ -208,7 +208,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @ServiceLog(doAction = "分页查询角色授权列表信息")
-    public PaginationData selectRoleListBySearchKey(SysRolePage rolePage) {
+    public PaginationData<List<SysRoleVO>> selectRoleListBySearchKey(SysRolePage rolePage) {
         Page<Object> objects = PageHelper.startPage(rolePage.getPage(), rolePage.getRows());
         List<SysRoleVO> sysRoleVOList = sysRoleMapper.findTByPage(rolePage);
         for (SysRoleVO sysRoleVO : sysRoleVOList) {
@@ -378,7 +378,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @ServiceLog(doAction = "查询角色已经具有的用户信息,且条件分页获取为角色未拥有的用户信息")
-    public PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
+    public PaginationData<SysRoleUserVO> findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage) {
         //根据角色id获取角色已经拥有的用户信息
         List<SysTUser> userOfRoleList = sysUserRoleMapper.findUserByRoleId(sysRoleUserPage.getRoleId());
         //条件分页获取角色未拥有用户信息
@@ -399,7 +399,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @ServiceLog(doAction = "查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息")
-    public PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
+    public PaginationData<SysRoleUserGroupVO> findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage) {
         //获取角色已经拥有的用户组信息
         List<SysGroup> userGroupOfRoleList = sysGroupRoleMapper.findUserGroupByRoleId(sysRoleUserGroupPage.getRoleId());
         //条件分页获取角色为拥有的用户组信息
@@ -419,7 +419,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     @ServiceLog(doAction = "查询角色具有的权限信息及条件分页获取为拥有权限信息")
-    public PaginationData findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
+    public PaginationData<SysRolePermissionVO> findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage) {
         //获取角色已经拥有的权限信息
         List<SysPermission> permissionOfRoleList =
                 sysRolePermissionMapper.findPermissionByRoleId(sysRolePermissionPage.getRoleId());

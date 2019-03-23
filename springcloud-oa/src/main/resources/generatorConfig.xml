@@ -10,7 +10,7 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
             <property name="searchString" value="Example$"/>
             <property name="replaceString" value="Criteria"/>
@@ -52,15 +52,15 @@
         </javaClientGenerator>
 
         <!-- 会议记录表 -->
-        <table tableName="tb_oa_meeting" />
+        <table tableName="tb_oa_meeting"/>
         <!-- 会议申请内容表 -->
-        <table tableName="tb_oa_meeting_content" />
+        <table tableName="tb_oa_meeting_content"/>
         <!-- 会议参会人员表 -->
-        <table tableName="tb_oa_meeting_participants" />
+        <table tableName="tb_oa_meeting_participants"/>
         <!-- 会议室管理表 -->
-        <table tableName="tb_oa_meeting_room" />
+        <table tableName="tb_oa_meeting_room"/>
         <!-- 会议室图片管理表 -->
-        <table tableName="tb_oa_meeting_room_photo" />
+        <table tableName="tb_oa_meeting_room_photo"/>
 
     </context>
 
@@ -70,7 +70,7 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
             <property name="searchString" value="Example$"/>
             <property name="replaceString" value="Criteria"/>
@@ -112,7 +112,7 @@
         </javaClientGenerator>
 
         <!-- 公告管理表 -->
-        <table tableName="tb_oa_notice" />
+        <table tableName="tb_oa_notice"/>
 
     </context>
 
@@ -122,7 +122,7 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
             <property name="searchString" value="Example$"/>
             <property name="replaceString" value="Criteria"/>
@@ -164,17 +164,17 @@
         </javaClientGenerator>
 
         <!-- 项目管理表 -->
-        <table tableName="tb_oa_item" />
+        <table tableName="tb_oa_item"/>
         <!-- 项目历史记录表 -->
-        <table tableName="tb_oa_item_history" />
+        <table tableName="tb_oa_item_history"/>
         <!-- 工作计划管理表 -->
-        <table tableName="tb_oa_work_plan" />
+        <table tableName="tb_oa_work_plan"/>
         <!-- 工作计划管理表 -->
-        <table tableName="tb_oa_work_plan_history" />
+        <table tableName="tb_oa_work_plan_history"/>
         <!-- 工作计划工作记录表 -->
-        <table tableName="tb_oa_work_plan_record" />
+        <table tableName="tb_oa_work_plan_record"/>
         <!-- 工作计划负责人表 -->
-        <table tableName="tb_oa_work_plan_user" />
+        <table tableName="tb_oa_work_plan_user"/>
 
     </context>
 
@@ -184,7 +184,7 @@
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
         <!--覆盖生成XML文件-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
         <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
             <property name="searchString" value="Example$"/>
             <property name="replaceString" value="Criteria"/>
@@ -226,9 +226,9 @@
         </javaClientGenerator>
 
         <!-- 一键Email管理表 -->
-        <table tableName="tb_oa_email" />
+        <table tableName="tb_oa_email"/>
         <!-- 一键Email接受用户管理表 -->
-        <table tableName="tb_oa_email_user" />
+        <table tableName="tb_oa_email_user"/>
 
     </context>
 

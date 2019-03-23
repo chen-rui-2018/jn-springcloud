@@ -10,13 +10,21 @@ public interface TbOaWorkPlanHistoryMapper {
 
     int deleteByExample(TbOaWorkPlanHistoryCriteria example);
 
+    int deleteByPrimaryKey(String id);
+
     int insert(TbOaWorkPlanHistory record);
 
     int insertSelective(TbOaWorkPlanHistory record);
 
     List<TbOaWorkPlanHistory> selectByExample(TbOaWorkPlanHistoryCriteria example);
 
+    TbOaWorkPlanHistory selectByPrimaryKey(String id);
+
     int updateByExampleSelective(@Param("record") TbOaWorkPlanHistory record, @Param("example") TbOaWorkPlanHistoryCriteria example);
 
     int updateByExample(@Param("record") TbOaWorkPlanHistory record, @Param("example") TbOaWorkPlanHistoryCriteria example);
+
+    int updateByPrimaryKeySelective(TbOaWorkPlanHistory record);
+
+    int updateByPrimaryKey(TbOaWorkPlanHistory record);
 }

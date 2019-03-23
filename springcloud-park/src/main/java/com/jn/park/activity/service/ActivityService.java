@@ -1,11 +1,9 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityContent;
-import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.ActivityParment;
-import com.jn.park.model.ActivitySataus;
-import com.jn.park.model.ActivitySlimQuery;
+import com.jn.park.model.*;
+
+import java.util.List;
 
 /**
  * 活动
@@ -21,7 +19,7 @@ public interface ActivityService {
      * @param activityParment
      * @return
      */
-    PaginationData selectActivityList(ActivityParment activityParment);
+    PaginationData<List<Activity>> selectActivityList(ActivityParment activityParment);
 
     /**
      * 查询活动详情[后台管理]
@@ -72,7 +70,7 @@ public interface ActivityService {
      * @return
      */
 
-    PaginationData activityListSlim(ActivitySlimQuery activitySlimQuery);
+    PaginationData<List<ActivitySlim>> activityListSlim(ActivitySlimQuery activitySlimQuery);
 
 	 /**
      * 手动发送活动通知接口

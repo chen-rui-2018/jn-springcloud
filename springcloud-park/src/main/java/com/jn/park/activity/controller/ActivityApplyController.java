@@ -125,7 +125,7 @@ public class ActivityApplyController extends BaseController {
 //    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
     @ApiOperation(value = "报名人资料", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/activityApplyInfo")
-    public Result activityApplyInfo(@ApiParam(value = "用户账号",required = true) @RequestParam(value = "account") String account){
+    public Result<UserExtensionInfo> activityApplyInfo(@ApiParam(value = "用户账号",required = true) @RequestParam(value = "account") String account){
         Assert.notNull(account, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         UserExtensionInfo user =  activityApplyService.activityApplyInfo(account);
         return new Result(user);

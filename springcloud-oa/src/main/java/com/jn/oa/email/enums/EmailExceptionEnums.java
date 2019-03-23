@@ -10,7 +10,7 @@ import com.jn.common.api.CodeAndMsg;
  * @version： v1.0
  * @modified By:
  **/
-public enum EmailExceptionEnmus implements CodeAndMsg {
+public enum EmailExceptionEnums implements CodeAndMsg {
     SEND_STATUS_NOT_NULL("6013501", "邮件发送状态不能为空"),
     DELAY_SEND_TIME_NOT_NULL("6013502","定时发送时间不能为空"),
     DELAY_SEND_TIME_ERROR("6013503","定时发送时间需要大于当前时间"),
@@ -26,7 +26,7 @@ public enum EmailExceptionEnmus implements CodeAndMsg {
 
     private String message;
 
-    EmailExceptionEnmus(String key, String message) {
+    EmailExceptionEnums(String key, String message) {
         this.code = key;
         this.message = message;
     }

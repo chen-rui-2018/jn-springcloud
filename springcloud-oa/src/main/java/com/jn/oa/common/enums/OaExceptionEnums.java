@@ -20,6 +20,7 @@ public enum OaExceptionEnums implements CodeAndMsg {
     ID_NOT_NULL("6000507","ID不能为空"),
     ADD_MEETING_TIME_CONFLICT("6000508","添加失败,会议开始时间不能小于当前时间"),
     UPDATE_MEETING_TIME_CONFLICT("6000509","修改失败,会议开始时间不能小于当前时间"),
+    TIMING_FAILURE("6000510","定时设置失败,请稍后再试")
     ;
 
     private String code;

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -41,8 +42,8 @@ public class NoticeController extends BaseController {
 
     @ControllerLog(doAction = "添加/修改公告")
     @RequiresPermissions("/oa/notice/addOrUpdateNotice")
-    @ApiOperation(value = "添加/修改公告", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/addOrUpdateNotice")
+    @ApiOperation(value = "添加/修改公告", notes = "添加/修改公告")
+    @RequestMapping(value = "/addOrUpdateNotice", method = RequestMethod.POST)
     public Result addOrUpdateNotice(@Validated @RequestBody NoticeAdd noticeAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -57,35 +58,35 @@ public class NoticeController extends BaseController {
 
     @ControllerLog(doAction = "公告列表")
     @RequiresPermissions("/oa/notice/list")
-    @ApiOperation(value = "公告列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/list")
-    public Result list(@Validated @RequestBody NoticePage noticePage) {
-        PaginationData data = noticeService.list(noticePage);
+    @ApiOperation(value = "公告列表", notes = "公告列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Result<PaginationData<List<Notice>>> list(@Validated @RequestBody NoticePage noticePage) {
+        PaginationData<List<Notice>> data = noticeService.list(noticePage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "查询公告详情")
     @RequiresPermissions("/oa/notice/getNoticeById")
-    @ApiOperation(value = "查询公告详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/getNoticeById")
-    public Result getNoticeById(String noticeId) {
+    @ApiOperation(value = "查询公告详情", notes = "查询公告详情")
+    @RequestMapping(value = "/getNoticeById", method = RequestMethod.POST)
+    public Result<Notice> getNoticeById(String noticeId) {
         Notice notice = noticeService.getNoticeById(noticeId);
         return new Result(notice);
     }
 
     @ControllerLog(doAction = "发布公告")
     @RequiresPermissions("/oa/notice/publishNotice")
-    @ApiOperation(value = "发布公告", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/publishNotice")
-    public Result publishNotice(String platformType) {
+    @ApiOperation(value = "发布公告", notes = "发布公告")
+    @RequestMapping(value = "/publishNotice", method = RequestMethod.POST)
+    public Result<List<Notice>> publishNotice(String platformType) {
         List<Notice> noticeList = noticeService.publishNotice(platformType);
         return new Result(noticeList);
     }
 
-    @ControllerLog(doAction = "(逻辑)删除公告")
+    @ControllerLog(doAction = "删除公告")
     @RequiresPermissions("/oa/notice/delete")
-    @ApiOperation(value = "(逻辑)删除公告", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/delete")
+    @ApiOperation(value = "删除公告", notes = "删除公告")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Result delete(String noticeId) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();

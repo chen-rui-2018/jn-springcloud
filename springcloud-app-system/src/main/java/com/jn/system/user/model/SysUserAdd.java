@@ -24,7 +24,7 @@ public class SysUserAdd implements Serializable {
     private String id;
 
     @ApiModelProperty("用户账号")
-    @Pattern(regexp = "^[A-Za-z0-9]{6,16}$", message = "{\"account\":\"账号只允许6-16位数字及字母\"}")
+    @Pattern(regexp = "^[A-Za-z0-9]{1,16}$", message = "{\"account\":\"账号只允许1-16位数字及字母\"}")
     private String account;
 
     @ApiModelProperty("用户密码")

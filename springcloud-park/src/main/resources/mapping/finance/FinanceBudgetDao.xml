@@ -94,6 +94,40 @@
         LEFT JOIN tb_finance_type t ON t.id = th.cost_type_id
         WHERE
         th.record_status = 1
+        <if test="budgetType != null">
+            AND th.budget_Type=#{budgetType}
+        </if>
+        AND t.record_status = 1
+        AND th.budget_month BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
+        <if test="costTypeId != null">
+            and t.id=#{costTypeId,jdbcType=INTEGER}
+        </if>
+        <if test="departmentId != null">
+            and th.department_id in
+            <foreach collection="departmentId.split(',')" open="(" item="item" index="index" separator="," close=")">
+                #{item,jdbcType=VARCHAR}
+            </foreach>
+        </if>
+        GROUP BY
+        th.budget_Type
+        <!--th.cost_type_id,
+        th.department_id-->
+        ORDER BY t.show_order
+        <!--SELECT
+        th.cost_type_id as costTypeId,
+        max(th.cost_type_name) as costTypeName,
+        th.department_id as departmentId,
+        max(th.department_name) as departmentName,
+        th.created_time,
+        th.budget_Type,
+        case th.budget_Type when 0 then '年初预算' else '临时预算'end as budget_Type_name,
+        #{startMonth,jdbcType=VARCHAR} as startMonth,
+        #{endMonth,jdbcType=VARCHAR} as endMonth
+        FROM
+        `tb_finance_budget_history` th
+        LEFT JOIN tb_finance_type t ON t.id = th.cost_type_id
+        WHERE
+        th.record_status = 1
         AND t.record_status = 1
         AND th.budget_month BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
         <if test="costTypeId != null">
@@ -108,7 +142,7 @@
         GROUP BY
         th.cost_type_id,
         th.department_id
-        ORDER BY t.show_order
+        ORDER BY t.show_order-->
     </select>
 
   <!--查询预算历史中的总预算（按月统计）-->

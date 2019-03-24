@@ -2,9 +2,11 @@ package com.jn;
 
 import com.spring4all.swagger.EnableSwagger2Doc;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * 园区服务
@@ -17,6 +19,8 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 @EnableFeignClients
 @EnableSwagger2Doc
 @SpringCloudApplication
+@SpringBootApplication
+@EnableScheduling
 @MapperScan("com.jn.**.dao")
 public class SpringCloudParkApplication {
     public static void main(String[] args) {

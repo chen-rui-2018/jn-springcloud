@@ -216,7 +216,7 @@
 
 
   <!--XQ00017对外行政审批中心-->
-    <context id="approve">
+    <context id="sp">
         <!-- 实现Serializable接口 -->
         <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
@@ -246,39 +246,34 @@
         </javaTypeResolver>
 
         <!-- 生成模型的包名和位置 -->
-        <javaModelGenerator targetPackage="com.jn.park.approve.entity"
+        <javaModelGenerator targetPackage="com.jn.park.sp.entity"
                             targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!-- 生成映射文件的包名和位置 -->
-        <sqlMapGenerator targetPackage="mapping.generator.approve"
+        <sqlMapGenerator targetPackage="mapping.generator.sp"
                          targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- 生成Mapper 接口的包名和位置-->
         <javaClientGenerator type="XMLMAPPER"
-                             targetPackage="com.jn.park.approve.dao"
+                             targetPackage="com.jn.park.sp.dao"
                              targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <!--行政审批指南表-->
-        <table tableName="tb_approve_guide" alias="g" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--行政审批内容详情表-->
-        <table tableName="tb_approve_guide_content" alias="gc">
-        </table>
-        <!--行政审批指南内容-办理清单-->
-        <table tableName="tb_approve_guide_materials" alias="gm">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
-        <!--行政审批指南-我要留言-内容表-->
-        <table tableName="tb_approve_guide_message" alias="gmess">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
-        </table>
+        <!--行对外行政审批中心-实施部门-->
+        <table tableName="tb_sp_dict_depart"  ></table>
+        <!--对外行政审批中心-留言表-->
+        <table tableName="tb_sp_message" ></table>
+        <!--对外行政审批中心-权力清单-->
+        <table tableName="tb_sp_power"></table>
+        <!--对外行政审批中心-权力清单-服务业务-->
+        <table tableName="tb_sp_power_busi"></table>
+        <!--对外行政审批中心-权力清单-服务业务-办理清单-->
+        <table tableName="tb_sp_power_busi_materials"></table>
     </context>
 </generatorConfiguration>

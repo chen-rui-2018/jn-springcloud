@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "对外行政审批中心-门户")
+@Api(tags = "对外行政审批中心-门户(新)")
 @RestController
 @RequestMapping("/portal/approve/guide")
 public class ApproveGuidePortalController extends BaseController {

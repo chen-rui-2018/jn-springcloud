@@ -1,8 +1,9 @@
 import request from '@/utils/request'
+var systemUrl = 'springcloud-app-system/'
 // 获取用户列表
 export function api(url, query) {
   return request({
-    url: url,
+    url: systemUrl + url,
     method: 'post',
     data: query
   })
@@ -41,12 +42,9 @@ export function api(url, query) {
 // }
 export function paramApi(url, query, parameter) {
   const param = new URLSearchParams()
-  // param.append('account', query)
   param.append(parameter, query)
-
   return request({
-    // url: 'system/sysUser/checkUserName',
-    url: url,
+    url: systemUrl + url,
     method: 'post',
     data: param
   })
@@ -155,9 +153,7 @@ export function paramApi(url, query, parameter) {
 // 导出功能
 export function exportExcel(query) {
   return request({
-    url: 'system/sysUser/exportExcelUserInfo',
-    method: 'get',
-    data: query,
-    responseType: 'blob'
+    url: systemUrl + `system/sysUser/exportExcelUserInfo?name=${query.name}&postOrTypeName=${query.postOrTypeName}&recordStatus=${query.recordStatus}`,
+    method: 'get'
   })
 }

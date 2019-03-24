@@ -25,7 +25,7 @@
     <!-- 主体部分 -->
     <div class="userManagement-content">
       <div v-if="isShow" class="userManagement-content-left">
-        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" @node-click="handleNodeClick"/>
+        <el-tree v-loading="departmentListLoading" :data="departmentList" :expand-on-click-node="false" :props="defaultProps" default-expand-all @node-click="handleNodeClick"/>
       </div>
       <div class="userManagement-content-right">
         <el-table :key="tableKey" :data="userList" border fit highlight-current-row style="width: 100%;">
@@ -39,11 +39,7 @@
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
-          <el-table-column label="创建时间" prop="createdTime" align="center" width="200">
-            <!-- <template slot-scope="scope">
-              {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-            </template> -->
-          </el-table-column>
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="200"/>
           <el-table-column label="状态" prop="recordStatus" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -165,7 +161,7 @@
     <el-dialog :visible.sync="dialogResetPasswordVisible" title="重置密码" width="400px">
       <el-form ref="resetPassword" :model="resetPassword" :rules="passwordRule" label-width="60px">
         <el-form-item label="密码" prop="password">
-          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="16" />
+          <el-input v-model="resetPassword.password" :type="passwordType" maxlength="18" />
           <span class="show-pwd" @click="showPwd">
             <svg-icon icon-class="eye" />
           </span>
@@ -196,22 +192,8 @@
 import {
   api,
   paramApi,
-  // userCreate,
-  // getDepartment,
-  // deleteSysUser,
-  // checkUserName,
-  // findSysPostAll,
-  // findDepartmentandPostByUserId,
-  // saveDepartmentandPostOfUser,
-  // updateSysUser,
-  // editUser,
-  // getRoleInfo,
-  // updataRole,
-  // getUserGroupInfo,
-  // updataUserGroup,
   exportExcel
 } from '@/api/Permission-model/userManagement'
-// import initList from './components/components'
 export default {
   name: 'UserManagement',
   filters: {
@@ -260,9 +242,9 @@ export default {
       }
     }
     var checkPassword = (rule, value, callback) => {
-      const reg = /^[a-zA-Z0-9_!~&@]{6,16}$/
+      const reg = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位由字母或数字组成的密码'))
+        callback(new Error('密码至少为字母、数字两种组成8-16位字符，不包含空格,中文'))
       } else {
         callback()
       }
@@ -334,15 +316,15 @@ export default {
       }],
       positionOptions: [],
       temp: {
-        name: undefined,
-        account: undefined,
+        name: '',
+        account: '',
         recordStatus: '',
-        email: undefined,
-        phone: undefined,
-        id: undefined,
-        departmentId: undefined,
-        postId: undefined,
-        wechatAccount: undefined
+        email: '',
+        phone: '',
+        id: '',
+        departmentId: '',
+        postId: '',
+        wechatAccount: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -448,47 +430,8 @@ export default {
     // 导出功能
     handleExcel() {
       exportExcel(this.listQuery).then(res => {
-        // console.log(res.request.responseURL)
-        // window.location.href = res.request.responseURL
-        const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8' })
-        const downloadElement = document.createElement('a')
-        const href = window.URL.createObjectURL(blob)
-        downloadElement.href = href
-        downloadElement.download = 'rate.xlsx'
-        document.body.appendChild(downloadElement)
-        downloadElement.click()
-        document.body.removeChild(downloadElement) // 下载完成移除元素
-        window.URL.revokeObjectURL(href) // 释放掉blob对象
+        window.location.href = res.request.responseURL
       })
-      // exportExcel(this.listQuery).then((res) => {
-      //   console.log(res)
-      //   const link = document.createElement('a')
-      //   const blob = new Blob([res.data])
-      //   link.style.display = 'none'
-      //   link.href = URL.createObjectURL(blob)
-      //   const objectUrl = URL.createObjectURL(blob)
-      //   window.location.herf = objectUrl
-      //   let num = ''
-      //   for (let i = 0; i < 10; i++) {
-      //     num += Math.ceil(Math.random() * 10)
-      //   }
-      //   link.setAttribute('download', '用户_' + num + '.xlsx')
-      //   document.body.appendChild(link)
-      //   link.click()
-      //   document.body.removeChild(link)
-      // }).catch(error => {
-      //   this.$Notice.error({
-      //     title: '错误',
-      //     desc: '网络连接错误'
-      //   })
-      //   console.log(error)
-      // })
-      // exportExcel().then(res => {
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // })
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo'
-      // window.location.href = 'http://localhost/springcloud-app-system/system/sysUser/exportExcelUserInfo?name=' + this.listQuery.name
-      //  + '&departmentId=' + this.listQuery.departmentId + '&postOrTypeName=' + this.listQuery.postOrTypeName + '&recordStatus=1'
     },
     // 选择部门（新增用户对话框）
     handleChangeDepartment(value) {
@@ -519,6 +462,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
       api('system/sysUser/saveSysGroupToSysUser', { userId: this.userId, groupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -528,11 +477,13 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getUserGroup()
       })
     },
     // 授权用户组分页功能
     handleUserGroupCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
@@ -575,7 +526,7 @@ export default {
     },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -591,6 +542,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
       api('system/sysUser/saveSysRoleToSysUser', { userId: this.userId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -600,6 +557,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -649,7 +608,6 @@ export default {
     },
     // 改变状态
     selecteUserStatus(value) {
-      console.log(value)
       this.listQuery.recordStatus = value
     },
     // 获取所有部门列表

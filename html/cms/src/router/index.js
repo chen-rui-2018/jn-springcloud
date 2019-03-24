@@ -14,6 +14,9 @@ import Layout from '@/views/layout/Layout'
 import operationRouter from './modules/operation'
 import planningRouter from './modules/planning'
 import menuRouter from './modules/menu'
+import portalRouter from './modules/portal'
+import oaRouter from './modules/oa'
+import financRouter from './modules/financialSynergy'
 // import permissionManagement from './modules/permissionManagement'
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -79,8 +82,11 @@ export const constantRouterMap = [
     ]
   },
   menuRouter,
+  portalRouter,
+  oaRouter,
   // permissionManagement,
-  planningRouter
+  planningRouter,
+  financRouter
   // {
   //   path: '/documentation',
   //   component: Layout,

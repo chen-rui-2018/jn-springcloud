@@ -35,6 +35,9 @@ public class TbFinanceIncomeMonth implements Serializable {
     /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
+    /*@ApiModelProperty("去年同期收入")*/
+    private BigDecimal lastYearIncome;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -117,6 +120,14 @@ public class TbFinanceIncomeMonth implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
+    public BigDecimal getLastYearIncome() {
+        return lastYearIncome;
+    }
+
+    public void setLastYearIncome(BigDecimal lastYearIncome) {
+        this.lastYearIncome = lastYearIncome;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -138,7 +149,8 @@ public class TbFinanceIncomeMonth implements Serializable {
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
+            && (this.getLastYearIncome() == null ? other.getLastYearIncome() == null : this.getLastYearIncome().equals(other.getLastYearIncome()));
     }
 
     @Override
@@ -155,6 +167,7 @@ public class TbFinanceIncomeMonth implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
+        result = prime * result + ((getLastYearIncome() == null) ? 0 : getLastYearIncome().hashCode());
         return result;
     }
 
@@ -174,6 +187,7 @@ public class TbFinanceIncomeMonth implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
+        sb.append(", lastYearIncome=").append(lastYearIncome);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

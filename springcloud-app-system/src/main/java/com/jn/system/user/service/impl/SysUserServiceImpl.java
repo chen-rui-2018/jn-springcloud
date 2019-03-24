@@ -100,7 +100,9 @@ public class SysUserServiceImpl implements SysUserService {
         BeanUtils.copyProperties(sysUser, tbSysUser);
         tbSysUser.setCreatedTime(new Date());
         tbSysUser.setCreatorAccount(user.getAccount());
-        tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        if (StringUtils.isBlank(tbSysUser.getPassword())){
+            tbSysUser.setPassword(DigestUtils.md5Hex(RandomStringUtils.random(6, true, true)));
+        }
         //添加用户信息
         tbSysUserMapper.insert(tbSysUser);
         logger.info("[用户] 新增用户信息成功！，sysUserId:{}", tbSysUser.getId());
@@ -138,6 +140,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @param tbSysUser
      */
     private void addDepartmentPostToUser(SysUserAdd sysUser, User user, TbSysUser tbSysUser) {
+
         TbSysUserDepartmentPost sysUserDepartmentPost = new TbSysUserDepartmentPost();
         sysUserDepartmentPost.setCreatorAccount(user.getAccount());
         sysUserDepartmentPost.setId(UUID.randomUUID().toString());
@@ -148,7 +151,9 @@ public class SysUserServiceImpl implements SysUserService {
         sysUserDepartmentPost.setPostId(sysUser.getPostId());
         sysUserDepartmentPost.setIsDefault(SysStatusEnums.EFFECTIVE.getCode());
         sysUserDepartmentPost.setCreatedTime(new Date());
+
         tbSysUserDepartmentPostMapper.insertSelective(sysUserDepartmentPost);
+
     }
 
     /**
@@ -174,10 +179,10 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询用户")
-    public PaginationData findSysUserByPage(UserPage sysUserPage) {
+    public PaginationData<List<SysUserVO>> findSysUserByPage(UserPage sysUserPage) {
         //分页查询
         Page<Object> objects = PageHelper.startPage(sysUserPage.getPage(), sysUserPage.getRows());
-        List<SysUserVO> sysUserVOList = new ArrayList<SysUserVO>();
+        List<SysUserVO> sysUserVOList = null;
         if (StringUtils.isBlank(sysUserPage.getPostOrTypeName())) {
             //当查询条件中岗位或岗位类型名称为空时
             sysUserVOList = sysUserMapper.findSysUserByPage(sysUserPage);
@@ -256,7 +261,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "查询用户已经具有的用户组信息,且条件分页获取用户未拥有的用户组信息")
-    public PaginationData findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
+    public PaginationData<SysUserGroupVO> findSysGroupByUserId(SysUserGroupPage sysUserGroupPage) {
         //根据用户id查询用户组
         List<SysGroup> sysGroupOfUserList = sysGroupMapper.findSysGroupByUserId(sysUserGroupPage.getUserId());
         //条件分页获取用户未拥有用户组信息
@@ -326,7 +331,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     @ServiceLog(doAction = "根据用户id获取用户具有角色及条件分页查询用户未拥有的角色")
-    public PaginationData findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
+    public PaginationData<SysUserRoleVO> findSysRoleByUserId(SysUserRolePage sysUserRolePage) {
         //获取用户已经具有角色
         List<SysRole> sysRoleOfUserList = sysRoleMapper.findSysRoleByUserId(sysUserRolePage.getUserId());
         //条件分页获取用户未拥有的角色信息

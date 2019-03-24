@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.activity.dao.TbActivityMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.activity.entity.TbActivity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="acti_type" jdbcType="VARCHAR" property="actiType" />
+    <result column="acti_name" jdbcType="VARCHAR" property="actiName" />
+    <result column="acti_start_time" jdbcType="TIMESTAMP" property="actiStartTime" />
+    <result column="acti_end_time" jdbcType="TIMESTAMP" property="actiEndTime" />
+    <result column="apply_start_time" jdbcType="TIMESTAMP" property="applyStartTime" />
+    <result column="apply_end_time" jdbcType="TIMESTAMP" property="applyEndTime" />
+    <result column="mes_send_time" jdbcType="TIMESTAMP" property="mesSendTime" />
+    <result column="park_id" jdbcType="VARCHAR" property="parkId" />
+    <result column="acti_address" jdbcType="VARCHAR" property="actiAddress" />
+    <result column="acti_cost" jdbcType="DECIMAL" property="actiCost" />
+    <result column="acti_organizer" jdbcType="VARCHAR" property="actiOrganizer" />
+    <result column="acti_number" jdbcType="INTEGER" property="actiNumber" />
+    <result column="acti_poster_url" jdbcType="VARCHAR" property="actiPosterUrl" />
+    <result column="acti_status" jdbcType="VARCHAR" property="actiStatus" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="acti_views" jdbcType="INTEGER" property="actiViews" />
+    <result column="acti_like" jdbcType="INTEGER" property="actiLike" />
+    <result column="apply_num" jdbcType="INTEGER" property="applyNum" />
+    <result column="partic_num" jdbcType="INTEGER" property="particNum" />
+    <result column="is_index" jdbcType="VARCHAR" property="isIndex" />
+    <result column="is_apply" jdbcType="VARCHAR" property="isApply" />
+    <result column="acti_order" jdbcType="INTEGER" property="actiOrder" />
+    <result column="issue_time" jdbcType="TIMESTAMP" property="issueTime" />
+    <result column="issue_account" jdbcType="VARCHAR" property="issueAccount" />
+    <result column="show_apply_num" jdbcType="VARCHAR" property="showApplyNum" />
+    <result column="apply_check" jdbcType="VARCHAR" property="applyCheck" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, acti_type, acti_name, acti_start_time, acti_end_time, apply_start_time, apply_end_time, 
+    mes_send_time, park_id, acti_address, acti_cost, acti_organizer, acti_number, acti_poster_url, 
+    acti_status, created_time, creator_account, modified_time, modifier_account, acti_views, 
+    acti_like, apply_num, partic_num, is_index, is_apply, acti_order, issue_time, issue_account, 
+    show_apply_num, apply_check, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_activity
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria">
+    delete from tb_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.activity.entity.TbActivity">
+    insert into tb_activity (id, acti_type, acti_name, 
+      acti_start_time, acti_end_time, apply_start_time, 
+      apply_end_time, mes_send_time, park_id, 
+      acti_address, acti_cost, acti_organizer, 
+      acti_number, acti_poster_url, acti_status, 
+      created_time, creator_account, modified_time, 
+      modifier_account, acti_views, acti_like, 
+      apply_num, partic_num, is_index, 
+      is_apply, acti_order, issue_time, 
+      issue_account, show_apply_num, apply_check, 
+      record_status)
+    values (#{id,jdbcType=VARCHAR}, #{actiType,jdbcType=VARCHAR}, #{actiName,jdbcType=VARCHAR}, 
+      #{actiStartTime,jdbcType=TIMESTAMP}, #{actiEndTime,jdbcType=TIMESTAMP}, #{applyStartTime,jdbcType=TIMESTAMP}, 
+      #{applyEndTime,jdbcType=TIMESTAMP}, #{mesSendTime,jdbcType=TIMESTAMP}, #{parkId,jdbcType=VARCHAR}, 
+      #{actiAddress,jdbcType=VARCHAR}, #{actiCost,jdbcType=DECIMAL}, #{actiOrganizer,jdbcType=VARCHAR}, 
+      #{actiNumber,jdbcType=INTEGER}, #{actiPosterUrl,jdbcType=VARCHAR}, #{actiStatus,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{actiViews,jdbcType=INTEGER}, #{actiLike,jdbcType=INTEGER}, 
+      #{applyNum,jdbcType=INTEGER}, #{particNum,jdbcType=INTEGER}, #{isIndex,jdbcType=VARCHAR}, 
+      #{isApply,jdbcType=VARCHAR}, #{actiOrder,jdbcType=INTEGER}, #{issueTime,jdbcType=TIMESTAMP}, 
+      #{issueAccount,jdbcType=VARCHAR}, #{showApplyNum,jdbcType=VARCHAR}, #{applyCheck,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.activity.entity.TbActivity">
+    insert into tb_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="actiType != null">
+        acti_type,
+      </if>
+      <if test="actiName != null">
+        acti_name,
+      </if>
+      <if test="actiStartTime != null">
+        acti_start_time,
+      </if>
+      <if test="actiEndTime != null">
+        acti_end_time,
+      </if>
+      <if test="applyStartTime != null">
+        apply_start_time,
+      </if>
+      <if test="applyEndTime != null">
+        apply_end_time,
+      </if>
+      <if test="mesSendTime != null">
+        mes_send_time,
+      </if>
+      <if test="parkId != null">
+        park_id,
+      </if>
+      <if test="actiAddress != null">
+        acti_address,
+      </if>
+      <if test="actiCost != null">
+        acti_cost,
+      </if>
+      <if test="actiOrganizer != null">
+        acti_organizer,
+      </if>
+      <if test="actiNumber != null">
+        acti_number,
+      </if>
+      <if test="actiPosterUrl != null">
+        acti_poster_url,
+      </if>
+      <if test="actiStatus != null">
+        acti_status,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="actiViews != null">
+        acti_views,
+      </if>
+      <if test="actiLike != null">
+        acti_like,
+      </if>
+      <if test="applyNum != null">
+        apply_num,
+      </if>
+      <if test="particNum != null">
+        partic_num,
+      </if>
+      <if test="isIndex != null">
+        is_index,
+      </if>
+      <if test="isApply != null">
+        is_apply,
+      </if>
+      <if test="actiOrder != null">
+        acti_order,
+      </if>
+      <if test="issueTime != null">
+        issue_time,
+      </if>
+      <if test="issueAccount != null">
+        issue_account,
+      </if>
+      <if test="showApplyNum != null">
+        show_apply_num,
+      </if>
+      <if test="applyCheck != null">
+        apply_check,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="actiType != null">
+        #{actiType,jdbcType=VARCHAR},
+      </if>
+      <if test="actiName != null">
+        #{actiName,jdbcType=VARCHAR},
+      </if>
+      <if test="actiStartTime != null">
+        #{actiStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actiEndTime != null">
+        #{actiEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyStartTime != null">
+        #{applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyEndTime != null">
+        #{applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mesSendTime != null">
+        #{mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkId != null">
+        #{parkId,jdbcType=VARCHAR},
+      </if>
+      <if test="actiAddress != null">
+        #{actiAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actiCost != null">
+        #{actiCost,jdbcType=DECIMAL},
+      </if>
+      <if test="actiOrganizer != null">
+        #{actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiNumber != null">
+        #{actiNumber,jdbcType=INTEGER},
+      </if>
+      <if test="actiPosterUrl != null">
+        #{actiPosterUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="actiStatus != null">
+        #{actiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="actiViews != null">
+        #{actiViews,jdbcType=INTEGER},
+      </if>
+      <if test="actiLike != null">
+        #{actiLike,jdbcType=INTEGER},
+      </if>
+      <if test="applyNum != null">
+        #{applyNum,jdbcType=INTEGER},
+      </if>
+      <if test="particNum != null">
+        #{particNum,jdbcType=INTEGER},
+      </if>
+      <if test="isIndex != null">
+        #{isIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="isApply != null">
+        #{isApply,jdbcType=VARCHAR},
+      </if>
+      <if test="actiOrder != null">
+        #{actiOrder,jdbcType=INTEGER},
+      </if>
+      <if test="issueTime != null">
+        #{issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issueAccount != null">
+        #{issueAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="showApplyNum != null">
+        #{showApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCheck != null">
+        #{applyCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.activity.entity.TbActivityCriteria" resultType="java.lang.Long">
+    select count(*) from tb_activity
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_activity
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiType != null">
+        acti_type = #{record.actiType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiName != null">
+        acti_name = #{record.actiName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiStartTime != null">
+        acti_start_time = #{record.actiStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.actiEndTime != null">
+        acti_end_time = #{record.actiEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.applyStartTime != null">
+        apply_start_time = #{record.applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.applyEndTime != null">
+        apply_end_time = #{record.applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mesSendTime != null">
+        mes_send_time = #{record.mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parkId != null">
+        park_id = #{record.parkId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiAddress != null">
+        acti_address = #{record.actiAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiCost != null">
+        acti_cost = #{record.actiCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actiOrganizer != null">
+        acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiNumber != null">
+        acti_number = #{record.actiNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.actiPosterUrl != null">
+        acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiStatus != null">
+        acti_status = #{record.actiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiViews != null">
+        acti_views = #{record.actiViews,jdbcType=INTEGER},
+      </if>
+      <if test="record.actiLike != null">
+        acti_like = #{record.actiLike,jdbcType=INTEGER},
+      </if>
+      <if test="record.applyNum != null">
+        apply_num = #{record.applyNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.particNum != null">
+        partic_num = #{record.particNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.isIndex != null">
+        is_index = #{record.isIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isApply != null">
+        is_apply = #{record.isApply,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actiOrder != null">
+        acti_order = #{record.actiOrder,jdbcType=INTEGER},
+      </if>
+      <if test="record.issueTime != null">
+        issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.issueAccount != null">
+        issue_account = #{record.issueAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.showApplyNum != null">
+        show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyCheck != null">
+        apply_check = #{record.applyCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_activity
+    set id = #{record.id,jdbcType=VARCHAR},
+      acti_type = #{record.actiType,jdbcType=VARCHAR},
+      acti_name = #{record.actiName,jdbcType=VARCHAR},
+      acti_start_time = #{record.actiStartTime,jdbcType=TIMESTAMP},
+      acti_end_time = #{record.actiEndTime,jdbcType=TIMESTAMP},
+      apply_start_time = #{record.applyStartTime,jdbcType=TIMESTAMP},
+      apply_end_time = #{record.applyEndTime,jdbcType=TIMESTAMP},
+      mes_send_time = #{record.mesSendTime,jdbcType=TIMESTAMP},
+      park_id = #{record.parkId,jdbcType=VARCHAR},
+      acti_address = #{record.actiAddress,jdbcType=VARCHAR},
+      acti_cost = #{record.actiCost,jdbcType=DECIMAL},
+      acti_organizer = #{record.actiOrganizer,jdbcType=VARCHAR},
+      acti_number = #{record.actiNumber,jdbcType=INTEGER},
+      acti_poster_url = #{record.actiPosterUrl,jdbcType=VARCHAR},
+      acti_status = #{record.actiStatus,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      acti_views = #{record.actiViews,jdbcType=INTEGER},
+      acti_like = #{record.actiLike,jdbcType=INTEGER},
+      apply_num = #{record.applyNum,jdbcType=INTEGER},
+      partic_num = #{record.particNum,jdbcType=INTEGER},
+      is_index = #{record.isIndex,jdbcType=VARCHAR},
+      is_apply = #{record.isApply,jdbcType=VARCHAR},
+      acti_order = #{record.actiOrder,jdbcType=INTEGER},
+      issue_time = #{record.issueTime,jdbcType=TIMESTAMP},
+      issue_account = #{record.issueAccount,jdbcType=VARCHAR},
+      show_apply_num = #{record.showApplyNum,jdbcType=VARCHAR},
+      apply_check = #{record.applyCheck,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.activity.entity.TbActivity">
+    update tb_activity
+    <set>
+      <if test="actiType != null">
+        acti_type = #{actiType,jdbcType=VARCHAR},
+      </if>
+      <if test="actiName != null">
+        acti_name = #{actiName,jdbcType=VARCHAR},
+      </if>
+      <if test="actiStartTime != null">
+        acti_start_time = #{actiStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="actiEndTime != null">
+        acti_end_time = #{actiEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyStartTime != null">
+        apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="applyEndTime != null">
+        apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mesSendTime != null">
+        mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkId != null">
+        park_id = #{parkId,jdbcType=VARCHAR},
+      </if>
+      <if test="actiAddress != null">
+        acti_address = #{actiAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actiCost != null">
+        acti_cost = #{actiCost,jdbcType=DECIMAL},
+      </if>
+      <if test="actiOrganizer != null">
+        acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      </if>
+      <if test="actiNumber != null">
+        acti_number = #{actiNumber,jdbcType=INTEGER},
+      </if>
+      <if test="actiPosterUrl != null">
+        acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="actiStatus != null">
+        acti_status = #{actiStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="actiViews != null">
+        acti_views = #{actiViews,jdbcType=INTEGER},
+      </if>
+      <if test="actiLike != null">
+        acti_like = #{actiLike,jdbcType=INTEGER},
+      </if>
+      <if test="applyNum != null">
+        apply_num = #{applyNum,jdbcType=INTEGER},
+      </if>
+      <if test="particNum != null">
+        partic_num = #{particNum,jdbcType=INTEGER},
+      </if>
+      <if test="isIndex != null">
+        is_index = #{isIndex,jdbcType=VARCHAR},
+      </if>
+      <if test="isApply != null">
+        is_apply = #{isApply,jdbcType=VARCHAR},
+      </if>
+      <if test="actiOrder != null">
+        acti_order = #{actiOrder,jdbcType=INTEGER},
+      </if>
+      <if test="issueTime != null">
+        issue_time = #{issueTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="issueAccount != null">
+        issue_account = #{issueAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="showApplyNum != null">
+        show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCheck != null">
+        apply_check = #{applyCheck,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.activity.entity.TbActivity">
+    update tb_activity
+    set acti_type = #{actiType,jdbcType=VARCHAR},
+      acti_name = #{actiName,jdbcType=VARCHAR},
+      acti_start_time = #{actiStartTime,jdbcType=TIMESTAMP},
+      acti_end_time = #{actiEndTime,jdbcType=TIMESTAMP},
+      apply_start_time = #{applyStartTime,jdbcType=TIMESTAMP},
+      apply_end_time = #{applyEndTime,jdbcType=TIMESTAMP},
+      mes_send_time = #{mesSendTime,jdbcType=TIMESTAMP},
+      park_id = #{parkId,jdbcType=VARCHAR},
+      acti_address = #{actiAddress,jdbcType=VARCHAR},
+      acti_cost = #{actiCost,jdbcType=DECIMAL},
+      acti_organizer = #{actiOrganizer,jdbcType=VARCHAR},
+      acti_number = #{actiNumber,jdbcType=INTEGER},
+      acti_poster_url = #{actiPosterUrl,jdbcType=VARCHAR},
+      acti_status = #{actiStatus,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      acti_views = #{actiViews,jdbcType=INTEGER},
+      acti_like = #{actiLike,jdbcType=INTEGER},
+      apply_num = #{applyNum,jdbcType=INTEGER},
+      partic_num = #{particNum,jdbcType=INTEGER},
+      is_index = #{isIndex,jdbcType=VARCHAR},
+      is_apply = #{isApply,jdbcType=VARCHAR},
+      acti_order = #{actiOrder,jdbcType=INTEGER},
+      issue_time = #{issueTime,jdbcType=TIMESTAMP},
+      issue_account = #{issueAccount,jdbcType=VARCHAR},
+      show_apply_num = #{showApplyNum,jdbcType=VARCHAR},
+      apply_check = #{applyCheck,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

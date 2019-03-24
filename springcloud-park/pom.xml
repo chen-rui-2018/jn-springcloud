@@ -21,16 +21,22 @@
             <groupId>com.jn</groupId>
             <artifactId>springcloud-park-api</artifactId>
         </dependency>
-        <!--mybatis-generate生成插件-->
         <dependency>
             <groupId>com.jn</groupId>
-            <artifactId>jn-spring-cloud-generator</artifactId>
-            <version>1.0-RELEASE</version>
+            <artifactId>springcloud-user-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-fastdfs-api</artifactId>
         </dependency>
 
     </dependencies>

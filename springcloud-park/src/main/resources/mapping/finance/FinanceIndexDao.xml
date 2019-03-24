@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceIndexDao">
+
+    <!--园区管委会支出/预算-->
+    <select id="ratioAndState" resultType="java.lang.String" parameterType="com.jn.park.finance.model.FinanceIndexRatioStateModel">
+        SELECT CONCAT(ROUND(
+         (
+        select sum(t.cost)
+        from
+        tb_finance_expenses_month t
+         where
+        t.cost_happend_time between #{beginTime} and #{endTime}
+        )/ (
+        select
+        SUM(t.budget_number)
+        from
+        tb_finance_total_budget t
+        ) * 100)) as "已支出/全年预算";
+
+    </select>
+
+    <!--首页-各部门支出预算 模块-->
+    <select id="budgetExpendRatio" parameterType="java.util.Map" resultType="com.jn.park.finance.vo.FinanceIndexBudgetExpendRatioVo">
+        SELECT
+            t1.departmentid as "departmentid",
+            t1.departmentname as "departmentname",
+            CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%")  as "ratio"
+            FROM
+            (SELECT SUM(t.cost) as "cost",
+            t.department_id as "departmentid",
+            t.department_name as "departmentname",
+            t.cost_happend_time as "costhappendtime"
+             from tb_finance_expenses_month t
+            WHERE t.record_status = '1'
+            AND t.department_id in
+            <foreach collection="list" open="(" item="item" index="index" separator="," close=")">
+                #{item.departmentId,jdbcType=VARCHAR}
+            </foreach>
+            AND t.cost_happend_time BETWEEN #{startTime} and #{endTime}
+            GROUP BY t.department_id) t1
+            INNER JOIN
+            (SELECT SUM(t.budget_number) as "budgetnumber",
+            t.department_id as "departmentid",
+            t.department_name as "departmentname",
+            t.budget_month as "budgetmonth"
+             from tb_finance_total_budget t
+            where t.record_status='1'
+            GROUP BY t.department_id) t2
+            ON t2.departmentid = t1.departmentid
+            and t2.budgetmonth = t1.costhappendtime
+    </select>
+
+
+    <!--管委会每月支出预算 柱状图-->
+    <select id="expendBudget" resultType="com.jn.park.finance.vo.FinanceIndexExpendBudgetStatisticsVo">
+        SELECT
+        t1.month as "month",
+        t1.cost as "cost",
+        IFNULL(t2.budgetnumber,0) as "budgetnumber" ,
+        IFNULL(CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%") ,"/")as "ratio"
+        FROM
+        (SELECT m.month as "month",
+        IFNULL(t.cost,0) as "cost"
+        from tb_finance_expenses_month t
+        RIGHT JOIN tb_month m
+        on m.month=t.cost_happend_time
+          and t.record_status=1
+        and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
+        where m.month BETWEEN #{startTime} AND  #{endTime} ) t1
+        LEFT  JOIN
+        (SELECT
+        t.budget_month as "budgetmonth",
+        IFNULL(SUM(t.budget_number),0) as "budgetnumber"
+        from tb_finance_total_budget t
+        where t.record_status = 1
+        and t.budget_month BETWEEN #{startTime} AND  #{endTime} group by t.budget_month ) t2
+        ON t2.budgetmonth=t1.month
+    </select>
+
+
+    <!--部门明细/支出月统计 柱状图-->
+    <select id="sectionBudgetExpend" resultType="com.jn.park.finance.vo.FinanceIndexSectionBudgetExpendVo">
+      SELECT
+        t1.month as "month",
+        t1.cost as "cost",
+        IFNULL(t2.budgetnumber,0) as "budgetnumber" ,
+        IFNULL(CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%") ,"/")as "ratio"
+        FROM
+        (SELECT m.month as "month",
+        IFNULL(t.cost,0) as "cost"
+        from tb_finance_expenses_month t
+        RIGHT JOIN tb_month m
+        on m.month=t.cost_happend_time
+        and t.record_status=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        and t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+            and t.cost_after_type_id=#{typeId}
+        </if>
+        and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
+        where m.month BETWEEN #{startTime} AND  #{endTime} ) t1
+        LEFT  JOIN
+        (SELECT
+        t.budget_month as "budgetmonth",
+        IFNULL(SUM(t.budget_number),0) as "budgetnumber"
+        from tb_finance_total_budget t
+        where t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        and t.department_id=#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(typeId)">
+            and t.cost_type_id=#{typeId}
+        </if>
+        and t.budget_month BETWEEN #{startTime} AND  #{endTime} group by t.budget_month ) t2
+        ON t2.budgetmonth=t1.month
+    </select>
+
+    <!--部门明细/各项占比 饼状图-->
+    <select id="accumulativeExpendRatio" resultType="com.jn.park.finance.vo.FinanceIndexExpendBudgetRatioVo">
+      select
+        t1.cost as "cost",
+        t1.costftertypename as "costftertypename",
+        t2.budgetnumber as "budgetnumber"
+        from
+        (SELECT sum(t.cost) as "cost",
+        t.cost_after_type_name as "costftertypename",
+        t.department_id  as "departmentid"
+        FROM tb_finance_expenses_month t
+        where t.department_id = #{departmentId}  and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
+        group by t.cost_after_type_id) t1
+        inner  JOIN
+        (select sum(t.budget_number) as "budgetnumber",
+        department_id as "departmentid"
+        from tb_finance_total_budget t
+        group by t.department_id) t2
+        ON t2.departmentid=t1.departmentid
+    </select>
+
+
+    <!--部门明细/预算支出 报表-->
+    <select id="sectionExpendForms" resultMap="sectionExpendFormsVoResultMap">
+    SELECT
+            tb.cost_after_type_id as costTypeId,
+            max(tb.cost_after_type_name) as costTypeName,
+            tb.department_id as departmentId,
+            max(tb.department_name) as departmentName,
+             #{startMonth,jdbcType=VARCHAR} as startMonth,
+             #{endMonth,jdbcType=VARCHAR} as endMonth
+        FROM
+            `tb_finance_expenses_month` tb
+        LEFT JOIN tb_finance_type t ON t.id = tb.cost_after_type_id
+        WHERE
+            tb.record_status = 1
+            and tb.department_id=#{departmentId}
+        AND t.record_status = 1
+        AND tb.cost_happend_time BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
+
+        GROUP BY
+            tb.cost_after_type_id,
+            tb.department_id
+        ORDER BY t.show_order
+    </select>
+
+
+    <resultMap id="sectionExpendFormsVoResultMap" type="com.jn.park.finance.vo.FinanceIndexSectionExpendFormsVo">
+        <result column="cost_type_id" jdbcType="INTEGER" property="costTypeId" />
+        <result column="cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
+        <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+        <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+        <collection property="financeIndexSectionExpendFormsModels"
+                    ofType="com.jn.park.finance.model.FinanceIndexSectionExpendFormsModel"
+                    select="selectEverySectionExpendForms"
+                    column="{costTypeId=costTypeId,departmentId=departmentId,startMonth=startMonth,endMonth=endMonth}"></collection>
+    </resultMap>
+
+    <select id="selectEverySectionExpendForms" resultMap="sectionExpendFormsMap">
+    select right(t1.`month`,2) as "month",IFNULL(t1.budgetnumber,0) as "budgetnumber",IFNULL(t2.cost,0) as "cost"  from
+    (SELECT
+            m.`month` as "month",
+            IFNULL(tb.budget_number,0) AS "budgetnumber"
+        FROM
+            tb_finance_total_budget tb
+        RIGHT JOIN tb_month m ON m.`month` = tb.budget_month
+        AND tb.record_status = 1
+        AND tb.cost_type_id = #{costTypeId,jdbcType=INTEGER}
+        AND tb.department_id = #{departmentId,jdbcType=VARCHAR}
+        WHERE
+            m. MONTH BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
+        ORDER BY m.`month`) t1
+				LEFT JOIN
+					(select
+					t.cost_happend_time as "costhappendtime",
+					t.cost as "cost",
+					t.cost_after_type_id as "costaftertypeid",
+					t.department_id as "departmentid"
+					from tb_finance_expenses_month t
+					where t.record_status =1
+					and  t.cost_after_type_id=#{costTypeId,jdbcType=INTEGER}
+					and t.department_id=#{departmentId,jdbcType=VARCHAR}) t2
+					on t1.`month` =t2.costhappendtime
+					ORDER BY t1.`month`
+    </select>
+
+
+    <resultMap id="sectionExpendFormsMap" type="com.jn.park.finance.model.FinanceIndexSectionExpendFormsModel">
+        <result column="month" jdbcType="CHAR" property="month" />
+        <result column="budget_number" jdbcType="DECIMAL" property="budgetNumber" />
+        <result column="cost" jdbcType="DECIMAL" property="cost" />
+    </resultMap>
+
+
+
+    <!--合计-->
+    <select id="total" resultType="com.jn.park.finance.model.FinanceIndexSectionExpendFormsModel">
+        SELECT
+        t1.month as "month",
+        t1.cost as "cost",
+        IFNULL(t2.budgetnumber,0) as "budgetnumber"
+        FROM
+        (SELECT m.month as "month",
+        SUM(IFNULL(t.cost,0)) as "cost"
+        from tb_finance_expenses_month t
+        RIGHT JOIN tb_month m
+        on m.month=t.cost_happend_time
+          and t.record_status=1
+          AND t.department_id=#{departmentId}
+        and t.cost_happend_time BETWEEN #{startMonth} AND  #{endMonth}
+        where m.month BETWEEN  #{startMonth} AND  #{endMonth} GROUP BY t.cost_happend_time ORDER BY m.month ) t1
+        LEFT  JOIN
+        (SELECT
+        t.budget_month as "budgetmonth",
+        IFNULL(SUM(t.budget_number),0) as "budgetnumber"
+        from tb_finance_total_budget t
+        where t.record_status = 1
+        AND t.department_id=#{departmentId}
+        and t.budget_month BETWEEN  #{startMonth} AND  #{endMonth} group by t.budget_month ) t2
+        ON t2.budgetmonth=t1.month
+
+
+    </select>
+
+
+    <!--部门明细/预算支出报表-->
+    <!--<select id="accumulativeExpendRatio" resultType="com.jn.park.finance.model.FinanceIndexSectionExpendFormsModel">
+      SELECT
+	t1.budgetmonth AS "budgetmonth",
+	  t1.departmentname as "部门" ,
+	  t1.costtypeid as "类型ID",
+	t1.costtypename AS "costtypename",
+	t1.budgetnumber AS "budgetnumber",
+	t2.cost AS "cost"
+    FROM
+        (
+            SELECT
+                t.cost_type_id AS "costtypeid",
+                t.cost_type_name AS "costtypename",
+                t.department_id AS "departmentid",
+                t.department_name AS "departmentname",
+                date_format(t.budget_month, '%Y-%m') AS "budgetmonth",
+                t.budget_number AS "budgetnumber"
+            FROM
+                tb_finance_total_budget t
+            WHERE
+                t.department_id = #{financeId}
+            AND record_status = 1
+            AND date_format(t.budget_month, '%Y') = #{year}
+        ) t1
+    LEFT JOIN (
+        SELECT
+            date_format(
+                t.cost_happend_time,
+                '%Y-%m'
+            ) AS "costhappendtime",
+            t.cost AS "cost",
+            t.cost_after_type_id AS "costaftertypeid",
+            t.cost_after_type_name AS "costaftertypename",
+            t.department_id AS "departmentid",
+            t.department_name AS "departmentname"
+        FROM
+            tb_finance_expenses t
+        WHERE
+            t.department_id = #{financeId}
+        AND t.record_status = 1
+    ) t2 ON t1.budgetmonth = t2.costhappendtime
+    AND t1.costtypeid = t2.costaftertypeid
+    </select>-->
+
+    <!--类型下拉框条件-->
+    <select id="downType" resultType="com.jn.park.finance.model.FinanceIndexDownTypeModel">
+      select
+      DISTINCT(t.finance_name) as "financeName",
+      t.id  as "financeId"
+      from tb_finance_type t
+        <!--where t.is_public = 1-->
+    </select>
+
+</mapper>

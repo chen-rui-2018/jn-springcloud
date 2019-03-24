@@ -11,7 +11,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
-
+import '../static/UE/ueditor.config'
+import '../static/UE/ueditor.all'
+import '../static/UE/lang/zh-cn/zh-cn'
+import '../static/UE/ueditor.parse.min.js'
+// 引入全局变量
+import global from './api/global'
 import App from './App'
 import router from './router'
 import store from './store'
@@ -23,7 +28,8 @@ import './permission' // permission control
 import './mock' // simulation data
 
 import * as filters from './filters' // global filters
-
+// 挂载全局变量
+Vue.prototype.GLOBAL = global
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium' // set element-ui default size
   // i18n: (key, value) => i18n.t(key, value)

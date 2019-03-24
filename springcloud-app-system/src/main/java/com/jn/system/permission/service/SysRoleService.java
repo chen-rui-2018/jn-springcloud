@@ -4,8 +4,14 @@ import com.jn.common.model.PaginationData;
 import com.jn.system.model.User;
 import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
+import com.jn.system.permission.vo.SysRolePermissionVO;
+import com.jn.system.permission.vo.SysRoleUserGroupVO;
+import com.jn.system.permission.vo.SysRoleUserVO;
+import com.jn.system.permission.vo.SysRoleVO;
 import com.jn.system.user.model.SysUserGroupRoleAdd;
 import com.jn.system.user.model.SysUserRoleAdd;
+
+import java.util.List;
 
 /**
  * @author： shaobao
@@ -44,7 +50,7 @@ public interface SysRoleService {
      * @param rolePage
      * @return
      */
-    PaginationData selectRoleListBySearchKey(SysRolePage rolePage);
+    PaginationData<List<SysRoleVO>> selectRoleListBySearchKey(SysRolePage rolePage);
 
 
     /**
@@ -82,7 +88,7 @@ public interface SysRoleService {
      * @param sysRoleUserPage
      * @return
      */
-    PaginationData findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
+    PaginationData<SysRoleUserVO> findUserOfRoleAndOtherUser(SysRoleUserPage sysRoleUserPage);
 
     /**
      * 查询角色已经具有的用户组信息,且条件分页获取角色未拥有的用户组信息
@@ -90,7 +96,7 @@ public interface SysRoleService {
      * @param sysRoleUserGroupPage
      * @return
      */
-    PaginationData findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
+    PaginationData<SysRoleUserGroupVO> findUserGroupOfRoleAndOtherGroup(SysRoleUserGroupPage sysRoleUserGroupPage);
 
     /**
      * 查询角色已经具有的权限信息,且条件分页获取角色未拥有的权限信息
@@ -98,5 +104,5 @@ public interface SysRoleService {
      * @param sysRolePermissionPage
      * @return
      */
-    PaginationData findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
+    PaginationData<SysRolePermissionVO> findPermissionOrRoleAndOtherPermission(SysRolePermissionPage sysRolePermissionPage);
 }

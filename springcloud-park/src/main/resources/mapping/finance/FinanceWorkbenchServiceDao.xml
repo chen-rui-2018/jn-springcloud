@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceWorkbenchDao">
+
+    <!--财务监控-->
+    <select id="financeMonitoring" resultType="com.jn.park.finance.vo.FinanceWorkbenchMonitoringVo">
+        <!-- 算出总支出-->
+        SELECT t1.cost as "sumcost",<!-- 总支出-->
+        t2.budgetnumber as "sumbudgetnumber",<!-- 总预算-->
+        CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%")  as "ratio", <!-- 当前使用率-->
+        t3.income as "sumincome", <!-- 总收入-->
+        t3.lastyearpercent as "lastyearpercent" <!-- 去年同比-->
+        from
+        (SELECT  SUM(t.cost) as "cost",m.`month` as "month"
+                FROM
+                    tb_finance_expenses_month t
+                LEFT JOIN tb_month m ON m.`month` = t.cost_happend_time
+                WHERE
+                    t.record_status = 1
+                AND  m. MONTH BETWEEN #{StartTime} AND #{endTime}) t1
+        INNER JOIN
+        <!-- 预算-->
+        (SELECT   SUM(t.budget_number) as "budgetnumber",m.`month` as "month"
+        FROM
+                    tb_finance_total_budget t
+                RIGHT JOIN tb_month m ON m.`month` = t.budget_month
+                AND t.record_status = 1
+                WHERE
+                    m. MONTH BETWEEN #{StartTime} AND #{endTime}
+                ORDER BY m.`month`) t2
+        INNER JOIN
+        <!-- 算出当年累计收入及同比-->
+        (SELECT
+        sum(t.income) as "income",
+        SUM(t.last_year_income) as "lastyearincome",
+        m.month as "month",
+         IFNULL(CONCAT(ROUND(IF (SUM(t.last_year_income) = NULL,0,(SUM(t.income) - SUM(t.last_year_income)) / SUM(t.last_year_income))* 100),"%"),"0%") AS "lastyearpercent"
+        FROM
+                    tb_finance_income_month t
+                RIGHT JOIN tb_month m ON m.`month` = t.income_month
+                AND t.record_status = 1
+                WHERE
+                    m. MONTH BETWEEN #{StartTime} AND #{endTime}
+                ORDER BY m.`month`) t3
+        ON t1.month=t2.month and t2.month = t3.month
+    </select>
+</mapper>

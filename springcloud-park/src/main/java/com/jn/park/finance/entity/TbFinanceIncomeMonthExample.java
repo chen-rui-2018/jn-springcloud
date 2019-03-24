@@ -745,6 +745,66 @@ public class TbFinanceIncomeMonthExample {
             addCriterion("imonth.modified_time not between", value1, value2, "modifiedTime");
             return (Criteria) this;
         }
+
+        public Criteria andLastYearIncomeIsNull() {
+            addCriterion("imonth.last_year_income is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeIsNotNull() {
+            addCriterion("imonth.last_year_income is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeEqualTo(BigDecimal value) {
+            addCriterion("imonth.last_year_income =", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeNotEqualTo(BigDecimal value) {
+            addCriterion("imonth.last_year_income <>", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeGreaterThan(BigDecimal value) {
+            addCriterion("imonth.last_year_income >", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("imonth.last_year_income >=", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeLessThan(BigDecimal value) {
+            addCriterion("imonth.last_year_income <", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("imonth.last_year_income <=", value, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeIn(List<BigDecimal> values) {
+            addCriterion("imonth.last_year_income in", values, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeNotIn(List<BigDecimal> values) {
+            addCriterion("imonth.last_year_income not in", values, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("imonth.last_year_income between", value1, value2, "lastYearIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastYearIncomeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("imonth.last_year_income not between", value1, value2, "lastYearIncome");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

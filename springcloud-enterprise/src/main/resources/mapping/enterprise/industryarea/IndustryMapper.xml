@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.industryarea.dao.IndustryMapper">
+    <select id="selectIndustryList" parameterType="com.jn.enterprise.servicemarket.industryarea.model.IndustryParameter"
+            resultType="com.jn.enterprise.servicemarket.industryarea.model.Industry">
+        select p.id as "id"
+        ,p.pre_value as "preValue"
+        ,p.pre_type as "preType"
+        ,date_format(p.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,p.creator_account as "creatorAccount"
+        ,(select count(1) from tb_service_org o where o.business_type = p.id) as "orgNum"
+        from tb_service_prefer p where p.record_status = '1' and p.pre_type = '0' <!-- 只查询业务领域数据 -->
+        <if test="preValue != null and preValue != ''">
+            and p.pre_value like concat('%',#{preValue},'%')
+        </if>
+
+    </select>
+    <select id="getIndustryDetail" parameterType="java.lang.String"
+            resultType="com.jn.enterprise.servicemarket.industryarea.model.Industry">
+        select p.id as "id"
+        ,p.pre_value as "preValue"
+        ,p.pre_type as "preType"
+        ,date_format(p.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"
+        ,p.creator_account as "creatorAccount"
+        ,(select count(1) from tb_service_org o where o.business_type = p.id) as "orgNum"
+        from tb_service_prefer p where p.record_status = '1' and p.id =  #{id}
+
+    </select>
+
+
+</mapper>

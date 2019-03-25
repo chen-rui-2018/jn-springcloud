@@ -171,19 +171,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         if(detail!=null){
             ServiceContent content= detail.getContent();
             if (content!=null){
-                byte[] serviceDetails =  content.getServiceDetails();
-                if(serviceDetails!= null) {
-                    try {
-                        String productDetails = new String(serviceDetails, "UTF-8");
-                        content.setProductDetails(productDetails);
-                        detail.setContent(content);
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                        logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
-                    }
+                 content.setProductDetails(checkServiceDetails(content.getServiceDetails()));
+                 content.setServiceDetails(null);
+                 content.setServiceDetails(null);
+                 detail.setContent(content);
                 }
             }
-        }
         //添加产品浏览数
         TbServiceProduct product =tbServiceProductMapper.selectByPrimaryKey(productId);
         TbServiceProduct productUpdate = new TbServiceProduct();
@@ -212,8 +205,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @ServiceLog(doAction = "服务产品上下架")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void productShelf(ServiceProductApproval approval, String account) {
-        productDao.productShelf(approval.getProductId(),approval.getStatus(),account);
+    public void productShelf(ProductShelfOperation operation , String account) {
+        productDao.productShelf(operation.getProductId(),operation.getStatus(),account);
     }
 
 
@@ -239,12 +232,16 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void modifyCommonService(ServiceContent content, String account){
+        TbServiceProductCriteria criteria1 = new TbServiceProductCriteria();
+        criteria1.createCriteria().andTemplateIdEqualTo(content.getProductId());
+        List<TbServiceProduct> productList =tbServiceProductMapper.selectByExample(criteria1);
+        if(productList!=null && productList.size()>0){
+            logger.warn("[编辑常规产品]，编辑常规产品{}产品已有机构上架,不能修改：productId: {}编辑常规产品,产品已有机构上架,不能修改!");
+            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_PRODUCT_SHELF);
+        }
+
         if (content.getReferPrice() != null) {
             checkReferPrice(content.getReferPrice());
-        }
-        if(StringUtils.isBlank(content.getProductId())){
-            logger.warn("[编辑常规产品]，编辑常规产品{}服务产品Id不能为空：productId: {}编辑常规产品,服务产品Id不能为空!");
-            throw new JnSpringCloudException(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY);
         }
         TbServiceProduct product = new TbServiceProduct();
         BeanUtils.copyProperties(content,product);
@@ -280,17 +277,12 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductDetails findWebProductDetails(String productId) {
         WebServiceProductInfo info= productDao.findWebProductDetails(productId);
-        if(info.getServiceDetails()!=null) {
-            try {
-                info.setProductDetails(new String(info.getServiceDetails(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-                logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
-            }
-        }
         if(info== null){
             return null;
         }
+        //产品详情
+        info.setProductDetails(checkServiceDetails(info.getServiceDetails()));
+        info.setServiceDetails(null);
         ProductQueryConditions conditions = new ProductQueryConditions();
         conditions.setSignoryId(info.getSignoryId());
         List<WebServiceProductInfo> infoList= productDao.findWebProductList(conditions);
@@ -327,18 +319,18 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     }
     @ServiceLog(doAction = "机构-前台服务产品列表")
     @Override
-    public PaginationData findOrgProductList(ProductInquiryInfo info, Boolean needPage) {
+    public PaginationData findOrgProductList(OrgProductQuery query, Boolean needPage) {
         com.github.pagehelper.Page<Object> objects = null;
         if(needPage){
-            objects = PageHelper.startPage(info.getPage(), info.getRows() == 0 ? 15 : info.getRows(), true);
+            objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
         }
-         List<ServiceProductManage>  data = productDao.findOrgProductList(info.getKeyWords(), info.getOrgId(), info.getProductType(),info.getProductStatus());
+         List<ServiceProductManage>  data = productDao.findOrgProductList(query.getKeyWords(), query.getOrgId(), query.getProductType(),query.getProductStatus());
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }
     @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品")
     @Override
-    public List<CommonServiceShelf> findShelfProductList(String orgId){
-        List<CommonServiceShelf> data = null;
+    public List<ProductShelf> findShelfProductList(String orgId){
+        List<ProductShelf> data = null;
         if(StringUtils.isNotBlank(orgId)){
             data=productDao.findShelfProductList(orgId);
         }
@@ -348,26 +340,22 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @Override
     public WebServiceProductInfo findShelfProductInfo(String productId)  {
         WebServiceProductInfo data =   productDao.findShelfProductInfo(productId);
-        try {
-            data.setProductDetails(new String(data.getServiceDetails(), "UTF-8"));
-        }catch (UnsupportedEncodingException e){
-            e.printStackTrace();
-            logger.info("服务产品详情描述,不支持的字符集"+e.getMessage());
-        }
+        data.setProductDetails(checkServiceDetails(data.getServiceDetails()));
+        data.setServiceDetails(null);
         return data;
     }
 
     @ServiceLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
     @Override
-    public List<CommonServiceShelf> productQueryList(String productName) {
-        List<CommonServiceShelf> data=productDao.productQueryList(productName);
+    public List<ProductShelf> productQueryList(String productName) {
+        List<ProductShelf> data=productDao.productQueryList(productName);
         return data;
     }
 
     @ServiceLog(doAction = "机构-编辑常规产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateCommonProduct(CommonServiceShelf product,String account) {
+    public void updateCommonProduct(OrgUpdateCommonProduct product,String account) {
         //更新产品表中信息
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
         tbServiceProduct.setProductId(product.getProductId());
@@ -382,7 +370,7 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     @ServiceLog(doAction = "机构编辑特色服务产品")
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateFeatureProduct(ServiceContent content, String account) {
+    public void updateFeatureProduct(OrgUpdateFeatureProduct content, String account) {
        //修改后需要进行审核
         String status = "0";
         TbServiceProduct tbServiceProduct = new TbServiceProduct();
@@ -416,6 +404,15 @@ public class ServiceProductServiceImpl implements ServiceProductService {
         ServiceStatistics serviceStatistics =   productDao.findServiceStatistics();
         return serviceStatistics;
     }
+    @ServiceLog(doAction = "编辑修改常规服务产品界面产品详情信息")
+    @Override
+    public UpdateCommonProductShow modifyCommonServiceShow(String productId) {
+        UpdateCommonProductShow show = productDao.modifyCommonServiceShow(productId);
+        show.setProductDetails(checkServiceDetails(show.getServiceDetails()));
+        show.setServiceDetails(null);
+        return  show;
+    }
+
     @ServiceLog(doAction = "获取服务产品编号")
     @Override
     public String getProductSerialNumber(String productType){
@@ -503,5 +500,23 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             advisorList.add(advisor);
         }
         advisorDao.addServiceAdvisor(advisorList);
+    }
+
+    /**
+     * 产品详情转换
+     * @param serviceDetails
+     * @return
+     */
+     private String  checkServiceDetails(byte [] serviceDetails){
+        String productDetails =null;
+         if(serviceDetails != null) {
+             try {
+              productDetails = new String(serviceDetails, "UTF-8");
+             } catch (UnsupportedEncodingException e) {
+                 e.printStackTrace();
+                 logger.info("服务产品详情描述,不支持的字符集" + e.getMessage());
+             }
+         }
+        return productDetails;
     }
 }

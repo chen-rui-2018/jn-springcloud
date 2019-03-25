@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -39,16 +40,17 @@ public class ServiceProductWebController  extends BaseController {
     private ServiceProductService productService;
 
     @ControllerLog(doAction = "上架常规服务产品")
-    @ApiOperation(value = "上架常规服务产品(非科技金融),(app常规产品新增)")
+    @ApiOperation(value = "上架常规服务产品(非科技金融)")
     @RequiresPermissions("/servicemarket/product/web/upShelfCommonService")
     @RequestMapping(value = "/upShelfCommonService",method = RequestMethod.POST)
-    public Result upShelfCommonService(@RequestBody @Validated CommonServiceShelf commonService){
-        Assert.notNull(commonService.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+    public Result upShelfCommonService(@RequestBody @Validated CommonProductShelf product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         //服务产品主键Id
         String productId = UUID.randomUUID().toString().replaceAll("-", "");
-        commonService.setProductId(productId);
-        productService.upShelfCommonService(commonService,user != null?user.getAccount():"");
+        CommonServiceShelf serviceShelf = new CommonServiceShelf();
+        BeanUtils.copyProperties(product,serviceShelf);
+        serviceShelf.setProductId(productId);
+        productService.upShelfCommonService(serviceShelf,user != null?user.getAccount():"");
         return new Result();
     }
 
@@ -56,10 +58,12 @@ public class ServiceProductWebController  extends BaseController {
     @ApiOperation(value = "添加特色服务产品(非科技金融)(App特色产品新增)")
     @RequiresPermissions("/servicemarket/product/web/addFeatureService")
     @RequestMapping(value = "/addFeatureService",method = RequestMethod.POST)
-    public Result addFeatureService(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content, ServiceProductExceptionEnum.SERVICE_PRODUCT_NAME_EMPTY.getMessage());
+    public Result addFeatureService(@RequestBody @Validated AddFeatureProduct product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String productId = UUID.randomUUID().toString().replaceAll("-","");
+        ServiceContent content = new ServiceContent();
+        BeanUtils.copyProperties(product,content);
+        content.setProductId(productId);
         productService.addServiceProduct(content,user != null?user.getAccount():"",productId);
         return new Result();
     }
@@ -68,14 +72,14 @@ public class ServiceProductWebController  extends BaseController {
     @ControllerLog(doAction = "服务超市首页,热门产品")
     @ApiOperation(value ="服务超市首页,热门产品")
     @RequestMapping(value = "/findHotProducts",method = RequestMethod.GET)
-    public Result<PaginationData<List<HotProducts>>> findHotProducts(Page page){
+    public Result<PaginationData<List<HotProducts>>> findHotProducts(@RequestBody Page page){
         PaginationData data = productService.findHotProducts(page);
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表")
-    @ApiOperation(value ="服务产品列表(app共用)")
+    @ApiOperation(value ="服务产品列表")
     @RequestMapping(value = "/findProductList",method = RequestMethod.GET)
-    public Result<PaginationData<List<WebServiceProductInfo>>> findProductList(ProductInquiryInfo info){
+    public Result<PaginationData<List<WebServiceProductInfo>>> findProductList( ProductInquiryInfo info){
         PaginationData data = productService.findWebProductList(info,true);
         return new Result(data);
     }
@@ -91,19 +95,17 @@ public class ServiceProductWebController  extends BaseController {
     @ApiOperation(value ="机构-服务产品列表,(app-产品管理)")
     @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
     @RequestMapping(value = "/findOrgProductList",method = RequestMethod.GET)
-    public Result<PaginationData<List<ServiceProductManage>>> findOrgProductList(ProductInquiryInfo info){
-        Assert.notNull(info.getOrgId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
-        Assert.notNull(info.getProductType(), ServiceProductExceptionEnum.SERVICE_PRODUCT_PRODUCT_TYPE_EMPTY.getMessage());
-        PaginationData data =    productService.findOrgProductList(info,true);
-                return  new Result(data);
+    public Result<PaginationData<List<ServiceProductManage>>> findOrgProductList( OrgProductQuery query){
+        PaginationData data  =  productService.findOrgProductList(query,true);
+        return  new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品,")
     @ApiOperation(value="服务产品列表,只包含服务Id和服务名称,用于机构上架常规服务产品(App上架常规产品)")
     @RequiresPermissions("/servicemarket/product/web/findShelfProductList")
     @RequestMapping(value = "/findShelfProductList",method = RequestMethod.GET)
-    public Result< List<CommonServiceShelf>> findShelfProductList(@ApiParam(name = "orgId", value = "机构Id", required = true) @RequestParam String  orgId){
+    public Result< List<ProductShelf>> findShelfProductList(@ApiParam(name = "orgId", value = "机构Id", required = true) @RequestParam String  orgId){
         Assert.notNull(orgId, ServiceProductExceptionEnum.SERVICE_PRODUCT_ORG_ID_EMPTY.getMessage());
-        List<CommonServiceShelf> data =    productService.findShelfProductList(orgId);
+        List<ProductShelf> data =    productService.findShelfProductList(orgId);
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品信息,上架常规服务产品时展示")
@@ -118,8 +120,8 @@ public class ServiceProductWebController  extends BaseController {
     @ControllerLog(doAction = "服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
     @ApiOperation(value="服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件")
     @RequestMapping(value = "/productQueryList",method = RequestMethod.GET)
-    public Result<List<CommonServiceShelf>> productQueryList(String productName){
-        List<CommonServiceShelf> data =    productService.productQueryList(productName);
+    public Result<List<ProductShelf>> productQueryList(String productName){
+        List<ProductShelf> data =    productService.productQueryList(productName);
         return new Result(data);
     }
 
@@ -127,8 +129,7 @@ public class ServiceProductWebController  extends BaseController {
     @ApiOperation(value="机构-编辑常规产品(App编辑常规服务产品")
     @RequiresPermissions("/servicemarket/product/web/updateCommonProduct")
     @RequestMapping(value = "/updateCommonProduct",method = RequestMethod.POST)
-    public Result updateCommonProduct(@RequestBody  CommonServiceShelf product){
-        Assert.notNull(product.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+    public Result updateCommonProduct(@RequestBody  OrgUpdateCommonProduct product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         productService.updateCommonProduct(product,user.getAccount());
         return new Result();
@@ -137,17 +138,16 @@ public class ServiceProductWebController  extends BaseController {
     @ApiOperation(value="机构-编辑特色产品,(App编辑特色服务产品)")
     @RequiresPermissions("/servicemarket/product/web/updateFeatureProduct")
     @RequestMapping(value = "/updateFeatureProduct",method = RequestMethod.POST)
-    public Result updateFeatureProduct(@RequestBody @Validated ServiceContent content){
-        Assert.notNull(content.getProductId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getMessage());
+    public Result updateFeatureProduct(@RequestBody @Validated OrgUpdateFeatureProduct product){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        productService.updateFeatureProduct(content,user.getAccount());
+        productService.updateFeatureProduct(product,user.getAccount());
         return new Result();
     }
     @ControllerLog(doAction = "顾问-服务产品列表")
     @ApiOperation(value="顾问-服务产品列表")
     @RequiresPermissions("/servicemarket/product/web/advisorProductList")
     @RequestMapping(value = "/advisorProductList",method = RequestMethod.GET)
-    public Result<PaginationData< List<AdvisorProductInfo>>> advisorProductList(@Validated AdvisorProductQuery query){
+    public Result<PaginationData< List<AdvisorProductInfo>>> advisorProductList( @Validated AdvisorProductQuery query){
         Assert.notNull(query.getAdvisorAccount(), ServiceProductExceptionEnum.SERVICE_PRODUCT_ADVISOR_ACCOUNT_EMPTY.getMessage());
         PaginationData data =   productService.advisorProductList(query,true);
 
@@ -156,15 +156,17 @@ public class ServiceProductWebController  extends BaseController {
     @ControllerLog(doAction = "同类型服务产品列表")
     @ApiOperation(value ="同类型服务产品列表(App服务产品详情下的同类型服务列表)")
     @RequestMapping(value = "/sameTypeProductList",method = RequestMethod.GET)
-    public Result<PaginationData<List<WebServiceProductInfo>>> sameTypeProductList(ProductInquiryInfo info){
-        Assert.notNull(info.getSignoryId(), ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());
+    public Result<PaginationData<List<WebServiceProductInfo>>> sameTypeProductList(@ApiParam(name = "signoryId", value = "领域Id", required = true) @RequestParam String  signoryId){
+        Assert.notNull(signoryId, ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());
+        ProductInquiryInfo info = new ProductInquiryInfo();
+        info.setSignoryId(signoryId);
         PaginationData data = productService.findWebProductList(info,true);
         return new Result(data);
     }
     @ControllerLog(doAction = "首次进入产品列表界面,统计信息加产品列表信息")
-    @ApiOperation(value ="首次进入产品列表界面,统计信息加产品列表信息,(app产品列表))")
+    @ApiOperation(value ="首次进入产品列表界面,统计信息加产品列表信息")
     @RequestMapping(value = "/productListAndStatistics",method = RequestMethod.GET)
-    public Result<ProductListAndCountVO> productListAndStatistics(ProductInquiryInfo info){
+    public Result<ProductListAndCountVO> productListAndStatistics( ProductInquiryInfo info){
         PaginationData data = productService.findWebProductList(info,true);
         ServiceStatistics serviceStatistics =productService.findServiceStatistics();
         ProductListAndCountVO vo = new ProductListAndCountVO();

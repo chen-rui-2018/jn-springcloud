@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "AdvisorListParam",description = "前台服务产品列表查询入参")
 public class ProductInquiryInfo extends Page implements Serializable {
-    @ApiModelProperty(value = "领域Id,用户中心查询产品时不传值")
+    @ApiModelProperty(value = "领域Id")
     private String signoryId;
     @ApiModelProperty(value = "机构id")
     private String orgId;

@@ -7,22 +7,21 @@ import org.hibernate.validator.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * 服务产品审批,上下架
+ * 产品上下架操作 的 bean
  * @author： chenr
- * @date： Created on 2019/2/18 10:47
+ * @date： Created on 2019/3/23 11:51
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ServiceProductApproval", description = "服务产品审批,上下架")
-public class ServiceProductApproval implements Serializable {
+@ApiModel(value="ProductShelfOperation" ,description = "产品上下架操作的 bean")
+public class ProductShelfOperation implements Serializable {
     @ApiModelProperty(value = "服务产品ID",required = true)
     @NotBlank(message = "产品Id 不能为空")
     private String productId;
-    @ApiModelProperty(value = "状态(审批结果 1:审批通过,2:审批不通过)",required = true,example = "1")
-    @NotBlank(message = "审批结果不能为空")
+    @ApiModelProperty(value = "状态(上架 1,下架-1)",required = true)
+    @NotBlank(message = "操作行为结果不能为空")
     private String status;
-    @ApiModelProperty(value = "审批意见",example = "符合要求,审批通过")
-    private String approvalComments;
+
     public String getProductId() {
         return productId;
     }
@@ -37,13 +36,5 @@ public class ServiceProductApproval implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getApprovalComments() {
-        return approvalComments;
-    }
-
-    public void setApprovalComments(String approvalComments) {
-        this.approvalComments = approvalComments;
     }
 }

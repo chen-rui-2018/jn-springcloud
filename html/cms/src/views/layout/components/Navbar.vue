@@ -3,11 +3,10 @@
     <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container" />
 
     <breadcrumb class="breadcrumb-container" />
-
+    <a href="http://112.94.22.222:2381" target="_blank" style="display:inline-block;margin-left: 20px;">快速开发平台</a>
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <!-- <error-log class="errLog-container right-menu-item"/> -->
-
         <div class="avatar-wrapper">
           <span v-if="userName!==null">
             {{ userName }}
@@ -19,6 +18,7 @@
         </div>
       </template>
     </div>
+    <iframe v-show = "false" ref="iframe" frameborder = "0" src="" name="kskfpt" scrolling="auto"/>
   </div>
 </template>
 
@@ -57,6 +57,16 @@ export default {
     // } else {
     //   this.userName = localStorage.getItem('userName')
     // }
+
+    // 登录成功，请求快速快发平台进行登录,iframe
+    /* axios.get('http://localhost:8080/ibps/noPasswordLogin.htm?username=' + this.loginForm.username + '&password=123', response => {
+      if (response.status >= 200 && response.status < 300) {
+        console.log(response.data)
+      } else {
+        console.log(response.message)
+      }
+    })*/
+    this.$refs.iframe.contentWindow.location.replace('http://112.94.22.222:2381/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
   },
   methods: {
     toggleSideBar() {

@@ -128,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[后台管理-活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId, activityDetails == null ? 0 : activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR);
         }
-        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        List<ParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
         activityDetail.setParkCodes(parkCodeByType);
         return activityDetail;

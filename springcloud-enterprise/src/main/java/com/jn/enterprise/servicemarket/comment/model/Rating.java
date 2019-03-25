@@ -22,9 +22,9 @@ public class Rating {
     private String productName;
     @ApiModelProperty(value = "机构电话")
     private String orgTelephone;
-    @ApiModelProperty(value = "需求提出时间")
+    @ApiModelProperty(value = "需求提出时间 yyyy-MM-dd HH:mm:ss")
     private String issueTime;
-    @ApiModelProperty(value = "需求处理时间")
+    @ApiModelProperty(value = "需求处理时间 yyyy-MM-dd HH:mm:ss")
     private String handleTime;
     @ApiModelProperty(value = "点评状态")
     private String isComment;

@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * 服务点评
- * @Author: yangph
+ * @Author: jiangyl
  * @Date: 2019/2/25 14:51
  * @Version v1.0
  * @modified By:
@@ -66,22 +66,22 @@ public class CommentController extends BaseController {
     @ApiOperation(value = "获取评价页详情",notes = "已评价和未评价都从这接口获取")
     @RequestMapping(value = "/getRatingCommentDetail",method = RequestMethod.GET)
     @RequiresPermissions("/guest/serviceMarket/comment/getRatingCommentDetail")
-    public Result getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true)@RequestParam(value = "id") String id){
+    public Result<RatingDetail> getRatingCommentDetail(@ApiParam(name="id",value = "需求/评价id",required = true,example = "2cc20cc10c4b4d608f5a05728b86d888")@RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         RatingDetail ratingCommentDetail = commentService.getRatingCommentDetail(id);
-        return new Result(ratingCommentDetail);
+        return new Result<>(ratingCommentDetail);
     }
 
     @ControllerLog(doAction = "提交评价信息")
     @ApiOperation(value = "提交评价信息")
     @RequestMapping(value = "/saveRatingComment",method = RequestMethod.POST)
     @RequiresPermissions("/guest/serviceMarket/comment/saveRatingComment")
-    public Result saveRatingComment(@RequestBody @Validated CommentParameter commentParameter){
+    public Result<Boolean> saveRatingComment(@RequestBody @Validated CommentParameter commentParameter){
         Assert.notNull(commentParameter.getId(), OrgExceptionEnum.COMMENT_ID_IS_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Boolean aBoolean = commentService.saveRatingComment(commentParameter,user.getAccount());
         logger.info("提交评价信息,需求ID{},响应结果{}",commentParameter.getId(),aBoolean);
-        return new Result(aBoolean);
+        return new Result<>(aBoolean);
     }
 
 }

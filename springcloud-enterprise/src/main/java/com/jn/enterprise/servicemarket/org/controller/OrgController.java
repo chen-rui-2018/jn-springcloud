@@ -61,7 +61,8 @@ public class OrgController extends BaseController {
     @ApiOperation(value = "获取服务机构详情,(app机构详情)", notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
-    public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+    public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")
+                                                       @RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         return new Result<>(orgService.getServiceOrgDetail(orgId));
     }
@@ -70,7 +71,8 @@ public class OrgController extends BaseController {
     @ApiOperation(value = "获取服机构信息(app机构信息)",notes = "查询条件orgId")
     @RequestMapping(value = "/getOrgInfoForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
-    public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true)@RequestParam(value = "orgId")  String orgId){
+    public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367"
+    )@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         ProductInquiryInfo info = new ProductInquiryInfo();
         info.setOrgId(orgId);

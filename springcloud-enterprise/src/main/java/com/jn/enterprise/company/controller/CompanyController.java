@@ -40,7 +40,7 @@ public class CompanyController extends BaseController {
     @ApiOperation(value = "根据用户账号查询企业信息",notes = "用户为企业管理员")
     @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId",method = RequestMethod.GET)
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
-            @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true)
+            @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true,example = "wangsong")
             @RequestParam(value = "accountOrCompanyId") String accountOrCompanyId){
         return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
     }

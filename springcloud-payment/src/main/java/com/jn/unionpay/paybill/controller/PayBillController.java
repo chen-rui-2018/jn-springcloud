@@ -55,7 +55,7 @@ public class PayBillController extends BaseController {
     @ApiOperation(value = "获取账单详情",notes = "可根据账单ID和账单编号查询")
     @RequestMapping(value = "/getPayBillDetailByIdOrNum",method = RequestMethod.GET)
     public Result<PayBillVO> getPayBillDetailByIdOrNum(
-            @ApiParam(name="idOrNum",value = "账单ID或编号",required = true)
+            @ApiParam(name="idOrNum",value = "账单ID或编号",required = true,example = "TC-2019031910124")
             @RequestParam(value = "idOrNum") String idOrNum){
         Assert.notNull(idOrNum, PayBillExceptionEnum.BILL_ID_OR_NUM_IS_NOT_NULL.getMessage());
         return new Result<>(payBillService.getPayBillDetailByIdOrNum(idOrNum));

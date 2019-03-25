@@ -66,7 +66,7 @@ public class OrgApproveController extends BaseController{
     @ApiOperation(value = "查询机构审核详情")
     @RequestMapping(value = "/getOrgApplyDetail",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/OrgApproveController/getOrgApplyDetail")
-    public Result<OrgApplyDetailVo> getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true)@RequestParam(value = "orgId") String orgId){
+    public Result<OrgApplyDetailVo> getOrgApplyDetail(@ApiParam(name="orgId",value = "orgId:机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")@RequestParam(value = "orgId") String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         OrgApplyDetailVo orgApplyDetailVo = orgApproveService.getOrgApplyDetail(orgId);
         return new Result<>(orgApplyDetailVo);

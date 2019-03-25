@@ -51,7 +51,7 @@ public class IndustryManageController extends BaseController {
     @ApiOperation(value = "新增行业领域")
     @RequestMapping(value = "/saveIndustry",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/industryManage/saveIndustry")
-    public Result saveIndustry(@RequestBody @Validated IndustryData industryData){
+    public Result<Boolean> saveIndustry(@RequestBody @Validated IndustryData industryData){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Boolean b = industryService.saveOrUpdateIndustry(industryData,user.getAccount());
         return new Result(b);
@@ -72,7 +72,7 @@ public class IndustryManageController extends BaseController {
     @ApiOperation(value = "行业领域详情")
     @RequestMapping(value = "/getIndustryDetail",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/industryManage/getIndustryDetail")
-    public Result<Industry> getIndustryDetail(@ApiParam(value = "领域id" ,required = true) @RequestParam(value = "id") String id){
+    public Result<Industry> getIndustryDetail(@ApiParam(value = "领域id" ,required = true,example = "ogistics") @RequestParam(value = "id") String id){
         Assert.notNull(id, OrgExceptionEnum.PRE_ID_IS_NOT_NULL.getMessage());
         Industry industryDetail = industryService.getIndustryDetail(id);
         return new Result(industryDetail);

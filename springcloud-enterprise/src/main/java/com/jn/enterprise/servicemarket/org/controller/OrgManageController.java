@@ -45,7 +45,7 @@ public class OrgManageController extends BaseController {
     private OrgService orgService;
 
     @ControllerLog(doAction = "保存服务机构基本信息")
-    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)")
+    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)",notes = "返回结果为机构ID")
     @RequestMapping(value = "/saveOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
     public Result<String> saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){

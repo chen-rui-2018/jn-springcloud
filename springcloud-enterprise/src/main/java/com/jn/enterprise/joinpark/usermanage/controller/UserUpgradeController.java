@@ -58,7 +58,7 @@ public class UserUpgradeController {
 
 
     @ControllerLog(doAction = "升级企业工作流回调接口")
-    @ApiOperation(value = "升级企业工作流回调接口")
+    @ApiOperation(value = "升级企业工作流回调接口",notes = "前端无需理会该接口，此处仅为测试使用")
     @RequestMapping(value = "/changeToCompanyCallBack",method = RequestMethod.POST)
     public Result<Boolean> changeToCompanyCallBack(@RequestBody @Validated CompanyCheckCallBackParam companyCheckCallBackParam) {
         Boolean aBoolean = userUpgradeService.changeToCompanyCallBack(companyCheckCallBackParam);
@@ -66,7 +66,7 @@ public class UserUpgradeController {
     }
 
     @ControllerLog(doAction = "升级员工工作流回调接口")
-    @ApiOperation(value = "升级员工工作流回调接口")
+    @ApiOperation(value = "升级员工工作流回调接口",notes = "前端无需理会该接口，此处仅为测试使用")
     @RequestMapping(value = "/changeToStaffCallBack",method = RequestMethod.POST)
     public Result<Boolean> changeToStaffCallBack(@RequestBody @Validated StaffCheckCallBackParam staffCheckCallBackParam) {
         Boolean aBoolean = userUpgradeService.changeToStaffCallBack(staffCheckCallBackParam);

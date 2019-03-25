@@ -51,7 +51,7 @@ public class PayManageController {
     @ControllerLog(doAction = "获取账单核对单详情")
     @ApiOperation(value = "获取账单核对单详情",notes = "查询条件：支付提醒remindId")
     @RequestMapping(value = "/getBillRemindDetail",method = RequestMethod.GET)
-    public Result<PayRemindVO> getBillRemindDetail(@ApiParam(value = "支付提醒remindId" ,required = true)
+    public Result<PayRemindVO> getBillRemindDetail(@ApiParam(value = "支付提醒remindId" ,required = true,example = "a08e4fe712684def8f2f6b95338e66fa")
                                                        @RequestParam(value = "remindId") String remindId){
         Assert.notNull(remindId, PayBillExceptionEnum.PAYMENT_REMIND_ID_IS_NOT_NULL.getMessage());
         PayRemindVO payRemindVO = payRemindService.getBillRemindDetail(remindId);

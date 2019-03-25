@@ -8,7 +8,7 @@
         (select
         a.org_id as "orgId",a.org_name as "orgName",
         a.org_logo as "orgLogo",a.org_show as "pageviews",
-        date_format(a.org_register_time,'%Y-%m-%d %H:%i:%s') as "orgRegisterTime",
+        date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
         CONCAT(i.org_province,i.org_city,i.org_area,i.org_address) as "orgAddress",
         (select count(1) from tb_service_require t where t.org_id = a.org_id and t.record_status = '1' and t.handle_result = '1' ) as "transactionNum" <!-- 累计交易笔数 -->
@@ -51,6 +51,7 @@
         <result column="s_orgName" jdbcType="VARCHAR" property="orgName" javaType="java.lang.String"/>
         <result column="s_orgBusiness" jdbcType="VARCHAR" property="orgBusiness" javaType="java.lang.String"/>
         <result column="s_orgSynopsis" jdbcType="VARCHAR" property="orgSynopsis" javaType="java.lang.String"/>
+        <result column="s_orgStatus" jdbcType="VARCHAR" property="orgStatus" javaType="java.lang.String"/>
         <result column="s_orgShow" jdbcType="VARCHAR" property="orgShow" javaType="java.lang.String"/>
         <result column="s_transactionCount" jdbcType="VARCHAR" property="transactionCount" javaType="java.lang.String"/>
         <result column="s_orgServiceScore" jdbcType="VARCHAR" property="orgServiceScore" javaType="java.lang.String"/>
@@ -116,6 +117,7 @@
           o.org_name AS "s_orgName",
           o.org_business AS "s_orgBusiness",
           o.org_synopsis AS "s_orgSynopsis",
+          o.org_status AS "s_orgStatus",
           o.org_show AS "s_orgShow",
           (select count(1) from tb_service_require tr where tr.org_id = o.org_id and tr.record_status = '1' and tr.handle_result = '1' ) AS "s_transactionCount",
           (SELECT(SUM(attitude_score) / COUNT(1)) FROM tb_service_rating ra WHERE ra.org_id = o.org_id) AS "s_orgServiceScore",

@@ -22,10 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -164,8 +161,8 @@ public class ActivityController extends BaseController {
     }
 
     @ControllerLog(doAction = "活动报名列表")
-    @ApiOperation(value = "活动报名列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/applyActivityList")
+    @ApiOperation(value = "活动报名列表")
+    @RequestMapping(value = "/applyActivityList",method = RequestMethod.GET)
     @RequiresPermissions("/activity/applyActivityList")
     public Result<PaginationData<List<ActivityApplyDetail>>> applyActivityList(@RequestBody @Validated ActivityApplyParam activityApplyParam) {
         Assert.notNull(activityApplyParam.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());

@@ -2,6 +2,7 @@ package com.jn.park.sp.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Page;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.sp.model.SpDictDepartModel;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
@@ -22,7 +23,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "对外行政审批中心-门户")
+@Api(tags = "对外行政审批中心-门户(新)")
 @RestController
 @RequestMapping("/portal/sp/power")
 public class SpPowerPortalController extends BaseController {
@@ -49,8 +50,8 @@ public class SpPowerPortalController extends BaseController {
             @ApiImplicitParam(name = "type",value = "权力类型",example = "1"),
             @ApiImplicitParam(name = "code",value = "权力编码",example = "0100381002")
     })
-    public Result<List<SpPowerVo>> list(String name,String parentId,String departId,String type,String code, @ApiParam("分页参数") Page page){
-        return new Result<List<SpPowerVo>>();
+    public Result<PaginationData<List<SpPowerVo>>> list(String name, String parentId, String departId, String type, String code, @ApiParam("分页参数") Page page){
+        return new Result<PaginationData<List<SpPowerVo>>>();
     }
 
 

@@ -735,6 +735,146 @@ public class TbSpPowerCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andLevelIsNull() {
+            addCriterion("level is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelIsNotNull() {
+            addCriterion("level is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelEqualTo(String value) {
+            addCriterion("level =", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelNotEqualTo(String value) {
+            addCriterion("level <>", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelGreaterThan(String value) {
+            addCriterion("level >", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelGreaterThanOrEqualTo(String value) {
+            addCriterion("level >=", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelLessThan(String value) {
+            addCriterion("level <", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelLessThanOrEqualTo(String value) {
+            addCriterion("level <=", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelLike(String value) {
+            addCriterion("level like", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelNotLike(String value) {
+            addCriterion("level not like", value, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelIn(List<String> values) {
+            addCriterion("level in", values, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelNotIn(List<String> values) {
+            addCriterion("level not in", values, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelBetween(String value1, String value2) {
+            addCriterion("level between", value1, value2, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andLevelNotBetween(String value1, String value2) {
+            addCriterion("level not between", value1, value2, "level");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromIsNull() {
+            addCriterion("from is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromIsNotNull() {
+            addCriterion("from is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromEqualTo(String value) {
+            addCriterion("from =", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromNotEqualTo(String value) {
+            addCriterion("from <>", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromGreaterThan(String value) {
+            addCriterion("from >", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromGreaterThanOrEqualTo(String value) {
+            addCriterion("from >=", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromLessThan(String value) {
+            addCriterion("from <", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromLessThanOrEqualTo(String value) {
+            addCriterion("from <=", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromLike(String value) {
+            addCriterion("from like", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromNotLike(String value) {
+            addCriterion("from not like", value, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromIn(List<String> values) {
+            addCriterion("from in", values, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromNotIn(List<String> values) {
+            addCriterion("from not in", values, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromBetween(String value1, String value2) {
+            addCriterion("from between", value1, value2, "from");
+            return (Criteria) this;
+        }
+
+        public Criteria andFromNotBetween(String value1, String value2) {
+            addCriterion("from not between", value1, value2, "from");
+            return (Criteria) this;
+        }
+
         public Criteria andIsAreaIsNull() {
             addCriterion("is_area is null");
             return (Criteria) this;

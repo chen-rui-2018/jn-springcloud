@@ -85,7 +85,7 @@ public class InvestorManagementController extends BaseController {
     @ApiOperation(value = "投资人详情", httpMethod = "GET", response = Result.class)
     @RequiresPermissions("/technologyFinancial/investorManagementController/getInvestorInfoDetails")
     @RequestMapping(value = "/getInvestorInfoDetails",method = RequestMethod.GET)
-    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true)@RequestParam("investorAccount") String investorAccount){
+    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true,example = "wangsong")@RequestParam("investorAccount") String investorAccount){
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
         return  new Result(investorInfoDetailsVo);

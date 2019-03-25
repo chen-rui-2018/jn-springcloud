@@ -119,20 +119,22 @@ public class InvestorServiceImpl implements InvestorService {
             logger.warn("<<----当前投资人[{}]信息不存在--->>",investorAccount);
             throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_INFO_NOT_EXIST);
         }
+        InvestorBaseInfoShow investorBaseInfoShow=new InvestorBaseInfoShow();
+        BeanUtils.copyProperties(tbServiceInvestorList.get(0), investorBaseInfoShow);
         //设置投资人基本信息
-        investorInfoDetailsVo.setTbServiceInvestor(tbServiceInvestorList.get(0));
+        investorInfoDetailsVo.setInvestorBaseInfoShow(investorBaseInfoShow);
         //投资人主投领域
-        List<TbServiceInvestorMainArea> tbServiceInvestorMainAreaList = getMainAreaList(investorAccount);
-        investorInfoDetailsVo.setMainAreaList(tbServiceInvestorMainAreaList);
+        List<InvestorMainArea> mainAreaList = getMainAreaList(investorAccount);
+        investorInfoDetailsVo.setMainAreaList(mainAreaList);
         //投资人主投轮次
-        List<TbServiceInvestorMainRound> tbServiceInvestorMainRoundList = getMainRoundList(investorAccount);
-        investorInfoDetailsVo.setMainRoundList(tbServiceInvestorMainRoundList);
+        List<InvestorMainRound> mainRoundList = getMainRoundList(investorAccount);
+        investorInfoDetailsVo.setMainRoundList(mainRoundList);
         //投资人工作经历
-        List<TbServiceInvestorWorkExp> tbServiceInvestorWorkExpList = getWorkExpList(investorAccount);
-        investorInfoDetailsVo.setWorkExpList(tbServiceInvestorWorkExpList);
+        List<InvestorWorkExperienceShow> workExpList = getWorkExpList(investorAccount);
+        investorInfoDetailsVo.setWorkExperienceList(workExpList);
         //投资人教育经历
-        List<TbServiceInvestorEduExp> tbServiceInvestorEduExpList = getEduExpList(investorAccount);
-        investorInfoDetailsVo.setEduExpList(tbServiceInvestorEduExpList);
+        List<InvestorEduExperienceShow> eduExpList = getEduExpList(investorAccount);
+        investorInfoDetailsVo.setEduExpList(eduExpList);
         return investorInfoDetailsVo;
     }
 
@@ -142,10 +144,20 @@ public class InvestorServiceImpl implements InvestorService {
      * @return
      */
     @ServiceLog(doAction = "根据投资人账号获取投资人教育经历")
-    private List<TbServiceInvestorEduExp> getEduExpList(String investorAccount) {
+    private List<InvestorEduExperienceShow> getEduExpList(String investorAccount) {
         TbServiceInvestorEduExpCriteria example=new TbServiceInvestorEduExpCriteria();
         example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
-        return tbServiceInvestorEduExpMapper.selectByExample(example);
+        List<TbServiceInvestorEduExp> tbServiceInvestorEduExpList = tbServiceInvestorEduExpMapper.selectByExample(example);
+        if(tbServiceInvestorEduExpList.isEmpty()){
+            return null;
+        }
+        List<InvestorEduExperienceShow> resultList=new ArrayList<>(16);
+        for(TbServiceInvestorEduExp tbServiceInvestorEduExp:tbServiceInvestorEduExpList){
+            InvestorEduExperienceShow investorEduExperienceShow=new InvestorEduExperienceShow();
+            BeanUtils.copyProperties(tbServiceInvestorEduExp, investorEduExperienceShow);
+            resultList.add(investorEduExperienceShow);
+        }
+        return resultList;
     }
 
     /**
@@ -154,10 +166,20 @@ public class InvestorServiceImpl implements InvestorService {
      * @return
      */
     @ServiceLog(doAction = "根据投资人账号获取投资人工作经历")
-    private List<TbServiceInvestorWorkExp> getWorkExpList(String investorAccount) {
+    private List<InvestorWorkExperienceShow> getWorkExpList(String investorAccount) {
         TbServiceInvestorWorkExpCriteria example=new TbServiceInvestorWorkExpCriteria();
         example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
-        return tbServiceInvestorWorkExpMapper.selectByExample(example);
+        List<TbServiceInvestorWorkExp> workExpList = tbServiceInvestorWorkExpMapper.selectByExample(example);
+        if(workExpList.isEmpty()){
+            return null;
+        }
+        List<InvestorWorkExperienceShow> resultList=new ArrayList<>();
+        for(TbServiceInvestorWorkExp tbServiceInvestorWorkExp:workExpList){
+            InvestorWorkExperienceShow investorWorkExperienceShow=new InvestorWorkExperienceShow();
+            BeanUtils.copyProperties(tbServiceInvestorWorkExp, investorWorkExperienceShow);
+            resultList.add(investorWorkExperienceShow);
+        }
+        return resultList;
     }
 
     /**
@@ -166,11 +188,23 @@ public class InvestorServiceImpl implements InvestorService {
      * @return
      */
     @ServiceLog(doAction = "根据投资人账号获取投资人主投轮次")
-    private List<TbServiceInvestorMainRound> getMainRoundList(String investorAccount) {
+    private List<InvestorMainRound> getMainRoundList(String investorAccount) {
         TbServiceInvestorMainRoundCriteria example=new TbServiceInvestorMainRoundCriteria();
         example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
-        return tbServiceInvestorMainRoundMapper.selectByExample(example);
-    }
+        List<TbServiceInvestorMainRound> investorMainRoundList = tbServiceInvestorMainRoundMapper.selectByExample(example);
+        if(investorMainRoundList.isEmpty()){
+            return null;
+        }
+        List<InvestorMainRound> resultList=new ArrayList<>(16);
+        for(TbServiceInvestorMainRound tbServiceInvestorMainRound:investorMainRoundList){
+            InvestorMainRound investorMainRound=new InvestorMainRound();
+            investorMainRound.setMainRoundCode(tbServiceInvestorMainRound.getMainRoundCode());
+            investorMainRound.setMainRoundName(tbServiceInvestorMainRound.getMainRoundName());
+            resultList.add(investorMainRound);
+
+        }
+        return resultList;
+     }
 
     /**
      * 根据投资人账号获取投资人主投领域
@@ -178,10 +212,21 @@ public class InvestorServiceImpl implements InvestorService {
      * @return
      */
     @ServiceLog(doAction = "根据投资人账号获取投资人主投领域")
-    private List<TbServiceInvestorMainArea> getMainAreaList(String investorAccount) {
+    private List<InvestorMainArea> getMainAreaList(String investorAccount) {
         TbServiceInvestorMainAreaCriteria example=new TbServiceInvestorMainAreaCriteria();
         example.createCriteria().andInvestorAccountEqualTo(investorAccount).andRecordStatusEqualTo(RECORD_STATUS);
-        return tbServiceInvestorMainAreaMapper.selectByExample(example);
+        List<TbServiceInvestorMainArea> tbServiceInvestorMainAreaList = tbServiceInvestorMainAreaMapper.selectByExample(example);
+        if(tbServiceInvestorMainAreaList.isEmpty()){
+            return null;
+        }
+        List<InvestorMainArea> investorMainAreaList=new ArrayList<>(16);
+        for(TbServiceInvestorMainArea tbServiceInvestorMainArea:tbServiceInvestorMainAreaList){
+            InvestorMainArea investorMainArea=new InvestorMainArea();
+            investorMainArea.setMainCode(tbServiceInvestorMainArea.getMainCode());
+            investorMainArea.setMainName(tbServiceInvestorMainArea.getMainName());
+            investorMainAreaList.add(investorMainArea);
+        }
+        return investorMainAreaList;
     }
 
     /**
@@ -203,19 +248,19 @@ public class InvestorServiceImpl implements InvestorService {
      */
     @ServiceLog(doAction = "查询所属单位")
     @Override
-    public List<AffiliaationUnitShow> getAffiliationUnit(String orgName) {
+    public List<AffiliationUnitShow> getAffiliationUnit(String orgName) {
         //根据单位名称，从机构信息表（tb_service_org）中模糊查询所有机构
         TbServiceOrgCriteria example=new TbServiceOrgCriteria();
         //审核通过
         String status="1";
         example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
         List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
-        List<AffiliaationUnitShow> resultList=new ArrayList<>(16);
+        List<AffiliationUnitShow> resultList=new ArrayList<>(16);
         for(TbServiceOrg serviceOrg:tbServiceOrgList){
-            AffiliaationUnitShow affiliaationUnitShow=new AffiliaationUnitShow();
-            affiliaationUnitShow.setOrgId(serviceOrg.getOrgId());
-            affiliaationUnitShow.setOrgName(serviceOrg.getOrgName());
-            resultList.add(affiliaationUnitShow);
+            AffiliationUnitShow affiliationUnitShow =new AffiliationUnitShow();
+            affiliationUnitShow.setOrgId(serviceOrg.getOrgId());
+            affiliationUnitShow.setOrgName(serviceOrg.getOrgName());
+            resultList.add(affiliationUnitShow);
         }
         return resultList;
     }
@@ -258,14 +303,14 @@ public class InvestorServiceImpl implements InvestorService {
         List<InvestorMainRound> investorMainRoundList = investorAuthenticateParam.getInvestorMainRoundList();
         addInvestorMainRoundBatch(investorAccount, investorMainRoundList);
         //工作经历
-        List<InvestorWorkExperience> investorWorkExperienceList = investorAuthenticateParam.getInvestorWorkExperienceList();
-        if(investorWorkExperienceList!=null && !investorWorkExperienceList.isEmpty()){
-            addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceList);
+        List<InvestorWorkExperienceParam> investorWorkExperienceParamList = investorAuthenticateParam.getInvestorWorkExperienceParamList();
+        if(investorWorkExperienceParamList !=null && !investorWorkExperienceParamList.isEmpty()){
+            addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceParamList);
         }
         //教育经历
-        List<InvestorEduExperience> investorEduExperienceList = investorAuthenticateParam.getInvestorEduExperienceList();
-        if(investorEduExperienceList!=null && !investorEduExperienceList.isEmpty()){
-            addInvestorEduExperienceBatch(investorAccount,investorEduExperienceList);
+        List<InvestorEduExperienceParam> investorEduExperienceParamList = investorAuthenticateParam.getInvestorEduExperienceParamList();
+        if(investorEduExperienceParamList !=null && !investorEduExperienceParamList.isEmpty()){
+            addInvestorEduExperienceBatch(investorAccount, investorEduExperienceParamList);
         }
         return responseNum;
     }
@@ -273,18 +318,18 @@ public class InvestorServiceImpl implements InvestorService {
     /**
      * 批量新增投资人教育经历信息
      * @param investorAccount
-     * @param investorEduExperienceList
+     * @param investorEduExperienceParamList
      */
     @ServiceLog(doAction = "批量新增投资人教育经历信息")
-    private void addInvestorEduExperienceBatch(String investorAccount, List<InvestorEduExperience> investorEduExperienceList) {
+    private void addInvestorEduExperienceBatch(String investorAccount, List<InvestorEduExperienceParam> investorEduExperienceParamList) {
         List<TbServiceInvestorEduExp> eduExpList=new ArrayList<>(16);
-        if(!investorEduExperienceList.isEmpty()){
-            for(InvestorEduExperience investorEduExperience:investorEduExperienceList){
-                if(StringUtils.isNotBlank(investorEduExperience.getStartTime()) && StringUtils.isNotBlank(investorEduExperience.getEndTime())){
-                    int startTime = Integer.parseInt(investorEduExperience.getStartTime().replaceAll("-", ""));
-                    int endTime = Integer.parseInt(investorEduExperience.getEndTime().replaceAll("-", ""));
+        if(!investorEduExperienceParamList.isEmpty()){
+            for(InvestorEduExperienceParam investorEduExperienceParam : investorEduExperienceParamList){
+                if(StringUtils.isNotBlank(investorEduExperienceParam.getStartTime()) && StringUtils.isNotBlank(investorEduExperienceParam.getEndTime())){
+                    int startTime = Integer.parseInt(investorEduExperienceParam.getStartTime().replaceAll("-", ""));
+                    int endTime = Integer.parseInt(investorEduExperienceParam.getEndTime().replaceAll("-", ""));
                     if(startTime>endTime){
-                        logger.warn("投资人认证教育经历中数据开始时间:[{}]晚于结束时间:[{}]",investorEduExperience.getStartTime(),investorEduExperience.getEndTime());
+                        logger.warn("投资人认证教育经历中数据开始时间:[{}]晚于结束时间:[{}]", investorEduExperienceParam.getStartTime(), investorEduExperienceParam.getEndTime());
                         throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_EDU_START_TIME_LATER_END_TIME);
                     }
                 }
@@ -294,13 +339,13 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 eduExp.setInvestorAccount(investorAccount);
                 //开始时间
-                eduExp.setStartTime(DateUtils.parseDate(investorEduExperience.getStartTime()));
+                eduExp.setStartTime(DateUtils.parseDate(investorEduExperienceParam.getStartTime()));
                 //结束时间
-                eduExp.setEndTime(DateUtils.parseDate(investorEduExperience.getEndTime()));
+                eduExp.setEndTime(DateUtils.parseDate(investorEduExperienceParam.getEndTime()));
                 //学校名称
-                eduExp.setSchoolName(investorEduExperience.getSchoolName());
+                eduExp.setSchoolName(investorEduExperienceParam.getSchoolName());
                 //专业名称
-                eduExp.setProfessionTitle(investorEduExperience.getProfessionTitle());
+                eduExp.setProfessionTitle(investorEduExperienceParam.getProfessionTitle());
                 //创建时间
                 eduExp.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
                 //创建人
@@ -316,18 +361,18 @@ public class InvestorServiceImpl implements InvestorService {
     /**
      * 批量新增投资人工作经历信息
      * @param investorAccount
-     * @param investorWorkExperienceList
+     * @param investorWorkExperienceParamList
      */
     @ServiceLog(doAction = "批量新增投资人工作经历信息")
-    private void addInvestorWorkExperienceBatch(String investorAccount, List<InvestorWorkExperience> investorWorkExperienceList) {
+    private void addInvestorWorkExperienceBatch(String investorAccount, List<InvestorWorkExperienceParam> investorWorkExperienceParamList) {
         List<TbServiceInvestorWorkExp> workExpList=new ArrayList<>(16);
-        if(!investorWorkExperienceList.isEmpty()){
-            for(InvestorWorkExperience investorWorkExperience:investorWorkExperienceList){
-                if(StringUtils.isNotBlank(investorWorkExperience.getStartTime()) && StringUtils.isNotBlank(investorWorkExperience.getEndTime())){
-                    int startTime = Integer.parseInt(investorWorkExperience.getStartTime().replaceAll("-", ""));
-                    int endTime = Integer.parseInt(investorWorkExperience.getEndTime().replaceAll("-", ""));
+        if(!investorWorkExperienceParamList.isEmpty()){
+            for(InvestorWorkExperienceParam investorWorkExperienceParam : investorWorkExperienceParamList){
+                if(StringUtils.isNotBlank(investorWorkExperienceParam.getStartTime()) && StringUtils.isNotBlank(investorWorkExperienceParam.getEndTime())){
+                    int startTime = Integer.parseInt(investorWorkExperienceParam.getStartTime().replaceAll("-", ""));
+                    int endTime = Integer.parseInt(investorWorkExperienceParam.getEndTime().replaceAll("-", ""));
                     if(startTime>endTime){
-                        logger.warn("投资人认证工作经历中数据开始时间:[{}]晚于结束时间:[{}]",investorWorkExperience.getStartTime(),investorWorkExperience.getEndTime());
+                        logger.warn("投资人认证工作经历中数据开始时间:[{}]晚于结束时间:[{}]", investorWorkExperienceParam.getStartTime(), investorWorkExperienceParam.getEndTime());
                         throw new JnSpringCloudException(InvestorExceptionEnum.INVESTOR_WORK_START_TIME_LATER_END_TIME);
                     }
                 }
@@ -337,13 +382,13 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 workExp.setInvestorAccount(investorAccount);
                 //开始时间
-                workExp.setStartTime(DateUtils.parseDate(investorWorkExperience.getStartTime()));
+                workExp.setStartTime(DateUtils.parseDate(investorWorkExperienceParam.getStartTime()));
                 //结束时间
-                workExp.setEndTime(DateUtils.parseDate(investorWorkExperience.getEndTime()));
+                workExp.setEndTime(DateUtils.parseDate(investorWorkExperienceParam.getEndTime()));
                 //单位名称
-                workExp.setCompanyName(investorWorkExperience.getCompanyName());
+                workExp.setCompanyName(investorWorkExperienceParam.getCompanyName());
                 //职务
-                workExp.setPosition(investorWorkExperience.getPosition());
+                workExp.setPosition(investorWorkExperienceParam.getPosition());
                 //创建时间
                 workExp.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
                 //创建人

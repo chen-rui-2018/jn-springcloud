@@ -54,7 +54,7 @@ public class AdvisorController extends BaseController {
     @ControllerLog(doAction = "服务顾问详情")
     @ApiOperation(value = "服务顾问详情",notes="根据顾问账号获取顾问详情")
     @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
-    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true)@RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);

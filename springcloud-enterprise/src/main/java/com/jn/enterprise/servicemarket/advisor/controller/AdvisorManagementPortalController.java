@@ -59,7 +59,7 @@ public class AdvisorManagementPortalController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementPortalController/getAdvisorManagementDetails")
     @ApiOperation(value = "服务顾问详情(后台门户管理)")
     @RequestMapping(value = "/getAdvisorManagementDetails",method = RequestMethod.GET)
-    public Result<AdvisroManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisroManagementDetailsVo> getAdvisorManagementDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisroManagementDetailsVo advisorManagementDetails = advisorManagementPortalService.getAdvisorManagementDetails(advisorAccount);
         return  new Result(advisorManagementDetails);

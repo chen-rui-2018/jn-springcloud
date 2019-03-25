@@ -61,7 +61,7 @@ public class OrgColleagueController extends BaseController {
     @ApiOperation(value = "设置为联系人",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/setAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/setAsContact")
-    public Result setAsContact(@ApiParam(value = "设置为联系人的账号" ,required = true)String account){
+    public Result setAsContact(@ApiParam(value = "设置为联系人的账号" ,required = true,example = "wangsong")String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         int responseNum = orgColleagueService.setAsContact(account);
         logger.info("------设置为联系人成功，数据响应条数：{}-------",responseNum);
@@ -72,7 +72,7 @@ public class OrgColleagueController extends BaseController {
     @ApiOperation(value = "取消联系人",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/cancelAsContact",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/cancelAsContact")
-    public Result cancelAsContact(@ApiParam(value = "取消联系人的账号" ,required = true)String account){
+    public Result cancelAsContact(@ApiParam(value = "取消联系人的账号" ,required = true,example = "wangsong")String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         int responseNum = orgColleagueService.cancelAsContact(account);
         logger.info("------取消联系人成功，数据响应条数：{}-------",responseNum);
@@ -83,7 +83,7 @@ public class OrgColleagueController extends BaseController {
     @ApiOperation(value = "删除联系人或顾问",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
-    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号" ,required = true)String account){
+    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号" ,required = true,example = "wangsong")String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();

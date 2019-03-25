@@ -57,7 +57,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/echoUserInfo")
     @ApiOperation(value = "通过注册账号回显用户信息")
     @RequestMapping(value = "/echoUserInfo",method = RequestMethod.GET)
-    public Result<UserExtensionInfo> echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true)@RequestParam("registerAccount") String registerAccount){
+    public Result<UserExtensionInfo> echoUserInfo(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "18088888888")@RequestParam("registerAccount") String registerAccount){
         Assert.notNull(registerAccount, AdvisorExceptionEnum.REGISTER_ACCOUNT.getMessage());
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(registerAccount);
         return  userExtension;
@@ -99,7 +99,7 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/advisorDetails")
     @ApiOperation(value = "用户中心顾问详情")
     @RequestMapping(value = "/advisorDetails",method = RequestMethod.GET)
-    public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true) @RequestParam("advisorAccount") String advisorAccount){
+    public Result<AdvisorDetailsVo> advisorDetails(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);

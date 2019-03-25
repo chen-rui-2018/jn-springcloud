@@ -60,9 +60,9 @@ public class InvestorAuthenticateParam implements Serializable {
     @NotNull(message = "主投轮次不能为空")
     private List<InvestorMainRound>investorMainRoundList;
     @ApiModelProperty(value = "工作经历")
-    private List<InvestorWorkExperience>investorWorkExperienceList;
+    private List<InvestorWorkExperienceParam> investorWorkExperienceParamList;
     @ApiModelProperty(value = "教育经历")
-    private List<InvestorEduExperience>investorEduExperienceList;
+    private List<InvestorEduExperienceParam> investorEduExperienceParamList;
 
     public String getInvestorName() {
         return investorName;
@@ -176,19 +176,19 @@ public class InvestorAuthenticateParam implements Serializable {
         this.investorMainRoundList = investorMainRoundList;
     }
 
-    public List<InvestorWorkExperience> getInvestorWorkExperienceList() {
-        return investorWorkExperienceList;
+    public List<InvestorWorkExperienceParam> getInvestorWorkExperienceParamList() {
+        return investorWorkExperienceParamList;
     }
 
-    public void setInvestorWorkExperienceList(List<InvestorWorkExperience> investorWorkExperienceList) {
-        this.investorWorkExperienceList = investorWorkExperienceList;
+    public void setInvestorWorkExperienceParamList(List<InvestorWorkExperienceParam> investorWorkExperienceParamList) {
+        this.investorWorkExperienceParamList = investorWorkExperienceParamList;
     }
 
-    public List<InvestorEduExperience> getInvestorEduExperienceList() {
-        return investorEduExperienceList;
+    public List<InvestorEduExperienceParam> getInvestorEduExperienceParamList() {
+        return investorEduExperienceParamList;
     }
 
-    public void setInvestorEduExperienceList(List<InvestorEduExperience> investorEduExperienceList) {
-        this.investorEduExperienceList = investorEduExperienceList;
+    public void setInvestorEduExperienceParamList(List<InvestorEduExperienceParam> investorEduExperienceParamList) {
+        this.investorEduExperienceParamList = investorEduExperienceParamList;
     }
 }

@@ -31,7 +31,7 @@ public class AdvisorManagementPortalParam extends Page implements Serializable {
     private String submitEndTime;
     @ApiModelProperty(value = "所属机构",example = "xxx机构")
     private String affiliation;
-    @ApiModelProperty(value = "是否分页(1:分页   0:不分页)",required = true,example = "1")
+    @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{isDefault:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

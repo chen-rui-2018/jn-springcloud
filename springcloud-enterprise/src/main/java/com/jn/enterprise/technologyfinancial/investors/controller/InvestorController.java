@@ -69,7 +69,7 @@ public class InvestorController extends BaseController {
     @ApiOperation(value = "投资人详情/投资人查看")
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoDetails")
     @RequestMapping(value = "/getInvestorInfoDetails",method = RequestMethod.GET)
-    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true)@RequestParam("investorAccount") String investorAccount){
+    public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true,example = "wangsong")@RequestParam("investorAccount") String investorAccount){
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
         return  new Result(investorInfoDetailsVo);
@@ -79,9 +79,9 @@ public class InvestorController extends BaseController {
     @ApiOperation(value = "查询所属单位")
     @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
     @RequestMapping(value = "/getAffiliationUnit",method = RequestMethod.GET)
-    public Result<List<AffiliaationUnitShow>> getAffiliationUnit(@ApiParam(value = "单位名称" ,required = true)@RequestParam("orgName") String orgName){
+    public Result<List<AffiliationUnitShow>> getAffiliationUnit(@ApiParam(value = "单位名称" ,required = true,example = "xxx机构")@RequestParam("orgName") String orgName){
         Assert.notNull(orgName, InvestorExceptionEnum.AFFILIATION_NAME.getMessage());
-        List<AffiliaationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
+        List<AffiliationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
         return  new Result(affiliationUnit);
     }
 

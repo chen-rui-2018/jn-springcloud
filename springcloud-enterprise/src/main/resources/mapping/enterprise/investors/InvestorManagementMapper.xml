@@ -46,7 +46,7 @@
               and date_format(si.created_time,'%Y%m')&lt;=#{applyEndTime}
           </if>
           <if test="position !=null and position !=''">              <!--职务-->
-              and si.position = #{position}
+              and si.position  like concat('%',#{position},'%')
           </if>
     </select>
 

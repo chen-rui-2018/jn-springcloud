@@ -105,7 +105,7 @@ public class FinancialProductServiceImpl implements FinancialProductService {
      */
     @ServiceLog(doAction = "金融产品详情")
     @Override
-    public FinacialProductDetails getFinancialProductDetails(String productId) {
+    public FinancialProductDetails getFinancialProductDetails(String productId) {
         TbServiceProductCriteria example=new TbServiceProductCriteria();
         example.createCriteria().andProductIdEqualTo(productId).andStatusEqualTo("1")
                 .andSignoryIdEqualTo(BUSINESS_AREA).andRecordStatusEqualTo(RECORD_STATUS);
@@ -114,9 +114,9 @@ public class FinancialProductServiceImpl implements FinancialProductService {
             return null;
         }
         TbServiceProduct tbServiceProduct = tbServiceProductList.get(0);
-        FinacialProductDetails finacialProductDetails=new FinacialProductDetails();
-        BeanUtils.copyProperties(tbServiceProduct, finacialProductDetails);
-        return finacialProductDetails;
+        FinancialProductDetails financialProductDetails =new FinancialProductDetails();
+        BeanUtils.copyProperties(tbServiceProduct, financialProductDetails);
+        return financialProductDetails;
     }
 
     /**
@@ -125,19 +125,19 @@ public class FinancialProductServiceImpl implements FinancialProductService {
      */
     @ServiceLog(doAction = "金融产品贷款类别")
     @Override
-    public List<FinacialProductLoanType> getFinancialProductLoanType() {
+    public List<FinancialProductLoanType> getFinancialProductLoanType() {
         TbServiceProductLoanTypeCriteria example=new TbServiceProductLoanTypeCriteria();
         example.createCriteria().andLoanCodeIsNotNull().andRecordStatusEqualTo(RECORD_STATUS);
         List<TbServiceProductLoanType> tbServiceProductLoanTypeList = tbServiceProductLoanTypeMapper.selectByExample(example);
         if(tbServiceProductLoanTypeList.isEmpty()){
             return null;
         }else{
-            List<FinacialProductLoanType> resultList=new ArrayList<>(16);
+            List<FinancialProductLoanType> resultList=new ArrayList<>(16);
             for(TbServiceProductLoanType loanType:tbServiceProductLoanTypeList){
-                FinacialProductLoanType finacialProductLoanType=new FinacialProductLoanType();
-                finacialProductLoanType.setLoanCode(loanType.getLoanCode());
-                finacialProductLoanType.setLoanName(loanType.getLoanName());
-                resultList.add(finacialProductLoanType);
+                FinancialProductLoanType financialProductLoanType =new FinancialProductLoanType();
+                financialProductLoanType.setLoanCode(loanType.getLoanCode());
+                financialProductLoanType.setLoanName(loanType.getLoanName());
+                resultList.add(financialProductLoanType);
             }
             return resultList;
         }

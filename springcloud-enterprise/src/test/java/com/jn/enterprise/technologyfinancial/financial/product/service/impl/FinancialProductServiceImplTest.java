@@ -5,8 +5,6 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.enums.ServiceProductExceptionEnum;
 import com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceAndAdvisorCriteria;
-import com.jn.enterprise.servicemarket.product.entity.TbServiceDetailsCriteria;
 import com.jn.enterprise.servicemarket.product.model.CommonServiceShelf;
 import com.jn.enterprise.technologyfinancial.financial.product.model.*;
 import com.jn.enterprise.technologyfinancial.financial.product.service.FinancialProductService;
@@ -23,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.anything;
@@ -175,7 +172,7 @@ public class FinancialProductServiceImplTest {
      */
     @Test
     public void getFinancialProductDetails() {
-        FinacialProductDetails financialProductDetails = financialProductService.getFinancialProductDetails(productId);
+        FinancialProductDetails financialProductDetails = financialProductService.getFinancialProductDetails(productId);
         if(financialProductDetails!=null){
             logger.info(financialProductDetails.toString());
         }
@@ -187,7 +184,7 @@ public class FinancialProductServiceImplTest {
      */
     @Test
     public void getFinancialProductLoanType() {
-        List<FinacialProductLoanType> financialProductLoanType = financialProductService.getFinancialProductLoanType();
+        List<FinancialProductLoanType> financialProductLoanType = financialProductService.getFinancialProductLoanType();
         assertThat(financialProductLoanType, anything());
     }
 

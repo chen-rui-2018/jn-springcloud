@@ -22,7 +22,7 @@ public class ProductListAndCountVO implements Serializable {
     @ApiModelProperty(value="统计信息")
     private ServiceStatistics serviceStatistics;
     @ApiModelProperty(value = "服务产品列表信息")
-    private PaginationData productInfos;
+    private PaginationData< List<WebServiceProductInfo>> productInfos;
 
     public ServiceStatistics getServiceStatistics() {
         return serviceStatistics;
@@ -32,11 +32,11 @@ public class ProductListAndCountVO implements Serializable {
         this.serviceStatistics = serviceStatistics;
     }
 
-    public PaginationData getProductInfos() {
+    public PaginationData<List<WebServiceProductInfo>> getProductInfos() {
         return productInfos;
     }
 
-    public void setProductInfos(PaginationData productInfos) {
+    public void setProductInfos(PaginationData<List<WebServiceProductInfo>> productInfos) {
         this.productInfos = productInfos;
     }
 }

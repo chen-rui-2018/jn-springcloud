@@ -211,10 +211,9 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void productShelf() {
-        ServiceProductApproval approval = new ServiceProductApproval();
+        ProductShelfOperation approval = new ProductShelfOperation();
         approval.setProductId("228043fd4f37438ea34e5a9ccdea2271");
         approval.setStatus("-1");
-        approval.setApprovalComments(comments);
         productService.productShelf(approval,account);
         logger.info("服务产品上架/下架成功产品id="+approval.getProductId());
     }
@@ -251,7 +250,7 @@ public class ServiceProductServiceImplTest {
             logger.info("info>>>>>>>>>>>code:" + e.getCode() + "- - - -message:" + e.getMsg());
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(ServiceProductExceptionEnum.SERVICE_PRODUCT_ID_EMPTY.getCode())
+                            Matchers.containsString(ServiceProductExceptionEnum.SERVICE_PRODUCT_PRODUCT_SHELF.getCode())
                     )
             );
         }
@@ -298,7 +297,7 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void findOrgProductList() {
-        ProductInquiryInfo  info = new ProductInquiryInfo();
+        OrgProductQuery  info = new OrgProductQuery();
         info.setProductType("0");
         info.setOrgId("1001211");
         info.setKeyWords("");
@@ -311,7 +310,7 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void findShelfProductList() {
-        List<CommonServiceShelf> serviceList =  productService.findShelfProductList(orgId);
+        List<ProductShelf> serviceList =  productService.findShelfProductList(orgId);
         logger.info("前台机构的服务产品列表查询成功! 符合条件数据条数="+(serviceList==null?0:serviceList.size()));
     }
     /**
@@ -319,7 +318,7 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void productQueryList() {
-        List<CommonServiceShelf>  serviceList = productService.productQueryList("招聘");
+        List<ProductShelf>  serviceList = productService.productQueryList("招聘");
         logger.info("前台机构的服务产品列表查询成功! 符合条件数据条数="+(serviceList==null?0:serviceList.size()));
     }
 
@@ -328,8 +327,7 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void updateCommonProduct() {
-        CommonServiceShelf product = new CommonServiceShelf();
-        product.setOrgId(orgId);
+        OrgUpdateCommonProduct product = new OrgUpdateCommonProduct();
         product.setProductId(commonProductId);
         product.setAdvisorAccount("zhaoliu");
         productService.updateCommonProduct(  product,"wangsong");
@@ -340,7 +338,7 @@ public class ServiceProductServiceImplTest {
      */
     @Test
     public void updateFeatureProduct() {
-        ServiceContent content = new ServiceContent();
+        OrgUpdateFeatureProduct content = new OrgUpdateFeatureProduct();
         content.setProductId(featureProductId);
         content.setProductName("法律咨询");
         content.setServiceCycle("1次");

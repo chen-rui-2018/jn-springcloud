@@ -16,11 +16,11 @@ public class Industry {
     private String id;
     @ApiModelProperty(value = "领域值")
     private String preValue;
-    @ApiModelProperty(value = "领域类型")
+    @ApiModelProperty(value = "领域类型",notes = "0业务领域1行业领域2发展阶段3企业性质")
     private String preType;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间 yyyy-MM-dd HH:mm:ss")
     private String createdTime;
     @ApiModelProperty(value = "服务机构数量")
     private String orgNum;

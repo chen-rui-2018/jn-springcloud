@@ -175,6 +175,76 @@ public class TbServiceInvestorCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andInvestorCodeIsNull() {
+            addCriterion("investor_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeIsNotNull() {
+            addCriterion("investor_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeEqualTo(String value) {
+            addCriterion("investor_code =", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeNotEqualTo(String value) {
+            addCriterion("investor_code <>", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeGreaterThan(String value) {
+            addCriterion("investor_code >", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("investor_code >=", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeLessThan(String value) {
+            addCriterion("investor_code <", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeLessThanOrEqualTo(String value) {
+            addCriterion("investor_code <=", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeLike(String value) {
+            addCriterion("investor_code like", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeNotLike(String value) {
+            addCriterion("investor_code not like", value, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeIn(List<String> values) {
+            addCriterion("investor_code in", values, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeNotIn(List<String> values) {
+            addCriterion("investor_code not in", values, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeBetween(String value1, String value2) {
+            addCriterion("investor_code between", value1, value2, "investorCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andInvestorCodeNotBetween(String value1, String value2) {
+            addCriterion("investor_code not between", value1, value2, "investorCode");
+            return (Criteria) this;
+        }
+
         public Criteria andInvestorAccountIsNull() {
             addCriterion("investor_account is null");
             return (Criteria) this;

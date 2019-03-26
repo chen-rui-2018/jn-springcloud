@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -34,9 +35,8 @@ public class OrgJoinController {
 
 
     @ControllerLog(doAction = "保存/修改机构认证信息")
-    @ApiOperation(value = "保存/修改机构认证信息", httpMethod = "POST", response = Result.class,
-    notes = "返回数据响应条数，正常情况为1")
-    @RequestMapping(value = "/saveOrUpdateOrgDetail")
+    @ApiOperation(value = "保存/修改机构认证信息", notes = "返回数据响应条数，正常情况为1")
+    @RequestMapping(value = "/saveOrUpdateOrgDetail",method = RequestMethod.POST)
     public Result<Integer> saveOrUpdateOrgDetail(@RequestBody @Validated OrgDetailParameter orgDetailParameter) {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = orgJoinService.saveOrUpdateOrgDetail(orgDetailParameter,user.getAccount());

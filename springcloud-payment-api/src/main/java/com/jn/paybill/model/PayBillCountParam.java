@@ -12,11 +12,12 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "PayBillCountParam", description = "缴费统计查询入参")
 public class PayBillCountParam {
-    @ApiModelProperty(value = "账期开始时间[yyyy-MM-dd HH:mm:ss]")
+    @ApiModelProperty(value = "账期开始时间[yyyy-MM-dd HH:mm:ss]",example = "2019-03-24 10:00:00")
     private String billStartTime;
-    @ApiModelProperty(value = "账期结束时间[yyyy-MM-dd HH:mm:ss]")
+    @ApiModelProperty(value = "账期结束时间[yyyy-MM-dd HH:mm:ss]",example = "2019-03-24 10:00:00")
     private String billEndTime;
-    @ApiModelProperty(value = "账单类型[不传查所有]")
+    @ApiModelProperty(value = "账单类型[不传查所有]",example = "005"
+            ,notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
     private String[] billTypeIds;
 
     public String getBillStartTime() {

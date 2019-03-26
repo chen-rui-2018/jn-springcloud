@@ -13,9 +13,9 @@ import java.io.Serializable;
  */
 @ApiModel(value = "InvestorMainRound", description = "科技金融投资人主投轮次信息")
 public class InvestorMainRound implements Serializable {
-    @ApiModelProperty(value = "主投轮次编码")
+    @ApiModelProperty(value = "主投轮次编码",example = "angel_wheel")
     private String mainRoundCode;
-    @ApiModelProperty(value = "主投轮次名称")
+    @ApiModelProperty(value = "主投轮次名称",example = "天使轮")
     private String mainRoundName;
 
     public String getMainRoundCode() {

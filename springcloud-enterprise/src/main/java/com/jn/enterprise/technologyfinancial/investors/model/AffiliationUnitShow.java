@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AffiliaationUnitShow", description = "科技金融投资人认证查询所属单位出参")
-public class AffiliaationUnitShow implements Serializable {
+@ApiModel(value = "AffiliationUnitShow", description = "科技金融投资人认证查询所属单位出参")
+public class AffiliationUnitShow implements Serializable {
     @ApiModelProperty(value = "所属单位id")
     private String orgId;
     @ApiModelProperty(value = "所属单位名称")
@@ -36,7 +36,7 @@ public class AffiliaationUnitShow implements Serializable {
 
     @Override
     public String toString() {
-        return "AffiliaationUnitShow{" +
+        return "AffiliationUnitShow{" +
                 "orgId='" + orgId + '\'' +
                 ", orgName='" + orgName + '\'' +
                 '}';

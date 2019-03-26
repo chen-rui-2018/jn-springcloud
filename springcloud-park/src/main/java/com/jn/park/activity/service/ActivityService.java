@@ -93,4 +93,12 @@ public interface ActivityService {
      */
     int activitySendMessageByTimedTask(ActivityContent activity);
 
+    /**
+     * 查看用户的报名活动列表
+     * @param query
+     * @param needPage
+     * @return
+     */
+    PaginationData findActivitySuccessfulRegistration(ActivityApplyedListQuery query, Boolean needPage);
+
 }

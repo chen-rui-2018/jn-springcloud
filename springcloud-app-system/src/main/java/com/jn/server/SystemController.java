@@ -8,6 +8,7 @@ import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.system.api.SystemClient;
 import com.jn.system.common.enums.SysExceptionEnums;
+import com.jn.system.dept.entity.TbSysDepartment;
 import com.jn.system.dept.service.SysDepartmentService;
 import com.jn.system.file.entity.TbSysFileGroup;
 import com.jn.system.file.service.SysFileGroupService;
@@ -158,6 +159,13 @@ public class SystemController extends BaseController implements SystemClient {
     }
 
     @Override
+    @ControllerLog(doAction = "根据部门名称获取部门信息")
+    public Result getDept(@RequestParam("deptName") String deptName) {
+        TbSysDepartment tbSysDepartment= sysDepartmentService.getDept(deptName);
+        return new Result(tbSysDepartment);
+    }
+
+    @Override
     @ControllerLog(doAction = "更新用户")
     public Result updateSysUser(@Validated @RequestBody User user) {
         if (StringUtils.isNotBlank(user.getAccount())) {
@@ -167,7 +175,6 @@ public class SystemController extends BaseController implements SystemClient {
             }
             user.setId(u.get(0).getId());
         }
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         sysUserService.updateSysUser(sysUser, new User());

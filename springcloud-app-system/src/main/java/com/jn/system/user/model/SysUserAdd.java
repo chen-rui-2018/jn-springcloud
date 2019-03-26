@@ -24,8 +24,13 @@ public class SysUserAdd implements Serializable {
     private String id;
 
     @ApiModelProperty("用户账号")
-    @Pattern(regexp = "^[A-Za-z0-9]{6,16}$", message = "{\"account\":\"账号只允许6-16位数字及字母\"}")
+    @Pattern(regexp = "^[A-Za-z0-9]{1,16}$", message = "{\"account\":\"账号只允许1-16位数字及字母\"}")
     private String account;
+
+    @ApiModelProperty("用户密码")
+    @Pattern(regexp="^(?!^\\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\\u4E00-\\u9FA5].*$)^\\S{8,16}$",
+            message="{password:'密码至少为字母、数字、符号两种组成，不包含空格,不能输入中文'}")
+    private String password;
 
     @ApiModelProperty("用户名称")
     @Size(max = 16, message = "用户名称长度不能超过16个字")
@@ -62,10 +67,11 @@ public class SysUserAdd implements Serializable {
     public SysUserAdd() {
     }
 
-    public SysUserAdd(String id, String account, String name, String phone, String email, Byte recordStatus,
-                      String wechatAccount, String remark, String departmentId, String postId) {
+    public SysUserAdd(String id, String account, String password, String name, String phone, String email,
+                      Byte recordStatus, String wechatAccount, String remark, String departmentId, String postId) {
         this.id = id;
         this.account = account;
+        this.password = password;
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -90,6 +96,14 @@ public class SysUserAdd implements Serializable {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -161,6 +175,7 @@ public class SysUserAdd implements Serializable {
         return "SysUserAdd{" +
                 "id='" + id + '\'' +
                 ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +

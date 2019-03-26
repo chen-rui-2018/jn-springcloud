@@ -22,11 +22,11 @@ public class OrgApplyVo implements Serializable {
     private String businessType;
     @ApiModelProperty(value = "机构组织机构代码")
     private String orgCode;
-    @ApiModelProperty(value = "机构注册时间")
+    @ApiModelProperty(value = "机构注册时间yyyy-MM-dd HH:mm:ss")
     private String orgRegisterTime;
-    @ApiModelProperty(value = "申请时间")
+    @ApiModelProperty(value = "申请时间yyyy-MM-dd HH:mm:ss")
     private String createdTime;
-    @ApiModelProperty(value = "审核状态")
+    @ApiModelProperty(value = "审核状态[0未审核1审核通过2审核不通过]")
     private String orgStatus;
     @ApiModelProperty(value = "申请人账号")
     private String orgAccount;

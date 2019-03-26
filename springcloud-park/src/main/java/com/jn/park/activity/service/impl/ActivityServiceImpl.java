@@ -128,7 +128,7 @@ public class ActivityServiceImpl implements ActivityService {
             logger.warn("[后台管理-活动详情],查询活动详情失败，activityId: {},查询响应条数{}", activityId, activityDetails == null ? 0 : activityDetails.size());
             throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_RESULT_ERROR);
         }
-        List<TbParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
+        List<ParkCode> parkCodeByType = parkCodeService.getParkCodeByType("parkName");
         ActivityDetail activityDetail = activityDetails.get(0);
         activityDetail.setParkCodes(parkCodeByType);
         return activityDetail;
@@ -468,6 +468,8 @@ public class ActivityServiceImpl implements ActivityService {
         return activitySendMessage(activity.getId(), activity.getActiStartTime());
     }
 
+
+
     /**
      * 活动消息发送接口
      *
@@ -492,4 +494,23 @@ public class ActivityServiceImpl implements ActivityService {
         return 0;
     }
 
+    /**
+     * author chenr
+     * @param query
+     * @param needPage
+     * @return
+     */
+    @ServiceLog(doAction = "查看用户报名的活动列表")
+    @Override
+    public PaginationData findActivitySuccessfulRegistration(ActivityApplyedListQuery query, Boolean needPage) {
+        int pageSize = query.getRows() == 0 ? 15 : query.getRows();
+        int pageNumber = query.getPage();
+        Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(pageNumber,pageSize,true);
+        }
+        List<ActivityListApplyed> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus());
+
+        return new PaginationData(activityList,objects==null?0:objects.getTotal());
+    }
 }

@@ -16,44 +16,52 @@ import java.io.Serializable;
 @ApiModel(value = "OrgBasicData",description = "服务机构认证基本信息")
 public class OrgBasicData implements Serializable {
 
-    @ApiModelProperty(value = "机构ID[新增id传空，修改不能为空]")
+    @ApiModelProperty(value = "机构ID[新增id传空，修改不能为空]",example = "25b7b14a39ff4982b358ca63eb77cc97")
     private String orgId;
 
-    @ApiModelProperty(value = "机构名称",required = true)
+    @ApiModelProperty(value = "机构名称",required = true,example = "***事务所")
     @NotNull(message = "机构名称不能为空")
     private String orgName;
 
-    @ApiModelProperty(value = "统一社会信用代码/组织机构代码",required = true)
+    @ApiModelProperty(value = "统一社会信用代码/组织机构代码",required = true,example = "8831212412h21")
     @NotNull(message = "统一社会信用代码/组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "注册时间 yyyy-MM-dd",required = true)
+    @ApiModelProperty(value = "注册时间 yyyy-MM-dd",required = true,example = "2017-05-12")
     @NotNull(message = "注册时间不能为空")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "机构简介",required = true)
+    @ApiModelProperty(value = "机构简介",required = true,example = "机构成立于****")
     @NotNull(message = "机构简介不能为空")
     private String orgSynopsis;
 
-    @ApiModelProperty(value = "主营业务",required = true)
+    @ApiModelProperty(value = "主营业务",required = true,example = "商业纠纷，劳动纠纷" )
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "业务擅长[数组]",required = true)
+    @ApiModelProperty(value = "业务擅长[数组]",required = true,
+            notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取"
+            ,example = "['ogistics','technology_finance']")
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
 
-    @ApiModelProperty(value = "机构LOGO",required = true)
+    @ApiModelProperty(value = "机构LOGO",required = true,example = "***/***/**.jpg")
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 
-    @ApiModelProperty(value = "行业领域[数组]")
+    @NotNull(message = "行业领域不能为空")
+    @ApiModelProperty(value = "行业领域[数组]",example = "['shengwuyiyao','xinnengyuan']"
+            ,notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取")
     private String[] industrySector;
 
-    @ApiModelProperty(value = "发展阶段[数组]")
+    @NotNull(message = "发展阶段不能为空")
+    @ApiModelProperty(value = "发展阶段[数组]",example = "['gufenqiye','fazhanqi']"
+            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取")
     private String[] developmentStage;
 
-    @ApiModelProperty(value = "企业性质[数组]")
+    @NotNull(message = "企业性质不能为空")
+    @ApiModelProperty(value = "企业性质[数组]",example = "['guoyouqiye','minyingqiye']"
+            ,notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取")
     private String[] companyNature;
 
     public String getOrgId() {

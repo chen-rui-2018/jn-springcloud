@@ -25,7 +25,7 @@ public class AdvisorServiceManagementInfo implements Serializable {
     private String productName;
     @ApiModelProperty(value = "服务评价得分")
     private String evaluationScore;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0:未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "从业年限")
     private Float workingYears;

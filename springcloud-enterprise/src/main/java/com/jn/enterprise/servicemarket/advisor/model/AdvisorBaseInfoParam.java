@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -14,39 +13,36 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "AdvisorBaseInfo", description = "顾问资料基本信息")
-public class AdvisorBaseInfo  implements Serializable {
-    @ApiModelProperty(value = "主键id")
+@ApiModel(value = "AdvisorBaseInfoParam", description = "顾问资料基本信息")
+public class AdvisorBaseInfoParam implements Serializable {
+    @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "机构Id")
+    @ApiModelProperty(value = "机构Id",example="1234")
     private String orgId;
-    @ApiModelProperty(value = "机构名称")
+    @ApiModelProperty(value = "机构名称",example="测试机构")
     private String orgName;
-    @ApiModelProperty(value = "顾问账号",required = true)
+    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "从业年限")
-    @Size(max=50,message="从业年限只能是数值，且小于50")
+    @ApiModelProperty(value = "从业年限",example ="10")
     private Double workingYears;
-    @ApiModelProperty(value = "毕业学校")
+    @ApiModelProperty(value = "毕业学校",example = "中南大学")
     private String graduatedSchool;
-    @ApiModelProperty(value = "学历")
+    @ApiModelProperty(value = "学历",example = "硕士")
     private String education;
-    @ApiModelProperty(value = "联系手机")
+    @ApiModelProperty(value = "联系手机",example = "18088888888")
     @Pattern(regexp = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\\d{8}$",
             message = "{phone:'手机号码验证出错'}")
     private String phone;
-    @ApiModelProperty(value = "联系邮箱")
+    @ApiModelProperty(value = "联系邮箱",example = "123@126.com")
     @Pattern(regexp = "[\\w!#$%&'*+/=?^_`{|}~-]+(?:\\.[\\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\\w](?:[\\w-]*[\\w])?\\.)+[\\w](?:[\\w-]*[\\w])?",
             message = "{email:'邮箱验证出错'}")
     private String contactEmail;
-    @ApiModelProperty(value = "执业资质")
+    @ApiModelProperty(value = "执业资质",example = "高级律师证")
     private String practiceQualification;
-    @ApiModelProperty(value = "业务擅长")
+    @ApiModelProperty(value = "业务擅长",example = "打官司")
     private String goodAtBusiness;
-    @ApiModelProperty(value = "业务领域")
-    private String businessArea;
-    @ApiModelProperty(value = "个人简介")
+    @ApiModelProperty(value = "个人简介",example = "我是xxx")
     private String personalProfile;
 
     public String getId() {
@@ -137,14 +133,6 @@ public class AdvisorBaseInfo  implements Serializable {
         this.goodAtBusiness = goodAtBusiness;
     }
 
-    public String getBusinessArea() {
-        return businessArea;
-    }
-
-    public void setBusinessArea(String businessArea) {
-        this.businessArea = businessArea;
-    }
-
     public String getPersonalProfile() {
         return personalProfile;
     }
@@ -155,7 +143,7 @@ public class AdvisorBaseInfo  implements Serializable {
 
     @Override
     public String toString() {
-        return "AdvisorBaseInfo{" +
+        return "AdvisorBaseInfoParam{" +
                 "advisorAccount='" + advisorAccount + '\'' +
                 ", workingYears=" + workingYears +
                 ", graduatedSchool='" + graduatedSchool + '\'' +
@@ -164,7 +152,6 @@ public class AdvisorBaseInfo  implements Serializable {
                 ", contactEmail='" + contactEmail + '\'' +
                 ", practiceQualification='" + practiceQualification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +
-                ", businessArea='" + businessArea + '\'' +
                 ", personalProfile='" + personalProfile + '\'' +
                 '}';
     }

@@ -33,7 +33,7 @@ public interface InvestorService {
      * @param orgName 单位名称
      * @return
      */
-    List<AffiliaationUnitShow> getAffiliationUnit(String orgName);
+    List<AffiliationUnitShow> getAffiliationUnit(String orgName);
 
     /**
      * 新增投资人认证信息

@@ -17,39 +17,39 @@ import java.util.List;
  */
 @ApiModel(value = "InvestorAuthenticateParam", description = "科技金融投资人认证入参")
 public class InvestorAuthenticateParam implements Serializable {
-    @ApiModelProperty(value = "投资人姓名",required = true)
+    @ApiModelProperty(value = "投资人姓名",required = true,example = "wangsong")
     @NotNull(message = "投资人姓名不能为空")
     private String investorName;
-    @ApiModelProperty(value = "头像url",required = true)
+    @ApiModelProperty(value = "头像url",required = true,example = "xxx/avg.jpg")
     @NotNull(message = "头像url不能为空")
     private String avatar;
-    @ApiModelProperty(value = "性别（0:女  1:男）",required = true)
+    @ApiModelProperty(value = "性别（0:女  1:男）",required = true,example = "1")
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'默认值值只允许为0,1'}")
     private String sex;
-    @ApiModelProperty(value = "所属单位id")
+    @ApiModelProperty(value = "所属单位id",example = "123234")
     private String orgId;
-    @ApiModelProperty(value = "所属单位名称")
+    @ApiModelProperty(value = "所属单位名称",example = "xxx单位")
     private String orgName;
-    @ApiModelProperty(value = "职务",required = true)
+    @ApiModelProperty(value = "职务",required = true,example = "xxx职位")
     @NotNull(message = "职务不能为空")
     private String position;
-    @ApiModelProperty(value = "常住地省份",required = true)
+    @ApiModelProperty(value = "常住地省份",required = true,example = "xxx省")
     @NotNull(message = "常住地省份不能为空")
     private String addressProvince;
-    @ApiModelProperty(value = "常住地城市",required = true)
+    @ApiModelProperty(value = "常住地城市",required = true,example = "xxx市")
     @NotNull(message = "常住地城市不能为空")
     private String addressCity;
-    @ApiModelProperty(value = "常住地区域",required = true)
+    @ApiModelProperty(value = "常住地区域",required = true,example = "xxx区")
     @NotNull(message = "常住地区域不能为空")
     private String addressArea;
-    @ApiModelProperty(value = "手机号码",required = true)
+    @ApiModelProperty(value = "手机号码",required = true,example = "18088888888")
     @NotNull(message = "手机号码不能为空")
     private String phone;
-    @ApiModelProperty(value = "邮箱",required = true)
+    @ApiModelProperty(value = "邮箱",required = true,example = "123@qq.com")
     @NotNull(message = "邮箱不能为空")
     private String email;
-    @ApiModelProperty(value = "个人简介",required = true)
+    @ApiModelProperty(value = "个人简介",required = true,example = "个人简介....")
     @NotNull(message = "个人简介不能为空")
     @Size(max=512,message = "个人简介不能超过512个字")
     private String personalProfile;
@@ -60,9 +60,9 @@ public class InvestorAuthenticateParam implements Serializable {
     @NotNull(message = "主投轮次不能为空")
     private List<InvestorMainRound>investorMainRoundList;
     @ApiModelProperty(value = "工作经历")
-    private List<InvestorWorkExperience>investorWorkExperienceList;
+    private List<InvestorWorkExperienceParam> investorWorkExperienceParamList;
     @ApiModelProperty(value = "教育经历")
-    private List<InvestorEduExperience>investorEduExperienceList;
+    private List<InvestorEduExperienceParam> investorEduExperienceParamList;
 
     public String getInvestorName() {
         return investorName;
@@ -176,19 +176,19 @@ public class InvestorAuthenticateParam implements Serializable {
         this.investorMainRoundList = investorMainRoundList;
     }
 
-    public List<InvestorWorkExperience> getInvestorWorkExperienceList() {
-        return investorWorkExperienceList;
+    public List<InvestorWorkExperienceParam> getInvestorWorkExperienceParamList() {
+        return investorWorkExperienceParamList;
     }
 
-    public void setInvestorWorkExperienceList(List<InvestorWorkExperience> investorWorkExperienceList) {
-        this.investorWorkExperienceList = investorWorkExperienceList;
+    public void setInvestorWorkExperienceParamList(List<InvestorWorkExperienceParam> investorWorkExperienceParamList) {
+        this.investorWorkExperienceParamList = investorWorkExperienceParamList;
     }
 
-    public List<InvestorEduExperience> getInvestorEduExperienceList() {
-        return investorEduExperienceList;
+    public List<InvestorEduExperienceParam> getInvestorEduExperienceParamList() {
+        return investorEduExperienceParamList;
     }
 
-    public void setInvestorEduExperienceList(List<InvestorEduExperience> investorEduExperienceList) {
-        this.investorEduExperienceList = investorEduExperienceList;
+    public void setInvestorEduExperienceParamList(List<InvestorEduExperienceParam> investorEduExperienceParamList) {
+        this.investorEduExperienceParamList = investorEduExperienceParamList;
     }
 }

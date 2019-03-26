@@ -44,7 +44,7 @@ public class AdvisorServiceImplTest {
     private String advisorAccount;
 
 
-    private AdvisorInquiryInfo advisorInquiryInfo=new AdvisorInquiryInfo();
+    private AdvisorListParam advisorListParam =new AdvisorListParam();
 
     private ServiceEvaluationParam serviceEvaluationParam =new ServiceEvaluationParam();
 
@@ -53,14 +53,14 @@ public class AdvisorServiceImplTest {
         domain="";
         sortTypes="";
         keyWords="";
-        advisorInquiryInfo.setDomain(domain);
-        advisorInquiryInfo.setKeyWords(keyWords);
-        advisorInquiryInfo.setSortTypes(sortTypes);
+        advisorListParam.setDomain(domain);
+        advisorListParam.setKeyWords(keyWords);
+        advisorListParam.setSortTypes(sortTypes);
         advisorAccount="wangsong";
 
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
         serviceEvaluationParam.setRatingType("差评");
-        serviceEvaluationParam.setNeedPage(Boolean.FALSE);
+        serviceEvaluationParam.setNeedPage("0");
     }
 
     /**
@@ -68,7 +68,7 @@ public class AdvisorServiceImplTest {
      */
     @Test
     public void getServiceConsultantList() {
-        PaginationData paginationData = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
+        PaginationData paginationData = advisorService.getServiceConsultantList(advisorListParam, Boolean.TRUE);
         List<AdvisorListInfo> list= (List<AdvisorListInfo>)paginationData.getRows();
         if(list!=null){
             for(AdvisorListInfo advisorListInfo:list){

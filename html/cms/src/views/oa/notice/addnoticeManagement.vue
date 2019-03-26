@@ -33,7 +33,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="平台类型" prop="platformType" class="inline">
-          <el-select v-model="noticeForm.platformType" value-key="key" multiple placeholder="请选择">
+          <el-select v-model="platformType" value-key="key" multiple placeholder="请选择">
             <el-option
               v-for="item in codeOptions"
               :key="item.key"
@@ -51,7 +51,6 @@
       </div>
       <div class="primaryList">
         <el-button :disabled="isDisabled" type="primary" @click="title==='新增公告'?submitForm():updateData()">提交</el-button>
-        <!-- <el-button :disabled="isDisabled" @click="cancel">取消</el-button> -->
         <el-button @click="goBack($route)" >返回</el-button>
 
       </div>
@@ -75,20 +74,14 @@ export default {
         callback()
       }
     }
-    // var checkBuilding = (rule, value, callback) => {
-    //   const reg = /^[\u4e00-\u9fa5\w]{1,20}$/
-    //   if (!reg.test(value)) {
-    //     callback(new Error('名称只允许数字、中文、字母及下划线'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     return {
       defaultMsg: '',
       config: {
         initialFrameWidth: '100%',
         initialFrameHeight: 300
       },
+      isShow: false,
+      platformType: [],
       codeOptions: [],
       isDisabled: false,
       statusOptions: [
@@ -108,7 +101,7 @@ export default {
         effectiveTime: '',
         failureTime: '',
         recordStatus: '',
-        platformType: [],
+        platformType: '',
         noticeContent: '',
         id: ''
       },
@@ -124,7 +117,7 @@ export default {
         ],
         effectiveTime: [{ required: true, message: '请选择生效时间', trigger: 'change' }],
         failureTime: [{ required: true, message: '请选择失效时间', trigger: 'change' }],
-        // platformType: [{ required: true, message: '请选择平台类型', trigger: 'blur' }],
+        platformType: [{ required: true, message: '请选择平台类型', trigger: 'blur' }],
         recordStatus: [{ required: true, message: '请选择状态', trigger: 'change' }],
         noticeContent: [{ required: true, message: '请输入公告内容', trigger: 'blur' }]
       }
@@ -135,37 +128,25 @@ export default {
     this.getCode()
   },
   methods: {
-    // cancel() {
-    //   this.isDisabled = true
-    //   if (this.title === '新增公告') {
-    //     this.noticeForm.noticeTitle = ''
-    //     this.noticeForm.effectiveTime = ''
-    //     this.noticeForm.failureTime = ''
-    //     this.noticeForm.recordStatus = ''
-    //     this.noticeForm.platformType = []
-    //     this.defaultMsg = ''
-    //     this.$nextTick(() => {
-    //       this.$refs['noticeForm'].clearValidate()
-    //     })
-    //     this.isDisabled = false
-    //   }
-    //   this.initList()
-    //   // this.isDisabled = false
-    // },
     // 新增提交表单
     submitForm() {
       this.isDisabled = true
-      if (this.noticeForm.platformType.length === 0) {
+      if (this.platformType.length === 0) {
         alert('请选择发布平台')
         this.isDisabled = false
-        return
+        return false
       }
-      this.noticeForm.platformType = JSON.stringify(this.noticeForm.platformType)
+      if (new Date(this.noticeForm.failureTime.replace(/-/g, '\/')) < new Date(this.noticeForm.effectiveTime.replace(/-/g, '\/'))) {
+        alert('失效时间必须大于生效时间,请重新选择')
+        this.isDisabled = false
+        return false
+      }
+      this.noticeForm.platformType = JSON.stringify(this.platformType)
       this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
-      this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
-      this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
       this.$refs['noticeForm'].validate(valid => {
         if (valid) {
+          this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
+          this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
           // 调用接口发送请求
           api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
             if (res.data.code === '0000') {
@@ -174,8 +155,6 @@ export default {
                 type: 'success'
               })
               this.goBack(this.$route)
-              // 重置表单元素的数据
-              this.$refs['noticeForm'].resetFields()
             } else {
               this.$message.error(res.data.result)
             }
@@ -199,13 +178,23 @@ export default {
     // 编辑表单
     updateData() {
       this.isDisabled = true
-      this.noticeForm.platformType = JSON.stringify(this.noticeForm.platformType)
+      if (new Date(this.noticeForm.failureTime.replace(/-/g, '\/')) < new Date(this.noticeForm.effectiveTime.replace(/-/g, '\/'))) {
+        alert('失效时间必须大于生效时间,请重新选择')
+        this.isDisabled = false
+        return false
+      }
+      if (this.platformType.length === 0) {
+        alert('请选择发布平台')
+        this.isDisabled = false
+        return false
+      }
+      this.noticeForm.platformType = JSON.stringify(this.platformType)
       this.noticeForm.noticeContent = this.$refs.ue.getUEContent()
-      this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
-      this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
       this.$refs['noticeForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
+          this.noticeForm.effectiveTime = this.noticeForm.effectiveTime + ' ' + '00:00:00'
+          this.noticeForm.failureTime = this.noticeForm.failureTime + ' ' + '23:59:59'
           api('oa/notice/addOrUpdateNotice', this.noticeForm).then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -238,7 +227,7 @@ export default {
             this.noticeForm.effectiveTime = data.effectiveTime.slice(0, 10)
             this.noticeForm.failureTime = data.failureTime.slice(0, 10)
             this.noticeForm.recordStatus = data.recordStatus.toString()
-            this.noticeForm.platformType = JSON.parse(data.platformType)
+            this.platformType = JSON.parse(data.platformType)
             this.defaultMsg = data.noticeContent
           } else {
             this.$message.error(res.data.result)

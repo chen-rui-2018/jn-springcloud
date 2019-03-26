@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.item.dao.WorkPlanHistoryMapper">
+
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tb_oa_work_plan_history
+        (
+        id, work_plan_id,operate_recode,record_status,creator_account,created_time
+        ) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.id,jdbcType=VARCHAR},
+            #{item.workPlanId,jdbcType=VARCHAR},
+            #{item.operateRecode,jdbcType=VARCHAR},
+            #{item.recordStatus,jdbcType=TINYINT},
+            #{item.creatorAccount,jdbcType=VARCHAR},
+            NOW())
+        </foreach>
+    </insert>
+
+    <update id="delete" parameterType="java.lang.String">
+        UPDATE `tb_oa_work_plan_history`
+        SET record_status = '0',
+            modifier_account = #{account,jdbcType=VARCHAR},
+            modified_time = NOW()
+        WHERE
+            work_plan_id = #{workPlanId,jdbcType=VARCHAR};
+    </update>
+
+</mapper>

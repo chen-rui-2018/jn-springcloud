@@ -21,6 +21,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 活动报名
  * @Author: yangph
@@ -91,7 +93,7 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "报名人列表查看",
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList",method = RequestMethod.POST)
-    public Result activityApplyList(@RequestBody  ActivityQueryPaging activityQueryPaging){
+    public Result<PaginationData<List<ActivityApplyDetail>>> activityApplyList(@RequestBody  ActivityQueryPaging activityQueryPaging){
        Assert.notNull(activityQueryPaging,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
        PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityQueryPaging,Boolean.TRUE);
        return new Result(activityApplyList);
@@ -120,7 +122,7 @@ public class ActivityApplyController extends BaseController {
     }
 
     @ControllerLog(doAction = "报名人资料")
-//    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
+    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
     @ApiOperation(value = "报名人资料", httpMethod = "POST")
     @RequestMapping(value = "/activityApplyInfo")
     public Result<UserExtensionInfo> activityApplyInfo(@ApiParam(value = "用户账号",required = true,example = "wangsong") @RequestParam(value = "account") String account){

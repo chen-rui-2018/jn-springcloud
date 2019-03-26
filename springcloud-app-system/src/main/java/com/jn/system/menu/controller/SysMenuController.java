@@ -121,8 +121,8 @@ public class SysMenuController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据父菜单id获取子下一级所有菜单信息")
-    @ApiOperation(value = "根据父菜单id获取子下一级所有菜单信息", notes = "根据父菜单id获取子下一级所有菜单信息")
+    @ControllerLog(doAction = "获取菜单信息")
+    @ApiOperation(value = "获取菜单信息", notes = "根据父菜单id获取子下一级所有菜单信息")
     @RequestMapping(value = "/getChildrenMenuByParentId", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysMenu/getChildrenMenuByParentId")
     public Result<List<SysMenuTreeVO>> getChildrenMenuByParentId(String parentId) {
@@ -130,8 +130,8 @@ public class SysMenuController extends BaseController {
         return new Result(list);
     }
 
-    @ControllerLog(doAction = "根据用户权限动态获取菜单信息")
-    @ApiOperation(value = "根据用户权限动态获取菜单信息", notes = "根据用户权限动态获取菜单信息")
+    @ControllerLog(doAction = "动态获取菜单信息")
+    @ApiOperation(value = "动态获取菜单信息", notes = "根据用户权限动态获取菜单信息")
     @RequestMapping(value = "/getDynamicMenu", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysMenu/getDynamicMenu")
     public Result<List<SysMenuTreeVO>> getDynamicMenu() {

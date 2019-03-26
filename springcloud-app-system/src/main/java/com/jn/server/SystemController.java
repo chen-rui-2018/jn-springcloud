@@ -175,7 +175,6 @@ public class SystemController extends BaseController implements SystemClient {
             }
             user.setId(u.get(0).getId());
         }
-        user.setPassword(DigestUtils.md5Hex(user.getPassword()));
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(user, sysUser);
         sysUserService.updateSysUser(sysUser, new User());

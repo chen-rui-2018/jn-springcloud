@@ -73,9 +73,9 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据主键获取权限信息")
+    @ControllerLog(doAction = "获取权限信息")
     @RequiresPermissions("/system/sysPermission/selectByPrimaryKey")
-    @ApiOperation(value = "根据主键获取权限信息", notes = "根据主键获取权限信息")
+    @ApiOperation(value = "获取权限信息", notes = "根据主键获取权限信息")
     @RequestMapping(value = "/selectByPrimaryKey", method = RequestMethod.POST)
     public Result<SysPermission> selectByPrimaryKey(String id) {
         SysPermission sysPermission = sysPermissionService.selectByPrimaryKey(id);
@@ -115,9 +115,9 @@ public class SysPermissionController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "获取权限已经具有的角色信息")
+    @ControllerLog(doAction = "获取权限的角色信息")
     @RequiresPermissions("/system/sysPermission/findRoleOfPermission")
-    @ApiOperation(value = "获取权限已经具有的角色信息",
+    @ApiOperation(value = "获取权限的角色信息",
             notes = "获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息")
     @RequestMapping(value = "/findRoleOfPermission", method = RequestMethod.POST)
     public Result<PaginationData<SysPermissionRoleVO>> findRoleOfPermission(@Validated @RequestBody SysPermissionRolePage sysPermissionRolePage) {
@@ -125,9 +125,9 @@ public class SysPermissionController extends BaseController {
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "获取除权限已经具有的文件组信息")
+    @ControllerLog(doAction = "获取除权限的文件组信息")
     @RequiresPermissions("/system/sysPermission/findFileGroupOfPermission")
-    @ApiOperation(value = "获取除权限已经具有的文件组信息",
+    @ApiOperation(value = "获取除权限的文件组信息",
             notes = "获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息")
     @RequestMapping(value = "/findFileGroupOfPermission", method = RequestMethod.POST)
     public Result<PaginationData<SysPermissionFileGroupVO>> findFileGroupOfPermission(@Validated @RequestBody SysPermissionFileGroupPage sysPermissionFileGroupPage) {
@@ -156,9 +156,9 @@ public class SysPermissionController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "权限授权功能,获取菜单及功能信息")
+    @ControllerLog(doAction = "获取菜单及功能信息")
     @RequiresPermissions("/system/sysPermission/getMenuAndResources")
-    @ApiOperation(value = "权限授权功能,获取菜单及功能信息", notes = "权限授权功能,获取菜单及功能信息")
+    @ApiOperation(value = "获取菜单及功能信息", notes = "权限授权功能,获取菜单及功能信息")
     @RequestMapping(value = "/getMenuAndResources", method = RequestMethod.POST)
     public Result<SysMenuResourcesVO> getMenuAndResources(String permissionId) {
         SysMenuResourcesVO sysMenuResourcesVO = sysPermissionService.getMenuAndResources(permissionId);

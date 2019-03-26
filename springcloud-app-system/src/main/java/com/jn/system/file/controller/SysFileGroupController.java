@@ -89,8 +89,8 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据ID查询文件组")
-    @ApiOperation(value = "根据ID查询文件组", notes = "根据ID查询文件组")
+    @ControllerLog(doAction = "查询文件组信息")
+    @ApiOperation(value = "查询文件组信息", notes = "根据ID查询文件组")
     @RequestMapping(value = "/selectById", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/selectById")
     public Result<SysFileGroup> selectById(@RequestParam(value = "id") String id) {

@@ -95,8 +95,8 @@ public class SysResourcesController extends BaseController {
         return new Result(sysResources);
     }
 
-    @ControllerLog(doAction = "校验菜单界面页面功能名称是否存在")
-    @ApiOperation(value = "校验菜单界面页面功能名称是否存在", notes = "fail表示名称已存在,success表示可以使用")
+    @ControllerLog(doAction = "校验功能名称是否存在")
+    @ApiOperation(value = "校验功能名称是否存在", notes = "fail表示名称已存在,success表示可以使用")
     @RequestMapping(value = "/checkResourceName", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/checkResourceName")
     public Result<String> checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName) {
@@ -104,8 +104,8 @@ public class SysResourcesController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "根据菜单id获取菜单所有页面功能")
-    @ApiOperation(value = "根据菜单id获取菜单所有页面功能", notes = "根据菜单id获取菜单所有页面功能")
+    @ControllerLog(doAction = "获取页面功能信息")
+    @ApiOperation(value = "获取页面功能信息", notes = "根据菜单id获取菜单所有页面功能")
     @RequestMapping(value = "/findResourcesByMenuId", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/findResourcesByMenuId")
     public Result<List<TbSysResources>> findResourcesByMenuId(String menuId) {

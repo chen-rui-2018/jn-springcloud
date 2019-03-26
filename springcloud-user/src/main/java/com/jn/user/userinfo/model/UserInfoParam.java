@@ -33,6 +33,9 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "年龄")
     private Integer age;
 
+    @ApiModelProperty(value = "电话号码")
+    private String phone;
+
     @ApiModelProperty(value = "性别[0女1男]",required = true)
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'性别只允许为0,1'}")
@@ -117,5 +120,13 @@ public class UserInfoParam implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

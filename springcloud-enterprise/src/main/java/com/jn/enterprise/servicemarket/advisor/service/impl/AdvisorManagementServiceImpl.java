@@ -12,8 +12,8 @@ import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisorCriteria;
 import com.jn.enterprise.servicemarket.advisor.enums.ApprovalTypeEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementShow;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
-import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
 import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
@@ -21,9 +21,9 @@ import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,17 +57,19 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
 
     /**
      * 邀请顾问
-     * @param inviteAdvisorInfo  邀请顾问入参（被邀请人和邀请人账号）
+     * @param registerAccount   被邀请人手机号或邮箱
+     * @param loginAccount      当前登录用户账号
+     * @return
      */
     @Override
     @ServiceLog(doAction = "邀请顾问")
     @Transactional(rollbackFor = Exception.class)
-    public void inviteAdvisor(InviteAdvisorInfo inviteAdvisorInfo) {
+    public int inviteAdvisor(String registerAccount,String loginAccount) {
         //1.判断顾问表中是否已存在当前机构和顾问关联的数据（审核状态为非解除状态，非审批不通过状态）
         //通过机构账号从服务机构表获得机构编码和机构名称
-        TbServiceOrg serviceOrgInfo = getServiceOrgInfo(inviteAdvisorInfo.getInviteAccount());
+        TbServiceOrg serviceOrgInfo = getServiceOrgInfo(loginAccount);
         if(serviceOrgInfo==null){
-            logger.warn("当前账号{}在服务机构表中不存在",inviteAdvisorInfo.getInviteAccount());
+            logger.warn("当前账号{}在服务机构表中不存在",loginAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST);
         }
         //审批状态为“解除（value="4"）”，“审批不通过（value="3"）”
@@ -76,29 +78,33 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         approvalStatus.add("4");
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andOrgIdEqualTo(serviceOrgInfo.getOrgId())
-                .andAdvisorAccountEqualTo(inviteAdvisorInfo.getRegisterAccount())
+                .andAdvisorAccountEqualTo(registerAccount)
                 .andApprovalStatusNotIn(approvalStatus);
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         //不存在当前机构和顾问关联的数据（审核状态为非解除状态）
         if(tbServiceAdvisorList.isEmpty()){
             //2.往顾问信息表添加一条机构和顾问的信息
-            insertServiceAdvisorInfo(inviteAdvisorInfo,serviceOrgInfo);
+            int responseNum = insertServiceAdvisorInfo(registerAccount,loginAccount, serviceOrgInfo);
             //3.todo:调用消息接口，向被邀顾问发送短信或邮件（顾问可通过信息中的链接直接跳转到接收机构邀请页面） yangph
+
+            return responseNum;
         }else{
             //存在当前机构和顾问关联的数据（审核状态为非解除状态）
-            logger.warn("当前被邀请的顾问[{}]已经被邀请，请不要重复邀请！！！",inviteAdvisorInfo.getRegisterAccount());
+            logger.warn("当前被邀请的顾问[{}]已经被邀请，请不要重复邀请！！！",registerAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_IS_EXIT);
         }
-
     }
 
 
     /**
      * 往顾问信息表添加顾问信息
-     * @param inviteAdvisorInfo
+     * @param registerAccount  被邀请顾问账号
+     * @param loginAccount     登录用户
+     * @param serviceOrgInfo
+     * @return
      */
     @ServiceLog(doAction = "往顾问信息表添加顾问信息")
-    private void insertServiceAdvisorInfo(InviteAdvisorInfo inviteAdvisorInfo,TbServiceOrg serviceOrgInfo ) {
+    private int insertServiceAdvisorInfo(String registerAccount,String loginAccount,TbServiceOrg serviceOrgInfo ) {
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         //主键id
         tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -106,9 +112,9 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         tbServiceAdvisor.setOrgId(serviceOrgInfo.getOrgId());
         tbServiceAdvisor.setOrgName(serviceOrgInfo.getOrgName());
         //根据顾问账号获取顾问信息
-        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(inviteAdvisorInfo.getRegisterAccount());
+        Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(registerAccount);
         if(userExtension==null ||userExtension.getData()==null){
-            logger.warn("顾问邀请获取顾问[{}]信息失败",inviteAdvisorInfo.getRegisterAccount());
+            logger.warn("顾问邀请获取顾问[{}]信息失败",registerAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL);
         }
         //顾问账号
@@ -124,10 +130,10 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
         //创建时间
         tbServiceAdvisor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate("yyyy-MM-dd HH:mm:ss")));
         //创建人
-        tbServiceAdvisor.setCreatorAccount(inviteAdvisorInfo.getInviteAccount());
+        tbServiceAdvisor.setCreatorAccount(loginAccount);
         //记录状态 0标记删除，1正常
         tbServiceAdvisor.setRecordStatus((byte)1);
-        tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
+        return tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 
     /**
@@ -166,7 +172,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             objects = PageHelper.startPage(advisorManagementParam.getPage(),
                     advisorManagementParam.getRows() == 0 ? 15 : advisorManagementParam.getRows(), true);
         }
-        List<TbServiceAdvisor> tbServiceAdvisorList = getTbServiceAdvisors(advisorManagementParam);
+        List<AdvisorManagementShow> tbServiceAdvisorList = getTbServiceAdvisors(advisorManagementParam);
         return new PaginationData(tbServiceAdvisorList, objects == null ? 0 : objects.getTotal());
     }
 
@@ -177,7 +183,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @return
      */
     @ServiceLog(doAction ="根据查询条件获取顾问信息")
-    private List<TbServiceAdvisor> getTbServiceAdvisors(AdvisorManagementParam advisorManagementParam) {
+    private List<AdvisorManagementShow> getTbServiceAdvisors(AdvisorManagementParam advisorManagementParam) {
         //审批状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)
         //默认值为 1：待审批
         String approvalStatus="1";
@@ -204,6 +210,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             example.createCriteria().andApprovalStatusEqualTo(approvalStatus);
         }
         List<TbServiceAdvisor> tbServiceAdvisorList= tbServiceAdvisorMapper.selectByExample(example);
+        List<AdvisorManagementShow>resultList=new ArrayList<>(16);
         for(TbServiceAdvisor advisor:tbServiceAdvisorList){
             if(ApprovalTypeEnum.PENDING.getCode().equals(advisor.getApprovalStatus())){
                 //审批状态为"待审核"
@@ -218,8 +225,11 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
                 //审批状态为"已拒绝"
                 advisor.setApprovalStatus(ApprovalTypeEnum.REJECTED.getMessage());
             }
+            AdvisorManagementShow advisorManagementShow=new AdvisorManagementShow();
+            BeanUtils.copyProperties(advisor, advisorManagementShow);
+            resultList.add(advisorManagementShow);
         }
-        return tbServiceAdvisorList;
+        return resultList;
     }
 
     /**
@@ -228,7 +238,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      */
     @ServiceLog(doAction = "审批顾问填写信息")
     @Override
-    public void approvalAdvisorInfo(ApprovalParam approvalParam) {
+    public int approvalAdvisorInfo(ApprovalParam approvalParam) {
         //根据顾问账号判断待审批状态的顾问在系统中是否存在
         //待审批状态值“1”
         String approvalStatus="1";
@@ -244,7 +254,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             //审批结果为“审批通过”，根据顾问账号更新审批状态信息
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="2";
-            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
+            return updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
         }else if(ApprovalTypeEnum.APPROVAL_NOT_PASSED.getCode().equals(approvalParam.getApprovalResults())){
             //审批结果为“审批不通过”，根据顾问账号更新审批状态信息
             //审批不通过
@@ -254,7 +264,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             }
             //审批状态  "2":审批通过  "3"：审批不通过
             approvalStatus="3";
-            updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
+            return updateApprovalStatus(approvalParam.getAdvisorAccount(),approvalStatus, approvalParam.getApprovalDesc());
         }else{
             logger.warn("审批顾问[{}]填写资料的审批状态值与系统不符", approvalParam.getAdvisorAccount());
             throw new JnSpringCloudException(AdvisorExceptionEnum.PENDING_ADVISOR_NOT_EXIT);
@@ -268,7 +278,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
      * @param approvalDesc    审批说明
      */
      @ServiceLog(doAction = "修改顾问审批状态")
-    private void updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
+    private int updateApprovalStatus(String advisorAccount,String approvalStatus,String approvalDesc) {
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
         example.createCriteria().andAdvisorAccountEqualTo(advisorAccount);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
@@ -279,7 +289,7 @@ public class AdvisorManagementServiceImpl implements AdvisorManagementService {
             //审批通过，没有审批说明，需清空审批不通过的审批说明
             tbServiceAdvisor.setApprovalDesc("");
         }
-        tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
+        return tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
     }
 
     /**

@@ -10,6 +10,8 @@ public class TbOaWorkPlanHistory implements Serializable {
 
     private String remark;
 
+    private String operateDetails;
+
     private String operateRecode;
 
     private Byte recordStatus;
@@ -46,6 +48,14 @@ public class TbOaWorkPlanHistory implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public String getOperateDetails() {
+        return operateDetails;
+    }
+
+    public void setOperateDetails(String operateDetails) {
+        this.operateDetails = operateDetails == null ? null : operateDetails.trim();
     }
 
     public String getOperateRecode() {
@@ -111,6 +121,7 @@ public class TbOaWorkPlanHistory implements Serializable {
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getWorkPlanId() == null ? other.getWorkPlanId() == null : this.getWorkPlanId().equals(other.getWorkPlanId()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getOperateDetails() == null ? other.getOperateDetails() == null : this.getOperateDetails().equals(other.getOperateDetails()))
             && (this.getOperateRecode() == null ? other.getOperateRecode() == null : this.getOperateRecode().equals(other.getOperateRecode()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -126,6 +137,7 @@ public class TbOaWorkPlanHistory implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getWorkPlanId() == null) ? 0 : getWorkPlanId().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getOperateDetails() == null) ? 0 : getOperateDetails().hashCode());
         result = prime * result + ((getOperateRecode() == null) ? 0 : getOperateRecode().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -144,6 +156,7 @@ public class TbOaWorkPlanHistory implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", workPlanId=").append(workPlanId);
         sb.append(", remark=").append(remark);
+        sb.append(", operateDetails=").append(operateDetails);
         sb.append(", operateRecode=").append(operateRecode);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

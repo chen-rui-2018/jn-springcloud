@@ -53,7 +53,10 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty("业务擅长")
     private String orgSpeciality;
 
-    @ApiModelProperty(value = "经营状态")
+    @ApiModelProperty("机构状态(0未审核[审核中]1审核通过2审核不通过3已删除) ")
+    private String orgStatus;
+
+    @ApiModelProperty(value = "经营状态[0冻结 1正常户]")
     private String operateStatus;
 
     @ApiModelProperty(value = "组织机构代码")
@@ -357,5 +360,13 @@ public class OrgDetailVo implements Serializable {
 
     public void setOrgWeb(String orgWeb) {
         this.orgWeb = orgWeb;
+    }
+
+    public String getOrgStatus() {
+        return orgStatus;
+    }
+
+    public void setOrgStatus(String orgStatus) {
+        this.orgStatus = orgStatus;
     }
 }

@@ -12,11 +12,11 @@ public interface AcceptOrgInvitationService {
      * 接受机构邀请
      * @param advisorAccount 顾问账号
      */
-    void acceptOrgInvitation(String advisorAccount);
+    int acceptOrgInvitation(String advisorAccount);
 
     /**
      * 拒绝机构邀请
      * @param advisorAccount  顾问账号
      */
-    void refuseInvitation(String advisorAccount);
+    int refuseInvitation(String advisorAccount);
 }

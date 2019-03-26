@@ -14,6 +14,8 @@ public class TbOaWorkPlan implements Serializable {
 
     private String demandDescribe;
 
+    private String isExpire;
+
     private Date planStartTime;
 
     private Date planEndTime;
@@ -82,6 +84,14 @@ public class TbOaWorkPlan implements Serializable {
 
     public void setDemandDescribe(String demandDescribe) {
         this.demandDescribe = demandDescribe == null ? null : demandDescribe.trim();
+    }
+
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire == null ? null : isExpire.trim();
     }
 
     public Date getPlanStartTime() {
@@ -213,6 +223,7 @@ public class TbOaWorkPlan implements Serializable {
             && (this.getWorkPlanName() == null ? other.getWorkPlanName() == null : this.getWorkPlanName().equals(other.getWorkPlanName()))
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getDemandDescribe() == null ? other.getDemandDescribe() == null : this.getDemandDescribe().equals(other.getDemandDescribe()))
+            && (this.getIsExpire() == null ? other.getIsExpire() == null : this.getIsExpire().equals(other.getIsExpire()))
             && (this.getPlanStartTime() == null ? other.getPlanStartTime() == null : this.getPlanStartTime().equals(other.getPlanStartTime()))
             && (this.getPlanEndTime() == null ? other.getPlanEndTime() == null : this.getPlanEndTime().equals(other.getPlanEndTime()))
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
@@ -238,6 +249,7 @@ public class TbOaWorkPlan implements Serializable {
         result = prime * result + ((getWorkPlanName() == null) ? 0 : getWorkPlanName().hashCode());
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getDemandDescribe() == null) ? 0 : getDemandDescribe().hashCode());
+        result = prime * result + ((getIsExpire() == null) ? 0 : getIsExpire().hashCode());
         result = prime * result + ((getPlanStartTime() == null) ? 0 : getPlanStartTime().hashCode());
         result = prime * result + ((getPlanEndTime() == null) ? 0 : getPlanEndTime().hashCode());
         result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
@@ -266,6 +278,7 @@ public class TbOaWorkPlan implements Serializable {
         sb.append(", workPlanName=").append(workPlanName);
         sb.append(", content=").append(content);
         sb.append(", demandDescribe=").append(demandDescribe);
+        sb.append(", isExpire=").append(isExpire);
         sb.append(", planStartTime=").append(planStartTime);
         sb.append(", planEndTime=").append(planEndTime);
         sb.append(", startTime=").append(startTime);

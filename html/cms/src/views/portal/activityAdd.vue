@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import UE from '../../components/UE/ue.vue'
+import UE from '../../components/ue.vue'
 import { getToken } from '@/utils/auth'
 import {
   getActivityType,

@@ -41,8 +41,8 @@ public class SysResourcesController extends BaseController {
     private SysResourcesService sysResourcesService;
 
     @ControllerLog(doAction = "新增功能")
-    @ApiOperation(value = "新增功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增功能", notes = "新增功能")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/add")
     public Result add(@Validated @RequestBody SysResources sysResources) {
         //获取当前登录用户信息
@@ -62,8 +62,8 @@ public class SysResourcesController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改功能")
-    @ApiOperation(value = "修改功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @ApiOperation(value = "修改功能", notes = "修改功能")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/update")
     public Result update(@Validated @RequestBody SysResources sysResources) {
         Assert.notNull(sysResources.getId(), "功能ID不能为空");
@@ -74,8 +74,8 @@ public class SysResourcesController extends BaseController {
     }
 
     @ControllerLog(doAction = "批量删除功能")
-    @ApiOperation(value = "批量删除功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @ApiOperation(value = "批量删除功能", notes = "批量删除功能")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "功能ID不能为空");
@@ -86,29 +86,29 @@ public class SysResourcesController extends BaseController {
     }
 
     @ControllerLog(doAction = "根据ID查询功能")
-    @ApiOperation(value = "根据ID查询功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectById")
+    @ApiOperation(value = "根据ID查询功能", notes = "根据ID查询功能")
+    @RequestMapping(value = "/selectById", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/selectById")
-    public Result selectById(@RequestParam(value = "id") String id) {
+    public Result<SysResources> selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "功能ID不能为空");
         SysResources sysResources = sysResourcesService.selectSysResourcesById(id);
         return new Result(sysResources);
     }
 
-    @ControllerLog(doAction = "校验菜单界面页面功能名称是否存在,fail表示名称已存在,success表示可以使用")
-    @ApiOperation(value = "校验菜单界面页面功能名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/checkResourceName")
+    @ControllerLog(doAction = "校验功能名称是否存在")
+    @ApiOperation(value = "校验功能名称是否存在", notes = "fail表示名称已存在,success表示可以使用")
+    @RequestMapping(value = "/checkResourceName", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/checkResourceName")
-    public Result checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName) {
+    public Result<String> checkResourceName(@Validated @RequestBody SysResourceCheckName sysResourceCheckName) {
         String result = sysResourcesService.checkResourceName(sysResourceCheckName);
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "根据菜单id获取菜单所有页面功能")
-    @ApiOperation(value = "根据菜单id获取菜单所有页面功能", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findResourcesByMenuId")
+    @ControllerLog(doAction = "获取页面功能信息")
+    @ApiOperation(value = "获取页面功能信息", notes = "根据菜单id获取菜单所有页面功能")
+    @RequestMapping(value = "/findResourcesByMenuId", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysResources/findResourcesByMenuId")
-    public Result findResourcesByMenuId(String menuId) {
+    public Result<List<TbSysResources>> findResourcesByMenuId(String menuId) {
         List<TbSysResources> sysResourcesList = sysResourcesService.findResourcesByMenuId(menuId);
         return new Result(sysResourcesList);
     }

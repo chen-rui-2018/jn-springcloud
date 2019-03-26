@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "FinacialProductDetails", description = "金融产品详情")
-public class FinacialProductDetails implements Serializable {
+@ApiModel(value = "FinancialProductDetails", description = "金融产品详情")
+public class FinancialProductDetails implements Serializable {
     @ApiModelProperty(value = "产品id)")
     private String productId;
     @ApiModelProperty(value = "产品名称)")
@@ -31,7 +31,7 @@ public class FinacialProductDetails implements Serializable {
     private String pictureUrl;
     @ApiModelProperty(value = "产品类型)")
     private String productType;
-    @ApiModelProperty(value = "状态)")
+    @ApiModelProperty(value = "状态(0:无效  1：有效))")
     private String status;
     @ApiModelProperty(value = "参考利率最小值)")
     private Double refRateMin;
@@ -296,7 +296,7 @@ public class FinacialProductDetails implements Serializable {
 
     @Override
     public String toString() {
-        return "FinacialProductDetails{" +
+        return "FinancialProductDetails{" +
                 "productId='" + productId + '\'' +
                 ", productName='" + productName + '\'' +
                 ", serialNumber='" + serialNumber + '\'' +

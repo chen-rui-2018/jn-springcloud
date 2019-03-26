@@ -244,7 +244,7 @@ export default {
               'id': '3bf517a3-6864-4888-afff-653edc0b45b4',
               'workOrderNum': null,
               'startTime': '2019-03-16 14:00:00',
-              'endTime': '2019-03-06 14:30:00',
+              'endTime': '2019-03-16 14:30:00',
               'meetingRoomId': null,
               'approvalStatus': null,
               'recordStatus': null,
@@ -286,8 +286,8 @@ export default {
             'meetingList': [{
               'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
               'workOrderNum': null,
-              'startTime': '2019-03-16 15:00:00',
-              'endTime': '2019-03-16 16:00:00',
+              'startTime': '2019-03-16 10:00:00',
+              'endTime': '2019-03-16 11:30:00',
               'meetingRoomId': null,
               'approvalStatus': null,
               'recordStatus': null,
@@ -313,8 +313,62 @@ export default {
             {
               'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
               'workOrderNum': null,
-              'startTime': '2019-03-16 16:00:00',
-              'endTime': '2019-03-16 17:00:00',
+              'startTime': '2019-03-16 15:00:00',
+              'endTime': '2019-03-16 15:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试1234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            },
+            {
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 15:30:00',
+              'endTime': '2019-03-16 16:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试1234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            },
+            {
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 17:00:00',
+              'endTime': '2019-03-16 17:30:00',
               'meetingRoomId': null,
               'approvalStatus': null,
               'recordStatus': null,
@@ -403,13 +457,6 @@ export default {
           return 'meetingBgc'
         }
       }
-      // if (rowIndex === 5 && columnIndex === 4) {
-      //   return 'rgb196'
-      // } else if (rowIndex === 6 && columnIndex === 4) {
-      //   return 'bacColorf4984e'
-      // } else if (rowIndex === 6 && columnIndex === 5) {
-      //   return 'bacColor317eb0'
-      // }
     },
     // 修改table tr行的背景色
     tableRowStyle({ row, rowIndex, column, columnIndex }) {
@@ -485,7 +532,6 @@ export default {
         }
       }
     },
-
     // 上一個月   传入当前年份和月份
     pickPre(year, month) {
       this.daysUL = []
@@ -584,6 +630,12 @@ export default {
         // .replace(/^.*T/, '')
         // .slice(0, 5)
         .split(':')
+      // if (_end[1] === '00') {
+      //   _end[0] = _end[0] - 1
+      // } else {
+      //   _end[1] = parseInt(_end[1] - 1)
+      // }
+      // console.log(_end)
       function getColNum(num) {
         var _num_a = parseInt(num[0])
         var _num_b = parseInt(num[1])
@@ -731,7 +783,11 @@ export default {
 </script>
 
 <style lang="scss">
+body .el-table th.gutter{
+    display: table-cell!important;
+}
 .conferenceReservation {
+
   display: flex;
   display: -webkit-box;
 

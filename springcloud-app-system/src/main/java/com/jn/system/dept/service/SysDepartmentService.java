@@ -89,4 +89,12 @@ public interface SysDepartmentService {
      * @return
      */
     Boolean checkUserDept(String userId, String deptId);
+
+    /**
+     * 根据部门名称,获取部门信息
+     *
+     * @param deptName
+     * @return
+     */
+    TbSysDepartment getDept(String deptName);
 }

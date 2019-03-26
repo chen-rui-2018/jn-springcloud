@@ -35,7 +35,7 @@ public class WebServiceProductInfo implements Serializable {
     private String pictureUrl;
     @ApiModelProperty(value = "前台展示产品详情")
     private String productDetails;
-    @ApiModelProperty(value = "产品详情")
+    @ApiModelProperty(value = "后台进行产品详情装换使用")
     private byte[] serviceDetails;
     @ApiModelProperty(value = "交易数")
     private Integer transactionsNumber;

@@ -45,7 +45,7 @@ public class SysFileServiceImpl implements SysFileService {
      */
     @Override
     @ServiceLog(doAction = "根据关键字分页查询文件列表")
-    public PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage) {
+    public PaginationData<List<SysFileVO>> selectSysFileListBySearchKey(SysFilePage sysFilePage) {
         Page<Object> objects = PageHelper.startPage(sysFilePage.getPage(), sysFilePage.getRows());
         List<SysFileVO> sysFileVOList = null;
         if (StringUtils.isNotBlank(sysFilePage.getFileGroupName())) {

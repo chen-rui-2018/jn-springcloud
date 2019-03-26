@@ -18,34 +18,35 @@ import java.util.Date;
  */
 @ApiModel(value = "PaymentBillModel", description = "缴费账单生成实体")
 public class PaymentBillModel implements Serializable {
-    @ApiModelProperty(value = "账单编号",required = true)
+    @ApiModelProperty(value = "账单编号",required = true,example = "TC-2019031910124")
     @NotBlank(message = "账单编号不能为空")
     private String billNum;
-    @ApiModelProperty(value = "账单名称",required = true)
+    @ApiModelProperty(value = "账单名称",required = true,example = "湘AH2323-20190325停车费")
     @NotBlank(message = "账单名称不能为空")
     private String billName;
-    @ApiModelProperty(value = "账单类型",required = true)
+    @ApiModelProperty(value = "账单类型",required = true,example = "005"
+            ,notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
     @NotBlank(message = "账单类型不能为空")
     private String billType;
-    @ApiModelProperty(value = "账单对象[Account]",required = true)
+    @ApiModelProperty(value = "账单对象[Account]",required = true,example = "wangsong")
     @NotBlank(message = "账单对象ID不能为空")
     private String billObjId;
-    @ApiModelProperty(value = "账单对象名",required = true)
+    @ApiModelProperty(value = "账单对象名",required = true,example = "王松")
     @NotBlank(message = "账单对象名不能为空")
     private String billObjName;
-    @ApiModelProperty(value = "账单金额",required = true)
+    @ApiModelProperty(value = "账单金额",required = true,example = "10.00")
     @NotBlank(message = "账单金额不能为空")
     private Double billAmount;
-    @ApiModelProperty(value = "账单生成时间[yyyy-MM-dd HH:mm:ss]",required = true)
+    @ApiModelProperty(value = "账单生成时间[yyyy-MM-dd HH:mm:ss]",required = true,example = "2019-03-25 10:00:00")
     @NotBlank(message = "账单生成时间不能为空")
     private String billCreateTime;
-    @ApiModelProperty(value = "最晚缴费时间[yyyy-MM-dd HH:mm:ss]",required = true)
+    @ApiModelProperty(value = "最晚缴费时间[yyyy-MM-dd HH:mm:ss]",required = true,example = "2019-03-26 10:00:00")
     @NotBlank(message = "最晚缴费时间不能为空")
     private String payEndTime;
-    @ApiModelProperty(value = "生成操作人",required = true)
+    @ApiModelProperty(value = "生成操作人",required = true,example = "wangsong")
     @NotBlank(message = "生成操作人不能为空")
     private String billCreateAccount;
-    @ApiModelProperty(value = "账单说明",required = true)
+    @ApiModelProperty(value = "账单说明",required = true,example = "停车缴费")
     @NotBlank(message = "账单说明不能为空")
     private String billRemark;
 

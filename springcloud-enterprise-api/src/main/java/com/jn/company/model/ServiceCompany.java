@@ -48,10 +48,10 @@ public class ServiceCompany implements Serializable {
     private String products;
     @ApiModelProperty(value = "主要原材料")
     private String material;
-    @ApiModelProperty(value = "企业性质 多个,分隔")
+    @ApiModelProperty(value = "企业性质ID 多个,分隔")
     private String comProperty;
 
-    @ApiModelProperty(value = "企业性质[数组]")
+    @ApiModelProperty(value = "企业性质ID[数组]")
     private String[] comPropertys;
 
     @ApiModelProperty(value = "企业性质名称[数组]")
@@ -67,7 +67,7 @@ public class ServiceCompany implements Serializable {
     private String foundingTime;
     @ApiModelProperty(value = "落地时间")
     private String runTime;
-    @ApiModelProperty(value = "行业分类(产业领域、所属行业)")
+    @ApiModelProperty(value = "行业分类ID(产业领域、所属行业)")
     private String induType;
 
     @ApiModelProperty(value = "行业分类(产业领域、所属行业)名称")

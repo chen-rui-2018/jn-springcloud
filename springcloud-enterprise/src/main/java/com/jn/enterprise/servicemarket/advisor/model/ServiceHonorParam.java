@@ -18,23 +18,25 @@ import java.io.Serializable;
 public class ServiceHonorParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "顾问账号",required = true)
+    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "颁发机构")
+    @ApiModelProperty(value = "颁发机构",required = true,example = "xxx机构")
     @Size(max=64,message = "颁发机构长度最多为64个字")
+    @NotNull(message="颁发机构不能为空")
     private String issuingAgency;
-    @ApiModelProperty(value = "证书名称",required = true)
+    @ApiModelProperty(value = "证书名称",required = true,example = "高级律师证")
     @NotNull(message="证书名称不能为空")
     private String certificateName;
-    @ApiModelProperty(value = "证书类型",required = true)
+    @ApiModelProperty(value = "证书类型(从获取指定证件类型接口获得证书类型，lawyerLicense:律师执业证   professionalAgentLicense：专业代理人执业证  cap：注册会计师)"
+            ,required = true,example="lawyerLicense")
     @NotNull(message="证书类型不能为空")
-    private String certificateType;
-    @ApiModelProperty(value = "颁发/获得时间(格式：201903)")
+    private String certificateCode;
+    @ApiModelProperty(value = "颁发/获得时间",example = "201903")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{getTime:'颁发/获得时间格式错误'}")
     private String getTime;
-    @ApiModelProperty(value = "证书证件")
+    @ApiModelProperty(value = "证书证件",example = "xxx/photo.jpg")
     private String certificatePhoto;
 
 
@@ -70,12 +72,12 @@ public class ServiceHonorParam implements Serializable {
         this.certificateName = certificateName;
     }
 
-    public String getCertificateType() {
-        return certificateType;
+    public String getCertificateCode() {
+        return certificateCode;
     }
 
-    public void setCertificateType(String certificateType) {
-        this.certificateType = certificateType;
+    public void setCertificateCode(String certificateCode) {
+        this.certificateCode = certificateCode;
     }
 
     public String getGetTime() {
@@ -101,7 +103,7 @@ public class ServiceHonorParam implements Serializable {
                 ", advisorAccount='" + advisorAccount + '\'' +
                 ", issuingAgency='" + issuingAgency + '\'' +
                 ", certificateName='" + certificateName + '\'' +
-                ", certificateType='" + certificateType + '\'' +
+                ", certificateCode='" + certificateCode + '\'' +
                 ", getTime='" + getTime + '\'' +
                 ", certificatePhoto='" + certificatePhoto + '\'' +
                 '}';

@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -39,17 +40,17 @@ public class SysFileGroupController extends BaseController {
     private SysFileGroupService sysFileGroupService;
 
     @ControllerLog(doAction = "查询文件组列表")
-    @ApiOperation(value = "查询文件组列表", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/list")
+    @ApiOperation(value = "查询文件组列表", notes = "查询文件组列表")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/list")
-    public Result list(@RequestBody SysFileGroupPage sysFileGroupPage) {
-        PaginationData data = sysFileGroupService.selectSysFileGroupListBySearchKey(sysFileGroupPage);
+    public Result<PaginationData<List<SysFileGroup>>> list(@RequestBody SysFileGroupPage sysFileGroupPage) {
+        PaginationData<List<SysFileGroup>> data = sysFileGroupService.selectSysFileGroupListBySearchKey(sysFileGroupPage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "新增文件组")
-    @ApiOperation(value = "新增文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/add")
+    @ApiOperation(value = "新增文件组", notes = "新增文件组")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/add")
     public Result add(@Validated @RequestBody SysFileGroup sysFileGroup) {
         //获取当前登录用户信息
@@ -65,8 +66,8 @@ public class SysFileGroupController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改文件组")
-    @ApiOperation(value = "修改文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/update")
+    @ApiOperation(value = "修改文件组", notes = "修改文件组")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/update")
     public Result update(@Validated @RequestBody SysFileGroup sysFileGroup) {
         Assert.notNull(sysFileGroup.getId(), "文件组ID不能为空");
@@ -77,8 +78,8 @@ public class SysFileGroupController extends BaseController {
     }
 
     @ControllerLog(doAction = "批量删除文件组")
-    @ApiOperation(value = "批量删除文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/delete")
+    @ApiOperation(value = "批量删除文件组", notes = "批量删除文件组")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/delete")
     public Result delete(@RequestParam(value = "ids") String[] ids) {
         Assert.noNullElements(ids, "文件组ID不能为空");
@@ -88,21 +89,21 @@ public class SysFileGroupController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据ID查询文件组")
-    @ApiOperation(value = "根据ID查询文件组", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/selectById")
+    @ControllerLog(doAction = "查询文件组信息")
+    @ApiOperation(value = "查询文件组信息", notes = "根据ID查询文件组")
+    @RequestMapping(value = "/selectById", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/selectById")
-    public Result selectById(@RequestParam(value = "id") String id) {
+    public Result<SysFileGroup> selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "文件组ID不能为空");
         SysFileGroup sysFileGroup = sysFileGroupService.selectSysFileGroupByIds(id);
         return new Result(sysFileGroup);
     }
 
-    @ControllerLog(doAction = "校验文件组名称是否存在,fail表示名称已存在,success表示可以使用")
-    @ApiOperation(value = "校验文件组名称是否存在,fail表示名称已存在,success表示可以使用", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/checkFileGroupName")
+    @ControllerLog(doAction = "校验文件组名称是否存在")
+    @ApiOperation(value = "校验文件组名称是否存在", notes = "fail表示名称已存在,success表示可以使用")
+    @RequestMapping(value = "/checkFileGroupName", method = RequestMethod.POST)
     @RequiresPermissions("/system/sysFileGroup/checkFileGroupName")
-    public Result checkFileGroupName(String fileGroupName) {
+    public Result<String> checkFileGroupName(String fileGroupName) {
         String result = sysFileGroupService.checkFileGroupName(fileGroupName);
         return new Result(result);
     }

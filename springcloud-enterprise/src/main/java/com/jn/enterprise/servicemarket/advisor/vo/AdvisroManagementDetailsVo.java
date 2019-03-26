@@ -18,7 +18,7 @@ public class AdvisroManagementDetailsVo implements Serializable {
     @ApiModelProperty(value = "顾问详情简介)")
     private AdvisorServiceManagementInfo advisorIntroduction;
     @ApiModelProperty(value = "顾问基本信息)")
-    private AdvisorBaseInfo advisorBaseInfo;
+    private AdvisorBaseInfoParam advisorBaseInfoParam;
     @ApiModelProperty(value = "顾问荣誉资质)")
     private List<ServiceHonor> serviceHonorList;
     @ApiModelProperty(value = "顾问服务经历)")
@@ -34,12 +34,12 @@ public class AdvisroManagementDetailsVo implements Serializable {
         this.advisorIntroduction = advisorIntroduction;
     }
 
-    public AdvisorBaseInfo getAdvisorBaseInfo() {
-        return advisorBaseInfo;
+    public AdvisorBaseInfoParam getAdvisorBaseInfoParam() {
+        return advisorBaseInfoParam;
     }
 
-    public void setAdvisorBaseInfo(AdvisorBaseInfo advisorBaseInfo) {
-        this.advisorBaseInfo = advisorBaseInfo;
+    public void setAdvisorBaseInfoParam(AdvisorBaseInfoParam advisorBaseInfoParam) {
+        this.advisorBaseInfoParam = advisorBaseInfoParam;
     }
 
     public List<ServiceHonor> getServiceHonorList() {

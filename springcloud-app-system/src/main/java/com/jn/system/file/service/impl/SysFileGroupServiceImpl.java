@@ -177,7 +177,7 @@ public class SysFileGroupServiceImpl implements SysFileGroupService {
      */
     @Override
     @ServiceLog(doAction = "根据关键字分页查询文件组列表")
-    public PaginationData selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
+    public PaginationData<List<SysFileGroup>> selectSysFileGroupListBySearchKey(SysFileGroupPage sysFileGroupPage) {
         Page<Object> objects = PageHelper.startPage(sysFileGroupPage.getPage(), sysFileGroupPage.getRows());
         List<SysFileGroup> sysFileGroups = sysFileGroupMapper.getFileGroupByPage(sysFileGroupPage);
         PaginationData data = new PaginationData(sysFileGroups,objects.getTotal());

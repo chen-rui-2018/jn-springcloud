@@ -2,6 +2,7 @@ package com.jn.park.model;
 
 import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -16,24 +17,23 @@ import java.util.Date;
  */
 @ApiModel(value = "ParkCode", description = "园区字典")
 public class ParkCode extends Page implements Serializable {
+    @ApiModelProperty(value = "字典id")
     private String id;
-
+    @ApiModelProperty(value = "字典类型编号",notes = "parkName:园区名称")
     private String groupId;
-
+    @ApiModelProperty(value = "字典类型名称",notes = "parkName:园区名称")
     private String groupName;
-
+    @ApiModelProperty(value = "字典值",notes = "前台取该值传给对应的业务")
     private String codeValue;
-
+    @ApiModelProperty(value = "点评值名称",notes = "前台取该值展示")
     private String codeName;
-
-    private String status;
-
+    @ApiModelProperty(value = "创建人")
     private String createAccount;
-
+    @ApiModelProperty(value = "创建时间")
     private Date createTime;
-
+    @ApiModelProperty(value = "修改人")
     private String updateAccount;
-
+    @ApiModelProperty(value = "修改时间")
     private Date updateTime;
 
     public String getId() {
@@ -74,14 +74,6 @@ public class ParkCode extends Page implements Serializable {
 
     public void setCodeName(String codeName) {
         this.codeName = codeName;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public String getCreateAccount() {

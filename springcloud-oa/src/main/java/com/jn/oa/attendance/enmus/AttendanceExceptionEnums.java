@@ -1,24 +1,23 @@
-package com.jn.oa.meeting.enums;
+package com.jn.oa.attendance.enmus;
 
 import com.jn.common.api.CodeAndMsg;
 
 /**
- * 状态枚举
+ * 考勤异常枚举
+ *
  * @author： yuanyy
- * @date： Created on 2018/11/1 17:03
+ * @date： Created on 2019/2/12 17:02
  * @version： v1.0
  * @modified By:
- */
-public enum OaMeetingRoomStatusEnums implements CodeAndMsg {
-    EFFECTIVE("1", "可用"),
-    INVALID("2", "不可用"),
-    DELETED("0","已删除");
+ **/
+public enum AttendanceExceptionEnums implements CodeAndMsg {
+    ATTENDANCE_SIGN_OUT__ERROR("6015501", "未签到，不能进行签退");
 
     private String code;
 
     private String message;
 
-    OaMeetingRoomStatusEnums(String key, String message) {
+    AttendanceExceptionEnums(String key, String message) {
         this.code = key;
         this.message = message;
     }
@@ -33,5 +32,4 @@ public enum OaMeetingRoomStatusEnums implements CodeAndMsg {
     public String getMessage() {
         return message;
     }
-
 }

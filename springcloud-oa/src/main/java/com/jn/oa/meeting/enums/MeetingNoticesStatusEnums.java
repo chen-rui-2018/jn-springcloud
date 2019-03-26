@@ -9,16 +9,18 @@ import com.jn.common.api.CodeAndMsg;
  * @version： v1.0
  * @modified By:
  */
-public enum OaMeetingNoticesTemplateEnums implements CodeAndMsg {
+public enum MeetingNoticesStatusEnums implements CodeAndMsg {
 
-    MESSAGE_TEMPLATE("1001", "会议通知短信模板");
+    NO_NOTIFICATION("0", "未通知"),
+    HAVE_INFORMED("1", "已经通知")
+    ;
 
 
     private String code;
 
     private String message;
 
-    OaMeetingNoticesTemplateEnums(String key, String message) {
+    MeetingNoticesStatusEnums(String key, String message) {
         this.code = key;
         this.message = message;
     }

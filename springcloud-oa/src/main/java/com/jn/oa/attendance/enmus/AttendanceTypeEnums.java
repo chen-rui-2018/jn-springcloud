@@ -1,4 +1,4 @@
-package com.jn.oa.meeting.enums;
+package com.jn.oa.attendance.enmus;
 
 import com.jn.common.api.CodeAndMsg;
 
@@ -9,18 +9,19 @@ import com.jn.common.api.CodeAndMsg;
  * @version： v1.0
  * @modified By:
  */
-public enum OaMeetingStatusEnums implements CodeAndMsg {
-    //会议状态（0:待开始、1:进行中、2:已完成、3:已取消）
-    TO_BEGIN("0", "待开始"),
-    DOING("1", "进行中"),
-    COMPLETED("2", "已完成"),
-    CANCELLED("3", "已取消");
+public enum AttendanceTypeEnums implements CodeAndMsg {
+
+    //参会类型：1：签到，2:签退
+    SIGN_IN("1", "签到"),
+    SIGN_OUT("2", "签退")
+    ;
+
 
     private String code;
 
     private String message;
 
-    OaMeetingStatusEnums(String key, String message) {
+    AttendanceTypeEnums(String key, String message) {
         this.code = key;
         this.message = message;
     }

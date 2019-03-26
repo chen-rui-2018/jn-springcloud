@@ -17,7 +17,7 @@ import java.util.Map;
  * @version： v1.0
  * @modified By:
  */
-public interface OaMeetingRoomMapper {
+public interface MeetingRoomMapper {
 
 
     void deleteBranchByIds(Map<String,Object> map);

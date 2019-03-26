@@ -37,7 +37,7 @@ import java.util.UUID;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OaMeetingRoomServiceTest {
+public class MeetingRoomServiceTest {
 
     @Autowired
     public MeetingRoomService meetingRoomService;

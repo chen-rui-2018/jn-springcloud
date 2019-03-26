@@ -6,11 +6,13 @@ import java.util.Date;
 public class TbOaItem implements Serializable {
     private String id;
 
-    private String itemMark;
+    private String workPlanNum;
 
     private String itemName;
 
     private String responsibleAccount;
+
+    private String applicantAccount;
 
     private String itemContent;
 
@@ -20,17 +22,23 @@ public class TbOaItem implements Serializable {
 
     private String approvalAdvise;
 
-    private Date planStartTime;
-
-    private Date planEndTime;
-
     private Double totalPlanTime;
 
     private Double totalConsumeTime;
 
     private Double totalRemainTime;
 
+    private Date planEndTime;
+
+    private Date planStartTime;
+
     private String itemProgress;
+
+    private Date startTime;
+
+    private Date endTime;
+
+    private String isExpire;
 
     private Byte recordStatus;
 
@@ -52,12 +60,12 @@ public class TbOaItem implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
-    public String getItemMark() {
-        return itemMark;
+    public String getWorkPlanNum() {
+        return workPlanNum;
     }
 
-    public void setItemMark(String itemMark) {
-        this.itemMark = itemMark == null ? null : itemMark.trim();
+    public void setWorkPlanNum(String workPlanNum) {
+        this.workPlanNum = workPlanNum == null ? null : workPlanNum.trim();
     }
 
     public String getItemName() {
@@ -74,6 +82,14 @@ public class TbOaItem implements Serializable {
 
     public void setResponsibleAccount(String responsibleAccount) {
         this.responsibleAccount = responsibleAccount == null ? null : responsibleAccount.trim();
+    }
+
+    public String getApplicantAccount() {
+        return applicantAccount;
+    }
+
+    public void setApplicantAccount(String applicantAccount) {
+        this.applicantAccount = applicantAccount == null ? null : applicantAccount.trim();
     }
 
     public String getItemContent() {
@@ -108,22 +124,6 @@ public class TbOaItem implements Serializable {
         this.approvalAdvise = approvalAdvise == null ? null : approvalAdvise.trim();
     }
 
-    public Date getPlanStartTime() {
-        return planStartTime;
-    }
-
-    public void setPlanStartTime(Date planStartTime) {
-        this.planStartTime = planStartTime;
-    }
-
-    public Date getPlanEndTime() {
-        return planEndTime;
-    }
-
-    public void setPlanEndTime(Date planEndTime) {
-        this.planEndTime = planEndTime;
-    }
-
     public Double getTotalPlanTime() {
         return totalPlanTime;
     }
@@ -148,12 +148,52 @@ public class TbOaItem implements Serializable {
         this.totalRemainTime = totalRemainTime;
     }
 
+    public Date getPlanEndTime() {
+        return planEndTime;
+    }
+
+    public void setPlanEndTime(Date planEndTime) {
+        this.planEndTime = planEndTime;
+    }
+
+    public Date getPlanStartTime() {
+        return planStartTime;
+    }
+
+    public void setPlanStartTime(Date planStartTime) {
+        this.planStartTime = planStartTime;
+    }
+
     public String getItemProgress() {
         return itemProgress;
     }
 
     public void setItemProgress(String itemProgress) {
         this.itemProgress = itemProgress == null ? null : itemProgress.trim();
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getIsExpire() {
+        return isExpire;
+    }
+
+    public void setIsExpire(String isExpire) {
+        this.isExpire = isExpire == null ? null : isExpire.trim();
     }
 
     public Byte getRecordStatus() {
@@ -209,19 +249,23 @@ public class TbOaItem implements Serializable {
         }
         TbOaItem other = (TbOaItem) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getItemMark() == null ? other.getItemMark() == null : this.getItemMark().equals(other.getItemMark()))
+            && (this.getWorkPlanNum() == null ? other.getWorkPlanNum() == null : this.getWorkPlanNum().equals(other.getWorkPlanNum()))
             && (this.getItemName() == null ? other.getItemName() == null : this.getItemName().equals(other.getItemName()))
             && (this.getResponsibleAccount() == null ? other.getResponsibleAccount() == null : this.getResponsibleAccount().equals(other.getResponsibleAccount()))
+            && (this.getApplicantAccount() == null ? other.getApplicantAccount() == null : this.getApplicantAccount().equals(other.getApplicantAccount()))
             && (this.getItemContent() == null ? other.getItemContent() == null : this.getItemContent().equals(other.getItemContent()))
             && (this.getItemStatus() == null ? other.getItemStatus() == null : this.getItemStatus().equals(other.getItemStatus()))
             && (this.getApprovalStatus() == null ? other.getApprovalStatus() == null : this.getApprovalStatus().equals(other.getApprovalStatus()))
             && (this.getApprovalAdvise() == null ? other.getApprovalAdvise() == null : this.getApprovalAdvise().equals(other.getApprovalAdvise()))
-            && (this.getPlanStartTime() == null ? other.getPlanStartTime() == null : this.getPlanStartTime().equals(other.getPlanStartTime()))
-            && (this.getPlanEndTime() == null ? other.getPlanEndTime() == null : this.getPlanEndTime().equals(other.getPlanEndTime()))
             && (this.getTotalPlanTime() == null ? other.getTotalPlanTime() == null : this.getTotalPlanTime().equals(other.getTotalPlanTime()))
             && (this.getTotalConsumeTime() == null ? other.getTotalConsumeTime() == null : this.getTotalConsumeTime().equals(other.getTotalConsumeTime()))
             && (this.getTotalRemainTime() == null ? other.getTotalRemainTime() == null : this.getTotalRemainTime().equals(other.getTotalRemainTime()))
+            && (this.getPlanEndTime() == null ? other.getPlanEndTime() == null : this.getPlanEndTime().equals(other.getPlanEndTime()))
+            && (this.getPlanStartTime() == null ? other.getPlanStartTime() == null : this.getPlanStartTime().equals(other.getPlanStartTime()))
             && (this.getItemProgress() == null ? other.getItemProgress() == null : this.getItemProgress().equals(other.getItemProgress()))
+            && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
+            && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
+            && (this.getIsExpire() == null ? other.getIsExpire() == null : this.getIsExpire().equals(other.getIsExpire()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -234,19 +278,23 @@ public class TbOaItem implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getItemMark() == null) ? 0 : getItemMark().hashCode());
+        result = prime * result + ((getWorkPlanNum() == null) ? 0 : getWorkPlanNum().hashCode());
         result = prime * result + ((getItemName() == null) ? 0 : getItemName().hashCode());
         result = prime * result + ((getResponsibleAccount() == null) ? 0 : getResponsibleAccount().hashCode());
+        result = prime * result + ((getApplicantAccount() == null) ? 0 : getApplicantAccount().hashCode());
         result = prime * result + ((getItemContent() == null) ? 0 : getItemContent().hashCode());
         result = prime * result + ((getItemStatus() == null) ? 0 : getItemStatus().hashCode());
         result = prime * result + ((getApprovalStatus() == null) ? 0 : getApprovalStatus().hashCode());
         result = prime * result + ((getApprovalAdvise() == null) ? 0 : getApprovalAdvise().hashCode());
-        result = prime * result + ((getPlanStartTime() == null) ? 0 : getPlanStartTime().hashCode());
-        result = prime * result + ((getPlanEndTime() == null) ? 0 : getPlanEndTime().hashCode());
         result = prime * result + ((getTotalPlanTime() == null) ? 0 : getTotalPlanTime().hashCode());
         result = prime * result + ((getTotalConsumeTime() == null) ? 0 : getTotalConsumeTime().hashCode());
         result = prime * result + ((getTotalRemainTime() == null) ? 0 : getTotalRemainTime().hashCode());
+        result = prime * result + ((getPlanEndTime() == null) ? 0 : getPlanEndTime().hashCode());
+        result = prime * result + ((getPlanStartTime() == null) ? 0 : getPlanStartTime().hashCode());
         result = prime * result + ((getItemProgress() == null) ? 0 : getItemProgress().hashCode());
+        result = prime * result + ((getStartTime() == null) ? 0 : getStartTime().hashCode());
+        result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
+        result = prime * result + ((getIsExpire() == null) ? 0 : getIsExpire().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -262,19 +310,23 @@ public class TbOaItem implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", itemMark=").append(itemMark);
+        sb.append(", workPlanNum=").append(workPlanNum);
         sb.append(", itemName=").append(itemName);
         sb.append(", responsibleAccount=").append(responsibleAccount);
+        sb.append(", applicantAccount=").append(applicantAccount);
         sb.append(", itemContent=").append(itemContent);
         sb.append(", itemStatus=").append(itemStatus);
         sb.append(", approvalStatus=").append(approvalStatus);
         sb.append(", approvalAdvise=").append(approvalAdvise);
-        sb.append(", planStartTime=").append(planStartTime);
-        sb.append(", planEndTime=").append(planEndTime);
         sb.append(", totalPlanTime=").append(totalPlanTime);
         sb.append(", totalConsumeTime=").append(totalConsumeTime);
         sb.append(", totalRemainTime=").append(totalRemainTime);
+        sb.append(", planEndTime=").append(planEndTime);
+        sb.append(", planStartTime=").append(planStartTime);
         sb.append(", itemProgress=").append(itemProgress);
+        sb.append(", startTime=").append(startTime);
+        sb.append(", endTime=").append(endTime);
+        sb.append(", isExpire=").append(isExpire);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

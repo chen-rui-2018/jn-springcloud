@@ -1,15 +1,12 @@
 package com.jn.oa.meeting.seivice;
 
-import com.jn.common.channel.MessageSource;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.news.vo.SmsTemplateVo;
 import com.jn.oa.common.enums.OaStatusEnums;
-import com.jn.oa.meeting.enums.OaMeetingApproveStatusEnums;
+import com.jn.oa.meeting.enums.MeetingApproveStatusEnums;
 import com.jn.oa.meeting.model.*;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.meeting.vo.OaMeetingParticipantVo;
-import com.jn.oa.meeting.vo.OaMeetingVo;
 import com.jn.system.model.User;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hamcrest.Matchers;
@@ -18,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -35,7 +31,7 @@ import java.util.UUID;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class OaMeetingServiceTest {
+public class MeetingServiceTest {
 
     @Autowired
     public MeetingService meetingService;
@@ -75,7 +71,7 @@ public class OaMeetingServiceTest {
         oaMeetingAdd.setParticipantsId(participantsId);
         oaMeetingAdd.setApplicationTime(new Date());
         //审批中
-        oaMeetingAdd.setApprovalStatus(OaMeetingApproveStatusEnums .APPROVAL.getCode());
+        oaMeetingAdd.setApprovalStatus(MeetingApproveStatusEnums.APPROVAL.getCode());
         oaMeetingAdd.setCreatorAccount(user.getAccount());
         oaMeetingAdd.setCreatedTime(new Date());
         Byte cancelledStatus = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());
@@ -134,7 +130,7 @@ public class OaMeetingServiceTest {
         oaMeetingApprove.setApprovalOpinion("测试审批意见");
         oaMeetingApprove.setModifiedTime(new Date());
         oaMeetingApprove.setApprovalUser(user.getAccount());
-        oaMeetingApprove.setApprovalStatus(OaMeetingApproveStatusEnums.APPROVAL_PASS.getCode());
+        oaMeetingApprove.setApprovalStatus(MeetingApproveStatusEnums.APPROVAL_PASS.getCode());
 
         meetingService.approveOaMeeting(oaMeetingApprove,user);
     }

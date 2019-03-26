@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.oa.meeting.dao.OaMeetingRoomMapper">
+<mapper namespace="com.jn.oa.meeting.dao.MeetingRoomMapper">
 
 
     <resultMap id="BaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingRoomVo">
@@ -233,7 +233,7 @@ FROM
         (
         select m.meeting_room_id from
 
-        (select meeting.id,meeting.title  ,meeting.start_time,meeting.end_time,meeting.meeting_room_id,meeting.approval_status,meeting.meeting_status
+        (select meeting.id,meeting.title  ,meeting.start_time,meeting.end_time,meeting.meeting_room_id,meeting.meeting_status
         FROM
         tb_oa_meeting meeting
 

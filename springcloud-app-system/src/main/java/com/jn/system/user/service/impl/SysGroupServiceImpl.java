@@ -64,7 +64,7 @@ public class SysGroupServiceImpl implements SysGroupService {
      */
     @Override
     @ServiceLog(doAction = "查询所用用户组信息")
-    public PaginationData findSysGroupAll(SysGroupPage groupPage) {
+    public PaginationData<List<SysGroupUserRoleVO>> findSysGroupAll(SysGroupPage groupPage) {
         Page<Object> objects = PageHelper.startPage(groupPage.getPage(), groupPage.getRows());
         List<SysGroupUserRoleVO> sysGroupAll = sysGroupMapper.findSysGroupAll(groupPage);
         if (sysGroupAll != null && sysGroupAll.size() > 0) {

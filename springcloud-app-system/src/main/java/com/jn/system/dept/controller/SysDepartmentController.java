@@ -41,9 +41,9 @@ public class SysDepartmentController extends BaseController {
     @Autowired
     private SysDepartmentService sysDepartmentService;
 
-    @ControllerLog(doAction = "根据部门id获取部门信息及所有子部门信息")
+    @ControllerLog(doAction = "获取部门信息")
     @RequiresPermissions("/system/sysDepartment/selectDeptByKey")
-    @ApiOperation(value = "根据部门id获取部门信息及所有子部门信息",
+    @ApiOperation(value = "获取部门信息",
             notes = "id为空,查所有一级部门,不为空,精确查询,flag为true查询所有子部门,false不查子部门")
     @RequestMapping(value = "/selectDeptByKey",method = RequestMethod.POST)
     public Result selectDeptByKey(@RequestParam("id")String id, @RequestParam("flag")Boolean flag) {
@@ -104,9 +104,9 @@ public class SysDepartmentController extends BaseController {
         return new Result(result);
     }
 
-    @ControllerLog(doAction = "查询所有部门信息,并根据层级关系返回数据")
+    @ControllerLog(doAction = "获取部门树")
     @RequiresPermissions("/system/sysDepartment/findDepartmentAllByLevel")
-    @ApiOperation(value = "查询所有部门信息,并根据层级关系返回数据", notes = "查询所有部门信息,并根据层级关系返回数据")
+    @ApiOperation(value = "获取部门树", notes = "获取部门树")
     @RequestMapping(value = "/findDepartmentAllByLevel",method = RequestMethod.POST)
     public Result<List<SysDepartmentVO>> findDepartmentAllByLevel() {
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentService.findDepartmentAllByLevel();
@@ -124,9 +124,9 @@ public class SysDepartmentController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据父级id获取所有子部门信息")
+    @ControllerLog(doAction = "获取子部门信息")
     @RequiresPermissions("/system/sysDepartment/getChild")
-    @ApiOperation(value = "根据父级id获取所有子部门信息", notes = "根据父级id获取所有子部门信息")
+    @ApiOperation(value = "获取子部门信息", notes = "根据父级id获取所有子部门信息")
     @RequestMapping(value = "/getChildDepartmentByParentId",method = RequestMethod.POST)
     public Result<List<SysDepartmentVO>> getChildDepartmentByParentId(String parentId) {
         List<SysDepartmentVO> sysDepartmentVOList = sysDepartmentService.getChildDepartmentByParentId(parentId);

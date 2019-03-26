@@ -87,7 +87,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         vo.setDynamicHeadList(dynamicHeadList);
         vo.setRows(financeBudgetHistoryVos);
 
-        return null;
+        return vo;
     }
 
     @ServiceLog(doAction = "预算录入")

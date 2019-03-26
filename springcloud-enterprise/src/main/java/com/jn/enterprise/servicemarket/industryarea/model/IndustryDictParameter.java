@@ -14,13 +14,13 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "IndustryDictParameter",description = "机构数据字典查询入参")
 public class IndustryDictParameter extends Page {
 
-    @ApiModelProperty(value = "领域值")
+    @ApiModelProperty(value = "数据名称",example = "生物医药")
     private String preValue;
 
-    @ApiModelProperty(value = "领域领域")
+    @ApiModelProperty(value = "领域名称",example = "1",notes = "0业务领域1行业领域2发展阶段3企业性质 ")
     private String preType;
 
-    @ApiModelProperty(value = "行业id")
+    @ApiModelProperty(value = "数据id",example = "shengwuyiyao")
     private String id;
 
     public String getPreValue() {

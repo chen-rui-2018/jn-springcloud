@@ -22,15 +22,15 @@ public class ActivityDetail implements Serializable {
     private String actiType;
     @ApiModelProperty(value = "活动名称")
     private String actiName;
-    @ApiModelProperty(value = "活动开始时间")
+    @ApiModelProperty(value = "活动开始时间 yyyy-MM-dd HH:mm:ss")
     private String actiStartTime;
-    @ApiModelProperty(value = "活动结束时间")
+    @ApiModelProperty(value = "活动结束时间 yyyy-MM-dd HH:mm:ss")
     private String actiEndTime;
-    @ApiModelProperty(value = "报名开始时间")
+    @ApiModelProperty(value = "报名开始时间 yyyy-MM-dd HH:mm:ss")
     private String applyStartTime;
-    @ApiModelProperty(value = "报名结束时间")
+    @ApiModelProperty(value = "报名结束时间 yyyy-MM-dd HH:mm:ss")
     private String applyEndTime;
-    @ApiModelProperty(value = "活动推送时间")
+    @ApiModelProperty(value = "活动推送时间 yyyy-MM-dd HH:mm:ss")
     private String mesSendTime;
     @ApiModelProperty(value = "活动地址")
     private String actiAddress;
@@ -50,17 +50,17 @@ public class ActivityDetail implements Serializable {
     private String applyNum;
     @ApiModelProperty(value = "活动参加人数")
     private String particNum;
-    @ApiModelProperty(value = "活动状态")
+    @ApiModelProperty(value = "活动状态（1草稿 2报名中 3活动结束4活动取消）")
     private String actiStatus;
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间 yyyy-MM-dd HH:mm:ss")
     private String createdTime;
     @ApiModelProperty(value = "创建人")
     private String creatorAccount;
-    @ApiModelProperty(value = "发布时间")
+    @ApiModelProperty(value = "发布时间 yyyy-MM-dd HH:mm:ss")
     private String issueTime;
     @ApiModelProperty(value = "发布人")
     private String issueAccount;
-    @ApiModelProperty(value = "修改时间")
+    @ApiModelProperty(value = "修改时间 yyyy-MM-dd HH:mm:ss")
     private String modifiedTime;
     @ApiModelProperty(value = "修改人")
     private String modifierAccount;
@@ -81,7 +81,7 @@ public class ActivityDetail implements Serializable {
     @ApiModelProperty(value = "活动排序")
     private String actiOrder;
     @ApiModelProperty(value = "园区列表")
-    private List<?> parkCodes;
+    private List<ParkCode> parkCodes;
 
     private static final long serialVersionUID = 1L;
 
@@ -341,11 +341,15 @@ public class ActivityDetail implements Serializable {
         this.actiOrder = actiOrder;
     }
 
-    public List<?> getParkCodes() {
+    public List<ParkCode> getParkCodes() {
         return parkCodes;
     }
 
-    public void setParkCodes(List<?> parkCodes) {
+    public void setParkCodes(List<ParkCode> parkCodes) {
         this.parkCodes = parkCodes;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 }

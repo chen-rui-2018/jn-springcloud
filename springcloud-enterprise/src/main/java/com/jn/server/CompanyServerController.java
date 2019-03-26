@@ -9,11 +9,9 @@ import com.jn.company.model.ServiceCompanyParam;
 import com.jn.enterprise.company.service.CompanyService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -32,19 +30,19 @@ public class CompanyServerController extends BaseController implements CompanyCl
     private CompanyService companyService;
 
     @ControllerLog(doAction = "查询企业列表")
-    @ApiOperation(value = "查询企业列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyList")
+    @ApiOperation(value = "查询企业列表")
+    @RequestMapping(value = "/getCompanyList",method = RequestMethod.GET)
     @Override
-    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(@RequestBody ServiceCompanyParam serviceCompanyParam){
+    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(ServiceCompanyParam serviceCompanyParam){
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
 
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
-    @ApiOperation(value = "根据用户账号/企业ID查询企业信息（用户为企业管理员）", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId")
+    @ApiOperation(value = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
+    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId",method = RequestMethod.GET)
     @Override
-    public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(@RequestBody String accountOrCompanyId){
+    public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(String accountOrCompanyId){
         return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
     }
 

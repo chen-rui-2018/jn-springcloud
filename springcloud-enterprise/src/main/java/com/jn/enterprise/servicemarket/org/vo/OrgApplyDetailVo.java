@@ -24,7 +24,7 @@ public class OrgApplyDetailVo implements Serializable {
     private String orgName;
     @ApiModelProperty(value = "机构社会信用代码")
     private String orgCode;
-    @ApiModelProperty(value = "机构注册时间")
+    @ApiModelProperty(value = "机构注册时间 yyyy-MM-dd")
     private String orgRegisterTime;
     @ApiModelProperty(value = "机构简介")
     private String orgSynopsis;

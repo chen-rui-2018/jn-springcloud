@@ -163,7 +163,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询")
-    public PaginationData findByPage(SysPermissionPage sysPermissionPage) {
+    public PaginationData<List<SysPermission>> findByPage(SysPermissionPage sysPermissionPage) {
         Page<Object> objects = PageHelper.startPage(sysPermissionPage.getPage(), sysPermissionPage.getRows());
         List<SysPermission> sysPermissionList = sysPermissionMapper.findByPage(sysPermissionPage);
         PaginationData data = new PaginationData(sysPermissionList, objects.getTotal());
@@ -277,7 +277,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     @ServiceLog(doAction = "获取权限已经具有的角色信息,且条件分页获取权限未拥有的角色信息")
-    public PaginationData findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage) {
+    public PaginationData<SysPermissionRoleVO> findRoleOfPermission(SysPermissionRolePage sysPermissionRolePage) {
         List<SysRole> roleOfPermissionList =
                 sysRolePermissionMapper.findRoleOfPermission(sysPermissionRolePage.getPermissionId());
         //条件分页获取未拥有的角色信息
@@ -297,7 +297,7 @@ public class SysPermissionServiceImpl implements SysPermissionService {
      */
     @Override
     @ServiceLog(doAction = "获取除权限已经具有的文件组信息,且条件分页获取权限未拥有的文件组信息")
-    public PaginationData findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage) {
+    public PaginationData<SysPermissionFileGroupVO> findFileGroupOfPermission(SysPermissionFileGroupPage sysPermissionFileGroupPage) {
         //获取权限已经具有的文件组信息
         List<SysFileGroup> sysFileGroupOfPermissionList =
                 sysPermissionFilesMapper.findFileGroupOfPermission(sysPermissionFileGroupPage.getPermissionId());

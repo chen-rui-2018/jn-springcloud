@@ -2,6 +2,9 @@ package com.jn.system.file.service;
 
 import com.jn.common.model.PaginationData;
 import com.jn.system.file.model.SysFilePage;
+import com.jn.system.file.vo.SysFileVO;
+
+import java.util.List;
 
 /**
  * 文件service
@@ -19,6 +22,6 @@ public interface SysFileService {
      * @param sysFilePage
      * @return
      */
-    PaginationData selectSysFileListBySearchKey(SysFilePage sysFilePage);
+    PaginationData<List<SysFileVO>> selectSysFileListBySearchKey(SysFilePage sysFilePage);
 
 }

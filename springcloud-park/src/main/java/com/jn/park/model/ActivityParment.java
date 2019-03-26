@@ -15,16 +15,16 @@ import org.hibernate.validator.constraints.NotBlank;
 @ApiModel(value = "ActivityParment",description = "活动查询入参")
 public class ActivityParment extends Page {
 
-    @ApiModelProperty("活动分类ID")
+    @ApiModelProperty(value = "活动分类ID",example = "a29e14a21352473ebf26420ddffb1c60")
     private String actiType;
 
-    @ApiModelProperty("活动状态")
+    @ApiModelProperty(value = "活动状态（1草稿 2报名中 3活动结束4活动取消）",example = "1")
     private String actiStatus;
 
-    @ApiModelProperty("活动名称")
+    @ApiModelProperty(value = "活动名称",example = "测试活动")
     private String actiName;
 
-    @ApiModelProperty("是否首页展示")
+    @ApiModelProperty(value = "是否首页展示（0：否，1：是）",example = "1")
     private String isIndex;
 
     public String getActiType() {

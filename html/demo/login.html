@@ -14,7 +14,7 @@
 				     url:url+"/login",   
 				     type:$("#ff").attr("method"),
 					 contentType: 'application/json',
-				     data:JSON.stringify($('#ff').serializeJSON()),
+				     data:JSON.stringify($('#ff').serializeObject()),
 				     success:function(data){
 				    	 if(data.code=="0000"){
 				        	$.messager.alert('登录成功','token：'+data.data);

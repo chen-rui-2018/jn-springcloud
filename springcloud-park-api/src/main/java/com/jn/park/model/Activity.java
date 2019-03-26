@@ -25,15 +25,15 @@ public class Activity implements Serializable {
     private String actiType;
     @ApiModelProperty(value = "活动名称")
     private String actiName;
-    @ApiModelProperty(value = "活动开始时间")
+    @ApiModelProperty(value = "活动开始时间 yyyy-MM-dd HH:mm:ss")
     private String actiStartTime;
-    @ApiModelProperty(value = "活动结束时间")
+    @ApiModelProperty(value = "活动结束时间 yyyy-MM-dd HH:mm:ss")
     private String actiEndTime;
-    @ApiModelProperty(value = "活动报名开始时间")
+    @ApiModelProperty(value = "活动报名开始时间 yyyy-MM-dd HH:mm:ss")
     private String applyStartTime;
-    @ApiModelProperty(value = "活动报名结束时间")
+    @ApiModelProperty(value = "活动报名结束时间 yyyy-MM-dd HH:mm:ss")
     private String applyEndTime;
-    @ApiModelProperty(value = "活动消息发送时间")
+    @ApiModelProperty(value = "活动消息发送时间 yyyy-MM-dd HH:mm:ss")
     private String mesSendTime;
     @ApiModelProperty(value = "活动园区")
     private String parkId;
@@ -49,13 +49,13 @@ public class Activity implements Serializable {
     private Integer actiNumber;
     @ApiModelProperty(value = "活动海报路径")
     private String actiPosterUrl;
-    @ApiModelProperty(value = "活动状态")
+    @ApiModelProperty(value = "活动状态（1草稿 2报名中 3活动结束4活动取消）")
     private String actiStatus;
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value = "创建时间 yyyy-MM-dd HH:mm:ss")
     private String createdTime;
     @ApiModelProperty(value = "创建者账号")
     private String creatorAccount;
-    @ApiModelProperty(value = "最新更新时间")
+    @ApiModelProperty(value = "最新更新时间 yyyy-MM-dd HH:mm:ss")
     private String modifiedTime;
     @ApiModelProperty(value = "最新更新者账号")
     private String modifierAccount;
@@ -67,9 +67,9 @@ public class Activity implements Serializable {
     private Integer applyNum;
     @ApiModelProperty(value = "实际参加人数")
     private Integer particNum;
-    @ApiModelProperty(value = "是否首页展示")
+    @ApiModelProperty(value = "是否首页展示（0：否，1：是）")
     private String isIndex;
-    @ApiModelProperty(value = "是否可报名")
+    @ApiModelProperty(value = "是否可报名（0：否，1：是）")
     private String isApply;
     @ApiModelProperty(value = "排序")
     private Integer actiOrder;
@@ -77,7 +77,7 @@ public class Activity implements Serializable {
     private String typeName;
     @ApiModelProperty(value = "活动详情")
     private String actiDetail;
-    @ApiModelProperty(value = "活动发布时间")
+    @ApiModelProperty(value = "活动发布时间 yyyy-MM-dd HH:mm:ss")
     private String issueTime;
     @ApiModelProperty(value = "发布人")
     private String issueAccount;

@@ -215,7 +215,7 @@ public class ActivityController extends BaseController {
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
         //把数组转换为字符串，并以逗号（“,”）分隔
         String exportTitle =  StringUtils.join(activityApplyParam.getExportTitle(),",");
-        String exportColName = StringUtils.join(activityApplyParam.getExportColName());
+        String exportColName = StringUtils.join(activityApplyParam.getExportColName(),",");
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, activityApplyDetails);
     }
 

@@ -1,0 +1,422 @@
+@charset "UTF-8";
+* {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+i {
+  font-style: normal;
+}
+
+input {
+  outline-style: none;
+}
+
+.clearfix:after {
+  /*正常浏览器 清除浮动*/
+  clear: both;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*zoom 1 就是ie6 清除浮动方式  *  ie7一下的版本所识别*/
+}
+
+.pr {
+  position: relative;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.w {
+  width: 1190px;
+  margin: 0 auto;
+}
+
+.mainColor {
+  color: #00a042;
+}
+
+.impact {
+  font-family: IMPACT;
+}
+
+.arialn {
+  font-family: ARIALN;
+}
+
+/* 活动中心开始 */
+.actiContent {
+  width: 1190px;
+  margin: 0 auto;
+}
+
+.actiContent .actiNav {
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.actiContent .actiNav a:last-child {
+  color: #00a041;
+  font-weight: bold;
+}
+
+.actiContent .actiFilter {
+  height: 75px;
+  line-height: 75px;
+  padding: 0 20px;
+  border: 1px solid #ccc;
+}
+
+.actiContent .actiFilter .timeFilter {
+  float: left;
+  color: #797979;
+}
+
+.actiContent .actiFilter .timeFilter > span {
+  cursor: pointer;
+  display: inline-block;
+  width: 100px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  margin-left: 20px;
+  border-radius: 16px;
+}
+
+.actiContent .actiFilter .timeFilter > span.active {
+  color: #fff;
+  background: -webkit-gradient(linear, left top, right bottom, from(#35bf6d), to(#00a041));
+  background: linear-gradient(to bottom right, #35bf6d, #00a041);
+}
+
+.actiContent .actiFilter .timeOrder {
+  float: right;
+  color: #919191;
+}
+
+.actiContent .actiFilter .timeOrder > ul {
+  overflow: hidden;
+}
+
+.actiContent .actiFilter .timeOrder > ul li {
+  display: inline-block;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.actiContent .actiFilter .timeOrder > ul li .iconfont {
+  font-size: 18px;
+}
+
+.actiContent .actiFilter .timeOrder > ul li .icon-menu1:hover {
+  cursor: pointer;
+}
+
+.actiContent .actiFilter .timeOrder > ul li .icon-menu {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.actiContent .actiFilter .timeOrder > ul li.active {
+  background-image: -webkit-linear-gradient(to bottom right, #35bf6d, #00a041);
+  -webkit-text-fill-color: #00a041;
+  -webkit-background-clip: text;
+}
+
+.actiContent .actiFilter .timeOrder > ul .showListLi > i.active {
+  color: #00a041;
+}
+
+.actiContent .allActi {
+  padding-top: 20px;
+  border-bottom: 1px solid #ccc;
+  line-height: 37px;
+}
+
+.actiContent .allActi .actiFilterUl > li {
+  float: left;
+  padding-bottom: 10px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.actiContent .allActi .actiFilterUl > li.active {
+  border-bottom: 2px solid #00a041;
+  color: #00a041;
+}
+
+.actiContent .allActi .actiFilterUl .bottomLi {
+  margin-right: 0;
+}
+
+.actiContent .allActi .actiFilterUl .box-card {
+  width: 360px;
+  height: 200px;
+  overflow: auto;
+  position: absolute;
+  left: 20px;
+  top: 15px;
+  background-color: #fff;
+  padding: 0;
+  z-index: 4;
+}
+
+.actiContent .allActi .actiFilterUl .el-card__body {
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.actiContent .allActi .actiFilterUl .listUl {
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.actiContent .allActi .actiFilterUl .listUl > li {
+  padding: 5px 0;
+  float: left;
+  width: 170px;
+  cursor: pointer;
+  color: #000;
+}
+
+.actiContent .allActi .actiFilterUl .listUl > li.active {
+  color: #00a041;
+}
+
+.actiContent .allActi .actiSearch {
+  width: 200px;
+  height: 35px;
+  line-height: 35px;
+  text-align: center;
+  padding-right: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.actiContent .allActi .actiSearch > input {
+  border: 0;
+  height: 100%;
+  width: 80%;
+}
+
+.actiContent .allActi .actiSearch input,
+.actiContent .allActi .actiSearch textarea,
+.actiContent .allActi .actiSearch select,
+.actiContent .allActi .actiSearch button {
+  text-rendering: auto;
+  color: #333;
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0;
+  text-shadow: none;
+  display: inline-block;
+  text-align: start;
+  margin: 0em;
+  font: 400 16px Arial;
+}
+
+.actiContent .allActi .actiSearch > .icon-sousuo {
+  position: relative;
+  top: -36px;
+  right: -120px;
+  cursor: pointer;
+  font-size: 20px;
+  display: inline-block;
+  width: 40px;
+  line-height: 37px;
+  text-align: center;
+  border-left: 1px solid #ccc;
+}
+
+.actiContent .actiTab {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.actiContent .actiTab .allActiUl > li {
+  float: left;
+  width: 273px;
+  height: 350px;
+  border: 1px solid #ccc;
+  margin-right: 30px;
+  margin-bottom: 30px;
+}
+
+.actiContent .actiTab .allActiUl > li .postImgItem {
+  display: inline-block;
+  width: 100%;
+  height: 192px;
+}
+
+.actiContent .actiTab .allActiUl > li .postImgItem .postImg {
+  height: 100%;
+  width: 100%;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum {
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum .avatar {
+  float: left;
+  padding-left: 10px;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum .avatar > ul {
+  display: inline-block;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li {
+  float: left;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  margin-left: -10px;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum .avatar > ul li img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum > i {
+  margin-left: 10px;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum > span {
+  float: right;
+}
+
+.actiContent .actiTab .allActiUl > li .actiNum > span .icon-xihuan {
+  margin-right: 5px;
+}
+
+.actiContent .actiTab .allActiUl > li .actiInfo {
+  padding: 10px;
+}
+
+.actiContent .actiTab .allActiUl > li .actiInfo .actiTimer {
+  text-indent: -10px;
+  margin-left: 18px;
+}
+
+.actiContent .actiTab .allActiUl li:nth-child(4n) {
+  margin-right: 0;
+}
+
+.actiContent .actiTab .verticalUl {
+  margin-bottom: 50px;
+}
+
+.actiContent .actiTab .verticalUl > li {
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalLeft {
+  margin-right: 30px;
+  width: 304px;
+  height: 185px;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalLeft > img {
+  width: 100%;
+  height: 100%;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .verticalTit {
+  color: #333;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .xihuan {
+  margin: 15px 0;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .location {
+  margin: 18px 0;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar {
+  float: left;
+  padding-left: 10px;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul {
+  display: inline-block;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li {
+  float: left;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  margin-left: -10px;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum .avatar > ul li img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalMiddle .actiNum > .btn {
+  float: right;
+}
+
+.actiContent .actiTab .verticalUl > li .verticalRight {
+  margin-top: 145px;
+}
+
+.actiContent .actiTab .verticalUl > li:first-child {
+  padding-top: 0;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #00a041;
+  color: #fff;
+}
+
+.el-pager li:hover {
+  color: #00a041;
+}
+
+.pagination-container {
+  text-align: center;
+}
+
+/* 活动中心结束 */
+/* 活动详情 */
+.el-textarea__inner {
+  background: #f9f9f9;
+}
+
+/* 活动详情 */
+/*# sourceMappingURL=main.css.map */

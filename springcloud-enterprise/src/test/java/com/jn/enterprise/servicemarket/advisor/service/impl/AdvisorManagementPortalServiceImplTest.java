@@ -98,8 +98,8 @@ public class AdvisorManagementPortalServiceImplTest {
             if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorIntroduction()!=null){
                 logger.info(advisorManagementDetails.getAdvisorIntroduction().toString());
             }
-            if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorBaseInfo()!=null){
-                logger.info(advisorManagementDetails.getAdvisorBaseInfo().toString());
+            if(advisorManagementDetails!=null && advisorManagementDetails.getAdvisorBaseInfoParam()!=null){
+                logger.info(advisorManagementDetails.getAdvisorBaseInfoParam().toString());
             }
             if(advisorManagementDetails!=null && advisorManagementDetails.getServiceHonorList()!=null){
                 for(ServiceHonor serviceHonor:advisorManagementDetails.getServiceHonorList()){

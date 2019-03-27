@@ -14,12 +14,12 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "CompanyCheckParam",description = "用户信息入参")
+@ApiModel(value = "UserInfoParam",description = "用户信息入参")
 public class UserInfoParam implements Serializable {
 
     @ApiModelProperty(value = "用户昵称",required = true)
     @NotNull(message = "用户昵称不能为空")
-    private String nick_name;
+    private String nickName;
 
     @ApiModelProperty(value = "姓名")
     private String name;
@@ -32,6 +32,9 @@ public class UserInfoParam implements Serializable {
 
     @ApiModelProperty(value = "年龄")
     private Integer age;
+
+    @ApiModelProperty(value = "电话号码")
+    private String phone;
 
     @ApiModelProperty(value = "性别[0女1男]",required = true)
     @NotNull(message = "性别不能为空")
@@ -47,13 +50,12 @@ public class UserInfoParam implements Serializable {
     @ApiModelProperty(value = "职业ID[数组]")
     private String[] jobs;
 
-
-    public String getNick_name() {
-        return nick_name;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNick_name(String nick_name) {
-        this.nick_name = nick_name;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public String getName() {
@@ -118,5 +120,13 @@ public class UserInfoParam implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

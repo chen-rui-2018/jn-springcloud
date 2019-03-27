@@ -11,8 +11,8 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "FinacialProductLoanType", description = "金融产品贷款类别")
-public class FinacialProductLoanType implements Serializable {
+@ApiModel(value = "FinancialProductLoanType", description = "金融产品贷款类别")
+public class FinancialProductLoanType implements Serializable {
     @ApiModelProperty(value = "贷款类别编码)")
     private String loanCode;
     @ApiModelProperty(value = "贷款类别名称)")

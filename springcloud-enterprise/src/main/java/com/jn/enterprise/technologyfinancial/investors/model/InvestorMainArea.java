@@ -13,9 +13,9 @@ import java.io.Serializable;
  */
 @ApiModel(value = "InvestorMainArea", description = "科技金融投资人主投领域信息")
 public class InvestorMainArea implements Serializable {
-    @ApiModelProperty(value = "主投领域编码")
+    @ApiModelProperty(value = "主投领域编码",example = "biomedicine")
     private String mainCode;
-    @ApiModelProperty(value = "主投领域名称")
+    @ApiModelProperty(value = "主投领域名称",example = "生物医药")
     private String mainName;
 
     public String getMainCode() {

@@ -18,10 +18,10 @@ public class ServiceProductApproval implements Serializable {
     @ApiModelProperty(value = "服务产品ID",required = true)
     @NotBlank(message = "产品Id 不能为空")
     private String productId;
-    @ApiModelProperty(value = "状态(审批结果1-审批通过,2审批不通过),(上架 1,下架-1)",required = true)
+    @ApiModelProperty(value = "状态(审批结果 1:审批通过,2:审批不通过)",required = true,example = "1")
     @NotBlank(message = "审批结果不能为空")
     private String status;
-    @ApiModelProperty(value = "审批意见,在产品上下架接口中不需要给值")
+    @ApiModelProperty(value = "审批意见",example = "符合要求,审批通过")
     private String approvalComments;
     public String getProductId() {
         return productId;

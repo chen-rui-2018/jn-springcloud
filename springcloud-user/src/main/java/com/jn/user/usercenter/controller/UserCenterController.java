@@ -6,17 +6,16 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.model.UserExtensionInfo;
 import com.jn.user.usercenter.model.ModifyPassword;
 import com.jn.user.usercenter.service.UserCenterService;
+import com.jn.user.usercenter.vo.UserCenterInfoVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户中心
@@ -38,11 +37,16 @@ public class UserCenterController extends BaseController {
     private UserCenterService userCenterService;
 
     @ControllerLog(doAction = "根据用户账号获取用户资料信息")
-    @ApiOperation(value = "根据用户账号获取用户资料信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getUserPersonInfo")
-    public Result<UserExtensionInfo> getUserPersonInfo(@ApiParam(name = "account", value = "服务产品id", required = true) @RequestParam String account) {
+    @ApiOperation(value = "根据用户账号获取用户资料信息")
+    @RequestMapping(value = "/getUserPersonInfo",method = RequestMethod.GET)
+    public Result<UserCenterInfoVo> getUserPersonInfo(@ApiParam(name = "account", value = "用户账号", required = true ,example = "wangsong") @RequestParam(value ="account") String account) {
         UserExtensionInfo userInfo = userCenterService.getUserExtension(account);
-        return new Result(userInfo);
+        if(userInfo == null ){
+            return new Result();
+        }
+        UserCenterInfoVo vo= new UserCenterInfoVo();
+        BeanUtils.copyProperties(userInfo,vo);
+        return new Result(vo);
     }
 
     @ControllerLog(doAction = "修改用户密码")

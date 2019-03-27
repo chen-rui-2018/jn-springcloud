@@ -28,7 +28,7 @@ public class FinanceTypeController extends FinanceBaseController {
     private FinanceTypeService financeTypeService;
 
     @ControllerLog(doAction = "新增财务项目类型")
-    @ApiOperation(value = "新增财务项目类型",notes = "新增财务项目类型", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "新增财务项目类型",notes = "新增财务项目类型", httpMethod = "POST")
     @PostMapping(value = "addType")
     @RequiresPermissions("/finance/type/addType")
     public Result addType(@Validated FinanceTypeModel financeTypeModel){
@@ -42,7 +42,7 @@ public class FinanceTypeController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "修改财务项目类型")
-    @ApiOperation(value = "修改财务项目类型",notes ="修改财务项目类型", httpMethod = "PUT", response = Result.class)
+    @ApiOperation(value = "修改财务项目类型",notes ="修改财务项目类型", httpMethod = "PUT")
     @PutMapping(value = "updateType")
     @RequiresPermissions("/finance/type/updateType")
     public Result updateType(@Validated FinanceTypeModel financeTypeModel){
@@ -68,7 +68,7 @@ public class FinanceTypeController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "查看所有财务项目类型")
-    @ApiOperation(value = "查看所有财务项目类型",notes="查看所有财务项目类型", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "查看所有财务项目类型",notes="查看所有财务项目类型", httpMethod = "GET")
     @GetMapping(value = "selectTypeByDepartmentId")
     @RequiresPermissions("/finance/type/selectTypeByDepartmentId")
     @ApiImplicitParams({
@@ -86,7 +86,7 @@ public class FinanceTypeController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "查看类型对应的所有部门")
-    @ApiOperation(value = "查看类型对应的所有部门",notes="查看类型对应的所有部门", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "查看类型对应的所有部门",notes="查看类型对应的所有部门", httpMethod = "GET")
     @GetMapping(value = "selectDepartmentByTypeId")
     @RequiresPermissions("/finance/type/selectDepartmentByTypeId")
     @ApiImplicitParam(name = "typeId",value = "类型ID",dataType = "Integer",paramType = "query")

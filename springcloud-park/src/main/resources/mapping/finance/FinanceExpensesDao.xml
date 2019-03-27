@@ -53,7 +53,7 @@
         WHERE
         t.record_status = 1
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costId)">
-            AND t.cost_id like concat(concat("%",#{costId}),"%")
+            and t.cost_id like CONCAT('%', #{costId,jdbcType=VARCHAR}, '%')
         </if>
         <if test="@org.apache.commons.lang.StringUtils@isNotBlank(costAfterTypeId)">
         AND t.cost_after_type_id = #{costAfterTypeId}

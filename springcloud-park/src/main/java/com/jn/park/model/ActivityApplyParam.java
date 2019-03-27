@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.io.Serializable;
+
 /**
  * 活动申请人查询/导出入参Bean
  * @author： jiangyl
@@ -14,7 +16,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @ApiModel(value = "ActivityApplyParam",description = "活动申请人查询入参")
-public class ActivityApplyParam extends Page {
+public class ActivityApplyParam extends Page implements Serializable {
     @ApiModelProperty(value = "活动ID",required = true,example = "92wefjw***")
     @NotBlank(message = "活动id不能为空！")
     private String activityId;

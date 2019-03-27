@@ -22,31 +22,31 @@ public class NoticeAdd implements Serializable {
     @ApiModelProperty(value = "公告id")
     private String id;
 
-    @ApiModelProperty(value = "公告编号", required = true)
+    @ApiModelProperty(value = "公告编号", required = true, example = "jisdjfoodhd")
     @NotNull(message = "公告编号不能为空")
     private String workOrderNum;
 
-    @ApiModelProperty(value = "公告标题", required = true)
+    @ApiModelProperty(value = "公告标题", required = true, example = "测试公告")
     @Size(max = 200, message = "公告标题不能超过200字")
     private String noticeTitle;
 
-    @ApiModelProperty(value = "发布平台类型（1:协同办公、2:外部系统,数据使用格式[{'key':'1',value:'协同办公'},...])", required = true)
+    @ApiModelProperty(value = "发布平台类型（1:协同办公、2:外部系统)", required = true, example = "\"1\"")
     @NotNull(message = "发布平台不能为空")
     private String platformType;
 
-    @ApiModelProperty(value = "生效时间(时间统一格式为yyyy-MM-dd HH:mm:ss)", required = true)
+    @ApiModelProperty(value = "生效时间", required = true, example = "2012-12-12 12:12:12")
     @NotNull(message = "生效时间不能为空")
     private String effectiveTime;
 
-    @ApiModelProperty(value = "失效时间(时间统一格式为yyyy-MM-dd HH:mm:ss)", required = true)
+    @ApiModelProperty(value = "失效时间", required = true, example = "2012-13-12 12:12:12")
     @NotNull(message = "失效时间不能为空")
     private String failureTime;
 
-    @ApiModelProperty(value = "状态（0删除,1有效,2失效", required = true)
+    @ApiModelProperty(value = "状态（0删除,1有效,2失效", required = true, example = "\"1\"")
     @NotNull(message = "状态值不能为空")
     private Byte recordStatus;
 
-    @ApiModelProperty(value = "公告内容", required = true)
+    @ApiModelProperty(value = "公告内容", required = true, example = "公告内容测试")
     private String noticeContent;
 
     public NoticeAdd() {

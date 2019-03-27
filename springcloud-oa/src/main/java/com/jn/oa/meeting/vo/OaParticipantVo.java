@@ -23,9 +23,6 @@ public class OaParticipantVo implements Serializable {
     @ApiModelProperty(value = "签退时间")
     private Date signBackTime;
 
-    @ApiModelProperty(value = "考勤状态（0:正常、1:缺勤、2:迟到、3:早退）")
-    private String attendanceStatus;
-
     @ApiModelProperty(value = " 是否删除（0标记删除，1正常）")
 
     private Byte recordStatus;
@@ -91,14 +88,6 @@ public class OaParticipantVo implements Serializable {
 
     public void setSignBackTime(Date signBackTime) {
         this.signBackTime = signBackTime;
-    }
-
-    public String getAttendanceStatus() {
-        return attendanceStatus;
-    }
-
-    public void setAttendanceStatus(String attendanceStatus) {
-        this.attendanceStatus = attendanceStatus == null ? null : attendanceStatus.trim();
     }
 
     public Byte getRecordStatus() {

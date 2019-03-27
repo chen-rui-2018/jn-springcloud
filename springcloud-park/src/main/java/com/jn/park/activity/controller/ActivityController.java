@@ -202,9 +202,9 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "活动报名人数据导出")
     @ApiOperation(value = "活动报名人数据导出")
-    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.POST)
+    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.GET)
     @RequiresPermissions("/activity/exportDataExcel")
-    public void exportDataExcel(@RequestBody  @Validated ActivityApplyParam activityApplyParam,
+    public void exportDataExcel(@Validated ActivityApplyParam activityApplyParam,
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
@@ -215,7 +215,7 @@ public class ActivityController extends BaseController {
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
         //把数组转换为字符串，并以逗号（“,”）分隔
         String exportTitle =  StringUtils.join(activityApplyParam.getExportTitle(),",");
-        String exportColName = StringUtils.join(activityApplyParam.getExportColName());
+        String exportColName = StringUtils.join(activityApplyParam.getExportColName(),",");
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, activityApplyDetails);
     }
 

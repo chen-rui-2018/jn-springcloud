@@ -1,18 +1,18 @@
-<template>
+<!--<template>
   <div class="dashboard-editor-container">
 
     <github-corner style="position: absolute; top: 0px; border: 0; right: 0;"/>
-    <!-- 四小块 -->
+    &lt;!&ndash; 四小块 &ndash;&gt;
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <!-- //曲线图 -->
+      &lt;!&ndash; //曲线图 &ndash;&gt;
       <line-chart :chart-data="lineChartData"/>
       <line-chart :chart-data="lineChartData2"/>
       <line-chart :chart-data="lineChartData3"/>
       <line-chart :chart-data="lineChartData4"/>
     </el-row>
-    <!-- 三个表格图 -->
+    &lt;!&ndash; 三个表格图 &ndash;&gt;
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
@@ -115,4 +115,57 @@ export default {
     margin-bottom: 32px;
   }
 }
+</style>-->
+
+<template>
+  <div class="dashboard-editor-container">
+    <div id="loading">正在加载中...</div>
+    <iframe id="kskfpt" ref="iframe" src="" width="100%" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>
+  </div>
+</template>
+<script>
+import $ from 'jquery'
+export default {
+  components: {
+  },
+  data() {
+  },
+  computed: {
+  },
+  mounted() {
+    // iframe 自适应高度
+    $('#kskfpt').height($(document.body).height() - 120)
+    // 预先登录模式
+    $('#kskfpt').attr('src', 'http://112.94.22.222:2381/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
+    let iframeNum = 0
+    // iframe加载完成打开工作台
+    var iframe = document.getElementById('kskfpt')
+    if (iframe.attachEvent) {
+      iframe.attachEvent('onload', function() {
+      })
+    } else {
+      iframe.onload = function() {
+        if (iframeNum === 0) {
+          $('#kskfpt').attr('src', 'http://112.94.22.222:2381/platform/console/home.htm')
+        } else {
+          $('#kskfpt').css('visibility', 'visible')
+          $('#loading').css('display', 'none')
+        }
+        iframeNum = iframeNum + 1
+      }
+    }
+  }
+}
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  .dashboard-editor-container {
+    padding: 1px;
+    background-color: rgb(240, 242, 245);
+    .chart-wrapper {
+      background: #fff;
+      padding: 1px 1px 0;
+      margin-bottom: 1px;
+    }
+  }
 </style>

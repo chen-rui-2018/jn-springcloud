@@ -10,6 +10,7 @@ import com.jn.system.user.vo.SysUserVO;
 import com.jn.system.vo.SysDepartmentPostVO;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户dao
@@ -116,4 +117,22 @@ public interface SysUserService {
      * @return
      */
     List<User> getUserAll();
+
+    /**
+     * 通过用户账号,获取用户信息,多个账号,返回多个用户信息
+     *
+     * @param accountList 账号集合
+     * @return
+     */
+    List<User> getUserInfoByAccount(List<String> accountList);
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
+     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
+     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @return
+     */
+    Boolean updateUserRole(User user, Set<String> deleRoleIds, Set<String> addRoleIds);
 }

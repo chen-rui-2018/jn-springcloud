@@ -43,7 +43,7 @@ public class FinanceExpensesController extends BaseController {
     @ApiOperation(value = "支出录入查询",notes = "支出录入查询", httpMethod = "GET", response = Result.class)
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/expenses/findAll")
-    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
+    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel){
         //todo
         this.checkIsSomeYear(financeExpensesPageModel.getStartMonth(),financeExpensesPageModel.getEndMonth());
         this.checkIsSomeYear(financeExpensesPageModel.getStartTime(),financeExpensesPageModel.getEndTime());
@@ -69,6 +69,13 @@ public class FinanceExpensesController extends BaseController {
     @RequiresPermissions("/finance/expenses/importData")
     public Result<FinanceExpendImportDataVo> importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
         //todo
+        //判断文件后缀名是否为.xlsx
+        //获取文件名
+        String name=file.getOriginalFilename();
+        String fileName= name.substring(name.length()-5);
+        if(!fileName.equals("xlsx")){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请导入模板文件");
+        }
         List<FinanceExpendImportDataVo> financeExpendImportDataVos=financeExpensesService.importData(file,getUser());
 
         return new Result(financeExpendImportDataVos);

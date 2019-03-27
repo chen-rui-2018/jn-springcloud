@@ -358,6 +358,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         com.github.pagehelper.Page<Object> objects = null;
         if (needPage) {
             objects = PageHelper.startPage(activityApplyParam.getPage(), activityApplyParam.getRows() == 0 ? 15 : activityApplyParam.getRows(), true);
+        }else{
+            objects = PageHelper.startPage(1, 200000, true);
         }
         List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), null);
         return new PaginationData<>(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());

@@ -35,7 +35,7 @@ public class TbSpPower implements Serializable {
     private String level;
 
     /*@ApiModelProperty("权力来源")*/
-    private String from;
+    private String comeFrom;
 
     /*@ApiModelProperty("是否区权(1是，0否)")*/
     private Integer isArea;
@@ -149,12 +149,12 @@ public class TbSpPower implements Serializable {
         this.level = level == null ? null : level.trim();
     }
 
-    public String getFrom() {
-        return from;
+    public String getComeFrom() {
+        return comeFrom;
     }
 
-    public void setFrom(String from) {
-        this.from = from == null ? null : from.trim();
+    public void setComeFrom(String comeFrom) {
+        this.comeFrom = comeFrom == null ? null : comeFrom.trim();
     }
 
     public Integer getIsArea() {
@@ -259,7 +259,7 @@ public class TbSpPower implements Serializable {
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getCode() == null ? other.getCode() == null : this.getCode().equals(other.getCode()))
             && (this.getLevel() == null ? other.getLevel() == null : this.getLevel().equals(other.getLevel()))
-            && (this.getFrom() == null ? other.getFrom() == null : this.getFrom().equals(other.getFrom()))
+            && (this.getComeFrom() == null ? other.getComeFrom() == null : this.getComeFrom().equals(other.getComeFrom()))
             && (this.getIsArea() == null ? other.getIsArea() == null : this.getIsArea().equals(other.getIsArea()))
             && (this.getIsNingzhengfa() == null ? other.getIsNingzhengfa() == null : this.getIsNingzhengfa().equals(other.getIsNingzhengfa()))
             && (this.getIsQinzhengfa() == null ? other.getIsQinzhengfa() == null : this.getIsQinzhengfa().equals(other.getIsQinzhengfa()))
@@ -286,7 +286,7 @@ public class TbSpPower implements Serializable {
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
         result = prime * result + ((getLevel() == null) ? 0 : getLevel().hashCode());
-        result = prime * result + ((getFrom() == null) ? 0 : getFrom().hashCode());
+        result = prime * result + ((getComeFrom() == null) ? 0 : getComeFrom().hashCode());
         result = prime * result + ((getIsArea() == null) ? 0 : getIsArea().hashCode());
         result = prime * result + ((getIsNingzhengfa() == null) ? 0 : getIsNingzhengfa().hashCode());
         result = prime * result + ((getIsQinzhengfa() == null) ? 0 : getIsQinzhengfa().hashCode());
@@ -316,7 +316,7 @@ public class TbSpPower implements Serializable {
         sb.append(", type=").append(type);
         sb.append(", code=").append(code);
         sb.append(", level=").append(level);
-        sb.append(", from=").append(from);
+        sb.append(", comeFrom=").append(comeFrom);
         sb.append(", isArea=").append(isArea);
         sb.append(", isNingzhengfa=").append(isNingzhengfa);
         sb.append(", isQinzhengfa=").append(isQinzhengfa);

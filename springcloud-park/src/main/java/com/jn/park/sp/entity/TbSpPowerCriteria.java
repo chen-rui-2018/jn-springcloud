@@ -805,73 +805,73 @@ public class TbSpPowerCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andFromIsNull() {
-            addCriterion("from is null");
+        public Criteria andComeFromIsNull() {
+            addCriterion("come_from is null");
             return (Criteria) this;
         }
 
-        public Criteria andFromIsNotNull() {
-            addCriterion("from is not null");
+        public Criteria andComeFromIsNotNull() {
+            addCriterion("come_from is not null");
             return (Criteria) this;
         }
 
-        public Criteria andFromEqualTo(String value) {
-            addCriterion("from =", value, "from");
+        public Criteria andComeFromEqualTo(String value) {
+            addCriterion("come_from =", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromNotEqualTo(String value) {
-            addCriterion("from <>", value, "from");
+        public Criteria andComeFromNotEqualTo(String value) {
+            addCriterion("come_from <>", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromGreaterThan(String value) {
-            addCriterion("from >", value, "from");
+        public Criteria andComeFromGreaterThan(String value) {
+            addCriterion("come_from >", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromGreaterThanOrEqualTo(String value) {
-            addCriterion("from >=", value, "from");
+        public Criteria andComeFromGreaterThanOrEqualTo(String value) {
+            addCriterion("come_from >=", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromLessThan(String value) {
-            addCriterion("from <", value, "from");
+        public Criteria andComeFromLessThan(String value) {
+            addCriterion("come_from <", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromLessThanOrEqualTo(String value) {
-            addCriterion("from <=", value, "from");
+        public Criteria andComeFromLessThanOrEqualTo(String value) {
+            addCriterion("come_from <=", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromLike(String value) {
-            addCriterion("from like", value, "from");
+        public Criteria andComeFromLike(String value) {
+            addCriterion("come_from like", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromNotLike(String value) {
-            addCriterion("from not like", value, "from");
+        public Criteria andComeFromNotLike(String value) {
+            addCriterion("come_from not like", value, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromIn(List<String> values) {
-            addCriterion("from in", values, "from");
+        public Criteria andComeFromIn(List<String> values) {
+            addCriterion("come_from in", values, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromNotIn(List<String> values) {
-            addCriterion("from not in", values, "from");
+        public Criteria andComeFromNotIn(List<String> values) {
+            addCriterion("come_from not in", values, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromBetween(String value1, String value2) {
-            addCriterion("from between", value1, value2, "from");
+        public Criteria andComeFromBetween(String value1, String value2) {
+            addCriterion("come_from between", value1, value2, "comeFrom");
             return (Criteria) this;
         }
 
-        public Criteria andFromNotBetween(String value1, String value2) {
-            addCriterion("from not between", value1, value2, "from");
+        public Criteria andComeFromNotBetween(String value1, String value2) {
+            addCriterion("come_from not between", value1, value2, "comeFrom");
             return (Criteria) this;
         }
 

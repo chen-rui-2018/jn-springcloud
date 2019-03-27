@@ -12,7 +12,7 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="code" jdbcType="VARCHAR" property="code" />
     <result column="level" jdbcType="VARCHAR" property="level" />
-    <result column="from" jdbcType="VARCHAR" property="from" />
+    <result column="come_from" jdbcType="VARCHAR" property="comeFrom" />
     <result column="is_area" jdbcType="INTEGER" property="isArea" />
     <result column="is_ningzhengfa" jdbcType="INTEGER" property="isNingzhengfa" />
     <result column="is_qinzhengfa" jdbcType="INTEGER" property="isQinzhengfa" />
@@ -84,7 +84,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, parent_id, parent_name, name, depart_id, depart_name, setting_basis, type, code, 
-    level, from, is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, record_status, 
+    level, come_from, is_area, is_ningzhengfa, is_qinzhengfa, is_qubianban, notes, record_status, 
     creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpPowerCriteria" resultMap="BaseResultMap">
@@ -121,7 +121,7 @@
     insert into tb_sp_power (id, parent_id, parent_name, 
       name, depart_id, depart_name, 
       setting_basis, type, code, 
-      level, from, is_area, 
+      level, come_from, is_area, 
       is_ningzhengfa, is_qinzhengfa, is_qubianban, 
       notes, record_status, creator_account, 
       created_time, modifier_account, modified_time
@@ -129,7 +129,7 @@
     values (#{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{parentName,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{departId,jdbcType=VARCHAR}, #{departName,jdbcType=VARCHAR}, 
       #{settingBasis,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
-      #{level,jdbcType=VARCHAR}, #{from,jdbcType=VARCHAR}, #{isArea,jdbcType=INTEGER}, 
+      #{level,jdbcType=VARCHAR}, #{comeFrom,jdbcType=VARCHAR}, #{isArea,jdbcType=INTEGER}, 
       #{isNingzhengfa,jdbcType=INTEGER}, #{isQinzhengfa,jdbcType=INTEGER}, #{isQubianban,jdbcType=INTEGER}, 
       #{notes,jdbcType=VARCHAR}, #{recordStatus,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
@@ -168,8 +168,8 @@
       <if test="level != null">
         level,
       </if>
-      <if test="from != null">
-        from,
+      <if test="comeFrom != null">
+        come_from,
       </if>
       <if test="isArea != null">
         is_area,
@@ -233,8 +233,8 @@
       <if test="level != null">
         #{level,jdbcType=VARCHAR},
       </if>
-      <if test="from != null">
-        #{from,jdbcType=VARCHAR},
+      <if test="comeFrom != null">
+        #{comeFrom,jdbcType=VARCHAR},
       </if>
       <if test="isArea != null">
         #{isArea,jdbcType=INTEGER},
@@ -307,8 +307,8 @@
       <if test="record.level != null">
         level = #{record.level,jdbcType=VARCHAR},
       </if>
-      <if test="record.from != null">
-        from = #{record.from,jdbcType=VARCHAR},
+      <if test="record.comeFrom != null">
+        come_from = #{record.comeFrom,jdbcType=VARCHAR},
       </if>
       <if test="record.isArea != null">
         is_area = #{record.isArea,jdbcType=INTEGER},
@@ -357,7 +357,7 @@
       type = #{record.type,jdbcType=VARCHAR},
       code = #{record.code,jdbcType=VARCHAR},
       level = #{record.level,jdbcType=VARCHAR},
-      from = #{record.from,jdbcType=VARCHAR},
+      come_from = #{record.comeFrom,jdbcType=VARCHAR},
       is_area = #{record.isArea,jdbcType=INTEGER},
       is_ningzhengfa = #{record.isNingzhengfa,jdbcType=INTEGER},
       is_qinzhengfa = #{record.isQinzhengfa,jdbcType=INTEGER},
@@ -402,8 +402,8 @@
       <if test="level != null">
         level = #{level,jdbcType=VARCHAR},
       </if>
-      <if test="from != null">
-        from = #{from,jdbcType=VARCHAR},
+      <if test="comeFrom != null">
+        come_from = #{comeFrom,jdbcType=VARCHAR},
       </if>
       <if test="isArea != null">
         is_area = #{isArea,jdbcType=INTEGER},
@@ -449,7 +449,7 @@
       type = #{type,jdbcType=VARCHAR},
       code = #{code,jdbcType=VARCHAR},
       level = #{level,jdbcType=VARCHAR},
-      from = #{from,jdbcType=VARCHAR},
+      come_from = #{comeFrom,jdbcType=VARCHAR},
       is_area = #{isArea,jdbcType=INTEGER},
       is_ningzhengfa = #{isNingzhengfa,jdbcType=INTEGER},
       is_qinzhengfa = #{isQinzhengfa,jdbcType=INTEGER},

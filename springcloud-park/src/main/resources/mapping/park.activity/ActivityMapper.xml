@@ -84,5 +84,25 @@
         ta.acti_order desc
     </select>
 
+    <select id="findActivitySuccessfulRegistration" resultType="com.jn.park.model.ActivityListApplyed">
+      select
+        t1.id as "id"
+        ,t1.acti_name as "actiName"
+        ,t3.type_name as "typeName"
+        ,t1.acti_cost as "actiCost"
+        ,t1.acti_organizer as "actiOrganizer"
+        ,t2.code_name as "parkName"
+        ,t1.acti_address as "actiAddress"
+        ,date_format(t1.acti_start_time,"%Y-%m-%d %H:%m:%s") as "actiStartTime"
+        ,t1.acti_status as "actiStatus"
+
+        from tb_activity t1
+            left join tb_park_code t2 on t2.id =t1.park_id
+            left join tb_activity_type t3 on t3.type_id = t1.acti_type
+            where t1.record_status ='1' and t1.acti_status != '1' and  t1.id in (
+            select activity_id from tb_activity_apply where creator_account = #{account} and apply_status=#{applyStatus}
+            )
+    </select>
+
 
 </mapper>

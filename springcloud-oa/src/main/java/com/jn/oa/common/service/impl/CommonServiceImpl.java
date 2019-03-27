@@ -10,7 +10,7 @@ import com.jn.down.api.DownLoadClient;
 import com.jn.down.model.DownLoad;
 import com.jn.oa.common.model.DownAttachment;
 import com.jn.oa.common.service.CommonService;
-import com.jn.oa.email.enums.EmailExceptionEnmus;
+import com.jn.oa.email.enums.EmailExceptionEnums;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.upload.api.UploadClient;
 import org.apache.commons.lang.RandomStringUtils;
@@ -57,7 +57,7 @@ public class CommonServiceImpl implements CommonService {
         for (MultipartFile file : files) {
             if (file.isEmpty()) {
                 logger.warn("[协同办公] 附件上传失败");
-                throw new JnSpringCloudException(EmailExceptionEnmus.FILE_IS_NULL);
+                throw new JnSpringCloudException(EmailExceptionEnums.FILE_IS_NULL);
             } else {
                 //获取文件名称
                 try {
@@ -73,7 +73,7 @@ public class CommonServiceImpl implements CommonService {
                     map.put("url", result.getData());
                     list.add(map);
                 } catch (IOException e) {
-                    throw new JnSpringCloudException(EmailExceptionEnmus.UPLOAD_FILE_ERRPR);
+                    throw new JnSpringCloudException(EmailExceptionEnums.UPLOAD_FILE_ERRPR);
                 }
             }
         }
@@ -86,7 +86,7 @@ public class CommonServiceImpl implements CommonService {
             return attachment;
         } catch (JsonProcessingException e) {
             logger.error("JsonProcessingException转换异常，附件上传失败失败。", e);
-            throw new JnSpringCloudException(EmailExceptionEnmus.UPLOAD_FILE_ERRPR);
+            throw new JnSpringCloudException(EmailExceptionEnums.UPLOAD_FILE_ERRPR);
         }
     }
 

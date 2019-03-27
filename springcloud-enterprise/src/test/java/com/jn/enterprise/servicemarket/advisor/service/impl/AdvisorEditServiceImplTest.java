@@ -3,7 +3,6 @@ package com.jn.enterprise.servicemarket.advisor.service.impl;
 import com.jn.SpringCloudEnterpriseApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import org.hamcrest.Matchers;
@@ -19,7 +18,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -43,7 +43,7 @@ public class AdvisorEditServiceImplTest {
     /**
      * 基本信息
      */
-    private AdvisorBaseInfo advisorBaseInfo=new AdvisorBaseInfo();
+    private AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
 
     /**
      * 荣誉资质
@@ -71,23 +71,23 @@ public class AdvisorEditServiceImplTest {
         advisorAccount="qianqi";
         //基本信息保存
         //账号
-        advisorBaseInfo.setAdvisorAccount(advisorAccount);
+        advisorBaseInfoParam.setAdvisorAccount(advisorAccount);
         //从业年限
-        advisorBaseInfo.setWorkingYears(11d);
+        advisorBaseInfoParam.setWorkingYears(11d);
         //毕业学校
-        advisorBaseInfo.setGraduatedSchool("中南大学");
+        advisorBaseInfoParam.setGraduatedSchool("中南大学");
         //学历
-        advisorBaseInfo.setEducation("硕士");
+        advisorBaseInfoParam.setEducation("硕士");
         //联系手机
-        advisorBaseInfo.setPhone("18674398739");
+        advisorBaseInfoParam.setPhone("18674398739");
         //联系邮箱
-        advisorBaseInfo.setContactEmail("123.qq.com");
+        advisorBaseInfoParam.setContactEmail("123.qq.com");
         //执业资质
-        advisorBaseInfo.setPracticeQualification("高级律师证");
+        advisorBaseInfoParam.setPracticeQualification("高级律师证");
         //业务擅长
-        advisorBaseInfo.setGoodAtBusiness("打官司，谈判");
+        advisorBaseInfoParam.setGoodAtBusiness("打官司，谈判");
         //个人简介
-        advisorBaseInfo.setPersonalProfile("从事行业十余年，未尝一败，高处不胜寒，朕寂寞啊，孤独啊");
+        advisorBaseInfoParam.setPersonalProfile("从事行业十余年，未尝一败，高处不胜寒，朕寂寞啊，孤独啊");
 
         //荣誉资质信息保存并更新
         //主键id
@@ -97,7 +97,7 @@ public class AdvisorEditServiceImplTest {
         //证书名称
         serviceHonor.setCertificateName("高级律师证");
         //证书类型  lawyerLicense:律师执业证   professionalAgentLicense：专业代理人执业证  cap：注册会计师
-        serviceHonor.setCertificateType("lawyerLicense");
+        serviceHonor.setCertificateCode("lawyerLicense");
         //获得时间
         serviceHonor.setGetTime("201707");
         //证书证件
@@ -144,7 +144,7 @@ public class AdvisorEditServiceImplTest {
     @Ignore
     public void saveOrUpdateAdvisorBaseInfo() {
         try {
-            advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
+            advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
             assertThat(anything(),anything() );
         } catch (JnSpringCloudException e) {
             logger.warn("基本信息保存并更新失败");
@@ -182,11 +182,11 @@ public class AdvisorEditServiceImplTest {
      */
     @Test
     public void getCertificateTypeList() {
-        List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
         if(certificateTypeList.isEmpty()){
             assertThat(certificateTypeList,anything());
         }else{
-            for(TbServiceCertificateType tbServiceCertificateType:certificateTypeList){
+            for(AdvisorCertificateTypeShow tbServiceCertificateType:certificateTypeList){
                 logger.info(tbServiceCertificateType.toString());
             }
             assertThat(certificateTypeList,notNullValue());

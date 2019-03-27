@@ -17,11 +17,11 @@ import java.util.List;
 public interface AdvisorService {
     /**
      * 服务顾问列表查询
-     * @param advisorInquiryInfo 查询条件
+     * @param advisorListParam 查询条件
      * @param needPage           是否需要分页
      * @return
      */
-    PaginationData getServiceConsultantList(AdvisorInquiryInfo advisorInquiryInfo ,Boolean needPage);
+    PaginationData getServiceConsultantList(AdvisorListParam advisorListParam, Boolean needPage);
 
     /**
      * 根据顾问账号获取顾问详情

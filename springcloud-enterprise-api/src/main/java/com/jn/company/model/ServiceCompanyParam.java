@@ -14,21 +14,21 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceCompanyParam", description = "企业查询入参")
 public class ServiceCompanyParam extends Page implements Serializable {
-    @ApiModelProperty(value = "企业名称[模糊搜索]")
+    @ApiModelProperty(value = "企业名称[模糊搜索]",example = "君南")
     private String comName;
-    @ApiModelProperty(value = "楼宇ID[模糊搜索]")
+    @ApiModelProperty(value = "楼宇ID[模糊搜索]",example = "e23i****22j")
     private String parkBuildId;
-    @ApiModelProperty(value = "楼宇名称[模糊搜索]")
+    @ApiModelProperty(value = "楼宇名称[模糊搜索]",example = "楼宇1")
     private String parkBuildName;
-    @ApiModelProperty(value = "是否参加园区活动[0否1是]")
+    @ApiModelProperty(value = "是否参加园区活动[0否1是]",example = "0")
     private String isJoinActivity;
-    @ApiModelProperty(value = "企业来源[1人才企业2招商企业]]")
+    @ApiModelProperty(value = "企业来源[1人才企业2招商企业]]",example = "1")
     private String comSource;
-    @ApiModelProperty(value = "审核状态 1:通过 0:审核中 -1:不通过")
+    @ApiModelProperty(value = "审核状态 1:通过 0:审核中 -1:不通过",example = "0")
     private String checkStatus;
-    @ApiModelProperty(value = "企业管理员账号Account")
+    @ApiModelProperty(value = "企业管理员账号Account",example = "wangsong")
     private String comAdmin;
-    @ApiModelProperty(value = "企业类型")
+    @ApiModelProperty(value = "企业类型",notes = "企业字典表type=3的，即企业类型。数据从【机构字典】接口获取",example = "guoyouqiye")
     private String comType;
 
     public String getComName() {

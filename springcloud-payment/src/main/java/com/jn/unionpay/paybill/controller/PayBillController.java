@@ -16,10 +16,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,35 +36,35 @@ public class PayBillController extends BaseController {
     private PayBillService payBillService;
 
     @ControllerLog(doAction = "获取账单列表")
-    @ApiOperation(value = "获取账单列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getBillList")
-    public Result<PaginationData<List<PaymentBill>>> getPaymentBillList(@RequestBody PaymentBillParam paymentBillParam){
+    @ApiOperation(value = "获取账单列表",notes = "查询账单列表")
+    @RequestMapping(value = "/getBillList",method = RequestMethod.GET)
+    public Result<PaginationData<List<PaymentBill>>> getPaymentBillList(PaymentBillParam paymentBillParam){
         PaginationData<List<PaymentBill>> paymentBillList = payBillService.getPaymentBillList(paymentBillParam);
         return new Result<>(paymentBillList);
     }
 
-    @ControllerLog(doAction = "创建账单【只供内部API调用，这里只用于测试】")
-    @ApiOperation(value = "创建账单", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/createBill")
+    @ControllerLog(doAction = "创建账单")
+    @ApiOperation(value = "创建账单【只供内部API调用，这里只用于测试】",notes = "【只供内部API调用，这里只用于测试】")
+    @RequestMapping(value = "/createBill",method = RequestMethod.POST)
     public Result<String> createBill(@RequestBody PaymentBillModel paymentBillModel){
         String bill = payBillService.createBill(paymentBillModel);
         return new Result<>(bill);
     }
 
     @ControllerLog(doAction = "获取账单详情")
-    @ApiOperation(value = "获取账单详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getPayBillDetailByIdOrNum")
+    @ApiOperation(value = "获取账单详情",notes = "可根据账单ID和账单编号查询")
+    @RequestMapping(value = "/getPayBillDetailByIdOrNum",method = RequestMethod.GET)
     public Result<PayBillVO> getPayBillDetailByIdOrNum(
-            @ApiParam(name="idOrNum",value = "账单ID或编号",required = true)
+            @ApiParam(name="idOrNum",value = "账单ID或编号",required = true,example = "TC-2019031910124")
             @RequestParam(value = "idOrNum") String idOrNum){
         Assert.notNull(idOrNum, PayBillExceptionEnum.BILL_ID_OR_NUM_IS_NOT_NULL.getMessage());
         return new Result<>(payBillService.getPayBillDetailByIdOrNum(idOrNum));
     }
 
     @ControllerLog(doAction = "按天查询缴费系统中各分类的收入情况")
-    @ApiOperation(value = "按天查询缴费系统中各分类的收入情况", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/statisticsBillAmount")
-    public Result<PayBillCountVO> statisticsBillAmount(@RequestBody PayBillCountParam payBillCountParam){
+    @ApiOperation(value = "按天查询缴费系统中各分类的收入情况",notes = "API接口和前端都可调用这个类")
+    @RequestMapping(value = "/statisticsBillAmount",method = RequestMethod.GET)
+    public Result<PayBillCountVO> statisticsBillAmount(PayBillCountParam payBillCountParam){
         PayBillCountVO payBillCountVO = payBillService.statisticsBillAmount(payBillCountParam);
         return new Result<>(payBillCountVO);
     }
@@ -78,8 +75,8 @@ public class PayBillController extends BaseController {
      * @return
      */
     @ControllerLog(doAction = "统一缴费--发起支付")
-    @ApiOperation(value = "统一缴费--发起支付", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/startPayment")
+    @ApiOperation(value = "统一缴费--发起支付")
+    @RequestMapping(value = "/startPayment",method = RequestMethod.POST)
     public Result<PayResponseVO> startPayment(@RequestBody PayInitiateParam payInitiateParam){
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         return new Result<>(payBillService.startPayment(payInitiateParam,user));

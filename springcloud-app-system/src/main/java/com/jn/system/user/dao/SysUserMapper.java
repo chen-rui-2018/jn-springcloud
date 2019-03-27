@@ -6,6 +6,7 @@ import com.jn.system.model.UserPage;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.vo.SysUserDepartmentPostVO;
 import com.jn.system.user.vo.SysUserVO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -80,4 +81,12 @@ public interface SysUserMapper {
      * @return
      */
     List<User> getUserAll();
+
+    /**
+     * 根据用户账号获取用户信息
+     *
+     * @param accountList
+     * @return
+     */
+    List<User> getUserInfoByAccount(@Param("accountList") List<String> accountList);
 }

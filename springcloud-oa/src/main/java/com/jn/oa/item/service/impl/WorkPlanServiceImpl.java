@@ -94,7 +94,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
      */
     @Override
     @ServiceLog(doAction = "工作计划列表")
-    public PaginationData list(WorkPlanPage workPlanPage) {
+    public PaginationData<List<WorkPlanVO>> list(WorkPlanPage workPlanPage) {
         Page<Object> objects = PageHelper.startPage(workPlanPage.getPage(), workPlanPage.getRows());
         List<WorkPlanVO> workPlanVOList = workPlanMapper.list(workPlanPage);
         return new PaginationData(workPlanVOList, objects.getTotal());

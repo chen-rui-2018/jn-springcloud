@@ -2,16 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.meeting.dao.TbOaMeetingContentMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingContent">
-    <id column="meetingcontent_id" jdbcType="VARCHAR" property="id" />
-    <result column="meetingcontent_meeting_id" jdbcType="VARCHAR" property="meetingId" />
-    <result column="meetingcontent_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="meetingcontent_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="meetingcontent_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="meetingcontent_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="meetingcontent_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.oa.meeting.entity.TbOaMeetingContent">
-    <result column="meetingcontent_content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,13 +72,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    meetingcontent.id as meetingcontent_id, meetingcontent.meeting_id as meetingcontent_meeting_id, 
-    meetingcontent.record_status as meetingcontent_record_status, meetingcontent.creator_account as meetingcontent_creator_account, 
-    meetingcontent.created_time as meetingcontent_created_time, meetingcontent.modifier_account as meetingcontent_modifier_account, 
-    meetingcontent.modified_time as meetingcontent_modified_time
+    id, meeting_id, record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
   <sql id="Blob_Column_List">
-    meetingcontent.content as meetingcontent_content
+    content
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.jn.oa.meeting.entity.TbOaMeetingContentCriteria" resultMap="ResultMapWithBLOBs">
     select
@@ -88,7 +85,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from tb_oa_meeting_content meetingcontent
+    from tb_oa_meeting_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -102,7 +99,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_content meetingcontent
+    from tb_oa_meeting_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -115,15 +112,15 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from tb_oa_meeting_content meetingcontent
-    where meetingcontent.id = #{id,jdbcType=VARCHAR}
+    from tb_oa_meeting_content
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_oa_meeting_content
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingContentCriteria">
-    delete from tb_oa_meeting_content meetingcontent
+    delete from tb_oa_meeting_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -192,37 +189,37 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingContentCriteria" resultType="java.lang.Long">
-    select count(*) from tb_oa_meeting_content meetingcontent
+    select count(*) from tb_oa_meeting_content
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_oa_meeting_content meetingcontent
+    update tb_oa_meeting_content
     <set>
       <if test="record.id != null">
-        meetingcontent.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.meetingId != null">
-        meetingcontent.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
+        meeting_id = #{record.meetingId,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        meetingcontent.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        meetingcontent.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        meetingcontent.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        meetingcontent.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        meetingcontent.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.content != null">
-        meetingcontent.content = #{record.content,jdbcType=LONGVARCHAR},
+        content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -230,28 +227,28 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update tb_oa_meeting_content meetingcontent
-    set meetingcontent.id = #{record.id,jdbcType=VARCHAR},
-      meetingcontent.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
-      meetingcontent.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      meetingcontent.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      meetingcontent.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      meetingcontent.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingcontent.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      meetingcontent.content = #{record.content,jdbcType=LONGVARCHAR}
+    update tb_oa_meeting_content
+    set id = #{record.id,jdbcType=VARCHAR},
+      meeting_id = #{record.meetingId,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_oa_meeting_content meetingcontent
-    set meetingcontent.id = #{record.id,jdbcType=VARCHAR},
-      meetingcontent.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
-      meetingcontent.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      meetingcontent.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      meetingcontent.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      meetingcontent.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingcontent.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_oa_meeting_content
+    set id = #{record.id,jdbcType=VARCHAR},
+      meeting_id = #{record.meetingId,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

@@ -4,7 +4,7 @@ import com.jn.common.controller.BaseController;
 
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.oa.meeting.enums.OaMeetingRoomStatusEnums;
+import com.jn.oa.meeting.enums.MeetingRoomStatusEnums;
 import com.jn.oa.meeting.model.OaMeetingPage;
 
 import com.jn.oa.meeting.model.OaMeetingRoomPage;
@@ -49,9 +49,9 @@ public class MeetingGuestController extends BaseController {
 
 
     @ControllerLog(doAction = "查询会议申请展示列表")
-    @ApiOperation(value = "查询会议申请展示列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询会议申请展示列表")
     @PostMapping(value = "/showList")
-    public Result showList(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
+    public Result<List<OaMeetingVo>> showList(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
         Assert.notNull(oaMeetingPage.getMeetingRoomId(), "会议室ID不能为空");
         //获取当前登录用户信息
         oaMeetingPage.setCurrentTime(new Date());
@@ -60,11 +60,11 @@ public class MeetingGuestController extends BaseController {
     }
 
     @ControllerLog(doAction = "查询会议列表")
-    @ApiOperation(value = "查询会议列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "查询会议列表")
     @PostMapping(value = "/showMeetingRoomList")
-    public Result showMeetingRoomList() {
+    public Result<List<OaMeetingRoomVo>> showMeetingRoomList() {
         OaMeetingRoomPage oaMeetingRoomPage=new OaMeetingRoomPage();
-        oaMeetingRoomPage.setRecordStatus(OaMeetingRoomStatusEnums.EFFECTIVE.getCode());
+        oaMeetingRoomPage.setRecordStatus(MeetingRoomStatusEnums.EFFECTIVE.getCode());
         List<OaMeetingRoomVo> data = meetingRoomService.selectOaMeetingRoomListBySearchKeyNoPage(oaMeetingRoomPage);
         return new Result(data);
     }

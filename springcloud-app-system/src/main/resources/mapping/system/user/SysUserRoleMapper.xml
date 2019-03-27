@@ -34,6 +34,17 @@
         </foreach>
     </update>
 
+    <update id="deleteUserRole">
+        update tb_sys_user_role
+        set
+        record_status = 0
+        where user_id = #{userId,jdbcType=VARCHAR}
+        and role_id in
+        <foreach item="roleId" collection="deleRoleIds" open="(" separator="," close=")">
+            #{roleId}
+        </foreach>
+    </update>
+
     <!--批量插入 -->
     <insert id="insertBatch" parameterType="java.util.List">
         insert into tb_sys_user_role (id, role_id,user_id,creator_account,created_time,record_status) values
@@ -123,5 +134,14 @@
             and t.role_name like CONCAT('%', #{roleName,jdbcType=VARCHAR}, '%')
         </if>
         ORDER BY t.created_time DESC ,t.id DESC
+    </select>
+
+    <select id="getRoleIdByUserId" resultType="java.lang.String">
+        SELECT
+            role_id
+        FROM
+            tb_sys_user_role
+        WHERE user_id = #{userId,jdbcType=VARCHAR}
+        AND record_status = 1
     </select>
 </mapper>

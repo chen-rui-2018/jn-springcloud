@@ -7,6 +7,8 @@ import com.jn.oa.email.vo.EmailVO;
 import com.jn.oa.model.Email;
 import com.jn.system.model.User;
 
+import java.util.List;
+
 /**
  * 一键EmailService层
  *
@@ -55,7 +57,7 @@ public interface EmailService {
      * @param emailPage 分页条件
      * @return
      */
-    PaginationData list(EmailPage emailPage);
+    PaginationData<List<EmailVO>> list(EmailPage emailPage);
 
     /**
      * (逻辑)批量删除邮件任务

@@ -138,8 +138,8 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Override
     @ControllerLog(doAction = "获取部门信息")
-    public Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
-                                       @RequestParam(value = "childFlag",required = false) Boolean childFlag) {
+    public Result selectDeptByParentId(@RequestParam(value = "parentId", required = false) String parentId,
+                                       @RequestParam(value = "childFlag", required = false) Boolean childFlag) {
         Result result = sysDepartmentService.selectDeptByKey(parentId, childFlag);
         return result;
     }
@@ -161,8 +161,37 @@ public class SystemController extends BaseController implements SystemClient {
     @Override
     @ControllerLog(doAction = "根据部门名称获取部门信息")
     public Result getDept(@RequestParam("deptName") String deptName) {
-        TbSysDepartment tbSysDepartment= sysDepartmentService.getDept(deptName);
+        TbSysDepartment tbSysDepartment = sysDepartmentService.getDept(deptName);
         return new Result(tbSysDepartment);
+    }
+
+    /**
+     * 通过用户账号,获取用户信息,多个账号,返回多个用户信息
+     *
+     * @param accountList 账号集合
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "通过用户账号,获取用户信息")
+    public Result<List<User>> getUserInfoByAccount(List<String> accountList) {
+        List<User> userList = sysUserService.getUserInfoByAccount(accountList);
+        return new Result<>(userList);
+    }
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
+     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
+     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @return
+     */
+    @Override
+    public Result<Boolean> updateUserRole(@RequestParam("account") User user,
+                                          @RequestParam("groupId") Set<String> deleRoleIds,
+                                          @RequestParam("roleIds") Set<String> addRoleIds) {
+        Boolean result = sysUserService.updateUserRole(user,deleRoleIds,addRoleIds);
+        return new Result(result);
     }
 
     @Override

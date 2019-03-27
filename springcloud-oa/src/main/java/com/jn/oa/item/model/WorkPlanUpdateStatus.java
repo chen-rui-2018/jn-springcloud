@@ -21,26 +21,26 @@ import java.util.Date;
 public class WorkPlanUpdateStatus implements Serializable {
     private static final long serialVersionUID = -844408024421886033L;
 
-    @ApiModelProperty(value = "工作计划id", required = true,example = "\"10000\"")
+    @ApiModelProperty(value = "工作计划id", required = true, example = "\"10000\"")
     @NotNull(message = "工作计划id不能为空")
     private String id;
 
-    @ApiModelProperty(value = "消耗总时间",example = "20")
+    @ApiModelProperty(value = "消耗总时间", example = "20")
     private Integer totalConsumeTime;
 
-    @ApiModelProperty(value = "剩余总时间",example = "10")
+    @ApiModelProperty(value = "剩余总时间", example = "10")
     private Integer totalRemainTime;
 
-    @ApiModelProperty(value = "任务状态(0未开始,1进行中,2已挂起,3已完成,5.添加备注,6继续)",required = true,example = "\"1\"")
+    @ApiModelProperty(value = "任务状态(0未开始,1进行中,2已挂起,3已完成,5.添加备注,6继续)", required = true, example = "\"1\"")
     @NotNull(message = "工作计划状态不能为空")
     private String workPlanStatus;
 
-    @ApiModelProperty(value = "工作计划实际开始时间",example = "2019-12-12 12:12:12")
+    @ApiModelProperty(value = "工作计划实际开始时间", example = "2019-12-12 12:12:12")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
-    @ApiModelProperty(value = "工作计划实际结束时间",example = "2019-12-12 12:12:12")
+    @ApiModelProperty(value = "工作计划实际结束时间", example = "2019-12-12 12:12:12")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
@@ -49,7 +49,7 @@ public class WorkPlanUpdateStatus implements Serializable {
             example = "\"[{\"title\":\"附件\",\"url\":\"https://www.baidu.com/img/dong_09e2cf5ed88fbc0093809ab8d37faf6e.gif\"}]\"")
     private String attachment;
 
-    @ApiModelProperty(value = "备注",example = "这是工作计划的备注测试")
+    @ApiModelProperty(value = "备注", example = "这是工作计划的备注测试")
     private String remark;
 
     public WorkPlanUpdateStatus() {

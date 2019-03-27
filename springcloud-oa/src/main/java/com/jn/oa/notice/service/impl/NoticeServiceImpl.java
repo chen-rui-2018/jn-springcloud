@@ -118,10 +118,10 @@ public class NoticeServiceImpl implements NoticeService {
      */
     @Override
     @ServiceLog(doAction = "条件分页获取公告列表信息")
-    public PaginationData list(NoticePage noticePage) {
+    public PaginationData<List<Notice>> list(NoticePage noticePage) {
         Page<Object> objects = PageHelper.startPage(noticePage.getPage(), noticePage.getRows());
         List<Notice> noticeList = noticeMapper.list(noticePage);
-        PaginationData date = new PaginationData(noticeList, objects.getTotal());
+        PaginationData<List<Notice>> date = new PaginationData(noticeList, objects.getTotal());
         return date;
     }
 

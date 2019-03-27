@@ -58,17 +58,17 @@ public class WorkPlanController extends BaseController {
 
     @ControllerLog(doAction = "工作计划列表")
     @RequiresPermissions("/oa/workPlan/list")
-    @ApiOperation(value = "工作计划列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/list")
-    public Result list(@RequestBody WorkPlanPage workPlanPage) {
-        PaginationData data = workPlanService.list(workPlanPage);
+    @ApiOperation(value = "工作计划列表", notes = "工作计划列表")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Result<PaginationData<List<WorkPlanVO>>> list(WorkPlanPage workPlanPage) {
+        PaginationData<List<WorkPlanVO>> data = workPlanService.list(workPlanPage);
         return new Result(data);
     }
 
     @ControllerLog(doAction = "添加工作计划")
     @RequiresPermissions("/oa/workPlan/add")
-    @ApiOperation(value = "添加工作计划", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/add")
+    @ApiOperation(value = "添加工作计划", notes = "添加工作计划")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public Result add(@Validated @RequestBody WorkPlanAdd workPlanAdd) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -80,17 +80,17 @@ public class WorkPlanController extends BaseController {
 
     @ControllerLog(doAction = "查询工作计划详情")
     @RequiresPermissions("/oa/workPlan/getWorkPlanById")
-    @ApiOperation(value = "查询工作计划详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/getWorkPlanById")
-    public Result getWorkPlanById(@RequestParam String workPlanId) {
+    @ApiOperation(value = "查询工作计划详情", notes = "查询工作计划详情")
+    @RequestMapping(value = "/getWorkPlanById", method = RequestMethod.GET)
+    public Result<WorkPlanVO> getWorkPlanById(@RequestParam String workPlanId) {
         WorkPlanVO workPlanVO = workPlanService.getWorkPlanById(workPlanId);
         return new Result(workPlanVO);
     }
 
     @ControllerLog(doAction = "编辑工作计划")
     @RequiresPermissions("/oa/workPlan/update")
-    @ApiOperation(value = "编辑工作计划", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/update")
+    @ApiOperation(value = "编辑工作计划", notes = "编辑工作计划")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result update(@Validated @RequestBody WorkPlanEdit workPlanEdit) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -98,10 +98,10 @@ public class WorkPlanController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "修改工作计划任务状态")
+    @ControllerLog(doAction = "修改任务状态")
     @RequiresPermissions("/oa/workPlan/updateWorkPlanStatus")
-    @ApiOperation(value = "修改工作计划任务状态", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/updateWorkPlanStatus")
+    @ApiOperation(value = "修改任务状态", notes = "修改工作计划任务状态")
+    @RequestMapping(value = "/updateWorkPlanStatus", method = RequestMethod.POST)
     public Result updateWorkPlanStatus(@Validated @RequestBody WorkPlanUpdateStatus workPlanUpdateStatus) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -111,8 +111,8 @@ public class WorkPlanController extends BaseController {
 
     @ControllerLog(doAction = "添加备注")
     @RequiresPermissions("/oa/workPlan/addRemark")
-    @ApiOperation(value = "添加备注", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/addRemark")
+    @ApiOperation(value = "添加备注", notes = "添加备注")
+    @RequestMapping(value = "/addRemark", method = RequestMethod.POST)
     public Result addRemark(@Validated @RequestBody WorkPlanAddRemark workPlanAddRemark) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -120,10 +120,10 @@ public class WorkPlanController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "(逻辑)删除工作计划")
+    @ControllerLog(doAction = "删除工作计划")
     @RequiresPermissions("/oa/workPlan/deleteBatch")
-    @ApiOperation(value = "(逻辑)删除工作计划", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/deleteBatch")
+    @ApiOperation(value = "删除工作计划", notes = "(逻辑)删除工作计划")
+    @RequestMapping(value = "/deleteBatch", method = RequestMethod.POST)
     public Result delete(@RequestParam String workPlanId) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -134,7 +134,7 @@ public class WorkPlanController extends BaseController {
 
     @ControllerLog(doAction = "导出工作计划")
     @RequiresPermissions("/oa/workPlan/exportExcelWorkPlanInfo")
-    @ApiOperation(value = "导出工作计划", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "导出工作计划", notes = "导出工作计划")
     @RequestMapping(value = "/exportExcelWorkPlanInfo", method = RequestMethod.GET)
     public void exportExcelWorkPlanInfo(WorkPlanPage workPlanPage, HttpServletResponse response) {
         String exportTitle = "项目名称,任务名称,负责人,任务状态,工作计划内容,计划工时,消耗工时,剩余工时," +
@@ -152,20 +152,20 @@ public class WorkPlanController extends BaseController {
 
     @ControllerLog(doAction = "导入工作计划")
     @RequiresPermissions("/oa/workPlan/importExcelWorkPlanInfo")
-    @ApiOperation(value = "导入工作计划", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "导入工作计划", notes = "导入工作计划")
     @RequestMapping(value = "/importExcelWorkPlanInfo", method = RequestMethod.POST)
-    public Result importExcelWorkPlanInfo(@RequestParam("file")  MultipartFile file) {
+    public Result importExcelWorkPlanInfo(@RequestParam("file") MultipartFile file) {
         //获取当前登录用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        String result = workPlanService.importExcelWorkPlanInfo(file,user);
+        String result = workPlanService.importExcelWorkPlanInfo(file, user);
         return new Result(result);
     }
 
     @ControllerLog(doAction = "下载工作计划excel模板")
     @RequiresPermissions("/oa/workPlan/downLoadWorkPlanExcelTemplateInfo")
-    @ApiOperation(value = "下载工作计划excel模板", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "下载工作计划excel模板", notes = "下载工作计划excel模板")
     @RequestMapping(value = "/downLoadWorkPlanExcelTemplateInfo", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> downLoadWorkPlanExcelTemplateInfo(HttpServletResponse response) {
+    public ResponseEntity<byte[]> downLoadWorkPlanExcelTemplateInfo() {
         try {
             Resource resource = resourceLoader.getResource("classpath:excelTemplate/workplanTemplate.xlsx");
             File file = resource.getFile();
@@ -184,5 +184,4 @@ public class WorkPlanController extends BaseController {
             throw new JnSpringCloudException(WorkPlanExceptionEnmus.DOWNLOAD_EXCEL_TEMPLATE_FAIL);
         }
     }
-
 }

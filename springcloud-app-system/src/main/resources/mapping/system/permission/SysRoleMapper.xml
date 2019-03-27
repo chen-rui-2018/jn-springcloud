@@ -8,7 +8,7 @@
 
     <select id="findSysRoleByUserId" parameterType="java.lang.String"
             resultType="com.jn.system.model.SysRole">
-        select
+        select distinct
         <include refid="Base_Column_List"/>
         from tb_sys_role
         where id in

@@ -49,7 +49,7 @@ public class FinanceTimerController {
      * 每月一号凌晨1点跑一次
      * @return
      */
-    @Scheduled(cron = "0 0 1 0 1/1 ? *")
+    @Scheduled(cron = "0 0 1 1 * ?")
     public Result updateIncomeDay()  {
         String status= financeTimerService.updateIncomeDay();
         return new Result(status);

@@ -202,9 +202,9 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "活动报名人数据导出")
     @ApiOperation(value = "活动报名人数据导出")
-    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.POST)
+    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.GET)
     @RequiresPermissions("/activity/exportDataExcel")
-    public void exportDataExcel(@RequestBody  @Validated ActivityApplyParam activityApplyParam,
+    public void exportDataExcel(@Validated ActivityApplyParam activityApplyParam,
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());

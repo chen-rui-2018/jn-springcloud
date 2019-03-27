@@ -17,30 +17,31 @@ import java.util.List;
 @ApiModel(value = "OrgTeamData",description = "机构团队信息")
 public class OrgTeamData implements Serializable {
 
-    @ApiModelProperty(value = "机构ID")
+    @NotNull(message = "机构ID不能为空")
+    @ApiModelProperty(value = "机构ID",required = true,example = "92ew23***")
     private String orgId;
 
-    @ApiModelProperty(value = "员工总人数",required = true)
+    @ApiModelProperty(value = "员工总人数",required = true,example = "100")
     @NotNull(message = "员工总人数不能为空")
     private Integer staffCount;
 
-    @ApiModelProperty(value = "执业人员人数",required = true)
+    @ApiModelProperty(value = "执业人员人数",required = true,example = "20")
     @NotNull(message = "执业人员人数不能为空")
     private Integer professionNum;
 
-    @ApiModelProperty(value = "本科学历人数",required = true)
+    @ApiModelProperty(value = "本科学历人数",required = true,example = "20")
     @NotNull(message = "本科学历人数不能为空")
     private Integer bachelorNum;
 
-    @ApiModelProperty(value = "硕士学历人数",required = true)
+    @ApiModelProperty(value = "硕士学历人数",required = true,example = "20")
     @NotNull(message = "硕士学历人数不能为空")
     private Integer masterNum;
 
-    @ApiModelProperty(value = "博士学历人数",required = true)
+    @ApiModelProperty(value = "博士学历人数",required = true,example = "20")
     @NotNull(message = "博士学历人数不能为空")
     private Integer doctorNum;
 
-    @ApiModelProperty(value = "海归员工人数",required = true)
+    @ApiModelProperty(value = "海归员工人数",required = true,example = "20")
     @NotNull(message = "海归员工人数不能为空")
     private Integer returneeNum;
 

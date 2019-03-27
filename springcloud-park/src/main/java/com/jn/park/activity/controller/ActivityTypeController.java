@@ -20,10 +20,8 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -49,8 +47,8 @@ public class ActivityTypeController extends BaseController {
     private ActivityTypeService activityTypeService;
 
     @ControllerLog(doAction = "增加活动类型")
-    @ApiOperation(value = "增加活动类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/add")
+    @ApiOperation(value = "增加活动类型")
+    @RequestMapping(value = "/add",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/add")
     public Result insertActivityType( @Valid @RequestBody  ActivityTypeAdd activityTypeAdd) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -59,17 +57,17 @@ public class ActivityTypeController extends BaseController {
     }
 
     @ControllerLog(doAction = "分页查询活动类型列表")
-    @ApiOperation(value = "查询活动类型列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findActivityTypeList")
-    @RequiresPermissions("/activity/activityType/findActivityTypeList")
+    @ApiOperation(value = "查询活动类型列表")
+    @RequestMapping(value = "/findActivityTypeList",method = RequestMethod.POST)
+    @RequiresPermissions("/activity/activityType/findActivityTypeList" )
     public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
         PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
         return new Result<>(activityTypeList);
     }
 
     @ControllerLog(doAction = "展示当前活动类型")
-    @ApiOperation(value = "根据ID 获取当前活动类型内容", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/findActivityType")
+    @ApiOperation(value = "根据ID 获取当前活动类型内容")
+    @RequestMapping(value = "/findActivityType",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/findActivityType")
     public Result<ActivityType> findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "typeId") String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
@@ -78,18 +76,18 @@ public class ActivityTypeController extends BaseController {
     }
 
     @ControllerLog(doAction = "编辑当前活动类型")
-    @ApiOperation(value = "编辑当前活动类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/updateActivityType")
+    @ApiOperation(value = "编辑当前活动类型")
+    @RequestMapping(value = "/updateActivityType",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/updateActivityType")
-    public Result updateActivityType( @RequestBody ActivityTypeUpdate activityTypeUpdate) {
+    public Result updateActivityType( @Validated  @RequestBody ActivityTypeUpdate activityTypeUpdate) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         activityTypeService.updateActivityType(activityTypeUpdate, user);
         return new Result();
     }
 
     @ControllerLog(doAction = "删除活动类型")
-    @ApiOperation(value = "删除活动类型", httpMethod = "POST", response = Result.class, notes = "可进行批量删除")
-    @RequestMapping(value = "/deleteActivityTypeList")
+    @ApiOperation(value = "删除活动类型", notes = "可进行批量删除")
+    @RequestMapping(value = "/deleteActivityTypeList",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/deleteActivityTypeList")
     public Result deleteActivityTypeList(@ApiParam(name = "typeId", value = "活动类型ID 数组", required = true) @RequestParam(value = "typeId") String[] typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());

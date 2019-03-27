@@ -17,18 +17,18 @@ import java.util.Date;
  */
 @ApiModel(value = "PayCallBackParam", description = "支付回调响应入参")
 public class PayCallBackParam implements Serializable {
-    @ApiModelProperty(value = "订单ID",required = true)
-    @NotBlank(message = "活动id不能为空！")
+    @ApiModelProperty(value = "订单ID",required = true,example = "5cd80d8624f14737abcc7eda4c0675b8")
+    @NotBlank(message = "订单ID不能为空！")
     private String orderId;
-    @ApiModelProperty(value = "支付状态[2已支付3支付失败]",required = true)
+    @ApiModelProperty(value = "支付状态[2已支付3支付失败]",required = true,example = "2")
     @NotBlank(message = "支付状态不能为空！")
     private String payStatus;
     @ApiModelProperty(value = "支付时间")
     private Date payTime;
-    @ApiModelProperty(value = "支付平台订单ID",required = true)
+    @ApiModelProperty(value = "支付平台订单ID",required = true,example = "21314737abcc7eda4c0675b8")
     @NotBlank(message = "支付平台订单ID不能为空")
     private String payOrderId;
-    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]")
+    @ApiModelProperty(value = "支付方式[0微信1支付宝2银联]",example = "0")
     private String payType;
 
     public String getOrderId() {

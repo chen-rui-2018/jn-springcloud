@@ -18,10 +18,7 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,8 +41,8 @@ public class ActivityDetailsController extends BaseController {
     private ActivityDetailsService activityDetailsService;
 
     @ControllerLog(doAction = "获取活动详情")
-    @ApiOperation(value = "获取活动详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/guest/getActivityDetails")
+    @ApiOperation(value = "获取活动详情")
+    @RequestMapping(value = "/guest/getActivityDetails",method = RequestMethod.POST)
     public Result<ActivityDetailVO> getActivityDetails(@ApiParam(value ="活动id",required = true) @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
@@ -61,8 +58,8 @@ public class ActivityDetailsController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取评论信息")
-    @ApiOperation(value = "获取评论信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/guest/getCommentInfo")
+    @ApiOperation(value = "获取评论信息")
+    @RequestMapping(value = "/guest/getCommentInfo",method = RequestMethod.POST)
     public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
         //获取当前登录用户
         User loginUser=(User) SecurityUtils.getSubject().getPrincipal();

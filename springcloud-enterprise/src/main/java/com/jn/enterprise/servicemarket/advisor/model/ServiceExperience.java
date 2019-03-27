@@ -3,7 +3,6 @@ package com.jn.enterprise.servicemarket.advisor.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,15 +17,12 @@ public class ServiceExperience implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")
-    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称")
-    @NotNull(message="公司名称不能为空")
     private String companyName;
     @ApiModelProperty(value = "职务")
-    @NotNull(message="职务不能为空")
     private String position;
-    @ApiModelProperty(value = "工作时间(格式：201903)")
+    @ApiModelProperty(value = "工作时间")
     private String workTime;
     @ApiModelProperty(value = "创建时间")
     private Date createdTime;

@@ -447,8 +447,11 @@ public class UserInfoServiceImpl implements UserInfoService {
         tagCriteria.createCriteria().andCreatorAccountEqualTo(user.getAccount());
         int i = tbUserTagMapper.deleteByExample(tagCriteria);
         logger.info("删除用户兴趣爱好/职业标签数据 {} 条",i);
-        int i1 = userTagMapper.insertUserTag(hobbys);
-        logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+        if(null!=hobbys && hobbys.size()>0){
+            int i1 = userTagMapper.insertUserTag(hobbys);
+            logger.info("【插入新数据】用户兴趣爱好/职业标签数据 {} 条",i1);
+        }
+
         //更新redis缓存数据
         updateRedisUserInfo(user.getAccount());
         return a;
@@ -460,19 +463,24 @@ public class UserInfoServiceImpl implements UserInfoService {
 
         if(null != s && s.length>0){
             for (String a:s) {
-                TbUserTag tag = new TbUserTag();
-                tag.setId(UUID.randomUUID().toString().replaceAll("-",""));
-                tag.setTagId(a);
-                tag.setUserId(id);
-                tag.setTagType(type);
-                tag.setCreatedTime(new Date());
-                tag.setCreatorAccount(account);
-                tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
-                for (TbTagCode tbUserTag:tagCodes
-                     ) {
-                    tag.setTagName(tbUserTag.getTagVaule());
+                if(StringUtils.isNotEmpty(a)){
+                    TbUserTag tag = new TbUserTag();
+                    tag.setId(UUID.randomUUID().toString().replaceAll("-",""));
+                    tag.setTagId(a);
+                    tag.setUserId(id);
+                    tag.setTagType(type);
+                    tag.setCreatedTime(new Date());
+                    tag.setCreatorAccount(account);
+                    tag.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+                    for (TbTagCode tbUserTag:tagCodes
+                    ) {
+                        if(StringUtils.equals(tbUserTag.getTagId(),a)){
+                            tag.setTagName(tbUserTag.getTagVaule());
+                        }
+                    }
+                    tags.add(tag);
                 }
-                tags.add(tag);
+
             }
         }
         return tags;

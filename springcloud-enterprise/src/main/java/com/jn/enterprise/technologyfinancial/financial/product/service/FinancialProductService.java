@@ -25,13 +25,13 @@ public interface FinancialProductService {
      * @param productId 产品id
      * @return
      */
-    FinacialProductDetails getFinancialProductDetails(String productId);
+    FinancialProductDetails getFinancialProductDetails(String productId);
 
     /**
      * 金融产品贷款类别
      * @return
      */
-    List<FinacialProductLoanType> getFinancialProductLoanType();
+    List<FinancialProductLoanType> getFinancialProductLoanType();
 
     /**
      * 金融产品担保方式

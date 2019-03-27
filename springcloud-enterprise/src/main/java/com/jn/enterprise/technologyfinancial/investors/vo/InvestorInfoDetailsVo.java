@@ -1,6 +1,6 @@
 package com.jn.enterprise.technologyfinancial.investors.vo;
 
-import com.jn.enterprise.technologyfinancial.investors.entity.*;
+import com.jn.enterprise.technologyfinancial.investors.model.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -16,53 +16,53 @@ import java.util.List;
 @ApiModel(value = "InvestorInfoDetailsVo", description = "科技金融投资人详情")
 public class InvestorInfoDetailsVo implements Serializable {
     @ApiModelProperty(value = "投资人基本信息")
-    private TbServiceInvestor tbServiceInvestor;
+    private InvestorBaseInfoShow investorBaseInfoShow;
     @ApiModelProperty(value = "主投领域")
-    private List<TbServiceInvestorMainArea> mainAreaList;
+    private List<InvestorMainArea> mainAreaList;
     @ApiModelProperty(value = "主投轮次")
-    private List<TbServiceInvestorMainRound> mainRoundList;
+    private List<InvestorMainRound> mainRoundList;
     @ApiModelProperty(value = "工作经历")
-    private List<TbServiceInvestorWorkExp> workExpList;
+    private List<InvestorWorkExperienceShow> workExperienceList;
     @ApiModelProperty(value = "教育经历")
-    private List<TbServiceInvestorEduExp> eduExpList;
+    private List<InvestorEduExperienceShow> eduExpList;
 
-    public TbServiceInvestor getTbServiceInvestor() {
-        return tbServiceInvestor;
+    public InvestorBaseInfoShow getInvestorBaseInfoShow() {
+        return investorBaseInfoShow;
     }
 
-    public void setTbServiceInvestor(TbServiceInvestor tbServiceInvestor) {
-        this.tbServiceInvestor = tbServiceInvestor;
+    public void setInvestorBaseInfoShow(InvestorBaseInfoShow investorBaseInfoShow) {
+        this.investorBaseInfoShow = investorBaseInfoShow;
     }
 
-    public List<TbServiceInvestorMainArea> getMainAreaList() {
+    public List<InvestorMainArea> getMainAreaList() {
         return mainAreaList;
     }
 
-    public void setMainAreaList(List<TbServiceInvestorMainArea> mainAreaList) {
+    public void setMainAreaList(List<InvestorMainArea> mainAreaList) {
         this.mainAreaList = mainAreaList;
     }
 
-    public List<TbServiceInvestorMainRound> getMainRoundList() {
+    public List<InvestorMainRound> getMainRoundList() {
         return mainRoundList;
     }
 
-    public void setMainRoundList(List<TbServiceInvestorMainRound> mainRoundList) {
+    public void setMainRoundList(List<InvestorMainRound> mainRoundList) {
         this.mainRoundList = mainRoundList;
     }
 
-    public List<TbServiceInvestorWorkExp> getWorkExpList() {
-        return workExpList;
+    public List<InvestorWorkExperienceShow> getWorkExperienceList() {
+        return workExperienceList;
     }
 
-    public void setWorkExpList(List<TbServiceInvestorWorkExp> workExpList) {
-        this.workExpList = workExpList;
+    public void setWorkExperienceList(List<InvestorWorkExperienceShow> workExperienceList) {
+        this.workExperienceList = workExperienceList;
     }
 
-    public List<TbServiceInvestorEduExp> getEduExpList() {
+    public List<InvestorEduExperienceShow> getEduExpList() {
         return eduExpList;
     }
 
-    public void setEduExpList(List<TbServiceInvestorEduExp> eduExpList) {
+    public void setEduExpList(List<InvestorEduExperienceShow> eduExpList) {
         this.eduExpList = eduExpList;
     }
 }

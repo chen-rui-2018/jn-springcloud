@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbServiceInvestor implements Serializable {
     private String id;
 
+    private String investorCode;
+
     private String investorAccount;
 
     private String investorName;
@@ -54,6 +56,14 @@ public class TbServiceInvestor implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getInvestorCode() {
+        return investorCode;
+    }
+
+    public void setInvestorCode(String investorCode) {
+        this.investorCode = investorCode == null ? null : investorCode.trim();
     }
 
     public String getInvestorAccount() {
@@ -229,6 +239,7 @@ public class TbServiceInvestor implements Serializable {
         }
         TbServiceInvestor other = (TbServiceInvestor) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getInvestorCode() == null ? other.getInvestorCode() == null : this.getInvestorCode().equals(other.getInvestorCode()))
             && (this.getInvestorAccount() == null ? other.getInvestorAccount() == null : this.getInvestorAccount().equals(other.getInvestorAccount()))
             && (this.getInvestorName() == null ? other.getInvestorName() == null : this.getInvestorName().equals(other.getInvestorName()))
             && (this.getAvatar() == null ? other.getAvatar() == null : this.getAvatar().equals(other.getAvatar()))
@@ -256,6 +267,7 @@ public class TbServiceInvestor implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getInvestorCode() == null) ? 0 : getInvestorCode().hashCode());
         result = prime * result + ((getInvestorAccount() == null) ? 0 : getInvestorAccount().hashCode());
         result = prime * result + ((getInvestorName() == null) ? 0 : getInvestorName().hashCode());
         result = prime * result + ((getAvatar() == null) ? 0 : getAvatar().hashCode());
@@ -286,6 +298,7 @@ public class TbServiceInvestor implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", investorCode=").append(investorCode);
         sb.append(", investorAccount=").append(investorAccount);
         sb.append(", investorName=").append(investorName);
         sb.append(", avatar=").append(avatar);

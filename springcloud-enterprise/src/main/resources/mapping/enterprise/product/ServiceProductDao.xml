@@ -8,7 +8,7 @@
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
            t1.signory_name as "signoryName",  <!--领域名称-->
-           date_format(t1.release_time,"%y-%m-%d %H:%i:%s") as "releaseTime", <!--发布时间-->
+           date_format(t1.release_time,"%Y-%m-%d %H:%i:%s") as "releaseTime", <!--发布时间-->
            t1.status as "status",             <!--状态-->
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
@@ -25,6 +25,9 @@
         </if>
         <if test = "orgName != null and orgName!=''">
             and t2.org_name like concat("%",#{orgName},"%")
+        </if>
+        <if test = "orgType != null and orgType!=''">
+            and t2.org_type = #{orgType}
         </if>
         <if test = "signoryName != null and signoryName!=''">
             and t1.signory_name like concat("%",#{signoryName},"%")
@@ -87,6 +90,7 @@
            t1.serial_number as serialNumber,  <!--产品编号-->
            t1.product_name as "productName",  <!--产品名称-->
            t1.product_type as "productType",  <!--产品类型-->
+           t1.signory_id as "signoryId",      <!--领域id-->
            t1.signory_name as "signoryName",  <!--领域名称-->
            t1.refer_price as "referPrice",    <!--参考价格-->
            t1.service_cycle as "serviceCycle",<!--服务周期-->
@@ -94,10 +98,11 @@
            t1.picture_url as "pictureUrl",    <!--产品图片-->
            t1.status as "status",             <!--状态-->
            t1.approval_comments as "approvalComments", <!--审批意见-->
+           t2.org_id as "orgId",              <!--机构id-->
            t2.org_name as "orgName",          <!--机构名称-->
            t3.con_phone as "conPhone",        <!--联系电话-->
            t3.con_name as "conName",          <!--联系人名称-->
-           t4.service_details as "productDetails", <!--服务详情-->
+           t4.service_details as "serviceDetails", <!--服务详情-->
           (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
            select advisor_account from tb_service_and_advisor tsa where  tsa.product_id = t1.product_id
            )) as "advisorName"                 <!--顾问名称-->
@@ -108,10 +113,8 @@
         where t1.record_status = '1' and  t1.product_id = #{productId,jdbcType=VARCHAR}
     </select>
     <resultMap id="serviceDetial" type="com.jn.enterprise.servicemarket.product.model.ServiceProductDetail">
-        <result column="orgName" property="orgName"/>
         <result column="conPhone" property="conPhone"/>
         <result column="conName" property="conName"/>
-        <result column="status" property="status"/>
         <result column="advisorName" property="advisorName"/>
         <result column="releaseTime" property="releaseTime"/>
         <result column="approvalComments" property="approvalComments"/>
@@ -119,12 +122,16 @@
             <result column="productId" property="productId"/>
             <result column="serialNumber" property="serialNumber"/>
             <result column="productName" property="productName"/>
+            <result column="orgId" property="orgId"/>
+            <result column="orgName" property="orgName"/>
             <result column="productType" property="productType"/>
+            <result column="signoryId" property="signoryId"/>
             <result column="signoryName" property="signoryName"/>
             <result column="referPrice" property="referPrice"/>
+            <result column="status" property="status"/>
             <result column="serviceCycle" property="serviceCycle"/>
             <result column="pictureUrl" property="pictureUrl"/>
-            <result column="productDetails" property="productDetails"/>
+            <result column="serviceDetails" property="serviceDetails"/>
         </association>
     </resultMap>
     <!--产品审批-->
@@ -205,6 +212,7 @@
                tt.productId,     <!--产品Id-->
                tt.productName,   <!--产品名称-->
                tt.signoryId,     <!--领域Id-->
+               tt.signoryName,   <!--领域名称-->
                tt.productType,   <!--产品类型-->
                tt.pictureUrl,    <!--图片路径-->
                tt.advisorName,   <!--顾问名称-->
@@ -220,6 +228,7 @@
         select
                t1.product_id as "productId",
                t1.signory_id as "signoryId",
+               t1.signory_name as "signryName"
                t1.product_name as "productName",
                t1.serial_number as "serialNumber",
                t1.product_type as "productType",
@@ -296,7 +305,7 @@ from tb_service_product t1
         </if>
        </select>
     <!--常规产品上架时,选择框的产品列表-->
-    <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.CommonServiceShelf">
+    <select id="findShelfProductList" resultType = "com.jn.enterprise.servicemarket.product.model.ProductShelf">
          select
        t1.product_id as "productId"
        ,t1.product_name as "productName"
@@ -355,4 +364,30 @@ from tb_service_product t1
         ,(select count(tp2.product_id) from tb_service_product tp2 where tp.template_id is null and tp2.record_status=1 and tp2.status="1")   as "commentsCount"
         from tb_service_product tp where product_type = "1" and tp.record_status=1 and tp.status="1" )tt;
     </select>
+
+    <select id="modifyCommonServiceShow"  resultType="com.jn.enterprise.servicemarket.product.model.UpdateCommonProductShow">
+        select
+        t1.product_id as "productId",      <!--产品Id-->
+        t1.serial_number as serialNumber,  <!--产品编号-->
+        t1.product_name as "productName",  <!--产品名称-->
+        t1.product_type as "productType",  <!--产品类型-->
+        t1.signory_id as "signoryId",      <!--领域id-->
+        t1.signory_name as "signoryName", <!--领域名称-->
+        t1.refer_price as "referPrice",     <!--参考价格-->
+        t1.service_cycle as "serviceCycle",  <!--服务周期-->
+        t1.picture_url as "pictureUrl",     <!--产品图片-->
+        t4.service_details as "serviceDetails",  <!--服务详情-->
+        (select  GROUP_CONCAT(tt.org_name) from tb_service_product tt where tt.template_id = #{productId})  as "orgName",            <!--机构名称-->
+        (select GROUP_CONCAT(advisor_name) from tb_service_advisor  where advisor_account in(
+        select advisor_account from tb_service_and_advisor tsa where  tsa.product_id in (
+        select t2.product_id from tb_service_product t2 where t2.template_id=#{productId}
+        )
+        )) as "advisorName"                   <!--顾问名称-->
+        from tb_service_product t1
+        left join tb_service_details t4 on t1.product_id = t4.product_id
+        where t1.record_status = '1' and  t1.product_id = #{productId}
+    </select>
+
+
+
 </mapper>

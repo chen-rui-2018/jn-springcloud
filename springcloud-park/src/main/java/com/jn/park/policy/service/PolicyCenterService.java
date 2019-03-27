@@ -1,5 +1,7 @@
 package com.jn.park.policy.service;
 
+import com.jn.common.model.PaginationData;
+import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.model.PolicyClassShow;
 import com.jn.park.policy.model.PolicyLevelShow;
 
@@ -23,4 +25,11 @@ public interface PolicyCenterService {
      * @return
      */
     List<PolicyClassShow>getPolicyClassList();
+
+    /**
+     * 政策中心首页
+     * @param policyCenterHomeParam
+     * @return
+     */
+    PaginationData getPolicyCenterList(PolicyCenterHomeParam policyCenterHomeParam);
 }

@@ -1,6 +1,9 @@
 package com.jn.park.policy.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
+import com.jn.common.model.PaginationData;
+import com.jn.common.util.StringUtils;
 import com.jn.park.enums.PolicyCenterExceptionEnum;
 import com.jn.park.policy.dao.TbPolicyClassMapper;
 import com.jn.park.policy.dao.TbPolicyLevelMapper;
@@ -9,6 +12,7 @@ import com.jn.park.policy.entity.TbPolicyClass;
 import com.jn.park.policy.entity.TbPolicyClassCriteria;
 import com.jn.park.policy.entity.TbPolicyLevel;
 import com.jn.park.policy.entity.TbPolicyLevelCriteria;
+import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.model.PolicyClassShow;
 import com.jn.park.policy.model.PolicyLevelShow;
 import com.jn.park.policy.service.PolicyCenterService;
@@ -94,5 +98,24 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
             resultList.add(policyClassShow);
         }
         return resultList;
+    }
+
+    /**
+     * 政策中心首页
+     * @param policyCenterHomeParam
+     * @return
+     */
+    @ServiceLog(doAction = "政策中心首页")
+    @Override
+    public PaginationData getPolicyCenterList(PolicyCenterHomeParam policyCenterHomeParam) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(StringUtils.isBlank(policyCenterHomeParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+
+        }
+        return null;
     }
 }

@@ -2,6 +2,7 @@ package com.jn.park.policy.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
+import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.model.PolicyClassShow;
 import com.jn.park.policy.model.PolicyLevelShow;
 import com.jn.park.policy.service.PolicyCenterService;
@@ -12,6 +13,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,4 +55,14 @@ public class PolicyCenterController extends BaseController {
         List<PolicyClassShow> classList =policyCenterService.getPolicyClassList();
         return new Result(classList);
     }
+
+    @ControllerLog(doAction = "政策中心首页")
+    @ApiOperation(value = "政策中心首页",notes = "获取政策中心首页列表数据")
+    @RequiresPermissions("/policy/policyCenterController/getPolicyCenterList")
+    @RequestMapping(value = "/getPolicyCenterList",method = RequestMethod.GET)
+    public Result<List<PolicyClassShow>> getPolicyCenterList(@Validated PolicyCenterHomeParam policyCenterHomeParam){
+        policyCenterService.getPolicyCenterList(policyCenterHomeParam);
+        return new Result();
+    }
+
 }

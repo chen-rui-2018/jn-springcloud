@@ -1,18 +1,19 @@
-package com.jn.park.enums;
+package com.jn.park.policy.enums;
 
 import com.jn.common.api.CodeAndMsg;
 
 /**
+ * 政策中心table页类型
  * @Author: yangph
- * @Date: 2019/3/27 15:11
+ * @Date: 2019/3/27 20:38
  * @Version v1.0
  * @modified By:
  */
-public enum PolicyCenterExceptionEnum implements CodeAndMsg {
-    NETWORK_ANOMALY("4020901", "网络异常，请稍后重试。"),
-    POLICY_LEVEL_NOT_EXIST("4020501", "系统中没有政策级别数据"),
-    POLICY_CLASS_NOT_EXIST("4020502", "系统中没有政策分类数据"),
-    POLICY_TYPE_NOT_NULL("4020503","政策类型不能为空")
+public enum PolicyTableTypeEnum implements CodeAndMsg {
+    ALL_POLICY("allPolicy","政策一览"),
+    DIAGRAM_POLICY("diagramPolicy","图解政策"),
+    FIRST_TOPIC("firstTopic","一号专题"),
+    PRIVATE_TOPIC("privateTopic","民营专题")
     ;
     /**
      * 编码
@@ -23,7 +24,7 @@ public enum PolicyCenterExceptionEnum implements CodeAndMsg {
      */
     private String message;
 
-    PolicyCenterExceptionEnum(String code, String message) {
+    PolicyTableTypeEnum(String code, String message) {
         this.code = code;
         this.message = message;
     }

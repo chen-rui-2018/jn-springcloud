@@ -27,7 +27,7 @@ public interface PolicyCenterService {
     List<PolicyClassShow>getPolicyClassList();
 
     /**
-     * 政策中心首页
+     * 政策中心首页--政策一览
      * @param policyCenterHomeParam
      * @return
      */

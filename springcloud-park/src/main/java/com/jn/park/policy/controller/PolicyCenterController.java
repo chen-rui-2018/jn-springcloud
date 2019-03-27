@@ -1,8 +1,10 @@
 package com.jn.park.policy.controller;
 
 import com.jn.common.controller.BaseController;
+import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.policy.model.PolicyCenterHomeParam;
+import com.jn.park.policy.model.PolicyCenterHomeShow;
 import com.jn.park.policy.model.PolicyClassShow;
 import com.jn.park.policy.model.PolicyLevelShow;
 import com.jn.park.policy.service.PolicyCenterService;
@@ -60,9 +62,8 @@ public class PolicyCenterController extends BaseController {
     @ApiOperation(value = "政策中心首页",notes = "获取政策中心首页列表数据")
     @RequiresPermissions("/policy/policyCenterController/getPolicyCenterList")
     @RequestMapping(value = "/getPolicyCenterList",method = RequestMethod.GET)
-    public Result<List<PolicyClassShow>> getPolicyCenterList(@Validated PolicyCenterHomeParam policyCenterHomeParam){
-        policyCenterService.getPolicyCenterList(policyCenterHomeParam);
-        return new Result();
+    public Result<PaginationData<List<PolicyCenterHomeShow>>> getPolicyCenterList(@Validated PolicyCenterHomeParam policyCenterHomeParam){
+        PaginationData policyCenterList = policyCenterService.getPolicyCenterList(policyCenterHomeParam);
+        return new Result(policyCenterList);
     }
-
 }

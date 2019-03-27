@@ -9,6 +9,8 @@
     <result column="policy_class_code" jdbcType="VARCHAR" property="policyClassCode" />
     <result column="policy_class_name" jdbcType="VARCHAR" property="policyClassName" />
     <result column="policy_type" jdbcType="VARCHAR" property="policyType" />
+    <result column="policy_diagram_url" jdbcType="VARCHAR" property="policyDiagramUrl" />
+    <result column="thematic_type" jdbcType="VARCHAR" property="thematicType" />
     <result column="policy_title" jdbcType="VARCHAR" property="policyTitle" />
     <result column="read_num" jdbcType="INTEGER" property="readNum" />
     <result column="release_date" jdbcType="TIMESTAMP" property="releaseDate" />
@@ -86,10 +88,10 @@
   </sql>
   <sql id="Base_Column_List">
     policy_id, policy_code, policy_level_code, policy_level_name, policy_class_code, 
-    policy_class_name, policy_type, policy_title, read_num, release_date, status, support_method, 
-    support_industry, issue_unit, is_policy_diagram, relation_policy_diagram_id, is_policy_original, 
-    relation_policy_original_id, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    policy_class_name, policy_type, policy_diagram_url, thematic_type, policy_title, 
+    read_num, release_date, status, support_method, support_industry, issue_unit, is_policy_diagram, 
+    relation_policy_diagram_id, is_policy_original, relation_policy_original_id, created_time, 
+    creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.policy.entity.TbPolicyCriteria" resultMap="BaseResultMap">
     select
@@ -124,22 +126,22 @@
   <insert id="insert" parameterType="com.jn.park.policy.entity.TbPolicy">
     insert into tb_policy (policy_id, policy_code, policy_level_code, 
       policy_level_name, policy_class_code, policy_class_name, 
-      policy_type, policy_title, read_num, 
-      release_date, status, support_method, 
-      support_industry, issue_unit, is_policy_diagram, 
-      relation_policy_diagram_id, is_policy_original, 
-      relation_policy_original_id, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      policy_type, policy_diagram_url, thematic_type, 
+      policy_title, read_num, release_date, 
+      status, support_method, support_industry, 
+      issue_unit, is_policy_diagram, relation_policy_diagram_id, 
+      is_policy_original, relation_policy_original_id, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
     values (#{policyId,jdbcType=VARCHAR}, #{policyCode,jdbcType=VARCHAR}, #{policyLevelCode,jdbcType=VARCHAR}, 
       #{policyLevelName,jdbcType=VARCHAR}, #{policyClassCode,jdbcType=VARCHAR}, #{policyClassName,jdbcType=VARCHAR}, 
-      #{policyType,jdbcType=VARCHAR}, #{policyTitle,jdbcType=VARCHAR}, #{readNum,jdbcType=INTEGER}, 
-      #{releaseDate,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR}, #{supportMethod,jdbcType=VARCHAR}, 
-      #{supportIndustry,jdbcType=VARCHAR}, #{issueUnit,jdbcType=VARCHAR}, #{isPolicyDiagram,jdbcType=VARCHAR}, 
-      #{relationPolicyDiagramId,jdbcType=VARCHAR}, #{isPolicyOriginal,jdbcType=VARCHAR}, 
-      #{relationPolicyOriginalId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{policyType,jdbcType=VARCHAR}, #{policyDiagramUrl,jdbcType=VARCHAR}, #{thematicType,jdbcType=VARCHAR}, 
+      #{policyTitle,jdbcType=VARCHAR}, #{readNum,jdbcType=INTEGER}, #{releaseDate,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=VARCHAR}, #{supportMethod,jdbcType=VARCHAR}, #{supportIndustry,jdbcType=VARCHAR}, 
+      #{issueUnit,jdbcType=VARCHAR}, #{isPolicyDiagram,jdbcType=VARCHAR}, #{relationPolicyDiagramId,jdbcType=VARCHAR}, 
+      #{isPolicyOriginal,jdbcType=VARCHAR}, #{relationPolicyOriginalId,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.policy.entity.TbPolicy">
     insert into tb_policy
@@ -164,6 +166,12 @@
       </if>
       <if test="policyType != null">
         policy_type,
+      </if>
+      <if test="policyDiagramUrl != null">
+        policy_diagram_url,
+      </if>
+      <if test="thematicType != null">
+        thematic_type,
       </if>
       <if test="policyTitle != null">
         policy_title,
@@ -235,6 +243,12 @@
       </if>
       <if test="policyType != null">
         #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyDiagramUrl != null">
+        #{policyDiagramUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thematicType != null">
+        #{thematicType,jdbcType=VARCHAR},
       </if>
       <if test="policyTitle != null">
         #{policyTitle,jdbcType=VARCHAR},
@@ -316,6 +330,12 @@
       <if test="record.policyType != null">
         policy_type = #{record.policyType,jdbcType=VARCHAR},
       </if>
+      <if test="record.policyDiagramUrl != null">
+        policy_diagram_url = #{record.policyDiagramUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.thematicType != null">
+        thematic_type = #{record.thematicType,jdbcType=VARCHAR},
+      </if>
       <if test="record.policyTitle != null">
         policy_title = #{record.policyTitle,jdbcType=VARCHAR},
       </if>
@@ -378,6 +398,8 @@
       policy_class_code = #{record.policyClassCode,jdbcType=VARCHAR},
       policy_class_name = #{record.policyClassName,jdbcType=VARCHAR},
       policy_type = #{record.policyType,jdbcType=VARCHAR},
+      policy_diagram_url = #{record.policyDiagramUrl,jdbcType=VARCHAR},
+      thematic_type = #{record.thematicType,jdbcType=VARCHAR},
       policy_title = #{record.policyTitle,jdbcType=VARCHAR},
       read_num = #{record.readNum,jdbcType=INTEGER},
       release_date = #{record.releaseDate,jdbcType=TIMESTAMP},
@@ -418,6 +440,12 @@
       </if>
       <if test="policyType != null">
         policy_type = #{policyType,jdbcType=VARCHAR},
+      </if>
+      <if test="policyDiagramUrl != null">
+        policy_diagram_url = #{policyDiagramUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="thematicType != null">
+        thematic_type = #{thematicType,jdbcType=VARCHAR},
       </if>
       <if test="policyTitle != null">
         policy_title = #{policyTitle,jdbcType=VARCHAR},
@@ -478,6 +506,8 @@
       policy_class_code = #{policyClassCode,jdbcType=VARCHAR},
       policy_class_name = #{policyClassName,jdbcType=VARCHAR},
       policy_type = #{policyType,jdbcType=VARCHAR},
+      policy_diagram_url = #{policyDiagramUrl,jdbcType=VARCHAR},
+      thematic_type = #{thematicType,jdbcType=VARCHAR},
       policy_title = #{policyTitle,jdbcType=VARCHAR},
       read_num = #{readNum,jdbcType=INTEGER},
       release_date = #{releaseDate,jdbcType=TIMESTAMP},

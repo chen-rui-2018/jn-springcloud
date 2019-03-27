@@ -56,4 +56,5 @@ public interface OaClient {
      */
     @RequestMapping(value = "/api/oa/updateWorkPlanStatus", method = RequestMethod.POST)
     Result<Boolean> updateWorkPlanStatus();
+
 }

@@ -14,9 +14,7 @@ public class TbOaMeetingParticipants implements Serializable {
 
     private Date signBackTime;
 
-    private String attendanceStatus;
-
-    private Byte recordStatus;
+    private String recordStatus;
 
     private String creatorAccount;
 
@@ -68,20 +66,12 @@ public class TbOaMeetingParticipants implements Serializable {
         this.signBackTime = signBackTime;
     }
 
-    public String getAttendanceStatus() {
-        return attendanceStatus;
-    }
-
-    public void setAttendanceStatus(String attendanceStatus) {
-        this.attendanceStatus = attendanceStatus == null ? null : attendanceStatus.trim();
-    }
-
-    public Byte getRecordStatus() {
+    public String getRecordStatus() {
         return recordStatus;
     }
 
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setRecordStatus(String recordStatus) {
+        this.recordStatus = recordStatus == null ? null : recordStatus.trim();
     }
 
     public String getCreatorAccount() {
@@ -133,7 +123,6 @@ public class TbOaMeetingParticipants implements Serializable {
             && (this.getMeetingUserId() == null ? other.getMeetingUserId() == null : this.getMeetingUserId().equals(other.getMeetingUserId()))
             && (this.getSignInTime() == null ? other.getSignInTime() == null : this.getSignInTime().equals(other.getSignInTime()))
             && (this.getSignBackTime() == null ? other.getSignBackTime() == null : this.getSignBackTime().equals(other.getSignBackTime()))
-            && (this.getAttendanceStatus() == null ? other.getAttendanceStatus() == null : this.getAttendanceStatus().equals(other.getAttendanceStatus()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -150,7 +139,6 @@ public class TbOaMeetingParticipants implements Serializable {
         result = prime * result + ((getMeetingUserId() == null) ? 0 : getMeetingUserId().hashCode());
         result = prime * result + ((getSignInTime() == null) ? 0 : getSignInTime().hashCode());
         result = prime * result + ((getSignBackTime() == null) ? 0 : getSignBackTime().hashCode());
-        result = prime * result + ((getAttendanceStatus() == null) ? 0 : getAttendanceStatus().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -170,7 +158,6 @@ public class TbOaMeetingParticipants implements Serializable {
         sb.append(", meetingUserId=").append(meetingUserId);
         sb.append(", signInTime=").append(signInTime);
         sb.append(", signBackTime=").append(signBackTime);
-        sb.append(", attendanceStatus=").append(attendanceStatus);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

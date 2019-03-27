@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.meeting.dao.MeetingRoomMapper">
+
+
+    <resultMap id="BaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingRoomVo">
+        <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
+        <result column="meetingroom_name" jdbcType="VARCHAR" property="name" />
+        <result column="meetingroom_building" jdbcType="VARCHAR" property="building" />
+        <result column="meetingroom_floor" jdbcType="VARCHAR" property="floor" />
+        <result column="meetingroom_room_number" jdbcType="VARCHAR" property="roomNumber" />
+        <result column="meetingroom_position" jdbcType="VARCHAR" property="position" />
+        <result column="meetingroom_explains" jdbcType="VARCHAR" property="explains" />
+        <result column="meetingroom_record_status" jdbcType="VARCHAR" property="recordStatus" />
+        <result column="meetingroom_capacity" jdbcType="VARCHAR" property="capacity" />
+        <result column="meetingroom_remark" jdbcType="VARCHAR" property="remark" />
+        <result column="meetingroom_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="meetingroom_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="meetingroom_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+
+
+    </resultMap>
+
+    <resultMap id="SelectResultMap" type="com.jn.oa.meeting.vo.OaMeetingRoomVo">
+        <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
+        <result column="meetingroom_name" jdbcType="VARCHAR" property="name" />
+        <result column="meetingroom_building" jdbcType="VARCHAR" property="building" />
+        <result column="meetingroom_floor" jdbcType="VARCHAR" property="floor" />
+        <result column="meetingroom_room_number" jdbcType="VARCHAR" property="roomNumber" />
+        <result column="meetingroom_position" jdbcType="VARCHAR" property="position" />
+        <result column="meetingroom_explains" jdbcType="VARCHAR" property="explains" />
+        <result column="meetingroom_record_status" jdbcType="VARCHAR" property="recordStatus" />
+        <result column="meetingroom_capacity" jdbcType="VARCHAR" property="capacity" />
+        <result column="meetingroom_remark" jdbcType="VARCHAR" property="remark" />
+        <result column="meetingroom_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="meetingroom_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="meetingroom_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="departmentName" jdbcType="VARCHAR" property="departmentName" />
+        <collection property="attachmentPaths" javaType="java.util.List" ofType="java.lang.String">
+            <result column="meetingroomphoto_photo_url" jdbcType="VARCHAR" property="attachmentPaths" />
+        </collection>
+    </resultMap>
+    <resultMap id="OrderBaseResultMap" type="com.jn.oa.meeting.vo.OaMeetingRoomOrderVo">
+        <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
+        <result column="meetingroom_name" jdbcType="VARCHAR" property="name" />
+        <result column="meetingroom_building" jdbcType="VARCHAR" property="building" />
+        <result column="meetingroom_floor" jdbcType="VARCHAR" property="floor" />
+        <result column="meetingroom_room_number" jdbcType="VARCHAR" property="roomNumber" />
+        <result column="meetingroom_position" jdbcType="VARCHAR" property="position" />
+        <result column="meetingroom_explains" jdbcType="VARCHAR" property="explains" />
+        <result column="meetingroom_record_status" jdbcType="VARCHAR" property="recordStatus" />
+        <result column="meetingroom_capacity" jdbcType="VARCHAR" property="capacity" />
+        <result column="meetingroom_remark" jdbcType="VARCHAR" property="remark" />
+        <result column="meetingroom_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="meetingroom_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="meetingroom_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+
+        <collection property="meetingList" javaType="java.util.List" ofType="com.jn.oa.meeting.entity.TbOaMeeting">
+            <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+            <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
+            <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
+            <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+        </collection>
+    </resultMap>
+    <resultMap id="meetingBaseResultMap" type="com.jn.oa.meeting.model.OaMeeting">
+        <id column="meeting_id" jdbcType="VARCHAR" property="id" />
+        <result column="meeting_start_time" jdbcType="TIMESTAMP" property="startTime" />
+        <result column="meeting_end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="meeting_title" jdbcType="VARCHAR" property="title" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    meetingroom.id as meetingroom_id, meetingroom.name as meetingroom_name, meetingroom.building as meetingroom_building,
+    meetingroom.floor as meetingroom_floor, meetingroom.room_number as meetingroom_room_number,
+    meetingroom.position as meetingroom_position, meetingroom.explains as meetingroom_explains,
+    meetingroom.record_status as meetingroom_record_status, meetingroom.capacity as meetingroom_capacity,
+    meetingroom.remark as meetingroom_remark, meetingroom.creator_account as meetingroom_creator_account,
+    meetingroom.created_time as meetingroom_created_time, meetingroom.modifier_account as meetingroom_modifier_account,
+    meetingroom.modified_time as meetingroom_modified_time, u.name as userName,
+	            u.department_name as departmentName
+  </sql>
+    <sql id="Base_Column_AttachmentList">
+    meetingroom.id as meetingroom_id, meetingroom.name as meetingroom_name, meetingroom.building as meetingroom_building,
+    meetingroom.floor as meetingroom_floor, meetingroom.room_number as meetingroom_room_number,
+    meetingroom.position as meetingroom_position, meetingroom.explains as meetingroom_explains,
+    meetingroom.record_status as meetingroom_record_status, meetingroom.capacity as meetingroom_capacity,
+    meetingroom.remark as meetingroom_remark, meetingroom.creator_account as meetingroom_creator_account,
+    meetingroom.created_time as meetingroom_created_time, meetingroom.modifier_account as meetingroom_modifier_account,
+    meetingroom.modified_time as meetingroom_modified_time,
+    meetingroomphoto.photo_url as meetingroomphoto_photo_url
+  </sql>
+
+    <update id="deleteBranchByIds" parameterType="java.util.Map">
+        update tb_oa_meeting_room
+        set
+        record_status = 0,
+        modifier_account=#{account},
+        modified_time = now()
+        where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectListByCondition" resultMap="BaseResultMap"  parameterType="com.jn.oa.meeting.model.OaMeetingRoomPage" >
+               SELECT
+
+        <include refid="Base_Column_List" />
+
+            FROM
+                tb_oa_meeting_room meetingroom
+                LEFT JOIN (
+                        SELECT
+                            t.id,
+                            t.name,
+                            t.account,
+                            tt.department_name
+                        FROM
+                            tb_sys_user t
+                            LEFT JOIN (
+                        SELECT
+                            t1.user_id,
+                            t2.department_name
+                        FROM
+                            tb_sys_user_department_post t1
+                            INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
+                        WHERE
+                            t1.is_default = 1
+                            AND t1.record_status = 1
+                            AND t2.record_status = 1
+                            ) tt ON t.id = tt.user_id
+            WHERE
+                t.record_status = 1
+                ) u ON meetingroom.creator_account = u.id
+                where meetingroom.record_status != 0
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+                    and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+                </if>
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+                    and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}
+                </if>
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(building)">
+                    and meetingroom.building =#{building,jdbcType=VARCHAR}
+                </if>
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(floor)">
+                    and meetingroom.floor =#{floor,jdbcType=VARCHAR}
+                </if>
+                <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roomNumber)">
+                    and meetingroom.room_number =#{roomNumber,jdbcType=VARCHAR}
+                </if>
+        order by meetingroom.created_time desc,meetingroom.id desc
+
+    </select>
+    <select id="selectMeetingRoomById" resultMap="SelectResultMap"  parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_AttachmentList" />
+        FROM tb_oa_meeting_room meetingroom
+        LEFT JOIN (
+        SELECT * FROM tb_oa_meeting_room_photo p
+        WHERE p.record_status!=0
+        )meetingroomphoto
+        on meetingroom.id=meetingroomphoto.meeting_room_id
+        where meetingroom.record_status!=0
+        and meetingroom.id=#{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectMeetingRoomAndMeetingOrder" resultMap="OrderBaseResultMap" parameterType="com.jn.oa.meeting.model.OaMeetingRoomOrderPage">
+        SELECT
+	meetingroom.id AS meetingroom_id,
+	meetingroom.NAME AS meetingroom_name,
+	meetingroom.building AS meetingroom_building,
+	meetingroom.floor AS meetingroom_floor,
+	meetingroom.room_number AS meetingroom_room_number,
+	meetingroom.position AS meetingroom_position,
+	meetingroom.explains AS meetingroom_explains,
+	meetingroom.record_status AS meetingroom_record_status,
+	meetingroom.capacity AS meetingroom_capacity,
+	meetingroom.remark AS meetingroom_remark,
+	meetingroom.creator_account AS meetingroom_creator_account,
+	meetingroom.created_time AS meetingroom_created_time,
+	meetingroom.modifier_account AS meetingroom_modifier_account,
+	meetingroom.modified_time AS meetingroom_modified_time
+
+
+FROM
+	tb_oa_meeting_room meetingroom
+
+
+
+	where meetingroom.record_status=1
+
+
+
+    </select>
+    <select id="selectMeetingByTimeAndId"  resultMap="meetingBaseResultMap" parameterType="com.jn.oa.meeting.model.OaMeetingRoomOrderPage">
+        select
+        m.id as meeting_id,
+        m.title  as meeting_title,
+       m.start_time as meeting_start_time,
+       m.end_time as meeting_end_time
+
+        FROM
+        tb_oa_meeting m
+        where m.meeting_status !=3
+        <if test=" meetingStartTime !=null">
+            and Date(m.start_time)=DATE_FORMAT(#{meetingStartTime},'%Y-%m-%d')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(meetingRoomId)">
+            and m.meeting_room_id =#{meetingRoomId}
+        </if>
+    </select>
+
+    <select id="selectAvailableMeetingRoomList"  resultMap="SelectResultMap"  parameterType="com.jn.oa.meeting.model.OaMeetingRoomPage" >
+
+        SELECT
+        <include refid="Base_Column_AttachmentList" />
+        FROM
+        tb_oa_meeting_room meetingroom
+        LEFT JOIN (
+        SELECT * FROM tb_oa_meeting_room_photo p
+        WHERE p.record_status!=0
+        )meetingroomphoto
+        on meetingroom.id=meetingroomphoto.meeting_room_id
+        where meetingroom.id
+        not in
+
+        (
+        select m.meeting_room_id from
+
+        (select meeting.id,meeting.title  ,meeting.start_time,meeting.end_time,meeting.meeting_room_id,meeting.meeting_status
+        FROM
+        tb_oa_meeting meeting
+
+        where ( meeting.meeting_status =0 or meeting.meeting_status =1)
+
+        <if test="startTime != null and endTime != null">
+
+        AND  <![CDATA[
+        	(
+                (meeting.start_time <#{startTime}and #{startTime}<meeting.end_time)
+                or
+                 (meeting.start_time <#{endTime}and #{endTime}<meeting.end_time)
+        	 )
+
+        ]]>
+
+        </if>
+
+        )m
+        ) and meetingroom.record_status=1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+            and meetingroom.NAME like CONCAT('%', #{name,jdbcType=VARCHAR}, '%')
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(recordStatus)">
+            and meetingroom.record_status = #{recordStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(building)">
+            and meetingroom.building =#{building,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(floor)">
+            and meetingroom.floor =#{floor,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(roomNumber)">
+            and meetingroom.room_number =#{roomNumber,jdbcType=VARCHAR}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(id)">
+            and meetingroom.id =#{id,jdbcType=VARCHAR}
+        </if>
+        order by meetingroom.created_time desc,meetingroom.id desc
+
+
+    </select>
+
+
+
+
+</mapper>

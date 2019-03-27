@@ -32,7 +32,7 @@ import java.util.UUID;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "(非科技金融)前台服务产品接口")
+@Api(tags = "(非科技金融)前台服务产品接口,(包含app接口)")
 @RestController
 @RequestMapping(value = "/servicemarket/product/web/")
 public class ServiceProductWebController  extends BaseController {
@@ -77,7 +77,7 @@ public class ServiceProductWebController  extends BaseController {
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表")
-    @ApiOperation(value ="服务产品列表")
+    @ApiOperation(value ="服务产品列表,(app服务产品列表)")
     @RequestMapping(value = "/findProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<WebServiceProductInfo>>> findProductList( ProductInquiryInfo info){
         PaginationData data = productService.findWebProductList(info,true);

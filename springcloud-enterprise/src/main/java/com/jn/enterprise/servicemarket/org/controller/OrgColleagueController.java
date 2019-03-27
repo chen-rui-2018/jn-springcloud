@@ -80,7 +80,7 @@ public class OrgColleagueController extends BaseController {
     }
 
     @ControllerLog(doAction = "删除联系人或顾问")
-    @ApiOperation(value = "删除联系人或顾问",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "删除联系人或顾问(app删除顾问操作)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
     public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号" ,required = true,example = "wangsong")String account){

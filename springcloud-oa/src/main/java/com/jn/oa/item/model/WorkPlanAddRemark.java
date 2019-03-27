@@ -18,11 +18,11 @@ import java.io.Serializable;
 public class WorkPlanAddRemark implements Serializable {
     private static final long serialVersionUID = -2004038545138489335L;
 
-    @ApiModelProperty(value = "工作计划id", example = "\"10000\"")
+    @ApiModelProperty(value = "工作计划id", required = true, example = "\"10000\"")
     @NotNull(message = "工作计划id不能为空")
     private String id;
 
-    @ApiModelProperty(value = "备注", example = "备注信息添加测试")
+    @ApiModelProperty(value = "备注", required = true, example = "备注信息添加测试")
     @NotNull(message = "备注不能为空")
     private String remark;
 

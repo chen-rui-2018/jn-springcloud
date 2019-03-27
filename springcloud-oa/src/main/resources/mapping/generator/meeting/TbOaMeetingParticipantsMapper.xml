@@ -2,17 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.meeting.dao.TbOaMeetingParticipantsMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
-    <id column="meetingparticipants_id" jdbcType="VARCHAR" property="id" />
-    <result column="meetingparticipants_meeting_id" jdbcType="VARCHAR" property="meetingId" />
-    <result column="meetingparticipants_meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
-    <result column="meetingparticipants_sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
-    <result column="meetingparticipants_sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
-    <result column="meetingparticipants_attendance_status" jdbcType="VARCHAR" property="attendanceStatus" />
-    <result column="meetingparticipants_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="meetingparticipants_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="meetingparticipants_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="meetingparticipants_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="meetingparticipants_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="meeting_id" jdbcType="VARCHAR" property="meetingId" />
+    <result column="meeting_user_id" jdbcType="VARCHAR" property="meetingUserId" />
+    <result column="sign_in_time" jdbcType="TIMESTAMP" property="signInTime" />
+    <result column="sign_back_time" jdbcType="TIMESTAMP" property="signBackTime" />
+    <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,12 +72,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    meetingparticipants.id as meetingparticipants_id, meetingparticipants.meeting_id as meetingparticipants_meeting_id, 
-    meetingparticipants.meeting_user_id as meetingparticipants_meeting_user_id, meetingparticipants.sign_in_time as meetingparticipants_sign_in_time, 
-    meetingparticipants.sign_back_time as meetingparticipants_sign_back_time, meetingparticipants.attendance_status as meetingparticipants_attendance_status, 
-    meetingparticipants.record_status as meetingparticipants_record_status, meetingparticipants.creator_account as meetingparticipants_creator_account, 
-    meetingparticipants.created_time as meetingparticipants_created_time, meetingparticipants.modifier_account as meetingparticipants_modifier_account, 
-    meetingparticipants.modified_time as meetingparticipants_modified_time
+    id, meeting_id, meeting_user_id, sign_in_time, sign_back_time, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingParticipantsCriteria" resultMap="BaseResultMap">
     select
@@ -86,7 +81,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_participants meetingparticipants
+    from tb_oa_meeting_participants
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,28 +92,28 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_participants meetingparticipants
-    where meetingparticipants.id = #{id,jdbcType=VARCHAR}
+    from tb_oa_meeting_participants
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_oa_meeting_participants
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingParticipantsCriteria">
-    delete from tb_oa_meeting_participants meetingparticipants
+    delete from tb_oa_meeting_participants
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
     insert into tb_oa_meeting_participants (id, meeting_id, meeting_user_id, 
-      sign_in_time, sign_back_time, attendance_status, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
+      sign_in_time, sign_back_time, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
     values (#{id,jdbcType=VARCHAR}, #{meetingId,jdbcType=VARCHAR}, #{meetingUserId,jdbcType=VARCHAR}, 
-      #{signInTime,jdbcType=TIMESTAMP}, #{signBackTime,jdbcType=TIMESTAMP}, #{attendanceStatus,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+      #{signInTime,jdbcType=TIMESTAMP}, #{signBackTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.meeting.entity.TbOaMeetingParticipants">
     insert into tb_oa_meeting_participants
@@ -137,9 +132,6 @@
       </if>
       <if test="signBackTime != null">
         sign_back_time,
-      </if>
-      <if test="attendanceStatus != null">
-        attendance_status,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -173,11 +165,8 @@
       <if test="signBackTime != null">
         #{signBackTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="attendanceStatus != null">
-        #{attendanceStatus,jdbcType=VARCHAR},
-      </if>
       <if test="recordStatus != null">
-        #{recordStatus,jdbcType=TINYINT},
+        #{recordStatus,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
@@ -194,46 +183,43 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingParticipantsCriteria" resultType="java.lang.Long">
-    select count(*) from tb_oa_meeting_participants meetingparticipants
+    select count(*) from tb_oa_meeting_participants
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_oa_meeting_participants meetingparticipants
+    update tb_oa_meeting_participants
     <set>
       <if test="record.id != null">
-        meetingparticipants.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.meetingId != null">
-        meetingparticipants.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
+        meeting_id = #{record.meetingId,jdbcType=VARCHAR},
       </if>
       <if test="record.meetingUserId != null">
-        meetingparticipants.meeting_user_id = #{record.meetingUserId,jdbcType=VARCHAR},
+        meeting_user_id = #{record.meetingUserId,jdbcType=VARCHAR},
       </if>
       <if test="record.signInTime != null">
-        meetingparticipants.sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
+        sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.signBackTime != null">
-        meetingparticipants.sign_back_time = #{record.signBackTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.attendanceStatus != null">
-        meetingparticipants.attendance_status = #{record.attendanceStatus,jdbcType=VARCHAR},
+        sign_back_time = #{record.signBackTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.recordStatus != null">
-        meetingparticipants.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
-        meetingparticipants.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        meetingparticipants.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        meetingparticipants.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        meetingparticipants.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -241,18 +227,17 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_oa_meeting_participants meetingparticipants
-    set meetingparticipants.id = #{record.id,jdbcType=VARCHAR},
-      meetingparticipants.meeting_id = #{record.meetingId,jdbcType=VARCHAR},
-      meetingparticipants.meeting_user_id = #{record.meetingUserId,jdbcType=VARCHAR},
-      meetingparticipants.sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
-      meetingparticipants.sign_back_time = #{record.signBackTime,jdbcType=TIMESTAMP},
-      meetingparticipants.attendance_status = #{record.attendanceStatus,jdbcType=VARCHAR},
-      meetingparticipants.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      meetingparticipants.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      meetingparticipants.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      meetingparticipants.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingparticipants.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_oa_meeting_participants
+    set id = #{record.id,jdbcType=VARCHAR},
+      meeting_id = #{record.meetingId,jdbcType=VARCHAR},
+      meeting_user_id = #{record.meetingUserId,jdbcType=VARCHAR},
+      sign_in_time = #{record.signInTime,jdbcType=TIMESTAMP},
+      sign_back_time = #{record.signBackTime,jdbcType=TIMESTAMP},
+      record_status = #{record.recordStatus,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,11 +257,8 @@
       <if test="signBackTime != null">
         sign_back_time = #{signBackTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="attendanceStatus != null">
-        attendance_status = #{attendanceStatus,jdbcType=VARCHAR},
-      </if>
       <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
+        record_status = #{recordStatus,jdbcType=VARCHAR},
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
@@ -299,8 +281,7 @@
       meeting_user_id = #{meetingUserId,jdbcType=VARCHAR},
       sign_in_time = #{signInTime,jdbcType=TIMESTAMP},
       sign_back_time = #{signBackTime,jdbcType=TIMESTAMP},
-      attendance_status = #{attendanceStatus,jdbcType=VARCHAR},
-      record_status = #{recordStatus,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},

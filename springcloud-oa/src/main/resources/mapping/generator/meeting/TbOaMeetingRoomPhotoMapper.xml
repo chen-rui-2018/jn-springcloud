@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.meeting.dao.TbOaMeetingRoomPhotoMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingRoomPhoto">
-    <id column="meetingroomphoto_id" jdbcType="VARCHAR" property="id" />
-    <result column="meetingroomphoto_meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
-    <result column="meetingroomphoto_photo_url" jdbcType="VARCHAR" property="photoUrl" />
-    <result column="meetingroomphoto_record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="meetingroomphoto_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="meetingroomphoto_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="meetingroomphoto_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="meetingroomphoto_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
-    <result column="meetingroomphoto_remark" jdbcType="VARCHAR" property="remark" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="meeting_room_id" jdbcType="VARCHAR" property="meetingRoomId" />
+    <result column="photo_url" jdbcType="VARCHAR" property="photoUrl" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,11 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    meetingroomphoto.id as meetingroomphoto_id, meetingroomphoto.meeting_room_id as meetingroomphoto_meeting_room_id, 
-    meetingroomphoto.photo_url as meetingroomphoto_photo_url, meetingroomphoto.record_status as meetingroomphoto_record_status, 
-    meetingroomphoto.creator_account as meetingroomphoto_creator_account, meetingroomphoto.created_time as meetingroomphoto_created_time, 
-    meetingroomphoto.modifier_account as meetingroomphoto_modifier_account, meetingroomphoto.modified_time as meetingroomphoto_modified_time, 
-    meetingroomphoto.remark as meetingroomphoto_remark
+    id, meeting_room_id, photo_url, record_status, creator_account, created_time, modifier_account, 
+    modified_time, remark
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomPhotoCriteria" resultMap="BaseResultMap">
     select
@@ -83,7 +80,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_room_photo meetingroomphoto
+    from tb_oa_meeting_room_photo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,15 +91,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_room_photo meetingroomphoto
-    where meetingroomphoto.id = #{id,jdbcType=VARCHAR}
+    from tb_oa_meeting_room_photo
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_oa_meeting_room_photo
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomPhotoCriteria">
-    delete from tb_oa_meeting_room_photo meetingroomphoto
+    delete from tb_oa_meeting_room_photo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -179,40 +176,40 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomPhotoCriteria" resultType="java.lang.Long">
-    select count(*) from tb_oa_meeting_room_photo meetingroomphoto
+    select count(*) from tb_oa_meeting_room_photo
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_oa_meeting_room_photo meetingroomphoto
+    update tb_oa_meeting_room_photo
     <set>
       <if test="record.id != null">
-        meetingroomphoto.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.meetingRoomId != null">
-        meetingroomphoto.meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
+        meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
       </if>
       <if test="record.photoUrl != null">
-        meetingroomphoto.photo_url = #{record.photoUrl,jdbcType=VARCHAR},
+        photo_url = #{record.photoUrl,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        meetingroomphoto.record_status = #{record.recordStatus,jdbcType=TINYINT},
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        meetingroomphoto.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        meetingroomphoto.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        meetingroomphoto.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        meetingroomphoto.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.remark != null">
-        meetingroomphoto.remark = #{record.remark,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -220,16 +217,16 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_oa_meeting_room_photo meetingroomphoto
-    set meetingroomphoto.id = #{record.id,jdbcType=VARCHAR},
-      meetingroomphoto.meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
-      meetingroomphoto.photo_url = #{record.photoUrl,jdbcType=VARCHAR},
-      meetingroomphoto.record_status = #{record.recordStatus,jdbcType=TINYINT},
-      meetingroomphoto.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      meetingroomphoto.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      meetingroomphoto.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingroomphoto.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
-      meetingroomphoto.remark = #{record.remark,jdbcType=VARCHAR}
+    update tb_oa_meeting_room_photo
+    set id = #{record.id,jdbcType=VARCHAR},
+      meeting_room_id = #{record.meetingRoomId,jdbcType=VARCHAR},
+      photo_url = #{record.photoUrl,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

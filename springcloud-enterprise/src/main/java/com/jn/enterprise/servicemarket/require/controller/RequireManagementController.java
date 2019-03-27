@@ -41,7 +41,7 @@ public class RequireManagementController extends BaseController {
     private RequireManagementService requireManagementService;
 
     @ControllerLog(doAction = "用户提需求(非科技金融)")
-    @ApiOperation(value = "用户提需求(非科技金融)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "用户提需求(非科技金融)(app新增需求)",notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/userDemand")
     @RequestMapping(value = "/userDemand",method = RequestMethod.POST)
     public Result<Integer> userDemand(@RequestBody @Validated RequireParam requireParam){
@@ -75,7 +75,7 @@ public class RequireManagementController extends BaseController {
     @ControllerLog(doAction = "对他人的需求列表查询")
     @ApiOperation(value = "对他人的需求列表查询")
     @RequiresPermissions("/serviceMarket/requireManagementController/getRequireOtherList")
-    @RequestMapping(value = "/getRequireOtherList",method = RequestMethod.GET)
+    @RequestMapping(value = "/getRequireOtherList,(app需求管理)",method = RequestMethod.GET)
     public Result<PaginationData<List<RequireInfoList>>> getRequireOtherList(@Validated RequireOtherParam requireOtherParam){
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
@@ -89,7 +89,7 @@ public class RequireManagementController extends BaseController {
 
 
     @ControllerLog(doAction = "撤销对他人的需求")
-    @ApiOperation(value = "撤销对他人的需求",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "撤销对他人的需求 (app 需求撤销)",notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/cancelRequire")
     @RequestMapping(value = "/cancelRequire",method = RequestMethod.POST)
     public Result<Integer> cancelRequire(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
@@ -106,7 +106,7 @@ public class RequireManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "需求详情（对他人需求）")
-    @ApiOperation(value = "需求详情（对他人需求）")
+    @ApiOperation(value = "需求详情（对他人需求）,(App需求详情)")
     @RequiresPermissions("/serviceMarket/requireManagementController/getOtherRequireDetails")
     @RequestMapping(value = "/getOtherRequireDetails",method = RequestMethod.GET)
     public Result<RequireOtherDetails> getOtherRequireDetails(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
@@ -116,7 +116,7 @@ public class RequireManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "我收到的需求列表查询")
-    @ApiOperation(value = "我收到的需求列表查询")
+    @ApiOperation(value = "我收到的需求列表查询 (app 需求管理(机构/顾问))")
     @RequiresPermissions("/serviceMarket/requireManagementController/getRequireReceivedList")
     @RequestMapping(value = "/getRequireReceivedList",method = RequestMethod.GET)
     public Result<PaginationData<List<RequireInfoList>>> getRequireReceivedList(@Validated RequireReceivedParam requireReceivedParam){
@@ -147,7 +147,7 @@ public class RequireManagementController extends BaseController {
     }
 
     @ControllerLog(doAction = "需求详情（我收到的需求）")
-    @ApiOperation(value = "需求详情（我收到的需求）")
+    @ApiOperation(value = "需求详情（我收到的需求）(app维护对接)")
     @RequiresPermissions("/serviceMarket/requireManagementController/getReceivedRequireDetails")
     @RequestMapping(value = "/getReceivedRequireDetails",method = RequestMethod.GET)
     public Result<RequireReceivedDetails> getReceivedRequireDetails(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){

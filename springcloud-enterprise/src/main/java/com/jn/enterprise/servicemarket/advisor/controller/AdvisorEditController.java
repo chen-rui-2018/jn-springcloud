@@ -25,7 +25,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "编辑顾问资料")
+@Api(tags = "编辑顾问资料,(app顾问认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorEditController")
 public class AdvisorEditController extends BaseController {
@@ -38,7 +38,7 @@ public class AdvisorEditController extends BaseController {
     private AdvisorEditService advisorEditService;
 
     @ControllerLog(doAction = "基本信息保存并更新")
-    @ApiOperation(value = "基本信息保存并更新")
+    @ApiOperation(value = "基本信息保存并更新(app基本资料)")
     @RequestMapping(value = "/saveOrUpdateAdvisorBaseInfo",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo")
     public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
@@ -48,7 +48,7 @@ public class AdvisorEditController extends BaseController {
     }
 
     @ControllerLog(doAction = "荣誉资质保存并更新")
-    @ApiOperation(value = "荣誉资质保存并更新")
+    @ApiOperation(value = "荣誉资质保存并更新,(app资质认证)")
     @RequestMapping(value = "/saveOrUpdateAdvisorHonor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor")
     public Result saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonorParam serviceHonorParam){
@@ -58,7 +58,7 @@ public class AdvisorEditController extends BaseController {
     }
 
     @ControllerLog(doAction = "服务经历保存并更新")
-    @ApiOperation(value = "服务经历保存并更新")
+    @ApiOperation(value = "服务经历保存并更新,(app服务经历)")
     @RequestMapping(value = "/saveOrUpdateAdvisorExperience",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorExperience")
     public Result saveOrUpdateAdvisorExperience(@RequestBody @Validated ServiceExperienceParam serviceExperienceParam){
@@ -68,7 +68,7 @@ public class AdvisorEditController extends BaseController {
     }
 
     @ControllerLog(doAction = "项目经验保存并更新")
-    @ApiOperation(value = "项目经验保存并更新")
+    @ApiOperation(value = "项目经验保存并更新(app项目经验)")
     @RequestMapping(value = "/saveOrUpdateAdvisorProjectExperience",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience")
     public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperienceParam serviceProjectExperienceParam){

@@ -69,14 +69,13 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        activity
+                        policy
                     </contexts>
                     <tableNames>
-                        tb_activity,
-                        tb_activity_apply,
-                        tb_activity_type,
-                        tb_park_like,
-                        tb_activity_file
+                        tb_policy,
+                        tb_policy_class,
+                        tb_policy_details,
+                        tb_policy_level
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

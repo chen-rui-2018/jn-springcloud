@@ -291,10 +291,12 @@
     <!--类型下拉框条件-->
     <select id="downType" resultType="com.jn.park.finance.model.FinanceIndexDownTypeModel">
       select
-      DISTINCT(t.finance_name) as "financeName",
+      t.finance_name as "financeName",
       t.id  as "financeId"
       from tb_finance_type t
-        <!--where t.is_public = 1-->
+			where t.record_status=1
+			ORDER BY t.show_order
+
     </select>
 
 </mapper>

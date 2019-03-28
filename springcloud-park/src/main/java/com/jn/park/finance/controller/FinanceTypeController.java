@@ -57,10 +57,10 @@ public class FinanceTypeController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "更新财务项目类型对应的部门")
-    @ApiOperation(value = "更新财务项目类型对应的部门",notes="更新财务项目类型对应的部门", httpMethod = "PUT", response = Result.class)
+    @ApiOperation(value = "更新财务项目类型对应的部门",notes="更新财务项目类型对应的部门")
     @PutMapping(value = "/updateDepartmentByType")
     @RequiresPermissions("/finance/type/updateDepartmentByType")
-    public Result updateDepartmentByType(Integer typeId,@RequestBody List<String> departmentIdList){
+    public Result updateDepartmentByType(String typeId,@RequestBody List<String> departmentIdList){
 
         //todo 是否要做数据权限控制
         financeTypeService.updateDepartmentByType(typeId,departmentIdList,getUser().getAccount());

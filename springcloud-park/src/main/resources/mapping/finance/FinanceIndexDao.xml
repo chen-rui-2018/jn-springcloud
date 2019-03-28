@@ -176,7 +176,7 @@
     </resultMap>
 
     <select id="selectEverySectionExpendForms" resultMap="sectionExpendFormsMap">
-    select right(t1.`month`,2) as "month",IFNULL(t1.budgetnumber,0) as "budgetnumber",IFNULL(t2.cost,0) as "cost"  from
+    select right(t1.`month`,2) as "month",IFNULL(SUM(t1.budgetnumber),0) as "budgetnumber",IFNULL(SUM(t2.cost),0) as "cost"  from
     (SELECT
             m.`month` as "month",
             IFNULL(tb.budget_number,0) AS "budgetnumber"
@@ -200,6 +200,7 @@
 					and  t.cost_after_type_id=#{costTypeId,jdbcType=INTEGER}
 					and t.department_id=#{departmentId,jdbcType=VARCHAR}) t2
 					on t1.`month` =t2.costhappendtime
+					GROUP BY t1.`month`
 					ORDER BY t1.`month`
     </select>
 

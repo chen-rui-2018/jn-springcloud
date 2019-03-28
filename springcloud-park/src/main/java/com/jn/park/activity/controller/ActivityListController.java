@@ -3,14 +3,12 @@ package com.jn.park.activity.controller;
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
-import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +51,13 @@ public class ActivityListController extends BaseController {
     @ApiOperation(value = "查询活动类型列表", notes="作为活动的查询条件")
     @RequestMapping(value = "/guest/activity/findActivityTypeList",method = RequestMethod.POST)
     public Result<PaginationData<List<ActivityType>>> findActivityTypeListByState() {
-        PaginationData  activityTypeList = activityTypeService.findActivityTypeListByState(new ActivityTypeQuery(),Boolean.FALSE);
+        PaginationData  activityTypeList = activityTypeService.findActivityTypeListByState(new ActivityTypeParam(),Boolean.FALSE);
         return new Result(activityTypeList);
     }
     @ControllerLog(doAction = "用户中心-已报名活动列表")
     @ApiOperation(value = "用户中心-已报名活动列表" ,notes = "用户中心-已报名活动列表")
     @RequestMapping(value = "/guest/activity/findActivityRegistration",method = RequestMethod.GET)
-    public Result<PaginationData<List<ActivityListApplyed>>> findActivityRegistration(@Validated ActivityApplyedListQuery query) {
+    public Result<PaginationData<List<ActivityListApply>>> findActivityRegistration(@Validated ActivityApplyListParam query) {
         PaginationData  activityTypeList = activityService.findActivitySuccessfulRegistration(query,Boolean.TRUE);
         return new Result(activityTypeList);
 

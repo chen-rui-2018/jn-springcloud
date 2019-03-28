@@ -84,7 +84,7 @@
         ta.acti_order desc
     </select>
 
-    <select id="findActivitySuccessfulRegistration" resultType="com.jn.park.model.ActivityListApplyed">
+    <select id="findActivitySuccessfulRegistration" resultType="com.jn.park.model.ActivityListApply">
       select
         t1.id as "id"
         ,t1.acti_name as "actiName"

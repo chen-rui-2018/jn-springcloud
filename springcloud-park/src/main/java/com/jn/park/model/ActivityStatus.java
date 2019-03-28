@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 
 /**
  *
@@ -13,8 +14,8 @@ import javax.validation.constraints.Pattern;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivitySataus",description = "活动状态修改入参")
-public class ActivitySataus {
+@ApiModel(value = "ActivityStatus",description = "活动状态修改入参")
+public class ActivityStatus implements Serializable {
 
     @ApiModelProperty(value = "活动ID",required = true,example = "f5c95f9adf714aedab3739cbc9297178")
     @NotBlank(message = "活动id不能为空！")

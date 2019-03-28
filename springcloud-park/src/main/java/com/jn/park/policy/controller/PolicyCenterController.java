@@ -84,7 +84,7 @@ public class PolicyCenterController extends BaseController {
     @ControllerLog(doAction = "图解政策详情")
     @ApiOperation(value = "图解政策详情",notes = "获取图解政策数据的详情")
     @RequiresPermissions("/policy/policyCenterController/getPolicyDiagramDetails")
-    @RequestMapping(value = "/getPolicyDetails",method = RequestMethod.GET)
+    @RequestMapping(value = "/getPolicyDiagramDetails",method = RequestMethod.GET)
     public Result<PolicyDiagramDetailsVo> getPolicyDiagramDetails(@ApiParam(value = "政策id",required = true,example="xxx123")
                                                       @RequestParam("policyId") String policyId){
         Assert.notNull(policyId, PolicyCenterExceptionEnum.POLICY_ID_NOT_NULL.getMessage());

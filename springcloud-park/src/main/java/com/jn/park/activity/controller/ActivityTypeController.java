@@ -8,7 +8,7 @@ import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityType;
 import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeQuery;
+import com.jn.park.model.ActivityTypeParam;
 import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -60,8 +60,8 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "查询活动类型列表")
     @RequestMapping(value = "/findActivityTypeList",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/findActivityTypeList" )
-    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
-        PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
+    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody ActivityTypeParam activityTypeParam) {
+        PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeParam,Boolean.TRUE);
         return new Result<>(activityTypeList);
     }
 

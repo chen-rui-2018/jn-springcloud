@@ -5,7 +5,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.util.DateUtils;
 import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.TbParkLikeCriteria;
-import com.jn.park.comment.model.CommentAdd;
+import com.jn.park.comment.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
@@ -67,18 +67,18 @@ public class CommentServiceImplTest {
     /**
      * 新增评论的传值信息
      */
-    private CommentAdd commentAdd=new CommentAdd();
+    private CommentAddParam commentAddParam =new CommentAddParam();
 
     @Before
     public void setUp() throws Exception {
         //活动id/服务id
-        commentAdd.setRootId("4b761c29c00a49cdaa3c3d8d3bb0e440");
+        commentAddParam.setRootId("4b761c29c00a49cdaa3c3d8d3bb0e440");
         //类型: 0:活动点评   1:服务点评
-        commentAdd.setComType("0");
+        commentAddParam.setComType("0");
         //点评ID/活动ID
-        commentAdd.setpId("ecfaffb2d2b24bfaa9b368e5f508b1ff");
+        commentAddParam.setpId("ecfaffb2d2b24bfaa9b368e5f508b1ff");
         //评论内容
-        commentAdd.setComContent("测试评论的新增评论"+ DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
+        commentAddParam.setComContent("测试评论的新增评论"+ DateUtils.getDate("yyyy-MM-dd HH:mm:ss"));
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
@@ -95,7 +95,7 @@ public class CommentServiceImplTest {
     @Test
     public void commentActivity() {
         try {
-            commentService.commentActivity(commentAdd, account);
+            commentService.commentActivity(commentAddParam, account);
             assertThat(anything(),anything());
         } catch (Exception e) {
             logger.info("活动评论/回复失败");

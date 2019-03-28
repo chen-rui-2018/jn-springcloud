@@ -86,11 +86,11 @@ public class AcitvityTest {
 
     @Test
     public void updateActivityApply(){
-        ActivitySataus activitySataus = new ActivitySataus();
-        activitySataus.setActivityId(activityId);
-        activitySataus.setActiStatus(status);
+        ActivityStatus activityStatus = new ActivityStatus();
+        activityStatus.setActivityId(activityId);
+        activityStatus.setActiStatus(status);
         try{
-            int i = activityService.updateActivityApply(activitySataus);
+            int i = activityService.updateActivityApply(activityStatus);
             assertThat(i,is(1));
         }catch (JnSpringCloudException e){
             logger.warn("活动数据状态错误");

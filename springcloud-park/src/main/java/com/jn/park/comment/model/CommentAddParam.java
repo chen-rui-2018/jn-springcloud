@@ -14,17 +14,17 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "ApplyUserInfo", description = "新增评论的传值信息")
-public class CommentAdd implements Serializable {
-    @ApiModelProperty(value = "活动id/服务id")
+@ApiModel(value = "CommentAddParam", description = "评论的传值信息")
+public class CommentAddParam implements Serializable {
+    @ApiModelProperty(value = "根id(活动id/服务id/话题id)",example="xxx1234")
     private String rootId;
-    @ApiModelProperty(value = "点评ID/活动ID")
+    @ApiModelProperty(value = "点评父id(可以是根id,可以是被评论的评论id)",example = "xxx5678")
     private String pId;
-    @ApiModelProperty(value = "类型")
-    @Pattern(regexp="^[0-1]$",message="{comType:'类型只能是0(活动点评)和1(服务点评)'}")
+    @ApiModelProperty(value = "类型(0-9的数值,0：活动点评，1：服务点评，2：话题点评 ，3：其他点评)",example="0")
+    @Pattern(regexp="^[0-9]$",message="{comType:'类型只能是0：活动点评，1：服务点评，2：话题点评 ，3：其他点评 ...'}")
     private String comType;
-    @ApiModelProperty(value = "评论内容")
-    @Size(max=512)
+    @ApiModelProperty(value = "评论内容",example = "xxx评论")
+    @Size(max=512,message="评论内容不能超过520个字")
     private String comContent;
 
     private static final long serialVersionUID = 1L;

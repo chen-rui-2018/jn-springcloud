@@ -5,7 +5,7 @@ package com.jn.park.activity.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.model.ActivityType;
 import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeQuery;
+import com.jn.park.model.ActivityTypeParam;
 import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.model.User;
 
@@ -31,11 +31,11 @@ public interface ActivityTypeService {
 
     /**
      *  查询活动类型列表
-     * @param activityTypeQuery
+     * @param activityTypeParam
      * @param isPage
      * @return
      */
-    PaginationData<List<ActivityType>> findActivityTypeListByState(ActivityTypeQuery activityTypeQuery, boolean isPage);
+    PaginationData<List<ActivityType>> findActivityTypeListByState(ActivityTypeParam activityTypeParam, boolean isPage);
 
     /**
      * 根据活动类型id(typeId) 获取当前活动类型内容

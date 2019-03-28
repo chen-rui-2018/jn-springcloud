@@ -20,7 +20,7 @@ public class FinanceExpensesHistoryPageModel extends Page implements Serializabl
     private static final long serialVersionUID = -1964455345534916201L;
     @ApiModelProperty(value = "部门ID", example = "281f4005-0363-4528-92a3-60a730532e53")
     private String  departmentId;
-    @ApiModelProperty(value = "流水号",example = "5625239304")
+    @ApiModelProperty(value = "流水号",example = "JFXXXXXXXX001")
     private String  costId;
     @ApiModelProperty(value = "开始时间YYYYMM" ,example = "201901")
     private String  startTime;
@@ -35,7 +35,7 @@ public class FinanceExpensesHistoryPageModel extends Page implements Serializabl
     private String  startMonth;
     @ApiModelProperty(value = "操作日期-结束时间YYYYMM",example = "201912")
     private String  endMonth;
-    @ApiModelProperty(value = "排序字段  排序方式",example = "cost_happend_time desc")
+    @ApiModelProperty(value = "排序字段(空格隔开)desc/asc,(cost_happend_time:费用发生时间/cost:费用金额/cost_id:费用流水号/excel_id:批次号)默认cost_happend_time desc",example = "cost_happend_time desc")
     private String  orderByClause;
 
     public String getOrderByClause() {

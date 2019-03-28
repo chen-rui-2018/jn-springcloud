@@ -20,7 +20,7 @@ public class FinanceBudgetHistoryModel implements Serializable {
     private static final long serialVersionUID = -5422189870286665253L;
 
     @ApiModelProperty(value = "费用类型ID",example = "1")
-    private Integer costTypeId;
+    private String costTypeId;
 
     @ApiModelProperty(value="费用类型名称",example = "差旅支出")
     private String costTypeName;
@@ -43,11 +43,11 @@ public class FinanceBudgetHistoryModel implements Serializable {
     @ApiModelProperty("创建者账号")
     private String creatorAccount;
 
-    public Integer getCostTypeId() {
+    public String getCostTypeId() {
         return costTypeId;
     }
 
-    public void setCostTypeId(Integer costTypeId) {
+    public void setCostTypeId(String costTypeId) {
         this.costTypeId = costTypeId;
     }
 

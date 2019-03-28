@@ -33,7 +33,7 @@ public class FinanceExpensesPageModel extends Page implements Serializable {
     private String  startMonth;
     @ApiModelProperty(value = "操作日期-结束时间YYYYMM",example = "201912")
     private String  endMonth;
-    @ApiModelProperty(value = "排序字段 排序方式",example = "cost_happend_time desc")
+    @ApiModelProperty(value = "排序字段(空格隔开)desc/asc(cost_happend_time:费用发生时间/cost:费用金额/modified_time:操作日期)默认cost_happend_time desc",example = "cost_happend_time desc")
     private String  orderByClause;
 
     public String getOrderByClause() {

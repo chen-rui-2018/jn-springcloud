@@ -7,7 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.ActivityPagingParam;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -60,7 +60,7 @@ public class ActivityDetailsController extends BaseController {
     @ControllerLog(doAction = "获取评论信息")
     @ApiOperation(value = "获取评论信息")
     @RequestMapping(value = "/guest/getCommentInfo",method = RequestMethod.POST)
-    public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody  ActivityQueryPaging activityQueryPaging){
+    public Result<PaginationData<List<Comment>>> getCommentInfo(@RequestBody ActivityPagingParam activityPagingParam){
         //获取当前登录用户
         User loginUser=(User) SecurityUtils.getSubject().getPrincipal();
         if(loginUser==null || loginUser.getAccount()==null){
@@ -70,7 +70,7 @@ public class ActivityDetailsController extends BaseController {
             logger.warn("获取评论信息接口获取当前登录用户失败");
             return result;
         }
-        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,loginUser.getAccount(),Boolean.TRUE);
+        PaginationData<List<Comment>> commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,loginUser.getAccount(),Boolean.TRUE);
         return new Result<>(commentInfo);
     }
 }

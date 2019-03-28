@@ -6,7 +6,6 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.activity.dao.ActivityDetailsMapper;
@@ -29,7 +28,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.jn.park.parkcode.entity.TbParkCode;
 import com.jn.park.parkcode.service.ParkCodeService;
 
 import java.text.ParseException;
@@ -136,11 +134,11 @@ public class ActivityServiceImpl implements ActivityService {
 
     @ServiceLog(doAction = "修改活动报名状态")
     @Override
-    public int updateActivityApply(ActivitySataus activitySataus) {
-        if (StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activitySataus.getActiStatus(), ACTIVITY_STATE_TRUE)) {
+    public int updateActivityApply(ActivityStatus activityStatus) {
+        if (StringUtils.equals(activityStatus.getActiStatus(), ACTIVITY_STATE_FALSE) || StringUtils.equals(activityStatus.getActiStatus(), ACTIVITY_STATE_TRUE)) {
             TbActivity activity = new TbActivity();
-            activity.setId(activitySataus.getActivityId());
-            activity.setIsApply(activitySataus.getActiStatus());
+            activity.setId(activityStatus.getActivityId());
+            activity.setIsApply(activityStatus.getActiStatus());
             int i = tbActivityMapper.updateByPrimaryKeySelective(activity);
             if (i == 1) {
                 return i;
@@ -502,14 +500,14 @@ public class ActivityServiceImpl implements ActivityService {
      */
     @ServiceLog(doAction = "查看用户报名的活动列表")
     @Override
-    public PaginationData findActivitySuccessfulRegistration(ActivityApplyedListQuery query, Boolean needPage) {
+    public PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage) {
         int pageSize = query.getRows() == 0 ? 15 : query.getRows();
         int pageNumber = query.getPage();
         Page<Object> objects = null;
         if(needPage){
             objects = PageHelper.startPage(pageNumber,pageSize,true);
         }
-        List<ActivityListApplyed> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus());
+        List<ActivityListApply> activityList = activityMapper.findActivitySuccessfulRegistration(query.getAccount(),query.getApplyStatus());
 
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }

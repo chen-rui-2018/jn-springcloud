@@ -18,6 +18,10 @@ public class TbPolicy implements Serializable {
 
     private String policyType;
 
+    private String policyDiagramUrl;
+
+    private String thematicType;
+
     private String policyTitle;
 
     private Integer readNum;
@@ -106,6 +110,22 @@ public class TbPolicy implements Serializable {
 
     public void setPolicyType(String policyType) {
         this.policyType = policyType == null ? null : policyType.trim();
+    }
+
+    public String getPolicyDiagramUrl() {
+        return policyDiagramUrl;
+    }
+
+    public void setPolicyDiagramUrl(String policyDiagramUrl) {
+        this.policyDiagramUrl = policyDiagramUrl == null ? null : policyDiagramUrl.trim();
+    }
+
+    public String getThematicType() {
+        return thematicType;
+    }
+
+    public void setThematicType(String thematicType) {
+        this.thematicType = thematicType == null ? null : thematicType.trim();
     }
 
     public String getPolicyTitle() {
@@ -255,6 +275,8 @@ public class TbPolicy implements Serializable {
             && (this.getPolicyClassCode() == null ? other.getPolicyClassCode() == null : this.getPolicyClassCode().equals(other.getPolicyClassCode()))
             && (this.getPolicyClassName() == null ? other.getPolicyClassName() == null : this.getPolicyClassName().equals(other.getPolicyClassName()))
             && (this.getPolicyType() == null ? other.getPolicyType() == null : this.getPolicyType().equals(other.getPolicyType()))
+            && (this.getPolicyDiagramUrl() == null ? other.getPolicyDiagramUrl() == null : this.getPolicyDiagramUrl().equals(other.getPolicyDiagramUrl()))
+            && (this.getThematicType() == null ? other.getThematicType() == null : this.getThematicType().equals(other.getThematicType()))
             && (this.getPolicyTitle() == null ? other.getPolicyTitle() == null : this.getPolicyTitle().equals(other.getPolicyTitle()))
             && (this.getReadNum() == null ? other.getReadNum() == null : this.getReadNum().equals(other.getReadNum()))
             && (this.getReleaseDate() == null ? other.getReleaseDate() == null : this.getReleaseDate().equals(other.getReleaseDate()))
@@ -284,6 +306,8 @@ public class TbPolicy implements Serializable {
         result = prime * result + ((getPolicyClassCode() == null) ? 0 : getPolicyClassCode().hashCode());
         result = prime * result + ((getPolicyClassName() == null) ? 0 : getPolicyClassName().hashCode());
         result = prime * result + ((getPolicyType() == null) ? 0 : getPolicyType().hashCode());
+        result = prime * result + ((getPolicyDiagramUrl() == null) ? 0 : getPolicyDiagramUrl().hashCode());
+        result = prime * result + ((getThematicType() == null) ? 0 : getThematicType().hashCode());
         result = prime * result + ((getPolicyTitle() == null) ? 0 : getPolicyTitle().hashCode());
         result = prime * result + ((getReadNum() == null) ? 0 : getReadNum().hashCode());
         result = prime * result + ((getReleaseDate() == null) ? 0 : getReleaseDate().hashCode());
@@ -316,6 +340,8 @@ public class TbPolicy implements Serializable {
         sb.append(", policyClassCode=").append(policyClassCode);
         sb.append(", policyClassName=").append(policyClassName);
         sb.append(", policyType=").append(policyType);
+        sb.append(", policyDiagramUrl=").append(policyDiagramUrl);
+        sb.append(", thematicType=").append(thematicType);
         sb.append(", policyTitle=").append(policyTitle);
         sb.append(", readNum=").append(readNum);
         sb.append(", releaseDate=").append(releaseDate);

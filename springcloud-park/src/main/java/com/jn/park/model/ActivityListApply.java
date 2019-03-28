@@ -14,8 +14,8 @@ import java.util.Date;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityListApplyed" ,description = "用户已报名的活动列表")
-public class ActivityListApplyed implements Serializable {
+@ApiModel(value = "ActivityListApply" ,description = "用户已报名的活动列表")
+public class ActivityListApply implements Serializable {
     @ApiModelProperty(value = "活动ID")
     private String id;
     @ApiModelProperty(value = "活动名称")

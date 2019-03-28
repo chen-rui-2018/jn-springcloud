@@ -30,6 +30,7 @@ public class AdvisorDetailsVo implements Serializable {
     private List<ServiceProjectExperience> serviceProjectExperienceList;
     @ApiModelProperty(value = "服务评价)")
     private List<ServiceRating> serviceRatingList;
+    @ApiModelProperty(value = "服务产品列表")
     private List<AdvisorProductInfo> advisorProductInfoList;
     @ApiModelProperty(value = "好评数")
     private int praiseNum;

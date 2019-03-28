@@ -595,6 +595,146 @@ public class TbPolicyCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andPolicyDiagramUrlIsNull() {
+            addCriterion("policy_diagram_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlIsNotNull() {
+            addCriterion("policy_diagram_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlEqualTo(String value) {
+            addCriterion("policy_diagram_url =", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlNotEqualTo(String value) {
+            addCriterion("policy_diagram_url <>", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlGreaterThan(String value) {
+            addCriterion("policy_diagram_url >", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("policy_diagram_url >=", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlLessThan(String value) {
+            addCriterion("policy_diagram_url <", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlLessThanOrEqualTo(String value) {
+            addCriterion("policy_diagram_url <=", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlLike(String value) {
+            addCriterion("policy_diagram_url like", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlNotLike(String value) {
+            addCriterion("policy_diagram_url not like", value, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlIn(List<String> values) {
+            addCriterion("policy_diagram_url in", values, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlNotIn(List<String> values) {
+            addCriterion("policy_diagram_url not in", values, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlBetween(String value1, String value2) {
+            addCriterion("policy_diagram_url between", value1, value2, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andPolicyDiagramUrlNotBetween(String value1, String value2) {
+            addCriterion("policy_diagram_url not between", value1, value2, "policyDiagramUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeIsNull() {
+            addCriterion("thematic_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeIsNotNull() {
+            addCriterion("thematic_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeEqualTo(String value) {
+            addCriterion("thematic_type =", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeNotEqualTo(String value) {
+            addCriterion("thematic_type <>", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeGreaterThan(String value) {
+            addCriterion("thematic_type >", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("thematic_type >=", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeLessThan(String value) {
+            addCriterion("thematic_type <", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeLessThanOrEqualTo(String value) {
+            addCriterion("thematic_type <=", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeLike(String value) {
+            addCriterion("thematic_type like", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeNotLike(String value) {
+            addCriterion("thematic_type not like", value, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeIn(List<String> values) {
+            addCriterion("thematic_type in", values, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeNotIn(List<String> values) {
+            addCriterion("thematic_type not in", values, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeBetween(String value1, String value2) {
+            addCriterion("thematic_type between", value1, value2, "thematicType");
+            return (Criteria) this;
+        }
+
+        public Criteria andThematicTypeNotBetween(String value1, String value2) {
+            addCriterion("thematic_type not between", value1, value2, "thematicType");
+            return (Criteria) this;
+        }
+
         public Criteria andPolicyTitleIsNull() {
             addCriterion("policy_title is null");
             return (Criteria) this;

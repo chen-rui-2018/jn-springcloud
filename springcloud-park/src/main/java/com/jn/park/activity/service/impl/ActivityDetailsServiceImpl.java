@@ -15,7 +15,7 @@ import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
 import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.ActivityPagingParam;
 import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
@@ -166,30 +166,30 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage     是否分页  true：分页   false:不分页
      * @param loginAccount  当前登录用户
      * @return
      */
     @ServiceLog(doAction = "获取活动点评信息")
     @Override
-    public PaginationData<List<Comment>> getCommentInfo(ActivityQueryPaging activityQueryPaging,String loginAccount, Boolean isPage){
+    public PaginationData<List<Comment>> getCommentInfo(ActivityPagingParam activityPagingParam, String loginAccount, Boolean isPage){
         Page<Object> objects=null;
         try {
             if(isPage){
                 //默认查询前15条
-                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 :activityQueryPaging.getRows(), true);
+                objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
             }
             //获取第一层级评论
             List<String>parentIds=new ArrayList<>(16);
-            parentIds.add(activityQueryPaging.getActivityId());
-            List<Comment>list=activityDetailsMapper.getCommentInfo(activityQueryPaging.getActivityId(),parentIds,loginAccount);
+            parentIds.add(activityPagingParam.getActivityId());
+            List<Comment>list=activityDetailsMapper.getCommentInfo(activityPagingParam.getActivityId(),parentIds,loginAccount);
             if(list.isEmpty()){
                 return new PaginationData(list,objects==null?0:objects.getTotal());
             }
             //获取评论用户头像信息
             getCommentUserAvatar(list);
-            list= getCommentChildComment(list,activityQueryPaging.getActivityId(),loginAccount);
+            list= getCommentChildComment(list, activityPagingParam.getActivityId(),loginAccount);
             return new PaginationData<>(list,objects==null?0:objects.getTotal());
         } finally {
             if(objects!=null){

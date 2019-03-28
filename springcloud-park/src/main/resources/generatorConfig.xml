@@ -161,7 +161,8 @@
     </javaClientGenerator>
     <table tableName="tb_comment">
     </table>
-
+    <table tableName="tb_comment_sensitive_word">
+    </table>
   </context>
 
   <!--评论-->

@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history', // require service support 去掉url中的#
   routes: [
     {
       path: '/',
@@ -33,7 +34,7 @@ export default new Router({
       path: '/user',
       component: resolve => require(['@/views/home'],resolve),
       meta: {title: '用户中心'},
-      
+
       children:[
         {
         path:'/user/userHome',

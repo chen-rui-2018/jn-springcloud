@@ -71,10 +71,10 @@ export const constantRouterMap = [
   {
     path: '',
     component: Layout,
-    redirect: 'dashboard',
+    redirect: '/',
     children: [
       {
-        path: 'dashboard',
+        path: '/',
         component: () => import('@/views/dashboard/index'),
         name: '工作台',
         meta: { title: '工作台', icon: 'dashboard', noCache: true }
@@ -116,7 +116,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support 去掉url中的#
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })

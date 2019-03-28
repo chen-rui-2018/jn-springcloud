@@ -108,7 +108,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
     }
 
     /**
-     * 政策中心首页--政策一览
+     * 政策中心首页
      * @param policyCenterHomeParam
      * @return
      */
@@ -132,6 +132,9 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }else if(PolicyTableTypeEnum.PRIVATE_TOPIC.getCode().equals(policyCenterHomeParam.getTableType())){
             //民营专题
             thematicType="1";
+        }else{
+            logger.warn("政策中心首页的table类型在系统中不存在");
+            throw new JnSpringCloudException(PolicyCenterExceptionEnum.TABLE_TYPE_IS_NOT_EXIST);
         }
         //非政策一览table页，政策级别，政策分类，发布时间，政策检索等查询条件全部清空
         if(!PolicyTableTypeEnum.ALL_POLICY.getCode().equals(policyCenterHomeParam.getTableType())){

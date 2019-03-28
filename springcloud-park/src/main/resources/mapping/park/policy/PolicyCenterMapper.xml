@@ -36,23 +36,23 @@
         and sp.record_status='1'
         and sp.status='1'
         <if test="policyCenterHomeParam.policyLevelCode != null and policyCenterHomeParam.policyLevelCode != ''">
-            and sp.policy_level_code=#{policyLevelCode}
+            and sp.policy_level_code=#{policyCenterHomeParam.policyLevelCode}
         </if>
         <if test="policyCenterHomeParam.policyClassCode != null and policyCenterHomeParam.policyClassCode != ''">
-            and sp.policy_class_code=#{policyClassCode}
+            and sp.policy_class_code=#{policyCenterHomeParam.policyClassCode}
         </if>
         <if test="policyCenterHomeParam.policyType != null and policyCenterHomeParam.policyType != ''">
-            and sp.policy_type=#{policyType}
+            and sp.policy_type=#{policyCenterHomeParam.policyType}
         </if>
 
         <if test="policyCenterHomeParam.releaseDate != null and policyCenterHomeParam.releaseDate != ''">
-            and date_format(sp.release_date,'%Y')=#{releaseDate}
+            and date_format(sp.release_date,'%Y')=#{policyCenterHomeParam.releaseDate}
         </if>
         <if test="policyCenterHomeParam.policySearch != null and policyCenterHomeParam.policySearch != ''">
-            and sp.policy_title like concat('%',#{policySearch},'%')
+            and sp.policy_title like concat('%',#{policyCenterHomeParam.policySearch},'%')
         </if>
         <if test="thematicType != null and thematicType != ''">
-            and sp.thematic_type =#{thematicType}
+            and sp.thematic_type =#{policyCenterHomeParam.thematicType}
         </if>
         order by sp.release_date desc
     </select>

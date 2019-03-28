@@ -16,6 +16,7 @@ public enum PolicyCenterExceptionEnum implements CodeAndMsg {
     POLICY_ID_NOT_NULL("4020504","政策id不能为空"),
     POLICY_DETAILS_NOT_EXIST("4020505","政策在系统中不存在或当前政策类型不是普通政策"),
     POLICY_DIAGRAM_DETAILS_NOT_EXIST("4020506","政策在系统中不存在或当前政策类型不是图解政策"),
+    TABLE_TYPE_IS_NOT_EXIST("4020507","table类型在系统中不存在"),
     ;
     /**
      * 编码

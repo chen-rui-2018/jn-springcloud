@@ -14,7 +14,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "PolicyClassShow",description = "政策中心首页入参")
+@ApiModel(value = "PolicyCenterHomeParam",description = "政策中心首页入参")
 public class PolicyCenterHomeParam extends Page implements Serializable {
     @ApiModelProperty(value = "table类型(allPolicy:政策一览  diagramPolicy:图解政策  firstTopic:一号专题   privateTopic：民营专题)",required = true,example = "allPolicy")
     @NotNull(message="table类型不能为空")

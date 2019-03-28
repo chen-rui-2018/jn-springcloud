@@ -3,26 +3,25 @@ package com.jn.park.policy.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.park.enums.PolicyCenterExceptionEnum;
 import com.jn.park.policy.dao.PolicyCenterMapper;
 import com.jn.park.policy.dao.TbPolicyClassMapper;
 import com.jn.park.policy.dao.TbPolicyLevelMapper;
-import com.jn.park.policy.entity.TbPolicyClass;
-import com.jn.park.policy.entity.TbPolicyClassCriteria;
-import com.jn.park.policy.entity.TbPolicyLevel;
-import com.jn.park.policy.entity.TbPolicyLevelCriteria;
+import com.jn.park.policy.dao.TbPolicyMapper;
+import com.jn.park.policy.entity.*;
 import com.jn.park.policy.enums.PolicyTableTypeEnum;
-import com.jn.park.policy.model.PolicyCenterHomeParam;
-import com.jn.park.policy.model.PolicyCenterHomeShow;
-import com.jn.park.policy.model.PolicyClassShow;
-import com.jn.park.policy.model.PolicyLevelShow;
+import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
+import com.jn.park.policy.vo.PolicyDiagramDetailsVo;
 import com.jn.system.log.annotation.ServiceLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +44,8 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
      */
     private static final byte RECORD_STATUS=1;
 
+    @Autowired
+    private TbPolicyMapper tbPolicyMapper;
 
     @Autowired
     private TbPolicyLevelMapper tbPolicyLevelMapper;
@@ -55,6 +56,7 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
     @Autowired
     private PolicyCenterMapper policyCenterMapper;
 
+    private static final String  PATTERN="yyyy-MM-dd HH:mm:ss";
 
 
     /**
@@ -161,5 +163,96 @@ public class PolicyCenterServiceImpl implements PolicyCenterService {
         }
         List<PolicyCenterHomeShow> investorInfoList = policyCenterMapper.getPolicyCenterList(policyCenterHomeParam,thematicType);
         return new PaginationData(investorInfoList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 政策指南详情
+     * @param policyId  政策id
+     * @return
+     */
+    @ServiceLog(doAction = "政策指南详情")
+    @Override
+    public PolicyDetailsShow getPolicyDetails(String policyId) {
+        //判断当前政策id在系统中是否存在，且政策类型是普通政策
+        String policyType="0";
+        TbPolicyCriteria example = getTbPolicyCriteria(policyId, policyType);
+        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExample(example);
+        //没有数据
+        if(tbPolicyList.isEmpty()){
+            logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是普通政策]");
+            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_DETAILS_NOT_EXIST);
+        }
+        //根据政策id查询详情
+        PolicyDetailsShow policyDetails = policyCenterMapper.getPolicyDetails(policyId);
+        updatePolicyReadNum(example, tbPolicyList.get(0).getReadNum());
+        return policyDetails;
+    }
+
+    /**
+     * 更新阅读次数
+     * @param example
+     * @param oldReadNum
+     */
+    private void updatePolicyReadNum(TbPolicyCriteria example, int oldReadNum) {
+        //更新阅读次数
+        TbPolicy tbPolicy=new TbPolicy();
+        tbPolicy.setReadNum(oldReadNum+1);
+        tbPolicyMapper.updateByExampleSelective(tbPolicy, example);
+    }
+
+    /**
+     * 获取政策详情查询条件
+     * @param policyId  政策id
+     * @param policyType   政策类型
+     * @return
+     */
+    @ServiceLog(doAction = "获取政策详情查询条件")
+    private TbPolicyCriteria getTbPolicyCriteria(String policyId, String policyType) {
+        TbPolicyCriteria example = new TbPolicyCriteria();
+        //根据政策id，有效状态（status="1"）,政策类型为普通政策（policyType="0"）,是否删除（recordStatus="1"）来判断
+        example.createCriteria().andPolicyIdEqualTo(policyId).andStatusEqualTo("1")
+                .andPolicyTypeEqualTo(policyType).andRecordStatusEqualTo(RECORD_STATUS);
+        return example;
+    }
+
+    /**
+     * 图解政策详情
+     * @param policyId 政策id
+     * @return
+     */
+    @ServiceLog(doAction = "图解政策详情")
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public PolicyDiagramDetailsVo getPolicyDiagramDetails(String policyId) {
+        //判断当前政策id在系统中是否存在，且政策类型是图解政策
+        String policyType="1";
+        TbPolicyCriteria example = getTbPolicyCriteria(policyId, policyType);
+        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExample(example);
+        //没有数据
+        if(tbPolicyList.isEmpty()){
+            logger.warn("政策id为[{}的政策在系统中不存在或当前政策类型不是图解政策]");
+            throw new JnSpringCloudException(PolicyCenterExceptionEnum.POLICY_DIAGRAM_DETAILS_NOT_EXIST);
+        }
+        TbPolicy tbPolicy = tbPolicyList.get(0);
+        //设置图解政策前端展示字段的值
+        PolicyDiagramDetailsVo policyDiagramDetailsVo=new PolicyDiagramDetailsVo();
+        BeanUtils.copyProperties(tbPolicy, policyDiagramDetailsVo);
+        //发布日期
+        policyDiagramDetailsVo.setReleaseDate(DateUtils.formatDate(tbPolicyList.get(0).getReleaseDate(),PATTERN));
+        //更新阅读次数
+        updatePolicyReadNum(example,tbPolicy.getReadNum());
+        //有无关联政策原文  0：无  1：有
+        String isPolicyOriginal="1";
+        if(isPolicyOriginal.equals(tbPolicy.getIsPolicyOriginal())){
+            //设置政策原文
+            String relationPolicyOriginalId = tbPolicy.getRelationPolicyOriginalId();
+            policyType="0";
+            example = getTbPolicyCriteria(policyId, policyType);
+            long existNum = tbPolicyMapper.countByExample(example);
+            if(existNum>0){
+                policyDiagramDetailsVo.setPolicyDetailsShow(getPolicyDetails(relationPolicyOriginalId));
+            }
+        }
+        return policyDiagramDetailsVo;
     }
 }

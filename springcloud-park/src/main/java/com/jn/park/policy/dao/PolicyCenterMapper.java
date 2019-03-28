@@ -2,6 +2,7 @@ package com.jn.park.policy.dao;
 
 import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.model.PolicyCenterHomeShow;
+import com.jn.park.policy.model.PolicyDetailsShow;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,4 +23,12 @@ public interface PolicyCenterMapper {
      * @return
      */
     List<PolicyCenterHomeShow> getPolicyCenterList(@Param("policyCenterHomeParam")PolicyCenterHomeParam policyCenterHomeParam, @Param("thematicType") String thematicType);
+
+    /**
+     * 政策指南详情
+     * @param policyId 政策id
+     * @return
+     */
+    PolicyDetailsShow getPolicyDetails(@Param("policyId") String policyId);
+
 }

@@ -11,11 +11,7 @@
           ,sp.policy_level_name as "policyLevelName"            <!--政策级别名称-->
           ,sp.policy_class_code as "policyClassCode"            <!--政策分类编码-->
           ,sp.policy_class_name as "policyClassName"            <!--政策分类名称-->
-          ,case sp.policy_type
-            when 0 then "普通政策"
-            when 1 then "图解政策"
-            else "未知"
-          end as  "policyType"                                  <!--政策类型-->
+          ,sp.policy_type as  "policyType"                      <!--政策类型-->
           ,sp.policy_diagram_url as "policyDiagramUrl"          <!--图解政策url-->
           ,sp.thematic_type as "thematicType"                   <!--专题类型-->
           ,sp.policy_title as "policyTitle"                     <!--政策标题-->
@@ -30,7 +26,9 @@
            else null
             end as "briefContent"                               <!--简要内容-->
           ,sp.is_policy_diagram as "isPolicyDiagram"            <!--有无关联政策图解(0：无    1：有)-->
+          ,sp.relation_policy_diagram_id as "relationPolicyDiagramId"<!--关联的政策图解id-->
           ,sp.is_policy_original as "isPolicyOriginal"          <!--有无关联政策原文(0：无    1：有)-->
+          ,sp.relation_policy_original_id as "relationPolicyOriginalId" <!--关联的政策原文id-->
         from tb_policy sp
         left join tb_policy_details spd
         on sp.policy_id=spd.policy_id
@@ -56,6 +54,29 @@
         <if test="thematicType != null and thematicType != ''">
             and sp.thematic_type =#{thematicType}
         </if>
+        order by sp.release_date desc
     </select>
 
+    <!--政策指南详情-->
+    <select id="getPolicyDetails" resultType="com.jn.park.policy.model.PolicyDetailsShow">
+        select
+        sp.policy_id  as "policyId"                           <!--政策id-->
+        ,sp.policy_level_name as "policyLevelName"            <!--政策级别名称-->
+        ,sp.policy_class_name as "policyClassName"            <!--政策分类名称-->
+        ,sp.policy_title as "policyTitle"                     <!--政策标题-->
+        ,sp.read_num as "readNum"                             <!--阅读次数-->
+        ,date_format(sp.release_date,'%Y-%m-%d %H:%i:%s') as "releaseDate" <!--发布日期-->
+        ,sp.support_method as "supportMethod"                 <!--支持方式-->
+        ,sp.support_industry as "supportIndustry"             <!--支持产业-->
+        ,sp.issue_unit as "issueUnit"                         <!--发文单位-->
+        ,spd.policy_content as "policyContent"                <!--政策内容-->
+        from tb_policy sp
+        left join tb_policy_details spd
+        on sp.policy_id=spd.policy_id
+        where 1=1
+        and sp.status='1'
+        and sp.record_status='1'
+        and sp.policy_id=#{policyId}
+        order by sp.release_date desc
+    </select>
 </mapper>

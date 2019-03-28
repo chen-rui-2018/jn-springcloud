@@ -3,7 +3,9 @@ package com.jn.park.policy.service;
 import com.jn.common.model.PaginationData;
 import com.jn.park.policy.model.PolicyCenterHomeParam;
 import com.jn.park.policy.model.PolicyClassShow;
+import com.jn.park.policy.model.PolicyDetailsShow;
 import com.jn.park.policy.model.PolicyLevelShow;
+import com.jn.park.policy.vo.PolicyDiagramDetailsVo;
 
 import java.util.List;
 
@@ -32,4 +34,18 @@ public interface PolicyCenterService {
      * @return
      */
     PaginationData getPolicyCenterList(PolicyCenterHomeParam policyCenterHomeParam);
+
+    /**
+     * 政策指南详情
+     * @param policyId  政策id
+     * @return
+     */
+    PolicyDetailsShow getPolicyDetails(String policyId);
+
+    /**
+     * 图解政策详情
+     * @param policyId 政策id
+     * @return
+     */
+    PolicyDiagramDetailsVo getPolicyDiagramDetails(String policyId);
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "PolicyClassShow",description = "政策中心首页出参")
+@ApiModel(value = "PolicyCenterHomeShow",description = "政策中心首页出参")
 public class PolicyCenterHomeShow implements Serializable {
     @ApiModelProperty(value = "政策id")
     private String policyId;
@@ -27,7 +27,7 @@ public class PolicyCenterHomeShow implements Serializable {
     private String policyClassName;
     @ApiModelProperty(value = "政策类型(0：普通政策  1：图解政策)")
     private String policyType;
-    @ApiModelProperty(value = "图解政策url")
+    @ApiModelProperty(value = "图解政策url(政策类型为普通政策时值为空，为图解政策时有值)")
     private String policyDiagramUrl;
     @ApiModelProperty(value = "专题类型(0：一号专题   1：民营专题)")
     private String thematicType;
@@ -49,8 +49,12 @@ public class PolicyCenterHomeShow implements Serializable {
     private String briefContent;
     @ApiModelProperty(value = "有无关联政策图解(0:无  1:有)")
     private String isPolicyDiagram;
+    @ApiModelProperty(value = "关联的政策图解id")
+    private String relationPolicyDiagramId;
     @ApiModelProperty(value = "有无关联政策原文(0:无  1:有)")
     private String isPolicyOriginal;
+    @ApiModelProperty(value = "关联的政策原文id")
+    private String relationPolicyOriginalId;
 
     public String getPolicyId() {
         return policyId;
@@ -196,11 +200,54 @@ public class PolicyCenterHomeShow implements Serializable {
         this.isPolicyDiagram = isPolicyDiagram;
     }
 
+    public String getRelationPolicyDiagramId() {
+        return relationPolicyDiagramId;
+    }
+
+    public void setRelationPolicyDiagramId(String relationPolicyDiagramId) {
+        this.relationPolicyDiagramId = relationPolicyDiagramId;
+    }
+
     public String getIsPolicyOriginal() {
         return isPolicyOriginal;
     }
 
     public void setIsPolicyOriginal(String isPolicyOriginal) {
         this.isPolicyOriginal = isPolicyOriginal;
+    }
+
+    public String getRelationPolicyOriginalId() {
+        return relationPolicyOriginalId;
+    }
+
+    public void setRelationPolicyOriginalId(String relationPolicyOriginalId) {
+        this.relationPolicyOriginalId = relationPolicyOriginalId;
+    }
+
+    @Override
+    public String toString() {
+        return "PolicyCenterHomeShow{" +
+                "policyId='" + policyId + '\'' +
+                ", policyCode='" + policyCode + '\'' +
+                ", policyLevelCode='" + policyLevelCode + '\'' +
+                ", policyLevelName='" + policyLevelName + '\'' +
+                ", policyClassCode='" + policyClassCode + '\'' +
+                ", policyClassName='" + policyClassName + '\'' +
+                ", policyType='" + policyType + '\'' +
+                ", policyDiagramUrl='" + policyDiagramUrl + '\'' +
+                ", thematicType='" + thematicType + '\'' +
+                ", policyTitle='" + policyTitle + '\'' +
+                ", readNum=" + readNum +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", status='" + status + '\'' +
+                ", supportMethod='" + supportMethod + '\'' +
+                ", supportIndustry='" + supportIndustry + '\'' +
+                ", issueUnit='" + issueUnit + '\'' +
+                ", briefContent='" + briefContent + '\'' +
+                ", isPolicyDiagram='" + isPolicyDiagram + '\'' +
+                ", relationPolicyDiagramId='" + relationPolicyDiagramId + '\'' +
+                ", isPolicyOriginal='" + isPolicyOriginal + '\'' +
+                ", relationPolicyOriginalId='" + relationPolicyOriginalId + '\'' +
+                '}';
     }
 }

@@ -18,7 +18,7 @@ public class FileImg {
     @NotNull(message="图片地址不能为空")
     private String imgUrl;
 
-    @ApiModelProperty(value = "图片说明",notes = "可为空")
+    @ApiModelProperty(value = "图片说明[可为空]",notes = "可为空")
     private String imgRemark;
 
     public String getImgUrl() {

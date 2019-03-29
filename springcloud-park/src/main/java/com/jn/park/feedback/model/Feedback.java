@@ -20,11 +20,13 @@ public class Feedback {
     @NotNull(message="反馈类容不能为空")
     private String feedContent;
 
-    @ApiModelProperty(value = "类型ID",notes = "传园区字典表查询(条件为：userFeed)返回的codeValue字段。",required = true,example = "user_feed_001")
+    @ApiModelProperty(value = "类型ID[传园区字典表查询(条件为：userFeed)返回的codeValue字段]",
+            notes = "传园区字典表查询(条件为：userFeed)返回的codeValue字段。",required = true,example = "user_feed_001")
     @NotNull(message="类型ID不能为空")
     private String feedTypeId;
 
-    @ApiModelProperty(value = "类型名称",notes = "传园区字典表查询(条件为：userFeed)返回的codeName字段。",required = true,example = "功能异常")
+    @ApiModelProperty(value = "类型名称[传园区字典表查询(条件为：userFeed)返回的codeName字段]",
+            notes = "传园区字典表查询(条件为：userFeed)返回的codeName字段。",required = true,example = "功能异常")
     @NotNull(message="类型名称不能为空")
     private String feedTypeName;
 

@@ -19,10 +19,10 @@ public class FeedbackParam extends Page {
     @ApiModelProperty(value = "反馈类容", example = "有bug")
     private String feedContent;
 
-    @ApiModelProperty(value = "类型ID", notes = "传园区字典表查询(条件为：userFeed)返回的codeValue字段。", example = "user_feed_001")
+    @ApiModelProperty(value = "类型ID[传园区字典表查询(条件为：userFeed)返回的codeValue字段]", notes = "传园区字典表查询(条件为：userFeed)返回的codeValue字段。", example = "user_feed_001")
     private String feedTypeId;
 
-    @ApiModelProperty(value = "类型名称", notes = "传园区字典表查询(条件为：userFeed)返回的codeName字段。", example = "功能异常")
+    @ApiModelProperty(value = "类型名称[传园区字典表查询(条件为：userFeed)返回的codeName字段]", notes = "传园区字典表查询(条件为：userFeed)返回的codeName字段。", example = "功能异常")
     private String feedTypeName;
 
     public String getFeedContent() {

@@ -25,7 +25,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "编辑顾问资料,(app顾问认证)")
+@Api(tags = "服务超市-编辑顾问资料,(app顾问认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorEditController")
 public class AdvisorEditController extends BaseController {

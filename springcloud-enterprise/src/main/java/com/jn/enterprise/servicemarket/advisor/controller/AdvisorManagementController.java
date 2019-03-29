@@ -35,7 +35,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "顾问管理(web+手机)")
+@Api(tags = "服务超市-顾问管理(web+手机)")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorManagementController")
 public class AdvisorManagementController extends BaseController {

@@ -30,7 +30,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务顾问")
+@Api(tags = "服务超市-服务顾问")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/advisorController")
 public class AdvisorController extends BaseController {

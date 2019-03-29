@@ -33,7 +33,7 @@ import java.util.UUID;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "金融产品")
+@Api(tags = "科技金融-金融产品")
 @RestController
 @RequestMapping(value = "/technologyFinancial/financialProductController")
 public class FinancialProductController extends BaseController {

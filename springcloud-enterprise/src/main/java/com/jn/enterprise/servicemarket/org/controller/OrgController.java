@@ -37,7 +37,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务机构(前台用户)")
+@Api(tags = "服务超市-服务机构(前台用户)")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/org")
 public class OrgController extends BaseController {

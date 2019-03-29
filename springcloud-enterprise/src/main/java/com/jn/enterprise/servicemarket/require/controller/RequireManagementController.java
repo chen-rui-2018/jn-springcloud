@@ -28,7 +28,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "需求管理")
+@Api(tags = "服务超市-需求管理")
 @RestController
 @RequestMapping(value = "/serviceMarket/requireManagementController")
 public class RequireManagementController extends BaseController {

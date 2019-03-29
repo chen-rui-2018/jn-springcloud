@@ -32,7 +32,7 @@ import java.util.UUID;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "(非科技金融)前台服务产品接口,(包含app接口)")
+@Api(tags = "服务超市-前台服务产品接口")
 @RestController
 @RequestMapping(value = "/servicemarket/product/web/")
 public class ServiceProductWebController  extends BaseController {

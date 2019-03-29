@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务机构管理,(app机构认证)")
+@Api(tags = "服务超市-服务机构管理,(app机构认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/org")
 public class OrgManageController extends BaseController {

@@ -22,7 +22,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "机构字典[业务领域 行业领域 发展阶段 企业性质]")
+@Api(tags = "服务超市-机构字典[业务领域 行业领域 发展阶段 企业性质]")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/industryManage")
 public class IndustryController {

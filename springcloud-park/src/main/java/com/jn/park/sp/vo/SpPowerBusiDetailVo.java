@@ -52,5 +52,95 @@ public class SpPowerBusiDetailVo extends SpPowerBusiModel implements Serializabl
     @ApiModelProperty("创建时间")
     private Date createdTime;
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
+    public List<SpPowerBusiMaterialsModel> getMaterialsModelList() {
+        return materialsModelList;
+    }
+
+    public void setMaterialsModelList(List<SpPowerBusiMaterialsModel> materialsModelList) {
+        this.materialsModelList = materialsModelList;
+    }
+
+    public String getDealTime() {
+        return dealTime;
+    }
+
+    public void setDealTime(String dealTime) {
+        this.dealTime = dealTime;
+    }
+
+    public String getDealAddress() {
+        return dealAddress;
+    }
+
+    public void setDealAddress(String dealAddress) {
+        this.dealAddress = dealAddress;
+    }
+
+    public String getDealUrl() {
+        return dealUrl;
+    }
+
+    public void setDealUrl(String dealUrl) {
+        this.dealUrl = dealUrl;
+    }
+
+    public String getLinkPhone() {
+        return linkPhone;
+    }
+
+    public void setLinkPhone(String linkPhone) {
+        this.linkPhone = linkPhone;
+    }
+
+    public Byte getDealLimitDays() {
+        return dealLimitDays;
+    }
+
+    public void setDealLimitDays(Byte dealLimitDays) {
+        this.dealLimitDays = dealLimitDays;
+    }
+
+    public String getFlowPic() {
+        return flowPic;
+    }
+
+    public void setFlowPic(String flowPic) {
+        this.flowPic = flowPic;
+    }
+
+    public String getFeeStandard() {
+        return feeStandard;
+    }
+
+    public void setFeeStandard(String feeStandard) {
+        this.feeStandard = feeStandard;
+    }
+
+    public Byte getRecordStatus() {
+        return recordStatus;
+    }
+
+    public void setRecordStatus(Byte recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+    public String getCreatorAccount() {
+        return creatorAccount;
+    }
+
+    public void setCreatorAccount(String creatorAccount) {
+        this.creatorAccount = creatorAccount;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
 }

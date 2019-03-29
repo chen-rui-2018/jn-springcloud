@@ -29,8 +29,6 @@ public class SpPowerVo  implements Serializable {
     private String name;
 
 
-
-
     public String getId() {
         return id;
     }
@@ -54,7 +52,6 @@ public class SpPowerVo  implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
 
 
     public List<SpPowerVo> getChilds() {

@@ -8,7 +8,7 @@ import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityType;
 import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeQuery;
+import com.jn.park.model.ActivityTypeParam;
 import com.jn.park.model.ActivityTypeUpdate;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
@@ -60,8 +60,8 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "查询活动类型列表")
     @RequestMapping(value = "/findActivityTypeList",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/findActivityTypeList" )
-    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody  ActivityTypeQuery activityTypeQuery) {
-        PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeQuery,Boolean.TRUE);
+    public Result<PaginationData<List<ActivityType>>> findActivityTypeListByStatus(@RequestBody ActivityTypeParam activityTypeParam) {
+        PaginationData<List<ActivityType>> activityTypeList = activityTypeService.findActivityTypeListByState(activityTypeParam,Boolean.TRUE);
         return new Result<>(activityTypeList);
     }
 
@@ -69,7 +69,7 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "根据ID 获取当前活动类型内容")
     @RequestMapping(value = "/findActivityType",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/findActivityType")
-    public Result<ActivityType> findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true) @RequestParam(value = "typeId") String typeId) {
+    public Result<ActivityType> findActivityTypeById(@ApiParam(name = "typeId", value = "活动类型ID", required = true,example = "3bfe2b488e6e442c9bbf36c3d035c182") @RequestParam(value = "typeId") String typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         ActivityType vo = activityTypeService.findActivityTypeById(typeId);
         return new Result<>(vo);
@@ -89,7 +89,7 @@ public class ActivityTypeController extends BaseController {
     @ApiOperation(value = "删除活动类型", notes = "可进行批量删除")
     @RequestMapping(value = "/deleteActivityTypeList",method = RequestMethod.POST)
     @RequiresPermissions("/activity/activityType/deleteActivityTypeList")
-    public Result deleteActivityTypeList(@ApiParam(name = "typeId", value = "活动类型ID 数组", required = true) @RequestParam(value = "typeId") String[] typeId) {
+    public Result deleteActivityTypeList(@ApiParam(name = "typeId", value = "活动类型ID 数组", required = true,example = "'0597ede370b047a380ac2fdd07bcd8cf','3bfe2b488e6e442c9bbf36c3d035c182'") @RequestParam(value = "typeId") String[] typeId) {
         Assert.notNull(typeId, ActivityExceptionEnum.ACTIVITY_TYPE_ID_EMPTY.getMessage());
         activityTypeService.deleteActivityTypeList(typeId);
         return new Result();

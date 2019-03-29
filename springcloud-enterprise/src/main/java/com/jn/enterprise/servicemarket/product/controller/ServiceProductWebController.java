@@ -32,7 +32,7 @@ import java.util.UUID;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "(非科技金融)前台服务产品接口")
+@Api(tags = "服务超市-前台服务产品接口")
 @RestController
 @RequestMapping(value = "/servicemarket/product/web/")
 public class ServiceProductWebController  extends BaseController {
@@ -40,7 +40,7 @@ public class ServiceProductWebController  extends BaseController {
     private ServiceProductService productService;
 
     @ControllerLog(doAction = "上架常规服务产品")
-    @ApiOperation(value = "上架常规服务产品(非科技金融)")
+    @ApiOperation(value = "上架常规服务产品(非科技金融)(pc/App)")
     @RequiresPermissions("/servicemarket/product/web/upShelfCommonService")
     @RequestMapping(value = "/upShelfCommonService",method = RequestMethod.POST)
     public Result upShelfCommonService(@RequestBody @Validated CommonProductShelf product){
@@ -55,7 +55,7 @@ public class ServiceProductWebController  extends BaseController {
     }
 
     @ControllerLog(doAction = "添加特色服务产品")
-    @ApiOperation(value = "添加特色服务产品(非科技金融)(App特色产品新增)")
+    @ApiOperation(value = "添加特色服务产品(非科技金融)(pc/App特色产品新增)")
     @RequiresPermissions("/servicemarket/product/web/addFeatureService")
     @RequestMapping(value = "/addFeatureService",method = RequestMethod.POST)
     public Result addFeatureService(@RequestBody @Validated AddFeatureProduct product){
@@ -77,7 +77,7 @@ public class ServiceProductWebController  extends BaseController {
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品列表")
-    @ApiOperation(value ="服务产品列表")
+    @ApiOperation(value ="服务产品列表,(pc/app服务产品列表)")
     @RequestMapping(value = "/findProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<WebServiceProductInfo>>> findProductList( ProductInquiryInfo info){
         PaginationData data = productService.findWebProductList(info,true);
@@ -85,14 +85,14 @@ public class ServiceProductWebController  extends BaseController {
     }
 
     @ControllerLog(doAction = "服务产品详情")
-    @ApiOperation(value ="服务产品详情(非科技金融,app服务此产品详情)")
+    @ApiOperation(value ="服务产品详情(非科技金融,pc/app服务此产品详情)")
     @RequestMapping(value = "/findProductDetails",method = RequestMethod.GET)
     public Result<WebServiceProductDetails> findProductDetails(@ApiParam(name = "productId", value = "服务产品id", required = true) @RequestParam String productId){
         WebServiceProductDetails details = productService.findWebProductDetails(productId);
         return new Result(details);
     }
     @ControllerLog(doAction = "机构-服务产品列表")
-    @ApiOperation(value ="机构-服务产品列表,(app-产品管理)")
+    @ApiOperation(value ="机构-服务产品列表,(pc/app-产品管理)")
     @RequiresPermissions("/servicemarket/product/web/findOrgProductList")
     @RequestMapping(value = "/findOrgProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceProductManage>>> findOrgProductList( OrgProductQuery query){
@@ -109,7 +109,7 @@ public class ServiceProductWebController  extends BaseController {
         return new Result(data);
     }
     @ControllerLog(doAction = "服务产品信息,上架常规服务产品时展示")
-    @ApiOperation(value="服务产品信息,上架常规服务产品时展示(App产品详情)")
+    @ApiOperation(value="服务产品信息,上架常规服务产品时展示(pc/App产品详情)")
     @RequiresPermissions("/servicemarket/product/web/findShelfProductInfo")
     @RequestMapping(value = "/findShelfProductInfo",method = RequestMethod.GET)
     public Result<WebServiceProductInfo> findShelfProductInfo(@ApiParam(name = "productId", value = "产品id", required = true) @RequestParam String  productId){
@@ -135,7 +135,7 @@ public class ServiceProductWebController  extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "机构-编辑特色产品")
-    @ApiOperation(value="机构-编辑特色产品,(App编辑特色服务产品)")
+    @ApiOperation(value="机构-编辑特色产品,(pc/App编辑特色服务产品)")
     @RequiresPermissions("/servicemarket/product/web/updateFeatureProduct")
     @RequestMapping(value = "/updateFeatureProduct",method = RequestMethod.POST)
     public Result updateFeatureProduct(@RequestBody @Validated OrgUpdateFeatureProduct product){
@@ -154,7 +154,7 @@ public class ServiceProductWebController  extends BaseController {
         return new Result(data);
     }
     @ControllerLog(doAction = "同类型服务产品列表")
-    @ApiOperation(value ="同类型服务产品列表(App服务产品详情下的同类型服务列表)")
+    @ApiOperation(value ="同类型服务产品列表(pc/App服务产品详情下的同类型服务列表)")
     @RequestMapping(value = "/sameTypeProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<WebServiceProductInfo>>> sameTypeProductList(@ApiParam(name = "signoryId", value = "领域Id", required = true) @RequestParam String  signoryId){
         Assert.notNull(signoryId, ServiceProductExceptionEnum.SERVICE_PRODUCT_SIGNORY_ID_EMPTY.getMessage());

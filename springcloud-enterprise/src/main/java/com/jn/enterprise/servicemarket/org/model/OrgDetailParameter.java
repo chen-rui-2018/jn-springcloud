@@ -43,23 +43,27 @@ public class OrgDetailParameter implements Serializable {
     @NotNull(message = "组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "业务擅长[数组]",notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取",
+    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",
+            notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取",
             required = true,example = "['ogistics','technology_finance']")
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
 
     @NotNull(message = "行业领域不能为空")
-    @ApiModelProperty(value = "行业领域[数组]",notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取]"
+            ,notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取"
             ,required = true,example = "['shengwuyiyao','xinnengyuan']")
     private String[] industrySector;
 
     @NotNull(message = "发展阶段不能为空")
-    @ApiModelProperty(value = "发展阶段[数组]",notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取]"
+            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取"
             ,required = true,example = "['gufenqiye','fazhanqi']")
     private String[] developmentStage;
 
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[数组]",notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取]"
+            ,notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取"
             ,required = true,example = "['guoyouqiye','minyingqiye']")
     private String[] companyNature;
 
@@ -67,7 +71,7 @@ public class OrgDetailParameter implements Serializable {
     @NotNull(message = "机构资质列表不能为空")
     private List<OrgLicense> licenses;
 
-    @ApiModelProperty(value = "机构业务领域",required = true,example = "ogistics"
+    @ApiModelProperty(value = "机构业务领域[机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",required = true,example = "ogistics"
             ,notes = "机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取")
     @NotNull(message = "业务领域不能为空")
     private String businessType;

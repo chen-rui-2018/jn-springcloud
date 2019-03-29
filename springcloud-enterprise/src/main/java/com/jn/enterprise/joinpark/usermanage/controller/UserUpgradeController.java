@@ -78,7 +78,7 @@ public class UserUpgradeController {
     @ControllerLog(doAction = "查询公司列表")
     @ApiOperation(value = "查询公司列表",notes = "comName可为空，不分页查询，只用于查询企业基本数据{企业id，企业名，企业logo}")
     @RequestMapping(value = "/selectCompany",method = RequestMethod.GET)
-    public Result<List<Company>> selectCompany(@ApiParam(name="comName",value = "企业名")@RequestParam(value = "comName")  String comName) {
+    public Result<List<Company>> selectCompany(@ApiParam(name="comName",value = "企业名",example = "君南")@RequestParam(value = "comName")  String comName) {
         List<Company> companies = userUpgradeService.selectCompany(comName);
         return new Result(companies);
     }

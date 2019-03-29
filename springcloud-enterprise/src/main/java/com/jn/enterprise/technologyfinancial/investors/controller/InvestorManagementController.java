@@ -33,7 +33,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "科技金融管理投资人管理")
+@Api(tags = "科技金融-科技金融管理投资人管理")
 @RestController
 @RequestMapping(value = "/technologyFinancial/investorManagementController")
 public class InvestorManagementController extends BaseController {

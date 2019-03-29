@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务机构管理,(app机构认证)")
+@Api(tags = "服务超市-服务机构管理,(app机构认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/org")
 public class OrgManageController extends BaseController {
@@ -45,7 +45,7 @@ public class OrgManageController extends BaseController {
     private OrgService orgService;
 
     @ControllerLog(doAction = "保存服务机构基本信息")
-    @ApiOperation(value = "保存服务机构基本信息,(app-基本资料)",notes = "返回结果为机构ID")
+    @ApiOperation(value = "保存服务机构基本信息,(pc/app-基本资料)",notes = "返回结果为机构ID")
     @RequestMapping(value = "/saveOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgBasicData")
     public Result<String> saveOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
@@ -56,7 +56,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改服务机构基本信息")
-    @ApiOperation(value = "修改服务机构基本信息(app-修改基本资料(我的机构))",notes = "返回结果为机构ID")
+    @ApiOperation(value = "修改服务机构基本信息(pc/app-修改基本资料)",notes = "返回结果为机构ID")
     @RequestMapping(value = "/updateOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
     public Result<String> updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){
@@ -68,7 +68,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构资质信息")
-    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(app-资质认证)",notes = "返回结果为响应数据条数，正常情况为1")
+    @ApiOperation(value = "保存/修改服务机构资质信息[保存/修改入参相同] ,(pc/app-资质认证)",notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgLicenseData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgLicenseData")
     public Result<Integer> saveOrgLicenseData(@RequestBody @Validated OrgLicenseData orgLicenseData){
@@ -80,7 +80,7 @@ public class OrgManageController extends BaseController {
 
 
     @ControllerLog(doAction = "保存/修改服务机构团队信息")
-    @ApiOperation(value = "保存/修改服务机构团队信息,(app-团队资料)",notes = "返回结果为响应数据条数，正常情况为1")
+    @ApiOperation(value = "保存/修改服务机构团队信息,(pc/app-团队资料)",notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgTeamData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgTeamData")
     public Result<Integer> saveOrgTeamData(@RequestBody @Validated OrgTeamData orgTeamData){
@@ -91,7 +91,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "保存/修改服务机构联系方式")
-    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(app-联系方式)",notes = "返回结果为响应数据条数，正常情况为1")
+    @ApiOperation(value = "保存/修改服务机构联系方式[保存/修改入参相同],(pc/app-联系方式)",notes = "返回结果为响应数据条数，正常情况为1")
     @RequestMapping(value = "/saveOrgContactData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/saveOrgContactData")
     public Result<Integer> saveOrgContactData(@RequestBody @Validated OrgContactData orgContactData){

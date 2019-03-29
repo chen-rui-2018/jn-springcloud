@@ -58,7 +58,7 @@ public class FinanceDocumentsController extends BaseController {
 
 
     @ControllerLog(doAction = "财务文档查询")
-    @ApiOperation(value = "财务文档查询",notes = "财务文档查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "财务文档查询",notes = "财务文档查询", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/documents/findAll")
     public Result<PaginationData<List<FinanceDocumentsFindAllVo>>> findAll(@RequestBody FinanceDocumentsFindAllModel financeDocumentsFindAllModel){
@@ -69,7 +69,7 @@ public class FinanceDocumentsController extends BaseController {
     }
 
     @ControllerLog(doAction = "文档上传")
-    @ApiOperation(value = "文档上传", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "文档上传", httpMethod = "POST")
     @PostMapping(value = "/uploading")
     @RequiresPermissions("/finance/documents/uploading")
     @ApiImplicitParams({
@@ -86,7 +86,7 @@ public class FinanceDocumentsController extends BaseController {
     }
 
     @ControllerLog(doAction = "下载")
-    @ApiOperation(value = "下载", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "下载", httpMethod = "GET")
     @GetMapping(value = "/download")
     @RequiresPermissions("/finance/documents/download")
     @ApiImplicitParam(name = "id",value = "id",dataType = "Integer",paramType = "query")
@@ -105,7 +105,7 @@ public class FinanceDocumentsController extends BaseController {
 
 
     @ControllerLog(doAction = "获取部门信息")
-    @ApiOperation(value = "获取部门信息",notes = "获取部门信息",httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "获取部门信息",notes = "获取部门信息",httpMethod = "GET")
     @GetMapping(value = "/getUserDepartment")
     @RequiresPermissions("/finance/documents/getUserDepartment")
     public Result<List<SysDepartmentPostVO>> getUserDepartment(){

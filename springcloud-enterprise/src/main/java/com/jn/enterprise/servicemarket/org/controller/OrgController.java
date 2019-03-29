@@ -4,16 +4,20 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailAndProductVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.enterprise.servicemarket.product.model.ProductInquiryInfo;
 import com.jn.enterprise.servicemarket.product.model.WebServiceProductInfo;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ControllerLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -33,7 +37,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务机构(前台用户)")
+@Api(tags = "服务超市-服务机构(前台用户)")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/org")
 public class OrgController extends BaseController {
@@ -46,10 +50,12 @@ public class OrgController extends BaseController {
     private OrgService orgService;
     @Autowired
     private ServiceProductService productService;
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
 
     @ControllerLog(doAction = "获取服务机构列表")
-    @ApiOperation(value = "获取服务机构列表,(app机构列表)")
+    @ApiOperation(value = "获取服务机构列表,(pc/app机构列表)")
     @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
@@ -58,7 +64,7 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情")
-    @ApiOperation(value = "获取服务机构详情,(app机构详情)", notes = "查询条件orgId")
+    @ApiOperation(value = "获取服务机构详情,(pc/app机构详情)", notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")
@@ -68,11 +74,10 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情+产品列表")
-    @ApiOperation(value = "获取服机构信息(app机构信息)",notes = "查询条件orgId")
+    @ApiOperation(value = "获取服机构信息(pc/app机构信息)",notes = "查询条件orgId")
     @RequestMapping(value = "/getOrgInfoForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
-    public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367"
-    )@RequestParam(value = "orgId")  String orgId){
+    public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")@RequestParam(value = "orgId")  String orgId){
         Assert.notNull(orgId, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
         ProductInquiryInfo info = new ProductInquiryInfo();
         info.setOrgId(orgId);
@@ -83,5 +88,17 @@ public class OrgController extends BaseController {
         vo.setProductList(infoList);
         return new Result(vo);
     }
+    @ControllerLog(doAction = "我的机构")
+    @ApiOperation(value = "获取我的服机构信息(app我的机构)",notes = "根据用户账号查询其所属机构信息")
+    @RequestMapping(value = "/getMyOrgInfo",method = RequestMethod.GET)
+    @RequiresPermissions("/serviceMarket/org/getMyOrgInfo")
+    public Result<MyOrgInfoVo>  getMyOrgInfo(@ApiParam(name="account",value = "用户账号",required = true,example = "wangsong" )@RequestParam(value = "account")  String account){
+        Assert.notNull(account, OrgExceptionEnum.ORG_ID_IS_NOT_NULL.getMessage());
+        MyOrgInfoVo vo = orgService.getMyOrgInfo(account);
+        return new Result<MyOrgInfoVo>(vo);
+
+    }
+
+
 
 }

@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TbFinanceType implements Serializable {
     /*@ApiModelProperty("财务项目ID")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("财务项目名称")*/
     private String financeName;
@@ -30,12 +30,12 @@ public class TbFinanceType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getFinanceName() {

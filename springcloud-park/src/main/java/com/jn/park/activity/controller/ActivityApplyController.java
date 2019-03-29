@@ -7,7 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.ActivityPagingParam;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.model.UserExtensionInfo;
@@ -93,9 +93,9 @@ public class ActivityApplyController extends BaseController {
     @ApiOperation(value = "报名人列表查看",
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
     @RequestMapping(value = "/activityApplyList",method = RequestMethod.POST)
-    public Result<PaginationData<List<ActivityApplyDetail>>> activityApplyList(@RequestBody  ActivityQueryPaging activityQueryPaging){
-       Assert.notNull(activityQueryPaging,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityQueryPaging,Boolean.TRUE);
+    public Result<PaginationData<List<ActivityApplyDetail>>> activityApplyList(@RequestBody ActivityPagingParam activityPagingParam){
+       Assert.notNull(activityPagingParam,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityPagingParam,Boolean.TRUE);
        return new Result(activityApplyList);
     }
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.park.finance.dao.TbFinanceBudgetHistoryMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceBudgetHistory">
     <id column="bh_id" jdbcType="INTEGER" property="id" />
-    <result column="bh_cost_type_id" jdbcType="INTEGER" property="costTypeId" />
+    <result column="bh_cost_type_id" jdbcType="VARCHAR" property="costTypeId" />
     <result column="bh_cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
     <result column="bh_department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="bh_department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -120,7 +120,7 @@
       budget_Type, record_status, created_time, 
       modifier_account, modified_time, creator_account
       )
-    values (#{costTypeId,jdbcType=INTEGER}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+    values (#{costTypeId,jdbcType=VARCHAR}, #{costTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
       #{departmentName,jdbcType=VARCHAR}, #{budgetMonth,jdbcType=CHAR}, #{budgetMoney,jdbcType=DECIMAL}, 
       #{budgetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}
@@ -171,7 +171,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="costTypeId != null">
-        #{costTypeId,jdbcType=INTEGER},
+        #{costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costTypeName != null">
         #{costTypeName,jdbcType=VARCHAR},
@@ -221,7 +221,7 @@
         bh.id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.costTypeId != null">
-        bh.cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
+        bh.cost_type_id = #{record.costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.costTypeName != null">
         bh.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
@@ -264,7 +264,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_finance_budget_history bh
     set bh.id = #{record.id,jdbcType=INTEGER},
-      bh.cost_type_id = #{record.costTypeId,jdbcType=INTEGER},
+      bh.cost_type_id = #{record.costTypeId,jdbcType=VARCHAR},
       bh.cost_type_name = #{record.costTypeName,jdbcType=VARCHAR},
       bh.department_id = #{record.departmentId,jdbcType=VARCHAR},
       bh.department_name = #{record.departmentName,jdbcType=VARCHAR},
@@ -284,7 +284,7 @@
     update tb_finance_budget_history
     <set>
       <if test="costTypeId != null">
-        cost_type_id = #{costTypeId,jdbcType=INTEGER},
+        cost_type_id = #{costTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costTypeName != null">
         cost_type_name = #{costTypeName,jdbcType=VARCHAR},
@@ -324,7 +324,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceBudgetHistory">
     update tb_finance_budget_history
-    set cost_type_id = #{costTypeId,jdbcType=INTEGER},
+    set cost_type_id = #{costTypeId,jdbcType=VARCHAR},
       cost_type_name = #{costTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

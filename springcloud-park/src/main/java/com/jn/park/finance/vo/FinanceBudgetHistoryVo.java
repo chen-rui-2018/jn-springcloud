@@ -1,5 +1,6 @@
 package com.jn.park.finance.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -21,6 +22,7 @@ public class FinanceBudgetHistoryVo extends FinanceTotalBudgetVo implements Seri
     private static final long serialVersionUID = -8699257566205753723L;
 
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @ApiModelProperty("录入时间")
     private Date createdTime;
 

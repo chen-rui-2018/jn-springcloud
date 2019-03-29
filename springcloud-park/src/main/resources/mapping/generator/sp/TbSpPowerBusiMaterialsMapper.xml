@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.sp.dao.TbSpPowerBusiMaterialsMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.sp.entity.TbSpPowerBusiMaterials">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="busi_id" jdbcType="VARCHAR" property="busiId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sample" jdbcType="VARCHAR" property="sample" />
+    <result column="from_channel" jdbcType="VARCHAR" property="fromChannel" />
+    <result column="paper_quantity" jdbcType="INTEGER" property="paperQuantity" />
+    <result column="is_need_electronic" jdbcType="INTEGER" property="isNeedElectronic" />
+    <result column="is_required" jdbcType="INTEGER" property="isRequired" />
+    <result column="notice" jdbcType="VARCHAR" property="notice" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, busi_id, name, sample, from_channel, paper_quantity, is_need_electronic, is_required, 
+    notice, record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterialsCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_sp_power_busi_materials
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_sp_power_busi_materials
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_sp_power_busi_materials
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterialsCriteria">
+    delete from tb_sp_power_busi_materials
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterials">
+    insert into tb_sp_power_busi_materials (id, busi_id, name, 
+      sample, from_channel, paper_quantity, 
+      is_need_electronic, is_required, notice, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{busiId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{sample,jdbcType=VARCHAR}, #{fromChannel,jdbcType=VARCHAR}, #{paperQuantity,jdbcType=INTEGER}, 
+      #{isNeedElectronic,jdbcType=INTEGER}, #{isRequired,jdbcType=INTEGER}, #{notice,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterials">
+    insert into tb_sp_power_busi_materials
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="busiId != null">
+        busi_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sample != null">
+        sample,
+      </if>
+      <if test="fromChannel != null">
+        from_channel,
+      </if>
+      <if test="paperQuantity != null">
+        paper_quantity,
+      </if>
+      <if test="isNeedElectronic != null">
+        is_need_electronic,
+      </if>
+      <if test="isRequired != null">
+        is_required,
+      </if>
+      <if test="notice != null">
+        notice,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="busiId != null">
+        #{busiId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sample != null">
+        #{sample,jdbcType=VARCHAR},
+      </if>
+      <if test="fromChannel != null">
+        #{fromChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="paperQuantity != null">
+        #{paperQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="isNeedElectronic != null">
+        #{isNeedElectronic,jdbcType=INTEGER},
+      </if>
+      <if test="isRequired != null">
+        #{isRequired,jdbcType=INTEGER},
+      </if>
+      <if test="notice != null">
+        #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterialsCriteria" resultType="java.lang.Long">
+    select count(*) from tb_sp_power_busi_materials
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_sp_power_busi_materials
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.busiId != null">
+        busi_id = #{record.busiId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sample != null">
+        sample = #{record.sample,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromChannel != null">
+        from_channel = #{record.fromChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paperQuantity != null">
+        paper_quantity = #{record.paperQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.isNeedElectronic != null">
+        is_need_electronic = #{record.isNeedElectronic,jdbcType=INTEGER},
+      </if>
+      <if test="record.isRequired != null">
+        is_required = #{record.isRequired,jdbcType=INTEGER},
+      </if>
+      <if test="record.notice != null">
+        notice = #{record.notice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_sp_power_busi_materials
+    set id = #{record.id,jdbcType=VARCHAR},
+      busi_id = #{record.busiId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      sample = #{record.sample,jdbcType=VARCHAR},
+      from_channel = #{record.fromChannel,jdbcType=VARCHAR},
+      paper_quantity = #{record.paperQuantity,jdbcType=INTEGER},
+      is_need_electronic = #{record.isNeedElectronic,jdbcType=INTEGER},
+      is_required = #{record.isRequired,jdbcType=INTEGER},
+      notice = #{record.notice,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterials">
+    update tb_sp_power_busi_materials
+    <set>
+      <if test="busiId != null">
+        busi_id = #{busiId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sample != null">
+        sample = #{sample,jdbcType=VARCHAR},
+      </if>
+      <if test="fromChannel != null">
+        from_channel = #{fromChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="paperQuantity != null">
+        paper_quantity = #{paperQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="isNeedElectronic != null">
+        is_need_electronic = #{isNeedElectronic,jdbcType=INTEGER},
+      </if>
+      <if test="isRequired != null">
+        is_required = #{isRequired,jdbcType=INTEGER},
+      </if>
+      <if test="notice != null">
+        notice = #{notice,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.sp.entity.TbSpPowerBusiMaterials">
+    update tb_sp_power_busi_materials
+    set busi_id = #{busiId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      sample = #{sample,jdbcType=VARCHAR},
+      from_channel = #{fromChannel,jdbcType=VARCHAR},
+      paper_quantity = #{paperQuantity,jdbcType=INTEGER},
+      is_need_electronic = #{isNeedElectronic,jdbcType=INTEGER},
+      is_required = #{isRequired,jdbcType=INTEGER},
+      notice = #{notice,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

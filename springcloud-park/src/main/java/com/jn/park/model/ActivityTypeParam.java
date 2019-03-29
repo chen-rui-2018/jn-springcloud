@@ -16,7 +16,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ActivityTypeParam", description = "活动类型列表查询条件")
 public class ActivityTypeParam extends Page implements Serializable {
-    @ApiModelProperty(value = "状态(0：无效，1：有效,不传则返回全部)")
+    @ApiModelProperty(value = "状态(0：无效，1：有效,不传则返回全部)",example = "0")
     private String typeStatus;
 
     public String getTypeStatus() {

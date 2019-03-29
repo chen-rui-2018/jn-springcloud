@@ -16,10 +16,10 @@ import java.io.Serializable;
 @ApiModel(value = "OrgParameter",description = "机构查询入参")
 public class OrgParameter extends Page implements Serializable {
 
-    @ApiModelProperty(value = "业务领域",notes = "企业字典表type=0的，即业务领域。数据从【机构字典】接口获取",example = "ogistics")
+    @ApiModelProperty(value = "业务领域[企业字典表type=0的，即业务领域。数据从【机构字典】接口获取]",example = "ogistics")
     private String businessType;
 
-    @ApiModelProperty(value = "二级业务领域",notes = "目前二级领域已废弃")
+    @ApiModelProperty(value = "二级业务领域[目前二级领域已废弃]")
     private String businessSType;
 
     @ApiModelProperty(value = "机构名称",example = "机构1")
@@ -28,7 +28,7 @@ public class OrgParameter extends Page implements Serializable {
     @ApiModelProperty(value = "主营业务",example = "商业纠纷")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "排序字段",notes = "popularity:人气排序，serviceNum：服务量排序，为空或integrate：综合排序",example = "integrate")
+    @ApiModelProperty(value = "排序字段[popularity:人气排序，serviceNum：服务量排序，为空或integrate：综合排序]",example = "integrate")
     private String sortTypes;
 
 

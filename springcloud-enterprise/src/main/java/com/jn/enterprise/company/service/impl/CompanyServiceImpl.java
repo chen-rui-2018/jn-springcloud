@@ -119,24 +119,29 @@ public class CompanyServiceImpl implements CompanyService {
 
         //查询企业字段数据
         TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
-        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
-        String[] comProperty = tbServiceCompany.getComProperty().split(",");
         List<String> comPropertys = new ArrayList<>(16);
-        company.setComPropertys(comProperty);
-        for (TbServicePrefer prefer: tbServicePrefers
-             ) {
-            // 行业领域
-            if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
-                company.setInduTypeName(prefer.getPreValue());
-            }
-            // 企业性质
-            for (String s: comProperty
-                 ) {
-                if(StringUtils.equals(s,prefer.getId())){
-                    comPropertys.add(prefer.getPreValue());
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+        if(StringUtils.isNotEmpty(tbServiceCompany.getComProperty())){
+            String[] comProperty = tbServiceCompany.getComProperty().split(",");
+
+            company.setComPropertys(comProperty);
+            for (TbServicePrefer prefer: tbServicePrefers
+            ) {
+                // 行业领域
+                if(StringUtils.equals(prefer.getId(),tbServiceCompany.getInduType())){
+                    company.setInduTypeName(prefer.getPreValue());
+                }
+                // 企业性质
+                for (String s: comProperty
+                ) {
+                    if(StringUtils.equals(s,prefer.getId())){
+                        comPropertys.add(prefer.getPreValue());
+                    }
                 }
             }
         }
+
+
         if(null != tbServiceCompany.getFoundingTime()){
             company.setFoundingTime(DateUtils.formatDate(tbServiceCompany.getFoundingTime(),PATTERN));
         }

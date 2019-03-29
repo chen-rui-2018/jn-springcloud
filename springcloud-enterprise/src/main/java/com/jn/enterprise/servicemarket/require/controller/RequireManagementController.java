@@ -92,7 +92,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "撤销对他人的需求 (app 需求撤销)",notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/cancelRequire")
     @RequestMapping(value = "/cancelRequire",method = RequestMethod.POST)
-    public Result<Integer> cancelRequire(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
+    public Result<Integer> cancelRequire(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
@@ -109,7 +109,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "需求详情（对他人需求）,(App需求详情)")
     @RequiresPermissions("/serviceMarket/requireManagementController/getOtherRequireDetails")
     @RequestMapping(value = "/getOtherRequireDetails",method = RequestMethod.GET)
-    public Result<RequireOtherDetails> getOtherRequireDetails(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
+    public Result<RequireOtherDetails> getOtherRequireDetails(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
         RequireOtherDetails otherRequireDetails = requireManagementService.getOtherRequireDetails(reqNum);
         return  new Result(otherRequireDetails);
@@ -134,7 +134,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "对接操作",notes = "返回数据响应条数，正常情况为1")
     @RequiresPermissions("/serviceMarket/requireManagementController/handleOperating")
     @RequestMapping(value = "/handleOperating",method = RequestMethod.POST)
-    public Result<Integer> handleOperating(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
+    public Result<Integer> handleOperating(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -150,7 +150,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "需求详情（我收到的需求）(app维护对接)")
     @RequiresPermissions("/serviceMarket/requireManagementController/getReceivedRequireDetails")
     @RequestMapping(value = "/getReceivedRequireDetails",method = RequestMethod.GET)
-    public Result<RequireReceivedDetails> getReceivedRequireDetails(@ApiParam(value = "需求单号" ,required = true)@RequestParam("reqNum") String reqNum){
+    public Result<RequireReceivedDetails> getReceivedRequireDetails(@ApiParam(value = "需求单号" ,required = true,example = "123****")@RequestParam("reqNum") String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
         RequireReceivedDetails requireReceivedDetails = requireManagementService.getReceivedRequireDetails(reqNum);
         return  new Result(requireReceivedDetails);
@@ -180,7 +180,7 @@ public class RequireManagementController extends BaseController {
     @ApiOperation(value = "需求详情（后台门户管理）")
     @RequiresPermissions("/serviceMarket/requireManagementController/getPortalRequireDetails")
     @RequestMapping(value = "/getPortalRequireDetails",method = RequestMethod.GET)
-    public Result<RequirePortalDetails> getPortalRequireDetails(@ApiParam(value = "需求编号" ,required = true)@RequestParam("reqNum") String reqNum){
+    public Result<RequirePortalDetails> getPortalRequireDetails(@ApiParam(value = "需求编号" ,required = true,example = "20190801*****")@RequestParam("reqNum") String reqNum){
         Assert.notNull(reqNum, RequireExceptionEnum.REQUIRE_NUM_NOT_NULL.getMessage());
         RequirePortalDetails requirePortalDetails = requireManagementService.getPortalRequireDetails(reqNum);
         return  new Result(requirePortalDetails);

@@ -39,9 +39,6 @@
             <li>
               <a href="javascript:void(0);">企业服务</a>
             </li>
-            <li>
-              <a target="_blank" href="http://112.94.22.222:2381">快速开发平台</a>
-            </li>
           </ul>
         </transition>
         <iframe id="kskfpt" ref="iframe" src="" width="0" height="0" frameborder="0" scrolling="auto" style="visibility: hidden;"/>

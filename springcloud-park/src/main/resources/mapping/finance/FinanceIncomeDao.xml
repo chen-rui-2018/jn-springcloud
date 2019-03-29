@@ -73,7 +73,7 @@
     </resultMap>
 
     <select id="selectEveryLastYearContrast" resultMap="selectEveryLastYearContrastMap">
-      SELECT  right(m.`month`,2) as "month", IFNULL(t.income,0) as "income",IFNULL(t.last_year_income,0) as "lastyearincome"
+      SELECT  right(m.`month`,2) as "month", IFNULL(SUM(t.income),0) as "income",IFNULL(SUM(t.last_year_income),0) as "lastyearincome"
         FROM tb_finance_income_month t
         RIGHT JOIN tb_month m
         on m.month=t.income_month
@@ -81,6 +81,7 @@
         and t.income_type = #{incomeType,jdbcType=INTEGER}
         and t.income_month BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
         where m.month BETWEEN #{startTime,jdbcType=VARCHAR} AND #{endTime,jdbcType=VARCHAR}
+        GROUP BY m.month
     </select>
 
     <resultMap id="selectEveryLastYearContrastMap" type="com.jn.park.finance.model.FinanceIncomeLastYearContrastModel">

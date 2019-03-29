@@ -69,13 +69,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        policy
+                        finance
                     </contexts>
                     <tableNames>
-                        tb_policy,
-                        tb_policy_class,
-                        tb_policy_details,
-                        tb_policy_level
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

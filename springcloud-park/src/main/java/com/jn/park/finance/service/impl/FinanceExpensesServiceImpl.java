@@ -45,7 +45,7 @@ public class FinanceExpensesServiceImpl implements FinanceExpensesService {
 
     @ServiceLog(doAction="支出录入分页查询")
     @Override
-    public PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel) {
+    public PaginationData<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel) {
 
 
         if(StringUtils.isBlank(financeExpensesPageModel.getOrderByClause())){

@@ -69,14 +69,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        activity
+                        gamtopic
                     </contexts>
                     <tableNames>
-                        tb_activity,
-                        tb_activity_apply,
-                        tb_activity_type,
-                        tb_park_like,
-                        tb_activity_file
+                        tb_gam_topic
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

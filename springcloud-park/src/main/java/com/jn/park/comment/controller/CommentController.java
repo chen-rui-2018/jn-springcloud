@@ -40,8 +40,8 @@ public class CommentController extends BaseController {
     @Autowired
     private CommentService commentService;
 
-    @ControllerLog(doAction = "活动评论/回复")
-    @ApiOperation(value = "活动评论/回复", httpMethod = "POST", response = Result.class)
+    @ControllerLog(doAction = "评论/回复")
+    @ApiOperation(value = "评论/回复", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivity")
     public Result commentActivity(@Validated @RequestBody CommentAdd commentAdd){
         Assert.notNull(commentAdd.getRootId(),CommentExceptionEnum.APPLY_ROOT_ID_NOT_NULL.getMessage());
@@ -62,7 +62,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "活动评论点赞")
     @ApiOperation(value = "活动评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityLike")
-    public Result commentActivityLike(@ApiParam(value = "点评ID/活动ID" ,required = true,example = "1234") @RequestParam(value = "id") String id){
+    public Result commentActivityLike(@ApiParam(value = "点赞对象ID" ,required = true,example = "1234") @RequestParam(value = "id") String id){
         Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();

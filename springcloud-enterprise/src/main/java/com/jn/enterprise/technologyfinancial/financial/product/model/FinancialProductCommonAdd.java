@@ -8,16 +8,13 @@ import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
- * 科技金融添加产品信息
  * @author： chenr
- * @date： Created on 2019/3/19 16:01
+ * @date： Created on 2019/3/29 14:52
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "FinancialProductAddInfo",description = "科技金融添加产品信息")
-public class FinancialProductAddInfo implements Serializable {
-    @ApiModelProperty(value = "产品id,不要传值")
-    private String productId;
+@ApiModel(value = "FinancialProductCommonAdd",description = "后台添加科技金融常规产品入参")
+public class FinancialProductCommonAdd implements Serializable {
     @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "0",required = true)
     @NotBlank(message = "产品类型不能为空")
     @Pattern(regexp = "^[0-1]$",message = "产品类型,只能为0或1")
@@ -25,7 +22,7 @@ public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value="产品编号",required = true,example = "CG000131226.0570718997558")
     @NotBlank(message = "产品编号不能为空")
     private String serialNumber;
-    @ApiModelProperty(value = "业务领域id",required = true,example = "00000000000000001111111111111111")
+    @ApiModelProperty(value = "业务领域id",required = true,example = "technology_finance")
     @NotBlank(message = "领域id不能为空")
     private String signoryId;
     @ApiModelProperty(value = "业务领域名称",required = true,example = "科技金融")
@@ -34,12 +31,6 @@ public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品名称",required = true,example = "无忧贷款")
     @NotBlank(message = "产品名称不能为空")
     private String productName;
-    @ApiModelProperty(value = "服务机构id,", required =  true, example = "00000000000000001111111111111111")
-    @NotBlank(message = "服务机构id不能为空")
-    private String orgId;
-    @ApiModelProperty(value = "服务机构名称",required = true,example = "北京快手")
-    @NotBlank(message = "服务机构名称不能为空")
-    private String orgName;
     @ApiModelProperty(value = "参考利率最小值",required = true,example = "2.56")
     @NotBlank(message = "参考利率不能为空")
     @Pattern(regexp = "^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "利率最小值符合规范,应为大于等于0的最多两位小数的数值 示例:2.56")
@@ -92,18 +83,16 @@ public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "担保方式名称",required = true,example = "抵押担保")
     @NotBlank(message = "担保方式名称不能为空")
     private String assureMethodName;
-    @ApiModelProperty(value = "产品图片")
+    @ApiModelProperty(value = "产品图片",example = "https://12346.png")
     private String pictureUrl;
-    @ApiModelProperty(value = "产品特点")
+    @ApiModelProperty(value = "产品特点",example = "超快办理，申请到放款3天完成")
     private String productFeature;
-    @ApiModelProperty(value = "申请条件")
+    @ApiModelProperty(value = "申请条件",example = "企业及其实际控制人无不良信用记录")
     private String applyCondition;
-    @ApiModelProperty(value = "提交材料")
+    @ApiModelProperty(value = "提交材料",example = "企业版营业执照")
     private String submitMaterial;
-    @ApiModelProperty(value = "适用客户")
+    @ApiModelProperty(value = "适用客户",example ="所有人")
     private String applicableCust;
-    @ApiModelProperty(value = "模板id,机构上架产品时使用,不用传值")
-    private String templateId;
 
     public String getProductType() {
         return productType;
@@ -111,22 +100,6 @@ public class FinancialProductAddInfo implements Serializable {
 
     public void setProductType(String productType) {
         this.productType = productType;
-    }
-
-    public String getTemplateId() {
-        return templateId;
-    }
-
-    public void setTemplateId(String templateId) {
-        this.templateId = templateId;
-    }
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
     }
 
     public String getSerialNumber() {
@@ -159,22 +132,6 @@ public class FinancialProductAddInfo implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public String getOrgId() {
-        return orgId;
-    }
-
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
-    }
-
-    public String getOrgName() {
-        return orgName;
-    }
-
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
     }
 
     public String getRefRateMin() {
@@ -223,6 +180,22 @@ public class FinancialProductAddInfo implements Serializable {
 
     public void setIsRmb(String isRmb) {
         this.isRmb = isRmb;
+    }
+
+    public String getLoanCategoryCode() {
+        return loanCategoryCode;
+    }
+
+    public void setLoanCategoryCode(String loanCategoryCode) {
+        this.loanCategoryCode = loanCategoryCode;
+    }
+
+    public String getLoanCategoryName() {
+        return loanCategoryName;
+    }
+
+    public void setLoanCategoryName(String loanCategoryName) {
+        this.loanCategoryName = loanCategoryName;
     }
 
     public String getLoanAmountMin() {
@@ -311,21 +284,5 @@ public class FinancialProductAddInfo implements Serializable {
 
     public void setApplicableCust(String applicableCust) {
         this.applicableCust = applicableCust;
-    }
-
-    public String getLoanCategoryCode() {
-        return loanCategoryCode;
-    }
-
-    public void setLoanCategoryCode(String loanCategoryCode) {
-        this.loanCategoryCode = loanCategoryCode;
-    }
-
-    public String getLoanCategoryName() {
-        return loanCategoryName;
-    }
-
-    public void setLoanCategoryName(String loanCategoryName) {
-        this.loanCategoryName = loanCategoryName;
     }
 }

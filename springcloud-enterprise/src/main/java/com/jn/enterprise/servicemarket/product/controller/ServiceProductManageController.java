@@ -124,7 +124,7 @@ public class ServiceProductManageController extends BaseController {
         return new Result();
     }
     @ControllerLog(doAction = "获取产品编号")
-    @ApiOperation(value ="获取产品编号(app新增特色产品获取编号)",notes = "新增常规产品/新增特色产品时获取产品编号")
+    @ApiOperation(value ="获取产品编号(pc+app新增特色产品获取编号)",notes = "新增常规产品/新增特色产品时获取产品编号")
     @RequestMapping(value = "/getProductSerialNumber",method = RequestMethod.GET)
     public Result<String> getProductSerialNumber(@ApiParam(name = "productType", value = "服务产品类型(0:常规-1:特色)", required = true) @RequestParam String productType){
         return new Result(productService.getProductSerialNumber(productType));

@@ -66,7 +66,7 @@ public class AdvisorManagementController extends BaseController {
 
     @ControllerLog(doAction = "邀请顾问")
     @RequiresPermissions("/advisor/advisorManagementController/inviteAdvisor")
-    @ApiOperation(value = "邀请顾问,(app邀请顾问)",notes = "返回数据响应条数，正常情况为1")
+    @ApiOperation(value = "邀请顾问,(pc/app邀请顾问)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
     public Result inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "181*****") String registerAccount){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -77,7 +77,7 @@ public class AdvisorManagementController extends BaseController {
 
     @ControllerLog(doAction = "顾问管理")
     @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
-    @ApiOperation(value = "顾问管理(app顾问管理)")
+    @ApiOperation(value = "顾问管理(pc/app顾问管理)")
     @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<AdvisorManagementShow>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
         Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());

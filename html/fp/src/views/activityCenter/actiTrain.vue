@@ -109,7 +109,7 @@
                         <li v-for="(item,index) in actiListSlim" :key='index'>
                             <img :src="item.actiPosterUrl" alt="活动海报图片" class="posterImg" @click="handleRout(item.id)">
                             <div class="actiInfo">
-                                <p>{{item.actiName}}</p>
+                                <p class="actiNameItem">{{item.actiName}}</p>
                                 <p class="actiTimer">
                                     <i class="el-icon-time"></i>
                                     <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>

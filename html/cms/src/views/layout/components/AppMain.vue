@@ -34,7 +34,7 @@ export default {
   width: 100%;
   position: relative;
   overflow: auto;
-  background-color: #fff;
+  /* background-color: #fff; */
 }
 </style>
 

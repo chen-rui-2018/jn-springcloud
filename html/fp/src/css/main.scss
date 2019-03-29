@@ -102,7 +102,7 @@ input {
     height: 75px;
     line-height: 75px;
     padding: 0 20px;
-    border: 1px solid #ccc;
+    border: 1px solid #eee;
 
     .timeFilter {
       float: left;
@@ -169,7 +169,7 @@ input {
 
   .allActi {
     padding-top: 20px;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #eee;
     line-height: 37px;
 
     .actiFilterUl {
@@ -178,6 +178,7 @@ input {
         padding-bottom: 10px;
         margin-right: 20px;
         cursor: pointer;
+        color: #333;
       }
 
       >li.active {
@@ -190,12 +191,9 @@ input {
       }
 
       .box-card {
-        width: 360px;
-        height: 200px;
-        overflow: auto;
         position: absolute;
-        left: 20px;
-        top: 15px;
+        left: 8px;
+        top: 23px;
         background-color: #fff;
         padding: 0;
         z-index: 4;
@@ -232,7 +230,7 @@ input {
       line-height: 35px;
       text-align: center;
       padding-right: 40px;
-      border: 1px solid #ccc;
+      border: 1px solid #eee;
       border-radius: 5px;
 
       >input {
@@ -268,7 +266,7 @@ input {
         width: 40px;
         line-height: 37px;
         text-align: center;
-        border-left: 1px solid #ccc;
+        border-left: 1px solid #eee;
       }
     }
   }
@@ -282,10 +280,10 @@ input {
 
       >li {
         float: left;
-        width: 273px;
-        height: 350px;
-        border: 1px solid #ccc;
-        margin-right: 30px;
+        width: 280px;
+        height: 345px;
+        border: 1px solid #eee;
+        margin-right: 20px;
         margin-bottom: 30px;
         .postImgItem{
           display: inline-block;
@@ -301,8 +299,9 @@ input {
 
         .actiNum {
           padding: 10px;
-          border-top: 1px solid #ccc;
-
+          border-top: 1px solid #eee;
+          color: #999;
+          font-size: 12px;
           .avatar {
             float: left;
             padding-left: 10px;
@@ -312,8 +311,8 @@ input {
 
               li {
                 float: left;
-                width: 22px;
-                height: 22px;
+                width: 18px;
+                height: 18px;
                 border: 1px solid #ccc;
                 border-radius: 50%;
                 margin-left: -10px;
@@ -342,10 +341,16 @@ input {
 
         .actiInfo {
           padding: 10px;
+          color:#999;
+          font-size: 13px;
+          >.actiNameItem{
+            color:#222;
+            font-size: 16px;
+          }
 
           .actiTimer {
             text-indent: -10px;
-            margin-left: 18px;
+            margin:10px 0 5px 18px;
           }
         }
       }

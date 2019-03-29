@@ -16,6 +16,7 @@
       <div class="tipPsw">长度至少8位</div>
       <input class="input" type="password" style="margin-bottom:30px" placeholder="请确认登录密码" v-model="password1">
       <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="submit()">提交</el-button>
+      <div class="returnBack" @click="handleLogin">返回登录页</div>
     </div>
   </div>
 </template>
@@ -32,6 +33,9 @@ export default {
   },
   created() {},
   methods: {
+    handleLogin() {
+      this.$router.push({ path: "/" });
+    },
     submit() {
       let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
       let psw = /^(?!^\d+$)(?!^[A-Za-z]+$)(?!^[^A-Za-z0-9]+$)(?!^.*[\u4E00-\u9FA5].*$)^\S{8,16}$/;
@@ -65,10 +69,10 @@ export default {
         // dataFlag: false,
         callback: function(res) {
           if (res.code == "0000") {
-            _this.$message.success('修改密码成功');
-            setTimeout(()=>{
-            _this.$router.push('/')
-            },1000)
+            _this.$message.success("修改密码成功");
+            setTimeout(() => {
+              _this.$router.push("/");
+            }, 1000);
           } else {
             _this.$message.error(res.result);
           }
@@ -82,13 +86,13 @@ export default {
         return;
       }
       let _this = this;
-      this.api.post({
-        url: `springcloud-user/guest/userJoin/getCode?phone=${_this.phone}`,
+      this.api.get({
+        url: `getCode`,
         data: {
           phone: _this.phone
         },
-        dataFlag: true,
-        urlFlag: true,
+        // dataFlag: true,
+        // urlFlag: true,
         callback: function(res) {
           if (res.code == "0000") {
             console.log(res);
@@ -113,8 +117,16 @@ export default {
   left: 0;
   right: 0;
   z-index: -1;
-  background: url("../../../static/img/login-bg.png") 100% 100% / 100% 100%
+  background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
+  .returnBack {
+    color: #00a041;
+    cursor: pointer;
+    position: relative;
+    right: -282px;
+    top: 20px;
+    font-size: 12px;
+  }
   .loginLogo {
     position: absolute;
     width: 155px;
@@ -128,7 +140,7 @@ export default {
   }
   .registerBox,
   .registerBox2 {
-    background: #fff;
+    background: rgba(255, 255, 255, .95);
     padding: 21px 95px;
     padding-bottom: 35px;
     width: 270px;

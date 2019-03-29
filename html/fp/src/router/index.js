@@ -33,20 +33,21 @@ export default new Router({
     {
       path: '/user',
       component: resolve => require(['@/views/home'],resolve),
+      name:'user',
       meta: {title: '用户中心'},
-
-      children:[
-        {
-        path:'/user/userHome',
-        name:'userHome',
-        component:resolve => require(['@/views/home/userHome'],resolve)
-      },
-        {
-        path:'/user/userData',
-        name:'userData',
-        component:resolve => require(['@/views/home/userData'],resolve)
-      },
-    ]
+      
+    //   children:[
+    //     {
+    //     path:'/user/userHome',
+    //     name:'userHome',
+    //     component:resolve => require(['@/views/home/userHome'],resolve)
+    //   },
+    //     {
+    //     path:'/user/userData',
+    //     name:'userData',
+    //     component:resolve => require(['@/views/home/userData'],resolve),
+    //   },
+    // ]
     },
     {
       path: '/actiCenter',

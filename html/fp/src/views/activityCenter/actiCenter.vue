@@ -60,7 +60,7 @@
               <img :src="item.actiPosterUrl" class="postImg" alt="活动海报图片" @click="handleRout(item.id)">
             </div>
             <div class="actiInfo">
-              <p>{{item.actiName}}</p>
+              <p class="actiNameItem">{{item.actiName}}</p>
               <p class="actiTimer">
                 <i class="el-icon-time"></i>
                 <span>{{item.actiStartTime}}-{{item.actiEndTime}}</span>

@@ -5,10 +5,11 @@
     </div>
     <div class="loginBox">
       <el-form ref="loginform" :model="loginform">
-          <input type="text" placeholder="请输入手机号码" v-model.trim="loginform.account">
-          <input type="password" placeholder="请输入密码" v-model.trim="loginform.password">
+        <input type="text" placeholder="请输入手机号码" v-model.trim="loginform.account">
+        <input type="password" placeholder="请输入密码" v-model.trim="loginform.password">
         <span class="forgetPass" @click="handleForpsw">忘记密码？</span>
-          <el-button plain style="width:100%;height:40px;line-height:14px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;" @click="loginForm('loginform')">登&nbsp;录</el-button>
+        <el-button plain style="width:100%;height:40px;line-height:14px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;" @click="loginForm('loginform')">登&nbsp;录</el-button>
+        <!-- <div class="returnBack" @click="$router.push({path:'/userData'})">返回首页</div> -->
         <span class="register" @click="handleRester">立即注册</span>
       </el-form>
     </div>
@@ -33,17 +34,17 @@ export default {
     handleForpsw() {
       this.$router.push({ path: "forgetPsw" });
     },
-    handleRester(){
-      this.$router.push({ path: 'register' })
+    handleRester() {
+      this.$router.push({ path: "register" });
     },
     loginForm(loginform) {
-      if(!this.loginform.account){
-        this.$message.error('请输入用户名')
-        return
+      if (!this.loginform.account) {
+        this.$message.error("请输入用户名");
+        return;
       }
-      if(!this.loginform.password){
-        this.$message.error('请输入密码')
-        return
+      if (!this.loginform.password) {
+        this.$message.error("请输入密码");
+        return;
       }
       let _this = this;
       this.api.post({
@@ -56,10 +57,13 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             sessionStorage.token = res.data;
-            _this.api.setToken(res.data)
-            _this.$router.push({ path: "/user/userHome", query: { account: _this.loginform.account } })
-          } else{
-            _this.$message.error(res.result)
+            // _this.api.setToken(res.data);
+            _this.$router.push({
+              path: "/user",
+              query: { account: _this.loginform.account }
+            });
+          } else {
+            _this.$message.error(res.result);
           }
         }
       });
@@ -77,20 +81,20 @@ export default {
   left: 0;
   right: 0;
   z-index: -1;
-  background: url("../../../static/img/login-bg.png") 100% 100% / 100% 100%
+  background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
-    .loginLogo{
-      width: 155px;
-      height: 38px;
-      img{
-        width: 100%;
-        height: 100%;
-        padding-left:160px;
-        padding-top:35px;
-      }
+  .loginLogo {
+    width: 155px;
+    height: 38px;
+    img {
+      width: 100%;
+      height: 100%;
+      padding-left: 160px;
+      padding-top: 35px;
     }
+  }
   .loginBox {
-    background: #fff;
+    background: rgba(255, 255, 255, .95);
     padding: 45px 75px;
     width: 266px;
     height: 185px;
@@ -109,8 +113,8 @@ export default {
       text-indent: 15px;
       border-radius: 5px;
     }
-    input:nth-child(1){
-      margin-bottom:20px;
+    input:nth-child(1) {
+      margin-bottom: 20px;
     }
     input::-webkit-input-placeholder {
       color: #b7b7b7;
@@ -129,12 +133,19 @@ export default {
       cursor: pointer;
     }
     .register {
-      display: inline-block;
+      // display: inline-block;
       font-size: 13px;
       color: #f00;
       position: absolute;
       right: 20px;
       bottom: 10px;
+      cursor: pointer;
+    }
+    .returnBack {
+      font-size: 13px;
+      position: absolute;
+      left:20px;
+      bottom:10px;
       cursor: pointer;
     }
   }

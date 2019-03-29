@@ -3,8 +3,8 @@ export default {
     host:"http://112.94.22.222:8000/",//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
-        findActivityTypeList:"springcloud-park/guest/findActivityTypeList",//查询活动类型列表
-        activityListSlim:"springcloud-park/guest/activityListSlim",//获取前台活动列表
+        findActivityTypeList:"springcloud-park/guest/activity/findActivityTypeList",//查询活动类型列表
+        activityListSlim:"springcloud-park/guest/activity/activityListSlim",//获取前台活动列表
         getActivityDetails:"springcloud-park/guest/getActivityDetails",//获取活动详情
         getCommentInfo:"springcloud-park/guest/getCommentInfo",//获取评论信息
         activityApplyList:"springcloud-park/activity/activityApply/activityApplyList",//报名人列表查看
@@ -48,7 +48,10 @@ export default {
         if(!data) data = {}
 
         axios.get(this.host + url, {
-            params: data || {}
+            params: data || {},
+            headers:{
+                'token':sessionStorage.token || ''
+            }
         })
             .then(function (response) {
                 if (typeof callback === "function")
@@ -101,7 +104,6 @@ export default {
         }
 
         if(!data) data = {}
-
         if(dataFlag){
             var querystring = require('querystring');
             var params = querystring.stringify(data);
@@ -112,7 +114,8 @@ export default {
         }
         axios.post(this.host + url, params,{
             headers: {
-                'Content-Type':headerSS
+                'Content-Type':headerSS,
+                'token':sessionStorage.token || ''
             }
         })
           .then(function (response) {

@@ -208,6 +208,12 @@ public class ActivityController extends BaseController {
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
+        for(int i=0;i<activityApplyParam.getExportTitle().length;i++){
+            logger.info("------入参导出标题：{}--------",activityApplyParam.getExportTitle()[i]);
+        }
+        for(int i=0;i<activityApplyParam.getExportColName().length;i++){
+            logger.info("------入参导出的字段别名：{}--------",activityApplyParam.getExportColName()[i]);
+        }
         //下载文件名
         String fileName="活动报名人";
         String sheetName = "活动报名人";

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.policy.dao.PolicyGuideMapper">
+    <select id="getPolicyManagementList" parameterType="com.jn.park.policy.model.PolicyManagementParam"
+            resultType="com.jn.park.policy.model.PolicyManagementShow">
+        select
+          sp.policy_title   as "policyTitle"              <!--政策标题-->
+          ,sp.read_num as "readNum"                       <!--阅读次数-->
+          ,sp.policy_level_name as "policyLevelName"      <!--政策级别名称-->
+          ,sp.policy_class_name as "policyClassName"      <!--政策分类名称-->
+          ,date_format(sp.release_date,'%Y/%m/%d %H:%i:%s') as "releaseDate"  <!--发布时间-->
+          ,sp.support_method as "supportMethod"           <!--支持方式-->
+          ,sp.support_industry as "supportIndustry"       <!--支持产业-->
+          ,sp.issue_unit as "issueUnit"                   <!--发文单位-->
+        from tb_policy sp
+        where 1=1
+        <if test=" status != null and status != '' " ><!--状态-->
+            and sp.status=#{status}
+        </if>
+        <if test="policyTitle != null and policyTitle != ''"><!--政策标题-->
+            and sp.policy_title like concat('%',#{policyTitle},'%')
+        </if>
+    </select>
+    <!--关联图解政策信息/关联政策原文-->
+    <select id="getPolicyInfo" resultType="com.jn.park.policy.model.PolicyInfoShow">
+        select
+          sp.policy_id as "policyId",
+          sp.policy_title as "policyTitle"
+        from tb_policy sp
+        where 1=1
+        and sp.status='1'
+        and sp.record_status='1'
+        and sp.policy_type=#{policyType}
+    </select>
+</mapper>

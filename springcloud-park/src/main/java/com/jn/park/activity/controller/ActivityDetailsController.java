@@ -4,11 +4,11 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityPagingParam;
-import com.jn.park.model.Comment;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -47,11 +47,8 @@ public class ActivityDetailsController extends BaseController {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
-            Result result=new Result();
-            result.setResult(ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
-            result.setCode(ActivityExceptionEnum.NETWORK_ANOMALY.getCode());
             logger.warn("获取活动详情接口获取当前登录用户失败");
-            return result;
+            return new Result(ActivityExceptionEnum.NETWORK_ANOMALY.getCode(),ActivityExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         ActivityDetailVO activityDetailVO=activityDetailsService.findActivityDetails(activityId,user.getAccount());
         return new Result<>(activityDetailVO);

@@ -1,7 +1,7 @@
 package com.jn.park.activity.vo;
 
 
-import com.jn.park.model.ActivityDetail;
+import com.jn.park.activity.model.ActivityDetail;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

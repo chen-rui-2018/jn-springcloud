@@ -51,9 +51,7 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentService.commentActivity(commentAddParam,user.getAccount());
         return result;
@@ -68,9 +66,7 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论点赞获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentService.commentActivityLike(id,user.getAccount());
         return result;
@@ -85,9 +81,7 @@ public class CommentController extends BaseController {
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
             logger.info("评论取消点赞获取用户账号失败");
-            result.setCode(CommentExceptionEnum.NETWORK_ANOMALY.getCode());
-            result.setResult(CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
-            return result;
+            return new Result(CommentExceptionEnum.NETWORK_ANOMALY.getCode(),CommentExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
         commentService.commentActivityCancelLike(id,user.getAccount());
         return result;

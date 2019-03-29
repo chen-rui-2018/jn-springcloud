@@ -16,7 +16,7 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.entity.TbActivityDetail;
 import com.jn.park.activity.service.ActivityApplyService;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.send.api.DelaySendMessageClient;

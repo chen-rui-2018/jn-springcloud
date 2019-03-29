@@ -1,9 +1,7 @@
-package com.jn.park.model;
+package com.jn.park.activity.model;
 
 import javax.validation.constraints.NotNull;
 import com.jn.common.model.Page;
-import com.jn.common.util.Assert;
-import com.jn.park.enums.ActivityExceptionEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

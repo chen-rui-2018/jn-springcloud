@@ -4,9 +4,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityPagingParam;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 
 import java.util.List;
 

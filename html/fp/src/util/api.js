@@ -1,6 +1,6 @@
 ﻿import axios from "axios"
 export default {
-    host:"http://192.168.10.31:1101/",//api的域名提出来放这里
+    host:"http://112.94.22.222:8000/",//api的域名提出来放这里
     apiURL:{ //API路径统一管理,需要的路径在这里加就可以了
         loginURL:"springcloud-app-system/login",
         findActivityTypeList:"springcloud-park/guest/findActivityTypeList",//查询活动类型列表
@@ -61,11 +61,11 @@ export default {
                     console.error(err)
             });
 
-    
+
 
     /**  使用实例
      *   无需引入任何文件可全局使用
-     * 
+     *
      *  this.api.get({
      *      url:'loginURL', //此处使用的是apiURL里面的对象key值
      *      data:{   //可选
@@ -76,9 +76,9 @@ export default {
      *      },
      *      error:function(err){
      *          console.log(err)
-     *      }  
+     *      }
      *  })
-     * 
+     *
      */
 
     },
@@ -99,9 +99,9 @@ export default {
         }else{
             url = url
         }
-        
+
         if(!data) data = {}
-        
+
         if(dataFlag){
             var querystring = require('querystring');
             var params = querystring.stringify(data);
@@ -118,11 +118,11 @@ export default {
           .then(function (response) {
             if (typeof callback === "function")
                 callback(response.data);
-                
+
           })
           .catch(function (err) {
             if (typeof error === "function")
-                error(err); 
+                error(err);
             else
                 console.error(err)
           });
@@ -130,7 +130,7 @@ export default {
 
     /**  使用实例
      *   无需引入任何文件可全局使用
-     * 
+     *
      *  this.api.post({
      *      url:'loginURL', //此处使用的是apiURL里面的对象key值
      *      data:{   //可选
@@ -141,26 +141,26 @@ export default {
      *      },
      *      error:function(err){
      *          console.log(err)
-     *      }  
+     *      }
      *  })
-     * 
+     *
      */
-    
+
 
     },
     getType(obj){
         //tostring会返回对应不同的标签的构造函数
         var toString = Object.prototype.toString;
         var map = {
-           '[object Boolean]'  : 'boolean', 
-           '[object Number]'   : 'number', 
-           '[object String]'   : 'string', 
-           '[object Function]' : 'function', 
-           '[object Array]'    : 'array', 
-           '[object Date]'     : 'date', 
-           '[object RegExp]'   : 'regExp', 
+           '[object Boolean]'  : 'boolean',
+           '[object Number]'   : 'number',
+           '[object String]'   : 'string',
+           '[object Function]' : 'function',
+           '[object Array]'    : 'array',
+           '[object Date]'     : 'date',
+           '[object RegExp]'   : 'regExp',
            '[object Undefined]': 'undefined',
-           '[object Null]'     : 'null', 
+           '[object Null]'     : 'null',
            '[object Object]'   : 'object'
        };
        if(obj instanceof Element) {

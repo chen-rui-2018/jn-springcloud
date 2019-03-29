@@ -141,8 +141,7 @@ export default {
             {
               name: "待办事务处理",
               flag: false,
-              // path: "http://112.94.22.222:2381/platform/office/bpmReceivedProcess/pending.htm",
-              path: "https://www.baidu.com/",
+              path: "http://112.94.22.222:2381/platform/office/bpmReceivedProcess/pending.htm",
               id: 10,
             },
             {
@@ -154,7 +153,7 @@ export default {
             {
               name: "我发起的流程",
               flag: false,
-              path: "112.94.22.222:2381/platform/office/bpmInitiatedProcess/myRequest.htm",
+              path: "http://112.94.22.222:2381/platform/office/bpmInitiatedProcess/myRequest.htm",
               id: 12,
             }
           ]
@@ -162,9 +161,6 @@ export default {
       ]
     };
   },
-  mounted() {
-    // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
   directives: {
     focus: {
       // 指令的定义
@@ -179,6 +175,8 @@ export default {
     });
   },
   mounted() {
+    // 预先登录模式
+    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
   methods: {

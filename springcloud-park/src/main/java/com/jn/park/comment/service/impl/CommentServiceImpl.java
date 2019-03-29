@@ -9,9 +9,12 @@ import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.entity.TbParkLikeCriteria;
 import com.jn.park.comment.dao.TbCommentMapper;
+import com.jn.park.comment.dao.TbCommentSensitiveWordMapper;
 import com.jn.park.comment.entity.TbComment;
 import com.jn.park.comment.entity.TbCommentCriteria;
-import com.jn.park.comment.model.CommentAdd;
+import com.jn.park.comment.entity.TbCommentSensitiveWord;
+import com.jn.park.comment.entity.TbCommentSensitiveWordCriteria;
+import com.jn.park.comment.model.CommentAddParam;
 import com.jn.park.comment.service.CommentService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.enums.CommentExceptionEnum;
@@ -46,7 +49,16 @@ public class CommentServiceImpl implements CommentService {
     private TbParkLikeMapper tbParkLikeMapper;
 
     @Autowired
+    private TbCommentSensitiveWordMapper tbCommentSensitiveWordMapper;
+
+    @Autowired
     private RedisCacheFactory redisCacheFactory;
+
+    /**
+     * 删除状态 0：已删除   1：有效
+     */
+    private static final byte RECORD_STATUS=1;
+
     /**
      * 时间格式
      */
@@ -75,13 +87,13 @@ public class CommentServiceImpl implements CommentService {
 
 
     /**
-     * 活动评论/回复
-     * @param commentAdd  点评信息   活动id,点评类型、点评内容
+     * 新增评论/回复
+     * @param commentAddParam  点评信息   活动id,点评类型、点评内容
      * @param account     用户账号/点评人
      */
-    @ServiceLog(doAction ="新增活动点评" )
+    @ServiceLog(doAction ="新增评论/回复" )
     @Override
-    public void commentActivity(CommentAdd commentAdd, String account) {
+    public void commentActivity(CommentAddParam commentAddParam, String account) {
         //从redis中获取敏感词词库
         Cache<Object> cache = redisCacheFactory.getCache(SENSITIVE_WORD_CACHE, expire);
         List<String> wordList = ( List<String>) cache.get(SENSITIVE_WORD);
@@ -92,10 +104,13 @@ public class CommentServiceImpl implements CommentService {
         int wordNum=0;
         if(wordList.size()==wordNum){
             //若redis中没有，从数据库中获取词库
-            //todo:从数据库中获取敏感词库数据
-            wordList.add("太多");
-            wordList.add("哈哈");
-            wordList.add("发呆");
+            TbCommentSensitiveWordCriteria example=new TbCommentSensitiveWordCriteria();
+            //敏感词分类（0：评论敏感词   1：其他敏感词）
+            example.createCriteria().andSensitiveTypeEqualTo("0").andRecordStatusEqualTo(RECORD_STATUS);
+            List<TbCommentSensitiveWord> tbCommentSensitiveWordList = tbCommentSensitiveWordMapper.selectByExample(example);
+            for(TbCommentSensitiveWord tbCommentSensitiveWord:tbCommentSensitiveWordList){
+                wordList.add(tbCommentSensitiveWord.getSensitiveWord());
+            }
             //把数据库获取词库写入redis中
             cache.put(SENSITIVE_WORD, wordList);
         }
@@ -106,21 +121,21 @@ public class CommentServiceImpl implements CommentService {
         }
         SensitiveWordUtil.init(sensitiveWordSet);
         //判断是否有敏感词
-        boolean result = SensitiveWordUtil.contains(commentAdd.getComContent());
+        boolean result = SensitiveWordUtil.contains(commentAddParam.getComContent());
         if(result){
             logger.info("评论中有敏感词，不允许新增");
             throw new JnSpringCloudException(CommentExceptionEnum.SENSITIVE_WORDS_IN_COMMENT);
         }
-        //新增活动点评
-        addActivityComment(commentAdd, account);
+        //新增点评
+        addActivityComment(commentAddParam, account);
     }
 
     /**
-     * 活动评论点赞
+     * 评论点赞
      * @param id         点评ID/活动ID
      * @param account    用户账号/点评人
      */
-    @ServiceLog(doAction = "活动评论点赞")
+    @ServiceLog(doAction = "评论点赞")
     @Override
     public void commentActivityLike(String  id,String account) {
         //状态为点赞  0：取消点赞  1：点赞
@@ -130,11 +145,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     /**
-     * 活动评论取消点赞
+     * 评论取消点赞
      * @param id         点评ID/活动ID
      * @param account    用户账号/点评人
      */
-    @ServiceLog(doAction = "活动评论取消点赞")
+    @ServiceLog(doAction = "评论取消点赞")
     @Override
     public void commentActivityCancelLike(String id,String account) {
         //状态为点赞  0：取消点赞  1：点赞
@@ -155,20 +170,18 @@ public class CommentServiceImpl implements CommentService {
         TbCommentCriteria example=new TbCommentCriteria();
         //有效点评状态
         String applyState="1";
-        //删除状态未被删除  0：删除  1:正常
-        byte recordStatus=1;
-        example.createCriteria().andIdEqualTo(id).andComStatusEqualTo(applyState).andRecordStatusEqualTo(recordStatus);
+        example.createCriteria().andIdEqualTo(id).andComStatusEqualTo(applyState).andRecordStatusEqualTo(RECORD_STATUS);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
         if(commentList==null || commentList.isEmpty()){
             throw new JnSpringCloudException(ActivityExceptionEnum.APPLY_IS_NOT_EXIST);
         }
         //查询园区点赞表（tb_park_like），根据活动id/评论id,用户判断是否存在点赞信息
         TbParkLikeCriteria existExample=new TbParkLikeCriteria();
-        existExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andRecordStatusEqualTo(recordStatus);
+        existExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andRecordStatusEqualTo(RECORD_STATUS);
         long existLikeNum = tbParkLikeMapper.countByExample(existExample);
         //查询园区点赞表（tb_park_like），根据活动id/评论id,用户以及状态为点赞,删除状态为未删除来判断是否已点赞/取消点赞
         TbParkLikeCriteria optionLikeExample=new TbParkLikeCriteria();
-        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andLikeStatusEqualTo(state).andRecordStatusEqualTo(recordStatus);
+        optionLikeExample.createCriteria().andLikeParentIdEqualTo(id).andCreatorAccountEqualTo(account).andLikeStatusEqualTo(state).andRecordStatusEqualTo(RECORD_STATUS);
         long optionLikeNum = tbParkLikeMapper.countByExample(optionLikeExample);
         //已点赞/已取消点赞，不做操作
         if(optionLikeNum>0){
@@ -212,20 +225,21 @@ public class CommentServiceImpl implements CommentService {
         tbCommentMapper.updateByExampleSelective(tbComment, example);
     }
 
+
     /**
-     * 新增活动点评
-     * @param commentAdd 点评信息
+     * 新增点评
+     * @param commentAddParam 点评信息
      * @param account    用户账号
      */
-    @ServiceLog(doAction = "新增活动点评")
-    private void addActivityComment(CommentAdd commentAdd, String account) {
+    @ServiceLog(doAction = "新增点评")
+    private void addActivityComment(CommentAddParam commentAddParam, String account) {
         TbComment tbComment=new TbComment();
         //id
         tbComment.setId(UUID.randomUUID().toString().replaceAll("-", ""));
-        //根节点id  活动id/服务id
-        tbComment.setRootId(commentAdd.getRootId());
+        //根节点id  活动id/服务id/话题id
+        tbComment.setRootId(commentAddParam.getRootId());
         //点评父标识（点评ID/活动id）
-        tbComment.setpId(commentAdd.getpId());
+        tbComment.setpId(commentAddParam.getpId());
         //点评人
         tbComment.setCreatorAccount(account);
         //点评状态 0:无效  1：有效 新增点评的状态为有效
@@ -233,7 +247,7 @@ public class CommentServiceImpl implements CommentService {
         tbComment.setComStatus(state);
         //根据点评父id得到被点评人
         TbCommentCriteria example=new TbCommentCriteria();
-        example.createCriteria().andIdEqualTo(commentAdd.getpId()).andComStatusEqualTo(state);
+        example.createCriteria().andIdEqualTo(commentAddParam.getpId()).andComStatusEqualTo(state);
         List<TbComment> commentList = tbCommentMapper.selectByExample(example);
         if(commentList!=null && !commentList.isEmpty()){
             //把被点评信息的点评人设置为当前信息的被点评人
@@ -245,13 +259,10 @@ public class CommentServiceImpl implements CommentService {
         int num=0;
         tbComment.setLikeNum(num);
         //点评类型
-        tbComment.setComType(commentAdd.getComType());
+        tbComment.setComType(commentAddParam.getComType());
         //点评内容
-        tbComment.setComContent(commentAdd.getComContent());
-        //是否删除  0:删除   1：正常
-        byte recordStatus=1;
-        tbComment.setRecordStatus(recordStatus);
-
+        tbComment.setComContent(commentAddParam.getComContent());
+        tbComment.setRecordStatus(RECORD_STATUS);
         tbCommentMapper.insertSelective(tbComment);
     }
 
@@ -298,9 +309,7 @@ public class CommentServiceImpl implements CommentService {
         //状态 0：取消点赞  1：点赞
         String likeState="1";
         parkLike.setLikeStatus(likeState);
-        //是否已删除  0:删除    1：正常
-        byte recordStatus=1;
-        parkLike.setRecordStatus(recordStatus);
+        parkLike.setRecordStatus(RECORD_STATUS);
         tbParkLikeMapper.insertSelective(parkLike);
     }
 }

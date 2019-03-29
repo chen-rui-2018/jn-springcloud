@@ -8,6 +8,7 @@ import com.jn.park.finance.model.FinanceExpensesTypeNameModel;
 import com.jn.park.finance.model.FinanceSelectDepartmentModel;
 import com.jn.park.finance.vo.FinanceExpendFinanceTypeVo;
 import com.jn.park.finance.vo.FinanceExpendFindImportDataVo;
+import com.jn.park.finance.vo.FinanceExpendHistoryVo;
 import com.jn.park.finance.vo.FinanceExpendImportDataVo;
 import com.jn.system.model.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +29,7 @@ public interface FinanceExpensesService {
      * @param financeExpensesPageModel
      * @return
      */
-    PaginationData findAll(FinanceExpensesPageModel financeExpensesPageModel);
+    PaginationData<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel);
 
     /**
      * 支出录入历史查询分页查询

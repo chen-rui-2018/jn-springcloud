@@ -17,11 +17,9 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -38,10 +36,10 @@ public class EmailController extends BaseController {
     @Autowired
     private EmailService emailService;
 
-    @ControllerLog(doAction = "一键Email添加/编辑功能")
+    @ControllerLog(doAction = "添加/编辑一键Email")
     @RequiresPermissions("/oa/email/addOrUpdate")
-    @ApiOperation(value = "一键Email添加/编辑功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/addOrUpdate")
+    @ApiOperation(value = "添加/编辑一键Email", notes = "一键Email添加/编辑功能")
+    @RequestMapping(value = "/addOrUpdate", method = RequestMethod.POST)
     public Result addOrUpdate(@Validated @RequestBody EmailAdd emailAdd) {
         //获取当前用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -57,10 +55,10 @@ public class EmailController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "用户手动一键发送邮件")
+    @ControllerLog(doAction = "一键发送功能")
     @RequiresPermissions("/oa/email/sendEmailManual")
-    @ApiOperation(value = "用户手动一键发送邮件", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/sendEmailManual")
+    @ApiOperation(value = "一键发送功能", notes = "用户手动一键发送邮件")
+    @RequestMapping(value = "/sendEmailManual", method = RequestMethod.POST)
     public Result sendEmailManual(String emailId) {
         //获取当前用户信息
         User user = (User) SecurityUtils.getSubject().getPrincipal();
@@ -68,28 +66,28 @@ public class EmailController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "一键Email列表功能")
+    @ControllerLog(doAction = "一键Email列表")
     @RequiresPermissions("/oa/email/list")
-    @ApiOperation(value = "一键Email列表功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/list")
-    public Result list(@Validated @RequestBody EmailPage emailPage) {
-        PaginationData data = emailService.list(emailPage);
+    @ApiOperation(value = "一键Email列表", notes = "一键Email列表功能")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public Result<PaginationData<List<EmailVO>>> list(@Validated @RequestBody EmailPage emailPage) {
+        PaginationData<List<EmailVO>> data = emailService.list(emailPage);
         return new Result(data);
     }
 
-    @ControllerLog(doAction = "查看邮件任务详情功能")
+    @ControllerLog(doAction = "查看邮件任务详情")
     @RequiresPermissions("/oa/email/getEmailDetails")
-    @ApiOperation(value = "查看邮件任务详情功能", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/getEmailDetails")
-    public Result getEmailDetails(String emailId) {
+    @ApiOperation(value = "查看邮件任务详情", notes = "查看邮件任务详情功能")
+    @RequestMapping(value = "/getEmailDetails", method = RequestMethod.GET)
+    public Result<EmailVO> getEmailDetails(String emailId) {
         EmailVO emailVO = emailService.getEmailDetails(emailId);
         return new Result(emailVO);
     }
 
-    @ControllerLog(doAction = "(逻辑)批量删除邮件任务")
+    @ControllerLog(doAction = "删除邮件任务")
     @RequiresPermissions("/oa/email/deleteBatch")
-    @ApiOperation(value = "(逻辑)批量删除邮件任务", httpMethod = "POST", response = Result.class)
-    @RequestMapping("/deleteBatch")
+    @ApiOperation(value = "删除邮件任务", notes = "(逻辑)批量删除邮件任务")
+    @RequestMapping(value = "/deleteBatch", method = RequestMethod.POST)
     public Result deleteBatch(@RequestParam("emailIds") String[] emailIds) {
         Assert.noNullElements(emailIds, "删除邮件不能为空");
 

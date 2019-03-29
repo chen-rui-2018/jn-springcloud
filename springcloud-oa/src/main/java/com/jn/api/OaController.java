@@ -7,6 +7,7 @@ import com.jn.oa.email.service.EmailService;
 import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.model.Email;
+import com.jn.oa.schedule.service.ScheduleService;
 import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private WorkPlanService workPlanService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -96,6 +100,5 @@ public class OaController extends BaseController implements OaClient {
         workPlanService.updateWorkPlanIsExpire();
         return new Result<>(true);
     }
-
 
 }

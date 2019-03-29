@@ -19,13 +19,13 @@ public class NoticePage extends Page implements Serializable {
 
     private static final long serialVersionUID = 9083783232467337356L;
 
-    @ApiModelProperty(value = "公告标题")
+    @ApiModelProperty(value = "公告标题", example = "公告")
     private String noticeTitle;
 
-    @ApiModelProperty(value = "发布平台类型（1:协同办公、2:外部系统、3全部")
+    @ApiModelProperty(value = "发布平台类型（1:协同办公、2:外部系统", example = "\"1\"")
     private String platformType;
 
-    @ApiModelProperty(value = "状态（0删除,1有效,2失效")
+    @ApiModelProperty(value = "状态（0删除,1有效,2失效", example = "\"1\"")
     private Byte recordStatus;
 
     public NoticePage() {

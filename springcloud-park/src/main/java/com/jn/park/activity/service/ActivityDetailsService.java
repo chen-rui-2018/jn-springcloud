@@ -5,7 +5,7 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.vo.ActivityDetailVO;
 import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.ActivityPagingParam;
 import com.jn.park.model.Comment;
 
 import java.util.List;
@@ -30,12 +30,12 @@ public interface ActivityDetailsService {
 
     /**
      * 根据活动id获取活动点评信息
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage     是否分页  true：分页   false:不分页
      * @param loginAccount 当前登录用来账号
      * @return
      */
-    PaginationData<List<Comment>> getCommentInfo(ActivityQueryPaging activityQueryPaging, String loginAccount, Boolean isPage);
+    PaginationData<List<Comment>> getCommentInfo(ActivityPagingParam activityPagingParam, String loginAccount, Boolean isPage);
 
     /**
      * 根据活动id获取活动点赞信息

@@ -10,7 +10,7 @@ public interface TbFinanceTypeMapper {
 
     int deleteByExample(TbFinanceTypeExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbFinanceType record);
 
@@ -18,7 +18,7 @@ public interface TbFinanceTypeMapper {
 
     List<TbFinanceType> selectByExample(TbFinanceTypeExample example);
 
-    TbFinanceType selectByPrimaryKey(Integer id);
+    TbFinanceType selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbFinanceType record, @Param("example") TbFinanceTypeExample example);
 

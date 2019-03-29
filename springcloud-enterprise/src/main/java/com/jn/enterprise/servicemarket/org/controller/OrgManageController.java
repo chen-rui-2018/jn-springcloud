@@ -56,7 +56,7 @@ public class OrgManageController extends BaseController {
     }
 
     @ControllerLog(doAction = "修改服务机构基本信息")
-    @ApiOperation(value = "修改服务机构基本信息(app-修改基本资料(我的机构))",notes = "返回结果为机构ID")
+    @ApiOperation(value = "修改服务机构基本信息(app-修改基本资料)",notes = "返回结果为机构ID")
     @RequestMapping(value = "/updateOrgBasicData",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/org/updateOrgBasicData")
     public Result<String> updateOrgBasicData(@RequestBody @Validated OrgBasicData orgBasicData){

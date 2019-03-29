@@ -69,10 +69,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        gamtopic
+                        finance
                     </contexts>
                     <tableNames>
-                        tb_gam_topic
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

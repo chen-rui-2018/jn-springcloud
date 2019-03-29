@@ -17,7 +17,9 @@ public enum SysUserExceptionEnums implements CodeAndMsg {
     ADD_DEPRTMENTPOST_ERROR("1110503", "添加失败,部门岗位必须同时添加"),
     ADDERR_NAME_EXIST("1110504", "添加失败,用户账号已存在"),
     ADD_DEPARTMENT_POST_REPEAT("1110505", "添加失败,部门岗位信息不能重复添加"),
-    NOT_ALLOWED_DELETE_GROUP("1110506", "用户组正在被使用,不允许删除");
+    NOT_ALLOWED_DELETE_GROUP("1110506", "用户组正在被使用,不允许删除"),
+    ACCOUNT_NOT_NULL("1110506","账号不能为空")
+    ;
 
 
     private String code;

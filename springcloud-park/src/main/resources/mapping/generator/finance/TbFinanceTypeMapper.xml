@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceTypeMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceType">
-    <id column="t_id" jdbcType="INTEGER" property="id" />
+    <id column="t_id" jdbcType="VARCHAR" property="id" />
     <result column="t_finance_name" jdbcType="VARCHAR" property="financeName" />
     <result column="t_show_order" jdbcType="INTEGER" property="showOrder" />
     <result column="t_record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -88,15 +88,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_finance_type t
-    where t.id = #{id,jdbcType=INTEGER}
+    where t.id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_finance_type
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceTypeExample">
     delete from tb_finance_type t
@@ -105,22 +105,19 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.park.finance.entity.TbFinanceType">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_finance_type (finance_name, show_order, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
-    values (#{financeName,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_finance_type (id, finance_name, show_order, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{financeName,jdbcType=VARCHAR}, #{showOrder,jdbcType=INTEGER}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.finance.entity.TbFinanceType">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_finance_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="financeName != null">
         finance_name,
       </if>
@@ -144,6 +141,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="financeName != null">
         #{financeName,jdbcType=VARCHAR},
       </if>
@@ -177,7 +177,7 @@
     update tb_finance_type t
     <set>
       <if test="record.id != null">
-        t.id = #{record.id,jdbcType=INTEGER},
+        t.id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.financeName != null">
         t.finance_name = #{record.financeName,jdbcType=VARCHAR},
@@ -207,7 +207,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_finance_type t
-    set t.id = #{record.id,jdbcType=INTEGER},
+    set t.id = #{record.id,jdbcType=VARCHAR},
       t.finance_name = #{record.financeName,jdbcType=VARCHAR},
       t.show_order = #{record.showOrder,jdbcType=INTEGER},
       t.record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -244,7 +244,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.park.finance.entity.TbFinanceType">
     update tb_finance_type
@@ -255,6 +255,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -5,7 +5,7 @@
     <id column="emonth_id" jdbcType="INTEGER" property="id" />
     <result column="emonth_cost_happend_time" jdbcType="CHAR" property="costHappendTime" />
     <result column="emonth_cost" jdbcType="DECIMAL" property="cost" />
-    <result column="emonth_cost_after_type_id" jdbcType="INTEGER" property="costAfterTypeId" />
+    <result column="emonth_cost_after_type_id" jdbcType="VARCHAR" property="costAfterTypeId" />
     <result column="emonth_cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
     <result column="emonth_department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="emonth_department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -119,7 +119,7 @@
       cost_after_type_name, department_id, department_name, 
       record_status, creator_account, created_time, 
       modifier_account, modified_time)
-    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costAfterTypeId,jdbcType=INTEGER}, 
+    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costAfterTypeId,jdbcType=VARCHAR}, 
       #{costAfterTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
@@ -172,7 +172,7 @@
         #{cost,jdbcType=DECIMAL},
       </if>
       <if test="costAfterTypeId != null">
-        #{costAfterTypeId,jdbcType=INTEGER},
+        #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         #{costAfterTypeName,jdbcType=VARCHAR},
@@ -219,7 +219,7 @@
         emonth.cost = #{record.cost,jdbcType=DECIMAL},
       </if>
       <if test="record.costAfterTypeId != null">
-        emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+        emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.costAfterTypeName != null">
         emonth.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
@@ -255,7 +255,7 @@
     set emonth.id = #{record.id,jdbcType=INTEGER},
       emonth.cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
       emonth.cost = #{record.cost,jdbcType=DECIMAL},
-      emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+      emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
       emonth.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
       emonth.department_id = #{record.departmentId,jdbcType=VARCHAR},
       emonth.department_name = #{record.departmentName,jdbcType=VARCHAR},
@@ -278,7 +278,7 @@
         cost = #{cost,jdbcType=DECIMAL},
       </if>
       <if test="costAfterTypeId != null">
-        cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+        cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
@@ -311,7 +311,7 @@
     update tb_finance_expenses_month
     set cost_happend_time = #{costHappendTime,jdbcType=CHAR},
       cost = #{cost,jdbcType=DECIMAL},
-      cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+      cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

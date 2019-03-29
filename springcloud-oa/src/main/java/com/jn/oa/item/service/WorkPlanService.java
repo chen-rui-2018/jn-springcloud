@@ -6,6 +6,8 @@ import com.jn.oa.item.vo.WorkPlanVO;
 import com.jn.system.model.User;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 /**
  * 工作计划管理服务层接口
  *
@@ -22,7 +24,7 @@ public interface WorkPlanService {
      * @param workPlanPage 分页查询条件
      * @return
      */
-    PaginationData list(WorkPlanPage workPlanPage);
+    PaginationData<List<WorkPlanVO>> list(WorkPlanPage workPlanPage);
 
     /**
      * 添加工作计划

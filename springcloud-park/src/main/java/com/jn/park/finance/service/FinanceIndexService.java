@@ -33,7 +33,7 @@ public interface FinanceIndexService {
      * @param year 年份
      * @return
      */
-    List<FinanceIndexExpendBudgetStatisticsVo>  expendBudget(String year);
+    FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>  expendBudget(String year);
 
     /**
      * 部门支出预算统计

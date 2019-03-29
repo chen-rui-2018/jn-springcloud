@@ -80,9 +80,9 @@ public class FinanceIndexController extends BaseController {
     @GetMapping(value = "/expendBudget")
     @RequiresPermissions("/finance/index/expendBudget")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019")
-    public Result<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year){
+    public Result<FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>> expendBudget(String year){
         //todo
-        List<FinanceIndexExpendBudgetStatisticsVo> expendBudget=financeIndexService.expendBudget(year);
+        FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>> expendBudget=financeIndexService.expendBudget(year);
         return new Result(expendBudget);
     }
 

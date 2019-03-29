@@ -14,10 +14,10 @@
         <div class="avaMenu" v-if="menuFlag">
           <el-card class="box-card bxcard">
             <ul class="avaUL">
-              <li style="border-bottom:1px solid #eee;">您好，{{userData.account}}</li>
+              <li style="border-bottom:1px solid #eee;">您好,{{userData.account}}</li>
               <!-- <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataLeft" :key="k" @click="dianji(i)">{{i.name}}</li> -->
               <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataTop" :key="k" @click="dianji(i)">{{i.name}}</li>
-              <li style="border-top:1px solid #eee;" @click="loginOut">退出</li>
+              <li style="border-top:1px solid #eee;" @click.stop="loginOut">退出</li>
             </ul>
           </el-card>
         </div>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.gamtopic.dao.GamTopicMapper">
+    <resultMap id="getUserFeedbackMap" type="com.jn.park.gamtopic.model.GamTopicVO">
+        <id column="t_topicId" jdbcType="VARCHAR" property="topicId" javaType="java.lang.String"/>
+        <result column="t_topicContent" jdbcType="VARCHAR" property="topicContent" javaType="java.lang.String"/>
+        <result column="t_topicType" jdbcType="VARCHAR" property="topicType" javaType="java.lang.String"/>
+        <result column="t_comNum" jdbcType="VARCHAR" property="comNum" javaType="java.lang.String"/>
+        <result column="t_comLike" jdbcType="VARCHAR" property="comLike" javaType="java.lang.String"/>
+        <result column="t_topicStatus" jdbcType="VARCHAR" property="topicStatus" javaType="java.lang.String"/>
+        <result column="t_createdTime" jdbcType="VARCHAR" property="createdTime" javaType="java.lang.String"/>
+        <result column="t_creatorAccount" jdbcType="VARCHAR" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="t_modifiedTime" jdbcType="VARCHAR" property="modifiedTime" javaType="java.lang.String"/>
+        <result column="t_modifierAccount" jdbcType="VARCHAR" property="modifierAccount" javaType="java.lang.String"/>
+
+        <!-- 文件图片 -->
+        <collection property="imgs" javaType="java.util.List"
+                    ofType="com.jn.park.fileimg.model.FileImg">
+            <id column="i_imgUrl" property="imgUrl" jdbcType="VARCHAR"/>
+            <result column="i_imgRemark" property="imgRemark" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <!--获得当前用户话题列表-->
+    <select id="getUserFeedbackList" resultMap="getUserFeedbackMap" parameterType="com.jn.park.gamtopic.model.GamTopicParam">
+        SELECT t.topic_id AS "t_topicId"
+        ,t.topic_content AS "t_feedContent"
+        ,t.topic_type AS "t_topicType"
+        ,(SELECT SUM(1) FROM tb_comment com WHERE com.root_id = t.topic_id ) AS "t_comNum"
+        ,(SELECT SUM(1) FROM tb_park_like li WHERE li.like_parent_id = t.topic_id ) AS "t_comLike"
+        ,t.topic_status AS "t_topicStatus"
+        ,DATE_FORMAT(t.created_time,'%Y-%m-%d %H:%i:%s') AS "t_createdTime"
+        ,t.creator_account AS "t_creatorAccount"
+        ,t.modifier_account AS "t_modifierAccount"
+        ,DATE_FORMAT(t.modified_time,'%Y-%m-%d %H:%i:%s') AS "t_modifiedTime"
+        ,i.img_url AS "i_imgUrl"
+        ,i.img_remark AS "i_imgRemark"
+        FROM tb_gam_topic t  LEFT JOIN tb_file_img i ON t.topic_id = i.topic_id AND i.record_status = '1'
+        WHERE t.record_status = '1'
+        <if test="topicContent != null and topicContent != ''">
+            and t.topic_content = #{topicContent}
+        </if>
+        <if test="topicType != null and topicType != ''">
+            and t.topic_type = #{topicType}
+        </if>
+        <if test="creatorAcount != null and creatorAcount != ''">
+            and t.creator_account = #{creatorAcount}
+        </if>
+
+    </select>
+
+
+</mapper>

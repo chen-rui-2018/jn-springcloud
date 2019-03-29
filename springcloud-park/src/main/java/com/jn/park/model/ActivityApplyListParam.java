@@ -15,8 +15,8 @@ import java.io.Serializable;
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value = "ActivityApplyedListQuery",description = "用户中心-报名活动列表 查询条件")
-public class ActivityApplyedListQuery extends Page implements Serializable {
+@ApiModel(value = "ActivityApplyListParam",description = "用户中心-报名活动列表 查询条件")
+public class ActivityApplyListParam extends Page implements Serializable {
     @ApiModelProperty(value = "用户账号",required = true ,example = "wangsong")
     @NotBlank(message = "用户账号不能为空")
     private String account;

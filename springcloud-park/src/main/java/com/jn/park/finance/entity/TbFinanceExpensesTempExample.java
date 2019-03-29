@@ -516,52 +516,62 @@ public class TbFinanceExpensesTempExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdEqualTo(Integer value) {
+        public Criteria andCostAfterTypeIdEqualTo(String value) {
             addCriterion("etemp.cost_after_type_id =", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdNotEqualTo(Integer value) {
+        public Criteria andCostAfterTypeIdNotEqualTo(String value) {
             addCriterion("etemp.cost_after_type_id <>", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdGreaterThan(Integer value) {
+        public Criteria andCostAfterTypeIdGreaterThan(String value) {
             addCriterion("etemp.cost_after_type_id >", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCostAfterTypeIdGreaterThanOrEqualTo(String value) {
             addCriterion("etemp.cost_after_type_id >=", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdLessThan(Integer value) {
+        public Criteria andCostAfterTypeIdLessThan(String value) {
             addCriterion("etemp.cost_after_type_id <", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdLessThanOrEqualTo(Integer value) {
+        public Criteria andCostAfterTypeIdLessThanOrEqualTo(String value) {
             addCriterion("etemp.cost_after_type_id <=", value, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdIn(List<Integer> values) {
+        public Criteria andCostAfterTypeIdLike(String value) {
+            addCriterion("etemp.cost_after_type_id like", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdNotLike(String value) {
+            addCriterion("etemp.cost_after_type_id not like", value, "costAfterTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostAfterTypeIdIn(List<String> values) {
             addCriterion("etemp.cost_after_type_id in", values, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdNotIn(List<Integer> values) {
+        public Criteria andCostAfterTypeIdNotIn(List<String> values) {
             addCriterion("etemp.cost_after_type_id not in", values, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdBetween(Integer value1, Integer value2) {
+        public Criteria andCostAfterTypeIdBetween(String value1, String value2) {
             addCriterion("etemp.cost_after_type_id between", value1, value2, "costAfterTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostAfterTypeIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andCostAfterTypeIdNotBetween(String value1, String value2) {
             addCriterion("etemp.cost_after_type_id not between", value1, value2, "costAfterTypeId");
             return (Criteria) this;
         }

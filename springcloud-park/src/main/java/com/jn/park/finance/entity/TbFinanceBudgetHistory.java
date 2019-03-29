@@ -9,7 +9,7 @@ public class TbFinanceBudgetHistory implements Serializable {
     private Integer id;
 
     /*@ApiModelProperty("费用类型ID")*/
-    private Integer costTypeId;
+    private String costTypeId;
 
     /*@ApiModelProperty("费用类型名称")*/
     private String costTypeName;
@@ -54,12 +54,12 @@ public class TbFinanceBudgetHistory implements Serializable {
         this.id = id;
     }
 
-    public Integer getCostTypeId() {
+    public String getCostTypeId() {
         return costTypeId;
     }
 
-    public void setCostTypeId(Integer costTypeId) {
-        this.costTypeId = costTypeId;
+    public void setCostTypeId(String costTypeId) {
+        this.costTypeId = costTypeId == null ? null : costTypeId.trim();
     }
 
     public String getCostTypeName() {

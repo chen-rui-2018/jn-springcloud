@@ -81,10 +81,10 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "修改活动可报名状态", notes = "数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateActivityApply",method = RequestMethod.POST)
     @RequiresPermissions("/activity/updateActivityApply")
-    public Result<Integer> updateActivityApply(@RequestBody @Validated ActivitySataus activitySataus) {
-        Assert.notNull(activitySataus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        Assert.notNull(activitySataus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
-        int i = activityService.updateActivityApply(activitySataus);
+    public Result<Integer> updateActivityApply(@RequestBody @Validated ActivityStatus activityStatus) {
+        Assert.notNull(activityStatus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        Assert.notNull(activityStatus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
+        int i = activityService.updateActivityApply(activityStatus);
         return new Result<>(i);
     }
 
@@ -208,6 +208,12 @@ public class ActivityController extends BaseController {
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
+        for(int i=0;i<activityApplyParam.getExportTitle().length;i++){
+            logger.info("------入参导出标题：{}--------",activityApplyParam.getExportTitle()[i]);
+        }
+        for(int i=0;i<activityApplyParam.getExportColName().length;i++){
+            logger.info("------入参导出的字段别名：{}--------",activityApplyParam.getExportColName()[i]);
+        }
         //下载文件名
         String fileName="活动报名人";
         String sheetName = "活动报名人";

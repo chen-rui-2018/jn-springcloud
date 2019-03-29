@@ -165,7 +165,7 @@
 
 
     <resultMap id="sectionExpendFormsVoResultMap" type="com.jn.park.finance.vo.FinanceIndexSectionExpendFormsVo">
-        <result column="cost_type_id" jdbcType="INTEGER" property="costTypeId" />
+        <result column="cost_type_id" jdbcType="VARCHAR" property="costTypeId" />
         <result column="cost_type_name" jdbcType="VARCHAR" property="costTypeName" />
         <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
         <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
@@ -176,7 +176,7 @@
     </resultMap>
 
     <select id="selectEverySectionExpendForms" resultMap="sectionExpendFormsMap">
-    select right(t1.`month`,2) as "month",IFNULL(t1.budgetnumber,0) as "budgetnumber",IFNULL(t2.cost,0) as "cost"  from
+    select right(t1.`month`,2) as "month",IFNULL(SUM(t1.budgetnumber),0) as "budgetnumber",IFNULL(SUM(t2.cost),0) as "cost"  from
     (SELECT
             m.`month` as "month",
             IFNULL(tb.budget_number,0) AS "budgetnumber"
@@ -184,7 +184,7 @@
             tb_finance_total_budget tb
         RIGHT JOIN tb_month m ON m.`month` = tb.budget_month
         AND tb.record_status = 1
-        AND tb.cost_type_id = #{costTypeId,jdbcType=INTEGER}
+        AND tb.cost_type_id = #{costTypeId,jdbcType=VARCHAR}
         AND tb.department_id = #{departmentId,jdbcType=VARCHAR}
         WHERE
             m. MONTH BETWEEN #{startMonth,jdbcType=VARCHAR} AND #{endMonth,jdbcType=VARCHAR}
@@ -197,9 +197,10 @@
 					t.department_id as "departmentid"
 					from tb_finance_expenses_month t
 					where t.record_status =1
-					and  t.cost_after_type_id=#{costTypeId,jdbcType=INTEGER}
+					and  t.cost_after_type_id=#{costTypeId,jdbcType=VARCHAR}
 					and t.department_id=#{departmentId,jdbcType=VARCHAR}) t2
 					on t1.`month` =t2.costhappendtime
+					GROUP BY t1.`month`
 					ORDER BY t1.`month`
     </select>
 
@@ -290,10 +291,12 @@
     <!--类型下拉框条件-->
     <select id="downType" resultType="com.jn.park.finance.model.FinanceIndexDownTypeModel">
       select
-      DISTINCT(t.finance_name) as "financeName",
+      t.finance_name as "financeName",
       t.id  as "financeId"
       from tb_finance_type t
-        <!--where t.is_public = 1-->
+			where t.record_status=1
+			ORDER BY t.show_order
+
     </select>
 
 </mapper>

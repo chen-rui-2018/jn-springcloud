@@ -67,7 +67,7 @@ public class FinanceBudgetController extends FinanceBaseController {
     }
 
     @ControllerLog(doAction = "预算录入历史查询")
-    @ApiOperation(value = "预算录入历史查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "预算录入历史查询", httpMethod = "GET")
     @GetMapping(value = "/selectBudgetHistory")
     @RequiresPermissions("/finance/budget/selectBudgetHistory")
     public Result<FianceDynamicTableVo<List<FinanceBudgetHistoryVo>>> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel){
@@ -86,7 +86,7 @@ public class FinanceBudgetController extends FinanceBaseController {
 
 
     @ControllerLog(doAction = "预算录入")
-    @ApiOperation(value = "预算录入", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "预算录入", httpMethod = "POST")
     @PostMapping(value = "/add")
     @RequiresPermissions("/finance/budget/add")
     @ApiImplicitParams({

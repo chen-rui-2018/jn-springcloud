@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FinanceMatterController extends BaseController {
 
     @ControllerLog(doAction = "事项查询")
-    @ApiOperation(value = "事项查询", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "事项查询", httpMethod = "POST")
     @PostMapping(value = "/findMatter")
     @RequiresPermissions("/finance/matter/findMatter")
     public Result findMatter(){
@@ -34,7 +34,7 @@ public class FinanceMatterController extends BaseController {
     }
 
     @ControllerLog(doAction = "发起工单")
-    @ApiOperation(value = "发起工单", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "发起工单", httpMethod = "POST")
     @PostMapping(value = "/startWork")
     @RequiresPermissions("/finance/matter/startWork")
     public Result startWork(){
@@ -43,7 +43,7 @@ public class FinanceMatterController extends BaseController {
     }
 
     @ControllerLog(doAction = "工单审批")
-    @ApiOperation(value = "工单审批", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "工单审批", httpMethod = "POST")
     @PostMapping(value = "/workApprove")
     @RequiresPermissions("/finance/matter/workApprove")
     public Result workApprove(){

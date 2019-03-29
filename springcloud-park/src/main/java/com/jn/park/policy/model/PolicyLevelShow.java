@@ -33,4 +33,12 @@ public class PolicyLevelShow implements Serializable {
     public void setPolicyLevelName(String policyLevelName) {
         this.policyLevelName = policyLevelName;
     }
+
+    @Override
+    public String toString() {
+        return "PolicyLevelShow{" +
+                "policyLevelCode='" + policyLevelCode + '\'' +
+                ", policyLevelName='" + policyLevelName + '\'' +
+                '}';
+    }
 }

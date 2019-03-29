@@ -37,7 +37,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务机构(前台用户)")
+@Api(tags = "服务超市-服务机构(前台用户)")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/org")
 public class OrgController extends BaseController {
@@ -55,7 +55,7 @@ public class OrgController extends BaseController {
 
 
     @ControllerLog(doAction = "获取服务机构列表")
-    @ApiOperation(value = "获取服务机构列表,(app机构列表)")
+    @ApiOperation(value = "获取服务机构列表,(pc/app机构列表)")
     @RequestMapping(value = "/selectServiceOrgList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/selectServiceOrgList")
     public Result<PaginationData<List<ServiceOrg>>> selectServiceOrgList(@Validated OrgParameter orgParameter){
@@ -64,7 +64,7 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情")
-    @ApiOperation(value = "获取服务机构详情,(app机构详情)", notes = "查询条件orgId")
+    @ApiOperation(value = "获取服务机构详情,(pc/app机构详情)", notes = "查询条件orgId")
     @RequestMapping(value = "/getActivityDetailsForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getActivityDetailsForManage")
     public Result<OrgDetailVo> getServiceOrgDetail(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")
@@ -74,7 +74,7 @@ public class OrgController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取服务机构详情+产品列表")
-    @ApiOperation(value = "获取服机构信息(app机构信息)",notes = "查询条件orgId")
+    @ApiOperation(value = "获取服机构信息(pc/app机构信息)",notes = "查询条件orgId")
     @RequestMapping(value = "/getOrgInfoForManage",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/org/getOrgInfoForManage")
     public Result<OrgDetailAndProductVo> getOrgInfoForManage(@ApiParam(name="orgId",value = "服务机构ID",required = true,example = "1a60dafd775941eab2e9be879591f367")@RequestParam(value = "orgId")  String orgId){

@@ -40,7 +40,7 @@ public class ActivityLikeController extends BaseController {
     @RequiresPermissions("/activity/activityLike/activityLike")
     @ApiOperation(value = "活动点赞")
     @RequestMapping(value = "/activityLike",method = RequestMethod.POST)
-    public Result activityLike(@ApiParam(value = "活动id" ,required = true) @RequestParam(value = "activityId") String activityId){
+    public Result activityLike(@ApiParam(value = "活动id" ,required = true,example = "12wew34****") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";
@@ -55,7 +55,7 @@ public class ActivityLikeController extends BaseController {
     @RequiresPermissions("/activity/activityLike/cancelLike")
     @ApiOperation(value = "取消点赞")
     @RequestMapping(value = "/cancelLike",method = RequestMethod.POST)
-    public Result cancelLike(@ApiParam(value = "活动id" ,required = true) @RequestParam(value = "activityId") String activityId){
+    public Result cancelLike(@ApiParam(value = "活动id" ,required = true,example = "12wew34****") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         String account="";

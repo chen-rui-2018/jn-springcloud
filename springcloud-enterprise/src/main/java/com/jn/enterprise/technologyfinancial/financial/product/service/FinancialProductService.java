@@ -65,4 +65,12 @@ public interface FinancialProductService {
      */
    void  upShelfFeatureProduct(FinancialProductAddInfo info,String account);
 
+    /**
+     * 更新服务科技金融产品
+     * @param product
+     * @param account
+     * @return
+     */
+   int modifyFeatureProduct(FinancialProductModifyParam product,String account);
+
 }

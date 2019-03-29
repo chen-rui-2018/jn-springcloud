@@ -17,7 +17,7 @@ public class IndustryDictParameter{
     @ApiModelProperty(value = "数据名称",example = "生物医药")
     private String preValue;
 
-    @ApiModelProperty(value = "领域名称[0业务领域1行业领域2发展阶段3企业性质]",example = "1")
+    @ApiModelProperty(value = "领域类型[0业务领域1行业领域2发展阶段3企业性质]",example = "1")
     private String preType;
 
     @ApiModelProperty(value = "数据id",example = "shengwuyiyao")

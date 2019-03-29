@@ -31,7 +31,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "服务机构认证(后台管理审核)")
+@Api(tags = "服务超市-服务机构认证(后台管理审核)")
 @RestController
 @RequestMapping(value = "/serviceMarket/OrgApproveController")
 public class OrgApproveController extends BaseController{

@@ -15,10 +15,10 @@ import java.io.Serializable;
  */
 @ApiModel(value = "CommonProductShelf",description = "常规产品上架入参")
 public class CommonProductShelf implements Serializable{
-    @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true)
+    @ApiModelProperty(value = "服务产品模板Id,所选产品的Id",required = true,example = "00000000000000001111111111111111")
     @NotBlank(message = "模板id不能为空")
     private String templateId;
-    @ApiModelProperty(value = "上架此产品的机构id" ,required = true)
+    @ApiModelProperty(value = "上架此产品的机构id" ,required = true,example = "00000000000000001111111111111111")
     @NotBlank(message = "机构名称不能为空")
     private String orgId;
     @ApiModelProperty(value = "服务产品顾问账号,多个时使用逗号','分隔",example = "wangsong,qianqi")

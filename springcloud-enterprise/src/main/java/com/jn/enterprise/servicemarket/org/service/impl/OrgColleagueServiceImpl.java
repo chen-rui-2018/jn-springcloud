@@ -135,8 +135,9 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      */
     @ServiceLog(doAction = "设置为联系人")
     @Override
-    public void setAsContact(String account) {
+    public int setAsContact(String account) {
         //todo：调用豹哥提供的修改用户角色接口 yangph
+        return 1;
     }
 
     /**
@@ -145,8 +146,9 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      */
     @ServiceLog(doAction = "取消联系人")
     @Override
-    public void cancelAsContact(String account) {
+    public int cancelAsContact(String account) {
         //todo：调用豹哥提供的修改用户角色接口 yangph
+        return 1;
     }
 
     /**
@@ -157,7 +159,7 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @ServiceLog(doAction = "取消联系人")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void deleteContactOrAdvisor(String loginAccount,String account) {
+    public int deleteContactOrAdvisor(String loginAccount,String account) {
         //todo：获取登录用户的角色，若是机构管理员，可以删除，否则不可以删除  yangph
 
         //把顾问信息表中的数据状态值为删除
@@ -174,5 +176,6 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         userAffiliateInfo.setAffiliateName(null);
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
         //todo：调用豹哥提供的修改用户角色接口删除用户角色 yangph
+        return 0;
     }
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.oa.attendance.dao.AttendanceMapper">
+    <resultMap id="BaseResultMap" type="com.jn.oa.attendance.entity.TbOaAttendance">
+        <id column="id" jdbcType="VARCHAR" property="id" />
+        <result column="attendance_user" jdbcType="VARCHAR" property="attendanceUser" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="attendance_time" jdbcType="TIMESTAMP" property="attendanceTime" />
+        <result column="attendance_platform" jdbcType="VARCHAR" property="attendancePlatform" />
+        <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+        <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+        <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+        <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+        <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+        <result column="attendance_ip" jdbcType="VARCHAR" property="attendanceIp" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, attendance_user, type, attendance_time, attendance_platform, creator_account,
+    created_time, modifier_account, modified_time, longitude, latitude, attendance_ip
+  </sql>
+
+
+   <select id="selectAttendanceByCondition" parameterType="com.jn.oa.attendance.model.Attendance" resultMap="BaseResultMap">
+       select
+       <include refid="Base_Column_List"/>
+      from tb_oa_attendance
+       where
+       1=1
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendancePlatform)">
+           and attendance_platform= #{attendancePlatform,jdbcType=VARCHAR}
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendanceUser)">
+        and attendance_user= #{attendanceUser,jdbcType=VARCHAR}
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendanceTime)">
+           and  Date(attendance_time) = DATE_FORMAT(#{attendanceTime},'%Y-%m-%d')
+       </if>
+       <if test="@org.apache.commons.lang.StringUtils@isNotBlank(attendanceTime)">
+           and type  = #{type,jdbcType=VARCHAR}
+       </if>
+       <if test="startTime != null">
+       AND  Date(attendance_time) &gt;= #{startTime}
+       </if>
+       <if test="endTime != null">
+       AND Date(attendance_time) &lt;= #{endTime}
+       </if>
+
+   </select>
+
+
+
+
+
+
+</mapper>

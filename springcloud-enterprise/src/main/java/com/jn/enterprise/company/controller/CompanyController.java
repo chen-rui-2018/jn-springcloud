@@ -11,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,17 +30,17 @@ public class CompanyController extends BaseController {
     private CompanyService companyService;
 
     @ControllerLog(doAction = "查询企业列表")
-    @ApiOperation(value = "查询企业列表", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyList")
-    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(@RequestBody ServiceCompanyParam serviceCompanyParam){
+    @ApiOperation(value = "查询企业列表")
+    @RequestMapping(value = "/getCompanyList",method = RequestMethod.GET)
+    public Result<PaginationData<List<ServiceCompany>>> getCompanyList(ServiceCompanyParam serviceCompanyParam){
         return new Result<>(companyService.getCompanyList(serviceCompanyParam));
     }
 
     @ControllerLog(doAction = "根据用户账号/企业ID查询企业信息（用户为企业管理员）")
-    @ApiOperation(value = "根据用户账号查询企业信息（用户为企业管理员）", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId")
+    @ApiOperation(value = "根据用户账号查询企业信息",notes = "用户为企业管理员")
+    @RequestMapping(value = "/getCompanyDetailByAccountOrCompanyId",method = RequestMethod.GET)
     public Result<ServiceCompany> getCompanyDetailByAccountOrCompanyId(
-            @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true)
+            @ApiParam(name="accountOrCompanyId",value = "用户账号或企业ID",required = true,example = "wangsong")
             @RequestParam(value = "accountOrCompanyId") String accountOrCompanyId){
         return new Result<>(companyService.getCompanyDetailByAccountOrId(accountOrCompanyId));
     }

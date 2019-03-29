@@ -16,25 +16,25 @@ import java.io.Serializable;
  */
 @ApiModel(value = "HandleRequireParam", description = "对接需求入参")
 public class HandleRequireParam extends Page implements Serializable {
-    @ApiModelProperty(value = "需求单号",required = true)
+    @ApiModelProperty(value = "需求单号",required = true,example = "xq-0001")
     @NotNull(message = "需求单号不能为空")
     private String reqNum;
-    @ApiModelProperty(value = "合同总金额")
+    @ApiModelProperty(value = "合同总金额",example = "10")
     @Pattern(regexp ="[0-9]*",message = "合同总金额只能输入数字")
     private String contractAmount;
     @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
     private String handleResult;
-    @ApiModelProperty(value = "结果描述")
+    @ApiModelProperty(value = "结果描述",example = "xxx描述")
     private String resultDetail;
-    @ApiModelProperty(value = "实际贷款金额（万元）",required = true)
+    @ApiModelProperty(value = "实际贷款金额（万元）",required = true,example = "20")
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
     @NotNull(message = "实际贷款金额不能为空")
     private String actualLoanAmount;
-    @ApiModelProperty(value = "合同首页")
+    @ApiModelProperty(value = "合同首页",example = "xxx/home.jpg")
     private String contractHomePage;
-    @ApiModelProperty(value = "合同尾页")
+    @ApiModelProperty(value = "合同尾页",example = "xxx/end.jpg")
     private String contractEndPage;
-    @ApiModelProperty(value = "是否科技金融类:0:非科技金融类  1：是科技金融类",required = true)
+    @ApiModelProperty(value = "是否科技金融类:0:非科技金融类  1：是科技金融类",required = true,example = "1")
     @NotNull(message = "是否科技金融类不能为空")
     @Pattern(regexp = "^[01]$", message = "{isTechnology:'默认值只允许为0,1'}")
     private String isTechnology;

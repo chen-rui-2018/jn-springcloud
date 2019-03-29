@@ -16,17 +16,17 @@ import java.io.Serializable;
 public class FinanceExpensesTypeNameModel implements Serializable {
 
     @ApiModelProperty("打标后费用类型ID")
-    private int costAfterTypeId ;
+    private String costAfterTypeId ;
 
     @ApiModelProperty("打标后费用类型名称")
     private String costAfterTypeName;
 
 
-    public int getCostAfterTypeId() {
+    public String getCostAfterTypeId() {
         return costAfterTypeId;
     }
 
-    public void setCostAfterTypeId(int costAfterTypeId) {
+    public void setCostAfterTypeId(String costAfterTypeId) {
         this.costAfterTypeId = costAfterTypeId;
     }
 

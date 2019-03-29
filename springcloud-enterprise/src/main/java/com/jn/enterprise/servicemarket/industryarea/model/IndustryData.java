@@ -13,10 +13,10 @@ import javax.validation.constraints.NotNull;
  */
 @ApiModel(value = "IndustryData",description = "业务领域参数")
 public class IndustryData {
-    @ApiModelProperty(value = "领域ID[新增时传空，修改时ID必传]")
+    @ApiModelProperty(value = "领域ID[新增时传空，修改时ID必传]",example = "ogistics")
     private String id;
 
-    @ApiModelProperty(value = "领域值",required = true)
+    @ApiModelProperty(value = "领域值",required = true,example = "物流快递")
     @NotNull(message = "领域值不能为空")
     private String preValue;
 

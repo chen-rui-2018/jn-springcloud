@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.org.dao;
 
+import com.jn.enterprise.servicemarket.org.model.OrgCount;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.enterprise.servicemarket.org.model.OrgParameter;
 import com.jn.enterprise.model.ServiceOrg;
@@ -29,5 +30,12 @@ public interface OrgMapper {
      * @return
      */
     OrgDetailVo getServiceOrgDetail(@Param("orgId")String orgId);
+
+    /**
+     * 机构的产品/顾问数统计
+     * @param orgId
+     * @return
+     */
+    OrgCount getMyOrgInfo(@Param("orgId") String orgId);
 
 }

@@ -7,7 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.enums.ActivityExceptionEnum;
 import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityQueryPaging;
+import com.jn.park.model.ActivityPagingParam;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import com.jn.user.model.UserExtensionInfo;
@@ -19,10 +19,9 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 活动报名
@@ -45,9 +44,9 @@ public class ActivityApplyController extends BaseController {
 
     @ControllerLog(doAction = "快速报名")
     @RequiresPermissions("/activity/activityApply/quickApply")
-    @ApiOperation(value = "快速报名", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "快速报名", httpMethod = "POST")
     @RequestMapping(value = "/quickApply")
-    public Result quickApply(@ApiParam(value = "活动id" ,required = true) @RequestParam(value = "activityId") String activityId){
+    public Result quickApply(@ApiParam(value = "活动id" ,required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -63,9 +62,9 @@ public class ActivityApplyController extends BaseController {
 
     @ControllerLog(doAction = "取消报名")
     @RequiresPermissions("/activity/activityApply/cancelApply")
-    @ApiOperation(value = "取消报名", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "取消报名", httpMethod = "POST")
     @RequestMapping(value = "/cancelApply")
-    public Result cancelApply(@ApiParam(value = "活动id",required = true) @RequestParam(value = "activityId") String activityId){
+    public Result cancelApply(@ApiParam(value = "活动id",required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         Result result=new Result();
@@ -79,10 +78,10 @@ public class ActivityApplyController extends BaseController {
         return result;
     }
     @ControllerLog(doAction = "在线签到")
-    @RequiresPermissions("/activity/activityApply/signInActivity")
-    @ApiOperation(value = "在线签到", httpMethod = "POST", response = Result.class )
+    @RequiresPermissions(value = "/activity/activityApply/signInActivity")
+    @ApiOperation(value = "在线签到", httpMethod = "POST" ,notes = "返回结果为数据响应条数，正常为1")
     @RequestMapping(value = "/signInActivity")
-    public Result signInActivity(@ApiParam(value = "活动id",required = true) @RequestParam(value = "activityId") String activityId){
+    public Result<Integer> signInActivity(@ApiParam(value = "活动id",required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "activityId") String activityId){
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivity(user==null?"":user.getAccount(), activityId);
@@ -91,20 +90,20 @@ public class ActivityApplyController extends BaseController {
 
     @ControllerLog(doAction = "报名人列表查看")
     @RequiresPermissions("/activity/activityApply/activityApplyList")
-    @ApiOperation(value = "报名人列表查看", httpMethod = "POST", response = Result.class,
+    @ApiOperation(value = "报名人列表查看",
             notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
-    @RequestMapping(value = "/activityApplyList")
-    public Result activityApplyList(@RequestBody  ActivityQueryPaging activityQueryPaging){
-       Assert.notNull(activityQueryPaging,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityQueryPaging,Boolean.TRUE);
+    @RequestMapping(value = "/activityApplyList",method = RequestMethod.POST)
+    public Result<PaginationData<List<ActivityApplyDetail>>> activityApplyList(@RequestBody ActivityPagingParam activityPagingParam){
+       Assert.notNull(activityPagingParam,ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+       PaginationData activityApplyList= activityApplyService.findApplyActivityList(activityPagingParam,Boolean.TRUE);
        return new Result(activityApplyList);
     }
 
     @ControllerLog(doAction = "后台签到接口")
     @RequiresPermissions("/activity/activityApply/signInActivityBackend")
-    @ApiOperation(value = "后台签到接口", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "后台签到接口", httpMethod = "POST")
     @RequestMapping(value = "/signInActivityBackend")
-    public Result signInActivityBackend(@ApiParam(value = "报名id",required = true) @RequestParam(value = "applyId") String applyId){
+    public Result<Integer> signInActivityBackend(@ApiParam(value = "报名id",required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "applyId") String applyId){
         Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivityBackend(applyId,user.getAccount());
@@ -113,19 +112,20 @@ public class ActivityApplyController extends BaseController {
 
     @ControllerLog(doAction = "报名审核接口")
     @RequiresPermissions("/activity/activityApply/signInActivityCheck")
-    @ApiOperation(value = "报名审核接口", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "报名审核接口", httpMethod = "POST")
     @RequestMapping(value = "/signInActivityCheck")
-    public Result signInActivityCheck(@ApiParam(value = "报名id",required = true) @RequestParam(value = "applyId") String applyId){
+    public Result<Integer> signInActivityCheck(@ApiParam(value = "报名id",required = true,example = "f5c95f9adf714aedab3739cbc9297178") @RequestParam(value = "applyId") String applyId){
         Assert.notNull(applyId, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityApplyService.signInActivityCheck(applyId,user.getAccount());
         return new Result(i);
     }
+
     @ControllerLog(doAction = "报名人资料")
-//    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
-    @ApiOperation(value = "报名人资料", httpMethod = "POST", response = Result.class)
+    @RequiresPermissions("/activity/activityApply/activityApplyInfo")
+    @ApiOperation(value = "报名人资料", httpMethod = "POST")
     @RequestMapping(value = "/activityApplyInfo")
-    public Result activityApplyInfo(@ApiParam(value = "用户账号",required = true) @RequestParam(value = "account") String account){
+    public Result<UserExtensionInfo> activityApplyInfo(@ApiParam(value = "用户账号",required = true,example = "wangsong") @RequestParam(value = "account") String account){
         Assert.notNull(account, ActivityExceptionEnum.ACTIVITY_APPLY_ID_NOT_NULL.getMessage());
         UserExtensionInfo user =  activityApplyService.activityApplyInfo(account);
         return new Result(user);

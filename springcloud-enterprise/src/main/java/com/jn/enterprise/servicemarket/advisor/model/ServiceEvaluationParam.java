@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 
 /**
@@ -15,13 +17,15 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceEvaluationParam",description = "服务评价信息查询入参")
 public class ServiceEvaluationParam extends Page implements Serializable {
-    @ApiModelProperty(value = "服务顾问账号")
+    @ApiModelProperty(value = "服务顾问账号",example = "wangsong")
     @NotBlank(message = "服务顾问账号不能为空！")
     private String advisorAccount;
-    @ApiModelProperty(value = "评价类型:全部、好评、中评、差评")
+    @ApiModelProperty(value = "评价类型:praise:好评  average:中评  badReview:差评",example = "praise")
     private String ratingType;
-    @ApiModelProperty(value = "是否分页：true:分页   false:不分页")
-    private Boolean needPage=false;
+    @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
+    @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
+    @NotNull(message="是否需要分页不能为空")
+    private String needPage;
 
     private static final long serialVersionUID = 1L;
 
@@ -41,11 +45,11 @@ public class ServiceEvaluationParam extends Page implements Serializable {
         this.ratingType = ratingType;
     }
 
-    public Boolean getNeedPage() {
+    public String getNeedPage() {
         return needPage;
     }
 
-    public void setNeedPage(Boolean needPage) {
+    public void setNeedPage(String needPage) {
         this.needPage = needPage;
     }
 }

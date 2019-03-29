@@ -66,6 +66,27 @@ public class OaMeetingAdd implements Serializable {
     @ApiModelProperty(value = "会议内容")
     private String oaMeetingContent;
 
+    @ApiModelProperty(value = "组织人")
+    private String organizationalUser;
+
+    @ApiModelProperty(value = "参会人员")
+    private String participantsStr;
+
+    public String getParticipantsStr() {
+        return participantsStr;
+    }
+
+    public void setParticipantsStr(String participantsStr) {
+        this.participantsStr = participantsStr;
+    }
+
+    public String getOrganizationalUser() {
+        return organizationalUser;
+    }
+
+    public void setOrganizationalUser(String organizationalUser) {
+        this.organizationalUser = organizationalUser;
+    }
 
     public String getOaMeetingContent() {
         return oaMeetingContent;

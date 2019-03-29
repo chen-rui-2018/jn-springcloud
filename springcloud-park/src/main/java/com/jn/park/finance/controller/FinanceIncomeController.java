@@ -39,7 +39,7 @@ public class FinanceIncomeController extends BaseController {
     private FinanceIncomeService financeIncomeService;
 
     @ControllerLog(doAction = "明细,同期对比")
-    @ApiOperation(value = "明细,同期对比",notes = "同期对比",httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "明细,同期对比",notes = "同期对比",httpMethod = "GET")
     @GetMapping(value = "/periodContrast")
     @RequiresPermissions("/finance/income/periodContrast")
     @ApiImplicitParams({
@@ -54,7 +54,7 @@ public class FinanceIncomeController extends BaseController {
     }
 
     @ControllerLog(doAction = "汇总占比")
-    @ApiOperation(value = "汇总占比",notes = "汇总占比", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "汇总占比",notes = "汇总占比", httpMethod = "GET")
     @GetMapping(value = "/summarizingProportion")
     @RequiresPermissions("/finance/income/summarizingProportion")
     @ApiImplicitParams({
@@ -69,7 +69,7 @@ public class FinanceIncomeController extends BaseController {
     }
 
     @ControllerLog(doAction = "往年对比")
-    @ApiOperation(value = "往年对比", notes = "往年对比",httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "往年对比", notes = "往年对比",httpMethod = "GET")
     @GetMapping(value = "/lastYearContrast")
     @RequiresPermissions("/finance/income/lastYearContrast")
     @ApiImplicitParams({
@@ -84,7 +84,7 @@ public class FinanceIncomeController extends BaseController {
     }
 
     @ControllerLog(doAction = "导出往年对比数据")
-    @ApiOperation(value = "导出往年对比数据", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "导出往年对比数据", httpMethod = "GET")
     @GetMapping(value = "/exportContrast")
     @RequiresPermissions("/finance/income/exportContrast")
     @ApiImplicitParams({

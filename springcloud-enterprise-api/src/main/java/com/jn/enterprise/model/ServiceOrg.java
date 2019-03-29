@@ -21,13 +21,13 @@ public class ServiceOrg implements Serializable {
     @ApiModelProperty(value = "机构名称")
     private String orgName;
 
-    @ApiModelProperty(value = "机构注册时间")
+    @ApiModelProperty(value = "机构注册时间 yyyy-MM-dd")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0未认证1已认证)")
     private String isApprove;
 
-    @ApiModelProperty(value = "机构类型")
+    @ApiModelProperty(value = "机构类型(1普通机构2会员机构) ")
     private String orgType;
 
     @ApiModelProperty(value = "机构咨询电话")
@@ -48,6 +48,16 @@ public class ServiceOrg implements Serializable {
     private Integer transactionNum;
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
+    @ApiModelProperty (value = "业务擅长")
+    private String orgSpeciality;
+
+    public String getOrgSpeciality() {
+        return orgSpeciality;
+    }
+
+    public void setOrgSpeciality(String orgSpeciality) {
+        this.orgSpeciality = orgSpeciality;
+    }
 
     public String getOrgId() {
         return orgId;

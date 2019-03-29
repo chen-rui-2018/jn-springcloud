@@ -18,76 +18,78 @@ import java.io.Serializable;
 public class FinancialProductAddInfo implements Serializable {
     @ApiModelProperty(value = "产品id,不要传值")
     private String productId;
-    @ApiModelProperty(value = "产品类型,(0:常规-1:特色)")
+    @ApiModelProperty(value = "产品类型,(0:常规-1:特色)",example = "0",required = true)
     @NotBlank(message = "产品类型不能为空")
     @Pattern(regexp = "^[0-1]$",message = "产品类型,只能为0或1")
     private String productType;
-    @ApiModelProperty(value="产品编号",required = true)
+    @ApiModelProperty(value="产品编号",required = true,example = "CG000131226.0570718997558")
     @NotBlank(message = "产品编号不能为空")
     private String serialNumber;
-    @ApiModelProperty(value = "业务领域id",required = true)
+    @ApiModelProperty(value = "业务领域id",required = true,example = "00000000000000001111111111111111")
     @NotBlank(message = "领域id不能为空")
     private String signoryId;
-    @ApiModelProperty(value = "业务领域名称",required = true)
+    @ApiModelProperty(value = "业务领域名称",required = true,example = "科技金融")
     @NotBlank(message = "领域名称不能为空")
     private String signoryName;
-    @ApiModelProperty(value = "产品名称",required = true)
+    @ApiModelProperty(value = "产品名称",required = true,example = "无忧贷款")
     @NotBlank(message = "产品名称不能为空")
     private String productName;
-    @ApiModelProperty(value = "服务机构id,上级常规产品/添加特色产品时不能为空")
+    @ApiModelProperty(value = "服务机构id,", required =  true, example = "00000000000000001111111111111111")
+    @NotBlank(message = "服务机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "服务机构名称,服务机构id,上级常规产品/添加特色产品时不能为空")
+    @ApiModelProperty(value = "服务机构名称",required = true,example = "北京快手")
+    @NotBlank(message = "服务机构名称不能为空")
     private String orgName;
-    @ApiModelProperty(value = "参考利率最小值",required = true)
+    @ApiModelProperty(value = "参考利率最小值",required = true,example = "2.56")
     @NotBlank(message = "参考利率不能为空")
     @Pattern(regexp = "^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "利率最小值符合规范,应为大于等于0的最多两位小数的数值 示例:2.56")
     private String refRateMin;
-    @ApiModelProperty(value = "参考利率最大值)",required=true)
+    @ApiModelProperty(value = "参考利率最大值)",required=true,example = "2.96")
     @NotBlank(message = "参考利率不能为空")
     @Pattern(regexp = "^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "利率最小值符合规范,应为大于等于0的最多两位小数的数值 示例:2.56")
     private String refRateMax;
-    @ApiModelProperty(value = "是否网贷直连(0:否-1:是)",required=true)
+    @ApiModelProperty(value = "是否网贷直连(0:否-1:是)",required=true,example = "1")
     @Pattern(regexp = "^[0-1]$",message = "是否网贷直连,只能为0或1")
     @NotBlank(message = "是否网贷直连不能为空")
     private String isOnlineLoan;
-    @ApiModelProperty(value="是否政策性产品(0:否  1:是)",required=true)
+    @ApiModelProperty(value="是否政策性产品(0:否  1:是)",required=true,example = "1")
     @Pattern(regexp = "^[0-1]$",message = "是否政策性产品,只能为0或1")
     @NotBlank(message = "是否政策性产品不能为空")
     private String isPolicyPro;
-    @ApiModelProperty(value="是否通用产品(0:否  1:是)",required=true)
+    @ApiModelProperty(value="是否通用产品(0:否  1:是)",required=true,example = "1")
     @Pattern(regexp = "^[0-1]$",message = "是否通用产品,只能为0或1")
     @NotBlank(message = "是否通用产品不能为空")
     private String isGeneralPro;
-    @ApiModelProperty(value="是否人民币(0:否  1:是)",required=true)
+    @ApiModelProperty(value="是否人民币(0:否  1:是)",required=true,example = "1")
     @Pattern(regexp = "^[0-1]$",message = "是否人民币,只能为0或1")
     @NotBlank(message = "是否人民币不能为空")
     private String isRmb;
-    @ApiModelProperty(value="贷款类表编码",required=true)
+    @ApiModelProperty(value="贷款类表编码",required=true,example = "A11123...")
     @NotBlank(message = "贷款类表编码不能为空")
     private String loanCategoryCode;
-    @ApiModelProperty(value="贷款类别名称",required=true)
+    @ApiModelProperty(value="贷款类别名称",required=true,example = "抵押贷款")
     @NotBlank(message = "贷款类别名称不能为空")
     private String loanCategoryName;
-    @ApiModelProperty(value = "贷款额度最小值",required = true)
+    @ApiModelProperty(value = "贷款额度最小值",required = true,example = "1000")
     @Pattern(regexp="^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "贷款额度只能为正数字")
     @NotBlank(message = "贷款额度最小值不能为空")
     private String loanAmountMin;
-    @ApiModelProperty(value = "贷款额度最大值")
+    @ApiModelProperty(value = "贷款额度最大值",required = true,example = "1000000")
     @Pattern(regexp="^^[1-9][0-9]*(\\.[0-9]{1,2})?$",message = "贷款额度只能为正数字")
     @NotBlank(message = "贷款额度最大值不能为空")
     private String loanAmountMax;
-    @ApiModelProperty(value="贷款最大期限")
+    @ApiModelProperty(value="贷款最大期限",required = true,example = "36")
     @Pattern(regexp="^[1-9][0-9]*$",message = "贷款期限为正整数")
     @NotBlank(message = "贷款最大期限不能为空")
     private String loanTermMax;
-    @ApiModelProperty(value="贷款最小期限")
+    @ApiModelProperty(value="贷款最小期限",required = true,example = "6")
     @Pattern(regexp="^[1-9][0-9]*$",message = "贷款期限为正整数")
     @NotBlank(message = "贷款最小期限不能为空")
     private String loanTermMin;
-    @ApiModelProperty(value = "担保方式编码",required = true)
+    @ApiModelProperty(value = "担保方式编码",required = true,example = "dbfs111...")
     @NotBlank(message = "担保方式编码不能为空")
     private String assureMethodCode;
-    @ApiModelProperty(value = "担保方式名称",required = true)
+    @ApiModelProperty(value = "担保方式名称",required = true,example = "抵押担保")
     @NotBlank(message = "担保方式名称不能为空")
     private String assureMethodName;
     @ApiModelProperty(value = "产品图片")

@@ -23,7 +23,7 @@ public class ActivityApplyDetail implements Serializable {
     private String account;
     @ApiModelProperty(value = "用户名称")
     private String name;
-    @ApiModelProperty(value = "用户性别")
+    @ApiModelProperty(value = "用户性别 0女1男")
     private String sex;
     @ApiModelProperty(value = "用户年龄")
     private Integer age;
@@ -35,13 +35,13 @@ public class ActivityApplyDetail implements Serializable {
     private String phone;
     @ApiModelProperty(value = "头像地址")
     private String avatar;
-    @ApiModelProperty(value = "签到状态")
+    @ApiModelProperty(value = "签到状态(0:未签到  1:已签到)")
     private String signStatus;
-    @ApiModelProperty(value = "报名状态")
+    @ApiModelProperty(value = "报名状态(0:取消报名  1:报名成功  2:报名待审核)")
     private String applyStatus;
-    @ApiModelProperty(value = "报名时间")
+    @ApiModelProperty(value = "报名时间 yyyy-MM-dd HH:mm:ss")
     private String applyTime;
-    @ApiModelProperty(value = "签到时间")
+    @ApiModelProperty(value = "签到时间 yyyy-MM-dd HH:mm:ss")
     private String signTime;
 
 

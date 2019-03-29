@@ -184,6 +184,10 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         financeIndexSectionExpendFormsVos.get(0).getFinanceIndexSectionExpendFormsModels().stream().forEach(e->{
             //String yyyy=e.getMonth().substring(0,4);
             String mm=e.getMonth();
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
             dynamicHeadList.add(String.format("%s月",mm));
         });
         vo1.setDynamicHeadList(dynamicHeadList);

@@ -93,9 +93,9 @@ public class AdvisorManagementPortalServiceImpl implements AdvisorManagementPort
         advisroManagementDetailsVo.setAdvisorIntroduction(advisorIntroduction);
         //顾问基本资料
         TbServiceAdvisor tbServiceAdvisor = advisorService.getAdvisorInfoByAccount(advisorAccount);
-        AdvisorBaseInfo advisorBaseInfo=new AdvisorBaseInfo();
-        BeanUtils.copyProperties(tbServiceAdvisor, advisorBaseInfo);
-        advisroManagementDetailsVo.setAdvisorBaseInfo(advisorBaseInfo);
+        AdvisorBaseInfoParam advisorBaseInfoParam =new AdvisorBaseInfoParam();
+        BeanUtils.copyProperties(tbServiceAdvisor, advisorBaseInfoParam);
+        advisroManagementDetailsVo.setAdvisorBaseInfoParam(advisorBaseInfoParam);
         //荣誉资质
         List<ServiceHonor> advisorHonorInfo = advisorService.getAdvisorHonorInfo(advisorAccount);
         if(!advisorHonorInfo.isEmpty()){

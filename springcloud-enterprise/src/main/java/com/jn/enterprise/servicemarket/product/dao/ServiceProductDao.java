@@ -88,14 +88,14 @@ public interface ServiceProductDao {
      * @param orgId
      * @return
      */
-    List<CommonServiceShelf>  findShelfProductList(@Param("orgId") String orgId);
+    List<ProductShelf> findShelfProductList(@Param("orgId") String orgId);
 
     /**
      * 服务产品列表,只包含服务Id和服务名称,用于评价的筛选条件
      * @param productName
      * @return
      */
-    List<CommonServiceShelf>  productQueryList(@Param("productName") String productName);
+    List<ProductShelf>  productQueryList(@Param("productName") String productName);
 
     /**
      * 服务产品信息,上架常规服务产品时展示
@@ -109,5 +109,12 @@ public interface ServiceProductDao {
      * @return
      */
    ServiceStatistics findServiceStatistics();
+    /**
+     * 编辑修改常规服务产品界面产品详情信息
+     * @param productId
+     * @return
+     */
+    UpdateCommonProductShow modifyCommonServiceShow(String productId);
+
 
 }

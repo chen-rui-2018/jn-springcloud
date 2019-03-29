@@ -30,10 +30,10 @@ public interface ActivityService {
 
     /**
      * 活动状态管理(修改)
-     * @param activitySataus
+     * @param activityStatus
      * @return
      */
-    int updateActivityApply( ActivitySataus activitySataus);
+    int updateActivityApply( ActivityStatus activityStatus);
 
     /**
      * 发布活动/保存草稿
@@ -92,5 +92,13 @@ public interface ActivityService {
      * @return
      */
     int activitySendMessageByTimedTask(ActivityContent activity);
+
+    /**
+     * 查看用户的报名活动列表
+     * @param query
+     * @param needPage
+     * @return
+     */
+    PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage);
 
 }

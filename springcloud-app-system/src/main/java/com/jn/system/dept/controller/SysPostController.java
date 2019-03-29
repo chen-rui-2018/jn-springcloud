@@ -94,18 +94,18 @@ public class SysPostController extends BaseController {
         return new Result();
     }
 
-    @ControllerLog(doAction = "根据岗位id获取岗位信息")
+    @ControllerLog(doAction = "获取岗位信息")
     @RequiresPermissions("/system/sysPost/selectByPrimaryKey")
-    @ApiOperation(value = "根据岗位id获取岗位信息", notes = "根据岗位id获取岗位信息")
+    @ApiOperation(value = "获取岗位信息", notes = "根据岗位id获取岗位信息")
     @RequestMapping(value = "/selectByPrimaryKey",method = RequestMethod.POST)
     public Result<SysPost> selectByPrimaryKey(String id) {
         SysPost sysPost = sysPostService.selectByPrimaryKey(id);
         return new Result(sysPost);
     }
 
-    @ControllerLog(doAction = "条件分页获取岗位信息列表")
+    @ControllerLog(doAction = "获取岗位列表")
     @RequiresPermissions("/system/sysPost/list")
-    @ApiOperation(value = "条件分页获取岗位信息列表", notes = "条件分页获取岗位信息列表")
+    @ApiOperation(value = "获取岗位列表", notes = "条件分页获取岗位信息列表")
     @RequestMapping(value = "/list",method = RequestMethod.POST)
     public Result<PaginationData<List<SysPost>>> list(@Validated @RequestBody SysPostPage sysPostPage) {
         PaginationData data = sysPostService.findByPage(sysPostPage);

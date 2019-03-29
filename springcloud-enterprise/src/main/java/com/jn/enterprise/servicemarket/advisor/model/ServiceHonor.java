@@ -3,8 +3,6 @@ package com.jn.enterprise.servicemarket.advisor.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,18 +16,13 @@ import java.util.Date;
 public class ServiceHonor implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
-    @ApiModelProperty(value = "顾问账号",required = true)
-    @NotNull(message="顾问账号不能为空")
+    @ApiModelProperty(value = "顾问账号")
     private String advisorAccount;
-    @ApiModelProperty(value = "证书名称",required = true)
-    @NotNull(message="证书名称不能为空")
+    @ApiModelProperty(value = "证书名称")
     private String certificateName;
     @ApiModelProperty(value = "证书类型")
-    @NotNull(message="证书类型不能为空")
     private String certificateType;
-    @ApiModelProperty(value = "获得时间(格式：201903)")
-    @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
-            message = "{getTime:'获得时间格式错误'}")
+    @ApiModelProperty(value = "获得时间")
     private String getTime;
     @ApiModelProperty(value = "证书证件")
     private String certificatePhoto;

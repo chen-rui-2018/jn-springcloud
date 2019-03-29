@@ -62,7 +62,7 @@ public class CommentController extends BaseController {
     @ControllerLog(doAction = "评论点赞")
     @ApiOperation(value = "评论点赞", httpMethod = "POST", response = Result.class)
     @RequestMapping(value = "/commentActivityLike")
-    public Result commentActivityLike(@ApiParam(value = "点评ID/活动ID" ,required = true,example = "1234") @RequestParam(value = "id") String id){
+    public Result commentActivityLike(@ApiParam(value = "点赞对象ID" ,required = true,example = "1234") @RequestParam(value = "id") String id){
         Assert.notNull(id,CommentExceptionEnum.APPLY_P_ID_NOT_NULL.getMessage());
         Result result=new Result();
         User user=(User) SecurityUtils.getSubject().getPrincipal();

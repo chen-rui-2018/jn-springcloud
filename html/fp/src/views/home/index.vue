@@ -218,7 +218,9 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            _this.userData = res.data;
+            if(res.data!=null){
+              _this.userData = res.data;
+            }
           } else {
             _this.$message.error(res.result);
           }

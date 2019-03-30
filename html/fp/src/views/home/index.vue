@@ -83,7 +83,7 @@
             </el-aside>
             <user-home v-if="showNum == 0" :userData='userData'></user-home>
             <el-container v-if="iframeShow" style="background:#fff;">
-              <iframe id="live" :src="iframePath" width="100%" height="100%" frameborder="0"></iframe>
+              <iframe id="live" :src="iframePath" onload="this.height=this.contentWindow.document.body.scrollHeight" width="100%" frameborder="0"></iframe>
               <!-- <iframe id="live" :src="iframePath" width="100%" height="100%" scrolling="no" frameborder="0" onload="setIframeHeight(this)"></iframe> -->
             </el-container>
             <!-- <router-view :userData='userData' /> -->
@@ -179,11 +179,29 @@ export default {
     $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
   },
+  updated(){
+    try {
+        var iframe = document.getElementById('live')
+        iframe.onload = function () {
+        }
+      iframe.onreadystatechange = function() {
+        if (iframe.readyState == "complete") {
+          // alert("Local iframe is now loaded.")
+        }
+      }
+    }catch (e) {
+    }
+  },
   methods: {
     ifs(i){
       this.iframeShow = true;
       this.showNum = i.id;
-      this.iframePath = i.path;
+      if(i.id ===11){
+        //window.open(i.path, '_blank');
+        window.open (i.path, 'newwindow', 'height=600, width=1000, top=50, left=250, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+      }else {
+        this.iframePath = i.path;
+      }
     },
     handleSearch() {},
     loginOut() {

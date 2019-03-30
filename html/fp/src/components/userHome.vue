@@ -58,7 +58,7 @@
             </template>
             <template v-else><span>无</span></template>
           </div>
-          <el-button type="success" class="editBtn" @click="editFlag=false">编&nbsp;&nbsp;辑</el-button>
+          <el-button type="success" class="editBtn" @click="editClick">编&nbsp;&nbsp;辑</el-button>
         </div>
       </div>
       <div class="editBody" v-else>
@@ -83,11 +83,11 @@
           <div class="setdistance">
             <span class="textRight">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
             <!-- <input type="radio"> -->
-            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag === 1"></i>
+            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag == 1"></i>
             <i class="iconfont icon-weixuanzhong-01" v-else @click="sexFlag=1"></i>
 
             <span style="margin-right:20px">男</span>
-            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag === 0"></i>
+            <i class="iconfont icon-icon_xuanzhong" v-if="sexFlag == 0"></i>
             <i class="iconfont icon-weixuanzhong-01" v-else @click="sexFlag=0"></i>
 
             <span>女</span>
@@ -176,6 +176,26 @@ export default {
     this.getTagCodeList();
   },
   methods: {
+    editClick(){
+      this.editFlag=false;
+      this.init();
+    },
+    init(){
+      this.nickName = this.userData.nickName;
+      this.name = this.userData.name;
+      this.name = this.userData.name;
+      this.sexFlag = this.userData.sex;
+      this.signature = this.userData.signature;
+      this.value11 = this.userData.hobbys;
+      for(let it of this.value11){
+        for(let it1 in this.options){
+          if(it == this.options[it1].tagVaule){
+            this.options[it1].flag = true;
+          }
+        }
+      }
+      this.value5 = this.userData.jobs;
+    },
     cancelEd() {
       for(let it of this.options){
         it.flag=false

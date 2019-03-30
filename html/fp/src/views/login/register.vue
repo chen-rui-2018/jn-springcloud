@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div class="register" v-loading="loading">
     <div class="loginLogo">
       <img src="@/../static/img/login-logo.png" alt="">
     </div>
@@ -50,7 +50,8 @@ export default {
       phone: "",
       messageCode: "",
       password: "",
-      password1: ""
+      password1: "",
+      loading:false
     };
   },
   created() {},
@@ -84,6 +85,7 @@ export default {
         this.$message.error("请先同意用户协议");
         return;
       }
+      this.loading = true;
       let _this = this;
       this.api.post({
         url: "addUser",
@@ -94,13 +96,38 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
+          _this.loading = false;
           if (res.code == "0000") {
             _this.$message.success("注册成功");
-            setTimeout(() => {
-               _this.$router.push("/");
-            }, 1000);
-           
-            console.log(res);
+            _this.$confirm('注册成功, 是否登录?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'success '
+            }).then(() => {
+              _this.loading = true;
+                _this.api.post({
+                  url: "loginURL",
+                  data: {
+                    account: _this.phone,
+                    password: _this.password
+                  },
+                  dataFlag: false,
+                  callback: function(res) {
+                    _this.loading = false;
+                    if (res.code == "0000") {
+                      sessionStorage.token = res.data;
+                      _this.$router.push({
+                        path: "/user",
+                        query: { account: _this.phone }
+                      });
+                    } else {
+                      _this.$message.error(res.result);
+                    }
+                  }
+                });
+            }).catch(() => {
+
+            });
           } else {
             _this.$message.error(res.result);
           }

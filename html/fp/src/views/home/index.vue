@@ -53,8 +53,8 @@
       <div class="honcontent w">
         <div class="bread">
           <span style="color:#666">用户中心</span>
-          <span>/</span>
-          <span style="color:#009f41" v-for="(i,k) in dataLeft" :key='k' v-if="$route.name == i.pathName">{{i.name}}</span>
+          /
+          <span style="color:#009f41">{{titleName}}</span>
           <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: i.path }" v-for="(i,k) in dataLeft" :key='k'>{{i.name}}</el-breadcrumb-item>
             <el-breadcrumb-item></el-breadcrumb-item>
@@ -105,7 +105,10 @@ export default {
       menuFlag: false,
       zhedieFlag:false,
       imgUrl: "",
-      userData: {},
+      titleName:'用户资料',
+      userData: {
+        avatar:''
+      },
       showNum:0,
       iframeShow:false,
       iframePath:'',
@@ -195,6 +198,7 @@ export default {
   methods: {
     ifs(i){
       this.iframeShow = true;
+      this.titleName = i.name;
       this.showNum = i.id;
       if(i.id ===11){
         //window.open(i.path, '_blank');
@@ -223,6 +227,7 @@ export default {
         return
       }
       this.iframeShow = false;
+      this.titleName = i.name;
       this.showNum = i.id
       // this.$router.push(`${i.path}?account=${this.$route.query.account}`);
     },

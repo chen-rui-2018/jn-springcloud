@@ -150,7 +150,7 @@ export default {
             {
               name: "发起人才申报",
               flag: false,
-              path: "http://112.94.22.222:2381/platform/bpmn/instance/bpmInst/toStart.htm?defId=559018228462911488&proInstId=",
+              path: "http://112.94.22.222:2381/platform/bpmn/instance/bpmInst/toStart.htm?defId=558773504321781760&proInstId=",
               id: 11,
             },
             {

@@ -230,7 +230,7 @@
           and t.record_status=1
           AND t.department_id=#{departmentId}
         and t.cost_happend_time BETWEEN #{startMonth} AND  #{endMonth}
-        where m.month BETWEEN  #{startMonth} AND  #{endMonth} GROUP BY t.cost_happend_time ORDER BY m.month ) t1
+        where m.month BETWEEN  #{startMonth} AND  #{endMonth} GROUP BY m.month ORDER BY m.month ) t1
         LEFT  JOIN
         (SELECT
         t.budget_month as "budgetmonth",

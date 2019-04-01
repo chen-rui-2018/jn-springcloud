@@ -141,23 +141,12 @@ export default {
           id: 1,
           childrenShow:false,
           children: [
+
             {
-              name: "待办事务处理",
+              name: "发起人才申报流程",
               flag: false,
-              path: "http://112.94.22.222:2381/platform/office/bpmReceivedProcess/pending.htm",
-              id: 10,
-            },
-            {
-              name: "发起人才申报",
-              flag: false,
-              path: "http://112.94.22.222:2381/platform/bpmn/instance/bpmInst/toStart.htm?defId=558773504321781760&proInstId=",
+              path: "http://112.94.22.222:2381",
               id: 11,
-            },
-            {
-              name: "我发起的流程",
-              flag: false,
-              path: "http://112.94.22.222:2381/platform/office/bpmInitiatedProcess/myRequest.htm",
-              id: 12,
             }
           ]
         }
@@ -201,8 +190,8 @@ export default {
       this.titleName = i.name;
       this.showNum = i.id;
       if(i.id ===11){
-        //window.open(i.path, '_blank');
-        window.open (i.path, 'newwindow', 'height=600, width=1000, top=50, left=250, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+        window.open(i.path, '_blank');
+        //window.open (i.path, 'newwindow', 'height=600, width=1000, top=50, left=250, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
       }else {
         this.iframePath = i.path;
       }

@@ -69,9 +69,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        finance
+                        notice
                     </contexts>
                     <tableNames>
+                        tb_notice_details,tb_notice_info
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

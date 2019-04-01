@@ -1,10 +1,7 @@
 package com.jn.park.policy.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.policy.model.PolicyGuideDetailsShow;
-import com.jn.park.policy.model.PolicyInfoEditParam;
-import com.jn.park.policy.model.PolicyInfoShow;
-import com.jn.park.policy.model.PolicyManagementParam;
+import com.jn.park.policy.model.*;
 
 import java.util.List;
 
@@ -44,7 +41,7 @@ public interface PolicyGuideService {
     List<PolicyInfoShow> getPolicyInfo(String policyType);
 
     /**
-     * 政策管理上架/下架
+     * 政策上架/下架上架/下架
      * @param policyId 政策id
      * @param status  状态值，0：下架   1：上架
      * @param account 登录用户账号
@@ -58,4 +55,26 @@ public interface PolicyGuideService {
      * @return
      */
     PolicyGuideDetailsShow getPolicyGuidDetails(String policyId);
+
+    /**
+     * 图解政策管理
+     * @param policyManagementParam
+     * @return
+     */
+    PaginationData getDiagramPolicyManagementList(PolicyManagementParam policyManagementParam);
+
+    /**
+     * 图解政策管理编辑（新增/修改）
+     * @param policyDiagramInfoEditParam
+     * @param account   当前登录用户账号
+     * @return
+     */
+    int saveOrUpdateDiagramPolicyInfo(PolicyDiagramInfoEditParam policyDiagramInfoEditParam,String account);
+
+    /**
+     * 获取图解政策详情
+     * @param policyId 政策id
+     * @return
+     */
+    PolicyGuideDiagramDetailsShow getPolicyGuidDiagramDetails(String policyId);
 }

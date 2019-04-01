@@ -76,8 +76,8 @@ public class PolicyGuideController extends BaseController {
         return new Result(policyInfoShowList);
     }
 
-    @ControllerLog(doAction = "政策管理上架/下架")
-    @ApiOperation(value = "政策管理上架/下架",notes = "对政策指南>>政策管理中的政策进行上架/下架操作")
+    @ControllerLog(doAction = "政策上架/下架")
+    @ApiOperation(value = "政策上架/下架",notes = "对政策指南>>政策管理/图解政策管理中的政策进行上架/下架操作")
     @RequiresPermissions("/policy/policyCenterController/shelfOrObtained")
     @RequestMapping(value = "/shelfOrObtained",method = RequestMethod.GET)
     public Result<Integer> shelfOrObtained(@ApiParam(value="政策id",required = true,example = "xxx1213")
@@ -100,7 +100,7 @@ public class PolicyGuideController extends BaseController {
     @ControllerLog(doAction = "获取普通政策详情")
     @ApiOperation(value = "获取普通政策详情",notes = "根据政策id获取政策指南>>政策管理中普通政策的详情")
     @RequiresPermissions("/policy/policyCenterController/getPolicyGuidDetails")
-    @RequestMapping(value = "/getPolicyInfo",method = RequestMethod.GET)
+    @RequestMapping(value = "/getPolicyGuidDetails",method = RequestMethod.GET)
     public Result<PolicyGuideDetailsShow> getPolicyGuidDetails(@ApiParam(value="政策id",required = true,example = "xxx1213")
                                                                  @NotBlank(message = "政策id不能为空或空字符串")
                                                                  @RequestParam("policyId")String policyId){
@@ -108,4 +108,39 @@ public class PolicyGuideController extends BaseController {
         return new Result(policyGuideDetailsShow);
     }
 
+
+    @ControllerLog(doAction = "图解政策管理")
+    @ApiOperation(value = "图解政策管理",notes = "获取政策指南>>图解政策管理列表数据")
+    @RequiresPermissions("/policy/policyCenterController/getDiagramPolicyManagementList")
+    @RequestMapping(value = "/getDiagramPolicyManagementList",method = RequestMethod.GET)
+    public Result<PaginationData<List<PolicyDiagramManagementShow>>> getDiagramPolicyManagementList(@Validated PolicyManagementParam policyManagementParam){
+        PaginationData policyDiagramManagementList = policyGuideService.getDiagramPolicyManagementList(policyManagementParam);
+        return new Result(policyDiagramManagementList);
+    }
+
+    @ControllerLog(doAction = "图解政策管理编辑（新增/修改）")
+    @ApiOperation(value = "图解政策管理编辑（新增/修改）",notes = "返回数据为响应条数，正常值为1")
+    @RequiresPermissions("/policy/policyCenterController/saveOrUpdateDiagramPolicyInfo")
+    @RequestMapping(value = "/saveOrUpdateDiagramPolicyInfo",method = RequestMethod.POST)
+    public Result<Integer> saveOrUpdateDiagramPolicyInfo(@RequestBody @Validated PolicyDiagramInfoEditParam  policyDiagramInfoEditParam){
+        User user=(User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.warn("图解政策管理编辑（新增/修改）获取登录用户失败");
+            return new Result(PolicyInfoExceptionEnum.NETWORK_ANOMALY.getCode(),PolicyInfoExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum=policyGuideService.saveOrUpdateDiagramPolicyInfo(policyDiagramInfoEditParam,user.getAccount());
+        logger.info("---------图解政策管理编辑（新增/修改）成功，响应数据条数：{}---------",responseNum);
+        return new Result(responseNum);
+    }
+
+    @ControllerLog(doAction = "获取图解政策详情")
+    @ApiOperation(value = "获取图解政策详情",notes = "根据政策id获取政策指南>>图解政策管理中图解政策的详情")
+    @RequiresPermissions("/policy/policyCenterController/getPolicyGuidDiagramDetails")
+    @RequestMapping(value = "/getPolicyGuidDiagramDetails",method = RequestMethod.GET)
+    public Result<PolicyGuideDiagramDetailsShow> getPolicyGuidDiagramDetails(@ApiParam(value="政策id",required = true,example = "xxx1213")
+                                                                      @NotBlank(message = "政策id不能为空或空字符串")
+                                                                      @RequestParam("policyId")String policyId){
+        PolicyGuideDiagramDetailsShow policyGuideDiagramDetailsShow=policyGuideService.getPolicyGuidDiagramDetails(policyId);
+        return new Result(policyGuideDiagramDetailsShow);
+    }
 }

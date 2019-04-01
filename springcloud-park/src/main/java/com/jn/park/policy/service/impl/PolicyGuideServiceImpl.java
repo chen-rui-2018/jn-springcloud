@@ -95,44 +95,46 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
         //是否有政策id
         if(StringUtils.isBlank(policyInfoEditParam.getPolicyId())){
             //新增
-            return policyInfoAdd(policyInfoEditParam, account);
+            TbPolicy tbPolicy=new TbPolicy();
+            BeanUtils.copyProperties(policyInfoEditParam, tbPolicy);
+            //政策类型 0:普通政策   1：图解政策
+            String policyType="0";
+            tbPolicy.setPolicyType(policyType);
+            return policyInfoAdd(tbPolicy, account);
         }else{
             //修改
-            policyInfoUpdate(policyInfoEditParam, account);
+            TbPolicy tbPolicy=new TbPolicy();
+            BeanUtils.copyProperties(policyInfoEditParam, tbPolicy);
+            return policyInfoUpdate(tbPolicy, account);
         }
-        return 0;
     }
 
     /**
-     * 修改普通政策信息
-     * @param policyInfoEditParam 入参
+     * 修改政策信息
+     * @param tbPolicy 入参
      * @param account 用户账号
      */
-    @ServiceLog(doAction = "修改普通政策信息")
-    private void policyInfoUpdate(PolicyInfoEditParam policyInfoEditParam, String account) {
+    @ServiceLog(doAction = "修改政策信息")
+    private int policyInfoUpdate(TbPolicy tbPolicy, String account) {
         TbPolicyCriteria example=new TbPolicyCriteria();
-        example.createCriteria().andPolicyIdEqualTo(policyInfoEditParam.getPolicyId()).andRecordStatusEqualTo(RECORD_STATUS);
-        TbPolicy tbPolicy=new TbPolicy();
-        BeanUtils.copyProperties(policyInfoEditParam, tbPolicy);
+        example.createCriteria().andPolicyIdEqualTo(tbPolicy.getPolicyId()).andRecordStatusEqualTo(RECORD_STATUS);
         //修改人
         tbPolicy.setModifierAccount(account);
         //修改时间
         tbPolicy.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //发布时间
         tbPolicy.setReleaseDate(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
-        tbPolicyMapper.updateByExampleSelective(tbPolicy, example);
+        return tbPolicyMapper.updateByExampleSelective(tbPolicy, example);
     }
 
     /**
-     * 新增普通政策信息
-     * @param policyInfoEditParam 入参
+     * 新增政策信息
+     * @param tbPolicy 包含前端传递信息的政策对象
      * @param account 用户账号
      * @return
      */
     @ServiceLog(doAction = "新增普通政策信息")
-    private int policyInfoAdd(PolicyInfoEditParam policyInfoEditParam, String account) {
-        TbPolicy tbPolicy=new TbPolicy();
-        BeanUtils.copyProperties(policyInfoEditParam, tbPolicy);
+    private int policyInfoAdd(TbPolicy tbPolicy, String account) {
         //政策id
         tbPolicy.setPolicyId(UUID.randomUUID().toString().replaceAll("-", ""));
         //政策编码
@@ -151,10 +153,10 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
     }
 
     /**
-     * 校验政策管理编辑（新增/修改）数据
+     * 校验政策管理编辑（新增/修改）入参数据
      * @param policyInfoEditParam
      */
-    @ServiceLog(doAction = "校验政策管理编辑（新增/修改）数据")
+    @ServiceLog(doAction = "校验政策管理编辑（新增/修改）入参数据")
     private void checkPolicyInfoEdit(PolicyInfoEditParam policyInfoEditParam) {
         List<PolicyLevelShow> policyLevelList = policyCenterService.getPolicyLevelList();
         PolicyLevelShow policyLevelShow=new PolicyLevelShow();
@@ -192,27 +194,18 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
         //0:普通政策/政策原文   1：图解政策
         String policyType="1";
         List<PolicyInfoShow> policyInfoShowList = getPolicyInfo(policyType);
-        if(policyInfoShowList.isEmpty()){
-            logger.warn("有关联政策图解，政策图解id在系统中不存在");
-            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST);
-        }
         List<String> policyIdList=new ArrayList<>(16);
         for(PolicyInfoShow policyInfoShow:policyInfoShowList){
             policyIdList.add(policyInfoShow.getPolicyId());
         }
-        if(!policyIdList.contains(policyInfoEditParam.getRelationPolicyDiagramId())){
+        if(policyInfoShowList.isEmpty() || !policyIdList.contains(policyInfoEditParam.getRelationPolicyDiagramId())){
             logger.warn("有关联政策图解，政策图解id在系统中不存在");
             throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST);
         }
 
         //若政策id有值，判断政策id在系统中是否存在
-        if(StringUtils.isNotBlank(policyInfoEditParam.getPolicyId())){
-            long existNum = getExistNum(policyInfoEditParam.getPolicyId());
-            if(existNum==0){
-                logger.warn("当前政策id在系统中不存在");
-                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST);
-            }
-        }
+        String msg="校验政策管理编辑（新增/修改）入参数据";
+        policyIdIsExist(policyInfoEditParam.getPolicyId(),msg);
     }
 
     /**
@@ -237,31 +230,28 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
     }
 
     /**
-     * 政策管理上架/下架
+     * 政策上架/下架上架/下架
      * @param policyId 政策id
      * @param status  状态值，0：下架   1：上架
      * @param account 登录用户账号
      * @return
      */
-    @ServiceLog(doAction = "政策管理上架/下架")
+    @ServiceLog(doAction = "政策上架/下架上架/下架")
     @Override
     public int shelfOrObtained(String policyId,String status, String account) {
         //根据政策id判断政策是否存在
-        long existNum = getExistNum(policyId);
-        if(existNum==0){
-            logger.warn("政策管理上架/下架,政策id[{}]在系统中不存在",policyId);
-            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST);
-        }
+        String msg="政策管理上架/下架";
+        policyIdIsExist(policyId,msg);
         //防止重复操作(上架/下架)
-        existNum = getStatusExistNum(policyId, status);
+        long existNum = getStatusExistNum(policyId, status);
         if(existNum>0){
             //状态标志  1：上架
             String flag="1";
-            String msg=status==flag?"上架":"下架";
-            logger.warn("当前政策已{},请不要重复操作",msg);
-            if(status==flag){
+            if(status.equals(flag)){
+                logger.warn("当前政策已上架,请不要重复操作");
                 throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_EXIST_SHELF);
             }
+            logger.warn("当前政策已下架,请不要重复操作");
             throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_EXIST_OBTAINED);
         }
         TbPolicyCriteria example = new TbPolicyCriteria();
@@ -294,11 +284,22 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
      * @return
      */
     @ServiceLog(doAction = "根据政策id判断政策在系统中是否存在")
-    private long getExistNum(String policyId) {
-        TbPolicyCriteria example = new TbPolicyCriteria();
-        example.createCriteria().andPolicyIdEqualTo(policyId).andRecordStatusEqualTo(RECORD_STATUS);
-        return tbPolicyMapper.countByExample(example);
+    private void policyIdIsExist(String policyId,String msg) {
+        if(StringUtils.isNotBlank(policyId)){
+            TbPolicyCriteria example = new TbPolicyCriteria();
+            example.createCriteria().andPolicyIdEqualTo(policyId).andRecordStatusEqualTo(RECORD_STATUS);
+            long existNum = tbPolicyMapper.countByExample(example);
+            if (existNum == 0) {
+                logger.warn("{},当前政策id在系统中不存在",msg);
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST);
+            }
+        }else{
+            logger.warn("当前政策id为不能为空");
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ID_NOT_NULL);
+        }
+
     }
+
 
     /**
      * 获取普通政策详情
@@ -308,11 +309,117 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
     @ServiceLog(doAction = "获取普通政策详情")
     @Override
     public PolicyGuideDetailsShow getPolicyGuidDetails(String policyId) {
-        long existNum = getExistNum(policyId);
-        if(existNum==0){
-            logger.warn("获取普通政策详情,政策id[{}]在系统中不存在",policyId);
-            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST);
-        }
+        String msg="获取普通政策详情";
+        policyIdIsExist(policyId,msg);
         return policyGuideMapper.getPolicyGuidDetails(policyId);
+    }
+
+    /**
+     * 图解政策管理
+     * @param policyManagementParam
+     * @return
+     */
+    @ServiceLog(doAction = "图解政策管理")
+    @Override
+    public PaginationData getDiagramPolicyManagementList(PolicyManagementParam policyManagementParam) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(StringUtils.isBlank(policyManagementParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+            List<PolicyDiagramManagementShow> resultList=policyGuideMapper.getDiagramPolicyManagementList(policyManagementParam);
+            return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+        }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(policyManagementParam.getNeedPage())){
+            objects = PageHelper.startPage(policyManagementParam.getPage(),
+                    policyManagementParam.getRows() == 0 ? 15 : policyManagementParam.getRows(), true);
+        }
+        List<PolicyDiagramManagementShow> resultList = policyGuideMapper.getDiagramPolicyManagementList(policyManagementParam);
+        return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 图解政策管理编辑（新增/修改）
+     * @param policyDiagramInfoEditParam
+     * @param account   当前登录用户账号
+     * @return
+     */
+    @ServiceLog(doAction = "图解政策管理编辑（新增/修改）")
+    @Override
+    public int saveOrUpdateDiagramPolicyInfo(PolicyDiagramInfoEditParam policyDiagramInfoEditParam, String account) {
+       //数据校验
+        checkPolicyDiagramInfoEdit(policyDiagramInfoEditParam);
+        //是否有政策id
+        if(StringUtils.isBlank(policyDiagramInfoEditParam.getPolicyId())){
+            //新增
+            TbPolicy tbPolicy=new TbPolicy();
+            BeanUtils.copyProperties(policyDiagramInfoEditParam, tbPolicy);
+            //政策类型 0:普通政策   1：图解政策
+            String policyType="1";
+            tbPolicy.setPolicyType(policyType);
+            return policyInfoAdd(tbPolicy, account);
+        }else{
+            //修改
+            TbPolicy tbPolicy=new TbPolicy();
+            BeanUtils.copyProperties(policyDiagramInfoEditParam, tbPolicy);
+            return policyInfoUpdate(tbPolicy, account);
+        }
+    }
+
+    /**
+     * 校验图解政策管理编辑（新增/修改）入参数据
+     * @param policyDiagramInfoEditParam
+     */
+    @ServiceLog(doAction = "校验图解政策管理编辑（新增/修改）入参数据")
+    private void checkPolicyDiagramInfoEdit(PolicyDiagramInfoEditParam policyDiagramInfoEditParam) {
+        //有关联图解id
+        String isPolicyDiagram="1";
+        if(isPolicyDiagram.equals(policyDiagramInfoEditParam.getIsPolicyOriginal())){
+            if(StringUtils.isBlank(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
+                logger.warn("有关联政策原文，政策原文id不能为空");
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_NULL);
+            }
+        }else{
+            if(StringUtils.isNotBlank(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
+                logger.warn("没有关联政策原文，政策原文id必须为空");
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_MUST_NULL);
+            }
+        }
+
+        //校验关联的政策原文id在系统中是否存在
+        //0:普通政策/政策原文   1：图解政策
+        String policyType="0";
+        List<PolicyInfoShow> policyInfoShowList = getPolicyInfo(policyType);
+        if(policyInfoShowList.isEmpty()){
+            logger.warn("有关联政策图解，政策图解id在系统中不存在");
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST);
+        }
+        List<String> policyIdList=new ArrayList<>(16);
+        for(PolicyInfoShow policyInfoShow:policyInfoShowList){
+            policyIdList.add(policyInfoShow.getPolicyId());
+        }
+        if(!policyIdList.contains(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
+            logger.warn("有关联政策原文，政策原文id在系统中不存在");
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_EXIST);
+        }
+        //若政策id有值，判断政策id在系统中是否存在
+        String msg="校验图解政策管理编辑（新增/修改）入参数据";
+        policyIdIsExist(policyDiagramInfoEditParam.getPolicyId(),msg);
+    }
+
+    /**
+     * 获取图解政策详情
+     * @param policyId 政策id
+     * @return
+     */
+    @ServiceLog(doAction = "获取图解政策详情")
+    @Override
+    public PolicyGuideDiagramDetailsShow getPolicyGuidDiagramDetails(String policyId) {
+        String msg="获取图解政策详情";
+        policyIdIsExist(policyId,msg);
+        return policyGuideMapper.getPolicyGuidDiagramDetails(policyId);
     }
 }

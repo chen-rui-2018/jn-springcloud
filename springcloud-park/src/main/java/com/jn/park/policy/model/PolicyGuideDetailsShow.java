@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @Version v1.0
  * @modified By:
  */
-@ApiModel(value = "PolicyGuideDetailsShow",description = "政策指南政策详情出参")
+@ApiModel(value = "PolicyGuideDetailsShow",description = "政策指南普通政策详情出参")
 public class PolicyGuideDetailsShow implements Serializable {
     @ApiModelProperty(value = "政策id")
     private String policyId;
@@ -45,6 +45,8 @@ public class PolicyGuideDetailsShow implements Serializable {
     private String isPolicyDiagram;
     @ApiModelProperty(value = "关联的政策图解id")
     private String relationPolicyDiagramId;
+    @ApiModelProperty(value = "关联的政策图解标题")
+    private String relationPolicyDiagramTitle;
     @ApiModelProperty(value = "政策内容")
     private String policyContent;
 
@@ -176,6 +178,14 @@ public class PolicyGuideDetailsShow implements Serializable {
         this.relationPolicyDiagramId = relationPolicyDiagramId;
     }
 
+    public String getRelationPolicyDiagramTitle() {
+        return relationPolicyDiagramTitle;
+    }
+
+    public void setRelationPolicyDiagramTitle(String relationPolicyDiagramTitle) {
+        this.relationPolicyDiagramTitle = relationPolicyDiagramTitle;
+    }
+
     public String getPolicyContent() {
         return policyContent;
     }
@@ -203,6 +213,7 @@ public class PolicyGuideDetailsShow implements Serializable {
                 ", issueUnit='" + issueUnit + '\'' +
                 ", isPolicyDiagram='" + isPolicyDiagram + '\'' +
                 ", relationPolicyDiagramId='" + relationPolicyDiagramId + '\'' +
+                ", relationPolicyDiagramTitle='" + relationPolicyDiagramTitle + '\'' +
                 ", policyContent='" + policyContent + '\'' +
                 '}';
     }

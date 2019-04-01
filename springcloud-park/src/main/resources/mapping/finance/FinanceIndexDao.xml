@@ -58,7 +58,7 @@
         t1.month as "month",
         SUM(t1.cost) as "cost",
         IFNULL(SUM(t2.budgetnumber),0) as "budgetnumber" ,
-        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/")as "ratio"
+        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
         IFNULL(t.cost,0) as "cost"
@@ -86,7 +86,7 @@
         t1.month as "month",
         SUM(t1.cost) as "cost",
         IFNULL(SUM(t2.budgetnumber),0) as "budgetnumber" ,
-        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/")as "ratio"
+        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
         IFNULL(t.cost,0) as "cost"

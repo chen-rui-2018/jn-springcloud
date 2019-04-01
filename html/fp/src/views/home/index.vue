@@ -143,7 +143,7 @@ export default {
           children: [
 
             {
-              name: "发起人才申报流程",
+              name: "流程系统",
               flag: false,
               path: "http://112.94.22.222:2381",
               id: 11,

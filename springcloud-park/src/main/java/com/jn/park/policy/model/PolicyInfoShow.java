@@ -33,4 +33,12 @@ public class PolicyInfoShow implements Serializable {
     public void setPolicyTitle(String policyTitle) {
         this.policyTitle = policyTitle;
     }
+
+    @Override
+    public String toString() {
+        return "PolicyInfoShow{" +
+                "policyId='" + policyId + '\'' +
+                ", policyTitle='" + policyTitle + '\'' +
+                '}';
+    }
 }

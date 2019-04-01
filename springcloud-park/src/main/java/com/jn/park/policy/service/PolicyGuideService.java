@@ -1,8 +1,9 @@
 package com.jn.park.policy.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.policy.model.PolicyInfoShow;
+import com.jn.park.policy.model.PolicyGuideDetailsShow;
 import com.jn.park.policy.model.PolicyInfoEditParam;
+import com.jn.park.policy.model.PolicyInfoShow;
 import com.jn.park.policy.model.PolicyManagementParam;
 
 import java.util.List;
@@ -41,4 +42,20 @@ public interface PolicyGuideService {
      * @return
      */
     List<PolicyInfoShow> getPolicyInfo(String policyType);
+
+    /**
+     * 政策管理上架/下架
+     * @param policyId 政策id
+     * @param status  状态值，0：下架   1：上架
+     * @param account 登录用户账号
+     * @return
+     */
+    int shelfOrObtained(String policyId,String status,String account);
+
+    /**
+     * 获取普通政策详情
+     * @param policyId 政策id
+     * @return
+     */
+    PolicyGuideDetailsShow getPolicyGuidDetails(String policyId);
 }

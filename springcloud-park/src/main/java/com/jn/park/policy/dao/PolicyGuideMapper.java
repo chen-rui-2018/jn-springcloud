@@ -1,8 +1,10 @@
 package com.jn.park.policy.dao;
 
+import com.jn.park.policy.model.PolicyGuideDetailsShow;
 import com.jn.park.policy.model.PolicyInfoShow;
 import com.jn.park.policy.model.PolicyManagementParam;
 import com.jn.park.policy.model.PolicyManagementShow;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,4 +30,11 @@ public interface PolicyGuideMapper {
      * @return
      */
     List<PolicyInfoShow> getPolicyInfo(String policyType);
+
+    /**
+     * 获取普通政策详情
+     * @param policyId
+     * @return
+     */
+    PolicyGuideDetailsShow getPolicyGuidDetails(@Param("policyId") String policyId);
 }

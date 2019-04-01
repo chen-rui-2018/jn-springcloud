@@ -23,6 +23,8 @@ public enum PolicyInfoExceptionEnum implements CodeAndMsg {
     POLICY_DIAGRAM_ID_MUST_NULL("4020511","没有关联政策图解，政策图解id必须为空"),
     POLICY_ID_NOT_EXIST("4020512","当前政策id在系统中不存在"),
     POLICY_DIAGRAM_ID_NOT_EXIST("4020513","有关联政策图解，政策图解id在系统中不存在"),
+    POLICY_EXIST_SHELF("4020514","当前政策已上架，请不要重复操作"),
+    POLICY_EXIST_OBTAINED("4020514","当前政策已下架，请不要重复操作"),
     ;
     /**
      * 编码

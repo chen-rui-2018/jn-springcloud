@@ -51,7 +51,7 @@ public class PolicyGuideController extends BaseController {
     }
 
     @ControllerLog(doAction = "政策管理编辑（新增/修改）")
-    @ApiOperation(value = "政策管理编辑（新增/修改）",notes = "返回数据为响应条数，正常值为1")
+    @ApiOperation(value = "政策管理编辑（新增/修改）",notes = "返回数据为响应条数，正常值为2（基本信息和详情）")
     @RequiresPermissions("/policy/policyCenterController/saveOrUpdatePolicyInfo")
     @RequestMapping(value = "/saveOrUpdatePolicyInfo",method = RequestMethod.POST)
     public Result<Integer> saveOrUpdatePolicyInfo(@RequestBody @Validated PolicyInfoEditParam policyManagementParam){

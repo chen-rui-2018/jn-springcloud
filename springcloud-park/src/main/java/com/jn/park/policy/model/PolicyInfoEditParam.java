@@ -2,6 +2,7 @@ package com.jn.park.policy.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
@@ -45,6 +46,7 @@ public class PolicyInfoEditParam implements Serializable {
     @ApiModelProperty(value = "关联的政策图解id(若是有关联管理图解政策，需要选择一个图解政策)",example = "xxx1234")
     private String relationPolicyDiagramId;
     @ApiModelProperty(value = "政策内容",required = true,example = "xxx政策内容")
+    @NotBlank(message = "政策内容不能为空")
     private String policyContent;
 
     public String getPolicyId() {

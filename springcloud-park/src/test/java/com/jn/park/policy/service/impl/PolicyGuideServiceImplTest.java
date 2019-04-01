@@ -62,36 +62,50 @@ public class PolicyGuideServiceImplTest {
      */
     private String policyId;
     private String status;
+    /**
+     * 图解政策管理编辑（新增、修改）
+     */
+    private PolicyDiagramInfoEditParam policyDiagramInfoEditParam=new PolicyDiagramInfoEditParam();
 
     @Before
     public void setUp() throws Exception {
         //政策管理
-        policyManagementParam.setStatus("");
+        policyManagementParam.setStatus("1");
         policyManagementParam.setPolicyTitle("");
-        policyManagementParam.setNeedPage("1");
+        policyManagementParam.setNeedPage("0");
 
         //政策管理编辑（新增/修改）
         account="wangsong";
-        policyInfoEditParam.setPolicyTitle("测试新增政策");
-        policyInfoEditParam.setPolicyLevelCode("national_level");
-        policyInfoEditParam.setPolicyLevelName("国家级");
-        policyInfoEditParam.setPolicyClassCode("financial_guidance");
-        policyInfoEditParam.setPolicyClassName("财政引导");
+        //policyInfoEditParam.setPolicyId("cddd344054624741b1af3f40a6ab571e");
+        policyInfoEditParam.setPolicyTitle("测试新增政策222");
+        policyInfoEditParam.setPolicyLevelCode("city_level");
+        policyInfoEditParam.setPolicyLevelName("市级");
+        policyInfoEditParam.setPolicyClassCode("industry_support");
+        policyInfoEditParam.setPolicyClassName("产业扶持");
         policyInfoEditParam.setThematicType("1");
         policyInfoEditParam.setSupportMethod("0");
         policyInfoEditParam.setSupportIndustry("1");
         policyInfoEditParam.setIssueUnit("国务院新闻办");
+        policyInfoEditParam.setStatus("1");
         policyInfoEditParam.setSupportIndustry("1");
-        policyInfoEditParam.setIsPolicyDiagram("1");
-        policyInfoEditParam.setRelationPolicyDiagramId("123");
-        policyInfoEditParam.setPolicyContent("各市，区科技局，有关单位，为贯彻落实市委，市政府....");
+        policyInfoEditParam.setIsPolicyDiagram("0");
+        //policyInfoEditParam.setRelationPolicyDiagramId("123");
+        policyInfoEditParam.setPolicyContent("各市，区科技局，有关单位，为贯彻落实市委，市政府45....");
 
         //关联图解政策信息/关联政策原文信息
-        policyType="0";
+        policyType="1";
 
         //政策管理上架/下架
-        policyId="123";
+        policyId="cddd344054624741b1af3f40a6ab571e";
         status="1";
+
+        //图解政策管理编辑（新增、修改）
+        policyDiagramInfoEditParam.setPolicyTitle("测试图解政策");
+        policyDiagramInfoEditParam.setThematicType("1");
+        policyDiagramInfoEditParam.setStatus("1");
+        policyDiagramInfoEditParam.setIsPolicyOriginal("1");
+        policyDiagramInfoEditParam.setRelationPolicyOriginalId("1233");
+        policyDiagramInfoEditParam.setPolicyDiagramUrl("1236655.jpg");
     }
 
     /**
@@ -105,7 +119,7 @@ public class PolicyGuideServiceImplTest {
         }else{
             List<PolicyManagementShow> policyManagementShows=(List<PolicyManagementShow>)paginationData.getRows();
             for (PolicyManagementShow policyManagementShow:policyManagementShows) {
-                logger.info(policyManagementShow.toString());
+                logger.info("政策管理:{}",policyManagementShow.toString());
             }
         }
         assertThat(paginationData,anything());
@@ -129,7 +143,8 @@ public class PolicyGuideServiceImplTest {
                             Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_NULL.getCode()),
                             Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_MUST_NULL.getCode()),
                             Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST.getCode()),
-                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_NULL.getCode())
                     ));
         }
     }
@@ -154,7 +169,7 @@ public class PolicyGuideServiceImplTest {
             policyInfo=new ArrayList<>();
         }else{
             for(PolicyInfoShow policyInfoShow:policyInfo){
-                logger.info(policyInfoShow.toString());
+                logger.info("关联图解政策信息/关联政策原文信息:{}",policyInfoShow.toString());
             }
         }
         assertThat(policyInfo.size(),greaterThanOrEqualTo(0));
@@ -188,7 +203,7 @@ public class PolicyGuideServiceImplTest {
         try {
             PolicyGuideDetailsShow policyGuidDetails = policyGuideService.getPolicyGuidDetails(policyId);
             if(policyGuidDetails!=null){
-                logger.info(policyGuidDetails.toString());
+                logger.info("获取普通政策详情:{}",policyGuidDetails.toString());
             }
             assertThat(policyGuidDetails, anything());
         } catch (JnSpringCloudException e) {
@@ -196,6 +211,65 @@ public class PolicyGuideServiceImplTest {
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST.getCode())
+                    ));
+        }
+    }
+
+    /**
+     * 图解政策管理
+     */
+    @Test
+    public void getDiagramPolicyManagementList(){
+        PaginationData paginationData = policyGuideService.getDiagramPolicyManagementList(policyManagementParam);
+        if(paginationData==null || paginationData.getRows()==null){
+            //ignore
+        }else{
+            List<PolicyDiagramManagementShow> policyManagementShows=(List<PolicyDiagramManagementShow>)paginationData.getRows();
+            for (PolicyDiagramManagementShow policyDiagramManagementShow:policyManagementShows) {
+                logger.info("图解政策管理:{}",policyDiagramManagementShow.toString());
+            }
+        }
+        assertThat(paginationData,anything());
+
+
+    }
+    /**
+     * 图解政策管理编辑（新增/修改）
+     */
+    @Test
+    public void saveOrUpdateDiagramPolicyInfo(){
+        try {
+            int responseNum = policyGuideService.saveOrUpdateDiagramPolicyInfo(policyDiagramInfoEditParam, account);
+            logger.info("-----------图解政策管理编辑（新增/修改）数据响应条数是：{}--------------",responseNum);
+            assertThat(responseNum,greaterThanOrEqualTo(0));
+        } catch (JnSpringCloudException e) {
+            logger.warn("图解政策管理编辑（新增/修改）失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_NULL.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_MUST_NULL.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_EXIST.getCode())
+                    ));
+        }
+    }
+
+    /**
+     * 获取图解政策详情
+     */
+    @Test
+    public void getPolicyGuidDiagramDetails(){
+        try {
+            PolicyGuideDiagramDetailsShow policyGuidDiagramDetails = policyGuideService.getPolicyGuidDiagramDetails(policyId);
+            if(policyGuidDiagramDetails!=null){
+                logger.info("获取图解政策详情:{}",policyGuidDiagramDetails.toString());
+            }
+            assertThat(policyGuidDiagramDetails, anything());
+        } catch (JnSpringCloudException e) {
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_EXIST.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_ID_NOT_NULL.getCode())
                     ));
         }
     }

@@ -72,6 +72,17 @@ public class OaMeetingAdd implements Serializable {
     @ApiModelProperty(value = "参会人员")
     private String participantsStr;
 
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
     public String getParticipantsStr() {
         return participantsStr;
     }

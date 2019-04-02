@@ -537,6 +537,11 @@ export default {
 .tablePagination{
   margin-top:15px;
 }
+.el-tooltip__popper{
+   text-align: center;
+    max-width: 260px;
+    word-break: break-all;
+}
 .management {
   .filter-container {
     .el-form-item {

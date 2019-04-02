@@ -58,7 +58,7 @@
         t1.month as "month",
         SUM(t1.cost) as "cost",
         IFNULL(SUM(t2.budgetnumber),0) as "budgetnumber" ,
-        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/")as "ratio"
+        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
         IFNULL(t.cost,0) as "cost"
@@ -84,9 +84,9 @@
     <select id="sectionBudgetExpend" resultType="com.jn.park.finance.vo.FinanceIndexSectionBudgetExpendVo">
       SELECT
         t1.month as "month",
-        t1.cost as "cost",
-        IFNULL(t2.budgetnumber,0) as "budgetnumber" ,
-        IFNULL(CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%") ,"/")as "ratio"
+        SUM(t1.cost) as "cost",
+        IFNULL(SUM(t2.budgetnumber),0) as "budgetnumber" ,
+        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
         IFNULL(t.cost,0) as "cost"
@@ -116,6 +116,7 @@
         </if>
         and t.budget_month BETWEEN #{startTime} AND  #{endTime} group by t.budget_month ) t2
         ON t2.budgetmonth=t1.month
+        GROUP BY t1.month
     </select>
 
     <!--部门明细/各项占比 饼状图-->
@@ -229,7 +230,7 @@
           and t.record_status=1
           AND t.department_id=#{departmentId}
         and t.cost_happend_time BETWEEN #{startMonth} AND  #{endMonth}
-        where m.month BETWEEN  #{startMonth} AND  #{endMonth} GROUP BY t.cost_happend_time ORDER BY m.month ) t1
+        where m.month BETWEEN  #{startMonth} AND  #{endMonth} GROUP BY m.month ORDER BY m.month ) t1
         LEFT  JOIN
         (SELECT
         t.budget_month as "budgetmonth",

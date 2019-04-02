@@ -46,7 +46,7 @@
         SUM(t.cost) AS "cost",
         t.cost_before_type_name AS "costbeforetypename",
         t.cost_after_type_name AS "costaftertypename",
-        t.created_time AS "createdtime",
+        t.modified_time AS "modifiedTime",
         t.department_name AS "departmentname"
         FROM
         tb_finance_expenses t

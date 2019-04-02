@@ -40,6 +40,13 @@
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jn</groupId>
+                        <artifactId>jn-spring-cloud-generator</artifactId>
+                        <version>0.0.1-RELEASE</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>Generate MyBatis Artifacts</id>
@@ -53,10 +60,9 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        technology
+                        data
                     </contexts>
                     <tableNames>
-                        tb_service_investor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -96,16 +96,17 @@ public class PolicyGuideServiceImplTest {
         policyType="1";
 
         //政策管理上架/下架
-        policyId="cddd344054624741b1af3f40a6ab571e";
+        policyId="867f15d18b3b49aabfc9e167aa5d75fe";
         status="1";
 
         //图解政策管理编辑（新增、修改）
-        policyDiagramInfoEditParam.setPolicyTitle("测试图解政策");
+        //policyDiagramInfoEditParam.setPolicyId("867f15d18b3b49aabfc9e167aa5d75fe");
+        policyDiagramInfoEditParam.setPolicyTitle("测试图解政策2222");
         policyDiagramInfoEditParam.setThematicType("1");
         policyDiagramInfoEditParam.setStatus("1");
         policyDiagramInfoEditParam.setIsPolicyOriginal("1");
-        policyDiagramInfoEditParam.setRelationPolicyOriginalId("1233");
-        policyDiagramInfoEditParam.setPolicyDiagramUrl("1236655.jpg");
+        policyDiagramInfoEditParam.setRelationPolicyOriginalId("cddd344054624741b1af3f40a6ab571e");
+        policyDiagramInfoEditParam.setPolicyDiagramUrl("shuji.jpg");
     }
 
     /**

@@ -17,7 +17,6 @@ import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
 import com.jn.park.policy.service.PolicyGuideService;
 import com.jn.system.log.annotation.ServiceLog;
-import org.bouncycastle.crypto.paddings.TBCPadding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -110,6 +109,8 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
             //政策类型 0:普通政策   1：图解政策
             String policyType="0";
             tbPolicy.setPolicyType(policyType);
+            //有无关联政策原文  0:无  1：有
+            tbPolicy.setIsPolicyOriginal("0");
             int responseNum = policyInfoAdd(tbPolicy, account);
             //添加政策内容
             responseNum+=addPolicyDetails(policyId,account, policyInfoEditParam.getPolicyContent());
@@ -432,6 +433,9 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
             //新增
             TbPolicy tbPolicy=new TbPolicy();
             BeanUtils.copyProperties(policyDiagramInfoEditParam, tbPolicy);
+            //政策id
+            String policyId=UUID.randomUUID().toString().replaceAll("-", "");
+            tbPolicy.setPolicyId(policyId);
             //政策类型 0:普通政策   1：图解政策
             String policyType="1";
             tbPolicy.setPolicyType(policyType);
@@ -457,32 +461,33 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
                 logger.warn("有关联政策原文，政策原文id不能为空");
                 throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_NULL);
             }
+            //校验关联的政策原文id在系统中是否存在
+            //0:普通政策/政策原文   1：图解政策
+            String policyType="0";
+            List<PolicyInfoShow> policyInfoShowList = getPolicyInfo(policyType);
+            if(policyInfoShowList.isEmpty()){
+                logger.warn("有关联政策图解，政策图解id在系统中不存在");
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST);
+            }
+            List<String> policyIdList=new ArrayList<>(16);
+            for(PolicyInfoShow policyInfoShow:policyInfoShowList){
+                policyIdList.add(policyInfoShow.getPolicyId());
+            }
+            if(!policyIdList.contains(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
+                logger.warn("有关联政策原文，政策原文id在系统中不存在");
+                throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_EXIST);
+            }
         }else{
             if(StringUtils.isNotBlank(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
                 logger.warn("没有关联政策原文，政策原文id必须为空");
                 throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_MUST_NULL);
             }
         }
-
-        //校验关联的政策原文id在系统中是否存在
-        //0:普通政策/政策原文   1：图解政策
-        String policyType="0";
-        List<PolicyInfoShow> policyInfoShowList = getPolicyInfo(policyType);
-        if(policyInfoShowList.isEmpty()){
-            logger.warn("有关联政策图解，政策图解id在系统中不存在");
-            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_DIAGRAM_ID_NOT_EXIST);
+        if(StringUtils.isNotBlank(policyDiagramInfoEditParam.getPolicyId())){
+            //若政策id有值，判断政策id在系统中是否存在
+            String msg="校验图解政策管理编辑（新增/修改）入参数据";
+            policyIdIsExist(policyDiagramInfoEditParam.getPolicyId(),msg);
         }
-        List<String> policyIdList=new ArrayList<>(16);
-        for(PolicyInfoShow policyInfoShow:policyInfoShowList){
-            policyIdList.add(policyInfoShow.getPolicyId());
-        }
-        if(!policyIdList.contains(policyDiagramInfoEditParam.getRelationPolicyOriginalId())){
-            logger.warn("有关联政策原文，政策原文id在系统中不存在");
-            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_ORIGINAL_ID_NOT_EXIST);
-        }
-        //若政策id有值，判断政策id在系统中是否存在
-        String msg="校验图解政策管理编辑（新增/修改）入参数据";
-        policyIdIsExist(policyDiagramInfoEditParam.getPolicyId(),msg);
     }
 
     /**

@@ -34,6 +34,9 @@
         and sp.status='1'
         and sp.record_status='1'
         and sp.policy_type=#{policyType}
+        and (sp.is_policy_original !='1' or sp.is_policy_original is null )
+        and (sp.is_policy_diagram !='1' or sp.is_policy_diagram is null)
+
     </select>
 
     <!--获取普通政策详情-->

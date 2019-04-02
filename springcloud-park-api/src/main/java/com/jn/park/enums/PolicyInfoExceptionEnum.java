@@ -28,6 +28,8 @@ public enum PolicyInfoExceptionEnum implements CodeAndMsg {
     POLICY_ORIGINAL_ID_NOT_NULL("4020515","有关联政策原文，政策原文id不能为空"),
     POLICY_ORIGINAL_ID_MUST_NULL("4020516","没有关联政策原文，政策原文id必须为空"),
     POLICY_ORIGINAL_ID_NOT_EXIST("4020517","有关联政策原文，政策袁恩id在系统中不存在"),
+    POLICY_RELATION_ORIGINAL_ID_EXIST("4020518","当前政策原文已被系统中图解政策关联，不能重复关联"),
+    POLICY_RELATION_DIAGRAM_ID_EXIST("4020519","当前图解政策已被系统中普通政策关联，不能重复关联"),
     ;
     /**
      * 编码

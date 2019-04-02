@@ -13,6 +13,7 @@ import com.jn.park.policy.entity.TbPolicy;
 import com.jn.park.policy.entity.TbPolicyCriteria;
 import com.jn.park.policy.entity.TbPolicyDetails;
 import com.jn.park.policy.entity.TbPolicyDetailsCriteria;
+import com.jn.park.policy.enums.PolicyTypeEnum;
 import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
 import com.jn.park.policy.service.PolicyGuideService;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,22 +97,21 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
      */
     @ServiceLog(doAction = "政策管理编辑（新增/修改）")
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdatePolicyInfo(PolicyInfoEditParam policyInfoEditParam,String account) {
         //数据校验
         checkPolicyInfoEdit(policyInfoEditParam);
+        //处理关联政策原文/关联图解政策
+        String policyId = dealWithPolicyRelation(policyInfoEditParam.getPolicyId(), policyInfoEditParam.getRelationPolicyDiagramId(), account);
         //是否有政策id
         if(StringUtils.isBlank(policyInfoEditParam.getPolicyId())){
             //新增
             TbPolicy tbPolicy=new TbPolicy();
             BeanUtils.copyProperties(policyInfoEditParam, tbPolicy);
-            //政策id
-            String policyId=UUID.randomUUID().toString().replaceAll("-", "");
             tbPolicy.setPolicyId(policyId);
             //政策类型 0:普通政策   1：图解政策
             String policyType="0";
             tbPolicy.setPolicyType(policyType);
-            //有无关联政策原文  0:无  1：有
-            tbPolicy.setIsPolicyOriginal("0");
             int responseNum = policyInfoAdd(tbPolicy, account);
             //添加政策内容
             responseNum+=addPolicyDetails(policyId,account, policyInfoEditParam.getPolicyContent());
@@ -425,16 +426,17 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
      */
     @ServiceLog(doAction = "图解政策管理编辑（新增/修改）")
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int saveOrUpdateDiagramPolicyInfo(PolicyDiagramInfoEditParam policyDiagramInfoEditParam, String account) {
        //数据校验
         checkPolicyDiagramInfoEdit(policyDiagramInfoEditParam);
+        //处理关联政策原文/关联图解政策
+        String policyId = dealWithPolicyRelation(policyDiagramInfoEditParam.getPolicyId(), policyDiagramInfoEditParam.getRelationPolicyOriginalId(), account);
         //是否有政策id
         if(StringUtils.isBlank(policyDiagramInfoEditParam.getPolicyId())){
             //新增
             TbPolicy tbPolicy=new TbPolicy();
             BeanUtils.copyProperties(policyDiagramInfoEditParam, tbPolicy);
-            //政策id
-            String policyId=UUID.randomUUID().toString().replaceAll("-", "");
             tbPolicy.setPolicyId(policyId);
             //政策类型 0:普通政策   1：图解政策
             String policyType="1";
@@ -489,6 +491,192 @@ public class PolicyGuideServiceImpl implements PolicyGuideService {
             policyIdIsExist(policyDiagramInfoEditParam.getPolicyId(),msg);
         }
     }
+
+    /**
+     * 处理关联政策原文/关联图解政策（此方法是在已经判断政策id,关联的id都正确之后执行）
+     * @param policyId          政策id
+     * @param relationId        关联的政策原文id/关联的图解id
+     * @param account           登录用户账号
+     * @return 返回政策id
+     */
+    @ServiceLog(doAction = "处理关联政策原文/关联图解政策")
+    private String dealWithPolicyRelation(String policyId, String relationId,String account){
+        //政策id和关联的政策id都为空，不做处理
+        if(StringUtils.isBlank(policyId) && StringUtils.isBlank(relationId)){
+            return UUID.randomUUID().toString().replaceAll("-", "") ;
+        }else if(StringUtils.isBlank(policyId) && StringUtils.isNotBlank(relationId)){
+            //政策id为空，关联id不为空,表示是新增政策
+            //1.判断关联id是否已被其他政策关联
+            judgeRelationId(relationId);
+            //2.修改关联政策的关联信息
+            policyId=UUID.randomUUID().toString().replaceAll("-", "") ;
+            updateRelationPolicyRelationId(policyId, relationId, account);
+        }else if(StringUtils.isNotBlank(policyId) && StringUtils.isBlank(relationId)){
+            //政策id不为空，关联id为空,表示是修改政策
+            updatePolicyRelationInfo(policyId, account);
+        }else if(StringUtils.isNotBlank(policyId) && StringUtils.isNotBlank(relationId)){
+            //政策id不为空，关联id不为空,表示是修改政策
+            //1.判断关联id是否已被其他政策关联
+            judgeRelationId(relationId);
+            //2.添加关联关系
+            updateAndAddPolicyRelationId(policyId, relationId, account);
+        }
+        return policyId;
+
+    }
+
+    /**
+     * 修改并添加政策的关联信息
+     * @param policyId
+     * @param relationId
+     * @param account
+     */
+    private void updateAndAddPolicyRelationId(String policyId, String relationId, String account) {
+        //获取政策类型
+        String policyType = getPolicyType(policyId);
+        TbPolicy tbPolicy=new TbPolicy();
+        if(PolicyTypeEnum.DIAGRAM_POLICY.getValue().equals(policyType)){
+            //说明新增的是图解政策，需要把政策id设置为普通政策的关联图解政策的id
+            //有无联图解政策 0：无  1：有
+            tbPolicy.setIsPolicyDiagram("1");
+            //关联图解政策的id
+            tbPolicy.setRelationPolicyDiagramId(policyId);
+        }else if(PolicyTypeEnum.GENERAL_POLICY.getValue().equals(policyType)){
+            //说明新增的是普通政策，需要把政策id设置为图解政策的关联政策原文的id
+            //是否关联政策原文 0：无  1：有
+            tbPolicy.setIsPolicyOriginal("1");
+            //关联政策原文的id
+            tbPolicy.setRelationPolicyOriginalId(policyId);
+        }
+        //修改时间
+        tbPolicy.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        //修改人
+        tbPolicy.setModifierAccount(account);
+        TbPolicyCriteria example=new TbPolicyCriteria();
+        example.createCriteria().andPolicyIdEqualTo(relationId).andRecordStatusEqualTo(RECORD_STATUS);
+        tbPolicyMapper.updateByExampleSelective(tbPolicy, example);
+    }
+
+    /**
+     * 修改政策的关联信息
+     * @param policyId 政策id
+     * @param account  系统账号
+     */
+    private void updatePolicyRelationInfo(String policyId, String account) {
+        //1.根据政策id判断修改前是否有关联政策
+        TbPolicyCriteria example=new TbPolicyCriteria();
+        example.createCriteria().andPolicyIdEqualTo(policyId).andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbPolicy> tbPolicyList= tbPolicyMapper.selectByExample(example);
+        TbPolicy tbPolicy = tbPolicyList.get(0);
+        //2.若是修改前有关联，需要把之前关联的撤销
+        if(StringUtils.isNotBlank(tbPolicy.getRelationPolicyOriginalId())){
+            //是图解政策关联政策原文，修改政策原文的关联信息
+            TbPolicyCriteria exampleOriginal=new TbPolicyCriteria();
+            exampleOriginal.createCriteria().andPolicyIdEqualTo(tbPolicy.getRelationPolicyOriginalId()).andRecordStatusEqualTo(RECORD_STATUS);
+            TbPolicy tp=new TbPolicy();
+            //有无关联图解政策 清空原来的值
+            tp.setIsPolicyDiagram("");
+            //关联图解政策id  清空原来的值
+            tp.setRelationPolicyDiagramId("");
+            tp.setModifierAccount(account);
+            tp.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbPolicyMapper.updateByExampleSelective(tp,exampleOriginal);
+
+            //把图解政策关联的政策原文清空
+            tbPolicy.setIsPolicyOriginal("");
+            tbPolicy.setRelationPolicyOriginalId("");
+            tbPolicy.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbPolicy.setModifierAccount(account);
+        }else if(StringUtils.isNotBlank(tbPolicy.getRelationPolicyDiagramId())){
+            //是普通政策关联图解政策，修改图解政策的关联信息
+            TbPolicyCriteria exampleOriginal=new TbPolicyCriteria();
+            exampleOriginal.createCriteria().andPolicyIdEqualTo(tbPolicy.getRelationPolicyDiagramId()).andRecordStatusEqualTo(RECORD_STATUS);
+            TbPolicy tp=new TbPolicy();
+            //有无关联政策原文 清空原来的值
+            tp.setIsPolicyOriginal("");
+            //关联政策原文id  清空原来的值
+            tp.setRelationPolicyOriginalId("");
+            tp.setModifierAccount(account);
+            tp.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbPolicyMapper.updateByExampleSelective(tp,exampleOriginal);
+
+            //把普通政策关联的图解政策清空
+            tbPolicy.setIsPolicyDiagram("");
+            tbPolicy.setRelationPolicyDiagramId("");
+            tbPolicy.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+            tbPolicy.setModifierAccount(account);
+        }
+        //3.修改当前政策的关联信息
+        tbPolicyMapper.updateByExampleSelective(tbPolicy,example);
+    }
+
+    /***
+     * 修改关联政策的关联信息
+     * @param policyId     政策id
+     * @param relationId   关联的政策id
+     * @param account      用户账号
+     */
+    private void updateRelationPolicyRelationId(String policyId, String relationId, String account) {
+        //获取政策类型
+        String policyType = getPolicyType(relationId);
+        TbPolicy tbPolicy=new TbPolicy();
+        if(PolicyTypeEnum.DIAGRAM_POLICY.getValue().equals(policyType)){
+            //图解政策类型，说明新增的是普通政策，关联了图解政策，需要把政策id设置为图解政策的关联政策原文的id
+            //是否关联政策原文 0：无  1：有
+            tbPolicy.setIsPolicyOriginal("1");
+            //关联政策原文的id
+            tbPolicy.setRelationPolicyOriginalId(policyId);
+        }else if(PolicyTypeEnum.GENERAL_POLICY.getValue().equals(policyType)){
+            //普通政策 说明新增的是图解政策，关联了政策原文，需要把政策id设置为普通政策的关联图解政策的id
+            //有无联图解政策 0：无  1：有
+            tbPolicy.setIsPolicyDiagram("1");
+            //关联图解政策的id
+            tbPolicy.setRelationPolicyDiagramId(policyId);
+        }
+        //修改时间
+        tbPolicy.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
+        //修改人
+        tbPolicy.setModifierAccount(account);
+        TbPolicyCriteria example=new TbPolicyCriteria();
+        example.createCriteria().andPolicyIdEqualTo(relationId).andRecordStatusEqualTo(RECORD_STATUS);
+        tbPolicyMapper.updateByExampleSelective(tbPolicy, example);
+    }
+
+    /**
+     * 根据政策id获取政策类型
+     * @param policyId
+     * @return
+     */
+    @ServiceLog(doAction = "根据政策id获取政策类型")
+    private String getPolicyType(String policyId) {
+        TbPolicyCriteria exampleOld=new TbPolicyCriteria();
+        exampleOld.createCriteria().andPolicyIdEqualTo(policyId).andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbPolicy> tbPolicyList = tbPolicyMapper.selectByExample(exampleOld);
+        return tbPolicyList.get(0).getPolicyType();
+    }
+
+    /**
+     * 判断关联id是否已被其他政策关联
+     * @param relationId
+     */
+    @ServiceLog(doAction = "判断关联id是否已被其他政策关联")
+    private void judgeRelationId(String relationId) {
+        TbPolicyCriteria example=new TbPolicyCriteria();
+        example.createCriteria().andRelationPolicyOriginalIdEqualTo(relationId).andRecordStatusEqualTo(RECORD_STATUS);
+        long existNum = tbPolicyMapper.countByExample(example);
+        if(existNum>0){
+            logger.warn("当前政策原文[id:{}]已被图解政策关联，不能重复关联",relationId);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_RELATION_ORIGINAL_ID_EXIST);
+        }
+        example.clear();
+        example.createCriteria().andRelationPolicyDiagramIdEqualTo(relationId).andRecordStatusEqualTo(RECORD_STATUS);
+        existNum= tbPolicyMapper.countByExample(example);
+        if(existNum>0){
+            logger.warn("当前图解政策[id:{}]已被普通政策关联，不能重复关联",relationId);
+            throw new JnSpringCloudException(PolicyInfoExceptionEnum.POLICY_RELATION_DIAGRAM_ID_EXIST);
+        }
+    }
+
 
     /**
      * 获取图解政策详情

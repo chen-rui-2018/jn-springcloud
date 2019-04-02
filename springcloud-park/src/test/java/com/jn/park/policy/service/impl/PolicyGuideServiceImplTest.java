@@ -76,21 +76,21 @@ public class PolicyGuideServiceImplTest {
 
         //政策管理编辑（新增/修改）
         account="wangsong";
-        //policyInfoEditParam.setPolicyId("cddd344054624741b1af3f40a6ab571e");
-        policyInfoEditParam.setPolicyTitle("测试新增政策222");
-        policyInfoEditParam.setPolicyLevelCode("city_level");
-        policyInfoEditParam.setPolicyLevelName("市级");
-        policyInfoEditParam.setPolicyClassCode("industry_support");
-        policyInfoEditParam.setPolicyClassName("产业扶持");
+        policyInfoEditParam.setPolicyId("4ad121d89a3241d5ba30731b3b91dfd2");
+        policyInfoEditParam.setPolicyTitle("测试关联图解政策新增");
+        policyInfoEditParam.setPolicyLevelCode("area_level");
+        policyInfoEditParam.setPolicyLevelName("区域级");
+        policyInfoEditParam.setPolicyClassCode("financial_support");
+        policyInfoEditParam.setPolicyClassName("金融扶持");
         policyInfoEditParam.setThematicType("1");
         policyInfoEditParam.setSupportMethod("0");
         policyInfoEditParam.setSupportIndustry("1");
-        policyInfoEditParam.setIssueUnit("国务院新闻办");
+        policyInfoEditParam.setIssueUnit("国务院新闻办住院部");
         policyInfoEditParam.setStatus("1");
         policyInfoEditParam.setSupportIndustry("1");
-        policyInfoEditParam.setIsPolicyDiagram("0");
-        //policyInfoEditParam.setRelationPolicyDiagramId("123");
-        policyInfoEditParam.setPolicyContent("各市，区科技局，有关单位，为贯彻落实市委，市政府45....");
+        policyInfoEditParam.setIsPolicyDiagram("1");
+        policyInfoEditParam.setRelationPolicyDiagramId("dde7f14d007e4ad2b81d8154773f1c48");
+        policyInfoEditParam.setPolicyContent("各市，区科技局，有关单位，为贯彻落实市委，市政府8888....");
 
         //关联图解政策信息/关联政策原文信息
         policyType="1";
@@ -101,12 +101,12 @@ public class PolicyGuideServiceImplTest {
 
         //图解政策管理编辑（新增、修改）
         //policyDiagramInfoEditParam.setPolicyId("867f15d18b3b49aabfc9e167aa5d75fe");
-        policyDiagramInfoEditParam.setPolicyTitle("测试图解政策2222");
+        policyDiagramInfoEditParam.setPolicyTitle("图解政策测试关联新增444");
         policyDiagramInfoEditParam.setThematicType("1");
         policyDiagramInfoEditParam.setStatus("1");
-        policyDiagramInfoEditParam.setIsPolicyOriginal("1");
-        policyDiagramInfoEditParam.setRelationPolicyOriginalId("cddd344054624741b1af3f40a6ab571e");
-        policyDiagramInfoEditParam.setPolicyDiagramUrl("shuji.jpg");
+        policyDiagramInfoEditParam.setIsPolicyOriginal("0");
+        //policyDiagramInfoEditParam.setRelationPolicyOriginalId("cddd344054624741b1af3f40a6ab571e");
+        policyDiagramInfoEditParam.setPolicyDiagramUrl("www.1299.jpg");
     }
 
     /**

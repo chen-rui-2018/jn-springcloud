@@ -17,7 +17,7 @@ public class TbPdPersonnelProjectBank implements Serializable {
     private Byte type;
 
     /*@ApiModelProperty("产业领域ID")*/
-    private Integer industrialFieldId;
+    private Integer industrialFId;
 
     /*@ApiModelProperty("产业领域名称")*/
     private String industrialFieldName;
@@ -125,12 +125,12 @@ public class TbPdPersonnelProjectBank implements Serializable {
         this.type = type;
     }
 
-    public Integer getIndustrialFieldId() {
-        return industrialFieldId;
+    public Integer getIndustrialFId() {
+        return industrialFId;
     }
 
-    public void setIndustrialFieldId(Integer industrialFieldId) {
-        this.industrialFieldId = industrialFieldId;
+    public void setIndustrialFId(Integer industrialFId) {
+        this.industrialFId = industrialFId;
     }
 
     public String getIndustrialFieldName() {
@@ -341,7 +341,7 @@ public class TbPdPersonnelProjectBank implements Serializable {
             && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
             && (this.getUnifiedSocialCredit() == null ? other.getUnifiedSocialCredit() == null : this.getUnifiedSocialCredit().equals(other.getUnifiedSocialCredit()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getIndustrialFieldId() == null ? other.getIndustrialFieldId() == null : this.getIndustrialFieldId().equals(other.getIndustrialFieldId()))
+            && (this.getIndustrialFId() == null ? other.getIndustrialFId() == null : this.getIndustrialFId().equals(other.getIndustrialFId()))
             && (this.getIndustrialFieldName() == null ? other.getIndustrialFieldName() == null : this.getIndustrialFieldName().equals(other.getIndustrialFieldName()))
             && (this.getEnterpriseLegalPerson() == null ? other.getEnterpriseLegalPerson() == null : this.getEnterpriseLegalPerson().equals(other.getEnterpriseLegalPerson()))
             && (this.getCompanyAddress() == null ? other.getCompanyAddress() == null : this.getCompanyAddress().equals(other.getCompanyAddress()))
@@ -376,7 +376,7 @@ public class TbPdPersonnelProjectBank implements Serializable {
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getUnifiedSocialCredit() == null) ? 0 : getUnifiedSocialCredit().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
-        result = prime * result + ((getIndustrialFieldId() == null) ? 0 : getIndustrialFieldId().hashCode());
+        result = prime * result + ((getIndustrialFId() == null) ? 0 : getIndustrialFId().hashCode());
         result = prime * result + ((getIndustrialFieldName() == null) ? 0 : getIndustrialFieldName().hashCode());
         result = prime * result + ((getEnterpriseLegalPerson() == null) ? 0 : getEnterpriseLegalPerson().hashCode());
         result = prime * result + ((getCompanyAddress() == null) ? 0 : getCompanyAddress().hashCode());
@@ -414,7 +414,7 @@ public class TbPdPersonnelProjectBank implements Serializable {
         sb.append(", name=").append(name);
         sb.append(", unifiedSocialCredit=").append(unifiedSocialCredit);
         sb.append(", type=").append(type);
-        sb.append(", industrialFieldId=").append(industrialFieldId);
+        sb.append(", industrialFId=").append(industrialFId);
         sb.append(", industrialFieldName=").append(industrialFieldName);
         sb.append(", enterpriseLegalPerson=").append(enterpriseLegalPerson);
         sb.append(", companyAddress=").append(companyAddress);

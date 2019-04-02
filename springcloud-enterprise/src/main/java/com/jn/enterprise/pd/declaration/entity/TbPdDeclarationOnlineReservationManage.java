@@ -5,10 +5,10 @@ import java.util.Date;
 
 public class TbPdDeclarationOnlineReservationManage implements Serializable {
     /*@ApiModelProperty("唯一标识符")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("预约项ID（关联公告ID）")*/
-    private Integer appointmentItemId;
+    private String appointmentItemId;
 
     /*@ApiModelProperty("预约项名称")*/
     private String appointmentItemName;
@@ -72,20 +72,20 @@ public class TbPdDeclarationOnlineReservationManage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
-    public Integer getAppointmentItemId() {
+    public String getAppointmentItemId() {
         return appointmentItemId;
     }
 
-    public void setAppointmentItemId(Integer appointmentItemId) {
-        this.appointmentItemId = appointmentItemId;
+    public void setAppointmentItemId(String appointmentItemId) {
+        this.appointmentItemId = appointmentItemId == null ? null : appointmentItemId.trim();
     }
 
     public String getAppointmentItemName() {

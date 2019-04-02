@@ -365,63 +365,63 @@ public class TbPdPersonnelProjectBankCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdIsNull() {
-            addCriterion("industrial_field_id is null");
+        public Criteria andIndustrialFIdIsNull() {
+            addCriterion("industrial_f_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdIsNotNull() {
-            addCriterion("industrial_field_id is not null");
+        public Criteria andIndustrialFIdIsNotNull() {
+            addCriterion("industrial_f_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdEqualTo(Integer value) {
-            addCriterion("industrial_field_id =", value, "industrialFieldId");
+        public Criteria andIndustrialFIdEqualTo(Integer value) {
+            addCriterion("industrial_f_id =", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdNotEqualTo(Integer value) {
-            addCriterion("industrial_field_id <>", value, "industrialFieldId");
+        public Criteria andIndustrialFIdNotEqualTo(Integer value) {
+            addCriterion("industrial_f_id <>", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdGreaterThan(Integer value) {
-            addCriterion("industrial_field_id >", value, "industrialFieldId");
+        public Criteria andIndustrialFIdGreaterThan(Integer value) {
+            addCriterion("industrial_f_id >", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("industrial_field_id >=", value, "industrialFieldId");
+        public Criteria andIndustrialFIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("industrial_f_id >=", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdLessThan(Integer value) {
-            addCriterion("industrial_field_id <", value, "industrialFieldId");
+        public Criteria andIndustrialFIdLessThan(Integer value) {
+            addCriterion("industrial_f_id <", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdLessThanOrEqualTo(Integer value) {
-            addCriterion("industrial_field_id <=", value, "industrialFieldId");
+        public Criteria andIndustrialFIdLessThanOrEqualTo(Integer value) {
+            addCriterion("industrial_f_id <=", value, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdIn(List<Integer> values) {
-            addCriterion("industrial_field_id in", values, "industrialFieldId");
+        public Criteria andIndustrialFIdIn(List<Integer> values) {
+            addCriterion("industrial_f_id in", values, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdNotIn(List<Integer> values) {
-            addCriterion("industrial_field_id not in", values, "industrialFieldId");
+        public Criteria andIndustrialFIdNotIn(List<Integer> values) {
+            addCriterion("industrial_f_id not in", values, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdBetween(Integer value1, Integer value2) {
-            addCriterion("industrial_field_id between", value1, value2, "industrialFieldId");
+        public Criteria andIndustrialFIdBetween(Integer value1, Integer value2) {
+            addCriterion("industrial_f_id between", value1, value2, "industrialFId");
             return (Criteria) this;
         }
 
-        public Criteria andIndustrialFieldIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("industrial_field_id not between", value1, value2, "industrialFieldId");
+        public Criteria andIndustrialFIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("industrial_f_id not between", value1, value2, "industrialFId");
             return (Criteria) this;
         }
 

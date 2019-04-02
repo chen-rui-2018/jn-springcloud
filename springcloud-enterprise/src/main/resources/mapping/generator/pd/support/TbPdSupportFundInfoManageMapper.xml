@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pd.support.dao.TbPdSupportFundInfoManageMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.support.entity.TbPdSupportFundInfoManage">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="unified_social_credit" jdbcType="VARCHAR" property="unifiedSocialCredit" />
     <result column="personnel_name" jdbcType="VARCHAR" property="personnelName" />
@@ -88,15 +88,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_pd_support_fund_info_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pd_support_fund_info_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundInfoManageCriteria">
     delete from tb_pd_support_fund_info_manage
@@ -105,7 +105,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundInfoManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_support_fund_info_manage (name, unified_social_credit, personnel_name, 
@@ -116,7 +116,7 @@
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundInfoManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_support_fund_info_manage
@@ -183,7 +183,7 @@
     update tb_pd_support_fund_info_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -216,7 +216,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pd_support_fund_info_manage
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
       unified_social_credit = #{record.unifiedSocialCredit,jdbcType=VARCHAR},
       personnel_name = #{record.personnelName,jdbcType=VARCHAR},
@@ -257,7 +257,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.support.entity.TbPdSupportFundInfoManage">
     update tb_pd_support_fund_info_manage
@@ -269,6 +269,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -10,7 +10,7 @@ public interface TbPdTalentServiceRangeMapper {
 
     int deleteByExample(TbPdTalentServiceRangeCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdTalentServiceRange record);
 
@@ -18,7 +18,7 @@ public interface TbPdTalentServiceRangeMapper {
 
     List<TbPdTalentServiceRange> selectByExample(TbPdTalentServiceRangeCriteria example);
 
-    TbPdTalentServiceRange selectByPrimaryKey(Integer id);
+    TbPdTalentServiceRange selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdTalentServiceRange record, @Param("example") TbPdTalentServiceRangeCriteria example);
 

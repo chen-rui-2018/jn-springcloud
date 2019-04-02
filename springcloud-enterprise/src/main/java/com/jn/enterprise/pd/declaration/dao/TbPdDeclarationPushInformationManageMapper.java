@@ -10,7 +10,7 @@ public interface TbPdDeclarationPushInformationManageMapper {
 
     int deleteByExample(TbPdDeclarationPushInformationManageCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdDeclarationPushInformationManage record);
 
@@ -18,7 +18,7 @@ public interface TbPdDeclarationPushInformationManageMapper {
 
     List<TbPdDeclarationPushInformationManage> selectByExample(TbPdDeclarationPushInformationManageCriteria example);
 
-    TbPdDeclarationPushInformationManage selectByPrimaryKey(Integer id);
+    TbPdDeclarationPushInformationManage selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationPushInformationManage record, @Param("example") TbPdDeclarationPushInformationManageCriteria example);
 

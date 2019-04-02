@@ -2,7 +2,6 @@ package com.jn.enterprise.pd.personnel.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jn.enterprise.pd.personnel.enums.PersonnelFlowNodeEnum;
-import com.sun.xml.internal.bind.v2.TODO;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 

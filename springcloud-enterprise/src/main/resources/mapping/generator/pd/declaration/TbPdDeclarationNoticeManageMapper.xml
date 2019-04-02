@@ -2,9 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationNoticeManageMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="title_name" jdbcType="VARCHAR" property="titleName" />
-    <result column="range_id" jdbcType="INTEGER" property="rangeId" />
+    <result column="range_id" jdbcType="VARCHAR" property="rangeId" />
     <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
     <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
     <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
@@ -119,17 +119,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from tb_pd_declaration_notice_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pd_declaration_notice_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManageCriteria">
     delete from tb_pd_declaration_notice_manage
@@ -138,7 +138,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_notice_manage (title_name, range_id, range_name, 
@@ -148,7 +148,7 @@
       status, record_status, creator_account, 
       created_time, modifier_account, modified_time, 
       announcement_content)
-    values (#{titleName,jdbcType=VARCHAR}, #{rangeId,jdbcType=INTEGER}, #{rangeName,jdbcType=VARCHAR}, 
+    values (#{titleName,jdbcType=VARCHAR}, #{rangeId,jdbcType=VARCHAR}, #{rangeName,jdbcType=VARCHAR}, 
       #{subordinatePlatformId,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
       #{deadline,jdbcType=TIMESTAMP}, #{timeNode,jdbcType=VARCHAR}, #{isRoofPlacement,jdbcType=TINYINT}, 
       #{contactPhoneConfiguration,jdbcType=VARCHAR}, #{browseTimes,jdbcType=INTEGER}, 
@@ -157,7 +157,7 @@
       #{announcementContent,jdbcType=LONGVARBINARY})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_notice_manage
@@ -219,7 +219,7 @@
         #{titleName,jdbcType=VARCHAR},
       </if>
       <if test="rangeId != null">
-        #{rangeId,jdbcType=INTEGER},
+        #{rangeId,jdbcType=VARCHAR},
       </if>
       <if test="rangeName != null">
         #{rangeName,jdbcType=VARCHAR},
@@ -278,13 +278,13 @@
     update tb_pd_declaration_notice_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.titleName != null">
         title_name = #{record.titleName,jdbcType=VARCHAR},
       </if>
       <if test="record.rangeId != null">
-        range_id = #{record.rangeId,jdbcType=INTEGER},
+        range_id = #{record.rangeId,jdbcType=VARCHAR},
       </if>
       <if test="record.rangeName != null">
         range_name = #{record.rangeName,jdbcType=VARCHAR},
@@ -338,9 +338,9 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_pd_declaration_notice_manage
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
       title_name = #{record.titleName,jdbcType=VARCHAR},
-      range_id = #{record.rangeId,jdbcType=INTEGER},
+      range_id = #{record.rangeId,jdbcType=VARCHAR},
       range_name = #{record.rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
@@ -362,9 +362,9 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pd_declaration_notice_manage
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
       title_name = #{record.titleName,jdbcType=VARCHAR},
-      range_id = #{record.rangeId,jdbcType=INTEGER},
+      range_id = #{record.rangeId,jdbcType=VARCHAR},
       range_name = #{record.rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
@@ -390,7 +390,7 @@
         title_name = #{titleName,jdbcType=VARCHAR},
       </if>
       <if test="rangeId != null">
-        range_id = #{rangeId,jdbcType=INTEGER},
+        range_id = #{rangeId,jdbcType=VARCHAR},
       </if>
       <if test="rangeName != null">
         range_name = #{rangeName,jdbcType=VARCHAR},
@@ -438,12 +438,12 @@
         announcement_content = #{announcementContent,jdbcType=LONGVARBINARY},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
     update tb_pd_declaration_notice_manage
     set title_name = #{titleName,jdbcType=VARCHAR},
-      range_id = #{rangeId,jdbcType=INTEGER},
+      range_id = #{rangeId,jdbcType=VARCHAR},
       range_name = #{rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -459,12 +459,12 @@
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       announcement_content = #{announcementContent,jdbcType=LONGVARBINARY}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage">
     update tb_pd_declaration_notice_manage
     set title_name = #{titleName,jdbcType=VARCHAR},
-      range_id = #{rangeId,jdbcType=INTEGER},
+      range_id = #{rangeId,jdbcType=VARCHAR},
       range_name = #{rangeName,jdbcType=VARCHAR},
       subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -479,6 +479,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

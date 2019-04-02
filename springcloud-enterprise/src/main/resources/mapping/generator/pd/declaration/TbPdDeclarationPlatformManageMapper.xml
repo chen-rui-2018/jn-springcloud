@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformManageMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="platform_title" jdbcType="VARCHAR" property="platformTitle" />
     <result column="link_address" jdbcType="VARCHAR" property="linkAddress" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="business_consult" jdbcType="VARCHAR" property="businessConsult" />
     <result column="system_support" jdbcType="VARCHAR" property="systemSupport" />
-    <result column="subordinate_platform_id" jdbcType="INTEGER" property="subordinatePlatformId" />
+    <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
     <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -94,15 +94,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_pd_declaration_platform_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pd_declaration_platform_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManageCriteria">
     delete from tb_pd_declaration_platform_manage
@@ -111,7 +111,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_platform_manage (platform_title, link_address, remark, 
@@ -120,13 +120,13 @@
       creator_account, created_time, modifier_account, 
       modified_time)
     values (#{platformTitle,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=INTEGER}, 
+      #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, 
       #{subordinatePlatformName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
       #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_platform_manage
@@ -188,7 +188,7 @@
         #{systemSupport,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformId != null">
-        #{subordinatePlatformId,jdbcType=INTEGER},
+        #{subordinatePlatformId,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformName != null">
         #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -223,7 +223,7 @@
     update tb_pd_declaration_platform_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.platformTitle != null">
         platform_title = #{record.platformTitle,jdbcType=VARCHAR},
@@ -241,7 +241,7 @@
         system_support = #{record.systemSupport,jdbcType=VARCHAR},
       </if>
       <if test="record.subordinatePlatformId != null">
-        subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=INTEGER},
+        subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       </if>
       <if test="record.subordinatePlatformName != null">
         subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
@@ -271,13 +271,13 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pd_declaration_platform_manage
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
       platform_title = #{record.platformTitle,jdbcType=VARCHAR},
       link_address = #{record.linkAddress,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       business_consult = #{record.businessConsult,jdbcType=VARCHAR},
       system_support = #{record.systemSupport,jdbcType=VARCHAR},
-      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=INTEGER},
+      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -308,7 +308,7 @@
         system_support = #{systemSupport,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformId != null">
-        subordinate_platform_id = #{subordinatePlatformId,jdbcType=INTEGER},
+        subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformName != null">
         subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -332,7 +332,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
     update tb_pd_declaration_platform_manage
@@ -341,7 +341,7 @@
       remark = #{remark,jdbcType=VARCHAR},
       business_consult = #{businessConsult,jdbcType=VARCHAR},
       system_support = #{systemSupport,jdbcType=VARCHAR},
-      subordinate_platform_id = #{subordinatePlatformId,jdbcType=INTEGER},
+      subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},
@@ -349,6 +349,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

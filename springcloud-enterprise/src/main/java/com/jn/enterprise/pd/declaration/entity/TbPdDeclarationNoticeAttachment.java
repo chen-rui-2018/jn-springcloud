@@ -8,7 +8,7 @@ public class TbPdDeclarationNoticeAttachment implements Serializable {
     private Integer id;
 
     /*@ApiModelProperty("公告ID")*/
-    private Integer noticeId;
+    private String noticeId;
 
     /*@ApiModelProperty("附件路径")*/
     private String fileUrl;
@@ -41,12 +41,12 @@ public class TbPdDeclarationNoticeAttachment implements Serializable {
         this.id = id;
     }
 
-    public Integer getNoticeId() {
+    public String getNoticeId() {
         return noticeId;
     }
 
-    public void setNoticeId(Integer noticeId) {
-        this.noticeId = noticeId;
+    public void setNoticeId(String noticeId) {
+        this.noticeId = noticeId == null ? null : noticeId.trim();
     }
 
     public String getFileUrl() {

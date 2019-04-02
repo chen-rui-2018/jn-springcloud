@@ -6,7 +6,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="unified_social_credit" jdbcType="VARCHAR" property="unifiedSocialCredit" />
     <result column="type" jdbcType="TINYINT" property="type" />
-    <result column="industrial_field_id" jdbcType="INTEGER" property="industrialFieldId" />
+    <result column="industrial_f_id" jdbcType="INTEGER" property="industrialFId" />
     <result column="industrial_field_name" jdbcType="VARCHAR" property="industrialFieldName" />
     <result column="enterprise_legal_person" jdbcType="VARCHAR" property="enterpriseLegalPerson" />
     <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
@@ -91,12 +91,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, unified_social_credit, type, industrial_field_id, industrial_field_name, 
-    enterprise_legal_person, company_address, company_logo, company_profile, project_name, 
-    project_profile, team_id, contact_name, contact_telephone, contact_email, project_introduction_file, 
-    policy_notice, policy_is_send_out, label_name, label_id, settle_is_complete_nuclear_name, 
-    settle_is_license_collect, settle_is_completion_seal, record_status, creator_account, 
-    created_time, modifier_account, modified_time
+    id, name, unified_social_credit, type, industrial_f_id, industrial_field_name, enterprise_legal_person, 
+    company_address, company_logo, company_profile, project_name, project_profile, team_id, 
+    contact_name, contact_telephone, contact_email, project_introduction_file, policy_notice, 
+    policy_is_send_out, label_name, label_id, settle_is_complete_nuclear_name, settle_is_license_collect, 
+    settle_is_completion_seal, record_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelProjectBankCriteria" resultMap="BaseResultMap">
     select
@@ -133,24 +133,24 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_personnel_project_bank (name, unified_social_credit, type, 
-      industrial_field_id, industrial_field_name, 
-      enterprise_legal_person, company_address, 
-      company_logo, company_profile, project_name, 
-      project_profile, team_id, contact_name, 
-      contact_telephone, contact_email, project_introduction_file, 
-      policy_notice, policy_is_send_out, label_name, 
-      label_id, settle_is_complete_nuclear_name, settle_is_license_collect, 
+      industrial_f_id, industrial_field_name, enterprise_legal_person, 
+      company_address, company_logo, company_profile, 
+      project_name, project_profile, team_id, 
+      contact_name, contact_telephone, contact_email, 
+      project_introduction_file, policy_notice, 
+      policy_is_send_out, label_name, label_id, 
+      settle_is_complete_nuclear_name, settle_is_license_collect, 
       settle_is_completion_seal, record_status, creator_account, 
       created_time, modifier_account, modified_time
       )
     values (#{name,jdbcType=VARCHAR}, #{unifiedSocialCredit,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
-      #{industrialFieldId,jdbcType=INTEGER}, #{industrialFieldName,jdbcType=VARCHAR}, 
-      #{enterpriseLegalPerson,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
-      #{companyLogo,jdbcType=VARCHAR}, #{companyProfile,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, 
-      #{projectProfile,jdbcType=VARCHAR}, #{teamId,jdbcType=VARCHAR}, #{contactName,jdbcType=VARCHAR}, 
-      #{contactTelephone,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, #{projectIntroductionFile,jdbcType=VARCHAR}, 
-      #{policyNotice,jdbcType=VARCHAR}, #{policyIsSendOut,jdbcType=TINYINT}, #{labelName,jdbcType=VARCHAR}, 
-      #{labelId,jdbcType=VARCHAR}, #{settleIsCompleteNuclearName,jdbcType=TINYINT}, #{settleIsLicenseCollect,jdbcType=TINYINT}, 
+      #{industrialFId,jdbcType=INTEGER}, #{industrialFieldName,jdbcType=VARCHAR}, #{enterpriseLegalPerson,jdbcType=VARCHAR}, 
+      #{companyAddress,jdbcType=VARCHAR}, #{companyLogo,jdbcType=VARCHAR}, #{companyProfile,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{projectProfile,jdbcType=VARCHAR}, #{teamId,jdbcType=VARCHAR}, 
+      #{contactName,jdbcType=VARCHAR}, #{contactTelephone,jdbcType=VARCHAR}, #{contactEmail,jdbcType=VARCHAR}, 
+      #{projectIntroductionFile,jdbcType=VARCHAR}, #{policyNotice,jdbcType=VARCHAR}, 
+      #{policyIsSendOut,jdbcType=TINYINT}, #{labelName,jdbcType=VARCHAR}, #{labelId,jdbcType=VARCHAR}, 
+      #{settleIsCompleteNuclearName,jdbcType=TINYINT}, #{settleIsLicenseCollect,jdbcType=TINYINT}, 
       #{settleIsCompletionSeal,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
       )
@@ -170,8 +170,8 @@
       <if test="type != null">
         type,
       </if>
-      <if test="industrialFieldId != null">
-        industrial_field_id,
+      <if test="industrialFId != null">
+        industrial_f_id,
       </if>
       <if test="industrialFieldName != null">
         industrial_field_name,
@@ -256,8 +256,8 @@
       <if test="type != null">
         #{type,jdbcType=TINYINT},
       </if>
-      <if test="industrialFieldId != null">
-        #{industrialFieldId,jdbcType=INTEGER},
+      <if test="industrialFId != null">
+        #{industrialFId,jdbcType=INTEGER},
       </if>
       <if test="industrialFieldName != null">
         #{industrialFieldName,jdbcType=VARCHAR},
@@ -354,8 +354,8 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=TINYINT},
       </if>
-      <if test="record.industrialFieldId != null">
-        industrial_field_id = #{record.industrialFieldId,jdbcType=INTEGER},
+      <if test="record.industrialFId != null">
+        industrial_f_id = #{record.industrialFId,jdbcType=INTEGER},
       </if>
       <if test="record.industrialFieldName != null">
         industrial_field_name = #{record.industrialFieldName,jdbcType=VARCHAR},
@@ -440,7 +440,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       unified_social_credit = #{record.unifiedSocialCredit,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=TINYINT},
-      industrial_field_id = #{record.industrialFieldId,jdbcType=INTEGER},
+      industrial_f_id = #{record.industrialFId,jdbcType=INTEGER},
       industrial_field_name = #{record.industrialFieldName,jdbcType=VARCHAR},
       enterprise_legal_person = #{record.enterpriseLegalPerson,jdbcType=VARCHAR},
       company_address = #{record.companyAddress,jdbcType=VARCHAR},
@@ -481,8 +481,8 @@
       <if test="type != null">
         type = #{type,jdbcType=TINYINT},
       </if>
-      <if test="industrialFieldId != null">
-        industrial_field_id = #{industrialFieldId,jdbcType=INTEGER},
+      <if test="industrialFId != null">
+        industrial_f_id = #{industrialFId,jdbcType=INTEGER},
       </if>
       <if test="industrialFieldName != null">
         industrial_field_name = #{industrialFieldName,jdbcType=VARCHAR},
@@ -564,7 +564,7 @@
     set name = #{name,jdbcType=VARCHAR},
       unified_social_credit = #{unifiedSocialCredit,jdbcType=VARCHAR},
       type = #{type,jdbcType=TINYINT},
-      industrial_field_id = #{industrialFieldId,jdbcType=INTEGER},
+      industrial_f_id = #{industrialFId,jdbcType=INTEGER},
       industrial_field_name = #{industrialFieldName,jdbcType=VARCHAR},
       enterprise_legal_person = #{enterpriseLegalPerson,jdbcType=VARCHAR},
       company_address = #{companyAddress,jdbcType=VARCHAR},

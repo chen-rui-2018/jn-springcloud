@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TbPdDeclarationPlatformManage implements Serializable {
     /*@ApiModelProperty("唯一标识符")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("平台标题")*/
     private String platformTitle;
@@ -23,7 +23,7 @@ public class TbPdDeclarationPlatformManage implements Serializable {
     private String systemSupport;
 
     /*@ApiModelProperty("所属平台ID")*/
-    private Integer subordinatePlatformId;
+    private String subordinatePlatformId;
 
     /*@ApiModelProperty("所属平台名称")*/
     private String subordinatePlatformName;
@@ -48,12 +48,12 @@ public class TbPdDeclarationPlatformManage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getPlatformTitle() {
@@ -96,12 +96,12 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         this.systemSupport = systemSupport == null ? null : systemSupport.trim();
     }
 
-    public Integer getSubordinatePlatformId() {
+    public String getSubordinatePlatformId() {
         return subordinatePlatformId;
     }
 
-    public void setSubordinatePlatformId(Integer subordinatePlatformId) {
-        this.subordinatePlatformId = subordinatePlatformId;
+    public void setSubordinatePlatformId(String subordinatePlatformId) {
+        this.subordinatePlatformId = subordinatePlatformId == null ? null : subordinatePlatformId.trim();
     }
 
     public String getSubordinatePlatformName() {

@@ -10,7 +10,7 @@ public interface TbPdEnterpriseSelfEvaluaMapper {
 
     int deleteByExample(TbPdEnterpriseSelfEvaluaCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdEnterpriseSelfEvalua record);
 
@@ -18,7 +18,7 @@ public interface TbPdEnterpriseSelfEvaluaMapper {
 
     List<TbPdEnterpriseSelfEvalua> selectByExample(TbPdEnterpriseSelfEvaluaCriteria example);
 
-    TbPdEnterpriseSelfEvalua selectByPrimaryKey(Integer id);
+    TbPdEnterpriseSelfEvalua selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdEnterpriseSelfEvalua record, @Param("example") TbPdEnterpriseSelfEvaluaCriteria example);
 

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPushInformationManageMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="push_title" jdbcType="VARCHAR" property="pushTitle" />
     <result column="push_content" jdbcType="VARCHAR" property="pushContent" />
     <result column="receive_enterprise" jdbcType="VARCHAR" property="receiveEnterprise" />
@@ -95,15 +95,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_pd_declaration_push_information_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pd_declaration_push_information_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManageCriteria">
     delete from tb_pd_declaration_push_information_manage
@@ -112,7 +112,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_push_information_manage (push_title, push_content, receive_enterprise, 
@@ -127,7 +127,7 @@
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_push_information_manage
@@ -230,7 +230,7 @@
     update tb_pd_declaration_push_information_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.pushTitle != null">
         push_title = #{record.pushTitle,jdbcType=VARCHAR},
@@ -281,7 +281,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pd_declaration_push_information_manage
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
       push_title = #{record.pushTitle,jdbcType=VARCHAR},
       push_content = #{record.pushContent,jdbcType=VARCHAR},
       receive_enterprise = #{record.receiveEnterprise,jdbcType=VARCHAR},
@@ -346,7 +346,7 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
     update tb_pd_declaration_push_information_manage
@@ -364,6 +364,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

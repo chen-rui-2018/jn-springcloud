@@ -6,13 +6,13 @@ import java.util.Date;
 
 public class TbPdDeclarationNoticeManage implements Serializable {
     /*@ApiModelProperty("唯一标识符（公告ID）")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("标题名称")*/
     private String titleName;
 
     /*@ApiModelProperty("所属类型ID")*/
-    private Integer rangeId;
+    private String rangeId;
 
     /*@ApiModelProperty("所属类型名称")*/
     private String rangeName;
@@ -61,12 +61,12 @@ public class TbPdDeclarationNoticeManage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getTitleName() {
@@ -77,12 +77,12 @@ public class TbPdDeclarationNoticeManage implements Serializable {
         this.titleName = titleName == null ? null : titleName.trim();
     }
 
-    public Integer getRangeId() {
+    public String getRangeId() {
         return rangeId;
     }
 
-    public void setRangeId(Integer rangeId) {
-        this.rangeId = rangeId;
+    public void setRangeId(String rangeId) {
+        this.rangeId = rangeId == null ? null : rangeId.trim();
     }
 
     public String getRangeName() {

@@ -3,7 +3,7 @@
 <mapper namespace="com.jn.enterprise.pd.talent.dao.TbPdTalentNoticeAttachmentMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.talent.entity.TbPdTalentNoticeAttachment">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="notice_id" jdbcType="VARCHAR" property="noticeId" />
     <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -111,7 +111,7 @@
     insert into tb_pd_talent_notice_attachment (notice_id, file_url, file_name, 
       record_status, creator_account, created_time, 
       modifier_account, modified_time)
-    values (#{noticeId,jdbcType=INTEGER}, #{fileUrl,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
+    values (#{noticeId,jdbcType=VARCHAR}, #{fileUrl,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
@@ -148,7 +148,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="noticeId != null">
-        #{noticeId,jdbcType=INTEGER},
+        #{noticeId,jdbcType=VARCHAR},
       </if>
       <if test="fileUrl != null">
         #{fileUrl,jdbcType=VARCHAR},
@@ -186,7 +186,7 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.noticeId != null">
-        notice_id = #{record.noticeId,jdbcType=INTEGER},
+        notice_id = #{record.noticeId,jdbcType=VARCHAR},
       </if>
       <if test="record.fileUrl != null">
         file_url = #{record.fileUrl,jdbcType=VARCHAR},
@@ -217,7 +217,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_pd_talent_notice_attachment
     set id = #{record.id,jdbcType=INTEGER},
-      notice_id = #{record.noticeId,jdbcType=INTEGER},
+      notice_id = #{record.noticeId,jdbcType=VARCHAR},
       file_url = #{record.fileUrl,jdbcType=VARCHAR},
       file_name = #{record.fileName,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -233,7 +233,7 @@
     update tb_pd_talent_notice_attachment
     <set>
       <if test="noticeId != null">
-        notice_id = #{noticeId,jdbcType=INTEGER},
+        notice_id = #{noticeId,jdbcType=VARCHAR},
       </if>
       <if test="fileUrl != null">
         file_url = #{fileUrl,jdbcType=VARCHAR},
@@ -261,7 +261,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.talent.entity.TbPdTalentNoticeAttachment">
     update tb_pd_talent_notice_attachment
-    set notice_id = #{noticeId,jdbcType=INTEGER},
+    set notice_id = #{noticeId,jdbcType=VARCHAR},
       file_url = #{fileUrl,jdbcType=VARCHAR},
       file_name = #{fileName,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},

@@ -10,7 +10,7 @@ public interface TbPdDeclarationOnlineReservationManageMapper {
 
     int deleteByExample(TbPdDeclarationOnlineReservationManageCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdDeclarationOnlineReservationManage record);
 
@@ -18,7 +18,7 @@ public interface TbPdDeclarationOnlineReservationManageMapper {
 
     List<TbPdDeclarationOnlineReservationManage> selectByExample(TbPdDeclarationOnlineReservationManageCriteria example);
 
-    TbPdDeclarationOnlineReservationManage selectByPrimaryKey(Integer id);
+    TbPdDeclarationOnlineReservationManage selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationOnlineReservationManage record, @Param("example") TbPdDeclarationOnlineReservationManageCriteria example);
 

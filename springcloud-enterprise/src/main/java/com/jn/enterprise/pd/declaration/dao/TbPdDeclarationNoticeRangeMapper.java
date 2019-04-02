@@ -10,7 +10,7 @@ public interface TbPdDeclarationNoticeRangeMapper {
 
     int deleteByExample(TbPdDeclarationNoticeRangeCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdDeclarationNoticeRange record);
 
@@ -18,7 +18,7 @@ public interface TbPdDeclarationNoticeRangeMapper {
 
     List<TbPdDeclarationNoticeRange> selectByExample(TbPdDeclarationNoticeRangeCriteria example);
 
-    TbPdDeclarationNoticeRange selectByPrimaryKey(Integer id);
+    TbPdDeclarationNoticeRange selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationNoticeRange record, @Param("example") TbPdDeclarationNoticeRangeCriteria example);
 

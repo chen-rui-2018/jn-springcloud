@@ -10,7 +10,7 @@ public interface TbPdDeclarationNoticeManageMapper {
 
     int deleteByExample(TbPdDeclarationNoticeManageCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdDeclarationNoticeManage record);
 
@@ -20,7 +20,7 @@ public interface TbPdDeclarationNoticeManageMapper {
 
     List<TbPdDeclarationNoticeManage> selectByExample(TbPdDeclarationNoticeManageCriteria example);
 
-    TbPdDeclarationNoticeManage selectByPrimaryKey(Integer id);
+    TbPdDeclarationNoticeManage selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationNoticeManage record, @Param("example") TbPdDeclarationNoticeManageCriteria example);
 

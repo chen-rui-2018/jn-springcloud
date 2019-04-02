@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class TbPdDeclarationPushInformationManage implements Serializable {
     /*@ApiModelProperty("")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("推送标题")*/
     private String pushTitle;
@@ -51,12 +51,12 @@ public class TbPdDeclarationPushInformationManage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getPushTitle() {

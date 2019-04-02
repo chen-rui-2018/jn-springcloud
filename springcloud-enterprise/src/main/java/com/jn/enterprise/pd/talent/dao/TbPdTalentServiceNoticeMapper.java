@@ -10,7 +10,7 @@ public interface TbPdTalentServiceNoticeMapper {
 
     int deleteByExample(TbPdTalentServiceNoticeCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdTalentServiceNotice record);
 
@@ -20,7 +20,7 @@ public interface TbPdTalentServiceNoticeMapper {
 
     List<TbPdTalentServiceNotice> selectByExample(TbPdTalentServiceNoticeCriteria example);
 
-    TbPdTalentServiceNotice selectByPrimaryKey(Integer id);
+    TbPdTalentServiceNotice selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdTalentServiceNotice record, @Param("example") TbPdTalentServiceNoticeCriteria example);
 

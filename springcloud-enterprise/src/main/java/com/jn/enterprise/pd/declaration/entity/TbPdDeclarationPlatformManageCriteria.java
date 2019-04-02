@@ -115,52 +115,62 @@ public class TbPdDeclarationPlatformManageCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(Integer value) {
+        public Criteria andIdEqualTo(String value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(Integer value) {
+        public Criteria andIdNotEqualTo(String value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(Integer value) {
+        public Criteria andIdGreaterThan(String value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andIdGreaterThanOrEqualTo(String value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(Integer value) {
+        public Criteria andIdLessThan(String value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(Integer value) {
+        public Criteria andIdLessThanOrEqualTo(String value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdIn(List<Integer> values) {
+        public Criteria andIdLike(String value) {
+            addCriterion("id like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotLike(String value) {
+            addCriterion("id not like", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<String> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<Integer> values) {
+        public Criteria andIdNotIn(List<String> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(Integer value1, Integer value2) {
+        public Criteria andIdBetween(String value1, String value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -525,52 +535,62 @@ public class TbPdDeclarationPlatformManageCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdEqualTo(Integer value) {
+        public Criteria andSubordinatePlatformIdEqualTo(String value) {
             addCriterion("subordinate_platform_id =", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdNotEqualTo(Integer value) {
+        public Criteria andSubordinatePlatformIdNotEqualTo(String value) {
             addCriterion("subordinate_platform_id <>", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdGreaterThan(Integer value) {
+        public Criteria andSubordinatePlatformIdGreaterThan(String value) {
             addCriterion("subordinate_platform_id >", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSubordinatePlatformIdGreaterThanOrEqualTo(String value) {
             addCriterion("subordinate_platform_id >=", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdLessThan(Integer value) {
+        public Criteria andSubordinatePlatformIdLessThan(String value) {
             addCriterion("subordinate_platform_id <", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdLessThanOrEqualTo(Integer value) {
+        public Criteria andSubordinatePlatformIdLessThanOrEqualTo(String value) {
             addCriterion("subordinate_platform_id <=", value, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdIn(List<Integer> values) {
+        public Criteria andSubordinatePlatformIdLike(String value) {
+            addCriterion("subordinate_platform_id like", value, "subordinatePlatformId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubordinatePlatformIdNotLike(String value) {
+            addCriterion("subordinate_platform_id not like", value, "subordinatePlatformId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubordinatePlatformIdIn(List<String> values) {
             addCriterion("subordinate_platform_id in", values, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdNotIn(List<Integer> values) {
+        public Criteria andSubordinatePlatformIdNotIn(List<String> values) {
             addCriterion("subordinate_platform_id not in", values, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdBetween(Integer value1, Integer value2) {
+        public Criteria andSubordinatePlatformIdBetween(String value1, String value2) {
             addCriterion("subordinate_platform_id between", value1, value2, "subordinatePlatformId");
             return (Criteria) this;
         }
 
-        public Criteria andSubordinatePlatformIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andSubordinatePlatformIdNotBetween(String value1, String value2) {
             addCriterion("subordinate_platform_id not between", value1, value2, "subordinatePlatformId");
             return (Criteria) this;
         }

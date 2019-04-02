@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationOnlineReservationManageMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="appointment_item_id" jdbcType="INTEGER" property="appointmentItemId" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="appointment_item_id" jdbcType="VARCHAR" property="appointmentItemId" />
     <result column="appointment_item_name" jdbcType="VARCHAR" property="appointmentItemName" />
     <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
     <result column="contact_phone" jdbcType="VARCHAR" property="contactPhone" />
@@ -103,15 +103,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from tb_pd_declaration_online_reservation_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_pd_declaration_online_reservation_manage
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManageCriteria">
     delete from tb_pd_declaration_online_reservation_manage
@@ -120,7 +120,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_online_reservation_manage (appointment_item_id, appointment_item_name, 
@@ -131,7 +131,7 @@
       audit_department, declare_type, record_status, 
       creator_account, created_time, modifier_account, 
       modified_time)
-    values (#{appointmentItemId,jdbcType=INTEGER}, #{appointmentItemName,jdbcType=VARCHAR}, 
+    values (#{appointmentItemId,jdbcType=VARCHAR}, #{appointmentItemName,jdbcType=VARCHAR}, 
       #{contactName,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
       #{fileUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{timeAppointment,jdbcType=TIMESTAMP}, 
       #{declareEnterprise,jdbcType=VARCHAR}, #{declareItem,jdbcType=VARCHAR}, #{replyStatus,jdbcType=TINYINT}, 
@@ -141,7 +141,7 @@
       #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_online_reservation_manage
@@ -212,7 +212,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="appointmentItemId != null">
-        #{appointmentItemId,jdbcType=INTEGER},
+        #{appointmentItemId,jdbcType=VARCHAR},
       </if>
       <if test="appointmentItemName != null">
         #{appointmentItemName,jdbcType=VARCHAR},
@@ -286,10 +286,10 @@
     update tb_pd_declaration_online_reservation_manage
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.appointmentItemId != null">
-        appointment_item_id = #{record.appointmentItemId,jdbcType=INTEGER},
+        appointment_item_id = #{record.appointmentItemId,jdbcType=VARCHAR},
       </if>
       <if test="record.appointmentItemName != null">
         appointment_item_name = #{record.appointmentItemName,jdbcType=VARCHAR},
@@ -358,8 +358,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update tb_pd_declaration_online_reservation_manage
-    set id = #{record.id,jdbcType=INTEGER},
-      appointment_item_id = #{record.appointmentItemId,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=VARCHAR},
+      appointment_item_id = #{record.appointmentItemId,jdbcType=VARCHAR},
       appointment_item_name = #{record.appointmentItemName,jdbcType=VARCHAR},
       contact_name = #{record.contactName,jdbcType=VARCHAR},
       contact_phone = #{record.contactPhone,jdbcType=VARCHAR},
@@ -388,7 +388,7 @@
     update tb_pd_declaration_online_reservation_manage
     <set>
       <if test="appointmentItemId != null">
-        appointment_item_id = #{appointmentItemId,jdbcType=INTEGER},
+        appointment_item_id = #{appointmentItemId,jdbcType=VARCHAR},
       </if>
       <if test="appointmentItemName != null">
         appointment_item_name = #{appointmentItemName,jdbcType=VARCHAR},
@@ -451,11 +451,11 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationOnlineReservationManage">
     update tb_pd_declaration_online_reservation_manage
-    set appointment_item_id = #{appointmentItemId,jdbcType=INTEGER},
+    set appointment_item_id = #{appointmentItemId,jdbcType=VARCHAR},
       appointment_item_name = #{appointmentItemName,jdbcType=VARCHAR},
       contact_name = #{contactName,jdbcType=VARCHAR},
       contact_phone = #{contactPhone,jdbcType=VARCHAR},
@@ -476,6 +476,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

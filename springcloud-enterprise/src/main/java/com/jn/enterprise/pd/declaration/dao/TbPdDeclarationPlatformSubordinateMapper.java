@@ -10,7 +10,7 @@ public interface TbPdDeclarationPlatformSubordinateMapper {
 
     int deleteByExample(TbPdDeclarationPlatformSubordinateCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdDeclarationPlatformSubordinate record);
 
@@ -18,7 +18,7 @@ public interface TbPdDeclarationPlatformSubordinateMapper {
 
     List<TbPdDeclarationPlatformSubordinate> selectByExample(TbPdDeclarationPlatformSubordinateCriteria example);
 
-    TbPdDeclarationPlatformSubordinate selectByPrimaryKey(Integer id);
+    TbPdDeclarationPlatformSubordinate selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdDeclarationPlatformSubordinate record, @Param("example") TbPdDeclarationPlatformSubordinateCriteria example);
 

@@ -10,7 +10,7 @@ public interface TbPdSupportFundExamineMapper {
 
     int deleteByExample(TbPdSupportFundExamineCriteria example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(String id);
 
     int insert(TbPdSupportFundExamine record);
 
@@ -18,7 +18,7 @@ public interface TbPdSupportFundExamineMapper {
 
     List<TbPdSupportFundExamine> selectByExample(TbPdSupportFundExamineCriteria example);
 
-    TbPdSupportFundExamine selectByPrimaryKey(Integer id);
+    TbPdSupportFundExamine selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdSupportFundExamine record, @Param("example") TbPdSupportFundExamineCriteria example);
 

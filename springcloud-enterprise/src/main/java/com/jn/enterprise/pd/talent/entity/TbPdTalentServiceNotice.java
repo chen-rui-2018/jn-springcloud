@@ -6,19 +6,19 @@ import java.util.Date;
 
 public class TbPdTalentServiceNotice implements Serializable {
     /*@ApiModelProperty("唯一标识符")*/
-    private Integer id;
+    private String id;
 
     /*@ApiModelProperty("公告标题")*/
     private String noticeTitle;
 
     /*@ApiModelProperty("所属类型ID")*/
-    private Integer rangeId;
+    private String rangeId;
 
     /*@ApiModelProperty("所属类型名称")*/
     private String rangeName;
 
     /*@ApiModelProperty("所属平台ID")*/
-    private Integer subordinatePlatformId;
+    private String subordinatePlatformId;
 
     /*@ApiModelProperty("所属平台名称")*/
     private String subordinatePlatformName;
@@ -58,12 +58,12 @@ public class TbPdTalentServiceNotice implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setId(String id) {
+        this.id = id == null ? null : id.trim();
     }
 
     public String getNoticeTitle() {
@@ -74,12 +74,12 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.noticeTitle = noticeTitle == null ? null : noticeTitle.trim();
     }
 
-    public Integer getRangeId() {
+    public String getRangeId() {
         return rangeId;
     }
 
-    public void setRangeId(Integer rangeId) {
-        this.rangeId = rangeId;
+    public void setRangeId(String rangeId) {
+        this.rangeId = rangeId == null ? null : rangeId.trim();
     }
 
     public String getRangeName() {
@@ -90,12 +90,12 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.rangeName = rangeName == null ? null : rangeName.trim();
     }
 
-    public Integer getSubordinatePlatformId() {
+    public String getSubordinatePlatformId() {
         return subordinatePlatformId;
     }
 
-    public void setSubordinatePlatformId(Integer subordinatePlatformId) {
-        this.subordinatePlatformId = subordinatePlatformId;
+    public void setSubordinatePlatformId(String subordinatePlatformId) {
+        this.subordinatePlatformId = subordinatePlatformId == null ? null : subordinatePlatformId.trim();
     }
 
     public String getSubordinatePlatformName() {

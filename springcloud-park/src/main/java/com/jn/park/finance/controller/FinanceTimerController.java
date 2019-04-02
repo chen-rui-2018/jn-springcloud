@@ -34,22 +34,23 @@ public class FinanceTimerController {
 
     /**
      * 更新收入情况月表
-     * 每天凌晨2点跑一次
+     * 每月一号凌晨1点跑一次
      * @return
      */
-    @Scheduled(cron = "0 0 2 * * ?")
+    @Scheduled(cron = "0 0 1 1 * ?")
     public Result updateIncomeMonth() {
         String status= financeTimerService.updateIncomeMonth();
         return new Result(status);
     }
 
 
+
     /**
      * 更新收入情况日表
-     * 每月一号凌晨1点跑一次
+     * 每天凌晨2点跑一次
      * @return
      */
-    @Scheduled(cron = "0 0 1 1 * ?")
+    @Scheduled(cron = "0 0 2 * * ?")
     public Result updateIncomeDay()  {
         String status= financeTimerService.updateIncomeDay();
         return new Result(status);

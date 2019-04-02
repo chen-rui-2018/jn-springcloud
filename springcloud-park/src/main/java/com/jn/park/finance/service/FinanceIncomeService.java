@@ -19,7 +19,7 @@ public interface FinanceIncomeService {
      * @param endTime 结束时间
      * @return
      */
-    List<FinanceIncomePeriodVo> periodContrast(String startTime,String endTime);
+    FianceDynamicTableVo<List<FinanceIncomePeriodVo>> periodContrast(String startTime,String endTime);
 
     /**
      * 汇总占比

@@ -80,9 +80,9 @@ public class FinanceIndexController extends BaseController {
     @GetMapping(value = "/expendBudget")
     @RequiresPermissions("/finance/index/expendBudget")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019")
-    public Result<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year){
+    public Result<FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>> expendBudget(String year){
         //todo
-        List<FinanceIndexExpendBudgetStatisticsVo> expendBudget=financeIndexService.expendBudget(year);
+        FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>> expendBudget=financeIndexService.expendBudget(year);
         return new Result(expendBudget);
     }
 
@@ -95,9 +95,9 @@ public class FinanceIndexController extends BaseController {
             @ApiImplicitParam(name = "departmentId",value = "部门ID",dataType = "String",paramType = "query",example = "281f4005-0363-4528-92a3-60a730532e53"),
             @ApiImplicitParam(name = "typeId",value = "类型ID",dataType = "String",paramType = "query")
     })
-    public Result<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, String typeId){
+    public Result<FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>>> sectionBudgetExpend(String year, String departmentId, String typeId){
         //todo
-        List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend=financeIndexService.sectionBudgetExpend(year,departmentId,typeId);
+        FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>> sectionBudgetExpend=financeIndexService.sectionBudgetExpend(year,departmentId,typeId);
         return new Result(sectionBudgetExpend);
     }
 

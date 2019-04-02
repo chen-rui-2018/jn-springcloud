@@ -132,8 +132,10 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
        //根据名称模糊查询出全部的实施部门
        TbSpDictDepartCriteria tbSpDictDepartCriteria = new TbSpDictDepartCriteria();
        TbSpDictDepartCriteria.Criteria criteria = tbSpDictDepartCriteria.createCriteria();
-       //模糊查询实施部门
-       criteria.andNameLike("%"+name+"%");
+       if(name != null){
+           //模糊查询实施部门
+           criteria.andNameLike("%"+name+"%");
+       }
        //只查询有效的部门
         Byte recordStatus = Byte.parseByte(SpStatusEnums.EFFECTIVE.getCode());
         criteria.andRecordStatusEqualTo(recordStatus);

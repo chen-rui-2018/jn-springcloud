@@ -116,6 +116,9 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="organizationalUserName" jdbcType="VARCHAR" property="organizationalUserName" />
         <result column="organizationalDepartmentName" jdbcType="VARCHAR" property="organizationalDepartmentName" />
+        <result column="organizationalId" jdbcType="VARCHAR" property="organizationalId" />
+        <result column="organizationalUserId" jdbcType="VARCHAR" property="organizationalUserId" />
+
         <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
 
         <collection property="tbOaMeetingRoom" ofType="com.jn.oa.meeting.entity.TbOaMeetingRoom">
@@ -369,6 +372,8 @@
                 meeting.meeting_status AS meeting_meeting_status,
                 o.NAME AS organizationalUserName,
                 o.department_name AS organizationalDepartmentName,
+                o.departmentId as organizationalId,
+                o.id as organizationalUserId,
                 u.`NAME` as userName,
                 meetingroom.meetingroom_id,
                 meetingroom.NAME AS meetingroom_name,
@@ -399,13 +404,15 @@
                 t.id,
                 t.NAME,
                 t.account,
-                tt.department_name
+                tt.department_name,
+                tt.id as departmentId
             FROM
                 tb_sys_user t
                 LEFT JOIN (
             SELECT
                 t1.user_id,
-                t2.department_name
+                t2.department_name,
+                t2.id
             FROM
                 tb_sys_user_department_post t1
                 INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id

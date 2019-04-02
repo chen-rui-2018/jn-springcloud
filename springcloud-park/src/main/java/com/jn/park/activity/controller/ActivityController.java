@@ -129,7 +129,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteDraftActivity")
     @RequiresPermissions("/activity/deleteDraftActivity")
     public Result<Integer> deleteDraftActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteDraftActivity(activityId,user.getAccount());
@@ -141,7 +141,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteActivity")
     @RequiresPermissions("/activity/deleteActivity")
     public Result<Integer> deleteActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteActivity(activityId,user.getAccount());
@@ -208,6 +208,12 @@ public class ActivityController extends BaseController {
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
+        for(int i=0;i<activityApplyParam.getExportTitle().length;i++){
+            logger.info("------入参导出标题：{}--------",activityApplyParam.getExportTitle()[i]);
+        }
+        for(int i=0;i<activityApplyParam.getExportColName().length;i++){
+            logger.info("------入参导出的字段别名：{}--------",activityApplyParam.getExportColName()[i]);
+        }
         //下载文件名
         String fileName="活动报名人";
         String sheetName = "活动报名人";

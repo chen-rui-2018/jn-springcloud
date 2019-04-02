@@ -3,6 +3,9 @@ import Vue from 'vue'
 import Cookies from 'js-cookie'
 import ECharts from 'vue-echarts'
 Vue.component('chart', ECharts)
+
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 import 'babel-polyfill'
 import Element from 'element-ui'
@@ -11,6 +14,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 // 引入字体图标
 import '@/assets/icon/css/font-awesome.min.css'
+import '@/assets/iconfont/iconfont.css'
 import '../static/UE/ueditor.config'
 import '../static/UE/ueditor.all'
 import '../static/UE/lang/zh-cn/zh-cn'

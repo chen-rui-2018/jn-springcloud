@@ -21,7 +21,8 @@ public class OrgLicenseData implements Serializable {
     @NotNull(message = "机构ID不能为空")
     private String orgId;
 
-    @ApiModelProperty(value = "一级业务领域",required = true,example = "ogistics"
+    @ApiModelProperty(value = "一级业务领域[机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]"
+            ,required = true,example = "ogistics"
             ,notes = "机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取")
     @NotNull(message = "一级业务领域不能为空")
     private String businessType;

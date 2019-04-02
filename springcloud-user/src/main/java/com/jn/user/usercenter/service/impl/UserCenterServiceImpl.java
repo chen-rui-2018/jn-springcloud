@@ -55,11 +55,7 @@ public class UserCenterServiceImpl implements UserCenterService {
            logger.warn("[用户密码修改]，用户旧密码{}密码错误：oldPassword{},密码错误,请重新输入正确的密码");
            throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_IS_ERROR);
        }
-       if(!modifyPassword.getNewPasswordA().equals(modifyPassword.getNewPasswordB())){
-           logger.warn("[用户密码修改]，用户新密码{}两次输入不相等：newPassword{},密码不相等,请重新输入两次相同的新密码");
-           throw new JnSpringCloudException(UserExtensionExceptionEnum.USER_PASSWORD_NOT_EQUALS);
-       }
-        user.setPassword(modifyPassword.getNewPasswordA());
+        user.setPassword(modifyPassword.getNewPassword());
         systemClient.updateSysUser(user);
     }
 

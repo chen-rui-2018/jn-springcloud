@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "接受机构邀请")
+@Api(tags = "服务超市-接受机构邀请")
 @RestController
 @RequestMapping(value = "/serviceMarket/acceptOrgInvitationController")
 public class AcceptOrgInvitationController extends BaseController {

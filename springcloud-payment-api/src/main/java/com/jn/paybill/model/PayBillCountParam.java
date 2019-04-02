@@ -16,7 +16,7 @@ public class PayBillCountParam {
     private String billStartTime;
     @ApiModelProperty(value = "账期结束时间[yyyy-MM-dd HH:mm:ss]",example = "2019-03-24 10:00:00")
     private String billEndTime;
-    @ApiModelProperty(value = "账单类型[不传查所有]",example = "005"
+    @ApiModelProperty(value = "账单类型[不传查所有]{暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费}",example = "['005','006']"
             ,notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
     private String[] billTypeIds;
 

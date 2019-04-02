@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.notice.dao.NoticeInfoDao">
+  <!--首页公告列表-->
+  <select id="findNoticeList" parameterType="com.jn.park.notice.model.NoticeQueryParam" resultType="com.jn.park.notice.model.NoticeManageShow">
+      select
+          t1.notice_id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.home_popup as "homePopup"
+        ,t1.home_show as "homeShow"
+        ,t1.platform_type as "platformType"
+        ,t1.platform_name as "platformName"
+        ,t1.publish_name as "pulishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t1.notice_status as "noticeStatus"
+        ,t1.sort_field as "sortField"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.notice_id=t2.notice_id
+        where 1=1 and t1.record_status = 1
+        <if test = "noticeStatus != null and noticeStatus != ''">
+          and t1.notice_status = #{noticeStatus}
+        </if>
+        <if test="homePopup != null and homePopup !=''">
+          and t1.home_popup = #{homePopup}
+        </if>
+        <if test = "homeShow != null and homeShow != ''">
+          and t1.home_show  = #{homeShow}
+        </if>
+        <if test ="keyWord != null and keyWord != ''">
+          and t1.notice_title like CONCAT("%",#{keyWord},"%")
+          or  t1.platform_name like CONCAT("%",#{keyWord},"%")
+        </if>
+        order by t1.sort_field,t1.created_time desc
+  </select>
+
+  <select id="findNoticeDetails" resultType="com.jn.park.notice.model.NoticeManageShow">
+     select
+          t1.notice_id as "noticeId"
+        ,t1.notice_title as "noticeTitle"
+        ,t1.notice_serial as "noticeSerial"
+        ,DATE_FORMAT(t1.start_time,"%Y-%m-%d") as "startTime"
+        ,DATE_FORMAT(t1.end_time,"%Y-%m-%d") as "endTime"
+        ,t1.home_popup as "homePopup"
+        ,t1.home_show as "homeShow"
+        ,t1.platform_type as "platformType"
+        ,t1.platform_name as "platformName"
+        ,t1.publish_name as "pulishName"
+        ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
+        ,t1.notice_status as "noticeStatus"
+        ,t1.sort_field as "sortField"
+        ,t2.notice_details as "noticeDetails"
+        from tb_notice_info t1
+        left join tb_notice_details t2 on t1.notice_id=t2.notice_id
+        where 1=1 and t1.record_status = 1
+         and  t1.notice_id = #{noticeId}
+  </select>
+  <update id="noticeShelfOperate">
+    update tb_notice_info t1
+    set t1.notice_status =#{noticeStatus},
+        t1.modifier_account =#{account},
+        t1.modified_time = now()
+    where t1.notice_id = #{noticeId}
+  </update>
+</mapper>

@@ -1,6 +1,12 @@
 package com.jn.park.notice.service;
 
+import com.jn.common.model.PaginationData;
+import com.jn.park.notice.model.NoticeManageShow;
 import com.jn.park.notice.model.NoticeModifyParam;
+import com.jn.park.notice.model.NoticeQueryParam;
+import com.jn.park.notice.model.NoticeShelfParam;
+
+import java.util.List;
 
 /**
  * 园区公告
@@ -17,5 +23,35 @@ public interface NoticeService {
      * @return
      */
    int addNotice(NoticeModifyParam param,String account);
+
+    /**
+     * 后台公告列表
+     * @param queryParam
+     * @return
+     */
+   PaginationData<List<NoticeManageShow>> findNoticeList(NoticeQueryParam queryParam);
+
+    /**
+     * 更新公告信息
+     * @param param
+     * @param account
+     * @return
+     */
+   int  modifyNotice(NoticeModifyParam param,String account);
+
+    /**
+     * 公告详情
+     * @param noticeId
+     * @return
+     */
+   NoticeManageShow findNoticeDetails(String noticeId);
+
+    /**
+     * 公告上架/下架操作
+     * @param shelfParam
+     * @param account
+     * @return
+     */
+   int noticeShelfOperate( NoticeShelfParam shelfParam,String account);
 }
 

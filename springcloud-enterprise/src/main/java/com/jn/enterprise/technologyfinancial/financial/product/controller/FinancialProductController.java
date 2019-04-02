@@ -48,7 +48,7 @@ public class FinancialProductController extends BaseController {
     @ControllerLog(doAction = "金融产品列表查询")
     @ApiOperation(value = "金融产品列表查询")
     @RequiresPermissions("/technologyFinancial/financialProductController/getFinancialProductList")
-    @RequestMapping(value = "/getInvestorInfoList",method = RequestMethod.GET)
+    @RequestMapping(value = "/getFinancialProductList",method = RequestMethod.GET)
     public Result<PaginationData<List<FinancialProductListInfo>>> getFinancialProductList(@Validated FinancialProductListParam financialProductListParam){
         PaginationData investorInfoList = financialProductService.getFinancialProductList(financialProductListParam);
         return  new Result(investorInfoList);

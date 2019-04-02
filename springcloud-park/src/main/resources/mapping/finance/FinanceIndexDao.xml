@@ -56,9 +56,9 @@
     <select id="expendBudget" resultType="com.jn.park.finance.vo.FinanceIndexExpendBudgetStatisticsVo">
         SELECT
         t1.month as "month",
-        t1.cost as "cost",
-        IFNULL(t2.budgetnumber,0) as "budgetnumber" ,
-        IFNULL(CONCAT(ROUND( t1.cost/t2.budgetnumber * 100),"%") ,"/")as "ratio"
+        SUM(t1.cost) as "cost",
+        IFNULL(SUM(t2.budgetnumber),0) as "budgetnumber" ,
+        IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/")as "ratio"
         FROM
         (SELECT m.month as "month",
         IFNULL(t.cost,0) as "cost"
@@ -76,6 +76,7 @@
         where t.record_status = 1
         and t.budget_month BETWEEN #{startTime} AND  #{endTime} group by t.budget_month ) t2
         ON t2.budgetmonth=t1.month
+        GROUP BY t1.month
     </select>
 
 

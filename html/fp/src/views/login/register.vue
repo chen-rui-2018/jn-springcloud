@@ -20,14 +20,15 @@
         <i class="iconfont icon-xuanzhong" v-if="xuanzhong" @click="xuanzhong=false"></i>
         <i class="iconfont icon-weixuanzhong1" v-else @click="xuanzhong=true"></i>
         <!-- <label for="checkBox"> -->
-          <span class="remeberpw">
-            <span>我已阅读并同意</span>
-            <span style="color:#f00">用户协议</span>
-          </span>
+        <span class="remeberpw">
+          <span>我已阅读并同意</span>
+          <span style="color:#f00">用户协议</span>
+        </span>
         <!-- </label> -->
       </div>
       <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="registerForm()">注册</el-button>
       <div class="regFoot pr">
+        <!-- <div @click="$router.push({path:'/userData'})">返回首页</div> -->
         <span>我已有账号，
           <i style="color:#00a041;font-size:13px;cursor: pointer;" @click="handleLogin">直接登录</i>
         </span>
@@ -40,7 +41,7 @@
 export default {
   data() {
     return {
-      xuanzhong:true,
+      xuanzhong: true,
       // checked: true,
       phone: "",
       messageCode: "",
@@ -50,8 +51,8 @@ export default {
   },
   created() {},
   methods: {
-    handleLogin(){
-       this.$router.push({ path: '/' })
+    handleLogin() {
+      this.$router.push({ path: "/" });
     },
     registerForm() {
       let phone = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/;
@@ -66,10 +67,12 @@ export default {
         return;
       }
       if (!psw.test(this.password)) {
-        this.$message.error("密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文");
+        this.$message.error(
+          "密码至少为字母、数字、符号两种组成的8-16字符，不包含空格,不能输入中文"
+        );
         return;
       }
-      if (this.password!=this.password1) {
+      if (this.password != this.password1) {
         this.$message.error("两次输入的密码不一致");
         return;
       }
@@ -88,8 +91,8 @@ export default {
         dataFlag: false,
         callback: function(res) {
           if (res.code == "0000") {
-            _this.$message.success('注册成功');
-            _this.$router.push('/')
+            _this.$message.success("注册成功");
+            _this.$router.push("/");
             console.log(res);
           } else {
             _this.$message.error(res.result);
@@ -104,13 +107,12 @@ export default {
         return;
       }
       let _this = this;
-      this.api.post({
-        url: `springcloud-user/guest/userJoin/getCode?phone=${_this.phone}`,
+      this.api.get({
+        // url: `springcloud-user/guest/userJoin/getCode?phone=${_this.phone}`,
+        url: 'getCode',
         data: {
           phone: _this.phone
         },
-        dataFlag: true,
-        urlFlag:true,
         callback: function(res) {
           if (res.code == "0000") {
             console.log(res);
@@ -135,7 +137,7 @@ export default {
   left: 0;
   right: 0;
   z-index: -1;
-  background: url("../../../static/img/login-bg.png") 100% 100% / 100% 100%
+  background: url("../../../static/img/beijing.png") 100% 100% / 100% 100%
     no-repeat;
   .loginLogo {
     position: absolute;
@@ -150,7 +152,7 @@ export default {
   }
   .registerBox,
   .resiter2 {
-    background: #fff;
+    background: rgba(255, 255, 255, .95);
     padding: 21px 95px;
     padding-bottom: 35px;
     width: 280px;
@@ -201,7 +203,8 @@ export default {
     }
     .userAgree {
       margin: 21px 0 27px 0;
-      .icon-weixuanzhong1,.icon-xuanzhong{
+      .icon-weixuanzhong1,
+      .icon-xuanzhong {
         font-size: 14px;
       }
     }
@@ -219,9 +222,17 @@ export default {
           cursor: pointer;
         }
       }
+      > div {
+        position: absolute;
+        left: -80px;
+        font-size: 12px;
+        color:#666;
+        cursor: pointer;
+      }
       > span {
         position: absolute;
-        right: -85px;
+        right: -80px;
+        font-size: 12px;
       }
     }
   }

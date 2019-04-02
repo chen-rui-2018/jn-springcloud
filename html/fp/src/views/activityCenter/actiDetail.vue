@@ -51,7 +51,7 @@
           <div class="delshare">
             <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='1'" style="background:#00a040;height:38px;width:110px" round @click="quickApply(activityDetail.id)">立即报名</el-button>
             <el-button type="success" v-if="this.activityDetail.actiStatus=='2'&&this.activityDetail.isApply=='0'" style="background:#00a040;height:38px;width:110px" round @click="stopApply(activityDetail.id)">停止报名</el-button>
-            <el-button type="success" style="background:#ebfcf1;color:#009f42;height:38px;width:110px" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button>
+            <el-button type="success" class="atten" round icon="iconfont icon-xihuan">&nbsp;关注&nbsp;3</el-button>
             <span class="shareto">
               分享到
               <i class="iconfont icon-weixin"></i>
@@ -305,7 +305,7 @@ export default {
           if (res.code == "0000") {
             _this.$message.success("报名成功");
             console.log(res);
-            _this.init()
+            _this.init();
           } else {
             _this.$message.error(res.result);
           }
@@ -324,7 +324,7 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("取消报名成功");
-            _this.init()
+            _this.init();
           } else {
             _this.$message.error(res.result);
           }
@@ -418,29 +418,33 @@ export default {
   }
 };
 </script>
-<style lang='scss' scoped>
+<style lang='scss'>
 .actiDetail {
   width: 1190px;
   margin: 0 auto;
   .delnav {
-    padding: 10px 0;
+    padding: 20px 0;
   }
   .delinfo {
-    margin-top: 20px;
+    margin-top: 40px;
+    .el-card__body {
+      padding: 30px;
+    }
     .infotop {
       height: 310px;
       .infoImg {
         width: 548px;
         height: 323px;
         position: relative;
-        left: -40px;
-        top: -40px;
+        left: -70px;
+        top: -70px;
         border-radius: 10px;
       }
       .infotitle {
         position: absolute;
         left: 537px;
         top: 20px;
+        width: 42%;
         > span {
           font-size: 22px;
           font-weight: bold;
@@ -467,7 +471,7 @@ export default {
               float: left;
               height: 20px;
               width: 20px;
-              border: 1px solid #ccc;
+              border: 1px solid #eee;
               border-radius: 50%;
             }
           }
@@ -481,12 +485,23 @@ export default {
       }
     }
     .infobottom {
-      border-top: 1px solid #ccc;
+      border-top: 1px solid #eee;
+      padding-bottom: 10px;
       > p {
         line-height: 30px;
       }
       .delshare {
-        margin-top: 5px;
+        margin-top: 20px;
+        .atten {
+          background: #ebfcf1;
+          color: #009f42;
+          height: 38px;
+          width: 110px;
+          line-height: 10px;
+          .icon-xihuan{
+            font-size: 20px;
+          }
+        }
         .shareto {
           float: right;
           .icon-weixin {
@@ -548,7 +563,7 @@ export default {
       // border: 1px solid #ccc;
       > ul {
         > li {
-          border-bottom: 1px solid #ccc;
+          border-bottom: 1px solid #eee;
           padding: 20px 0;
           .liLeft {
             float: left;

@@ -29,7 +29,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "科技金融投资人")
+@Api(tags = "科技金融-科技金融投资人")
 @RestController
 @RequestMapping(value = "/technologyFinancial/investorController")
 public class InvestorController extends BaseController {

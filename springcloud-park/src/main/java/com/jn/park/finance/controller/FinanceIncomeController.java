@@ -46,10 +46,10 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query",example = "201901"),
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
-    public Result<FinanceIncomePeriodVo> periodContrast(String startTime,String endTime){
+    public Result<FianceDynamicTableVo<List<FinanceIncomePeriodVo>>> periodContrast(String startTime,String endTime){
         //todo
         this.checkIsSomeYear(startTime,endTime);
-        List<FinanceIncomePeriodVo> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
+        FianceDynamicTableVo<List<FinanceIncomePeriodVo>> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
         return new Result(periodContrast);
     }
 

@@ -129,7 +129,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteDraftActivity")
     @RequiresPermissions("/activity/deleteDraftActivity")
     public Result<Integer> deleteDraftActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteDraftActivity(activityId,user.getAccount());
@@ -141,7 +141,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteActivity")
     @RequiresPermissions("/activity/deleteActivity")
     public Result<Integer> deleteActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteActivity(activityId,user.getAccount());

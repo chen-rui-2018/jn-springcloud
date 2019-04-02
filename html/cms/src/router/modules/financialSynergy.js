@@ -34,12 +34,18 @@ const financRouter = {
           component: () => import('@/views/financ/finacialMonitoring/expenses'),
           name: 'expenses',
           meta: { title: '支出录入', noCache: true }
+        },
+        {
+          path: 'income',
+          component: () => import('@/views/financ/finacialMonitoring/income'),
+          name: 'income',
+          meta: { title: '收入情况', noCache: true }
         }
       ]
     }
     //     {
     //       path: 'departmentManagement',
-    //       component: () => import('@/views/menu/departmentManagement'),
+    //       component: () => import('@/views/menu/financ/financialMonitoring/income'),
     //       name: 'departmentManagement',
     //       meta: { title: '部门管理', noCache: true }
     //     },

@@ -22,7 +22,7 @@ public class PaymentBillParam extends Page implements Serializable {
     private String billNum;
     @ApiModelProperty(value = "账单名称",example = "湘A122JS-20190325停车费")
     private String billName;
-    @ApiModelProperty(value = "账单类型",example = "005"
+    @ApiModelProperty(value = "账单类型{暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费}",example = "005"
             ,notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
     private String billType;
     @ApiModelProperty(value = "账单对象ID",example = "wangsong")
@@ -47,11 +47,13 @@ public class PaymentBillParam extends Page implements Serializable {
     @ApiModelProperty(value = "是否已催付[0否1是]",example = "1")
     @Pattern(regexp = "^[0,1]$", message = "{isUrge:'支付方式只能为[0、1]'}")
     private String isUrge;
-    @ApiModelProperty(value = "排序字段",notes = "支付方式排序：billType支付方式,billCreateTime账单生成时间,billStatus账单状态",example = "billType")
+    @ApiModelProperty(value = "排序字段{支付方式排序：billType支付方式,billCreateTime账单生成时间,billStatus账单状态}"
+            ,notes = "支付方式排序：billType支付方式,billCreateTime账单生成时间,billStatus账单状态",example = "billType")
     private String orderBy;
     @ApiModelProperty(value = "搜索关键字")
     private String searchCode;
-    @ApiModelProperty(value = "查询类型[1前端业务2后台业务]",notes = "前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务",example = "2")
+    @ApiModelProperty(value = "查询类型[1前端业务2后台业务]{前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务}"
+            ,notes = "前台业务和后台业务的区别为：前台用户不能查询待审核和审核失败账单，为空默认查前端业务",example = "2")
     @Pattern(regexp = "^[2,1]$", message = "{isUrge:'支付方式只能为[2、1]'}")
     private String queryType;
 

@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ActivityTypeUpdate", description = "编辑活动信息")
 public class ActivityTypeUpdate extends ActivityTypeAdd implements Serializable {
-    @ApiModelProperty(value = "活动类型Id",required = true)
+    @ApiModelProperty(value = "活动类型Id",required = true,example = "8we2***")
     @NotBlank(message = "活动类型Id不能为空")
     private  String typeId;
 

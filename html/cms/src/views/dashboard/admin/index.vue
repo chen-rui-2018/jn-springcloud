@@ -126,12 +126,6 @@ export default {
 <script>
 import $ from 'jquery'
 export default {
-  components: {
-  },
-  data() {
-  },
-  computed: {
-  },
   mounted() {
     // iframe 自适应高度
     $('#kskfpt').height($(document.body).height() - 120)

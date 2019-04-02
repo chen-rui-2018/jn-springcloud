@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.sp.dao.SpPowerDao">
+
+    <select id="selectPowerByKey" parameterType="java.lang.String"
+            resultType="com.jn.park.sp.entity.TbSpPower">
+        SELECT
+            id,
+            parent_id as parentId,
+            parent_name AS parentName,
+            NAME,
+            depart_id as departId,
+            depart_name as departName,
+            setting_basis as settingBasis,
+            type,
+            CODE,
+            LEVEL,
+            come_from as comeFrom,
+            is_area as isArea,
+            is_ningzhengfa as isNingzhengfa,
+            is_qinzhengfa as isQinzhengfa,
+            is_qubianban as isQubianban,
+            notes ,
+            record_status as recordStatus,
+            creator_account as creatorAccount,
+            created_time as createdTime,
+            modifier_account as modifierAccount,
+            modified_time as modifiedTime
+        FROM
+            tb_sp_power
+        WHERE
+            id = #{id} and record_status != 0
+    </select>
+
+    <select id="findByPage" parameterType="java.util.Map" resultType="com.jn.park.sp.vo.SpPowerVo">
+        SELECT
+        t.id,
+        t.parent_id as parentId,
+        t.parent_name AS parentName,
+        t.name,
+        t.depart_id as departId,
+        t.depart_name as departName,
+        t.setting_basis as settingBasis,
+        t.type,
+        t.code,
+        t.level,
+        t.come_from as comeFrom,
+        t.is_area as isArea,
+        t.is_ningzhengfa as isNingzhengfa,
+        t.is_qinzhengfa as isQinzhengfa,
+        t.is_qubianban as isQubianban,
+        t.notes
+        FROM
+            tb_sp_power t
+        WHERE record_status != 0
+        <if test="parentId != null and parentId != ''">
+            and t.parent_id = #{parentId}
+        </if>
+        <if test="type != null and type != ''">
+            and t.type = #{type}
+        </if>
+        <if test="name != null and name != ''">
+            and t.name like CONCAT('%',#{name},'%')
+        </if>
+        <if test="code != null and code != ''">
+            and t.code = #{code}
+        </if>
+
+    </select>
+
+    <select id="selectChilds" parameterType="java.lang.String" resultType="com.jn.park.sp.vo.SpPowerVo">
+        SELECT
+            t.id,
+            t.parent_id as parentId,
+            t.parent_name AS parentName,
+            t.name,
+            t.depart_id as departId,
+            t.depart_name as departName,
+            t.setting_basis as settingBasis,
+            t.type,
+            t.code,
+            t.level,
+            t.come_from as comeFrom,
+            t.is_area as isArea,
+            t.is_ningzhengfa as isNingzhengfa,
+            t.is_qinzhengfa as isQinzhengfa,
+            t.is_qubianban as isQubianban,
+            t.notes
+        FROM
+            tb_sp_power t
+        WHERE record_status != 0 and t.parent_id = #{id}
+    </select>
+</mapper>

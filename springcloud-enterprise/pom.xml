@@ -53,10 +53,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        technology
+                        company
                     </contexts>
                     <tableNames>
-                        tb_service_investor
+                        tb_service_recruit
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.recruit.dao.ServiceRecruitMapper">
+
+    <sql id="recruitFiled">
+        a.id AS "id",
+        a.com_id AS "comId",
+        a.post AS "post",
+        a.salary AS "salary",
+        a.num AS "num",
+        a.type AS "type",
+        a.details AS "details",
+        a.status AS "status",
+        a.view_count AS "viewCount",
+        a.creator_account AS "creatorAccount",
+        a.created_time AS "createdTime",
+        a.modifier_account AS "modifierAccount",
+        a.modified_time AS "modifiedTime",
+        a.record_status AS "recordStatus",
+        co.com_name AS "comName"
+    </sql>
+
+    <sql id="recruitJoin">
+        LEFT JOIN tb_service_company co ON co.id = a.com_id
+    </sql>
+
+    <!-- 根据ID获取招聘详情 -->
+    <select id="getRecruitDetailsById" resultType="com.jn.enterprise.recruit.vo.RecruitDetailsVO">
+        SELECT
+            <include refid="recruitFiled" />
+        FROM tb_service_recruit a
+            <include refid="recruitJoin" />
+        WHERE a.record_status = 1
+        AND a.id = #{id}
+    </select>
+
+    <!-- 查询企业招聘信息列表 -->
+    <select id="getRecruitList" resultType="com.jn.enterprise.recruit.vo.RecruitVO">
+        SELECT
+            <include refid="recruitFiled" />
+        FROM tb_service_recruit a
+            <include refid="recruitJoin" />
+        WHERE a.record_status = 1
+        <if test="comId != null and comId != ''">
+            AND a.com_id = #{comId}
+        </if>
+        <if test="status != null and status != ''">
+            AND a.status = #{status}
+        </if>
+        <if test="type != null and type != ''">
+            AND a.type = #{type}
+        </if>
+        <if test="searchFiled != null and searchFiled != ''">
+            AND ( a.post LIKE CONCAT('%', #{searchFiled}, '%') OR co.com_name LIKE CONCAT('%', #{searchFiled}, '%'))
+        </if>
+        <if test="whereTypes != null and whereTypes != ''">
+            <choose>
+                <when test="whereTypes == 'w'">
+                    <![CDATA[ AND DATE_SUB(DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%S'), INTERVAL 6 DAY) <= DATE_FORMAT(a.created_time,'%Y-%m-%d %H:%i:%S') ]]>
+                </when>
+                <when test="whereTypes == 'm'">
+                    <![CDATA[ AND DATE_SUB(DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%S'), INTERVAL 1 MONTH) <= DATE_FORMAT(a.created_time,'%Y-%m-%d %H:%i:%S') ]]>
+                </when>
+                <otherwise>
+
+                </otherwise>
+            </choose>
+        </if>
+
+        <choose>
+            <when test="sortTypes != null and sortTypes != '' and sortTypes == 'hot'">
+                ORDER BY a.view_count DESC, a.created_time DESC
+            </when>
+            <otherwise>
+                ORDER BY a.created_time DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 企业招聘信息浏览量 -->
+    <update id="addRecruitClickById">
+        UPDATE tb_service_recruit SET
+            view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 删除企业招聘信息 -->
+    <delete id="delRecruitById">
+        UPDATE tb_service_recruit SET
+            record_status = 0,
+            modifier_account = #{account},
+            modified_time = #{modifiedTime}
+        WHERE id = #{id}
+    </delete>
+</mapper>

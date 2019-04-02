@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.sp.dao.SpPowerBusiDao">
+    <select id="selectBusiByKey" parameterType="java.lang.String" resultType="com.jn.park.sp.entity.TbSpPowerBusiWithBLOBs">
+        SELECT
+            t.id,
+            t.power_id as powerId,
+            t.power_name as power_name,
+            t.name ,
+            t.deal_time as dealTime,
+            t.deal_address as dealAddress,
+            t.deal_url as dealUrl,
+            t.link_phone as linkPhone,
+            t.deal_limit_days as dealLimitDays,
+            t.flow_pic as flowPic,
+            t.setting_basis as settingBasis,
+            t.deal_conditions as dealConditions,
+            t.fee_standard as feeStandard,
+            t.record_status as recordStatus,
+            t.creator_account as creatorAccount,
+            t.created_time as createdTime,
+            t.modifier_account as modifierAccount,
+            t.modified_time as modifiedTime
+        FROM
+            tb_sp_power_busi t
+        where
+            id = #{id} and record_status != 0
+    </select>
+</mapper>

@@ -59,11 +59,28 @@
   font-size: 14px;
 }
 
+.userHome .header .nav .sousuo > input::-webkit-input-placeholder {
+  color: #b7b7b7;
+  font-size: 12px;
+}
+
 .userHome .header .headerRight {
   line-height: 38px;
 }
 
-.userHome .header .headerRight img.active {
+.userHome .header .headerRight .imgU {
+  width: 74px;
+  height: 74px;
+  display: inline-block;
+}
+
+.userHome .header .headerRight .imgU > img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+
+.userHome .header .headerRight .imgU.active {
   background: #00a040;
 }
 
@@ -72,7 +89,7 @@
   display: inline-block;
   background: #ccc;
   width: 1px;
-  margin: 0 10px;
+  margin-left: 10px;
 }
 
 .userHome .header .headerRight .avaMenu {
@@ -81,16 +98,16 @@
           box-shadow: 2px 2px 5px #eee;
   background: #fff;
   z-index: 4;
-  left: -36px;
+  left: 5px;
 }
 
 .userHome .header .headerRight .avaMenu ul {
-  width: 200px;
+  width: 150px;
 }
 
 .userHome .header .headerRight .avaMenu ul > li {
   padding: 5px 15px;
-  font-size: 14px;
+  font-size: 13px;
   color: #333;
   cursor: pointer;
 }
@@ -119,7 +136,31 @@
   color: #00a041;
 }
 
-.userHome .userContent .honcontent .userContent .el-header {
+.userHome .userContent .honcontent .userCon .zhedieUl {
+  width: 150px;
+  position: relative;
+  text-indent: 25px;
+  left: -28px;
+  top: 15px;
+}
+
+.userHome .userContent .honcontent .userCon .zhedieUl > li {
+  padding: 12px 0;
+  background: #f7f7f7;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.userHome .userContent .honcontent .userCon .zhedieUl > li.lihover {
+  background: #00a040 !important;
+  color: #fff !important;
+}
+
+.userHome .userContent .honcontent .userCon .zhedieUl > li.lick {
+  color: #00a040;
+}
+
+.userHome .userContent .honcontent .userCon .el-header {
   background-color: #fff;
   color: #333;
   margin-bottom: 10px;
@@ -127,17 +168,24 @@
   font-size: 16px;
 }
 
-.userHome .userContent .honcontent .userContent .el-header > img {
-  width: 84px;
-  height: 84px;
-  vertical-align: middle;
+.userHome .userContent .honcontent .userCon .el-header > div {
+  width: 64px;
+  height: 64px;
+  display: inline-block;
 }
 
-.userHome .userContent .honcontent .userContent .el-header > span {
+.userHome .userContent .honcontent .userCon .el-header > div > img {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  border-radius: 50%;
+}
+
+.userHome .userContent .honcontent .userCon .el-header > span {
   margin-left: 20px;
 }
 
-.userHome .userContent .honcontent .userContent .el-aside {
+.userHome .userContent .honcontent .userCon .el-aside {
   background-color: #fff;
   color: #333;
   margin-right: 12px;
@@ -145,35 +193,36 @@
   height: 512px;
 }
 
-.userHome .userContent .honcontent .userContent .el-aside > ul > li {
+.userHome .userContent .honcontent .userCon .el-aside > ul > li {
   padding: 15px 28px;
   border-bottom: 1px solid #eee;
   position: relative;
   cursor: pointer;
 }
 
-.userHome .userContent .honcontent .userContent .el-aside > ul > li .line {
+.userHome .userContent .honcontent .userCon .el-aside > ul > li .line {
   display: inline-block;
   width: 2px;
   height: 20px;
   background: #00a041;
   position: absolute;
-  top: 50%;
-  left: 10px;
+  top: 24px;
+  left: 0px;
   -webkit-transform: translateY(-50%);
           transform: translateY(-50%);
 }
 
-.userHome .userContent .honcontent .userContent .el-aside > ul > li.lick .line {
-  background-color: #fff;
+.userHome .userContent .honcontent .userCon .el-aside > ul > li.lick {
+  color: #00a041;
+  font-weight: bold;
 }
 
-.userHome .userContent .honcontent .userContent .el-aside > ul > li.lick {
+.userHome .userContent .honcontent .userCon .el-aside > ul > li.lihover {
   background-color: #00a041;
   color: #fff;
 }
 
-.userHome .userContent .honcontent .userContent .el-main {
+.userHome .userContent .honcontent .userCon .el-main {
   background-color: #fff;
   color: #333;
   border-radius: 3px;
@@ -182,7 +231,7 @@
   position: relative;
 }
 
-.userHome .userContent .honcontent .userContent .el-main > .imgItem {
+.userHome .userContent .honcontent .userCon .el-main > .imgItem {
   width: 390px;
   height: 218px;
   position: absolute;

@@ -18,6 +18,8 @@ public class TbOaEmail implements Serializable {
 
     private Date delaySendTime;
 
+    private String attachment;
+
     private Date sendTime;
 
     private Byte recordStatus;
@@ -88,6 +90,14 @@ public class TbOaEmail implements Serializable {
         this.delaySendTime = delaySendTime;
     }
 
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment == null ? null : attachment.trim();
+    }
+
     public Date getSendTime() {
         return sendTime;
     }
@@ -155,6 +165,7 @@ public class TbOaEmail implements Serializable {
             && (this.getSendStatus() == null ? other.getSendStatus() == null : this.getSendStatus().equals(other.getSendStatus()))
             && (this.getIsDelay() == null ? other.getIsDelay() == null : this.getIsDelay().equals(other.getIsDelay()))
             && (this.getDelaySendTime() == null ? other.getDelaySendTime() == null : this.getDelaySendTime().equals(other.getDelaySendTime()))
+            && (this.getAttachment() == null ? other.getAttachment() == null : this.getAttachment().equals(other.getAttachment()))
             && (this.getSendTime() == null ? other.getSendTime() == null : this.getSendTime().equals(other.getSendTime()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
@@ -174,6 +185,7 @@ public class TbOaEmail implements Serializable {
         result = prime * result + ((getSendStatus() == null) ? 0 : getSendStatus().hashCode());
         result = prime * result + ((getIsDelay() == null) ? 0 : getIsDelay().hashCode());
         result = prime * result + ((getDelaySendTime() == null) ? 0 : getDelaySendTime().hashCode());
+        result = prime * result + ((getAttachment() == null) ? 0 : getAttachment().hashCode());
         result = prime * result + ((getSendTime() == null) ? 0 : getSendTime().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
@@ -196,6 +208,7 @@ public class TbOaEmail implements Serializable {
         sb.append(", sendStatus=").append(sendStatus);
         sb.append(", isDelay=").append(isDelay);
         sb.append(", delaySendTime=").append(delaySendTime);
+        sb.append(", attachment=").append(attachment);
         sb.append(", sendTime=").append(sendTime);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);

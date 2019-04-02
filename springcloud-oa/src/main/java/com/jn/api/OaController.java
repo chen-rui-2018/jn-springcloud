@@ -4,8 +4,10 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.oa.api.OaClient;
 import com.jn.oa.email.service.EmailService;
+import com.jn.oa.item.service.WorkPlanService;
 import com.jn.oa.meeting.service.MeetingService;
 import com.jn.oa.model.Email;
+import com.jn.oa.schedule.service.ScheduleService;
 import com.jn.system.log.annotation.ControllerLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,12 @@ public class OaController extends BaseController implements OaClient {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private WorkPlanService workPlanService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     /**
      * 定时十分钟通知会议申请人
@@ -65,10 +73,32 @@ public class OaController extends BaseController implements OaClient {
      */
     @Override
     @ControllerLog(doAction = "一键Email定时发送接口")
-    public Result regularSendEmail(@RequestBody Email email) {
-        emailService.regularSendEmail(email);
-        return new Result();
+    public Result<Boolean> regularSendEmail(@RequestBody Email email) {
+        Boolean result = emailService.regularSendEmail(email);
+        return new Result(result);
     }
 
+    /**
+     * 工作计划提醒功能,每天定时提醒用户
+     *
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "工作计划提醒功能")
+    public Result<Boolean> workPlanRemindEveryDay() {
+        Boolean result = workPlanService.workPlanRemindEveryDay();
+        return new Result<>(result);
+    }
+
+    /**
+     * 每天陵城两点自动更新工作计划状态
+     *
+     * @return
+     */
+    @Override
+    public Result<Boolean> updateWorkPlanStatus() {
+        workPlanService.updateWorkPlanIsExpire();
+        return new Result<>(true);
+    }
 
 }

@@ -39,11 +39,7 @@
           <el-table-column label="手机" prop="phone" align="center" width="120" />
           <el-table-column label="微信" prop="wechatAccount" align="center" width="120" />
           <el-table-column :show-overflow-tooltip="true" label="备注" prop="remark" align="center" width="120"/>
-          <el-table-column label="创建时间" prop="createdTime" align="center" width="200">
-            <!-- <template slot-scope="scope">
-              {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}:{s}') }}
-            </template> -->
-          </el-table-column>
+          <el-table-column label="创建时间" prop="createdTime" align="center" width="200"/>
           <el-table-column label="状态" prop="recordStatus" align="center" width="70">
             <template slot-scope="scope">
               <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -196,22 +192,8 @@
 import {
   api,
   paramApi,
-  // userCreate,
-  // getDepartment,
-  // deleteSysUser,
-  // checkUserName,
-  // findSysPostAll,
-  // findDepartmentandPostByUserId,
-  // saveDepartmentandPostOfUser,
-  // updateSysUser,
-  // editUser,
-  // getRoleInfo,
-  // updataRole,
-  // getUserGroupInfo,
-  // updataUserGroup,
   exportExcel
 } from '@/api/Permission-model/userManagement'
-// import initList from './components/components'
 export default {
   name: 'UserManagement',
   filters: {
@@ -225,9 +207,9 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[A-Za-z0-9]{6,16}$/
+      const reg = /[A-Za-z0-9]{1,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位长度字符的数字及字母'))
+        callback(new Error('请输入1到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
           paramApi('system/sysUser/checkUserName', this.temp.account, 'account').then(response => {
@@ -480,6 +462,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
+      }
       api('system/sysUser/saveSysGroupToSysUser', { userId: this.userId, groupIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -489,11 +477,13 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getUserGroup()
       })
     },
     // 授权用户组分页功能
     handleUserGroupCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
@@ -536,7 +526,7 @@ export default {
     },
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -552,6 +542,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
       api('system/sysUser/saveSysRoleToSysUser', { userId: this.userId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -561,6 +557,8 @@ export default {
         } else {
           this.$message.error(res.data.result)
         }
+        this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -610,7 +608,6 @@ export default {
     },
     // 改变状态
     selecteUserStatus(value) {
-      console.log(value)
       this.listQuery.recordStatus = value
     },
     // 获取所有部门列表

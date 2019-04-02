@@ -1,6 +1,7 @@
 package com.jn.schedule.oa;
 
 
+import com.jn.common.util.LoadBalancerUtil;
 import com.jn.oa.api.OaClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,8 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class OaScheduledController {
-    @Autowired
-    private LoadBalancerUtil loadBalancerUtils;
+
     @Autowired
     private OaClient oaClient;
 
@@ -43,10 +43,27 @@ public class OaScheduledController {
         //更新会议状态
         logger.info("每2分钟执行一次更新会议状态");
         oaClient.updateMeetingStatusByTime();
+    }
 
-
+    /**
+     * 每天八点半执行工作计划任务提醒功能
+     */
+    @Scheduled(cron = " 0 30 9 * * ? ")
+    public void workPlanRemindEveryDay() {
+        //更新会议状态
+        logger.info("执行工作计划任务提醒功能");
+        oaClient.workPlanRemindEveryDay();
     }
 
 
+    /**
+     * 每天陵城两点执行执行,更新工作计划是否延期
+     */
+    @Scheduled(cron = " 0 0 2 * * ? ")
+    public void updateWorkPlanStatus() {
+        //更新会议状态
+        logger.info("更新工作计划是否延期,修改状态");
+        oaClient.updateWorkPlanStatus();
+    }
 
 }

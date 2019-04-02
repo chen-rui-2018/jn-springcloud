@@ -200,7 +200,7 @@ public class SysDictServiceImpl implements SysDictService {
      */
     @Override
     @ServiceLog(doAction = "条件分页查询数据字典列表")
-    public PaginationData getDictByPage(SysDictPage sysDictPage) {
+    public PaginationData<List<SysDict>> getDictByPage(SysDictPage sysDictPage) {
         Page<Object> objects = PageHelper.startPage(sysDictPage.getPage(), sysDictPage.getRows());
         List<SysDict> sysDictList = sysDictMapper.getDictByPage(sysDictPage);
         PaginationData date = new PaginationData(sysDictList, objects.getTotal());
@@ -240,7 +240,8 @@ public class SysDictServiceImpl implements SysDictService {
         List<SysDictKeyValue> list = new ArrayList<SysDictKeyValue>();
         for (TbSysDict tbSysDict : tbSysDicts) {
             SysDictKeyValue dict = new SysDictKeyValue();
-            BeanUtils.copyProperties(tbSysDict, dict);
+            dict.setKey(tbSysDict.getDictKey());
+            dict.setLable(tbSysDict.getDictValue());
             list.add(dict);
         }
 

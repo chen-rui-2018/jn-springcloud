@@ -118,10 +118,10 @@ public class NoticeServiceImpl implements NoticeService {
      */
     @Override
     @ServiceLog(doAction = "条件分页获取公告列表信息")
-    public PaginationData list(NoticePage noticePage) {
+    public PaginationData<List<Notice>> list(NoticePage noticePage) {
         Page<Object> objects = PageHelper.startPage(noticePage.getPage(), noticePage.getRows());
         List<Notice> noticeList = noticeMapper.list(noticePage);
-        PaginationData date = new PaginationData(noticeList, objects.getTotal());
+        PaginationData<List<Notice>> date = new PaginationData(noticeList, objects.getTotal());
         return date;
     }
 
@@ -136,7 +136,7 @@ public class NoticeServiceImpl implements NoticeService {
     public Notice getNoticeById(String noticeId) {
         TbOaNotice tbOaNotice = tbOaNoticeMapper.selectByPrimaryKey(noticeId);
         //判断公告存在,且为删除时,返回公告内容
-        if (tbOaNotice != null && new Byte(OaStatusEnums.EFFECTIVE.getCode()).equals(tbOaNotice.getRecordStatus())) {
+        if (tbOaNotice != null && !new Byte(OaStatusEnums.DELETED.getCode()).equals(tbOaNotice.getRecordStatus())) {
             Notice notice = new Notice();
             BeanUtils.copyProperties(tbOaNotice, notice);
             return notice;

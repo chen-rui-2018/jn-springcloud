@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.servicemarket.product.dao.TbServiceProductMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
+    <id column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="serial_number" jdbcType="VARCHAR" property="serialNumber" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="refer_price" jdbcType="VARCHAR" property="referPrice" />
+    <result column="signory_id" jdbcType="VARCHAR" property="signoryId" />
+    <result column="signory_name" jdbcType="VARCHAR" property="signoryName" />
+    <result column="template_id" jdbcType="VARCHAR" property="templateId" />
+    <result column="org_id" jdbcType="VARCHAR" property="orgId" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="service_cycle" jdbcType="VARCHAR" property="serviceCycle" />
+    <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl" />
+    <result column="product_type" jdbcType="VARCHAR" property="productType" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="approval_account" jdbcType="VARCHAR" property="approvalAccount" />
+    <result column="approval_comments" jdbcType="VARCHAR" property="approvalComments" />
+    <result column="approval_time" jdbcType="TIMESTAMP" property="approvalTime" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+    <result column="ref_rate_min" jdbcType="DOUBLE" property="refRateMin" />
+    <result column="ref_rate_max" jdbcType="DOUBLE" property="refRateMax" />
+    <result column="is_online_loan" jdbcType="VARCHAR" property="isOnlineLoan" />
+    <result column="is_policy_pro" jdbcType="VARCHAR" property="isPolicyPro" />
+    <result column="is_general_pro" jdbcType="VARCHAR" property="isGeneralPro" />
+    <result column="is_rmb" jdbcType="VARCHAR" property="isRmb" />
+    <result column="loan_category_code" jdbcType="VARCHAR" property="loanCategoryCode" />
+    <result column="loan_category_name" jdbcType="VARCHAR" property="loanCategoryName" />
+    <result column="loan_amount_min" jdbcType="DOUBLE" property="loanAmountMin" />
+    <result column="loan_amount_max" jdbcType="DOUBLE" property="loanAmountMax" />
+    <result column="loan_term_min" jdbcType="INTEGER" property="loanTermMin" />
+    <result column="loan_term_max" jdbcType="INTEGER" property="loanTermMax" />
+    <result column="assure_method_code" jdbcType="VARCHAR" property="assureMethodCode" />
+    <result column="assure_method_name" jdbcType="VARCHAR" property="assureMethodName" />
+    <result column="product_feature" jdbcType="VARCHAR" property="productFeature" />
+    <result column="apply_condition" jdbcType="VARCHAR" property="applyCondition" />
+    <result column="submit_material" jdbcType="VARCHAR" property="submitMaterial" />
+    <result column="applicable_cust" jdbcType="VARCHAR" property="applicableCust" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    product_id, serial_number, product_name, refer_price, signory_id, signory_name, template_id, 
+    org_id, org_name, service_cycle, picture_url, product_type, view_count, status, approval_account, 
+    approval_comments, approval_time, release_time, ref_rate_min, ref_rate_max, is_online_loan, 
+    is_policy_pro, is_general_pro, is_rmb, loan_category_code, loan_category_name, loan_amount_min, 
+    loan_amount_max, loan_term_min, loan_term_max, assure_method_code, assure_method_name, 
+    product_feature, apply_condition, submit_material, applicable_cust, created_time, 
+    creator_account, modified_time, modifier_account, record_status
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_service_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_service_product
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_service_product
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria">
+    delete from tb_service_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
+    insert into tb_service_product (product_id, serial_number, product_name, 
+      refer_price, signory_id, signory_name, 
+      template_id, org_id, org_name, 
+      service_cycle, picture_url, product_type, 
+      view_count, status, approval_account, 
+      approval_comments, approval_time, release_time, 
+      ref_rate_min, ref_rate_max, is_online_loan, 
+      is_policy_pro, is_general_pro, is_rmb, 
+      loan_category_code, loan_category_name, loan_amount_min, 
+      loan_amount_max, loan_term_min, loan_term_max, 
+      assure_method_code, assure_method_name, product_feature, 
+      apply_condition, submit_material, applicable_cust, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
+    values (#{productId,jdbcType=VARCHAR}, #{serialNumber,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{referPrice,jdbcType=VARCHAR}, #{signoryId,jdbcType=VARCHAR}, #{signoryName,jdbcType=VARCHAR}, 
+      #{templateId,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, 
+      #{serviceCycle,jdbcType=VARCHAR}, #{pictureUrl,jdbcType=VARCHAR}, #{productType,jdbcType=VARCHAR}, 
+      #{viewCount,jdbcType=INTEGER}, #{status,jdbcType=VARCHAR}, #{approvalAccount,jdbcType=VARCHAR}, 
+      #{approvalComments,jdbcType=VARCHAR}, #{approvalTime,jdbcType=TIMESTAMP}, #{releaseTime,jdbcType=TIMESTAMP}, 
+      #{refRateMin,jdbcType=DOUBLE}, #{refRateMax,jdbcType=DOUBLE}, #{isOnlineLoan,jdbcType=VARCHAR}, 
+      #{isPolicyPro,jdbcType=VARCHAR}, #{isGeneralPro,jdbcType=VARCHAR}, #{isRmb,jdbcType=VARCHAR}, 
+      #{loanCategoryCode,jdbcType=VARCHAR}, #{loanCategoryName,jdbcType=VARCHAR}, #{loanAmountMin,jdbcType=DOUBLE}, 
+      #{loanAmountMax,jdbcType=DOUBLE}, #{loanTermMin,jdbcType=INTEGER}, #{loanTermMax,jdbcType=INTEGER}, 
+      #{assureMethodCode,jdbcType=VARCHAR}, #{assureMethodName,jdbcType=VARCHAR}, #{productFeature,jdbcType=VARCHAR}, 
+      #{applyCondition,jdbcType=VARCHAR}, #{submitMaterial,jdbcType=VARCHAR}, #{applicableCust,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
+    insert into tb_service_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="serialNumber != null">
+        serial_number,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="referPrice != null">
+        refer_price,
+      </if>
+      <if test="signoryId != null">
+        signory_id,
+      </if>
+      <if test="signoryName != null">
+        signory_name,
+      </if>
+      <if test="templateId != null">
+        template_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="orgName != null">
+        org_name,
+      </if>
+      <if test="serviceCycle != null">
+        service_cycle,
+      </if>
+      <if test="pictureUrl != null">
+        picture_url,
+      </if>
+      <if test="productType != null">
+        product_type,
+      </if>
+      <if test="viewCount != null">
+        view_count,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="approvalAccount != null">
+        approval_account,
+      </if>
+      <if test="approvalComments != null">
+        approval_comments,
+      </if>
+      <if test="approvalTime != null">
+        approval_time,
+      </if>
+      <if test="releaseTime != null">
+        release_time,
+      </if>
+      <if test="refRateMin != null">
+        ref_rate_min,
+      </if>
+      <if test="refRateMax != null">
+        ref_rate_max,
+      </if>
+      <if test="isOnlineLoan != null">
+        is_online_loan,
+      </if>
+      <if test="isPolicyPro != null">
+        is_policy_pro,
+      </if>
+      <if test="isGeneralPro != null">
+        is_general_pro,
+      </if>
+      <if test="isRmb != null">
+        is_rmb,
+      </if>
+      <if test="loanCategoryCode != null">
+        loan_category_code,
+      </if>
+      <if test="loanCategoryName != null">
+        loan_category_name,
+      </if>
+      <if test="loanAmountMin != null">
+        loan_amount_min,
+      </if>
+      <if test="loanAmountMax != null">
+        loan_amount_max,
+      </if>
+      <if test="loanTermMin != null">
+        loan_term_min,
+      </if>
+      <if test="loanTermMax != null">
+        loan_term_max,
+      </if>
+      <if test="assureMethodCode != null">
+        assure_method_code,
+      </if>
+      <if test="assureMethodName != null">
+        assure_method_name,
+      </if>
+      <if test="productFeature != null">
+        product_feature,
+      </if>
+      <if test="applyCondition != null">
+        apply_condition,
+      </if>
+      <if test="submitMaterial != null">
+        submit_material,
+      </if>
+      <if test="applicableCust != null">
+        applicable_cust,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumber != null">
+        #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="referPrice != null">
+        #{referPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="signoryId != null">
+        #{signoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="signoryName != null">
+        #{signoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCycle != null">
+        #{serviceCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null">
+        #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="viewCount != null">
+        #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccount != null">
+        #{approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalComments != null">
+        #{approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null">
+        #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="releaseTime != null">
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refRateMin != null">
+        #{refRateMin,jdbcType=DOUBLE},
+      </if>
+      <if test="refRateMax != null">
+        #{refRateMax,jdbcType=DOUBLE},
+      </if>
+      <if test="isOnlineLoan != null">
+        #{isOnlineLoan,jdbcType=VARCHAR},
+      </if>
+      <if test="isPolicyPro != null">
+        #{isPolicyPro,jdbcType=VARCHAR},
+      </if>
+      <if test="isGeneralPro != null">
+        #{isGeneralPro,jdbcType=VARCHAR},
+      </if>
+      <if test="isRmb != null">
+        #{isRmb,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCategoryCode != null">
+        #{loanCategoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCategoryName != null">
+        #{loanCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmountMin != null">
+        #{loanAmountMin,jdbcType=DOUBLE},
+      </if>
+      <if test="loanAmountMax != null">
+        #{loanAmountMax,jdbcType=DOUBLE},
+      </if>
+      <if test="loanTermMin != null">
+        #{loanTermMin,jdbcType=INTEGER},
+      </if>
+      <if test="loanTermMax != null">
+        #{loanTermMax,jdbcType=INTEGER},
+      </if>
+      <if test="assureMethodCode != null">
+        #{assureMethodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assureMethodName != null">
+        #{assureMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="productFeature != null">
+        #{productFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCondition != null">
+        #{applyCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="submitMaterial != null">
+        #{submitMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="applicableCust != null">
+        #{applicableCust,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProductCriteria" resultType="java.lang.Long">
+    select count(*) from tb_service_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_service_product
+    <set>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumber != null">
+        serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.referPrice != null">
+        refer_price = #{record.referPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signoryId != null">
+        signory_id = #{record.signoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signoryName != null">
+        signory_name = #{record.signoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.templateId != null">
+        template_id = #{record.templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgId != null">
+        org_id = #{record.orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orgName != null">
+        org_name = #{record.orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serviceCycle != null">
+        service_cycle = #{record.serviceCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pictureUrl != null">
+        picture_url = #{record.pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productType != null">
+        product_type = #{record.productType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.viewCount != null">
+        view_count = #{record.viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalAccount != null">
+        approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalComments != null">
+        approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.approvalTime != null">
+        approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.releaseTime != null">
+        release_time = #{record.releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.refRateMin != null">
+        ref_rate_min = #{record.refRateMin,jdbcType=DOUBLE},
+      </if>
+      <if test="record.refRateMax != null">
+        ref_rate_max = #{record.refRateMax,jdbcType=DOUBLE},
+      </if>
+      <if test="record.isOnlineLoan != null">
+        is_online_loan = #{record.isOnlineLoan,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isPolicyPro != null">
+        is_policy_pro = #{record.isPolicyPro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isGeneralPro != null">
+        is_general_pro = #{record.isGeneralPro,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isRmb != null">
+        is_rmb = #{record.isRmb,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loanCategoryCode != null">
+        loan_category_code = #{record.loanCategoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loanCategoryName != null">
+        loan_category_name = #{record.loanCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loanAmountMin != null">
+        loan_amount_min = #{record.loanAmountMin,jdbcType=DOUBLE},
+      </if>
+      <if test="record.loanAmountMax != null">
+        loan_amount_max = #{record.loanAmountMax,jdbcType=DOUBLE},
+      </if>
+      <if test="record.loanTermMin != null">
+        loan_term_min = #{record.loanTermMin,jdbcType=INTEGER},
+      </if>
+      <if test="record.loanTermMax != null">
+        loan_term_max = #{record.loanTermMax,jdbcType=INTEGER},
+      </if>
+      <if test="record.assureMethodCode != null">
+        assure_method_code = #{record.assureMethodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.assureMethodName != null">
+        assure_method_name = #{record.assureMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productFeature != null">
+        product_feature = #{record.productFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyCondition != null">
+        apply_condition = #{record.applyCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.submitMaterial != null">
+        submit_material = #{record.submitMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applicableCust != null">
+        applicable_cust = #{record.applicableCust,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_service_product
+    set product_id = #{record.productId,jdbcType=VARCHAR},
+      serial_number = #{record.serialNumber,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      refer_price = #{record.referPrice,jdbcType=VARCHAR},
+      signory_id = #{record.signoryId,jdbcType=VARCHAR},
+      signory_name = #{record.signoryName,jdbcType=VARCHAR},
+      template_id = #{record.templateId,jdbcType=VARCHAR},
+      org_id = #{record.orgId,jdbcType=VARCHAR},
+      org_name = #{record.orgName,jdbcType=VARCHAR},
+      service_cycle = #{record.serviceCycle,jdbcType=VARCHAR},
+      picture_url = #{record.pictureUrl,jdbcType=VARCHAR},
+      product_type = #{record.productType,jdbcType=VARCHAR},
+      view_count = #{record.viewCount,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=VARCHAR},
+      approval_account = #{record.approvalAccount,jdbcType=VARCHAR},
+      approval_comments = #{record.approvalComments,jdbcType=VARCHAR},
+      approval_time = #{record.approvalTime,jdbcType=TIMESTAMP},
+      release_time = #{record.releaseTime,jdbcType=TIMESTAMP},
+      ref_rate_min = #{record.refRateMin,jdbcType=DOUBLE},
+      ref_rate_max = #{record.refRateMax,jdbcType=DOUBLE},
+      is_online_loan = #{record.isOnlineLoan,jdbcType=VARCHAR},
+      is_policy_pro = #{record.isPolicyPro,jdbcType=VARCHAR},
+      is_general_pro = #{record.isGeneralPro,jdbcType=VARCHAR},
+      is_rmb = #{record.isRmb,jdbcType=VARCHAR},
+      loan_category_code = #{record.loanCategoryCode,jdbcType=VARCHAR},
+      loan_category_name = #{record.loanCategoryName,jdbcType=VARCHAR},
+      loan_amount_min = #{record.loanAmountMin,jdbcType=DOUBLE},
+      loan_amount_max = #{record.loanAmountMax,jdbcType=DOUBLE},
+      loan_term_min = #{record.loanTermMin,jdbcType=INTEGER},
+      loan_term_max = #{record.loanTermMax,jdbcType=INTEGER},
+      assure_method_code = #{record.assureMethodCode,jdbcType=VARCHAR},
+      assure_method_name = #{record.assureMethodName,jdbcType=VARCHAR},
+      product_feature = #{record.productFeature,jdbcType=VARCHAR},
+      apply_condition = #{record.applyCondition,jdbcType=VARCHAR},
+      submit_material = #{record.submitMaterial,jdbcType=VARCHAR},
+      applicable_cust = #{record.applicableCust,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
+    update tb_service_product
+    <set>
+      <if test="serialNumber != null">
+        serial_number = #{serialNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="referPrice != null">
+        refer_price = #{referPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="signoryId != null">
+        signory_id = #{signoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="signoryName != null">
+        signory_name = #{signoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="templateId != null">
+        template_id = #{templateId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=VARCHAR},
+      </if>
+      <if test="orgName != null">
+        org_name = #{orgName,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceCycle != null">
+        service_cycle = #{serviceCycle,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureUrl != null">
+        picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="productType != null">
+        product_type = #{productType,jdbcType=VARCHAR},
+      </if>
+      <if test="viewCount != null">
+        view_count = #{viewCount,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalAccount != null">
+        approval_account = #{approvalAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalComments != null">
+        approval_comments = #{approvalComments,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null">
+        approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="releaseTime != null">
+        release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refRateMin != null">
+        ref_rate_min = #{refRateMin,jdbcType=DOUBLE},
+      </if>
+      <if test="refRateMax != null">
+        ref_rate_max = #{refRateMax,jdbcType=DOUBLE},
+      </if>
+      <if test="isOnlineLoan != null">
+        is_online_loan = #{isOnlineLoan,jdbcType=VARCHAR},
+      </if>
+      <if test="isPolicyPro != null">
+        is_policy_pro = #{isPolicyPro,jdbcType=VARCHAR},
+      </if>
+      <if test="isGeneralPro != null">
+        is_general_pro = #{isGeneralPro,jdbcType=VARCHAR},
+      </if>
+      <if test="isRmb != null">
+        is_rmb = #{isRmb,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCategoryCode != null">
+        loan_category_code = #{loanCategoryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="loanCategoryName != null">
+        loan_category_name = #{loanCategoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="loanAmountMin != null">
+        loan_amount_min = #{loanAmountMin,jdbcType=DOUBLE},
+      </if>
+      <if test="loanAmountMax != null">
+        loan_amount_max = #{loanAmountMax,jdbcType=DOUBLE},
+      </if>
+      <if test="loanTermMin != null">
+        loan_term_min = #{loanTermMin,jdbcType=INTEGER},
+      </if>
+      <if test="loanTermMax != null">
+        loan_term_max = #{loanTermMax,jdbcType=INTEGER},
+      </if>
+      <if test="assureMethodCode != null">
+        assure_method_code = #{assureMethodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="assureMethodName != null">
+        assure_method_name = #{assureMethodName,jdbcType=VARCHAR},
+      </if>
+      <if test="productFeature != null">
+        product_feature = #{productFeature,jdbcType=VARCHAR},
+      </if>
+      <if test="applyCondition != null">
+        apply_condition = #{applyCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="submitMaterial != null">
+        submit_material = #{submitMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="applicableCust != null">
+        applicable_cust = #{applicableCust,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+    </set>
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.servicemarket.product.entity.TbServiceProduct">
+    update tb_service_product
+    set serial_number = #{serialNumber,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      refer_price = #{referPrice,jdbcType=VARCHAR},
+      signory_id = #{signoryId,jdbcType=VARCHAR},
+      signory_name = #{signoryName,jdbcType=VARCHAR},
+      template_id = #{templateId,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=VARCHAR},
+      org_name = #{orgName,jdbcType=VARCHAR},
+      service_cycle = #{serviceCycle,jdbcType=VARCHAR},
+      picture_url = #{pictureUrl,jdbcType=VARCHAR},
+      product_type = #{productType,jdbcType=VARCHAR},
+      view_count = #{viewCount,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      approval_account = #{approvalAccount,jdbcType=VARCHAR},
+      approval_comments = #{approvalComments,jdbcType=VARCHAR},
+      approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      ref_rate_min = #{refRateMin,jdbcType=DOUBLE},
+      ref_rate_max = #{refRateMax,jdbcType=DOUBLE},
+      is_online_loan = #{isOnlineLoan,jdbcType=VARCHAR},
+      is_policy_pro = #{isPolicyPro,jdbcType=VARCHAR},
+      is_general_pro = #{isGeneralPro,jdbcType=VARCHAR},
+      is_rmb = #{isRmb,jdbcType=VARCHAR},
+      loan_category_code = #{loanCategoryCode,jdbcType=VARCHAR},
+      loan_category_name = #{loanCategoryName,jdbcType=VARCHAR},
+      loan_amount_min = #{loanAmountMin,jdbcType=DOUBLE},
+      loan_amount_max = #{loanAmountMax,jdbcType=DOUBLE},
+      loan_term_min = #{loanTermMin,jdbcType=INTEGER},
+      loan_term_max = #{loanTermMax,jdbcType=INTEGER},
+      assure_method_code = #{assureMethodCode,jdbcType=VARCHAR},
+      assure_method_name = #{assureMethodName,jdbcType=VARCHAR},
+      product_feature = #{productFeature,jdbcType=VARCHAR},
+      apply_condition = #{applyCondition,jdbcType=VARCHAR},
+      submit_material = #{submitMaterial,jdbcType=VARCHAR},
+      applicable_cust = #{applicableCust,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT}
+    where product_id = #{productId,jdbcType=VARCHAR}
+  </update>
+</mapper>

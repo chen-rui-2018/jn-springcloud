@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.finance.dao.FinanceRecordsDao">
+
+    <!--支出录入查询-->
+    <select id="findDetail" resultType="com.jn.park.finance.model.FinanceRecordsFindDetailModel">
+        SELECT
+        sum(1) as 'total',
+        sum(CASE t.create_state WHEN 0 then 1 else 0 end) as 'complete',
+        sum(CASE t.create_state WHEN 1 then 1 else 0 end) as 'uncomplete',
+        CONCAT(ROUND(sum( CASE
+        WHEN (t.create_state =0 &amp;&amp; t.financer_sure =0)
+        THEN 1 ELSE 0  END)/sum(1) * 100,1),"%") as "integrity"
+        FROM
+            `tb_finance_record_information` t
+        WHERE
+            t.record_status = 1;
+    </select>
+
+
+    <!--支出录入查询-->
+    <select id="findAll" parameterType="com.jn.park.finance.model.FinanceRecordsFindAllModel" resultType="com.jn.park.finance.vo.FinanceRecordsFindAllVo">
+
+        select
+        t.name as "name",
+        t.flow_type as "flowtype",
+        t.creator_account as "creatoraccount",
+        t.department_name as "departmentname",
+        t.deadline as "deadline",
+        case t.create_state when '1' then '未录入' else '已完成' end  as "createstate",
+        case t.financer_sure when '1' then '未确认' else '已确认' end  as "financersure",
+        case t.early_warning when '1' then '未预警' else '已预警' end  as "earlywarning",
+        case t.leader_early_warning when '1' then '未预警' else '已预警' end  as "leaderearlywarning"
+         FROM  tb_finance_record_information t
+        where
+        t.record_status = 1
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(createState)">
+        AND t.create_state = #{createState}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(financerSure)">
+        AND t.financer_sure = #{financerSure}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(departmentId)">
+        AND t.department_id =#{departmentId}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(creatorAccount)">
+        AND t.creator_account = #{creatorAccount}
+        </if>
+        <if test="@org.apache.commons.lang.StringUtils@isNotBlank(name)">
+        AND t.name = #{name}
+        </if>
+
+        ORDER BY ${orderByClause}
+    </select>
+
+</mapper>

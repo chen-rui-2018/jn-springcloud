@@ -30,7 +30,7 @@ public interface NoticeService {
      * @param noticePage 查询条件
      * @return
      */
-    PaginationData list(NoticePage noticePage);
+    PaginationData<List<Notice>> list(NoticePage noticePage);
 
     /**
      * 查询公告详情

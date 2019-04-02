@@ -14,7 +14,7 @@
       @open="handleOpen"
       @close="handleClose">
       <!-- <sidebar-item v-for="route in permission_routers" :key="route.path" :item="route" :base-path="route.path" /> -->
-      <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id"/>
+      <sidebar-item v-for="(item,index,key) in menuItems" :key="key" :item="item" :index="item.id" />
     </el-menu>
   </el-scrollbar>
 </template>

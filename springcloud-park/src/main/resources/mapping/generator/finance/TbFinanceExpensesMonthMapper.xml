@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.finance.dao.TbFinanceExpensesMonthMapper">
   <resultMap id="BaseResultMap" type="com.jn.park.finance.entity.TbFinanceExpensesMonth">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="cost_happend_time" jdbcType="CHAR" property="costHappendTime" />
-    <result column="cost" jdbcType="DECIMAL" property="cost" />
-    <result column="cost_after_type_id" jdbcType="INTEGER" property="costAfterTypeId" />
-    <result column="cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
-    <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
-    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
-    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="emonth_id" jdbcType="INTEGER" property="id" />
+    <result column="emonth_cost_happend_time" jdbcType="CHAR" property="costHappendTime" />
+    <result column="emonth_cost" jdbcType="DECIMAL" property="cost" />
+    <result column="emonth_cost_after_type_id" jdbcType="VARCHAR" property="costAfterTypeId" />
+    <result column="emonth_cost_after_type_name" jdbcType="VARCHAR" property="costAfterTypeName" />
+    <result column="emonth_department_id" jdbcType="VARCHAR" property="departmentId" />
+    <result column="emonth_department_name" jdbcType="VARCHAR" property="departmentName" />
+    <result column="emonth_record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="emonth_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="emonth_created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="emonth_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="emonth_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -74,9 +74,12 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, cost_happend_time, cost, cost_after_type_id, cost_after_type_name, department_id, 
-    department_name, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    emonth.id as emonth_id, emonth.cost_happend_time as emonth_cost_happend_time, emonth.cost as emonth_cost, 
+    emonth.cost_after_type_id as emonth_cost_after_type_id, emonth.cost_after_type_name as emonth_cost_after_type_name, 
+    emonth.department_id as emonth_department_id, emonth.department_name as emonth_department_name, 
+    emonth.record_status as emonth_record_status, emonth.creator_account as emonth_creator_account, 
+    emonth.created_time as emonth_created_time, emonth.modifier_account as emonth_modifier_account, 
+    emonth.modified_time as emonth_modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesMonthExample" resultMap="BaseResultMap">
     select
@@ -84,7 +87,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_finance_expenses_month
+    from tb_finance_expenses_month emonth
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,15 +98,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_finance_expenses_month
-    where id = #{id,jdbcType=INTEGER}
+    from tb_finance_expenses_month emonth
+    where emonth.id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from tb_finance_expenses_month
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesMonthExample">
-    delete from tb_finance_expenses_month
+    delete from tb_finance_expenses_month emonth
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -116,7 +119,7 @@
       cost_after_type_name, department_id, department_name, 
       record_status, creator_account, created_time, 
       modifier_account, modified_time)
-    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costAfterTypeId,jdbcType=INTEGER}, 
+    values (#{costHappendTime,jdbcType=CHAR}, #{cost,jdbcType=DECIMAL}, #{costAfterTypeId,jdbcType=VARCHAR}, 
       #{costAfterTypeName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
       #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
@@ -169,7 +172,7 @@
         #{cost,jdbcType=DECIMAL},
       </if>
       <if test="costAfterTypeId != null">
-        #{costAfterTypeId,jdbcType=INTEGER},
+        #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         #{costAfterTypeName,jdbcType=VARCHAR},
@@ -198,49 +201,49 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.park.finance.entity.TbFinanceExpensesMonthExample" resultType="java.lang.Long">
-    select count(*) from tb_finance_expenses_month
+    select count(*) from tb_finance_expenses_month emonth
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_finance_expenses_month
+    update tb_finance_expenses_month emonth
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        emonth.id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.costHappendTime != null">
-        cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
+        emonth.cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
       </if>
       <if test="record.cost != null">
-        cost = #{record.cost,jdbcType=DECIMAL},
+        emonth.cost = #{record.cost,jdbcType=DECIMAL},
       </if>
       <if test="record.costAfterTypeId != null">
-        cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
+        emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="record.costAfterTypeName != null">
-        cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
+        emonth.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
-        department_id = #{record.departmentId,jdbcType=VARCHAR},
+        emonth.department_id = #{record.departmentId,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentName != null">
-        department_name = #{record.departmentName,jdbcType=VARCHAR},
+        emonth.department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        record_status = #{record.recordStatus,jdbcType=TINYINT},
+        emonth.record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
       <if test="record.creatorAccount != null">
-        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        emonth.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        emonth.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        emonth.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        emonth.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -248,19 +251,19 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_finance_expenses_month
-    set id = #{record.id,jdbcType=INTEGER},
-      cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
-      cost = #{record.cost,jdbcType=DECIMAL},
-      cost_after_type_id = #{record.costAfterTypeId,jdbcType=INTEGER},
-      cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
-      department_id = #{record.departmentId,jdbcType=VARCHAR},
-      department_name = #{record.departmentName,jdbcType=VARCHAR},
-      record_status = #{record.recordStatus,jdbcType=TINYINT},
-      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_finance_expenses_month emonth
+    set emonth.id = #{record.id,jdbcType=INTEGER},
+      emonth.cost_happend_time = #{record.costHappendTime,jdbcType=CHAR},
+      emonth.cost = #{record.cost,jdbcType=DECIMAL},
+      emonth.cost_after_type_id = #{record.costAfterTypeId,jdbcType=VARCHAR},
+      emonth.cost_after_type_name = #{record.costAfterTypeName,jdbcType=VARCHAR},
+      emonth.department_id = #{record.departmentId,jdbcType=VARCHAR},
+      emonth.department_name = #{record.departmentName,jdbcType=VARCHAR},
+      emonth.record_status = #{record.recordStatus,jdbcType=TINYINT},
+      emonth.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      emonth.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      emonth.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      emonth.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -275,7 +278,7 @@
         cost = #{cost,jdbcType=DECIMAL},
       </if>
       <if test="costAfterTypeId != null">
-        cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+        cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       </if>
       <if test="costAfterTypeName != null">
         cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
@@ -308,7 +311,7 @@
     update tb_finance_expenses_month
     set cost_happend_time = #{costHappendTime,jdbcType=CHAR},
       cost = #{cost,jdbcType=DECIMAL},
-      cost_after_type_id = #{costAfterTypeId,jdbcType=INTEGER},
+      cost_after_type_id = #{costAfterTypeId,jdbcType=VARCHAR},
       cost_after_type_name = #{costAfterTypeName,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},

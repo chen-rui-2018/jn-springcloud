@@ -65,7 +65,10 @@
     >
       <el-table
         :data="rowTableData"
+        :cell-style="tableRowStyle"
         :span-method="arraySpanMethod"
+        :cell-class-name="rowClass"
+        :header-cell-style="{background:'rgb(242, 242, 242)'}"
       >
         <el-table-column
           label="会议室"
@@ -80,6 +83,7 @@
             prop="[0].title"
             label="名称"
             align="center"
+            min-width="100"
           />
           <el-table-column
             prop="[0].building"
@@ -97,7 +101,7 @@
             :label="item"
             :prop="index+''"
             align="center"
-            min-width="50"
+            min-width="45"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -105,8 +109,8 @@
                 :post-id="scope.row[index].id"
                 :post-title="scope.row[index].title"
                 :post-time="item"
-                :disabled="befoTime(item)"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
+                :disabled="listQuery.meetingStartTime | setColor(item)"
+                :class=" listQuery.meetingStartTime | setColor(item)?'disabledStyle':'textStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -115,133 +119,6 @@
             /></template>
           </el-table-column>
         </el-table-column>
-        <!-- <el-table-column
-            label="9:30"
-            prop="[1]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[1].status=='0'"
-                :post-id="scope.row[1].id"
-                :post-title="scope.row[1].title"
-                :post-time="'9:30'"
-                :disabled="befoTime('09:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[1].status=='1'"
-                :post-title="scope.row[1].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="10:00"
-            prop="[2]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[2].status=='0'"
-                :post-id="scope.row[2].id"
-                :post-title="scope.row[2].title"
-                :post-time="'10:00'"
-                :disabled="befoTime('10:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[2].status=='1'"
-                :post-title="scope.row[2].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="10:30"
-            prop="[3]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[3].status=='0'"
-                :post-id="scope.row[3].id"
-                :post-title="scope.row[3].title"
-                :post-time="'10:30'"
-                :disabled="befoTime('10:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[3].status=='1'"
-                :post-title="scope.row[3].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="11:00"
-            prop="[4]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[4].status=='0'"
-                :post-id="scope.row[4].id"
-                :post-title="scope.row[4].title"
-                :post-time="'11:00'"
-                :disabled="befoTime('11:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[4].status=='1'"
-                :post-title="scope.row[4].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="11:30"
-            prop="[5]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[5].status=='0'"
-                :post-id="scope.row[5].id"
-                :post-title="scope.row[5].title"
-                :post-time="'11:30'"
-                :disabled="befoTime('11:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[5].status=='1'"
-                :post-title="scope.row[5].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="12:00"
-            prop="[6]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[6].status=='0'"
-                :post-id="scope.row[6].id"
-                :post-title="scope.row[6].title"
-                :post-time="'12:00'"
-                :disabled="befoTime('12:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[6].status=='1'"
-                :post-title="scope.row[6].name"
-            /></template>
-          </el-table-column>
-        </el-table-column> -->
         <el-table-column
           label="下午"
           align="center"
@@ -252,7 +129,7 @@
             :label="item"
             :prop="index+7+''"
             align="center"
-            min-width="50"
+            min-width="45"
           >
             <template slot-scope="scope">
               <meeting-div1
@@ -260,8 +137,8 @@
                 :post-id="scope.row[7+index].id"
                 :post-title="scope.row[7+index].title"
                 :post-time="item"
-                :disabled="befoTime(item)"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
+                :disabled="listQuery.meetingStartTime | setColor(item)"
+                :class=" listQuery.meetingStartTime | setColor(item)?'disabledStyle':'textStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -269,195 +146,6 @@
                 :post-title="scope.row[7+index].name"
             /></template>
           </el-table-column>
-          <!-- <el-table-column
-            label="14:00"
-            prop="[8]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[8].status=='0'"
-                :post-id="scope.row[8].id"
-                :post-title="scope.row[8].title"
-                :post-time="'14:00'"
-                :disabled="befoTime('14:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[8].status=='1'"
-                :post-title="scope.row[8].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="14:30"
-            prop="[9]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[9].status=='0'"
-                :post-id="scope.row[9].id"
-                :post-title="scope.row[9].title"
-                :post-time="'14:30'"
-                :disabled="befoTime('14:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[9].status=='1'"
-                :post-title="scope.row[9].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="15:00"
-            prop="[10]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[10].status=='0'"
-                :post-id="scope.row[10].id"
-                :post-title="scope.row[10].title"
-                :post-time="'15:00'"
-                :disabled="befoTime('15:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[10].status=='1'"
-                :post-title="scope.row[10].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="15:30"
-            prop="[11]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[11].status=='0'"
-                :post-id="scope.row[11].id"
-                :post-title="scope.row[11].title"
-                :post-time="'15:30'"
-                :disabled="befoTime('15:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[11].status=='1'"
-                :post-title="scope.row[11].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="16:00"
-            prop="[12]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[12].status=='0'"
-                :post-id="scope.row[12].id"
-                :post-title="scope.row[12].title"
-                :post-time="'16:00'"
-                :disabled="befoTime('16:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[12].status=='1'"
-                :post-title="scope.row[12].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="16:30"
-            prop="[13]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[13].status=='0'"
-                :post-id="scope.row[13].id"
-                :post-title="scope.row[13].title"
-                :post-time="'16:30'"
-                :disabled="befoTime('16:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[13].status=='1'"
-                :post-title="scope.row[13].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="17:00"
-            prop="[14]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[14].status=='0'"
-                :post-id="scope.row[14].id"
-                :post-title="scope.row[14].title"
-                :post-time="'17:00'"
-                :disabled="befoTime('17:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[14].status=='1'"
-                :post-title="scope.row[14].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="17:30"
-            prop="[15]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[15].status=='0'"
-                :post-id="scope.row[15].id"
-                :post-title="scope.row[15].title"
-                :post-time="'17:30'"
-                :disabled="befoTime('17:30')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[15].status=='1'"
-                :post-title="scope.row[15].name"
-            /></template>
-          </el-table-column>
-          <el-table-column
-            label="18:00"
-            prop="[16]"
-            align="center"
-            min-width="50"
-          >
-            <template slot-scope="scope">
-              <meeting-div1
-                v-if="scope.row[16].status=='0'"
-                :post-id="scope.row[16].id"
-                :post-title="scope.row[16].title"
-                :post-time="'18:00'"
-                :disabled="befoTime('18:00')"
-                :class="Isdisabled?'textStyle':'disabledStyle'"
-                @meeting_order="meeting_order"
-              />
-              <meeting-div2
-                v-if="scope.row[16].status=='1'"
-                :post-title="scope.row[16].name"
-            /></template>
-          </el-table-column> -->
         </el-table-column>
       </el-table>
       <div class="pagination-container">
@@ -491,7 +179,7 @@ export default {
       // 预约组件
       props: ['postId', 'postTitle', 'postTime'],
       template:
-        '<button class="textStyle"  @click="meeting_order(postId,postTitle,postTime)">预约</button>',
+        '<button class=""  @click="meeting_order(postId,postTitle,postTime)">预约</button>',
       methods: {
         meeting_order(id, title, time) {
           // 会议预约
@@ -502,11 +190,25 @@ export default {
     'meeting-div2': {
       // 会议组件
       props: ['postTitle'],
-      template: '<div class="textBgc" >{{postTitle}}</div>',
+      template: '<div class="" >{{postTitle}}</div>',
       methods: {}
     }
   },
-
+  filters: {
+    setColor: (value, time) => {
+      var timeArr = time.split(':')
+      if (timeArr[0] < 10) {
+        time = '0' + time
+      }
+      var buttonTime = value + ' ' + time + ':00'
+      var today_time = new Date().getTime()
+      if (new Date(buttonTime) - today_time < 0) {
+        return true
+      } else {
+        return false
+      }
+    }
+  },
   data() {
     return {
       downData: [
@@ -521,8 +223,181 @@ export default {
         '17:30',
         '18:00'
       ],
+      staticData: {
+        data: {
+          'rows': [{
+            'id': '1f5c6df4-8ff7-46c6-bdf0-cf5ccb38ee1c',
+            'name': '多功能厅',
+            'building': '多功能厅',
+            'floor': '2层',
+            'roomNumber': '',
+            'position': '102栋2层101',
+            'explains': '测试数据',
+            'recordStatus': 1,
+            'capacity': '10',
+            'remark': null,
+            'creatorAccount': '10000',
+            'createdTime': '2019-02-27 16:49',
+            'modifierAccount': '10000',
+            'modifiedTime': '2019-02-27 16:49',
+            'meetingList': [{
+              'id': '3bf517a3-6864-4888-afff-653edc0b45b4',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 14:00:00',
+              'endTime': '2019-03-16 14:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            }]
+          },
+          {
+            'id': '1fcc5ba3-f00a-461d-a4fc-1607f6dd187b',
+            'name': '党建会议室',
+            'building': '多功能厅',
+            'floor': '3层',
+            'roomNumber': '',
+            'position': '102栋2层101',
+            'explains': '测试数据',
+            'recordStatus': 1,
+            'capacity': '10',
+            'remark': null,
+            'creatorAccount': '10000',
+            'createdTime': '2019-02-28 18:23',
+            'modifierAccount': null,
+            'modifiedTime': '2019-02-28 18:24',
+            'meetingList': [{
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 10:00:00',
+              'endTime': '2019-03-16 11:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            },
+            {
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 15:00:00',
+              'endTime': '2019-03-16 15:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试1234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            },
+            {
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 15:30:00',
+              'endTime': '2019-03-16 16:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试1234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            },
+            {
+              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+              'workOrderNum': null,
+              'startTime': '2019-03-16 17:00:00',
+              'endTime': '2019-03-16 17:30:00',
+              'meetingRoomId': null,
+              'approvalStatus': null,
+              'recordStatus': null,
+              'creatorAccount': null,
+              'createdTime': null,
+              'modifierAccount': null,
+              'modifiedTime': null,
+              'userIdStr': null,
+              'applicant': null,
+              'applicationTime': null,
+              'signInQr': null,
+              'wechatRemind': null,
+              'messageRemind': null,
+              'pcRemind': null,
+              'appRemind': null,
+              'isRemind': null,
+              'title': '测试1234',
+              'approvalRole': null,
+              'approvalUser': null,
+              'approvalOpinion': null,
+              'meetingStatus': null
+            }]
+          }
+          ]
+        }
+
+      },
       upData: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00'],
-      Isdisabled: '',
+      Isdisabled: true,
       errorTime: true,
       errorText: '',
       listQuery: {
@@ -563,13 +438,40 @@ export default {
       leftCol: 3 // 数据左侧列数
     }
   },
-
   created() {
     this.initList()
     this.initData(null)
   },
 
   methods: {
+
+    rowClass({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex >= this.leftCol) {
+        if (
+          this.rowTableData[rowIndex][columnIndex - this.leftCol].status === 1
+        ) {
+          return 'meetingBgc'
+        } else if (
+          this.rowTableData[rowIndex][columnIndex - this.leftCol].status === 2
+        ) {
+          return 'meetingBgc'
+        }
+      }
+    },
+    // 修改table tr行的背景色
+    tableRowStyle({ row, rowIndex, column, columnIndex }) {
+      // const sbb = this.arraySpanMethod()
+      // console.log(sbb)
+      if (columnIndex === 1) { // 指定列号
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none;'
+      } else if (columnIndex === 2) {
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none;'
+      } else if (columnIndex === 0) {
+        return 'background:rgb(242, 242, 242); border:1px solid #ccc;border-left:none;border-bottom:none; border'
+      } else {
+        return ''
+      }
+    },
     // 格式化日期
     formatDate(year, month, day) {
       const y = year
@@ -630,7 +532,6 @@ export default {
         }
       }
     },
-
     // 上一個月   传入当前年份和月份
     pickPre(year, month) {
       this.daysUL = []
@@ -677,11 +578,6 @@ export default {
         this.errorTime = false
         this.errorText = '对不起,您不能预约当前日期之前的会议,请重新选择'
         return
-      } else if (time < -2) {
-        alert('对不起,您只能预约3天之内的会议,请重新选择')
-        this.errorTime = false
-        this.errorText = '对不起,您只能预约3天之内的会议,请重新选择'
-        return
       } else {
         this.errorTime = true
       }
@@ -701,18 +597,6 @@ export default {
         }
       })
     },
-    // 判断当前时间和按钮时间
-    befoTime(time) {
-      var buttonTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
-      var today_time = new Date().getTime()
-      if (new Date(buttonTime) - today_time < 0) {
-        this.Isdisabled = false
-        return true
-      } else {
-        this.Isdisabled = true
-        return false
-      }
-    },
     // 点击预约按钮的时候
     meeting_order(id, title, time) {
       // 会议预约
@@ -720,12 +604,12 @@ export default {
       if (timeArr[0] < 10) {
         time = '0' + time
       }
-      // var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
-      // var today_time = new Date().getTime()
-      // if (new Date(clickTime) - today_time < 0) {
-      //   alert('对不起,会议预约时间必须大于当前时间,请重新选择')
-      //   return
-      // }
+      var clickTime = this.listQuery.meetingStartTime + ' ' + time + ':00'
+      var today_time = new Date().getTime()
+      if (new Date(clickTime) - today_time < 0) {
+        alert('对不起,会议预约时间必须大于当前时间,请重新选择')
+        return
+      }
       this.$router.push({
         name: 'meetingApplication',
         query: {
@@ -746,6 +630,12 @@ export default {
         // .replace(/^.*T/, '')
         // .slice(0, 5)
         .split(':')
+      // if (_end[1] === '00') {
+      //   _end[0] = _end[0] - 1
+      // } else {
+      //   _end[1] = parseInt(_end[1] - 1)
+      // }
+      // console.log(_end)
       function getColNum(num) {
         var _num_a = parseInt(num[0])
         var _num_b = parseInt(num[1])
@@ -859,6 +749,7 @@ export default {
     arraySpanMethod({ row, column, rowIndex, columnIndex }) {
       // 合并单元格
       var _num = this.leftCol
+
       if (this.rowTableData.length === 0) {
         return [1, 1]
       }
@@ -892,7 +783,11 @@ export default {
 </script>
 
 <style lang="scss">
+body .el-table th.gutter{
+    display: table-cell!important;
+}
 .conferenceReservation {
+
   display: flex;
   display: -webkit-box;
 
@@ -902,8 +797,16 @@ export default {
   .el-table--border th:first-child .cell {
     padding: 0px;
   }
+  .el-table thead.has-gutter th{
+        border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+  }
+  .el-table--border, .el-table--group {
+    border: 1px solid #ccc;
+}
   .table {
     margin-left: 15px;
+    // width: 85%;
     flex: 8;
     .textStyle {
       color: #090;
@@ -919,9 +822,10 @@ export default {
       border: none;
       cursor: default;
     }
-    .textBgc {
-      color: rgb(0, 176, 240);
-    }
+    // .textBgc {
+    //   // background: blue;
+    //   color: rgb(0, 176, 240);
+    // }
     .el-pagination {
       margin-top: 15px;
     }
@@ -987,5 +891,9 @@ export default {
 .errorStyle {
   line-height: 392px;
   margin: 0 auto;
+}
+.meetingBgc{
+  background: rgb(0, 176, 240);
+  color:black;
 }
 </style>

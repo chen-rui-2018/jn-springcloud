@@ -19,19 +19,19 @@ public class FinanceBudgetHistoryModel implements Serializable {
 
     private static final long serialVersionUID = -5422189870286665253L;
 
-    @ApiModelProperty("费用类型ID")
-    private Integer costTypeId;
+    @ApiModelProperty(value = "费用类型ID",example = "1")
+    private String costTypeId;
 
-    @ApiModelProperty("费用类型名称")
+    @ApiModelProperty(value="费用类型名称",example = "差旅支出")
     private String costTypeName;
 
-    @ApiModelProperty("部门")
+    @ApiModelProperty(value="部门",example = "281f4005-0363-4528-92a3-60a730532e53")
     private String departmentId;
 
-    @ApiModelProperty("部门名称")
+    @ApiModelProperty(value="部门名称",example = "行政综合部")
     private String departmentName;
 
-    @ApiModelProperty("数据月份")
+    @ApiModelProperty(value="数据月份",example = "201901")
     private String budgetMonth;
 
     @ApiModelProperty("预算金额")
@@ -43,11 +43,11 @@ public class FinanceBudgetHistoryModel implements Serializable {
     @ApiModelProperty("创建者账号")
     private String creatorAccount;
 
-    public Integer getCostTypeId() {
+    public String getCostTypeId() {
         return costTypeId;
     }
 
-    public void setCostTypeId(Integer costTypeId) {
+    public void setCostTypeId(String costTypeId) {
         this.costTypeId = costTypeId;
     }
 

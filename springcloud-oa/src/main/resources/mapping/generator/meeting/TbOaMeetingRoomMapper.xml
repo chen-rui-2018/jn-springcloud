@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.meeting.dao.TbOaMeetingRoomMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.meeting.entity.TbOaMeetingRoom">
-    <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
-    <result column="meetingroom_name" jdbcType="VARCHAR" property="name" />
-    <result column="meetingroom_building" jdbcType="VARCHAR" property="building" />
-    <result column="meetingroom_floor" jdbcType="VARCHAR" property="floor" />
-    <result column="meetingroom_room_number" jdbcType="VARCHAR" property="roomNumber" />
-    <result column="meetingroom_position" jdbcType="VARCHAR" property="position" />
-    <result column="meetingroom_explains" jdbcType="VARCHAR" property="explains" />
-    <result column="meetingroom_record_status" jdbcType="VARCHAR" property="recordStatus" />
-    <result column="meetingroom_capacity" jdbcType="VARCHAR" property="capacity" />
-    <result column="meetingroom_remark" jdbcType="VARCHAR" property="remark" />
-    <result column="meetingroom_creator_account" jdbcType="VARCHAR" property="creatorAccount" />
-    <result column="meetingroom_created_time" jdbcType="TIMESTAMP" property="createdTime" />
-    <result column="meetingroom_modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
-    <result column="meetingroom_modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="building" jdbcType="VARCHAR" property="building" />
+    <result column="floor" jdbcType="VARCHAR" property="floor" />
+    <result column="room_number" jdbcType="VARCHAR" property="roomNumber" />
+    <result column="position" jdbcType="VARCHAR" property="position" />
+    <result column="explains" jdbcType="VARCHAR" property="explains" />
+    <result column="record_status" jdbcType="VARCHAR" property="recordStatus" />
+    <result column="capacity" jdbcType="VARCHAR" property="capacity" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,13 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    meetingroom.id as meetingroom_id, meetingroom.name as meetingroom_name, meetingroom.building as meetingroom_building, 
-    meetingroom.floor as meetingroom_floor, meetingroom.room_number as meetingroom_room_number, 
-    meetingroom.position as meetingroom_position, meetingroom.explains as meetingroom_explains, 
-    meetingroom.record_status as meetingroom_record_status, meetingroom.capacity as meetingroom_capacity, 
-    meetingroom.remark as meetingroom_remark, meetingroom.creator_account as meetingroom_creator_account, 
-    meetingroom.created_time as meetingroom_created_time, meetingroom.modifier_account as meetingroom_modifier_account, 
-    meetingroom.modified_time as meetingroom_modified_time
+    id, name, building, floor, room_number, position, explains, record_status, capacity, 
+    remark, creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria" resultMap="BaseResultMap">
     select
@@ -90,7 +85,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_room meetingroom
+    from tb_oa_meeting_room
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,15 +96,15 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_oa_meeting_room meetingroom
-    where meetingroom.id = #{id,jdbcType=VARCHAR}
+    from tb_oa_meeting_room
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_oa_meeting_room
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria">
-    delete from tb_oa_meeting_room meetingroom
+    delete from tb_oa_meeting_room
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -218,55 +213,55 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.oa.meeting.entity.TbOaMeetingRoomCriteria" resultType="java.lang.Long">
-    select count(*) from tb_oa_meeting_room meetingroom
+    select count(*) from tb_oa_meeting_room
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_oa_meeting_room meetingroom
+    update tb_oa_meeting_room
     <set>
       <if test="record.id != null">
-        meetingroom.id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.name != null">
-        meetingroom.name = #{record.name,jdbcType=VARCHAR},
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.building != null">
-        meetingroom.building = #{record.building,jdbcType=VARCHAR},
+        building = #{record.building,jdbcType=VARCHAR},
       </if>
       <if test="record.floor != null">
-        meetingroom.floor = #{record.floor,jdbcType=VARCHAR},
+        floor = #{record.floor,jdbcType=VARCHAR},
       </if>
       <if test="record.roomNumber != null">
-        meetingroom.room_number = #{record.roomNumber,jdbcType=VARCHAR},
+        room_number = #{record.roomNumber,jdbcType=VARCHAR},
       </if>
       <if test="record.position != null">
-        meetingroom.position = #{record.position,jdbcType=VARCHAR},
+        position = #{record.position,jdbcType=VARCHAR},
       </if>
       <if test="record.explains != null">
-        meetingroom.explains = #{record.explains,jdbcType=VARCHAR},
+        explains = #{record.explains,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
-        meetingroom.record_status = #{record.recordStatus,jdbcType=VARCHAR},
+        record_status = #{record.recordStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.capacity != null">
-        meetingroom.capacity = #{record.capacity,jdbcType=VARCHAR},
+        capacity = #{record.capacity,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
-        meetingroom.remark = #{record.remark,jdbcType=VARCHAR},
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.creatorAccount != null">
-        meetingroom.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
-        meetingroom.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifierAccount != null">
-        meetingroom.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.modifiedTime != null">
-        meetingroom.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
     <if test="_parameter != null">
@@ -274,21 +269,21 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_oa_meeting_room meetingroom
-    set meetingroom.id = #{record.id,jdbcType=VARCHAR},
-      meetingroom.name = #{record.name,jdbcType=VARCHAR},
-      meetingroom.building = #{record.building,jdbcType=VARCHAR},
-      meetingroom.floor = #{record.floor,jdbcType=VARCHAR},
-      meetingroom.room_number = #{record.roomNumber,jdbcType=VARCHAR},
-      meetingroom.position = #{record.position,jdbcType=VARCHAR},
-      meetingroom.explains = #{record.explains,jdbcType=VARCHAR},
-      meetingroom.record_status = #{record.recordStatus,jdbcType=VARCHAR},
-      meetingroom.capacity = #{record.capacity,jdbcType=VARCHAR},
-      meetingroom.remark = #{record.remark,jdbcType=VARCHAR},
-      meetingroom.creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
-      meetingroom.created_time = #{record.createdTime,jdbcType=TIMESTAMP},
-      meetingroom.modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
-      meetingroom.modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    update tb_oa_meeting_room
+    set id = #{record.id,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      building = #{record.building,jdbcType=VARCHAR},
+      floor = #{record.floor,jdbcType=VARCHAR},
+      room_number = #{record.roomNumber,jdbcType=VARCHAR},
+      position = #{record.position,jdbcType=VARCHAR},
+      explains = #{record.explains,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=VARCHAR},
+      capacity = #{record.capacity,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>

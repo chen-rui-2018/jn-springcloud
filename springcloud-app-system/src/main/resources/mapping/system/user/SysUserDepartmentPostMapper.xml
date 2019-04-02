@@ -116,24 +116,32 @@
 
     <select id="findDepartmentAndPostByUserId" parameterType="java.lang.String"
             resultType="com.jn.system.vo.SysDepartmentPostVO">
-        select
-            t2.id as departmentId,
-            t2.department_name as departmentName,
-            t2.parent_id as parentId,
+        SELECT
+            t2.id AS departmentId,
+            t2.department_name AS departmentName,
+            t2.parent_id AS parentId,
             t2.`level`,
-            t3.id as postId ,
-            t3.post_name as postName,
+            t3.id AS postId,
+            t3.post_name AS postName,
             t1.user_id,
-            t1.is_default as isDefault
-            from tb_sys_user_department_post t1,tb_sys_department t2,
-            tb_sys_post t3
-            where
+            t1.is_default AS isDefault,
+            t4.id as postTypeId,
+            t4.post_type_name as postTypeName
+        FROM
+            tb_sys_user_department_post t1,
+            tb_sys_department t2,
+            tb_sys_post t3,
+            tb_sys_post_type t4
+        WHERE
             t1.department_id = t2.id
-            AND t1.post_id = t3.id
-            and t1.`record_status` = 1
-            and t2.`record_status` = 1
-            and t3.`record_status` = 1
-            and t1.user_id = #{id,jdbcType=VARCHAR}
-            ORDER BY t1.is_default DESC
+        AND t1.post_id = t3.id
+        AND t3.post_type_id = t4.id
+        AND t1.`record_status` = 1
+        AND t2.`record_status` = 1
+        AND t3.`record_status` = 1
+        AND t4.record_status = 1
+        AND t1.user_id = #{id,jdbcType=VARCHAR}
+        ORDER BY
+            t1.is_default DESC
     </select>
 </mapper>

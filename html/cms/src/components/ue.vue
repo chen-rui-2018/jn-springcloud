@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="ueQuidtor">
     <script id="editor" type="text/plain" />
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
     this.editor.addListener('ready', function() {
       setTimeout(function() {
         _this.editor.setContent(_this.defaultMsg) // 确保UE加载完成后，放入内容。
-      }, 50)
+      }, 500)
     })
   },
   destroyed() {
@@ -41,3 +41,11 @@ export default {
   }
 }
 </script>
+<style  lang="scss">
+.ueQuidtor{
+
+   .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+    line-height: 22px !important;
+}
+}
+</style>

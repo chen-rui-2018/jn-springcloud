@@ -2,6 +2,7 @@ package com.jn.park.finance.service.impl;
 
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.Result;
+import com.jn.common.util.DateUtils;
 import com.jn.park.finance.dao.FinanceBudgetDao;
 import com.jn.park.finance.dao.TbFinanceBudgetHistoryMapper;
 import com.jn.park.finance.dao.TbFinanceTotalBudgetMapper;
@@ -15,6 +16,7 @@ import com.jn.park.finance.model.FinanceBudgetHistoryQueryModel;
 import com.jn.park.finance.model.FinanceBudgetMoneyModel;
 import com.jn.park.finance.model.FinanceBudgetQueryModel;
 import com.jn.park.finance.service.FinanceBudgetService;
+import com.jn.park.finance.vo.FianceDynamicTableVo;
 import com.jn.park.finance.vo.FinanceBudgetHistoryVo;
 import com.jn.park.finance.vo.FinanceTotalBudgetVo;
 import com.jn.system.log.annotation.ServiceLog;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -49,15 +52,42 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     @ServiceLog(doAction = "总预算查询")
     @Override
-    public List<FinanceTotalBudgetVo> selectTotalBudget(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount) {
+    public FianceDynamicTableVo<List<FinanceTotalBudgetVo>> selectTotalBudget(FinanceBudgetQueryModel financeBudgetQueryModel, String userAccount) {
         List<FinanceTotalBudgetVo> financeTotalBudgetVoList=financeBudgetDao.selectTotalBudget(financeBudgetQueryModel);
-        return financeTotalBudgetVoList;
+
+        if(null==financeTotalBudgetVoList||financeTotalBudgetVoList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceTotalBudgetVo>> vo=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        financeTotalBudgetVoList.get(0).getBudgetMoneyModels().stream().forEach(e->{
+            String yyyy=e.getMonth().substring(0,4);
+            String mm=e.getMonth().substring(4);
+            dynamicHeadList.add(String.format("%s年%s月",yyyy,mm));
+        });
+        vo.setDynamicHeadList(dynamicHeadList);
+        vo.setRows(financeTotalBudgetVoList);
+        return vo;
     }
 
     @ServiceLog(doAction = "预算录入历史查询")
     @Override
-    public List<FinanceBudgetHistoryVo> selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount) {
-        return financeBudgetDao.selectBudgetHistory(financeBudgetHistoryQueryModel);
+    public FianceDynamicTableVo<List<FinanceBudgetHistoryVo>>selectBudgetHistory(FinanceBudgetHistoryQueryModel financeBudgetHistoryQueryModel, String userAccount) {
+        List<FinanceBudgetHistoryVo> financeBudgetHistoryVos=financeBudgetDao.selectBudgetHistory(financeBudgetHistoryQueryModel);
+        if(null==financeBudgetHistoryVos||financeBudgetHistoryVos.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceBudgetHistoryVo>> vo=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        financeBudgetHistoryVos.get(0).getBudgetMoneyModels().stream().forEach(e->{
+            String yyyy=e.getMonth().substring(0,4);
+            String mm=e.getMonth().substring(4);
+            dynamicHeadList.add(String.format("%s年%s月",yyyy,mm));
+        });
+        vo.setDynamicHeadList(dynamicHeadList);
+        vo.setRows(financeBudgetHistoryVos);
+
+        return vo;
     }
 
     @ServiceLog(doAction = "预算录入")
@@ -93,7 +123,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
     }
 
     //是否已经导入过年初预算了
-    private void checkBudgetType0(String departmentId,Integer costTypeId,String costTypeName,String budgetMonth ){
+    private void checkBudgetType0(String departmentId,String costTypeId,String costTypeName,String budgetMonth ){
         TbFinanceBudgetHistoryExample historyExample=new TbFinanceBudgetHistoryExample();
         TbFinanceBudgetHistoryExample.Criteria historyExampleCriteria=historyExample.createCriteria();
         historyExampleCriteria.andRecordStatusEqualTo(new Byte("1"));
@@ -116,7 +146,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     }
 
-    private TbFinanceTotalBudget selectByPrimaryKey(Integer costTypeId,String departmentId,String budgetMonth){
+    private TbFinanceTotalBudget selectByPrimaryKey(String costTypeId,String departmentId,String budgetMonth){
         TbFinanceTotalBudgetExample totalBudgetExample=new TbFinanceTotalBudgetExample();
         TbFinanceTotalBudgetExample.Criteria totalBudgetExampleCriteria=totalBudgetExample.createCriteria();
         totalBudgetExampleCriteria.andRecordStatusEqualTo(new Byte("1"));
@@ -132,7 +162,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         return null;
     }
 
-    private void updateTotal(Integer costTypeId, String costTypeName, String departmentId, String departmentName,String budgetMonth, String userAccount){
+    private void updateTotal(String costTypeId, String costTypeName, String departmentId, String departmentName,String budgetMonth, String userAccount){
         //查询预算历史中的总预算（按月统计）
         FinanceBudgetHistoryModel historyModel= financeBudgetDao.calcHistoryMoney(departmentId,costTypeId,budgetMonth);
         //

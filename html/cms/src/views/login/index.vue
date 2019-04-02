@@ -56,14 +56,14 @@ export default {
     //     callback()
     //   }
     // }
-    const validateUsername = (rule, value, callback) => {
-      const reg = /[A-Za-z0-9]{6,16}$/
-      if (!reg.test(value)) {
-        callback(new Error('请输入6到16位长度字符的数字及字母'))
-      } else {
-        callback()
-      }
-    }
+    // const validateUsername = (rule, value, callback) => {
+    //   const reg = /[A-Za-z0-9]{6,16}$/
+    //   if (!reg.test(value)) {
+    //     callback(new Error('请输入6到16位长度字符的数字及字母'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       checked: true,
       loginForm: {
@@ -72,8 +72,7 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, message: '用户名不能为空', trigger: 'blur' },
-          { validator: validateUsername, trigger: 'blur' }
+          { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -201,7 +200,7 @@ $cursor: #fff;
     height: 53px;
     font-size: 18px;
     color:#999999;
-    background-color: rgb(255, 154, 255);
+    background-color:#fff;
     // color: #454545;
   }
     .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
@@ -344,13 +343,13 @@ $light_gray: #eee;
       }
     input[type="checkbox"]:checked::before{
       content: "\2713";
-       background-color: rgb(255, 154, 255);
+      //  background-color: rgb(255, 154, 255);
       position: absolute;
       top: 0;
       left: 0;
       width:100%;
-      border: 1px solid rgb(255, 154, 255);
-      color:#fff;
+      // border: 1px solid rgb(255, 154, 255);
+      color:black;
       font-size: 12px;
       font-weight: bolder;
       }

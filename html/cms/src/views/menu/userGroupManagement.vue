@@ -30,11 +30,7 @@
           {{ scope.row.sysRoleList.join('、') }}
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime">
-        <!-- <template slot-scope="scope">
-          {{ scope.row.createdTime | parseTime('{y}-{m}-{d} {h}:{i}') }}
-        </template> -->
-      </el-table-column>
+      <el-table-column label="创建时间" min-width="200" align="center" prop="createdTime"/>
       <el-table-column label="状态" align="center" prop="status">
         <template slot-scope="scope">
           <span :class="scope.row.recordStatus==1 ? 'text-green' : 'text-red'">{{ scope.row.recordStatus | statusFilter }}</span>
@@ -245,7 +241,7 @@ export default {
   methods: {
     // 授权角色分页功能
     handleRoleCurrentChange(val) {
-      if (this.numberTotal - this.moveArr > (val - 1) * this.numberRows) {
+      if (this.numberTotal > (val - 1) * this.numberRows) {
         this.numberPage = val
       } else {
         this.numberPage = val - 1
@@ -261,6 +257,12 @@ export default {
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
       }
+      this.numberTotal = this.numberTotal - this.moveArr
+      if (this.numberTotal > (this.numberPage - 1) * this.numberRows) {
+        this.numberPage = this.numberPage
+      } else {
+        this.numberPage = this.numberPage - 1
+      }
       api('system/sysGroup/roleGroupAuthorization', { groupId: this.groupId, roleIds: value }).then(res => {
         if (res.data.code === '0000') {
           this.$message({
@@ -271,6 +273,7 @@ export default {
           this.$message.error(res.data.result)
         }
         this.initList()
+        this.getRole()
       })
     },
     // 显示授权角色对话框
@@ -342,13 +345,13 @@ export default {
     },
     // 授权用户分页功能
     handleUserCurrentChange(val) {
-      if (this.userTotal - this.moveArr > (val - 1) * this.userRows) {
+      if (this.userTotal > (val - 1) * this.userRows) {
         this.userPage = val
       } else {
         this.userPage = val - 1
       }
-      this.userLoading = true
       this.getUser()
+      this.userLoading = true
     },
     // 改变授权用户穿梭框时获取选中的用户
     handleUserChange(value, direction, movedKeys) {
@@ -357,6 +360,12 @@ export default {
         this.moveArr = -(movedKeys.length)
       } else if (direction === 'right') {
         this.moveArr = movedKeys.length
+      }
+      this.userTotal = this.userTotal - this.moveArr
+      if (this.userTotal > (this.userPage - 1) * this.userRows) {
+        this.userPage = this.userPage
+      } else {
+        this.userPage = this.userPage - 1
       }
       api('system/sysGroup/userGroupAuthorization', { groupId: this.userGroupId, userIds: value }).then(
         res => {
@@ -369,6 +378,7 @@ export default {
             this.$message.error(res.data.result)
           }
           this.initList()
+          this.getUser()
         }
       )
     },
@@ -495,7 +505,6 @@ export default {
     initList() {
       this.listLoading = true
       api('system/sysGroup/list', this.listQuery).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total

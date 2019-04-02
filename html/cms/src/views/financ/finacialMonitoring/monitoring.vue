@@ -122,7 +122,7 @@ export default {
               color: 'rgb(183, 178, 255)'
             },
             left: '35%'
-            // subtext: '纯属虚构'
+          // subtext: '纯属虚构'
           },
           tooltip: {
             trigger: 'axis'
@@ -252,12 +252,9 @@ export default {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.rows.length > 0) {
             this.drawLine(res.data.data)
-          } else {
-            this.drawLine(this.empty)
           }
         } else {
           this.$message.error(res.data.result)
-          this.drawLine(this.empty)
         }
       })
     },

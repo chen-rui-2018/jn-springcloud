@@ -61,7 +61,8 @@
       <el-dialog :visible.sync="dialogVisible" title="导入" width="400px" >
         <div style="display:flex;justify-content: space-between;" class="demo">
           <el-button type="success" @click="submit($event)">{{ softtype }}</el-button>
-          <a class="download" href="javascript:;" @click="download" >下载模板</a>
+          <a class="download" href="/static/file/budgetTemplate.xlsx" download >下载模板</a>
+          <!-- <a class="download" href="javascript:;" @click="download" >下载模板</a> -->
         </div>
         <div>
           <p>注意:</p>

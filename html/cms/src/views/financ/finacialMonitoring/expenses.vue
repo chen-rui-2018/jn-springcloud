@@ -68,7 +68,7 @@
       <el-dialog :visible.sync="dialogVisible" title="导入" class="daoru" >
         <div style="display:flex;justify-content: space-between;" class="demo">
           <el-button :disabled="disabled" type="success" @click="submit($event)">{{ softtype }}</el-button>
-          <a class="download" href="javascript:;" @click="download" >下载模板</a>
+          <a href="/static/file/expendTemplate.xlsx" class="download" download >下载模板</a>
         </div>
         <div>
           <p>注意:</p>
@@ -201,9 +201,9 @@ export default {
   },
   methods: {
     // 下载模板文件
-    download() {
-      window.location.href = '/static/file/支出录入.xlsx'
-    },
+    // download() {
+    //   window.location.href = '/static/file/支出录入.xlsx'
+    // },
     // 批量打标
     batchMark() {
       if (this.multipleSelection.length === 0) {

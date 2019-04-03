@@ -4,24 +4,25 @@
 
     <sql id="recruitFiled">
         a.id AS "id",
-        a.com_id AS "comId",
+        a.recruit_no AS "recruitNo",
         a.post AS "post",
-        a.salary AS "salary",
         a.num AS "num",
-        a.type AS "type",
         a.details AS "details",
-        a.status AS "status",
         a.view_count AS "viewCount",
-        a.creator_account AS "creatorAccount",
         a.created_time AS "createdTime",
-        a.modifier_account AS "modifierAccount",
-        a.modified_time AS "modifiedTime",
-        a.record_status AS "recordStatus",
-        co.com_name AS "comName"
+        co.com_name AS "comName",
+        cd.code_name AS "typeName",
+        tsc.code_name AS "salaryName",
+        CASE
+            WHEN a.status = '1' THEN '有效'
+            WHEN a.status = '0' THEN '无效'
+        ELSE '错误' END AS 'statusName'
     </sql>
 
     <sql id="recruitJoin">
         LEFT JOIN tb_service_company co ON co.id = a.com_id
+        LEFT JOIN tb_service_code cd ON cd.group_id = 'recruitType' AND cd.code_value = a.type
+        LEFT JOIN tb_service_code tsc ON tsc.group_id = 'recruitSalary' AND tsc.code_value = a.salary
     </sql>
 
     <!-- 根据ID获取招聘详情 -->
@@ -44,9 +45,14 @@
         <if test="comId != null and comId != ''">
             AND a.com_id = #{comId}
         </if>
-        <if test="status != null and status != ''">
-            AND a.status = #{status}
-        </if>
+        <choose>
+            <when test="status != 2">
+                AND a.status = #{status}
+            </when>
+            <otherwise>
+
+            </otherwise>
+        </choose>
         <if test="type != null and type != ''">
             AND a.type = #{type}
         </if>
@@ -55,10 +61,10 @@
         </if>
         <if test="whereTypes != null and whereTypes != ''">
             <choose>
-                <when test="whereTypes == 'w'">
+                <when test="whereTypes == 'week'">
                     <![CDATA[ AND DATE_SUB(DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%S'), INTERVAL 6 DAY) <= DATE_FORMAT(a.created_time,'%Y-%m-%d %H:%i:%S') ]]>
                 </when>
-                <when test="whereTypes == 'm'">
+                <when test="whereTypes == 'month'">
                     <![CDATA[ AND DATE_SUB(DATE_FORMAT(CURDATE(),'%Y-%m-%d %H:%i:%S'), INTERVAL 1 MONTH) <= DATE_FORMAT(a.created_time,'%Y-%m-%d %H:%i:%S') ]]>
                 </when>
                 <otherwise>
@@ -66,7 +72,12 @@
                 </otherwise>
             </choose>
         </if>
-
+        <if test="beginDate != null and endDate != null">
+            <![CDATA[
+                AND DATE_FORMAT(#{beginDate},'%Y-%m-%d') <= DATE_FORMAT(a.created_time,'%Y-%m-%d')
+                AND DATE_FORMAT(#{endDate},'%Y-%m-%d') >= DATE_FORMAT(a.created_time,'%Y-%m-%d')
+            ]]>
+        </if>
         <choose>
             <when test="sortTypes != null and sortTypes != '' and sortTypes == 'hot'">
                 ORDER BY a.view_count DESC, a.created_time DESC

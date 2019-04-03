@@ -1,6 +1,5 @@
 package com.jn.enterprise.recruit.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -14,25 +13,26 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceRecruitPublishParam", description = "发布企业招聘入参")
 public class ServiceRecruitPublishParam implements Serializable {
+    @ApiModelProperty(value = "编号", example = "GDNJ-20180707001")
+    private String recruitNo;
     @ApiModelProperty(value = "招聘岗位", required = true, example = "java程序员")
     private String post;
-    @ApiModelProperty(value = "薪资待遇编码（码表）", required = true, example = "face_face")
+    @ApiModelProperty(value = "薪资待遇编码（请调用[企业服务码表]获取数据，传值为groupId=recruitSalary）", required = true, example = "face_face")
     private String salary;
     @ApiModelProperty(value = "招聘人数", required = true, example = "5")
     private Integer num;
-    @ApiModelProperty(value = "招聘类型编码（码表）", required = true, example = "full_time")
+    @ApiModelProperty(value = "招聘类型编码（请调用[企业服务码表]获取数据，传值为groupId=recruitType）", required = true, example = "full_time")
     private String type;
     @ApiModelProperty(value = "招聘详情", required = true, example = "1.精通spring")
     private String details;
-//    @ApiModelProperty(value = "创建人")
-//    private String creatorAccount;
-//    @ApiModelProperty(value = "修改人")
-//    private String modifierAccount;
-//    @ApiModelProperty(value = "创建时间")
-//    private Date createdTime;
-//    @ApiModelProperty(value = "修改时间")
-//    private Date modifiedTime;
 
+    public String getRecruitNo() {
+        return recruitNo;
+    }
+
+    public void setRecruitNo(String recruitNo) {
+        this.recruitNo = recruitNo;
+    }
 
     public String getPost() {
         return post;

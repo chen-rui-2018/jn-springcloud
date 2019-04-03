@@ -17,18 +17,18 @@ public class ServiceRecruitEditParam implements Serializable {
     @ApiModelProperty(value = "招聘id", required = true)
     @NotNull
     private String id;
+    @ApiModelProperty(value = "招聘编号", example = "GDNJ-20180707001")
+    private String recruitNo;
     @ApiModelProperty(value = "招聘岗位", example = "java程序员")
     private String post;
-    @ApiModelProperty(value = "薪资待遇编码（码表）", example = "face_face")
+    @ApiModelProperty(value = "薪资待遇编码（请调用[企业服务码表]获取数据，传值为groupId=recruitSalary）", example = "face_face")
     private String salary;
     @ApiModelProperty(value = "招聘人数", example = "5")
     private Integer num;
-    @ApiModelProperty(value = "招聘类型编码（码表）", example = "full_time")
+    @ApiModelProperty(value = "招聘类型编码（请调用[企业服务码表]获取数据，传值为groupId=recruitType）", example = "full_time")
     private String type;
     @ApiModelProperty(value = "招聘详情", example = "1.精通spring")
     private String details;
-    @ApiModelProperty(value = "状态（1：已上架 0：已下架）", example = "1")
-    private String status;
 
     public String getId() {
         return id;
@@ -38,12 +38,12 @@ public class ServiceRecruitEditParam implements Serializable {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRecruitNo() {
+        return recruitNo;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setRecruitNo(String recruitNo) {
+        this.recruitNo = recruitNo;
     }
 
     public String getPost() {

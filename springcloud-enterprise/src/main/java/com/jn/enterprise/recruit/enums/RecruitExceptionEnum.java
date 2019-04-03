@@ -10,10 +10,17 @@ import com.jn.common.api.CodeAndMsg;
  */
 public enum RecruitExceptionEnum implements CodeAndMsg {
     RECRUIT_COMPANY_ID_IS_NULL("5011201","企业ID不能为空"),
-    RECRUIT_COMPANY_IS_NOT_EXIST("5011202","查询的企业不存在"),
+    RECRUIT_NO_IS_NULL("5011202","招聘编号不能为空"),
     RECRUIT_USER_NOT_ENTERPRISE_ADMIN("5011203","该用户不是本次查询企业的管理员"),
     RECRUIT_INFO_IS_NOT_EXIST("5011204","招聘信息不存在"),
     RECRUIT_ID_IS_NULL("5011205","招聘信息ID不能为空"),
+    RECRUIT_COMPANY_IS_NOT_EXIST("5011206","查询的企业不存在"),
+    RECRUIT_STATUS_IS_NULL("5011207","招聘状态不能为空"),
+
+    RECRUIT_WHERE_TYPE_ERROR("5011220","查询字段传值错误"),
+    RECRUIT_SORT_TYPE_ERROR("5011221","排序字段传值错误"),
+    RECRUIT_STATUS_ERROR("5011222","招聘信息状态传值错误"),
+    RECRUIT_SEARCH_DATE_FORMAT_ERROR("5011223","发布日期格式错误"),
     ;
     /**
      * 编码

@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbServiceRecruit implements Serializable {
     private String id;
 
+    private String recruitNo;
+
     private String comId;
 
     private String post;
@@ -40,6 +42,14 @@ public class TbServiceRecruit implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getRecruitNo() {
+        return recruitNo;
+    }
+
+    public void setRecruitNo(String recruitNo) {
+        this.recruitNo = recruitNo == null ? null : recruitNo.trim();
     }
 
     public String getComId() {
@@ -159,6 +169,7 @@ public class TbServiceRecruit implements Serializable {
         }
         TbServiceRecruit other = (TbServiceRecruit) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getRecruitNo() == null ? other.getRecruitNo() == null : this.getRecruitNo().equals(other.getRecruitNo()))
             && (this.getComId() == null ? other.getComId() == null : this.getComId().equals(other.getComId()))
             && (this.getPost() == null ? other.getPost() == null : this.getPost().equals(other.getPost()))
             && (this.getSalary() == null ? other.getSalary() == null : this.getSalary().equals(other.getSalary()))
@@ -179,6 +190,7 @@ public class TbServiceRecruit implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getRecruitNo() == null) ? 0 : getRecruitNo().hashCode());
         result = prime * result + ((getComId() == null) ? 0 : getComId().hashCode());
         result = prime * result + ((getPost() == null) ? 0 : getPost().hashCode());
         result = prime * result + ((getSalary() == null) ? 0 : getSalary().hashCode());
@@ -202,6 +214,7 @@ public class TbServiceRecruit implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", recruitNo=").append(recruitNo);
         sb.append(", comId=").append(comId);
         sb.append(", post=").append(post);
         sb.append(", salary=").append(salary);

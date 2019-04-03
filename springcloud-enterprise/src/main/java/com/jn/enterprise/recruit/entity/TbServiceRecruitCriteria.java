@@ -175,6 +175,76 @@ public class TbServiceRecruitCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andRecruitNoIsNull() {
+            addCriterion("recruit_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoIsNotNull() {
+            addCriterion("recruit_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoEqualTo(String value) {
+            addCriterion("recruit_no =", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoNotEqualTo(String value) {
+            addCriterion("recruit_no <>", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoGreaterThan(String value) {
+            addCriterion("recruit_no >", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoGreaterThanOrEqualTo(String value) {
+            addCriterion("recruit_no >=", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoLessThan(String value) {
+            addCriterion("recruit_no <", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoLessThanOrEqualTo(String value) {
+            addCriterion("recruit_no <=", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoLike(String value) {
+            addCriterion("recruit_no like", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoNotLike(String value) {
+            addCriterion("recruit_no not like", value, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoIn(List<String> values) {
+            addCriterion("recruit_no in", values, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoNotIn(List<String> values) {
+            addCriterion("recruit_no not in", values, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoBetween(String value1, String value2) {
+            addCriterion("recruit_no between", value1, value2, "recruitNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andRecruitNoNotBetween(String value1, String value2) {
+            addCriterion("recruit_no not between", value1, value2, "recruitNo");
+            return (Criteria) this;
+        }
+
         public Criteria andComIdIsNull() {
             addCriterion("com_id is null");
             return (Criteria) this;

@@ -1,11 +1,14 @@
 package com.jn.enterprise.recruit.service;
 
 import com.jn.common.model.PaginationData;
+import com.jn.enterprise.recruit.entity.TbServiceRecruit;
 import com.jn.enterprise.recruit.model.ServiceRecruitEditParam;
 import com.jn.enterprise.recruit.model.ServiceRecruitParam;
 import com.jn.enterprise.recruit.model.ServiceRecruitPublishParam;
+import com.jn.enterprise.recruit.model.ServiceRecruitUnderParam;
 import com.jn.enterprise.recruit.vo.RecruitDetailsVO;
 import com.jn.enterprise.recruit.vo.RecruitVO;
+import com.jn.system.model.User;
 
 import java.util.List;
 
@@ -26,6 +29,13 @@ public interface RecruitService {
     RecruitDetailsVO getRecruitDetailsById(String id);
 
     /**
+     * 根据编号获取招聘详情
+     * @param no
+     * @return
+     */
+    TbServiceRecruit getRecruitByNo(String no);
+
+    /**
      * 查询企业招聘信息列表
      * @param recruitParam
      * @return
@@ -38,20 +48,27 @@ public interface RecruitService {
      * @param comId 企业ID
      * @return
      */
-    Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId);
+    Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId, User user);
 
     /**
-     * 编辑/下架 企业招聘信息
+     * 编辑企业招聘信息
      * @param serviceRecruitEditParam
      * @return
      */
-    Integer editRecruitInfo(ServiceRecruitEditParam serviceRecruitEditParam);
+    Integer editRecruitInfo(ServiceRecruitEditParam serviceRecruitEditParam, User user);
+
+    /**
+     * 上/下架企业招聘信息
+     * @param serviceRecruitUnderParam
+     * @return
+     */
+    Integer underRecruit(ServiceRecruitUnderParam serviceRecruitUnderParam, User user);
 
     /**
      * 根据ID删除企业招聘信息
      * @param id
      * @return
      */
-    Integer delRecruitById(String id);
+    Integer delRecruitById(String id, User user);
 
 }

@@ -2,9 +2,8 @@ package com.jn.enterprise.recruit.dao;
 
 import com.jn.enterprise.recruit.entity.TbServiceRecruit;
 import com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria;
-import org.apache.ibatis.annotations.Param;
-
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface TbServiceRecruitMapper {
     long countByExample(TbServiceRecruitCriteria example);

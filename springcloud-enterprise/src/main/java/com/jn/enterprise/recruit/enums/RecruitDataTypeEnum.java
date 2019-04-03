@@ -9,11 +9,18 @@ import com.jn.common.api.CodeAndMsg;
  * @modified By:
  */
 public enum RecruitDataTypeEnum implements CodeAndMsg {
-    ALL("all","全部"),
+    // 查询筛选
     WEEK("week","最近一周"),
     MONTH("month","最近一月"),
+
+    // 排序条件
     TIME("time","时间"),
     HOT("hot","热度"),
+
+    // 状态
+    ALL_SHELVES("2","全部"),
+    ON_SHELVES("1","已上架"),
+    OFF_SHELVES("0","已下架"),
     ;
     /**
      * 编码

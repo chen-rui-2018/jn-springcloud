@@ -1,7 +1,11 @@
 package com.jn.enterprise.recruit.vo;
 
-public class RecruitDetailsVO extends RecruitVO {
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(value = "RecruitDetailsVO", description = "招聘详情出参")
+public class RecruitDetailsVO extends RecruitVO {
+    @ApiModelProperty(value = "详情")
     private String details;
 
     public String getDetails() {

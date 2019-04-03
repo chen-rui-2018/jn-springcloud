@@ -3,6 +3,7 @@
 <mapper namespace="com.jn.enterprise.recruit.dao.TbServiceRecruitMapper">
   <resultMap id="BaseResultMap" type="com.jn.enterprise.recruit.entity.TbServiceRecruit">
     <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="recruit_no" jdbcType="VARCHAR" property="recruitNo" />
     <result column="com_id" jdbcType="VARCHAR" property="comId" />
     <result column="post" jdbcType="VARCHAR" property="post" />
     <result column="salary" jdbcType="VARCHAR" property="salary" />
@@ -76,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, com_id, post, salary, num, type, details, status, view_count, creator_account, 
+    id, recruit_no, com_id, post, salary, num, type, details, status, view_count, creator_account, 
     created_time, modifier_account, modified_time, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria" resultMap="BaseResultMap">
@@ -110,22 +111,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
-    insert into tb_service_recruit (id, com_id, post, 
-      salary, num, type, 
-      details, status, view_count, 
-      creator_account, created_time, modifier_account, 
-      modified_time, record_status)
-    values (#{id,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, #{post,jdbcType=VARCHAR}, 
-      #{salary,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, 
-      #{details,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{viewCount,jdbcType=INTEGER}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT})
+    insert into tb_service_recruit (id, recruit_no, com_id, 
+      post, salary, num, 
+      type, details, status, 
+      view_count, creator_account, created_time, 
+      modifier_account, modified_time, record_status
+      )
+    values (#{id,jdbcType=VARCHAR}, #{recruitNo,jdbcType=VARCHAR}, #{comId,jdbcType=VARCHAR}, 
+      #{post,jdbcType=VARCHAR}, #{salary,jdbcType=VARCHAR}, #{num,jdbcType=INTEGER}, 
+      #{type,jdbcType=VARCHAR}, #{details,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{viewCount,jdbcType=INTEGER}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
     insert into tb_service_recruit
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
+      </if>
+      <if test="recruitNo != null">
+        recruit_no,
       </if>
       <if test="comId != null">
         com_id,
@@ -170,6 +176,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="recruitNo != null">
+        #{recruitNo,jdbcType=VARCHAR},
       </if>
       <if test="comId != null">
         #{comId,jdbcType=VARCHAR},
@@ -224,6 +233,9 @@
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
       </if>
+      <if test="record.recruitNo != null">
+        recruit_no = #{record.recruitNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.comId != null">
         com_id = #{record.comId,jdbcType=VARCHAR},
       </if>
@@ -271,6 +283,7 @@
   <update id="updateByExample" parameterType="map">
     update tb_service_recruit
     set id = #{record.id,jdbcType=VARCHAR},
+      recruit_no = #{record.recruitNo,jdbcType=VARCHAR},
       com_id = #{record.comId,jdbcType=VARCHAR},
       post = #{record.post,jdbcType=VARCHAR},
       salary = #{record.salary,jdbcType=VARCHAR},
@@ -291,6 +304,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
     update tb_service_recruit
     <set>
+      <if test="recruitNo != null">
+        recruit_no = #{recruitNo,jdbcType=VARCHAR},
+      </if>
       <if test="comId != null">
         com_id = #{comId,jdbcType=VARCHAR},
       </if>
@@ -335,7 +351,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
     update tb_service_recruit
-    set com_id = #{comId,jdbcType=VARCHAR},
+    set recruit_no = #{recruitNo,jdbcType=VARCHAR},
+      com_id = #{comId,jdbcType=VARCHAR},
       post = #{post,jdbcType=VARCHAR},
       salary = #{salary,jdbcType=VARCHAR},
       num = #{num,jdbcType=INTEGER},

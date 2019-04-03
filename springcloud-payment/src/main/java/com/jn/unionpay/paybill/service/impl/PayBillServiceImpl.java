@@ -19,6 +19,7 @@ import com.jn.unionpay.paybill.dao.TbPaymentOrderMapper;
 import com.jn.unionpay.paybill.entity.TbPaymentBill;
 import com.jn.unionpay.paybill.entity.TbPaymentBillCriteria;
 import com.jn.unionpay.paybill.entity.TbPaymentOrder;
+import com.jn.unionpay.paybill.entity.TbPaymentOrderCriteria;
 import com.jn.unionpay.paybill.enums.PayBillEnum;
 import com.jn.unionpay.paybill.service.PayBillService;
 import org.slf4j.Logger;
@@ -180,9 +181,11 @@ public class PayBillServiceImpl implements PayBillService {
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_IS_NOT_EXIT,"选择账单数: "+payInitiateParam.getBillIds().length
                     +" 与实际有效账单数: "+tbPaymentBills.size()+" 不匹配，请刷新页面再试。");
         }
+
         BigDecimal totleAmount = new BigDecimal(0);
         StringBuilder orderName = new StringBuilder();
         StringBuilder ids = new StringBuilder();
+        Set<String> set = new HashSet<>();
         for (TbPaymentBill bill:tbPaymentBills) {
             if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_PAY_CHECKED.getCode())){
                 throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+bill.getBillNum()+"已确认支付，请刷新页面重试。");
@@ -190,10 +193,33 @@ public class PayBillServiceImpl implements PayBillService {
             if(StringUtils.equals(bill.getBillStatus(),PayBillEnum.BILL_ORDER_IS_PAY.getCode())){
                 throw new JnSpringCloudException(PayBillExceptionEnum.PAYMENT_STATUS_IS_PAY,"订单："+bill.getBillNum()+"已支付，请刷新页面重试。");
             }
-            totleAmount.add(new BigDecimal(bill.getBillAmount()));
+            BigDecimal decimal = new BigDecimal(bill.getBillAmount());
+            totleAmount.add(decimal);
             orderName.append(bill.getBillName()+"、");
             ids.append(bill.getBillId()+",");
+            set.add(bill.getOrderId());
         }
+
+        //查询订单状态，未支付成功且未取消支付的账单不能再次发起支付
+        List<String> orders = new ArrayList<>(set);
+        TbPaymentOrderCriteria orderCriteria = new TbPaymentOrderCriteria();
+        orderCriteria.createCriteria().andIdIn(orders).andOrderStatusEqualTo(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentOrder> tbPaymentOrders = tbPaymentOrderMapper.selectByExample(orderCriteria);
+        if(null != tbPaymentOrders && tbPaymentOrders.size()>0){
+            StringBuffer sb = new StringBuffer();
+            for (TbPaymentBill bill:tbPaymentBills) {
+                for (TbPaymentOrder oder :tbPaymentOrders) {
+                    if(StringUtils.equals(bill.getOrderId(),oder.getId())){
+                        sb.append(bill.getBillNum()+",");
+                    }
+                }
+            }
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_IS_NOT_COMPLETE,"账单："+sb.toString()+"已发起支付，请先取消订单再进行支付。");
+        }
+
+        //TODO 积分抵扣金额
+
+
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
         TbPaymentBill paymentBill = new TbPaymentBill();
         paymentBill.setOrderId(orderId);
@@ -207,9 +233,10 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setOrderName(name);
         paymentOrder.setOrderObjType(tbPaymentBills.get(0).getBillObjType());
         paymentOrder.setOrderObjId(user.getId());
+        paymentOrder.setOrderObjName(user.getAccount());
         String id = ids.substring(0,ids.length()-1);
         paymentOrder.setBillIds(id);
-        paymentOrder.setOrderName(user.getName());
+        paymentOrder.setOrderNum(DateUtils.formatDate(new Date(),"yyyyMMdd")+((Math.random()*9+1)*100000));
         paymentOrder.setOrderAmount(totleAmount.setScale(2).doubleValue());
         paymentOrder.setOrderStatus(PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode());
         paymentOrder.setPayType(payInitiateParam.getPayMenthed());
@@ -248,7 +275,6 @@ public class PayBillServiceImpl implements PayBillService {
         paymentBill.setBillPayType(PayBillEnum.PAY_METHOD_ONLINE.getCode());
         TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
         billCriteria.createCriteria().andBillIdIn(Arrays.asList(paymentOrder.getBillIds().split(","))).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
-       // billCriteria.createCriteria().andOrderIdEqualTo(callBackParam.getOrderId()).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
         int i1 = tbPaymentBillMapper.updateByExampleSelective(paymentBill, billCriteria);
         logger.info("支付回调-账单处理响应条数:{}",i1);
@@ -272,5 +298,56 @@ public class PayBillServiceImpl implements PayBillService {
         return false;
     }
 
+    @Override
+    @ServiceLog(doAction = "取消支付订单")
+    public Integer cancelPayOrderById(String orderId,String account){
+        TbPaymentOrder paymentOrder = tbPaymentOrderMapper.selectByPrimaryKey(orderId);
+        if(!StringUtils.equals(paymentOrder.getCreatorAccount(),account)){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_NOW_USER);
+        }
+        if(!StringUtils.equals(paymentOrder.getOrderStatus(),PayBillEnum.BILL_ORDER_IS_NOT_PAY.getCode())){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_PAYING);
+        }
+        paymentOrder.setOrderStatus(PayBillEnum.BILL_ORDER_CANCEL_PAY.getCode());
+        paymentOrder.setModifiedTime(new Date());
+        paymentOrder.setModifierAccount(account);
+        logger.info("订单取消支付成功，订单ID:{},操作人{}",orderId,account);
+        return tbPaymentOrderMapper.updateByPrimaryKeySelective(paymentOrder);
+    }
+
+    @Override
+    @ServiceLog(doAction = "获取当前用户支付订单列表")
+    public PaginationData<List<PayOrderModel>> getPayOrderForUser(com.jn.common.model.Page page, String account){
+        Page<Object> objects = PageHelper.startPage(page.getPage(), page.getRows() == 0 ? 15 : page.getRows(), true);
+        TbPaymentOrderCriteria orderCriteria = new TbPaymentOrderCriteria();
+        orderCriteria.createCriteria().andCreatorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentOrder> tbPaymentOrders = tbPaymentOrderMapper.selectByExample(orderCriteria);
+        return new PaginationData(tbPaymentOrders, objects == null ? 0 : objects.getTotal());
+    }
+
+    @Override
+    @ServiceLog(doAction = "根据订单ID获取订单详情（包含订单明细）")
+    public PayOrderVO getPayOrderDetail(String orderId){
+        TbPaymentOrder paymentOrder = tbPaymentOrderMapper.selectByPrimaryKey(orderId);
+        if(null == paymentOrder){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_IS_NOT_EXIT);
+        }
+        TbPaymentBillCriteria billCriteria = new TbPaymentBillCriteria();
+        billCriteria.createCriteria().andOrderIdEqualTo(orderId).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
+        List<TbPaymentBill> tbPaymentBills = tbPaymentBillMapper.selectByExample(billCriteria);
+
+        PayOrderVO payOrderVO = new PayOrderVO();
+        BeanUtils.copyProperties(paymentOrder,payOrderVO);
+        List<PaymentBill> bills = new ArrayList<>(16);
+        if(null != tbPaymentBills && tbPaymentBills.size() > 0 ){
+            for (TbPaymentBill bill:tbPaymentBills) {
+                PaymentBill paymentBill = new PaymentBill();
+                BeanUtils.copyProperties(bill,paymentBill);
+                bills.add(paymentBill);
+            }
+        }
+        payOrderVO.setBills(bills);
+        return payOrderVO;
+    }
 
 }

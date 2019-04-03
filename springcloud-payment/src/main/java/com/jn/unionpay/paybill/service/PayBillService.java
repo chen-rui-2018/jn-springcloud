@@ -1,5 +1,6 @@
 package com.jn.unionpay.paybill.service;
 
+import com.jn.common.model.Page;
 import com.jn.common.model.PaginationData;
 import com.jn.paybill.model.*;
 import com.jn.system.model.User;
@@ -58,4 +59,29 @@ public interface PayBillService {
      * @return
      */
     PayCallBackVO payCallBack(PayCallBackParam callBackParam);
+
+    /**
+     * 取消支付订单接口
+     * @param orderId
+     * @param account
+     * @return
+     */
+    Integer cancelPayOrderById(String orderId,String account);
+
+    /**
+     * 获取当前用户支付订单列表
+     * @param page
+     * @param account
+     * @return
+     */
+    PaginationData<List<PayOrderModel>> getPayOrderForUser(Page page,String account);
+
+    /**
+     * 根据订单ID获取订单详情（包含订单明细）
+     * @param orderId
+     * @return
+     */
+    PayOrderVO getPayOrderDetail(String orderId);
+
+
 }

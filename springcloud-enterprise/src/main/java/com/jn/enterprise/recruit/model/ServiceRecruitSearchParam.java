@@ -1,8 +1,6 @@
 package com.jn.enterprise.recruit.model;
 
 import com.jn.common.model.Page;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.util.Date;

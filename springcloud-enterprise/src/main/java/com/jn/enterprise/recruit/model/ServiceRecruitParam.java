@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author： huxw
@@ -19,7 +18,7 @@ public class ServiceRecruitParam extends Page implements Serializable {
     private String comId;
     @ApiModelProperty(value = "招聘岗位/企业名称[模糊搜索]", example = "Java程序员/君南")
     private String searchFiled;
-    @ApiModelProperty(value = "招聘类型（请调用[企业服务码表]获取数据，传值为groupId=recruitType）", example = "full_time")
+    @ApiModelProperty(value = "招聘类型（请调用[企业服务-公共：码表-数据列表]获取数据，传值为groupId=recruitType）", example = "full_time")
     private String type;
     @ApiModelProperty(value = "状态（1：已上架[默认] 0：已下架 2：全部）", example = "1")
     private String status;

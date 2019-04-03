@@ -8,6 +8,7 @@
         a.post AS "post",
         a.num AS "num",
         a.details AS "details",
+        a.status AS "status",
         a.view_count AS "viewCount",
         a.created_time AS "createdTime",
         co.com_name AS "comName",

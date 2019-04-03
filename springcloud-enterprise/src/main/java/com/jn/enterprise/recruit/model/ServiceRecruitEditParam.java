@@ -21,11 +21,11 @@ public class ServiceRecruitEditParam implements Serializable {
     private String recruitNo;
     @ApiModelProperty(value = "招聘岗位", example = "java程序员")
     private String post;
-    @ApiModelProperty(value = "薪资待遇编码（请调用[企业服务码表]获取数据，传值为groupId=recruitSalary）", example = "face_face")
+    @ApiModelProperty(value = "薪资待遇编码（请调用[企业服务-公共：码表-数据列表]获取数据，传值为groupId=recruitSalary）", example = "face_face")
     private String salary;
     @ApiModelProperty(value = "招聘人数", example = "5")
     private Integer num;
-    @ApiModelProperty(value = "招聘类型编码（请调用[企业服务码表]获取数据，传值为groupId=recruitType）", example = "full_time")
+    @ApiModelProperty(value = "招聘类型编码（请调用[企业服务-公共：码表-数据列表]获取数据，传值为groupId=recruitType）", example = "full_time")
     private String type;
     @ApiModelProperty(value = "招聘详情", example = "1.精通spring")
     private String details;

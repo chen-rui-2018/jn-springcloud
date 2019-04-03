@@ -17,6 +17,8 @@ public class RecruitVO implements Serializable {
     private String post;
     @ApiModelProperty(value = "招聘人数")
     private Integer num;
+    @ApiModelProperty(value = "状态（1：已上架 0：已下架）")
+    private String status;
     @ApiModelProperty(value = "有效性")
     private String statusName;
     @ApiModelProperty(value = "浏览数")
@@ -32,6 +34,14 @@ public class RecruitVO implements Serializable {
     private Date createdTime;
 
     private static final long serialVersionUID = 1L;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public String getRecruitNo() {
         return recruitNo;

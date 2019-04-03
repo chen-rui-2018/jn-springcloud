@@ -455,6 +455,76 @@ public class TbOaWorkPlanCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIsExpireIsNull() {
+            addCriterion("is_expire is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireIsNotNull() {
+            addCriterion("is_expire is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireEqualTo(String value) {
+            addCriterion("is_expire =", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireNotEqualTo(String value) {
+            addCriterion("is_expire <>", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireGreaterThan(String value) {
+            addCriterion("is_expire >", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireGreaterThanOrEqualTo(String value) {
+            addCriterion("is_expire >=", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireLessThan(String value) {
+            addCriterion("is_expire <", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireLessThanOrEqualTo(String value) {
+            addCriterion("is_expire <=", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireLike(String value) {
+            addCriterion("is_expire like", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireNotLike(String value) {
+            addCriterion("is_expire not like", value, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireIn(List<String> values) {
+            addCriterion("is_expire in", values, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireNotIn(List<String> values) {
+            addCriterion("is_expire not in", values, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireBetween(String value1, String value2) {
+            addCriterion("is_expire between", value1, value2, "isExpire");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsExpireNotBetween(String value1, String value2) {
+            addCriterion("is_expire not between", value1, value2, "isExpire");
+            return (Criteria) this;
+        }
+
         public Criteria andPlanStartTimeIsNull() {
             addCriterion("plan_start_time is null");
             return (Criteria) this;

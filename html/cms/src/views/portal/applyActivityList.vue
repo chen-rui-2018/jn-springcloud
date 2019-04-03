@@ -176,14 +176,12 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route.params.id)
     this.getApplyActivityList()
   },
   methods: {
     getApplyActivityList() {
       this.actiList.activityId = this.$route.params.id
       getApplyActivityList(this.actiList).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total
@@ -198,10 +196,6 @@ export default {
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
-      // downloadSignCodeImg(this.$route.params.id).then(res => {
-      //   console.log(res)
-      //   this.src = res.data
-      // })
       this.src = `http://192.168.10.31:1101/springcloud-park/activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
     },
     handleExport() {
@@ -209,8 +203,10 @@ export default {
       const exportTitle = []
       for (const it in this.tableHeadArr) {
         if (this.tableHeadArr[it].inputCheck) {
-          exportColName.push(this.tableHeadArr[it].name)
-          exportTitle.push(this.arrFlag[it])
+          // exportColName.push(this.tableHeadArr[it].name)
+          // exportTitle.push(this.arrFlag[it])
+          exportTitle.push(this.tableHeadArr[it].name)
+          exportColName.push(this.arrFlag[it])
         }
       }
       const data = {
@@ -221,8 +217,6 @@ export default {
         rows: this.total
       }
       exportDataExcel(data).then(res => {
-        console.log(res)
-        debugger
         window.location.href = res.request.responseURL
       })
     },
@@ -234,7 +228,6 @@ export default {
         applyId: i.id
       }
       signInActivityBackend(data).then(res => {
-        console.log(res)
         if (res.data.code === '0000') {
           this.getApplyActivityList()
           this.$message(res.data.result)

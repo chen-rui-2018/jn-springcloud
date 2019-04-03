@@ -23,7 +23,7 @@ public interface FinanceBudgetDao {
      * @param budgetMonth
      * @return
      */
-    FinanceBudgetHistoryModel calcHistoryMoney(@Param("departmentId")String departmentId, @Param("costTypeId")Integer costTypeId, @Param("budgetMonth")String budgetMonth );
+    FinanceBudgetHistoryModel calcHistoryMoney(@Param("departmentId")String departmentId, @Param("costTypeId")String costTypeId, @Param("budgetMonth")String budgetMonth );
 
     /**
      * 查询总预算

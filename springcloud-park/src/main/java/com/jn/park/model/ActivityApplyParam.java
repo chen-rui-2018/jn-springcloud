@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.io.Serializable;
+
 /**
  * 活动申请人查询/导出入参Bean
  * @author： jiangyl
@@ -14,15 +16,15 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @ApiModel(value = "ActivityApplyParam",description = "活动申请人查询入参")
-public class ActivityApplyParam extends Page {
-    @ApiModelProperty(value = "活动ID",required = true)
+public class ActivityApplyParam extends Page implements Serializable {
+    @ApiModelProperty(value = "活动ID",required = true,example = "92wefjw***")
     @NotBlank(message = "活动id不能为空！")
     private String activityId;
 
-    @ApiModelProperty(value = "[查询时传空]导出excel导出的字段别名 比如：name,phone,sex ...多个字段以数组传递")
+    @ApiModelProperty(value = "[查询时传空]导出excel导出的字段别名 比如：name,phone,sex ...多个字段以数组传递",example = "['name','phone']")
     private String[] exportColName;
 
-    @ApiModelProperty(value = "[查询时传空]excel导出字段的标题 比如：姓名,手机,性别...多个字段以数组传递")
+    @ApiModelProperty(value = "[查询时传空]excel导出字段的标题 比如：姓名,手机,性别...多个字段以数组传递",example = "['姓名','手机']")
     private String[] exportTitle;
 
     public String getActivityId() {

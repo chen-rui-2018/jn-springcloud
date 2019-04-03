@@ -6,6 +6,8 @@ import java.util.Date;
 public class TbOaWorkPlanRecord implements Serializable {
     private String id;
 
+    private Date recordDate;
+
     private String workPlanId;
 
     private Integer consumeTime;
@@ -13,6 +15,8 @@ public class TbOaWorkPlanRecord implements Serializable {
     private Integer remainTime;
 
     private String remark;
+
+    private Integer sort;
 
     private Byte recordStatus;
 
@@ -32,6 +36,14 @@ public class TbOaWorkPlanRecord implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public Date getRecordDate() {
+        return recordDate;
+    }
+
+    public void setRecordDate(Date recordDate) {
+        this.recordDate = recordDate;
     }
 
     public String getWorkPlanId() {
@@ -64,6 +76,14 @@ public class TbOaWorkPlanRecord implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
     }
 
     public Byte getRecordStatus() {
@@ -119,10 +139,12 @@ public class TbOaWorkPlanRecord implements Serializable {
         }
         TbOaWorkPlanRecord other = (TbOaWorkPlanRecord) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getRecordDate() == null ? other.getRecordDate() == null : this.getRecordDate().equals(other.getRecordDate()))
             && (this.getWorkPlanId() == null ? other.getWorkPlanId() == null : this.getWorkPlanId().equals(other.getWorkPlanId()))
             && (this.getConsumeTime() == null ? other.getConsumeTime() == null : this.getConsumeTime().equals(other.getConsumeTime()))
             && (this.getRemainTime() == null ? other.getRemainTime() == null : this.getRemainTime().equals(other.getRemainTime()))
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
+            && (this.getSort() == null ? other.getSort() == null : this.getSort().equals(other.getSort()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -135,10 +157,12 @@ public class TbOaWorkPlanRecord implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getRecordDate() == null) ? 0 : getRecordDate().hashCode());
         result = prime * result + ((getWorkPlanId() == null) ? 0 : getWorkPlanId().hashCode());
         result = prime * result + ((getConsumeTime() == null) ? 0 : getConsumeTime().hashCode());
         result = prime * result + ((getRemainTime() == null) ? 0 : getRemainTime().hashCode());
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
+        result = prime * result + ((getSort() == null) ? 0 : getSort().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -154,10 +178,12 @@ public class TbOaWorkPlanRecord implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
+        sb.append(", recordDate=").append(recordDate);
         sb.append(", workPlanId=").append(workPlanId);
         sb.append(", consumeTime=").append(consumeTime);
         sb.append(", remainTime=").append(remainTime);
         sb.append(", remark=").append(remark);
+        sb.append(", sort=").append(sort);
         sb.append(", recordStatus=").append(recordStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", createdTime=").append(createdTime);

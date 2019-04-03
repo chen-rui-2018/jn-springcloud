@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorInquiryInfo;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorListParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
@@ -19,10 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,7 +30,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务顾问")
+@Api(tags = "服务超市-服务顾问")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/advisorController")
 public class AdvisorController extends BaseController {
@@ -47,27 +44,26 @@ public class AdvisorController extends BaseController {
 
 
     @ControllerLog(doAction = "服务顾问列表")
-    @ApiOperation(value = "服务顾问列表", httpMethod = "POST", response = Result.class
-                ,notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
-    @RequestMapping(value = "/getServiceConsultantList")
-    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(@RequestBody AdvisorInquiryInfo advisorInquiryInfo){
-        PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorInquiryInfo, Boolean.TRUE);
+    @ApiOperation(value = "服务顾问列表",notes = "查询条件--活动ID，关键字,分页页码及行数，不传页码行数默认查询前15条")
+    @RequestMapping(value = "/getServiceConsultantList",method = RequestMethod.GET)
+    public Result<PaginationData<List<AdvisorListInfo>>>getServiceConsultantList(AdvisorListParam advisorListParam){
+        PaginationData serviceConsultantList = advisorService.getServiceConsultantList(advisorListParam, Boolean.TRUE);
         return  new Result(serviceConsultantList);
     }
 
     @ControllerLog(doAction = "服务顾问详情")
-    @ApiOperation(value = "服务顾问详情", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getServiceAdvisorInfo")
-    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true)@RequestParam("advisorAccount") String advisorAccount){
+    @ApiOperation(value = "服务顾问详情 (pc/app顾问详情+顾问信息)",notes="根据顾问账号获取顾问详情")
+    @RequestMapping(value = "/getServiceAdvisorInfo",method = RequestMethod.GET)
+    public Result<AdvisorDetailsVo> getServiceAdvisorInfo(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong")@RequestParam("advisorAccount") String advisorAccount){
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);
     }
 
     @ControllerLog(doAction = "服务评价")
-    @ApiOperation(value = "服务评价", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getServiceRatingInfo")
-    public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@RequestBody @Validated ServiceEvaluationParam serviceEvaluationParam){
+    @ApiOperation(value = "服务评价",notes="根据顾问账号和评价类型获取顾问的评价")
+    @RequestMapping(value = "/getServiceRatingInfo",method = RequestMethod.GET)
+    public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);
         return  new Result(serviceRatingInfo);
     }

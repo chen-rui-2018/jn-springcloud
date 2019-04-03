@@ -17,19 +17,19 @@ public class FinanceRecordsFindAllModel extends Page implements Serializable {
 
 
     private static final long serialVersionUID = -623711746996691788L;
-    @ApiModelProperty(value = "录入状态 0：已录入；1：未录入",example="")
+    @ApiModelProperty(value = "录入状态 0：已录入；1：未录入")
     private String  createState;
 
-    @ApiModelProperty(value = "财务状态 0：已确认；1：未确认",example="")
+    @ApiModelProperty(value = "财务状态 0：已确认；1：未确认")
     private String  financerSure;
 
     @ApiModelProperty(value = "部门ID",example="281f4005-0363-4528-92a3-60a730532e53")
     private String  departmentId;
 
-    @ApiModelProperty(value = "录入人",example="" )
+    @ApiModelProperty(value = "录入人")
     private String creatorAccount;
 
-    @ApiModelProperty(value = "资料名称",example="")
+    @ApiModelProperty(value = "资料名称")
     private String name;
 
     @ApiModelProperty(value = "排序字段 排序方式",example = "deadline DESC")

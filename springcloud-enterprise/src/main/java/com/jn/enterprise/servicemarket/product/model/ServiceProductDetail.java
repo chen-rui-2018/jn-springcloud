@@ -17,14 +17,10 @@ public class ServiceProductDetail implements Serializable {
     private ServiceContent content;
     @ApiModelProperty(value = "审批意见")
     private String approvalComments;
-    @ApiModelProperty(value = "机构名称")
-    private String orgName;
     @ApiModelProperty(value = "联系人名称")
     private String conName;
     @ApiModelProperty(value = "联系电话")
     private String conPhone;
-    @ApiModelProperty(value = "状态( -1无效(下架) 0-待审核 1-有效(上架/审核通过) 2-审核不通过)")
-    private String status;
     @ApiModelProperty(value = "顾问名称")
     private String advisorName;
     @ApiModelProperty(value = "服务产品发布日期")
@@ -44,14 +40,6 @@ public class ServiceProductDetail implements Serializable {
 
     public void setContent(ServiceContent content) {
         this.content = content;
-    }
-
-    public String getOrgName() {
-        return orgName;
-    }
-
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
     }
 
     public String getConName() {
@@ -78,13 +66,7 @@ public class ServiceProductDetail implements Serializable {
         this.approvalComments = approvalComments;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getAdvisorName() {
         return advisorName;

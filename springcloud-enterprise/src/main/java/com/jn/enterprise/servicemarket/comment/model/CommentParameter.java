@@ -3,6 +3,8 @@ package com.jn.enterprise.servicemarket.comment.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 提交评论入参
  * @author： jiangyl
@@ -13,13 +15,15 @@ import io.swagger.annotations.ApiModelProperty;
 @ApiModel(value = "CommentParameter",description = "提交评论入参")
 public class CommentParameter {
 
-    @ApiModelProperty(value = "需求ID")
+    @ApiModelProperty(value = "需求ID",example = "2cc20cc10c4b4d608f5a05728b86d888",required = true)
+    @NotNull(message = "需求ID不能为空")
     private String id;
 
-    @ApiModelProperty(value = "评分")
+    @NotNull(message = "评分不能为空")
+    @ApiModelProperty(value = "评分",example = "5",required = true)
     private String attitudeScore;
 
-    @ApiModelProperty(value = "评价详情")
+    @ApiModelProperty(value = "评价详情",example = "好评好评。。。")
     private String evaluationDesc;
 
     public String getId() {

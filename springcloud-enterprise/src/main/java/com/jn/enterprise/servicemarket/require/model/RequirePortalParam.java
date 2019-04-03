@@ -16,27 +16,27 @@ import java.io.Serializable;
  */
 @ApiModel(value = "RequirePortalParam", description = "需求管理（后台门户管理入参）")
 public class RequirePortalParam extends Page implements Serializable {
-    @ApiModelProperty(value = "产品类型(0:常规产品  1:特色产品))")
+    @ApiModelProperty(value = "产品类型(0:常规产品  1:特色产品))",example = "0")
     @Pattern(regexp = "^[01]$", message = "{productType:'默认值只允许为0,1'}")
     private String productType;
-    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)")
+    @ApiModelProperty(value = "对接结果(1:对接成功  2:对接失败  3:企业需求撤销 4:未对接)",example = "1")
     @Pattern(regexp = "^[1234]$", message = "{对接结果:'默认值只允许为1,2,3,4'}")
     private String handleResult;
-    @ApiModelProperty(value = "业务领域id")
+    @ApiModelProperty(value = "业务领域id",example = "technology_financial")
     private String businessId;
-    @ApiModelProperty(value = "服务机构")
+    @ApiModelProperty(value = "服务机构",example = "xxx机构")
     private String serviceOrg;
-    @ApiModelProperty(value = "需求日期开始时间（格式201905）")
+    @ApiModelProperty(value = "需求日期开始时间",example = "201904")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{requireStartTime:'获得时间格式错误'}")
     private String requireStartTime;
-    @ApiModelProperty(value = "需求日期结束时间（格式201905）")
+    @ApiModelProperty(value = "需求日期结束时间",example = "201905")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{requireEndTime:'获得时间格式错误'}")
     private String requireEndTime;
-    @ApiModelProperty(value = "服务产品")
+    @ApiModelProperty(value = "服务产品",example = "xxx产品")
     private String serviceProduct;
-    @ApiModelProperty(value = "是否需要分页  0:分页   1:不分页")
+    @ApiModelProperty(value = "是否需要分页  1:分页   0:不分页",required = true,example = "1")
     @Pattern(regexp = "^[01]$", message = "{needPage:'默认值只允许为0,1'}")
     @NotNull(message="是否需要分页不能为空")
     private String needPage;

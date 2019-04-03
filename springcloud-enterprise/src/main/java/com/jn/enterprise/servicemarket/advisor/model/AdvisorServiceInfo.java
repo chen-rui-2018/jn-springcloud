@@ -30,7 +30,7 @@ public class AdvisorServiceInfo implements Serializable {
     private String position;
     @ApiModelProperty(value = "所属机构名称")
     private String orgName;
-    @ApiModelProperty(value = "是否认证")
+    @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "联系手机")
     private String phone;

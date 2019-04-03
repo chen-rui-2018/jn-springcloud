@@ -119,25 +119,65 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         //查询所有部门的支出占比
         List<FinanceIndexBudgetExpendRatioVo> budgetExpendRatio=financeIndexDao.budgetExpendRatio(map);
 
+
         return budgetExpendRatio;
     }
 
     @ServiceLog(doAction = "全年支出/预算 统计柱状图")
     @Override
-    public List<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year) {
+    public FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>  expendBudget(String year) {
         //拼接年月
         String startTime=year+"01";
         String endTime=year+"12";
-        return financeIndexDao.expendBudget(startTime,endTime);
+
+        List<FinanceIndexExpendBudgetStatisticsVo> expendBudgetList=financeIndexDao.expendBudget(startTime,endTime);
+
+        if(null==expendBudgetList||expendBudgetList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        for (int i=0;i<expendBudgetList.size();i++){
+            String mm=expendBudgetList.get(i).getMonth().substring(4);
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        }
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(expendBudgetList);
+        return vo1;
     }
 
     @ServiceLog(doAction = "监控明细部门支出预算统计（柱状图）")
     @Override
-    public List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, int typeId) {
+    public FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>>sectionBudgetExpend(String year, String departmentId, String typeId) {
         //拼接年月
         String startTime=year+"01";
         String endTime=year+"12";
-        return financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
+        List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpendVoList=financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
+
+        if(null==sectionBudgetExpendVoList||sectionBudgetExpendVoList.size()<1){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"无数据");
+        }
+        FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>> vo1=new FianceDynamicTableVo<>();
+        List<String>dynamicHeadList=new ArrayList<>();
+        for (int i=0;i<sectionBudgetExpendVoList.size();i++){
+            String mm=sectionBudgetExpendVoList.get(i).getMonth().substring(4);
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
+            dynamicHeadList.add(String.format("%s月",mm));
+        }
+        vo1.setDynamicHeadList(dynamicHeadList);
+        vo1.setRows(sectionBudgetExpendVoList);
+        return vo1;
+
+
+
+        //return financeIndexDao.sectionBudgetExpend(startTime,endTime,departmentId,typeId);
     }
 
     @ServiceLog(doAction = "监控明细各项支出占比（饼状图）")
@@ -184,6 +224,10 @@ public class FinanceIndexServiceImpl implements FinanceIndexService {
         financeIndexSectionExpendFormsVos.get(0).getFinanceIndexSectionExpendFormsModels().stream().forEach(e->{
             //String yyyy=e.getMonth().substring(0,4);
             String mm=e.getMonth();
+            //如果小于10，就截取后一位，把前面的0去掉
+            if(Integer.parseInt(mm) <10){
+                mm=mm.substring(1);
+            }
             dynamicHeadList.add(String.format("%s月",mm));
         });
         vo1.setDynamicHeadList(dynamicHeadList);

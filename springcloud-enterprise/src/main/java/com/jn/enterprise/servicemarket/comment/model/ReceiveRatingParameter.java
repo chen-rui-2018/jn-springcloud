@@ -13,11 +13,11 @@ import io.swagger.annotations.ApiModelProperty;
  */
 @ApiModel(value = "ReceiveRatingParameter",description = "我收到的评价查询入参")
 public class ReceiveRatingParameter extends Page {
-    @ApiModelProperty("需求提出人")
+    @ApiModelProperty(value = "需求提出人",example = "wangsong")
     private String issueAccount;
-    @ApiModelProperty("服务产品Id")
+    @ApiModelProperty(value = "服务产品Id",example = "3677b55f9bd647ee950fe71b079f1e69")
     private String productId;
-    @ApiModelProperty("顾问Id")
+    @ApiModelProperty(value = "顾问Id",example = "41da7180518e4546b7f96fc02db08be3")
     private String advisorId;
     @ApiModelProperty("当前用户[前台请忽略此参数]")
     private String account;

@@ -43,13 +43,13 @@
     <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[5,10,20,30, 50]" :page-size="listQuery.rows" :total="total" class="tablePagination" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
     <!-- 弹出的新增活动类型对话框 -->
     <template v-if="activityTypedialogFormVisible">
-      <el-dialog :visible.sync="activityTypedialogFormVisible" :title="dialogStatus" width="450px">
+      <el-dialog :visible.sync="activityTypedialogFormVisible" :title="dialogStatus" width="650px">
         <el-form ref="activityTypeForm" :model="activityTypeForm" label-position="right" label-width="80px">
           <el-form-item label="类型名称:" prop="typeName">
-            <el-input v-model.trim="activityTypeForm.typeName" maxlength="20" clearable style="width:250px"/>
+            <el-input v-model.trim="activityTypeForm.typeName" maxlength="20" clearable style="width:350px"/>
           </el-form-item>
           <el-form-item label="状态:" prop="typeStatus">
-            <el-select v-model="activityTypeForm.typeStatus" placeholder="请选择" class="filter-item" clearable>
+            <el-select v-model="activityTypeForm.typeStatus" placeholder="请选择" class="filter-item" clearable style="width:350px">
               <el-option v-for="(item,index) in statusOptions" :key="index" :label="item" :value="index" />
             </el-select>
             <!-- <template slot-scope="scope">
@@ -57,7 +57,7 @@
               <span v-if="scope.row.typeStatus==='1'">有效</span>
             </template> -->
           </el-form-item>
-          <el-form-item v-loading="loadingUpFlag" label="海报模板:" prop="templateList" style="width:415px;height:280px;overflow:auto">
+          <el-form-item v-loading="loadingUpFlag" label="海报模板:" prop="templateList" style="width:615px;height:280px;overflow:auto">
             <div v-if="dialogStatus==='编辑活动类型'" class="editModule">
               <ul class="editUl">
                 <li v-for="(i,k) in activityTypeForm.templateList" :key="k"><img :src="i" alt=""><span @click="delImg(k)">x</span></li>
@@ -443,6 +443,7 @@ export default {
           color: red;
           line-height: 13px;
           background: #fff;
+          cursor: pointer;
       }
     }
   }

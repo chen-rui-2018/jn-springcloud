@@ -1,5 +1,6 @@
 package com.jn.park.model;
 
+import javax.validation.constraints.NotNull;
 import com.jn.common.model.Page;
 import com.jn.common.util.Assert;
 import com.jn.park.enums.ActivityExceptionEnum;
@@ -20,41 +21,43 @@ public class ActivityContent extends Page implements Serializable {
 
     @ApiModelProperty(value = "活动ID(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值)",required = true)
+    @ApiModelProperty(value = "活动类型(传通过/findActivityTypeList查询出的活动类型值) 存草稿时可空，发布活动时必填",example = "a29e14a21352473ebf26420ddffb1c60")
     private String actiType;
-    @ApiModelProperty(value = "活动名称",required = true)
+    @NotNull(message = "活动名称不能为空")
+    @ApiModelProperty(value = "活动名称",required = true,example = "***活动")
     private String actiName;
-    @ApiModelProperty(value = "活动开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss)",required = true)
+    @ApiModelProperty(value = "活动开始时间(时间统一格式为yyyy-MM-dd HH:mm:ss) 存草稿时可空，发布活动时必填",example = "2019-03-03 10:00:00")
     private String actiStartTime;
-    @ApiModelProperty(value = "活动结束时间",required = true)
+    @ApiModelProperty(value = "活动结束时间",example = "2019-03-03 10:00:00")
     private String actiEndTime;
-    @ApiModelProperty(value = "活动报名结束时间",required = true)
+    @ApiModelProperty(value = "活动报名结束时间",example = "2019-03-03 10:00:00")
     private String applyEndTime;
-    @ApiModelProperty(value = "活动消息发送时间",required = true)
+    @ApiModelProperty(value = "活动消息发送时间",example = "2019-03-03 10:00:00")
     private String mesSendTime;
-    @ApiModelProperty(value = "活动园区(传通过/getParkCodeByType查询的园区列表值)",required = true)
+    @ApiModelProperty(value = "活动园区(传通过/getParkCodeByType查询的园区列表值[codeValue]) 存草稿时可空，发布活动时必填",example = "002")
     private String parkId;
-    @ApiModelProperty(value = "活动地址",required = true)
+    @ApiModelProperty(value = "活动地址",example = "***地址")
     private String actiAddress;
-    @ApiModelProperty(value = "活动费用",required = true)
+    @ApiModelProperty(value = "活动费用",example = "0")
     private BigDecimal actiCost;
-    @ApiModelProperty(value = "活动主办方",required = true)
+    @ApiModelProperty(value = "活动主办方",example = "园区管委会")
     private String actiOrganizer;
-    @ApiModelProperty(value = "活动人数",required = true)
+    @ApiModelProperty(value = "活动人数",example = "100")
     private Integer actiNumber;
-    @ApiModelProperty(value = "活动海报路径",required = true)
+    @ApiModelProperty(value = "活动海报路径",example = "**/**/**.png")
     private String actiPosterUrl;
-    @ApiModelProperty(value = "活动状态(修改只能修改活动状态actiStatus为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)")
+    @ApiModelProperty(value = "活动状态[1草稿 2报名中 3活动结束4活动取消 ](修改只能修改活动状态actiStatus为1(草稿)的数据。新增活动为草稿时，必填字段只为活动名，当发布活动时，会校验所有必填字段。)"
+            ,example = "1")
     private String actiStatus;
-    @ApiModelProperty(value = "是否首页展示")
+    @ApiModelProperty(value = "是否首页展示（0：否，1：是） 保存草稿时可空，发布活动时必填",example = "1")
     private String isIndex;
-    @ApiModelProperty(value = "排序-若排序字段为空，后台自动对其排序为0(靠后排序)")
+    @ApiModelProperty(value = "排序-若排序字段为空，后台自动对其排序为0(靠后排序)",example = "0")
     private Integer actiOrder;
-    @ApiModelProperty(value = "活动详情")
+    @ApiModelProperty(value = "活动详情 保存草稿时可空，发布活动时必填",example = "活动详情详情....")
     private String actiDetail;
-    @ApiModelProperty(value = "是否展示报名人-0否1是")
+    @ApiModelProperty(value = "是否展示报名人-0否1是 保存草稿时可空，发布活动时必填",example = "1")
     private String showApplyNum;
-    @ApiModelProperty(value = "报名是否需审核-0否1是",required = true)
+    @ApiModelProperty(value = "报名是否需审核-0否1是 保存草稿时可空，发布活动时必填",example = "1")
     private String applyCheck;
 
     public String getId() {

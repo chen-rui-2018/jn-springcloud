@@ -153,7 +153,7 @@ public class SysGroupServiceTest {
 
     @Test
     public void zDeleSysGroupTest() {
-        String[] groupIdS = {groupId};
+        String[] groupIdS = {"3fb72ea7-d29f-490a-97de-9a778a36277e"};
         sysGroupService.deleSysGroup(groupIdS,user);
     }
 }

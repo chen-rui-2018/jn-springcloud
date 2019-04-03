@@ -176,52 +176,62 @@ public class TbFinanceTotalBudgetExample {
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdEqualTo(Integer value) {
+        public Criteria andCostTypeIdEqualTo(String value) {
             addCriterion("tb.cost_type_id =", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotEqualTo(Integer value) {
+        public Criteria andCostTypeIdNotEqualTo(String value) {
             addCriterion("tb.cost_type_id <>", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdGreaterThan(Integer value) {
+        public Criteria andCostTypeIdGreaterThan(String value) {
             addCriterion("tb.cost_type_id >", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andCostTypeIdGreaterThanOrEqualTo(String value) {
             addCriterion("tb.cost_type_id >=", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdLessThan(Integer value) {
+        public Criteria andCostTypeIdLessThan(String value) {
             addCriterion("tb.cost_type_id <", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdLessThanOrEqualTo(Integer value) {
+        public Criteria andCostTypeIdLessThanOrEqualTo(String value) {
             addCriterion("tb.cost_type_id <=", value, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdIn(List<Integer> values) {
+        public Criteria andCostTypeIdLike(String value) {
+            addCriterion("tb.cost_type_id like", value, "costTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostTypeIdNotLike(String value) {
+            addCriterion("tb.cost_type_id not like", value, "costTypeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostTypeIdIn(List<String> values) {
             addCriterion("tb.cost_type_id in", values, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotIn(List<Integer> values) {
+        public Criteria andCostTypeIdNotIn(List<String> values) {
             addCriterion("tb.cost_type_id not in", values, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdBetween(Integer value1, Integer value2) {
+        public Criteria andCostTypeIdBetween(String value1, String value2) {
             addCriterion("tb.cost_type_id between", value1, value2, "costTypeId");
             return (Criteria) this;
         }
 
-        public Criteria andCostTypeIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andCostTypeIdNotBetween(String value1, String value2) {
             addCriterion("tb.cost_type_id not between", value1, value2, "costTypeId");
             return (Criteria) this;
         }

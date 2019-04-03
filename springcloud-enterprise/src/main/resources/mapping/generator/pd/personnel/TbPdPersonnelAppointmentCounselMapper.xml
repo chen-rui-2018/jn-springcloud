@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.personnel.dao.TbPdPersonnelAppointmentCounselMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounsel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="theme" jdbcType="VARCHAR" property="theme" />
+    <result column="park_appointment_time_start" jdbcType="TIMESTAMP" property="parkAppointmentTimeStart" />
+    <result column="park_appointment_time_end" jdbcType="TIMESTAMP" property="parkAppointmentTimeEnd" />
+    <result column="park_reservation_address" jdbcType="VARCHAR" property="parkReservationAddress" />
+    <result column="notify_counsel_time_start" jdbcType="TIMESTAMP" property="notifyCounselTimeStart" />
+    <result column="notify_counsel_time_end" jdbcType="TIMESTAMP" property="notifyCounselTimeEnd" />
+    <result column="notify_counsel_address" jdbcType="VARCHAR" property="notifyCounselAddress" />
+    <result column="reservation_limit" jdbcType="INTEGER" property="reservationLimit" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="counsel_type" jdbcType="TINYINT" property="counselType" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, theme, park_appointment_time_start, park_appointment_time_end, park_reservation_address, 
+    notify_counsel_time_start, notify_counsel_time_end, notify_counsel_address, reservation_limit, 
+    deadline, counsel_type, status, record_status, creator_account, created_time, modifier_account, 
+    modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounselCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_personnel_appointment_counsel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_personnel_appointment_counsel
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_pd_personnel_appointment_counsel
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounselCriteria">
+    delete from tb_pd_personnel_appointment_counsel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounsel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_personnel_appointment_counsel (theme, park_appointment_time_start, 
+      park_appointment_time_end, park_reservation_address, 
+      notify_counsel_time_start, notify_counsel_time_end, 
+      notify_counsel_address, reservation_limit, 
+      deadline, counsel_type, status, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{theme,jdbcType=VARCHAR}, #{parkAppointmentTimeStart,jdbcType=TIMESTAMP}, 
+      #{parkAppointmentTimeEnd,jdbcType=TIMESTAMP}, #{parkReservationAddress,jdbcType=VARCHAR}, 
+      #{notifyCounselTimeStart,jdbcType=TIMESTAMP}, #{notifyCounselTimeEnd,jdbcType=TIMESTAMP}, 
+      #{notifyCounselAddress,jdbcType=VARCHAR}, #{reservationLimit,jdbcType=INTEGER}, 
+      #{deadline,jdbcType=TIMESTAMP}, #{counselType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounsel">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_personnel_appointment_counsel
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="theme != null">
+        theme,
+      </if>
+      <if test="parkAppointmentTimeStart != null">
+        park_appointment_time_start,
+      </if>
+      <if test="parkAppointmentTimeEnd != null">
+        park_appointment_time_end,
+      </if>
+      <if test="parkReservationAddress != null">
+        park_reservation_address,
+      </if>
+      <if test="notifyCounselTimeStart != null">
+        notify_counsel_time_start,
+      </if>
+      <if test="notifyCounselTimeEnd != null">
+        notify_counsel_time_end,
+      </if>
+      <if test="notifyCounselAddress != null">
+        notify_counsel_address,
+      </if>
+      <if test="reservationLimit != null">
+        reservation_limit,
+      </if>
+      <if test="deadline != null">
+        deadline,
+      </if>
+      <if test="counselType != null">
+        counsel_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="theme != null">
+        #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAppointmentTimeStart != null">
+        #{parkAppointmentTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkAppointmentTimeEnd != null">
+        #{parkAppointmentTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkReservationAddress != null">
+        #{parkReservationAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyCounselTimeStart != null">
+        #{notifyCounselTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyCounselTimeEnd != null">
+        #{notifyCounselTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyCounselAddress != null">
+        #{notifyCounselAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="reservationLimit != null">
+        #{reservationLimit,jdbcType=INTEGER},
+      </if>
+      <if test="deadline != null">
+        #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="counselType != null">
+        #{counselType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounselCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_personnel_appointment_counsel
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_personnel_appointment_counsel
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.theme != null">
+        theme = #{record.theme,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parkAppointmentTimeStart != null">
+        park_appointment_time_start = #{record.parkAppointmentTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parkAppointmentTimeEnd != null">
+        park_appointment_time_end = #{record.parkAppointmentTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.parkReservationAddress != null">
+        park_reservation_address = #{record.parkReservationAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.notifyCounselTimeStart != null">
+        notify_counsel_time_start = #{record.notifyCounselTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.notifyCounselTimeEnd != null">
+        notify_counsel_time_end = #{record.notifyCounselTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.notifyCounselAddress != null">
+        notify_counsel_address = #{record.notifyCounselAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reservationLimit != null">
+        reservation_limit = #{record.reservationLimit,jdbcType=INTEGER},
+      </if>
+      <if test="record.deadline != null">
+        deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.counselType != null">
+        counsel_type = #{record.counselType,jdbcType=TINYINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_personnel_appointment_counsel
+    set id = #{record.id,jdbcType=INTEGER},
+      theme = #{record.theme,jdbcType=VARCHAR},
+      park_appointment_time_start = #{record.parkAppointmentTimeStart,jdbcType=TIMESTAMP},
+      park_appointment_time_end = #{record.parkAppointmentTimeEnd,jdbcType=TIMESTAMP},
+      park_reservation_address = #{record.parkReservationAddress,jdbcType=VARCHAR},
+      notify_counsel_time_start = #{record.notifyCounselTimeStart,jdbcType=TIMESTAMP},
+      notify_counsel_time_end = #{record.notifyCounselTimeEnd,jdbcType=TIMESTAMP},
+      notify_counsel_address = #{record.notifyCounselAddress,jdbcType=VARCHAR},
+      reservation_limit = #{record.reservationLimit,jdbcType=INTEGER},
+      deadline = #{record.deadline,jdbcType=TIMESTAMP},
+      counsel_type = #{record.counselType,jdbcType=TINYINT},
+      status = #{record.status,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounsel">
+    update tb_pd_personnel_appointment_counsel
+    <set>
+      <if test="theme != null">
+        theme = #{theme,jdbcType=VARCHAR},
+      </if>
+      <if test="parkAppointmentTimeStart != null">
+        park_appointment_time_start = #{parkAppointmentTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkAppointmentTimeEnd != null">
+        park_appointment_time_end = #{parkAppointmentTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parkReservationAddress != null">
+        park_reservation_address = #{parkReservationAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="notifyCounselTimeStart != null">
+        notify_counsel_time_start = #{notifyCounselTimeStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyCounselTimeEnd != null">
+        notify_counsel_time_end = #{notifyCounselTimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="notifyCounselAddress != null">
+        notify_counsel_address = #{notifyCounselAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="reservationLimit != null">
+        reservation_limit = #{reservationLimit,jdbcType=INTEGER},
+      </if>
+      <if test="deadline != null">
+        deadline = #{deadline,jdbcType=TIMESTAMP},
+      </if>
+      <if test="counselType != null">
+        counsel_type = #{counselType,jdbcType=TINYINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.personnel.entity.TbPdPersonnelAppointmentCounsel">
+    update tb_pd_personnel_appointment_counsel
+    set theme = #{theme,jdbcType=VARCHAR},
+      park_appointment_time_start = #{parkAppointmentTimeStart,jdbcType=TIMESTAMP},
+      park_appointment_time_end = #{parkAppointmentTimeEnd,jdbcType=TIMESTAMP},
+      park_reservation_address = #{parkReservationAddress,jdbcType=VARCHAR},
+      notify_counsel_time_start = #{notifyCounselTimeStart,jdbcType=TIMESTAMP},
+      notify_counsel_time_end = #{notifyCounselTimeEnd,jdbcType=TIMESTAMP},
+      notify_counsel_address = #{notifyCounselAddress,jdbcType=VARCHAR},
+      reservation_limit = #{reservationLimit,jdbcType=INTEGER},
+      deadline = #{deadline,jdbcType=TIMESTAMP},
+      counsel_type = #{counselType,jdbcType=TINYINT},
+      status = #{status,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

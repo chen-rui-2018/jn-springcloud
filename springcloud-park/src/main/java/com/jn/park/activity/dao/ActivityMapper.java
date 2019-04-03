@@ -2,6 +2,7 @@ package com.jn.park.activity.dao;
 
 
 import com.jn.park.model.ActivityContent;
+import com.jn.park.model.ActivityListApply;
 import com.jn.park.model.ActivitySlim;
 import com.jn.park.model.Activity;
 import org.apache.ibatis.annotations.Param;
@@ -33,4 +34,13 @@ public interface ActivityMapper {
      * @return
      */
    List<ActivitySlim> activityListSlim(@Param("typeId") String typeId, @Param("keyWord") String keyWord,@Param("startTime") String startTime,@Param("endTime") String endTime,@Param("orderBy") String orderBy);
+
+    /**
+     * author chenr
+     * 查询用户已报名的活动列表
+     * @param account
+     * @param applyStatus
+     * @return
+     */
+    List<ActivityListApply> findActivitySuccessfulRegistration(@Param("account") String account , @Param("applyStatus") String applyStatus);
 }

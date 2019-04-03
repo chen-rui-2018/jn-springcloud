@@ -17,20 +17,20 @@ import java.io.Serializable;
 public class ServiceExperienceParam  implements Serializable {
     @ApiModelProperty(value = "主键id（新增时为空，修改时必传）")
     private String id;
-    @ApiModelProperty(value = "顾问账号")
+    @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
-    @ApiModelProperty(value = "公司名称")
+    @ApiModelProperty(value = "公司名称",required = true,example = "xxx公司")
     @NotNull(message="公司名称不能为空")
     private String companyName;
-    @ApiModelProperty(value = "职务")
+    @ApiModelProperty(value = "职务",required = true,example = "高级律师")
     @NotNull(message="职务不能为空")
     private String position;
-    @ApiModelProperty(value = "工作开始时间(格式：201903)")
+    @ApiModelProperty(value = "工作开始时间",example = "201903")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{workTime:'工作开始时间格式错误'}")
     private String workTime;
-    @ApiModelProperty(value = "工作结束时间(格式：201904)")
+    @ApiModelProperty(value = "工作结束时间",example = "201904")
     @Pattern(regexp = "((19[2-9][0-9])|(20[0-3][0-9]))((0?[1-9])|(1[0-2]))",
             message = "{workEndTime:'工作结束时间格式错误'}")
     private String workEndTime;

@@ -87,7 +87,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         vo.setDynamicHeadList(dynamicHeadList);
         vo.setRows(financeBudgetHistoryVos);
 
-        return null;
+        return vo;
     }
 
     @ServiceLog(doAction = "预算录入")
@@ -123,7 +123,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
     }
 
     //是否已经导入过年初预算了
-    private void checkBudgetType0(String departmentId,Integer costTypeId,String costTypeName,String budgetMonth ){
+    private void checkBudgetType0(String departmentId,String costTypeId,String costTypeName,String budgetMonth ){
         TbFinanceBudgetHistoryExample historyExample=new TbFinanceBudgetHistoryExample();
         TbFinanceBudgetHistoryExample.Criteria historyExampleCriteria=historyExample.createCriteria();
         historyExampleCriteria.andRecordStatusEqualTo(new Byte("1"));
@@ -146,7 +146,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
 
     }
 
-    private TbFinanceTotalBudget selectByPrimaryKey(Integer costTypeId,String departmentId,String budgetMonth){
+    private TbFinanceTotalBudget selectByPrimaryKey(String costTypeId,String departmentId,String budgetMonth){
         TbFinanceTotalBudgetExample totalBudgetExample=new TbFinanceTotalBudgetExample();
         TbFinanceTotalBudgetExample.Criteria totalBudgetExampleCriteria=totalBudgetExample.createCriteria();
         totalBudgetExampleCriteria.andRecordStatusEqualTo(new Byte("1"));
@@ -162,7 +162,7 @@ public class FinanceBudgetServiceImpl implements FinanceBudgetService {
         return null;
     }
 
-    private void updateTotal(Integer costTypeId, String costTypeName, String departmentId, String departmentName,String budgetMonth, String userAccount){
+    private void updateTotal(String costTypeId, String costTypeName, String departmentId, String departmentName,String budgetMonth, String userAccount){
         //查询预算历史中的总预算（按月统计）
         FinanceBudgetHistoryModel historyModel= financeBudgetDao.calcHistoryMoney(departmentId,costTypeId,budgetMonth);
         //

@@ -42,8 +42,6 @@ public class OaMeetingAdd implements Serializable {
     @ApiModelProperty(value = "会议室id")
     private String meetingRoomId;
 
-    @ApiModelProperty(value = "审批状态（0:已取消、1:审批中、2:审批通过、3:审批不通过、4:已作废）")
-    private String approvalStatus;
 
     @ApiModelProperty(value = "是否删除（0标记删除，1正常）")
     private Byte recordStatus;
@@ -66,6 +64,38 @@ public class OaMeetingAdd implements Serializable {
     @ApiModelProperty(value = "会议内容")
     private String oaMeetingContent;
 
+    @ApiModelProperty(value = "组织人")
+    private String organizationalUser;
+
+    @ApiModelProperty(value = "参会人员")
+    private String participantsStr;
+
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public String getParticipantsStr() {
+        return participantsStr;
+    }
+
+    public void setParticipantsStr(String participantsStr) {
+        this.participantsStr = participantsStr;
+    }
+
+    public String getOrganizationalUser() {
+        return organizationalUser;
+    }
+
+    public void setOrganizationalUser(String organizationalUser) {
+        this.organizationalUser = organizationalUser;
+    }
 
     public String getOaMeetingContent() {
         return oaMeetingContent;
@@ -132,13 +162,6 @@ public class OaMeetingAdd implements Serializable {
         this.meetingRoomId = meetingRoomId;
     }
 
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
 
     public Byte getRecordStatus() {
         return recordStatus;

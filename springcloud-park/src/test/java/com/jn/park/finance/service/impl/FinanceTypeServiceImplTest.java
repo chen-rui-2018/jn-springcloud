@@ -24,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author： huangbq
@@ -55,7 +56,7 @@ public class FinanceTypeServiceImplTest {
         //添加10个类型（5个公共类型的）
         for(int i=0;i<typeArr.length;i++){
             TbFinanceType type=new TbFinanceType();
-            type.setId(1);
+            type.setId("1");
             type.setFinanceName(typeArr[i]);
             type.setCreatorAccount("admin");
             type.setCreatedTime(new Date());
@@ -83,7 +84,7 @@ public class FinanceTypeServiceImplTest {
         //添加10个类型（5个公共类型的）
         for(int i=0;i<10;i++){
             TbFinanceType type=new TbFinanceType();
-            type.setId(1);
+            type.setId("1");
             type.setFinanceName("交通费"+i);
             //奇数的公用的类型
             type.setCreatorAccount("huangbq");
@@ -135,12 +136,13 @@ public class FinanceTypeServiceImplTest {
         //1、
         FinanceTypeModel financeTypeModel=new FinanceTypeModel();
         financeTypeModel.setFinanceName("团建费0");
+        financeTypeModel.setId(UUID.randomUUID().toString());
         int id=financeTypeService.saveOrUpdate(financeTypeModel,"huangbq");
-        Assert.isTrue(tbFinanceTypeMapper.selectByPrimaryKey(id)!=null);
+        Assert.isTrue(tbFinanceTypeMapper.selectByPrimaryKey(financeTypeModel.getId())!=null);
 
         //2、
         FinanceTypeModel update=new FinanceTypeModel();
-        update.setId(id);
+        update.setId(financeTypeModel.getId());
         update.setFinanceName("差旅支出");
         try {
             int updateCount=financeTypeService.saveOrUpdate(update,"huangbq");
@@ -154,10 +156,10 @@ public class FinanceTypeServiceImplTest {
         update.setShowOrder(1);
         int updateCount=financeTypeService.saveOrUpdate(update,"huangbq");
         Assert.isTrue(updateCount==1);
-        Assert.isTrue(tbFinanceTypeMapper.selectByPrimaryKey(id).getShowOrder().equals(1));
+        Assert.isTrue(tbFinanceTypeMapper.selectByPrimaryKey(financeTypeModel.getId()).getShowOrder().equals(1));
 
         //4、
-        Assert.isTrue(tbFinanceTypeMapper.deleteByPrimaryKey(id)==1);
+        Assert.isTrue(tbFinanceTypeMapper.deleteByPrimaryKey(financeTypeModel.getId())==1);
     }
 
     /**

@@ -15,23 +15,23 @@ import java.io.Serializable;
  */
 @ApiModel(value = "PayRemindParam", description = "账单核对提醒")
 public class PayRemindParam implements Serializable {
-    @ApiModelProperty(value = "账单[数组]",required = true)
+    @ApiModelProperty(value = "账单[数组]",required = true,example = "['48w55wwffno383912','48w55wwffno383913']")
     @NotBlank(message = "账单不能为空")
     private String[] billIds;
-    @ApiModelProperty(value = "开户行名称",required = true)
+    @ApiModelProperty(value = "开户行名称",required = true,example = "中国农业银行")
     @NotBlank(message = "支付平台订单ID不能为空")
     private String bankName;
-    @ApiModelProperty(value = "银行卡号",required = true)
+    @ApiModelProperty(value = "银行卡号",required = true,example = "6228481121140222555")
     private String bankId;
-    @ApiModelProperty(value = "银行户名",required = true)
+    @ApiModelProperty(value = "银行户名",required = true,example = "王松")
     private String bankAccount;
-    @ApiModelProperty(value = "缴费金额",required = true)
+    @ApiModelProperty(value = "缴费金额",required = true,example = "20.00")
     @NotBlank(message = "缴费金额不能为空")
     private Double payAmount;
-    @ApiModelProperty(value = "缴费说明")
+    @ApiModelProperty(value = "缴费说明",example = "通过线下转账缴费")
     private String payRemark;
     @NotBlank(message = "缴费图片不能为空")
-    @ApiModelProperty(value = "缴费证明(图片链接)",required = true)
+    @ApiModelProperty(value = "缴费证明(图片链接)",required = true,example = "**/**/a.jpg")
     private String payImg;
 
     public String[] getBillIds() {

@@ -26,6 +26,10 @@
             <artifactId>springcloud-app-fastdfs-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-delay-stream-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
@@ -61,7 +65,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        notice,item,meeting,email
+                        notice,item,meeting,email,schedule,attendance
                     </contexts>
                     <tableNames>
 

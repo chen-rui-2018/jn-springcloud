@@ -42,4 +42,19 @@ public interface OaClient {
      */
     @RequestMapping(value = "/api/oa/regularSendEmail", method = RequestMethod.POST)
     Result<Boolean> regularSendEmail(@RequestBody Email email);
+
+    /**
+     * 工作计划提醒功能,每天定时提醒用户
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/workPlanRemindEveryDay", method = RequestMethod.POST)
+    Result<Boolean> workPlanRemindEveryDay();
+
+    /**
+     * 每天凌晨两点自动更新工作计划已延迟状态
+     * @return
+     */
+    @RequestMapping(value = "/api/oa/updateWorkPlanStatus", method = RequestMethod.POST)
+    Result<Boolean> updateWorkPlanStatus();
+
 }

@@ -78,16 +78,16 @@ public class InvestorServiceImplTest {
     /**
      * 工作经历
      */
-    private List<InvestorWorkExperience> investorWorkExperienceList=new ArrayList<>(16);
-    private InvestorWorkExperience investorWorkExperience1=new InvestorWorkExperience();
-    private InvestorWorkExperience investorWorkExperience2=new InvestorWorkExperience();
+    private List<InvestorWorkExperienceParam> investorWorkExperienceParamList =new ArrayList<>(16);
+    private InvestorWorkExperienceParam investorWorkExperienceParam1 =new InvestorWorkExperienceParam();
+    private InvestorWorkExperienceParam investorWorkExperienceParam2 =new InvestorWorkExperienceParam();
 
     /**
      * 教育经历
      */
-    private List<InvestorEduExperience> investorEduExperienceList=new ArrayList<>(16);
-    private InvestorEduExperience investorEduExperience1=new InvestorEduExperience();
-    private InvestorEduExperience investorEduExperience2=new InvestorEduExperience();
+    private List<InvestorEduExperienceParam> investorEduExperienceParamList =new ArrayList<>(16);
+    private InvestorEduExperienceParam investorEduExperienceParam1 =new InvestorEduExperienceParam();
+    private InvestorEduExperienceParam investorEduExperienceParam2 =new InvestorEduExperienceParam();
 
 
     @Before
@@ -134,29 +134,29 @@ public class InvestorServiceImplTest {
         investorMainRoundList.add(investorMainRound2);
         investorAuthenticateParam.setInvestorMainRoundList(investorMainRoundList);
         //工作经历
-        investorWorkExperience1.setStartTime("2014-09-01");
-        investorWorkExperience1.setEndTime("2018-06-30");
-        investorWorkExperience1.setCompanyName("湖南律师事务所");
-        investorWorkExperience1.setPosition("高级律师");
-        investorWorkExperienceList.add(investorWorkExperience1);
-        investorWorkExperience2.setStartTime("2018-07-15");
-        investorWorkExperience2.setEndTime("2019-03-30");
-        investorWorkExperience2.setCompanyName("长沙高新律师事务所");
-        investorWorkExperience2.setPosition("主任律师");
-        investorWorkExperienceList.add(investorWorkExperience2);
-        investorAuthenticateParam.setInvestorWorkExperienceList(investorWorkExperienceList);
+        investorWorkExperienceParam1.setStartTime("2014-09-01");
+        investorWorkExperienceParam1.setEndTime("2018-06-30");
+        investorWorkExperienceParam1.setCompanyName("湖南律师事务所");
+        investorWorkExperienceParam1.setPosition("高级律师");
+        investorWorkExperienceParamList.add(investorWorkExperienceParam1);
+        investorWorkExperienceParam2.setStartTime("2018-07-15");
+        investorWorkExperienceParam2.setEndTime("2019-03-30");
+        investorWorkExperienceParam2.setCompanyName("长沙高新律师事务所");
+        investorWorkExperienceParam2.setPosition("主任律师");
+        investorWorkExperienceParamList.add(investorWorkExperienceParam2);
+        investorAuthenticateParam.setInvestorWorkExperienceParamList(investorWorkExperienceParamList);
         //教育经历
-        investorEduExperience1.setStartTime("2008-09-01");
-        investorEduExperience1.setEndTime("2012-06-30");
-        investorEduExperience1.setSchoolName("湖南大学");
-        investorEduExperience1.setProfessionTitle("律师专业");
-        investorEduExperienceList.add(investorEduExperience1);
-        investorEduExperience2.setStartTime("2014-09-01");
-        investorEduExperience2.setEndTime("2016-06-30");
-        investorEduExperience2.setSchoolName("中南大学");
-        investorEduExperience2.setProfessionTitle("高级律师专业");
-        investorEduExperienceList.add(investorEduExperience2);
-        investorAuthenticateParam.setInvestorEduExperienceList(investorEduExperienceList);
+        investorEduExperienceParam1.setStartTime("2008-09-01");
+        investorEduExperienceParam1.setEndTime("2012-06-30");
+        investorEduExperienceParam1.setSchoolName("湖南大学");
+        investorEduExperienceParam1.setProfessionTitle("律师专业");
+        investorEduExperienceParamList.add(investorEduExperienceParam1);
+        investorEduExperienceParam2.setStartTime("2014-09-01");
+        investorEduExperienceParam2.setEndTime("2016-06-30");
+        investorEduExperienceParam2.setSchoolName("中南大学");
+        investorEduExperienceParam2.setProfessionTitle("高级律师专业");
+        investorEduExperienceParamList.add(investorEduExperienceParam2);
+        investorAuthenticateParam.setInvestorEduExperienceParamList(investorEduExperienceParamList);
     }
 
     /**
@@ -203,12 +203,12 @@ public class InvestorServiceImplTest {
      */
     @Test
     public void getAffiliationUnit() {
-        List<AffiliaationUnitShow> affiliationUnitList = investorService.getAffiliationUnit(orgName);
+        List<AffiliationUnitShow> affiliationUnitList = investorService.getAffiliationUnit(orgName);
         if(affiliationUnitList == null || affiliationUnitList.isEmpty()){
             //ignore
         }else{
-            for(AffiliaationUnitShow affiliaationUnitShow:affiliationUnitList){
-                logger.info(affiliaationUnitShow.toString());
+            for(AffiliationUnitShow affiliationUnitShow :affiliationUnitList){
+                logger.info(affiliationUnitShow.toString());
             }
         }
         assertThat(affiliationUnitList,anything());

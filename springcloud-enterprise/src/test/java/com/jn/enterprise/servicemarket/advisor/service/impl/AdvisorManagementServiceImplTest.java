@@ -7,7 +7,6 @@ import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceAdvisor;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorManagementParam;
 import com.jn.enterprise.servicemarket.advisor.model.ApprovalParam;
-import com.jn.enterprise.servicemarket.advisor.model.InviteAdvisorInfo;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorManagementService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
@@ -39,7 +38,8 @@ public class AdvisorManagementServiceImplTest {
     @Autowired
     private AdvisorManagementService advisorManagementService;
 
-    private InviteAdvisorInfo inviteAdvisorInfo=new InviteAdvisorInfo();
+    private String loginAccount ="";
+    private String registerAccount="";
 
     private AdvisorManagementParam advisorManagementParam =new AdvisorManagementParam();
 
@@ -48,8 +48,8 @@ public class AdvisorManagementServiceImplTest {
     @Before
     public void setUp() throws Exception {
         //顾问邀请
-        inviteAdvisorInfo.setInviteAccount("123");
-        inviteAdvisorInfo.setRegisterAccount("wangsong11");
+        loginAccount="123";
+        registerAccount="wangsong11";
 
         //顾问管理  审批状态(rejected：已拒绝    noFeedBack：未反馈   pending：待审批   approvalNotPassed：审批不通过)
         advisorManagementParam.setApprovalStatus("pending");
@@ -72,7 +72,7 @@ public class AdvisorManagementServiceImplTest {
     @Test
     public void inviteAdvisor(){
         try {
-            advisorManagementService.inviteAdvisor(inviteAdvisorInfo);
+            advisorManagementService.inviteAdvisor(registerAccount,loginAccount);
             assertThat(anything(),anything());
         } catch (JnSpringCloudException e) {
             logger.warn("邀请顾问失败");

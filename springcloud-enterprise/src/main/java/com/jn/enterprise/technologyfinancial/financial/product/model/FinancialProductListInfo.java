@@ -17,6 +17,8 @@ public class FinancialProductListInfo implements Serializable {
     private String productId;
     @ApiModelProperty(value = "产品名称)")
     private String productName;
+    @ApiModelProperty(value = "产品图片)")
+    private String pictureUrl;
     @ApiModelProperty(value = "服务机构id)")
     private String orgId;
     @ApiModelProperty(value = "服务机构名称)")
@@ -56,6 +58,14 @@ public class FinancialProductListInfo implements Serializable {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public String getOrgId() {

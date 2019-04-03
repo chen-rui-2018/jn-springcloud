@@ -17,10 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author： tangry
@@ -37,8 +34,8 @@ public class FinanceRecordsController extends BaseController {
     private FinanceRecordsService financeRecordsService;
 
     @ControllerLog(doAction = "备案项,需录入项等查询")
-    @ApiOperation(value = "备案项,需录入项等查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findDetail")
+    @ApiOperation(value = "备案项,需录入项等查询",notes = "备案项,需录入项等查询",httpMethod = "GET")
+    @GetMapping(value = "/findDetail")
     @RequiresPermissions("/finance/records/findDetail")
     public Result<FinanceRecordsFindDetailModel> findDetail(){
         //todo
@@ -47,18 +44,18 @@ public class FinanceRecordsController extends BaseController {
     }
 
     @ControllerLog(doAction = "备案查询")
-    @ApiOperation(value = "备案查询", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/findAll")
+    @ApiOperation(value = "备案查询",notes = "备案查询", httpMethod = "GET")
+    @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/records/findAll")
-    public Result<FinanceRecordsFindAllVo> findAll(@RequestBody FinanceRecordsFindAllModel financeRecordsFindAllModel){
+    public Result<PaginationData<FinanceRecordsFindAllVo>> findAll(@RequestBody FinanceRecordsFindAllModel financeRecordsFindAllModel){
         //todo
         PaginationData findAll=financeRecordsService.findAll(financeRecordsFindAllModel);
         return new Result(findAll);
     }
 
     @ControllerLog(doAction = "查看")
-    @ApiOperation(value = "查看", httpMethod = "POST", response = Result.class)
-    @PostMapping(value = "/single")
+    @ApiOperation(value = "查看",notes = "查看", httpMethod = "GET")
+    @GetMapping(value = "/single")
     @RequiresPermissions("/finance/records/single")
     public Result single(){
         //todo
@@ -66,7 +63,7 @@ public class FinanceRecordsController extends BaseController {
     }
 
     @ControllerLog(doAction = "录入")
-    @ApiOperation(value = "录入", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "录入", notes = "录入",httpMethod = "POST")
     @PostMapping(value = "/entering")
     @RequiresPermissions("/finance/records/entering")
     public Result entering(){
@@ -75,7 +72,7 @@ public class FinanceRecordsController extends BaseController {
     }
 
     @ControllerLog(doAction = "财务确认")
-    @ApiOperation(value = "财务确认", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "财务确认",notes = "财务确认", httpMethod = "POST")
     @PostMapping(value = "/notarize")
     @RequiresPermissions("/finance/records/notarize")
     public Result notarize(){

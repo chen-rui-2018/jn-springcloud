@@ -115,13 +115,13 @@ public interface SystemClient {
     /**
      * 查询所有部门信息,并根据层级关系返回数据
      *
-     * @param parentId   parentId,查询对应部门,为空时查询所以一级部门
+     * @param parentId  parentId,查询对应部门,为空时查询所以一级部门
      * @param childFlag 是否查询所有子部门,true是,false否
      * @return
      */
     @RequestMapping(value = "/api/system/selectDeptByParentId", method = RequestMethod.POST)
-    Result selectDeptByParentId(@RequestParam(value = "parentId",required = false) String parentId,
-                                @RequestParam(value = "childFlag",required = false) Boolean childFlag);
+    Result selectDeptByParentId(@RequestParam(value = "parentId", required = false) String parentId,
+                                @RequestParam(value = "childFlag", required = false) Boolean childFlag);
 
     /**
      * 条件分页查询用户信息
@@ -143,4 +143,34 @@ public interface SystemClient {
     @RequestMapping(value = "/api/system/checkUserDept", method = RequestMethod.POST)
     Result checkUserDept(@RequestParam("userId") String userId, @RequestParam("deptId") String deptId);
 
+    /**
+     * 根据部门名称,获取部门信息
+     *
+     * @param deptName 部门名称
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getDept", method = RequestMethod.POST)
+    Result getDept(@RequestParam("deptName") String deptName);
+
+    /**
+     * 通过用户账号获取用户信息,传多账号,返回多个用户信息
+     *
+     * @param accountList 账号集合
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getUserInfoByAccount", method = RequestMethod.GET)
+    Result<List<User>> getUserInfoByAccount(@RequestParam("accountList") List<String> accountList);
+
+    /**
+     * 修改用户角色信息
+     *
+     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
+     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
+     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @return
+     */
+    @RequestMapping(value = "/api/system/updateUserRole", method = RequestMethod.POST)
+    Result<Boolean> updateUserRole(@RequestParam("account") User user,
+                                   @RequestParam("groupId") Set<String> deleRoleIds,
+                                   @RequestParam("roleIds") Set<String> addRoleIds);
 }

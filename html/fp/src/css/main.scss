@@ -1,0 +1,456 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+// .el-input__inner {
+//   -webkit-appearance: none;
+//   background-color: #fff;
+//   background-image: none;
+//   border-radius: 4px;
+//   border: 1px solid #dcdfe6;
+//   -webkit-box-sizing: border-box;
+//   box-sizing: border-box;
+//   color: #b7b7b7;
+//   display: inline-block;
+//   font-size: inherit;
+//   height: 40px;
+//   line-height: 40px;
+//   outline: 0;
+//   padding: 0 15px;
+//   -webkit-transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+//   width: 100%;
+//   font-family: '微软雅黑'
+// }
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit
+}
+
+i {
+  font-style: normal;
+}
+
+input {
+  outline-style: none;
+}
+
+.clearfix:after {
+  /*正常浏览器 清除浮动*/
+  clear: both;
+  content: '';
+  display: block;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearfix {
+  *zoom: 1;
+  /*zoom 1 就是ie6 清除浮动方式  *  ie7一下的版本所识别*/
+}
+
+.pr {
+  position: relative;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.w {
+  width: 1190px;
+  margin: 0 auto;
+}
+
+.mainColor {
+  color: #00a042;
+}
+
+.impact {
+  font-family: IMPACT;
+}
+
+.arialn {
+  font-family: ARIALN;
+}
+
+/* 活动中心开始 */
+.actiContent {
+  width: 1190px;
+  margin: 0 auto;
+
+  .actiNav {
+    margin: 20px 0;
+    font-size: 16px;
+
+    a:last-child {
+      color: #00a041;
+      font-weight: bold;
+    }
+  }
+
+  .actiFilter {
+    height: 75px;
+    line-height: 75px;
+    padding: 0 20px;
+    border: 1px solid #eee;
+
+    .timeFilter {
+      float: left;
+      color: #797979;
+
+      >span {
+        cursor: pointer;
+        display: inline-block;
+        width: 100px;
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        margin-left: 20px;
+        border-radius: 16px;
+      }
+
+      >span.active {
+        color: #fff;
+        background: linear-gradient(to bottom right, #35bf6d , #00a041);
+      }
+    }
+
+    .timeOrder {
+      float: right;
+      color: #919191;
+
+      >ul {
+        overflow: hidden;
+
+        li {
+          display: inline-block;
+          margin-left: 20px;
+          cursor: pointer;
+
+          .iconfont {
+            font-size: 18px;
+          }
+
+          .icon-menu1:hover {
+            cursor: pointer;
+          }
+
+          .icon-menu {
+            cursor: pointer;
+            margin-left: 10px;
+          }
+        }
+
+        li.active {
+          // color: #00a041;
+          background-image: -webkit-linear-gradient(to bottom right, #35bf6d , #00a041);
+          // -webkit-background-clip: text;
+          // color: transparent;
+          -webkit-text-fill-color: #00a041;
+          -webkit-background-clip: text;
+        }
+
+        .showListLi>i.active {
+          color: #00a041;
+        }
+      }
+    }
+  }
+
+  .allActi {
+    padding-top: 20px;
+    border-bottom: 1px solid #eee;
+    line-height: 37px;
+
+    .actiFilterUl {
+      >li {
+        float: left;
+        padding-bottom: 10px;
+        margin-right: 20px;
+        cursor: pointer;
+        color: #333;
+      }
+
+      >li.active {
+        border-bottom: 2px solid #00a041;
+        color: #00a041;
+      }
+
+      .bottomLi {
+        margin-right: 0;
+      }
+
+      .box-card {
+        position: absolute;
+        left: 8px;
+        top: 23px;
+        background-color: #fff;
+        padding: 0;
+        z-index: 4;
+      }
+
+      .el-card__body {
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .listUl {
+        width: 100%;
+        height: 100%;
+        padding: 0 20px;
+      }
+
+      .listUl>li {
+        padding: 5px 0;
+        float: left;
+        width: 170px;
+        cursor: pointer;
+        color: #000;
+      }
+
+      .listUl>li.active {
+        color: #00a041;
+      }
+    }
+
+    .actiSearch {
+      width: 200px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      padding-right: 40px;
+      border: 1px solid #eee;
+      border-radius: 5px;
+
+      >input {
+        border: 0;
+        height: 100%;
+        width: 80%;
+      }
+
+      input,
+      textarea,
+      select,
+      button {
+        text-rendering: auto;
+        color: #333;
+        letter-spacing: normal;
+        word-spacing: normal;
+        text-transform: none;
+        text-indent: 0;
+        text-shadow: none;
+        display: inline-block;
+        text-align: start;
+        margin: 0em;
+        font: 400 16px Arial;
+      }
+
+      >.icon-sousuo {
+        position: relative;
+        top: -36px;
+        right: -120px;
+        cursor: pointer;
+        font-size: 20px;
+        display: inline-block;
+        width: 40px;
+        line-height: 37px;
+        text-align: center;
+        border-left: 1px solid #eee;
+      }
+    }
+  }
+
+  .actiTab {
+    margin-top: 20px;
+    margin-bottom: 30px;
+
+    .allActiUl {
+      // overflow: hidden;
+
+      >li {
+        float: left;
+        width: 280px;
+        height: 345px;
+        border: 1px solid #eee;
+        margin-right: 20px;
+        margin-bottom: 30px;
+        .postImgItem{
+          display: inline-block;
+          width: 100%;
+          height: 192px;
+          .postImg {
+            
+            height: 100%;
+            width: 100%;
+          }
+        }
+        
+
+        .actiNum {
+          padding: 10px;
+          border-top: 1px solid #eee;
+          color: #999;
+          font-size: 12px;
+          .avatar {
+            float: left;
+            padding-left: 10px;
+
+            >ul {
+              display: inline-block;
+
+              li {
+                float: left;
+                width: 18px;
+                height: 18px;
+                border: 1px solid #ccc;
+                border-radius: 50%;
+                margin-left: -10px;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 50%;
+                }
+              }
+            }
+          }
+
+          >i {
+            margin-left: 10px;
+          }
+
+          >span {
+            float: right;
+
+            .icon-xihuan {
+              margin-right: 5px;
+            }
+          }
+        }
+
+        .actiInfo {
+          padding: 10px;
+          color:#999;
+          font-size: 13px;
+          >.actiNameItem{
+            color:#222;
+            font-size: 16px;
+          }
+
+          .actiTimer {
+            text-indent: -10px;
+            margin:10px 0 5px 18px;
+          }
+        }
+      }
+
+      li:nth-child(4n) {
+        margin-right: 0;
+      }
+    }
+
+    // 竖向排列样式
+    .verticalUl {
+      margin-bottom: 50px;
+
+      >li {
+        padding: 20px 0;
+        border-bottom: 1px solid #ccc;
+
+        .verticalLeft {
+          margin-right: 30px;
+          width: 304px;
+          height: 185px;
+
+          >img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .verticalMiddle {
+          .verticalTit {
+            color: #333;
+          }
+
+          .xihuan {
+            margin: 15px 0;
+          }
+
+          .location {
+            margin: 18px 0;
+          }
+
+          .actiNum {
+            .avatar {
+              float: left;
+              padding-left: 10px;
+
+              >ul {
+                display: inline-block;
+
+                li {
+                  float: left;
+                  width: 22px;
+                  height: 22px;
+                  border: 1px solid #ccc;
+                  border-radius: 50%;
+                  margin-left: -10px;
+
+                  img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                  }
+                }
+              }
+            }
+
+            >.btn {
+              float: right;
+            }
+          }
+        }
+
+        .verticalRight {
+          margin-top: 145px;
+        }
+      }
+
+      >li:first-child {
+        padding-top: 0;
+      }
+    }
+  }
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #00a041;
+  color: #fff;
+}
+
+.el-pager li:hover {
+  color: #00a041;
+}
+
+.pagination-container {
+  text-align: center;
+}
+
+/* 活动中心结束 */
+/* 活动详情 */
+.el-textarea__inner{
+  background: #f9f9f9;
+}
+/* 活动详情 */

@@ -126,7 +126,7 @@ public class InvestorManagementServiceImpl implements InvestorManagementService 
         tbServiceInvestor.setModifiedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //修改人
         tbServiceInvestor.setModifierAccount(account);
-        return tbServiceInvestorMapper.updateByExample(tbServiceInvestor, example);
+        return tbServiceInvestorMapper.updateByExampleSelective(tbServiceInvestor, example);
     }
 
     /**

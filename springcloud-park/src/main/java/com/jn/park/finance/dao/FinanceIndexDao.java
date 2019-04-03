@@ -48,7 +48,7 @@ public interface FinanceIndexDao {
      * @param typeId 类型
      * @return
      */
-    List<FinanceIndexSectionBudgetExpendVo>  sectionBudgetExpend(@Param("startTime")String startTime,@Param("endTime")String endTime, @Param("departmentId")String departmentId, @Param("typeId")int typeId);
+    List<FinanceIndexSectionBudgetExpendVo>  sectionBudgetExpend(@Param("startTime")String startTime,@Param("endTime")String endTime, @Param("departmentId")String departmentId, @Param("typeId")String typeId);
 
     /**
      * 部门资产明细/ 各项支出占比情况 饼状图

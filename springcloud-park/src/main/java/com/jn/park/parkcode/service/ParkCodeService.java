@@ -1,5 +1,6 @@
 package com.jn.park.parkcode.service;
 
+import com.jn.park.model.ParkCode;
 import com.jn.park.parkcode.entity.TbParkCode;
 
 import java.util.List;
@@ -18,5 +19,5 @@ public interface ParkCodeService {
      * @param codeType
      * @return
      */
-    List<TbParkCode> getParkCodeByType(String codeType);
+    List<ParkCode>  getParkCodeByType(String codeType);
 }

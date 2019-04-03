@@ -3,13 +3,14 @@
 <mapper namespace="com.jn.user.usertag.dao.UserTagMapper">
     <!--批量用户标签-->
     <insert id="insertUserTag" parameterType="java.util.List">
-        insert into tb_user_tag (id,user_id,tag_id,tag_type,created_time
+        insert into tb_user_tag (id,user_id,tag_id,tag_name,tag_type,created_time
         ,creator_account,modified_time,modifier_account,record_status)
         select A.* from(
         <foreach collection="list" item="item" index="index" open="" close="" separator="union all">
             ( select #{item.id,jdbcType=VARCHAR} as 'id'
             ,#{item.userId,jdbcType=VARCHAR} as 'userId'
             ,#{item.tagId,jdbcType=VARCHAR} as 'tagId'
+            ,#{item.tagName,jdbcType=VARCHAR} as 'tagName'
             ,#{item.tagType,jdbcType=VARCHAR} as 'tagType'
             ,#{item.createdTime,jdbcType=TIMESTAMP} as 'createdTime'
             ,#{item.creatorAccount,jdbcType=VARCHAR} as 'creatorAccount'

@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
@@ -12,8 +13,11 @@ import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
 import com.jn.enterprise.servicemarket.org.service.OrgService;
+import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -55,6 +59,8 @@ public class OrgServiceImpl implements OrgService {
     private OrgTeamMapper orgTeamMapper;
     @Autowired
     private TbServiceOrgInfoMapper tbServiceOrgInfoMapper;
+    @Autowired
+    private UserExtensionClient userClient;
 
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
@@ -244,6 +250,27 @@ public class OrgServiceImpl implements OrgService {
             tbServiceOrgInfo.setCreatorAccount(account);
             return tbServiceOrgInfoMapper.insertSelective(tbServiceOrgInfo);
         }
+    }
+    @ServiceLog(doAction = "我的机构,机构信息")
+    @Override
+    public MyOrgInfoVo getMyOrgInfo(String account) {
+       Result<UserExtensionInfo> userResult =  userClient.getUserExtension(account);
+        if (userResult.getData() == null) {
+            return  null;
+        }
+        UserExtensionInfo userInfo = userResult.getData();
+        String orgId =  userInfo.getAffiliateCode();
+        if(StringUtils.isBlank(orgId)){
+            return  null;
+        }
+        //机构详情
+        OrgDetailVo orgDetailVo = getServiceOrgDetail(orgId);
+        //机构统计信息
+        MyOrgInfoVo myOrgInfoVo = new MyOrgInfoVo();
+        myOrgInfoVo.setOrgDetailVo(orgDetailVo);
+        OrgCount orgCount =  orgMapper.getMyOrgInfo(orgId);
+        myOrgInfoVo.setOrgCount(orgCount);
+        return myOrgInfoVo;
     }
 
 

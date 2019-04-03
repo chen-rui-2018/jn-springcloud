@@ -182,7 +182,7 @@ public class UserInfoServiceImplTest {
     public void saveOrUpdateUserInfo(){
         UserInfoParam userInfoParam = new UserInfoParam();
         userInfoParam.setName("张桑");
-        userInfoParam.setNick_name("飞凡网");
+        userInfoParam.setNickName("飞凡网");
         userInfoParam.setAge(20);
         userInfoParam.setSex("1");
         userInfoParam.setJobs(new String[]{"101","102"});

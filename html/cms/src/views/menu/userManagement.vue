@@ -207,9 +207,9 @@ export default {
   },
   data() {
     var checkAccount = (rule, value, callback) => {
-      const reg = /[A-Za-z0-9]{6,16}$/
+      const reg = /[A-Za-z0-9]{1,16}$/
       if (!reg.test(value)) {
-        callback(new Error('请输入6到16位长度字符的数字及字母'))
+        callback(new Error('请输入1到16位长度字符的数字及字母'))
       } else {
         if (this.dialogStatus === 'create') {
           paramApi('system/sysUser/checkUserName', this.temp.account, 'account').then(response => {

@@ -3,7 +3,6 @@ package com.jn.enterprise.servicemarket.advisor.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,15 +17,12 @@ public class ServiceProjectExperience  implements Serializable {
     @ApiModelProperty(value = "主键id")
     private String id;
     @ApiModelProperty(value = "顾问账号")
-    @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
     @ApiModelProperty(value = "公司名称")
-    @NotNull(message="公司名称不能为空")
     private String companyName;
     @ApiModelProperty(value = "项目名称")
-    @NotNull(message="项目名称不能为空")
     private String projectName;
-    @ApiModelProperty(value = "项目时间(格式：201903)")
+    @ApiModelProperty(value = "项目时间")
     private String projectTime;
     @ApiModelProperty(value = "个人职责")
     private String personalDuties;

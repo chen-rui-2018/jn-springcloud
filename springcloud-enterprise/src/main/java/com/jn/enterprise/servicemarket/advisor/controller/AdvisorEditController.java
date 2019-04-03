@@ -2,11 +2,7 @@ package com.jn.enterprise.servicemarket.advisor.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
-import com.jn.enterprise.servicemarket.advisor.entity.TbServiceCertificateType;
-import com.jn.enterprise.servicemarket.advisor.model.AdvisorBaseInfo;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceExperienceParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceHonorParam;
-import com.jn.enterprise.servicemarket.advisor.model.ServiceProjectExperienceParam;
+import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
@@ -18,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,7 +25,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "编辑顾问资料")
+@Api(tags = "服务超市-编辑顾问资料,(app顾问认证)")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorEditController")
 public class AdvisorEditController extends BaseController {
@@ -41,50 +38,53 @@ public class AdvisorEditController extends BaseController {
     private AdvisorEditService advisorEditService;
 
     @ControllerLog(doAction = "基本信息保存并更新")
-    @ApiOperation(value = "基本信息保存并更新", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveOrUpdateAdvisorBaseInfo")
+    @ApiOperation(value = "基本信息保存并更新(pc/app基本资料)")
+    @RequestMapping(value = "/saveOrUpdateAdvisorBaseInfo",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorBaseInfo")
-    public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated  AdvisorBaseInfo advisorBaseInfo){
-        advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfo);
-        return new Result();
+    public Result saveOrUpdateAdvisorBaseInfo(@RequestBody @Validated AdvisorBaseInfoParam advisorBaseInfoParam){
+        int responseNum = advisorEditService.saveOrUpdateAdvisorBaseInfo(advisorBaseInfoParam);
+        logger.info("------基本信息保存并更新成功，数据响应条数：{}------",responseNum);
+        return new Result(responseNum);
     }
 
     @ControllerLog(doAction = "荣誉资质保存并更新")
-    @ApiOperation(value = "荣誉资质保存并更新", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveOrUpdateAdvisorHonor")
+    @ApiOperation(value = "荣誉资质保存并更新,(pc/app资质认证)")
+    @RequestMapping(value = "/saveOrUpdateAdvisorHonor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorHonor")
     public Result saveOrUpdateAdvisorHonor(@RequestBody @Validated ServiceHonorParam serviceHonorParam){
-        advisorEditService.saveOrUpdateAdvisorHonor(serviceHonorParam);
-        return new Result();
+        int responseNum = advisorEditService.saveOrUpdateAdvisorHonor(serviceHonorParam);
+        logger.info("------荣誉资质保存并更新成功，数据响应条数：{}------",responseNum);
+        return new Result(responseNum);
     }
 
-
     @ControllerLog(doAction = "服务经历保存并更新")
-    @ApiOperation(value = "服务经历保存并更新", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveOrUpdateAdvisorExperience")
+    @ApiOperation(value = "服务经历保存并更新,(pc/app服务经历)")
+    @RequestMapping(value = "/saveOrUpdateAdvisorExperience",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorExperience")
     public Result saveOrUpdateAdvisorExperience(@RequestBody @Validated ServiceExperienceParam serviceExperienceParam){
-        advisorEditService.saveOrUpdateAdvisorExperience(serviceExperienceParam);
-        return new Result();
+        int responseNum = advisorEditService.saveOrUpdateAdvisorExperience(serviceExperienceParam);
+        logger.info("------荣誉资质保存并更新成功，数据响应条数：{}------",responseNum);
+        return new Result(responseNum);
     }
 
     @ControllerLog(doAction = "项目经验保存并更新")
-    @ApiOperation(value = "项目经验保存并更新", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/saveOrUpdateAdvisorProjectExperience")
+    @ApiOperation(value = "项目经验保存并更新(pc/app项目经验)")
+    @RequestMapping(value = "/saveOrUpdateAdvisorProjectExperience",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/advisorEditController/saveOrUpdateAdvisorProjectExperience")
     public Result saveOrUpdateAdvisorProjectExperience(@RequestBody @Validated ServiceProjectExperienceParam serviceProjectExperienceParam){
-        advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperienceParam);
-        return new Result();
+        int responseNum = advisorEditService.saveOrUpdateAdvisorProjectExperience(serviceProjectExperienceParam);
+        logger.info("------荣誉资质保存并更新成功，数据响应条数：{}------",responseNum);
+        return new Result(responseNum);
     }
 
     @ControllerLog(doAction = "获取指定证件类型")
-    @ApiOperation(value = "获取指定证件类型", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getCertificateTypeList")
+    @ApiOperation(value = "获取指定证件类型")
+    @RequestMapping(value = "/getCertificateTypeList",method = RequestMethod.GET)
     @RequiresPermissions("/serviceMarket/advisorEditController/getCertificateTypeList")
-    public Result<List<TbServiceCertificateType>> getCertificateTypeList(){
+    public Result<List<AdvisorCertificateTypeShow>> getCertificateTypeList(){
         //证件类型分类 荣誉资质：honor
         String certificateType="honor";
-        List<TbServiceCertificateType> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
+        List<AdvisorCertificateTypeShow> certificateTypeList = advisorEditService.getCertificateTypeList(certificateType);
         return new Result(certificateTypeList);
     }
 

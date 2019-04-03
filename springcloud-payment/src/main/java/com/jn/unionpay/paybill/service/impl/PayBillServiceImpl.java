@@ -322,7 +322,17 @@ public class PayBillServiceImpl implements PayBillService {
         TbPaymentOrderCriteria orderCriteria = new TbPaymentOrderCriteria();
         orderCriteria.createCriteria().andCreatorAccountEqualTo(account).andRecordStatusEqualTo(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         List<TbPaymentOrder> tbPaymentOrders = tbPaymentOrderMapper.selectByExample(orderCriteria);
-        return new PaginationData(tbPaymentOrders, objects == null ? 0 : objects.getTotal());
+        List<PayOrderModel> orderModels = new ArrayList<>(16);
+        for (TbPaymentOrder order : tbPaymentOrders) {
+            PayOrderModel model = new PayOrderModel();
+            BeanUtils.copyProperties(objects,model);
+            if(null != order.getPayTime()){
+                model.setPayTime(DateUtils.formatDate(order.getPayTime(),"yyyy-MM-dd HH:mm:ss"));
+            }
+            model.setCreatedTime(DateUtils.formatDate(order.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+            orderModels.add(model);
+        }
+        return new PaginationData(orderModels, objects == null ? 0 : objects.getTotal());
     }
 
     @Override
@@ -338,11 +348,27 @@ public class PayBillServiceImpl implements PayBillService {
 
         PayOrderVO payOrderVO = new PayOrderVO();
         BeanUtils.copyProperties(paymentOrder,payOrderVO);
+        if(null != paymentOrder.getPayTime()){
+            payOrderVO.setPayTime(DateUtils.formatDate(paymentOrder.getPayTime(),"yyyy-MM-dd HH:mm:ss"));
+        }
+        payOrderVO.setCreatedTime(DateUtils.formatDate(paymentOrder.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
         List<PaymentBill> bills = new ArrayList<>(16);
         if(null != tbPaymentBills && tbPaymentBills.size() > 0 ){
             for (TbPaymentBill bill:tbPaymentBills) {
                 PaymentBill paymentBill = new PaymentBill();
                 BeanUtils.copyProperties(bill,paymentBill);
+                if(null != bill.getBillCreateTime()){
+                    paymentBill.setBillCreateTime(DateUtils.formatDate(bill.getBillCreateTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != bill.getRemindTime()){
+                    paymentBill.setRemindTime(DateUtils.formatDate(bill.getRemindTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != bill.getPayEndTime()){
+                    paymentBill.setPayEndTime(DateUtils.formatDate(bill.getPayEndTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
+                if(null != bill.getRemindTime()){
+                    paymentBill.setCreatedTime(DateUtils.formatDate(bill.getCreatedTime(),"yyyy-MM-dd HH:mm:ss"));
+                }
                 bills.add(paymentBill);
             }
         }

@@ -32,18 +32,20 @@ public class PayOrderModel implements Serializable {
     private Double orderAmount;
     @ApiModelProperty(value = "支付时间")
     private String payTime;
-    @ApiModelProperty(value = "订单状态")
+    @ApiModelProperty(value = "订单状态[-1取消支付1未支付2已支付3支付失败]")
     private String orderStatus;
     @ApiModelProperty(value = "支付平台订单号")
     private String payId;
     @ApiModelProperty(value = "实际支付金额")
     private Double payAmount;
+    @ApiModelProperty(value = "积分抵扣金额")
+    private Double integralAmount;
     @ApiModelProperty(value = "支付方式 0微信1支付宝2银联")
     private String payType;
     @ApiModelProperty(value = "支付备注")
     private String payRemark;
     @ApiModelProperty(value = "订单创建时间")
-    private Date createdTime;
+    private String createdTime;
     @ApiModelProperty(value = "订单创建人")
     private String creatorAccount;
 
@@ -143,6 +145,14 @@ public class PayOrderModel implements Serializable {
         this.payAmount = payAmount;
     }
 
+    public Double getIntegralAmount() {
+        return integralAmount;
+    }
+
+    public void setIntegralAmount(Double integralAmount) {
+        this.integralAmount = integralAmount;
+    }
+
     public String getPayType() {
         return payType;
     }
@@ -159,11 +169,11 @@ public class PayOrderModel implements Serializable {
         this.payRemark = payRemark;
     }
 
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(String createdTime) {
         this.createdTime = createdTime;
     }
 
@@ -190,6 +200,7 @@ public class PayOrderModel implements Serializable {
                 ", orderStatus='" + orderStatus + '\'' +
                 ", payId='" + payId + '\'' +
                 ", payAmount=" + payAmount +
+                ", integralAmount=" + integralAmount +
                 ", payType='" + payType + '\'' +
                 ", payRemark='" + payRemark + '\'' +
                 ", createdTime=" + createdTime +

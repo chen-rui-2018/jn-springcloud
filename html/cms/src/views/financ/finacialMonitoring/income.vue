@@ -43,7 +43,6 @@
         <el-button
           type="primary"
           style="float:right;margin-right:10px;"
-          @click="handleFilter"
         ><router-link :to="{name:'monitoring'}">返回主页</router-link></el-button>
       </el-form>
     </header>
@@ -114,17 +113,14 @@
           <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="financeIncomeLastYearContrastModels" align="center" min-width="100">
             <el-table-column label="去年" prop="createdTime" align="center">
               <template slot-scope="scope">
-                <span>￥{{ scope.row.financeIncomeLastYearContrastModels[index].lastYearIncome }}</span>
+                <span>￥{{ (Math.round(scope.row.financeIncomeLastYearContrastModels[index].lastYearIncome/100)/100).toFixed(2) }}万元</span>
               </template>
             </el-table-column>
             <el-table-column label="今年" prop="createdTime" align="center">
               <template slot-scope="scope">
-                <span>￥{{ scope.row.financeIncomeLastYearContrastModels[index].income }}</span>
+                <span>￥{{ (Math.round(scope.row.financeIncomeLastYearContrastModels[index].income/100)/100).toFixed(2) }}万元</span>
               </template>
             </el-table-column>
-          <!-- <template slot-scope="scope">
-              <span>{{ scope.row.budgetMoneyModels[index].money }}</span>
-            </template> -->
           </el-table-column>
         </el-table-column>
       </el-table>
@@ -135,7 +131,7 @@
 <script>
 import {
   api
-} from '@/api/financ'
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -159,7 +155,7 @@ export default {
   methods: {
     // 导出
     handleexcel() {
-      api(`finance/income/exportContrast?year=${this.textYear.slice(0, 4)}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/income/exportContrast?year=${this.textYear.slice(0, 4)}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -172,40 +168,35 @@ export default {
     },
     // 查询数据
     handleFilter() {
-      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === undefined) {
+      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === null) {
         alert('请选择开始日期')
         return false
-      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === undefined) {
+      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === null) {
         alert('请选择结束日期')
         return false
       }
       this.inislist()
     },
     // 设置柱状图
-    drawLine(data) {
+    drawLine(data, lastYearIncomeArr, incomeArr) {
       // 基于准备好的dom，初始化echarts实例
       const myChart = this.$echarts.init(document.getElementById('myChart'))
       if (data.rows) {
         myChart.hideLoading()
-        var lastYearIncomeArr = []
-        var incomeArr = []
-        for (let i = 0; i < data.rows.length; i++) {
-          lastYearIncomeArr.push(
-            Number(data.rows[i].lastYearIncome)
-          )
-          incomeArr.push(
-            Number(data.rows[i].income)
-          )
-        }
         // 绘制图表
         var options = {
           title: {
             text: '园区各月收入与同期对比',
             textStyle: {
-              color: 'rgb(183, 178, 255)'
+              color: 'rgb(44, 169, 248)',
+              fontWeight: 'lighter'
             },
-            left: '35%'
+            top: 10,
+            left: 'center'
             // subtext: '纯属虚构'
+          },
+          grid: {
+            left: '15%'
           },
           tooltip: {
             trigger: 'axis'
@@ -314,6 +305,11 @@ export default {
           ]
         }
         myChart.setOption(options)
+        window.addEventListener('resize', () => { myChart.resize() })
+        // window.onresize = function() {
+        //   myChart.resize()
+        //   // myChart1.resize();    //若有多个图表变动，可多写
+        // }
       } else {
         var ttt = {
           text: '暂无数据',
@@ -346,9 +342,11 @@ export default {
           title: {
             text: '各项收入汇总占比情况',
             textStyle: {
-              color: 'rgb(183, 178, 255)'
+              color: 'rgb(44, 169, 248)',
+              fontWeight: 'lighter'
             },
-            left: '20%'
+            top: 10,
+            left: 'center'
             // subtext: '纯属虚构'
           },
           tooltip: {
@@ -356,9 +354,11 @@ export default {
             formatter: '{a} <br/>{b}: {c} ({d}%)'
           },
           legend: {
+            type: 'scroll',
             orient: 'vertical',
-            right: '5%',
-            bottom: '20%',
+            right: 10,
+            top: 35,
+            bottom: 20,
             // data: ['电费', '楼宇租金', '物业费', '其它']
             data: legendArr
           },
@@ -400,6 +400,11 @@ export default {
           ]
         }
         collect.setOption(collectOption)
+        window.addEventListener('resize', () => { collect.resize() })
+        // window.onresize = function() {
+        //   collect.resize()
+        //   // myChart1.resize();    //若有多个图表变动，可多写
+        // }
       } else {
         var ttt = {
           text: '暂无数据',
@@ -422,7 +427,7 @@ export default {
     },
     // 获取表格数据
     getTableDate() {
-      api(`finance/income/lastYearContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/income/lastYearContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.rows.length > 0) {
             this.incomeList = res.data.data.rows
@@ -440,7 +445,7 @@ export default {
     },
     // 获取汇总信息
     getCollect() {
-      api(`finance/income/summarizingProportion?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/income/summarizingProportion?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.collectPie(res.data.data)
         } else {
@@ -451,11 +456,21 @@ export default {
     },
     // 获取明细， 同期对比
     getPeriodContrast() {
-      api(`finance/income/periodContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/income/periodContrast?startTime=${this.listQuery.startMonth}&endTime=${this.listQuery.endMonth}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // myChart.setOption.xAxis.data = res.data
           if (res.data.data.rows.length > 1) {
-            this.drawLine(res.data.data)
+            var lastYearIncomeArr = []
+            var incomeArr = []
+            for (let i = 0; i < res.data.data.rows.length; i++) {
+              lastYearIncomeArr.push(
+                Number(res.data.data.rows[i].lastYearIncome)
+              )
+              incomeArr.push(
+                Number(res.data.data.rows[i].income)
+              )
+            }
+            this.drawLine(res.data.data, lastYearIncomeArr, incomeArr)
             this.money = res.data.data.rows[0].sumIncome
             this.money = (Math.round(this.money / 100) / 100).toFixed(2)
             this.percentage = res.data.data.rows[0].sumLastYearPercent

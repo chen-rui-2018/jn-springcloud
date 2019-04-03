@@ -40,22 +40,30 @@
             style=" padding:15px;
              text-align: center; border-top:1px solid #ccc;">
             查看明细 <span v-show="Number(item.ratio.split('%')[0])>Number(ratio.split('%')[0])" class="iconfont" style="color:red;float:right;font-size:20px;">&#xe604;</span>
-            <span v-show="Number(item.ratio.split('%')[0])<Number(ratio.split('%')[0])" class="iconfont" style="color:blue;float:right;font-size:20px;">&#xe68b;</span>
+            <span v-show="Number(item.ratio.split('%')[0])<=Number(ratio.split('%')[0])" class="iconfont" style="color:blue;float:right;font-size:20px;">&#xe68b;</span>
           </div>
       </div></el-col>
       <div v-show="headerArr.length<=0" class="write" style="text-align:center;height:200px;line-height:200px;">暂无数据</div>
     </el-row>
     <div style="margin:20px 0px ; background:#fff;padding:10px 0; ">
-    <div id="myChart" :style="{width: '99%', height: '350px'}"/></div>
+    <chart id="myChart" :style="{width: '99%', height: '350px'}"/></div>
 </div></template>
 
 <script>
 import {
   api
-} from '@/api/financ'
+} from '@/api/axios'
+// import Chart from '@/components/financEcharts/barEcharts'
 export default {
+  // name: 'Chart',
+  // components: { Chart },
   data() {
     return {
+      // pubData: {
+      //   data: [],
+      //   lastYearIncomeArr: [],
+      //   incomeArr: []
+      // },
       empty: [],
       headerArr: [],
       selectYear: '',
@@ -72,7 +80,7 @@ export default {
   methods: {
     // 获取管委会支出与预算占比
     getRatio() {
-      api(`finance/index/ratioAndState?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/ratioAndState?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // this.headerArr = res.data.data
           // this.drawLine(res.data.data)
@@ -97,31 +105,23 @@ export default {
       this.$router.push({ name: 'financeDetails', query: { departmentId: value.departmentId, depName: value.departmentName }})
     },
     // 设置柱状图
-    drawLine(data) {
+    drawLine(data, lastYearIncomeArr, incomeArr) {
       // 基于准备好的dom，初始化echarts实例
       const myChart = this.$echarts.init(document.getElementById('myChart'))
       if (data.rows) {
         myChart.hideLoading()
-        var lastYearIncomeArr = []
-        var incomeArr = []
 
-        for (let i = 0; i < data.rows.length; i++) {
-        // mouthArr.push(data[i].month.slice(4, 6))
-          lastYearIncomeArr.push(
-            Number(data.rows[i].budgetNumber)
-          )
-          incomeArr.push(
-            Number(data.rows[i].cost)
-          )
-        }
         // 绘制图表
         var options = {
           title: {
-            text: '管委会每月预算监控(已支出/全年预算)',
+            text: this.selectYear + '年' + ' 管委会每月预算监控 (已支出/全年预算) ',
             textStyle: {
-              color: 'rgb(183, 178, 255)'
+              color: 'rgb(44, 169, 248)',
+              fontWeight: 'lighter'
+              // fontFamily: 'Microsoft YaHei'
             },
-            left: '35%'
+            top: 10,
+            left: 'center'
           // subtext: '纯属虚构'
           },
           tooltip: {
@@ -231,6 +231,7 @@ export default {
           ]
         }
         myChart.setOption(options)
+        window.addEventListener('resize', () => { myChart.resize() })
       } else {
         var ttt = {
           text: '暂无数据',
@@ -248,19 +249,29 @@ export default {
 
     // 已支出全年预算统计柱状图
     getExpendBudget() {
-      api(`finance/index/expendBudget?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/expendBudget?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
-          if (res.data.data.rows.length > 0) {
-            this.drawLine(res.data.data)
+          var lastYearIncomeArr = []
+          var incomeArr = []
+          for (let i = 0; i < res.data.data.rows.length; i++) {
+            // mouthArr.push(data[i].month.slice(4, 6))
+            lastYearIncomeArr.push(
+              Number(res.data.data.rows[i].budgetNumber)
+            )
+            incomeArr.push(
+              Number(res.data.data.rows[i].cost)
+            )
           }
+          this.drawLine(res.data.data, lastYearIncomeArr, incomeArr)
         } else {
           this.$message.error(res.data.result)
+          this.drawLine(this.empty)
         }
       })
     },
     // 各部门预算支出占比模块
     getBudgetExpendRatio() {
-      api(`finance/index/budgetExpendRatio?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/budgetExpendRatio?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.length > 0) {
             this.headerArr = res.data.data

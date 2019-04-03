@@ -49,7 +49,7 @@
       <el-table-column label="财务类型" prop="costTypeName" align="center" />
       <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="budgetMoneyModels" align="center" min-width="100">
         <template slot-scope="scope">
-          <span>{{ scope.row.budgetMoneyModels[index].money }}</span>
+          <span>￥{{ scope.row.budgetMoneyModels[index].money }}元</span>
         </template>
       </el-table-column>
       <el-table-column v-if="isShow" label="录入时间" prop="createdTime" min-width="120" sortable align="center"/>
@@ -95,8 +95,8 @@
 <script>
 // import global from '@/api/global'
 import {
-  api, importBdDeptdoc
-} from '@/api/financ'
+  api, Inventor
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -151,10 +151,6 @@ export default {
     this.getFinanceType()
   },
   methods: {
-    // 下载模板文件
-    download() {
-      window.location.href = '/static/file/预算录入模板.xlsx'
-    },
     // 获取时间
     getDate() {
       const date = new Date()
@@ -202,7 +198,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      importBdDeptdoc(`finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
+      Inventor(`${this.GLOBAL.financUrl}finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.$message({
@@ -234,7 +230,7 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        api(`finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.financUrl}finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
@@ -246,7 +242,7 @@ export default {
           this.listLoading = false
         })
       } else {
-        api(`finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.financUrl}finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
@@ -272,12 +268,12 @@ export default {
     },
     // 获取部门信息
     getDepartment() {
-      api('finance/documents/getUserDepartment', '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/documents/getUserDepartment`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data) {
             res.data.data.forEach(val => {
               if (val.departmentName === '财务部') {
-                api('finance/expenses/selectDepartment', '', 'get').then(res => {
+                api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
                   if (res.data.code === this.GLOBAL.code) {
                     this.departmentOptions = res.data.data
                   } else {
@@ -298,7 +294,7 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api('finance/expenses/selectFinanceType', '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.financeTypeOptions = res.data.data
         } else {

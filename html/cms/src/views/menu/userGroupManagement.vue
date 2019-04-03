@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   filters: {
     statusFilter(recordStatus) {
@@ -144,8 +144,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增用户组') {
-          paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/checkGroupName`, this.userGroupform.groupName, 'groupName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -155,8 +155,8 @@ export default {
           })
         } else {
           if (this.oldGroupName !== this.userGroupform.groupName) {
-            paramApi('system/sysGroup/checkGroupName', this.userGroupform.groupName, 'groupName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/checkGroupName`, this.userGroupform.groupName, 'groupName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -263,8 +263,8 @@ export default {
       } else {
         this.numberPage = this.numberPage - 1
       }
-      api('system/sysGroup/roleGroupAuthorization', { groupId: this.groupId, roleIds: value }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/roleGroupAuthorization`, { groupId: this.groupId, roleIds: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -286,13 +286,13 @@ export default {
       this.getRole()
     },
     getRole() {
-      api('system/sysGroup/selectGroupRoleAndOtherRole', {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/selectGroupRoleAndOtherRole`, {
         groupId: this.groupId,
         page: this.numberPage,
         rows: this.numberRows,
         roleName: this.roleName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const roleData = []
           const checkRole = []
           this.numberTotal = res.data.data.total
@@ -325,7 +325,7 @@ export default {
 
     // 根据用户组id获取用户组拥有的用户和其他用户
     getUser() {
-      api('system/sysGroup/findOtherUserByPage', { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }).then(res => {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/findOtherUserByPage`, { groupId: this.userGroupId, page: this.userPage, rows: this.userRows, name: this.name }, 'post').then(res => {
         const userData = []
         const checkUser = []
         this.userTotal = res.data.data.total
@@ -367,9 +367,9 @@ export default {
       } else {
         this.userPage = this.userPage - 1
       }
-      api('system/sysGroup/userGroupAuthorization', { groupId: this.userGroupId, userIds: value }).then(
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/userGroupAuthorization`, { groupId: this.userGroupId, userIds: value }, 'post').then(
         res => {
-          if (res.data.code === '0000') {
+          if (res.data.code === this.GLOBAL.code) {
             this.$message({
               message: '授权成功',
               type: 'success'
@@ -412,8 +412,8 @@ export default {
       this.$refs['userGroupform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysGroup/add', this.userGroupform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysGroup/add `, this.userGroupform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -456,8 +456,8 @@ export default {
           // 将对话框隐藏
           this.userGroupdialogFormVisible = false
           // 调用接口发送请求
-          api('system/sysGroup/update', this.userGroupform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysGroup/update`, this.userGroupform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -482,8 +482,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysGroup/delete', row.id, 'groupIds').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysGroup/delete`, row.id, 'groupIds').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -504,8 +504,8 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      api('system/sysGroup/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysGroup/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.usergroupList = res.data.data.rows
           this.total = res.data.data.total
           if (this.usergroupList.length === 0 && this.total > 0) {

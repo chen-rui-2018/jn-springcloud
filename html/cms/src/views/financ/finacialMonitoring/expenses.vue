@@ -38,17 +38,21 @@
     <el-table :data="budgetList" :default-sort = "{prop: 'date', order: 'descending'}" border fit highlight-current-row style="width: 100%;" @sort-change="sortChange">
       <!-- <el-table-column type="selection" align="center" width="60"/> -->
       <el-table-column label="序列" type="index" align="center" width="60"/>
-      <el-table-column label="月份" prop="costHappendTime" sortable="custom" align="center" width="100" >
+      <el-table-column label="月份" prop="costHappendTime" sortable="custom" align="center" min-width="100" >
         <template slot-scope="scope">
           <span>{{ scope.row.costHappendTime.slice(0,4)+'年' + scope.row.costHappendTime.slice(4,6)+'月' }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isShow" label="费用流水号" prop="costId" align="center" />
-      <el-table-column label="支出金额" prop="cost" sortable="custom" align="center" />
+      <el-table-column v-if="isShow" :key="Math.random()" label="费用流水号" prop="costId" align="center" />
+      <el-table-column label="支出金额" prop="cost" sortable="custom" align="center">
+        <template slot-scope="scope">
+          <span>{{ '￥' +scope.row.cost +'元' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="isShow" label="支出类型(打标前)" prop="costBeforeTypeName" align="center"/>
-      <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" align="center"/>
+      <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" sortable="custom" align="center"/>
       <el-table-column label="操作日期" prop="modifiedTime" sortable="custom" align="center"/>
-      <el-table-column label="部门" prop="departmentName" align="center"/>
+      <el-table-column label="部门" prop="departmentName" sortable="custom" align="center"/>
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -120,9 +124,6 @@
     <template v-if=" markdialogVisible">
       <el-dialog :visible.sync="markdialogVisible" title="打标类型" width="400px">
         <el-form label-width="100px" class="demo-ruleForm">
-          <!-- <el-form-item label="打标前类型:" >
-            <span>{{ costBeforeTypeName }}</span>
-          </el-form-item> -->
           <el-form-item label="打标后类型:" >
             <el-select v-model="costAfterTypeId" placeholder="请选择类型" @change="changecostAfterTypeId">
               <el-option v-for="item in markOptions" :key="item.id" :label="item.financeName" :value="item.id" />
@@ -140,11 +141,12 @@
 
 <script>
 import {
-  api, importBdDeptdoc
-} from '@/api/financ'
+  api, Inventor
+} from '@/api/axios'
 export default {
   data() {
     return {
+      key: '1',
       disabled: false,
       multipleSelection: [],
       selectIndex: '',
@@ -200,10 +202,6 @@ export default {
     this.getDepartment()
   },
   methods: {
-    // 下载模板文件
-    // download() {
-    //   window.location.href = '/static/file/支出录入.xlsx'
-    // },
     // 批量打标
     batchMark() {
       if (this.multipleSelection.length === 0) {
@@ -257,7 +255,7 @@ export default {
           return
         }
       }
-      api('finance/expenses/saveMarkData', this.newArr, 'post').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/expenses/saveMarkData`, this.newArr, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '导入成功',
@@ -298,7 +296,7 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api('finance/expenses/selectFinanceType', '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.markOptions = res.data.data
         } else {
@@ -329,7 +327,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      importBdDeptdoc(`finance/expenses/importData`, formData, 'post')
+      Inventor(`${this.GLOBAL.financUrl}finance/expenses/importData`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.dialogVisible = false
@@ -370,9 +368,9 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        this.getTableData('finance/expenses/findAll')
+        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findAll`)
       } else {
-        this.getTableData('finance/expenses/findHistoryAll')
+        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findHistoryAll`)
       }
     },
     // 获取表格数据
@@ -418,7 +416,7 @@ export default {
     },
     // 获取部门信息
     getDepartment() {
-      api('finance/expenses/selectDepartment', '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.departmentOptions = res.data.data
         } else {
@@ -446,7 +444,7 @@ export default {
 .dabiao{
 .el-dialog{
     width: 1000px;
-    height: 500px ;
+   max-height: 500px ;
     overflow: auto;
     .el-dialog__header{
       display: none;

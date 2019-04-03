@@ -98,15 +98,15 @@
         <el-table-column label="序列" type="index" align="center" width="60"/>
         <el-table-column label="分类" prop="costTypeName" align="center" />
         <el-table-column :label="listQuery.selectYear+'年'" align="center" >
-          <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="financeIndexSectionExpendFormsModels" align="center" min-width="100">
-            <el-table-column label="预算" align="center">
+          <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="financeIndexSectionExpendFormsModels" align="center">
+            <el-table-column label="预算" align="center" min-width="100">
               <template slot-scope="scope">
-                <span>￥{{ scope.row.financeIndexSectionExpendFormsModels[index].budgetNumber }}</span>
+                <span>￥{{ scope.row.financeIndexSectionExpendFormsModels[index].budgetNumber }}元</span>
               </template>
             </el-table-column>
-            <el-table-column label="支出" align="center">
+            <el-table-column label="支出" align="center" min-width="100">
               <template slot-scope="scope">
-                <span>￥{{ scope.row.financeIndexSectionExpendFormsModels[index].cost }}</span>
+                <span>￥{{ scope.row.financeIndexSectionExpendFormsModels[index].cost }}元</span>
               </template>
             </el-table-column>
           </el-table-column>
@@ -119,7 +119,7 @@
 <script>
 import {
   api
-} from '@/api/financ'
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -155,7 +155,7 @@ export default {
     },
     // 导出
     handleexcel() {
-      api(`finance/income/exportContrast?year=${this.listQuery.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/expendFormsExport?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -173,21 +173,14 @@ export default {
       const myChart = this.$echarts.init(document.getElementById('myChart'))
       // 绘制图表
       var options = {
-        noDataLoadingOption: {
-          text: '暂无数据',
-          effect: 'bubble',
-          effectOption: {
-            effect: {
-              n: 0
-            }
-          }
-        },
         title: {
           text: '部门预算及支出各月统计情况',
           textStyle: {
-            color: 'rgb(183, 178, 255)'
+            color: 'rgb(44, 169, 248)',
+            fontWeight: 'lighter'
           },
-          left: '35%'
+          top: 10,
+          left: 'center'
           // subtext: '纯属虚构'
         },
         tooltip: {
@@ -305,6 +298,7 @@ export default {
         }
 
         myChart.setOption(options)
+        window.addEventListener('resize', () => { myChart.resize() })
       } else {
         var ttt = {
           text: '暂无数据',
@@ -338,9 +332,11 @@ export default {
           title: {
             text: '各项累计支出占比情况',
             textStyle: {
-              color: 'rgb(183, 178, 255)'
+              color: 'rgb(44, 169, 248)',
+              fontWeight: 'lighter'
             },
-            left: '20%'
+            top: 10,
+            left: 'center'
             // subtext: '纯属虚构'
           },
           tooltip: {
@@ -348,9 +344,11 @@ export default {
             formatter: '{a} <br/>{b}: {c} ({d}%)'
           },
           legend: {
+            type: 'scroll',
             orient: 'vertical',
-            right: '5%',
-            bottom: '20%',
+            right: 10,
+            top: 35,
+            bottom: 20,
             // data: ['电费', '楼宇租金', '物业费', '其它']
             data: legendArr
           },
@@ -392,6 +390,7 @@ export default {
           ]
         }
         collect.setOption(collectOption)
+        window.addEventListener('resize', () => { collect.resize() })
       } else {
         var ttt = {
           text: '暂无数据',
@@ -417,7 +416,7 @@ export default {
     },
     // 获取表格数据
     getTableDate() {
-      api(`finance/index/sectionExpendForms?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/sectionExpendForms?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.incomeList = res.data.data.rows
           this.tableHeader = res.data.data.dynamicHeadList
@@ -430,7 +429,7 @@ export default {
     },
     // 获取汇总信息
     getCollect() {
-      api(`finance/index/accumulativeExpendRatio?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/accumulativeExpendRatio?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.length > 0) {
             this.collectPie(res.data.data)
@@ -444,6 +443,7 @@ export default {
             this.percentage = ''
           }
         } else {
+          this.collectPie(this.empty)
           this.$message.error(res.data.result)
           this.money = ''
           this.percentage = ''
@@ -452,7 +452,7 @@ export default {
     },
     // 获取明细， 同期对比
     getPeriodContrast() {
-      api(`finance/index/sectionBudgetExpend?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}&typeId=${this.listQuery.typeId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/sectionBudgetExpend?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}&typeId=${this.listQuery.typeId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // myChart.setOption.xAxis.data = res.data
           this.drawLine(res.data.data)
@@ -464,7 +464,7 @@ export default {
     },
     // 获取分类
     getType() {
-      api(`finance/index/downType`, '', 'get').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/index/downType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.typeIdOptions = res.data.data
           // this.collectPie(res.data.data)

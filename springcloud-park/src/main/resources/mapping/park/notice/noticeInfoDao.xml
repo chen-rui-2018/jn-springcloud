@@ -13,7 +13,7 @@
         ,t1.home_show as "homeShow"
         ,t1.platform_type as "platformType"
         ,t1.platform_name as "platformName"
-        ,t1.publish_name as "pulishName"
+        ,t1.publish_name as "publishName"
         ,DATE_FORMAT(t1.created_time,"%Y-%m-%d %H:%i:%s") as "createdTime"
         ,t1.notice_status as "noticeStatus"
         ,t1.sort_field as "sortField"

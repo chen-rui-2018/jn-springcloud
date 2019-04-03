@@ -31,7 +31,7 @@ public class NoticeManageShow implements Serializable {
     private String platformType;
     @ApiModelProperty(value="平台类型(全部/App/门户)")
     private String platformName;
-    @ApiModelProperty(value="公告内容,前端展示")
+    @ApiModelProperty(value="公告内容,页面展示")
     private String noticeContent;
     @ApiModelProperty(value="公告详情,用于后台转换")
     private byte [] noticeDetails;

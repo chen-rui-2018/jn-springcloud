@@ -7,17 +7,16 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
+import com.jn.park.activity.model.ParkCode;
 import com.jn.park.enums.NoticeExceptionEnum;
 import com.jn.park.notice.dao.NoticeInfoDao;
 import com.jn.park.notice.dao.TbNoticeDetailsMapper;
 import com.jn.park.notice.dao.TbNoticeInfoMapper;
 import com.jn.park.notice.entity.TbNoticeDetails;
 import com.jn.park.notice.entity.TbNoticeInfo;
-import com.jn.park.notice.model.NoticeManageShow;
-import com.jn.park.notice.model.NoticeModifyParam;
-import com.jn.park.notice.model.NoticeQueryParam;
-import com.jn.park.notice.model.NoticeShelfParam;
-import com.jn.park.notice.service.NoticeService;
+import com.jn.park.notice.model.*;
+import com.jn.park.notice.service.NoticeManageService;
+import com.jn.park.parkcode.service.ParkCodeService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -28,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.security.auth.callback.Callback;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -43,20 +41,22 @@ import java.util.List;
  * @modified By:
  */
 @Service
-public class NoticeServiceImpl implements NoticeService {
+public class NoticeManageServiceImpl implements NoticeManageService {
     /**
      * 日志组件
      */
-    Logger logger = LoggerFactory.getLogger(NoticeServiceImpl.class);
+    Logger logger = LoggerFactory.getLogger(NoticeManageServiceImpl.class);
+
     @Autowired
     private TbNoticeInfoMapper noticeInfoMapper;
-
     @Autowired
     private TbNoticeDetailsMapper noticeDetailsMapper;
     @Autowired
     private UserExtensionClient userClient;
     @Autowired
     private NoticeInfoDao noticeInfoDao;
+    @Autowired
+    private ParkCodeService parkCodeService;
 
     @ServiceLog(doAction = "添加(发布)公告信息")
     @Transactional(rollbackFor=Exception.class)
@@ -71,9 +71,6 @@ public class NoticeServiceImpl implements NoticeService {
         TbNoticeInfo info =  new TbNoticeInfo();
         BeanUtils.copyProperties(param,info);
         //2.补充字段内容
-        if(StringUtils.isNotBlank(info.getPlatformType())){
-            info.setPlatformName(getPlatformName(info.getPlatformType()));
-            }
         info.setStartTime(DateUtils.parseDate(param.getStartTime(),"yyyy-MM-dd"));
         info.setEndTime(DateUtils.parseDate(param.getEndTime(),"yyyy-MM-dd"));
         info.setCreatedTime(new Date());
@@ -123,7 +120,7 @@ public class NoticeServiceImpl implements NoticeService {
         }
         return new PaginationData(noticeList,objects==null?0:objects.getTotal());
     }
-    @ServiceLog(doAction = "查找对外公告管理列表")
+    @ServiceLog(doAction = "编辑公告")
     @Transactional(rollbackFor=Exception.class)
     @Override
     public int modifyNotice(NoticeModifyParam param, String account) {
@@ -173,12 +170,27 @@ public class NoticeServiceImpl implements NoticeService {
         list = transfromNoticeDetails(list);
         return list.get(0);
     }
-
+    @ServiceLog(doAction = "公告上下架操作")
     @Override
     public int noticeShelfOperate(NoticeShelfParam shelfParam,String account) {
 
         int i =  noticeInfoDao.noticeShelfOperate(shelfParam.getNoticeId(),shelfParam.getNoticeStatus(),account);
         return i;
+    }
+    @ServiceLog(doAction = "公告平台列表")
+    @Override
+    public List<NoticePlatformShow> findPlatformList(String codeType) {
+       List<NoticePlatformShow> platformShows= new ArrayList<>(16);
+       List<ParkCode> parkCodes = parkCodeService.getParkCodeByType(codeType);
+       if(parkCodes!=null && parkCodes.size()>0){
+           for(ParkCode parkCode : parkCodes){
+               NoticePlatformShow show = new NoticePlatformShow();
+               show.setPlatformType(parkCode.getCodeValue());
+               show.setPlatformName(parkCode.getCodeName());
+               platformShows.add(show);
+           }
+       }
+        return platformShows;
     }
 
 
@@ -201,24 +213,5 @@ public class NoticeServiceImpl implements NoticeService {
             throw new JnSpringCloudException(NoticeExceptionEnum.NOTICE_TRANCE_DETAILS_DEFAULT);
         }
         return noticeList;
-    }
-
-    /**
-     * 获取平台名称
-     * @param platformType
-     * @return
-     */
-    private String getPlatformName(String platformType){
-        String platformApp = "App";
-        String platformPark = "门户";
-        String platformAll = "全部";
-        String typeName = null;
-        switch (platformType){
-                case "0": typeName=platformAll; break;
-                case "1": typeName=platformApp; break;
-                case "2": typeName=platformPark; break;
-                default:
-            }
-       return typeName;
     }
 }

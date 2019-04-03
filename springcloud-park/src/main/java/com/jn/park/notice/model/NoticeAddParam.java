@@ -40,16 +40,27 @@ public class NoticeAddParam implements Serializable {
     @NotBlank(message = "是否首页展示不能为空")
     @Pattern(regexp = "^[0-1]$",message = "首页展示-只能为 0 或 1")
     private String homeShow;
-    @ApiModelProperty(value="平台类型(0:全部-1:app-2:门户)",required = true,example = "0")
+    @ApiModelProperty(value="平台类型(P001:全部-P002:App-P003:门户)",required = true,example = "P002")
     @NotBlank(message = "平台类型不能为空")
-    @Pattern(regexp = "^[0-2]$",message = "平台类型-只能为 0 或 1 或 2")
+    @Pattern(regexp = "^P00[1-3]$",message = "平台类型-只能为 P001 或  P002 或  P003")
     private String platformType;
+    @ApiModelProperty(value="平台类型名称(全部/App/门户)",required = true,example = "App")
+    @NotBlank(message = "平台类型名称不能为空")
+    private String platformName;
     @ApiModelProperty(value="公告内容",required = true,example = "公告内容...")
     @NotBlank(message = "公告内容不能为空")
     private String noticeContent;
     @ApiModelProperty(value="排序字段,用于公告的默认,1,2,3,4",example = "1")
     @NotBlank(message = "排序字段的值不能为空")
     private String sortField;
+
+    public String getPlatformName() {
+        return platformName;
+    }
+
+    public void setPlatformName(String platformName) {
+        this.platformName = platformName;
+    }
 
     public String getSortField() {
         return sortField;

@@ -1,10 +1,7 @@
 package com.jn.park.notice.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.notice.model.NoticeManageShow;
-import com.jn.park.notice.model.NoticeModifyParam;
-import com.jn.park.notice.model.NoticeQueryParam;
-import com.jn.park.notice.model.NoticeShelfParam;
+import com.jn.park.notice.model.*;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-public interface NoticeService {
+public interface NoticeManageService {
     /**
      * 添加公告信息
      * @param param
@@ -53,5 +50,12 @@ public interface NoticeService {
      * @return
      */
    int noticeShelfOperate( NoticeShelfParam shelfParam,String account);
+
+    /**
+     * 平台列表
+     * @param codeType
+     * @return
+     */
+   List<NoticePlatformShow> findPlatformList(String codeType);
 }
 

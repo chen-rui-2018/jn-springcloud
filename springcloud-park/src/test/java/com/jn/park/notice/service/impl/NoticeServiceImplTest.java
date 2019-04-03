@@ -4,15 +4,13 @@ import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.park.enums.NoticeExceptionEnum;
-import com.jn.park.enums.PolicyInfoExceptionEnum;
 import com.jn.park.notice.dao.TbNoticeDetailsMapper;
 import com.jn.park.notice.dao.TbNoticeInfoMapper;
 import com.jn.park.notice.model.NoticeManageShow;
 import com.jn.park.notice.model.NoticeModifyParam;
 import com.jn.park.notice.model.NoticeQueryParam;
 import com.jn.park.notice.model.NoticeShelfParam;
-import com.jn.park.notice.service.NoticeService;
-import com.jn.park.policy.service.impl.PolicyCenterServiceImplTest;
+import com.jn.park.notice.service.NoticeManageService;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -30,6 +28,12 @@ import java.util.List;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.core.IsAnything.anything;
 import static org.junit.Assert.*;
+/**
+ * @author： chenr
+ * @date： Created on 2019/04/3 09:18
+ * @version： v1.0
+ * @modified By:
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes={SpringCloudParkApplication.class})
 @FixMethodOrder(MethodSorters.JVM)
@@ -40,7 +44,7 @@ public class NoticeServiceImplTest {
     private Logger logger = LoggerFactory.getLogger(NoticeServiceImplTest.class);
 
     @Autowired
-    private NoticeService noticeService;
+    private NoticeManageService noticeManageService;
     @Autowired
     private TbNoticeDetailsMapper detailsMapper;
     @Autowired
@@ -85,7 +89,7 @@ public class NoticeServiceImplTest {
     @Test
     public void addNotice() {
         try {
-            int i = noticeService.addNotice(param, account);
+            int i = noticeManageService.addNotice(param, account);
             assertThat(i, greaterThanOrEqualTo(1));
         }catch (JnSpringCloudException e){
             logger.warn("发布(新增)公告失败");
@@ -99,7 +103,7 @@ public class NoticeServiceImplTest {
 
     @Test
     public void findNoticeList() {
-        PaginationData<List<NoticeManageShow>> noticeList =  noticeService.findNoticeList(queryParam);
+        PaginationData<List<NoticeManageShow>> noticeList =  noticeManageService.findNoticeList(queryParam);
         if(noticeList!=null) {
             assertThat((int) noticeList.getTotal(), greaterThanOrEqualTo(0));
         }
@@ -109,7 +113,7 @@ public class NoticeServiceImplTest {
     @Test
     public void modifyNoticeList() {
         try {
-            int i =  noticeService.modifyNotice(param,account);
+            int i =  noticeManageService.modifyNotice(param,account);
             assertThat(i,greaterThanOrEqualTo(1));
         }catch (JnSpringCloudException e){
             logger.warn("编辑公告失败");
@@ -123,7 +127,7 @@ public class NoticeServiceImplTest {
     @Test
     public void findNoticeDetails() {
         try {
-            NoticeManageShow noticeDetails =  noticeService.findNoticeDetails(noticeId);
+            NoticeManageShow noticeDetails =  noticeManageService.findNoticeDetails(noticeId);
             assertThat(anything(),anything());
         }catch (JnSpringCloudException e){
             logger.warn("公告详情查询失败");
@@ -135,7 +139,7 @@ public class NoticeServiceImplTest {
     }
     @Test
     public void noticeShelfOperate() {
-        int i =  noticeService.noticeShelfOperate(shelfParam,account);
+        int i =  noticeManageService.noticeShelfOperate(shelfParam,account);
         assertThat(i,greaterThanOrEqualTo(1));
     }
     @Test

@@ -63,10 +63,12 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        address
+                        userPoint
                     </contexts>
                     <tableNames>
-                        tb_user_address
+                        tb_point_rule,
+                        tb_user_point,
+                        tb_user_point_detail
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

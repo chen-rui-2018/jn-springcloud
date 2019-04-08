@@ -41,7 +41,7 @@ public class MeetingAttendanceController extends BaseController {
 
     @ControllerLog(doAction = "会议考勤签到、签退接口")
     @ApiOperation(value = "会议考勤签到、签退接口" , notes = "会议考勤签到/签退类型:1:签到，2：签退")
-    @PostMapping(value = "/attendance")
+    @RequestMapping(value = "/attendance", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeetingAttendance/attendance")
     public Result attendance(@Validated @RequestBody OaMeetingParticipantsAttendance oaMeetingParticipantsAttendance) {
         //获取当前登录用户信息
@@ -52,7 +52,7 @@ public class MeetingAttendanceController extends BaseController {
 
     @ControllerLog(doAction = "会议考勤列表查询")
     @ApiOperation(value = "会议考勤列表查询" , notes = "根据查询条件分页查询会议考勤列表")
-    @PostMapping(value = "/list")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeetingAttendance/list")
     public Result<List<OaMeetingParticipantsAttendanceVo>> list(@Validated @RequestBody OaMeetingAttendancePage oaMeetingAttendancePage) {
         PaginationData data=meetingAttendanceService.selectMeetingAttendanceList(oaMeetingAttendancePage);
@@ -61,7 +61,7 @@ public class MeetingAttendanceController extends BaseController {
 
     @ControllerLog(doAction = "根据ID查询会议考勤")
     @ApiOperation(value = "根据ID查询会议考勤",notes = "根据id查询会议考勤与会议详情")
-    @GetMapping(value = "/selectById")
+    @RequestMapping(value = "/selectById", method = RequestMethod.GET)
     @RequiresPermissions("/oa/oaMeetingAttendance/selectById")
     public Result<OaMeetingAttendanceVo> selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议考勤ID不能为空");

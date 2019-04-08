@@ -61,13 +61,13 @@
         IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
-        IFNULL(t.cost,0) as "cost"
+        IFNULL(SUM(t.cost),0) as "cost"
         from tb_finance_expenses_month t
         RIGHT JOIN tb_month m
         on m.month=t.cost_happend_time
           and t.record_status=1
         and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
-        where m.month BETWEEN #{startTime} AND  #{endTime} ) t1
+        where m.month BETWEEN #{startTime} AND  #{endTime} GROUP BY m.month) t1
         LEFT  JOIN
         (SELECT
         t.budget_month as "budgetmonth",
@@ -89,7 +89,7 @@
         IFNULL(CONCAT(ROUND( SUM(t1.cost)/SUM(t2.budgetnumber) * 100),"%") ,"/ %")as "ratio"
         FROM
         (SELECT m.month as "month",
-        IFNULL(t.cost,0) as "cost"
+        IFNULL(SUM(t.cost),0) as "cost"
         from tb_finance_expenses_month t
         RIGHT JOIN tb_month m
         on m.month=t.cost_happend_time
@@ -101,7 +101,7 @@
             and t.cost_after_type_id=#{typeId}
         </if>
         and t.cost_happend_time BETWEEN #{startTime} AND  #{endTime}
-        where m.month BETWEEN #{startTime} AND  #{endTime} ) t1
+        where m.month BETWEEN #{startTime} AND  #{endTime} GROUP BY t.cost_happend_time  ) t1
         LEFT  JOIN
         (SELECT
         t.budget_month as "budgetmonth",

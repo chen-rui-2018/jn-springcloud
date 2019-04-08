@@ -2,12 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.oa.item.dao.TbOaItemMapper">
   <resultMap id="BaseResultMap" type="com.jn.oa.item.entity.TbOaItem">
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="work_plan_num" jdbcType="VARCHAR" property="workPlanNum" />
+    <id column="id_" jdbcType="VARCHAR" property="id" />
     <result column="item_name" jdbcType="VARCHAR" property="itemName" />
-    <result column="responsible_account" jdbcType="VARCHAR" property="responsibleAccount" />
-    <result column="applicant_account" jdbcType="VARCHAR" property="applicantAccount" />
-    <result column="item_content" jdbcType="VARCHAR" property="itemContent" />
+    <result column="item_code" jdbcType="VARCHAR" property="itemCode" />
+    <result column="responsible_id" jdbcType="VARCHAR" property="responsibleId" />
     <result column="item_status" jdbcType="VARCHAR" property="itemStatus" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="approval_advise" jdbcType="VARCHAR" property="approvalAdvise" />
@@ -19,12 +17,16 @@
     <result column="item_progress" jdbcType="VARCHAR" property="itemProgress" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="attachment" jdbcType="VARCHAR" property="attachment" />
     <result column="is_expire" jdbcType="VARCHAR" property="isExpire" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.jn.oa.item.entity.TbOaItem">
+    <result column="item_content" jdbcType="LONGVARCHAR" property="itemContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -85,11 +87,30 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, work_plan_num, item_name, responsible_account, applicant_account, item_content, 
-    item_status, approval_status, approval_advise, total_plan_time, total_consume_time, 
-    total_remain_time, plan_end_time, plan_start_time, item_progress, start_time, end_time, 
-    is_expire, record_status, creator_account, created_time, modifier_account, modified_time
+    id_, item_name, item_code, responsible_id, item_status, approval_status, approval_advise, 
+    total_plan_time, total_consume_time, total_remain_time, plan_end_time, plan_start_time, 
+    item_progress, start_time, end_time, attachment, is_expire, record_status, creator_account, 
+    created_time, modifier_account, modified_time
   </sql>
+  <sql id="Blob_Column_List">
+    item_content
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.jn.oa.item.entity.TbOaItemCriteria" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tb_oa_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
   <select id="selectByExample" parameterType="com.jn.oa.item.entity.TbOaItemCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
@@ -104,15 +125,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
     from tb_oa_item
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from tb_oa_item
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.jn.oa.item.entity.TbOaItemCriteria">
     delete from tb_oa_item
@@ -121,43 +144,37 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.oa.item.entity.TbOaItem">
-    insert into tb_oa_item (id, work_plan_num, item_name, 
-      responsible_account, applicant_account, item_content, 
-      item_status, approval_status, approval_advise, 
-      total_plan_time, total_consume_time, total_remain_time, 
-      plan_end_time, plan_start_time, item_progress, 
-      start_time, end_time, is_expire, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{id,jdbcType=VARCHAR}, #{workPlanNum,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, 
-      #{responsibleAccount,jdbcType=VARCHAR}, #{applicantAccount,jdbcType=VARCHAR}, #{itemContent,jdbcType=VARCHAR}, 
-      #{itemStatus,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{approvalAdvise,jdbcType=VARCHAR}, 
-      #{totalPlanTime,jdbcType=DOUBLE}, #{totalConsumeTime,jdbcType=DOUBLE}, #{totalRemainTime,jdbcType=DOUBLE}, 
-      #{planEndTime,jdbcType=TIMESTAMP}, #{planStartTime,jdbcType=TIMESTAMP}, #{itemProgress,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{isExpire,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_oa_item (id_, item_name, item_code, 
+      responsible_id, item_status, approval_status, 
+      approval_advise, total_plan_time, total_consume_time, 
+      total_remain_time, plan_end_time, plan_start_time, 
+      item_progress, start_time, end_time, 
+      attachment, is_expire, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time, item_content)
+    values (#{id,jdbcType=VARCHAR}, #{itemName,jdbcType=VARCHAR}, #{itemCode,jdbcType=VARCHAR}, 
+      #{responsibleId,jdbcType=VARCHAR}, #{itemStatus,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, 
+      #{approvalAdvise,jdbcType=VARCHAR}, #{totalPlanTime,jdbcType=DOUBLE}, #{totalConsumeTime,jdbcType=DOUBLE}, 
+      #{totalRemainTime,jdbcType=DOUBLE}, #{planEndTime,jdbcType=TIMESTAMP}, #{planStartTime,jdbcType=TIMESTAMP}, 
+      #{itemProgress,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{attachment,jdbcType=VARCHAR}, #{isExpire,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{itemContent,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.oa.item.entity.TbOaItem">
     insert into tb_oa_item
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        id,
-      </if>
-      <if test="workPlanNum != null">
-        work_plan_num,
+        id_,
       </if>
       <if test="itemName != null">
         item_name,
       </if>
-      <if test="responsibleAccount != null">
-        responsible_account,
+      <if test="itemCode != null">
+        item_code,
       </if>
-      <if test="applicantAccount != null">
-        applicant_account,
-      </if>
-      <if test="itemContent != null">
-        item_content,
+      <if test="responsibleId != null">
+        responsible_id,
       </if>
       <if test="itemStatus != null">
         item_status,
@@ -192,6 +209,9 @@
       <if test="endTime != null">
         end_time,
       </if>
+      <if test="attachment != null">
+        attachment,
+      </if>
       <if test="isExpire != null">
         is_expire,
       </if>
@@ -210,25 +230,22 @@
       <if test="modifiedTime != null">
         modified_time,
       </if>
+      <if test="itemContent != null">
+        item_content,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=VARCHAR},
       </if>
-      <if test="workPlanNum != null">
-        #{workPlanNum,jdbcType=VARCHAR},
-      </if>
       <if test="itemName != null">
         #{itemName,jdbcType=VARCHAR},
       </if>
-      <if test="responsibleAccount != null">
-        #{responsibleAccount,jdbcType=VARCHAR},
+      <if test="itemCode != null">
+        #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="applicantAccount != null">
-        #{applicantAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="itemContent != null">
-        #{itemContent,jdbcType=VARCHAR},
+      <if test="responsibleId != null">
+        #{responsibleId,jdbcType=VARCHAR},
       </if>
       <if test="itemStatus != null">
         #{itemStatus,jdbcType=VARCHAR},
@@ -263,6 +280,9 @@
       <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="attachment != null">
+        #{attachment,jdbcType=VARCHAR},
+      </if>
       <if test="isExpire != null">
         #{isExpire,jdbcType=VARCHAR},
       </if>
@@ -281,6 +301,9 @@
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="itemContent != null">
+        #{itemContent,jdbcType=LONGVARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jn.oa.item.entity.TbOaItemCriteria" resultType="java.lang.Long">
@@ -293,22 +316,16 @@
     update tb_oa_item
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.workPlanNum != null">
-        work_plan_num = #{record.workPlanNum,jdbcType=VARCHAR},
+        id_ = #{record.id,jdbcType=VARCHAR},
       </if>
       <if test="record.itemName != null">
         item_name = #{record.itemName,jdbcType=VARCHAR},
       </if>
-      <if test="record.responsibleAccount != null">
-        responsible_account = #{record.responsibleAccount,jdbcType=VARCHAR},
+      <if test="record.itemCode != null">
+        item_code = #{record.itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="record.applicantAccount != null">
-        applicant_account = #{record.applicantAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.itemContent != null">
-        item_content = #{record.itemContent,jdbcType=VARCHAR},
+      <if test="record.responsibleId != null">
+        responsible_id = #{record.responsibleId,jdbcType=VARCHAR},
       </if>
       <if test="record.itemStatus != null">
         item_status = #{record.itemStatus,jdbcType=VARCHAR},
@@ -343,6 +360,9 @@
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.attachment != null">
+        attachment = #{record.attachment,jdbcType=VARCHAR},
+      </if>
       <if test="record.isExpire != null">
         is_expire = #{record.isExpire,jdbcType=VARCHAR},
       </if>
@@ -361,19 +381,20 @@
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.itemContent != null">
+        item_content = #{record.itemContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByExample" parameterType="map">
+  <update id="updateByExampleWithBLOBs" parameterType="map">
     update tb_oa_item
-    set id = #{record.id,jdbcType=VARCHAR},
-      work_plan_num = #{record.workPlanNum,jdbcType=VARCHAR},
+    set id_ = #{record.id,jdbcType=VARCHAR},
       item_name = #{record.itemName,jdbcType=VARCHAR},
-      responsible_account = #{record.responsibleAccount,jdbcType=VARCHAR},
-      applicant_account = #{record.applicantAccount,jdbcType=VARCHAR},
-      item_content = #{record.itemContent,jdbcType=VARCHAR},
+      item_code = #{record.itemCode,jdbcType=VARCHAR},
+      responsible_id = #{record.responsibleId,jdbcType=VARCHAR},
       item_status = #{record.itemStatus,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       approval_advise = #{record.approvalAdvise,jdbcType=VARCHAR},
@@ -385,6 +406,36 @@
       item_progress = #{record.itemProgress,jdbcType=VARCHAR},
       start_time = #{record.startTime,jdbcType=TIMESTAMP},
       end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
+      is_expire = #{record.isExpire,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      item_content = #{record.itemContent,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_oa_item
+    set id_ = #{record.id,jdbcType=VARCHAR},
+      item_name = #{record.itemName,jdbcType=VARCHAR},
+      item_code = #{record.itemCode,jdbcType=VARCHAR},
+      responsible_id = #{record.responsibleId,jdbcType=VARCHAR},
+      item_status = #{record.itemStatus,jdbcType=VARCHAR},
+      approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
+      approval_advise = #{record.approvalAdvise,jdbcType=VARCHAR},
+      total_plan_time = #{record.totalPlanTime,jdbcType=DOUBLE},
+      total_consume_time = #{record.totalConsumeTime,jdbcType=DOUBLE},
+      total_remain_time = #{record.totalRemainTime,jdbcType=DOUBLE},
+      plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
+      plan_start_time = #{record.planStartTime,jdbcType=TIMESTAMP},
+      item_progress = #{record.itemProgress,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      attachment = #{record.attachment,jdbcType=VARCHAR},
       is_expire = #{record.isExpire,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -398,20 +449,14 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.jn.oa.item.entity.TbOaItem">
     update tb_oa_item
     <set>
-      <if test="workPlanNum != null">
-        work_plan_num = #{workPlanNum,jdbcType=VARCHAR},
-      </if>
       <if test="itemName != null">
         item_name = #{itemName,jdbcType=VARCHAR},
       </if>
-      <if test="responsibleAccount != null">
-        responsible_account = #{responsibleAccount,jdbcType=VARCHAR},
+      <if test="itemCode != null">
+        item_code = #{itemCode,jdbcType=VARCHAR},
       </if>
-      <if test="applicantAccount != null">
-        applicant_account = #{applicantAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="itemContent != null">
-        item_content = #{itemContent,jdbcType=VARCHAR},
+      <if test="responsibleId != null">
+        responsible_id = #{responsibleId,jdbcType=VARCHAR},
       </if>
       <if test="itemStatus != null">
         item_status = #{itemStatus,jdbcType=VARCHAR},
@@ -446,6 +491,9 @@
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="attachment != null">
+        attachment = #{attachment,jdbcType=VARCHAR},
+      </if>
       <if test="isExpire != null">
         is_expire = #{isExpire,jdbcType=VARCHAR},
       </if>
@@ -464,16 +512,17 @@
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="itemContent != null">
+        item_content = #{itemContent,jdbcType=LONGVARCHAR},
+      </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaItem">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.jn.oa.item.entity.TbOaItem">
     update tb_oa_item
-    set work_plan_num = #{workPlanNum,jdbcType=VARCHAR},
-      item_name = #{itemName,jdbcType=VARCHAR},
-      responsible_account = #{responsibleAccount,jdbcType=VARCHAR},
-      applicant_account = #{applicantAccount,jdbcType=VARCHAR},
-      item_content = #{itemContent,jdbcType=VARCHAR},
+    set item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      responsible_id = #{responsibleId,jdbcType=VARCHAR},
       item_status = #{itemStatus,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       approval_advise = #{approvalAdvise,jdbcType=VARCHAR},
@@ -485,12 +534,39 @@
       item_progress = #{itemProgress,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
+      is_expire = #{isExpire,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      item_content = #{itemContent,jdbcType=LONGVARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.oa.item.entity.TbOaItem">
+    update tb_oa_item
+    set item_name = #{itemName,jdbcType=VARCHAR},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      responsible_id = #{responsibleId,jdbcType=VARCHAR},
+      item_status = #{itemStatus,jdbcType=VARCHAR},
+      approval_status = #{approvalStatus,jdbcType=VARCHAR},
+      approval_advise = #{approvalAdvise,jdbcType=VARCHAR},
+      total_plan_time = #{totalPlanTime,jdbcType=DOUBLE},
+      total_consume_time = #{totalConsumeTime,jdbcType=DOUBLE},
+      total_remain_time = #{totalRemainTime,jdbcType=DOUBLE},
+      plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
+      plan_start_time = #{planStartTime,jdbcType=TIMESTAMP},
+      item_progress = #{itemProgress,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      attachment = #{attachment,jdbcType=VARCHAR},
       is_expire = #{isExpire,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
+    where id_ = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

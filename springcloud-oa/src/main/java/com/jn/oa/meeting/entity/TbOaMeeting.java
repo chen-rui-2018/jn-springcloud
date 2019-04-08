@@ -46,6 +46,8 @@ public class TbOaMeeting implements Serializable {
 
     private String organizationalUser;
 
+    private String fileUrl;
+
     private static final long serialVersionUID = 1L;
 
     public String getId() {
@@ -216,6 +218,14 @@ public class TbOaMeeting implements Serializable {
         this.organizationalUser = organizationalUser == null ? null : organizationalUser.trim();
     }
 
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl == null ? null : fileUrl.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -248,7 +258,8 @@ public class TbOaMeeting implements Serializable {
             && (this.getAppRemind() == null ? other.getAppRemind() == null : this.getAppRemind().equals(other.getAppRemind()))
             && (this.getIsRemind() == null ? other.getIsRemind() == null : this.getIsRemind().equals(other.getIsRemind()))
             && (this.getTitle() == null ? other.getTitle() == null : this.getTitle().equals(other.getTitle()))
-            && (this.getOrganizationalUser() == null ? other.getOrganizationalUser() == null : this.getOrganizationalUser().equals(other.getOrganizationalUser()));
+            && (this.getOrganizationalUser() == null ? other.getOrganizationalUser() == null : this.getOrganizationalUser().equals(other.getOrganizationalUser()))
+            && (this.getFileUrl() == null ? other.getFileUrl() == null : this.getFileUrl().equals(other.getFileUrl()));
     }
 
     @Override
@@ -276,6 +287,7 @@ public class TbOaMeeting implements Serializable {
         result = prime * result + ((getIsRemind() == null) ? 0 : getIsRemind().hashCode());
         result = prime * result + ((getTitle() == null) ? 0 : getTitle().hashCode());
         result = prime * result + ((getOrganizationalUser() == null) ? 0 : getOrganizationalUser().hashCode());
+        result = prime * result + ((getFileUrl() == null) ? 0 : getFileUrl().hashCode());
         return result;
     }
 
@@ -306,6 +318,7 @@ public class TbOaMeeting implements Serializable {
         sb.append(", isRemind=").append(isRemind);
         sb.append(", title=").append(title);
         sb.append(", organizationalUser=").append(organizationalUser);
+        sb.append(", fileUrl=").append(fileUrl);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

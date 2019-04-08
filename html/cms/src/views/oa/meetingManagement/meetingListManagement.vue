@@ -39,8 +39,8 @@
       <el-table-column label="人员" align="center">
         <el-table-column label="组织方" align="center" class-name="small-padding fixed-width" width="150">
           <template slot-scope="scope">
-            <div>部门:{{ scope.row.departmentName? scope.row.departmentName:'无' }}</div>
-            <div>组织人:{{ scope.row.userName }}</div>
+            <div>部门:{{ scope.row.organizationalDepartmentName ? scope.row.organizationalDepartmentName : '无' }}</div>
+            <div>组织人:{{ scope.row.organizationalUserName ? scope.row.organizationalUserName : '无' }}</div>
             <div>预约人:{{ scope.row.userName }}</div>
           </template>
         </el-table-column>

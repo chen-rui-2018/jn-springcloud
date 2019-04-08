@@ -38,17 +38,21 @@
     <el-table :data="budgetList" :default-sort = "{prop: 'date', order: 'descending'}" border fit highlight-current-row style="width: 100%;" @sort-change="sortChange">
       <!-- <el-table-column type="selection" align="center" width="60"/> -->
       <el-table-column label="序列" type="index" align="center" width="60"/>
-      <el-table-column label="月份" prop="costHappendTime" sortable="custom" align="center" width="100" >
+      <el-table-column label="月份" prop="costHappendTime" sortable="custom" align="center" min-width="100" >
         <template slot-scope="scope">
           <span>{{ scope.row.costHappendTime.slice(0,4)+'年' + scope.row.costHappendTime.slice(4,6)+'月' }}</span>
         </template>
       </el-table-column>
-      <el-table-column v-if="isShow" label="费用流水号" prop="costId" align="center" />
-      <el-table-column label="支出金额" prop="cost" sortable="custom" align="center" />
+      <el-table-column v-if="isShow" :key="Math.random()" label="费用流水号" prop="costId" align="center" />
+      <el-table-column label="支出金额" prop="cost" sortable="custom" align="center">
+        <template slot-scope="scope">
+          <span>{{ '￥' +scope.row.cost +'元' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column v-if="isShow" label="支出类型(打标前)" prop="costBeforeTypeName" align="center"/>
-      <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" align="center"/>
+      <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" sortable="custom" align="center"/>
       <el-table-column label="操作日期" prop="modifiedTime" sortable="custom" align="center"/>
-      <el-table-column label="部门" prop="departmentName" align="center"/>
+      <el-table-column label="部门" prop="departmentName" sortable="custom" align="center"/>
     </el-table>
     <!-- 分页 -->
     <el-pagination
@@ -60,14 +64,15 @@
       class="tablePagination"
       background
       layout="total, sizes, prev, pager, next, jumper"
+      style="margin-top:15px;"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange" />
     <!-- 点击导入按钮的弹框 -->
     <template v-if="dialogVisible">
       <el-dialog :visible.sync="dialogVisible" title="导入" class="daoru" >
         <div style="display:flex;justify-content: space-between;" class="demo">
-          <el-button type="success" @click="submit($event)">{{ softtype }}</el-button>
-          <a class="download" href="/static/file/支出录入.xlsx">下载模板</a>
+          <el-button :disabled="disabled" type="success" @click="submit($event)">{{ softtype }}</el-button>
+          <a href="/static/file/expendTemplate.xlsx" class="download" download >下载模板</a>
         </div>
         <div>
           <p>注意:</p>
@@ -81,8 +86,8 @@
     <!-- 导入之后的表格弹框 -->
     <template v-if="markingDialogVisible">
       <el-dialog :visible.sync="markingDialogVisible" class="dabiao" >
-        <el-table :data="newArr" border fit highlight-current-row style="width: 100%;">
-          <!-- <el-table-column type="selection" align="center" width="60"/> -->
+        <el-table ref="multipleTable" :data="newArr" border fit highlight-current-row style="width: 100%;" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" align="center" width="60"/>
           <el-table-column label="序列" type="index" align="center" width="60"/>
           <el-table-column label="月份" prop="costHappendTime" align="center" width="100" >
             <template slot-scope="scope">
@@ -92,22 +97,26 @@
           <el-table-column label="费用流水号" prop="costId" align="center" />
           <el-table-column label="支出金额" prop="cost" align="center" />
           <el-table-column label="支出类型(打标前)" prop="costBeforeTypeName" align="center"/>
-          <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" align="center">
+          <el-table-column label="支出类型(打标后)" prop="costAfterTypeName" align="center" min-width="120">
             <template slot-scope="scope">
-              <span :class="scope.row.costAfterTypeName ? 'text-green' : 'text-red'">{{ scope.row.costAfterTypeName?scope.row.costAfterTypeName:'未打标' }}</span>
+              <!-- <span :class="scope.row.costAfterTypeName ? 'text-green' : 'text-red'">{{ scope.row.costAfterTypeName?scope.row.costAfterTypeName:'未打标' }}</span> -->
+              <el-select v-model="scope.row.costAfterTypeId" placeholder="未打标" @change="changecostAfterTypeId">
+                <el-option v-for="item in markOptions" :key="item.id" :label="item.financeName" :value="item.id" />
+              </el-select>
+
             </template>
           </el-table-column>
-          <el-table-column label="操作日期" prop="modifiedTime" align="center"/>
           <el-table-column label="部门" prop="departmentName" align="center"/>
-          <el-table-column fit label="操作" align="center">
+          <!-- <el-table-column fit label="操作" align="center">
             <template slot-scope="scope">
               <el-button type="text" @click="handleMark(scope.row)">打标</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="subMark">提交</el-button>
-          <el-button @click="markingDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="batchMark">批量打标</el-button>
+          <el-button :disabled="disabled" type="primary" @click="subMark">提交</el-button>
+          <el-button @click="cencalMark">取 消</el-button>
         </span>
       </el-dialog>
     </template>
@@ -115,9 +124,6 @@
     <template v-if=" markdialogVisible">
       <el-dialog :visible.sync="markdialogVisible" title="打标类型" width="400px">
         <el-form label-width="100px" class="demo-ruleForm">
-          <el-form-item label="打标前类型:" >
-            <span>{{ costBeforeTypeName }}</span>
-          </el-form-item>
           <el-form-item label="打标后类型:" >
             <el-select v-model="costAfterTypeId" placeholder="请选择类型" @change="changecostAfterTypeId">
               <el-option v-for="item in markOptions" :key="item.id" :label="item.financeName" :value="item.id" />
@@ -126,7 +132,7 @@
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="submitMark">确 定</el-button>
-          <el-button @click="markdialogVisible = false">取 消</el-button>
+          <el-button @click="markdialogVisible=false">取 消</el-button>
         </span>
       </el-dialog>
     </template>
@@ -135,11 +141,14 @@
 
 <script>
 import {
-  api, importBdDeptdoc
-} from '@/api/financ'
+  api, Inventor
+} from '@/api/axios'
 export default {
   data() {
     return {
+      key: '1',
+      disabled: false,
+      multipleSelection: [],
       selectIndex: '',
       newArr: [],
       costAfterTypeId: '',
@@ -184,6 +193,7 @@ export default {
       this.listQuery.departmentId = ''
       this.getDate()
       this.initList()
+      this.listQuery.costId = ''
     }
   },
   mounted() {
@@ -192,6 +202,42 @@ export default {
     this.getDepartment()
   },
   methods: {
+    // 批量打标
+    batchMark() {
+      if (this.multipleSelection.length === 0) {
+        alert('请先选择数据')
+        return false
+      }
+      this.$confirm(`此操作将对这几条数据进行同样的打标操作, 是否继续?`, '打标提示', {
+        cancelButtonText: '取消',
+        confirmButtonText: '确定',
+        type: 'warning'
+      })
+        .then(() => {
+          this.markdialogVisible = true
+          // this.costBeforeTypeName = row.costBeforeTypeName
+          // if (row.costAfterTypeId) {
+          //   this.costAfterTypeId = row.costAfterTypeId
+          //   this.costAfterTypeName = row.costAfterTypeName
+          // } else {
+          this.costAfterTypeId = ''
+          this.costAfterTypeName = ''
+          // }
+          // this.selectIndex = this.multipleSelection.indexNum
+          this.getFinanceType()
+        })
+        .catch(() => {
+        })
+    },
+    // 获取选中的数据
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    // 取消打标
+    cencalMark() {
+      this.newArr = []
+      this.markingDialogVisible = false
+    },
     // 获取时间
     getDate() {
       const date = new Date()
@@ -201,23 +247,27 @@ export default {
     },
     // 全部打标后提交
     subMark() {
+      this.disabled = true
       for (let i = 0; i < this.newArr.length; i++) {
         if (!this.newArr[i].costAfterTypeId) {
           alert('请对所有数据进行打标后在提交')
+          this.disabled = false
           return
         }
       }
-      api('finance/expenses/saveMarkData', this.newArr, 'post').then(res => {
+      api(`${this.GLOBAL.financUrl}finance/expenses/saveMarkData`, this.newArr, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '导入成功',
             type: 'success'
           })
-          this.markingDialogVisible = true
+          this.markingDialogVisible = false
+          this.newArr = []
           this.initList()
         } else {
           this.$message.error('导入失败' + res.data.result)
         }
+        this.disabled = false
       })
     },
     // 改变弹框选择的打标类型
@@ -235,39 +285,25 @@ export default {
         alert('请选择类型')
         return
       }
-      this.newArr[this.selectIndex].costAfterTypeId = this.costAfterTypeId
-      this.newArr[this.selectIndex].costAfterTypeName = this.costAfterTypeName
+      this.multipleSelection.forEach(val => {
+        val.costAfterTypeId = this.costAfterTypeId
+        val.costAfterTypeName = this.costAfterTypeName
+      })
+      // this.newArr[this.selectIndex].costAfterTypeId = this.costAfterTypeId
+      // this.newArr[this.selectIndex].costAfterTypeName = this.costAfterTypeName
+      this.$refs.multipleTable.clearSelection()
       this.markdialogVisible = false
     },
     // 获取财务类型
     getFinanceType() {
-      api('finance/expenses/selectFinanceType', '', 'get').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.markOptions = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
       })
     },
-    // 点击打标触发的操作
-    handleMark(row) {
-      console.log(row)
-      this.markdialogVisible = true
-      this.costBeforeTypeName = row.costBeforeTypeName
-      if (row.costAfterTypeId) {
-        this.costAfterTypeId = row.costAfterTypeId
-        this.costAfterTypeName = row.costAfterTypeName
-      } else {
-        this.costAfterTypeId = ''
-        this.costAfterTypeName = ''
-      }
-      this.selectIndex = row.indexNum
-      this.getFinanceType()
-    },
-    // 获取选中的列
-    // changeFun(val) {
-    //   this.multipleSelection = val // 返回的是选中的列的数组集合
-    // },
     getFile: function(event) {
       this.file = event.target.files[0]
     },
@@ -286,16 +322,14 @@ export default {
         })
         return false
       }
+      this.listLoading = true
+      this.newArr = []
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      importBdDeptdoc(`finance/expenses/importData`, formData, 'post')
+      Inventor(`${this.GLOBAL.financUrl}finance/expenses/importData`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
-            // this.$message({
-            //   message: '导入成功',
-            //   type: 'success'
-            // })
             this.dialogVisible = false
             this.markingDialogVisible = true
             this.markList = res.data.data
@@ -304,15 +338,19 @@ export default {
                 Object.assign({}, val, { indexNum: index })
               )
             })
+            this.getFinanceType()
           } else {
             this.$message.error('导入失败,' + res.data.result)
           }
+          this.listLoading = false
+          this.disabled = false
           // this.initList()
         })
     },
     // 支出导入
     expenses() {
       this.softtype = '支出导入'
+      this.file = ''
       this.dialogVisible = true
     },
     // 获取排序字段
@@ -330,40 +368,30 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        api(`finance/expenses/findAll?departmentId=${this.listQuery.departmentId}&orderByClause=${this.listQuery.orderByClause}&page=${this.listQuery.page}&rows=${this.listQuery.rows}&costId=${this.listQuery.costId}&startTime=${this.listQuery.startTime}&endTime=${this.listQuery.endTime}`, '', 'get').then(res => {
-          if (res.data.code === this.GLOBAL.code) {
-            this.budgetList = res.data.data.rows
-            this.total = res.data.data.total
-            if (this.budgetList.length === 0 && this.total > 0) {
-              this.listQuery.page = 1
-              this.initList()
-            }
-          } else {
-            this.$message.error(res.data.result)
-            this.budgetList = []
-            this.total = 0
-          }
-          this.listLoading = false
-        })
+        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findAll`)
       } else {
-        api(`finance/expenses/findHistoryAll?departmentId=${this.listQuery.departmentId}&&orderByClause=${this.listQuery.orderByClause}&page=${this.listQuery.page}&rows=${this.listQuery.rows}&startTime=${this.listQuery.startTime}&endTime=${this.listQuery.endTime}`, '', 'get').then(res => {
-          if (res.data.code === this.GLOBAL.code) {
-            console.log(res)
-            this.budgetList = res.data.data.rows
-            this.total = res.data.data.total
-            if (this.budgetList.length === 0 && this.total > 0) {
-              this.listQuery.page = 1
-              this.initList()
-            }
-          } else {
-            this.$message.error(res.data.result)
-            this.tableHeader = []
-            this.budgetList = []
-            this.total = 0
-          }
-          this.listLoading = false
-        })
+        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findHistoryAll`)
       }
+    },
+    // 获取表格数据
+    getTableData(url) {
+      api(`${url}?departmentId=${this.listQuery.departmentId}&&orderByClause=${this.listQuery.orderByClause}&page=${this.listQuery.page}&costId=${this.listQuery.costId}&rows=${this.listQuery.rows}&startTime=${this.listQuery.startTime}&endTime=${this.listQuery.endTime}`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          this.budgetList = res.data.data.rows
+          this.total = res.data.data.total
+          // this.listQuery.costId = ''
+          if (this.budgetList.length === 0 && this.total > 0) {
+            this.listQuery.page = 1
+            this.initList()
+          }
+        } else {
+          this.$message.error(res.data.result)
+          this.tableHeader = []
+          this.budgetList = []
+          this.total = 0
+        }
+        this.listLoading = false
+      })
     },
     // 查询数据
     handleFilter() {
@@ -388,8 +416,8 @@ export default {
     },
     // 获取部门信息
     getDepartment() {
-      api('finance/expenses/selectDepartment', '', 'get').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentOptions = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -416,7 +444,7 @@ export default {
 .dabiao{
 .el-dialog{
     width: 1000px;
-    height: 500px ;
+   max-height: 500px ;
     overflow: auto;
     .el-dialog__header{
       display: none;

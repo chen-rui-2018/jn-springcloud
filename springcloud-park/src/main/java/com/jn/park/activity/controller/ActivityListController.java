@@ -5,7 +5,7 @@ import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.activity.service.ActivityTypeService;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

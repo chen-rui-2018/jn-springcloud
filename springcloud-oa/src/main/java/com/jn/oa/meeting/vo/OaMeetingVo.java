@@ -108,21 +108,9 @@ public class OaMeetingVo implements Serializable {
     @ApiModelProperty(value = "组织人部门")
     private String organizationalDepartmentName;
 
-    public String getOrganizationalUserName() {
-        return organizationalUserName;
-    }
+    @ApiModelProperty(value = "附件url")
+    private String fileUrl;
 
-    public void setOrganizationalUserName(String organizationalUserName) {
-        this.organizationalUserName = organizationalUserName;
-    }
-
-    public String getOrganizationalDepartmentName() {
-        return organizationalDepartmentName;
-    }
-
-    public void setOrganizationalDepartmentName(String organizationalDepartmentName) {
-        this.organizationalDepartmentName = organizationalDepartmentName;
-    }
 
     @ApiModelProperty(value = "参会人员列表")
     private List<TbOaMeetingParticipants> participantList;
@@ -136,7 +124,28 @@ public class OaMeetingVo implements Serializable {
 
     @ApiModelProperty(value = "组织人")
     private String organizationalUser;
+    public String getOrganizationalUserName() {
+        return organizationalUserName;
+    }
+    public String getFileUrl() {
+        return fileUrl;
+    }
 
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public void setOrganizationalUserName(String organizationalUserName) {
+        this.organizationalUserName = organizationalUserName;
+    }
+
+    public String getOrganizationalDepartmentName() {
+        return organizationalDepartmentName;
+    }
+
+    public void setOrganizationalDepartmentName(String organizationalDepartmentName) {
+        this.organizationalDepartmentName = organizationalDepartmentName;
+    }
     public String getOrganizationalUser() {
         return organizationalUser;
     }

@@ -13,7 +13,7 @@
       </div>
       <div class="tipPsw">请输入收到短信中的验证码</div>
       <input class="input" type="password" placeholder="请输入新密码" v-model="password">
-      <div class="tipPsw">长度至少8位</div>
+      <div class="tipPsw">密码至少为字母、数字、符号两种组成的8-16字符</div>
       <input class="input" type="password" style="margin-bottom:30px" placeholder="请确认登录密码" v-model="password1">
       <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="submit()">提交</el-button>
       <div class="returnBack" @click="handleLogin">返回登录页</div>
@@ -143,7 +143,7 @@ export default {
     background: rgba(255, 255, 255, .95);
     padding: 21px 95px;
     padding-bottom: 35px;
-    width: 270px;
+    width: 282px;
     // height: 415px;
     // height: 220px;
     border-radius: 10px;

@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 var baseurl = 'springcloud-oa/'
+var parkBaseurl = 'springcloud-park'
 export function api(url, query) {
   return request({
     url: baseurl + url,
@@ -20,6 +21,14 @@ export function paramApi(url, query, parameter) {
 export function userAllList(query) {
   return request({
     url: 'springcloud-app-system/system/sysUser/getUserAll',
+    method: 'post',
+    data: query
+  })
+}
+// 获取用户列表
+export function userList(query) {
+  return request({
+    url: baseurl + '/oa/addressBook/list',
     method: 'post',
     data: query
   })
@@ -45,5 +54,12 @@ export function getCode(query) {
     url: 'springcloud-app-system/system/sysDict/getDict',
     method: 'post',
     data: query
+  })
+}
+// 获取组织部门列表
+export function getAllDepartment() {
+  return request({
+    url: parkBaseurl + '/finance/expenses/selectDepartment',
+    method: 'get'
   })
 }

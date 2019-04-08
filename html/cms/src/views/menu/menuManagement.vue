@@ -1,7 +1,7 @@
 <template>
   <div v-loading="listLoading" class="menuManagement">
     <div class="menu-left">
-      <el-tree :data="menuList" :expand-on-click-node="false" default-expand-all node-key="id" @node-click="handleNodeClick">
+      <el-tree :data="menuList" :expand-on-click-node="false" node-key="id" @node-click="handleNodeClick">
         <span slot-scope="{ node, data }" class="custom-tree-node">
           <span>
             <i :class="node.icon" style="margin-right:3px"/>{{ node.label }}
@@ -107,10 +107,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
-// import {
-//   getMenuList, checkMenuName, createMenu, createMenuDir, updateMenu, deleteMenuById, updateAllMenu, addResources, editResources, deleteResourcesById, getAllResources, checkResourcesName, getOldData
-// } from '@/api/Permission-model/menuManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -119,7 +116,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增') {
-          api('system/sysMenu/checkMenuName', { menuName: value, parentId: this.menuForm.parentId }).then(response => {
+          api(`${this.GLOBAL.systemUrl}system/sysMenu/checkMenuName`, { menuName: value, parentId: this.menuForm.parentId }, 'post').then(response => {
             if (response.data.data === 'fail') {
               callback(new Error('菜单名称已重复'))
             } else {
@@ -128,7 +125,7 @@ export default {
           })
         } else {
           if (this.oldMenuName !== this.menuForm.menuName) {
-            api('system/sysMenu/checkMenuName', { menuName: value, parentId: this.menuForm.parentId }).then(response => {
+            api(`${this.GLOBAL.systemUrl}system/sysMenu/checkMenuName`, { menuName: value, parentId: this.menuForm.parentId }, 'post').then(response => {
               if (response.data.data === 'fail') {
                 callback(new Error('菜单名称已重复'))
               } else {
@@ -147,8 +144,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增') {
-          api('system/sysResources/checkResourceName', { resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysResources/checkResourceName`, { resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -158,8 +155,8 @@ export default {
           })
         } else {
           if (this.oldResourcesName !== this.resourcesForm.resourcesName) {
-            api('system/sysResources/checkResourceName', { resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }).then(res => {
-              if (res.data.code === '0000') {
+            api(`${this.GLOBAL.systemUrl}system/sysResources/checkResourceName`, { resourceName: this.resourcesForm.resourcesName, menuId: this.resourcesForm.menuId }, 'post').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -303,8 +300,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysResources/delete', id, 'ids').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysResources/delete`, id, 'ids').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -326,8 +323,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           // 调用接口发送请求
-          api('system/sysResources/update', this.resourcesForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysResources/update`, this.resourcesForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -363,8 +360,8 @@ export default {
       this.$refs['resourcesForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysResources/add', this.resourcesForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysResources/add`, this.resourcesForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -385,8 +382,8 @@ export default {
     },
     // 获取所有功能
     getResources() {
-      paramApi('system/sysResources/findResourcesByMenuId', this.resourcesForm.menuId, 'menuId').then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.systemUrl}system/sysResources/findResourcesByMenuId`, this.resourcesForm.menuId, 'menuId').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.tableData = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -408,8 +405,8 @@ export default {
       if (this.parentId === undefined || null) {
         this.parentId = '1'
       }
-      paramApi('system/sysMenu/getChildrenMenuByParentId', this.parentId, 'parentId').then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.systemUrl}system/sysMenu/getChildrenMenuByParentId`, this.parentId, 'parentId').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.subForm.menuData = res.data.data
           this.$refs['subForm'].clearValidate()
         } else {
@@ -469,8 +466,8 @@ export default {
         this.isDisabled = true
         if (valid) {
           // 调用接口发送请求 进行批量更新
-          api('system/sysMenu/updateBatch', { sysMenuSortList: newData }).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysMenu/updateBatch`, { sysMenuSortList: newData }, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '保存成功',
                 type: 'success'
@@ -529,8 +526,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysMenu/delete', id, 'id').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysMenu/delete`, id, 'id').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -556,8 +553,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          api('system/sysMenu/update', this.menuForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysMenu/update`, this.menuForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -616,8 +613,8 @@ export default {
         if (valid) {
           // 判断用户选择的是目录还是页面
           if (this.radio === '1') {
-            api('system/sysMenu/addMenuDir', { menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
-              if (res.data.code === '0000') {
+            api(`${this.GLOBAL.systemUrl}system/sysMenu/addMenuDir`, { menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }, 'post').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 this.$message({
                   message: '添加成功',
                   type: 'success'
@@ -631,8 +628,8 @@ export default {
               this.isDisabled = false
             })
           } else if (this.radio === '2') {
-            api('system/sysMenu/addMenu', { menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }).then(res => {
-              if (res.data.code === '0000') {
+            api(`${this.GLOBAL.systemUrl}system/sysMenu/addMenu`, { menuName: this.menuForm.menuName, menuUrl: this.menuForm.menuUrl, parentId: this.menuForm.parentId }, 'post').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 this.$message({
                   message: '添加成功',
                   type: 'success'
@@ -658,8 +655,8 @@ export default {
     // 更新右侧页面
     updataRight() {
       if (this.location === '0') {
-        paramApi('system/sysMenu/getChildrenMenuByParentId', this.checkoutId, 'parentId').then(res => {
-          if (res.data.code === '0000') {
+        paramApi(`${this.GLOBAL.systemUrl}system/sysMenu/getChildrenMenuByParentId`, this.checkoutId, 'parentId').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             this.subForm.menuData = res.data.data
           } else {
             this.$message.error(res.data.result)
@@ -696,8 +693,8 @@ export default {
     },
     defaultLeft() {
       this.listLoading = true
-      api('system/sysMenu/list').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysMenu/list`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.menuList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -708,8 +705,8 @@ export default {
     // 初始化项目
     initList() {
       this.listLoading = true
-      api('system/sysMenu/list').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysMenu/list`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.menuList = res.data.data
           this.isShowInfo = true
           this.subForm.menuData = res.data.data
@@ -725,7 +722,8 @@ export default {
 
 <style lang="scss" >
 .menuManagement{
-  height: 100%;
+  // height: 100%;
+  padding:15px;
   display: flex;
   background-color: #fff;
   .resourcesBox{
@@ -741,13 +739,13 @@ export default {
     height: 100%;
   .el-tree{
     height: 100%;
-    width: 270px;
+    // width: 270px;
   // padding: 20px;
   // overflow: auto;
   }
 }
 .menu-right{
-  height: 100%;
+  // height: 100%;
   // overflow: auto;
   margin-left:20px;
   flex:1;

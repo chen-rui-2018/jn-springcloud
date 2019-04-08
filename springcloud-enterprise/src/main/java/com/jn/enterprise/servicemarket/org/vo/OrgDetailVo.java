@@ -114,6 +114,12 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "机构人员列表")
     private List<OrgTeam> orgTeams;
 
+    @ApiModelProperty(value = "评价分数(平均分)")
+    private String evaluationScore;
+
+    @ApiModelProperty(value = "评价次数")
+    private Integer evaluationNum;
+
     public String getOrgId() {
         return orgId;
     }
@@ -368,5 +374,21 @@ public class OrgDetailVo implements Serializable {
 
     public void setOrgStatus(String orgStatus) {
         this.orgStatus = orgStatus;
+    }
+
+    public String getEvaluationScore() {
+        return evaluationScore;
+    }
+
+    public void setEvaluationScore(String evaluationScore) {
+        this.evaluationScore = evaluationScore;
+    }
+
+    public Integer getEvaluationNum() {
+        return evaluationNum;
+    }
+
+    public void setEvaluationNum(Integer evaluationNum) {
+        this.evaluationNum = evaluationNum;
     }
 }

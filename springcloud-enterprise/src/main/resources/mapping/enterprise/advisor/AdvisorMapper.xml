@@ -49,6 +49,9 @@
        <if test="domain !=null  and domain !=''">
            and tt.businessArea=#{domain}  <!-- 领域-->
        </if>
+       <if test="orgId !=null and orgId!=''">
+           and tt.orgId=#{orgId}
+       </if>
        <if test="keyWords !=null  and keyWords !=''">
            <!-- 关键词-->
            and (tt.advisorName like '%'||#{domain}||'%' or tt.position like '%'||#{domain}||'%')

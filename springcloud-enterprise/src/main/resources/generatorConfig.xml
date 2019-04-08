@@ -548,8 +548,39 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="tb_data_reporting_create_task_log"></table>
-        <table tableName="tb_data_reporting_target"></table>
+        <table tableName="tb_data_reporting_create_task_log">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_target">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_garden_linker">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_group_company">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_group_struct">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_model">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_model_data">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_model_struct">
+        </table>
+        <table tableName="tb_data_reporting_model_tab">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_target_group">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+        <table tableName="tb_data_reporting_task">
+            <generatedKey column="id" sqlStatement="MySql" identity="true" />
+        </table>
+
 
     </context>
 </generatorConfiguration>

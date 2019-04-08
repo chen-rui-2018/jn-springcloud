@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingCreateTaskLogMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingModelStructMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingModelStruct">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="model_id" jdbcType="VARCHAR" property="modelId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="department" jdbcType="VARCHAR" property="department" />
-    <result column="create_time" jdbcType="CHAR" property="createTime" />
+    <result column="form_id" jdbcType="VARCHAR" property="formId" />
+    <result column="tab_id" jdbcType="VARCHAR" property="tabId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +67,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, model_id, name, department, create_time
+    id, target_id, model_id, form_id, tab_id
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLogCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStructCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_data_reporting_create_task_log
+    from tb_data_reporting_model_struct
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -83,88 +83,88 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_data_reporting_create_task_log
-    where id = #{id,jdbcType=VARCHAR}
+    from tb_data_reporting_model_struct
+    where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_data_reporting_create_task_log
-    where id = #{id,jdbcType=VARCHAR}
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_data_reporting_model_struct
+    where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLogCriteria">
-    delete from tb_data_reporting_create_task_log
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStructCriteria">
+    delete from tb_data_reporting_model_struct
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_create_task_log (model_id, name, department, 
-      create_time)
-    values (#{modelId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=CHAR})
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStruct">
+    insert into tb_data_reporting_model_struct (id, target_id, model_id, 
+      form_id, tab_id)
+    values (#{id,jdbcType=INTEGER}, #{targetId,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, 
+      #{formId,jdbcType=VARCHAR}, #{tabId,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_create_task_log
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStruct">
+    insert into tb_data_reporting_model_struct
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="targetId != null">
+        target_id,
+      </if>
       <if test="modelId != null">
         model_id,
       </if>
-      <if test="name != null">
-        name,
+      <if test="formId != null">
+        form_id,
       </if>
-      <if test="department != null">
-        department,
-      </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="tabId != null">
+        tab_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="targetId != null">
+        #{targetId,jdbcType=VARCHAR},
+      </if>
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="formId != null">
+        #{formId,jdbcType=VARCHAR},
       </if>
-      <if test="department != null">
-        #{department,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=CHAR},
+      <if test="tabId != null">
+        #{tabId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLogCriteria" resultType="java.lang.Long">
-    select count(*) from tb_data_reporting_create_task_log
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStructCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_model_struct
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_data_reporting_create_task_log
+    update tb_data_reporting_model_struct
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
       </if>
       <if test="record.modelId != null">
         model_id = #{record.modelId,jdbcType=VARCHAR},
       </if>
-      <if test="record.name != null">
-        name = #{record.name,jdbcType=VARCHAR},
+      <if test="record.formId != null">
+        form_id = #{record.formId,jdbcType=VARCHAR},
       </if>
-      <if test="record.department != null">
-        department = #{record.department,jdbcType=VARCHAR},
-      </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=CHAR},
+      <if test="record.tabId != null">
+        tab_id = #{record.tabId,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -172,40 +172,40 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_data_reporting_create_task_log
-    set id = #{record.id,jdbcType=VARCHAR},
+    update tb_data_reporting_model_struct
+    set id = #{record.id,jdbcType=INTEGER},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
       model_id = #{record.modelId,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      department = #{record.department,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=CHAR}
+      form_id = #{record.formId,jdbcType=VARCHAR},
+      tab_id = #{record.tabId,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    update tb_data_reporting_create_task_log
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStruct">
+    update tb_data_reporting_model_struct
     <set>
+      <if test="targetId != null">
+        target_id = #{targetId,jdbcType=VARCHAR},
+      </if>
       <if test="modelId != null">
         model_id = #{modelId,jdbcType=VARCHAR},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="formId != null">
+        form_id = #{formId,jdbcType=VARCHAR},
       </if>
-      <if test="department != null">
-        department = #{department,jdbcType=VARCHAR},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=CHAR},
+      <if test="tabId != null">
+        tab_id = #{tabId,jdbcType=VARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingCreateTaskLog">
-    update tb_data_reporting_create_task_log
-    set model_id = #{modelId,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      department = #{department,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=CHAR}
-    where id = #{id,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelStruct">
+    update tb_data_reporting_model_struct
+    set target_id = #{targetId,jdbcType=VARCHAR},
+      model_id = #{modelId,jdbcType=VARCHAR},
+      form_id = #{formId,jdbcType=VARCHAR},
+      tab_id = #{tabId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTargetMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <id column="target_id" jdbcType="VARCHAR" property="targetId" />
-    <result column="id" jdbcType="VARCHAR" property="id" />
-    <result column="have_child" jdbcType="TINYINT" property="haveChild" />
-    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="order" jdbcType="INTEGER" property="order" />
-    <result column="target_name" jdbcType="VARCHAR" property="targetName" />
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingGardenLinkerMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingGardenLinker">
+    <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" />
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="is_muilt_row" jdbcType="TINYINT" property="isMuiltRow" />
-    <result column="unit" jdbcType="VARCHAR" property="unit" />
-    <result column="target_type" jdbcType="TINYINT" property="targetType" />
+    <result column="link_name" jdbcType="VARCHAR" property="linkName" />
+    <result column="link_tel" jdbcType="VARCHAR" property="linkTel" />
+    <result column="link_account" jdbcType="VARCHAR" property="linkAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -78,17 +73,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    target_id, id, have_child, parent_id, order, target_name, department_id, department_name, 
-    is_muilt_row, unit, target_type, record_status, creator_account, created_time, modifier_account, 
-    modified_time
+    id, department_id, department_name, link_name, link_tel, link_account, record_status, 
+    creator_account, created_time, modifier_account, modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinkerCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_data_reporting_target
+    from tb_data_reporting_garden_linker
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -99,71 +93,52 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_data_reporting_target
-    where target_id = #{targetId,jdbcType=VARCHAR}
+    from tb_data_reporting_garden_linker
+    where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_data_reporting_target
-    where target_id = #{targetId,jdbcType=VARCHAR}
+    delete from tb_data_reporting_garden_linker
+    where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria">
-    delete from tb_data_reporting_target
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinkerCriteria">
+    delete from tb_data_reporting_garden_linker
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinker">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_data_reporting_target (target_id, have_child, parent_id, 
-      order, target_name, department_id, 
-      department_name, is_muilt_row, unit, 
-      target_type, record_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
-    values (#{targetId,jdbcType=VARCHAR}, #{haveChild,jdbcType=TINYINT}, #{parentId,jdbcType=VARCHAR}, 
-      #{order,jdbcType=INTEGER}, #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
-      #{departmentName,jdbcType=VARCHAR}, #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, 
-      #{targetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+    insert into tb_data_reporting_garden_linker (department_id, department_name, link_name, 
+      link_tel, link_account, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{linkName,jdbcType=VARCHAR}, 
+      #{linkTel,jdbcType=VARCHAR}, #{linkAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinker">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into tb_data_reporting_target
+    insert into tb_data_reporting_garden_linker
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="targetId != null">
-        target_id,
-      </if>
-      <if test="haveChild != null">
-        have_child,
-      </if>
-      <if test="parentId != null">
-        parent_id,
-      </if>
-      <if test="order != null">
-        order,
-      </if>
-      <if test="targetName != null">
-        target_name,
-      </if>
       <if test="departmentId != null">
         department_id,
       </if>
       <if test="departmentName != null">
         department_name,
       </if>
-      <if test="isMuiltRow != null">
-        is_muilt_row,
+      <if test="linkName != null">
+        link_name,
       </if>
-      <if test="unit != null">
-        unit,
+      <if test="linkTel != null">
+        link_tel,
       </if>
-      <if test="targetType != null">
-        target_type,
+      <if test="linkAccount != null">
+        link_account,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -182,35 +157,20 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="targetId != null">
-        #{targetId,jdbcType=VARCHAR},
-      </if>
-      <if test="haveChild != null">
-        #{haveChild,jdbcType=TINYINT},
-      </if>
-      <if test="parentId != null">
-        #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="order != null">
-        #{order,jdbcType=INTEGER},
-      </if>
-      <if test="targetName != null">
-        #{targetName,jdbcType=VARCHAR},
-      </if>
       <if test="departmentId != null">
         #{departmentId,jdbcType=VARCHAR},
       </if>
       <if test="departmentName != null">
         #{departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="isMuiltRow != null">
-        #{isMuiltRow,jdbcType=TINYINT},
+      <if test="linkName != null">
+        #{linkName,jdbcType=VARCHAR},
       </if>
-      <if test="unit != null">
-        #{unit,jdbcType=VARCHAR},
+      <if test="linkTel != null">
+        #{linkTel,jdbcType=VARCHAR},
       </if>
-      <if test="targetType != null">
-        #{targetType,jdbcType=TINYINT},
+      <if test="linkAccount != null">
+        #{linkAccount,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -229,32 +189,17 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultType="java.lang.Long">
-    select count(*) from tb_data_reporting_target
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinkerCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_garden_linker
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_data_reporting_target
+    update tb_data_reporting_garden_linker
     <set>
-      <if test="record.targetId != null">
-        target_id = #{record.targetId,jdbcType=VARCHAR},
-      </if>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
-      </if>
-      <if test="record.haveChild != null">
-        have_child = #{record.haveChild,jdbcType=TINYINT},
-      </if>
-      <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="record.order != null">
-        order = #{record.order,jdbcType=INTEGER},
-      </if>
-      <if test="record.targetName != null">
-        target_name = #{record.targetName,jdbcType=VARCHAR},
       </if>
       <if test="record.departmentId != null">
         department_id = #{record.departmentId,jdbcType=VARCHAR},
@@ -262,14 +207,14 @@
       <if test="record.departmentName != null">
         department_name = #{record.departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="record.isMuiltRow != null">
-        is_muilt_row = #{record.isMuiltRow,jdbcType=TINYINT},
+      <if test="record.linkName != null">
+        link_name = #{record.linkName,jdbcType=VARCHAR},
       </if>
-      <if test="record.unit != null">
-        unit = #{record.unit,jdbcType=VARCHAR},
+      <if test="record.linkTel != null">
+        link_tel = #{record.linkTel,jdbcType=VARCHAR},
       </if>
-      <if test="record.targetType != null">
-        target_type = #{record.targetType,jdbcType=TINYINT},
+      <if test="record.linkAccount != null">
+        link_account = #{record.linkAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -292,18 +237,13 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_data_reporting_target
-    set target_id = #{record.targetId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
-      have_child = #{record.haveChild,jdbcType=TINYINT},
-      parent_id = #{record.parentId,jdbcType=VARCHAR},
-      order = #{record.order,jdbcType=INTEGER},
-      target_name = #{record.targetName,jdbcType=VARCHAR},
+    update tb_data_reporting_garden_linker
+    set id = #{record.id,jdbcType=VARCHAR},
       department_id = #{record.departmentId,jdbcType=VARCHAR},
       department_name = #{record.departmentName,jdbcType=VARCHAR},
-      is_muilt_row = #{record.isMuiltRow,jdbcType=TINYINT},
-      unit = #{record.unit,jdbcType=VARCHAR},
-      target_type = #{record.targetType,jdbcType=TINYINT},
+      link_name = #{record.linkName,jdbcType=VARCHAR},
+      link_tel = #{record.linkTel,jdbcType=VARCHAR},
+      link_account = #{record.linkAccount,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -313,38 +253,23 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    update tb_data_reporting_target
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinker">
+    update tb_data_reporting_garden_linker
     <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="haveChild != null">
-        have_child = #{haveChild,jdbcType=TINYINT},
-      </if>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
-      </if>
-      <if test="targetName != null">
-        target_name = #{targetName,jdbcType=VARCHAR},
-      </if>
       <if test="departmentId != null">
         department_id = #{departmentId,jdbcType=VARCHAR},
       </if>
       <if test="departmentName != null">
         department_name = #{departmentName,jdbcType=VARCHAR},
       </if>
-      <if test="isMuiltRow != null">
-        is_muilt_row = #{isMuiltRow,jdbcType=TINYINT},
+      <if test="linkName != null">
+        link_name = #{linkName,jdbcType=VARCHAR},
       </if>
-      <if test="unit != null">
-        unit = #{unit,jdbcType=VARCHAR},
+      <if test="linkTel != null">
+        link_tel = #{linkTel,jdbcType=VARCHAR},
       </if>
-      <if test="targetType != null">
-        target_type = #{targetType,jdbcType=TINYINT},
+      <if test="linkAccount != null">
+        link_account = #{linkAccount,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
@@ -362,25 +287,20 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where target_id = #{targetId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    update tb_data_reporting_target
-    set id = #{id,jdbcType=VARCHAR},
-      have_child = #{haveChild,jdbcType=TINYINT},
-      parent_id = #{parentId,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER},
-      target_name = #{targetName,jdbcType=VARCHAR},
-      department_id = #{departmentId,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingGardenLinker">
+    update tb_data_reporting_garden_linker
+    set department_id = #{departmentId,jdbcType=VARCHAR},
       department_name = #{departmentName,jdbcType=VARCHAR},
-      is_muilt_row = #{isMuiltRow,jdbcType=TINYINT},
-      unit = #{unit,jdbcType=VARCHAR},
-      target_type = #{targetType,jdbcType=TINYINT},
+      link_name = #{linkName,jdbcType=VARCHAR},
+      link_tel = #{linkTel,jdbcType=VARCHAR},
+      link_account = #{linkAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where target_id = #{targetId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

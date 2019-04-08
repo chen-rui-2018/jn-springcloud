@@ -1,21 +1,23 @@
 package com.jn.enterprise.data.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 
 public class TbDataReportingCreateTaskLog implements Serializable {
-    /*@ApiModelProperty("")*/
+    @ApiModelProperty("序列")
     private String id;
 
-    /*@ApiModelProperty("模板ID")*/
+    @ApiModelProperty("模板ID")
     private String modelId;
 
-    /*@ApiModelProperty("企业/部门名称")*/
+    @ApiModelProperty("企业/部门名称")
     private String name;
 
-    /*@ApiModelProperty("填报格企业ID式")*/
+    @ApiModelProperty("填报格企业ID式")
     private String department;
 
-    /*@ApiModelProperty("模板每月的创建日期（由年月+生成模板的日期（号）组成）YYYYMMDD")*/
+    @ApiModelProperty("模板每月的创建日期（由年月+生成模板的日期（号）组成）YYYYMMDD")
     private String createTime;
 
     private static final long serialVersionUID = 1L;

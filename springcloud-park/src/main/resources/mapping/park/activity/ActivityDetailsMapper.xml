@@ -92,7 +92,7 @@
         from tb_activity_apply t1
         where  1=1
         and t1.activity_id=#{activityId}
-        and t1.creator_account=#{account}
         and t1.apply_status='1'
+        and t1.record_status='1'
     </select>
 </mapper>

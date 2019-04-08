@@ -37,8 +37,7 @@ public interface ActivityDetailsMapper {
     /**
      * 获取活动报名信息
      * @param id 活动id
-     * @param account  账号
      * @return
      */
-    List<ActivityApply>getActivityApplyInfo(@Param("activityId") String id, @Param("account") String account);
+    List<ActivityApply>getActivityApplyInfo(@Param("activityId") String id);
 }

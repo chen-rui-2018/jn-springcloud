@@ -83,10 +83,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @Override
     public int userDemand(RequireParam requireParam, String account) {
         //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
-        long num =getTbServiceRequireNum(requireParam.getProductId(),requireParam.getRequireDetail(), account);
-        if(num!=0){
-            logger.warn("用户提需求(非科技金融),系统已存在当前需求，请勿重复提需求");
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        if(StringUtils.isNotBlank(requireParam.getRequireDetail())) {
+            long num = getTbServiceRequireNum(requireParam.getProductId(), requireParam.getRequireDetail(), account);
+            if (num != 0) {
+                logger.warn("用户提需求(非科技金融),系统已存在当前需求，请勿重复提需求");
+                throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+            }
         }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireParam.getProductId());
@@ -162,10 +164,12 @@ public class RequireManagementServiceImpl implements RequireManagementService {
     @ServiceLog(doAction = "用户提需求(科技金融)")
     public int userDemandTechnology(RequireTechnologyParam requireTechnologyParam, String account) {
         //根据产品id,用户账号，需求说明，需求状态，对接结果，查询数据库是否已存在数据，若存在，提示用户重复提需求
-        long num =getTbServiceRequireNum(requireTechnologyParam.getProductId(),requireTechnologyParam.getRequireDetail(), account);
-        if(num!=0){
-            logger.warn("用户提需求(科技金融),系统已存在当前需求，请勿重复提需求");
-            throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+        if(StringUtils.isNotBlank(requireTechnologyParam.getRequireDetail())){
+            long num =getTbServiceRequireNum(requireTechnologyParam.getProductId(),requireTechnologyParam.getRequireDetail(), account);
+            if(num!=0){
+                logger.warn("用户提需求(科技金融),系统已存在当前需求，请勿重复提需求");
+                throw new JnSpringCloudException(RequireExceptionEnum.REQUIRE_REPEATED_SUBMIT);
+            }
         }
         //根据产品id查询服务产品表（tb_service_product），获得机构id和机构名称,领域id和领域名称,设置意向机构信息和领域信息
         List<TbServiceProduct> tbServiceProductList = getTbServiceProducts(requireTechnologyParam.getProductId());

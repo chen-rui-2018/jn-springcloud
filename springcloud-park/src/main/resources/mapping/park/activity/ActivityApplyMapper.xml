@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.park.activity.dao.ActivityApplyMapper">
-   <select id="findApplyActivityList" resultType="com.jn.park.model.ActivityApplyDetail">
+   <select id="findApplyActivityList" resultType="com.jn.park.activity.model.ActivityApplyDetail">
         select
         ta.id as "id",                                                      <!--签到信息id-->
         ta.creator_account as "account",									<!--签到人账号-->
@@ -24,7 +24,7 @@
 
     </select>
 
-    <select id="findApplyAccountList" resultType="com.jn.park.model.ActivityApplyDetail">
+    <select id="findApplyAccountList" resultType="com.jn.park.activity.model.ActivityApplyDetail">
         select
         ta.id as "id",                                                      <!--签到信息id-->
         ta.activity_id as "activityId",                                     <!--活动ID-->

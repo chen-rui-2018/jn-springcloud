@@ -3,7 +3,7 @@ package com.jn.park.policy.service.impl;
 import com.jn.SpringCloudParkApplication;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
-import com.jn.park.enums.PolicyCenterExceptionEnum;
+import com.jn.park.enums.PolicyInfoExceptionEnum;
 import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
 import com.jn.park.policy.vo.PolicyDiagramDetailsVo;
@@ -81,7 +81,7 @@ public class PolicyCenterServiceImplTest {
             logger.warn("获取政策级别列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(PolicyCenterExceptionEnum.POLICY_LEVEL_NOT_EXIST.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_LEVEL_NOT_EXIST.getCode())
                     ));
         }
     }
@@ -98,7 +98,7 @@ public class PolicyCenterServiceImplTest {
             logger.warn("获取政策分类列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(PolicyCenterExceptionEnum.POLICY_TYPE_NOT_NULL.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_TYPE_NOT_NULL.getCode())
                     ));
         }
     }
@@ -123,8 +123,8 @@ public class PolicyCenterServiceImplTest {
             logger.warn("获取政策中心首页列表失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(PolicyCenterExceptionEnum.POLICY_TYPE_NOT_NULL.getCode()),
-                            Matchers.containsString(PolicyCenterExceptionEnum.TABLE_TYPE_IS_NOT_EXIST.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_TYPE_NOT_NULL.getCode()),
+                            Matchers.containsString(PolicyInfoExceptionEnum.TABLE_TYPE_IS_NOT_EXIST.getCode())
                     ));
         }
     }
@@ -146,7 +146,7 @@ public class PolicyCenterServiceImplTest {
             logger.warn("获取政策指南详情失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(PolicyCenterExceptionEnum.POLICY_DETAILS_NOT_EXIST.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DETAILS_NOT_EXIST.getCode())
                     ));
         }
     }
@@ -168,7 +168,7 @@ public class PolicyCenterServiceImplTest {
             logger.warn("图解政策详情失败");
             assertThat(e.getCode(),
                     Matchers.anyOf(
-                            Matchers.containsString(PolicyCenterExceptionEnum.POLICY_DIAGRAM_DETAILS_NOT_EXIST.getCode())
+                            Matchers.containsString(PolicyInfoExceptionEnum.POLICY_DIAGRAM_DETAILS_NOT_EXIST.getCode())
                     ));
         }
     }

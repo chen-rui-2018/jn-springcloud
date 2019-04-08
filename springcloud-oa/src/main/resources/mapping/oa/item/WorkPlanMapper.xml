@@ -75,7 +75,7 @@
         tb_oa_item t2,
         tb_oa_work_plan_user t3,
         tb_sys_user t4
-        WHERE t1.item_id = t2.id
+        WHERE t1.item_id = t2.id_
         and t1.id = t3.work_plan_id
         and t3.responsible_user_account = t4.account
         AND t1.record_status = 1
@@ -199,7 +199,7 @@
                     tb_oa_work_plan_user t3,
                     tb_sys_user t4
                 WHERE
-                    t1.item_id = t2.id
+                    t1.item_id = t2.id_
                 AND t1.id = t3.work_plan_id
                 AND t3.responsible_user_account = t4.account
                 AND t1.record_status = 1

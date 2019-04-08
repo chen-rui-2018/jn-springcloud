@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -838,6 +839,42 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         tbOaWorkPlan.setIsExpire(OaStatusEnums.DELETED.getCode());
         //往历史记录表中添加数据
         inserWorkPlanHistory(user, workPlanId, WorkPlanOperateEnmus.FINISH.getMessage(), remark, operateDetails);
+
+        //修改项目管理进度
+        updateItemProgress(tbOaWorkPlan, totalConsumeTime);
+    }
+
+    /**
+     * 更新工作计划进度
+     *
+     * @param tbOaWorkPlan     工作计划
+     * @param totalConsumeTime 消耗时间
+     */
+    private void updateItemProgress(TbOaWorkPlan tbOaWorkPlan, Integer totalConsumeTime) {
+        TbOaItem tbOaItem = tbOaItemMapper.selectByPrimaryKey(tbOaWorkPlan.getItemId());
+        if (tbOaItem == null){
+            logger.warn("[工作计划] 导入失败,导入文件为空");
+            throw new JnSpringCloudException(WorkPlanExceptionEnmus.ITEM_IS_EXIST);
+        }
+        Double consumeTime = tbOaItem.getTotalConsumeTime();
+        Double remainTime = tbOaItem.getTotalRemainTime();
+        Double totalPlanTime = tbOaItem.getTotalPlanTime();
+        consumeTime = consumeTime + totalConsumeTime;
+        remainTime = remainTime - totalConsumeTime;
+        if (remainTime < 0) {
+            remainTime = 0D;
+        }
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        // 设置精确到小数点后2位
+        numberFormat.setMaximumFractionDigits(2);
+        String progress = numberFormat.format((Double) consumeTime / (Double) totalPlanTime * 100);
+
+        tbOaItem.setItemProgress(progress + "%");
+        tbOaItem.setTotalConsumeTime(consumeTime);
+        tbOaItem.setTotalRemainTime(remainTime);
+        //将数据保存值数据库
+        tbOaItemMapper.updateByPrimaryKeySelective(tbOaItem);
+        logger.info("[工作计划] 更新项目进度成功,itemId:{}", tbOaItem.getId());
     }
 
     /**

@@ -120,6 +120,9 @@ public class OrgDetailVo implements Serializable {
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
 
+    @ApiModelProperty(value = "职务")
+    private String position;
+
     public String getOrgId() {
         return orgId;
     }
@@ -390,5 +393,13 @@ public class OrgDetailVo implements Serializable {
 
     public void setEvaluationNum(Integer evaluationNum) {
         this.evaluationNum = evaluationNum;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 }

@@ -30,10 +30,10 @@ public interface InvestorService {
 
     /**
      * 查询所属单位
-     * @param orgName 单位名称
+     * @param affiliationUnitInfoParam
      * @return
      */
-    List<AffiliationUnitShow> getAffiliationUnit(String orgName);
+    PaginationData getAffiliationUnit(AffiliationUnitInfoParam affiliationUnitInfoParam);
 
     /**
      * 新增投资人认证信息

@@ -77,10 +77,9 @@ public class InvestorController extends BaseController {
     @ApiOperation(value = "查询所属单位")
     @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
     @RequestMapping(value = "/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
-    public Result<List<AffiliationUnitShow>> getAffiliationUnit(@ApiParam(value = "单位名称" ,required = true,example = "xxx机构")@RequestParam("orgName") String orgName){
-        Assert.notNull(orgName, InvestorExceptionEnum.AFFILIATION_NAME.getMessage());
-        List<AffiliationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
-        return  new Result(affiliationUnit);
+    public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
+        PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
+        return  new Result(result);
     }
 
     @ControllerLog(doAction = "查询投资人主投领域")

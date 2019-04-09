@@ -42,7 +42,7 @@ public class RecruitGuestController extends BaseController {
     private CompanyService companyService;
 
     @ControllerLog(doAction = "招聘列表")
-    @ApiOperation(value = "招聘列表", notes = "分页查询，日期查询请传开始和结束日期[只传一个忽略]")
+    @ApiOperation(value = "招聘列表", notes = "分页查询[默认15条]，日期查询请传开始和结束日期[只传一个忽略]")
     @RequestMapping(value = "/getRecruitList",method = RequestMethod.GET)
     public Result<PaginationData<List<RecruitVO>>> getRecruitList(@Validated ServiceRecruitParam serviceRecruitParam){
         if(StringUtils.isNotEmpty(serviceRecruitParam.getComId())) {

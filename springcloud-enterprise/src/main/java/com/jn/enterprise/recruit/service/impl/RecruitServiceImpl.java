@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.Date;
@@ -38,6 +39,7 @@ import java.util.UUID;
  */
 @Service
 public class RecruitServiceImpl implements RecruitService {
+
     private static Logger logger = LoggerFactory.getLogger(RecruitServiceImpl.class);
 
     @Autowired
@@ -56,7 +58,7 @@ public class RecruitServiceImpl implements RecruitService {
     public RecruitDetailsVO getRecruitDetailsById(String id) {
         RecruitDetailsVO recruitDetails = checkRecruitExist(id);
         if (1 == serviceRecruitMapper.addRecruitClickById(id)) {
-            logger.info("招聘信息ID【{}】浏览量增加",id);
+            logger.info("[招聘管理] 招聘信息浏览量增加,recruitId:{}",id);
         }
         return recruitDetails;
     }
@@ -112,6 +114,7 @@ public class RecruitServiceImpl implements RecruitService {
         ServiceRecruitSearchParam rp = new ServiceRecruitSearchParam();
         BeanUtils.copyProperties(recruitParam,rp);
 
+        // 复合查询判断并赋值(忽略单一查询)
         if (StringUtils.isNotEmpty(recruitParam.getBeginDate()) && StringUtils.isNotEmpty(recruitParam.getEndDate())) {
             try {
                 rp.setBeginDate(DateUtils.parseDate(recruitParam.getBeginDate(),"yyyy-MM-dd"));
@@ -129,6 +132,7 @@ public class RecruitServiceImpl implements RecruitService {
 
     @Override
     @ServiceLog(doAction = "发布招聘信息")
+    @Transactional(rollbackFor = Exception.class)
     public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId,User user) {
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitPublishParam,sr);
@@ -140,16 +144,17 @@ public class RecruitServiceImpl implements RecruitService {
         sr.setStatus(new Byte(RECORD_STATUS_VALID));
         sr.setViewCount(0);
         sr.setId(UUID.randomUUID().toString().replaceAll("-",""));
-        int i = tbServiceRecruitMapper.insertSelective(sr);
 
-        if (1 == i) {
-            logger.info("用户【{}】发布招聘成功",user.getAccount());
+        Integer result = tbServiceRecruitMapper.insertSelective(sr);
+        if (1 == result) {
+            logger.info("[招聘管理] {}发布招聘成功",user.getAccount());
         }
-        return i;
+        return result;
     }
 
     @Override
     @ServiceLog(doAction = "编辑招聘信息")
+    @Transactional(rollbackFor = Exception.class)
     public Integer editRecruitInfo(ServiceRecruitEditParam serviceRecruitEditParam, User user) {
         checkRecruitExist(serviceRecruitEditParam.getId());
         TbServiceRecruit sr = new TbServiceRecruit();
@@ -157,11 +162,17 @@ public class RecruitServiceImpl implements RecruitService {
 
         sr.setModifierAccount(user.getAccount());
         sr.setModifiedTime(new Date());
-        return tbServiceRecruitMapper.updateByPrimaryKeySelective(sr);
+
+        Integer result = tbServiceRecruitMapper.updateByPrimaryKeySelective(sr);
+        if (1 == result) {
+            logger.info("[招聘管理] 修改招聘信息成功,recruitId:{}",sr.getId());
+        }
+        return result;
     }
 
     @Override
     @ServiceLog(doAction = "上/下架招聘信息")
+    @Transactional(rollbackFor = Exception.class)
     public Integer underRecruit(ServiceRecruitUnderParam serviceRecruitUnderParam, User user) {
         // 过滤无效状态
         if (!serviceRecruitUnderParam.getStatus().equals(RecruitDataTypeEnum.ON_SHELVES.getCode())
@@ -174,6 +185,7 @@ public class RecruitServiceImpl implements RecruitService {
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitUnderParam,sr);
 
+        // 设置上/下架状态
         if (serviceRecruitUnderParam.getStatus().equals(RecruitDataTypeEnum.ON_SHELVES.getCode())) {
             sr.setStatus(new Byte(RecruitDataTypeEnum.OFF_SHELVES.getCode()));
         } else {
@@ -182,19 +194,31 @@ public class RecruitServiceImpl implements RecruitService {
 
         sr.setModifierAccount(user.getAccount());
         sr.setModifiedTime(new Date());
-        return tbServiceRecruitMapper.updateByPrimaryKeySelective(sr);
+
+        Integer result = tbServiceRecruitMapper.updateByPrimaryKeySelective(sr);
+        if (1 == result) {
+            logger.info("[招聘管理] 上下架招聘成功,recruitId:{}",sr.getId());
+        }
+        return result;
     }
 
     @Override
     @ServiceLog(doAction = "删除招聘")
+    @Transactional(rollbackFor = Exception.class)
     public Integer delRecruitById(String id, User user) {
         checkRecruitExist(id);
-        return serviceRecruitMapper.delRecruitById(id, user.getAccount(), new Date());
+        Integer result = serviceRecruitMapper.delRecruitById(id, user.getAccount(), new Date());
+        if (1 == result) {
+            logger.info("[招聘管理] 删除招聘成功,recruitId:{}", id);
+        }
+        return result;
     }
 
+    // 判断招聘ID是否存在
     public RecruitDetailsVO checkRecruitExist (String id) {
         RecruitDetailsVO recruitDetails = serviceRecruitMapper.getRecruitDetailsById(id);
         if (null == recruitDetails) {
+            logger.warn("[招聘管理] 获取招聘信息失败,招聘信息不存在,recruitId:{}", id);
             throw new JnSpringCloudException(RecruitExceptionEnum.RECRUIT_INFO_IS_NOT_EXIST);
         }
         return recruitDetails;

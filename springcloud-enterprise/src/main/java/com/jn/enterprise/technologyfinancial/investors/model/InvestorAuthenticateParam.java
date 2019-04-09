@@ -62,7 +62,7 @@ public class InvestorAuthenticateParam implements Serializable {
     @ApiModelProperty(value = "工作经历")
     private List<InvestorWorkExperienceParam> investorWorkExperienceParamList;
     @ApiModelProperty(value = "教育经历")
-    private List<InvestorEduExperienceParam> investorEduExperienceParamList;
+    private List<InvestorEducationExperienceParam> investorEducationExperienceParamList;
 
     public String getInvestorName() {
         return investorName;
@@ -184,11 +184,11 @@ public class InvestorAuthenticateParam implements Serializable {
         this.investorWorkExperienceParamList = investorWorkExperienceParamList;
     }
 
-    public List<InvestorEduExperienceParam> getInvestorEduExperienceParamList() {
-        return investorEduExperienceParamList;
+    public List<InvestorEducationExperienceParam> getInvestorEducationExperienceParamList() {
+        return investorEducationExperienceParamList;
     }
 
-    public void setInvestorEduExperienceParamList(List<InvestorEduExperienceParam> investorEduExperienceParamList) {
-        this.investorEduExperienceParamList = investorEduExperienceParamList;
+    public void setInvestorEducationExperienceParamList(List<InvestorEducationExperienceParam> investorEducationExperienceParamList) {
+        this.investorEducationExperienceParamList = investorEducationExperienceParamList;
     }
 }

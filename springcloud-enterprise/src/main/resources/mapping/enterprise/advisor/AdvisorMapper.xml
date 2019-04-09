@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jn.enterprise.servicemarket.advisor.dao.AdvisorMapper">
     <!--1.根据查询条件获取顾问列表信息-->
-   <select id="getServiceConsultantList" parameterType="com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions" resultType="com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo">
+   <select id="getServiceConsultantList" parameterType="com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions"
+           resultType="com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo">
        SELECT
        tt.orgId
        ,tt.advisorAccount
@@ -10,6 +11,7 @@
        ,tt.businessArea
        ,tt.avatar
        ,tt.position
+       ,tt.workingYears
        ,tt.orgName
        ,tt.isCertification
        ,tt.goodAtBusiness
@@ -27,6 +29,7 @@
        ,sa.`business_area` AS "businessArea"				              <!-- 业务领域-->
        ,sa.`avatar` AS "avatar"					                          <!-- 头像-->
        ,sa.`position` AS "position"					                      <!-- 职务-->
+       ,sa.working_years as "workingYears"                                <!--从业年限-->
        ,sa.`org_name` AS "orgName"					                      <!-- 所属机构名称-->
        ,sa.`is_certification` AS "isCertification"			              <!-- 是否认证-->
        ,sa.`good_at_business` AS "goodAtBusiness"			              <!-- 业务擅长-->
@@ -42,7 +45,7 @@
        and sa.record_status='1'              <!--数据状态为正常数据-->
        GROUP BY
        sa.`org_id`,sa.`advisor_account`,sa.`advisor_name`,sa.`business_area`,
-       sa.`avatar`,sa.`position`,sa.`org_name`,sa.`is_certification`,
+       sa.`avatar`,sa.`position`,sa.working_years,sa.`org_name`,sa.`is_certification`,
        sa.`good_at_business`,sa.`transaction_num`,sa.page_views
        )tt
        where 1=1

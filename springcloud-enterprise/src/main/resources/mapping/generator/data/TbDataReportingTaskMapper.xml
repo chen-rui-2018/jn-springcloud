@@ -23,6 +23,7 @@
     <result column="overdue_days" jdbcType="INTEGER" property="overdueDays" />
     <result column="examine_comment" jdbcType="VARCHAR" property="examineComment" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -86,7 +87,7 @@
     fill_id, id, file_type, model_id, fill_in_form_id, fill_in_form_name, form_time, 
     fill_in_form_deadline, tab_clumn_type, status, garden_examine_stauts, tab_create_type, 
     calling_time, calling_times, filler, up_time, filler_tel, is_overdue, overdue_days, 
-    examine_comment, create_time
+    examine_comment, create_time, task_batch
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTaskCriteria" resultMap="BaseResultMap">
     select
@@ -128,14 +129,16 @@
       garden_examine_stauts, tab_create_type, calling_time, 
       calling_times, filler, up_time, 
       filler_tel, is_overdue, overdue_days, 
-      examine_comment, create_time)
+      examine_comment, create_time, task_batch
+      )
     values (#{fillId,jdbcType=VARCHAR}, #{fileType,jdbcType=TINYINT}, #{modelId,jdbcType=VARCHAR}, 
       #{fillInFormId,jdbcType=VARCHAR}, #{fillInFormName,jdbcType=VARCHAR}, #{formTime,jdbcType=CHAR}, 
       #{fillInFormDeadline,jdbcType=CHAR}, #{tabClumnType,jdbcType=TINYINT}, #{status,jdbcType=TINYINT}, 
       #{gardenExamineStauts,jdbcType=TINYINT}, #{tabCreateType,jdbcType=TINYINT}, #{callingTime,jdbcType=TIMESTAMP}, 
       #{callingTimes,jdbcType=INTEGER}, #{filler,jdbcType=VARCHAR}, #{upTime,jdbcType=TIMESTAMP}, 
       #{fillerTel,jdbcType=VARCHAR}, #{isOverdue,jdbcType=TINYINT}, #{overdueDays,jdbcType=INTEGER}, 
-      #{examineComment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP})
+      #{examineComment,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{taskBatch,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTask">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
@@ -203,6 +206,9 @@
       <if test="createTime != null">
         create_time,
       </if>
+      <if test="taskBatch != null">
+        task_batch,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="fillId != null">
@@ -264,6 +270,9 @@
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -339,6 +348,9 @@
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -366,7 +378,8 @@
       is_overdue = #{record.isOverdue,jdbcType=TINYINT},
       overdue_days = #{record.overdueDays,jdbcType=INTEGER},
       examine_comment = #{record.examineComment,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      task_batch = #{record.taskBatch,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -434,6 +447,9 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="taskBatch != null">
+        task_batch = #{taskBatch,jdbcType=VARCHAR},
+      </if>
     </set>
     where fill_id = #{fillId,jdbcType=VARCHAR}
   </update>
@@ -458,7 +474,8 @@
       is_overdue = #{isOverdue,jdbcType=TINYINT},
       overdue_days = #{overdueDays,jdbcType=INTEGER},
       examine_comment = #{examineComment,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      task_batch = #{taskBatch,jdbcType=VARCHAR}
     where fill_id = #{fillId,jdbcType=VARCHAR}
   </update>
 </mapper>

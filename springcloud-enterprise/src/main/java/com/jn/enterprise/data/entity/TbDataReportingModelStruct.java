@@ -1,23 +1,21 @@
 package com.jn.enterprise.data.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 
 public class TbDataReportingModelStruct implements Serializable {
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private Integer id;
 
-    @ApiModelProperty("指标表")
+    /*@ApiModelProperty("指标表")*/
     private String targetId;
 
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private String modelId;
 
-    @ApiModelProperty("填报格式标识")
+    /*@ApiModelProperty("填报格式标识")*/
     private String formId;
 
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private String tabId;
 
     private static final long serialVersionUID = 1L;

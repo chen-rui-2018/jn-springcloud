@@ -1464,6 +1464,76 @@ public class TbDataReportingTaskCriteria {
             addCriterion("create_time not between", value1, value2, "createTime");
             return (Criteria) this;
         }
+
+        public Criteria andTaskBatchIsNull() {
+            addCriterion("task_batch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIsNotNull() {
+            addCriterion("task_batch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchEqualTo(String value) {
+            addCriterion("task_batch =", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotEqualTo(String value) {
+            addCriterion("task_batch <>", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThan(String value) {
+            addCriterion("task_batch >", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("task_batch >=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThan(String value) {
+            addCriterion("task_batch <", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThanOrEqualTo(String value) {
+            addCriterion("task_batch <=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLike(String value) {
+            addCriterion("task_batch like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotLike(String value) {
+            addCriterion("task_batch not like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIn(List<String> values) {
+            addCriterion("task_batch in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotIn(List<String> values) {
+            addCriterion("task_batch not in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchBetween(String value1, String value2) {
+            addCriterion("task_batch between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotBetween(String value1, String value2) {
+            addCriterion("task_batch not between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

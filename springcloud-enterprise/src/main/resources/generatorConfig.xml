@@ -581,6 +581,10 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
-
+        <table tableName="tb_data_reporting_snapshot_model"></table>
+        <table tableName="tb_data_reporting_snapshot_model_struct"></table>
+        <table tableName="tb_data_reporting_snapshot_model_tab"></table>
+        <table tableName="tb_data_reporting_snapshot_target_group"></table>
+        <table tableName="tb_data_reporting_snapshot_target"></table>
     </context>
 </generatorConfiguration>

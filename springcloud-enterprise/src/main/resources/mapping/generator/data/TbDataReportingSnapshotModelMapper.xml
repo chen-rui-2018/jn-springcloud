@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingModelMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingModel">
-    <id column="model_id" jdbcType="VARCHAR" property="modelId" />
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotModelMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotModel">
+    <id column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
     <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="model_id" jdbcType="VARCHAR" property="modelId" />
     <result column="model_name" jdbcType="VARCHAR" property="modelName" />
     <result column="model_type" jdbcType="TINYINT" property="modelType" />
     <result column="model_form_target_id" jdbcType="VARCHAR" property="modelFormTargetId" />
@@ -87,18 +88,19 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    model_id, id, model_name, model_type, model_form_target_id, model_cycle, warning_before_days, 
-    warning_by, pc_ad, app_ad, record_status, comment, group_Id, other_data, task_create_time, 
-    filll_in_form_deadline, department_id, department_name, order, reminder, remind_status, 
-    creator_account, created_time, modifier_account, modified_time
+    task_batch, id, model_id, model_name, model_type, model_form_target_id, model_cycle, 
+    warning_before_days, warning_by, pc_ad, app_ad, record_status, comment, group_Id, 
+    other_data, task_create_time, filll_in_form_deadline, department_id, department_name, 
+    order, reminder, remind_status, creator_account, created_time, modifier_account, 
+    modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_data_reporting_model
+    from tb_data_reporting_snapshot_model
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -109,48 +111,48 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from tb_data_reporting_model
-    where model_id = #{modelId,jdbcType=VARCHAR}
+    from tb_data_reporting_snapshot_model
+    where task_batch = #{taskBatch,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_data_reporting_model
-    where model_id = #{modelId,jdbcType=VARCHAR}
+    delete from tb_data_reporting_snapshot_model
+    where task_batch = #{taskBatch,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelCriteria">
-    delete from tb_data_reporting_model
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelCriteria">
+    delete from tb_data_reporting_snapshot_model
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_model (model_id, model_name, model_type, 
-      model_form_target_id, model_cycle, warning_before_days, 
-      warning_by, pc_ad, app_ad, 
-      record_status, comment, group_Id, 
-      other_data, task_create_time, filll_in_form_deadline, 
-      department_id, department_name, order, 
-      reminder, remind_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
-    values (#{modelId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{modelType,jdbcType=TINYINT}, 
-      #{modelFormTargetId,jdbcType=VARCHAR}, #{modelCycle,jdbcType=VARCHAR}, #{warningBeforeDays,jdbcType=VARCHAR}, 
-      #{warningBy,jdbcType=VARCHAR}, #{pcAd,jdbcType=VARCHAR}, #{appAd,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
-      #{otherData,jdbcType=VARCHAR}, #{taskCreateTime,jdbcType=CHAR}, #{filllInFormDeadline,jdbcType=CHAR}, 
-      #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{order,jdbcType=VARCHAR}, 
-      #{reminder,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModel">
+    insert into tb_data_reporting_snapshot_model (task_batch, id, model_id, 
+      model_name, model_type, model_form_target_id, 
+      model_cycle, warning_before_days, warning_by, 
+      pc_ad, app_ad, record_status, 
+      comment, group_Id, other_data, 
+      task_create_time, filll_in_form_deadline, department_id, 
+      department_name, order, reminder, 
+      remind_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{taskBatch,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, 
+      #{modelName,jdbcType=VARCHAR}, #{modelType,jdbcType=TINYINT}, #{modelFormTargetId,jdbcType=VARCHAR}, 
+      #{modelCycle,jdbcType=VARCHAR}, #{warningBeforeDays,jdbcType=VARCHAR}, #{warningBy,jdbcType=VARCHAR}, 
+      #{pcAd,jdbcType=VARCHAR}, #{appAd,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, 
+      #{comment,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, #{otherData,jdbcType=VARCHAR}, 
+      #{taskCreateTime,jdbcType=CHAR}, #{filllInFormDeadline,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{departmentName,jdbcType=VARCHAR}, #{order,jdbcType=VARCHAR}, #{reminder,jdbcType=VARCHAR}, 
+      #{remindStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_model
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModel">
+    insert into tb_data_reporting_snapshot_model
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskBatch != null">
+        task_batch,
+      </if>
+      <if test="id != null">
+        id,
+      </if>
       <if test="modelId != null">
         model_id,
       </if>
@@ -225,6 +227,12 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
       </if>
@@ -299,20 +307,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelCriteria" resultType="java.lang.Long">
-    select count(*) from tb_data_reporting_model
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModelCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_snapshot_model
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_data_reporting_model
+    update tb_data_reporting_snapshot_model
     <set>
-      <if test="record.modelId != null">
-        model_id = #{record.modelId,jdbcType=VARCHAR},
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       </if>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modelId != null">
+        model_id = #{record.modelId,jdbcType=VARCHAR},
       </if>
       <if test="record.modelName != null">
         model_name = #{record.modelName,jdbcType=VARCHAR},
@@ -389,9 +400,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_data_reporting_model
-    set model_id = #{record.modelId,jdbcType=VARCHAR},
+    update tb_data_reporting_snapshot_model
+    set task_batch = #{record.taskBatch,jdbcType=VARCHAR},
       id = #{record.id,jdbcType=VARCHAR},
+      model_id = #{record.modelId,jdbcType=VARCHAR},
       model_name = #{record.modelName,jdbcType=VARCHAR},
       model_type = #{record.modelType,jdbcType=TINYINT},
       model_form_target_id = #{record.modelFormTargetId,jdbcType=VARCHAR},
@@ -419,11 +431,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    update tb_data_reporting_model
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModel">
+    update tb_data_reporting_snapshot_model
     <set>
       <if test="id != null">
         id = #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="modelId != null">
+        model_id = #{modelId,jdbcType=VARCHAR},
       </if>
       <if test="modelName != null">
         model_name = #{modelName,jdbcType=VARCHAR},
@@ -495,11 +510,12 @@
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where model_id = #{modelId,jdbcType=VARCHAR}
+    where task_batch = #{taskBatch,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    update tb_data_reporting_model
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotModel">
+    update tb_data_reporting_snapshot_model
     set id = #{id,jdbcType=VARCHAR},
+      model_id = #{modelId,jdbcType=VARCHAR},
       model_name = #{modelName,jdbcType=VARCHAR},
       model_type = #{modelType,jdbcType=TINYINT},
       model_form_target_id = #{modelFormTargetId,jdbcType=VARCHAR},
@@ -523,6 +539,6 @@
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where model_id = #{modelId,jdbcType=VARCHAR}
+    where task_batch = #{taskBatch,jdbcType=VARCHAR}
   </update>
 </mapper>

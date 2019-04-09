@@ -2,15 +2,18 @@ package com.jn.enterprise.data.entity;
 
 import java.io.Serializable;
 
-public class TbDataReportingModelTab implements Serializable {
-    /*@ApiModelProperty("tab_id")*/
-    private String tabId;
-
+public class TbDataReportingSnapshotModelTab implements Serializable {
     /*@ApiModelProperty("序列")*/
     private String id;
 
+    /*@ApiModelProperty("")*/
+    private String taskBatch;
+
     /*@ApiModelProperty("模板ID")*/
     private String modelId;
+
+    /*@ApiModelProperty("tab_id")*/
+    private String tabId;
 
     /*@ApiModelProperty("表名称")*/
     private String tabName;
@@ -32,14 +35,6 @@ public class TbDataReportingModelTab implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getTabId() {
-        return tabId;
-    }
-
-    public void setTabId(String tabId) {
-        this.tabId = tabId == null ? null : tabId.trim();
-    }
-
     public String getId() {
         return id;
     }
@@ -48,12 +43,28 @@ public class TbDataReportingModelTab implements Serializable {
         this.id = id == null ? null : id.trim();
     }
 
+    public String getTaskBatch() {
+        return taskBatch;
+    }
+
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch == null ? null : taskBatch.trim();
+    }
+
     public String getModelId() {
         return modelId;
     }
 
     public void setModelId(String modelId) {
         this.modelId = modelId == null ? null : modelId.trim();
+    }
+
+    public String getTabId() {
+        return tabId;
+    }
+
+    public void setTabId(String tabId) {
+        this.tabId = tabId == null ? null : tabId.trim();
     }
 
     public String getTabName() {
@@ -115,10 +126,11 @@ public class TbDataReportingModelTab implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbDataReportingModelTab other = (TbDataReportingModelTab) that;
-        return (this.getTabId() == null ? other.getTabId() == null : this.getTabId().equals(other.getTabId()))
-            && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+        TbDataReportingSnapshotModelTab other = (TbDataReportingSnapshotModelTab) that;
+        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
             && (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
+            && (this.getTabId() == null ? other.getTabId() == null : this.getTabId().equals(other.getTabId()))
             && (this.getTabName() == null ? other.getTabName() == null : this.getTabName().equals(other.getTabName()))
             && (this.getTabClumnTargetShow() == null ? other.getTabClumnTargetShow() == null : this.getTabClumnTargetShow().equals(other.getTabClumnTargetShow()))
             && (this.getTabClumnType() == null ? other.getTabClumnType() == null : this.getTabClumnType().equals(other.getTabClumnType()))
@@ -131,9 +143,10 @@ public class TbDataReportingModelTab implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getTabId() == null) ? 0 : getTabId().hashCode());
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
         result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
+        result = prime * result + ((getTabId() == null) ? 0 : getTabId().hashCode());
         result = prime * result + ((getTabName() == null) ? 0 : getTabName().hashCode());
         result = prime * result + ((getTabClumnTargetShow() == null) ? 0 : getTabClumnTargetShow().hashCode());
         result = prime * result + ((getTabClumnType() == null) ? 0 : getTabClumnType().hashCode());
@@ -149,9 +162,10 @@ public class TbDataReportingModelTab implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", tabId=").append(tabId);
         sb.append(", id=").append(id);
+        sb.append(", taskBatch=").append(taskBatch);
         sb.append(", modelId=").append(modelId);
+        sb.append(", tabId=").append(tabId);
         sb.append(", tabName=").append(tabName);
         sb.append(", tabClumnTargetShow=").append(tabClumnTargetShow);
         sb.append(", tabClumnType=").append(tabClumnType);

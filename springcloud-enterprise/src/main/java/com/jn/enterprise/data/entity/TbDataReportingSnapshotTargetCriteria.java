@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbDataReportingTargetCriteria {
+public class TbDataReportingSnapshotTargetCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbDataReportingTargetCriteria() {
+    public TbDataReportingSnapshotTargetCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,76 +105,6 @@ public class TbDataReportingTargetCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andTargetIdIsNull() {
-            addCriterion("target_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdIsNotNull() {
-            addCriterion("target_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdEqualTo(String value) {
-            addCriterion("target_id =", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdNotEqualTo(String value) {
-            addCriterion("target_id <>", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdGreaterThan(String value) {
-            addCriterion("target_id >", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdGreaterThanOrEqualTo(String value) {
-            addCriterion("target_id >=", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdLessThan(String value) {
-            addCriterion("target_id <", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdLessThanOrEqualTo(String value) {
-            addCriterion("target_id <=", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdLike(String value) {
-            addCriterion("target_id like", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdNotLike(String value) {
-            addCriterion("target_id not like", value, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdIn(List<String> values) {
-            addCriterion("target_id in", values, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdNotIn(List<String> values) {
-            addCriterion("target_id not in", values, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdBetween(String value1, String value2) {
-            addCriterion("target_id between", value1, value2, "targetId");
-            return (Criteria) this;
-        }
-
-        public Criteria andTargetIdNotBetween(String value1, String value2) {
-            addCriterion("target_id not between", value1, value2, "targetId");
-            return (Criteria) this;
-        }
-
         public Criteria andIdIsNull() {
             addCriterion("id is null");
             return (Criteria) this;
@@ -242,6 +172,146 @@ public class TbDataReportingTargetCriteria {
 
         public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIsNull() {
+            addCriterion("task_batch is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIsNotNull() {
+            addCriterion("task_batch is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchEqualTo(String value) {
+            addCriterion("task_batch =", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotEqualTo(String value) {
+            addCriterion("task_batch <>", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThan(String value) {
+            addCriterion("task_batch >", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("task_batch >=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThan(String value) {
+            addCriterion("task_batch <", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLessThanOrEqualTo(String value) {
+            addCriterion("task_batch <=", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchLike(String value) {
+            addCriterion("task_batch like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotLike(String value) {
+            addCriterion("task_batch not like", value, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchIn(List<String> values) {
+            addCriterion("task_batch in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotIn(List<String> values) {
+            addCriterion("task_batch not in", values, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchBetween(String value1, String value2) {
+            addCriterion("task_batch between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTaskBatchNotBetween(String value1, String value2) {
+            addCriterion("task_batch not between", value1, value2, "taskBatch");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdIsNull() {
+            addCriterion("target_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdIsNotNull() {
+            addCriterion("target_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdEqualTo(String value) {
+            addCriterion("target_id =", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdNotEqualTo(String value) {
+            addCriterion("target_id <>", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdGreaterThan(String value) {
+            addCriterion("target_id >", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdGreaterThanOrEqualTo(String value) {
+            addCriterion("target_id >=", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdLessThan(String value) {
+            addCriterion("target_id <", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdLessThanOrEqualTo(String value) {
+            addCriterion("target_id <=", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdLike(String value) {
+            addCriterion("target_id like", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdNotLike(String value) {
+            addCriterion("target_id not like", value, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdIn(List<String> values) {
+            addCriterion("target_id in", values, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdNotIn(List<String> values) {
+            addCriterion("target_id not in", values, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdBetween(String value1, String value2) {
+            addCriterion("target_id between", value1, value2, "targetId");
+            return (Criteria) this;
+        }
+
+        public Criteria andTargetIdNotBetween(String value1, String value2) {
+            addCriterion("target_id not between", value1, value2, "targetId");
             return (Criteria) this;
         }
 

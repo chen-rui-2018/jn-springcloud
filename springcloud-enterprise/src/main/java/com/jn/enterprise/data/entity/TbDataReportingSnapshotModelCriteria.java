@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class TbDataReportingModelCriteria {
+public class TbDataReportingSnapshotModelCriteria {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public TbDataReportingModelCriteria() {
+    public TbDataReportingSnapshotModelCriteria() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -105,73 +105,73 @@ public class TbDataReportingModelCriteria {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
-        public Criteria andModelIdIsNull() {
-            addCriterion("model_id is null");
+        public Criteria andTaskBatchIsNull() {
+            addCriterion("task_batch is null");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdIsNotNull() {
-            addCriterion("model_id is not null");
+        public Criteria andTaskBatchIsNotNull() {
+            addCriterion("task_batch is not null");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdEqualTo(String value) {
-            addCriterion("model_id =", value, "modelId");
+        public Criteria andTaskBatchEqualTo(String value) {
+            addCriterion("task_batch =", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdNotEqualTo(String value) {
-            addCriterion("model_id <>", value, "modelId");
+        public Criteria andTaskBatchNotEqualTo(String value) {
+            addCriterion("task_batch <>", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdGreaterThan(String value) {
-            addCriterion("model_id >", value, "modelId");
+        public Criteria andTaskBatchGreaterThan(String value) {
+            addCriterion("task_batch >", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdGreaterThanOrEqualTo(String value) {
-            addCriterion("model_id >=", value, "modelId");
+        public Criteria andTaskBatchGreaterThanOrEqualTo(String value) {
+            addCriterion("task_batch >=", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdLessThan(String value) {
-            addCriterion("model_id <", value, "modelId");
+        public Criteria andTaskBatchLessThan(String value) {
+            addCriterion("task_batch <", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdLessThanOrEqualTo(String value) {
-            addCriterion("model_id <=", value, "modelId");
+        public Criteria andTaskBatchLessThanOrEqualTo(String value) {
+            addCriterion("task_batch <=", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdLike(String value) {
-            addCriterion("model_id like", value, "modelId");
+        public Criteria andTaskBatchLike(String value) {
+            addCriterion("task_batch like", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdNotLike(String value) {
-            addCriterion("model_id not like", value, "modelId");
+        public Criteria andTaskBatchNotLike(String value) {
+            addCriterion("task_batch not like", value, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdIn(List<String> values) {
-            addCriterion("model_id in", values, "modelId");
+        public Criteria andTaskBatchIn(List<String> values) {
+            addCriterion("task_batch in", values, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdNotIn(List<String> values) {
-            addCriterion("model_id not in", values, "modelId");
+        public Criteria andTaskBatchNotIn(List<String> values) {
+            addCriterion("task_batch not in", values, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdBetween(String value1, String value2) {
-            addCriterion("model_id between", value1, value2, "modelId");
+        public Criteria andTaskBatchBetween(String value1, String value2) {
+            addCriterion("task_batch between", value1, value2, "taskBatch");
             return (Criteria) this;
         }
 
-        public Criteria andModelIdNotBetween(String value1, String value2) {
-            addCriterion("model_id not between", value1, value2, "modelId");
+        public Criteria andTaskBatchNotBetween(String value1, String value2) {
+            addCriterion("task_batch not between", value1, value2, "taskBatch");
             return (Criteria) this;
         }
 
@@ -242,6 +242,76 @@ public class TbDataReportingModelCriteria {
 
         public Criteria andIdNotBetween(String value1, String value2) {
             addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdIsNull() {
+            addCriterion("model_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdIsNotNull() {
+            addCriterion("model_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdEqualTo(String value) {
+            addCriterion("model_id =", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdNotEqualTo(String value) {
+            addCriterion("model_id <>", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdGreaterThan(String value) {
+            addCriterion("model_id >", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdGreaterThanOrEqualTo(String value) {
+            addCriterion("model_id >=", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdLessThan(String value) {
+            addCriterion("model_id <", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdLessThanOrEqualTo(String value) {
+            addCriterion("model_id <=", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdLike(String value) {
+            addCriterion("model_id like", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdNotLike(String value) {
+            addCriterion("model_id not like", value, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdIn(List<String> values) {
+            addCriterion("model_id in", values, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdNotIn(List<String> values) {
+            addCriterion("model_id not in", values, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdBetween(String value1, String value2) {
+            addCriterion("model_id between", value1, value2, "modelId");
+            return (Criteria) this;
+        }
+
+        public Criteria andModelIdNotBetween(String value1, String value2) {
+            addCriterion("model_id not between", value1, value2, "modelId");
             return (Criteria) this;
         }
 

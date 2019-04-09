@@ -1,36 +1,34 @@
 package com.jn.enterprise.data.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 
 public class TbDataReportingGroupCompany implements Serializable {
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private String id;
 
-    @ApiModelProperty("群组ID")
+    /*@ApiModelProperty("群组ID")*/
     private String groupId;
 
-    @ApiModelProperty("企业名称")
+    /*@ApiModelProperty("企业名称")*/
     private String company;
 
-    @ApiModelProperty("企业ID")
+    /*@ApiModelProperty("企业ID")*/
     private String companyId;
 
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private Byte recordStatus;
 
-    @ApiModelProperty("创建者账号")
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
-    @ApiModelProperty("创建时间")
+    /*@ApiModelProperty("创建时间")*/
     private Date createdTime;
 
-    @ApiModelProperty("最新更新者账号")
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
-    @ApiModelProperty("最新更新时间")
+    /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;

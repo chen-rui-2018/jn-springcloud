@@ -1,73 +1,74 @@
 package com.jn.enterprise.data.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 
 public class TbDataReportingTask implements Serializable {
-    @ApiModelProperty("园区工单ID/企业填报ID")
+    /*@ApiModelProperty("园区工单ID/企业填报ID")*/
     private String fillId;
 
-    @ApiModelProperty("序列")
+    /*@ApiModelProperty("序列")*/
     private String id;
 
-    @ApiModelProperty("填报类型（1：企业；2：园区）")
+    /*@ApiModelProperty("填报类型（1：企业；2：园区）")*/
     private Byte fileType;
 
-    @ApiModelProperty("模板ID")
+    /*@ApiModelProperty("模板ID")*/
     private String modelId;
 
-    @ApiModelProperty("填报对象名称；是园区时，存储部门ID;企业时填写企业ID")
+    /*@ApiModelProperty("填报对象名称；是园区时，存储部门ID;企业时填写企业ID")*/
     private String fillInFormId;
 
-    @ApiModelProperty("填报对象名称；如果是企业：则为企业名称，是园区时，则是那个部门")
+    /*@ApiModelProperty("填报对象名称；如果是企业：则为企业名称，是园区时，则是那个部门")*/
     private String fillInFormName;
 
-    @ApiModelProperty("账期（月YYYYMM，年YYYY）")
+    /*@ApiModelProperty("账期（月YYYYMM，年YYYY）")*/
     private String formTime;
 
-    @ApiModelProperty("填报截至时间")
+    /*@ApiModelProperty("填报截至时间")*/
     private String fillInFormDeadline;
 
-    @ApiModelProperty("表填报列类型（0：累计值；1：本期值）")
+    /*@ApiModelProperty("表填报列类型（0：累计值；1：本期值）")*/
     private Byte tabClumnType;
 
-    @ApiModelProperty("状态（企业状态0：已上报；1未上报；2：逾期上报；园区状态3：已审核；4：未审核；5审核不通过）")
+    /*@ApiModelProperty("状态（企业状态0：已上报；1未上报；2：逾期上报；")*/
     private Byte status;
 
-    @ApiModelProperty("0：已审核；1：未审核；2审核不通过")
+    /*@ApiModelProperty("0：已审核；1：未审核；2审核不通过")*/
     private Byte gardenExamineStauts;
 
-    @ApiModelProperty("表生成模式（0:普通模板,1：科技园模板）")
+    /*@ApiModelProperty("表生成模式（0:普通模板,1：科技园模板）")*/
     private Byte tabCreateType;
 
-    @ApiModelProperty("最后催报时间")
+    /*@ApiModelProperty("最后催报时间")*/
     private Date callingTime;
 
-    @ApiModelProperty("催报次数")
+    /*@ApiModelProperty("催报次数")*/
     private Integer callingTimes;
 
-    @ApiModelProperty("填报人")
+    /*@ApiModelProperty("填报人")*/
     private String filler;
 
-    @ApiModelProperty("上报时间")
+    /*@ApiModelProperty("上报时间")*/
     private Date upTime;
 
-    @ApiModelProperty("填报人电话")
+    /*@ApiModelProperty("填报人电话")*/
     private String fillerTel;
 
-    @ApiModelProperty("是否逾期（1：是；0：否）")
+    /*@ApiModelProperty("是否逾期（1：是；0：否）")*/
     private Byte isOverdue;
 
-    @ApiModelProperty("逾期天数")
+    /*@ApiModelProperty("逾期天数")*/
     private Integer overdueDays;
 
-    @ApiModelProperty("审批意见")
+    /*@ApiModelProperty("审批意见")*/
     private String examineComment;
 
-    @ApiModelProperty("创建日期")
+    /*@ApiModelProperty("创建时间")*/
     private Date createTime;
+
+    /*@ApiModelProperty("")*/
+    private String taskBatch;
 
     private static final long serialVersionUID = 1L;
 
@@ -239,6 +240,14 @@ public class TbDataReportingTask implements Serializable {
         this.createTime = createTime;
     }
 
+    public String getTaskBatch() {
+        return taskBatch;
+    }
+
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch == null ? null : taskBatch.trim();
+    }
+
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -271,7 +280,8 @@ public class TbDataReportingTask implements Serializable {
             && (this.getIsOverdue() == null ? other.getIsOverdue() == null : this.getIsOverdue().equals(other.getIsOverdue()))
             && (this.getOverdueDays() == null ? other.getOverdueDays() == null : this.getOverdueDays().equals(other.getOverdueDays()))
             && (this.getExamineComment() == null ? other.getExamineComment() == null : this.getExamineComment().equals(other.getExamineComment()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()));
+            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+            && (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()));
     }
 
     @Override
@@ -299,6 +309,7 @@ public class TbDataReportingTask implements Serializable {
         result = prime * result + ((getOverdueDays() == null) ? 0 : getOverdueDays().hashCode());
         result = prime * result + ((getExamineComment() == null) ? 0 : getExamineComment().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
+        result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
         return result;
     }
 
@@ -329,6 +340,7 @@ public class TbDataReportingTask implements Serializable {
         sb.append(", overdueDays=").append(overdueDays);
         sb.append(", examineComment=").append(examineComment);
         sb.append(", createTime=").append(createTime);
+        sb.append(", taskBatch=").append(taskBatch);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingTargetMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <id column="target_id" jdbcType="VARCHAR" property="targetId" />
+<mapper namespace="com.jn.enterprise.data.dao.TbDataReportingSnapshotTargetMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
     <result column="id" jdbcType="VARCHAR" property="id" />
+    <result column="task_batch" jdbcType="VARCHAR" property="taskBatch" />
+    <result column="target_id" jdbcType="VARCHAR" property="targetId" />
     <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
     <result column="order" jdbcType="INTEGER" property="order" />
     <result column="target_name" jdbcType="VARCHAR" property="targetName" />
@@ -77,17 +78,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    target_id, id, parent_id, order, target_name, department_id, department_name, is_muilt_row, 
-    unit, target_type, record_status, creator_account, created_time, modifier_account, 
+    id, task_batch, target_id, parent_id, order, target_name, department_id, department_name, 
+    is_muilt_row, unit, target_type, record_status, creator_account, created_time, modifier_account, 
     modified_time
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from tb_data_reporting_target
+    from tb_data_reporting_snapshot_target
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,43 +96,35 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from tb_data_reporting_target
-    where target_id = #{targetId,jdbcType=VARCHAR}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from tb_data_reporting_target
-    where target_id = #{targetId,jdbcType=VARCHAR}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria">
-    delete from tb_data_reporting_target
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetCriteria">
+    delete from tb_data_reporting_snapshot_target
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_target (target_id, parent_id, order, 
-      target_name, department_id, department_name, 
-      is_muilt_row, unit, target_type, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{targetId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
-      #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
-      #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, #{targetType,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
+    insert into tb_data_reporting_snapshot_target (id, task_batch, target_id, 
+      parent_id, order, target_name, 
+      department_id, department_name, is_muilt_row, 
+      unit, target_type, record_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{id,jdbcType=VARCHAR}, #{taskBatch,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
+      #{parentId,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, #{targetName,jdbcType=VARCHAR}, 
+      #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{isMuiltRow,jdbcType=TINYINT}, 
+      #{unit,jdbcType=VARCHAR}, #{targetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_target
+  <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTarget">
+    insert into tb_data_reporting_snapshot_target
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="taskBatch != null">
+        task_batch,
+      </if>
       <if test="targetId != null">
         target_id,
       </if>
@@ -176,6 +169,12 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="taskBatch != null">
+        #{taskBatch,jdbcType=VARCHAR},
+      </if>
       <if test="targetId != null">
         #{targetId,jdbcType=VARCHAR},
       </if>
@@ -220,20 +219,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingTargetCriteria" resultType="java.lang.Long">
-    select count(*) from tb_data_reporting_target
+  <select id="countByExample" parameterType="com.jn.enterprise.data.entity.TbDataReportingSnapshotTargetCriteria" resultType="java.lang.Long">
+    select count(*) from tb_data_reporting_snapshot_target
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update tb_data_reporting_target
+    update tb_data_reporting_snapshot_target
     <set>
-      <if test="record.targetId != null">
-        target_id = #{record.targetId,jdbcType=VARCHAR},
-      </if>
       <if test="record.id != null">
         id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.taskBatch != null">
+        task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targetId != null">
+        target_id = #{record.targetId,jdbcType=VARCHAR},
       </if>
       <if test="record.parentId != null">
         parent_id = #{record.parentId,jdbcType=VARCHAR},
@@ -280,9 +282,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update tb_data_reporting_target
-    set target_id = #{record.targetId,jdbcType=VARCHAR},
-      id = #{record.id,jdbcType=VARCHAR},
+    update tb_data_reporting_snapshot_target
+    set id = #{record.id,jdbcType=VARCHAR},
+      task_batch = #{record.taskBatch,jdbcType=VARCHAR},
+      target_id = #{record.targetId,jdbcType=VARCHAR},
       parent_id = #{record.parentId,jdbcType=VARCHAR},
       order = #{record.order,jdbcType=INTEGER},
       target_name = #{record.targetName,jdbcType=VARCHAR},
@@ -299,71 +302,5 @@
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    update tb_data_reporting_target
-    <set>
-      <if test="id != null">
-        id = #{id,jdbcType=VARCHAR},
-      </if>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=VARCHAR},
-      </if>
-      <if test="order != null">
-        order = #{order,jdbcType=INTEGER},
-      </if>
-      <if test="targetName != null">
-        target_name = #{targetName,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentId != null">
-        department_id = #{departmentId,jdbcType=VARCHAR},
-      </if>
-      <if test="departmentName != null">
-        department_name = #{departmentName,jdbcType=VARCHAR},
-      </if>
-      <if test="isMuiltRow != null">
-        is_muilt_row = #{isMuiltRow,jdbcType=TINYINT},
-      </if>
-      <if test="unit != null">
-        unit = #{unit,jdbcType=VARCHAR},
-      </if>
-      <if test="targetType != null">
-        target_type = #{targetType,jdbcType=TINYINT},
-      </if>
-      <if test="recordStatus != null">
-        record_status = #{recordStatus,jdbcType=TINYINT},
-      </if>
-      <if test="creatorAccount != null">
-        creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="createdTime != null">
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifierAccount != null">
-        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      </if>
-      <if test="modifiedTime != null">
-        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where target_id = #{targetId,jdbcType=VARCHAR}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    update tb_data_reporting_target
-    set id = #{id,jdbcType=VARCHAR},
-      parent_id = #{parentId,jdbcType=VARCHAR},
-      order = #{order,jdbcType=INTEGER},
-      target_name = #{targetName,jdbcType=VARCHAR},
-      department_id = #{departmentId,jdbcType=VARCHAR},
-      department_name = #{departmentName,jdbcType=VARCHAR},
-      is_muilt_row = #{isMuiltRow,jdbcType=TINYINT},
-      unit = #{unit,jdbcType=VARCHAR},
-      target_type = #{targetType,jdbcType=TINYINT},
-      record_status = #{recordStatus,jdbcType=TINYINT},
-      creator_account = #{creatorAccount,jdbcType=VARCHAR},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
-      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
-    where target_id = #{targetId,jdbcType=VARCHAR}
   </update>
 </mapper>

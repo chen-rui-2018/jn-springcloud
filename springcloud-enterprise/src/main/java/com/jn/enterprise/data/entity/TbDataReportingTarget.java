@@ -1,57 +1,52 @@
 package com.jn.enterprise.data.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 
 public class TbDataReportingTarget implements Serializable {
-    @ApiModelProperty("指标ID")
+    /*@ApiModelProperty("指标ID")*/
     private String targetId;
 
-    @ApiModelProperty("序列")
+    /*@ApiModelProperty("序列")*/
     private String id;
 
-    @ApiModelProperty("是否具备子节点（0：是，1否），显示图标是文件夹")
-    private Byte haveChild;
-
-    @ApiModelProperty("父节点ID")
+    /*@ApiModelProperty("父节点ID")*/
     private String parentId;
 
-    @ApiModelProperty("指标顺序")
+    /*@ApiModelProperty("指标顺序")*/
     private Integer order;
 
-    @ApiModelProperty("指标名称")
+    /*@ApiModelProperty("指标名称")*/
     private String targetName;
 
-    @ApiModelProperty("部门ID")
+    /*@ApiModelProperty("部门ID")*/
     private String departmentId;
 
-    @ApiModelProperty("部门名称")
+    /*@ApiModelProperty("部门名称")*/
     private String departmentName;
 
-    @ApiModelProperty("是否支出多行输入（0：是，1：否）")
+    /*@ApiModelProperty("是否支出多行输入（0：是，1：否）")*/
     private Byte isMuiltRow;
 
-    @ApiModelProperty("指标单位")
+    /*@ApiModelProperty("指标单位")*/
     private String unit;
 
-    @ApiModelProperty("指标类型（0：企业指标，1园区指标）")
+    /*@ApiModelProperty("指标类型（0：企业指标，1园区指标）")*/
     private Byte targetType;
 
-    @ApiModelProperty("")
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
-    @ApiModelProperty("创建者账号")
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
-    @ApiModelProperty("")
+    /*@ApiModelProperty("")*/
     private Date createdTime;
 
-    @ApiModelProperty("最新更新者账号")
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
-    @ApiModelProperty("创建时间")
+    /*@ApiModelProperty("创建时间")*/
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;
@@ -70,14 +65,6 @@ public class TbDataReportingTarget implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
-    }
-
-    public Byte getHaveChild() {
-        return haveChild;
-    }
-
-    public void setHaveChild(Byte haveChild) {
-        this.haveChild = haveChild;
     }
 
     public String getParentId() {
@@ -198,7 +185,6 @@ public class TbDataReportingTarget implements Serializable {
         TbDataReportingTarget other = (TbDataReportingTarget) that;
         return (this.getTargetId() == null ? other.getTargetId() == null : this.getTargetId().equals(other.getTargetId()))
             && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getHaveChild() == null ? other.getHaveChild() == null : this.getHaveChild().equals(other.getHaveChild()))
             && (this.getParentId() == null ? other.getParentId() == null : this.getParentId().equals(other.getParentId()))
             && (this.getOrder() == null ? other.getOrder() == null : this.getOrder().equals(other.getOrder()))
             && (this.getTargetName() == null ? other.getTargetName() == null : this.getTargetName().equals(other.getTargetName()))
@@ -220,7 +206,6 @@ public class TbDataReportingTarget implements Serializable {
         int result = 1;
         result = prime * result + ((getTargetId() == null) ? 0 : getTargetId().hashCode());
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getHaveChild() == null) ? 0 : getHaveChild().hashCode());
         result = prime * result + ((getParentId() == null) ? 0 : getParentId().hashCode());
         result = prime * result + ((getOrder() == null) ? 0 : getOrder().hashCode());
         result = prime * result + ((getTargetName() == null) ? 0 : getTargetName().hashCode());
@@ -245,7 +230,6 @@ public class TbDataReportingTarget implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", targetId=").append(targetId);
         sb.append(", id=").append(id);
-        sb.append(", haveChild=").append(haveChild);
         sb.append(", parentId=").append(parentId);
         sb.append(", order=").append(order);
         sb.append(", targetName=").append(targetName);

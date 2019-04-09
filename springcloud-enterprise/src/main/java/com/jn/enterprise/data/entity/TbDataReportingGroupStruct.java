@@ -1,36 +1,34 @@
 package com.jn.enterprise.data.entity;
 
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
 
 public class TbDataReportingGroupStruct implements Serializable {
-    @ApiModelProperty("群组ID")
+    /*@ApiModelProperty("群组ID")*/
     private String groupId;
 
-    @ApiModelProperty("序列")
+    /*@ApiModelProperty("序列")*/
     private String id;
 
-    @ApiModelProperty("群主名称")
+    /*@ApiModelProperty("群主名称")*/
     private String groupName;
 
-    @ApiModelProperty("群组说明")
+    /*@ApiModelProperty("群组说明")*/
     private String groupComment;
 
-    @ApiModelProperty("创建者账号")
+    /*@ApiModelProperty("创建者账号")*/
     private String creatorAccount;
 
-    @ApiModelProperty("创建时间")
+    /*@ApiModelProperty("创建时间")*/
     private Date createTime;
 
-    @ApiModelProperty("是否删除（0标记删除，1正常）")
+    /*@ApiModelProperty("是否删除（0标记删除，1正常）")*/
     private Byte recordStatus;
 
-    @ApiModelProperty("最新更新者账号")
+    /*@ApiModelProperty("最新更新者账号")*/
     private String modifierAccount;
 
-    @ApiModelProperty("最新更新时间")
+    /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
 
     private static final long serialVersionUID = 1L;

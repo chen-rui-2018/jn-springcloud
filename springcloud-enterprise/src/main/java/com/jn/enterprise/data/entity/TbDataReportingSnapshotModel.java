@@ -3,12 +3,15 @@ package com.jn.enterprise.data.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-public class TbDataReportingModel implements Serializable {
-    /*@ApiModelProperty("模板ID")*/
-    private String modelId;
+public class TbDataReportingSnapshotModel implements Serializable {
+    /*@ApiModelProperty("任务批次")*/
+    private String taskBatch;
 
     /*@ApiModelProperty("")*/
     private String id;
+
+    /*@ApiModelProperty("模板ID")*/
+    private String modelId;
 
     /*@ApiModelProperty("模板名称")*/
     private String modelName;
@@ -83,12 +86,12 @@ public class TbDataReportingModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getModelId() {
-        return modelId;
+    public String getTaskBatch() {
+        return taskBatch;
     }
 
-    public void setModelId(String modelId) {
-        this.modelId = modelId == null ? null : modelId.trim();
+    public void setTaskBatch(String taskBatch) {
+        this.taskBatch = taskBatch == null ? null : taskBatch.trim();
     }
 
     public String getId() {
@@ -97,6 +100,14 @@ public class TbDataReportingModel implements Serializable {
 
     public void setId(String id) {
         this.id = id == null ? null : id.trim();
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId == null ? null : modelId.trim();
     }
 
     public String getModelName() {
@@ -294,9 +305,10 @@ public class TbDataReportingModel implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        TbDataReportingModel other = (TbDataReportingModel) that;
-        return (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
+        TbDataReportingSnapshotModel other = (TbDataReportingSnapshotModel) that;
+        return (this.getTaskBatch() == null ? other.getTaskBatch() == null : this.getTaskBatch().equals(other.getTaskBatch()))
             && (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
+            && (this.getModelId() == null ? other.getModelId() == null : this.getModelId().equals(other.getModelId()))
             && (this.getModelName() == null ? other.getModelName() == null : this.getModelName().equals(other.getModelName()))
             && (this.getModelType() == null ? other.getModelType() == null : this.getModelType().equals(other.getModelType()))
             && (this.getModelFormTargetId() == null ? other.getModelFormTargetId() == null : this.getModelFormTargetId().equals(other.getModelFormTargetId()))
@@ -326,8 +338,9 @@ public class TbDataReportingModel implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
+        result = prime * result + ((getTaskBatch() == null) ? 0 : getTaskBatch().hashCode());
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
+        result = prime * result + ((getModelId() == null) ? 0 : getModelId().hashCode());
         result = prime * result + ((getModelName() == null) ? 0 : getModelName().hashCode());
         result = prime * result + ((getModelType() == null) ? 0 : getModelType().hashCode());
         result = prime * result + ((getModelFormTargetId() == null) ? 0 : getModelFormTargetId().hashCode());
@@ -360,8 +373,9 @@ public class TbDataReportingModel implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", modelId=").append(modelId);
+        sb.append(", taskBatch=").append(taskBatch);
         sb.append(", id=").append(id);
+        sb.append(", modelId=").append(modelId);
         sb.append(", modelName=").append(modelName);
         sb.append(", modelType=").append(modelType);
         sb.append(", modelFormTargetId=").append(modelFormTargetId);

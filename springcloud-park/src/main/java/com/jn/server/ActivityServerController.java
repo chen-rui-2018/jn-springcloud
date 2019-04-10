@@ -22,6 +22,4 @@ public class ActivityServerController extends BaseController implements Activity
      * 日志组件
      */
     private static Logger logger = LoggerFactory.getLogger(ActivityServerController.class);
-
-
 }

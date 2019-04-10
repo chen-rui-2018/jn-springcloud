@@ -15,8 +15,9 @@
     <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
     <result column="pay_id" jdbcType="VARCHAR" property="payId" />
     <result column="pay_amount" jdbcType="DOUBLE" property="payAmount" />
+    <result column="integral_amount" jdbcType="DOUBLE" property="integralAmount" />
     <result column="pay_type" jdbcType="VARCHAR" property="payType" />
-    <result column="pay_remark" jdbcType="DATE" property="payRemark" />
+    <result column="pay_remark" jdbcType="VARCHAR" property="payRemark" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -83,8 +84,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, order_num, bill_ids, order_name, order_type, order_obj_type, order_obj_id, order_obj_name, 
-    order_amount, pay_time, order_status, pay_id, pay_amount, pay_type, pay_remark, created_time, 
-    creator_account, modified_time, modifier_account, record_status
+    order_amount, pay_time, order_status, pay_id, pay_amount, integral_amount, pay_type, 
+    pay_remark, created_time, creator_account, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.unionpay.paybill.entity.TbPaymentOrderCriteria" resultMap="BaseResultMap">
     select
@@ -121,16 +122,18 @@
       order_name, order_type, order_obj_type, 
       order_obj_id, order_obj_name, order_amount, 
       pay_time, order_status, pay_id, 
-      pay_amount, pay_type, pay_remark, 
-      created_time, creator_account, modified_time, 
-      modifier_account, record_status)
+      pay_amount, integral_amount, pay_type, 
+      pay_remark, created_time, creator_account, 
+      modified_time, modifier_account, record_status
+      )
     values (#{id,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{billIds,jdbcType=VARCHAR}, 
       #{orderName,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{orderObjType,jdbcType=VARCHAR}, 
       #{orderObjId,jdbcType=VARCHAR}, #{orderObjName,jdbcType=VARCHAR}, #{orderAmount,jdbcType=DOUBLE}, 
       #{payTime,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=VARCHAR}, #{payId,jdbcType=VARCHAR}, 
-      #{payAmount,jdbcType=DOUBLE}, #{payType,jdbcType=VARCHAR}, #{payRemark,jdbcType=DATE}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
+      #{payAmount,jdbcType=DOUBLE}, #{integralAmount,jdbcType=DOUBLE}, #{payType,jdbcType=VARCHAR}, 
+      #{payRemark,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.unionpay.paybill.entity.TbPaymentOrder">
     insert into tb_payment_order
@@ -173,6 +176,9 @@
       </if>
       <if test="payAmount != null">
         pay_amount,
+      </if>
+      <if test="integralAmount != null">
+        integral_amount,
       </if>
       <if test="payType != null">
         pay_type,
@@ -236,11 +242,14 @@
       <if test="payAmount != null">
         #{payAmount,jdbcType=DOUBLE},
       </if>
+      <if test="integralAmount != null">
+        #{integralAmount,jdbcType=DOUBLE},
+      </if>
       <if test="payType != null">
         #{payType,jdbcType=VARCHAR},
       </if>
       <if test="payRemark != null">
-        #{payRemark,jdbcType=DATE},
+        #{payRemark,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -307,11 +316,14 @@
       <if test="record.payAmount != null">
         pay_amount = #{record.payAmount,jdbcType=DOUBLE},
       </if>
+      <if test="record.integralAmount != null">
+        integral_amount = #{record.integralAmount,jdbcType=DOUBLE},
+      </if>
       <if test="record.payType != null">
         pay_type = #{record.payType,jdbcType=VARCHAR},
       </if>
       <if test="record.payRemark != null">
-        pay_remark = #{record.payRemark,jdbcType=DATE},
+        pay_remark = #{record.payRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -348,8 +360,9 @@
       order_status = #{record.orderStatus,jdbcType=VARCHAR},
       pay_id = #{record.payId,jdbcType=VARCHAR},
       pay_amount = #{record.payAmount,jdbcType=DOUBLE},
+      integral_amount = #{record.integralAmount,jdbcType=DOUBLE},
       pay_type = #{record.payType,jdbcType=VARCHAR},
-      pay_remark = #{record.payRemark,jdbcType=DATE},
+      pay_remark = #{record.payRemark,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -398,11 +411,14 @@
       <if test="payAmount != null">
         pay_amount = #{payAmount,jdbcType=DOUBLE},
       </if>
+      <if test="integralAmount != null">
+        integral_amount = #{integralAmount,jdbcType=DOUBLE},
+      </if>
       <if test="payType != null">
         pay_type = #{payType,jdbcType=VARCHAR},
       </if>
       <if test="payRemark != null">
-        pay_remark = #{payRemark,jdbcType=DATE},
+        pay_remark = #{payRemark,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -436,8 +452,9 @@
       order_status = #{orderStatus,jdbcType=VARCHAR},
       pay_id = #{payId,jdbcType=VARCHAR},
       pay_amount = #{payAmount,jdbcType=DOUBLE},
+      integral_amount = #{integralAmount,jdbcType=DOUBLE},
       pay_type = #{payType,jdbcType=VARCHAR},
-      pay_remark = #{payRemark,jdbcType=DATE},
+      pay_remark = #{payRemark,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

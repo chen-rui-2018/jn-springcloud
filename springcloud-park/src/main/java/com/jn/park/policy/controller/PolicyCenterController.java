@@ -4,7 +4,7 @@ import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
-import com.jn.park.enums.PolicyCenterExceptionEnum;
+import com.jn.park.enums.PolicyInfoExceptionEnum;
 import com.jn.park.policy.model.*;
 import com.jn.park.policy.service.PolicyCenterService;
 import com.jn.park.policy.vo.PolicyDiagramDetailsVo;
@@ -76,7 +76,7 @@ public class PolicyCenterController extends BaseController {
     @RequestMapping(value = "/getPolicyDetails",method = RequestMethod.GET)
     public Result<PolicyDetailsShow> getPolicyDetails(@ApiParam(value = "政策id",required = true,example="xxx123")
                                     @RequestParam("policyId") String policyId){
-        Assert.notNull(policyId, PolicyCenterExceptionEnum.POLICY_ID_NOT_NULL.getMessage());
+        Assert.notNull(policyId, PolicyInfoExceptionEnum.POLICY_ID_NOT_NULL.getMessage());
         PolicyDetailsShow policyDetails = policyCenterService.getPolicyDetails(policyId);
         return new Result(policyDetails);
     }
@@ -87,7 +87,7 @@ public class PolicyCenterController extends BaseController {
     @RequestMapping(value = "/getPolicyDiagramDetails",method = RequestMethod.GET)
     public Result<PolicyDiagramDetailsVo> getPolicyDiagramDetails(@ApiParam(value = "政策id",required = true,example="xxx123")
                                                       @RequestParam("policyId") String policyId){
-        Assert.notNull(policyId, PolicyCenterExceptionEnum.POLICY_ID_NOT_NULL.getMessage());
+        Assert.notNull(policyId, PolicyInfoExceptionEnum.POLICY_ID_NOT_NULL.getMessage());
         PolicyDiagramDetailsVo policyDiagramDetailsVo = policyCenterService.getPolicyDiagramDetails(policyId);
         return new Result(policyDiagramDetailsVo);
     }

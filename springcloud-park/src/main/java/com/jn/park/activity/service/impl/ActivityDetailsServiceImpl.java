@@ -13,10 +13,10 @@ import com.jn.park.activity.dao.TbParkLikeMapper;
 import com.jn.park.activity.entity.*;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.ActivityPagingParam;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -85,7 +85,7 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         //根据活动id查询点赞信息
         List<TbParkLike> activityLikeInfo = getActivityLikeInfo(activityId);
         int minLikeNum=0;
-        if (activityLikeInfo.isEmpty()) {
+        if (activityLikeInfo.isEmpty() || StringUtils.isBlank(account)) {
             //当前用户没有点赞
             activityDetailVO.setAccountIsLike(false);
         }else{
@@ -107,9 +107,8 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
         String showApplyNum="1";
         if(showApplyNum.equals(activityDetail.getShowApplyNum())){
             //根据活动id和account查询活动报名信息
-            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId,account);
-            int minApplyNum=0;
-            if (activityApplyInfo.size()>minApplyNum) {
+            List<ActivityApply> activityApplyInfo = getActivityApplyInfo(activityId);
+            if (!activityApplyInfo.isEmpty()) {
                 activityDetailVO.setActivityApplyList(activityApplyInfo);
                 activityDetailVO.setRealApplyNum(activityApplyInfo.size());
             }
@@ -277,15 +276,14 @@ public class ActivityDetailsServiceImpl implements ActivityDetailsService {
     }
 
     /**
-     * 根据活动id,account查询活动报名信息
+     * 根据活动id查询活动报名信息
      * @param activityId 活动id
-     * @param account    账号
      * @return
      */
-    @ServiceLog(doAction = "活动报名信息")
+    @ServiceLog(doAction = "根据活动id查询活动报名信息")
     @Override
-    public List<ActivityApply> getActivityApplyInfo(String activityId,String account){
-        List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(activityId, account);
+    public List<ActivityApply> getActivityApplyInfo(String activityId){
+        List<ActivityApply> activityApplyInfo = activityDetailsMapper.getActivityApplyInfo(activityId);
         //根据报名人账号得到报名人头像信息
         getApplyUserAvatar(activityApplyInfo);
         return activityApplyInfo;

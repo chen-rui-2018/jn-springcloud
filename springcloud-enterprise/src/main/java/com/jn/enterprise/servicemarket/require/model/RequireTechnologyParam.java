@@ -41,6 +41,7 @@ public class RequireTechnologyParam extends Page implements Serializable {
             "(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})" +
             "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
             message = "{projectTime:'资金需求日期格式错误'}")
+
     private String expectedDate;
     @ApiModelProperty(value = "资金需求说明",example = "xxx需求说明")
     private String fundsReqDesc;

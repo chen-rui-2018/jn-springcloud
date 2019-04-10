@@ -1,9 +1,9 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParam;
-import com.jn.park.model.ActivityPagingParam;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyParam;
+import com.jn.park.activity.model.ActivityPagingParam;
 import com.jn.user.model.UserExtensionInfo;
 
 import java.io.IOException;

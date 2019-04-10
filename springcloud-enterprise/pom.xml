@@ -19,6 +19,10 @@
         </dependency>
         <dependency>
             <groupId>com.jn</groupId>
+            <artifactId>springcloud-app-fastdfs-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jn</groupId>
             <artifactId>springcloud-enterprise-api</artifactId>
         </dependency>
         <dependency>
@@ -49,14 +53,20 @@
                         </goals>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.jn</groupId>
+                        <artifactId>jn-spring-cloud-generator</artifactId>
+                        <version>1.0-RELEASE</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        technology
+                        data
                     </contexts>
                     <tableNames>
-                        tb_service_investor
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

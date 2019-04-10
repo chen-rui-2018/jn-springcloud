@@ -145,10 +145,10 @@ public class AdvisorServiceImpl implements AdvisorService {
      * 设置顾问详情中服务评价的评价数量
      * @param advisorDetailsVo      顾问详情返回前端对象
      * @param advisorIntroduction   顾问详情简介对象
-     * @param servcieRatingInfoList 服务评价查询结果集
+     * @param serviceRatingInfoList 服务评价查询结果集
      */
     @ServiceLog(doAction = "设置顾问详情中服务评价的评价数量")
-    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> servcieRatingInfoList) {
+    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> serviceRatingInfoList) {
         //好评得分
         int praiseScore=5;
         //中评最低分
@@ -157,7 +157,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         int badReviewScore=1;
         //服务评分
         float evaluationScore=0f;
-        for(ServiceRating serviceRating:servcieRatingInfoList){
+        for(ServiceRating serviceRating:serviceRatingInfoList){
             if(serviceRating.getEvaluationScore()==null){
                 continue;
             }
@@ -178,7 +178,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         advisorDetailsVo.setEvaluationTotal(advisorDetailsVo.getPraiseNum()+advisorDetailsVo.getAverageNum()+advisorDetailsVo.getBadReviewNum());
 
         //计算顾问最终服务评分
-        evaluationScore=evaluationScore/servcieRatingInfoList.size();
+        evaluationScore=evaluationScore/serviceRatingInfoList.size();
         if(evaluationScore>0){
             //顾问详情简介设置服务评分
             advisorIntroduction.setEvaluationScore(evaluationScore+"");

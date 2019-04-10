@@ -34,7 +34,7 @@
         sum(t.income) as "income",
         SUM(t.last_year_income) as "lastyearincome",
         m.month as "month",
-         IFNULL(CONCAT(ROUND(IF (SUM(t.last_year_income) = NULL,0,(SUM(t.income) - SUM(t.last_year_income)) / SUM(t.last_year_income))* 100),"%"),"0%") AS "lastyearpercent"
+         IFNULL(CONCAT(ROUND(IF (SUM(t.last_year_income) = NULL,0,(SUM(t.income) - SUM(t.last_year_income)) / SUM(t.last_year_income))* 100),"%"),"/ %") AS "lastyearpercent"
         FROM
                     tb_finance_income_month t
                 RIGHT JOIN tb_month m ON m.`month` = t.income_month

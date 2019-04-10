@@ -27,6 +27,8 @@ public class AdvisorQueryConditions implements Serializable {
     private String sortTypes;
     @ApiModelProperty(value = "关键词")
     private String keyWords;
+    @ApiModelProperty(value = "机构id")
+    private String orgId;
 
     private static final long serialVersionUID = 1L;
 
@@ -84,5 +86,13 @@ public class AdvisorQueryConditions implements Serializable {
 
     public void setKeyWords(String keyWords) {
         this.keyWords = keyWords;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 }

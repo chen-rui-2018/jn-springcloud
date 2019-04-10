@@ -8,7 +8,7 @@ import com.jn.park.activity.dao.TbActivityMapper;
 import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -86,11 +86,11 @@ public class AcitvityTest {
 
     @Test
     public void updateActivityApply(){
-        ActivitySataus activitySataus = new ActivitySataus();
-        activitySataus.setActivityId(activityId);
-        activitySataus.setActiStatus(status);
+        ActivityStatus activityStatus = new ActivityStatus();
+        activityStatus.setActivityId(activityId);
+        activityStatus.setActiStatus(status);
         try{
-            int i = activityService.updateActivityApply(activitySataus);
+            int i = activityService.updateActivityApply(activityStatus);
             assertThat(i,is(1));
         }catch (JnSpringCloudException e){
             logger.warn("活动数据状态错误");

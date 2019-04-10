@@ -27,6 +27,10 @@ public enum PayBillExceptionEnum implements CodeAndMsg {
     PAYMENT_STATUS_IS_NOT_CHECK("6020515","账单状态不为待审核，无需处理数据。"),
     PAYMENT_STATUS_IS_PAY("6020516","账单已支付，无需再次支付。"),
     PAYMENT_STATUS_IS_PAY_NOT_CHECK("6020517","账单已线上支付，无需提交支付审核。"),
+    BILL_PAY_IS_NOT_COMPLETE("6020518","账单已发起支付，请先取消未支付订单。"),
+    BILL_PAY_ORDER_IS_NOT_NOW_USER("6020519","不能取消非当前用户订单。"),
+    BILL_PAY_ORDER_IS_NOT_PAYING("6020520","不能取消非支付中订单。"),
+    BILL_PAY_ORDER_IS_NOT_EXIT("6020521","支付账单不存在。"),
     ;
     /**
      * 编码

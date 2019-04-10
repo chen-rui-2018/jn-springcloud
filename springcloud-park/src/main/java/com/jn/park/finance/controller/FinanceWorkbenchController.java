@@ -32,7 +32,7 @@ public class FinanceWorkbenchController extends BaseController {
     private FinanceWorkbenchService financeWorkbenchService;
 
     @ControllerLog(doAction = "财务监控")
-    @ApiOperation(value = "财务监控", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "财务监控", httpMethod = "POST")
     @PostMapping(value = "/financeMonitoring")
     @RequiresPermissions("/finance/expend/financeMonitoring")
     public Result<FinanceWorkbenchMonitoringVo> financeMonitoring(){
@@ -42,7 +42,7 @@ public class FinanceWorkbenchController extends BaseController {
     }
 
     @ControllerLog(doAction = "财务备案")
-    @ApiOperation(value = "财务备案", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "财务备案", httpMethod = "POST")
     @PostMapping(value = "/records")
     @RequiresPermissions("/finance/expend/records")
     public Result records(){
@@ -51,7 +51,7 @@ public class FinanceWorkbenchController extends BaseController {
     }
 
     @ControllerLog(doAction = "审批列表")
-    @ApiOperation(value = "审批列表", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "审批列表", httpMethod = "POST")
     @PostMapping(value = "/approveList")
     @RequiresPermissions("/finance/expend/approveList")
     public Result approveList(){

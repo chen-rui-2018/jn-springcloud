@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.activity.dao.ActivityTypeMapper">
+
+    <!--活动类型列表查询 -->
+    <select id="findActivityTypeListByState" resultType="com.jn.park.activity.model.ActivityType">
+        select
+        t.type_id as "typeId"                                                     <!--类型ID-->
+        ,t.type_name as "typeName"                                                <!--类型名称-->
+        ,t.type_status as "typeStatus"                                                <!--类型状态-->
+        ,t.creator_account as "creatorAccount"                                     <!--创建人账号-->
+        ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"          <!--创建时间-->
+        ,t.modifier_account as "modifierAccount"                                    <!--修改人账号-->
+        ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime"         <!--修改时间-->
+        ,count(f.type_id) as "fileTotal"                                          <!--模板数量-->
+        from   tb_activity_type t
+        left join  tb_activity_file f  on  t.type_id = f.type_id
+        where 1=1
+        and   t.record_status != 0
+        <if test="status != null and status!=''">
+            and t.type_status = #{status,jdbcType=VARCHAR}
+        </if>
+        group by   t.type_id
+    </select>
+
+    <!--具体活动类型展示-->
+    <select id="findActivityTypeById" resultMap="ActivityMap">
+        select t.type_id as "typeId"                                                                                    <!--类型ID-->
+            ,t.type_name as "typeName"                                                                                   <!--类型名称-->
+            ,t.type_status as "typeStatus"                                                                               <!--类型状态-->
+            ,f.file_src as "fileSrc"                                                                                     <!--模板列表-->
+            ,t.creator_account as "creatorAccount"                                                                       <!--创建人账号-->
+            ,date_format(t.created_time,'%Y-%m-%d %H:%i:%s') as "createdTime"                                            <!--创建时间-->
+            ,t.modifier_account as "modifierAccount"                                                                     <!--修改人账号-->
+            ,date_format(t.modified_time,'%Y-%m-%d %H:%i:%s') as "modifiedTime"                                          <!--修改时间-->
+            ,(select count(type_id)  from  tb_activity_file where type_id = #{typeId,jdbcType=VARCHAR}) as "fileTotal" <!--模板数量-->
+        from   tb_activity_type t
+        left join  tb_activity_file f  on  t.type_id = f.type_id
+        where t.record_status != 0 and  t.type_id = #{typeId,jdbcType=VARCHAR}
+    </select>
+    <resultMap id="ActivityMap" type="com.jn.park.activity.model.ActivityType">
+        <id column="typeId" property="typeId" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="typeName" property="typeName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="typeStatus" property="typeStatus" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="fileTotal" property="fileTotal" javaType="java.lang.String"/>
+        <result column="creatorAccount" property="creatorAccount" javaType="java.lang.String"/>
+        <result column="createdTime" property="createdTime" javaType="java.lang.String"/>
+        <result column="modifierAccount" property="modifierAccount" javaType="java.lang.String"/>
+        <result column="modifiedTime" property="modifiedTime" javaType="java.lang.String"/>
+        <collection property="templateList"   ofType="java.lang.String">
+            <constructor>
+                <arg column="fileSrc"/>
+            </constructor>
+        </collection>
+    </resultMap>
+    <!--删除活动类型-->
+    <update id="deleteActivityTypeList" parameterType="java.util.List">
+        update tb_activity_type t set t.record_status = 0,t.type_status = '0',t.modified_time = now() where t.type_Id in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </update>
+
+</mapper>

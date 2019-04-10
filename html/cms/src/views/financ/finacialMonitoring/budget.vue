@@ -18,11 +18,11 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button v-show="status==='1'" type="primary" >年初预算导入</el-button>
-          <el-button v-show="status==='1'" type="primary" >临时预算导入</el-button></el-form-item>
+            <el-button v-show="status==='1'" type="primary" @click="startYear">年初预算导入</el-button>
+          <el-button v-show="status==='1'" type="primary" @click="temporary ">临时预算导入</el-button></el-form-item>
         </div>
         <div >
-          <el-form-item label="数据月份:">
+          <el-form-item label="数据月份:" class="budgetWidth">
             <el-date-picker
               v-model="listQuery.startMonth"
               type="month"
@@ -40,63 +40,84 @@
               <el-option v-for="item in budgetTypeOptions" :key="item.id" :label="item.value" :value="item.id" />
             </el-select>
           </el-form-item>
-        <el-button type="primary" style="float:right;" icon="el-icon-search" @click="handleFilter">查询</el-button></div>
-
+        <el-button type="primary" style="float:right;margin-right:10px;" icon="el-icon-search" @click="handleFilter">查询</el-button></div>
       </el-form>
     </div>
     <!-- 表格 -->
-    <el-table :data="budgetList" border fit highlight-current-row style="width: 100%;">
+    <el-table :data="budgetList" :default-sort = "{ order: 'descending'}" border fit highlight-current-row style="width: 100%;">
       <el-table-column label="序列" type="index" align="center" width="60"/>
       <el-table-column label="财务类型" prop="costTypeName" align="center" />
-      <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="budgetMoneyModels" align="center">
+      <el-table-column v-for="(item, index) in tableHeader" :key="index" :label="item" prop="budgetMoneyModels" align="center" min-width="100">
         <template slot-scope="scope">
-          <span >{{ setMoney(scope.row.budgetMoneyModels) }}</span>
+          <span>￥{{ scope.row.budgetMoneyModels[index].money }}元</span>
         </template>
       </el-table-column>
+      <el-table-column v-if="isShow" label="录入时间" prop="createdTime" min-width="120" sortable align="center"/>
+      <el-table-column v-if="isShow" label="录入类型" prop="budgetTypeName" align="center"/>
       <el-table-column label="部门" prop="departmentName" align="center"/>
     </el-table>
-    <!-- 分页 -->
-    <el-pagination
-      v-show="total>10"
-      :current-page="listQuery.page"
-      :page-sizes="[10,20,30, 50]"
-      :page-size="listQuery.rows"
-      :total="total"
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange" />
+    <!-- 点击导入按钮的弹框 -->
+    <template v-if="dialogVisible">
+      <el-dialog :visible.sync="dialogVisible" title="导入" width="400px" >
+        <div style="display:flex;justify-content: space-between;" class="demo">
+          <el-button type="success" @click="submit($event)">{{ softtype }}</el-button>
+          <a class="download" href="/static/file/budgetTemplate.xlsx" download >下载模板</a>
+          <!-- <a class="download" href="javascript:;" @click="download" >下载模板</a> -->
+        </div>
+        <div>
+          <p>注意:</p>
+          <p>1:年初预算，只能够导入一次</p>
+          <p>2:请先导出模板，并按照模板填入批量数据，保存后点击上传即可</p>
+        </div>
+        <div>
+          <input type="file" @change="getFile($event)">
+        </div>
+      </el-dialog>
+    </template>
+    <template v-if=" selectDepartmentdialogVisible">
+      <el-dialog :visible.sync="selectDepartmentdialogVisible" title="选择部门" width="400px">
+        <el-form label-width="100px" class="demo-ruleForm">
+          <el-form-item label="部门:" >
+            <el-select v-model="departmentId" placeholder="请选择部门" @change="changeDepartment">
+              <el-option v-for="item in departmentOptions" :key="item.departmentId" :label="item.departmentName" :value="item.departmentId" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="selectDepartment">确 定</el-button>
+          <el-button @click="selectDepartmentdialogVisible = false">取 消</el-button>
+        </span>
+      </el-dialog>
+    </template>
   </div>
 </template>
 
 <script>
 // import global from '@/api/global'
 import {
-  api
-} from '@/api/financ'
+  api, Inventor
+} from '@/api/axios'
 export default {
-  // filters: {
-  //   setMoney: function(budgetMoneyModels) {
-  //     console.log(budgetMoneyModels)
-  //     budgetMoneyModels.forEach(val => {
-  //       return val.money
-  //     })
-  //   }
-  // },
   data() {
     return {
+      // depOptions: [],
+      isShow: false,
+      softtype: '',
+      departmentId: '',
+      departmentName: '',
+      selectDepartmentdialogVisible: false,
+      file: '',
+      fileList: [],
+      dialogVisible: false,
       moneyData: [],
       tableHeader: [],
       listLoading: false,
       budgetList: [],
-      total: 0,
       status: '1',
       listQuery: {
-        startMonth: '201901',
+        startMonth: '',
         orderByClause: '',
-        endMonth: '201904',
-        rows: 10,
-        page: 1,
+        endMonth: '',
         departmentId: '',
         financeTypeId: '',
         budgetType: ''
@@ -106,74 +127,166 @@ export default {
       budgetTypeOptions: [
         { id: '0', value: '年初预算' },
         { id: '1', value: '临时预算' }
-
       ]
     }
   },
+  watch: {
+    status: function(newVal, oldVal) {
+      if (this.status === '2') {
+        this.listQuery.budgetType = ''
+        this.isShow = true
+      } else {
+        this.isShow = false
+      }
+      this.getDate()
+      this.listQuery.financeTypeId = ''
+      this.listQuery.departmentId = ''
+      this.initList()
+    }
+  },
   mounted() {
+    this.getDate()
     this.initList()
     this.getDepartment()
     this.getFinanceType()
   },
   methods: {
+    // 获取时间
+    getDate() {
+      const date = new Date()
+      const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+      this.listQuery.startMonth = date.getFullYear() + '01'
+      this.listQuery.endMonth = (date.getFullYear()).toString() + month.toString()
+    },
+    // 改变弹框选择的部门
+    changeDepartment(value) {
+      this.departmentId = value
+      this.departmentOptions.forEach(val => {
+        if (val.departmentId === value) {
+          this.departmentName = val.departmentName
+        }
+      })
+    },
+    // 确定选中部门触发
+    selectDepartment() {
+      if (!this.departmentId) {
+        alert('请选择部门')
+        return
+      }
+      this.dialogVisible = true
+      this.selectDepartmentdialogVisible = false
+      this.file = ''
+    },
+    getFile: function(event) {
+      this.file = event.target.files[0]
+    },
+    submit: function(event) {
+      if (this.file === '' || this.file === undefined) {
+        this.$message({
+          message: '请先选择文件',
+          type: 'error'
+        })
+        return false
+      }
+      if (this.file.name.substr(this.file.name.lastIndexOf('.')) !== '.xlsx') {
+        this.$message({
+          message: '文件格式错误,请选择模板文件',
+          type: 'error'
+        })
+        return false
+      }
+      const formData = new FormData()
+      formData.append('file', this.file)
+      // 调用导入文件接口
+      Inventor(`${this.GLOBAL.financUrl}finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
+        .then(res => {
+          if (res.data.code === this.GLOBAL.code) {
+            this.$message({
+              message: '导入成功',
+              type: 'success'
+            })
+            this.dialogVisible = false
+          } else {
+            this.$message.error('导入失败' + res.data.result)
+          }
+          this.initList()
+        })
+    },
+    // 临时导入
+    temporary() {
+      this.softtype = '临时导入'
+      this.departmentId = ''
+      this.selectDepartmentdialogVisible = true
+      this.listQuery.budgetType = '1'
+    },
+    // 年初预算导入
+    startYear() {
+      this.softtype = '年初预算导入'
+      this.departmentId = ''
+      this.selectDepartmentdialogVisible = true
+      this.listQuery.budgetType = '0'
+    },
     // 初始化页面
     initList() {
-      console.log(this.GLOBAL.code)
       this.listLoading = true
-      api(`finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&page=${this.listQuery.page}&rows=${this.listQuery.rows}`, '', 'get').then(res => {
-        if (res.data.code === this.GLOBAL.code) {
-          console.log(res)
-          this.tableHeader = res.data.data.dynamicHeadList
-          this.budgetList = res.data.data.rows
-          this.budgetList.forEach(item => {
-            item.budgetMoneyModels.forEach(val => {
-              this.moneyData.push(val.money)
-            })
-          })
-          console.log(this.moneyData)
-          this.total = res.data.data.total
-          if (this.budgetList.length === 0 && this.total > 0) {
-            this.listQuery.page = 1
-            this.initList()
+      if (this.status === '1') {
+        api(`${this.GLOBAL.financUrl}finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
+            this.tableHeader = res.data.data.dynamicHeadList
+            this.budgetList = res.data.data.rows
+          } else {
+            this.$message.error(res.data.result)
+            this.tableHeader = []
+            this.budgetList = []
           }
-        } else {
-          this.$message.error(res.data.result)
-        }
-        this.listLoading = false
-      })
+          this.listLoading = false
+        })
+      } else {
+        api(`${this.GLOBAL.financUrl}finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
+            this.tableHeader = res.data.data.dynamicHeadList
+            this.budgetList = res.data.data.rows
+          } else {
+            this.$message.error(res.data.result)
+            this.tableHeader = []
+            this.budgetList = []
+          }
+          this.listLoading = false
+        })
+      }
     },
     // 查询数据
     handleFilter() {
-      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === null) {
+      if (this.listQuery.startMonth === '' || this.listQuery.startMonth === undefined) {
         alert('请选择开始日期')
         return false
-      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === null) {
+      } else if (this.listQuery.endMonth === '' || this.listQuery.endMonth === undefined) {
         alert('请选择结束日期')
         return false
       }
-      console.log(this.listQuery)
-      this.listQuery.page = 1
       this.initList()
-      console.log(this.budgetList)
-    },
-    // 分页数更改
-    handleSizeChange(val) {
-      this.listQuery.rows = val
-      this.initList()
-    },
-    handleCurrentChange(val) {
-      this.listQuery.page = val
-      this.initList()
-    },
-    handleCreate() {
-
     },
     // 获取部门信息
     getDepartment() {
-      api('finance/documents/getUserDepartment', '', 'post').then(res => {
-        if (res.data.code === '0000') {
-          console.log(res)
-          this.departmentOptions = res.data.data
+      api(`${this.GLOBAL.financUrl}finance/documents/getUserDepartment`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
+          if (res.data.data) {
+            res.data.data.forEach(val => {
+              if (val.departmentName === '财务部') {
+                api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
+                  if (res.data.code === this.GLOBAL.code) {
+                    this.departmentOptions = res.data.data
+                  } else {
+                    this.$message.error(res.data.result)
+                  }
+                })
+              } else {
+                this.departmentOptions = res.data.data
+              }
+            })
+          } else {
+            this.departmentOptions = []
+          }
         } else {
           this.$message.error(res.data.result)
         }
@@ -181,24 +294,14 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api('finance/expenses/selectFinanceType', '', 'post').then(res => {
-        if (res.data.code === '0000') {
-          console.log(res)
+      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.financeTypeOptions = res.data.data
         } else {
           this.$message.error(res.data.result)
         }
       })
     }
-    // ,
-    // setMoney(data) {
-    //   var money
-    //   // var index
-    //   for (var item of data) {
-    //     money = item.money
-    //     return money
-    //   }
-    // }
   }
 }
 </script>
@@ -211,4 +314,40 @@ export default {
        justify-content: space-between;
       }
   }
+</style>
+<style lang="scss">
+.download{
+      display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    color: rgb(96, 98, 102);
+    -webkit-appearance: none;
+    text-align: center;
+    box-sizing: border-box;
+    font-weight: 500;
+    user-select: none;
+    font-size: 14px;
+    background: rgb(255, 255, 255);
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(220, 223, 230);
+    border-image: initial;
+    outline: none;
+    margin: 0px;
+    transition: all 0.1s ease 0s;
+    padding: 12px 20px;
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    background-color: rgb(64, 158, 255);
+    border-color: rgb(64, 158, 255);
+}
+.budgetWidth{
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 204px;
+}
+}
+.demo> a:hover{
+  color:#fff !important;
+}
 </style>

@@ -3,7 +3,7 @@
     <el-header style="height:60px;line-height:60px;font-size:14px;color:#000">
       <div>修改账号信息</div>
     </el-header>
-    <el-main style="padding:0 30px;text-align:left" v-model="userInfoList">
+    <el-main style="padding:0 30px;text-align:left" v-model="userData">
       <!-- <div>
                 <div class="mainColor setTit">手机设置</div>
                 <div class="setphone">
@@ -41,38 +41,42 @@
         <div class="setphone">
           <div class="setdistance">
             <span class="textRight mg">头&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;像：</span>
-            <img v-if="userInfoList.avatar" :src="userInfoList.avatar" class="imageItem" alt="">
+            <img v-if="userData.avatar" :src="userData.avatar" class="imageItem" alt="">
             <img v-else src="@/../static/img/头像.png" class="imageItem" alt="">
           </div>
           <div class="setdistance">
             <span class="textRight mg">昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：</span>
-            <span v-if="userInfoList.nickName">{{userInfoList.nickName}}</span>
+            <span v-if="userData.nickName">{{userData.nickName}}</span>
             <span v-else>无</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">真实姓名：</span>
-            <span v-if="userInfoList.name">{{userInfoList.name}}</span>
+            <span v-if="userData.name">{{userData.name}}</span>
             <span v-else>无</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：</span>
-            <span v-if="userInfoList.sex==1">男</span>
+            <span v-if="userData.sex==1">男</span>
             <span v-else>女</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">个性签名：</span>
-            <span v-if="userInfoList.signature">{{userInfoList.signature}}</span>
+            <span v-if="userData.signature">{{userData.signature}}</span>
             <span v-else>无</span>
           </div>
           <div class="setdistance">
             <span class="textRight mg">爱好兴趣：</span>
-            <span class="hobbySel" v-if="userInfoList.hobbys.length>0" v-for="(i,k) in userInfoList.hobbys" :key='k'>{{i}}</span>
-            <span v-else>无</span>
+            <template v-if="userData.hobbys!=null&&userData.hobbys.length>0">
+              <span class="hobbySel" v-for="(i,k) in userData.hobbys" :key='k'>{{i}}</span>
+            </template>
+            <template v-else><span>无</span></template>
           </div>
           <div class="setdistance" style="margin-top:30px">
             <span class="textRight mg">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;业：</span>
-            <span class="hobbySel" v-if="userInfoList.jobs.length>0" v-for="(i,k) in userInfoList.jobs" :key='k'>{{i}}</span>
-            <span v-else>无</span>
+            <template v-if="userData.jobs!=null&&userData.hobbys.length>0">
+            <span class="hobbySel" v-if="userData.jobs.length>0" v-for="(i,k) in userData.jobs" :key='k'>{{i}}</span>
+            </template>
+            <template v-else><span>无</span></template>
           </div>
           <el-button type="success" class="editBtn" @click="editFlag=false">编&nbsp;&nbsp;辑</el-button>
         </div>
@@ -121,9 +125,9 @@
             </el-select>
             <div>
               <ul class="selUl clearfix">
-                <li v-for="item in options" :key="item.tagId">
-                  <i class="iconfont icon-web_xuanzhong" v-if="item.flag" @click="changeAH(item)"></i>
-                  <i class="iconfont icon-weixuanzhongkuang" v-else @click="changeAH(item)"></i>
+                <li v-for="item in options" :key="item.tagId" @click="changeAH(item)">
+                  <i class="iconfont icon-web_xuanzhong" v-if="item.flag" ></i>
+                  <i class="iconfont icon-weixuanzhongkuang" v-else></i>
                   <span>{{item.tagVaule}}</span>
                 </li>
               </ul>
@@ -144,10 +148,11 @@
   </el-container>
 </template>
 <script>
+import bus from '@/util/bus'
 export default {
+  props:['userData'],
   data() {
     return {
-      userInfoList: {},
       signature: "",
       oldPassword: "",
       newPasswordA: "",
@@ -159,60 +164,6 @@ export default {
       sexFlag: "",
       options: [],
       options1: [],
-      // options: [
-      //   {
-      //     value: 0,
-      //     label: "打游戏",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 1,
-      //     label: "看书",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 2,
-      //     label: "旅游",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 3,
-      //     label: "睡觉",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 4,
-      //     label: "看电影",
-      //     flag: false
-      //   }
-      // ],
-      // options1: [
-      //   {
-      //     value: 0,
-      //     label: "Ui设计",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 1,
-      //     label: "软件编程",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 2,
-      //     label: "java后台",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 3,
-      //     label: "测试",
-      //     flag: false
-      //   },
-      //   {
-      //     value: 4,
-      //     label: "前端",
-      //     flag: false
-      //   }
-      // ],
       value5: [],
       value11: [],
       headers: {
@@ -221,7 +172,6 @@ export default {
     };
   },
   created() {
-    this.init();
     this.getTagCodeList();
   },
   methods: {
@@ -247,10 +197,6 @@ export default {
         this.$message.error("请选择性别");
         return;
       }
-      // if (this.value11.length == 0) {
-      //   this.$message.error("请选择爱好");
-      //   return;
-      // }
       let _this = this;
       this.api.post({
         url: "saveUserInfo",
@@ -264,13 +210,12 @@ export default {
           sex: _this.sexFlag,
           signature: _this.signature
         },
-        // dataFlag: false,
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("保存成功");
             _this.editFlag = true;
-            console.log(res);
-            _this.init();
+            _this.cancelEd();
+            bus.$emit('getUserinfoF')
           } else {
             _this.$message.error(res.result);
           }
@@ -343,28 +288,9 @@ export default {
         callback: function(res) {
           if (res.code == "0000") {
             _this.$message.success("修改密码成功");
-            (_this.oldPassword = ""),
-              (_this.newPasswordA = ""),
-              (_this.newPasswordB = ""),
-              console.log(res);
-          } else {
-            _this.$message.error(res.result);
-          }
-        }
-      });
-    },
-    init() {
-      let _this = this;
-      this.api.get({
-        url: `getUserPersonInfo`,
-        data: {
-          account: _this.$route.query.account
-        },
-        callback: function(res) {
-          if (res.code == "0000") {
-            console.log(res);
-            _this.userInfoList = res.data;
-            // _this.api.setToken(res.data)
+            _this.oldPassword = "",
+              _this.newPasswordA = "",
+              _this.newPasswordB = ""
           } else {
             _this.$message.error(res.result);
           }

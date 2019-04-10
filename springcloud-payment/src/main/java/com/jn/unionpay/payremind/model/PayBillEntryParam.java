@@ -20,7 +20,8 @@ public class PayBillEntryParam implements Serializable {
     @ApiModelProperty(value = "账单编号",required = true,example = "TCJF-20190312558166")
     @NotBlank(message = "账单编号不能为空")
     private String billNum;
-    @ApiModelProperty(value = "账单类型",required = true,example = "004",notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
+    @ApiModelProperty(value = "账单类型[暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费]"
+            ,required = true,example = "004",notes = "暂定：001楼宇租金 002物业费 003水费 004电费 005停车费 006维修费 007广告费")
     @NotBlank(message = "账单类型不能为空")
     private String billType;
     @ApiModelProperty(value = "账单名称",required = true,example = "湘AH2323-20190315停车费")

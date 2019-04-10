@@ -10,7 +10,8 @@ export function getActivityList(query) {
 // 获取活动管理类型所有数据
 export function getActivityType(query) {
   return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/guest/findActivityTypeList',
+    // url: 'http://192.168.10.31:1101/springcloud-park/guest/findActivityTypeList',
+    url: 'http://192.168.10.31:1101/springcloud-park/guest/activity/findActivityTypeList',
     method: 'post',
     data: query
   })
@@ -132,9 +133,8 @@ export function signInActivityBackend(query) {
 // 活动报名人数导出
 export function exportDataExcel(query) {
   return request({
-    url: 'http://192.168.10.31:1101/springcloud-park/activity/exportDataExcel',
-    method: 'post',
-    data: query
+    url: `http://localhost/springcloud-park/activity/exportDataExcel?activityId=${query.activityId}&exportColName=${query.exportColName}&exportTitle=${query.exportTitle}&page=${query.page}&rows=${query.rows}`,
+    method: 'get'
   })
 }
 // 获取活动详情

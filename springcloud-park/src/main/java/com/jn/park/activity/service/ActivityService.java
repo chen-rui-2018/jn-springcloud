@@ -1,7 +1,7 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 
 import java.util.List;
 
@@ -30,10 +30,10 @@ public interface ActivityService {
 
     /**
      * 活动状态管理(修改)
-     * @param activitySataus
+     * @param activityStatus
      * @return
      */
-    int updateActivityApply( ActivitySataus activitySataus);
+    int updateActivityApply( ActivityStatus activityStatus);
 
     /**
      * 发布活动/保存草稿
@@ -99,6 +99,6 @@ public interface ActivityService {
      * @param needPage
      * @return
      */
-    PaginationData findActivitySuccessfulRegistration(ActivityApplyedListQuery query, Boolean needPage);
+    PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage);
 
 }

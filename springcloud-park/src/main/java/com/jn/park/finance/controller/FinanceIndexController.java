@@ -50,7 +50,7 @@ public class FinanceIndexController extends BaseController {
     /** 测试通过 2019/3/14
      */
     @ControllerLog(doAction = "首页-管委会支出预算占比")
-    @ApiOperation(value = "管委会支出预算占比",notes = "管委会支出预算占比", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "管委会支出预算占比",notes = "管委会支出预算占比", httpMethod = "GET")
     @GetMapping(value = "/ratioAndState")
     @RequiresPermissions("/finance/index/ratioAndState")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019")
@@ -63,7 +63,7 @@ public class FinanceIndexController extends BaseController {
 
 
     @ControllerLog(doAction = "首页-各部门预算支出占比模块")
-    @ApiOperation(value = "各部门预算支出占比模块",notes = "各部门预算支出占比模块", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "各部门预算支出占比模块",notes = "各部门预算支出占比模块", httpMethod = "GET")
     @GetMapping(value = "/budgetExpendRatio")
     @RequiresPermissions("/finance/index/budgetExpendRatio")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019")
@@ -76,18 +76,18 @@ public class FinanceIndexController extends BaseController {
     /** 测试通过 2019/3/14
      */
     @ControllerLog(doAction = "首页-已支出全年预算统计-柱状图")
-    @ApiOperation(value = "已支出全年预算统计柱状图",notes = "已支出全年预算统计-柱状图", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "已支出全年预算统计柱状图",notes = "已支出全年预算统计-柱状图", httpMethod = "GET")
     @GetMapping(value = "/expendBudget")
     @RequiresPermissions("/finance/index/expendBudget")
     @ApiImplicitParam(name = "year",value = "年份YYYY",dataType = "String",paramType = "query",example = "2019")
-    public Result<FinanceIndexExpendBudgetStatisticsVo> expendBudget(String year){
+    public Result<FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>>> expendBudget(String year){
         //todo
-        List<FinanceIndexExpendBudgetStatisticsVo> expendBudget=financeIndexService.expendBudget(year);
+        FianceDynamicTableVo<List<FinanceIndexExpendBudgetStatisticsVo>> expendBudget=financeIndexService.expendBudget(year);
         return new Result(expendBudget);
     }
 
     @ControllerLog(doAction = "明细-部门支出预算统计-柱状图")
-    @ApiOperation(value = "部门支出预算统计",notes = "部门支出预算统计", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "部门支出预算统计",notes = "部门支出预算统计", httpMethod = "GET")
     @GetMapping(value = "/sectionBudgetExpend")
     @RequiresPermissions("/finance/index/sectionBudgetExpend")
     @ApiImplicitParams({
@@ -95,14 +95,14 @@ public class FinanceIndexController extends BaseController {
             @ApiImplicitParam(name = "departmentId",value = "部门ID",dataType = "String",paramType = "query",example = "281f4005-0363-4528-92a3-60a730532e53"),
             @ApiImplicitParam(name = "typeId",value = "类型ID",dataType = "String",paramType = "query")
     })
-    public Result<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend(String year, String departmentId, String typeId){
+    public Result<FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>>> sectionBudgetExpend(String year, String departmentId, String typeId){
         //todo
-        List<FinanceIndexSectionBudgetExpendVo> sectionBudgetExpend=financeIndexService.sectionBudgetExpend(year,departmentId,typeId);
+        FianceDynamicTableVo<List<FinanceIndexSectionBudgetExpendVo>> sectionBudgetExpend=financeIndexService.sectionBudgetExpend(year,departmentId,typeId);
         return new Result(sectionBudgetExpend);
     }
 
     @ControllerLog(doAction = "明细-各项累计支出占比-饼状图")
-    @ApiOperation(value = "各项累计支出占比",notes = "各项累计支出占比-饼状图", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "各项累计支出占比",notes = "各项累计支出占比-饼状图", httpMethod = "GET")
     @GetMapping(value = "/accumulativeExpendRatio")
     @RequiresPermissions("/finance/index/accumulativeExpendRatio")
     @ApiImplicitParams({
@@ -117,7 +117,7 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "部门预算支出报表")
-    @ApiOperation(value = "部门预算支出报表",notes = "部门预算支出报表", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "部门预算支出报表",notes = "部门预算支出报表", httpMethod = "GET")
     @GetMapping(value = "/sectionExpendForms")
     @RequiresPermissions("/finance/index/sectionExpendForms")
     @ApiImplicitParams({
@@ -132,7 +132,7 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "导出")
-    @ApiOperation(value = "导出", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "导出", httpMethod = "GET")
     @GetMapping(value = "/expendFormsExport")
     @RequiresPermissions("/finance/index/expendFormsExport")
     @ApiImplicitParams({
@@ -158,7 +158,7 @@ public class FinanceIndexController extends BaseController {
     }
 
     @ControllerLog(doAction = "明细-分类条件下拉框选项")
-    @ApiOperation(value = "分类条件下拉框选项",notes = "分类条件下拉框选项", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "分类条件下拉框选项",notes = "分类条件下拉框选项", httpMethod = "GET")
     @GetMapping(value = "/downType")
     @RequiresPermissions("/finance/index/downType")
     public Result<FinanceIndexDownTypeModel> downType(){

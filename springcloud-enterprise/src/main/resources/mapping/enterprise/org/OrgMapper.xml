@@ -3,10 +3,10 @@
 <mapper namespace="com.jn.enterprise.servicemarket.org.dao.OrgMapper">
     <select id="selectServiceOrgList" parameterType="com.jn.enterprise.servicemarket.org.model.OrgParameter"
             resultType="com.jn.enterprise.model.ServiceOrg">
-        select tt.orgId,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,
+        select tt.orgId,tt.orgName,tt.orgLogo,tt.pageviews,tt.orgRegisterTime,tt.isApprove,tt.orgType,orgPhone,tt.orgSpeciality,
         tt.orgAddress,tt.transactionNum,tt.attitudeScore,tt.evaluationNum from
         (select
-        a.org_id as "orgId",a.org_name as "orgName",
+        a.org_id as "orgId",a.org_name as "orgName",a.org_speciality as "orgSpeciality",
         a.org_logo as "orgLogo",a.org_show as "pageviews",
         date_format(a.org_register_time,'%Y-%m-%d') as "orgRegisterTime",
         a.is_approve as "isApprove",a.org_type as "orgType", i.org_phone as "orgPhone",
@@ -74,6 +74,10 @@
         <result column="s_conEmail" jdbcType="VARCHAR" property="conEmail" javaType="java.lang.String"/>
         <result column="s_orgRegisterTime" jdbcType="VARCHAR" property="orgRegisterTime" javaType="java.lang.String"/>
         <result column="s_orgLogo" jdbcType="VARCHAR" property="orgLogo" javaType="java.lang.String"/>
+        <result column="evaluationScore" jdbcType="VARCHAR" property="evaluationScore" javaType="java.lang.String"/>
+        <result column="evaluationNum" jdbcType="VARCHAR" property="evaluationNum" javaType="java.lang.Integer"/>
+        <result column="position" jdbcType="VARCHAR" property="position" javaType="java.lang.String"/>
+
         <!-- 执业标签 -->
         <collection property="orgLicenses" javaType="java.util.List"
                     ofType="com.jn.enterprise.servicemarket.org.model.OrgLicense">
@@ -159,6 +163,9 @@
           te.con_quali as "te_conQuali",
           date_format(te.con_time,'%Y-%m-%d') as "te_conTime",
           te.con_speciality as "te_conSpeciality"
+          ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		      <!-- 评价分数-->
+          ,COUNT(sr.`attitude_score`) AS "evaluationNum"			          <!-- 评价次数-->
+          ,sa.position as "position"                                          <!-- 职务-->
         FROM
           tb_service_org o
           LEFT JOIN tb_service_org_license lic
@@ -170,8 +177,17 @@
           LEFT JOIN tb_service_org_info i
             ON i.org_id = o.org_id and i.record_status = 1
           left join tb_service_org_team te on te.org_id = o.org_id and te.record_status = 1
+          LEFT JOIN tb_service_rating sr on o.org_id=sr.org_id
+          left join tb_service_advisor sa
+        on i.org_id=sa.org_id and i.con_name=sa.advisor_name
         where o.record_status = 1 and o.org_id = #{orgId}
     </select>
-
+    <!--机构的顾问数,产品数统计-->
+    <select id="getMyOrgInfo" resultType="com.jn.enterprise.servicemarket.org.model.OrgCount">
+        select count(t1.org_id) as "productNum",
+       (select count(t2.org_id) from tb_service_advisor t2 where t2.org_id=#{orgId}) as "advisorNum"
+            from tb_service_product t1
+               where t1.org_id = #{orgId}
+    </select>
 
 </mapper>

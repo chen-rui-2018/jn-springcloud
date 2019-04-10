@@ -86,7 +86,7 @@ public class RequireManagementServiceImplTest {
         //用户提需求(科技金融)
         requireTechnologyParam.setProductId("228043fd4f37438ea34e5a9ccdea2271");
         requireTechnologyParam.setProductName("招聘外包");
-        requireTechnologyParam.setRequireDetail("需要机构提供外包服务");
+        //requireTechnologyParam.setRequireDetail("需要机构提供外包服务");
         requireTechnologyParam.setFinancingAmount("90");
         requireTechnologyParam.setActualLoanAmount("66");
         requireTechnologyParam.setFinancingPeriod("6");

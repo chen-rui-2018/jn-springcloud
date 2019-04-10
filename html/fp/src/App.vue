@@ -16,9 +16,9 @@ export default {
   name: 'App',
   components:{AppHeader,AppFooter,SerHeader},
   created(){
-    if(sessionStorage.token){
-        this.api.setToken(sessionStorage.token)      
-    }
+    // if(sessionStorage.token){
+    //     this.api.setToken(sessionStorage.token)      
+    // }
     // this.init()
   },
   methods:{

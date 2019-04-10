@@ -227,6 +227,7 @@ export default {
           company: "",
           hobbys: _this.value11,
           jobs: _this.value5,
+          name:_this.name,
           nickName: _this.nickName,
           sex: _this.sexFlag,
           signature: _this.signature

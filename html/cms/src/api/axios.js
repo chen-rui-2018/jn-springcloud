@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-// var financUrl = 'springcloud-park/'
 export function api(url, query, mothod) {
   return request({
     url: url,

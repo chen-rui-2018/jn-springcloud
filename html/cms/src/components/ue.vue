@@ -42,10 +42,10 @@ export default {
 }
 </script>
 <style  lang="scss">
-.ueQuidtor{
+// #editor{
 
-   .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
-    line-height: 22px !important;
-}
-}
+//    .el-form-item--medium .el-form-item__content, .el-form-item--medium .el-form-item__label {
+//     line-height: 22px !important;
+// }
+// }
 </style>

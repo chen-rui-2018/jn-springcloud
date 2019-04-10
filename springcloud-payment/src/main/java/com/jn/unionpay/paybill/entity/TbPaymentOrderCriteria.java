@@ -2,7 +2,6 @@ package com.jn.unionpay.paybill.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class TbPaymentOrderCriteria {
@@ -104,32 +103,6 @@ public class TbPaymentOrderCriteria {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -1012,6 +985,66 @@ public class TbPaymentOrderCriteria {
             return (Criteria) this;
         }
 
+        public Criteria andIntegralAmountIsNull() {
+            addCriterion("integral_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountIsNotNull() {
+            addCriterion("integral_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountEqualTo(Double value) {
+            addCriterion("integral_amount =", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountNotEqualTo(Double value) {
+            addCriterion("integral_amount <>", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountGreaterThan(Double value) {
+            addCriterion("integral_amount >", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountGreaterThanOrEqualTo(Double value) {
+            addCriterion("integral_amount >=", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountLessThan(Double value) {
+            addCriterion("integral_amount <", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountLessThanOrEqualTo(Double value) {
+            addCriterion("integral_amount <=", value, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountIn(List<Double> values) {
+            addCriterion("integral_amount in", values, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountNotIn(List<Double> values) {
+            addCriterion("integral_amount not in", values, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountBetween(Double value1, Double value2) {
+            addCriterion("integral_amount between", value1, value2, "integralAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andIntegralAmountNotBetween(Double value1, Double value2) {
+            addCriterion("integral_amount not between", value1, value2, "integralAmount");
+            return (Criteria) this;
+        }
+
         public Criteria andPayTypeIsNull() {
             addCriterion("pay_type is null");
             return (Criteria) this;
@@ -1092,53 +1125,63 @@ public class TbPaymentOrderCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkEqualTo(Date value) {
-            addCriterionForJDBCDate("pay_remark =", value, "payRemark");
+        public Criteria andPayRemarkEqualTo(String value) {
+            addCriterion("pay_remark =", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkNotEqualTo(Date value) {
-            addCriterionForJDBCDate("pay_remark <>", value, "payRemark");
+        public Criteria andPayRemarkNotEqualTo(String value) {
+            addCriterion("pay_remark <>", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkGreaterThan(Date value) {
-            addCriterionForJDBCDate("pay_remark >", value, "payRemark");
+        public Criteria andPayRemarkGreaterThan(String value) {
+            addCriterion("pay_remark >", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("pay_remark >=", value, "payRemark");
+        public Criteria andPayRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("pay_remark >=", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkLessThan(Date value) {
-            addCriterionForJDBCDate("pay_remark <", value, "payRemark");
+        public Criteria andPayRemarkLessThan(String value) {
+            addCriterion("pay_remark <", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("pay_remark <=", value, "payRemark");
+        public Criteria andPayRemarkLessThanOrEqualTo(String value) {
+            addCriterion("pay_remark <=", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkIn(List<Date> values) {
-            addCriterionForJDBCDate("pay_remark in", values, "payRemark");
+        public Criteria andPayRemarkLike(String value) {
+            addCriterion("pay_remark like", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkNotIn(List<Date> values) {
-            addCriterionForJDBCDate("pay_remark not in", values, "payRemark");
+        public Criteria andPayRemarkNotLike(String value) {
+            addCriterion("pay_remark not like", value, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("pay_remark between", value1, value2, "payRemark");
+        public Criteria andPayRemarkIn(List<String> values) {
+            addCriterion("pay_remark in", values, "payRemark");
             return (Criteria) this;
         }
 
-        public Criteria andPayRemarkNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("pay_remark not between", value1, value2, "payRemark");
+        public Criteria andPayRemarkNotIn(List<String> values) {
+            addCriterion("pay_remark not in", values, "payRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayRemarkBetween(String value1, String value2) {
+            addCriterion("pay_remark between", value1, value2, "payRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayRemarkNotBetween(String value1, String value2) {
+            addCriterion("pay_remark not between", value1, value2, "payRemark");
             return (Criteria) this;
         }
 

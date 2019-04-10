@@ -22,10 +22,10 @@ import com.jn.park.activity.entity.TbActivityCriteria;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityApplyDetail;
-import com.jn.park.model.ActivityApplyParam;
-import com.jn.park.model.ActivityQueryPaging;
-import com.jn.park.model.ApplyUserInfo;
+import com.jn.park.activity.model.ActivityApplyDetail;
+import com.jn.park.activity.model.ActivityApplyParam;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.ApplyUserInfo;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -358,6 +358,8 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         com.github.pagehelper.Page<Object> objects = null;
         if (needPage) {
             objects = PageHelper.startPage(activityApplyParam.getPage(), activityApplyParam.getRows() == 0 ? 15 : activityApplyParam.getRows(), true);
+        }else{
+            objects = PageHelper.startPage(1, 200000, true);
         }
         List<ActivityApplyDetail> activityApplyList = activityApplyMapper.findApplyActivityList(activityApplyParam.getActivityId(), null);
         return new PaginationData<>(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
@@ -486,25 +488,25 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     /**
      * 报名人列表信息
      *
-     * @param activityQueryPaging
+     * @param activityPagingParam
      * @param isPage              true：分页  false:不分页
      * @return
      */
     @ServiceLog(doAction = "报名人列表信息(前台)")
     @Override
-    public PaginationData findApplyActivityList(ActivityQueryPaging activityQueryPaging, Boolean isPage) {
+    public PaginationData findApplyActivityList(ActivityPagingParam activityPagingParam, Boolean isPage) {
         Page<Object> objects = null;
         List<ActivityApplyDetail> activityApplyList;
             if (isPage) {
                 //默认查询前15条
-                objects = PageHelper.startPage(activityQueryPaging.getPage(), activityQueryPaging.getRows() == 0 ? 15 : activityQueryPaging.getRows(), true);
+                objects = PageHelper.startPage(activityPagingParam.getPage(), activityPagingParam.getRows() == 0 ? 15 : activityPagingParam.getRows(), true);
             }
             //前端查询有效报名状态数据
             String status = "1";
-            if(!StringUtils.isNotEmpty(activityQueryPaging.getActivityId())){
+            if(!StringUtils.isNotEmpty(activityPagingParam.getActivityId())){
                 throw new JnSpringCloudException(ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY);
             }
-            activityApplyList = activityApplyMapper.findApplyActivityList(activityQueryPaging.getActivityId(), status);
+            activityApplyList = activityApplyMapper.findApplyActivityList(activityPagingParam.getActivityId(), status);
             return new PaginationData(findUserExtension(activityApplyList), objects == null ? 0 : objects.getTotal());
     }
 

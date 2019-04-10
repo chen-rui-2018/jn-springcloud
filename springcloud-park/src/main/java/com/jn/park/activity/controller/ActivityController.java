@@ -10,7 +10,7 @@ import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -81,10 +81,10 @@ public class ActivityController extends BaseController {
     @ApiOperation(value = "修改活动可报名状态", notes = "数据响应条数，正常情况为1")
     @RequestMapping(value = "/updateActivityApply",method = RequestMethod.POST)
     @RequiresPermissions("/activity/updateActivityApply")
-    public Result<Integer> updateActivityApply(@RequestBody @Validated ActivitySataus activitySataus) {
-        Assert.notNull(activitySataus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
-        Assert.notNull(activitySataus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
-        int i = activityService.updateActivityApply(activitySataus);
+    public Result<Integer> updateActivityApply(@RequestBody @Validated ActivityStatus activityStatus) {
+        Assert.notNull(activityStatus.getActivityId(), ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
+        Assert.notNull(activityStatus.getActiStatus(), ActivityExceptionEnum.ACTIVITY_APPLY_TYPE_STATE_NOT_NULL.getMessage());
+        int i = activityService.updateActivityApply(activityStatus);
         return new Result<>(i);
     }
 
@@ -129,7 +129,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteDraftActivity")
     @RequiresPermissions("/activity/deleteDraftActivity")
     public Result<Integer> deleteDraftActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteDraftActivity(activityId,user.getAccount());
@@ -141,7 +141,7 @@ public class ActivityController extends BaseController {
     @RequestMapping(value = "/deleteActivity")
     @RequiresPermissions("/activity/deleteActivity")
     public Result<Integer> deleteActivity(
-            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "f5c95f9adf714aedab3739cbc9297178")@RequestParam(value = "activityId") String[] activityId) {
+            @ApiParam(name="activityId",value = "activityId:活动ID 数组",required = true,example = "['f5c95f9adf714aedab3739cbc9297178','f5c95f9adf714aedab3739cbc9297179']")@RequestParam(value = "activityId") String[] activityId) {
         Assert.notNull(activityId, ActivityExceptionEnum.ACTIVITY_ID_CANNOT_EMPTY.getMessage());
         User user=(User) SecurityUtils.getSubject().getPrincipal();
         int i = activityService.deleteActivity(activityId,user.getAccount());
@@ -202,12 +202,18 @@ public class ActivityController extends BaseController {
 
     @ControllerLog(doAction = "活动报名人数据导出")
     @ApiOperation(value = "活动报名人数据导出")
-    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.POST)
+    @RequestMapping(value = "/exportDataExcel",method = RequestMethod.GET)
     @RequiresPermissions("/activity/exportDataExcel")
-    public void exportDataExcel(@RequestBody  @Validated ActivityApplyParam activityApplyParam,
+    public void exportDataExcel(@Validated ActivityApplyParam activityApplyParam,
                                 HttpServletResponse response){
         Assert.notNull(activityApplyParam.getExportColName(), ActivityExceptionEnum.EXPORT_COL_NAME_NOT_NULL.getMessage());
         Assert.notNull(activityApplyParam.getExportTitle(), ActivityExceptionEnum.EXPORT__TITLE_NOT_NULL.getMessage());
+        for(int i=0;i<activityApplyParam.getExportTitle().length;i++){
+            logger.info("------入参导出标题：{}--------",activityApplyParam.getExportTitle()[i]);
+        }
+        for(int i=0;i<activityApplyParam.getExportColName().length;i++){
+            logger.info("------入参导出的字段别名：{}--------",activityApplyParam.getExportColName()[i]);
+        }
         //下载文件名
         String fileName="活动报名人";
         String sheetName = "活动报名人";
@@ -215,7 +221,7 @@ public class ActivityController extends BaseController {
         List<ActivityApplyDetail> activityApplyDetails=(List<ActivityApplyDetail>)paginationData.getRows();
         //把数组转换为字符串，并以逗号（“,”）分隔
         String exportTitle =  StringUtils.join(activityApplyParam.getExportTitle(),",");
-        String exportColName = StringUtils.join(activityApplyParam.getExportColName());
+        String exportColName = StringUtils.join(activityApplyParam.getExportColName(),",");
         ExcelUtil.writeExcelWithCol(response, fileName, sheetName, exportTitle, exportColName, activityApplyDetails);
     }
 

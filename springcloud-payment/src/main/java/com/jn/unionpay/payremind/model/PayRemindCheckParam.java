@@ -16,7 +16,8 @@ import java.io.Serializable;
  */
 @ApiModel(value = "PayRemindCheckParam", description = "账单核对审核提交入参")
 public class PayRemindCheckParam implements Serializable {
-    @ApiModelProperty(value = "审核项ID或账单ID",notes = "[线下支付审核为审核项id(remind_id),线上支付为账单id(bill_id)]",required = true,example = "de2b944a227b41eb9b55fbd9a2cf10f4")
+    @ApiModelProperty(value = "审核项ID或账单ID[线下支付审核为审核项id(remind_id),线上支付为账单id(bill_id)]"
+            ,notes = "[线下支付审核为审核项id(remind_id),线上支付为账单id(bill_id)]",required = true,example = "de2b944a227b41eb9b55fbd9a2cf10f4")
     @NotBlank(message = "审核项ID或账单ID不能为空")
     private String id;
     @ApiModelProperty(value = "审核状态[4支付审核通过5审核不通过]",required = true,example = "4")

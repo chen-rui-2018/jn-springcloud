@@ -29,7 +29,7 @@ import java.util.List;
  * @version： v1.0
  * @modified By:
  */
-@Api(tags = "行业领域管理")
+@Api(tags = "服务超市-行业领域管理")
 @RestController
 @RequestMapping(value = "/serviceMarket/industryManage")
 public class IndustryManageController extends BaseController {

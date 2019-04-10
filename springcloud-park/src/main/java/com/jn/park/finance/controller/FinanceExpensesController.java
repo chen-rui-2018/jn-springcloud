@@ -40,42 +40,47 @@ public class FinanceExpensesController extends BaseController {
     private FinanceExpensesService financeExpensesService;
 
     @ControllerLog(doAction = "支出录入查询")
-    @ApiOperation(value = "支出录入查询",notes = "支出录入查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "支出录入查询",notes = "支出录入查询", httpMethod = "GET")
     @GetMapping(value = "/findAll")
     @RequiresPermissions("/finance/expenses/findAll")
-    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(@RequestBody FinanceExpensesPageModel financeExpensesPageModel){
+    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findAll(FinanceExpensesPageModel financeExpensesPageModel){
         //todo
-        this.checkIsSomeYear(financeExpensesPageModel.getStartMonth(),financeExpensesPageModel.getEndMonth());
         this.checkIsSomeYear(financeExpensesPageModel.getStartTime(),financeExpensesPageModel.getEndTime());
         PaginationData findAll= financeExpensesService.findAll(financeExpensesPageModel);
         return new Result(findAll);
     }
 
     @ControllerLog(doAction = "支出录入历史查询")
-    @ApiOperation(value = "支出录入历史查询",notes = "支出录入历史查询", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "支出录入历史查询",notes = "支出录入历史查询", httpMethod = "GET")
     @GetMapping(value = "/findHistoryAll")
     @RequiresPermissions("/finance/expenses/findHistoryAll")
-    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findHistoryAll(@RequestBody FinanceExpensesHistoryPageModel financeEhpm){
+    public Result<PaginationData<List<FinanceExpendHistoryVo>>> findHistoryAll(FinanceExpensesHistoryPageModel financeEhpm){
         //todo
-        this.checkIsSomeYear(financeEhpm.getStartMonth(),financeEhpm.getEndMonth());
         this.checkIsSomeYear(financeEhpm.getStartTime(),financeEhpm.getEndTime());
         PaginationData findHistoryAll= financeExpensesService.findHistoryAll(financeEhpm);
         return new Result(findHistoryAll);
     }
 
     @ControllerLog(doAction = "录入导入")
-    @ApiOperation(value = "录入导入", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "录入导入", httpMethod = "POST")
     @PostMapping(value = "/importData")
     @RequiresPermissions("/finance/expenses/importData")
     public Result<FinanceExpendImportDataVo> importData(@ApiParam(value = "Excel模板文件",required = true) MultipartFile file){
         //todo
+        //判断文件后缀名是否为.xlsx
+        //获取文件名
+        String name=file.getOriginalFilename();
+        String fileName= name.substring(name.length()-4);
+        if(!fileName.equals("xlsx")){
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"请导入模板文件");
+        }
         List<FinanceExpendImportDataVo> financeExpendImportDataVos=financeExpensesService.importData(file,getUser());
 
         return new Result(financeExpendImportDataVos);
     }
 
     @ControllerLog(doAction = "保存打标数据")
-    @ApiOperation(value = "保存打标数据", httpMethod = "POST", response = Result.class)
+    @ApiOperation(value = "保存打标数据", httpMethod = "POST")
     @PostMapping(value = "/saveMarkData")
     @RequiresPermissions("/finance/expenses/saveMarkData")
     public Result saveMarkData(@RequestBody List<FinanceExpendFindImportDataVo> feList){
@@ -85,7 +90,7 @@ public class FinanceExpensesController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取财务类型")
-    @ApiOperation(value = "获取财务类型",notes = "获取财务类型", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "获取财务类型",notes = "获取财务类型", httpMethod = "GET")
     @GetMapping(value = "/selectFinanceType")
     @RequiresPermissions("/finance/expenses/selectFinanceType")
     public Result<List<FinanceExpendFinanceTypeVo>>  selectFinanceType(){
@@ -95,7 +100,7 @@ public class FinanceExpensesController extends BaseController {
     }
 
     @ControllerLog(doAction = "获取部门信息")
-    @ApiOperation(value = "获取部门信息",notes = "获取部门信息", httpMethod = "GET", response = Result.class)
+    @ApiOperation(value = "获取部门信息",notes = "获取部门信息", httpMethod = "GET")
     @GetMapping(value = "/selectDepartment")
     @RequiresPermissions("/finance/expenses/selectDepartment")
     public Result<List<FinanceSelectDepartmentModel>>  selectDepartment(){
@@ -112,13 +117,13 @@ public class FinanceExpensesController extends BaseController {
      */
     private void checkIsSomeYear(String startMonth,String endMonth){
         if(StringUtils.isBlank(startMonth)||startMonth.length()!=6){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"开始月份格式必须是YYYYMM");
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"起止月份格式必须是YYYYMM");
         }
         if(null!=endMonth&&endMonth.length()!=6){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份格式必须是YYYYMM");
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"起止月份格式必须是YYYYMM");
         }
         if((startMonth.compareTo(endMonth))>0){
-            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"结束月份必须大于等于开始月份");
+            throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"起止月份必须大于等于开始月份");
         }
         if(!startMonth.substring(0,4).equals(endMonth.substring(0,4))){
             throw new JnSpringCloudException(FinanceBudgetExceptionEnums.UN_KNOW,"只能查同一年的数据");

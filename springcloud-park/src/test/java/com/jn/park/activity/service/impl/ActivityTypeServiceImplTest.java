@@ -10,10 +10,10 @@ import com.jn.park.activity.entity.TbActivityType;
 import com.jn.park.activity.entity.TbActivityTypeCriteria;
 import com.jn.park.activity.service.ActivityTypeService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.ActivityType;
-import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeQuery;
-import com.jn.park.model.ActivityTypeUpdate;
+import com.jn.park.activity.model.ActivityType;
+import com.jn.park.activity.model.ActivityTypeAdd;
+import com.jn.park.activity.model.ActivityTypeParam;
+import com.jn.park.activity.model.ActivityTypeUpdate;
 import com.jn.system.model.User;
 import org.junit.After;
 import org.junit.Before;
@@ -64,7 +64,7 @@ public class ActivityTypeServiceImplTest {
     private String[] typeIds = {"f0396c4fd4d1462b8a4142f395d1e914","aeaa1a3bbd0141cb93e7a5dbd12973dd"};
     private ActivityTypeAdd activityTypeAdd;
     private ActivityTypeUpdate activityTypeUpdate;
-    private ActivityTypeQuery activityTypeQuery;
+    private ActivityTypeParam activityTypeParam;
 
     @Before
     public void setUp() throws Exception {
@@ -116,11 +116,11 @@ public class ActivityTypeServiceImplTest {
      */
     @Test
     public void findActivityTypeListByState() {
-        activityTypeQuery = new ActivityTypeQuery();
-        activityTypeQuery.setTypeStatus(status);
-        activityTypeQuery.setPage(page);
-        activityTypeQuery.setRows(rows);
-        PaginationData data = activityTypeService.findActivityTypeListByState(activityTypeQuery, true);
+        activityTypeParam = new ActivityTypeParam();
+        activityTypeParam.setTypeStatus(status);
+        activityTypeParam.setPage(page);
+        activityTypeParam.setRows(rows);
+        PaginationData data = activityTypeService.findActivityTypeListByState(activityTypeParam, true);
         int length = (int) data.getTotal();
         assertThat(length, greaterThanOrEqualTo(0));
     }

@@ -29,7 +29,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务点评")
+@Api(tags = "服务超市-服务点评")
 @RestController
 @RequestMapping(value = "/guest/serviceMarket/comment")
 public class CommentController extends BaseController {

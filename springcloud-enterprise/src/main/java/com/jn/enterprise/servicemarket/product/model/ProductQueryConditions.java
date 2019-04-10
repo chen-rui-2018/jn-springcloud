@@ -1,5 +1,6 @@
 package com.jn.enterprise.servicemarket.product.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public class ProductQueryConditions implements Serializable {
     private Float otherFactorScore=0.0f;
     @ApiModelProperty(value = "领域Id")
     private String signoryId;
+    @ApiModelProperty(value="机构id")
+    private String orgId;
     @ApiModelProperty(value = "排序类型")
     private String sortTypes;
     @ApiModelProperty(value = "关键词")
@@ -90,5 +93,13 @@ public class ProductQueryConditions implements Serializable {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public String getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 }

@@ -50,7 +50,7 @@ public class MeetingGuestController extends BaseController {
 
     @ControllerLog(doAction = "查询会议申请展示列表")
     @ApiOperation(value = "查询会议申请展示列表")
-    @PostMapping(value = "/showList")
+    @RequestMapping(value = "/showList", method = RequestMethod.POST)
     public Result<List<OaMeetingVo>> showList(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
         Assert.notNull(oaMeetingPage.getMeetingRoomId(), "会议室ID不能为空");
         //获取当前登录用户信息
@@ -61,7 +61,7 @@ public class MeetingGuestController extends BaseController {
 
     @ControllerLog(doAction = "查询会议列表")
     @ApiOperation(value = "查询会议列表")
-    @PostMapping(value = "/showMeetingRoomList")
+    @RequestMapping(value = "/showMeetingRoomList", method = RequestMethod.POST)
     public Result<List<OaMeetingRoomVo>> showMeetingRoomList() {
         OaMeetingRoomPage oaMeetingRoomPage=new OaMeetingRoomPage();
         oaMeetingRoomPage.setRecordStatus(MeetingRoomStatusEnums.EFFECTIVE.getCode());

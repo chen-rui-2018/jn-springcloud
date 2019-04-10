@@ -3,6 +3,7 @@ package com.jn.enterprise.servicemarket.org.service;
 import com.jn.common.model.PaginationData;
 import com.jn.enterprise.model.ServiceOrg;
 import com.jn.enterprise.servicemarket.org.model.*;
+import com.jn.enterprise.servicemarket.org.vo.MyOrgInfoVo;
 import com.jn.enterprise.servicemarket.org.vo.OrgDetailVo;
 
 import java.util.List;
@@ -61,4 +62,11 @@ public interface OrgService {
      * @return
      */
     int saveOrUpdateOrgContactData(OrgContactData orgContactData,String account);
+
+    /**
+     * 我的机构信息
+     * @param account
+     * @return
+     */
+    MyOrgInfoVo getMyOrgInfo(String account);
 }

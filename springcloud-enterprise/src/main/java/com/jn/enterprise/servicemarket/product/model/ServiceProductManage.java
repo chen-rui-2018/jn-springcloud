@@ -34,6 +34,16 @@ public class ServiceProductManage implements Serializable {
     private String status;
     @ApiModelProperty(value = "顾问名称")
     private String advisorName;
+    @ApiModelProperty(value="参考价格")
+    private String  referPrice;
+
+    public String getReferPrice() {
+        return referPrice;
+    }
+
+    public void setReferPrice(String referPrice) {
+        this.referPrice = referPrice;
+    }
 
     public String getProductId() {
         return productId;

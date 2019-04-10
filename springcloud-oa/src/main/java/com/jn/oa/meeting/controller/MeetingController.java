@@ -45,7 +45,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "查询会议申请列表")
     @ApiOperation(value = "查询会议申请列表")
-    @PostMapping(value = "/list")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/list")
     public Result<PaginationData<List<OaMeetingVo>>> list(@Validated @RequestBody OaMeetingPage oaMeetingPage) {
         //获取当前登录用户信息
@@ -57,7 +57,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "新增会议申请")
     @ApiOperation(value = "新增会议申请")
-    @PostMapping(value = "/add")
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/add")
     public Result add(@Validated @RequestBody OaMeetingAdd oaMeetingAdd) {
         //获取当前登录用户信息
@@ -74,7 +74,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "修改会议申请")
     @ApiOperation(value = "修改会议室")
-    @PostMapping(value = "/update")
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/update")
     public Result update(@Validated @RequestBody OaMeetingAdd oaMeeting) {
         Assert.notNull(oaMeeting.getId(), "会议申请ID不能为空");
@@ -87,7 +87,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "审核会议申请")
     @ApiOperation(value = "审核会议申请",notes = "审核状态（0:已取消、1:审批中、2:审批通过、3:审批不通过、4:已作废）")
-    @PostMapping(value = "/approve")
+    @RequestMapping(value = "/approve", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/approve")
     public Result approve(@Validated @RequestBody OaMeetingApprove oaMeetingApprove){
         Assert.notNull(oaMeetingApprove.getId(), "会议申请ID不能为空");
@@ -101,7 +101,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "根据ID查询会议申请")
     @ApiOperation(value = "根据ID查询会议申请")
-    @PostMapping(value = "/selectById")
+    @RequestMapping(value = "/selectById", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/selectById")
     public Result<OaMeetingParticipantVo> selectById(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
@@ -112,7 +112,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "根据ID结束会议申请")
     @ApiOperation(value = "根据ID结束会议申请")
-    @PostMapping(value = "/finishOaMeeting")
+    @RequestMapping(value = "/finishOaMeeting", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/finishOaMeeting")
     public Result finishOaMeeting(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
@@ -123,7 +123,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "根据ID取消会议申请")
     @ApiOperation(value = "根据ID取消会议申请")
-    @PostMapping(value = "/cancelOaMeeting")
+    @RequestMapping(value = "/cancelOaMeeting", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/cancelOaMeeting")
     public Result cancelOaMeeting(@RequestParam(value = "id") String id) {
         Assert.notNull(id, "会议申请ID不能为空");
@@ -135,7 +135,7 @@ public class MeetingController extends BaseController {
 
     @ControllerLog(doAction = "校验会议室主题称是否存在,fail表示名称已存在,success表示可以使用")
     @ApiOperation(value = "校验会议室主题是否存在", notes = "fail表示名称已存在,success表示可以使用")
-    @RequestMapping(value = "/checkName")
+    @RequestMapping(value = "/checkName", method = RequestMethod.POST)
     @RequiresPermissions("/oa/oaMeeting/checkName")
     public Result<String> checkName(String meetingRoomName) {
         String result = meetingService.checkMeetingName(meetingRoomName);

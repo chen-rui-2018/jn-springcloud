@@ -48,6 +48,16 @@ public class ServiceOrg implements Serializable {
     private Integer transactionNum;
     @ApiModelProperty(value = "评价次数")
     private Integer evaluationNum;
+    @ApiModelProperty (value = "业务擅长")
+    private String orgSpeciality;
+
+    public String getOrgSpeciality() {
+        return orgSpeciality;
+    }
+
+    public void setOrgSpeciality(String orgSpeciality) {
+        this.orgSpeciality = orgSpeciality;
+    }
 
     public String getOrgId() {
         return orgId;

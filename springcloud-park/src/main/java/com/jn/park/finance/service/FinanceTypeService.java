@@ -26,7 +26,7 @@ public interface FinanceTypeService {
      * @param departmentIdList
      * @return
      */
-    Integer updateDepartmentByType(Integer typeId, List<String>departmentIdList,String userAccount);
+    Integer updateDepartmentByType(String typeId, List<String>departmentIdList,String userAccount);
 
 
 

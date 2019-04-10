@@ -6,9 +6,9 @@ import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.service.ActivityDetailsService;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityQueryPaging;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,17 +51,17 @@ public class ActivityDetailsServiceImplTest {
      */
     private String account;
 
-    ActivityQueryPaging activityQueryPaging =new ActivityQueryPaging();
+    ActivityPagingParam activityPagingParam =new ActivityPagingParam();
 
     @Before
     public void setUp() throws Exception {
         //活动id
         activityId="4b761c29c00a49cdaa3c3d8d3bb0e440";
         //用户账号
-        account="wangsong";
-        activityQueryPaging.setActivityId(activityId);
-        activityQueryPaging.setPage(1);
-        activityQueryPaging.setRows(15);
+        account="";
+        activityPagingParam.setActivityId(activityId);
+        activityPagingParam.setPage(1);
+        activityPagingParam.setRows(15);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ActivityDetailsServiceImplTest {
      */
     @Test
     public void getCommentInfo() {
-        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityQueryPaging,account, true);
+        PaginationData commentInfo = activityDetailsService.getCommentInfo(activityPagingParam,account, true);
         List<Comment> list= (List<Comment>)commentInfo.getRows();
         assertThat(list.size(), greaterThan(0));
     }
@@ -96,11 +96,11 @@ public class ActivityDetailsServiceImplTest {
     }
 
     /**
-     * 根据活动id,account查询活动报名信息
+     * 根据活动id查询活动报名信息
      */
     @Test
     public void getActivityApplyInfo() {
-        List<ActivityApply> activityApplyInfo = activityDetailsService.getActivityApplyInfo(activityId, account);
+        List<ActivityApply> activityApplyInfo = activityDetailsService.getActivityApplyInfo(activityId);
         assertThat(activityApplyInfo.size(), greaterThanOrEqualTo(0));
     }
 

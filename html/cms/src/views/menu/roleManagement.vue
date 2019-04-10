@@ -118,7 +118,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -127,7 +127,7 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增角色') {
-          paramApi('system/sysRole/checkRoleName', this.roleform.roleName, 'roleName').then(res => {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysRole/checkRoleName`, this.roleform.roleName, 'roleName').then(res => {
             // if (res.data.code === '0000') {
             if (res.data.data === 'success') {
               callback()
@@ -138,7 +138,7 @@ export default {
           })
         } else {
           if (this.oldRoleName !== this.roleform.roleName) {
-            paramApi('system/sysRole/checkRoleName', this.roleform.roleName, 'roleName').then(res => {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysRole/checkRoleName`, this.roleform.roleName, 'roleName').then(res => {
               // if (res.data.code === '0000') {
               if (res.data.data === 'success') {
                 callback()
@@ -256,8 +256,8 @@ export default {
       } else {
         this.authorityPage = this.authorityPage - 1
       }
-      api('system/sysRole/rolePermissionAuthorization', { roleId: this.roleId, permissionId: value }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/rolePermissionAuthorization`, { roleId: this.roleId, permissionId: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -279,13 +279,13 @@ export default {
       this.getAuthority()
     },
     getAuthority() {
-      api('system/sysRole/findPermissionOrRoleAndOtherPermission', {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/findPermissionOrRoleAndOtherPermission`, {
         roleId: this.roleId,
         page: this.authorityPage,
         rows: this.authorityRows,
         permissionName: this.permissionName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const authorityData = []
           const checkAuthority = []
           this.authorityTotal = res.data.data.total
@@ -322,8 +322,8 @@ export default {
       } else {
         this.userPage = this.userPage - 1
       }
-      api('/system/sysRole/userGroupRoleAuthorization', { roleId: this.roleId, userGroupId: value }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}/system/sysRole/userGroupRoleAuthorization`, { roleId: this.roleId, userGroupId: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -355,13 +355,13 @@ export default {
       this.getUserGroup()
     },
     getUserGroup() {
-      api('system/sysRole/findUserGroupOfRoleAndOtherGroup', {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/findUserGroupOfRoleAndOtherGroup`, {
         roleId: this.roleId,
         page: this.userPage,
         rows: this.userRows,
         userGroupName: this.userGroupName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           const userGroupData = []
           const checkUserGroup = []
           this.userTotal = res.data.data.total
@@ -384,13 +384,13 @@ export default {
       })
     },
     getUser() {
-      api('system/sysRole/findUserOfRoleAndOtherUser', {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/findUserOfRoleAndOtherUser`, {
         roleId: this.roleId,
         page: this.userPage,
         rows: this.userRows,
         userName: this.userName
-      }).then(res => {
-        if (res.data.code === '0000') {
+      }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           res.data.data.rows.userOfRoleList.forEach(val => {
             this.oldOwnUser.push(val.id)
           })
@@ -439,8 +439,8 @@ export default {
       } else {
         this.userPage = this.userPage - 1
       }
-      api('system/sysRole/userRoleAuthorization', { roleId: this.roleId, userId: value }).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/userRoleAuthorization`, { roleId: this.roleId, userId: value }, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '授权成功',
             type: 'success'
@@ -481,8 +481,8 @@ export default {
         if (valid) {
           this.isDisabled = true
           // // 调用接口发送请求
-          api('system/sysRole/update', this.roleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysRole/update`, this.roleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -507,8 +507,8 @@ export default {
       this.$refs['roleform'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysRole/add', this.roleform).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysRole/add`, this.roleform, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -556,8 +556,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysRole/delete', id, 'ids').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysRole/delete`, id, 'ids').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -577,8 +577,8 @@ export default {
     // 项目初始化
     initList() {
       this.rolelistLoading = true
-      api('system/sysRole/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysRole/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.roleList = res.data.data.rows
           this.total = res.data.data.total
           if (this.roleList.length === 0 && this.total > 0) {

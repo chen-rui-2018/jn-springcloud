@@ -35,7 +35,7 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="pagination-container">
+        <div style="margin-top:15px;">
           <el-pagination v-show="total>0" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.rows" :total="total" background layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange" @current-change="handleCurrentChange" />
         </div>
       </div>
@@ -70,7 +70,7 @@
 <script>
 import {
   api, paramApi
-} from '@/api/oa/meetingManagement'
+} from '@/api/axios'
 export default {
 
   data() {
@@ -114,15 +114,13 @@ export default {
     // 查看数据
     handlelooking(row) {
       this.aaa = this.randomColor()
-      console.log(row)
-      paramApi('oa/addressBook/getUserInfo', row.account, 'userAccount').then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.oaUrl}oa/addressBook/getUserInfo`, row.account, 'userAccount').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.dialogFormVisible = true
           if (res.data.data.name) {
             this.addressListForm.name = res.data.data.name
             this.addressListForm.lastName = res.data.data.name.charAt((res.data.data.name).length - 1)
           }
-          console.log(this.addressListForm.lastName)
           if (res.data.data.sysDepartmentPostVO) {
             this.userPosition = res.data.data.sysDepartmentPostVO
           }
@@ -151,8 +149,8 @@ export default {
     // 获取所有部门列表
     getAllDepartment() {
       this.departmentListLoading = true
-      api('oa/addressBook/getDeptTree').then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/getDeptTree`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.departmentList = res.data.data
         } else {
           this.$message.error(res.data.result)
@@ -178,9 +176,8 @@ export default {
     // 初始化页面
     initList() {
       this.listLoading = true
-      api('oa/addressBook/list', this.listQuery).then(res => {
-        console.log(res)
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/addressBook/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.addressList = res.data.data.rows
           this.total = res.data.data.total
           if (this.addressList.length === 0 && this.total > 0) {
@@ -216,7 +213,8 @@ export default {
 .addressBook-content{
   display: flex;
   .addressBook-left{
-          margin-top:15px;
+    padding: 15px;
+    background:#fff;
     margin-right:30px;
   }
   .addressBook-right{

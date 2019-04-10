@@ -17,37 +17,37 @@ import java.io.Serializable;
 @ApiModel(value = "UserInfoParam",description = "用户信息入参")
 public class UserInfoParam implements Serializable {
 
-    @ApiModelProperty(value = "用户昵称",required = true)
+    @ApiModelProperty(value = "用户昵称",required = true,example = "杨辉辉")
     @NotNull(message = "用户昵称不能为空")
     private String nickName;
 
-    @ApiModelProperty(value = "姓名")
+    @ApiModelProperty(value = "姓名",example = "懒洋洋")
     private String name;
 
-    @ApiModelProperty(value = "个性签名")
+    @ApiModelProperty(value = "个性签名",example = "别看我只是一头羊")
     private String signature;
 
-    @ApiModelProperty(value = "头像路径")
+    @ApiModelProperty(value = "头像路径",example = "***/***.png")
     private String avatar;
 
-    @ApiModelProperty(value = "年龄")
+    @ApiModelProperty(value = "年龄",example = "20")
     private Integer age;
 
-    @ApiModelProperty(value = "电话号码")
+    @ApiModelProperty(value = "电话号码",example = "110")
     private String phone;
 
-    @ApiModelProperty(value = "性别[0女1男]",required = true)
+    @ApiModelProperty(value = "性别[0女1男]",required = true,example = "1")
     @NotNull(message = "性别不能为空")
     @Pattern(regexp="^[01]$",message="{sex:'性别只允许为0,1'}")
     private String sex;
 
-    @ApiModelProperty(value = "公司")
+    @ApiModelProperty(value = "公司",example = "青青草原")
     private String company;
 
-    @ApiModelProperty(value = "兴趣爱好ID[数组]")
+    @ApiModelProperty(value = "兴趣爱好ID[数组]，传“用户标签-获取用户字典表 tagType=0的ID”",example = "['001','002']")
     private String[] hobbys;
 
-    @ApiModelProperty(value = "职业ID[数组]")
+    @ApiModelProperty(value = "职业ID[数组],传“用户标签-获取用户字典表 tagType=1的ID”",example = "['101','102']")
     private String[] jobs;
 
     public String getNickName() {

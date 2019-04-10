@@ -110,7 +110,7 @@
                 :post-title="scope.row[index].title"
                 :post-time="item"
                 :disabled="listQuery.meetingStartTime | setColor(item)"
-                :class=" listQuery.meetingStartTime | setColor(item)?'disabledStyle':'textStyle'"
+                :class="listQuery.meetingStartTime | setColor(item)?'disabledStyle':'textStyle'"
                 @meeting_order="meeting_order"
               />
               <meeting-div2
@@ -170,7 +170,7 @@
 </template>
 
 <script>
-import { api } from '@/api/oa/meetingManagement'
+import { api } from '@/api/axios'
 export default {
   name: 'Date',
   components: {
@@ -223,179 +223,179 @@ export default {
         '17:30',
         '18:00'
       ],
-      staticData: {
-        data: {
-          'rows': [{
-            'id': '1f5c6df4-8ff7-46c6-bdf0-cf5ccb38ee1c',
-            'name': '多功能厅',
-            'building': '多功能厅',
-            'floor': '2层',
-            'roomNumber': '',
-            'position': '102栋2层101',
-            'explains': '测试数据',
-            'recordStatus': 1,
-            'capacity': '10',
-            'remark': null,
-            'creatorAccount': '10000',
-            'createdTime': '2019-02-27 16:49',
-            'modifierAccount': '10000',
-            'modifiedTime': '2019-02-27 16:49',
-            'meetingList': [{
-              'id': '3bf517a3-6864-4888-afff-653edc0b45b4',
-              'workOrderNum': null,
-              'startTime': '2019-03-16 14:00:00',
-              'endTime': '2019-03-16 14:30:00',
-              'meetingRoomId': null,
-              'approvalStatus': null,
-              'recordStatus': null,
-              'creatorAccount': null,
-              'createdTime': null,
-              'modifierAccount': null,
-              'modifiedTime': null,
-              'userIdStr': null,
-              'applicant': null,
-              'applicationTime': null,
-              'signInQr': null,
-              'wechatRemind': null,
-              'messageRemind': null,
-              'pcRemind': null,
-              'appRemind': null,
-              'isRemind': null,
-              'title': '测试234',
-              'approvalRole': null,
-              'approvalUser': null,
-              'approvalOpinion': null,
-              'meetingStatus': null
-            }]
-          },
-          {
-            'id': '1fcc5ba3-f00a-461d-a4fc-1607f6dd187b',
-            'name': '党建会议室',
-            'building': '多功能厅',
-            'floor': '3层',
-            'roomNumber': '',
-            'position': '102栋2层101',
-            'explains': '测试数据',
-            'recordStatus': 1,
-            'capacity': '10',
-            'remark': null,
-            'creatorAccount': '10000',
-            'createdTime': '2019-02-28 18:23',
-            'modifierAccount': null,
-            'modifiedTime': '2019-02-28 18:24',
-            'meetingList': [{
-              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
-              'workOrderNum': null,
-              'startTime': '2019-03-16 10:00:00',
-              'endTime': '2019-03-16 11:30:00',
-              'meetingRoomId': null,
-              'approvalStatus': null,
-              'recordStatus': null,
-              'creatorAccount': null,
-              'createdTime': null,
-              'modifierAccount': null,
-              'modifiedTime': null,
-              'userIdStr': null,
-              'applicant': null,
-              'applicationTime': null,
-              'signInQr': null,
-              'wechatRemind': null,
-              'messageRemind': null,
-              'pcRemind': null,
-              'appRemind': null,
-              'isRemind': null,
-              'title': '测试',
-              'approvalRole': null,
-              'approvalUser': null,
-              'approvalOpinion': null,
-              'meetingStatus': null
-            },
-            {
-              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
-              'workOrderNum': null,
-              'startTime': '2019-03-16 15:00:00',
-              'endTime': '2019-03-16 15:30:00',
-              'meetingRoomId': null,
-              'approvalStatus': null,
-              'recordStatus': null,
-              'creatorAccount': null,
-              'createdTime': null,
-              'modifierAccount': null,
-              'modifiedTime': null,
-              'userIdStr': null,
-              'applicant': null,
-              'applicationTime': null,
-              'signInQr': null,
-              'wechatRemind': null,
-              'messageRemind': null,
-              'pcRemind': null,
-              'appRemind': null,
-              'isRemind': null,
-              'title': '测试1234',
-              'approvalRole': null,
-              'approvalUser': null,
-              'approvalOpinion': null,
-              'meetingStatus': null
-            },
-            {
-              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
-              'workOrderNum': null,
-              'startTime': '2019-03-16 15:30:00',
-              'endTime': '2019-03-16 16:30:00',
-              'meetingRoomId': null,
-              'approvalStatus': null,
-              'recordStatus': null,
-              'creatorAccount': null,
-              'createdTime': null,
-              'modifierAccount': null,
-              'modifiedTime': null,
-              'userIdStr': null,
-              'applicant': null,
-              'applicationTime': null,
-              'signInQr': null,
-              'wechatRemind': null,
-              'messageRemind': null,
-              'pcRemind': null,
-              'appRemind': null,
-              'isRemind': null,
-              'title': '测试1234',
-              'approvalRole': null,
-              'approvalUser': null,
-              'approvalOpinion': null,
-              'meetingStatus': null
-            },
-            {
-              'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
-              'workOrderNum': null,
-              'startTime': '2019-03-16 17:00:00',
-              'endTime': '2019-03-16 17:30:00',
-              'meetingRoomId': null,
-              'approvalStatus': null,
-              'recordStatus': null,
-              'creatorAccount': null,
-              'createdTime': null,
-              'modifierAccount': null,
-              'modifiedTime': null,
-              'userIdStr': null,
-              'applicant': null,
-              'applicationTime': null,
-              'signInQr': null,
-              'wechatRemind': null,
-              'messageRemind': null,
-              'pcRemind': null,
-              'appRemind': null,
-              'isRemind': null,
-              'title': '测试1234',
-              'approvalRole': null,
-              'approvalUser': null,
-              'approvalOpinion': null,
-              'meetingStatus': null
-            }]
-          }
-          ]
-        }
+      // staticData: {
+      //   data: {
+      //     'rows': [{
+      //       'id': '1f5c6df4-8ff7-46c6-bdf0-cf5ccb38ee1c',
+      //       'name': '多功能厅',
+      //       'building': '多功能厅',
+      //       'floor': '2层',
+      //       'roomNumber': '',
+      //       'position': '102栋2层101',
+      //       'explains': '测试数据',
+      //       'recordStatus': 1,
+      //       'capacity': '10',
+      //       'remark': null,
+      //       'creatorAccount': '10000',
+      //       'createdTime': '2019-02-27 16:49',
+      //       'modifierAccount': '10000',
+      //       'modifiedTime': '2019-02-27 16:49',
+      //       'meetingList': [{
+      //         'id': '3bf517a3-6864-4888-afff-653edc0b45b4',
+      //         'workOrderNum': null,
+      //         'startTime': '2019-03-16 14:00:00',
+      //         'endTime': '2019-03-16 14:30:00',
+      //         'meetingRoomId': null,
+      //         'approvalStatus': null,
+      //         'recordStatus': null,
+      //         'creatorAccount': null,
+      //         'createdTime': null,
+      //         'modifierAccount': null,
+      //         'modifiedTime': null,
+      //         'userIdStr': null,
+      //         'applicant': null,
+      //         'applicationTime': null,
+      //         'signInQr': null,
+      //         'wechatRemind': null,
+      //         'messageRemind': null,
+      //         'pcRemind': null,
+      //         'appRemind': null,
+      //         'isRemind': null,
+      //         'title': '测试234',
+      //         'approvalRole': null,
+      //         'approvalUser': null,
+      //         'approvalOpinion': null,
+      //         'meetingStatus': null
+      //       }]
+      //     },
+      //     {
+      //       'id': '1fcc5ba3-f00a-461d-a4fc-1607f6dd187b',
+      //       'name': '党建会议室',
+      //       'building': '多功能厅',
+      //       'floor': '3层',
+      //       'roomNumber': '',
+      //       'position': '102栋2层101',
+      //       'explains': '测试数据',
+      //       'recordStatus': 1,
+      //       'capacity': '10',
+      //       'remark': null,
+      //       'creatorAccount': '10000',
+      //       'createdTime': '2019-02-28 18:23',
+      //       'modifierAccount': null,
+      //       'modifiedTime': '2019-02-28 18:24',
+      //       'meetingList': [{
+      //         'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+      //         'workOrderNum': null,
+      //         'startTime': '2019-03-16 10:00:00',
+      //         'endTime': '2019-03-16 11:30:00',
+      //         'meetingRoomId': null,
+      //         'approvalStatus': null,
+      //         'recordStatus': null,
+      //         'creatorAccount': null,
+      //         'createdTime': null,
+      //         'modifierAccount': null,
+      //         'modifiedTime': null,
+      //         'userIdStr': null,
+      //         'applicant': null,
+      //         'applicationTime': null,
+      //         'signInQr': null,
+      //         'wechatRemind': null,
+      //         'messageRemind': null,
+      //         'pcRemind': null,
+      //         'appRemind': null,
+      //         'isRemind': null,
+      //         'title': '测试',
+      //         'approvalRole': null,
+      //         'approvalUser': null,
+      //         'approvalOpinion': null,
+      //         'meetingStatus': null
+      //       },
+      //       {
+      //         'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+      //         'workOrderNum': null,
+      //         'startTime': '2019-03-16 15:00:00',
+      //         'endTime': '2019-03-16 15:30:00',
+      //         'meetingRoomId': null,
+      //         'approvalStatus': null,
+      //         'recordStatus': null,
+      //         'creatorAccount': null,
+      //         'createdTime': null,
+      //         'modifierAccount': null,
+      //         'modifiedTime': null,
+      //         'userIdStr': null,
+      //         'applicant': null,
+      //         'applicationTime': null,
+      //         'signInQr': null,
+      //         'wechatRemind': null,
+      //         'messageRemind': null,
+      //         'pcRemind': null,
+      //         'appRemind': null,
+      //         'isRemind': null,
+      //         'title': '测试1234',
+      //         'approvalRole': null,
+      //         'approvalUser': null,
+      //         'approvalOpinion': null,
+      //         'meetingStatus': null
+      //       },
+      //       {
+      //         'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+      //         'workOrderNum': null,
+      //         'startTime': '2019-03-16 15:30:00',
+      //         'endTime': '2019-03-16 16:30:00',
+      //         'meetingRoomId': null,
+      //         'approvalStatus': null,
+      //         'recordStatus': null,
+      //         'creatorAccount': null,
+      //         'createdTime': null,
+      //         'modifierAccount': null,
+      //         'modifiedTime': null,
+      //         'userIdStr': null,
+      //         'applicant': null,
+      //         'applicationTime': null,
+      //         'signInQr': null,
+      //         'wechatRemind': null,
+      //         'messageRemind': null,
+      //         'pcRemind': null,
+      //         'appRemind': null,
+      //         'isRemind': null,
+      //         'title': '测试1234',
+      //         'approvalRole': null,
+      //         'approvalUser': null,
+      //         'approvalOpinion': null,
+      //         'meetingStatus': null
+      //       },
+      //       {
+      //         'id': '13338537-ac98-4c70-a9fc-8b6fb994eb68',
+      //         'workOrderNum': null,
+      //         'startTime': '2019-03-16 17:00:00',
+      //         'endTime': '2019-03-16 17:30:00',
+      //         'meetingRoomId': null,
+      //         'approvalStatus': null,
+      //         'recordStatus': null,
+      //         'creatorAccount': null,
+      //         'createdTime': null,
+      //         'modifierAccount': null,
+      //         'modifiedTime': null,
+      //         'userIdStr': null,
+      //         'applicant': null,
+      //         'applicationTime': null,
+      //         'signInQr': null,
+      //         'wechatRemind': null,
+      //         'messageRemind': null,
+      //         'pcRemind': null,
+      //         'appRemind': null,
+      //         'isRemind': null,
+      //         'title': '测试1234',
+      //         'approvalRole': null,
+      //         'approvalUser': null,
+      //         'approvalOpinion': null,
+      //         'meetingStatus': null
+      //       }]
+      //     }
+      //     ]
+      //   }
 
-      },
+      // },
       upData: ['9:00', '9:30', '10:00', '10:30', '11:00', '11:30', '12:00'],
       Isdisabled: true,
       errorTime: true,
@@ -587,8 +587,8 @@ export default {
 
     // 页面初始化
     initList() {
-      api('oa/oaMeetingRoom/orderList', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/orderList`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.staticData = res.data.data.rows
           this.total = res.data.data.total
           this.calcDataA()
@@ -632,6 +632,7 @@ export default {
         .split(':')
       // if (_end[1] === '00') {
       //   _end[0] = _end[0] - 1
+      //   _end[1] = '59'
       // } else {
       //   _end[1] = parseInt(_end[1] - 1)
       // }

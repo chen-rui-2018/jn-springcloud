@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.data.dao.TargetDao">
+    <!--指标作废-->
+    <update id="invalidTarget" parameterType="java.lang.String">
+       update tb_data_reporting_target t
+       set
+       t.record_status =0
+       where
+       t.target_id=#{targetId}
+    </update>
+
+    <insert id="insertTargt" parameterType="com.jn.enterprise.data.vo.TargetVO">
+      insert into tb_data_reporting_target t
+      (target_id, id, parent_id, order, target_name, department_id, department_name, is_muilt_row,
+      unit, target_type, record_status, creator_account, created_time, modifier_account,
+      modified_time)
+      values
+      (
+      #{targetId},
+      #{targetId},
+      #{parentId},
+      #{order},
+      #{targetName},
+      #{departmentId},
+       #{departmentName},
+       #{isMuiltTow},
+      #{unit},
+      #{targetType},
+      #{recordStatus},
+      #{creatorAccount},
+      #{createdTime},
+      #{modifierAccount},
+      #{modifiedTime}
+      #{targetComment}
+      )
+    </insert>
+
+</mapper>

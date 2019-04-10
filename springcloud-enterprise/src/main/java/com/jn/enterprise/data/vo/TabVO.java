@@ -13,43 +13,55 @@ import java.util.List;
  */
 @ApiModel(value = "TabVO",description = "tab表单")
 public class TabVO {
+
+    @ApiModelProperty(value = "tabId",example = "001")
+    private String tabId;
+
     @ApiModelProperty(value = "tab名称",example = "XXXX填报表")
-    private String tab_name;
+    private String tabName;
     @ApiModelProperty(value = "表类型（0：上月填报值；1：上年同期值；2：上月上年同期值；3增幅）" ,example = "1")
-    private String tab_clumn_target_show;
+    private String tabClumnTargetShow;
     @ApiModelProperty(value = "表填报列类型（0：累计值；1：本期值）",example = "0")
-    private String tab_clumn_type;
+    private String tabClumnType;
     @ApiModelProperty(value = "状态（0：有效；1作废）",example = "0")
     private String status ;
     @ApiModelProperty(value = "表生成模式（0:普通模板1：科技园模板）" ,example = "1")
-    private String tab_create_type;
+    private String tabCreateType;
     @ApiModelProperty(value = "tab表的显示顺序（因为可能会存在一组tabtab1tab2）",example = "23")
     private String order;
-
+    @ApiModelProperty(value = "tab指标集合",example = "23")
     private List<TargetVO> targetList;
 
-    public String getTab_name() {
-        return tab_name;
+    public String getTabId() {
+        return tabId;
     }
 
-    public void setTab_name(String tab_name) {
-        this.tab_name = tab_name;
+    public void setTabId(String tabId) {
+        this.tabId = tabId;
     }
 
-    public String getTab_clumn_target_show() {
-        return tab_clumn_target_show;
+    public String getTabName() {
+        return tabName;
     }
 
-    public void setTab_clumn_target_show(String tab_clumn_target_show) {
-        this.tab_clumn_target_show = tab_clumn_target_show;
+    public void setTabName(String tabName) {
+        this.tabName = tabName;
     }
 
-    public String getTab_clumn_type() {
-        return tab_clumn_type;
+    public String getTabClumnTargetShow() {
+        return tabClumnTargetShow;
     }
 
-    public void setTab_clumn_type(String tab_clumn_type) {
-        this.tab_clumn_type = tab_clumn_type;
+    public void setTabClumnTargetShow(String tabClumnTargetShow) {
+        this.tabClumnTargetShow = tabClumnTargetShow;
+    }
+
+    public String getTabClumnType() {
+        return tabClumnType;
+    }
+
+    public void setTabClumnType(String tabClumnType) {
+        this.tabClumnType = tabClumnType;
     }
 
     public String getStatus() {
@@ -60,12 +72,12 @@ public class TabVO {
         this.status = status;
     }
 
-    public String getTab_create_type() {
-        return tab_create_type;
+    public String getTabCreateType() {
+        return tabCreateType;
     }
 
-    public void setTab_create_type(String tab_create_type) {
-        this.tab_create_type = tab_create_type;
+    public void setTabCreateType(String tabCreateType) {
+        this.tabCreateType = tabCreateType;
     }
 
     public String getOrder() {
@@ -74,5 +86,13 @@ public class TabVO {
 
     public void setOrder(String order) {
         this.order = order;
+    }
+
+    public List<TargetVO> getTargetList() {
+        return targetList;
+    }
+
+    public void setTargetList(List<TargetVO> targetList) {
+        this.targetList = targetList;
     }
 }

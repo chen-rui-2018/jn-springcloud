@@ -58,9 +58,9 @@ public class DataUploadController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-企业数据上报-保存企业数据上报信息")
     @PostMapping(path = "/company/saveCompanyFormData")
-    @ApiOperation(value = "保存企业数据上报信息",notes = "返回成功或失败")
+    @ApiOperation(value = "保存企业数据上报信息",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/company/saveCompanyFormData")
-    public Result saveCompanyFormData(@ModelAttribute ModelDataVO data){
+    public Result<Integer> saveCompanyFormData(@ModelAttribute ModelDataVO data){
         return new Result();
     }
 
@@ -86,9 +86,9 @@ public class DataUploadController  extends BaseController {
 
 
     /**企业上报数据统计**/
-    @ControllerLog(doAction = "数据上报-企业数据上报统计-获取企业已经填报的表单的结构信息和值")
+    @ControllerLog(doAction = "数据上报-企业数据上报统计-获取企业数据上报统计表")
     @GetMapping(path = "/company/getFormView")
-    @ApiOperation(value = "获取企业已经填报的表单的结构信息和值",notes = "返回企业已经填报的表单的结构信息和值")
+    @ApiOperation(value = "获取企业数据上报统计表",notes = "获取企业数据上报统计表")
     @RequiresPermissions("/data/company/getFormView")
     public Result<PaginationData<List<CompanyDataStatisticsModel>>> getFormView(@ModelAttribute CompanyDataStatisticsParamModel param){
         //fileType=1:企业 2园区
@@ -103,6 +103,37 @@ public class DataUploadController  extends BaseController {
         //fileType=1:企业 2园区
         return new Result();
     }
+
+
+    @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表催报")
+    @GetMapping(path = "/company/setStatisticsListUrgeCompany")
+    @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
+    @RequiresPermissions("/data/company/setStatisticsListUrgeCompany")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
+
+    })
+    public Result<Integer> setStatisticsListUrgeCompany(String formTime,String modelName,String modelCycle){
+        return new Result();
+    }
+
+    @ControllerLog(doAction = "数据上报-企业数据上报统计-数据列表修改截至日期")
+    @GetMapping(path = "/company/setDeadlineCompany")
+    @ApiOperation(value = "数据列表修改截至日期",notes = "返回修改截至日期的结果，正常结果为1")
+    @RequiresPermissions("/data/company/setDeadlineCompany")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelName",value = "模板名称",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001"),
+            @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
+
+    })
+    public Result<Integer> setDeadlineCompany(String formTime,String modelName,String modelCycle){
+        return new Result();
+    }
+
 
     @ControllerLog(doAction = "数据上报-企业数据上报统计-获取企业已经填报的信息")
     @GetMapping(path = "/company/getFormedStruct")
@@ -124,7 +155,7 @@ public class DataUploadController  extends BaseController {
     @ControllerLog(doAction = "数据上报-企业数据上报统计-导出明细")
     @GetMapping(path = "/company/exportDetail")
     @ApiOperation(value = "数据上报-企业数据上报统计-导出明细",notes = "导出excel明细")
-    @RequiresPermissions("/data/company/getFormedStruct")
+    @RequiresPermissions("/data/company/exportDetail")
     @ApiImplicitParams({
             @ApiImplicitParam(name="modelId",value = "模板ID",dataType = "String",paramType = "query",example = "填报周期1：年，0：月"),
             @ApiImplicitParam(name="formTime",value = "填报账期",dataType = "String",paramType = "query",example = "填报周期为月时YYYYMM，为年时YYYY"),
@@ -153,6 +184,9 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
+
+
+
     /**园区上报数据统计**/
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区广告获取")
@@ -173,9 +207,9 @@ public class DataUploadController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-本月数据上报保存")
     @PostMapping(path = "/garden/saveTaskData")
-    @ApiOperation(value = "园区本月数据上报保存",notes = "返回成功或失败")
+    @ApiOperation(value = "园区本月数据上报保存",notes = "返回成功或失败,正常结果为1")
     @RequiresPermissions("/data/garden/saveTaskData")
-    public Result saveTaskData(@ModelAttribute ModelDataVO data){
+    public Result<Integer> saveTaskData(@ModelAttribute ModelDataVO data){
         return new Result();
     }
 
@@ -235,19 +269,20 @@ public class DataUploadController  extends BaseController {
         return new Result();
     }
 
+    /*
     @ControllerLog(doAction = "数据上报-园区数据上报统计-审核建议")
     @GetMapping(path = "/garden/saveCheck")
-    @ApiOperation(value = "审核建议",notes = "返回审核建议结果")
+    @ApiOperation(value = "审核建议",notes = "返回审核建议结果,正常结果为1")
     @RequiresPermissions("/data/garden/saveCheck")
     @ApiImplicitParams({
             @ApiImplicitParam(name="fileId",value = "工单编号",dataType = "String",paramType = "query",example = "001"),
             @ApiImplicitParam(name="gardenExamineStauts",value = "审批结果",dataType = "String",paramType = "query",example = "001"),
             @ApiImplicitParam(name="examineComment",value = "审批意见",dataType = "String",paramType = "query",example = "001")
     })
-    public Result saveCheck(String fileId,String gardenExamineStauts,String examineComment){
+    public Result<Integer> saveCheck(String fileId,String gardenExamineStauts,String examineComment){
         return new Result();
     }
-
+*/
     /**园区上报数据统计**/
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据上报列表")
@@ -268,7 +303,7 @@ public class DataUploadController  extends BaseController {
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据列表催报")
     @GetMapping(path = "/garden/setStatisticsListUrge")
-    @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果")
+    @ApiOperation(value = "园区内部数据列表催报",notes = "返回催报结果,正常结果为1")
     @RequiresPermissions("/data/garden/setStatisticsListUrge")
     @ApiImplicitParams({
             @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
@@ -276,13 +311,13 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="modelCycle",value = "填报周期",dataType = "String",paramType = "query",example = "001")
 
     })
-    public Result setStatisticsListUrge(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setStatisticsListUrge(String formTime,String modelName,String modelCycle){
         return new Result();
     }
 
     @ControllerLog(doAction = "数据上报-园区数据上报统计-园区内部数据列表修改截至日期")
     @GetMapping(path = "/garden/setDeadline")
-    @ApiOperation(value = "园区内部数据列表修改截至日期",notes = "返回修改截至日期的结果")
+    @ApiOperation(value = "园区内部数据列表修改截至日期",notes = "返回修改截至日期的结果,正常结果为1")
     @RequiresPermissions("/data/garden/setDeadline")
     @ApiImplicitParams({
             @ApiImplicitParam(name="formTime",value = "账期",dataType = "String",paramType = "query",example = "001"),
@@ -291,7 +326,7 @@ public class DataUploadController  extends BaseController {
             @ApiImplicitParam(name="fillInFormDeadline",value = "截至日期",dataType = "String",paramType = "query",example = "001")
 
     })
-    public Result setDeadline(String formTime,String modelName,String modelCycle){
+    public Result<Integer> setDeadline(String formTime,String modelName,String modelCycle){
         return new Result();
     }
 

@@ -20,13 +20,13 @@ public class ModelDataVO implements Serializable {
     @ApiModelProperty(value = "tab集合",example = "表集合")
     private List<TabVO> tabs ;
 
-    @ApiModelProperty(value = "模板ID",example = "模板id由后端生成")
+    @ApiModelProperty(value = "模板ID",example = "001")
     private String modelId;
     @ApiModelProperty(value = "模板名称",example = "企业知识产权上报模板")
     private String modelName ;
     @ApiModelProperty(value = "填报类型（0：企业，1：园管委会）",example = "0")
     private String modelType ;
-    @ApiModelProperty(value = "填报群组(企业群组)/园区填报部门",example = "群组")
+    @ApiModelProperty(value = "填报群组(企业群组)/园区填报部门",example = "A群组")
     private String modelFormTargetId ;
     @ApiModelProperty(value = "填报周期（1：年，0：月）",example = "1")
     private String modelCycle ;
@@ -34,9 +34,9 @@ public class ModelDataVO implements Serializable {
     private String warningBeforeDays ;
     @ApiModelProperty(value = "预警方式：（0:短信1:邮件2:app）多选，值以逗号隔开",example = "0，1，2")
     private String warningBy ;
-    @ApiModelProperty(value = "PC广告图",example = "广告地址，由后端写入，图片由前端传入")
+    @ApiModelProperty(value = "PC广告图",example = "yellow.png")
     private String pcAd;
-    @ApiModelProperty(value = "app广告图",example = "广告地址，由后端写入，图片由前端传入")
+    @ApiModelProperty(value = "app广告图",example = "red.png")
     private String appAd;
     @ApiModelProperty(value = "状态（0：发布1：暂停2：失效）",example = "0")
     private String recordStatus ;

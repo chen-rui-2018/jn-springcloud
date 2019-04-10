@@ -45,6 +45,17 @@ public class TargetVO implements Serializable {
     private String modifierAccount;
     @ApiModelProperty(value = "创建时间",example = "2018-12-21:01:22:61")
     private Date modifiedTime ;
+    @ApiModelProperty(value = "指标说明",example = "当前指标用于。。。。")
+    private String targetCommon ;
+
+    public String getTargetCommon() {
+        return targetCommon;
+    }
+
+    public void setTargetCommon(String targetCommon) {
+        this.targetCommon = targetCommon;
+    }
+
     @ApiModelProperty(value = "指标填写格式",example = "inputformat对象类型")
     private List<InputFormatModel> inputFormatModels;
 

@@ -20,7 +20,7 @@ public class CompanyDataStatisticsParamModel extends Page implements Serializabl
     @ApiModelProperty(value = "账期",example = "2018")
     private String formTime;
 
-    @ApiModelProperty(value = "模板名称",example = "")
+    @ApiModelProperty(value = "模板名称",example = "XXX模板")
     private String modelName;
 
     @ApiModelProperty(value = "填报周期",example = "1：年，0：月")

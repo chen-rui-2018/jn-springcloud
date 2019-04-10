@@ -200,7 +200,7 @@ export default {
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
-      console.log(`${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`)
+      // console.log(`${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`)
       this.src = `${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
     },
     handleExport() {

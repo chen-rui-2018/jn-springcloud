@@ -175,7 +175,7 @@ export default {
     },
     // 文件上传之前的函数
     beforeUpload(file) {
-      if (file.name.substr(file.name.lastIndexOf('.')) !== '.png' && file.name.substr(file.name.lastIndexOf('.')) !== '.jpg' || file.name.substr(file.name.lastIndexOf('.')) !== '.gif') {
+      if ((file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.png' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.jpg' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.gif') {
         this.$message({
           message: '文件格式错误,请选择png、jpg、gif等格式',
           type: 'error'
@@ -186,6 +186,9 @@ export default {
     // 图片上传成功时的函数
     uploadDone(res, file, fileList) {
       this.meetingroomForm.attachmentPaths.push(res.data)
+      // console.log(this.meetingroomForm.attachmentPaths)
+      // console.log(file)
+      // console.log(fileList)
     },
     imgUploadError() {
       this.$message.error('上传图片失败!')

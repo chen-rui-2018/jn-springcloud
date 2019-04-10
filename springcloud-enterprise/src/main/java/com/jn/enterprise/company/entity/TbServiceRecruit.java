@@ -1,4 +1,4 @@
-package com.jn.enterprise.recruit.entity;
+package com.jn.enterprise.company.entity;
 
 import java.io.Serializable;
 import java.util.Date;

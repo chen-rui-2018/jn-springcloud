@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.recruit.dao.ServiceRecruitMapper">
+<mapper namespace="com.jn.enterprise.company.dao.ServiceRecruitMapper">
 
     <sql id="recruitFiled">
         a.id AS "id",
@@ -27,7 +27,7 @@
     </sql>
 
     <!-- 根据ID获取招聘详情 -->
-    <select id="getRecruitDetailsById" resultType="com.jn.enterprise.recruit.vo.RecruitDetailsVO">
+    <select id="getRecruitDetailsById" resultType="com.jn.enterprise.company.vo.RecruitDetailsVO">
         SELECT
             <include refid="recruitFiled" />
         FROM tb_service_recruit a
@@ -37,7 +37,7 @@
     </select>
 
     <!-- 查询企业招聘信息列表 -->
-    <select id="getRecruitList" resultType="com.jn.enterprise.recruit.vo.RecruitVO">
+    <select id="getRecruitList" resultType="com.jn.enterprise.company.vo.RecruitVO">
         SELECT
             <include refid="recruitFiled" />
         FROM tb_service_recruit a

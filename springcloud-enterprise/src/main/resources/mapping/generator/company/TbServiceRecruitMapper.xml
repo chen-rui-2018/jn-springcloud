@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jn.enterprise.recruit.dao.TbServiceRecruitMapper">
-  <resultMap id="BaseResultMap" type="com.jn.enterprise.recruit.entity.TbServiceRecruit">
+<mapper namespace="com.jn.enterprise.company.dao.TbServiceRecruitMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.company.entity.TbServiceRecruit">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="recruit_no" jdbcType="VARCHAR" property="recruitNo" />
     <result column="com_id" jdbcType="VARCHAR" property="comId" />
@@ -80,7 +80,7 @@
     id, recruit_no, com_id, post, salary, num, type, details, status, view_count, creator_account, 
     created_time, modifier_account, modified_time, record_status
   </sql>
-  <select id="selectByExample" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -104,13 +104,13 @@
     delete from tb_service_recruit
     where id = #{id,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria">
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria">
     delete from tb_service_recruit
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
+  <insert id="insert" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     insert into tb_service_recruit (id, recruit_no, com_id, 
       post, salary, num, 
       type, details, status, 
@@ -124,7 +124,7 @@
       #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
+  <insert id="insertSelective" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     insert into tb_service_recruit
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -221,7 +221,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.jn.enterprise.company.entity.TbServiceRecruitCriteria" resultType="java.lang.Long">
     select count(*) from tb_service_recruit
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -301,7 +301,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     update tb_service_recruit
     <set>
       <if test="recruitNo != null">
@@ -349,7 +349,7 @@
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.recruit.entity.TbServiceRecruit">
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.company.entity.TbServiceRecruit">
     update tb_service_recruit
     set recruit_no = #{recruitNo,jdbcType=VARCHAR},
       com_id = #{comId,jdbcType=VARCHAR},

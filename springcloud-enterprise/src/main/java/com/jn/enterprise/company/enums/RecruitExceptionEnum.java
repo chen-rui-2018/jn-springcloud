@@ -1,4 +1,4 @@
-package com.jn.enterprise.recruit.enums;
+package com.jn.enterprise.company.enums;
 
 import com.jn.common.api.CodeAndMsg;
 

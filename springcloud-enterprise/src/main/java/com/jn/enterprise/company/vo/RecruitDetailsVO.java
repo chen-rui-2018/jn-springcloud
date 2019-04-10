@@ -1,4 +1,4 @@
-package com.jn.enterprise.recruit.vo;
+package com.jn.enterprise.company.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

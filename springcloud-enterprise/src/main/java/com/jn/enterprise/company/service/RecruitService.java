@@ -1,13 +1,13 @@
-package com.jn.enterprise.recruit.service;
+package com.jn.enterprise.company.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.enterprise.recruit.entity.TbServiceRecruit;
-import com.jn.enterprise.recruit.model.ServiceRecruitEditParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitPublishParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitUnderParam;
-import com.jn.enterprise.recruit.vo.RecruitDetailsVO;
-import com.jn.enterprise.recruit.vo.RecruitVO;
+import com.jn.enterprise.company.model.ServiceRecruitEditParam;
+import com.jn.enterprise.company.vo.RecruitDetailsVO;
+import com.jn.enterprise.company.entity.TbServiceRecruit;
+import com.jn.enterprise.company.model.ServiceRecruitParam;
+import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
+import com.jn.enterprise.company.model.ServiceRecruitUnderParam;
+import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.model.User;
 
 import java.util.List;

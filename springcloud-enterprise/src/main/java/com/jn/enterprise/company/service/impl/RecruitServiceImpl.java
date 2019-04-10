@@ -1,4 +1,4 @@
-package com.jn.enterprise.recruit.service.impl;
+package com.jn.enterprise.company.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -6,16 +6,17 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
-import com.jn.enterprise.recruit.dao.ServiceRecruitMapper;
-import com.jn.enterprise.recruit.dao.TbServiceRecruitMapper;
-import com.jn.enterprise.recruit.entity.TbServiceRecruit;
-import com.jn.enterprise.recruit.entity.TbServiceRecruitCriteria;
-import com.jn.enterprise.recruit.enums.RecruitDataTypeEnum;
-import com.jn.enterprise.recruit.enums.RecruitExceptionEnum;
+import com.jn.enterprise.company.dao.ServiceRecruitMapper;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
+import com.jn.enterprise.company.model.*;
+import com.jn.enterprise.company.vo.RecruitDetailsVO;
+import com.jn.enterprise.company.dao.TbServiceRecruitMapper;
+import com.jn.enterprise.company.entity.TbServiceRecruit;
+import com.jn.enterprise.company.entity.TbServiceRecruitCriteria;
+import com.jn.enterprise.company.enums.RecruitDataTypeEnum;
 import com.jn.enterprise.recruit.model.*;
-import com.jn.enterprise.recruit.service.RecruitService;
-import com.jn.enterprise.recruit.vo.RecruitDetailsVO;
-import com.jn.enterprise.recruit.vo.RecruitVO;
+import com.jn.enterprise.company.service.RecruitService;
+import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.User;
 import org.slf4j.Logger;
@@ -133,7 +134,7 @@ public class RecruitServiceImpl implements RecruitService {
     @Override
     @ServiceLog(doAction = "发布招聘信息")
     @Transactional(rollbackFor = Exception.class)
-    public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId,User user) {
+    public Integer publishRecruitInfo(ServiceRecruitPublishParam serviceRecruitPublishParam, String comId, User user) {
         TbServiceRecruit sr = new TbServiceRecruit();
         BeanUtils.copyProperties(serviceRecruitPublishParam,sr);
 

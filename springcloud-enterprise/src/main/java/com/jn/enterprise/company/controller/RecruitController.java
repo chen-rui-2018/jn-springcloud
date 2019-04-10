@@ -1,15 +1,15 @@
-package com.jn.enterprise.recruit.controller;
+package com.jn.enterprise.company.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.company.model.ServiceCompany;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
+import com.jn.enterprise.company.model.ServiceRecruitEditParam;
+import com.jn.enterprise.company.model.ServiceRecruitPublishParam;
+import com.jn.enterprise.company.model.ServiceRecruitUnderParam;
 import com.jn.enterprise.company.service.CompanyService;
-import com.jn.enterprise.recruit.enums.RecruitExceptionEnum;
-import com.jn.enterprise.recruit.model.ServiceRecruitEditParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitPublishParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitUnderParam;
-import com.jn.enterprise.recruit.service.RecruitService;
+import com.jn.enterprise.company.service.RecruitService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;
@@ -56,7 +56,7 @@ public class RecruitController extends BaseController {
     @RequestMapping(value = "/editRecruitInfo",method = RequestMethod.POST)
     @RequiresPermissions("/enterprise/RecruitController/editRecruitInfo")
     public Result<Integer> editRecruitInfo(@Validated @RequestBody ServiceRecruitEditParam serviceRecruitEditParam){
-        Assert.notNull(serviceRecruitEditParam.getId(),RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());
+        Assert.notNull(serviceRecruitEditParam.getId(), RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());
         User user = (User) SecurityUtils.getSubject().getPrincipal();
 
         // 只有企业管理员有权限编辑

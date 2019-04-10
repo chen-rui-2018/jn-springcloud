@@ -1,16 +1,16 @@
-package com.jn.enterprise.recruit.controller;
+package com.jn.enterprise.company.controller;
 
 import com.jn.common.controller.BaseController;
 import com.jn.common.model.PaginationData;
 import com.jn.common.model.Result;
 import com.jn.common.util.Assert;
 import com.jn.common.util.StringUtils;
+import com.jn.enterprise.company.enums.RecruitExceptionEnum;
 import com.jn.enterprise.company.service.CompanyService;
-import com.jn.enterprise.recruit.enums.RecruitExceptionEnum;
-import com.jn.enterprise.recruit.model.ServiceRecruitParam;
-import com.jn.enterprise.recruit.service.RecruitService;
-import com.jn.enterprise.recruit.vo.RecruitDetailsVO;
-import com.jn.enterprise.recruit.vo.RecruitVO;
+import com.jn.enterprise.company.vo.RecruitDetailsVO;
+import com.jn.enterprise.company.model.ServiceRecruitParam;
+import com.jn.enterprise.company.service.RecruitService;
+import com.jn.enterprise.company.vo.RecruitVO;
 import com.jn.system.log.annotation.ControllerLog;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,7 +55,7 @@ public class RecruitGuestController extends BaseController {
     @ApiOperation(value = "招聘详情", notes = "必传招聘ID")
     @RequestMapping(value = "/viewRecruitDetails",method = RequestMethod.GET)
     public Result<RecruitDetailsVO> addRecruitClick(@Validated @RequestParam @ApiParam(name="recruitId",value = "招聘ID", required = true) String recruitId){
-        Assert.notNull(recruitId,RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());
+        Assert.notNull(recruitId, RecruitExceptionEnum.RECRUIT_ID_IS_NULL.getMessage());
         return new Result(recruitService.getRecruitDetailsById(recruitId));
     }
 

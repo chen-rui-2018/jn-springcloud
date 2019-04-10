@@ -1,9 +1,8 @@
-package com.jn.enterprise.recruit.dao;
+package com.jn.enterprise.company.dao;
 
-import com.jn.enterprise.recruit.model.ServiceRecruitParam;
-import com.jn.enterprise.recruit.model.ServiceRecruitSearchParam;
-import com.jn.enterprise.recruit.vo.RecruitDetailsVO;
-import com.jn.enterprise.recruit.vo.RecruitVO;
+import com.jn.enterprise.company.model.ServiceRecruitSearchParam;
+import com.jn.enterprise.company.vo.RecruitDetailsVO;
+import com.jn.enterprise.company.vo.RecruitVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;

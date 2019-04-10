@@ -71,7 +71,6 @@ public class MeetingServiceTest {
         oaMeetingAdd.setParticipantsId(participantsId);
         oaMeetingAdd.setApplicationTime(new Date());
         //审批中
-        oaMeetingAdd.setApprovalStatus(MeetingApproveStatusEnums.APPROVAL.getCode());
         oaMeetingAdd.setCreatorAccount(user.getAccount());
         oaMeetingAdd.setCreatedTime(new Date());
         Byte cancelledStatus = Byte.parseByte(OaStatusEnums.EFFECTIVE.getCode());

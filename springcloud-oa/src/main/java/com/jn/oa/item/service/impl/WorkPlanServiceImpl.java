@@ -868,7 +868,10 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         // 设置精确到小数点后2位
         numberFormat.setMaximumFractionDigits(2);
         String progress = numberFormat.format((Double) consumeTime / (Double) totalPlanTime * 100);
-
+        double pro = Double.parseDouble(progress);
+        if (pro > 100){
+            progress = "100";
+        }
         tbOaItem.setItemProgress(progress + "%");
         tbOaItem.setTotalConsumeTime(consumeTime);
         tbOaItem.setTotalRemainTime(remainTime);
@@ -937,8 +940,8 @@ public class WorkPlanServiceImpl implements WorkPlanService {
             }
         }
 
-        String substring = titleBuffer.substring(0, titleBuffer.length() - 1);
-        if (substring.length() != 0) {
+        if (titleBuffer.length() != 0) {
+            String substring = titleBuffer.substring(0, titleBuffer.length() - 1);
             if (StringUtils.isBlank(remark)) {
                 remark = substring;
             } else {

@@ -79,7 +79,6 @@
         and t1.id = t3.work_plan_id
         and t3.responsible_user_account = t4.account
         AND t1.record_status = 1
-        AND t2.record_status = 1
         AND t3.record_status = 1
         GROUP BY t1.id
         ) t
@@ -203,7 +202,6 @@
                 AND t1.id = t3.work_plan_id
                 AND t3.responsible_user_account = t4.account
                 AND t1.record_status = 1
-                AND t2.record_status = 1
                 AND t3.record_status = 1
                 AND t1.id = #{id,jdbcType=VARCHAR}
                 GROUP BY

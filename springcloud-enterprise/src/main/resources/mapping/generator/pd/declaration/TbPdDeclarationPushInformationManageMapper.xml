@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPushInformationManageMapper">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="push_title" jdbcType="VARCHAR" property="pushTitle" />
+    <result column="push_content" jdbcType="VARCHAR" property="pushContent" />
+    <result column="receive_enterprise" jdbcType="VARCHAR" property="receiveEnterprise" />
+    <result column="receive_person" jdbcType="VARCHAR" property="receivePerson" />
+    <result column="receive_phone" jdbcType="VARCHAR" property="receivePhone" />
+    <result column="push_person" jdbcType="VARCHAR" property="pushPerson" />
+    <result column="push_time" jdbcType="TIMESTAMP" property="pushTime" />
+    <result column="push_status" jdbcType="TINYINT" property="pushStatus" />
+    <result column="push_source" jdbcType="TINYINT" property="pushSource" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, push_title, push_content, receive_enterprise, receive_person, receive_phone, 
+    push_person, push_time, push_status, push_source, record_status, creator_account, 
+    created_time, modifier_account, modified_time
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManageCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_pd_declaration_push_information_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_pd_declaration_push_information_manage
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_pd_declaration_push_information_manage
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManageCriteria">
+    delete from tb_pd_declaration_push_information_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_declaration_push_information_manage (push_title, push_content, receive_enterprise, 
+      receive_person, receive_phone, push_person, 
+      push_time, push_status, push_source, 
+      record_status, creator_account, created_time, 
+      modifier_account, modified_time)
+    values (#{pushTitle,jdbcType=VARCHAR}, #{pushContent,jdbcType=VARCHAR}, #{receiveEnterprise,jdbcType=VARCHAR}, 
+      #{receivePerson,jdbcType=VARCHAR}, #{receivePhone,jdbcType=VARCHAR}, #{pushPerson,jdbcType=VARCHAR}, 
+      #{pushTime,jdbcType=TIMESTAMP}, #{pushStatus,jdbcType=TINYINT}, #{pushSource,jdbcType=TINYINT}, 
+      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into tb_pd_declaration_push_information_manage
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pushTitle != null">
+        push_title,
+      </if>
+      <if test="pushContent != null">
+        push_content,
+      </if>
+      <if test="receiveEnterprise != null">
+        receive_enterprise,
+      </if>
+      <if test="receivePerson != null">
+        receive_person,
+      </if>
+      <if test="receivePhone != null">
+        receive_phone,
+      </if>
+      <if test="pushPerson != null">
+        push_person,
+      </if>
+      <if test="pushTime != null">
+        push_time,
+      </if>
+      <if test="pushStatus != null">
+        push_status,
+      </if>
+      <if test="pushSource != null">
+        push_source,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pushTitle != null">
+        #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushContent != null">
+        #{pushContent,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveEnterprise != null">
+        #{receiveEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePerson != null">
+        #{receivePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePhone != null">
+        #{receivePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPerson != null">
+        #{pushPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="pushTime != null">
+        #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pushStatus != null">
+        #{pushStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pushSource != null">
+        #{pushSource,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManageCriteria" resultType="java.lang.Long">
+    select count(*) from tb_pd_declaration_push_information_manage
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_pd_declaration_push_information_manage
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushTitle != null">
+        push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushContent != null">
+        push_content = #{record.pushContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveEnterprise != null">
+        receive_enterprise = #{record.receiveEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receivePerson != null">
+        receive_person = #{record.receivePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receivePhone != null">
+        receive_phone = #{record.receivePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushPerson != null">
+        push_person = #{record.pushPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pushTime != null">
+        push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.pushStatus != null">
+        push_status = #{record.pushStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.pushSource != null">
+        push_source = #{record.pushSource,jdbcType=TINYINT},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_pd_declaration_push_information_manage
+    set id = #{record.id,jdbcType=VARCHAR},
+      push_title = #{record.pushTitle,jdbcType=VARCHAR},
+      push_content = #{record.pushContent,jdbcType=VARCHAR},
+      receive_enterprise = #{record.receiveEnterprise,jdbcType=VARCHAR},
+      receive_person = #{record.receivePerson,jdbcType=VARCHAR},
+      receive_phone = #{record.receivePhone,jdbcType=VARCHAR},
+      push_person = #{record.pushPerson,jdbcType=VARCHAR},
+      push_time = #{record.pushTime,jdbcType=TIMESTAMP},
+      push_status = #{record.pushStatus,jdbcType=TINYINT},
+      push_source = #{record.pushSource,jdbcType=TINYINT},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
+    update tb_pd_declaration_push_information_manage
+    <set>
+      <if test="pushTitle != null">
+        push_title = #{pushTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="pushContent != null">
+        push_content = #{pushContent,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveEnterprise != null">
+        receive_enterprise = #{receiveEnterprise,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePerson != null">
+        receive_person = #{receivePerson,jdbcType=VARCHAR},
+      </if>
+      <if test="receivePhone != null">
+        receive_phone = #{receivePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="pushPerson != null">
+        push_person = #{pushPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="pushTime != null">
+        push_time = #{pushTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="pushStatus != null">
+        push_status = #{pushStatus,jdbcType=TINYINT},
+      </if>
+      <if test="pushSource != null">
+        push_source = #{pushSource,jdbcType=TINYINT},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPushInformationManage">
+    update tb_pd_declaration_push_information_manage
+    set push_title = #{pushTitle,jdbcType=VARCHAR},
+      push_content = #{pushContent,jdbcType=VARCHAR},
+      receive_enterprise = #{receiveEnterprise,jdbcType=VARCHAR},
+      receive_person = #{receivePerson,jdbcType=VARCHAR},
+      receive_phone = #{receivePhone,jdbcType=VARCHAR},
+      push_person = #{pushPerson,jdbcType=VARCHAR},
+      push_time = #{pushTime,jdbcType=TIMESTAMP},
+      push_status = #{pushStatus,jdbcType=TINYINT},
+      push_source = #{pushSource,jdbcType=TINYINT},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

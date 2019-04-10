@@ -14,10 +14,10 @@
         <div class="avaMenu" v-if="menuFlag">
           <el-card class="box-card bxcard">
             <ul class="avaUL">
-              <li style="border-bottom:1px solid #eee;">您好，{{userData.account}}</li>
+              <li style="border-bottom:1px solid #eee;">您好,{{userData.account}}</li>
               <!-- <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataLeft" :key="k" @click="dianji(i)">{{i.name}}</li> -->
               <li :class="{'liActi':$route.name == i.pathName}" v-for="(i,k) in dataTop" :key="k" @click="dianji(i)">{{i.name}}</li>
-              <li style="border-top:1px solid #eee;" @click="loginOut">退出</li>
+              <li style="border-top:1px solid #eee;" @click.stop="loginOut">退出</li>
             </ul>
           </el-card>
         </div>
@@ -53,8 +53,8 @@
       <div class="honcontent w">
         <div class="bread">
           <span style="color:#666">用户中心</span>
-          <span>/</span>
-          <span style="color:#009f41" v-for="(i,k) in dataLeft" :key='k' v-if="$route.name == i.pathName">{{i.name}}</span>
+          /
+          <span style="color:#009f41">{{titleName}}</span>
           <!-- <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: i.path }" v-for="(i,k) in dataLeft" :key='k'>{{i.name}}</el-breadcrumb-item>
             <el-breadcrumb-item></el-breadcrumb-item>
@@ -83,7 +83,7 @@
             </el-aside>
             <user-home v-if="showNum == 0" :userData='userData'></user-home>
             <el-container v-if="iframeShow" style="background:#fff;">
-              <iframe id="live" :src="iframePath" width="100%" height="100%" frameborder="0"></iframe>
+              <iframe id="live" :src="iframePath" onload="this.height=this.contentWindow.document.body.scrollHeight" width="100%" frameborder="0"></iframe>
               <!-- <iframe id="live" :src="iframePath" width="100%" height="100%" scrolling="no" frameborder="0" onload="setIframeHeight(this)"></iframe> -->
             </el-container>
             <!-- <router-view :userData='userData' /> -->
@@ -105,7 +105,10 @@ export default {
       menuFlag: false,
       zhedieFlag:false,
       imgUrl: "",
-      userData: {},
+      titleName:'用户资料',
+      userData: {
+        avatar:''
+      },
       showNum:0,
       iframeShow:false,
       iframePath:'',
@@ -138,33 +141,18 @@ export default {
           id: 1,
           childrenShow:false,
           children: [
+
             {
-              name: "待办事务处理",
+              name: "流程系统",
               flag: false,
-              // path: "http://112.94.22.222:2381/platform/office/bpmReceivedProcess/pending.htm",
-              path: "https://www.baidu.com/",
-              id: 10,
-            },
-            {
-              name: "发起人才申报",
-              flag: false,
-              path: "http://112.94.22.222:2381/platform/bpmn/instance/bpmInst/toStart.htm?defId=559018228462911488&proInstId=",
+              path: "http://112.94.22.222:2381",
               id: 11,
-            },
-            {
-              name: "我发起的流程",
-              flag: false,
-              path: "112.94.22.222:2381/platform/office/bpmInitiatedProcess/myRequest.htm",
-              id: 12,
             }
           ]
         }
       ]
     };
   },
-  mounted() {
-    // 预先登录模式
-    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
   directives: {
     focus: {
       // 指令的定义
@@ -179,13 +167,34 @@ export default {
     });
   },
   mounted() {
+    // 预先登录模式
+    $('#kskfpt').attr('src', `http://112.94.22.222:2381/noPasswordLogin.htm?username=${this.$route.query.account}&password=123`)
     this.getUserExtension();
+  },
+  updated(){
+    try {
+        var iframe = document.getElementById('live')
+        iframe.onload = function () {
+        }
+      iframe.onreadystatechange = function() {
+        if (iframe.readyState == "complete") {
+          // alert("Local iframe is now loaded.")
+        }
+      }
+    }catch (e) {
+    }
   },
   methods: {
     ifs(i){
       this.iframeShow = true;
+      this.titleName = i.name;
       this.showNum = i.id;
-      this.iframePath = i.path;
+      if(i.id ===11){
+        window.open(i.path, '_blank');
+        //window.open (i.path, 'newwindow', 'height=600, width=1000, top=50, left=250, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+      }else {
+        this.iframePath = i.path;
+      }
     },
     handleSearch() {},
     loginOut() {
@@ -207,6 +216,7 @@ export default {
         return
       }
       this.iframeShow = false;
+      this.titleName = i.name;
       this.showNum = i.id
       // this.$router.push(`${i.path}?account=${this.$route.query.account}`);
     },
@@ -220,7 +230,9 @@ export default {
         data: {},
         callback: function(res) {
           if (res.code == "0000") {
-            _this.userData = res.data;
+            if(res.data!=null){
+              _this.userData = res.data;
+            }
           } else {
             _this.$message.error(res.result);
           }

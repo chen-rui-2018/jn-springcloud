@@ -46,10 +46,10 @@ public class FinanceIncomeController extends BaseController {
             @ApiImplicitParam(name = "startTime",value = "开始时间YYYYMM",dataType = "String",paramType = "query",example = "201901"),
             @ApiImplicitParam(name = "endTime",value = "结束时间YYYYMM",dataType = "String",paramType = "query",example = "201912")
     })
-    public Result<FinanceIncomePeriodVo> periodContrast(String startTime,String endTime){
+    public Result<FianceDynamicTableVo<List<FinanceIncomePeriodVo>>> periodContrast(String startTime,String endTime){
         //todo
         this.checkIsSomeYear(startTime,endTime);
-        List<FinanceIncomePeriodVo> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
+        FianceDynamicTableVo<List<FinanceIncomePeriodVo>> periodContrast=financeIncomeService.periodContrast(startTime,endTime);
         return new Result(periodContrast);
     }
 
@@ -98,9 +98,9 @@ public class FinanceIncomeController extends BaseController {
                 "去年4月收入,今年4月收入,去年5月收入,今年5月收入,去年6月收入,今年6月收入,去年7月收入,今年7月收入,去年8月收入," +
                 "今年8月收入,去年9月收入,今年9月收入,去年10月收入,今年10月收入,去年11月收入,今年11月收入,去年12月收入,今年12月收入";
 
-        String exportColName = "incomeTypeName,income1,lastYearIncome1,income2,lastYearIncome2,income3,lastYearIncome3," +
-                "income4,lastYearIncome4,income5,lastYearIncome5,income6,lastYearIncome5,income7,lastYearIncome7,income8,lastYearIncome7," +
-                "income9,lastYearIncome9,income10,lastYearIncome10,income11,lastYearIncome11,income12,lastYearIncome12,";
+        String exportColName = "incomeTypeName,lastYearIncome1,income1,lastYearIncome2,income2,lastYearIncome3,income3," +
+                "lastYearIncome4,income4,lastYearIncome5,income5,lastYearIncome5,income6,lastYearIncome7,income7,lastYearIncome7,income8," +
+                "lastYearIncome9,income9,lastYearIncome10,income10,lastYearIncome11,income11,lastYearIncome12,income12,";
 
         String fileName = year+"年-往年对比数据";
         String sheetName = year+"年-往年对比数据";

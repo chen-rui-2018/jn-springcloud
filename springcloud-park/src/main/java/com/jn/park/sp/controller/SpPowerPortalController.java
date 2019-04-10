@@ -44,10 +44,9 @@ public class SpPowerPortalController extends BaseController {
     @GetMapping(value = "/departList")
     @RequiresPermissions("/portal/sp/power/departList")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "name",value = "部门名称",example = "1")
+            @ApiImplicitParam(name = "name",value = "部门名称",example = "秦淮区")
     })
     public Result<List<SpDictDepartModel>> departList(String name){
-        Assert.notNull(name,"部门名称不能为空");
         List<SpDictDepartModel> spDictDepartModelList = spPowerPortalService.departList(name);
         return new Result<List<SpDictDepartModel>>(spDictDepartModelList);
     }

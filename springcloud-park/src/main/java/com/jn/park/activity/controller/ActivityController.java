@@ -10,7 +10,7 @@ import com.jn.common.util.excel.ExcelUtil;
 import com.jn.park.activity.service.ActivityApplyService;
 import com.jn.park.activity.service.ActivityService;
 import com.jn.park.enums.ActivityExceptionEnum;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.model.User;
 import io.swagger.annotations.Api;

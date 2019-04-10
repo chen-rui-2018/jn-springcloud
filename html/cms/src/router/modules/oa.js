@@ -109,6 +109,30 @@ const oaRouter = {
       component: () => import('@/views/oa/addressBook/addressBook'),
       name: 'addressBook',
       meta: { title: '通讯录管理', noCache: true }
+    },
+    {
+      path: 'email',
+      component: () => import('@/views/oa/email'),
+      name: 'email',
+      meta: { title: '一键Email', noCache: true }
+    },
+    {
+      path: 'addemail',
+      component: () => import('@/views/oa/addemail'),
+      name: 'addemail',
+      meta: { title: '一键Email新增', noCache: false }
+    },
+    {
+      path: 'editemail',
+      component: () => import('@/views/oa/addemail'),
+      name: 'editemail',
+      meta: { title: '一键Email编辑', noCache: false }
+    },
+    {
+      path: 'lookemail',
+      component: () => import('@/views/oa/addemail'),
+      name: 'lookemail',
+      meta: { title: '一键Email详情', noCache: false }
     }
 
   ]

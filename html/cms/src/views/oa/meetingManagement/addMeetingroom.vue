@@ -45,7 +45,8 @@
             :on-remove="handleRemove"
             :on-error="imgUploadError"
             :file-list="fileList"
-            :action="process.env.BASE_API+'springcloud-app-fastdfs/upload/fastUpload'"
+            :before-upload="beforeUpload"
+            :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
             list-type="picture-card">
             <div v-if="showImg" class="showImg"><img v-for="(item,index) in fileList" :key="index" :src="item" alt="会议室图片"></div>
 
@@ -72,7 +73,7 @@
 import store from '@/store'
 import {
   api, paramApi
-} from '@/api/oa/meetingManagement'
+} from '@/api/axios'
 export default {
   data() {
     var checkmeetingroomName = (rule, value, callback) => {
@@ -81,8 +82,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.title === '新增会议室') {
-          paramApi('oa/oaMeetingRoom/checkName', this.meetingroomForm.name, 'meetingRoomName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/checkName`, this.meetingroomForm.name, 'meetingRoomName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -104,6 +105,7 @@ export default {
       }
     }
     return {
+      baseUrl: process.env.BASE_API,
       showImg: false,
       fileList: [],
       lookMeetingroom: false,
@@ -171,9 +173,22 @@ export default {
       }
       this.initList()
     },
+    // 文件上传之前的函数
+    beforeUpload(file) {
+      if ((file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.png' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.jpg' && (file.name.substr(file.name.lastIndexOf('.')).toLowerCase()) !== '.gif') {
+        this.$message({
+          message: '文件格式错误,请选择png、jpg、gif等格式',
+          type: 'error'
+        })
+        return false
+      }
+    },
     // 图片上传成功时的函数
     uploadDone(res, file, fileList) {
       this.meetingroomForm.attachmentPaths.push(res.data)
+      // console.log(this.meetingroomForm.attachmentPaths)
+      // console.log(file)
+      // console.log(fileList)
     },
     imgUploadError() {
       this.$message.error('上传图片失败!')
@@ -184,8 +199,8 @@ export default {
       this.$refs['meetingroomForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('oa/oaMeetingRoom/add', this.meetingroomForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/add`, this.meetingroomForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -209,12 +224,12 @@ export default {
     goBack(view) {
       this.$store.dispatch('delView', view).then(({ visitedViews }) => {
         if (this.isActive(view)) {
-          const latestView = visitedViews.slice(-1)[0]
-          if (latestView) {
-            this.$router.push('meetingroomManagement')
-          } else {
-            this.$router.push('/')
-          }
+          // const latestView = visitedViews.slice(-1)[0]
+          // if (latestView) {
+          this.$router.push('meetingroomManagement')
+          // } else {
+          //   this.$router.push('/')
+          // }
         }
       })
     },
@@ -224,8 +239,8 @@ export default {
       this.$refs['meetingroomForm'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('oa/oaMeetingRoom/update', this.meetingroomForm).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/update`, this.meetingroomForm, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -289,8 +304,8 @@ export default {
       this.title = query.title
       if (query.id) {
         this.meetingroomForm.id = query.id
-        paramApi('oa/oaMeetingRoom/selectById', query.id, 'id').then(res => {
-          if (res.data.code === '0000') {
+        paramApi(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/selectById`, query.id, 'id').then(res => {
+          if (res.data.code === this.GLOBAL.code) {
             var data = res.data.data
             this.meetingroomForm.name = data.name
             this.meetingroomForm.building = data.building

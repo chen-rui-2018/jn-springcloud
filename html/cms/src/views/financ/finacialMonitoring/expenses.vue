@@ -146,7 +146,6 @@ import {
 export default {
   data() {
     return {
-      key: '1',
       disabled: false,
       multipleSelection: [],
       selectIndex: '',
@@ -255,7 +254,7 @@ export default {
           return
         }
       }
-      api(`${this.GLOBAL.financUrl}finance/expenses/saveMarkData`, this.newArr, 'post').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/saveMarkData`, this.newArr, 'post').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.$message({
             message: '导入成功',
@@ -296,7 +295,7 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.markOptions = res.data.data
         } else {
@@ -327,7 +326,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      Inventor(`${this.GLOBAL.financUrl}finance/expenses/importData`, formData, 'post')
+      Inventor(`${this.GLOBAL.parkUrl}finance/expenses/importData`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.dialogVisible = false
@@ -368,9 +367,9 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findAll`)
+        this.getTableData(`${this.GLOBAL.parkUrl}finance/expenses/findAll`)
       } else {
-        this.getTableData(`${this.GLOBAL.financUrl}finance/expenses/findHistoryAll`)
+        this.getTableData(`${this.GLOBAL.parkUrl}finance/expenses/findHistoryAll`)
       }
     },
     // 获取表格数据
@@ -416,7 +415,7 @@ export default {
     },
     // 获取部门信息
     getDepartment() {
-      api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.departmentOptions = res.data.data
         } else {

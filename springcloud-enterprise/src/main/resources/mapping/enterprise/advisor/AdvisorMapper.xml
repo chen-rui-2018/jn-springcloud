@@ -78,7 +78,8 @@
    </select>
 
     <!--2.根据查询条件获取服务评价信息-->
-    <select id="getServcieRatingInfo" resultType="com.jn.enterprise.servicemarket.comment.model.ServiceRating">
+    <select id="getServiceRatingInfo" parameterType="com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam"
+            resultType="com.jn.enterprise.servicemarket.comment.model.ServiceRating">
         SELECT
 		tt.orgId
 		,tt.orgName
@@ -88,7 +89,7 @@
 		,tt.productName
 		,tt.pictureUrl
 		,tt.evaluationAccount
-		,tt.createdTime
+		,tt.evaluationTime
 		,tt.evaluationDesc
 		,tt.evaluationScore
 	    FROM
@@ -102,23 +103,30 @@
                 ,sr.`product_name` AS "productName"				            <!-- 服务产品名称-->
                 ,sp.`picture_url` AS "pictureUrl"				            <!-- 服务产品图片-->
                 ,sr.`evaluator_account` AS "evaluationAccount"			    <!-- 评价人账号-->
-                ,sr.`created_time` AS "createdTime"				            <!-- 评价时间-->
+                ,date_format(sr.`created_time`,'%Y-%m-%d %H:%i:%s') AS "evaluationTime"<!-- 评价时间-->
                 ,sr.`evaluation_desc` AS "evaluationDesc"			        <!-- 评价描述-->
                 ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"	<!-- 评价分数-->
             FROM tb_service_advisor  sa
-            LEFT JOIN tb_service_rating sr
+            RIGHT JOIN tb_service_rating sr
             ON sa.`advisor_account` = sr.`advisor_account`
-            LEFT JOIN tb_service_product sp
-            ON sr.`product_id`=sp.`product_id`
-            where 1=1
             and sa.approval_status='2'            <!--审批通过-->
             and sa.record_status='1'              <!--数据状态为正常数据-->
+            LEFT JOIN tb_service_product sp
+            ON sr.`product_id`=sp.`product_id`
             GROUP BY sa.`org_id`,sa.`org_name`,sa.`advisor_account`,sa.`advisor_name`,
                  sr.product_id,sr.`product_name`, sp.`picture_url`,sr.`evaluator_account`,
                  sr.`created_time`,sr.`evaluation_desc`
           )tt
         WHERE 1=1
-        AND tt.advisorAccount=#{advisorAccount}
+        <if test="orgId !=null and orgId !=''"> <!--查询机构评价-->
+            AND tt.orgId=#{orgId}
+        </if>
+        <if test="productId !=null and productId !=''"><!--查询机构评价-->
+            AND tt.productId=#{productId}
+        </if>
+        <if test="advisorAccount !=null and advisorAccount !=''">
+            AND tt.advisorAccount=#{advisorAccount}
+        </if>
         <if test="ratingType=='praise'">    <!--好评  5星-->
             and tt.evaluationScore=5
         </if>
@@ -130,7 +138,7 @@
             and tt.evaluationScore&gt;=1
             and tt.evaluationScore&lt;3
         </if>
-        ORDER BY  tt.advisorAccount, tt.evaluationScore DESC
+        ORDER BY tt.evaluationTime desc, tt.advisorAccount, tt.evaluationScore DESC
 
     </select>
 

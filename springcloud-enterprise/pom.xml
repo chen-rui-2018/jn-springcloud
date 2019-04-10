@@ -64,7 +64,7 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        pd-enterprise,pd-talent,pd-personnel,pd-declaration,pd-support
+                        data
                     </contexts>
                     <tableNames>
                     </tableNames>

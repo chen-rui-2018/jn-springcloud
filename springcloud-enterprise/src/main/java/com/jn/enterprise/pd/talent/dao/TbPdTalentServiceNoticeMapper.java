@@ -16,21 +16,15 @@ public interface TbPdTalentServiceNoticeMapper {
 
     int insertSelective(TbPdTalentServiceNotice record);
 
-    List<TbPdTalentServiceNotice> selectByExampleWithBLOBs(TbPdTalentServiceNoticeCriteria example);
-
     List<TbPdTalentServiceNotice> selectByExample(TbPdTalentServiceNoticeCriteria example);
 
     TbPdTalentServiceNotice selectByPrimaryKey(String id);
 
     int updateByExampleSelective(@Param("record") TbPdTalentServiceNotice record, @Param("example") TbPdTalentServiceNoticeCriteria example);
 
-    int updateByExampleWithBLOBs(@Param("record") TbPdTalentServiceNotice record, @Param("example") TbPdTalentServiceNoticeCriteria example);
-
     int updateByExample(@Param("record") TbPdTalentServiceNotice record, @Param("example") TbPdTalentServiceNoticeCriteria example);
 
     int updateByPrimaryKeySelective(TbPdTalentServiceNotice record);
-
-    int updateByPrimaryKeyWithBLOBs(TbPdTalentServiceNotice record);
 
     int updateByPrimaryKey(TbPdTalentServiceNotice record);
 }

@@ -551,7 +551,6 @@
 
         <!-- 高企申报自评表-->
         <table tableName="tb_pd_enterprise_self_evalua">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>
 
@@ -607,15 +606,12 @@
 
         <!-- 人才服务-公告管理-->
         <table tableName="tb_pd_talent_service_notice">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才服务所属类型表-->
         <table tableName="tb_pd_talent_service_range">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 公告管理-公告附件-->
         <table tableName="tb_pd_talent_notice_attachment">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>
 
@@ -671,47 +667,36 @@
 
         <!--人才项目库 -->
         <table tableName="tb_pd_personnel_project_bank">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-产业领域表-->
         <table tableName="tb_pd_personnel_industrial_field">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-营业执照表-->
         <table tableName="tb_pd_personnel_business_license">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-资质荣誉表-->
         <table tableName="tb_pd_personnel_qualifications_honours">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-企业经营数据分析表-->
         <table tableName="tb_pd_personnel_enterprise_management">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-企业资质产权数表-->
         <table tableName="tb_pd_personnel_enterprise_qualification">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--预约辅导表 -->
         <table tableName="tb_pd_personnel_appointment_counsel">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-通知明细表 -->
         <table tableName="tb_pd_personnel_notification_details">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-完善申报资料表-->
         <table tableName="tb_pd_personnel_declared_info">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-人才申报文件表 -->
         <table tableName="tb_pd_personnel_file">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-人才标签配置表 -->
         <table tableName="tb_pd_personnel_talent_label">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>
@@ -768,31 +753,24 @@
 
         <!--项目申报-申报中心-申报公告管理 -->
         <table tableName="tb_pd_declaration_notice_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-申报公告-所属类型表-->
         <table tableName="tb_pd_declaration_notice_range">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-公告管理-公告附件-->
         <table tableName="tb_pd_declaration_notice_attachment">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--申报平台管理 -->
         <table tableName="tb_pd_declaration_platform_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 平台管理-所属平台表-->
         <table tableName="tb_pd_declaration_platform_subordinate">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-推送信息管理-->
         <table tableName="tb_pd_declaration_push_information_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--项目申报-申报中心-预约申报管理 -->
         <table tableName="tb_pd_declaration_online_reservation_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>
@@ -849,11 +827,9 @@
 
         <!--扶持资金审核表 -->
         <table tableName="tb_pd_support_fund_examine">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--扶持资金信息管理表 -->
         <table tableName="tb_pd_support_fund_info_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>

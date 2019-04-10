@@ -22,9 +22,6 @@ public class TbPdDeclarationPlatformManage implements Serializable {
     /*@ApiModelProperty("系统支持")*/
     private String systemSupport;
 
-    /*@ApiModelProperty("所属平台ID")*/
-    private String subordinatePlatformId;
-
     /*@ApiModelProperty("所属平台名称")*/
     private String subordinatePlatformName;
 
@@ -94,14 +91,6 @@ public class TbPdDeclarationPlatformManage implements Serializable {
 
     public void setSystemSupport(String systemSupport) {
         this.systemSupport = systemSupport == null ? null : systemSupport.trim();
-    }
-
-    public String getSubordinatePlatformId() {
-        return subordinatePlatformId;
-    }
-
-    public void setSubordinatePlatformId(String subordinatePlatformId) {
-        this.subordinatePlatformId = subordinatePlatformId == null ? null : subordinatePlatformId.trim();
     }
 
     public String getSubordinatePlatformName() {
@@ -178,7 +167,6 @@ public class TbPdDeclarationPlatformManage implements Serializable {
             && (this.getRemark() == null ? other.getRemark() == null : this.getRemark().equals(other.getRemark()))
             && (this.getBusinessConsult() == null ? other.getBusinessConsult() == null : this.getBusinessConsult().equals(other.getBusinessConsult()))
             && (this.getSystemSupport() == null ? other.getSystemSupport() == null : this.getSystemSupport().equals(other.getSystemSupport()))
-            && (this.getSubordinatePlatformId() == null ? other.getSubordinatePlatformId() == null : this.getSubordinatePlatformId().equals(other.getSubordinatePlatformId()))
             && (this.getSubordinatePlatformName() == null ? other.getSubordinatePlatformName() == null : this.getSubordinatePlatformName().equals(other.getSubordinatePlatformName()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
@@ -198,7 +186,6 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         result = prime * result + ((getRemark() == null) ? 0 : getRemark().hashCode());
         result = prime * result + ((getBusinessConsult() == null) ? 0 : getBusinessConsult().hashCode());
         result = prime * result + ((getSystemSupport() == null) ? 0 : getSystemSupport().hashCode());
-        result = prime * result + ((getSubordinatePlatformId() == null) ? 0 : getSubordinatePlatformId().hashCode());
         result = prime * result + ((getSubordinatePlatformName() == null) ? 0 : getSubordinatePlatformName().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -221,7 +208,6 @@ public class TbPdDeclarationPlatformManage implements Serializable {
         sb.append(", remark=").append(remark);
         sb.append(", businessConsult=").append(businessConsult);
         sb.append(", systemSupport=").append(systemSupport);
-        sb.append(", subordinatePlatformId=").append(subordinatePlatformId);
         sb.append(", subordinatePlatformName=").append(subordinatePlatformName);
         sb.append(", status=").append(status);
         sb.append(", recordStatus=").append(recordStatus);

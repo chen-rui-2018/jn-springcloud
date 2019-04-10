@@ -28,7 +28,7 @@ public class AdvisorManagementShow implements Serializable {
     private String education;
     @ApiModelProperty(value = "入驻日期")
     private Date createdTime;
-    @ApiModelProperty(value = "邀请状态")
+    @ApiModelProperty(value = "邀请状态(- 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除)")
     private String approvalStatus;
 
     public String getAdvisorName() {

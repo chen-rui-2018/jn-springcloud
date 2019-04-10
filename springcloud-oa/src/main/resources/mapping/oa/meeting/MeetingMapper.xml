@@ -30,6 +30,7 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="meetingRoomName" jdbcType="VARCHAR" property="meetingRoomName" />
         <result column="meetingStatusMessage" jdbcType="VARCHAR" property="meetingStatusMessage" />
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
 
 
 
@@ -85,6 +86,7 @@
         <result column="meeting_title" jdbcType="VARCHAR" property="title" />
         <result column="meeting_meeting_status" jdbcType="VARCHAR" property="meetingStatus" />
         <result column="meeting_organizational_user" jdbcType="VARCHAR" property="organizationalUser" />
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
     </resultMap>
 
 
@@ -114,6 +116,10 @@
         <result column="content" jdbcType="VARCHAR" property="content" />
         <result column="organizationalUserName" jdbcType="VARCHAR" property="organizationalUserName" />
         <result column="organizationalDepartmentName" jdbcType="VARCHAR" property="organizationalDepartmentName" />
+        <result column="organizationalId" jdbcType="VARCHAR" property="organizationalId" />
+        <result column="organizationalUserId" jdbcType="VARCHAR" property="organizationalUserId" />
+
+        <result column="file_url" jdbcType="VARCHAR" property="fileUrl" />
 
         <collection property="tbOaMeetingRoom" ofType="com.jn.oa.meeting.entity.TbOaMeetingRoom">
             <id column="meetingroom_id" jdbcType="VARCHAR" property="id" />
@@ -145,7 +151,7 @@
     meeting.wechat_remind as meeting_wechat_remind, meeting.message_remind as meeting_message_remind,
     meeting.pc_remind as meeting_pc_remind, meeting.app_remind as meeting_app_remind,
     meeting.is_remind as meeting_is_remind, meeting.title as meeting_title,
-    meeting.meeting_status as meeting_meeting_status,meeting.organizational_user as meeting_organizational_user
+    meeting.meeting_status as meeting_meeting_status,meeting.organizational_user as meeting_organizational_user,meeting.file_url
   </sql>
     <sql id="Base_Column_List">
     	meeting.id AS meeting_id,
@@ -187,6 +193,7 @@
      WHEN 2 THEN '已完成'
       WHEN 3 THEN '已取消'
        END)meetingStatusMessage
+       ,meeting.file_url
   </sql>
     <update id="deleteBranchByIds" parameterType="java.util.Map">
         update tb_oa_meeting
@@ -365,6 +372,8 @@
                 meeting.meeting_status AS meeting_meeting_status,
                 o.NAME AS organizationalUserName,
                 o.department_name AS organizationalDepartmentName,
+                o.departmentId as organizationalId,
+                o.id as organizationalUserId,
                 u.`NAME` as userName,
                 meetingroom.meetingroom_id,
                 meetingroom.NAME AS meetingroom_name,
@@ -372,7 +381,7 @@
                 meetingroom.floor AS meetingroom_floor,
                 meetingroom.room_number AS meetingroom_room_number,
                 meetingroom.position AS meetingroom_position,
-                tc.content AS content
+                tc.content AS content,meeting.file_url
             FROM
                 tb_oa_meeting meeting
                 LEFT JOIN ( SELECT c.meeting_id, c.content FROM tb_oa_meeting_content c WHERE c.record_status != 0 ) tc ON tc.meeting_id = meeting.id
@@ -395,13 +404,15 @@
                 t.id,
                 t.NAME,
                 t.account,
-                tt.department_name
+                tt.department_name,
+                tt.id as departmentId
             FROM
                 tb_sys_user t
                 LEFT JOIN (
             SELECT
                 t1.user_id,
-                t2.department_name
+                t2.department_name,
+                t2.id
             FROM
                 tb_sys_user_department_post t1
                 INNER JOIN tb_sys_department t2 ON t1.department_id = t2.id
@@ -435,7 +446,6 @@
         meetingparticipants.id AS id,
         meetingparticipants.meeting_id AS meetingId,
         meetingparticipants.meeting_user_id AS meetingUserId,
-        meetingparticipants.attendance_status AS attendanceStatus,
 				u.name as userName,
 				u.account
         FROM

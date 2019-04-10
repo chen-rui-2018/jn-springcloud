@@ -3,9 +3,10 @@
 <mapper namespace="com.jn.enterprise.technologyfinancial.financial.product.dao.FinancialProductMapper">
     <!--金融产品列表查询-->
     <select id="getFinancialProductList" resultType="com.jn.enterprise.technologyfinancial.financial.product.model.FinancialProductListInfo">
-        SELECT 
+        SELECT
             sp.`product_id` AS "productId"				        <!--产品id-->
             ,sp.`product_name` AS "productName"			        <!--产品名称-->
+            ,sp.picture_url as "pictureUrl"                     <!--产品图片-->
             ,sp.`org_id` AS "orgId"					            <!--机构id-->
             ,sp.`org_name` AS "orgName"				            <!--机构名称-->
             ,sp.`ref_rate_min` AS "refRateMin"			        <!--参考利率最小值-->

@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "InvestorManagementListParam", description = "科技金融管理投资人管理列表查询入参")
 public class InvestorManagementListParam extends Page implements Serializable {
-    @ApiModelProperty(value = "状态(0：无效   1：有效)",example = "1")
+    @ApiModelProperty(value = "状态(0：无效   1：有效，不传则返回全部)",example = "1")
     @Pattern(regexp="^[01]$",message="{status:'状态值只允许为0,1'}")
     private String status;
     @ApiModelProperty(value = "姓名",example = "王松")

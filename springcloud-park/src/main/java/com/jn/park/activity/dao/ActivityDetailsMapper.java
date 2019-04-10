@@ -1,9 +1,9 @@
 package com.jn.park.activity.dao;
 
 
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityDetail;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityDetail;
+import com.jn.park.activity.model.Comment;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -37,8 +37,7 @@ public interface ActivityDetailsMapper {
     /**
      * 获取活动报名信息
      * @param id 活动id
-     * @param account  账号
      * @return
      */
-    List<ActivityApply>getActivityApplyInfo(@Param("activityId") String id, @Param("account") String account);
+    List<ActivityApply>getActivityApplyInfo(@Param("activityId") String id);
 }

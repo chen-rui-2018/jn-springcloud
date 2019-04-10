@@ -17,7 +17,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "ServiceEvaluationParam",description = "服务评价信息查询入参")
 public class ServiceEvaluationParam extends Page implements Serializable {
-    @ApiModelProperty(value = "服务顾问账号",example = "wangsong")
+    @ApiModelProperty(value = "服务顾问账号",required = true,example = "wangsong")
     @NotBlank(message = "服务顾问账号不能为空！")
     private String advisorAccount;
     @ApiModelProperty(value = "评价类型:praise:好评  average:中评  badReview:差评",example = "praise")

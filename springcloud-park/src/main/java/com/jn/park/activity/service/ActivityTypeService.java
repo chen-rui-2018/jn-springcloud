@@ -3,10 +3,10 @@ package com.jn.park.activity.service;
 
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.ActivityType;
-import com.jn.park.model.ActivityTypeAdd;
-import com.jn.park.model.ActivityTypeParam;
-import com.jn.park.model.ActivityTypeUpdate;
+import com.jn.park.activity.model.ActivityType;
+import com.jn.park.activity.model.ActivityTypeAdd;
+import com.jn.park.activity.model.ActivityTypeParam;
+import com.jn.park.activity.model.ActivityTypeUpdate;
 import com.jn.system.model.User;
 
 import java.util.List;

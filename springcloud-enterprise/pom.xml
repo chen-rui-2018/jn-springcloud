@@ -64,9 +64,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        data
+                        require
                     </contexts>
                     <tableNames>
+                        tb_service_require
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

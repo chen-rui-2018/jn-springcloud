@@ -61,7 +61,7 @@ public class AdvisorController extends BaseController {
     }
 
     @ControllerLog(doAction = "服务评价")
-    @ApiOperation(value = "服务评价",notes="根据顾问账号和评价类型获取顾问的评价")
+    @ApiOperation(value = "服务评价",notes="根据机构id/产品id/顾问账号和评价类型获取机构/产品/顾问的评价")
     @RequestMapping(value = "/getServiceRatingInfo",method = RequestMethod.GET)
     public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);

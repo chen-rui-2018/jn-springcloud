@@ -22,19 +22,25 @@ public interface OrgColleagueService {
     /**
      * 设置为联系人
      * @param account 设置为联系人的账号
+     * @return
      */
     int setAsContact(String account);
 
     /**
+     *
+     */
+    /**
      * 取消联系人
      * @param account 取消联系人的账号
+     * @return
      */
     int cancelAsContact(String account);
 
     /**
      * 删除联系人或顾问
      * @param loginAccount 登录用户账号
-     * @param account 删除联系人或顾问的账号
+     * @param accountList 删除联系人或顾问的账号
+     * @return
      */
-    int deleteContactOrAdvisor(String loginAccount,String account);
+    int deleteContactOrAdvisor(String loginAccount,String[] accountList);
 }

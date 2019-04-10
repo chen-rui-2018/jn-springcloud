@@ -112,28 +112,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_target (target_id, parent_id, order, 
-      target_name, department_id, department_name, 
-      is_muilt_row, unit, target_type, 
-      record_status, creator_account, created_time, 
-      modifier_account, modified_time)
-    values (#{targetId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{order,jdbcType=INTEGER}, 
-      #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
-      #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, #{targetType,jdbcType=TINYINT}, 
-      #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_data_reporting_target (target_id, id, parent_id, 
+      order, target_name, department_id, 
+      department_name, is_muilt_row, unit, 
+      target_type, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
+    values (#{targetId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{order,jdbcType=INTEGER}, #{targetName,jdbcType=VARCHAR}, #{departmentId,jdbcType=VARCHAR}, 
+      #{departmentName,jdbcType=VARCHAR}, #{isMuiltRow,jdbcType=TINYINT}, #{unit,jdbcType=VARCHAR}, 
+      #{targetType,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingTarget">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_data_reporting_target
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="targetId != null">
         target_id,
+      </if>
+      <if test="id != null">
+        id,
       </if>
       <if test="parentId != null">
         parent_id,
@@ -178,6 +177,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="targetId != null">
         #{targetId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="parentId != null">
         #{parentId,jdbcType=VARCHAR},

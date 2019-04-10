@@ -123,36 +123,33 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_model (model_id, model_name, model_type, 
-      model_form_target_id, model_cycle, warning_before_days, 
-      warning_by, pc_ad, app_ad, 
-      record_status, comment, group_Id, 
-      other_data, task_create_time, filll_in_form_deadline, 
-      department_id, department_name, order, 
-      reminder, remind_status, creator_account, 
-      created_time, modifier_account, modified_time
-      )
-    values (#{modelId,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, #{modelType,jdbcType=TINYINT}, 
-      #{modelFormTargetId,jdbcType=VARCHAR}, #{modelCycle,jdbcType=VARCHAR}, #{warningBeforeDays,jdbcType=VARCHAR}, 
-      #{warningBy,jdbcType=VARCHAR}, #{pcAd,jdbcType=VARCHAR}, #{appAd,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR}, 
-      #{otherData,jdbcType=VARCHAR}, #{taskCreateTime,jdbcType=CHAR}, #{filllInFormDeadline,jdbcType=CHAR}, 
-      #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, #{order,jdbcType=VARCHAR}, 
-      #{reminder,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
-      )
+    insert into tb_data_reporting_model (model_id, id, model_name, 
+      model_type, model_form_target_id, model_cycle, 
+      warning_before_days, warning_by, pc_ad, 
+      app_ad, record_status, comment, 
+      group_Id, other_data, task_create_time, 
+      filll_in_form_deadline, department_id, department_name, 
+      order, reminder, remind_status, 
+      creator_account, created_time, modifier_account, 
+      modified_time)
+    values (#{modelId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{modelName,jdbcType=VARCHAR}, 
+      #{modelType,jdbcType=TINYINT}, #{modelFormTargetId,jdbcType=VARCHAR}, #{modelCycle,jdbcType=VARCHAR}, 
+      #{warningBeforeDays,jdbcType=VARCHAR}, #{warningBy,jdbcType=VARCHAR}, #{pcAd,jdbcType=VARCHAR}, 
+      #{appAd,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}, #{comment,jdbcType=VARCHAR}, 
+      #{groupId,jdbcType=VARCHAR}, #{otherData,jdbcType=VARCHAR}, #{taskCreateTime,jdbcType=CHAR}, 
+      #{filllInFormDeadline,jdbcType=CHAR}, #{departmentId,jdbcType=VARCHAR}, #{departmentName,jdbcType=VARCHAR}, 
+      #{order,jdbcType=VARCHAR}, #{reminder,jdbcType=VARCHAR}, #{remindStatus,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModel">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_data_reporting_model
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="modelId != null">
         model_id,
+      </if>
+      <if test="id != null">
+        id,
       </if>
       <if test="modelName != null">
         model_name,
@@ -227,6 +224,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="modelId != null">
         #{modelId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="modelName != null">
         #{modelName,jdbcType=VARCHAR},

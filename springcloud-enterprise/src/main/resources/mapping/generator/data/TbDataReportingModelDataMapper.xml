@@ -103,24 +103,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_model_data (fall_in_form_id, target_id, model_id, 
-      data, form_id, tab_id, 
-      fill_id)
-    values (#{fallInFormId,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, #{modelId,jdbcType=VARCHAR}, 
-      #{data,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, #{tabId,jdbcType=VARCHAR}, 
-      #{fillId,jdbcType=VARCHAR})
+    insert into tb_data_reporting_model_data (fall_in_form_id, id, target_id, 
+      model_id, data, form_id, 
+      tab_id, fill_id)
+    values (#{fallInFormId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{targetId,jdbcType=VARCHAR}, 
+      #{modelId,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, #{formId,jdbcType=VARCHAR}, 
+      #{tabId,jdbcType=VARCHAR}, #{fillId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingModelData">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_data_reporting_model_data
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="fallInFormId != null">
         fall_in_form_id,
+      </if>
+      <if test="id != null">
+        id,
       </if>
       <if test="targetId != null">
         target_id,
@@ -144,6 +141,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="fallInFormId != null">
         #{fallInFormId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="targetId != null">
         #{targetId,jdbcType=VARCHAR},

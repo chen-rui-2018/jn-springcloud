@@ -105,24 +105,23 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into tb_data_reporting_group_struct (group_id, group_name, group_comment, 
-      creator_account, create_time, record_status, 
-      modifier_account, modified_time)
-    values (#{groupId,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, #{groupComment,jdbcType=VARCHAR}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{recordStatus,jdbcType=TINYINT}, 
-      #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP})
+    insert into tb_data_reporting_group_struct (group_id, id, group_name, 
+      group_comment, creator_account, create_time, 
+      record_status, modifier_account, modified_time
+      )
+    values (#{groupId,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{groupName,jdbcType=VARCHAR}, 
+      #{groupComment,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{recordStatus,jdbcType=TINYINT}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.data.entity.TbDataReportingGroupStruct">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into tb_data_reporting_group_struct
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="groupId != null">
         group_id,
+      </if>
+      <if test="id != null">
+        id,
       </if>
       <if test="groupName != null">
         group_name,
@@ -149,6 +148,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="groupId != null">
         #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
       </if>
       <if test="groupName != null">
         #{groupName,jdbcType=VARCHAR},

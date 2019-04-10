@@ -45,7 +45,7 @@
             :on-remove="handleRemove"
             :on-error="imgUploadError"
             :file-list="fileList"
-            action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+            :action="process.env.BASE_API+'springcloud-app-fastdfs/upload/fastUpload'"
             list-type="picture-card">
             <div v-if="showImg" class="showImg"><img v-for="(item,index) in fileList" :key="index" :src="item" alt="会议室图片"></div>
 

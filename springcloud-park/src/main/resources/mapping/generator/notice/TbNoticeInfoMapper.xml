@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.notice.dao.TbNoticeInfoMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.notice.entity.TbNoticeInfo">
+    <id column="notice_id" jdbcType="VARCHAR" property="noticeId" />
+    <result column="notice_serial" jdbcType="VARCHAR" property="noticeSerial" />
+    <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="publish_name" jdbcType="VARCHAR" property="publishName" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="home_popup" jdbcType="VARCHAR" property="homePopup" />
+    <result column="home_show" jdbcType="VARCHAR" property="homeShow" />
+    <result column="notice_status" jdbcType="VARCHAR" property="noticeStatus" />
+    <result column="platform_name" jdbcType="VARCHAR" property="platformName" />
+    <result column="sort_field" jdbcType="VARCHAR" property="sortField" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="platform_type" jdbcType="VARCHAR" property="platformType" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    notice_id, notice_serial, notice_title, start_time, end_time, created_time, modified_time, 
+    creator_account, publish_name, modifier_account, home_popup, home_show, notice_status, 
+    platform_name, sort_field, record_status, platform_type
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.notice.entity.TbNoticeInfoCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_notice_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_notice_info
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_notice_info
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.notice.entity.TbNoticeInfoCriteria">
+    delete from tb_notice_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.notice.entity.TbNoticeInfo">
+    insert into tb_notice_info (notice_id, notice_serial, notice_title, 
+      start_time, end_time, created_time, 
+      modified_time, creator_account, publish_name, 
+      modifier_account, home_popup, home_show, 
+      notice_status, platform_name, sort_field, 
+      record_status, platform_type)
+    values (#{noticeId,jdbcType=VARCHAR}, #{noticeSerial,jdbcType=VARCHAR}, #{noticeTitle,jdbcType=VARCHAR}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{publishName,jdbcType=VARCHAR}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{homePopup,jdbcType=VARCHAR}, #{homeShow,jdbcType=VARCHAR}, 
+      #{noticeStatus,jdbcType=VARCHAR}, #{platformName,jdbcType=VARCHAR}, #{sortField,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT}, #{platformType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.notice.entity.TbNoticeInfo">
+    insert into tb_notice_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="noticeSerial != null">
+        notice_serial,
+      </if>
+      <if test="noticeTitle != null">
+        notice_title,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="creatorAccount != null">
+        creator_account,
+      </if>
+      <if test="publishName != null">
+        publish_name,
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account,
+      </if>
+      <if test="homePopup != null">
+        home_popup,
+      </if>
+      <if test="homeShow != null">
+        home_show,
+      </if>
+      <if test="noticeStatus != null">
+        notice_status,
+      </if>
+      <if test="platformName != null">
+        platform_name,
+      </if>
+      <if test="sortField != null">
+        sort_field,
+      </if>
+      <if test="recordStatus != null">
+        record_status,
+      </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeSerial != null">
+        #{noticeSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null">
+        #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="publishName != null">
+        #{publishName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierAccount != null">
+        #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="homePopup != null">
+        #{homePopup,jdbcType=VARCHAR},
+      </if>
+      <if test="homeShow != null">
+        #{homeShow,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeStatus != null">
+        #{noticeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="platformName != null">
+        #{platformName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortField != null">
+        #{sortField,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.notice.entity.TbNoticeInfoCriteria" resultType="java.lang.Long">
+    select count(*) from tb_notice_info
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_notice_info
+    <set>
+      <if test="record.noticeId != null">
+        notice_id = #{record.noticeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeSerial != null">
+        notice_serial = #{record.noticeSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeTitle != null">
+        notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.startTime != null">
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedTime != null">
+        modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.creatorAccount != null">
+        creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.publishName != null">
+        publish_name = #{record.publishName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modifierAccount != null">
+        modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homePopup != null">
+        home_popup = #{record.homePopup,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homeShow != null">
+        home_show = #{record.homeShow,jdbcType=VARCHAR},
+      </if>
+      <if test="record.noticeStatus != null">
+        notice_status = #{record.noticeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.platformName != null">
+        platform_name = #{record.platformName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sortField != null">
+        sort_field = #{record.sortField,jdbcType=VARCHAR},
+      </if>
+      <if test="record.recordStatus != null">
+        record_status = #{record.recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="record.platformType != null">
+        platform_type = #{record.platformType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_notice_info
+    set notice_id = #{record.noticeId,jdbcType=VARCHAR},
+      notice_serial = #{record.noticeSerial,jdbcType=VARCHAR},
+      notice_title = #{record.noticeTitle,jdbcType=VARCHAR},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
+      creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      publish_name = #{record.publishName,jdbcType=VARCHAR},
+      modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      home_popup = #{record.homePopup,jdbcType=VARCHAR},
+      home_show = #{record.homeShow,jdbcType=VARCHAR},
+      notice_status = #{record.noticeStatus,jdbcType=VARCHAR},
+      platform_name = #{record.platformName,jdbcType=VARCHAR},
+      sort_field = #{record.sortField,jdbcType=VARCHAR},
+      record_status = #{record.recordStatus,jdbcType=TINYINT},
+      platform_type = #{record.platformType,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.notice.entity.TbNoticeInfo">
+    update tb_notice_info
+    <set>
+      <if test="noticeSerial != null">
+        notice_serial = #{noticeSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeTitle != null">
+        notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="creatorAccount != null">
+        creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="publishName != null">
+        publish_name = #{publishName,jdbcType=VARCHAR},
+      </if>
+      <if test="modifierAccount != null">
+        modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="homePopup != null">
+        home_popup = #{homePopup,jdbcType=VARCHAR},
+      </if>
+      <if test="homeShow != null">
+        home_show = #{homeShow,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeStatus != null">
+        notice_status = #{noticeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="platformName != null">
+        platform_name = #{platformName,jdbcType=VARCHAR},
+      </if>
+      <if test="sortField != null">
+        sort_field = #{sortField,jdbcType=VARCHAR},
+      </if>
+      <if test="recordStatus != null">
+        record_status = #{recordStatus,jdbcType=TINYINT},
+      </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.notice.entity.TbNoticeInfo">
+    update tb_notice_info
+    set notice_serial = #{noticeSerial,jdbcType=VARCHAR},
+      notice_title = #{noticeTitle,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      publish_name = #{publishName,jdbcType=VARCHAR},
+      modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      home_popup = #{homePopup,jdbcType=VARCHAR},
+      home_show = #{homeShow,jdbcType=VARCHAR},
+      notice_status = #{noticeStatus,jdbcType=VARCHAR},
+      platform_name = #{platformName,jdbcType=VARCHAR},
+      sort_field = #{sortField,jdbcType=VARCHAR},
+      record_status = #{recordStatus,jdbcType=TINYINT},
+      platform_type = #{platformType,jdbcType=VARCHAR}
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </update>
+</mapper>

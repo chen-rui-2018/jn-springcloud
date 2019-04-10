@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { api, paramApi } from '@/api/Permission-model/userManagement'
+import { api, paramApi } from '@/api/axios'
 export default {
   data() {
     var checkAccount = (rule, value, callback) => {
@@ -75,8 +75,8 @@ export default {
         callback(new Error('名称只允许数字、中文、字母及下划线'))
       } else {
         if (this.dialogStatus === '新增文件组') {
-          paramApi('system/sysFileGroup/checkFileGroupName', this.temp.fileGroupName, 'fileGroupName').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysFileGroup/checkFileGroupName`, this.temp.fileGroupName, 'fileGroupName').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               if (res.data.data === 'success') {
                 callback()
               } else {
@@ -86,8 +86,8 @@ export default {
           })
         } else {
           if (this.oldName !== this.temp.fileGroupName) {
-            paramApi('system/sysFileGroup/checkFileGroupName', this.temp.fileGroupName, 'fileGroupName').then(res => {
-              if (res.data.code === '0000') {
+            paramApi(`${this.GLOBAL.systemUrl}system/sysFileGroup/checkFileGroupName`, this.temp.fileGroupName, 'fileGroupName').then(res => {
+              if (res.data.code === this.GLOBAL.code) {
                 if (res.data.data === 'success') {
                   callback()
                 } else {
@@ -178,8 +178,8 @@ export default {
       this.$refs['temp'].validate(valid => {
         if (valid) {
           // 调用接口发送请求
-          api('system/sysFileGroup/add', this.temp).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysFileGroup/add`, this.temp, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '添加成功',
                 type: 'success'
@@ -219,8 +219,8 @@ export default {
       this.$refs['temp'].validate(valid => {
         if (valid) {
           // 通过验证
-          api('system/sysFileGroup/update', this.temp).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.systemUrl}system/sysFileGroup/update`, this.temp, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -245,8 +245,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('system/sysFileGroup/delete', id, 'ids').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.systemUrl}system/sysFileGroup/delete`, id, 'ids').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -266,8 +266,8 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      api('system/sysFileGroup/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysFileGroup/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.fileGroupList = res.data.data.rows
           this.total = res.data.data.total
           if (this.fileGroupList.length === 0 && this.total > 0) {

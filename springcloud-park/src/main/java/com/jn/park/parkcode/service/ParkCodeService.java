@@ -1,7 +1,6 @@
 package com.jn.park.parkcode.service;
 
-import com.jn.park.model.ParkCode;
-import com.jn.park.parkcode.entity.TbParkCode;
+import com.jn.park.activity.model.ParkCode;
 
 import java.util.List;
 

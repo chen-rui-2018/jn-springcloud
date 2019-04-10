@@ -1,7 +1,7 @@
 package com.jn.park.activity.service;
 
 import com.jn.common.model.PaginationData;
-import com.jn.park.model.*;
+import com.jn.park.activity.model.*;
 
 import java.util.List;
 

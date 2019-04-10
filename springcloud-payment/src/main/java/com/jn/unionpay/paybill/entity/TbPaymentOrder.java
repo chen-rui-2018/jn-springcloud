@@ -30,9 +30,11 @@ public class TbPaymentOrder implements Serializable {
 
     private Double payAmount;
 
+    private Double integralAmount;
+
     private String payType;
 
-    private Date payRemark;
+    private String payRemark;
 
     private Date createdTime;
 
@@ -150,6 +152,14 @@ public class TbPaymentOrder implements Serializable {
         this.payAmount = payAmount;
     }
 
+    public Double getIntegralAmount() {
+        return integralAmount;
+    }
+
+    public void setIntegralAmount(Double integralAmount) {
+        this.integralAmount = integralAmount;
+    }
+
     public String getPayType() {
         return payType;
     }
@@ -158,12 +168,12 @@ public class TbPaymentOrder implements Serializable {
         this.payType = payType == null ? null : payType.trim();
     }
 
-    public Date getPayRemark() {
+    public String getPayRemark() {
         return payRemark;
     }
 
-    public void setPayRemark(Date payRemark) {
-        this.payRemark = payRemark;
+    public void setPayRemark(String payRemark) {
+        this.payRemark = payRemark == null ? null : payRemark.trim();
     }
 
     public Date getCreatedTime() {
@@ -231,6 +241,7 @@ public class TbPaymentOrder implements Serializable {
             && (this.getOrderStatus() == null ? other.getOrderStatus() == null : this.getOrderStatus().equals(other.getOrderStatus()))
             && (this.getPayId() == null ? other.getPayId() == null : this.getPayId().equals(other.getPayId()))
             && (this.getPayAmount() == null ? other.getPayAmount() == null : this.getPayAmount().equals(other.getPayAmount()))
+            && (this.getIntegralAmount() == null ? other.getIntegralAmount() == null : this.getIntegralAmount().equals(other.getIntegralAmount()))
             && (this.getPayType() == null ? other.getPayType() == null : this.getPayType().equals(other.getPayType()))
             && (this.getPayRemark() == null ? other.getPayRemark() == null : this.getPayRemark().equals(other.getPayRemark()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
@@ -257,6 +268,7 @@ public class TbPaymentOrder implements Serializable {
         result = prime * result + ((getOrderStatus() == null) ? 0 : getOrderStatus().hashCode());
         result = prime * result + ((getPayId() == null) ? 0 : getPayId().hashCode());
         result = prime * result + ((getPayAmount() == null) ? 0 : getPayAmount().hashCode());
+        result = prime * result + ((getIntegralAmount() == null) ? 0 : getIntegralAmount().hashCode());
         result = prime * result + ((getPayType() == null) ? 0 : getPayType().hashCode());
         result = prime * result + ((getPayRemark() == null) ? 0 : getPayRemark().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
@@ -286,6 +298,7 @@ public class TbPaymentOrder implements Serializable {
         sb.append(", orderStatus=").append(orderStatus);
         sb.append(", payId=").append(payId);
         sb.append(", payAmount=").append(payAmount);
+        sb.append(", integralAmount=").append(integralAmount);
         sb.append(", payType=").append(payType);
         sb.append(", payRemark=").append(payRemark);
         sb.append(", createdTime=").append(createdTime);

@@ -31,7 +31,6 @@ import java.util.List;
  */
 @Api(tags = "科技金融-科技金融投资人")
 @RestController
-@RequestMapping(value = "/technologyFinancial/investorController")
 public class InvestorController extends BaseController {
     /**
      * 日志组件
@@ -43,8 +42,7 @@ public class InvestorController extends BaseController {
 
     @ControllerLog(doAction = "投资人列表查询")
     @ApiOperation(value = "投资人列表查询")
-    @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoList")
-    @RequestMapping(value = "/getInvestorInfoList",method = RequestMethod.GET)
+    @RequestMapping(value = "/guest/technologyFinancial/investorController/getInvestorInfoList",method = RequestMethod.GET)
     public Result<PaginationData<List<InvestorInfoListShow>>> getInvestorInfoList(@Validated InvestorInfoListParam investorInfoListParam){
         PaginationData investorInfoList = investorService.getInvestorInfoList(investorInfoListParam);
         return  new Result(investorInfoList);
@@ -53,7 +51,7 @@ public class InvestorController extends BaseController {
     @ControllerLog(doAction = "投资人认证")
     @ApiOperation(value = "投资人认证",notes = "返回数据为数据响应条数,正常情况为1")
     @RequiresPermissions("/technologyFinancial/investorController/addInvestorInfo")
-    @RequestMapping(value = "/addInvestorInfo",method = RequestMethod.POST)
+    @RequestMapping(value = "/technologyFinancial/investorController/addInvestorInfo",method = RequestMethod.POST)
     public Result<Integer> addInvestorInfo(@RequestBody @Validated InvestorAuthenticateParam investorAuthenticateParam){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         if(user==null || user.getAccount()==null){
@@ -68,7 +66,7 @@ public class InvestorController extends BaseController {
     @ControllerLog(doAction = "投资人详情")
     @ApiOperation(value = "投资人详情/投资人查看")
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorInfoDetails")
-    @RequestMapping(value = "/getInvestorInfoDetails",method = RequestMethod.GET)
+    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorInfoDetails",method = RequestMethod.GET)
     public Result<InvestorInfoDetailsVo> getInvestorInfoDetails(@ApiParam(value = "投资人账号" ,required = true,example = "wangsong")@RequestParam("investorAccount") String investorAccount){
         Assert.notNull(investorAccount, InvestorExceptionEnum.INVESTOR_ACCOUNT_NOT_NULL.getMessage());
         InvestorInfoDetailsVo investorInfoDetailsVo=investorService.getInvestorInfoDetails(investorAccount);
@@ -78,17 +76,16 @@ public class InvestorController extends BaseController {
     @ControllerLog(doAction = "查询所属单位")
     @ApiOperation(value = "查询所属单位")
     @RequiresPermissions("/technologyFinancial/investorController/getAffiliationUnit")
-    @RequestMapping(value = "/getAffiliationUnit",method = RequestMethod.GET)
-    public Result<List<AffiliationUnitShow>> getAffiliationUnit(@ApiParam(value = "单位名称" ,required = true,example = "xxx机构")@RequestParam("orgName") String orgName){
-        Assert.notNull(orgName, InvestorExceptionEnum.AFFILIATION_NAME.getMessage());
-        List<AffiliationUnitShow> affiliationUnit = investorService.getAffiliationUnit(orgName);
-        return  new Result(affiliationUnit);
+    @RequestMapping(value = "/technologyFinancial/investorController/getAffiliationUnit",method = RequestMethod.GET)
+    public Result<PaginationData<List<AffiliationUnitShow>>> getAffiliationUnit(@Validated  AffiliationUnitInfoParam affiliationUnitInfoParam){
+        PaginationData result= investorService.getAffiliationUnit(affiliationUnitInfoParam);
+        return  new Result(result);
     }
 
     @ControllerLog(doAction = "查询投资人主投领域")
     @ApiOperation(value = "查询投资人主投领域")
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainArea")
-    @RequestMapping(value = "/getInvestorMainArea",method = RequestMethod.GET)
+    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainArea",method = RequestMethod.GET)
     public Result<List<InvestorMainArea>> getInvestorMainArea(){
         List<InvestorMainArea> investorMainAreaList = investorService.getInvestorMainArea();
         return  new Result(investorMainAreaList);
@@ -97,7 +94,7 @@ public class InvestorController extends BaseController {
     @ControllerLog(doAction = "查询投资人主投轮次")
     @ApiOperation(value = "查询投资人主投轮次")
     @RequiresPermissions("/technologyFinancial/investorController/getInvestorMainRound")
-    @RequestMapping(value = "/getInvestorMainRound",method = RequestMethod.GET)
+    @RequestMapping(value = "/technologyFinancial/investorController/getInvestorMainRound",method = RequestMethod.GET)
     public Result<List<InvestorMainRound>> getInvestorMainRound(){
         List<InvestorMainRound> investorMainRound = investorService.getInvestorMainRound();
         return  new Result(investorMainRound);

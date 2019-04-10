@@ -2,7 +2,7 @@
 location / {
     root   D:/IdeaProjects/jn-spring-cloud/html/cms/dist;
     index login.html;
-	location ~* \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|ttf|eot|mao|ico)$ {
+	location ~* \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|woff2|ttf|eot|mao|ico|txt|xls|xlsx|doc|docx)$ {
 		break;
 	}
 	proxy_pass http://127.0.0.1:1101;
@@ -13,7 +13,7 @@ location / {
 
 #方案二，解决需要拼写index.html文件
 #静态资源
-location ~ \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|woff2|ttf|eot|mao|ico|txt)$ {
+location ~ \.(css|js|jpg|gif|png|swf|htm|html|json|xml|svg|woff|woff2|ttf|eot|mao|ico|txt|xls|xlsx|doc|docx)$ {
     root   D:/IdeaProjects/jn-spring-cloud/html/cms/dist;
     index index.html index.htm;
 }

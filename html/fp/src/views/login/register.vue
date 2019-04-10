@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div class="register" v-loading="loading">
     <div class="loginLogo">
       <img src="@/../static/img/login-logo.png" alt="">
     </div>
@@ -9,11 +9,13 @@
       <div class="tipPsw">请输入正确手机号码，可用于登录或找回密码</div>
       <div class="yanzheng">
         <input class="input" type="text" placeholder="请输入验证码" style="width:140px" v-model="messageCode">
-        <span class="getCode" @click="getCode">获取验证码</span>
+        <span class="getCode" v-if="sendAuthCode" @click="getCode">获取验证码</span>
+        <span class="getCode" v-else style="padding: 10px 15px;">
+          <span>{{auth_time}}</span>秒后重新获取</span>
       </div>
       <div class="tipPsw">请输入收到短信中的验证码</div>
       <input class="input" type="password" placeholder="请输入登录密码" v-model="password">
-      <div class="tipPsw">长度至少8位</div>
+      <div class="tipPsw">密码至少为字母、数字、符号两种组成的8-16字符</div>
       <input class="input" type="password" placeholder="请确认登录密码" v-model="password1">
       <div class="userAgree">
         <!-- <input id="usercheckBox" v-model="checked" type="checkbox"> -->
@@ -26,7 +28,7 @@
         </span>
         <!-- </label> -->
       </div>
-      <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="registerForm()">注册</el-button>
+      <el-button type="success" plain style="width:100%;height:35px;border:1px solid #41d787;color:#00a041;background:#ecfcf2;font-size:14px;line-height: 5px;" @click="registerForm">注册</el-button>
       <div class="regFoot pr">
         <!-- <div @click="$router.push({path:'/userData'})">返回首页</div> -->
         <span>我已有账号，
@@ -41,12 +43,15 @@
 export default {
   data() {
     return {
+      sendAuthCode: true,
+      auth_time: 0,
       xuanzhong: true,
       // checked: true,
       phone: "",
       messageCode: "",
       password: "",
-      password1: ""
+      password1: "",
+      loading:false
     };
   },
   created() {},
@@ -80,6 +85,7 @@ export default {
         this.$message.error("请先同意用户协议");
         return;
       }
+      this.loading = true;
       let _this = this;
       this.api.post({
         url: "addUser",
@@ -90,10 +96,38 @@ export default {
         },
         dataFlag: false,
         callback: function(res) {
+          _this.loading = false;
           if (res.code == "0000") {
             _this.$message.success("注册成功");
-            _this.$router.push("/");
-            console.log(res);
+            _this.$confirm('注册成功, 是否登录?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'success '
+            }).then(() => {
+              _this.loading = true;
+                _this.api.post({
+                  url: "loginURL",
+                  data: {
+                    account: _this.phone,
+                    password: _this.password
+                  },
+                  dataFlag: false,
+                  callback: function(res) {
+                    _this.loading = false;
+                    if (res.code == "0000") {
+                      sessionStorage.token = res.data;
+                      _this.$router.push({
+                        path: "/user",
+                        query: { account: _this.phone }
+                      });
+                    } else {
+                      _this.$message.error(res.result);
+                    }
+                  }
+                });
+            }).catch(() => {
+
+            });
           } else {
             _this.$message.error(res.result);
           }
@@ -109,13 +143,22 @@ export default {
       let _this = this;
       this.api.get({
         // url: `springcloud-user/guest/userJoin/getCode?phone=${_this.phone}`,
-        url: 'getCode',
+        url: "getCode",
         data: {
           phone: _this.phone
         },
         callback: function(res) {
           if (res.code == "0000") {
             console.log(res);
+            _this.sendAuthCode = false;
+            _this.auth_time = 60;
+            var auth_timetimer = setInterval(() => {
+              _this.auth_time--;
+              if (_this.auth_time <= 0) {
+                _this.sendAuthCode = true;
+                clearInterval(auth_timetimer);
+              }
+            }, 1000);
           } else {
             _this.$message.error(res.result);
           }
@@ -152,10 +195,10 @@ export default {
   }
   .registerBox,
   .resiter2 {
-    background: rgba(255, 255, 255, .95);
+    background: rgba(255, 255, 255, 0.95);
     padding: 21px 95px;
     padding-bottom: 35px;
-    width: 280px;
+    width: 282px;
     // height: 415px;
     // height: 220px;
     border-radius: 10px;
@@ -226,7 +269,7 @@ export default {
         position: absolute;
         left: -80px;
         font-size: 12px;
-        color:#666;
+        color: #666;
         cursor: pointer;
       }
       > span {

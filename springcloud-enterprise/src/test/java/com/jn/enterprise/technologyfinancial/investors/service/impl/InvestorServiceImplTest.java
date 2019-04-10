@@ -54,7 +54,7 @@ public class InvestorServiceImplTest {
     /**
      * 查询所属单位
      */
-    private String orgName;
+    private AffiliationUnitInfoParam affiliationUnitInfoParam=new AffiliationUnitInfoParam();
 
     /**
      * 投资人认证信息
@@ -85,9 +85,9 @@ public class InvestorServiceImplTest {
     /**
      * 教育经历
      */
-    private List<InvestorEduExperienceParam> investorEduExperienceParamList =new ArrayList<>(16);
-    private InvestorEduExperienceParam investorEduExperienceParam1 =new InvestorEduExperienceParam();
-    private InvestorEduExperienceParam investorEduExperienceParam2 =new InvestorEduExperienceParam();
+    private List<InvestorEducationExperienceParam> investorEduExperienceParamList =new ArrayList<>(16);
+    private InvestorEducationExperienceParam investorEduExperienceParam1 =new InvestorEducationExperienceParam();
+    private InvestorEducationExperienceParam investorEduExperienceParam2 =new InvestorEducationExperienceParam();
 
 
     @Before
@@ -101,7 +101,8 @@ public class InvestorServiceImplTest {
         investorAccount="wangsong";
 
         //查询所属单位
-        orgName="湖南鑫欧宇";
+        affiliationUnitInfoParam.setOrgName("湖南鑫欧宇");
+        affiliationUnitInfoParam.setNeedPage("0");
 
         //投资人认证信息
         //投资人姓名
@@ -156,7 +157,7 @@ public class InvestorServiceImplTest {
         investorEduExperienceParam2.setSchoolName("中南大学");
         investorEduExperienceParam2.setProfessionTitle("高级律师专业");
         investorEduExperienceParamList.add(investorEduExperienceParam2);
-        investorAuthenticateParam.setInvestorEduExperienceParamList(investorEduExperienceParamList);
+        investorAuthenticateParam.setInvestorEducationExperienceParamList(investorEduExperienceParamList);
     }
 
     /**
@@ -203,15 +204,16 @@ public class InvestorServiceImplTest {
      */
     @Test
     public void getAffiliationUnit() {
-        List<AffiliationUnitShow> affiliationUnitList = investorService.getAffiliationUnit(orgName);
-        if(affiliationUnitList == null || affiliationUnitList.isEmpty()){
+        PaginationData paginationData = investorService.getAffiliationUnit(affiliationUnitInfoParam);
+        if(paginationData == null || paginationData.getRows()==null){
             //ignore
         }else{
+            List<AffiliationUnitShow> affiliationUnitList=(List<AffiliationUnitShow> )paginationData.getRows();
             for(AffiliationUnitShow affiliationUnitShow :affiliationUnitList){
                 logger.info(affiliationUnitShow.toString());
             }
         }
-        assertThat(affiliationUnitList,anything());
+        assertThat(paginationData,anything());
     }
 
     /**

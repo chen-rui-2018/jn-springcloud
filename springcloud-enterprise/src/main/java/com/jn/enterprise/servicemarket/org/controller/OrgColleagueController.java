@@ -18,6 +18,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,15 +84,15 @@ public class OrgColleagueController extends BaseController {
     @ApiOperation(value = "删除联系人或顾问(pc/app删除顾问操作)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/deleteContactOrAdvisor",method = RequestMethod.POST)
     @RequiresPermissions("/serviceMarket/orgColleagueController/deleteContactOrAdvisor")
-    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号" ,required = true,example = "wangsong")String account){
-        Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
+    public Result deleteContactOrAdvisor(@ApiParam(value = "删除联系人或顾问的账号,已数组传递" ,required = true,example = "['wangsong','zhaoliu']")@RequestBody String[] accountList){
+        Assert.notNull(accountList, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
         //获取当前登录用户基本信息
         User user = (User)SecurityUtils.getSubject().getPrincipal();
         if(user==null){
             logger.warn("机构同事查询获取当前登录用户信息失败");
             return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
         }
-        int responseNum = orgColleagueService.deleteContactOrAdvisor(user.getAccount(), account);
+        int responseNum = orgColleagueService.deleteContactOrAdvisor(user.getAccount(), accountList);
         logger.info("------删除联系人或顾问成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }

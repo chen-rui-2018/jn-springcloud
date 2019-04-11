@@ -1,11 +1,9 @@
 package com.jn.enterprise.servicemarket.comment.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @Author: yangph
@@ -14,7 +12,7 @@ import java.util.Date;
  * @modified By:
  */
 @ApiModel(value = "ServiceRating",description = "服务评价")
-public class ServiceRating extends Page implements Serializable {
+public class ServiceRating implements Serializable {
     @ApiModelProperty(value = "机构id")
     private String orgId;
     @ApiModelProperty(value = "机构名称")
@@ -31,22 +29,16 @@ public class ServiceRating extends Page implements Serializable {
     private String pictureUrl;
     @ApiModelProperty(value = "评价人账号")
     private String evaluationAccount;
+    @ApiModelProperty(value = "评价人头像")
+    private String evaluationAvatar;
+    @ApiModelProperty(value = "评价人姓名")
+    private String evaluationName;
     @ApiModelProperty(value = "服务评分")
     private String evaluationScore;
     @ApiModelProperty(value = "服务评价描述")
     private String evaluationDesc;
-    @ApiModelProperty(value = "创建时间")
-    private Date createdTime;
-    @ApiModelProperty(value = "创建人")
-    private String creatorAccount;
-    @ApiModelProperty(value = "修改时间")
-    private Date modifiedTime;
-    @ApiModelProperty(value = "修改人")
-    private String modifierAccount;
-    @ApiModelProperty(value = "记录状态")
-    private Byte recordStatus;
-
-    private static final long serialVersionUID = 1L;
+    @ApiModelProperty(value = "评价时间")
+    private String evaluationTime;
 
     public String getOrgId() {
         return orgId;
@@ -112,6 +104,22 @@ public class ServiceRating extends Page implements Serializable {
         this.evaluationAccount = evaluationAccount;
     }
 
+    public String getEvaluationAvatar() {
+        return evaluationAvatar;
+    }
+
+    public void setEvaluationAvatar(String evaluationAvatar) {
+        this.evaluationAvatar = evaluationAvatar;
+    }
+
+    public String getEvaluationName() {
+        return evaluationName;
+    }
+
+    public void setEvaluationName(String evaluationName) {
+        this.evaluationName = evaluationName;
+    }
+
     public String getEvaluationScore() {
         return evaluationScore;
     }
@@ -128,44 +136,12 @@ public class ServiceRating extends Page implements Serializable {
         this.evaluationDesc = evaluationDesc;
     }
 
-    public Date getCreatedTime() {
-        return createdTime;
+    public String getEvaluationTime() {
+        return evaluationTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public String getCreatorAccount() {
-        return creatorAccount;
-    }
-
-    public void setCreatorAccount(String creatorAccount) {
-        this.creatorAccount = creatorAccount;
-    }
-
-    public Date getModifiedTime() {
-        return modifiedTime;
-    }
-
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
-    }
-
-    public String getModifierAccount() {
-        return modifierAccount;
-    }
-
-    public void setModifierAccount(String modifierAccount) {
-        this.modifierAccount = modifierAccount;
-    }
-
-    public Byte getRecordStatus() {
-        return recordStatus;
-    }
-
-    public void setRecordStatus(Byte recordStatus) {
-        this.recordStatus = recordStatus;
+    public void setEvaluationTime(String evaluationTime) {
+        this.evaluationTime = evaluationTime;
     }
 
     @Override
@@ -179,13 +155,11 @@ public class ServiceRating extends Page implements Serializable {
                 ", advisorName='" + advisorName + '\'' +
                 ", pictureUrl='" + pictureUrl + '\'' +
                 ", evaluationAccount='" + evaluationAccount + '\'' +
+                ", evaluationAvatar='" + evaluationAvatar + '\'' +
+                ", evaluationName='" + evaluationName + '\'' +
                 ", evaluationScore='" + evaluationScore + '\'' +
                 ", evaluationDesc='" + evaluationDesc + '\'' +
-                ", createdTime=" + createdTime +
-                ", creatorAccount='" + creatorAccount + '\'' +
-                ", modifiedTime=" + modifiedTime +
-                ", modifierAccount='" + modifierAccount + '\'' +
-                ", recordStatus=" + recordStatus +
+                ", evaluationTime='" + evaluationTime + '\'' +
                 '}';
     }
 }

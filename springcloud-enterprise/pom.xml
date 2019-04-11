@@ -64,10 +64,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        common
+                        require
                     </contexts>
                     <tableNames>
-                        tb_service_code
+                        tb_service_require
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

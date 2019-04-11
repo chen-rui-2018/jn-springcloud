@@ -72,7 +72,7 @@ public class ServiceProductWebController  extends BaseController {
     @ControllerLog(doAction = "服务超市首页,热门产品")
     @ApiOperation(value ="服务超市首页,热门产品")
     @RequestMapping(value = "/findHotProducts",method = RequestMethod.GET)
-    public Result<PaginationData<List<HotProducts>>> findHotProducts(@RequestBody Page page){
+    public Result<PaginationData<List<HotProducts>>> findHotProducts(Page page){
         PaginationData data = productService.findHotProducts(page);
         return new Result(data);
     }

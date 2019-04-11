@@ -3,10 +3,10 @@ package com.jn.enterprise.servicemarket.advisor.dao;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceExperience;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExper;
-import com.jn.enterprise.servicemarket.advisor.model.*;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
+import com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions;
+import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
-import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgTeam;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,11 +29,10 @@ public interface AdvisorMapper {
 
     /**
      * 根据查询条件获取服务评价信息
-     * @param advisorAccount  顾问账号
-     * @param ratingType      评价类型: 好评：praise  中评：average  差评：badReview
+     * @param serviceEvaluationParam      评价类型: 好评：praise  中评：average  差评：badReview
      * @return
      */
-    List<ServiceRating>getServcieRatingInfo(@Param("advisorAccount") String advisorAccount, @Param("ratingType")String ratingType);
+    List<ServiceRating>getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam);
 
     /**
      * 批量插入顾问荣誉资质

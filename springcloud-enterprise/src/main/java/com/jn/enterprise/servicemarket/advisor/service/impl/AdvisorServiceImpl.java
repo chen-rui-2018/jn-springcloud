@@ -1,8 +1,10 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
@@ -17,6 +19,8 @@ import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +61,9 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     @Autowired
     private ServiceProductService serviceProductService;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
 
     /**
      * 服务顾问列表查询
@@ -193,6 +200,13 @@ public class AdvisorServiceImpl implements AdvisorService {
     @ServiceLog(doAction = "根据查询条件获取服务评价信息")
     @Override
     public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
+        //是否公共页面  1：是  0：否
+        String isPublicPage="0";
+        if(isPublicPage.equals(serviceEvaluationParam.getIsPublicPage()) && StringUtils.isBlank(serviceEvaluationParam.getOrgId())
+                && StringUtils.isBlank(serviceEvaluationParam.getProductId()) && StringUtils.isBlank(serviceEvaluationParam.getAdvisorAccount())){
+            logger.warn("根据查询条件获取服务评价信息的机构id,产品id,顾问账号不能都为空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL);
+        }
         com.github.pagehelper.Page<Object> objects = null;
         //需要分页标识
         String isPage="1";
@@ -214,8 +228,42 @@ public class AdvisorServiceImpl implements AdvisorService {
             //全部
             ratingType="";
         }
-        List<ServiceRating> servcieRatingInfo = advisorMapper.getServcieRatingInfo(serviceEvaluationParam.getAdvisorAccount(), ratingType);
-        return new PaginationData(servcieRatingInfo, objects == null ? 0 : objects.getTotal());
+        List<ServiceRating> serviceRatingInfo = advisorMapper.getServiceRatingInfo(serviceEvaluationParam);
+        return getEvaluationPaginationData(objects, serviceRatingInfo);
+    }
+
+    /**
+     * 封装处理评价信息
+     * @param objects
+     * @param serviceRatingInfo
+     * @return
+     */
+    @ServiceLog(doAction = "封装处理评价信息")
+    private PaginationData getEvaluationPaginationData(Page<Object> objects, List<ServiceRating> serviceRatingInfo) {
+        if(serviceRatingInfo.isEmpty()){
+            return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
+        }
+        List<String> accountList=new ArrayList<>(16);
+        //获取评价人姓名，头像
+        for(ServiceRating serviceRating:serviceRatingInfo){
+            accountList.add(serviceRating.getEvaluationAccount());
+        }
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension!=null &&  moreUserExtension.getData()!=null){
+            List<UserExtensionInfo>userExtensionInfoList= moreUserExtension.getData();
+            for(ServiceRating serviceRating:serviceRatingInfo){
+                for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
+                    if(StringUtils.equals(serviceRating.getEvaluationAccount(),userExtensionInfo.getAccount())){
+                        //头像
+                        serviceRating.setEvaluationAvatar(userExtensionInfo.getAvatar());
+                        //姓名
+                        serviceRating.setEvaluationName(userExtensionInfo.getName());
+                        break;
+                    }
+                }
+            }
+        }
+        return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
     }
 
     /**

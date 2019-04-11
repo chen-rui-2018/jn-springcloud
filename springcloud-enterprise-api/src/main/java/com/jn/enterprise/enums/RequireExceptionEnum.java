@@ -20,6 +20,7 @@ public enum RequireExceptionEnum implements CodeAndMsg {
     DATA_NOT_ALLOW_OPERATING("5020537","当前需求编号对应数据不允许对接操作"),
     IS_NOT_TECHNOLOGY_NOT_MATCH("5020538","当前需求的为非科技金融类型，与传递的是科技金融不匹配"),
     IS_TECHNOLOGY_NOT_MATCH("5020539","当前需求的为科技金融类型，与传递的是非科技金融不匹配"),
+    FINANCING_PERIOD("5020540","融资期限不能为空"),
     ;
 
     /**

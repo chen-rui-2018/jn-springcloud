@@ -31,6 +31,7 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     TIME_CHANGE_ERROR("5020517","时间转换出错，请核对参数"),
     CERTIFICATE_TYPE_NOT_EXIST("5020518","系统中没有证书类型"),
     ORG_NAME_NOT_NULL("5020519","机构名称不能为空"),
+    EVALUATION_ID_NOT_NULL("5020520","机构id,产品id,顾问账号不能都为空"),
     ;
 
     /**

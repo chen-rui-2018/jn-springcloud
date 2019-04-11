@@ -1,5 +1,7 @@
 package com.jn.enterprise.servicemarket.org.service.impl;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
@@ -26,7 +28,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 机构同事
@@ -89,8 +93,14 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         if(userExtensionByAffiliateCode==null || userExtensionByAffiliateCode.getData()==null){
             return new PaginationData(userExtension.getData(), objects == null ? 0 : objects.getTotal());
         }
-        PaginationData pageData = (PaginationData)userExtensionByAffiliateCode.getData();
-        List<UserExtensionInfo> userExtensionInfoList=(List<UserExtensionInfo> ) pageData.getRows();
+        Map<String,Object> pageData = (Map<String,Object>)userExtensionByAffiliateCode.getData();
+        List<UserExtensionInfo> userExtensionInfoList=new ArrayList<>(16);
+        List userList=(List)pageData.get("rows");
+        ObjectMapper objectMapper = new ObjectMapper();
+        for(int i=0;i<userList.size();i++){
+            UserExtensionInfo userExtensionInfo = objectMapper.convertValue(userList.get(i), UserExtensionInfo.class);
+            userExtensionInfoList.add(userExtensionInfo);
+        }
         //取出查询出的所有账号
         List<String>accountList=new ArrayList<>(16);
         for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
@@ -154,17 +164,21 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     /**
      * 删除联系人或顾问
      * @param loginAccount 登录用户账号
-     * @param account 删除联系人或顾问的账号
+     * @param accountList 删除联系人或顾问的账号
+     * @return
      */
-    @ServiceLog(doAction = "取消联系人")
+    @ServiceLog(doAction = "删除联系人或顾问")
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteContactOrAdvisor(String loginAccount,String account) {
+    public int deleteContactOrAdvisor(String loginAccount,String[] accountList) {
         //todo：获取登录用户的角色，若是机构管理员，可以删除，否则不可以删除  yangph
-
+        if(accountList.length==0){
+            throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_NULL);
+        }
+        List<String> delAccountList = Arrays.asList(accountList);
         //把顾问信息表中的数据状态值为删除
         TbServiceAdvisorCriteria example=new TbServiceAdvisorCriteria();
-        example.createCriteria().andAdvisorAccountEqualTo(account);
+        example.createCriteria().andAdvisorAccountIn(delAccountList);
         TbServiceAdvisor tbServiceAdvisor=new TbServiceAdvisor();
         //数据状态  0：删除   1：有效
         byte recordStatus=0;
@@ -172,10 +186,11 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         tbServiceAdvisorMapper.updateByExampleSelective(tbServiceAdvisor, example);
         //清空用户信息表中的所属机构编码和机构名称
         UserAffiliateInfo userAffiliateInfo=new UserAffiliateInfo();
-        userAffiliateInfo.setAffiliateCode(null);
-        userAffiliateInfo.setAffiliateName(null);
+        userAffiliateInfo.setAccountList(accountList);
+        userAffiliateInfo.setAffiliateCode("");
+        userAffiliateInfo.setAffiliateName("");
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
         //todo：调用豹哥提供的修改用户角色接口删除用户角色 yangph
-        return 0;
+        return 1;
     }
 }

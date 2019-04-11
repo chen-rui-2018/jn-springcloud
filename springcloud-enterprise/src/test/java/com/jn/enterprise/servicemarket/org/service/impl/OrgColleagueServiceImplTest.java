@@ -40,7 +40,9 @@ public class OrgColleagueServiceImplTest {
     /**
      * 登录用户账号
      */
-    private String account;
+    private String loginAccount;
+
+    private String  account;
     /**
      * 机构同事列表查询入参
      */
@@ -52,7 +54,8 @@ public class OrgColleagueServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        account="wangsong";
+        loginAccount="18073856620";
+        account="18674398739";
         //机构同事列表查询
         orgColleagueParam.setNeedPage("1");
     }
@@ -79,7 +82,7 @@ public class OrgColleagueServiceImplTest {
      */
     @Test
     public void setAsContact() {
-        int responseNum = orgColleagueService.setAsContact(account);
+        int responseNum = orgColleagueService.setAsContact(loginAccount,account);
         logger.info("设置为联系人数据响应条数:{}",responseNum);
         assertThat(responseNum, greaterThanOrEqualTo(0));
     }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.enterprise.pd.talent.dao.TalentNoticeDao">
+  <resultMap id="BaseResultMap" type="com.jn.enterprise.pd.talent.model.TalentNoticeModel">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="notice_title" jdbcType="VARCHAR" property="noticeTitle" />
+    <result column="range_id" jdbcType="VARCHAR" property="rangeId" />
+    <result column="range_name" jdbcType="VARCHAR" property="rangeName" />
+    <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
+    <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="time_node" jdbcType="VARCHAR" property="timeNode" />
+    <result column="is_roof_placement" jdbcType="TINYINT" property="isRoofPlacement" />
+    <result column="announcement_content" jdbcType="VARCHAR" property="announcementContent" />
+    <result column="browse_times" jdbcType="INTEGER" property="browseTimes" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
+    <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, notice_title, range_id, range_name, subordinate_platform_id, subordinate_platform_name, 
+    deadline, time_node, is_roof_placement, announcement_content, browse_times, status, 
+    record_status, creator_account, created_time, modifier_account, modified_time
+  </sql>
+
+  <select id="selectByTalentNoticeList" parameterType="com.jn.enterprise.pd.talent.model.TalentNoticeModel" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_pd_talent_service_notice
+    WHERE 1=1
+    <if test="@org.apache.commons.lang.StringUtils@isNotBlank(noticeTitle)">
+      and notice_title like CONCAT('%', #{noticeTitle,jdbcType=VARCHAR}, '%')
+    </if>
+
+    ORDER BY
+    created_time DESC
+
+  </select>
+</mapper>

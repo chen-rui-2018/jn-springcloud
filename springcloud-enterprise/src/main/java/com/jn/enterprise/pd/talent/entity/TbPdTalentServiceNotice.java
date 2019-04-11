@@ -1,7 +1,6 @@
 package com.jn.enterprise.pd.talent.entity;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Date;
 
 public class TbPdTalentServiceNotice implements Serializable {
@@ -32,6 +31,9 @@ public class TbPdTalentServiceNotice implements Serializable {
     /*@ApiModelProperty("是否置顶（1：置顶，2：不置顶）")*/
     private Byte isRoofPlacement;
 
+    /*@ApiModelProperty("公告内容")*/
+    private String announcementContent;
+
     /*@ApiModelProperty("浏览次数")*/
     private Integer browseTimes;
 
@@ -52,9 +54,6 @@ public class TbPdTalentServiceNotice implements Serializable {
 
     /*@ApiModelProperty("最新更新时间")*/
     private Date modifiedTime;
-
-    /*@ApiModelProperty("公告内容")*/
-    private byte[] announcementContent;
 
     private static final long serialVersionUID = 1L;
 
@@ -130,6 +129,14 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.isRoofPlacement = isRoofPlacement;
     }
 
+    public String getAnnouncementContent() {
+        return announcementContent;
+    }
+
+    public void setAnnouncementContent(String announcementContent) {
+        this.announcementContent = announcementContent == null ? null : announcementContent.trim();
+    }
+
     public Integer getBrowseTimes() {
         return browseTimes;
     }
@@ -186,14 +193,6 @@ public class TbPdTalentServiceNotice implements Serializable {
         this.modifiedTime = modifiedTime;
     }
 
-    public byte[] getAnnouncementContent() {
-        return announcementContent;
-    }
-
-    public void setAnnouncementContent(byte[] announcementContent) {
-        this.announcementContent = announcementContent;
-    }
-
     @Override
     public boolean equals(Object that) {
         if (this == that) {
@@ -215,14 +214,14 @@ public class TbPdTalentServiceNotice implements Serializable {
             && (this.getDeadline() == null ? other.getDeadline() == null : this.getDeadline().equals(other.getDeadline()))
             && (this.getTimeNode() == null ? other.getTimeNode() == null : this.getTimeNode().equals(other.getTimeNode()))
             && (this.getIsRoofPlacement() == null ? other.getIsRoofPlacement() == null : this.getIsRoofPlacement().equals(other.getIsRoofPlacement()))
+            && (this.getAnnouncementContent() == null ? other.getAnnouncementContent() == null : this.getAnnouncementContent().equals(other.getAnnouncementContent()))
             && (this.getBrowseTimes() == null ? other.getBrowseTimes() == null : this.getBrowseTimes().equals(other.getBrowseTimes()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
-            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
-            && (Arrays.equals(this.getAnnouncementContent(), other.getAnnouncementContent()));
+            && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()));
     }
 
     @Override
@@ -238,6 +237,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         result = prime * result + ((getDeadline() == null) ? 0 : getDeadline().hashCode());
         result = prime * result + ((getTimeNode() == null) ? 0 : getTimeNode().hashCode());
         result = prime * result + ((getIsRoofPlacement() == null) ? 0 : getIsRoofPlacement().hashCode());
+        result = prime * result + ((getAnnouncementContent() == null) ? 0 : getAnnouncementContent().hashCode());
         result = prime * result + ((getBrowseTimes() == null) ? 0 : getBrowseTimes().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -245,7 +245,6 @@ public class TbPdTalentServiceNotice implements Serializable {
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
-        result = prime * result + (Arrays.hashCode(getAnnouncementContent()));
         return result;
     }
 
@@ -264,6 +263,7 @@ public class TbPdTalentServiceNotice implements Serializable {
         sb.append(", deadline=").append(deadline);
         sb.append(", timeNode=").append(timeNode);
         sb.append(", isRoofPlacement=").append(isRoofPlacement);
+        sb.append(", announcementContent=").append(announcementContent);
         sb.append(", browseTimes=").append(browseTimes);
         sb.append(", status=").append(status);
         sb.append(", recordStatus=").append(recordStatus);
@@ -271,7 +271,6 @@ public class TbPdTalentServiceNotice implements Serializable {
         sb.append(", createdTime=").append(createdTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", modifiedTime=").append(modifiedTime);
-        sb.append(", announcementContent=").append(announcementContent);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

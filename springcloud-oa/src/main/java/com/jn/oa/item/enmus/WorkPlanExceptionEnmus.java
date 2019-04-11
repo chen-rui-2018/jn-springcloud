@@ -18,7 +18,8 @@ public enum WorkPlanExceptionEnmus implements CodeAndMsg {
     REMARK_NOT_NULL("6012507", "备注信息不能为空"),
     WORKPLANRECODE_ID_NOT_NULL("6012508","工作计划工作记录不能为空"),
     DOWNLOAD_EXCEL_TEMPLATE_FAIL("6012509","工作计划导入模板下载失败,请稍后再试"),
-    FILE_NOT_EMPTY("6012510","上传文件不能为空")
+    FILE_NOT_EMPTY("6012510","上传文件不能为空"),
+    ITEM_IS_EXIST("6012511","修改状态失败,请稍后再试")
     ;
     private String code;
 

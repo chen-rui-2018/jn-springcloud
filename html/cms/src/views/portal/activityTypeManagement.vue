@@ -70,7 +70,7 @@
               :before-upload="progressULod"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
-              action="http://192.168.10.31:1101/springcloud-app-fastdfs/upload/fastUpload"
+              :action="baseUrl+'springcloud-app-fastdfs/upload/fastUpload'"
               list-type="picture-card">
               <i class="el-icon-plus"/>
             </el-upload>
@@ -113,17 +113,21 @@
 </template>
 
 <script>
+// import {
+//   getTypeList,
+//   findActivityType,
+//   deleteActivityTypeList,
+//   activityTypeAdd,
+//   updateActivityType
+// } from '@/api/portalManagement/activityType'
 import {
-  getTypeList,
-  findActivityType,
-  deleteActivityTypeList,
-  activityTypeAdd,
-  updateActivityType
-} from '@/api/portalManagement/activityType'
+  api, paramApi
+} from '@/api/axios'
 import { getToken } from '@/utils/auth'
 export default {
   data() {
     return {
+      baseUrl: process.env.BASE_API,
       loadingUpFlag: false,
       headers: {
         token: getToken()
@@ -199,9 +203,9 @@ export default {
       this.moduleList[0].typeStatus = row.typeStatus
       this.moduleList[0].fileTotal = row.fileTotal
       // const data = { typeId: row.typeId }
-      findActivityType(row.typeId).then(res => {
+      paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, row.typeId, 'typeId').then(res => {
         console.log(res)
-        if (res.data.code === '0000') {
+        if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.templateList.length > 0) {
             this.templateImgList = res.data.data.templateList
           }
@@ -230,9 +234,9 @@ export default {
       this.isDisabled = true
       this.$refs['activityTypeForm'].validate(valid => {
         if (valid) {
-          activityTypeAdd(this.activityTypeForm).then((res) => {
+          api(`${this.GLOBAL.parkUrl}activity/activityType/add`, this.activityTypeForm, 'post').then((res) => {
             console.log(res)
-            if (res.data.code === '0000') {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '新增成功',
                 type: 'success'
@@ -253,8 +257,8 @@ export default {
     },
     handleUpdate(row) {
       this.dialogStatus = '编辑活动类型'
-      findActivityType(row.typeId).then(res => {
-        if (res.data.code === '0000') {
+      paramApi(`${this.GLOBAL.parkUrl}activity/activityType/findActivityType`, row.typeId, 'typeId').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.templateList = []
           this.activityTypeForm.typeName = res.data.data.typeName
           this.activityTypeForm.typeStatus = res.data.data.typeStatus
@@ -280,8 +284,8 @@ export default {
             typeName: this.activityTypeForm.typeName,
             typeStatus: this.activityTypeForm.typeStatus
           }
-          updateActivityType(data).then(res => {
-            if (res.data.code === '0000') {
+          api(`${this.GLOBAL.parkUrl}activity/activityType/updateActivityType`, data, 'post').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '编辑成功',
                 type: 'success'
@@ -312,8 +316,8 @@ export default {
           // const data = {
           //   typeId: row.id
           // }
-          deleteActivityTypeList(row.typeId).then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.parkUrl}activity/activityType/deleteActivityTypeList`, row.typeId, 'typeId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -354,8 +358,8 @@ export default {
           //   'token': getSessiontoken('token'),
           //   'typeId': this.ids
           // }
-          deleteActivityTypeList(this.ids).then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.parkUrl}activity/activityType/deleteActivityTypeList`, this.ids, 'typeId').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -381,9 +385,9 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      getTypeList(this.listQuery).then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/activityType/findActivityTypeList`, this.listQuery, 'post').then(res => {
         console.log(res)
-        if (res.data.code === '0000') {
+        if (res.data.code === this.GLOBAL.code) {
           this.typeList = res.data.data.rows
           this.total = res.data.data.total
           if (this.typeList.length === 0 && this.total > 0) {

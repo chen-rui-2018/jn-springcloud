@@ -59,7 +59,7 @@
           </template>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="write">
         <template v-for="(i,ky) in actiListData">
           <tr :key="ky">
             <td>{{ ky+1 }}</td>
@@ -105,15 +105,19 @@
   </div>
 </template>
 <script>
+// import {
+//   getApplyActivityList,
+//   // downloadSignCodeImg,
+//   signInActivityBackend,
+//   exportDataExcel
+// } from '@/api/portalManagement/activity'
 import {
-  getApplyActivityList,
-  // downloadSignCodeImg,
-  signInActivityBackend,
-  exportDataExcel
-} from '@/api/portalManagement/activity'
+  api
+} from '@/api/axios'
 export default {
   data() {
     return {
+      baseUrl: process.env.BASE_API,
       total: 0,
       signincodeDialogVisible: false,
       src: '',
@@ -181,8 +185,8 @@ export default {
   methods: {
     getApplyActivityList() {
       this.actiList.activityId = this.$route.params.id
-      getApplyActivityList(this.actiList).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}activity/applyActivityList`, this.actiList, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.actiListData = res.data.data.rows
           this.total = res.data.data.total
         }
@@ -196,7 +200,8 @@ export default {
     },
     handleRegistration() {
       this.signincodeDialogVisible = true
-      this.src = `http://192.168.10.31:1101/springcloud-park/activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
+      // console.log(`${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`)
+      this.src = `${this.baseUrl}${this.GLOBAL.parkUrl}activity/downloadSignCodeImg?activityId=${this.$route.params.id}`
     },
     handleExport() {
       const exportColName = []
@@ -216,7 +221,7 @@ export default {
         page: this.actiList.page,
         rows: this.total
       }
-      exportDataExcel(data).then(res => {
+      api(`${this.GLOBAL.parkUrl}activity/exportDataExcel?activityId=${data.activityId}&exportColName=${data.exportColName}&exportTitle=${data.exportTitle}&page=${data.page}&rows=${data.rows}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -227,8 +232,8 @@ export default {
       const data = {
         applyId: i.id
       }
-      signInActivityBackend(data).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.parkUrl}activity/activityApply/signInActivityBackend`, data, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.getApplyActivityList()
           this.$message(res.data.result)
         } else {

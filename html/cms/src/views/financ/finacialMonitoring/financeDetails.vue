@@ -155,7 +155,7 @@ export default {
     },
     // 导出
     handleexcel() {
-      api(`${this.GLOBAL.financUrl}finance/index/expendFormsExport?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/expendFormsExport?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -416,7 +416,7 @@ export default {
     },
     // 获取表格数据
     getTableDate() {
-      api(`${this.GLOBAL.financUrl}finance/index/sectionExpendForms?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/sectionExpendForms?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.incomeList = res.data.data.rows
           this.tableHeader = res.data.data.dynamicHeadList
@@ -429,7 +429,7 @@ export default {
     },
     // 获取汇总信息
     getCollect() {
-      api(`${this.GLOBAL.financUrl}finance/index/accumulativeExpendRatio?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/accumulativeExpendRatio?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.length > 0) {
             this.collectPie(res.data.data)
@@ -452,7 +452,7 @@ export default {
     },
     // 获取明细， 同期对比
     getPeriodContrast() {
-      api(`${this.GLOBAL.financUrl}finance/index/sectionBudgetExpend?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}&typeId=${this.listQuery.typeId}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/sectionBudgetExpend?year=${this.listQuery.selectYear}&departmentId=${this.departmentId}&typeId=${this.listQuery.typeId}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // myChart.setOption.xAxis.data = res.data
           this.drawLine(res.data.data)
@@ -464,7 +464,7 @@ export default {
     },
     // 获取分类
     getType() {
-      api(`${this.GLOBAL.financUrl}finance/index/downType`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/downType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.typeIdOptions = res.data.data
           // this.collectPie(res.data.data)

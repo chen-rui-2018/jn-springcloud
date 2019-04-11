@@ -27,7 +27,7 @@
         t.attachment,
         t.created_time as createdTime,
         t.creator,
-        t.userAccounts
+        t.userNames
         FROM
         (SELECT
             t1.id,
@@ -45,7 +45,7 @@
             FROM
             tb_sys_user
             WHERE account = t1.creator_account ) as creator,
-            GROUP_CONCAT(t2.`name`) as userAccounts
+            GROUP_CONCAT(t2.`name`) as userNames
             FROM
             tb_oa_email t1
             LEFT JOIN

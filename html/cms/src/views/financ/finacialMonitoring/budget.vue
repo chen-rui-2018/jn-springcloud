@@ -198,7 +198,7 @@ export default {
       const formData = new FormData()
       formData.append('file', this.file)
       // 调用导入文件接口
-      Inventor(`${this.GLOBAL.financUrl}finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
+      Inventor(`${this.GLOBAL.parkUrl}finance/budget/add?budgetType=${this.listQuery.budgetType}&departmentId=${this.departmentId}&departmentName=${this.departmentName}`, formData, 'post')
         .then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.$message({
@@ -230,7 +230,7 @@ export default {
     initList() {
       this.listLoading = true
       if (this.status === '1') {
-        api(`${this.GLOBAL.financUrl}finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.parkUrl}finance/budget/selectTotalBudget?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
@@ -242,7 +242,7 @@ export default {
           this.listLoading = false
         })
       } else {
-        api(`${this.GLOBAL.financUrl}finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
+        api(`${this.GLOBAL.parkUrl}finance/budget/selectBudgetHistory?costTypeId=${this.listQuery.financeTypeId}&departmentId=${this.listQuery.departmentId}&endMonth=${this.listQuery.endMonth}&startMonth=${this.listQuery.startMonth}&orderByClause=${this.listQuery.orderByClause}&budgetType=${this.listQuery.budgetType}`, '', 'get').then(res => {
           if (res.data.code === this.GLOBAL.code) {
             this.tableHeader = res.data.data.dynamicHeadList
             this.budgetList = res.data.data.rows
@@ -268,12 +268,12 @@ export default {
     },
     // 获取部门信息
     getDepartment() {
-      api(`${this.GLOBAL.financUrl}finance/documents/getUserDepartment`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/documents/getUserDepartment`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data) {
             res.data.data.forEach(val => {
               if (val.departmentName === '财务部') {
-                api(`${this.GLOBAL.financUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
+                api(`${this.GLOBAL.parkUrl}finance/expenses/selectDepartment`, '', 'get').then(res => {
                   if (res.data.code === this.GLOBAL.code) {
                     this.departmentOptions = res.data.data
                   } else {
@@ -294,7 +294,7 @@ export default {
     },
     // 获取财务类型
     getFinanceType() {
-      api(`${this.GLOBAL.financUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/expenses/selectFinanceType`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           this.financeTypeOptions = res.data.data
         } else {

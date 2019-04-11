@@ -126,8 +126,8 @@
 
 <script>
 import {
-  api, paramApi, exportExcel
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -153,7 +153,7 @@ export default {
   methods: {
     // 导出
     exportText() {
-      exportExcel(this.listQuery).then(res => {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeeting/exportExcelMeeting?meetingRoomName=${this.listQuery.meetingRoomName}&meetingStatus=${this.listQuery.meetingStatus}&departmentName=${this.listQuery.departmentName}&startTime=${this.listQuery.startTime}&endTime=${this.listQuery.endTime}`, '', 'get').then(res => {
         window.location.href = res.request.responseURL
       })
     },
@@ -170,8 +170,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/oaMeeting/finishOaMeeting', row.id, 'id').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/finishOaMeeting`, row.id, 'id').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '结束会议成功',
                 type: 'success'
@@ -201,9 +201,9 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/oaMeeting/cancelOaMeeting', row.id, 'id').then(res => {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeeting/cancelOaMeeting`, row.id, 'id').then(res => {
           // api('oa/oaMeeting/delete', { id: [row.id] }).then(res => {
-            if (res.data.code === '0000') {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '取消会议成功',
                 type: 'success'
@@ -239,8 +239,8 @@ export default {
     // 获取会议列表
     initList() {
       this.listLoading = true
-      api('oa/oaMeeting/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeeting/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.meetingList = res.data.data.rows
           this.total = res.data.data.total
         } else {
@@ -258,7 +258,7 @@ export default {
     .el-dialog{
       height: 400px;
       img{
-           width: 60%;
+           width: 45%;
     display: block;
     border-style: none;
     margin: 0 auto;

@@ -10,10 +10,7 @@ import com.jn.park.finance.service.impl.FinanceTypeServiceImpl;
 import com.jn.park.sp.dao.*;
 import com.jn.park.sp.entity.*;
 import com.jn.park.sp.enums.SpStatusEnums;
-import com.jn.park.sp.model.SpDictDepartModel;
-import com.jn.park.sp.model.SpMessageModel;
-import com.jn.park.sp.model.SpPowerBusiMaterialsModel;
-import com.jn.park.sp.model.SpPowerBusiModel;
+import com.jn.park.sp.model.*;
 import com.jn.park.sp.service.SpPowerPortalService;
 import com.jn.park.sp.vo.SpPowerBusiDetailVo;
 import com.jn.park.sp.vo.SpPowerDetailVo;
@@ -56,6 +53,8 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
     private TbSpMessageMapper tbSpMessageMapper;
     @Autowired
     private CompanyClient companyClient;
+    @Autowired
+    private SpAdDao spAdDao;
 
     /**
      *通过业务id查询业务明细内容
@@ -202,5 +201,12 @@ public class SpPowerPortalServiceImpl implements SpPowerPortalService {
         int insert = tbSpMessageMapper.insert(tbSpMessage);
         logger.info("【添加】添加留言成功,对应ID为{}",tbSpMessage.getId());
         return insert;
+    }
+
+    @Override
+    @ServiceLog(doAction="轮播广告")
+    public List<SpAdModel> getAdvertising() {
+        List<SpAdModel> spAdModelList = spAdDao.getAdvertising();
+        return spAdModelList;
     }
 }

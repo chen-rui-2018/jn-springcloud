@@ -20,13 +20,17 @@ public class TbPointRule implements Serializable {
 
     private String cycleStatus;
 
-    private Integer integralCountNum;
+    private Double incomeTotal;
+
+    private Double incomeScale;
 
     private String ruleType;
 
     private String isStatus;
 
     private String creatorAccount;
+
+    private Date createdTime;
 
     private Date modifiedTime;
 
@@ -100,12 +104,20 @@ public class TbPointRule implements Serializable {
         this.cycleStatus = cycleStatus == null ? null : cycleStatus.trim();
     }
 
-    public Integer getIntegralCountNum() {
-        return integralCountNum;
+    public Double getIncomeTotal() {
+        return incomeTotal;
     }
 
-    public void setIntegralCountNum(Integer integralCountNum) {
-        this.integralCountNum = integralCountNum;
+    public void setIncomeTotal(Double incomeTotal) {
+        this.incomeTotal = incomeTotal;
+    }
+
+    public Double getIncomeScale() {
+        return incomeScale;
+    }
+
+    public void setIncomeScale(Double incomeScale) {
+        this.incomeScale = incomeScale;
     }
 
     public String getRuleType() {
@@ -130,6 +142,14 @@ public class TbPointRule implements Serializable {
 
     public void setCreatorAccount(String creatorAccount) {
         this.creatorAccount = creatorAccount == null ? null : creatorAccount.trim();
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
     }
 
     public Date getModifiedTime() {
@@ -176,10 +196,12 @@ public class TbPointRule implements Serializable {
             && (this.getCycleUnitNum() == null ? other.getCycleUnitNum() == null : this.getCycleUnitNum().equals(other.getCycleUnitNum()))
             && (this.getCycleUnit() == null ? other.getCycleUnit() == null : this.getCycleUnit().equals(other.getCycleUnit()))
             && (this.getCycleStatus() == null ? other.getCycleStatus() == null : this.getCycleStatus().equals(other.getCycleStatus()))
-            && (this.getIntegralCountNum() == null ? other.getIntegralCountNum() == null : this.getIntegralCountNum().equals(other.getIntegralCountNum()))
+            && (this.getIncomeTotal() == null ? other.getIncomeTotal() == null : this.getIncomeTotal().equals(other.getIncomeTotal()))
+            && (this.getIncomeScale() == null ? other.getIncomeScale() == null : this.getIncomeScale().equals(other.getIncomeScale()))
             && (this.getRuleType() == null ? other.getRuleType() == null : this.getRuleType().equals(other.getRuleType()))
             && (this.getIsStatus() == null ? other.getIsStatus() == null : this.getIsStatus().equals(other.getIsStatus()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
+            && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
             && (this.getModifierAccount() == null ? other.getModifierAccount() == null : this.getModifierAccount().equals(other.getModifierAccount()))
             && (this.getRecordStatus() == null ? other.getRecordStatus() == null : this.getRecordStatus().equals(other.getRecordStatus()));
@@ -197,10 +219,12 @@ public class TbPointRule implements Serializable {
         result = prime * result + ((getCycleUnitNum() == null) ? 0 : getCycleUnitNum().hashCode());
         result = prime * result + ((getCycleUnit() == null) ? 0 : getCycleUnit().hashCode());
         result = prime * result + ((getCycleStatus() == null) ? 0 : getCycleStatus().hashCode());
-        result = prime * result + ((getIntegralCountNum() == null) ? 0 : getIntegralCountNum().hashCode());
+        result = prime * result + ((getIncomeTotal() == null) ? 0 : getIncomeTotal().hashCode());
+        result = prime * result + ((getIncomeScale() == null) ? 0 : getIncomeScale().hashCode());
         result = prime * result + ((getRuleType() == null) ? 0 : getRuleType().hashCode());
         result = prime * result + ((getIsStatus() == null) ? 0 : getIsStatus().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
+        result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
         result = prime * result + ((getModifierAccount() == null) ? 0 : getModifierAccount().hashCode());
         result = prime * result + ((getRecordStatus() == null) ? 0 : getRecordStatus().hashCode());
@@ -221,10 +245,12 @@ public class TbPointRule implements Serializable {
         sb.append(", cycleUnitNum=").append(cycleUnitNum);
         sb.append(", cycleUnit=").append(cycleUnit);
         sb.append(", cycleStatus=").append(cycleStatus);
-        sb.append(", integralCountNum=").append(integralCountNum);
+        sb.append(", incomeTotal=").append(incomeTotal);
+        sb.append(", incomeScale=").append(incomeScale);
         sb.append(", ruleType=").append(ruleType);
         sb.append(", isStatus=").append(isStatus);
         sb.append(", creatorAccount=").append(creatorAccount);
+        sb.append(", createdTime=").append(createdTime);
         sb.append(", modifiedTime=").append(modifiedTime);
         sb.append(", modifierAccount=").append(modifierAccount);
         sb.append(", recordStatus=").append(recordStatus);

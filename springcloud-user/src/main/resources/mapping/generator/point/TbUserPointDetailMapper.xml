@@ -6,9 +6,12 @@
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
     <result column="rule_type_name" jdbcType="VARCHAR" property="ruleTypeName" />
     <result column="rule_type_id" jdbcType="VARCHAR" property="ruleTypeId" />
-    <result column="pointtype" jdbcType="VARCHAR" property="pointtype" />
+    <result column="point_type" jdbcType="VARCHAR" property="pointType" />
     <result column="point_num" jdbcType="DOUBLE" property="pointNum" />
     <result column="point_balance" jdbcType="DOUBLE" property="pointBalance" />
+    <result column="point_income_id" jdbcType="VARCHAR" property="pointIncomeId" />
+    <result column="point_order_id" jdbcType="VARCHAR" property="pointOrderId" />
+    <result column="point_status" jdbcType="VARCHAR" property="pointStatus" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -74,8 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, user_account, rule_type_name, rule_type_id, pointtype, point_num, point_balance, 
-    created_time, creator_account, modified_time, modifier_account, record_status
+    id, user_account, rule_type_name, rule_type_id, point_type, point_num, point_balance, 
+    point_income_id, point_order_id, point_status, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.point.entity.TbUserPointDetailCriteria" resultMap="BaseResultMap">
     select
@@ -109,13 +113,15 @@
   </delete>
   <insert id="insert" parameterType="com.jn.user.point.entity.TbUserPointDetail">
     insert into tb_user_point_detail (id, user_account, rule_type_name, 
-      rule_type_id, pointtype, point_num, 
-      point_balance, created_time, creator_account, 
+      rule_type_id, point_type, point_num, 
+      point_balance, point_income_id, point_order_id, 
+      point_status, created_time, creator_account, 
       modified_time, modifier_account, record_status
       )
     values (#{id,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{ruleTypeName,jdbcType=VARCHAR}, 
-      #{ruleTypeId,jdbcType=VARCHAR}, #{pointtype,jdbcType=VARCHAR}, #{pointNum,jdbcType=DOUBLE}, 
-      #{pointBalance,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{ruleTypeId,jdbcType=VARCHAR}, #{pointType,jdbcType=VARCHAR}, #{pointNum,jdbcType=DOUBLE}, 
+      #{pointBalance,jdbcType=DOUBLE}, #{pointIncomeId,jdbcType=VARCHAR}, #{pointOrderId,jdbcType=VARCHAR}, 
+      #{pointStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
       )
   </insert>
@@ -134,14 +140,23 @@
       <if test="ruleTypeId != null">
         rule_type_id,
       </if>
-      <if test="pointtype != null">
-        pointtype,
+      <if test="pointType != null">
+        point_type,
       </if>
       <if test="pointNum != null">
         point_num,
       </if>
       <if test="pointBalance != null">
         point_balance,
+      </if>
+      <if test="pointIncomeId != null">
+        point_income_id,
+      </if>
+      <if test="pointOrderId != null">
+        point_order_id,
+      </if>
+      <if test="pointStatus != null">
+        point_status,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -172,14 +187,23 @@
       <if test="ruleTypeId != null">
         #{ruleTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="pointtype != null">
-        #{pointtype,jdbcType=VARCHAR},
+      <if test="pointType != null">
+        #{pointType,jdbcType=VARCHAR},
       </if>
       <if test="pointNum != null">
         #{pointNum,jdbcType=DOUBLE},
       </if>
       <if test="pointBalance != null">
         #{pointBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="pointIncomeId != null">
+        #{pointIncomeId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointOrderId != null">
+        #{pointOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointStatus != null">
+        #{pointStatus,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -219,14 +243,23 @@
       <if test="record.ruleTypeId != null">
         rule_type_id = #{record.ruleTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="record.pointtype != null">
-        pointtype = #{record.pointtype,jdbcType=VARCHAR},
+      <if test="record.pointType != null">
+        point_type = #{record.pointType,jdbcType=VARCHAR},
       </if>
       <if test="record.pointNum != null">
         point_num = #{record.pointNum,jdbcType=DOUBLE},
       </if>
       <if test="record.pointBalance != null">
         point_balance = #{record.pointBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="record.pointIncomeId != null">
+        point_income_id = #{record.pointIncomeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointOrderId != null">
+        point_order_id = #{record.pointOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointStatus != null">
+        point_status = #{record.pointStatus,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -254,9 +287,12 @@
       user_account = #{record.userAccount,jdbcType=VARCHAR},
       rule_type_name = #{record.ruleTypeName,jdbcType=VARCHAR},
       rule_type_id = #{record.ruleTypeId,jdbcType=VARCHAR},
-      pointtype = #{record.pointtype,jdbcType=VARCHAR},
+      point_type = #{record.pointType,jdbcType=VARCHAR},
       point_num = #{record.pointNum,jdbcType=DOUBLE},
       point_balance = #{record.pointBalance,jdbcType=DOUBLE},
+      point_income_id = #{record.pointIncomeId,jdbcType=VARCHAR},
+      point_order_id = #{record.pointOrderId,jdbcType=VARCHAR},
+      point_status = #{record.pointStatus,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -278,14 +314,23 @@
       <if test="ruleTypeId != null">
         rule_type_id = #{ruleTypeId,jdbcType=VARCHAR},
       </if>
-      <if test="pointtype != null">
-        pointtype = #{pointtype,jdbcType=VARCHAR},
+      <if test="pointType != null">
+        point_type = #{pointType,jdbcType=VARCHAR},
       </if>
       <if test="pointNum != null">
         point_num = #{pointNum,jdbcType=DOUBLE},
       </if>
       <if test="pointBalance != null">
         point_balance = #{pointBalance,jdbcType=DOUBLE},
+      </if>
+      <if test="pointIncomeId != null">
+        point_income_id = #{pointIncomeId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointOrderId != null">
+        point_order_id = #{pointOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointStatus != null">
+        point_status = #{pointStatus,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -310,9 +355,12 @@
     set user_account = #{userAccount,jdbcType=VARCHAR},
       rule_type_name = #{ruleTypeName,jdbcType=VARCHAR},
       rule_type_id = #{ruleTypeId,jdbcType=VARCHAR},
-      pointtype = #{pointtype,jdbcType=VARCHAR},
+      point_type = #{pointType,jdbcType=VARCHAR},
       point_num = #{pointNum,jdbcType=DOUBLE},
       point_balance = #{pointBalance,jdbcType=DOUBLE},
+      point_income_id = #{pointIncomeId,jdbcType=VARCHAR},
+      point_order_id = #{pointOrderId,jdbcType=VARCHAR},
+      point_status = #{pointStatus,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

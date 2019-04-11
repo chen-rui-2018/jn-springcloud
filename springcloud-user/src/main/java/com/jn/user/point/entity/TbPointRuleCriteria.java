@@ -635,63 +635,123 @@ public class TbPointRuleCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumIsNull() {
-            addCriterion("integral_count_num is null");
+        public Criteria andIncomeTotalIsNull() {
+            addCriterion("income_total is null");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumIsNotNull() {
-            addCriterion("integral_count_num is not null");
+        public Criteria andIncomeTotalIsNotNull() {
+            addCriterion("income_total is not null");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumEqualTo(Integer value) {
-            addCriterion("integral_count_num =", value, "integralCountNum");
+        public Criteria andIncomeTotalEqualTo(Double value) {
+            addCriterion("income_total =", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumNotEqualTo(Integer value) {
-            addCriterion("integral_count_num <>", value, "integralCountNum");
+        public Criteria andIncomeTotalNotEqualTo(Double value) {
+            addCriterion("income_total <>", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumGreaterThan(Integer value) {
-            addCriterion("integral_count_num >", value, "integralCountNum");
+        public Criteria andIncomeTotalGreaterThan(Double value) {
+            addCriterion("income_total >", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumGreaterThanOrEqualTo(Integer value) {
-            addCriterion("integral_count_num >=", value, "integralCountNum");
+        public Criteria andIncomeTotalGreaterThanOrEqualTo(Double value) {
+            addCriterion("income_total >=", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumLessThan(Integer value) {
-            addCriterion("integral_count_num <", value, "integralCountNum");
+        public Criteria andIncomeTotalLessThan(Double value) {
+            addCriterion("income_total <", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumLessThanOrEqualTo(Integer value) {
-            addCriterion("integral_count_num <=", value, "integralCountNum");
+        public Criteria andIncomeTotalLessThanOrEqualTo(Double value) {
+            addCriterion("income_total <=", value, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumIn(List<Integer> values) {
-            addCriterion("integral_count_num in", values, "integralCountNum");
+        public Criteria andIncomeTotalIn(List<Double> values) {
+            addCriterion("income_total in", values, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumNotIn(List<Integer> values) {
-            addCriterion("integral_count_num not in", values, "integralCountNum");
+        public Criteria andIncomeTotalNotIn(List<Double> values) {
+            addCriterion("income_total not in", values, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumBetween(Integer value1, Integer value2) {
-            addCriterion("integral_count_num between", value1, value2, "integralCountNum");
+        public Criteria andIncomeTotalBetween(Double value1, Double value2) {
+            addCriterion("income_total between", value1, value2, "incomeTotal");
             return (Criteria) this;
         }
 
-        public Criteria andIntegralCountNumNotBetween(Integer value1, Integer value2) {
-            addCriterion("integral_count_num not between", value1, value2, "integralCountNum");
+        public Criteria andIncomeTotalNotBetween(Double value1, Double value2) {
+            addCriterion("income_total not between", value1, value2, "incomeTotal");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleIsNull() {
+            addCriterion("income_scale is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleIsNotNull() {
+            addCriterion("income_scale is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleEqualTo(Double value) {
+            addCriterion("income_scale =", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleNotEqualTo(Double value) {
+            addCriterion("income_scale <>", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleGreaterThan(Double value) {
+            addCriterion("income_scale >", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleGreaterThanOrEqualTo(Double value) {
+            addCriterion("income_scale >=", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleLessThan(Double value) {
+            addCriterion("income_scale <", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleLessThanOrEqualTo(Double value) {
+            addCriterion("income_scale <=", value, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleIn(List<Double> values) {
+            addCriterion("income_scale in", values, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleNotIn(List<Double> values) {
+            addCriterion("income_scale not in", values, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleBetween(Double value1, Double value2) {
+            addCriterion("income_scale between", value1, value2, "incomeScale");
+            return (Criteria) this;
+        }
+
+        public Criteria andIncomeScaleNotBetween(Double value1, Double value2) {
+            addCriterion("income_scale not between", value1, value2, "incomeScale");
             return (Criteria) this;
         }
 
@@ -902,6 +962,66 @@ public class TbPointRuleCriteria {
 
         public Criteria andCreatorAccountNotBetween(String value1, String value2) {
             addCriterion("creator_account not between", value1, value2, "creatorAccount");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeIsNull() {
+            addCriterion("created_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeIsNotNull() {
+            addCriterion("created_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeEqualTo(Date value) {
+            addCriterion("created_time =", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeNotEqualTo(Date value) {
+            addCriterion("created_time <>", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeGreaterThan(Date value) {
+            addCriterion("created_time >", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("created_time >=", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeLessThan(Date value) {
+            addCriterion("created_time <", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeLessThanOrEqualTo(Date value) {
+            addCriterion("created_time <=", value, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeIn(List<Date> values) {
+            addCriterion("created_time in", values, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeNotIn(List<Date> values) {
+            addCriterion("created_time not in", values, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeBetween(Date value1, Date value2) {
+            addCriterion("created_time between", value1, value2, "createdTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreatedTimeNotBetween(Date value1, Date value2) {
+            addCriterion("created_time not between", value1, value2, "createdTime");
             return (Criteria) this;
         }
 

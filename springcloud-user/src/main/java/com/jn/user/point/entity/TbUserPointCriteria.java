@@ -245,123 +245,123 @@ public class TbUserPointCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumIsNull() {
-            addCriterion("personal_num is null");
+        public Criteria andPointNumIsNull() {
+            addCriterion("point_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumIsNotNull() {
-            addCriterion("personal_num is not null");
+        public Criteria andPointNumIsNotNull() {
+            addCriterion("point_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumEqualTo(Double value) {
-            addCriterion("personal_num =", value, "personalNum");
+        public Criteria andPointNumEqualTo(Double value) {
+            addCriterion("point_num =", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumNotEqualTo(Double value) {
-            addCriterion("personal_num <>", value, "personalNum");
+        public Criteria andPointNumNotEqualTo(Double value) {
+            addCriterion("point_num <>", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumGreaterThan(Double value) {
-            addCriterion("personal_num >", value, "personalNum");
+        public Criteria andPointNumGreaterThan(Double value) {
+            addCriterion("point_num >", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumGreaterThanOrEqualTo(Double value) {
-            addCriterion("personal_num >=", value, "personalNum");
+        public Criteria andPointNumGreaterThanOrEqualTo(Double value) {
+            addCriterion("point_num >=", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumLessThan(Double value) {
-            addCriterion("personal_num <", value, "personalNum");
+        public Criteria andPointNumLessThan(Double value) {
+            addCriterion("point_num <", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumLessThanOrEqualTo(Double value) {
-            addCriterion("personal_num <=", value, "personalNum");
+        public Criteria andPointNumLessThanOrEqualTo(Double value) {
+            addCriterion("point_num <=", value, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumIn(List<Double> values) {
-            addCriterion("personal_num in", values, "personalNum");
+        public Criteria andPointNumIn(List<Double> values) {
+            addCriterion("point_num in", values, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumNotIn(List<Double> values) {
-            addCriterion("personal_num not in", values, "personalNum");
+        public Criteria andPointNumNotIn(List<Double> values) {
+            addCriterion("point_num not in", values, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumBetween(Double value1, Double value2) {
-            addCriterion("personal_num between", value1, value2, "personalNum");
+        public Criteria andPointNumBetween(Double value1, Double value2) {
+            addCriterion("point_num between", value1, value2, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andPersonalNumNotBetween(Double value1, Double value2) {
-            addCriterion("personal_num not between", value1, value2, "personalNum");
+        public Criteria andPointNumNotBetween(Double value1, Double value2) {
+            addCriterion("point_num not between", value1, value2, "pointNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumIsNull() {
-            addCriterion("company_num is null");
+        public Criteria andFreezeNumIsNull() {
+            addCriterion("freeze_num is null");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumIsNotNull() {
-            addCriterion("company_num is not null");
+        public Criteria andFreezeNumIsNotNull() {
+            addCriterion("freeze_num is not null");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumEqualTo(Double value) {
-            addCriterion("company_num =", value, "companyNum");
+        public Criteria andFreezeNumEqualTo(Double value) {
+            addCriterion("freeze_num =", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumNotEqualTo(Double value) {
-            addCriterion("company_num <>", value, "companyNum");
+        public Criteria andFreezeNumNotEqualTo(Double value) {
+            addCriterion("freeze_num <>", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumGreaterThan(Double value) {
-            addCriterion("company_num >", value, "companyNum");
+        public Criteria andFreezeNumGreaterThan(Double value) {
+            addCriterion("freeze_num >", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumGreaterThanOrEqualTo(Double value) {
-            addCriterion("company_num >=", value, "companyNum");
+        public Criteria andFreezeNumGreaterThanOrEqualTo(Double value) {
+            addCriterion("freeze_num >=", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumLessThan(Double value) {
-            addCriterion("company_num <", value, "companyNum");
+        public Criteria andFreezeNumLessThan(Double value) {
+            addCriterion("freeze_num <", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumLessThanOrEqualTo(Double value) {
-            addCriterion("company_num <=", value, "companyNum");
+        public Criteria andFreezeNumLessThanOrEqualTo(Double value) {
+            addCriterion("freeze_num <=", value, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumIn(List<Double> values) {
-            addCriterion("company_num in", values, "companyNum");
+        public Criteria andFreezeNumIn(List<Double> values) {
+            addCriterion("freeze_num in", values, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumNotIn(List<Double> values) {
-            addCriterion("company_num not in", values, "companyNum");
+        public Criteria andFreezeNumNotIn(List<Double> values) {
+            addCriterion("freeze_num not in", values, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumBetween(Double value1, Double value2) {
-            addCriterion("company_num between", value1, value2, "companyNum");
+        public Criteria andFreezeNumBetween(Double value1, Double value2) {
+            addCriterion("freeze_num between", value1, value2, "freezeNum");
             return (Criteria) this;
         }
 
-        public Criteria andCompanyNumNotBetween(Double value1, Double value2) {
-            addCriterion("company_num not between", value1, value2, "companyNum");
+        public Criteria andFreezeNumNotBetween(Double value1, Double value2) {
+            addCriterion("freeze_num not between", value1, value2, "freezeNum");
             return (Criteria) this;
         }
 

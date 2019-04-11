@@ -22,6 +22,10 @@ import com.jn.unionpay.paybill.entity.TbPaymentOrder;
 import com.jn.unionpay.paybill.entity.TbPaymentOrderCriteria;
 import com.jn.unionpay.paybill.enums.PayBillEnum;
 import com.jn.unionpay.paybill.service.PayBillService;
+import com.jn.user.api.UserPointServerClient;
+import com.jn.user.model.PointDeductionParam;
+import com.jn.user.model.PointDeductionVO;
+import com.jn.user.model.PointOrderPayParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -53,6 +57,8 @@ public class PayBillServiceImpl implements PayBillService {
     private CompanyClient companyClient;
     @Autowired
     private TbPaymentOrderMapper tbPaymentOrderMapper;
+    @Autowired
+    private UserPointServerClient userPointServerClient;
 
     private final static String TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -92,6 +98,14 @@ public class PayBillServiceImpl implements PayBillService {
         Page<Object> objects = PageHelper.startPage(paymentBillParam.getPage(), paymentBillParam.getRows() == 0 ? 15 : paymentBillParam.getRows(), true);
         List<PaymentBill> tbPaymentBills = paymentBillMapper.getPaymentBillList(paymentBillParam);
         return new PaginationData(tbPaymentBills, objects == null ? 0 : objects.getTotal());
+    }
+
+    @ServiceLog(doAction = "根据条件查询账单数据[不分页查询]")
+    @Override
+    public List<PaymentBill> getPaymentBillListByIds(String[] billIds){
+        PaymentBillParam paymentBillParam = new PaymentBillParam();
+        paymentBillParam.setBillIds(billIds);
+        return  paymentBillMapper.getPaymentBillList(paymentBillParam);
     }
 
     @ServiceLog(doAction = "创建缴费账单")
@@ -217,8 +231,12 @@ public class PayBillServiceImpl implements PayBillService {
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_IS_NOT_COMPLETE,"账单："+sb.toString()+"已发起支付，请先取消订单再进行支付。");
         }
 
-        //TODO 积分抵扣金额
-
+        //积分抵扣金额
+        PointDeductionParam pointDeductionParam = new PointDeductionParam();
+        pointDeductionParam.setBillIds(billIds);
+        pointDeductionParam.setAccount(user.getAccount());
+        Result<PointDeductionVO> pointDeductionVOResult = userPointServerClient.orderPointDeduction(pointDeductionParam);
+        PointDeductionVO pointDeductionVO = pointDeductionVOResult.getData();
 
         String orderId = UUID.randomUUID().toString().replaceAll("-", "");
         TbPaymentBill paymentBill = new TbPaymentBill();
@@ -242,14 +260,27 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setPayType(payInitiateParam.getPayMenthed());
         paymentOrder.setCreatedTime(new Date());
         paymentOrder.setCreatorAccount(user.getAccount());
+        paymentOrder.setPayAmount(pointDeductionVO.getDeductionTotalAmount()!=null?(totleAmount.setScale(2).doubleValue()-pointDeductionVO.getDeductionTotalAmount()):totleAmount.setScale(2).doubleValue());
+        paymentOrder.setIntegralAmount(pointDeductionVO.getDeductionTotalAmount()!=null?pointDeductionVO.getDeductionTotalAmount():0);
         paymentOrder.setRecordStatus(new Byte(PayBillEnum.BILL_STATE_NOT_DELETE.getCode()));
         int insert = tbPaymentOrderMapper.insert(paymentOrder);
         if(insert != 1){
             logger.error("支付订单数据插入异常，响应条数为：{}",insert);
             throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_CREATE_ERROR);
         }
-        //TODO 调用支付接口发起支付
+        //TODO 调用支付接口发起支付  实际支付金额为“pay_amount”
 
+
+        //支付接口调用成功，处理用户积分
+        PointOrderPayParam pointOrderPayParam = new PointOrderPayParam();
+        BeanUtils.copyProperties(pointDeductionVO,pointOrderPayParam);
+        pointOrderPayParam.setOrderId(orderId);
+        pointOrderPayParam.setAccount(user.getAccount());
+        pointOrderPayParam.setDeductionDetails(pointDeductionVO.getDeductionDetails());
+        Result<Boolean> booleanResult = userPointServerClient.pointPreDeduction(pointOrderPayParam);
+        if(!booleanResult.getData()){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_POINT_IS_ERROR);
+        }
         return null;
     }
 
@@ -284,6 +315,12 @@ public class PayBillServiceImpl implements PayBillService {
             Boolean aBoolean = this.callBackBusiness(bill);
             logger.info("账单ID:{} 账单号:{}回调处理，响应接口：{}",bill.getBillId(),bill.getBillNum(),aBoolean);
         }
+        //处理支付成功积分抵扣
+        Result<Boolean> booleanResult = userPointServerClient.orderPaySuccessPointDeduction(callBackParam.getOrderId());
+        if(!booleanResult.getData()){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_POINT_IS_ERROR);
+        }
+
         PayCallBackVO callBackVO = new PayCallBackVO();
         callBackVO.setOrderId(callBackParam.getPayOrderId());
         callBackVO.setRespStatus("处理成功");
@@ -312,6 +349,12 @@ public class PayBillServiceImpl implements PayBillService {
         paymentOrder.setModifiedTime(new Date());
         paymentOrder.setModifierAccount(account);
         logger.info("订单取消支付成功，订单ID:{},操作人{}",orderId,account);
+        //
+        //处理支付失败/取消积分退回
+        Result<Boolean> booleanResult = userPointServerClient.orderPaySuccessPointDeduction(orderId);
+        if(!booleanResult.getData()){
+            throw new JnSpringCloudException(PayBillExceptionEnum.BILL_PAY_ORDER_POINT_IS_ERROR);
+        }
         return tbPaymentOrderMapper.updateByPrimaryKeySelective(paymentOrder);
     }
 

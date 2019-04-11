@@ -8,9 +8,9 @@ public class TbUserPoint implements Serializable {
 
     private String userAccount;
 
-    private Double personalNum;
+    private Double pointNum;
 
-    private Double companyNum;
+    private Double freezeNum;
 
     private Date createdTime;
 
@@ -40,20 +40,20 @@ public class TbUserPoint implements Serializable {
         this.userAccount = userAccount == null ? null : userAccount.trim();
     }
 
-    public Double getPersonalNum() {
-        return personalNum;
+    public Double getPointNum() {
+        return pointNum;
     }
 
-    public void setPersonalNum(Double personalNum) {
-        this.personalNum = personalNum;
+    public void setPointNum(Double pointNum) {
+        this.pointNum = pointNum;
     }
 
-    public Double getCompanyNum() {
-        return companyNum;
+    public Double getFreezeNum() {
+        return freezeNum;
     }
 
-    public void setCompanyNum(Double companyNum) {
-        this.companyNum = companyNum;
+    public void setFreezeNum(Double freezeNum) {
+        this.freezeNum = freezeNum;
     }
 
     public Date getCreatedTime() {
@@ -110,8 +110,8 @@ public class TbUserPoint implements Serializable {
         TbUserPoint other = (TbUserPoint) that;
         return (this.getPointId() == null ? other.getPointId() == null : this.getPointId().equals(other.getPointId()))
             && (this.getUserAccount() == null ? other.getUserAccount() == null : this.getUserAccount().equals(other.getUserAccount()))
-            && (this.getPersonalNum() == null ? other.getPersonalNum() == null : this.getPersonalNum().equals(other.getPersonalNum()))
-            && (this.getCompanyNum() == null ? other.getCompanyNum() == null : this.getCompanyNum().equals(other.getCompanyNum()))
+            && (this.getPointNum() == null ? other.getPointNum() == null : this.getPointNum().equals(other.getPointNum()))
+            && (this.getFreezeNum() == null ? other.getFreezeNum() == null : this.getFreezeNum().equals(other.getFreezeNum()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -125,8 +125,8 @@ public class TbUserPoint implements Serializable {
         int result = 1;
         result = prime * result + ((getPointId() == null) ? 0 : getPointId().hashCode());
         result = prime * result + ((getUserAccount() == null) ? 0 : getUserAccount().hashCode());
-        result = prime * result + ((getPersonalNum() == null) ? 0 : getPersonalNum().hashCode());
-        result = prime * result + ((getCompanyNum() == null) ? 0 : getCompanyNum().hashCode());
+        result = prime * result + ((getPointNum() == null) ? 0 : getPointNum().hashCode());
+        result = prime * result + ((getFreezeNum() == null) ? 0 : getFreezeNum().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -143,8 +143,8 @@ public class TbUserPoint implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", pointId=").append(pointId);
         sb.append(", userAccount=").append(userAccount);
-        sb.append(", personalNum=").append(personalNum);
-        sb.append(", companyNum=").append(companyNum);
+        sb.append(", pointNum=").append(pointNum);
+        sb.append(", freezeNum=").append(freezeNum);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

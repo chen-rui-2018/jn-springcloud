@@ -10,10 +10,12 @@
     <result column="cycle_unit_num" jdbcType="INTEGER" property="cycleUnitNum" />
     <result column="cycle_unit" jdbcType="VARCHAR" property="cycleUnit" />
     <result column="cycle_status" jdbcType="VARCHAR" property="cycleStatus" />
-    <result column="integral_count_num" jdbcType="INTEGER" property="integralCountNum" />
+    <result column="income_total" jdbcType="DOUBLE" property="incomeTotal" />
+    <result column="income_scale" jdbcType="DOUBLE" property="incomeScale" />
     <result column="rule_type" jdbcType="VARCHAR" property="ruleType" />
     <result column="is_status" jdbcType="VARCHAR" property="isStatus" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -78,8 +80,8 @@
   </sql>
   <sql id="Base_Column_List">
     rule_id, rule_code, rule_name, integral_num, integral_cycle, cycle_unit_num, cycle_unit, 
-    cycle_status, integral_count_num, rule_type, is_status, creator_account, modified_time, 
-    modifier_account, record_status
+    cycle_status, income_total, income_scale, rule_type, is_status, creator_account, 
+    created_time, modified_time, modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.point.entity.TbPointRuleCriteria" resultMap="BaseResultMap">
     select
@@ -114,16 +116,16 @@
   <insert id="insert" parameterType="com.jn.user.point.entity.TbPointRule">
     insert into tb_point_rule (rule_id, rule_code, rule_name, 
       integral_num, integral_cycle, cycle_unit_num, 
-      cycle_unit, cycle_status, integral_count_num, 
-      rule_type, is_status, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      cycle_unit, cycle_status, income_total, 
+      income_scale, rule_type, is_status, 
+      creator_account, created_time, modified_time, 
+      modifier_account, record_status)
     values (#{ruleId,jdbcType=VARCHAR}, #{ruleCode,jdbcType=VARCHAR}, #{ruleName,jdbcType=VARCHAR}, 
       #{integralNum,jdbcType=DOUBLE}, #{integralCycle,jdbcType=INTEGER}, #{cycleUnitNum,jdbcType=INTEGER}, 
-      #{cycleUnit,jdbcType=VARCHAR}, #{cycleStatus,jdbcType=VARCHAR}, #{integralCountNum,jdbcType=INTEGER}, 
-      #{ruleType,jdbcType=VARCHAR}, #{isStatus,jdbcType=VARCHAR}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{cycleUnit,jdbcType=VARCHAR}, #{cycleStatus,jdbcType=VARCHAR}, #{incomeTotal,jdbcType=DOUBLE}, 
+      #{incomeScale,jdbcType=DOUBLE}, #{ruleType,jdbcType=VARCHAR}, #{isStatus,jdbcType=VARCHAR}, 
+      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.user.point.entity.TbPointRule">
     insert into tb_point_rule
@@ -152,8 +154,11 @@
       <if test="cycleStatus != null">
         cycle_status,
       </if>
-      <if test="integralCountNum != null">
-        integral_count_num,
+      <if test="incomeTotal != null">
+        income_total,
+      </if>
+      <if test="incomeScale != null">
+        income_scale,
       </if>
       <if test="ruleType != null">
         rule_type,
@@ -163,6 +168,9 @@
       </if>
       <if test="creatorAccount != null">
         creator_account,
+      </if>
+      <if test="createdTime != null">
+        created_time,
       </if>
       <if test="modifiedTime != null">
         modified_time,
@@ -199,8 +207,11 @@
       <if test="cycleStatus != null">
         #{cycleStatus,jdbcType=VARCHAR},
       </if>
-      <if test="integralCountNum != null">
-        #{integralCountNum,jdbcType=INTEGER},
+      <if test="incomeTotal != null">
+        #{incomeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="incomeScale != null">
+        #{incomeScale,jdbcType=DOUBLE},
       </if>
       <if test="ruleType != null">
         #{ruleType,jdbcType=VARCHAR},
@@ -210,6 +221,9 @@
       </if>
       <if test="creatorAccount != null">
         #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifiedTime != null">
         #{modifiedTime,jdbcType=TIMESTAMP},
@@ -255,8 +269,11 @@
       <if test="record.cycleStatus != null">
         cycle_status = #{record.cycleStatus,jdbcType=VARCHAR},
       </if>
-      <if test="record.integralCountNum != null">
-        integral_count_num = #{record.integralCountNum,jdbcType=INTEGER},
+      <if test="record.incomeTotal != null">
+        income_total = #{record.incomeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="record.incomeScale != null">
+        income_scale = #{record.incomeScale,jdbcType=DOUBLE},
       </if>
       <if test="record.ruleType != null">
         rule_type = #{record.ruleType,jdbcType=VARCHAR},
@@ -266,6 +283,9 @@
       </if>
       <if test="record.creatorAccount != null">
         creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.modifiedTime != null">
         modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -291,10 +311,12 @@
       cycle_unit_num = #{record.cycleUnitNum,jdbcType=INTEGER},
       cycle_unit = #{record.cycleUnit,jdbcType=VARCHAR},
       cycle_status = #{record.cycleStatus,jdbcType=VARCHAR},
-      integral_count_num = #{record.integralCountNum,jdbcType=INTEGER},
+      income_total = #{record.incomeTotal,jdbcType=DOUBLE},
+      income_scale = #{record.incomeScale,jdbcType=DOUBLE},
       rule_type = #{record.ruleType,jdbcType=VARCHAR},
       is_status = #{record.isStatus,jdbcType=VARCHAR},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT}
@@ -326,8 +348,11 @@
       <if test="cycleStatus != null">
         cycle_status = #{cycleStatus,jdbcType=VARCHAR},
       </if>
-      <if test="integralCountNum != null">
-        integral_count_num = #{integralCountNum,jdbcType=INTEGER},
+      <if test="incomeTotal != null">
+        income_total = #{incomeTotal,jdbcType=DOUBLE},
+      </if>
+      <if test="incomeScale != null">
+        income_scale = #{incomeScale,jdbcType=DOUBLE},
       </if>
       <if test="ruleType != null">
         rule_type = #{ruleType,jdbcType=VARCHAR},
@@ -337,6 +362,9 @@
       </if>
       <if test="creatorAccount != null">
         creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifiedTime != null">
         modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
@@ -359,10 +387,12 @@
       cycle_unit_num = #{cycleUnitNum,jdbcType=INTEGER},
       cycle_unit = #{cycleUnit,jdbcType=VARCHAR},
       cycle_status = #{cycleStatus,jdbcType=VARCHAR},
-      integral_count_num = #{integralCountNum,jdbcType=INTEGER},
+      income_total = #{incomeTotal,jdbcType=DOUBLE},
+      income_scale = #{incomeScale,jdbcType=DOUBLE},
       rule_type = #{ruleType,jdbcType=VARCHAR},
       is_status = #{isStatus,jdbcType=VARCHAR},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT}

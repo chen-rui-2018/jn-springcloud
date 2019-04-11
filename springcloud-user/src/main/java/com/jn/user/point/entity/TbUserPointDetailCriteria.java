@@ -385,73 +385,73 @@ public class TbUserPointDetailCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeIsNull() {
-            addCriterion("pointtype is null");
+        public Criteria andPointTypeIsNull() {
+            addCriterion("point_type is null");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeIsNotNull() {
-            addCriterion("pointtype is not null");
+        public Criteria andPointTypeIsNotNull() {
+            addCriterion("point_type is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeEqualTo(String value) {
-            addCriterion("pointtype =", value, "pointtype");
+        public Criteria andPointTypeEqualTo(String value) {
+            addCriterion("point_type =", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeNotEqualTo(String value) {
-            addCriterion("pointtype <>", value, "pointtype");
+        public Criteria andPointTypeNotEqualTo(String value) {
+            addCriterion("point_type <>", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeGreaterThan(String value) {
-            addCriterion("pointtype >", value, "pointtype");
+        public Criteria andPointTypeGreaterThan(String value) {
+            addCriterion("point_type >", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeGreaterThanOrEqualTo(String value) {
-            addCriterion("pointtype >=", value, "pointtype");
+        public Criteria andPointTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("point_type >=", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeLessThan(String value) {
-            addCriterion("pointtype <", value, "pointtype");
+        public Criteria andPointTypeLessThan(String value) {
+            addCriterion("point_type <", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeLessThanOrEqualTo(String value) {
-            addCriterion("pointtype <=", value, "pointtype");
+        public Criteria andPointTypeLessThanOrEqualTo(String value) {
+            addCriterion("point_type <=", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeLike(String value) {
-            addCriterion("pointtype like", value, "pointtype");
+        public Criteria andPointTypeLike(String value) {
+            addCriterion("point_type like", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeNotLike(String value) {
-            addCriterion("pointtype not like", value, "pointtype");
+        public Criteria andPointTypeNotLike(String value) {
+            addCriterion("point_type not like", value, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeIn(List<String> values) {
-            addCriterion("pointtype in", values, "pointtype");
+        public Criteria andPointTypeIn(List<String> values) {
+            addCriterion("point_type in", values, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeNotIn(List<String> values) {
-            addCriterion("pointtype not in", values, "pointtype");
+        public Criteria andPointTypeNotIn(List<String> values) {
+            addCriterion("point_type not in", values, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeBetween(String value1, String value2) {
-            addCriterion("pointtype between", value1, value2, "pointtype");
+        public Criteria andPointTypeBetween(String value1, String value2) {
+            addCriterion("point_type between", value1, value2, "pointType");
             return (Criteria) this;
         }
 
-        public Criteria andPointtypeNotBetween(String value1, String value2) {
-            addCriterion("pointtype not between", value1, value2, "pointtype");
+        public Criteria andPointTypeNotBetween(String value1, String value2) {
+            addCriterion("point_type not between", value1, value2, "pointType");
             return (Criteria) this;
         }
 
@@ -572,6 +572,216 @@ public class TbUserPointDetailCriteria {
 
         public Criteria andPointBalanceNotBetween(Double value1, Double value2) {
             addCriterion("point_balance not between", value1, value2, "pointBalance");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdIsNull() {
+            addCriterion("point_income_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdIsNotNull() {
+            addCriterion("point_income_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdEqualTo(String value) {
+            addCriterion("point_income_id =", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdNotEqualTo(String value) {
+            addCriterion("point_income_id <>", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdGreaterThan(String value) {
+            addCriterion("point_income_id >", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdGreaterThanOrEqualTo(String value) {
+            addCriterion("point_income_id >=", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdLessThan(String value) {
+            addCriterion("point_income_id <", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdLessThanOrEqualTo(String value) {
+            addCriterion("point_income_id <=", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdLike(String value) {
+            addCriterion("point_income_id like", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdNotLike(String value) {
+            addCriterion("point_income_id not like", value, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdIn(List<String> values) {
+            addCriterion("point_income_id in", values, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdNotIn(List<String> values) {
+            addCriterion("point_income_id not in", values, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdBetween(String value1, String value2) {
+            addCriterion("point_income_id between", value1, value2, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointIncomeIdNotBetween(String value1, String value2) {
+            addCriterion("point_income_id not between", value1, value2, "pointIncomeId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdIsNull() {
+            addCriterion("point_order_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdIsNotNull() {
+            addCriterion("point_order_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdEqualTo(String value) {
+            addCriterion("point_order_id =", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdNotEqualTo(String value) {
+            addCriterion("point_order_id <>", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdGreaterThan(String value) {
+            addCriterion("point_order_id >", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdGreaterThanOrEqualTo(String value) {
+            addCriterion("point_order_id >=", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdLessThan(String value) {
+            addCriterion("point_order_id <", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdLessThanOrEqualTo(String value) {
+            addCriterion("point_order_id <=", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdLike(String value) {
+            addCriterion("point_order_id like", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdNotLike(String value) {
+            addCriterion("point_order_id not like", value, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdIn(List<String> values) {
+            addCriterion("point_order_id in", values, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdNotIn(List<String> values) {
+            addCriterion("point_order_id not in", values, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdBetween(String value1, String value2) {
+            addCriterion("point_order_id between", value1, value2, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointOrderIdNotBetween(String value1, String value2) {
+            addCriterion("point_order_id not between", value1, value2, "pointOrderId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusIsNull() {
+            addCriterion("point_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusIsNotNull() {
+            addCriterion("point_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusEqualTo(String value) {
+            addCriterion("point_status =", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusNotEqualTo(String value) {
+            addCriterion("point_status <>", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusGreaterThan(String value) {
+            addCriterion("point_status >", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusGreaterThanOrEqualTo(String value) {
+            addCriterion("point_status >=", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusLessThan(String value) {
+            addCriterion("point_status <", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusLessThanOrEqualTo(String value) {
+            addCriterion("point_status <=", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusLike(String value) {
+            addCriterion("point_status like", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusNotLike(String value) {
+            addCriterion("point_status not like", value, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusIn(List<String> values) {
+            addCriterion("point_status in", values, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusNotIn(List<String> values) {
+            addCriterion("point_status not in", values, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusBetween(String value1, String value2) {
+            addCriterion("point_status between", value1, value2, "pointStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andPointStatusNotBetween(String value1, String value2) {
+            addCriterion("point_status not between", value1, value2, "pointStatus");
             return (Criteria) this;
         }
 

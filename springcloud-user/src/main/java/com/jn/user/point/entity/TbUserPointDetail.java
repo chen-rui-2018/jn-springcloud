@@ -12,11 +12,17 @@ public class TbUserPointDetail implements Serializable {
 
     private String ruleTypeId;
 
-    private String pointtype;
+    private String pointType;
 
     private Double pointNum;
 
     private Double pointBalance;
+
+    private String pointIncomeId;
+
+    private String pointOrderId;
+
+    private String pointStatus;
 
     private Date createdTime;
 
@@ -62,12 +68,12 @@ public class TbUserPointDetail implements Serializable {
         this.ruleTypeId = ruleTypeId == null ? null : ruleTypeId.trim();
     }
 
-    public String getPointtype() {
-        return pointtype;
+    public String getPointType() {
+        return pointType;
     }
 
-    public void setPointtype(String pointtype) {
-        this.pointtype = pointtype == null ? null : pointtype.trim();
+    public void setPointType(String pointType) {
+        this.pointType = pointType == null ? null : pointType.trim();
     }
 
     public Double getPointNum() {
@@ -84,6 +90,30 @@ public class TbUserPointDetail implements Serializable {
 
     public void setPointBalance(Double pointBalance) {
         this.pointBalance = pointBalance;
+    }
+
+    public String getPointIncomeId() {
+        return pointIncomeId;
+    }
+
+    public void setPointIncomeId(String pointIncomeId) {
+        this.pointIncomeId = pointIncomeId == null ? null : pointIncomeId.trim();
+    }
+
+    public String getPointOrderId() {
+        return pointOrderId;
+    }
+
+    public void setPointOrderId(String pointOrderId) {
+        this.pointOrderId = pointOrderId == null ? null : pointOrderId.trim();
+    }
+
+    public String getPointStatus() {
+        return pointStatus;
+    }
+
+    public void setPointStatus(String pointStatus) {
+        this.pointStatus = pointStatus == null ? null : pointStatus.trim();
     }
 
     public Date getCreatedTime() {
@@ -142,9 +172,12 @@ public class TbUserPointDetail implements Serializable {
             && (this.getUserAccount() == null ? other.getUserAccount() == null : this.getUserAccount().equals(other.getUserAccount()))
             && (this.getRuleTypeName() == null ? other.getRuleTypeName() == null : this.getRuleTypeName().equals(other.getRuleTypeName()))
             && (this.getRuleTypeId() == null ? other.getRuleTypeId() == null : this.getRuleTypeId().equals(other.getRuleTypeId()))
-            && (this.getPointtype() == null ? other.getPointtype() == null : this.getPointtype().equals(other.getPointtype()))
+            && (this.getPointType() == null ? other.getPointType() == null : this.getPointType().equals(other.getPointType()))
             && (this.getPointNum() == null ? other.getPointNum() == null : this.getPointNum().equals(other.getPointNum()))
             && (this.getPointBalance() == null ? other.getPointBalance() == null : this.getPointBalance().equals(other.getPointBalance()))
+            && (this.getPointIncomeId() == null ? other.getPointIncomeId() == null : this.getPointIncomeId().equals(other.getPointIncomeId()))
+            && (this.getPointOrderId() == null ? other.getPointOrderId() == null : this.getPointOrderId().equals(other.getPointOrderId()))
+            && (this.getPointStatus() == null ? other.getPointStatus() == null : this.getPointStatus().equals(other.getPointStatus()))
             && (this.getCreatedTime() == null ? other.getCreatedTime() == null : this.getCreatedTime().equals(other.getCreatedTime()))
             && (this.getCreatorAccount() == null ? other.getCreatorAccount() == null : this.getCreatorAccount().equals(other.getCreatorAccount()))
             && (this.getModifiedTime() == null ? other.getModifiedTime() == null : this.getModifiedTime().equals(other.getModifiedTime()))
@@ -160,9 +193,12 @@ public class TbUserPointDetail implements Serializable {
         result = prime * result + ((getUserAccount() == null) ? 0 : getUserAccount().hashCode());
         result = prime * result + ((getRuleTypeName() == null) ? 0 : getRuleTypeName().hashCode());
         result = prime * result + ((getRuleTypeId() == null) ? 0 : getRuleTypeId().hashCode());
-        result = prime * result + ((getPointtype() == null) ? 0 : getPointtype().hashCode());
+        result = prime * result + ((getPointType() == null) ? 0 : getPointType().hashCode());
         result = prime * result + ((getPointNum() == null) ? 0 : getPointNum().hashCode());
         result = prime * result + ((getPointBalance() == null) ? 0 : getPointBalance().hashCode());
+        result = prime * result + ((getPointIncomeId() == null) ? 0 : getPointIncomeId().hashCode());
+        result = prime * result + ((getPointOrderId() == null) ? 0 : getPointOrderId().hashCode());
+        result = prime * result + ((getPointStatus() == null) ? 0 : getPointStatus().hashCode());
         result = prime * result + ((getCreatedTime() == null) ? 0 : getCreatedTime().hashCode());
         result = prime * result + ((getCreatorAccount() == null) ? 0 : getCreatorAccount().hashCode());
         result = prime * result + ((getModifiedTime() == null) ? 0 : getModifiedTime().hashCode());
@@ -181,9 +217,12 @@ public class TbUserPointDetail implements Serializable {
         sb.append(", userAccount=").append(userAccount);
         sb.append(", ruleTypeName=").append(ruleTypeName);
         sb.append(", ruleTypeId=").append(ruleTypeId);
-        sb.append(", pointtype=").append(pointtype);
+        sb.append(", pointType=").append(pointType);
         sb.append(", pointNum=").append(pointNum);
         sb.append(", pointBalance=").append(pointBalance);
+        sb.append(", pointIncomeId=").append(pointIncomeId);
+        sb.append(", pointOrderId=").append(pointOrderId);
+        sb.append(", pointStatus=").append(pointStatus);
         sb.append(", createdTime=").append(createdTime);
         sb.append(", creatorAccount=").append(creatorAccount);
         sb.append(", modifiedTime=").append(modifiedTime);

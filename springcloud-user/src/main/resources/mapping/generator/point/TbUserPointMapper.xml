@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.jn.user.point.entity.TbUserPoint">
     <id column="point_id" jdbcType="VARCHAR" property="pointId" />
     <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
-    <result column="personal_num" jdbcType="DOUBLE" property="personalNum" />
-    <result column="company_num" jdbcType="DOUBLE" property="companyNum" />
+    <result column="point_num" jdbcType="DOUBLE" property="pointNum" />
+    <result column="freeze_num" jdbcType="DOUBLE" property="freezeNum" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
@@ -71,8 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    point_id, user_account, personal_num, company_num, created_time, creator_account, 
-    modified_time, modifier_account, record_status
+    point_id, user_account, point_num, freeze_num, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.user.point.entity.TbUserPointCriteria" resultMap="BaseResultMap">
     select
@@ -105,12 +105,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jn.user.point.entity.TbUserPoint">
-    insert into tb_user_point (point_id, user_account, personal_num, 
-      company_num, created_time, creator_account, 
+    insert into tb_user_point (point_id, user_account, point_num, 
+      freeze_num, created_time, creator_account, 
       modified_time, modifier_account, record_status
       )
-    values (#{pointId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{personalNum,jdbcType=DOUBLE}, 
-      #{companyNum,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
+    values (#{pointId,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, #{pointNum,jdbcType=DOUBLE}, 
+      #{freezeNum,jdbcType=DOUBLE}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
       )
   </insert>
@@ -123,11 +123,11 @@
       <if test="userAccount != null">
         user_account,
       </if>
-      <if test="personalNum != null">
-        personal_num,
+      <if test="pointNum != null">
+        point_num,
       </if>
-      <if test="companyNum != null">
-        company_num,
+      <if test="freezeNum != null">
+        freeze_num,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -152,11 +152,11 @@
       <if test="userAccount != null">
         #{userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="personalNum != null">
-        #{personalNum,jdbcType=DOUBLE},
+      <if test="pointNum != null">
+        #{pointNum,jdbcType=DOUBLE},
       </if>
-      <if test="companyNum != null">
-        #{companyNum,jdbcType=DOUBLE},
+      <if test="freezeNum != null">
+        #{freezeNum,jdbcType=DOUBLE},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -190,11 +190,11 @@
       <if test="record.userAccount != null">
         user_account = #{record.userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="record.personalNum != null">
-        personal_num = #{record.personalNum,jdbcType=DOUBLE},
+      <if test="record.pointNum != null">
+        point_num = #{record.pointNum,jdbcType=DOUBLE},
       </if>
-      <if test="record.companyNum != null">
-        company_num = #{record.companyNum,jdbcType=DOUBLE},
+      <if test="record.freezeNum != null">
+        freeze_num = #{record.freezeNum,jdbcType=DOUBLE},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -220,8 +220,8 @@
     update tb_user_point
     set point_id = #{record.pointId,jdbcType=VARCHAR},
       user_account = #{record.userAccount,jdbcType=VARCHAR},
-      personal_num = #{record.personalNum,jdbcType=DOUBLE},
-      company_num = #{record.companyNum,jdbcType=DOUBLE},
+      point_num = #{record.pointNum,jdbcType=DOUBLE},
+      freeze_num = #{record.freezeNum,jdbcType=DOUBLE},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
@@ -237,11 +237,11 @@
       <if test="userAccount != null">
         user_account = #{userAccount,jdbcType=VARCHAR},
       </if>
-      <if test="personalNum != null">
-        personal_num = #{personalNum,jdbcType=DOUBLE},
+      <if test="pointNum != null">
+        point_num = #{pointNum,jdbcType=DOUBLE},
       </if>
-      <if test="companyNum != null">
-        company_num = #{companyNum,jdbcType=DOUBLE},
+      <if test="freezeNum != null">
+        freeze_num = #{freezeNum,jdbcType=DOUBLE},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -264,8 +264,8 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.user.point.entity.TbUserPoint">
     update tb_user_point
     set user_account = #{userAccount,jdbcType=VARCHAR},
-      personal_num = #{personalNum,jdbcType=DOUBLE},
-      company_num = #{companyNum,jdbcType=DOUBLE},
+      point_num = #{pointNum,jdbcType=DOUBLE},
+      freeze_num = #{freezeNum,jdbcType=DOUBLE},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},

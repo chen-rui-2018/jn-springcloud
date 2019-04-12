@@ -281,7 +281,7 @@ public class RequireManagementServiceImpl implements RequireManagementService {
         tbServiceRequire.setReqDetail(requireDetail);
         //需求用户姓名，职务，手机号，邮箱
         tbServiceRequire.setReqName(user.getName());
-        tbServiceRequire.setReqPost(user.getPost());
+        tbServiceRequire.setReqPost(user.getPosition());
         tbServiceRequire.setReqPhone(user.getPhone());
         tbServiceRequire.setReqEmail(user.getEmail());
         //发布日期，发布人

@@ -15,6 +15,7 @@ import com.jn.system.file.service.SysFileGroupService;
 import com.jn.system.log.annotation.ControllerLog;
 import com.jn.system.menu.service.SysResourcesService;
 import com.jn.system.model.*;
+import com.jn.system.permission.service.SysRoleService;
 import com.jn.system.user.model.SysUser;
 import com.jn.system.user.model.SysUserAdd;
 import com.jn.system.user.service.SysUserService;
@@ -61,6 +62,9 @@ public class SystemController extends BaseController implements SystemClient {
 
     @Autowired
     private SysDepartmentService sysDepartmentService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Override
     @ControllerLog(doAction = "用户登录")
@@ -193,6 +197,19 @@ public class SystemController extends BaseController implements SystemClient {
         Set<String> addRoleId = sysUserRoleVO.getAddRoleId();
         Boolean result = sysUserService.updateUserRole(user, deleRoleIds, addRoleId);
         return new Result(result);
+    }
+
+    /**
+     * 根据角色名称,获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @Override
+    @ControllerLog(doAction = "根据角色名称,获取角色信息")
+    public Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName) {
+        SysRole sysRole = sysRoleService.getRoleByName(roleName);
+        return new Result<SysRole>(sysRole);
     }
 
     @Override

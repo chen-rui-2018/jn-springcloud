@@ -21,10 +21,11 @@ public interface OrgColleagueService {
 
     /**
      * 设置为联系人
+     * @param loginAccount  当前登录用户
      * @param account 设置为联系人的账号
      * @return
      */
-    int setAsContact(String account);
+    int setAsContact(String loginAccount,String account);
 
     /**
      *

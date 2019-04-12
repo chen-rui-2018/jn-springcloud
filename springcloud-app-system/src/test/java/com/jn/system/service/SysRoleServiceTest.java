@@ -4,6 +4,7 @@ import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.permission.entity.TbSysRole;
 import com.jn.system.permission.model.*;
@@ -183,6 +184,12 @@ public class SysRoleServiceTest {
         String result = sysRoleService.checkRoleName(roleName);
         Assert.assertThat(result, Matchers.anyOf(Matchers.equalTo(SysReturnMessageEnum.FAIL.getMessage()),
                 Matchers.equalTo(SysReturnMessageEnum.SUCCESS.getMessage())));
+    }
+
+    @Test
+    public void getRoleByName(){
+        SysRole sysRole = sysRoleService.getRoleByName(roleName);
+        Assert.assertThat(sysRole, Matchers.anything());
     }
 
     /**

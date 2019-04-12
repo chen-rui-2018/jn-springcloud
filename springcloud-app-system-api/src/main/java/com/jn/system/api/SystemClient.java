@@ -170,4 +170,14 @@ public interface SystemClient {
      */
     @RequestMapping(value = "/api/system/updateUserRole", method = RequestMethod.POST)
     Result<Boolean> updateUserRole(@RequestBody SysUserRoleVO sysUserRoleVO);
+
+    /**
+     * 根据角色名称获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getRoleByName", method = RequestMethod.GET)
+    Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName);
+
 }

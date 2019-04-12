@@ -337,6 +337,20 @@ public class WorkPlanServiceImpl implements WorkPlanService {
     }
 
     /**
+     * 获取所有项目信息
+     *
+     * @return
+     */
+    @Override
+    @ServiceLog(doAction = "获取所有项目信息")
+    public List<TbOaItem> getItemAll() {
+        TbOaItemCriteria tbOaItemCriteria = new TbOaItemCriteria();
+        tbOaItemCriteria.setOrderByClause("id_ desc");
+        List<TbOaItem> itemList = tbOaItemMapper.selectByExample(tbOaItemCriteria);
+        return itemList;
+    }
+
+    /**
      * 获取工作计划历史记录
      *
      * @param user
@@ -852,7 +866,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
      */
     private void updateItemProgress(TbOaWorkPlan tbOaWorkPlan, Integer totalConsumeTime) {
         TbOaItem tbOaItem = tbOaItemMapper.selectByPrimaryKey(tbOaWorkPlan.getItemId());
-        if (tbOaItem == null){
+        if (tbOaItem == null) {
             logger.warn("[工作计划] 导入失败,导入文件为空");
             throw new JnSpringCloudException(WorkPlanExceptionEnmus.ITEM_IS_EXIST);
         }
@@ -869,7 +883,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         numberFormat.setMaximumFractionDigits(2);
         String progress = numberFormat.format((Double) consumeTime / (Double) totalPlanTime * 100);
         double pro = Double.parseDouble(progress);
-        if (pro > 100){
+        if (pro > 100) {
             progress = "100";
         }
         tbOaItem.setItemProgress(progress + "%");

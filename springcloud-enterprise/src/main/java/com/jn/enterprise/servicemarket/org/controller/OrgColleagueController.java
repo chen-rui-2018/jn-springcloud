@@ -64,7 +64,13 @@ public class OrgColleagueController extends BaseController {
     @RequiresPermissions("/serviceMarket/orgColleagueController/setAsContact")
     public Result setAsContact(@ApiParam(value = "设置为联系人的账号" ,required = true,example = "wangsong")String account){
         Assert.notNull(account, OrgExceptionEnum.ACCOUNT_NOT_NULL.getMessage());
-        int responseNum = orgColleagueService.setAsContact(account);
+        //获取当前登录用户基本信息
+        User user = (User)SecurityUtils.getSubject().getPrincipal();
+        if(user==null){
+            logger.warn("设置为联系人获取当前登录用户信息失败");
+            return new Result(OrgExceptionEnum.NETWORK_ANOMALY.getCode(),OrgExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = orgColleagueService.setAsContact(user.getAccount(),account);
         logger.info("------设置为联系人成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
     }

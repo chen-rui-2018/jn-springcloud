@@ -17,10 +17,12 @@ import java.io.Serializable;
 public class AdvisorBaseInfoParam implements Serializable {
     @ApiModelProperty(value = "主键id(新增时传空，修改时必传)")
     private String id;
-    @ApiModelProperty(value = "机构Id",example="1234")
+    @ApiModelProperty(value = "机构Id(邀请链接有机构id)",required = true,example="1234")
+    @NotNull(message="机构id不能为空")
     private String orgId;
-    @ApiModelProperty(value = "机构名称",example="测试机构")
-    private String orgName;
+    @ApiModelProperty(value = "业务领域(从机构字典接口获取),可以有多个",required = true,example = "technology_financial")
+    @NotNull(message="业务领域不能为空")
+    private String[] businessAreas;
     @ApiModelProperty(value = "顾问账号",required = true,example = "wangsong")
     @NotNull(message="顾问账号不能为空")
     private String advisorAccount;
@@ -61,12 +63,12 @@ public class AdvisorBaseInfoParam implements Serializable {
         this.orgId = orgId;
     }
 
-    public String getOrgName() {
-        return orgName;
+    public String[] getBusinessAreas() {
+        return businessAreas;
     }
 
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setBusinessAreas(String[] businessAreas) {
+        this.businessAreas = businessAreas;
     }
 
     public String getAdvisorAccount() {

@@ -9,6 +9,12 @@ import com.jn.enterprise.servicemarket.advisor.dao.*;
 import com.jn.enterprise.servicemarket.advisor.entity.*;
 import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorEditService;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionary;
+import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
+import com.jn.enterprise.servicemarket.org.dao.TbServiceOrgMapper;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrg;
+import com.jn.enterprise.servicemarket.org.entity.TbServiceOrgCriteria;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
@@ -54,7 +60,19 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @Autowired
     private UserExtensionClient userExtensionClient;
 
+    @Autowired
+    private IndustryService industryService;
+
+    @Autowired
+    private TbServiceOrgMapper tbServiceOrgMapper;
+    /**
+     * 日期格式
+     */
     private static final String PATTERN="yyyy-MM-dd HH:mm:ss";
+    /**
+     * 是否删除 0：已删除  1：有效
+     */
+    private static final byte RECORD_STATUS=1;
 
     /**
      * 基本信息保存并更新
@@ -63,6 +81,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "基本信息保存并更新")
     @Override
     public int saveOrUpdateAdvisorBaseInfo(AdvisorBaseInfoParam advisorBaseInfoParam) {
+        //校验业务领域
+        checkBusinessArea(advisorBaseInfoParam.getBusinessAreas());
+        //校验机构id并获取机构信息
+        TbServiceOrg tbServiceOrg = checkOrgIdAdnGetOrgInfo(advisorBaseInfoParam.getOrgId());
+
         //根据账号查询是否存在顾问信息
         //数据状态  0：删除  1：正常
         byte recordStatus=1;
@@ -71,15 +94,16 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //根据账号获取数据库现有顾问信息
         List<TbServiceAdvisor> tbServiceAdvisorList = tbServiceAdvisorMapper.selectByExample(example);
         if(tbServiceAdvisorList.isEmpty()){
-            return insertServiceAdvisorInfo(advisorBaseInfoParam);
+            return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName());
         }else{
             TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
-            //把id,orgId,orgName保留,防止copy时被覆盖
+            //把id,orgId保留,防止copy时被覆盖
             advisorBaseInfoParam.setId(tbServiceAdvisor.getId());
             advisorBaseInfoParam.setOrgId(tbServiceAdvisor.getOrgId());
-            advisorBaseInfoParam.setOrgName(tbServiceAdvisor.getOrgName());
             //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
             BeanUtils.copyProperties(advisorBaseInfoParam, tbServiceAdvisor);
+            //机构名称
+            tbServiceAdvisor.setOrgName(tbServiceOrg.getOrgName());
             //修改人
             tbServiceAdvisor.setModifierAccount(advisorBaseInfoParam.getAdvisorAccount());
             //修改时间
@@ -90,12 +114,52 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     }
 
     /**
+     * 校验orgId并获取机构信息
+     * @param orgId
+     */
+    @ServiceLog(doAction = "校验orgId并获取机构信息")
+    private TbServiceOrg checkOrgIdAdnGetOrgInfo(String orgId) {
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        example.createCriteria().andOrgIdEqualTo(orgId).andOrgStatusEqualTo("1")
+                .andRecordStatusEqualTo(RECORD_STATUS);
+        List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
+        if(tbServiceOrgList.isEmpty()){
+            logger.warn("基本信息保存并更新的机构id:[{}]在系统中不存在",orgId);
+            throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_ID_NOT_EXIT);
+        }
+        return tbServiceOrgList.get(0);
+    }
+
+    /**
+     * 校验业务领域
+     * @param businessAreaArray
+     */
+    @ServiceLog(doAction = "校验业务领域")
+    private void checkBusinessArea(String[] businessAreaArray) {
+        //获取系统所有业务领域
+        IndustryDictParameter industryDictParameter=new IndustryDictParameter();
+        //领域类型[0业务领域1行业领域2发展阶段3企业性质]
+        industryDictParameter.setPreType("0");
+        List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
+        List<String> businessAreaList=new ArrayList<>();
+        for(IndustryDictionary industryDictionary:industryDictionaryList){
+            businessAreaList.add(industryDictionary.getId());
+        }
+        for(int i=0;i<businessAreaArray.length;i++) {
+            if (!businessAreaList.contains(businessAreaArray[i])) {
+                logger.warn("基本信息保存并更新的业务领域：[{}]在系统中不存在",businessAreaArray[i]);
+                throw new JnSpringCloudException(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT);
+            }
+        }
+    }
+
+    /**
      * 新增顾问信息
      * @param advisorBaseInfoParam
      */
     @ServiceLog(doAction = "新增顾问信息")
-    private int insertServiceAdvisorInfo(AdvisorBaseInfoParam advisorBaseInfoParam) {
-        if(StringUtils.isBlank(advisorBaseInfoParam.getOrgId()) || StringUtils.isBlank(advisorBaseInfoParam.getOrgName())){
+    private int insertServiceAdvisorInfo(AdvisorBaseInfoParam advisorBaseInfoParam,String orgName) {
+        if(StringUtils.isBlank(advisorBaseInfoParam.getOrgId()) || StringUtils.isBlank(orgName)){
             logger.warn("基本信息保存并更新，机构id或机构名称不能为空");
             throw new JnSpringCloudException(AdvisorExceptionEnum.ORG_INFO_NOT_NULL);
         }
@@ -106,7 +170,9 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         tbServiceAdvisor.setId(UUID.randomUUID().toString().replaceAll("-", ""));
         //机构id、机构名称
         tbServiceAdvisor.setOrgId(advisorBaseInfoParam.getOrgId());
-        tbServiceAdvisor.setOrgName(advisorBaseInfoParam.getOrgName());
+        tbServiceAdvisor.setOrgName(orgName);
+        //业务领域
+        tbServiceAdvisor.setBusinessArea(StringUtils.join(advisorBaseInfoParam.getBusinessAreas(), ","));
         //根据顾问账号获取顾问信息
         Result<UserExtensionInfo> userExtension = userExtensionClient.getUserExtension(advisorBaseInfoParam.getAdvisorAccount());
         if(userExtension==null ||userExtension.getData()==null){

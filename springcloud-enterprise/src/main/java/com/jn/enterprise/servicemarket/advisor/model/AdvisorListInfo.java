@@ -15,6 +15,8 @@ import java.io.Serializable;
 public class AdvisorListInfo implements Serializable {
     @ApiModelProperty(value = "机构id")
     private String orgId;
+    @ApiModelProperty(value = "所属机构名称")
+    private String orgName;
     @ApiModelProperty(value = "顾问账号")
     private String advisorAccount;
     @ApiModelProperty(value = "顾问姓名")
@@ -25,8 +27,6 @@ public class AdvisorListInfo implements Serializable {
     private String position;
     @ApiModelProperty(value = "从业年限")
     private Double workingYears;
-    @ApiModelProperty(value = "所属机构名称")
-    private String orgName;
     @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "业务擅长")

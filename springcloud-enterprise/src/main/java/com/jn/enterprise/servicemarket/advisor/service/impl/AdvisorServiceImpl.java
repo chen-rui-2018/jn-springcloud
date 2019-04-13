@@ -15,6 +15,9 @@ import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionary;
+import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
@@ -64,6 +67,10 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     @Autowired
     private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private IndustryService industryService;
+
 
     /**
      * 服务顾问列表查询
@@ -377,6 +384,25 @@ public class AdvisorServiceImpl implements AdvisorService {
             logger.warn("当前顾问[{}]信息不存在",advisorAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST);
         }
-        return tbServiceAdvisors.get(0);
+        TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisors.get(0);
+        //获取系统所有业务领域
+        IndustryDictParameter industryDictParameter=new IndustryDictParameter();
+        //领域类型[0业务领域1行业领域2发展阶段3企业性质]
+        industryDictParameter.setPreType("0");
+        List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
+        String []businessAreaArry=tbServiceAdvisor.getBusinessArea().split(",");
+        StringBuilder businessAreaBul=new StringBuilder();
+        for(IndustryDictionary industryDictionary:industryDictionaryList){
+            for(String businessArea:businessAreaArry){
+                if(StringUtils.equals(industryDictionary.getId(), businessArea)){
+                    businessAreaBul.append(industryDictionary.getPreValue());
+                    businessAreaBul.append(",");
+                    break;
+                }
+            }
+        }
+        int length = businessAreaBul.length()-1;
+        tbServiceAdvisor.setBusinessArea(businessAreaBul.toString().substring(0, length));
+        return tbServiceAdvisor;
     }
 }

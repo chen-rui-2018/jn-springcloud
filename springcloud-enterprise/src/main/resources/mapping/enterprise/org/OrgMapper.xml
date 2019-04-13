@@ -15,21 +15,31 @@
         ,(SELECT IFNULL(AVG(t.`attitude_score`), 0) FROM tb_service_rating t
         WHERE t.org_id = a.org_id)  AS "attitudeScore" <!-- 评价得分 -->
         ,(SELECT COUNT(1) FROM tb_service_rating t WHERE t.org_id = a.org_id)  AS "evaluationNum"  <!-- 评价次数 -->
-        from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id
+        from tb_service_org a left join tb_service_org_info i on a.org_id = i.org_id LEFT JOIN tb_service_org_trait tr ON a.org_id = tr.org_id
         where 1=1 and a.record_status != '0'
 
-        <if test="businessType != null and businessType != ''">
-            and a.business_type = #{businessType}
+        <if test="businessType != null and businessType.length>0">
+            AND a.business_type IN
+            <foreach item="item" index="index" collection="businessType" open="("  close=")" separator=",">
+                #{item}
+            </foreach>
         </if>
         <if test="businessSType != null and businessSType != ''">
             and a.business_s_type = #{businessSType}
         </if>
         <if test="orgName != null and orgName != ''">
-            and a.org_name = #{orgName}
+            and a.org_name like CONCAT('%', #{orgName}, '%')
         </if>
         <if test="orgBusiness != null and orgBusiness != ''">
             and a.org_business = #{orgBusiness}
         </if>
+        <if test="companyList != null and companyList.size()>0">
+            AND tr.trait_value IN
+            <foreach item="item" index="index" collection="companyList" open="("  close=")" separator=",">
+                #{item}
+          </foreach>
+        </if>
+        GROUP BY a.org_id
         <if test="sortTypes =='popularity'">
             ORDER BY <!-- 人气排序-->
             a.org_show DESC   <!-- 浏览量-->
@@ -116,7 +126,7 @@
     <select id="getServiceOrgDetail" resultMap="queryServiceOrgDetailMap" parameterType="java.lang.String">
         SELECT
           o.org_id AS "s_id",
-          o.business_type AS "s_businessType",
+         (SELECT pre.pre_value FROM tb_service_prefer pre WHERE pre.id = o.business_type )AS "s_businessType",
           o.business_s_type AS "s_businessSType",
           o.org_name AS "s_orgName",
           o.org_business AS "s_orgBusiness",

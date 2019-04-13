@@ -28,14 +28,12 @@ public interface OrgColleagueService {
     int setAsContact(String loginAccount,String account);
 
     /**
-     *
-     */
-    /**
      * 取消联系人
+     * @param loginAccount 当前登录用户
      * @param account 取消联系人的账号
      * @return
      */
-    int cancelAsContact(String account);
+    int cancelAsContact(String loginAccount,String account);
 
     /**
      * 删除联系人或顾问

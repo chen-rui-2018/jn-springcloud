@@ -64,11 +64,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        technology
+                        service_org
                     </contexts>
                     <tableNames>
-                            tb_service_investor_work_exp,
-                        tb_service_investor_edu_exp
+                        tb_service_org_team
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

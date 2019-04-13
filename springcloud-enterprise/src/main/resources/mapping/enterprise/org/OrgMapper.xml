@@ -171,7 +171,7 @@
           te.con_name as "te_conName",
           te.con_position as "te_conPosition",
           te.con_quali as "te_conQuali",
-          date_format(te.con_time,'%Y-%m-%d') as "te_conTime",
+          te.con_time as "te_conTime",
           te.con_speciality as "te_conSpeciality"
           ,IFNULL(AVG(sr.`attitude_score`),0) AS "evaluationScore"		      <!-- 评价分数-->
           ,COUNT(sr.`attitude_score`) AS "evaluationNum"			          <!-- 评价次数-->

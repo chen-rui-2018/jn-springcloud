@@ -7,7 +7,7 @@
     <result column="con_name" jdbcType="VARCHAR" property="conName" />
     <result column="con_position" jdbcType="VARCHAR" property="conPosition" />
     <result column="con_quali" jdbcType="VARCHAR" property="conQuali" />
-    <result column="con_time" jdbcType="DATE" property="conTime" />
+    <result column="con_time" jdbcType="VARCHAR" property="conTime" />
     <result column="con_speciality" jdbcType="VARCHAR" property="conSpeciality" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
@@ -114,7 +114,7 @@
       modified_time, modifier_account, record_status
       )
     values (#{id,jdbcType=VARCHAR}, #{orgId,jdbcType=VARCHAR}, #{conName,jdbcType=VARCHAR}, 
-      #{conPosition,jdbcType=VARCHAR}, #{conQuali,jdbcType=VARCHAR}, #{conTime,jdbcType=DATE}, 
+      #{conPosition,jdbcType=VARCHAR}, #{conQuali,jdbcType=VARCHAR}, #{conTime,jdbcType=VARCHAR}, 
       #{conSpeciality,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
       #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
       )
@@ -176,7 +176,7 @@
         #{conQuali,jdbcType=VARCHAR},
       </if>
       <if test="conTime != null">
-        #{conTime,jdbcType=DATE},
+        #{conTime,jdbcType=VARCHAR},
       </if>
       <if test="conSpeciality != null">
         #{conSpeciality,jdbcType=VARCHAR},
@@ -223,7 +223,7 @@
         con_quali = #{record.conQuali,jdbcType=VARCHAR},
       </if>
       <if test="record.conTime != null">
-        con_time = #{record.conTime,jdbcType=DATE},
+        con_time = #{record.conTime,jdbcType=VARCHAR},
       </if>
       <if test="record.conSpeciality != null">
         con_speciality = #{record.conSpeciality,jdbcType=VARCHAR},
@@ -255,7 +255,7 @@
       con_name = #{record.conName,jdbcType=VARCHAR},
       con_position = #{record.conPosition,jdbcType=VARCHAR},
       con_quali = #{record.conQuali,jdbcType=VARCHAR},
-      con_time = #{record.conTime,jdbcType=DATE},
+      con_time = #{record.conTime,jdbcType=VARCHAR},
       con_speciality = #{record.conSpeciality,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
@@ -282,7 +282,7 @@
         con_quali = #{conQuali,jdbcType=VARCHAR},
       </if>
       <if test="conTime != null">
-        con_time = #{conTime,jdbcType=DATE},
+        con_time = #{conTime,jdbcType=VARCHAR},
       </if>
       <if test="conSpeciality != null">
         con_speciality = #{conSpeciality,jdbcType=VARCHAR},
@@ -311,7 +311,7 @@
       con_name = #{conName,jdbcType=VARCHAR},
       con_position = #{conPosition,jdbcType=VARCHAR},
       con_quali = #{conQuali,jdbcType=VARCHAR},
-      con_time = #{conTime,jdbcType=DATE},
+      con_time = #{conTime,jdbcType=VARCHAR},
       con_speciality = #{conSpeciality,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       creator_account = #{creatorAccount,jdbcType=VARCHAR},

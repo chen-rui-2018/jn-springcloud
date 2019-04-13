@@ -28,7 +28,7 @@ public class OrgTeam implements Serializable {
     @ApiModelProperty(value = "资质",example = "一级项目管理证书")
     private String conQuali;
 
-    @ApiModelProperty(value = "从业起始时间yyyy-MM-dd",example = "2017-01-01")
+    @ApiModelProperty(value = "从业起始时间yyyy-MM",example = "2017-01")
     private String conTime;
 
     @ApiModelProperty(value = "业务特长",example = "项目成本管理")

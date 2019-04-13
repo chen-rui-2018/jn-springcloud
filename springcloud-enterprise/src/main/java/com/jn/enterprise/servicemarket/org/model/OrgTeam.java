@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 @ApiModel(value = "OrgTeam",description = "机构服务团队")
 public class OrgTeam implements Serializable {
-    @ApiModelProperty(value = "机构ID[入参前端不需要传ID]")
+    @ApiModelProperty(value = "机构ID[APP入参前端不需要传ID]")
     private String orgId;
 
     @ApiModelProperty(value = "人员姓名",required = true,example = "张三")

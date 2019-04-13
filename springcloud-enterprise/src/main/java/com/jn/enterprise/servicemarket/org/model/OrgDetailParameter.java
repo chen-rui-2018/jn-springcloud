@@ -35,35 +35,35 @@ public class OrgDetailParameter implements Serializable {
     @NotNull(message = "机构LOGO不能为空")
     private String orgLogo;
 
-    @ApiModelProperty(value = "机构注册时间yyyy-MM-dd",required = true,example = "2019-03-01 10:00:00")
+    @ApiModelProperty(value = "机构注册时间yyyy-MM-dd",required = true,example = "2019-03-01")
     @NotNull(message = "机构注册时间不能为空")
     private String orgRegisterTime;
 
-    @ApiModelProperty(value = "组织机构代码",required = true,example = "65151****")
+    @ApiModelProperty(value = "组织机构代码(统一社会信用代码)",required = true,example = "65151****")
     @NotNull(message = "组织机构代码不能为空")
     private String orgCode;
 
-    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",
-            notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取",
+    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)]",
+            notes = "企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)",
             required = true,example = "['ogistics','technology_finance']")
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
 
     @NotNull(message = "行业领域不能为空")
-    @ApiModelProperty(value = "行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取]"
-            ,notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "客户偏好-行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)]"
+            ,notes = "企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)"
             ,required = true,example = "['shengwuyiyao','xinnengyuan']")
     private String[] industrySector;
 
     @NotNull(message = "发展阶段不能为空")
-    @ApiModelProperty(value = "发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取]"
-            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "客户偏好-发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)]"
+            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)"
             ,required = true,example = "['gufenqiye','fazhanqi']")
     private String[] developmentStage;
 
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取]"
-            ,notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "客户偏好-企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)]"
+            ,notes = "企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)"
             ,required = true,example = "['guoyouqiye','minyingqiye']")
     private String[] companyNature;
 
@@ -71,8 +71,8 @@ public class OrgDetailParameter implements Serializable {
     @NotNull(message = "机构资质列表不能为空")
     private List<OrgLicense> licenses;
 
-    @ApiModelProperty(value = "机构业务领域[机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",required = true,example = "ogistics"
-            ,notes = "机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "机构业务领域(单选，app为多选，需修改为单选)[机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)]",required = true,example = "ogistics"
+            ,notes = "机构的一级业务领域。取企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)")
     @NotNull(message = "业务领域不能为空")
     private String businessType;
 
@@ -96,8 +96,7 @@ public class OrgDetailParameter implements Serializable {
     @NotNull(message = "博士学历人数不能为空")
     private Integer doctorNum;
 
-    @ApiModelProperty(value = "海归员工人数",required = true,example = "20")
-    @NotNull(message = "海归员工人数不能为空")
+    @ApiModelProperty(value = "海归员工人数",example = "20")
     private Integer returneeNum;
 
     @ApiModelProperty(value = "机构人员列表")

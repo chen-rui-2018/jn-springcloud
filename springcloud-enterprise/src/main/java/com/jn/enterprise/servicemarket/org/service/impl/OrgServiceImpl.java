@@ -9,6 +9,9 @@ import com.jn.common.util.DateUtils;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.OrgExceptionEnum;
 import com.jn.enterprise.model.ServiceOrg;
+import com.jn.enterprise.servicemarket.industryarea.dao.TbServicePreferMapper;
+import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePrefer;
+import com.jn.enterprise.servicemarket.industryarea.entity.TbServicePreferCriteria;
 import com.jn.enterprise.servicemarket.org.dao.*;
 import com.jn.enterprise.servicemarket.org.entity.*;
 import com.jn.enterprise.servicemarket.org.model.*;
@@ -61,11 +64,29 @@ public class OrgServiceImpl implements OrgService {
     private TbServiceOrgInfoMapper tbServiceOrgInfoMapper;
     @Autowired
     private UserExtensionClient userClient;
+    @Autowired
+    private TbServicePreferMapper tbServicePreferMapper;
 
+    /**
+     * 数据状态 1:有效
+     */
+    private final static String RECORD_STATUS_VALID = "1";
+    
     @ServiceLog(doAction = "查询服务机构列表")
     @Override
     public PaginationData<List<ServiceOrg>> selectServiceOrgList(OrgParameter orgParameter){
         Page<Object> objects = PageHelper.startPage(orgParameter.getPage(), orgParameter.getRows() == 0 ? 15 : orgParameter.getRows());
+        List<String> sList = new ArrayList<>(16);
+        if(null!=orgParameter.getCompanyNature()&&orgParameter.getCompanyNature().length>0){
+            sList.addAll(Arrays.asList(orgParameter.getCompanyNature()));
+        }
+        if(null!=orgParameter.getDevelopmentStage()&&orgParameter.getDevelopmentStage().length>0){
+            sList.addAll(Arrays.asList(orgParameter.getDevelopmentStage()));
+        }
+        if(null!=orgParameter.getIndustrySector()&&orgParameter.getIndustrySector().length>0){
+            sList.addAll(Arrays.asList(orgParameter.getIndustrySector()));
+        }
+        orgParameter.setCompanyList(sList);
         List<ServiceOrg> serviceOrg = orgMapper.selectServiceOrgList(orgParameter);
         PaginationData<List<ServiceOrg>> data = new PaginationData(serviceOrg, objects.getTotal());
         return data;
@@ -88,14 +109,40 @@ public class OrgServiceImpl implements OrgService {
         TbServiceOrg tbServiceOrg = new TbServiceOrg();
         BeanUtils.copyProperties(orgBasicData,tbServiceOrg);
 
-        tbServiceOrg.setRecordStatus(new Byte("1"));
-        tbServiceOrg.setOrgSpeciality(StringUtils.join(orgBasicData.getOrgSpeciality(), ","));
+        tbServiceOrg.setRecordStatus(new Byte(RECORD_STATUS_VALID));
+
+        List<String> hobby = new ArrayList<>(16);
+        hobby.addAll(Arrays.asList(orgBasicData.getIndustrySector()));
+        TbServicePreferCriteria preferCriteria = new TbServicePreferCriteria();
+        preferCriteria.createCriteria().andRecordStatusEqualTo(new Byte(RECORD_STATUS_VALID));
+        List<TbServicePrefer> tbServicePrefers = tbServicePreferMapper.selectByExample(preferCriteria);
+        StringBuffer sbSpeciality = new StringBuffer();
+        StringBuffer sbHobby = new StringBuffer();
+        String businessTypeStr = "";
+        for (TbServicePrefer prefer:tbServicePrefers) {
+            for (String sp:orgBasicData.getOrgSpeciality()) {
+                if(StringUtils.equals(sp,prefer.getId())){
+                    sbSpeciality.append(prefer.getPreValue()+",");
+                }
+            }
+            for (String shobby :hobby) {
+                if(StringUtils.equals(shobby,prefer.getId())){
+                    sbHobby.append(prefer.getPreValue()+",");
+                }
+            }
+
+        }
+
+        tbServiceOrg.setOrgSpeciality(sbSpeciality.toString().substring(0, sbSpeciality.toString().length() - 1));
+        tbServiceOrg.setOrgHobby(sbHobby.toString().substring(0, sbHobby.toString().length() - 1));
+
         try {
             tbServiceOrg.setOrgRegisterTime(DateUtils.parseDate(orgBasicData.getOrgRegisterTime(),"yyyy-MM-dd"));
         } catch (ParseException e) {
             logger.info("保存服务机构基本信息。失败原因{}", e.getMessage(), e);
             throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
         }
+
         if(StringUtils.isEmpty(orgBasicData.getOrgId())){
             //新增，设置状态为待审核
             tbServiceOrg.setOrgStatus("0");
@@ -145,7 +192,7 @@ public class OrgServiceImpl implements OrgService {
                 serviceOrgTrait.setCreatorAccount(account);
                 serviceOrgTrait.setStatus("1");
                 serviceOrgTrait.setTraitValue(sector);
-                serviceOrgTrait.setRecordStatus(new Byte("1"));
+                serviceOrgTrait.setRecordStatus(new Byte(RECORD_STATUS_VALID));
                 serviceOrgTrait.setTraitType(traitType);
                 traitsList.add(serviceOrgTrait);
             }
@@ -169,12 +216,12 @@ public class OrgServiceImpl implements OrgService {
             try {
                 tbServiceOrgLicense.setAwardTime(DateUtils.parseDate(orgLicense.getAwardTime(),"yyyy-MM-dd"));
             } catch (ParseException e) {
-                logger.info("新增活动时间转换失败。失败原因{}", e.getMessage(), e);
+                logger.info("保存服务机构资质信息时间转换失败。失败原因{}", e.getMessage(), e);
                 throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
             }
             tbServiceOrgLicense.setCreatedTime(new Date());
             tbServiceOrgLicense.setCreatorAccount(account);
-            tbServiceOrgLicense.setRecordStatus(new Byte("1"));
+            tbServiceOrgLicense.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             tbServiceOrgLicense.setId(UUID.randomUUID().toString().replaceAll("-", ""));
             tbServiceOrgLicense.setOrgId(orgLicenseData.getOrgId());
             orgLicenses.add(tbServiceOrgLicense);
@@ -196,6 +243,7 @@ public class OrgServiceImpl implements OrgService {
         for (OrgTeam team: orgTeams) {
             TbServiceOrgTeam serviceOrgTeam = new TbServiceOrgTeam();
             BeanUtils.copyProperties(team,serviceOrgTeam);
+            serviceOrgTeam.setOrgId(orgTeamData.getOrgId());
             serviceOrgTeam.setId(UUID.randomUUID().toString().replaceAll("-",""));
             try {
                 serviceOrgTeam.setConTime(DateUtils.parseDate(team.getConTime(),"yyyy-MM-dd"));
@@ -205,7 +253,7 @@ public class OrgServiceImpl implements OrgService {
             }
             serviceOrgTeam.setCreatedTime(new Date());
             serviceOrgTeam.setCreatorAccount(account);
-            serviceOrgTeam.setRecordStatus(new Byte("1"));
+            serviceOrgTeam.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             orgTeamList.add(serviceOrgTeam);
         }
         TbServiceOrgTeamCriteria orgTeamCriteria = new TbServiceOrgTeamCriteria();
@@ -227,7 +275,7 @@ public class OrgServiceImpl implements OrgService {
             serviceOrgElement.setId(UUID.randomUUID().toString().replaceAll("-",""));
             serviceOrgElement.setCreatedTime(new Date());
             serviceOrgElement.setCreatorAccount(account);
-            serviceOrgElement.setRecordStatus(new Byte("1"));
+            serviceOrgElement.setRecordStatus(new Byte(RECORD_STATUS_VALID));
             return tbServiceOrgElementMapper.insert(serviceOrgElement);
         }
     }
@@ -237,7 +285,7 @@ public class OrgServiceImpl implements OrgService {
     public int saveOrUpdateOrgContactData(OrgContactData orgContactData,String account){
         TbServiceOrgInfo tbServiceOrgInfo = new TbServiceOrgInfo();
         BeanUtils.copyProperties(orgContactData,tbServiceOrgInfo);
-        tbServiceOrgInfo.setRecordStatus(new Byte("1"));
+        tbServiceOrgInfo.setRecordStatus(new Byte(RECORD_STATUS_VALID));
         TbServiceOrgInfo tbServiceOrgInfo1 = tbServiceOrgInfoMapper.selectByPrimaryKey(orgContactData.getOrgId());
         if(null!=tbServiceOrgInfo1&&StringUtils.isNotEmpty(tbServiceOrgInfo1.getOrgId())){
             //存在对应机构联系方式，修改。

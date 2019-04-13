@@ -245,12 +245,6 @@ public class OrgServiceImpl implements OrgService {
             BeanUtils.copyProperties(team,serviceOrgTeam);
             serviceOrgTeam.setOrgId(orgTeamData.getOrgId());
             serviceOrgTeam.setId(UUID.randomUUID().toString().replaceAll("-",""));
-            try {
-                serviceOrgTeam.setConTime(DateUtils.parseDate(team.getConTime(),"yyyy-MM-dd"));
-            } catch (ParseException e) {
-                logger.info("从业起止年份时间转换失败。失败原因{}", e.getMessage(), e);
-                throw new JnSpringCloudException(OrgExceptionEnum.ORG_TIME_PARSE_ERROR);
-            }
             serviceOrgTeam.setCreatedTime(new Date());
             serviceOrgTeam.setCreatorAccount(account);
             serviceOrgTeam.setRecordStatus(new Byte(RECORD_STATUS_VALID));

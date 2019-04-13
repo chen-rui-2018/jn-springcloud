@@ -12,7 +12,7 @@
             ,#{item.conName,jdbcType=VARCHAR} as "conName"
             ,#{item.conPosition,jdbcType=VARCHAR} as "conPosition"
             ,#{item.conQuali,jdbcType=VARCHAR} as "conQuali"
-            ,#{item.conTime,jdbcType=DATE} as "conTime"
+            ,#{item.conTime,jdbcType=VARCHAR} as "conTime"
             ,#{item.conSpeciality,jdbcType=VARCHAR} as "conSpeciality"
             ,#{item.createdTime,jdbcType=TIMESTAMP} as "createdTime"
             ,#{item.creatorAccount,jdbcType=VARCHAR} as "creatorAccount"

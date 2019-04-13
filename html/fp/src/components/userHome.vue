@@ -183,18 +183,27 @@ export default {
     init(){
       this.nickName = this.userData.nickName;
       this.name = this.userData.name;
-      this.name = this.userData.name;
+      // this.name = this.userData.name;
       this.sexFlag = this.userData.sex;
       this.signature = this.userData.signature;
-      this.value11 = this.userData.hobbys;
-      for(let it of this.value11){
+      this.value11 = [];
+      this.value5 = [];
+      for(let it of this.userData.hobbys){
         for(let it1 in this.options){
           if(it == this.options[it1].tagVaule){
             this.options[it1].flag = true;
+            this.value11.push(this.options[it1].tagId)
           }
         }
       }
-      this.value5 = this.userData.jobs;
+      for(let it of this.userData.jobs){
+        for(let it1 in this.options1){
+          if(it == this.options1[it1].tagVaule){
+            this.value5.push(this.options1[it1].tagId)
+          }
+        }
+      }
+      
     },
     cancelEd() {
       for(let it of this.options){

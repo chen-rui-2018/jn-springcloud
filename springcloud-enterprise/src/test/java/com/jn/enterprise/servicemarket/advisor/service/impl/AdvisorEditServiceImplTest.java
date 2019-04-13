@@ -64,7 +64,7 @@ public class AdvisorEditServiceImplTest {
 
     private String advisorAccount;
 
-    private String[]businessAreaArry={"technology_finance","shengwuyiyao"};
+    private String[]businessAreaArry={"technology_finance","ogistics"};
 
 
     @Before

@@ -57,7 +57,7 @@ public class AdvisorServiceImplTest {
         advisorListParam.setKeyWords(keyWords);
         advisorListParam.setSortTypes(sortTypes);
         advisorListParam.setOrgId("1001211");
-        advisorAccount="wangsong";
+        advisorAccount="18674398739";
 
         serviceEvaluationParam.setIsPublicPage("0");
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);

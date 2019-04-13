@@ -17,6 +17,7 @@
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="personal_profile" jdbcType="VARCHAR" property="personalProfile" />
+    <result column="inves_finan_exper" jdbcType="VARCHAR" property="invesFinanExper" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="approval_status" jdbcType="VARCHAR" property="approvalStatus" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -86,8 +87,8 @@
   <sql id="Base_Column_List">
     id, investor_code, investor_account, investor_name, avatar, sex, org_id, org_name, 
     position, address_province, address_city, address_area, phone, email, personal_profile, 
-    status, approval_status, created_time, creator_account, modified_time, modifier_account, 
-    record_status
+    inves_finan_exper, status, approval_status, created_time, creator_account, modified_time, 
+    modifier_account, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorCriteria" resultMap="BaseResultMap">
     select
@@ -125,17 +126,17 @@
       org_id, org_name, position, 
       address_province, address_city, address_area, 
       phone, email, personal_profile, 
-      status, approval_status, created_time, 
-      creator_account, modified_time, modifier_account, 
-      record_status)
+      inves_finan_exper, status, approval_status, 
+      created_time, creator_account, modified_time, 
+      modifier_account, record_status)
     values (#{id,jdbcType=VARCHAR}, #{investorCode,jdbcType=VARCHAR}, #{investorAccount,jdbcType=VARCHAR}, 
       #{investorName,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
       #{orgId,jdbcType=VARCHAR}, #{orgName,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, 
       #{addressProvince,jdbcType=VARCHAR}, #{addressCity,jdbcType=VARCHAR}, #{addressArea,jdbcType=VARCHAR}, 
       #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{personalProfile,jdbcType=VARCHAR}, 
-      #{status,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{recordStatus,jdbcType=TINYINT})
+      #{invesFinanExper,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{approvalStatus,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestor">
     insert into tb_service_investor
@@ -184,6 +185,9 @@
       </if>
       <if test="personalProfile != null">
         personal_profile,
+      </if>
+      <if test="invesFinanExper != null">
+        inves_finan_exper,
       </if>
       <if test="status != null">
         status,
@@ -252,6 +256,9 @@
       </if>
       <if test="personalProfile != null">
         #{personalProfile,jdbcType=VARCHAR},
+      </if>
+      <if test="invesFinanExper != null">
+        #{invesFinanExper,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
@@ -330,6 +337,9 @@
       <if test="record.personalProfile != null">
         personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
       </if>
+      <if test="record.invesFinanExper != null">
+        inves_finan_exper = #{record.invesFinanExper,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=VARCHAR},
       </if>
@@ -373,6 +383,7 @@
       phone = #{record.phone,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       personal_profile = #{record.personalProfile,jdbcType=VARCHAR},
+      inves_finan_exper = #{record.invesFinanExper,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       approval_status = #{record.approvalStatus,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -429,6 +440,9 @@
       <if test="personalProfile != null">
         personal_profile = #{personalProfile,jdbcType=VARCHAR},
       </if>
+      <if test="invesFinanExper != null">
+        inves_finan_exper = #{invesFinanExper,jdbcType=VARCHAR},
+      </if>
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
@@ -469,6 +483,7 @@
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       personal_profile = #{personalProfile,jdbcType=VARCHAR},
+      inves_finan_exper = #{invesFinanExper,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       approval_status = #{approvalStatus,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

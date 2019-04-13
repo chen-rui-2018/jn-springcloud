@@ -4,8 +4,8 @@
   <resultMap id="BaseResultMap" type="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorEduExp">
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="investor_account" jdbcType="VARCHAR" property="investorAccount" />
-    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="start_time" jdbcType="VARCHAR" property="startTime" />
+    <result column="end_time" jdbcType="VARCHAR" property="endTime" />
     <result column="school_name" jdbcType="VARCHAR" property="schoolName" />
     <result column="profession_title" jdbcType="VARCHAR" property="professionTitle" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
@@ -111,8 +111,8 @@
       end_time, school_name, profession_title, 
       created_time, creator_account, modified_time, 
       modifier_account, record_status)
-    values (#{id,jdbcType=VARCHAR}, #{investorAccount,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{schoolName,jdbcType=VARCHAR}, #{professionTitle,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=VARCHAR}, #{investorAccount,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{schoolName,jdbcType=VARCHAR}, #{professionTitle,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}, 
       #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT})
   </insert>
@@ -161,10 +161,10 @@
         #{investorAccount,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
-        #{startTime,jdbcType=TIMESTAMP},
+        #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=VARCHAR},
       </if>
       <if test="schoolName != null">
         #{schoolName,jdbcType=VARCHAR},
@@ -205,10 +205,10 @@
         investor_account = #{record.investorAccount,jdbcType=VARCHAR},
       </if>
       <if test="record.startTime != null">
-        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+        start_time = #{record.startTime,jdbcType=VARCHAR},
       </if>
       <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+        end_time = #{record.endTime,jdbcType=VARCHAR},
       </if>
       <if test="record.schoolName != null">
         school_name = #{record.schoolName,jdbcType=VARCHAR},
@@ -240,8 +240,8 @@
     update tb_service_investor_edu_exp
     set id = #{record.id,jdbcType=VARCHAR},
       investor_account = #{record.investorAccount,jdbcType=VARCHAR},
-      start_time = #{record.startTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      start_time = #{record.startTime,jdbcType=VARCHAR},
+      end_time = #{record.endTime,jdbcType=VARCHAR},
       school_name = #{record.schoolName,jdbcType=VARCHAR},
       profession_title = #{record.professionTitle,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -260,10 +260,10 @@
         investor_account = #{investorAccount,jdbcType=VARCHAR},
       </if>
       <if test="startTime != null">
-        start_time = #{startTime,jdbcType=TIMESTAMP},
+        start_time = #{startTime,jdbcType=VARCHAR},
       </if>
       <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+        end_time = #{endTime,jdbcType=VARCHAR},
       </if>
       <if test="schoolName != null">
         school_name = #{schoolName,jdbcType=VARCHAR},
@@ -292,8 +292,8 @@
   <update id="updateByPrimaryKey" parameterType="com.jn.enterprise.technologyfinancial.investors.entity.TbServiceInvestorEduExp">
     update tb_service_investor_edu_exp
     set investor_account = #{investorAccount,jdbcType=VARCHAR},
-      start_time = #{startTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
       school_name = #{schoolName,jdbcType=VARCHAR},
       profession_title = #{professionTitle,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},

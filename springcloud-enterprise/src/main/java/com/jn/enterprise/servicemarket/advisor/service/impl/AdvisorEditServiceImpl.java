@@ -97,13 +97,14 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             return insertServiceAdvisorInfo(advisorBaseInfoParam,tbServiceOrg.getOrgName());
         }else{
             TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisorList.get(0);
-            //把id,orgId保留,防止copy时被覆盖
+            //把id备份,防止copy时被覆盖
             advisorBaseInfoParam.setId(tbServiceAdvisor.getId());
-            advisorBaseInfoParam.setOrgId(tbServiceAdvisor.getOrgId());
             //页面传递基本信息覆盖之前基本信息，非基本信息保持不变
             BeanUtils.copyProperties(advisorBaseInfoParam, tbServiceAdvisor);
             //机构名称
             tbServiceAdvisor.setOrgName(tbServiceOrg.getOrgName());
+            //业务领域
+            tbServiceAdvisor.setBusinessArea(StringUtils.join(advisorBaseInfoParam.getBusinessAreas(), ","));
             //修改人
             tbServiceAdvisor.setModifierAccount(advisorBaseInfoParam.getAdvisorAccount());
             //修改时间
@@ -171,6 +172,8 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //机构id、机构名称
         tbServiceAdvisor.setOrgId(advisorBaseInfoParam.getOrgId());
         tbServiceAdvisor.setOrgName(orgName);
+        //浏览量
+        tbServiceAdvisor.setPageViews(0);
         //业务领域
         tbServiceAdvisor.setBusinessArea(StringUtils.join(advisorBaseInfoParam.getBusinessAreas(), ","));
         //根据顾问账号获取顾问信息

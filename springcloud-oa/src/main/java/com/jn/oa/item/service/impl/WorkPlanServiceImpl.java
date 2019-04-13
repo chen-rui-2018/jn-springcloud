@@ -197,7 +197,7 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         tbOaWorkPlanHistory.setCreatorAccount(user.getAccount());
         tbOaWorkPlanHistory.setRecordStatus(new Byte(OaStatusEnums.EFFECTIVE.getCode()));
         String currentTime = DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
-        tbOaWorkPlanHistory.setOperateRecode(currentTime + ",由" + user.getName() + operate + "。");
+        tbOaWorkPlanHistory.setOperateRecode(currentTime + ",由 <strong style=\"color:black\">" + user.getName() +"</strong> "+ operate + "。");
         if (StringUtils.isNotBlank(operateDetails)) {
             tbOaWorkPlanHistory.setOperateDetails(operateDetails);
         }
@@ -600,8 +600,9 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         if (!StringUtils.equals(oldItemId, newItemId)) {
             TbOaItem oldTbOaItem = tbOaItemMapper.selectByPrimaryKey(oldItemId);
             TbOaItem newTbOaItem = tbOaItemMapper.selectByPrimaryKey(newItemId);
-            buffer.append("修改了").append("工作计划所属项目").append(",旧值为:")
-                    .append(oldTbOaItem.getItemName()).append(",新值为:").append(newTbOaItem.getItemName()).append(";");
+            buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append("工作计划所属项目")
+                    .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldTbOaItem.getItemName())
+                    .append("\",&nbsp;&nbsp;新值为: &nbsp;&nbsp;\"").append(newTbOaItem.getItemName()).append("\"。</p>");
         }
 
         //3.判断是否修改任务负责人
@@ -639,8 +640,9 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         //5.添加负责人历史记录信息
         if (oldResponsibleName != null) {
             String newResponsibleName = workPlanMapper.getResponsibleName(workPlanId);
-            buffer.append("修改了").append("工作计划负责人").append(",旧值为:")
-                    .append(oldResponsibleName).append(",新值为:").append(newResponsibleName).append(";");
+            buffer.append("<p>修改了&nbsp;&nbsp;<i style=\"color:black;font-weight:600\">").append("工作计划负责人")
+                    .append(" </i>,&nbsp;&nbsp;旧值为:&nbsp;&nbsp;\"").append(oldResponsibleName)
+                    .append("\",&nbsp;&nbsp;新值为: &nbsp;&nbsp;\"").append(newResponsibleName).append("\"。</p>");
         }
 
         //6.添加历史记录信息
@@ -714,7 +716,12 @@ public class WorkPlanServiceImpl implements WorkPlanService {
         }
 
         //6.修改工作计划状态属性值
-        tbOaWorkPlan.setWorkPlanStatus(workPlanStatus);
+        if(WorkPlanStatusEnums.RESTART.getCode().equals(workPlanStatus)){
+            tbOaWorkPlan.setWorkPlanStatus(WorkPlanStatusEnums.DOING.getCode());
+        }else{
+            tbOaWorkPlan.setWorkPlanStatus(workPlanStatus);
+        }
+
         if (StringUtils.isNotBlank(attachment)) {
             //设置附件
             setAttachment(attachment, tbOaWorkPlan);

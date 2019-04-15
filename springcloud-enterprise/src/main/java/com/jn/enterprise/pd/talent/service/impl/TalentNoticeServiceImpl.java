@@ -1,9 +1,13 @@
 package com.jn.enterprise.pd.talent.service.impl;
 
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
 import com.jn.enterprise.pd.declaration.enums.DeclaratStatusEnums;
 import com.jn.enterprise.pd.talent.dao.TbPdTalentServiceNoticeMapper;
+import com.jn.enterprise.pd.talent.dao.TbPdTalentServiceRangeMapper;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNotice;
 import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceNoticeCriteria;
+import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRange;
+import com.jn.enterprise.pd.talent.entity.TbPdTalentServiceRangeCriteria;
 import com.jn.enterprise.pd.talent.enums.SortEnums;
 import com.jn.enterprise.pd.talent.service.TalentNoticeService;
 import org.slf4j.Logger;
@@ -29,6 +33,9 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
     @Autowired
     private TbPdTalentServiceNoticeMapper tbPdTalentServiceNoticeMapper;
 
+    @Autowired
+    private TbPdTalentServiceRangeMapper tbPdTalentServiceRangeMapper;
+
 
     /**
      * 查询公告列表
@@ -37,7 +44,7 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
      * @return
      */
     @Override
-    public List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeName,String sortType) {
+    public List<TbPdTalentServiceNotice> selectByTalentNoticeList(String rangeId,String sortType) {
         TbPdTalentServiceNoticeCriteria noticeCriteria = new TbPdTalentServiceNoticeCriteria();
         if(sortType.equals(SortEnums.RELEASETIME_SORT)){
             noticeCriteria.setOrderByClause("modified_time desc");
@@ -49,9 +56,49 @@ public class TalentNoticeServiceImpl implements TalentNoticeService {
         TbPdTalentServiceNoticeCriteria.Criteria criteria = noticeCriteria.createCriteria();
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
-        criteria.andRangeNameEqualTo(rangeName);
+        criteria.andRangeIdEqualTo(rangeId);
         List<TbPdTalentServiceNotice> selectByTalentNoticeList = tbPdTalentServiceNoticeMapper.selectByExample(noticeCriteria);
         return selectByTalentNoticeList;
+    }
+
+    /**
+     * 根据ID查询公告详情
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public TbPdTalentServiceNotice selectByTalentNotice(String id) {
+        return tbPdTalentServiceNoticeMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 查询公告所属类型列表
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public List<TbPdTalentServiceRange> selectByTalentRangeList() {
+        TbPdTalentServiceRangeCriteria rangeCriteria = new TbPdTalentServiceRangeCriteria();
+        List<TbPdTalentServiceRange> selectByTalentRangeList = tbPdTalentServiceRangeMapper.selectByExample(rangeCriteria);
+        return selectByTalentRangeList;
+    }
+
+    /**
+     * 更新公告访问量（用户点击查看一次公告，访问量加 1)
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public void updateTrafficVolume(String id) {
+        TbPdTalentServiceNotice notice = new TbPdTalentServiceNotice();
+        notice = tbPdTalentServiceNoticeMapper.selectByPrimaryKey(id);
+        int trafficVolume = notice.getBrowseTimes() + 1;
+        notice.setBrowseTimes(trafficVolume);
+        tbPdTalentServiceNoticeMapper.updateByPrimaryKey(notice);
+        logger.info("[人才服务-公告访问量] 访问量更新成功，公告id:{}", id);
     }
 
 }

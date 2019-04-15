@@ -23,7 +23,6 @@ import com.jn.enterprise.servicemarket.org.service.OrgColleagueService;
 import com.jn.system.log.annotation.ServiceLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.UserExtensionInfo;
-import com.sun.deploy.ui.AboutDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

@@ -454,6 +454,26 @@ public class UserInfoServiceImpl implements UserInfoService {
         updateRedisUserInfo(user.getAccount());
         return a;
     }
+    @ServiceLog(doAction = "根据条件查找用户账号列表")
+    @Override
+    public List<String> getAccountList( UserInfoQueryParam param) {
+        List<String> accountLIst = new ArrayList<>(16);
+        TbUserPersonCriteria criteria = new TbUserPersonCriteria();
+        TbUserPersonCriteria.Criteria example = criteria.createCriteria();
+        if (StringUtils.isNotBlank(param.getNickName())){
+            example.andNickNameLike("%"+param.getNickName()+"%");
+        }
+        if(StringUtils.isNotBlank(param.getPhone())){
+            example.andPhoneLike("%"+param.getPhone()+"%");
+        }
+        List<TbUserPerson> list=  tbUserPersonMapper.selectByExample(criteria);
+        if(!list.isEmpty()){
+            for(TbUserPerson user : list){
+             accountLIst.add(user.getAccount());
+            }
+        }
+      return  accountLIst;
+    }
 
 
     private List<TbUserTag> getUserTagList(String[] s,String type,String id,String account,List<TbTagCode> tagCodes){

@@ -8,6 +8,7 @@ import com.jn.system.log.annotation.ControllerLog;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
+import com.jn.user.userinfo.entity.TbUserPerson;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.userjoin.service.UserJoinService;
 import org.slf4j.Logger;
@@ -95,6 +96,12 @@ public class UserExtensionController extends BaseController implements UserExten
     @Override
     public Result<String> getSendCodeByPhone(@RequestBody String phone){
         return new Result<>(userJoinService.getSendCodeByPhone(phone));
+    }
+
+    @ControllerLog(doAction = "通过条件获取用户账号列表")
+    @Override
+    public Result<List<String>> getAccountList(@RequestBody UserInfoQueryParam param){
+        return new Result<>(userInfoService.getAccountList(param));
     }
 
 }

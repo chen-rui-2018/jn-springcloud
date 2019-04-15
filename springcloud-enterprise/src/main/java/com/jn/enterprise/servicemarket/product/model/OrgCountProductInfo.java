@@ -1,26 +1,18 @@
 package com.jn.enterprise.servicemarket.product.model;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.io.Serializable;
 
 /**
- * 前台 web 服务产品信息
  * @author： chenr
- * @date： Created on 2019/2/20 17:54
+ * @date： Created on 2019/4/15 11:45
  * @version： v1.0
  * @modified By:
  */
-@ApiModel(value ="WebServiceProductInfo", description = "前台 web 服务产品信息")
-public class WebServiceProductInfo implements Serializable {
+public class OrgCountProductInfo implements Serializable {
     @ApiModelProperty(value = "产品Id")
     private String productId;
-    @ApiModelProperty(value ="产品编号")
-    private String serialNumber;
-    @ApiModelProperty(value = "服务产品领域ID")
-    private String signoryId;
     @ApiModelProperty(value = "产品名称")
     private String productName;
     @ApiModelProperty(value ="机构名称")
@@ -33,10 +25,6 @@ public class WebServiceProductInfo implements Serializable {
     private String serviceCycle;
     @ApiModelProperty(value ="产品图片")
     private String pictureUrl;
-    @ApiModelProperty(value = "前台展示产品详情,产品内容")
-    private String productDetails;
-    @ApiModelProperty(value = "后台进行产品详情转换使用")
-    private byte[] serviceDetails;
     @ApiModelProperty(value = "交易数")
     private Integer transactionsNumber;
     @ApiModelProperty(value = "浏览数")
@@ -45,32 +33,14 @@ public class WebServiceProductInfo implements Serializable {
     private String evaluationScore;
     @ApiModelProperty(value = "评价数")
     private String evaluationNumber;
-    @ApiModelProperty(value = "上架此产品的机构数")
-    private String upShelfOrgNumber;
-
-    public byte[] getServiceDetails() {
-        return serviceDetails;
-    }
-
-    public void setServiceDetails(byte[] serviceDetails) {
-        this.serviceDetails = serviceDetails;
-    }
-
-    public String getUpShelfOrgNumber() {
-        return upShelfOrgNumber;
-    }
-
-    public void setUpShelfOrgNumber(String upShelfOrgNumber) {
-        this.upShelfOrgNumber = upShelfOrgNumber;
-    }
-
-    public String getSignoryId() {
-        return signoryId;
-    }
-
-    public void setSignoryId(String signoryId) {
-        this.signoryId = signoryId;
-    }
+    @ApiModelProperty(value ="全部服务数")
+    private Integer serviceTotal;
+    @ApiModelProperty(value = "常规服务数")
+    private Integer commonTotal;
+    @ApiModelProperty(value = "特色服务数")
+    private Integer featureTotal;
+    @ApiModelProperty(value = "五星好评数")
+    private Integer praiseTotal;
 
     public String getProductId() {
         return productId;
@@ -88,20 +58,20 @@ public class WebServiceProductInfo implements Serializable {
         this.productName = productName;
     }
 
-    public String getAdvisorName() {
-        return advisorName;
-    }
-
-    public void setAdvisorName(String advisorName) {
-        this.advisorName = advisorName;
-    }
-
     public String getOrgName() {
         return orgName;
     }
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getAdvisorName() {
+        return advisorName;
+    }
+
+    public void setAdvisorName(String advisorName) {
+        this.advisorName = advisorName;
     }
 
     public String getReferPrice() {
@@ -118,6 +88,14 @@ public class WebServiceProductInfo implements Serializable {
 
     public void setServiceCycle(String serviceCycle) {
         this.serviceCycle = serviceCycle;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
     public Integer getTransactionsNumber() {
@@ -144,35 +122,43 @@ public class WebServiceProductInfo implements Serializable {
         this.evaluationScore = evaluationScore;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
-    }
-
-    public void setSerialNumber(String serialNumber) {
-        this.serialNumber = serialNumber;
-    }
-
-    public String getProductDetails() {
-        return productDetails;
-    }
-
-    public void setProductDetails(String productDetails) {
-        this.productDetails = productDetails;
-    }
-
-    public String getPictureUrl() {
-        return pictureUrl;
-    }
-
-    public void setPictureUrl(String pictureUrl) {
-        this.pictureUrl = pictureUrl;
-    }
-
     public String getEvaluationNumber() {
         return evaluationNumber;
     }
 
     public void setEvaluationNumber(String evaluationNumber) {
         this.evaluationNumber = evaluationNumber;
+    }
+
+    public Integer getServiceTotal() {
+        return serviceTotal;
+    }
+
+    public void setServiceTotal(Integer serviceTotal) {
+        this.serviceTotal = serviceTotal;
+    }
+
+    public Integer getCommonTotal() {
+        return commonTotal;
+    }
+
+    public void setCommonTotal(Integer commonTotal) {
+        this.commonTotal = commonTotal;
+    }
+
+    public Integer getFeatureTotal() {
+        return featureTotal;
+    }
+
+    public void setFeatureTotal(Integer featureTotal) {
+        this.featureTotal = featureTotal;
+    }
+
+    public Integer getPraiseTotal() {
+        return praiseTotal;
+    }
+
+    public void setPraiseTotal(Integer praiseTotal) {
+        this.praiseTotal = praiseTotal;
     }
 }

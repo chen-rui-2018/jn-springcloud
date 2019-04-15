@@ -7,6 +7,7 @@ import com.jn.common.util.Assert;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListParam;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
+import com.jn.enterprise.servicemarket.advisor.model.EvaluationCountInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
@@ -66,6 +67,14 @@ public class AdvisorController extends BaseController {
     public Result<PaginationData<List<ServiceRating>>> getServiceRatingInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
         PaginationData serviceRatingInfo = advisorService.getServiceRatingInfo(serviceEvaluationParam);
         return  new Result(serviceRatingInfo);
+    }
+
+    @ControllerLog(doAction = "服务评价统计信息")
+    @ApiOperation(value = "服务评价统计信息",notes="根据机构id/产品id/顾问账号和评价类型获取机构/产品/顾问的评价统计信息（评价总数，好评数，中评数，差评数）")
+    @RequestMapping(value = "/getEvaluationCountInfo",method = RequestMethod.GET)
+    public Result<EvaluationCountInfo> getEvaluationCountInfo(@Validated ServiceEvaluationParam serviceEvaluationParam){
+        EvaluationCountInfo evaluationCountInfo=advisorService.getEvaluationCountInfo(serviceEvaluationParam);
+        return  new Result(evaluationCountInfo);
     }
 
 }

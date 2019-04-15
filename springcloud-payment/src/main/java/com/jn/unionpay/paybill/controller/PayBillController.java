@@ -43,12 +43,13 @@ public class PayBillController extends BaseController {
         return new Result<>(paymentBillList);
     }
 
-    @ControllerLog(doAction = "创建账单")
-    @ApiOperation(value = "创建账单【只供内部API调用，这里只用于测试】",notes = "【只供内部API调用，这里只用于测试】")
-    @RequestMapping(value = "/createBill",method = RequestMethod.POST)
-    public Result<String> createBill(@RequestBody PaymentBillModel paymentBillModel){
-        String bill = payBillService.createBill(paymentBillModel);
-        return new Result<>(bill);
+    @ControllerLog(doAction = "根据账单IDs获取账单列表内容")
+    @ApiOperation(value = "根据账单IDs获取账单列表内容",notes = "根据账单IDs获取账单列表内容[不分页查询]")
+    @RequestMapping(value = "/getPaymentBillListByBillIds",method = RequestMethod.GET)
+    public Result<List<PaymentBill>> getPaymentBillListByBillIds(@ApiParam(name="billIds",value = "账单ID或编号",required = true,example = "{'123**','235***'}")
+                                                                        @RequestParam(value = "billIds") String[] billIds){
+        List<PaymentBill> paymentBillList = payBillService.getPaymentBillListByIds(billIds);
+        return new Result<>(paymentBillList);
     }
 
     @ControllerLog(doAction = "获取账单详情")

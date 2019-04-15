@@ -2,7 +2,6 @@ package com.jn.enterprise.servicemarket.org.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 public class TbServiceOrgTeamCriteria {
@@ -104,32 +103,6 @@ public class TbServiceOrgTeamCriteria {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -492,53 +465,63 @@ public class TbServiceOrgTeamCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andConTimeEqualTo(Date value) {
-            addCriterionForJDBCDate("con_time =", value, "conTime");
+        public Criteria andConTimeEqualTo(String value) {
+            addCriterion("con_time =", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeNotEqualTo(Date value) {
-            addCriterionForJDBCDate("con_time <>", value, "conTime");
+        public Criteria andConTimeNotEqualTo(String value) {
+            addCriterion("con_time <>", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeGreaterThan(Date value) {
-            addCriterionForJDBCDate("con_time >", value, "conTime");
+        public Criteria andConTimeGreaterThan(String value) {
+            addCriterion("con_time >", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("con_time >=", value, "conTime");
+        public Criteria andConTimeGreaterThanOrEqualTo(String value) {
+            addCriterion("con_time >=", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeLessThan(Date value) {
-            addCriterionForJDBCDate("con_time <", value, "conTime");
+        public Criteria andConTimeLessThan(String value) {
+            addCriterion("con_time <", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("con_time <=", value, "conTime");
+        public Criteria andConTimeLessThanOrEqualTo(String value) {
+            addCriterion("con_time <=", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeIn(List<Date> values) {
-            addCriterionForJDBCDate("con_time in", values, "conTime");
+        public Criteria andConTimeLike(String value) {
+            addCriterion("con_time like", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeNotIn(List<Date> values) {
-            addCriterionForJDBCDate("con_time not in", values, "conTime");
+        public Criteria andConTimeNotLike(String value) {
+            addCriterion("con_time not like", value, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("con_time between", value1, value2, "conTime");
+        public Criteria andConTimeIn(List<String> values) {
+            addCriterion("con_time in", values, "conTime");
             return (Criteria) this;
         }
 
-        public Criteria andConTimeNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("con_time not between", value1, value2, "conTime");
+        public Criteria andConTimeNotIn(List<String> values) {
+            addCriterion("con_time not in", values, "conTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConTimeBetween(String value1, String value2) {
+            addCriterion("con_time between", value1, value2, "conTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andConTimeNotBetween(String value1, String value2) {
+            addCriterion("con_time not between", value1, value2, "conTime");
             return (Criteria) this;
         }
 

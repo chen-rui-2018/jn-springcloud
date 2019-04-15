@@ -77,4 +77,13 @@ public interface UserExtensionClient {
      */
     @RequestMapping(value = "/api/user/getSendCodeByPhone", method = RequestMethod.POST)
     Result getSendCodeByPhone(@RequestBody  String phone);
+
+    /**
+     * 通过条件 返回用户账号列表
+     *
+     * @param param
+     * @return
+     */
+    @RequestMapping(value = "/api/user/getAccountList", method = RequestMethod.POST)
+    Result<List<String>> getAccountList(@RequestBody  UserInfoQueryParam param);
 }

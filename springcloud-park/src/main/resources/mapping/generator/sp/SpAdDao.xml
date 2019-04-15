@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.sp.dao.SpAdDao">
+    <select id="getAdvertising" resultType="com.jn.park.sp.model.SpAdModel">
+        SELECT
+            id,
+            ad_name AS adName,
+            ad_address AS adAddress,
+            ad_url AS adUrl
+        FROM
+            tb_sp_ad
+        WHERE
+            record_status != 0
+        ORDER BY
+            created_time DESC
+            LIMIT 5
+    </select>
+</mapper>

@@ -55,8 +55,8 @@ public class FinancialProductFeatureAdd implements Serializable {
     @Pattern(regexp = "^[0-1]$",message = "是否人民币,只能为0或1")
     @NotBlank(message = "是否人民币不能为空")
     private String isRmb;
-    @ApiModelProperty(value="贷款类表编码",required=true,example = "A11123...")
-    @NotBlank(message = "贷款类表编码不能为空")
+    @ApiModelProperty(value="贷款类别编码",required=true,example = "A11123...")
+    @NotBlank(message = "贷款类别编码不能为空")
     private String loanCategoryCode;
     @ApiModelProperty(value="贷款类别名称",required=true,example = "抵押贷款")
     @NotBlank(message = "贷款类别名称不能为空")

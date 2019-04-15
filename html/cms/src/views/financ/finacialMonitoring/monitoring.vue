@@ -80,7 +80,7 @@ export default {
   methods: {
     // 获取管委会支出与预算占比
     getRatio() {
-      api(`${this.GLOBAL.financUrl}finance/index/ratioAndState?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/ratioAndState?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           // this.headerArr = res.data.data
           // this.drawLine(res.data.data)
@@ -249,7 +249,7 @@ export default {
 
     // 已支出全年预算统计柱状图
     getExpendBudget() {
-      api(`${this.GLOBAL.financUrl}finance/index/expendBudget?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/expendBudget?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           var lastYearIncomeArr = []
           var incomeArr = []
@@ -271,7 +271,7 @@ export default {
     },
     // 各部门预算支出占比模块
     getBudgetExpendRatio() {
-      api(`${this.GLOBAL.financUrl}finance/index/budgetExpendRatio?year=${this.selectYear}`, '', 'get').then(res => {
+      api(`${this.GLOBAL.parkUrl}finance/index/budgetExpendRatio?year=${this.selectYear}`, '', 'get').then(res => {
         if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.length > 0) {
             this.headerArr = res.data.data

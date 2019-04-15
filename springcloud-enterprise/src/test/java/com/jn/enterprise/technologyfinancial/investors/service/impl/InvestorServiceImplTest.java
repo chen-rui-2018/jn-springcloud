@@ -117,6 +117,7 @@ public class InvestorServiceImplTest {
         investorAuthenticateParam.setAddressArea("岳麓区");
         investorAuthenticateParam.setPhone("18674398766");
         investorAuthenticateParam.setEmail("123456@163.com");
+        investorAuthenticateParam.setInvesFinanExper("59595融资");
         investorAuthenticateParam.setPersonalProfile("我爱唱歌跳舞打豆豆");
         //主投领域
         investorMainArea1.setMainCode("biomedicine");
@@ -135,25 +136,25 @@ public class InvestorServiceImplTest {
         investorMainRoundList.add(investorMainRound2);
         investorAuthenticateParam.setInvestorMainRoundList(investorMainRoundList);
         //工作经历
-        investorWorkExperienceParam1.setStartTime("2014-09-01");
-        investorWorkExperienceParam1.setEndTime("2018-06-30");
+        investorWorkExperienceParam1.setStartTime("201409");
+        investorWorkExperienceParam1.setEndTime("201806");
         investorWorkExperienceParam1.setCompanyName("湖南律师事务所");
         investorWorkExperienceParam1.setPosition("高级律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam1);
-        investorWorkExperienceParam2.setStartTime("2018-07-15");
-        investorWorkExperienceParam2.setEndTime("2019-03-30");
+        investorWorkExperienceParam2.setStartTime("201807");
+        investorWorkExperienceParam2.setEndTime("201903");
         investorWorkExperienceParam2.setCompanyName("长沙高新律师事务所");
         investorWorkExperienceParam2.setPosition("主任律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam2);
         investorAuthenticateParam.setInvestorWorkExperienceParamList(investorWorkExperienceParamList);
         //教育经历
-        investorEduExperienceParam1.setStartTime("2008-09-01");
-        investorEduExperienceParam1.setEndTime("2012-06-30");
+        investorEduExperienceParam1.setStartTime("200809");
+        investorEduExperienceParam1.setEndTime("201206");
         investorEduExperienceParam1.setSchoolName("湖南大学");
         investorEduExperienceParam1.setProfessionTitle("律师专业");
         investorEduExperienceParamList.add(investorEduExperienceParam1);
-        investorEduExperienceParam2.setStartTime("2014-09-01");
-        investorEduExperienceParam2.setEndTime("2016-06-30");
+        investorEduExperienceParam2.setStartTime("201409");
+        investorEduExperienceParam2.setEndTime("201606");
         investorEduExperienceParam2.setSchoolName("中南大学");
         investorEduExperienceParam2.setProfessionTitle("高级律师专业");
         investorEduExperienceParamList.add(investorEduExperienceParam2);

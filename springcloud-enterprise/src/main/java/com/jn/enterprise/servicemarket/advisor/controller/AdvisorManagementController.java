@@ -80,6 +80,10 @@ public class AdvisorManagementController extends BaseController {
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
     public Result<Integer> inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "181*****") String registerAccount){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("邀请顾问获取用户账号失败");
+            return new Result(AdvisorExceptionEnum.NETWORK_ANOMALY.getCode(),AdvisorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
         int responseNum = advisorManagementService.inviteAdvisor(registerAccount,user.getAccount());
         logger.info("------邀请顾问操作成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
@@ -103,6 +107,22 @@ public class AdvisorManagementController extends BaseController {
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);
+    }
+
+    @ControllerLog(doAction = "再次邀请")
+    @RequiresPermissions("/advisor/advisorManagementController/inviteAgain")
+    @ApiOperation(value = "再次邀请")
+    @RequestMapping(value = "/inviteAgain",method = RequestMethod.GET)
+    public Result<Integer> inviteAgain(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
+        Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("邀请顾问获取用户账号失败");
+            return new Result(AdvisorExceptionEnum.NETWORK_ANOMALY.getCode(),AdvisorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = advisorManagementService.inviteAgain(advisorAccount,user.getAccount());
+        logger.info("------再次邀请，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 }
 

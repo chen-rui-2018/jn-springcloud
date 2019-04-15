@@ -32,7 +32,7 @@
                    re.req_email as "reqEmail",re.req_detail as "reqDetail",
                    re.contract_amount as "financingAmount",
                    re.actual_loan_amount as "actualLoanAmount",
-                   re.financing_period as "financingPeriod",
+                   re.financing_period_max as "financingPeriod",
                    re.expected_date as "expectedDate",
                    re.result_detail as "resultDetail",
                    re.is_comment as "isComment",

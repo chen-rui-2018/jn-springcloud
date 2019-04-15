@@ -22,7 +22,7 @@ import java.util.List;
 public class EmailVO implements Serializable {
     private static final long serialVersionUID = 4315984199557297656L;
 
-    @ApiModelProperty(value = "一键EmailID,添加时不用传,编辑时必须传", example = "\"100\"")
+    @ApiModelProperty(value = "一键EmailID", example = "\"100\"")
     private String id;
 
     @ApiModelProperty(value = "工单编号", required = true, example = "OAEMAIL20190309123")
@@ -47,6 +47,9 @@ public class EmailVO implements Serializable {
 
     @ApiModelProperty(value = "邮件接收人账号", example = "[\"wangsong\"]")
     private String userAccounts;
+
+    @ApiModelProperty(value = "邮件接收人名称", example = "王松,刘雄")
+    private String userNames;
 
     @ApiModelProperty(value = "创建时间", example = "2019-12-12 12:13:13")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -74,8 +77,9 @@ public class EmailVO implements Serializable {
     }
 
     public EmailVO(String id, String workOrderNum, String title, String emailContent, String sendStatus,
-                   String isDelay, Date delaySendTime, String userAccounts, Date createdTime, String creator,
-                   String attachment, Date sendTime, String departName, List<EmailReceiver> receiverList) {
+                   String isDelay, Date delaySendTime, String userAccounts, String userNames,
+                   Date createdTime, String creator, String attachment, Date sendTime, String departName,
+                   List<EmailReceiver> receiverList) {
         this.id = id;
         this.workOrderNum = workOrderNum;
         this.title = title;
@@ -84,6 +88,7 @@ public class EmailVO implements Serializable {
         this.isDelay = isDelay;
         this.delaySendTime = delaySendTime;
         this.userAccounts = userAccounts;
+        this.userNames = userNames;
         this.createdTime = createdTime;
         this.creator = creator;
         this.attachment = attachment;
@@ -156,6 +161,14 @@ public class EmailVO implements Serializable {
         this.userAccounts = userAccounts;
     }
 
+    public String getUserNames() {
+        return userNames;
+    }
+
+    public void setUserNames(String userNames) {
+        this.userNames = userNames;
+    }
+
     public Date getCreatedTime() {
         return createdTime;
     }
@@ -204,6 +217,7 @@ public class EmailVO implements Serializable {
         this.receiverList = receiverList;
     }
 
+
     @Override
     public String toString() {
         return "EmailVO{" +
@@ -215,6 +229,7 @@ public class EmailVO implements Serializable {
                 ", isDelay='" + isDelay + '\'' +
                 ", delaySendTime=" + delaySendTime +
                 ", userAccounts='" + userAccounts + '\'' +
+                ", userNames='" + userNames + '\'' +
                 ", createdTime=" + createdTime +
                 ", creator='" + creator + '\'' +
                 ", attachment='" + attachment + '\'' +

@@ -131,7 +131,7 @@ export default {
     // iframe 自适应高度
     $('#kskfpt').height($(document.body).height() - 120)
     // 预先登录模式
-    $('#kskfpt').attr('src', 'http://112.94.22.222:2381/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
+    $('#kskfpt').attr('src', 'http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
     let iframeNum = 0
     // iframe加载完成打开工作台
     var iframe = document.getElementById('kskfpt')
@@ -141,7 +141,7 @@ export default {
     } else {
       iframe.onload = function() {
         if (iframeNum === 0) {
-          $('#kskfpt').attr('src', 'http://112.94.22.222:2381/platform/console/home.htm')
+          $('#kskfpt').attr('src', 'http://112.94.22.222:2381/ibps/platform/console/home.htm')
         } else {
           $('#kskfpt').css('visibility', 'visible')
           $('#loading').css('display', 'none')

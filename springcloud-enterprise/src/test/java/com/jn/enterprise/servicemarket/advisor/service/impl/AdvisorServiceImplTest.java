@@ -57,11 +57,11 @@ public class AdvisorServiceImplTest {
         advisorListParam.setKeyWords(keyWords);
         advisorListParam.setSortTypes(sortTypes);
         advisorListParam.setOrgId("1001211");
-        advisorAccount="18674398739";
+        advisorAccount="wangsong";
 
         serviceEvaluationParam.setIsPublicPage("0");
         serviceEvaluationParam.setAdvisorAccount(advisorAccount);
-        serviceEvaluationParam.setRatingType("差评");
+        //serviceEvaluationParam.setRatingType("差评");
         serviceEvaluationParam.setNeedPage("0");
     }
 
@@ -198,6 +198,27 @@ public class AdvisorServiceImplTest {
             assertThat(e.getCode(),
                     Matchers.anyOf(
                             Matchers.containsString(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST.getCode())
+                    )
+            );
+        }
+    }
+
+    /**
+     * 服务评价统计信息
+     */
+    @Test
+    public void getEvaluationCountInfo(){
+        try {
+            EvaluationCountInfo evaluationCountInfo = advisorService.getEvaluationCountInfo(serviceEvaluationParam);
+            if(evaluationCountInfo!=null){
+                logger.info("服务评价统计信息{}",evaluationCountInfo.toString());
+            }
+            assertThat(evaluationCountInfo, anything());
+        } catch (JnSpringCloudException e) {
+            logger.info("根据查询条件获取服务评价统计信息失败");
+            assertThat(e.getCode(),
+                    Matchers.anyOf(
+                            Matchers.containsString(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL.getCode())
                     )
             );
         }

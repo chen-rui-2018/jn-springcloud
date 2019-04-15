@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jn.park.gamtopic.dao.TbPersonCareMapper">
+  <resultMap id="BaseResultMap" type="com.jn.park.gamtopic.entity.TbPersonCare">
+    <id column="care_id" jdbcType="VARCHAR" property="careId" />
+    <result column="care_account" jdbcType="VARCHAR" property="careAccount" />
+    <result column="receive_account" jdbcType="VARCHAR" property="receiveAccount" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    care_id, care_account, receive_account
+  </sql>
+  <select id="selectByExample" parameterType="com.jn.park.gamtopic.entity.TbPersonCareCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_person_care
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_person_care
+    where care_id = #{careId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_person_care
+    where care_id = #{careId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jn.park.gamtopic.entity.TbPersonCareCriteria">
+    delete from tb_person_care
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
+    insert into tb_person_care (care_id, care_account, receive_account
+      )
+    values (#{careId,jdbcType=VARCHAR}, #{careAccount,jdbcType=VARCHAR}, #{receiveAccount,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
+    insert into tb_person_care
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="careId != null">
+        care_id,
+      </if>
+      <if test="careAccount != null">
+        care_account,
+      </if>
+      <if test="receiveAccount != null">
+        receive_account,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="careId != null">
+        #{careId,jdbcType=VARCHAR},
+      </if>
+      <if test="careAccount != null">
+        #{careAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveAccount != null">
+        #{receiveAccount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jn.park.gamtopic.entity.TbPersonCareCriteria" resultType="java.lang.Long">
+    select count(*) from tb_person_care
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_person_care
+    <set>
+      <if test="record.careId != null">
+        care_id = #{record.careId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.careAccount != null">
+        care_account = #{record.careAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiveAccount != null">
+        receive_account = #{record.receiveAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_person_care
+    set care_id = #{record.careId,jdbcType=VARCHAR},
+      care_account = #{record.careAccount,jdbcType=VARCHAR},
+      receive_account = #{record.receiveAccount,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
+    update tb_person_care
+    <set>
+      <if test="careAccount != null">
+        care_account = #{careAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveAccount != null">
+        receive_account = #{receiveAccount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where care_id = #{careId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jn.park.gamtopic.entity.TbPersonCare">
+    update tb_person_care
+    set care_account = #{careAccount,jdbcType=VARCHAR},
+      receive_account = #{receiveAccount,jdbcType=VARCHAR}
+    where care_id = #{careId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -357,7 +357,8 @@
                          targetProject="src/main/java">
       <property name="enableSubPackages" value="true"/>
     </javaClientGenerator>
-    <table tableName="tb_gam_topic">
+    <table tableName="tb_gam_topic"/>
+    <table tableName="tb_person_care">
     </table>
   </context>
 

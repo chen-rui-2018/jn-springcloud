@@ -1,8 +1,8 @@
 package com.jn.enterprise.pd.declaration.service.impl;
 
 import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformManageMapper;
-import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage;
-import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManageCriteria;
+import com.jn.enterprise.pd.declaration.dao.TbPdDeclarationPlatformSubordinateMapper;
+import com.jn.enterprise.pd.declaration.entity.*;
 import com.jn.enterprise.pd.declaration.enums.DeclaratStatusEnums;
 import com.jn.enterprise.pd.declaration.service.DeclarationPlatformService;
 import org.slf4j.Logger;
@@ -28,6 +28,9 @@ public class DeclarationPlatformServiceImpl implements DeclarationPlatformServic
     @Autowired
     private TbPdDeclarationPlatformManageMapper tbPdDeclarationPlatformManageMapper;
 
+    @Autowired
+    private TbPdDeclarationPlatformSubordinateMapper tbPdDeclarationPlatformSubordinateMapper;
+
     @Override
     public List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList(String subordinatePlatformName) {
         TbPdDeclarationPlatformManageCriteria platformManageCriteria = new TbPdDeclarationPlatformManageCriteria();
@@ -35,8 +38,15 @@ public class DeclarationPlatformServiceImpl implements DeclarationPlatformServic
         TbPdDeclarationPlatformManageCriteria.Criteria criteria = platformManageCriteria.createCriteria();
         Byte status = Byte.parseByte(DeclaratStatusEnums.RELEASE.getCode());
         criteria.andStatusEqualTo(status);
-        criteria.andSubordinatePlatformNameLike(subordinatePlatformName);
+        criteria.andSubordinatePlatformNameEqualTo(subordinatePlatformName);
         List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList = tbPdDeclarationPlatformManageMapper.selectByExample(platformManageCriteria);
         return selectByDeclarationPlatformList;
+    }
+
+    @Override
+    public List<TbPdDeclarationPlatformSubordinate> selectByPlatformSubordinateList() {
+        TbPdDeclarationPlatformSubordinateCriteria subordinateCriteria = new TbPdDeclarationPlatformSubordinateCriteria();
+        List<TbPdDeclarationPlatformSubordinate> selectByPlatformSubordinateList = tbPdDeclarationPlatformSubordinateMapper.selectByExample(subordinateCriteria);
+        return selectByPlatformSubordinateList;
     }
 }

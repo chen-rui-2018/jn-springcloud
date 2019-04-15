@@ -1,6 +1,9 @@
 package com.jn.enterprise.pd.declaration.service;
 
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeRange;
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage;
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformSubordinate;
+
 import java.util.List;
 
 /**
@@ -19,4 +22,11 @@ public interface DeclarationPlatformService {
      * @return
      */
     List<TbPdDeclarationPlatformManage> selectByDeclarationPlatformList(String subordinatePlatformName);
+
+    /**
+     * 查询所有平台类型列表
+     *
+     * @return
+     */
+    List<TbPdDeclarationPlatformSubordinate> selectByPlatformSubordinateList();
 }

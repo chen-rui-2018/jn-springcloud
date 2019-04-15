@@ -1,6 +1,7 @@
 package com.jn.enterprise.pd.declaration.service;
 
 import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeManage;
+import com.jn.enterprise.pd.declaration.entity.TbPdDeclarationNoticeRange;
 
 import java.util.List;
 
@@ -14,5 +15,11 @@ import java.util.List;
  */
 public interface DeclarationNoticeService {
 
-    List<TbPdDeclarationNoticeManage> selectByDeclarationNoticeList(String rangeName,String sortType);
+    List<TbPdDeclarationNoticeManage> selectByDeclarationNoticeList(String rangeId,String sortType);
+
+    TbPdDeclarationNoticeManage selectByTalentNotice(String id);
+
+    List<TbPdDeclarationNoticeRange> selectByNoticeRangeList();
+
+    void updateTrafficVolume(String id);
 }

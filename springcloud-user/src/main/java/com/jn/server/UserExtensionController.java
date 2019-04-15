@@ -10,15 +10,11 @@ import com.jn.user.enums.UserExtensionExceptionEnum;
 import com.jn.user.model.*;
 import com.jn.user.userinfo.service.UserInfoService;
 import com.jn.user.userjoin.service.UserJoinService;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -31,7 +27,6 @@ import java.util.List;
  * @modified By:
  */
 @RestController
-@RequestMapping("/api/user")
 public class UserExtensionController extends BaseController implements UserExtensionClient {
     /**
      * 日志组件
@@ -43,11 +38,7 @@ public class UserExtensionController extends BaseController implements UserExten
     @Autowired
     private UserJoinService userJoinService;
 
-
-
     @ControllerLog(doAction = "获取登录用户扩展信息")
-    @ApiOperation(value = "获取登录用户扩展信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getUserExtension")
     @Override
     public Result<UserExtensionInfo> getUserExtension(@RequestBody String account) {
         Assert.notNull(account, UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
@@ -61,8 +52,6 @@ public class UserExtensionController extends BaseController implements UserExten
 
 
     @ControllerLog(doAction = "批量获取用户的扩展信息")
-    @ApiOperation(value = "批量获取用户的扩展信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getMoreUserExtension")
     @Override
     public Result<List<UserExtensionInfo>>getMoreUserExtension(@RequestBody List<String> accountList){
         Assert.notNull(accountList, UserExtensionExceptionEnum.USER_ACCOUNT_NOT_NULL.getMessage());
@@ -75,8 +64,6 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "更新用户所属机构信息")
-    @ApiOperation(value = "更新用户所属机构信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/updateAffiliateInfo")
     @Override
     public Result updateAffiliateInfo(@RequestBody @Validated UserAffiliateInfo userAffiliateInfo) {
         boolean updateSuccess = userInfoService.updateAffiliateInfo(userAffiliateInfo);
@@ -84,8 +71,6 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "更新用户所属企业信息")
-    @ApiOperation(value = "更新用户所属企业信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/updateCompanyInfo")
     @Override
     public Result updateCompanyInfo(@RequestBody @Validated UserCompanyInfo userCompanyInfo) {
         boolean updateSuccess = userInfoService.updateCompanyInfo(userCompanyInfo);
@@ -93,8 +78,6 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "根据所属机构编码批量获取用户信息")
-    @ApiOperation(value = "根据所属机构编码批量获取用户信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getUserExtensionByAffiliateCode")
     @Override
     public Result getUserExtensionByAffiliateCode(@RequestBody @Validated AffiliateParam affiliateParam) {
         PaginationData paginationData=userInfoService.getUserExtensionByAffiliateCode(affiliateParam);
@@ -102,8 +85,6 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "根据所属机构编码批量获取用户信息")
-    @ApiOperation(value = "根据所属机构编码批量获取用户信息", httpMethod = "POST", response = Result.class)
-    @RequestMapping(value = "/getUserExtensionByCompanyCode")
     @Override
     public Result getUserExtensionByCompanyCode(@RequestBody @Validated CompanyParam companyParam) {
         PaginationData paginationData=userInfoService.getUserExtensionByCompanyCode(companyParam);
@@ -111,8 +92,6 @@ public class UserExtensionController extends BaseController implements UserExten
     }
 
     @ControllerLog(doAction = "通过手机号获取已发送的验证码")
-    @ApiOperation(value = "通过手机号获取已发送的验证码",httpMethod = "POST",response = Result.class)
-    @RequestMapping(value = "/getSendCodeByPhone")
     @Override
     public Result<String> getSendCodeByPhone(@RequestBody String phone){
         return new Result<>(userJoinService.getSendCodeByPhone(phone));

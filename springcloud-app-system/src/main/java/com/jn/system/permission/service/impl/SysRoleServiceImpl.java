@@ -8,6 +8,7 @@ import com.jn.system.common.enums.SysExceptionEnums;
 import com.jn.system.common.enums.SysReturnMessageEnum;
 import com.jn.system.common.enums.SysStatusEnums;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.permission.dao.SysRoleMapper;
 import com.jn.system.permission.dao.SysRolePermissionMapper;
@@ -238,7 +239,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         Map<String, Object> map = getDeleteMap(user, roleIds);
         userRoleService.deleteTbUserRoleByRoleIds(map);
         logger.info("[角色授权用户] 删除该角色下用户信息成功！roleId:{}", sysUserRoleAdd.getRoleId());
-        Boolean isDelete = (userIds == null || userIds.length == 0)? Boolean.TRUE : Boolean.FALSE;
+        Boolean isDelete = (userIds == null || userIds.length == 0) ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
@@ -330,7 +331,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         Map<String, Object> map = getDeleteMap(user, roleIds);
         sysGroupRoleMapper.deleteTbSysGroupRoleByRoleIds(map);
         logger.info("[角色授权用户组] 删除该角色下用户组信息成功！roleId:{}", sysUserGroupRoleAdd.getRoleId());
-        Boolean isDelete = (userGroupIds == null || userGroupIds.length == 0)? Boolean.TRUE : Boolean.FALSE;
+        Boolean isDelete = (userGroupIds == null || userGroupIds.length == 0) ? Boolean.TRUE : Boolean.FALSE;
         if (isDelete) {
             return;
         }
@@ -430,6 +431,27 @@ public class SysRoleServiceImpl implements SysRoleService {
         SysRolePermissionVO sysRolePermissionVO = new SysRolePermissionVO(permissionOfRoleList, otherPermissionList);
         PaginationData data = new PaginationData(sysRolePermissionVO, objects.getTotal());
         return data;
+    }
+
+    /**
+     * 根据角色名称,获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @Override
+    public SysRole getRoleByName(String roleName) {
+        TbSysRoleCriteria tbSysRoleCriteria = new TbSysRoleCriteria();
+        TbSysRoleCriteria.Criteria criteria = tbSysRoleCriteria.createCriteria();
+        criteria.andRecordStatusEqualTo(new Byte(SysStatusEnums.EFFECTIVE.getCode()));
+        criteria.andRoleNameEqualTo(roleName);
+        List<TbSysRole> tbSysRoles = tbSysRoleMapper.selectByExample(tbSysRoleCriteria);
+        if (tbSysRoles != null && tbSysRoles.size() > 0){
+            SysRole sysRole = new SysRole();
+            BeanUtils.copyProperties(tbSysRoles.get(0),sysRole);
+            return sysRole;
+        }
+        return null;
     }
 
 }

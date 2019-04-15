@@ -1,18 +1,18 @@
-<!--<template>
+<template>
   <div class="dashboard-editor-container">
 
     <github-corner style="position: absolute; top: 0px; border: 0; right: 0;"/>
-    &lt;!&ndash; 四小块 &ndash;&gt;
+    <!-- 四小块 -->
     <panel-group @handleSetLineChartData="handleSetLineChartData"/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      &lt;!&ndash; //曲线图 &ndash;&gt;
+      <!-- //曲线图 -->
       <line-chart :chart-data="lineChartData"/>
       <line-chart :chart-data="lineChartData2"/>
       <line-chart :chart-data="lineChartData3"/>
       <line-chart :chart-data="lineChartData4"/>
     </el-row>
-    &lt;!&ndash; 三个表格图 &ndash;&gt;
+    <!-- 三个表格图 -->
     <el-row :gutter="32">
       <el-col :xs="24" :sm="24" :lg="8">
         <div class="chart-wrapper">
@@ -115,8 +115,9 @@ export default {
     margin-bottom: 32px;
   }
 }
-</style>-->
+</style>
 
+<!--
 <template>
   <div class="dashboard-editor-container">
     <div id="loading">正在加载中...</div>
@@ -130,7 +131,7 @@ export default {
     // iframe 自适应高度
     $('#kskfpt').height($(document.body).height() - 120)
     // 预先登录模式
-    $('#kskfpt').attr('src', 'http://112.94.22.222:2381/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
+    $('#kskfpt').attr('src', 'http://112.94.22.222:2381/ibps/noPasswordLogin.htm?username=' + localStorage.getItem('account') + '&password=123')
     let iframeNum = 0
     // iframe加载完成打开工作台
     var iframe = document.getElementById('kskfpt')
@@ -140,7 +141,7 @@ export default {
     } else {
       iframe.onload = function() {
         if (iframeNum === 0) {
-          $('#kskfpt').attr('src', 'http://112.94.22.222:2381/platform/console/home.htm')
+          $('#kskfpt').attr('src', 'http://112.94.22.222:2381/ibps/platform/console/home.htm')
         } else {
           $('#kskfpt').css('visibility', 'visible')
           $('#loading').css('display', 'none')
@@ -163,3 +164,4 @@ export default {
     }
   }
 </style>
+-->

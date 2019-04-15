@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { api } from '@/api/Permission-model/userManagement'
+import { api } from '@/api/axios'
 export default {
   data() {
     return {
@@ -79,8 +79,8 @@ export default {
     // 项目初始化
     initList() {
       this.fileListLoading = true
-      api('system/sysFile/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysFile/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.fileList = res.data.data.rows
           this.total = res.data.data.total
           if (this.fileList.length === 0 && this.total > 0) {

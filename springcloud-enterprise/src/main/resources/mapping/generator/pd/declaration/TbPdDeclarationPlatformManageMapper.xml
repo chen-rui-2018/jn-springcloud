@@ -8,7 +8,6 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="business_consult" jdbcType="VARCHAR" property="businessConsult" />
     <result column="system_support" jdbcType="VARCHAR" property="systemSupport" />
-    <result column="subordinate_platform_id" jdbcType="VARCHAR" property="subordinatePlatformId" />
     <result column="subordinate_platform_name" jdbcType="VARCHAR" property="subordinatePlatformName" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
@@ -76,9 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, platform_title, link_address, remark, business_consult, system_support, subordinate_platform_id, 
-    subordinate_platform_name, status, record_status, creator_account, created_time, 
-    modifier_account, modified_time
+    id, platform_title, link_address, remark, business_consult, system_support, subordinate_platform_name, 
+    status, record_status, creator_account, created_time, modifier_account, modified_time
   </sql>
   <select id="selectByExample" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManageCriteria" resultMap="BaseResultMap">
     select
@@ -115,15 +113,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into tb_pd_declaration_platform_manage (platform_title, link_address, remark, 
-      business_consult, system_support, subordinate_platform_id, 
-      subordinate_platform_name, status, record_status, 
-      creator_account, created_time, modifier_account, 
-      modified_time)
+      business_consult, system_support, subordinate_platform_name, 
+      status, record_status, creator_account, 
+      created_time, modifier_account, modified_time
+      )
     values (#{platformTitle,jdbcType=VARCHAR}, #{linkAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, #{subordinatePlatformId,jdbcType=VARCHAR}, 
-      #{subordinatePlatformName,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, 
-      #{creatorAccount,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP})
+      #{businessConsult,jdbcType=VARCHAR}, #{systemSupport,jdbcType=VARCHAR}, #{subordinatePlatformName,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{recordStatus,jdbcType=TINYINT}, #{creatorAccount,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.jn.enterprise.pd.declaration.entity.TbPdDeclarationPlatformManage">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.String">
@@ -145,9 +143,6 @@
       </if>
       <if test="systemSupport != null">
         system_support,
-      </if>
-      <if test="subordinatePlatformId != null">
-        subordinate_platform_id,
       </if>
       <if test="subordinatePlatformName != null">
         subordinate_platform_name,
@@ -186,9 +181,6 @@
       </if>
       <if test="systemSupport != null">
         #{systemSupport,jdbcType=VARCHAR},
-      </if>
-      <if test="subordinatePlatformId != null">
-        #{subordinatePlatformId,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformName != null">
         #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -240,9 +232,6 @@
       <if test="record.systemSupport != null">
         system_support = #{record.systemSupport,jdbcType=VARCHAR},
       </if>
-      <if test="record.subordinatePlatformId != null">
-        subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
-      </if>
       <if test="record.subordinatePlatformName != null">
         subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
       </if>
@@ -277,7 +266,6 @@
       remark = #{record.remark,jdbcType=VARCHAR},
       business_consult = #{record.businessConsult,jdbcType=VARCHAR},
       system_support = #{record.systemSupport,jdbcType=VARCHAR},
-      subordinate_platform_id = #{record.subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{record.subordinatePlatformName,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=TINYINT},
       record_status = #{record.recordStatus,jdbcType=TINYINT},
@@ -306,9 +294,6 @@
       </if>
       <if test="systemSupport != null">
         system_support = #{systemSupport,jdbcType=VARCHAR},
-      </if>
-      <if test="subordinatePlatformId != null">
-        subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       </if>
       <if test="subordinatePlatformName != null">
         subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
@@ -341,7 +326,6 @@
       remark = #{remark,jdbcType=VARCHAR},
       business_consult = #{businessConsult,jdbcType=VARCHAR},
       system_support = #{systemSupport,jdbcType=VARCHAR},
-      subordinate_platform_id = #{subordinatePlatformId,jdbcType=VARCHAR},
       subordinate_platform_name = #{subordinatePlatformName,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT},
       record_status = #{recordStatus,jdbcType=TINYINT},

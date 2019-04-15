@@ -1,9 +1,13 @@
 // const baseURL = 'www.baidu.com'
 const code = '0000'
-// const userSite = '林花落了春红，太匆匆'
-
+const parkUrl = 'springcloud-park/'
+const systemUrl = 'springcloud-app-system/'
+const oaUrl = 'springcloud-oa/'
 export default {
 //   baseURL,
-  code
+  code,
+  parkUrl,
+  systemUrl,
+  oaUrl
 //   userSite
 }

@@ -31,16 +31,18 @@ public class RequireTechnologyParam extends Page implements Serializable {
     @ApiModelProperty(value = "实际贷款金额（万元）",example = "40")
     @Pattern(regexp ="[0-9]*",message = "实际贷款金额只能输入数字")
     private String actualLoanAmount;
-    @ApiModelProperty(value = "融资期限（月）",required = true,example = "5")
-    @Pattern(regexp ="[0-9]*",message = "融资期限只能输入数字")
-    @NotNull(message = "融资期限不能为空")
-    private String financingPeriod;
+    @ApiModelProperty(value = "融资期限最小值(3个月及以下  6个月及以下  12个月及以下  36个月及以下,值为空  36个月以上，值不为空))",example = "3")
+    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMin:'默认值只允许为数字}")
+    private String financingPeriodMin;
+    @ApiModelProperty(value = "融资期限最大值(3个月及以下  6个月及以下  12个月及以下  36个月及以下，值不为空  36个月以上，值为空))",example = "6")
+    @Pattern(regexp = "^[0-9]*$", message = "{loanTermMax:'默认值只允许为数字}")
+    private String financingPeriodMax;
     @ApiModelProperty(value = "资金需求日期",required = true,example = "2019-03-22")
     @NotNull(message = "资金需求日期不能为空")
     @Pattern(regexp = "(([0-9]{3}[1-9]|[0-9]{2}[1-9][0-9]{1}|[0-9]{1}[1-9][0-9]{2}|[1-9][0-9]{3})-(((0[13578]|1[02])-" +
             "(0[1-9]|[12][0-9]|3[01]))|((0[469]|11)-(0[1-9]|[12][0-9]|30))|(02-(0[1-9]|[1][0-9]|2[0-8]))))|((([0-9]{2})" +
             "(0[48]|[2468][048]|[13579][26])|((0[48]|[2468][048]|[3579][26])00))-02-29)",
-            message = "{projectTime:'资金需求日期格式错误'}")
+            message = "{expectedDate:'资金需求日期格式错误'}")
     private String expectedDate;
     @ApiModelProperty(value = "资金需求说明",example = "xxx需求说明")
     private String fundsReqDesc;
@@ -85,12 +87,20 @@ public class RequireTechnologyParam extends Page implements Serializable {
         this.actualLoanAmount = actualLoanAmount;
     }
 
-    public String getFinancingPeriod() {
-        return financingPeriod;
+    public String getFinancingPeriodMin() {
+        return financingPeriodMin;
     }
 
-    public void setFinancingPeriod(String financingPeriod) {
-        this.financingPeriod = financingPeriod;
+    public void setFinancingPeriodMin(String financingPeriodMin) {
+        this.financingPeriodMin = financingPeriodMin;
+    }
+
+    public String getFinancingPeriodMax() {
+        return financingPeriodMax;
+    }
+
+    public void setFinancingPeriodMax(String financingPeriodMax) {
+        this.financingPeriodMax = financingPeriodMax;
     }
 
     public String getExpectedDate() {

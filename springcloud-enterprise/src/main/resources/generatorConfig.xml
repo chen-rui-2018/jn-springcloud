@@ -551,7 +551,6 @@
 
         <!-- 高企申报自评表-->
         <table tableName="tb_pd_enterprise_self_evalua">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>
 
@@ -607,15 +606,12 @@
 
         <!-- 人才服务-公告管理-->
         <table tableName="tb_pd_talent_service_notice">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才服务所属类型表-->
         <table tableName="tb_pd_talent_service_range">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 公告管理-公告附件-->
         <table tableName="tb_pd_talent_notice_attachment">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
     </context>
 
@@ -671,47 +667,36 @@
 
         <!--人才项目库 -->
         <table tableName="tb_pd_personnel_project_bank">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-产业领域表-->
         <table tableName="tb_pd_personnel_industrial_field">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-营业执照表-->
         <table tableName="tb_pd_personnel_business_license">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-资质荣誉表-->
         <table tableName="tb_pd_personnel_qualifications_honours">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-企业经营数据分析表-->
         <table tableName="tb_pd_personnel_enterprise_management">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-企业资质产权数表-->
         <table tableName="tb_pd_personnel_enterprise_qualification">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--预约辅导表 -->
         <table tableName="tb_pd_personnel_appointment_counsel">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-通知明细表 -->
         <table tableName="tb_pd_personnel_notification_details">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 人才管理-完善申报资料表-->
         <table tableName="tb_pd_personnel_declared_info">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-人才申报文件表 -->
         <table tableName="tb_pd_personnel_file">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--人才管理-人才标签配置表 -->
         <table tableName="tb_pd_personnel_talent_label">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>
@@ -768,31 +753,24 @@
 
         <!--项目申报-申报中心-申报公告管理 -->
         <table tableName="tb_pd_declaration_notice_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-申报公告-所属类型表-->
         <table tableName="tb_pd_declaration_notice_range">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-公告管理-公告附件-->
         <table tableName="tb_pd_declaration_notice_attachment">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--申报平台管理 -->
         <table tableName="tb_pd_declaration_platform_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 平台管理-所属平台表-->
         <table tableName="tb_pd_declaration_platform_subordinate">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!-- 项目申报-申报中心-推送信息管理-->
         <table tableName="tb_pd_declaration_push_information_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--项目申报-申报中心-预约申报管理 -->
         <table tableName="tb_pd_declaration_online_reservation_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
     </context>
@@ -849,12 +827,78 @@
 
         <!--扶持资金审核表 -->
         <table tableName="tb_pd_support_fund_examine">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
         <!--扶持资金信息管理表 -->
         <table tableName="tb_pd_support_fund_info_manage">
-            <generatedKey column="id" sqlStatement="MySql" identity="true" />
         </table>
 
+    </context>
+
+    <!--数据上报-->
+    <context id="data">
+        <!-- 实现Serializable接口 -->
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <!--在各个字段添加注解-->
+        <plugin type="com.jn.generator.CommentsPlugin"></plugin>
+        <!--覆盖生成XML文件-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
+        <plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+            <property name="searchString" value="Example$"/>
+            <property name="replaceString" value="Criteria"/>
+        </plugin>
+        <commentGenerator>
+            <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示保护 -->
+            <!-- 如果生成日期，会造成即使修改一个字段，整个实体类所有属性都会发生变化，不利于版本控制，所以设置为true -->
+            <property name="suppressDate" value="true"/>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--数据库链接URL，用户名、密码 -->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.10.28:3306/des?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="desuser" password="des_u_123">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成模型的包名和位置 -->
+        <javaModelGenerator targetPackage="com.jn.enterprise.data.entity"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成映射文件的包名和位置 -->
+        <sqlMapGenerator targetPackage="mapping.generator.data"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成Mapper 接口的包名和位置-->
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.jn.enterprise.data.dao"
+                             targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="tb_data_reporting_create_task_log"></table>
+        <table tableName="tb_data_reporting_target"></table>
+        <table tableName="tb_data_reporting_garden_linker"></table>
+        <table tableName="tb_data_reporting_group_company"></table>
+        <table tableName="tb_data_reporting_group_struct"></table>
+        <table tableName="tb_data_reporting_model"></table>
+        <table tableName="tb_data_reporting_model_data"></table>
+        <table tableName="tb_data_reporting_model_struct"></table>
+        <table tableName="tb_data_reporting_model_tab"></table>
+        <table tableName="tb_data_reporting_target_group"></table>
+        <table tableName="tb_data_reporting_task"></table>
+        <table tableName="tb_data_reporting_snapshot_model"></table>
+        <table tableName="tb_data_reporting_snapshot_model_struct"></table>
+        <table tableName="tb_data_reporting_snapshot_model_tab"></table>
+        <table tableName="tb_data_reporting_snapshot_target_group"></table>
+        <table tableName="tb_data_reporting_snapshot_target"></table>
     </context>
 </generatorConfiguration>

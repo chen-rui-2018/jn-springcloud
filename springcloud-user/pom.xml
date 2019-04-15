@@ -67,10 +67,10 @@
                     <configurationFile>${basedir}/src/main/resources/generatorConfig.xml</configurationFile>
                     <overwrite>true</overwrite>
                     <contexts>
-                        userPoint
+                        userExtension
                     </contexts>
                     <tableNames>
-                        tb_user_point_detail
+                        tb_user_person
                     </tableNames>
                     <verbose>true</verbose>
                 </configuration>

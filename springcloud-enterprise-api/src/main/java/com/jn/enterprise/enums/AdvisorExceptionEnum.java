@@ -30,6 +30,12 @@ public enum AdvisorExceptionEnum implements CodeAndMsg {
     ORG_INFO_NOT_NULL("5020516","机构id或机构名称不能为空"),
     TIME_CHANGE_ERROR("5020517","时间转换出错，请核对参数"),
     CERTIFICATE_TYPE_NOT_EXIST("5020518","系统中没有证书类型"),
+    ORG_NAME_NOT_NULL("5020519","机构名称不能为空"),
+    EVALUATION_ID_NOT_NULL("5020520","机构id,产品id,顾问账号不能都为空"),
+    BUSINESS_AREA_NOT_EXIT("5020521","业务领域在系统中不存"),
+    ORG_ID_NOT_EXIT("5020522","机构id在系统中不存在"),
+    ACCOUNT_NOT_ORG_MANAGE("5020523","当前登录用户账号不是机构管理员"),
+    ACCOUNT_STATUS_NOT_REJECTED("5020524","再次邀请顾问审批状态不是“已拒绝”，不能再次邀请"),
     ;
 
     /**

@@ -243,18 +243,44 @@ public class InvestorServiceImpl implements InvestorService {
 
     /**
      * 查询所属单位
-     * @param orgName 单位名称
+     * @param affiliationUnitInfoParam
      * @return
      */
     @ServiceLog(doAction = "查询所属单位")
     @Override
-    public List<AffiliationUnitShow> getAffiliationUnit(String orgName) {
-        //根据单位名称，从机构信息表（tb_service_org）中模糊查询所有机构
-        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
-        //审核通过
-        String status="1";
-        example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
-        List<TbServiceOrg> tbServiceOrgList = tbServiceOrgMapper.selectByExample(example);
+    public PaginationData getAffiliationUnit(AffiliationUnitInfoParam affiliationUnitInfoParam) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(StringUtils.isBlank(affiliationUnitInfoParam.getNeedPage())){
+            //默认查询第1页的15条数据
+            int pageNum=1;
+            int pageSize=15;
+            objects = PageHelper.startPage(pageNum,pageSize, true);
+            //获取系统中机构信息
+            List<TbServiceOrg> tbServiceOrgList = getTbServiceOrgList(affiliationUnitInfoParam.getOrgName());
+            //转换封装机构信息，返回前端
+            List<AffiliationUnitShow> resultList = getAffiliationUnitShows(tbServiceOrgList);
+            return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+        }
+        //需要分页标识
+        String isPage="1";
+        if(isPage.equals(affiliationUnitInfoParam.getNeedPage())){
+            objects = PageHelper.startPage(affiliationUnitInfoParam.getPage(),
+                    affiliationUnitInfoParam.getRows() == 0 ? 15 : affiliationUnitInfoParam.getRows(), true);
+        }
+        //获取系统中机构信息
+        List<TbServiceOrg> tbServiceOrgList = getTbServiceOrgList(affiliationUnitInfoParam.getOrgName());
+        //转换封装机构信息，返回前端
+        List<AffiliationUnitShow> resultList = getAffiliationUnitShows(tbServiceOrgList);
+        return new PaginationData(resultList, objects == null ? 0 : objects.getTotal());
+    }
+
+    /**
+     * 机构数据转换封装
+     * @param tbServiceOrgList
+     * @return
+     */
+    @ServiceLog(doAction = "机构数据转换封装")
+    private List<AffiliationUnitShow> getAffiliationUnitShows(List<TbServiceOrg> tbServiceOrgList) {
         List<AffiliationUnitShow> resultList=new ArrayList<>(16);
         for(TbServiceOrg serviceOrg:tbServiceOrgList){
             AffiliationUnitShow affiliationUnitShow =new AffiliationUnitShow();
@@ -263,6 +289,25 @@ public class InvestorServiceImpl implements InvestorService {
             resultList.add(affiliationUnitShow);
         }
         return resultList;
+    }
+
+    /**
+     * 获取机构信息
+     * @param orgName 机构名称
+     * @return
+     */
+    @ServiceLog(doAction = "获取机构信息")
+    private List<TbServiceOrg> getTbServiceOrgList(String orgName) {
+        //根据单位名称，从机构信息表（tb_service_org）中模糊查询所有机构
+        TbServiceOrgCriteria example=new TbServiceOrgCriteria();
+        //审核通过
+        String status="1";
+        if(StringUtils.isBlank(orgName)){
+            example.createCriteria().andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+        }else{
+            example.createCriteria().andOrgNameLike("%"+orgName+"%").andOrgStatusEqualTo(status).andRecordStatusEqualTo(RECORD_STATUS);
+        }
+        return tbServiceOrgMapper.selectByExample(example);
     }
 
     /**
@@ -308,7 +353,7 @@ public class InvestorServiceImpl implements InvestorService {
             addInvestorWorkExperienceBatch(investorAccount, investorWorkExperienceParamList);
         }
         //教育经历
-        List<InvestorEduExperienceParam> investorEduExperienceParamList = investorAuthenticateParam.getInvestorEduExperienceParamList();
+        List<InvestorEducationExperienceParam> investorEduExperienceParamList = investorAuthenticateParam.getInvestorEducationExperienceParamList();
         if(investorEduExperienceParamList !=null && !investorEduExperienceParamList.isEmpty()){
             addInvestorEduExperienceBatch(investorAccount, investorEduExperienceParamList);
         }
@@ -321,10 +366,10 @@ public class InvestorServiceImpl implements InvestorService {
      * @param investorEduExperienceParamList
      */
     @ServiceLog(doAction = "批量新增投资人教育经历信息")
-    private void addInvestorEduExperienceBatch(String investorAccount, List<InvestorEduExperienceParam> investorEduExperienceParamList) {
+    private void addInvestorEduExperienceBatch(String investorAccount, List<InvestorEducationExperienceParam> investorEduExperienceParamList) {
         List<TbServiceInvestorEduExp> eduExpList=new ArrayList<>(16);
         if(!investorEduExperienceParamList.isEmpty()){
-            for(InvestorEduExperienceParam investorEduExperienceParam : investorEduExperienceParamList){
+            for(InvestorEducationExperienceParam investorEduExperienceParam : investorEduExperienceParamList){
                 if(StringUtils.isNotBlank(investorEduExperienceParam.getStartTime()) && StringUtils.isNotBlank(investorEduExperienceParam.getEndTime())){
                     int startTime = Integer.parseInt(investorEduExperienceParam.getStartTime().replaceAll("-", ""));
                     int endTime = Integer.parseInt(investorEduExperienceParam.getEndTime().replaceAll("-", ""));
@@ -339,9 +384,9 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 eduExp.setInvestorAccount(investorAccount);
                 //开始时间
-                eduExp.setStartTime(DateUtils.parseDate(investorEduExperienceParam.getStartTime()));
+                eduExp.setStartTime(investorEduExperienceParam.getStartTime());
                 //结束时间
-                eduExp.setEndTime(DateUtils.parseDate(investorEduExperienceParam.getEndTime()));
+                eduExp.setEndTime(investorEduExperienceParam.getEndTime());
                 //学校名称
                 eduExp.setSchoolName(investorEduExperienceParam.getSchoolName());
                 //专业名称
@@ -382,9 +427,9 @@ public class InvestorServiceImpl implements InvestorService {
                 //投资人账号
                 workExp.setInvestorAccount(investorAccount);
                 //开始时间
-                workExp.setStartTime(DateUtils.parseDate(investorWorkExperienceParam.getStartTime()));
+                workExp.setStartTime(investorWorkExperienceParam.getStartTime());
                 //结束时间
-                workExp.setEndTime(DateUtils.parseDate(investorWorkExperienceParam.getEndTime()));
+                workExp.setEndTime(investorWorkExperienceParam.getEndTime());
                 //单位名称
                 workExp.setCompanyName(investorWorkExperienceParam.getCompanyName());
                 //职务

@@ -39,8 +39,8 @@ public class OrgBasicData implements Serializable {
     @NotNull(message = "主营业务不能为空")
     private String orgBusiness;
 
-    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取]",required = true,
-            notes = "企业字典表type=0的，即业务领域类型。数据从【机构字典】接口获取"
+    @ApiModelProperty(value = "业务擅长[数组][企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)]",required = true,
+            notes = "企业字典表type=0的，即业务领域类型。数据从【服务超市-机构字典】接口获取(id)"
             ,example = "['ogistics','technology_finance']")
     @NotNull(message = "业务擅长不能为空")
     private String[] orgSpeciality;
@@ -50,18 +50,18 @@ public class OrgBasicData implements Serializable {
     private String orgLogo;
 
     @NotNull(message = "行业领域不能为空")
-    @ApiModelProperty(value = "行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取]",example = "['shengwuyiyao','xinnengyuan']"
-            ,notes = "企业字典表type=1的，即行业领域类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "客户偏好-行业领域[数组][企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['shengwuyiyao','xinnengyuan']"
+            ,notes = "企业字典表type=1的，即行业领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] industrySector;
 
     @NotNull(message = "发展阶段不能为空")
-    @ApiModelProperty(value = "发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取]",example = "['gufenqiye','fazhanqi']"
-            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "客户偏好-发展阶段[数组][企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['gufenqiye','fazhanqi']"
+            ,notes = "企业字典表type=2的，即发展阶段领域类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] developmentStage;
 
     @NotNull(message = "企业性质不能为空")
-    @ApiModelProperty(value = "企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取]",example = "['guoyouqiye','minyingqiye']"
-            ,notes = "企业字典表type=3的，即企业性质类型。数据从【机构字典】接口获取")
+    @ApiModelProperty(value = "客户偏好-企业性质[数组][企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)]",example = "['guoyouqiye','minyingqiye']"
+            ,notes = "企业字典表type=3的，即企业性质类型。数据从【服务超市-机构字典】接口获取(id)")
     private String[] companyNature;
 
     public String getOrgId() {

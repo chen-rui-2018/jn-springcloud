@@ -1,8 +1,10 @@
 package com.jn.enterprise.servicemarket.advisor.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.jn.common.exception.JnSpringCloudException;
 import com.jn.common.model.PaginationData;
+import com.jn.common.model.Result;
 import com.jn.common.util.StringUtils;
 import com.jn.enterprise.enums.AdvisorExceptionEnum;
 import com.jn.enterprise.servicemarket.advisor.dao.*;
@@ -13,10 +15,15 @@ import com.jn.enterprise.servicemarket.advisor.model.*;
 import com.jn.enterprise.servicemarket.advisor.service.AdvisorService;
 import com.jn.enterprise.servicemarket.advisor.vo.AdvisorDetailsVo;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictParameter;
+import com.jn.enterprise.servicemarket.industryarea.model.IndustryDictionary;
+import com.jn.enterprise.servicemarket.industryarea.service.IndustryService;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductInfo;
 import com.jn.enterprise.servicemarket.product.model.AdvisorProductQuery;
 import com.jn.enterprise.servicemarket.product.service.ServiceProductService;
 import com.jn.system.log.annotation.ServiceLog;
+import com.jn.user.api.UserExtensionClient;
+import com.jn.user.model.UserExtensionInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -57,6 +64,13 @@ public class AdvisorServiceImpl implements AdvisorService {
 
     @Autowired
     private ServiceProductService serviceProductService;
+
+    @Autowired
+    private UserExtensionClient userExtensionClient;
+
+    @Autowired
+    private IndustryService industryService;
+
 
     /**
      * 服务顾问列表查询
@@ -145,10 +159,10 @@ public class AdvisorServiceImpl implements AdvisorService {
      * 设置顾问详情中服务评价的评价数量
      * @param advisorDetailsVo      顾问详情返回前端对象
      * @param advisorIntroduction   顾问详情简介对象
-     * @param servcieRatingInfoList 服务评价查询结果集
+     * @param serviceRatingInfoList 服务评价查询结果集
      */
     @ServiceLog(doAction = "设置顾问详情中服务评价的评价数量")
-    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> servcieRatingInfoList) {
+    private void setRatingNum(AdvisorDetailsVo advisorDetailsVo, AdvisorIntroduction advisorIntroduction, List<ServiceRating> serviceRatingInfoList) {
         //好评得分
         int praiseScore=5;
         //中评最低分
@@ -157,7 +171,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         int badReviewScore=1;
         //服务评分
         float evaluationScore=0f;
-        for(ServiceRating serviceRating:servcieRatingInfoList){
+        for(ServiceRating serviceRating:serviceRatingInfoList){
             if(serviceRating.getEvaluationScore()==null){
                 continue;
             }
@@ -178,7 +192,7 @@ public class AdvisorServiceImpl implements AdvisorService {
         advisorDetailsVo.setEvaluationTotal(advisorDetailsVo.getPraiseNum()+advisorDetailsVo.getAverageNum()+advisorDetailsVo.getBadReviewNum());
 
         //计算顾问最终服务评分
-        evaluationScore=evaluationScore/servcieRatingInfoList.size();
+        evaluationScore=evaluationScore/serviceRatingInfoList.size();
         if(evaluationScore>0){
             //顾问详情简介设置服务评分
             advisorIntroduction.setEvaluationScore(evaluationScore+"");
@@ -193,6 +207,13 @@ public class AdvisorServiceImpl implements AdvisorService {
     @ServiceLog(doAction = "根据查询条件获取服务评价信息")
     @Override
     public PaginationData getServiceRatingInfo(ServiceEvaluationParam serviceEvaluationParam) {
+        //是否公共页面  1：是  0：否
+        String isPublicPage="0";
+        if(isPublicPage.equals(serviceEvaluationParam.getIsPublicPage()) && StringUtils.isBlank(serviceEvaluationParam.getOrgId())
+                && StringUtils.isBlank(serviceEvaluationParam.getProductId()) && StringUtils.isBlank(serviceEvaluationParam.getAdvisorAccount())){
+            logger.warn("根据查询条件获取服务评价信息的机构id,产品id,顾问账号不能都为空");
+            throw new JnSpringCloudException(AdvisorExceptionEnum.EVALUATION_ID_NOT_NULL);
+        }
         com.github.pagehelper.Page<Object> objects = null;
         //需要分页标识
         String isPage="1";
@@ -214,8 +235,42 @@ public class AdvisorServiceImpl implements AdvisorService {
             //全部
             ratingType="";
         }
-        List<ServiceRating> servcieRatingInfo = advisorMapper.getServcieRatingInfo(serviceEvaluationParam.getAdvisorAccount(), ratingType);
-        return new PaginationData(servcieRatingInfo, objects == null ? 0 : objects.getTotal());
+        List<ServiceRating> serviceRatingInfo = advisorMapper.getServiceRatingInfo(serviceEvaluationParam);
+        return getEvaluationPaginationData(objects, serviceRatingInfo);
+    }
+
+    /**
+     * 封装处理评价信息
+     * @param objects
+     * @param serviceRatingInfo
+     * @return
+     */
+    @ServiceLog(doAction = "封装处理评价信息")
+    private PaginationData getEvaluationPaginationData(Page<Object> objects, List<ServiceRating> serviceRatingInfo) {
+        if(serviceRatingInfo.isEmpty()){
+            return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
+        }
+        List<String> accountList=new ArrayList<>(16);
+        //获取评价人姓名，头像
+        for(ServiceRating serviceRating:serviceRatingInfo){
+            accountList.add(serviceRating.getEvaluationAccount());
+        }
+        Result<List<UserExtensionInfo>> moreUserExtension = userExtensionClient.getMoreUserExtension(accountList);
+        if(moreUserExtension!=null &&  moreUserExtension.getData()!=null){
+            List<UserExtensionInfo>userExtensionInfoList= moreUserExtension.getData();
+            for(ServiceRating serviceRating:serviceRatingInfo){
+                for(UserExtensionInfo userExtensionInfo:userExtensionInfoList){
+                    if(StringUtils.equals(serviceRating.getEvaluationAccount(),userExtensionInfo.getAccount())){
+                        //头像
+                        serviceRating.setEvaluationAvatar(userExtensionInfo.getAvatar());
+                        //姓名
+                        serviceRating.setEvaluationName(userExtensionInfo.getName());
+                        break;
+                    }
+                }
+            }
+        }
+        return new PaginationData(serviceRatingInfo, objects == null ? 0 : objects.getTotal());
     }
 
     /**
@@ -233,7 +288,8 @@ public class AdvisorServiceImpl implements AdvisorService {
         }
         TbServiceAdvisor advisorInfo=new TbServiceAdvisor();
         //浏览量加1
-        advisorInfo.setPageViews(tbServiceAdvisors.get(0).getPageViews()+1);
+        int num = tbServiceAdvisors.get(0).getPageViews() == null ? 0 : tbServiceAdvisors.get(0).getPageViews();
+        advisorInfo.setPageViews(num+1);
         tbServiceAdvisorMapper.updateByExampleSelective(advisorInfo,example);
     }
 
@@ -329,6 +385,25 @@ public class AdvisorServiceImpl implements AdvisorService {
             logger.warn("当前顾问[{}]信息不存在",advisorAccount);
             throw new JnSpringCloudException(AdvisorExceptionEnum.ADVISOR_INFO_NOT_EXIST);
         }
-        return tbServiceAdvisors.get(0);
+        TbServiceAdvisor tbServiceAdvisor = tbServiceAdvisors.get(0);
+        //获取系统所有业务领域
+        IndustryDictParameter industryDictParameter=new IndustryDictParameter();
+        //领域类型[0业务领域1行业领域2发展阶段3企业性质]
+        industryDictParameter.setPreType("0");
+        List<IndustryDictionary> industryDictionaryList = industryService.getIndustryDictionary(industryDictParameter);
+        String []businessAreaArry=tbServiceAdvisor.getBusinessArea().split(",");
+        StringBuilder businessAreaBul=new StringBuilder();
+        for(IndustryDictionary industryDictionary:industryDictionaryList){
+            for(String businessArea:businessAreaArry){
+                if(StringUtils.equals(industryDictionary.getId(), businessArea)){
+                    businessAreaBul.append(industryDictionary.getPreValue());
+                    businessAreaBul.append(",");
+                    break;
+                }
+            }
+        }
+        int length = businessAreaBul.length()-1;
+        tbServiceAdvisor.setBusinessArea(businessAreaBul.toString().substring(0, length));
+        return tbServiceAdvisor;
     }
 }

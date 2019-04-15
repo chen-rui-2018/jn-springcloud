@@ -186,7 +186,7 @@
         END AS "handleResult"				 	                  <!--对接结果-->
         ,IFNULL(sr.result_detail,"暂无") as "resultDetail"         <!--结果描述-->
         ,sr.financing_amount as "financingAmount"                 <!--[科技金融]融资金额-->
-        ,sr.financing_period as "financingPeriod"                 <!--[科技金融]融资期限-->
+        ,sr.financing_period_max as "financingPeriod"                 <!--[科技金融]融资期限-->
         ,sr.actual_loan_amount as "actualLoanAmount"              <!--[科技金融]实际贷款金额(万元)-->
         ,sr.funds_req_desc as "fundsReqDesc"                      <!--[科技金融]资金需求说明-->
         ,DATE_FORMAT(sr.expected_date,"%Y-%m-%d")as "expectedDate"<!--[科技金融]资金需求日期")-->

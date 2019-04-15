@@ -54,7 +54,7 @@ public class InvestorServiceImplTest {
     /**
      * 查询所属单位
      */
-    private String orgName;
+    private AffiliationUnitInfoParam affiliationUnitInfoParam=new AffiliationUnitInfoParam();
 
     /**
      * 投资人认证信息
@@ -85,9 +85,9 @@ public class InvestorServiceImplTest {
     /**
      * 教育经历
      */
-    private List<InvestorEduExperienceParam> investorEduExperienceParamList =new ArrayList<>(16);
-    private InvestorEduExperienceParam investorEduExperienceParam1 =new InvestorEduExperienceParam();
-    private InvestorEduExperienceParam investorEduExperienceParam2 =new InvestorEduExperienceParam();
+    private List<InvestorEducationExperienceParam> investorEduExperienceParamList =new ArrayList<>(16);
+    private InvestorEducationExperienceParam investorEduExperienceParam1 =new InvestorEducationExperienceParam();
+    private InvestorEducationExperienceParam investorEduExperienceParam2 =new InvestorEducationExperienceParam();
 
 
     @Before
@@ -101,7 +101,8 @@ public class InvestorServiceImplTest {
         investorAccount="wangsong";
 
         //查询所属单位
-        orgName="湖南鑫欧宇";
+        affiliationUnitInfoParam.setOrgName("湖南鑫欧宇");
+        affiliationUnitInfoParam.setNeedPage("0");
 
         //投资人认证信息
         //投资人姓名
@@ -116,6 +117,7 @@ public class InvestorServiceImplTest {
         investorAuthenticateParam.setAddressArea("岳麓区");
         investorAuthenticateParam.setPhone("18674398766");
         investorAuthenticateParam.setEmail("123456@163.com");
+        investorAuthenticateParam.setInvesFinanExper("59595融资");
         investorAuthenticateParam.setPersonalProfile("我爱唱歌跳舞打豆豆");
         //主投领域
         investorMainArea1.setMainCode("biomedicine");
@@ -134,29 +136,29 @@ public class InvestorServiceImplTest {
         investorMainRoundList.add(investorMainRound2);
         investorAuthenticateParam.setInvestorMainRoundList(investorMainRoundList);
         //工作经历
-        investorWorkExperienceParam1.setStartTime("2014-09-01");
-        investorWorkExperienceParam1.setEndTime("2018-06-30");
+        investorWorkExperienceParam1.setStartTime("201409");
+        investorWorkExperienceParam1.setEndTime("201806");
         investorWorkExperienceParam1.setCompanyName("湖南律师事务所");
         investorWorkExperienceParam1.setPosition("高级律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam1);
-        investorWorkExperienceParam2.setStartTime("2018-07-15");
-        investorWorkExperienceParam2.setEndTime("2019-03-30");
+        investorWorkExperienceParam2.setStartTime("201807");
+        investorWorkExperienceParam2.setEndTime("201903");
         investorWorkExperienceParam2.setCompanyName("长沙高新律师事务所");
         investorWorkExperienceParam2.setPosition("主任律师");
         investorWorkExperienceParamList.add(investorWorkExperienceParam2);
         investorAuthenticateParam.setInvestorWorkExperienceParamList(investorWorkExperienceParamList);
         //教育经历
-        investorEduExperienceParam1.setStartTime("2008-09-01");
-        investorEduExperienceParam1.setEndTime("2012-06-30");
+        investorEduExperienceParam1.setStartTime("200809");
+        investorEduExperienceParam1.setEndTime("201206");
         investorEduExperienceParam1.setSchoolName("湖南大学");
         investorEduExperienceParam1.setProfessionTitle("律师专业");
         investorEduExperienceParamList.add(investorEduExperienceParam1);
-        investorEduExperienceParam2.setStartTime("2014-09-01");
-        investorEduExperienceParam2.setEndTime("2016-06-30");
+        investorEduExperienceParam2.setStartTime("201409");
+        investorEduExperienceParam2.setEndTime("201606");
         investorEduExperienceParam2.setSchoolName("中南大学");
         investorEduExperienceParam2.setProfessionTitle("高级律师专业");
         investorEduExperienceParamList.add(investorEduExperienceParam2);
-        investorAuthenticateParam.setInvestorEduExperienceParamList(investorEduExperienceParamList);
+        investorAuthenticateParam.setInvestorEducationExperienceParamList(investorEduExperienceParamList);
     }
 
     /**
@@ -203,15 +205,16 @@ public class InvestorServiceImplTest {
      */
     @Test
     public void getAffiliationUnit() {
-        List<AffiliationUnitShow> affiliationUnitList = investorService.getAffiliationUnit(orgName);
-        if(affiliationUnitList == null || affiliationUnitList.isEmpty()){
+        PaginationData paginationData = investorService.getAffiliationUnit(affiliationUnitInfoParam);
+        if(paginationData == null || paginationData.getRows()==null){
             //ignore
         }else{
+            List<AffiliationUnitShow> affiliationUnitList=(List<AffiliationUnitShow> )paginationData.getRows();
             for(AffiliationUnitShow affiliationUnitShow :affiliationUnitList){
                 logger.info(affiliationUnitShow.toString());
             }
         }
-        assertThat(affiliationUnitList,anything());
+        assertThat(paginationData,anything());
     }
 
     /**

@@ -1,10 +1,10 @@
 package com.jn.park.activity.dao;
 
 
-import com.jn.park.model.ActivityContent;
-import com.jn.park.model.ActivityListApply;
-import com.jn.park.model.ActivitySlim;
-import com.jn.park.model.Activity;
+import com.jn.park.activity.model.ActivityContent;
+import com.jn.park.activity.model.ActivityListApply;
+import com.jn.park.activity.model.ActivitySlim;
+import com.jn.park.activity.model.Activity;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

@@ -721,4 +721,8 @@ body .el-table th.gutter {
   position: relative;
   word-wrap: normal;
 }
+
+.write {
+  background: #fff;
+}
 /*# sourceMappingURL=index.css.map */

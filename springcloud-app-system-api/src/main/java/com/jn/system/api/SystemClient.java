@@ -2,6 +2,7 @@ package com.jn.system.api;
 
 import com.jn.common.model.Result;
 import com.jn.system.model.*;
+import com.jn.system.vo.SysUserRoleVO;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -158,19 +159,25 @@ public interface SystemClient {
      * @param accountList 账号集合
      * @return
      */
-    @RequestMapping(value = "/api/system/getUserInfoByAccount", method = RequestMethod.GET)
-    Result<List<User>> getUserInfoByAccount(@RequestParam("accountList") List<String> accountList);
+    @RequestMapping(value = "/api/system/getUserInfoByAccount", method = RequestMethod.POST)
+    Result<List<User>> getUserInfoByAccount(@RequestBody List<String> accountList);
 
     /**
      * 修改用户角色信息
      *
-     * @param user        用户对象,传账号id都可以,都传,优先使用id操作
-     * @param deleRoleIds 删除的角色id集合,不删除集合传空集合
-     * @param addRoleIds  新增的角色id集合,不新增集合传空集合
+     * @param sysUserRoleVO
      * @return
      */
     @RequestMapping(value = "/api/system/updateUserRole", method = RequestMethod.POST)
-    Result<Boolean> updateUserRole(@RequestParam("account") User user,
-                                   @RequestParam("groupId") Set<String> deleRoleIds,
-                                   @RequestParam("roleIds") Set<String> addRoleIds);
+    Result<Boolean> updateUserRole(@RequestBody SysUserRoleVO sysUserRoleVO);
+
+    /**
+     * 根据角色名称获取角色信息
+     *
+     * @param roleName 角色名称
+     * @return
+     */
+    @RequestMapping(value = "/api/system/getRoleByName", method = RequestMethod.GET)
+    Result<SysRole> getRoleByName(@RequestParam("roleName") String roleName);
+
 }

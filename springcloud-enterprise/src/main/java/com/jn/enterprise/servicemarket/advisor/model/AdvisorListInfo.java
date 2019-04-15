@@ -1,6 +1,5 @@
 package com.jn.enterprise.servicemarket.advisor.model;
 
-import com.jn.common.model.Page;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -13,9 +12,11 @@ import java.io.Serializable;
  * @modified By:
  */
 @ApiModel(value = "AdvisorListInfo", description = "服务顾问列表信息")
-public class AdvisorListInfo extends Page implements Serializable {
+public class AdvisorListInfo implements Serializable {
     @ApiModelProperty(value = "机构id")
     private String orgId;
+    @ApiModelProperty(value = "所属机构名称")
+    private String orgName;
     @ApiModelProperty(value = "顾问账号")
     private String advisorAccount;
     @ApiModelProperty(value = "顾问姓名")
@@ -24,8 +25,8 @@ public class AdvisorListInfo extends Page implements Serializable {
     private String avatar;
     @ApiModelProperty(value = "职务")
     private String position;
-    @ApiModelProperty(value = "所属机构名称")
-    private String orgName;
+    @ApiModelProperty(value = "从业年限")
+    private Double workingYears;
     @ApiModelProperty(value = "是否认证(0：未认证  1：已认证)")
     private String isCertification;
     @ApiModelProperty(value = "业务擅长")
@@ -83,6 +84,14 @@ public class AdvisorListInfo extends Page implements Serializable {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public Double getWorkingYears() {
+        return workingYears;
+    }
+
+    public void setWorkingYears(Double workingYears) {
+        this.workingYears = workingYears;
     }
 
     public String getOrgName() {
@@ -149,6 +158,10 @@ public class AdvisorListInfo extends Page implements Serializable {
         this.evaluationNum = evaluationNum;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
     @Override
     public String toString() {
         return "AdvisorListInfo{" +
@@ -157,6 +170,7 @@ public class AdvisorListInfo extends Page implements Serializable {
                 ", advisorName='" + advisorName + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", position='" + position + '\'' +
+                ", workingYears=" + workingYears +
                 ", orgName='" + orgName + '\'' +
                 ", isCertification='" + isCertification + '\'' +
                 ", goodAtBusiness='" + goodAtBusiness + '\'' +

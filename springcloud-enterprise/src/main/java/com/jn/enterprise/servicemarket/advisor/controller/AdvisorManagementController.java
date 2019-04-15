@@ -35,7 +35,7 @@ import java.util.List;
  * @Version v1.0
  * @modified By:
  */
-@Api(tags = "服务超市-顾问管理(web+手机)")
+@Api(tags = "用户中心--我的机构--顾问管理")
 @RestController
 @RequestMapping(value = "/serviceMarket/advisorManagementController")
 public class AdvisorManagementController extends BaseController {
@@ -53,6 +53,16 @@ public class AdvisorManagementController extends BaseController {
     @Autowired
     private AdvisorService advisorService;
 
+    @ControllerLog(doAction = "顾问管理")
+    @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
+    @ApiOperation(value = "顾问管理(pc/app顾问管理)")
+    @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
+    public Result<PaginationData<List<AdvisorManagementShow>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
+        Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
+        PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
+        return  new Result(advisorManagementInfo);
+    }
+
     @ControllerLog(doAction = "通过注册账号回显用户信息")
     @RequiresPermissions("/advisor/advisorManagementController/echoUserInfo")
     @ApiOperation(value = "通过注册账号回显用户信息")
@@ -68,21 +78,15 @@ public class AdvisorManagementController extends BaseController {
     @RequiresPermissions("/advisor/advisorManagementController/inviteAdvisor")
     @ApiOperation(value = "邀请顾问,(pc/app邀请顾问)",notes = "返回数据响应条数，正常情况为1")
     @RequestMapping(value = "/inviteAdvisor",method = RequestMethod.POST)
-    public Result inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "181*****") String registerAccount){
+    public Result<Integer> inviteAdvisor(@ApiParam(value = "注册手机/邮箱" ,required = true,example = "181*****") String registerAccount){
         User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("邀请顾问获取用户账号失败");
+            return new Result(AdvisorExceptionEnum.NETWORK_ANOMALY.getCode(),AdvisorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
         int responseNum = advisorManagementService.inviteAdvisor(registerAccount,user.getAccount());
         logger.info("------邀请顾问操作成功，数据响应条数：{}-------",responseNum);
         return  new Result(responseNum);
-    }
-
-    @ControllerLog(doAction = "顾问管理")
-    @RequiresPermissions("/advisor/advisorManagementController/getAdvisorManagementInfo")
-    @ApiOperation(value = "顾问管理(pc/app顾问管理)")
-    @RequestMapping(value = "/getAdvisorManagementInfo",method = RequestMethod.GET)
-    public Result<PaginationData<List<AdvisorManagementShow>>> getAdvisorManagementInfo(@Validated AdvisorManagementParam advisorManagementParam){
-        Assert.notNull(advisorManagementParam.getApprovalStatus(), AdvisorExceptionEnum.APPROVAL_STATUS_NOT_NULL.getMessage());
-        PaginationData advisorManagementInfo = advisorManagementService.getAdvisorManagementInfo(advisorManagementParam);
-        return  new Result(advisorManagementInfo);
     }
 
     @ControllerLog(doAction = "审批顾问填写信息")
@@ -103,6 +107,22 @@ public class AdvisorManagementController extends BaseController {
         Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
         AdvisorDetailsVo advisorDetailsVo = advisorService.getServiceAdvisorInfo(advisorAccount);
         return  new Result(advisorDetailsVo);
+    }
+
+    @ControllerLog(doAction = "再次邀请")
+    @RequiresPermissions("/advisor/advisorManagementController/inviteAgain")
+    @ApiOperation(value = "再次邀请")
+    @RequestMapping(value = "/inviteAgain",method = RequestMethod.GET)
+    public Result<Integer> inviteAgain(@ApiParam(value = "顾问账号" ,required = true,example = "wangsong") @RequestParam("advisorAccount") String advisorAccount){
+        Assert.notNull(advisorAccount, AdvisorExceptionEnum.ADVISOR_ACCOUNT_NOT_NULL.getMessage());
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        if(user==null || user.getAccount()==null){
+            logger.info("邀请顾问获取用户账号失败");
+            return new Result(AdvisorExceptionEnum.NETWORK_ANOMALY.getCode(),AdvisorExceptionEnum.NETWORK_ANOMALY.getMessage());
+        }
+        int responseNum = advisorManagementService.inviteAgain(advisorAccount,user.getAccount());
+        logger.info("------再次邀请，数据响应条数：{}-------",responseNum);
+        return  new Result(responseNum);
     }
 }
 

@@ -4,9 +4,9 @@ import com.jn.common.model.PaginationData;
 import com.jn.park.activity.entity.TbActivity;
 import com.jn.park.activity.entity.TbParkLike;
 import com.jn.park.activity.vo.ActivityDetailVO;
-import com.jn.park.model.ActivityApply;
-import com.jn.park.model.ActivityPagingParam;
-import com.jn.park.model.Comment;
+import com.jn.park.activity.model.ActivityApply;
+import com.jn.park.activity.model.ActivityPagingParam;
+import com.jn.park.activity.model.Comment;
 
 import java.util.List;
 
@@ -45,12 +45,11 @@ public interface ActivityDetailsService {
     List<TbParkLike> getActivityLikeInfo(String activityId);
 
     /**
-     * 根据活动id,account查询活动报名信息
+     * 根据活动id查询活动报名信息
      * @param activityId       活动id
-     * @param account  账号
      * @return
      */
-    List<ActivityApply> getActivityApplyInfo(String activityId, String account);
+    List<ActivityApply> getActivityApplyInfo(String activityId);
 
     /**
      * 根据活动id获取园区活动信息

@@ -60,8 +60,8 @@
 
 <script>
 import {
-  api, paramApi, getUserInfo
-} from '@/api/oa/meetingManagement'
+  api, paramApi
+} from '@/api/axios'
 export default {
   data() {
     return {
@@ -97,8 +97,8 @@ export default {
     // 获取登陆用户信息
     getUserInfo() {
       var sysId = '531a2a04-be44-4239-a36b-5b09aac3499d'
-      getUserInfo().then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.systemUrl}system/sysUser/getUserInfo`, '', 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           if (res.data.data.sysRole) {
             res.data.data.sysRole.forEach(val => {
               if (val.id === sysId) {
@@ -127,8 +127,8 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          paramApi('oa/oaMeetingRoom/delete', row.id, 'ids').then(res => {
-            if (res.data.code === '0000') {
+          paramApi(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/delete`, row.id, 'ids').then(res => {
+            if (res.data.code === this.GLOBAL.code) {
               this.$message({
                 message: '删除成功',
                 type: 'success'
@@ -160,8 +160,8 @@ export default {
     // 项目初始化
     initList() {
       this.listLoading = true
-      api('oa/oaMeetingRoom/list', this.listQuery).then(res => {
-        if (res.data.code === '0000') {
+      api(`${this.GLOBAL.oaUrl}oa/oaMeetingRoom/list`, this.listQuery, 'post').then(res => {
+        if (res.data.code === this.GLOBAL.code) {
           this.meetingroomList = res.data.data.rows
           this.total = res.data.data.total
           if (this.meetingroomList.length === 0 && this.total > 0) {

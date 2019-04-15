@@ -64,4 +64,11 @@ public interface AdvisorService {
      */
     List<ServiceExperience> getServiceExperienceInfo(String advisorAccount);
 
+    /**
+     * 服务评价统计信息
+     * @param serviceEvaluationParam
+     * @return
+     */
+    EvaluationCountInfo getEvaluationCountInfo(ServiceEvaluationParam serviceEvaluationParam);
+
 }

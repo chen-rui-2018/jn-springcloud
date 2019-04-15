@@ -24,6 +24,7 @@ import com.jn.system.log.annotation.ServiceLog;
 import com.jn.system.model.SysRole;
 import com.jn.system.model.User;
 import com.jn.system.vo.SysGroupVO;
+import com.jn.system.vo.SysUserRoleVO;
 import com.jn.user.api.UserExtensionClient;
 import com.jn.user.model.AffiliateParam;
 import com.jn.user.model.UserAffiliateInfo;
@@ -32,14 +33,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 机构同事
@@ -237,7 +234,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
      * @return
      */
     @ServiceLog(doAction = "据指定角色获取用户的角色信息")
-    private List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
+    @Override
+    public List<UserRoleInfo> getUserRoleInfoList(List<String> accountList,String roleName) {
         Result<List<User>> resultData = systemClient.getUserInfoByAccount(accountList);
         List<User> userInfoList = resultData.getData();
         List<UserRoleInfo> userRoleInfoList=new ArrayList<>(16);
@@ -281,35 +279,96 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @Override
     public int setAsContact(String loginAccount,String account) {
         //判断当前登录用户角色是否为机构管理员
-        List<String> accountList=new ArrayList<>(16);
-        accountList.add(loginAccount);
-        String roleName="机构管理员";
-        List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
-        if(userRoleInfoList.isEmpty() || roleName.equals(userRoleInfoList.get(0).getRoleName())){
-            logger.warn("设置为联系人的当前登录用户不是{}，不能把顾问设置为联系人",roleName);
-            throw new JnSpringCloudException(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE);
-        }
-        //清空集合
-        accountList.clear();
+        judgeRoleIsOrgManage(loginAccount);
+        List<String> accountList =new ArrayList<>(16);
         accountList.add(account);
-        userRoleInfoList = getUserRoleInfoList(accountList, roleName);
-        roleName="机构顾问";
-        if(userRoleInfoList.isEmpty() || roleName.equals(userRoleInfoList.get(0).getRoleName())){
+        String roleName="机构顾问";
+        List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
+        if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
             logger.warn("设置为联系人的账号：[{}]，不是机构顾问",account);
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_ADVISOR);
         }
-        return 1;
+        //获取机构联系人角色id
+        roleName="机构联系人";
+        Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
+        if(sysRoleData==null || sysRoleData.getData()==null){
+            logger.warn("设置为联系人,获取机构联系人角色id失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        Boolean isSuccess = updateOrgUserRole(account, userRoleInfoList.get(0).getRoleId(), sysRoleData.getData().getId());
+        //成功返回1，失败返回0
+        return isSuccess?1:0;
     }
 
     /**
      * 取消联系人
+     * @param loginAccount 当前登录用户
      * @param account 取消联系人的账号
+     * @return
      */
     @ServiceLog(doAction = "取消联系人")
     @Override
-    public int cancelAsContact(String account) {
-        //todo：调用豹哥提供的修改用户角色接口 yangph
-        return 1;
+    public int cancelAsContact(String loginAccount,String account) {
+        //判断当前登录用户角色是否为机构管理员
+        judgeRoleIsOrgManage(loginAccount);
+        List<String> accountList =new ArrayList<>(16);
+        accountList.add(account);
+        String roleName="机构联系人";
+        List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
+        if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
+            logger.warn("取消联系人的账号：[{}]，不是机构联系人",account);
+            throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_ORG_CONTACT);
+        }
+        //获取机构顾问角色id
+        roleName="机构顾问";
+        Result<SysRole> sysRoleData = systemClient.getRoleByName(roleName);
+        if(sysRoleData==null || sysRoleData.getData()==null){
+            logger.warn("取消联系人,获取机构顾问角色id失败");
+            throw new JnSpringCloudException(OrgExceptionEnum.NETWORK_ANOMALY);
+        }
+        Boolean isSuccess = updateOrgUserRole(account, userRoleInfoList.get(0).getRoleId(), sysRoleData.getData().getId());
+        //成功返回1，失败返回0
+        return isSuccess?1:0;
+    }
+
+
+    /**
+     * 判断当前登录用户角色是否为机构管理员
+     * @param loginAccount
+     * @return
+     */
+    @ServiceLog(doAction = "判断当前登录用户角色是否为机构管理员")
+    private void judgeRoleIsOrgManage(String loginAccount) {
+        List<String> accountList=new ArrayList<>(16);
+        accountList.add(loginAccount);
+        String roleName="机构管理员";
+        List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accountList, roleName);
+        if(userRoleInfoList.isEmpty() || !roleName.equals(userRoleInfoList.get(0).getRoleName())){
+            logger.warn("当前登录用户不是{}，不能进行当前操作",roleName);
+            throw new JnSpringCloudException(OrgExceptionEnum.LOGIN_ACCOUNT_NOT_ORG_MANAGE);
+        }
+    }
+
+    /**
+     * 修改机构下用户角色
+     * @param account    用户账号
+     * @param delRoleId  要删除的角色
+     * @param addRoleId  要修改的角色
+     */
+    @ServiceLog(doAction = "修改机构下用户角色")
+    private Boolean updateOrgUserRole(String account, String delRoleId, String addRoleId) {
+        SysUserRoleVO sysUserRoleVO=new SysUserRoleVO();
+        User user=new User();
+        user.setAccount(account);
+        Set<String> delRoleIds=new TreeSet<>();
+        delRoleIds.add(delRoleId);
+        Set<String>addRoleIds=new TreeSet<>();
+        addRoleIds.add(addRoleId);
+        sysUserRoleVO.setUser(user);
+        sysUserRoleVO.setAddRoleId(addRoleIds);
+        sysUserRoleVO.setDeleRoleIds(delRoleIds);
+        Result<Boolean> booleanResult = systemClient.updateUserRole(sysUserRoleVO);
+        return booleanResult.getData();
     }
 
     /**
@@ -322,7 +381,8 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int deleteContactOrAdvisor(String loginAccount,String[] accountList) {
-        //todo：获取登录用户的角色，若是机构管理员，可以删除，否则不可以删除  yangph
+        //获取登录用户的角色，若是机构管理员，可以删除，否则不可以删除
+        judgeRoleIsOrgManage(loginAccount);
         if(accountList.length==0){
             throw new JnSpringCloudException(OrgExceptionEnum.ACCOUNT_NOT_NULL);
         }
@@ -341,7 +401,20 @@ public class OrgColleagueServiceImpl implements OrgColleagueService {
         userAffiliateInfo.setAffiliateCode("");
         userAffiliateInfo.setAffiliateName("");
         userExtensionClient.updateAffiliateInfo(userAffiliateInfo);
-        //todo：调用豹哥提供的修改用户角色接口删除用户角色 yangph
-        return 1;
+        //删除用户角色信息
+        List<String> accounts = Arrays.asList(accountList);
+        String roleName="机构";
+        List<UserRoleInfo> userRoleInfoList = getUserRoleInfoList(accounts, roleName);
+        int responseNum=0;
+        for(UserRoleInfo userRoleInfo:userRoleInfoList){
+            Boolean isSuccess = updateOrgUserRole(userRoleInfo.getAccount(), userRoleInfo.getRoleId(), "");
+            if(isSuccess){
+                logger.info("删除[{}]角色信息成功",userRoleInfo.getAccount());
+                responseNum++;
+            }else{
+                logger.info("删除[{}]角色信息失败",userRoleInfo.getAccount());
+            }
+        }
+        return responseNum;
     }
 }

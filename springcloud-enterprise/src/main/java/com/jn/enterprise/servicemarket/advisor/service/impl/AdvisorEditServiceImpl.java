@@ -191,13 +191,13 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         //是否认证 0：未认证     1：已认证
         tbServiceAdvisor.setIsCertification("0");
         //审核状态  - 1：已拒绝    0：未反馈   1：待审批   2：审批通过  3：审批不通过  4：已解除
-        tbServiceAdvisor.setApprovalStatus("0");
+        tbServiceAdvisor.setApprovalStatus("1");
         //创建时间
         tbServiceAdvisor.setCreatedTime(DateUtils.parseDate(DateUtils.getDate(PATTERN)));
         //创建人
         tbServiceAdvisor.setCreatorAccount(advisorBaseInfoParam.getAdvisorAccount());
         //记录状态 0标记删除，1正常
-        tbServiceAdvisor.setRecordStatus((byte)1);
+        tbServiceAdvisor.setRecordStatus(RECORD_STATUS);
         return tbServiceAdvisorMapper.insertSelective(tbServiceAdvisor);
     }
 
@@ -226,11 +226,10 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
         }
         //有主键id,根据主键id和账号更新荣誉资质信息
         if(StringUtils.isNotBlank(serviceHonorParam.getId())){
-            byte recordStatus=1;
             TbServiceHonorCriteria example=new TbServiceHonorCriteria();
             example.createCriteria().andIdEqualTo(serviceHonorParam.getId())
                     .andAdvisorAccountEqualTo(serviceHonorParam.getAdvisorAccount())
-                    .andRecordStatusEqualTo(recordStatus);
+                    .andRecordStatusEqualTo(RECORD_STATUS);
             List<TbServiceHonor> tbServiceHonorList = tbServiceHonorMapper.selectByExample(example);
              if(tbServiceHonorList.isEmpty()){
                 logger.warn("当前荣誉资质信息[id:{},account:{}]在系统中已失效或已删除",serviceHonorParam.getId(),serviceHonorParam.getAdvisorAccount());
@@ -254,8 +253,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //创建人
             tbServiceHonor.setCreatorAccount(serviceHonorParam.getAdvisorAccount());
             //数据状态
-            byte recordStatus=1;
-            tbServiceHonor.setRecordStatus(recordStatus);
+            tbServiceHonor.setRecordStatus(RECORD_STATUS);
             return tbServiceHonorMapper.insertSelective(tbServiceHonor);
         }
     }
@@ -268,12 +266,11 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     @ServiceLog(doAction = "获取指定证件类型")
     @Override
     public List<AdvisorCertificateTypeShow> getCertificateTypeList(String certificateType) {
-        byte recordStatus=1;
         TbServiceCertificateTypeCriteria example=new TbServiceCertificateTypeCriteria();
         if(StringUtils.isBlank(certificateType)){
-            example.createCriteria().andRecordStatusEqualTo(recordStatus);
+            example.createCriteria().andRecordStatusEqualTo(RECORD_STATUS);
         }else{
-            example.createCriteria().andCertificateTypeEqualTo(certificateType).andRecordStatusEqualTo(recordStatus);
+            example.createCriteria().andCertificateTypeEqualTo(certificateType).andRecordStatusEqualTo(RECORD_STATUS);
         }
         List<TbServiceCertificateType> tbServiceCertificateTypeList = tbServiceCertificateTypeMapper.selectByExample(example);
         if(tbServiceCertificateTypeList.isEmpty()){
@@ -327,8 +324,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //创建人
             tbServiceExperience.setCreatorAccount(serviceExperienceParam.getAdvisorAccount());
             //数据状态
-            byte recordStatus=1;
-            tbServiceExperience.setRecordStatus(recordStatus);
+            tbServiceExperience.setRecordStatus(RECORD_STATUS);
             return tbServiceExperienceMapper.insertSelective(tbServiceExperience);
         }
     }
@@ -342,11 +338,10 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
     public int saveOrUpdateAdvisorProjectExperience(ServiceProjectExperienceParam serviceProjectExperienceParam) {
         //有主键id,更据主键id和账号更新服务经历
         if(StringUtils.isNotBlank(serviceProjectExperienceParam.getId())){
-            byte recordStatus=1;
             TbServiceProExperCriteria example=new TbServiceProExperCriteria();
             example.createCriteria().andIdEqualTo(serviceProjectExperienceParam.getId())
                     .andAdvisorAccountEqualTo(serviceProjectExperienceParam.getAdvisorAccount())
-                    .andRecordStatusEqualTo(recordStatus);
+                    .andRecordStatusEqualTo(RECORD_STATUS);
             List<TbServiceProExper> tbServiceProExperList = tbServiceProExperMapper.selectByExample(example);
             if(tbServiceProExperList.isEmpty()){
                 logger.warn("当前项目经验信息[id:{},account:{}]在系统中已失效或已删除",serviceProjectExperienceParam.getId(),serviceProjectExperienceParam.getAdvisorAccount());
@@ -359,7 +354,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //修改人
             tbServiceProExper.setModifierAccount(tbServiceProExper.getAdvisorAccount());
             //数据状态
-            tbServiceProExper.setRecordStatus(recordStatus);
+            tbServiceProExper.setRecordStatus(RECORD_STATUS);
             return tbServiceProExperMapper.updateByExample(tbServiceProExper, example);
         }else{
             //没有主键id,新增
@@ -372,8 +367,7 @@ public class AdvisorEditServiceImpl implements AdvisorEditService {
             //创建人
             tbServiceProExper.setCreatorAccount(serviceProjectExperienceParam.getAdvisorAccount());
             //数据状态
-            byte recordStatus=1;
-            tbServiceProExper.setRecordStatus(recordStatus);
+            tbServiceProExper.setRecordStatus(RECORD_STATUS);
             return tbServiceProExperMapper.insertSelective(tbServiceProExper);
         }
     }

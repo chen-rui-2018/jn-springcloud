@@ -5,6 +5,7 @@ import com.jn.enterprise.servicemarket.advisor.entity.TbServiceHonor;
 import com.jn.enterprise.servicemarket.advisor.entity.TbServiceProExper;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorListInfo;
 import com.jn.enterprise.servicemarket.advisor.model.AdvisorQueryConditions;
+import com.jn.enterprise.servicemarket.advisor.model.EvaluationCountInfo;
 import com.jn.enterprise.servicemarket.advisor.model.ServiceEvaluationParam;
 import com.jn.enterprise.servicemarket.comment.model.ServiceRating;
 import org.springframework.stereotype.Repository;
@@ -54,4 +55,11 @@ public interface AdvisorMapper {
      * @return
      */
     int insertServiceExperienceList(List<TbServiceExperience> list);
+
+    /**
+     *
+     * @param serviceEvaluationParam
+     * @return
+     */
+    EvaluationCountInfo getEvaluationInfo(ServiceEvaluationParam serviceEvaluationParam);
 }

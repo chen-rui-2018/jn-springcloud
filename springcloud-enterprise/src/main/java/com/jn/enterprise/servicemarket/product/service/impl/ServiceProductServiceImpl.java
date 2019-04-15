@@ -53,6 +53,8 @@ public class ServiceProductServiceImpl implements ServiceProductService {
     private ServiceProductDao productDao;
     @Autowired
     private ServiceAdvisorDao advisorDao;
+     @Autowired
+    private ServiceOrgDao serviceOrgDao;
 
 
     @ServiceLog(doAction = "添加服务产品")
@@ -395,6 +397,17 @@ public class ServiceProductServiceImpl implements ServiceProductService {
             objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
         }
           List<AdvisorProductInfo> data =  advisorDao.advisorProductList(query.getAdvisorAccount(),query.getProductType(),query.getPraise());
+
+        return new PaginationData(data,objects==null?0:objects.getTotal());
+    }
+    @ServiceLog(doAction = "机构(查看)-服务产品列表")
+    @Override
+    public PaginationData findOrgCountProductList(OrgCountQueryParam query, boolean needPage) {
+        com.github.pagehelper.Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(query.getPage(), query.getRows() == 0 ? 15 : query.getRows(), true);
+        }
+        List<OrgCountProductInfo> data =  serviceOrgDao.findOrgCountProductList(query.getOrgd(),query.getProductType(),query.getPraise());
 
         return new PaginationData(data,objects==null?0:objects.getTotal());
     }

@@ -69,10 +69,10 @@ public class AdvisorEditServiceImplTest {
 
     @Before
     public void setUp() throws Exception {
-        advisorAccount="18674398739";
+        advisorAccount="18565007009";
         //基本信息保存
         //机构id
-        advisorBaseInfoParam.setOrgId("cbe0d8ba94844a3a8f7b44822cfc7388");
+        advisorBaseInfoParam.setOrgId("cbe0d8ba94844a3a8f7b44822cfc7382");
         //账号
         advisorBaseInfoParam.setAdvisorAccount(advisorAccount);
         //从业年限
@@ -82,7 +82,7 @@ public class AdvisorEditServiceImplTest {
         //学历
         advisorBaseInfoParam.setEducation("硕士");
         //联系手机
-        advisorBaseInfoParam.setPhone("18674398739");
+        advisorBaseInfoParam.setPhone("18565007009");
         //联系邮箱
         advisorBaseInfoParam.setContactEmail("123.qq.com");
         //执业资质
@@ -157,7 +157,8 @@ public class AdvisorEditServiceImplTest {
                             Matchers.containsString(AdvisorExceptionEnum.SERVICE_ORG_NOT_EXIST.getCode()),
                             Matchers.containsString(AdvisorExceptionEnum.ORG_INFO_NOT_NULL.getCode()),
                             Matchers.containsString(AdvisorExceptionEnum.GET_ADVISOR_INFO_FAIL.getCode()),
-                            Matchers.containsString(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT.getCode())
+                            Matchers.containsString(AdvisorExceptionEnum.BUSINESS_AREA_NOT_EXIT.getCode()),
+                            Matchers.containsString(AdvisorExceptionEnum.ORG_ID_NOT_EXIT.getCode())
                     )
             );
         }

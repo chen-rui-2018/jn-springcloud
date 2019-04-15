@@ -10,6 +10,10 @@
     <result column="creator_account" jdbcType="VARCHAR" property="creatorAccount" />
     <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
     <result column="modifier_account" jdbcType="VARCHAR" property="modifierAccount" />
+    <result column="identity" jdbcType="VARCHAR" property="identity" />
+    <result column="longitude" jdbcType="VARCHAR" property="longitude" />
+    <result column="latitude" jdbcType="VARCHAR" property="latitude" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="record_status" jdbcType="TINYINT" property="recordStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -72,7 +76,7 @@
   </sql>
   <sql id="Base_Column_List">
     topic_id, topic_content, topic_type, topic_status, created_time, creator_account, 
-    modified_time, modifier_account, record_status
+    modified_time, modifier_account, identity, longitude, latitude, address, record_status
   </sql>
   <select id="selectByExample" parameterType="com.jn.park.gamtopic.entity.TbGamTopicCriteria" resultMap="BaseResultMap">
     select
@@ -107,12 +111,14 @@
   <insert id="insert" parameterType="com.jn.park.gamtopic.entity.TbGamTopic">
     insert into tb_gam_topic (topic_id, topic_content, topic_type, 
       topic_status, created_time, creator_account, 
-      modified_time, modifier_account, record_status
-      )
+      modified_time, modifier_account, identity, 
+      longitude, latitude, address, 
+      record_status)
     values (#{topicId,jdbcType=VARCHAR}, #{topicContent,jdbcType=VARCHAR}, #{topicType,jdbcType=VARCHAR}, 
       #{topicStatus,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{creatorAccount,jdbcType=VARCHAR}, 
-      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{recordStatus,jdbcType=TINYINT}
-      )
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{modifierAccount,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
+      #{longitude,jdbcType=VARCHAR}, #{latitude,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
+      #{recordStatus,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.jn.park.gamtopic.entity.TbGamTopic">
     insert into tb_gam_topic
@@ -140,6 +146,18 @@
       </if>
       <if test="modifierAccount != null">
         modifier_account,
+      </if>
+      <if test="identity != null">
+        identity,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="address != null">
+        address,
       </if>
       <if test="recordStatus != null">
         record_status,
@@ -169,6 +187,18 @@
       </if>
       <if test="modifierAccount != null">
         #{modifierAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="identity != null">
+        #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
       <if test="recordStatus != null">
         #{recordStatus,jdbcType=TINYINT},
@@ -208,6 +238,18 @@
       <if test="record.modifierAccount != null">
         modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
       </if>
+      <if test="record.identity != null">
+        identity = #{record.identity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longitude != null">
+        longitude = #{record.longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.latitude != null">
+        latitude = #{record.latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
       <if test="record.recordStatus != null">
         record_status = #{record.recordStatus,jdbcType=TINYINT},
       </if>
@@ -226,6 +268,10 @@
       creator_account = #{record.creatorAccount,jdbcType=VARCHAR},
       modified_time = #{record.modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{record.modifierAccount,jdbcType=VARCHAR},
+      identity = #{record.identity,jdbcType=VARCHAR},
+      longitude = #{record.longitude,jdbcType=VARCHAR},
+      latitude = #{record.latitude,jdbcType=VARCHAR},
+      address = #{record.address,jdbcType=VARCHAR},
       record_status = #{record.recordStatus,jdbcType=TINYINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -255,6 +301,18 @@
       <if test="modifierAccount != null">
         modifier_account = #{modifierAccount,jdbcType=VARCHAR},
       </if>
+      <if test="identity != null">
+        identity = #{identity,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=VARCHAR},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
       <if test="recordStatus != null">
         record_status = #{recordStatus,jdbcType=TINYINT},
       </if>
@@ -270,6 +328,10 @@
       creator_account = #{creatorAccount,jdbcType=VARCHAR},
       modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
       modifier_account = #{modifierAccount,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR},
+      longitude = #{longitude,jdbcType=VARCHAR},
+      latitude = #{latitude,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
       record_status = #{recordStatus,jdbcType=TINYINT}
     where topic_id = #{topicId,jdbcType=VARCHAR}
   </update>

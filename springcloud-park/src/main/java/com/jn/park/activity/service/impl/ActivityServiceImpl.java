@@ -511,4 +511,17 @@ public class ActivityServiceImpl implements ActivityService {
 
         return new PaginationData(activityList,objects==null?0:objects.getTotal());
     }
+    @ServiceLog(doAction = "查看机构下的活动列表")
+    @Override
+    public PaginationData findOrgActivityList(OrgActivityParam query, String activityType, boolean needPage) {
+        int pageSize = query.getRows() == 0 ? 15 : query.getRows();
+        int pageNumber = query.getPage();
+        Page<Object> objects = null;
+        if(needPage){
+            objects = PageHelper.startPage(pageNumber,pageSize,true);
+        }
+        List<OrgActivityShow> activityList =  activityMapper.findOrgActivityList(query.getStartTime(),query.getEndTime(),activityType);
+        return new PaginationData(activityList,objects==null?0:objects.getTotal());
+    }
+
 }

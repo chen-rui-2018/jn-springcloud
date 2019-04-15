@@ -159,6 +159,15 @@ public interface ServiceProductService {
     /**
      * 获取服务产品编号
      * @param productType
+     * @return
      */
     String getProductSerialNumber(String productType);
+
+    /**
+     * 机构(查看)-服务产品列表
+     * @param query
+     * @param needPage
+     * @return
+     */
+    PaginationData findOrgCountProductList(OrgCountQueryParam query,boolean needPage);
 }

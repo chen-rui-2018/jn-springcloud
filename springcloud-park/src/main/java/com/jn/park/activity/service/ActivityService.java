@@ -101,4 +101,13 @@ public interface ActivityService {
      */
     PaginationData findActivitySuccessfulRegistration(ActivityApplyListParam query, Boolean needPage);
 
+    /**
+     * 查看机构活动资讯列表
+     * @param query
+     * @param activityType
+     * @param needPage
+     * @return
+     */
+    PaginationData findOrgActivityList( OrgActivityParam query,String activityType,boolean needPage);
+
 }

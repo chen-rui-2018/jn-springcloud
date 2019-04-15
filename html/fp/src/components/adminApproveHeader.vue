@@ -1,0 +1,380 @@
+<template>
+  <div class="approveHead">
+    <el-card class="box-card">
+      <div id="approveheader" v-if="headFlag">
+        <div class="headerContainer clearfix">
+          <div class="titleImg fl"><img src="@/../static/img/LOGO.png" alt=""></div>
+          <div class="menu" style="display:none">
+            <i class="el-icon-close"></i>
+            <input type="text">
+            <i class="el-icon-search"></i>
+          </div>
+          <div class="headerRight fr">
+            <div class="search" v-if="!sousuo">
+              <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
+            </div>
+            <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
+              <a>登录</a>
+              <span class="line">|</span>
+              <a>注册</a>
+            </div>
+            <div class="navlogin" v-if="this.$route.name =='actiManagent'">
+              <i class="el-icon-bell"></i>
+              <span class="line">|</span>
+              <img src="" alt="">
+            </div>
+          </div>
+          <div class="nav" v-if="this.$route.name=='actiCenter'||this.$route.name=='actiDetail'||this.$route.name=='regData'||this.$route.name=='regStatus'||this.$route.name=='actiManagent'">
+            <transition name="fade">
+              <div class="sousuo posA" v-if="sousuo">
+                <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
+                <input type="text" v-focus @keyup.enter="handleSearch">
+                <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
+              </div>
+              <ul class="posA clearfix" v-else>
+                <li>
+                  <a href="javascript:void(0);">首页</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">招商引资</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">智慧党建</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">企业服务</a>
+                </li>
+              </ul>
+              <!-- <div class="sousuo" v-if="!this.status">
+            <i class="el-icon-close" style="margin-right:8px;font-size:20px" @click="handClose"></i>
+            <input type="text">
+            <i class="el-icon-search" style="margin-left:8px;font-size:20px" @click="handClose"></i>
+          </div> -->
+
+            </transition>
+          </div>
+        </div>
+      </div>
+      <div id="approveheaderW" v-else>
+        <div class="headerContainer clearfix" >
+          <div class="titleImg fl"><img src="@/../static/img/login-logo.png" alt=""></div>
+          <div class="menu" style="display:none">
+            <i class="el-icon-close"></i>
+            <input type="text">
+            <i class="el-icon-search"></i>
+          </div>
+          <div class="headerRight fr" :class="{'rightDetail_right':$route.name!=='compassView'}">
+            <div class="search" v-if="!sousuo">
+              <i class="el-icon-search" @click="handleChange" style="font-size:20px"></i>
+            </div>
+            <div class="navlogin" v-if="this.$route.name!=='actiManagent'">
+              <a>登录</a>
+              <span class="line">|</span>
+              <a>注册</a>
+            </div>
+            <div class="navlogin" v-if="this.$route.name =='actiManagent'">
+              <i class="el-icon-bell"></i>
+              <span class="line">|</span>
+              <img src="" alt="">
+            </div>
+          </div>
+          <div class="nav" v-if="this.$route.name=='compassView'||this.$route.name=='rightDetail'||this.$route.name=='serviceDetail'||this.$route.name=='declarationNoticeDetail'||this.$route.name=='declarationPlatform'">
+            <transition name="fade">
+              <div class="sousuo posA" v-if="sousuo">
+                <i class="el-icon-close" style="vertical-align: middle;" @click="sousuo=false"></i>
+                <input type="text" v-focus @keyup.enter="handleSearch">
+                <i class="el-icon-search" style="vertical-align: middle;" @click="sousuo=false"></i>
+              </div>
+              <ul class="posA clearfix" v-else :class="{'rightDetail':this.$route.name!=='compassView'&&this.$route.name!=='declarationPlatform'}">
+                <li>
+                  <a href="javascript:void(0);">首页</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">招商引资</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">智慧党建</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0);">企业服务</a>
+                </li>
+              </ul>
+            </transition>
+          </div>
+        </div>
+      </div>
+    </el-card>
+    <div class="banner_box" v-show="this.$route.name=='compassView'||this.$route.name=='declarationPlatform'">
+      <el-carousel arrow="always" loop :autoplay="false">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <img src="@/assets/image/approv.png" alt="">
+          </el-carousel-item>
+      </el-carousel>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      sousuo: false,
+      headFlag:false,
+    };
+  },
+  methods: {
+    handleChange() {
+      this.sousuo = true;
+    },
+    handClose() {
+      this.status = true;
+    }
+  }
+};
+</script>
+
+<style lang="scss">
+.approveHead{
+  z-index: 100;
+  .el-card__body{
+    padding:0;
+  }
+   .el-carousel__item{
+    img{
+      height: 100%;
+    }
+  }
+  .el-carousel__arrow{
+    background-color: rgba(31,45,61,0);
+    border: 1px solid #fff;
+  }
+  .el-carousel__container{
+    height: 323px;
+  }
+  .el-card{
+    position: relative;
+  }
+  .banner_box{
+    width: 100%;
+    position: absolute;
+    top: 0;
+  }
+  
+}
+#approveheader {
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 0 160px;
+  .headerContainer {
+    // position: relative;
+    width: 100%;
+    height: 91px;
+    line-height: 91px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    box-sizing: border-box;
+    // background-color: #757381;
+    .titleImg {
+      // width: 218px;
+      // height: 54px;
+      // margin-left:160px;
+      width: 155px;
+      height: 38px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+    .nav {
+      width: 600px;
+      height: 37.6px;
+      margin: 0 auto;
+      > ul {
+        overflow: hidden;
+        li {
+          float: left;
+          // color: #ccc;
+          font-size: 14px;
+          text-align: center;
+          line-height: 52px;
+          margin: 0 50px;
+        }
+      }
+      // .sousuo {
+      //   // width: 300px;
+      //   height: 30px;
+      //   line-height: 30px;
+      //   font-size: 16px;
+      //   margin-left: 150px;
+      //   > input {
+      //     width: 320px;
+      //     height: 30px;
+      //     border: none;
+      //     outline: none;
+      //   }
+      // }
+      .posA {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 20px 0;
+      }
+      .sousuo {
+        font-size: 18px;
+        line-height: 48px;
+        > input {
+          border: none;
+          width: 350px;
+          height: 38px;
+          font-size: 14px;
+        }
+        > input::-webkit-input-placeholder {
+          color: #b7b7b7;
+          font-size: 12px;
+        }
+      }
+    }
+    .headerRight {
+      .search {
+        display: inline-block;
+        margin-right: 20px;
+        i {
+          width: 26px;
+          height: 25px;
+        }
+      }
+      .navlogin {
+        display: inline-block;
+        a {
+          display: inline-block;
+        }
+        .line {
+          display: inline-block;
+          height: 12px;
+          margin: 0 15px;
+        }
+        > img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+}
+
+#approveheaderW {
+  position: relative;
+  background: rgba(255, 255, 255, 0.17);
+  padding: 0 160px;
+  z-index: 100;
+  // box-shadow: 2px 2px 2px #ccc;
+  .headerContainer {
+    // position: relative;
+    width: 100%;
+    height: 91px;
+    line-height: 91px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    box-sizing: border-box;
+    // background-color: #757381;
+    .rightDetail{
+      color:black;
+    }
+    .titleImg {
+      // width: 218px;
+      // height: 54px;
+      // margin-left:160px;
+      width: 155px;
+      height: 38px;
+      img {
+        width: 100%;
+        height: 100%;
+        vertical-align: middle;
+      }
+    }
+    .nav {
+      width: 600px;
+      height: 37.6px;
+      margin: 0 auto;
+      > ul {
+        overflow: hidden;
+        li {
+          float: left;
+          // color: #ccc;
+          font-size: 14px;
+          text-align: center;
+          line-height: 52px;
+          margin: 0 50px;
+        }
+      }
+      // .sousuo {
+      //   // width: 300px;
+      //   height: 30px;
+      //   line-height: 30px;
+      //   font-size: 16px;
+      //   margin-left: 150px;
+      //   > input {
+      //     width: 320px;
+      //     height: 30px;
+      //     border: none;
+      //     outline: none;
+      //   }
+      // }
+      .posA {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 20px 0;
+      }
+      .sousuo {
+        font-size: 18px;
+        line-height: 48px;
+        > input {
+          border: none;
+          width: 350px;
+          height: 38px;
+          font-size: 14px;
+        }
+        > input::-webkit-input-placeholder {
+          color: #b7b7b7;
+          font-size: 12px;
+        }
+      }
+    }
+    .rightDetail_right{
+        color:#b2b2b2;
+      }
+    .headerRight {
+      
+      .search {
+        display: inline-block;
+        margin-right: 20px;
+        i {
+          width: 26px;
+          height: 25px;
+        }
+      }
+      .navlogin {
+        display: inline-block;
+        a {
+          display: inline-block;
+        }
+        .line {
+          display: inline-block;
+          height: 12px;
+          margin: 0 15px;
+        }
+        > img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+ 
+}
+</style>
